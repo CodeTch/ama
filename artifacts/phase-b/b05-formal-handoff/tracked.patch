@@ -1,0 +1,11 @@
+diff --git a/pom.xml b/pom.xml
+index 213b66a..60376c7 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -4,5 +4,5 @@
+   <parent><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-parent</artifactId><version>4.1.1</version><relativePath/></parent>
+   <groupId>ama</groupId><artifactId>ama-parent</artifactId><version>0.1.0-SNAPSHOT</version><packaging>pom</packaging>
+   <properties><java.version>21</java.version><project.build.sourceEncoding>UTF-8</project.build.sourceEncoding></properties>
+-  <modules><module>backend/contracts</module><module>backend/core</module><module>backend/adapters</module><module>backend/api</module><module>backend/file-service</module><module>backend/integration-tests</module></modules>
++  <modules><module>backend/contracts</module><module>backend/core</module><module>backend/adapters</module><module>backend/api</module><module>backend/file-service</module><module>backend/worker</module><module>backend/integration-tests</module></modules>
+ </project>

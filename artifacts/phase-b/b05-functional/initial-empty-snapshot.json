@@ -1,0 +1,41 @@
+{
+  "captured_at_utc": "2026-10-21T18:26:17.463415+00:00",
+  "capture_label": "initial-empty",
+  "scope": "Timestamped historical snapshot, not a claim about later fixture state",
+  "container": "ama-test-b01-5833aa5fe461",
+  "loopback_port": "45009",
+  "mysql_version": "8.4.6",
+  "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "native_aio": "0",
+  "auto_remove": false,
+  "mounts": [
+    {
+      "Type": "volume",
+      "Name": "e6bec76a30b5703efe9ed707df90650378d3902f1425b296415bcdcd9b16b317",
+      "Source": "/var/lib/docker/volumes/e6bec76a30b5703efe9ed707df90650378d3902f1425b296415bcdcd9b16b317/_data",
+      "Destination": "/var/lib/mysql",
+      "Driver": "local",
+      "Mode": "",
+      "RW": true,
+      "Propagation": ""
+    }
+  ],
+  "metadata": {
+    "tables": [],
+    "columns": [],
+    "indexes": [],
+    "checks": [],
+    "foreign_keys": []
+  },
+  "rows": {},
+  "show_create": {},
+  "migration_sha256": {
+    "V001__foundation.sql": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+    "V002__identity_acl.sql": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+    "V005__tasks_outbox.sql": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+    "V006__audit_metadata.sql": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+    "V007__identity_sessions.sql": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+    "V008__meeting_schema.sql": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+    "V009__file_schema.sql": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d"
+  }
+}

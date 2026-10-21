@@ -1,0 +1,4030 @@
+{
+  "captured_at_utc": "2026-10-21T18:38:11.780269+00:00",
+  "capture_label": "formal-before",
+  "scope": "Timestamped historical snapshot, not a claim about later fixture state",
+  "container": "ama-test-b01-3ee46f689f9a",
+  "loopback_port": "45979",
+  "mysql_version": "8.4.6",
+  "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "native_aio": "0",
+  "auto_remove": false,
+  "mounts": [
+    {
+      "Type": "volume",
+      "Name": "492fc746d1d2aa690a724c6c95fc5caaf15c0321b92081bb0ff7a92059588b1a",
+      "Source": "/var/lib/docker/volumes/492fc746d1d2aa690a724c6c95fc5caaf15c0321b92081bb0ff7a92059588b1a/_data",
+      "Destination": "/var/lib/mysql",
+      "Driver": "local",
+      "Mode": "",
+      "RW": true,
+      "Propagation": ""
+    }
+  ],
+  "metadata": {
+    "tables": [
+      {
+        "table": "audit_event",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "department",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "durable_task",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "table": "enterprise_identity",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "file_cleanup",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "file_object",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "file_reference",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "flyway_schema_history",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "idempotency_record",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "identity_session",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "meeting",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "meeting_access_grant",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "meeting_acl",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "meeting_info_revision",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "meeting_person_search",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "meeting_search_projection",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "model_capacity",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "table": "model_reservation",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "table": "role_assignment",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "roster_member",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "roster_revision",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "storage_backend",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "task_outbox",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "table": "task_outbox_sequence",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "task_subject",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "table": "upload_part",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "upload_session",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      }
+    ],
+    "columns": [
+      {
+        "type": "bigint unsigned",
+        "extra": "auto_increment",
+        "table": "audit_event",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "audit_event",
+        "column": "actor_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "audit_event",
+        "column": "action",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "audit_event",
+        "column": "resource_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "audit_event",
+        "column": "revision",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "audit_event",
+        "column": "result",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "audit_event",
+        "column": "trace_id",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "audit_event",
+        "column": "occurred_at",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "department",
+        "column": "enterprise_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "department",
+        "column": "display_name",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "department",
+        "column": "parent_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "department",
+        "column": "verified_at",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "task_type",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "pool",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "subject_kind",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "subject_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(512)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "input_reference",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(128)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "input_fingerprint",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint",
+        "extra": "",
+        "table": "durable_task",
+        "column": "business_version",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint",
+        "extra": "",
+        "table": "durable_task",
+        "column": "cancel_epoch",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "int",
+        "extra": "",
+        "table": "durable_task",
+        "column": "priority",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(20)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "state",
+        "default": "READY",
+        "ordinal": 11,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint",
+        "extra": "",
+        "table": "durable_task",
+        "column": "attempt",
+        "default": "0",
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(128)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "lease_owner",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "expires_at",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "available_at",
+        "default": null,
+        "ordinal": 15,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 16,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(512)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "output_reference",
+        "default": null,
+        "ordinal": 17,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "enterprise_identity",
+        "column": "enterprise_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "enterprise_identity",
+        "column": "display_name",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "enterprise_identity",
+        "column": "department",
+        "default": "",
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "enterprise_identity",
+        "column": "status",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "tinyint(1)",
+        "extra": "",
+        "table": "enterprise_identity",
+        "column": "platform_admin",
+        "default": "0",
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "enterprise_identity",
+        "column": "department_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "enterprise_identity",
+        "column": "session_generation",
+        "default": "0",
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "enterprise_identity",
+        "column": "verified_at",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "file_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "backend_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "namespace",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(512)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "object_key",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "expected_location_revision",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "expected_reference_epoch",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "state",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "not_before",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "attempt",
+        "default": "0",
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "last_error",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_object",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_object",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_object",
+        "column": "backend_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_object",
+        "column": "storage_type",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_object",
+        "column": "namespace",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(512)",
+        "extra": "",
+        "table": "file_object",
+        "column": "object_key",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "file_object",
+        "column": "provider_version_id",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "file_object",
+        "column": "display_name",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_object",
+        "column": "size_bytes",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "file_object",
+        "column": "sha256",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_object",
+        "column": "location_revision",
+        "default": "0",
+        "ordinal": 11,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_object",
+        "column": "state",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_object",
+        "column": "reference_epoch",
+        "default": "0",
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "file_object",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_reference",
+        "column": "file_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_reference",
+        "column": "owner_kind",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_reference",
+        "column": "owner_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_reference",
+        "column": "purpose",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "int",
+        "extra": "",
+        "table": "flyway_schema_history",
+        "column": "installed_rank",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(50)",
+        "extra": "",
+        "table": "flyway_schema_history",
+        "column": "version",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(200)",
+        "extra": "",
+        "table": "flyway_schema_history",
+        "column": "description",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(20)",
+        "extra": "",
+        "table": "flyway_schema_history",
+        "column": "type",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(1000)",
+        "extra": "",
+        "table": "flyway_schema_history",
+        "column": "script",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "int",
+        "extra": "",
+        "table": "flyway_schema_history",
+        "column": "checksum",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(100)",
+        "extra": "",
+        "table": "flyway_schema_history",
+        "column": "installed_by",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "timestamp",
+        "extra": "DEFAULT_GENERATED",
+        "table": "flyway_schema_history",
+        "column": "installed_on",
+        "default": "CURRENT_TIMESTAMP",
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "int",
+        "extra": "",
+        "table": "flyway_schema_history",
+        "column": "execution_time",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "tinyint(1)",
+        "extra": "",
+        "table": "flyway_schema_history",
+        "column": "success",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "idempotency_record",
+        "column": "scope_hash",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "idempotency_record",
+        "column": "actor_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "idempotency_record",
+        "column": "resource_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "idempotency_record",
+        "column": "operation",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "idempotency_record",
+        "column": "key_hash",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "idempotency_record",
+        "column": "request_hash",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "idempotency_record",
+        "column": "state",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "idempotency_record",
+        "column": "result_id",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "smallint unsigned",
+        "extra": "",
+        "table": "idempotency_record",
+        "column": "http_status",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "idempotency_record",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "identity_session",
+        "column": "token_hash",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "identity_session",
+        "column": "enterprise_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "char(43)",
+        "extra": "",
+        "table": "identity_session",
+        "column": "csrf_token",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "identity_session",
+        "column": "expires_at",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "identity_session",
+        "column": "revoked_at",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "identity_session",
+        "column": "session_generation",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "identity_session",
+        "column": "issued_at",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "meeting",
+        "column": "owner_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "meeting",
+        "column": "revision",
+        "default": "0",
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "meeting",
+        "column": "cancel_epoch",
+        "default": "0",
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "meeting",
+        "column": "access_revision",
+        "default": "0",
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "meeting",
+        "column": "stage",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "meeting",
+        "column": "lifecycle",
+        "default": "ACTIVE",
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "meeting",
+        "column": "governance_state",
+        "default": "ACTIVE",
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "tinyint unsigned",
+        "extra": "",
+        "table": "meeting",
+        "column": "ever_published",
+        "default": "0",
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "info_revision_id",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "roster_revision_id",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "transcript_confirmation_id",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "minutes_revision_id",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "final_confirmation_id",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "date",
+        "extra": "",
+        "table": "meeting",
+        "column": "actual_meeting_date",
+        "default": null,
+        "ordinal": 15,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "meeting",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 16,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "meeting",
+        "column": "updated_at",
+        "default": null,
+        "ordinal": 17,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "transcript_revision_id",
+        "default": null,
+        "ordinal": 18,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "material_snapshot_id",
+        "default": null,
+        "ordinal": 19,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "template_revision_id",
+        "default": null,
+        "ordinal": 20,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "element_set_id",
+        "default": null,
+        "ordinal": 21,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting",
+        "column": "exclusion_revision_id",
+        "default": null,
+        "ordinal": 22,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "meeting",
+        "column": "generation_fingerprint",
+        "default": null,
+        "ordinal": 23,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "tinyint unsigned",
+        "extra": "",
+        "table": "meeting",
+        "column": "needs_generation",
+        "default": "0",
+        "ordinal": 24,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "tinyint unsigned",
+        "extra": "",
+        "table": "meeting",
+        "column": "materials_pending",
+        "default": "0",
+        "ordinal": 25,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_access_grant",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "meeting_access_grant",
+        "column": "enterprise_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "meeting_access_grant",
+        "column": "action",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_access_grant",
+        "column": "roster_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "meeting_access_grant",
+        "column": "confirmed_at",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "meeting_acl",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "utf8mb4_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "meeting_acl",
+        "column": "enterprise_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(16)",
+        "extra": "",
+        "table": "meeting_acl",
+        "column": "action",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "meeting_acl",
+        "column": "confirmed_at",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_info_revision",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_info_revision",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "meeting_info_revision",
+        "column": "revision",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "meeting_info_revision",
+        "column": "name",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "meeting_info_revision",
+        "column": "category_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "meeting_info_revision",
+        "column": "summary",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "date",
+        "extra": "",
+        "table": "meeting_info_revision",
+        "column": "actual_meeting_date",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "meeting_info_revision",
+        "column": "created_by",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "meeting_info_revision",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_person_search",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_person_search",
+        "column": "roster_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_person_search",
+        "column": "member_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "meeting_person_search",
+        "column": "name_search",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_as_ci"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "info_revision_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "roster_revision_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "name_search",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_as_ci"
+      },
+      {
+        "type": "varchar(36)",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "number_search",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_as_ci"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "category_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "meeting_revision",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(128)",
+        "extra": "",
+        "table": "model_capacity",
+        "column": "model",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "int",
+        "extra": "",
+        "table": "model_capacity",
+        "column": "capacity",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "model_reservation",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(128)",
+        "extra": "",
+        "table": "model_reservation",
+        "column": "model",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "model_reservation",
+        "column": "safe_deadline",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "role_assignment",
+        "column": "enterprise_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "role_assignment",
+        "column": "role",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "role_assignment",
+        "column": "assigned_at",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "roster_member",
+        "column": "roster_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "roster_member",
+        "column": "member_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "roster_member",
+        "column": "enterprise_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "roster_member",
+        "column": "display_name",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "roster_member",
+        "column": "member_kind",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "roster_revision",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "roster_revision",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "roster_revision",
+        "column": "revision",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "roster_revision",
+        "column": "state",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "roster_revision",
+        "column": "confirmed_at",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "roster_revision",
+        "column": "confirmed_by",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "storage_backend",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "storage_backend",
+        "column": "storage_type",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "storage_backend",
+        "column": "status",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "storage_backend",
+        "column": "config_revision",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "sequence_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(32)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "event_type",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "task_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(512)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "reference",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "occurred_at",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "int",
+        "extra": "",
+        "table": "task_outbox_sequence",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint",
+        "extra": "",
+        "table": "task_outbox_sequence",
+        "column": "next_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "task_subject",
+        "column": "subject_kind",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "task_subject",
+        "column": "subject_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint",
+        "extra": "",
+        "table": "task_subject",
+        "column": "business_version",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint",
+        "extra": "",
+        "table": "task_subject",
+        "column": "cancel_epoch",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "upload_part",
+        "column": "upload_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "upload_part",
+        "column": "part_no",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "upload_part",
+        "column": "size_bytes",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "upload_part",
+        "column": "sha256",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "upload_part",
+        "column": "provider_token",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "backend_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "namespace",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(512)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "object_key",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "upload_session",
+        "column": "cancel_epoch",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "upload_session",
+        "column": "expected_size",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "expected_sha256",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "upload_session",
+        "column": "provider_upload_token",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "state",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "completed_file_id",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "updated_at",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "upload_session",
+        "column": "display_name",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "purpose",
+        "default": null,
+        "ordinal": 15,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 1,
+        "name": "audit_resource_time",
+        "type": "BTREE",
+        "table": "audit_event",
+        "column": "resource_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "audit_resource_time",
+        "type": "BTREE",
+        "table": "audit_event",
+        "column": "occurred_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "audit_resource_time",
+        "type": "BTREE",
+        "table": "audit_event",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "audit_trace",
+        "type": "BTREE",
+        "table": "audit_event",
+        "column": "trace_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "audit_event",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_department_0",
+        "type": "BTREE",
+        "table": "department",
+        "column": "parent_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "department",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "subject_kind",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "subject_kind",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "subject_kind",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "subject_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "task_claim",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "pool",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "task_claim",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "task_claim",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "available_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "task_claim",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "priority",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_enterprise_identity_0",
+        "type": "BTREE",
+        "table": "enterprise_identity",
+        "column": "department_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "enterprise_identity",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "cleanup_due",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "cleanup_due",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "not_before",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "cleanup_due",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "cleanup_target",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "backend_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "cleanup_target",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "namespace",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "cleanup_target",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "object_key",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_file_cleanup_0",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "file_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "file_cleanup",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "file_cleanup",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "created_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "file_cleanup",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "file_location",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "backend_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "file_location",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "namespace",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "file_location",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "object_key",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "file_meeting",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "file_meeting",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "file_meeting",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "file_ref_owner",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "owner_kind",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "file_ref_owner",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "file_ref_owner",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "file_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "file_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "owner_kind",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "purpose",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "flyway_schema_history_s_idx",
+        "type": "BTREE",
+        "table": "flyway_schema_history",
+        "column": "success",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "flyway_schema_history",
+        "column": "installed_rank",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "idempotency_record",
+        "column": "scope_hash",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "identity_session",
+        "column": "token_hash",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "session_identity",
+        "type": "BTREE",
+        "table": "identity_session",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "session_identity",
+        "type": "BTREE",
+        "table": "identity_session",
+        "column": "expires_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "meeting_owner_date",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "meeting_owner_date",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "lifecycle",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "meeting_owner_date",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "actual_meeting_date",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "meeting_owner_date",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "meeting_owner_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "meeting_owner_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "lifecycle",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "meeting_owner_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "updated_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "meeting_owner_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "meeting_stage_date",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "lifecycle",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "meeting_stage_date",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "stage",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "meeting_stage_date",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "actual_meeting_date",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "meeting_stage_date",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "meeting_stage_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "lifecycle",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "meeting_stage_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "stage",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "meeting_stage_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "updated_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "meeting_stage_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "access_person_meeting",
+        "type": "BTREE",
+        "table": "meeting_access_grant",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "access_person_meeting",
+        "type": "BTREE",
+        "table": "meeting_access_grant",
+        "column": "action",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "access_person_meeting",
+        "type": "BTREE",
+        "table": "meeting_access_grant",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_meeting_access_grant_2",
+        "type": "BTREE",
+        "table": "meeting_access_grant",
+        "column": "roster_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_access_grant",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_access_grant",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_access_grant",
+        "column": "action",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_acl_identity",
+        "type": "BTREE",
+        "table": "meeting_acl",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_acl",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_acl",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_acl",
+        "column": "action",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_meeting_info_revision_1",
+        "type": "BTREE",
+        "table": "meeting_info_revision",
+        "column": "created_by",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "info_revision",
+        "type": "BTREE",
+        "table": "meeting_info_revision",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "info_revision",
+        "type": "BTREE",
+        "table": "meeting_info_revision",
+        "column": "revision",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_info_revision",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_meeting_person_search_1",
+        "type": "BTREE",
+        "table": "meeting_person_search",
+        "column": "roster_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "fk_meeting_person_search_1",
+        "type": "BTREE",
+        "table": "meeting_person_search",
+        "column": "member_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_person_search",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_person_search",
+        "column": "member_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_meeting_search_projection_1",
+        "type": "BTREE",
+        "table": "meeting_search_projection",
+        "column": "info_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_meeting_search_projection_2",
+        "type": "BTREE",
+        "table": "meeting_search_projection",
+        "column": "roster_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_search_projection",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "search_category",
+        "type": "BTREE",
+        "table": "meeting_search_projection",
+        "column": "category_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "search_category",
+        "type": "BTREE",
+        "table": "meeting_search_projection",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "model_capacity",
+        "column": "model",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "model_deadline",
+        "type": "BTREE",
+        "table": "model_reservation",
+        "column": "model",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "model_deadline",
+        "type": "BTREE",
+        "table": "model_reservation",
+        "column": "safe_deadline",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "model_reservation",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "role_assignment",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "role_assignment",
+        "column": "role",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_roster_member_1",
+        "type": "BTREE",
+        "table": "roster_member",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "roster_member",
+        "column": "roster_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "roster_member",
+        "column": "member_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "roster_person",
+        "type": "BTREE",
+        "table": "roster_member",
+        "column": "roster_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "roster_person",
+        "type": "BTREE",
+        "table": "roster_member",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_roster_revision_1",
+        "type": "BTREE",
+        "table": "roster_revision",
+        "column": "confirmed_by",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "roster_revision",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "roster_revision",
+        "type": "BTREE",
+        "table": "roster_revision",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "roster_revision",
+        "type": "BTREE",
+        "table": "roster_revision",
+        "column": "revision",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "storage_backend",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "task_outbox",
+        "column": "sequence_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "task_id",
+        "type": "BTREE",
+        "table": "task_outbox",
+        "column": "task_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "task_outbox_sequence",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "task_subject",
+        "column": "subject_kind",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "task_subject",
+        "column": "subject_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "upload_part",
+        "column": "upload_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "upload_part",
+        "column": "part_no",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_upload_session_2",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "completed_file_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "upload_meeting",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "upload_meeting",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "upload_meeting",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "upload_target",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "backend_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "upload_target",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "namespace",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "upload_target",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "object_key",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      }
+    ],
+    "checks": [
+      {
+        "name": "durable_task_chk_1",
+        "table": "durable_task",
+        "clause": "((`business_version` >= 0) and (`cancel_epoch` >= 0) and (`attempt` >= 0))",
+        "enforced": "YES"
+      },
+      {
+        "name": "durable_task_chk_2",
+        "table": "durable_task",
+        "clause": "(`state` in (_utf8mb4\\'READY\\',_utf8mb4\\'RUNNING\\',_utf8mb4\\'RECONCILING\\',_utf8mb4\\'SUCCEEDED\\',_utf8mb4\\'FAILED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_enterprise_identity_0",
+        "table": "enterprise_identity",
+        "clause": "(`status` in (_utf8mb4\\'ACTIVE\\',_utf8mb4\\'DISABLED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_file_cleanup_0",
+        "table": "file_cleanup",
+        "clause": "(`state` in (_ascii\\'PENDING\\',_ascii\\'RUNNING\\',_ascii\\'FAILED\\',_ascii\\'COMPLETE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_file_object_0",
+        "table": "file_object",
+        "clause": "(`storage_type` in (_ascii\\'local\\',_ascii\\'s3\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_file_object_1",
+        "table": "file_object",
+        "clause": "(`state` in (_ascii\\'AVAILABLE\\',_ascii\\'DELETE_PENDING\\',_ascii\\'DELETED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_idempotency_record_0",
+        "table": "idempotency_record",
+        "clause": "(`state` in (_utf8mb4\\'SUCCEEDED\\',_utf8mb4\\'REJECTED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_identity_session_0",
+        "table": "identity_session",
+        "clause": "(`expires_at` > `issued_at`)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_meeting_0",
+        "table": "meeting",
+        "clause": "(`stage` in (_ascii\\'ENTRY\\',_ascii\\'TRANSCRIPT_PENDING\\',_ascii\\'TRANSCRIPT_FAILED\\',_ascii\\'MINUTES_PENDING\\',_ascii\\'MINUTES_FAILED\\',_ascii\\'READY_TO_PUBLISH\\',_ascii\\'PUBLISH_FAILED\\',_ascii\\'PUBLISHED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_meeting_1",
+        "table": "meeting",
+        "clause": "(`lifecycle` in (_ascii\\'ACTIVE\\',_ascii\\'DELETING\\',_ascii\\'DELETED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_meeting_2",
+        "table": "meeting",
+        "clause": "(`governance_state` in (_ascii\\'ACTIVE\\',_ascii\\'WITHDRAW_PENDING\\',_ascii\\'WITHDRAWN\\',_ascii\\'OBSOLETE_PENDING\\',_ascii\\'OBSOLETE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_meeting_3",
+        "table": "meeting",
+        "clause": "(`ever_published` in (0,1))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_meeting_4",
+        "table": "meeting",
+        "clause": "(`needs_generation` in (0,1))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_meeting_5",
+        "table": "meeting",
+        "clause": "(`materials_pending` in (0,1))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_meeting_access_grant_0",
+        "table": "meeting_access_grant",
+        "clause": "(`action` = _ascii\\'READ\\')",
+        "enforced": "YES"
+      },
+      {
+        "name": "chk_acl_action",
+        "table": "meeting_acl",
+        "clause": "(`action` in (_utf8mb4\\'READ\\',_utf8mb4\\'EDIT\\',_utf8mb4\\'MANAGE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "model_capacity_chk_1",
+        "table": "model_capacity",
+        "clause": "(`capacity` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_role_assignment_0",
+        "table": "role_assignment",
+        "clause": "(`role` in (_utf8mb4\\'USER\\',_utf8mb4\\'PLATFORM_ADMIN\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_roster_member_0",
+        "table": "roster_member",
+        "clause": "(`member_kind` in (_ascii\\'ENTERPRISE\\',_ascii\\'EXTERNAL\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_roster_member_1",
+        "table": "roster_member",
+        "clause": "(((`member_kind` = _ascii\\'ENTERPRISE\\') and (`enterprise_id` is not null)) or ((`member_kind` = _ascii\\'EXTERNAL\\') and (`enterprise_id` is null)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_roster_revision_0",
+        "table": "roster_revision",
+        "clause": "(`state` in (_ascii\\'DRAFT\\',_ascii\\'CONFIRMED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_roster_revision_1",
+        "table": "roster_revision",
+        "clause": "(((`state` = _ascii\\'DRAFT\\') and (`confirmed_at` is null) and (`confirmed_by` is null)) or ((`state` = _ascii\\'CONFIRMED\\') and (`confirmed_at` is not null) and (`confirmed_by` is not null)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_storage_backend_0",
+        "table": "storage_backend",
+        "clause": "(`storage_type` in (_utf8mb4\\'local\\',_utf8mb4\\'s3\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_storage_backend_1",
+        "table": "storage_backend",
+        "clause": "(`status` in (_utf8mb4\\'WRITABLE\\',_utf8mb4\\'READ_ONLY\\',_utf8mb4\\'DISABLED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "task_subject_chk_1",
+        "table": "task_subject",
+        "clause": "((`business_version` >= 0) and (`cancel_epoch` >= 0))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_upload_part_0",
+        "table": "upload_part",
+        "clause": "(`part_no` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_upload_session_0",
+        "table": "upload_session",
+        "clause": "(`state` in (_ascii\\'OPEN\\',_ascii\\'FINALIZING\\',_ascii\\'COMPLETED\\',_ascii\\'ABORTED\\',_ascii\\'FAILED\\'))",
+        "enforced": "YES"
+      }
+    ],
+    "foreign_keys": [
+      {
+        "name": "fk_department_0",
+        "table": "department",
+        "column": "parent_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "department",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "durable_task_ibfk_1",
+        "table": "durable_task",
+        "column": "subject_kind",
+        "delete": "NO ACTION",
+        "remote": "subject_kind",
+        "target": "task_subject",
+        "update": "NO ACTION",
+        "ordinal": 1
+      },
+      {
+        "name": "durable_task_ibfk_1",
+        "table": "durable_task",
+        "column": "subject_id",
+        "delete": "NO ACTION",
+        "remote": "subject_id",
+        "target": "task_subject",
+        "update": "NO ACTION",
+        "ordinal": 2
+      },
+      {
+        "name": "fk_enterprise_identity_0",
+        "table": "enterprise_identity",
+        "column": "department_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "department",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_file_cleanup_0",
+        "table": "file_cleanup",
+        "column": "file_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "file_object",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_file_cleanup_1",
+        "table": "file_cleanup",
+        "column": "backend_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "storage_backend",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_file_object_0",
+        "table": "file_object",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_file_object_1",
+        "table": "file_object",
+        "column": "backend_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "storage_backend",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_file_reference_0",
+        "table": "file_reference",
+        "column": "file_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "file_object",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_identity_session_0",
+        "table": "identity_session",
+        "column": "enterprise_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_0",
+        "table": "meeting",
+        "column": "owner_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_access_grant_0",
+        "table": "meeting_access_grant",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_access_grant_1",
+        "table": "meeting_access_grant",
+        "column": "enterprise_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_access_grant_2",
+        "table": "meeting_access_grant",
+        "column": "roster_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "roster_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_acl_identity",
+        "table": "meeting_acl",
+        "column": "enterprise_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_info_revision_0",
+        "table": "meeting_info_revision",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_info_revision_1",
+        "table": "meeting_info_revision",
+        "column": "created_by",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_person_search_0",
+        "table": "meeting_person_search",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_person_search_1",
+        "table": "meeting_person_search",
+        "column": "roster_id",
+        "delete": "RESTRICT",
+        "remote": "roster_id",
+        "target": "roster_member",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_person_search_1",
+        "table": "meeting_person_search",
+        "column": "member_id",
+        "delete": "RESTRICT",
+        "remote": "member_id",
+        "target": "roster_member",
+        "update": "RESTRICT",
+        "ordinal": 2
+      },
+      {
+        "name": "fk_meeting_search_projection_0",
+        "table": "meeting_search_projection",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_search_projection_1",
+        "table": "meeting_search_projection",
+        "column": "info_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting_info_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_search_projection_2",
+        "table": "meeting_search_projection",
+        "column": "roster_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "roster_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "model_reservation_ibfk_1",
+        "table": "model_reservation",
+        "column": "model",
+        "delete": "NO ACTION",
+        "remote": "model",
+        "target": "model_capacity",
+        "update": "NO ACTION",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_role_assignment_0",
+        "table": "role_assignment",
+        "column": "enterprise_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_roster_member_0",
+        "table": "roster_member",
+        "column": "roster_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "roster_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_roster_member_1",
+        "table": "roster_member",
+        "column": "enterprise_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_roster_revision_0",
+        "table": "roster_revision",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_roster_revision_1",
+        "table": "roster_revision",
+        "column": "confirmed_by",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "task_outbox_ibfk_1",
+        "table": "task_outbox",
+        "column": "task_id",
+        "delete": "NO ACTION",
+        "remote": "id",
+        "target": "durable_task",
+        "update": "NO ACTION",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_upload_part_0",
+        "table": "upload_part",
+        "column": "upload_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "upload_session",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_upload_session_0",
+        "table": "upload_session",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_upload_session_1",
+        "table": "upload_session",
+        "column": "backend_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "storage_backend",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_upload_session_2",
+        "table": "upload_session",
+        "column": "completed_file_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "file_object",
+        "update": "RESTRICT",
+        "ordinal": 1
+      }
+    ]
+  },
+  "rows": {
+    "audit_event": [],
+    "department": [],
+    "durable_task": [],
+    "enterprise_identity": [],
+    "file_cleanup": [],
+    "file_object": [],
+    "file_reference": [],
+    "flyway_schema_history": [
+      {
+        "type": "SQL",
+        "script": "V001__foundation.sql",
+        "success": 1,
+        "version": "001",
+        "checksum": 1201435595,
+        "description": "foundation",
+        "installed_by": "ama_test",
+        "installed_on": "2026-10-21 18:33:21.000000",
+        "execution_time": 211,
+        "installed_rank": 1
+      },
+      {
+        "type": "SQL",
+        "script": "V002__identity_acl.sql",
+        "success": 1,
+        "version": "002",
+        "checksum": 1757300424,
+        "description": "identity acl",
+        "installed_by": "ama_test",
+        "installed_on": "2026-10-21 18:33:22.000000",
+        "execution_time": 528,
+        "installed_rank": 2
+      },
+      {
+        "type": "SQL",
+        "script": "V005__tasks_outbox.sql",
+        "success": 1,
+        "version": "005",
+        "checksum": -1999355348,
+        "description": "tasks outbox",
+        "installed_by": "ama_test",
+        "installed_on": "2026-10-21 18:33:23.000000",
+        "execution_time": 864,
+        "installed_rank": 3
+      },
+      {
+        "type": "SQL",
+        "script": "V006__audit_metadata.sql",
+        "success": 1,
+        "version": "006",
+        "checksum": -1744360556,
+        "description": "audit metadata",
+        "installed_by": "ama_test",
+        "installed_on": "2026-10-21 18:33:23.000000",
+        "execution_time": 321,
+        "installed_rank": 4
+      },
+      {
+        "type": "SQL",
+        "script": "V007__identity_sessions.sql",
+        "success": 1,
+        "version": "007",
+        "checksum": 157746768,
+        "description": "identity sessions",
+        "installed_by": "ama_test",
+        "installed_on": "2026-10-21 18:33:24.000000",
+        "execution_time": 1254,
+        "installed_rank": 5
+      },
+      {
+        "type": "SQL",
+        "script": "V008__meeting_schema.sql",
+        "success": 1,
+        "version": "008",
+        "checksum": -1747387036,
+        "description": "meeting schema",
+        "installed_by": "ama_test",
+        "installed_on": "2026-10-21 18:33:30.000000",
+        "execution_time": 5736,
+        "installed_rank": 6
+      },
+      {
+        "type": "SQL",
+        "script": "V009__file_schema.sql",
+        "success": 1,
+        "version": "009",
+        "checksum": -287948759,
+        "description": "file schema",
+        "installed_by": "ama_test",
+        "installed_on": "2026-10-21 18:33:34.000000",
+        "execution_time": 4030,
+        "installed_rank": 7
+      }
+    ],
+    "idempotency_record": [],
+    "identity_session": [],
+    "meeting": [],
+    "meeting_access_grant": [],
+    "meeting_acl": [],
+    "meeting_info_revision": [],
+    "meeting_person_search": [],
+    "meeting_search_projection": [],
+    "model_capacity": [],
+    "model_reservation": [],
+    "role_assignment": [],
+    "roster_member": [],
+    "roster_revision": [],
+    "storage_backend": [],
+    "task_outbox": [],
+    "task_outbox_sequence": [
+      {
+        "id": 1,
+        "next_id": 1
+      }
+    ],
+    "task_subject": [],
+    "upload_part": [],
+    "upload_session": []
+  },
+  "show_create": {
+    "audit_event": "audit_event\tCREATE TABLE `audit_event` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `actor_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `action` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `resource_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `revision` bigint unsigned NOT NULL,\n  `result` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `trace_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `occurred_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `audit_resource_time` (`resource_id`,`occurred_at`,`id`),\n  KEY `audit_trace` (`trace_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "department": "department\tCREATE TABLE `department` (\n  `enterprise_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `display_name` longtext NOT NULL,\n  `parent_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin DEFAULT NULL,\n  `verified_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`enterprise_id`),\n  KEY `fk_department_0` (`parent_id`),\n  CONSTRAINT `fk_department_0` FOREIGN KEY (`parent_id`) REFERENCES `department` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRICT\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "durable_task": "durable_task\tCREATE TABLE `durable_task` (\n  `id` char(36) COLLATE utf8mb4_0900_bin NOT NULL,\n  `task_type` varchar(64) COLLATE utf8mb4_0900_bin NOT NULL,\n  `pool` varchar(64) COLLATE utf8mb4_0900_bin NOT NULL,\n  `subject_kind` varchar(64) COLLATE utf8mb4_0900_bin NOT NULL,\n  `subject_id` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,\n  `input_reference` varchar(512) COLLATE utf8mb4_0900_bin NOT NULL,\n  `input_fingerprint` varchar(128) COLLATE utf8mb4_0900_bin NOT NULL,\n  `business_version` bigint NOT NULL,\n  `cancel_epoch` bigint NOT NULL,\n  `priority` int NOT NULL,\n  `state` varchar(20) COLLATE utf8mb4_0900_bin NOT NULL DEFAULT 'READY',\n  `attempt` bigint NOT NULL DEFAULT '0',\n  `lease_owner` varchar(128) COLLATE utf8mb4_0900_bin DEFAULT NULL,\n  `expires_at` datetime(6) DEFAULT NULL,\n  `available_at` datetime(6) NOT NULL,\n  `created_at` datetime(6) NOT NULL,\n  `output_reference` varchar(512) COLLATE utf8mb4_0900_bin DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `task_claim` (`pool`,`state`,`available_at`,`priority`),\n  KEY `subject_kind` (`subject_kind`,`subject_id`),\n  CONSTRAINT `durable_task_ibfk_1` FOREIGN KEY (`subject_kind`, `subject_id`) REFERENCES `task_subject` (`subject_kind`, `subject_id`),\n  CONSTRAINT `durable_task_chk_1` CHECK (((`business_version` >= 0) and (`cancel_epoch` >= 0) and (`attempt` >= 0))),\n  CONSTRAINT `durable_task_chk_2` CHECK ((`state` in (_utf8mb4'READY',_utf8mb4'RUNNING',_utf8mb4'RECONCILING',_utf8mb4'SUCCEEDED',_utf8mb4'FAILED')))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_bin\n",
+    "enterprise_identity": "enterprise_identity\tCREATE TABLE `enterprise_identity` (\n  `enterprise_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `display_name` longtext NOT NULL,\n  `department` varchar(255) NOT NULL DEFAULT '',\n  `status` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `platform_admin` tinyint(1) NOT NULL DEFAULT '0',\n  `department_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin DEFAULT NULL,\n  `session_generation` bigint unsigned NOT NULL DEFAULT '0',\n  `verified_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`enterprise_id`),\n  KEY `fk_enterprise_identity_0` (`department_id`),\n  CONSTRAINT `fk_enterprise_identity_0` FOREIGN KEY (`department_id`) REFERENCES `department` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_enterprise_identity_0` CHECK ((`status` in (_utf8mb4'ACTIVE',_utf8mb4'DISABLED')))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "file_cleanup": "file_cleanup\tCREATE TABLE `file_cleanup` (\n  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `file_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `backend_id` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `namespace` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `object_key` varchar(512) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `expected_location_revision` bigint unsigned DEFAULT NULL,\n  `expected_reference_epoch` bigint unsigned DEFAULT NULL,\n  `state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `not_before` datetime(6) NOT NULL,\n  `attempt` bigint unsigned NOT NULL DEFAULT '0',\n  `last_error` varchar(64) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `cleanup_target` (`backend_id`,`namespace`,`object_key`),\n  KEY `cleanup_due` (`state`,`not_before`,`id`),\n  KEY `fk_file_cleanup_0` (`file_id`),\n  CONSTRAINT `fk_file_cleanup_0` FOREIGN KEY (`file_id`) REFERENCES `file_object` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_file_cleanup_1` FOREIGN KEY (`backend_id`) REFERENCES `storage_backend` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_file_cleanup_0` CHECK ((`state` in (_ascii'PENDING',_ascii'RUNNING',_ascii'FAILED',_ascii'COMPLETE')))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "file_object": "file_object\tCREATE TABLE `file_object` (\n  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `backend_id` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `storage_type` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `namespace` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `object_key` varchar(512) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `provider_version_id` longtext,\n  `display_name` longtext NOT NULL,\n  `size_bytes` bigint unsigned NOT NULL,\n  `sha256` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `location_revision` bigint unsigned NOT NULL DEFAULT '0',\n  `state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `reference_epoch` bigint unsigned NOT NULL DEFAULT '0',\n  `created_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `file_location` (`backend_id`,`namespace`,`object_key`),\n  KEY `file_meeting` (`meeting_id`,`state`,`id`),\n  KEY `file_cleanup` (`state`,`created_at`,`id`),\n  CONSTRAINT `fk_file_object_0` FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_file_object_1` FOREIGN KEY (`backend_id`) REFERENCES `storage_backend` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_file_object_0` CHECK ((`storage_type` in (_ascii'local',_ascii's3'))),\n  CONSTRAINT `ck_file_object_1` CHECK ((`state` in (_ascii'AVAILABLE',_ascii'DELETE_PENDING',_ascii'DELETED')))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "file_reference": "file_reference\tCREATE TABLE `file_reference` (\n  `file_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `owner_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `owner_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `purpose` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  PRIMARY KEY (`file_id`,`owner_kind`,`owner_id`,`purpose`),\n  KEY `file_ref_owner` (`owner_kind`,`owner_id`,`file_id`),\n  CONSTRAINT `fk_file_reference_0` FOREIGN KEY (`file_id`) REFERENCES `file_object` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "flyway_schema_history": "flyway_schema_history\tCREATE TABLE `flyway_schema_history` (\n  `installed_rank` int NOT NULL,\n  `version` varchar(50) DEFAULT NULL,\n  `description` varchar(200) NOT NULL,\n  `type` varchar(20) NOT NULL,\n  `script` varchar(1000) NOT NULL,\n  `checksum` int DEFAULT NULL,\n  `installed_by` varchar(100) NOT NULL,\n  `installed_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `execution_time` int NOT NULL,\n  `success` tinyint(1) NOT NULL,\n  PRIMARY KEY (`installed_rank`),\n  KEY `flyway_schema_history_s_idx` (`success`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "idempotency_record": "idempotency_record\tCREATE TABLE `idempotency_record` (\n  `scope_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `actor_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `resource_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `operation` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `key_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `request_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `result_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `http_status` smallint unsigned NOT NULL,\n  `created_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`scope_hash`),\n  CONSTRAINT `ck_idempotency_record_0` CHECK ((`state` in (_utf8mb4'SUCCEEDED',_utf8mb4'REJECTED')))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "identity_session": "identity_session\tCREATE TABLE `identity_session` (\n  `token_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `enterprise_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `csrf_token` char(43) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `expires_at` datetime(6) NOT NULL,\n  `revoked_at` datetime(6) DEFAULT NULL,\n  `session_generation` bigint unsigned NOT NULL,\n  `issued_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`token_hash`),\n  KEY `session_identity` (`enterprise_id`,`expires_at`),\n  CONSTRAINT `fk_identity_session_0` FOREIGN KEY (`enterprise_id`) REFERENCES `enterprise_identity` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_identity_session_0` CHECK ((`expires_at` > `issued_at`))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "meeting": "meeting\tCREATE TABLE `meeting` (\n  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `owner_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `revision` bigint unsigned NOT NULL DEFAULT '0',\n  `cancel_epoch` bigint unsigned NOT NULL DEFAULT '0',\n  `access_revision` bigint unsigned NOT NULL DEFAULT '0',\n  `stage` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `lifecycle` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'ACTIVE',\n  `governance_state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'ACTIVE',\n  `ever_published` tinyint unsigned NOT NULL DEFAULT '0',\n  `info_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `roster_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `transcript_confirmation_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `minutes_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `final_confirmation_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `actual_meeting_date` date DEFAULT NULL,\n  `created_at` datetime(6) NOT NULL,\n  `updated_at` datetime(6) NOT NULL,\n  `transcript_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `material_snapshot_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `template_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `element_set_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `exclusion_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `generation_fingerprint` char(64) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `needs_generation` tinyint unsigned NOT NULL DEFAULT '0',\n  `materials_pending` tinyint unsigned NOT NULL DEFAULT '0',\n  PRIMARY KEY (`id`),\n  KEY `meeting_owner_date` (`owner_id`,`lifecycle`,`actual_meeting_date`,`id`),\n  KEY `meeting_stage_date` (`lifecycle`,`stage`,`actual_meeting_date`,`id`),\n  KEY `meeting_owner_updated` (`owner_id`,`lifecycle`,`updated_at`,`id`),\n  KEY `meeting_stage_updated` (`lifecycle`,`stage`,`updated_at`,`id`),\n  CONSTRAINT `fk_meeting_0` FOREIGN KEY (`owner_id`) REFERENCES `enterprise_identity` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_meeting_0` CHECK ((`stage` in (_ascii'ENTRY',_ascii'TRANSCRIPT_PENDING',_ascii'TRANSCRIPT_FAILED',_ascii'MINUTES_PENDING',_ascii'MINUTES_FAILED',_ascii'READY_TO_PUBLISH',_ascii'PUBLISH_FAILED',_ascii'PUBLISHED'))),\n  CONSTRAINT `ck_meeting_1` CHECK ((`lifecycle` in (_ascii'ACTIVE',_ascii'DELETING',_ascii'DELETED'))),\n  CONSTRAINT `ck_meeting_2` CHECK ((`governance_state` in (_ascii'ACTIVE',_ascii'WITHDRAW_PENDING',_ascii'WITHDRAWN',_ascii'OBSOLETE_PENDING',_ascii'OBSOLETE'))),\n  CONSTRAINT `ck_meeting_3` CHECK ((`ever_published` in (0,1))),\n  CONSTRAINT `ck_meeting_4` CHECK ((`needs_generation` in (0,1))),\n  CONSTRAINT `ck_meeting_5` CHECK ((`materials_pending` in (0,1)))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "meeting_access_grant": "meeting_access_grant\tCREATE TABLE `meeting_access_grant` (\n  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `enterprise_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `action` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `roster_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `confirmed_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`meeting_id`,`enterprise_id`,`action`),\n  KEY `access_person_meeting` (`enterprise_id`,`action`,`meeting_id`),\n  KEY `fk_meeting_access_grant_2` (`roster_id`),\n  CONSTRAINT `fk_meeting_access_grant_0` FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_meeting_access_grant_1` FOREIGN KEY (`enterprise_id`) REFERENCES `enterprise_identity` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_meeting_access_grant_2` FOREIGN KEY (`roster_id`) REFERENCES `roster_revision` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_meeting_access_grant_0` CHECK ((`action` = _ascii'READ'))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "meeting_acl": "meeting_acl\tCREATE TABLE `meeting_acl` (\n  `meeting_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,\n  `enterprise_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `action` varchar(16) NOT NULL,\n  `confirmed_at` datetime(6) DEFAULT NULL,\n  PRIMARY KEY (`meeting_id`,`enterprise_id`,`action`),\n  KEY `fk_acl_identity` (`enterprise_id`),\n  CONSTRAINT `fk_acl_identity` FOREIGN KEY (`enterprise_id`) REFERENCES `enterprise_identity` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `chk_acl_action` CHECK ((`action` in (_utf8mb4'READ',_utf8mb4'EDIT',_utf8mb4'MANAGE')))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "meeting_info_revision": "meeting_info_revision\tCREATE TABLE `meeting_info_revision` (\n  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `revision` bigint unsigned NOT NULL,\n  `name` longtext,\n  `category_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin DEFAULT NULL,\n  `summary` longtext,\n  `actual_meeting_date` date DEFAULT NULL,\n  `created_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `created_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `info_revision` (`meeting_id`,`revision`),\n  KEY `fk_meeting_info_revision_1` (`created_by`),\n  CONSTRAINT `fk_meeting_info_revision_0` FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_meeting_info_revision_1` FOREIGN KEY (`created_by`) REFERENCES `enterprise_identity` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRICT\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "meeting_person_search": "meeting_person_search\tCREATE TABLE `meeting_person_search` (\n  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `roster_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `member_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `name_search` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_as_ci NOT NULL,\n  PRIMARY KEY (`meeting_id`,`member_id`),\n  KEY `fk_meeting_person_search_1` (`roster_id`,`member_id`),\n  CONSTRAINT `fk_meeting_person_search_0` FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_meeting_person_search_1` FOREIGN KEY (`roster_id`, `member_id`) REFERENCES `roster_member` (`roster_id`, `member_id`) ON DELETE RESTRICT ON UPDATE RESTRICT\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "meeting_search_projection": "meeting_search_projection\tCREATE TABLE `meeting_search_projection` (\n  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `info_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `roster_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `name_search` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_as_ci,\n  `number_search` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_as_ci NOT NULL,\n  `category_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin DEFAULT NULL,\n  `meeting_revision` bigint unsigned NOT NULL,\n  PRIMARY KEY (`meeting_id`),\n  KEY `search_category` (`category_id`,`meeting_id`),\n  KEY `fk_meeting_search_projection_1` (`info_revision_id`),\n  KEY `fk_meeting_search_projection_2` (`roster_revision_id`),\n  CONSTRAINT `fk_meeting_search_projection_0` FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_meeting_search_projection_1` FOREIGN KEY (`info_revision_id`) REFERENCES `meeting_info_revision` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_meeting_search_projection_2` FOREIGN KEY (`roster_revision_id`) REFERENCES `roster_revision` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "model_capacity": "model_capacity\tCREATE TABLE `model_capacity` (\n  `model` varchar(128) COLLATE utf8mb4_0900_bin NOT NULL,\n  `capacity` int NOT NULL,\n  PRIMARY KEY (`model`),\n  CONSTRAINT `model_capacity_chk_1` CHECK ((`capacity` > 0))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_bin\n",
+    "model_reservation": "model_reservation\tCREATE TABLE `model_reservation` (\n  `id` char(36) COLLATE utf8mb4_0900_bin NOT NULL,\n  `model` varchar(128) COLLATE utf8mb4_0900_bin NOT NULL,\n  `safe_deadline` datetime(6) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `model_deadline` (`model`,`safe_deadline`),\n  CONSTRAINT `model_reservation_ibfk_1` FOREIGN KEY (`model`) REFERENCES `model_capacity` (`model`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_bin\n",
+    "role_assignment": "role_assignment\tCREATE TABLE `role_assignment` (\n  `enterprise_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `role` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `assigned_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`enterprise_id`,`role`),\n  CONSTRAINT `fk_role_assignment_0` FOREIGN KEY (`enterprise_id`) REFERENCES `enterprise_identity` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_role_assignment_0` CHECK ((`role` in (_utf8mb4'USER',_utf8mb4'PLATFORM_ADMIN')))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "roster_member": "roster_member\tCREATE TABLE `roster_member` (\n  `roster_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `member_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `enterprise_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin DEFAULT NULL,\n  `display_name` longtext NOT NULL,\n  `member_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  PRIMARY KEY (`roster_id`,`member_id`),\n  UNIQUE KEY `roster_person` (`roster_id`,`enterprise_id`),\n  KEY `fk_roster_member_1` (`enterprise_id`),\n  CONSTRAINT `fk_roster_member_0` FOREIGN KEY (`roster_id`) REFERENCES `roster_revision` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_roster_member_1` FOREIGN KEY (`enterprise_id`) REFERENCES `enterprise_identity` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_roster_member_0` CHECK ((`member_kind` in (_ascii'ENTERPRISE',_ascii'EXTERNAL'))),\n  CONSTRAINT `ck_roster_member_1` CHECK ((((`member_kind` = _ascii'ENTERPRISE') and (`enterprise_id` is not null)) or ((`member_kind` = _ascii'EXTERNAL') and (`enterprise_id` is null))))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "roster_revision": "roster_revision\tCREATE TABLE `roster_revision` (\n  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `revision` bigint unsigned NOT NULL,\n  `state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `confirmed_at` datetime(6) DEFAULT NULL,\n  `confirmed_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `roster_revision` (`meeting_id`,`revision`),\n  KEY `fk_roster_revision_1` (`confirmed_by`),\n  CONSTRAINT `fk_roster_revision_0` FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_roster_revision_1` FOREIGN KEY (`confirmed_by`) REFERENCES `enterprise_identity` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_roster_revision_0` CHECK ((`state` in (_ascii'DRAFT',_ascii'CONFIRMED'))),\n  CONSTRAINT `ck_roster_revision_1` CHECK ((((`state` = _ascii'DRAFT') and (`confirmed_at` is null) and (`confirmed_by` is null)) or ((`state` = _ascii'CONFIRMED') and (`confirmed_at` is not null) and (`confirmed_by` is not null))))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "storage_backend": "storage_backend\tCREATE TABLE `storage_backend` (\n  `id` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `storage_type` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `status` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `config_revision` bigint unsigned NOT NULL,\n  PRIMARY KEY (`id`),\n  CONSTRAINT `ck_storage_backend_0` CHECK ((`storage_type` in (_utf8mb4'local',_utf8mb4's3'))),\n  CONSTRAINT `ck_storage_backend_1` CHECK ((`status` in (_utf8mb4'WRITABLE',_utf8mb4'READ_ONLY',_utf8mb4'DISABLED')))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "task_outbox": "task_outbox\tCREATE TABLE `task_outbox` (\n  `sequence_id` bigint NOT NULL,\n  `event_type` varchar(32) COLLATE utf8mb4_0900_bin NOT NULL,\n  `task_id` char(36) COLLATE utf8mb4_0900_bin NOT NULL,\n  `reference` varchar(512) COLLATE utf8mb4_0900_bin NOT NULL,\n  `occurred_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`sequence_id`),\n  KEY `task_id` (`task_id`),\n  CONSTRAINT `task_outbox_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `durable_task` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_bin\n",
+    "task_outbox_sequence": "task_outbox_sequence\tCREATE TABLE `task_outbox_sequence` (\n  `id` int NOT NULL,\n  `next_id` bigint NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "task_subject": "task_subject\tCREATE TABLE `task_subject` (\n  `subject_kind` varchar(64) COLLATE utf8mb4_0900_bin NOT NULL,\n  `subject_id` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,\n  `business_version` bigint NOT NULL,\n  `cancel_epoch` bigint NOT NULL,\n  PRIMARY KEY (`subject_kind`,`subject_id`),\n  CONSTRAINT `task_subject_chk_1` CHECK (((`business_version` >= 0) and (`cancel_epoch` >= 0)))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_bin\n",
+    "upload_part": "upload_part\tCREATE TABLE `upload_part` (\n  `upload_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `part_no` bigint unsigned NOT NULL,\n  `size_bytes` bigint unsigned NOT NULL,\n  `sha256` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `provider_token` longtext,\n  PRIMARY KEY (`upload_id`,`part_no`),\n  CONSTRAINT `fk_upload_part_0` FOREIGN KEY (`upload_id`) REFERENCES `upload_session` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_upload_part_0` CHECK ((`part_no` > 0))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+    "upload_session": "upload_session\tCREATE TABLE `upload_session` (\n  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `backend_id` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `namespace` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `object_key` varchar(512) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `cancel_epoch` bigint unsigned NOT NULL,\n  `expected_size` bigint unsigned NOT NULL,\n  `expected_sha256` char(64) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `provider_upload_token` longtext,\n  `state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `completed_file_id` char(36) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,\n  `created_at` datetime(6) NOT NULL,\n  `updated_at` datetime(6) NOT NULL,\n  `display_name` longtext NOT NULL,\n  `purpose` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `upload_target` (`backend_id`,`namespace`,`object_key`),\n  KEY `upload_meeting` (`meeting_id`,`state`,`id`),\n  KEY `fk_upload_session_2` (`completed_file_id`),\n  CONSTRAINT `fk_upload_session_0` FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_upload_session_1` FOREIGN KEY (`backend_id`) REFERENCES `storage_backend` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `fk_upload_session_2` FOREIGN KEY (`completed_file_id`) REFERENCES `file_object` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_upload_session_0` CHECK ((`state` in (_ascii'OPEN',_ascii'FINALIZING',_ascii'COMPLETED',_ascii'ABORTED',_ascii'FAILED')))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n"
+  },
+  "migration_sha256": {
+    "V001__foundation.sql": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+    "V002__identity_acl.sql": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+    "V005__tasks_outbox.sql": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+    "V006__audit_metadata.sql": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+    "V007__identity_sessions.sql": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+    "V008__meeting_schema.sql": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+    "V009__file_schema.sql": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+    "V010__reliable_execution.sql": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db"
+  }
+}

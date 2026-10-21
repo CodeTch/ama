@@ -1,0 +1,104 @@
+{
+  "stash_oid_retained": "bc12e825246c60c12752129c4d512ef9c545758c",
+  "archive_files": [
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+      "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcSubjectFences.java",
+      "sha256": "4622efcf0e6d76bf69e385fc442b4098fb6fe6f222b017349b92267008bb40dc",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TaskTransactionContext.java",
+      "sha256": "111780076f9b7fd49fc8bc86df24bf25d8e499a4bcc0a2fae12ed811b4214b19",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/task/TaskMetadataTest.java",
+      "sha256": "bd8d21bdaaed179e237adcbc46fe790482e473572883c446f7828c2da224eb31",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/ExternalContracts.java",
+      "sha256": "7dfe2dc2a212e38c0277dc9fa0d37c6acd87276024830a33ef2c97294a6c6481",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/OutboxContracts.java",
+      "sha256": "1742162ac321e42bce3d8de516edbf2f9b42cfec4cf36ba8a846c7f1c365be2d",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/TaskContracts.java",
+      "sha256": "6641098514d21f4cba9b2ab82b7a6eaea9894f162a563447c69859e9dbdb9880",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+      "sha256": "dda0a5b6c04e7af6dd29d423f2649e1cd9ce071e396f06c1420748e0f3ce9594",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ModelPermitPool.java",
+      "sha256": "f6b9b10755583686d7e1984940e2bf8ecbdc5e7df29d45c4e9f0146f45c03f32",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/OutboxPort.java",
+      "sha256": "14160441f145edf022b497a26b063d803f15e14f8a2b4b9b7fdb2e0b772fe839",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/OutboxReferenceValidator.java",
+      "sha256": "3d5bc3f78eafa21f8153c5dcfe8387e8815b9408ea7e79e1be43d84e212a6557",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/SubjectFencePort.java",
+      "sha256": "0f40f2beca0fc1d31c871efe73beeba381ebe5918cc12a524f907ea13fcb73c5",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+      "sha256": "992f15564103856be5ee20ad194b89faff24f004dac6d15ba008ba306aa9ad5b",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskQueue.java",
+      "sha256": "4244597da8dad036ffe2d5e90ac4a8ccb8c5ff21bebe30c85d114b72bbc90a33",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/OutboxFenceIT.java",
+      "sha256": "1687220c3a377d2fab47de635fb31130b2af0b7e53210feb7f4170589efd49e2",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/worker/pom.xml",
+      "sha256": "3347d2bd1a4dd6229f3478c791d93e0cb1e54517b049b272eeacc180c03e13e0",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "sha256": "72599c0cff1632132883f6f4eb5a7ea164240656821d957d9265482756724da8",
+      "matches_exact_stash_untracked_tree": true
+    },
+    {
+      "path": "backend/worker/src/test/java/ama/worker/WorkerLoopTest.java",
+      "sha256": "d0d83ab2144eceba8c9a1cdddbbc7cdf64a87e8a16c011e20d713a0fc7295155",
+      "matches_exact_stash_untracked_tree": true
+    }
+  ],
+  "all_archive_files_match": true,
+  "preserved_file_sha256": {
+    "head.txt": "1c3bcc1d344359244f548f5ad5fe66c95025188cd11d6715b632f8c81afbe2a6",
+    "untracked-sources.tar.gz": "7275258f414f4eb1ff0910c3cecf6ac191be14a0bd9aee069c6eb294edfafd25",
+    "tracked.patch": "6e5dee412c66f2e07a2a9b2a040e559aee2ca121951b1ca268b4e6db4bbe213c",
+    "status.txt": "d7f13bb07c6c36ad9c1ef3d8a94df7936da9fc45ffa785a2d6171196e823b70d",
+    "stash-oid.txt": "0d1eeeea665023f3e3a089f991c9006b8808bbca5c99647850b480a78152a6ec",
+    "preparation-report.md": "bccd737da15c77376eb99a255f25d06d18a73bff8fab48d108249a4617c3ecfc"
+  }
+}

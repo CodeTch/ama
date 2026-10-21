@@ -1,0 +1,210 @@
+-- REVIEW-ONLY B05 V010 candidate. NOT frozen, NOT in a Flyway location, NEVER applied.
+
+-- Derived only from adopted B00-1.2, frozen V005, and root empty-legacy maintenance ruling.
+
+-- Prerequisite: stop ALL writers/workers, approved ordered 001/002/005/006/007/008/009, verified empty legacy work.
+
+-- Root independent lower-migration reviews + final SHA freeze acknowledgment are STILL REQUIRED.
+
+-- Nonempty/unknown history fails before permanent DDL. Never repair, reset sequence, infer inputs or delete source rows.
+
+SET NAMES utf8mb4;
+
+SET time_zone = '+00:00';
+
+CREATE TEMPORARY TABLE b05_v010_preflight (compatible TINYINT NOT NULL, CONSTRAINT ck_b05_v010_compatible CHECK(compatible=1));
+
+INSERT INTO b05_v010_preflight SELECT (SELECT GROUP_CONCAT(version ORDER BY installed_rank SEPARATOR ',') FROM flyway_schema_history WHERE version IS NOT NULL) = '001,002,005,006,007,008,009' AND NOT EXISTS(SELECT 1 FROM flyway_schema_history WHERE success<>1);
+
+INSERT INTO b05_v010_preflight SELECT NOT EXISTS(SELECT 1 FROM durable_task);
+
+INSERT INTO b05_v010_preflight SELECT NOT EXISTS(SELECT 1 FROM task_outbox);
+
+INSERT INTO b05_v010_preflight SELECT NOT EXISTS(SELECT 1 FROM model_reservation);
+
+INSERT INTO b05_v010_preflight SELECT NOT EXISTS(SELECT 1 FROM model_capacity);
+
+INSERT INTO b05_v010_preflight SELECT COUNT(*)=1 AND MIN(id)=1 AND MIN(next_id)=1 FROM task_outbox_sequence;
+
+INSERT INTO b05_v010_preflight SELECT NOT EXISTS(SELECT 1 FROM task_subject s WHERE CAST(s.subject_kind AS BINARY)<>_binary'MEETING' OR NOT EXISTS(SELECT 1 FROM meeting m WHERE CAST(m.id AS BINARY)=CAST(s.subject_id AS BINARY) AND m.revision=s.business_version AND m.cancel_epoch=s.cancel_epoch AND m.lifecycle='ACTIVE'));
+
+DROP TEMPORARY TABLE b05_v010_preflight;
+
+-- All preflight checks have succeeded; the following permanent DDL is NOT transactionally reversible as a group.
+
+ALTER TABLE durable_task DROP FOREIGN KEY durable_task_ibfk_1, DROP INDEX subject_kind, DROP INDEX task_claim, DROP CHECK durable_task_chk_1, DROP CHECK durable_task_chk_2;
+
+ALTER TABLE task_outbox DROP FOREIGN KEY task_outbox_ibfk_1, DROP INDEX task_id;
+
+ALTER TABLE model_reservation DROP FOREIGN KEY model_reservation_ibfk_1, DROP INDEX model_deadline;
+
+ALTER TABLE task_subject DROP CHECK task_subject_chk_1;
+
+ALTER TABLE model_capacity DROP CHECK model_capacity_chk_1;
+
+ALTER TABLE task_subject
+    MODIFY COLUMN `subject_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL FIRST,
+    MODIFY COLUMN `subject_id` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL AFTER `subject_kind`,
+    MODIFY COLUMN `business_version` bigint unsigned NOT NULL AFTER `subject_id`,
+    MODIFY COLUMN `cancel_epoch` bigint unsigned NOT NULL AFTER `business_version`,
+    ADD COLUMN `deleted` tinyint unsigned NOT NULL DEFAULT 0 AFTER `cancel_epoch`,
+    ADD CONSTRAINT ck_task_subject_0 CHECK (deleted IN (0,1)),
+    DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+ALTER TABLE durable_task
+    DROP COLUMN `input_reference`,
+    DROP COLUMN `output_reference`,
+    MODIFY COLUMN `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL FIRST,
+    MODIFY COLUMN `task_type` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `id`,
+    MODIFY COLUMN `pool` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `task_type`,
+    MODIFY COLUMN `subject_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `pool`,
+    MODIFY COLUMN `subject_id` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL AFTER `subject_kind`,
+    ADD COLUMN `producer_key` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `subject_id`,
+    ADD COLUMN `input_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `producer_key`,
+    ADD COLUMN `input_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `input_kind`,
+    MODIFY COLUMN `input_fingerprint` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `input_id`,
+    MODIFY COLUMN `business_version` bigint unsigned NOT NULL AFTER `input_fingerprint`,
+    MODIFY COLUMN `cancel_epoch` bigint unsigned NOT NULL AFTER `business_version`,
+    MODIFY COLUMN `priority` int NOT NULL AFTER `cancel_epoch`,
+    MODIFY COLUMN `state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'READY' AFTER `priority`,
+    MODIFY COLUMN `attempt` bigint unsigned NOT NULL DEFAULT 0 AFTER `state`,
+    ADD COLUMN `max_attempts` bigint unsigned NOT NULL AFTER `attempt`,
+    MODIFY COLUMN `lease_owner` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL AFTER `max_attempts`,
+    MODIFY COLUMN `expires_at` datetime(6) NULL AFTER `lease_owner`,
+    MODIFY COLUMN `available_at` datetime(6) NOT NULL AFTER `expires_at`,
+    MODIFY COLUMN `created_at` datetime(6) NOT NULL AFTER `available_at`,
+    ADD COLUMN `output_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL AFTER `created_at`,
+    ADD COLUMN `output_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL AFTER `output_kind`,
+    ADD COLUMN `last_error` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL AFTER `output_id`,
+    ADD UNIQUE INDEX task_producer (producer_key),
+    ADD INDEX task_ready (pool,state,available_at,id),
+    ADD INDEX task_expired (pool,state,expires_at,id),
+    ADD INDEX task_subject_history (subject_kind,subject_id,created_at,id),
+    ADD CONSTRAINT ck_durable_task_0 CHECK (state IN ('READY','RUNNING','RECONCILING','SUCCEEDED','FAILED','CANCELLED','STALE')),
+    ADD CONSTRAINT ck_durable_task_1 CHECK (max_attempts > 0),
+    ADD CONSTRAINT ck_durable_task_2 CHECK (state <> 'RUNNING' OR (lease_owner IS NOT NULL AND expires_at IS NOT NULL)),
+    DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE task_attempt (
+    `task_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `attempt` bigint unsigned NOT NULL,
+    `owner` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `started_at` datetime(6) NOT NULL,
+    `ended_at` datetime(6) NULL,
+    `outcome` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL,
+    `error_code` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL,
+    PRIMARY KEY (task_id,attempt)) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE external_operation (
+    `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `operation_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `business_key` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+    `request_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `marked_at` datetime(6) NOT NULL,
+    `next_check_at` datetime(6) NOT NULL,
+    `reconcile_epoch` bigint unsigned NOT NULL DEFAULT 0,
+    `reconcile_owner` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL,
+    `reconcile_expires_at` datetime(6) NULL,
+    `external_result_id` longtext NULL,
+    `last_error` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL,
+    `subject_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `subject_id` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+    `current_execution_no` bigint unsigned NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE INDEX external_key (operation_kind,business_key),
+    INDEX external_due (state,next_check_at,id),
+    CONSTRAINT ck_external_operation_0 CHECK (state IN ('MARKED','UNKNOWN','RETRY_QUEUED','SUCCEEDED','FAILED','MANUAL_REQUIRED')),
+    CONSTRAINT ck_external_operation_1 CHECK (current_execution_no > 0)) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+ALTER TABLE task_outbox_sequence
+    MODIFY COLUMN `id` int NOT NULL FIRST,
+    MODIFY COLUMN `next_id` bigint unsigned NOT NULL DEFAULT 1 AFTER `id`,
+    ADD CONSTRAINT ck_task_outbox_sequence_0 CHECK (id = 1),
+    ADD CONSTRAINT ck_task_outbox_sequence_1 CHECK (next_id > 0),
+    DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+ALTER TABLE task_outbox
+    DROP COLUMN `reference`,
+    MODIFY COLUMN `sequence_id` bigint unsigned NOT NULL FIRST,
+    MODIFY COLUMN `event_type` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `sequence_id`,
+    MODIFY COLUMN `task_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL AFTER `event_type`,
+    ADD COLUMN `subject_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `task_id`,
+    ADD COLUMN `subject_id` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL AFTER `subject_kind`,
+    ADD COLUMN `subject_revision` bigint unsigned NOT NULL AFTER `subject_id`,
+    ADD COLUMN `reference_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `subject_revision`,
+    ADD COLUMN `reference_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `reference_kind`,
+    MODIFY COLUMN `occurred_at` datetime(6) NOT NULL AFTER `reference_id`,
+    ADD INDEX outbox_subject (subject_kind,subject_id,sequence_id),
+    DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE outbox_consumer (
+    `consumer_id` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `cursor` bigint unsigned NOT NULL DEFAULT 0,
+    `epoch` bigint unsigned NOT NULL DEFAULT 0,
+    `lease_owner` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL,
+    `expires_at` datetime(6) NULL,
+    PRIMARY KEY (consumer_id)) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+ALTER TABLE model_capacity
+    MODIFY COLUMN `model` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL FIRST,
+    MODIFY COLUMN `capacity` int unsigned NOT NULL AFTER `model`,
+    ADD COLUMN `config_revision` bigint unsigned NOT NULL AFTER `capacity`,
+    ADD COLUMN `enabled` tinyint unsigned NOT NULL DEFAULT 0 AFTER `config_revision`,
+    ADD COLUMN `cutoff_policy` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `enabled`,
+    ADD CONSTRAINT ck_model_capacity_0 CHECK (capacity > 0),
+    ADD CONSTRAINT ck_model_capacity_1 CHECK (enabled IN (0,1)),
+    ADD CONSTRAINT ck_model_capacity_2 CHECK (cutoff_policy IN ('PROVEN_DEADLINE','EXPLICIT_SETTLEMENT')),
+    DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+ALTER TABLE model_reservation
+    MODIFY COLUMN `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL FIRST,
+    MODIFY COLUMN `model` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `id`,
+    ADD COLUMN `execution_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `model`,
+    ADD COLUMN `config_revision` bigint unsigned NOT NULL AFTER `execution_id`,
+    MODIFY COLUMN `safe_deadline` datetime(6) NULL AFTER `config_revision`,
+    ADD COLUMN `created_at` datetime(6) NOT NULL AFTER `safe_deadline`,
+    ADD COLUMN `settled_at` datetime(6) NULL AFTER `created_at`,
+    ADD UNIQUE INDEX reservation_execution (execution_id),
+    ADD INDEX model_deadline (model,settled_at,safe_deadline),
+    DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE external_execution (
+    `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `operation_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `execution_no` bigint unsigned NOT NULL,
+    `task_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `task_attempt` bigint unsigned NULL,
+    `state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `request_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `request_manifest` longtext NOT NULL,
+    `created_at` datetime(6) NOT NULL,
+    `marked_at` datetime(6) NULL,
+    `finished_at` datetime(6) NULL,
+    `no_effect_basis` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL,
+    `no_effect_evidence` longtext NULL,
+    `no_effect_verified_at` datetime(6) NULL,
+    PRIMARY KEY (id),
+    UNIQUE INDEX external_execution_number (operation_id,execution_no),
+    UNIQUE INDEX external_execution_task (task_id),
+    CONSTRAINT ck_external_execution_0 CHECK (execution_no > 0),
+    CONSTRAINT ck_external_execution_1 CHECK (state IN ('PREPARED','MARKED','UNKNOWN','SUCCEEDED','FAILED')),
+    CONSTRAINT ck_external_execution_2 CHECK (state <> 'MARKED' OR (task_attempt IS NOT NULL AND marked_at IS NOT NULL)),
+    CONSTRAINT ck_external_execution_3 CHECK (no_effect_basis IS NULL OR no_effect_basis IN ('NOT_SENT','DEFINITIVE_REJECTION','PROVEN_CUTOFF_FENCED')),
+    CONSTRAINT ck_external_execution_4 CHECK ((no_effect_basis IS NULL AND no_effect_evidence IS NULL AND no_effect_verified_at IS NULL) OR (state='FAILED' AND no_effect_basis IS NOT NULL AND no_effect_evidence IS NOT NULL AND no_effect_verified_at IS NOT NULL AND finished_at IS NOT NULL))) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+ALTER TABLE durable_task ADD CONSTRAINT fk_durable_task_0 FOREIGN KEY (subject_kind,subject_id) REFERENCES task_subject (subject_kind,subject_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE task_attempt ADD CONSTRAINT fk_task_attempt_0 FOREIGN KEY (task_id) REFERENCES durable_task (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE external_operation ADD CONSTRAINT fk_external_operation_0 FOREIGN KEY (subject_kind,subject_id) REFERENCES task_subject (subject_kind,subject_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE task_outbox ADD CONSTRAINT fk_task_outbox_0 FOREIGN KEY (task_id) REFERENCES durable_task (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE model_reservation ADD CONSTRAINT fk_model_reservation_0 FOREIGN KEY (model) REFERENCES model_capacity (model) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE model_reservation ADD CONSTRAINT fk_model_reservation_1 FOREIGN KEY (execution_id) REFERENCES external_execution (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE external_execution ADD CONSTRAINT fk_external_execution_0 FOREIGN KEY (operation_id) REFERENCES external_operation (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE external_execution ADD CONSTRAINT fk_external_execution_1 FOREIGN KEY (task_id) REFERENCES durable_task (id) ON UPDATE RESTRICT ON DELETE RESTRICT;

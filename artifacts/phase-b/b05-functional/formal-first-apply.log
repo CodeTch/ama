@@ -1,0 +1,7 @@
+Pre-migration table count: 27
+02:38:17.605 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:45979/ama_b01_fixture (MySQL 8.4)
+02:38:18.083 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 8 migrations (execution time 00:00.168s)
+02:38:18.179 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 009
+02:38:18.441 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_b01_fixture` to version "010 - reliable execution"
+02:38:25.532 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 1 migration to schema `ama_b01_fixture`, now at version v010 (execution time 00:06.976s)
+Applied migrations: 1
