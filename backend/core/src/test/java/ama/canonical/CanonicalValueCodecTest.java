@@ -24,6 +24,13 @@ class CanonicalValueCodecTest {
         assertFalse(Arrays.equals(encode(list(number(1),number(2))),encode(list(number(2),number(1)))));
         assertFalse(Arrays.equals(encode(string("a\r\nb")),encode(string("a\nb"))));
         assertFalse(Arrays.equals(encode(nil()),encode(string(""))));
+        assertFalse(Arrays.equals(encode(list(string("a|b"),string("c"))),encode(list(string("a"),string("b|c")))));
+        var data=object(field("opaque",string("a|b"+(char)0+"c")));
+        var first=object(field("profile",string("p1")),field("kind",string("K1")),field("data",data));
+        var otherProfile=object(field("profile",string("p2")),field("kind",string("K1")),field("data",data));
+        var otherKind=object(field("profile",string("p1")),field("kind",string("K2")),field("data",data));
+        assertNotEquals(codec.sha256(first,B,()->false),codec.sha256(otherProfile,B,()->false));
+        assertNotEquals(codec.sha256(first,B,()->false),codec.sha256(otherKind,B,()->false));
         assertFalse(Arrays.equals(encode(list()),encode(object())));
     }
     @Test void frozenEntriesRejectDuplicateBeforeConversionAndRejectLoneSurrogates() {

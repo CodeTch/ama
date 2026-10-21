@@ -38,7 +38,7 @@ class StrictMinutesJsonReaderTest {
    byte[] valid=json().getBytes(StandardCharsets.UTF_8);byte[] bad=Arrays.copyOf(valid,valid.length+1);bad[valid.length]=(byte)0xff;
    fails(INVALID_UTF8,()->read(bad,BUDGET));
    fails(INVALID_UTF8,()->read(("\ufeff"+json()).getBytes(StandardCharsets.UTF_8),BUDGET));
-   for(var charset:List.of(StandardCharsets.UTF_16LE,StandardCharsets.UTF_16BE))assertThrows(Failure.class,()->read(json().getBytes(charset),BUDGET));
+   for(var charset:List.of(StandardCharsets.UTF_16LE,StandardCharsets.UTF_16BE,java.nio.charset.Charset.forName("UTF-32LE"),java.nio.charset.Charset.forName("UTF-32BE")))assertThrows(Failure.class,()->read(json().getBytes(charset),BUDGET));
    fails(INVALID_SCALAR,()->read(json().replace("A😀B","\\ud800")));
    fails(INVALID_SCALAR,()->read(json().replace("A😀B","\\udc00")));
    assertEquals("😀",read(json().replace("A😀B","\\ud83d\\ude00")).output().body());

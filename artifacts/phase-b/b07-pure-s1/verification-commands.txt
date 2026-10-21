@@ -10,3 +10,5 @@ Whitespace check after explicit staging:
 git diff --cached --check
 Integrity check:
 sha256sum -c artifacts/phase-b/b07-pure-s1/SHA256SUMS
+
+After final checklist added UTF-32LE/BE and explicit separator/profile/kind domain assertions, the same complete 13-suite selector was rerun; raw/82-complete-owned-final-utf32-domains.log and junit/final-owned contain 97 unique passing tests. Canonical runner was already run against unchanged production sources and was not redundantly rerun.
