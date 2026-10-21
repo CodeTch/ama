@@ -86,7 +86,8 @@ def startup_failure(directory, name, passwords):
         save()
     except BaseException:
         return "capture=failed; cleanup=refused"
-    if owned:
+    # Preserve the container whenever its startup logs could not be safely saved.
+    if owned and outcome["logs"] == "captured":
         try:
             failure_command("rm", "-f", name)
             outcome["cleanup"] = "removed"

@@ -23,9 +23,11 @@ that allowlist before serialization. Cleanup requires the exact generated name,
 label `ama.test-fixture=b01`, pinned image reference, and exactly one
 `3306/tcp` binding to `127.0.0.1`. Configured bindings are checked because exited
 containers may lack active network port mappings. Unavailable, malformed, or
-mismatching proof refuses removal. Diagnostic state is persisted before removal;
-failure to persist it also refuses removal. Each new Docker inspect/log/remove
-subprocess has a 10-second timeout and captures stderr without printing it.
+mismatching proof refuses removal. Safe diagnostic state and redacted logs must
+both be persisted before removal. Failure to read or persist the logs also
+refuses removal, retaining the original container for diagnosis. Each new Docker
+inspect/log/remove subprocess has a 10-second timeout and captures stderr without
+printing it.
 
 Successful startup, CLI, pinned image, launch arguments, readiness behavior,
 default native AIO profile, and explicit stop behavior retain their existing
@@ -72,3 +74,26 @@ Ignored raw evidence is explicitly allowlisted by
 `artifacts/phase-b/ci-fixture-01/ALLOWLIST.txt` and hashed by the adjacent
 `SHA256SUMS`. No credential directory is included. Independent review/adoption
 and any live Docker validation remain separate from this mocked qualification.
+
+## Review fix round 1: retain containers when log preservation fails
+
+Independent review I1 found that the initial implementation still removed the
+container after a log-read or `docker.log` write failure if the separate
+`failure.json` write succeeded. This could lose the exact MySQL startup evidence
+again. The cleanup guard now requires `logs=captured`, which is set only after
+safe redaction and successful log persistence, together with ownership proof and
+the preceding successful state-evidence write.
+
+The prior log-read test's contrary removal expectation was corrected, and a
+separate `docker.log`-only write failure case lets all `failure.json` writes
+succeed. Both cases assert no removal, `inspect=captured`, `logs=failed`,
+`cleanup=refused`, the same original exception/traceback, and no secret values in
+diagnostics, notes, or stdout.
+
+Fix BASE: `3d7aec112a6c04aff22708c6e1a78769c9432c84`. The unchanged focused command
+first produced **13 methods, two expected assertion failures**, then **13 passed,
+zero failures/errors/skips** after the guard change. No aggregate gate or other
+suite was rerun. Historical counts above describe the original implementation
+and overlap with these regression cases; they are not additive. New raw evidence
+is separate under `artifacts/phase-b/ci-fixture-01/fix-round-1`, with its own
+`ALLOWLIST.txt` and `SHA256SUMS`. Original evidence bytes remain unchanged.
