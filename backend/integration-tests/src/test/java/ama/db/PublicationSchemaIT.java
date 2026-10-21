@@ -223,6 +223,11 @@ class PublicationSchemaIT {
         error(1452,"INSERT INTO final_result_review VALUES ('missing-confirmation','review')");
         error(1452,"INSERT INTO final_result_review VALUES ('final','missing-review')");
         error(1062,"INSERT INTO final_result_review VALUES ('final','review')");
+        // Isolate the two membership edges from all other child references.
+        jdbc.update("DELETE FROM publication_attempt");
+        jdbc.update("DELETE FROM external_document_mapping");
+        jdbc.update("DELETE FROM publication");
+        jdbc.update("DELETE FROM result_review_evidence WHERE review_id='review'");
         error(1451,"DELETE FROM result_review WHERE id='review'");
         error(1451,"DELETE FROM final_confirmation WHERE id='final'");
         assertEquals(List.of("review"),jdbc.queryForList("SELECT review_id FROM final_result_review WHERE confirmation_id='final'",String.class));
@@ -230,6 +235,8 @@ class PublicationSchemaIT {
         assertEquals(List.of("review"),jdbc.queryForList("SELECT review_id FROM final_result_review WHERE confirmation_id='final'",String.class),"new assertions do not automatically become frozen membership");
         jdbc.update("DELETE FROM final_result_review WHERE confirmation_id='final'");
         assertEquals(1,jdbc.queryForObject("SELECT COUNT(*) FROM result_review WHERE id='review'",Integer.class));
+        assertEquals(1,jdbc.update("DELETE FROM result_review WHERE id='review'"));
+        assertEquals(1,jdbc.update("DELETE FROM final_confirmation WHERE id='final'"));
     }
 
     @Test void everyDeployedFkRejectsMissingParentsAndReferencedRowsRestrictDelete() throws Exception {

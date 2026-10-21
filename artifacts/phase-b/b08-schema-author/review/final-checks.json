@@ -1,0 +1,46 @@
+{
+  "status": "AUTHOR_FUNCTIONAL_GREEN_FRESH_INDEPENDENT_REVIEW_REQUIRED",
+  "captured_utc": "2026-10-21T21:50:20.963157+00:00",
+  "counts": {
+    "tables": 5,
+    "columns": 42,
+    "indexes": 30,
+    "checks": 4,
+    "foreign_keys": 18
+  },
+  "exact_five_group_equality": true,
+  "complete_lower_preservation": true,
+  "new_rows_all_empty_after_rollback": true,
+  "four_full_snapshots_byte_equal": true,
+  "final_snapshot_sha256": "866f7bf59731563f5aeb0d52d9b464b0cd451cb1e91df27873a02cd10d65c841",
+  "red": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "green": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "source_and_classpath_frozen_equal": true,
+  "central_register_commit": "0759dc9fb5a20072fb982c91f8ddee70ec175219",
+  "central_register_commit_epoch": 1792619280,
+  "ack_utc": "2026-10-21T21:48:36.027422+00:00",
+  "native_first_application": {
+    "rank": 12,
+    "type": "SQL",
+    "script": "V013__publications.sql",
+    "success": 1,
+    "version": "013",
+    "checksum": -847352333,
+    "description": "publications",
+    "installed_by": "ama_test",
+    "execution_time": 5758,
+    "installed_epoch": 1792619379,
+    "installed_on_utc": "2026-10-21 21:49:39.000000"
+  },
+  "fixture": "ama-test-b01-ee4d94105bb9"
+}
