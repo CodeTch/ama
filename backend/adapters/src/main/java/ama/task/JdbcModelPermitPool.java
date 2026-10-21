@@ -17,11 +17,16 @@ public final class JdbcModelPermitPool implements ModelPermitPool {
   configurations.forEach((key,value)->{if(!key.equals(value.model()))throw new IllegalArgumentException("Mismatched model key");});
  }
  public void configure(){independent();q.tx.required(()->{
-  for(var model:new TreeSet<>(configurations.keySet())){
+  var models=new TreeSet<>(configurations.keySet());
+  // Lock the COMPLETE sorted model set before the first reservation consistent read.
+  // Otherwise A's count creates an RR ReadView that misses an admission committed before B's lock.
+  // Upsert also avoids missing-key gap-lock/insert deadlocks; configuration never locks operations.
+  for(var model:models){
    var config=configurations.get(model);
-   // Materialize explicit admin configuration before selecting. Concurrent missing-key gap locks
-   // followed by INSERT can deadlock under MySQL REPEATABLE READ even with sorted keys.
    j.update("INSERT INTO model_capacity(model,capacity,config_revision,enabled,cutoff_policy) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE model=model",model,config.capacity(),config.revision(),config.enabled(),config.cutoffPolicy().name());
+  }
+  for(var model:models){
+   var config=configurations.get(model);
    var old=j.queryForList("SELECT * FROM model_capacity WHERE model=? FOR UPDATE",model);
    if(!old.isEmpty()){
     var row=old.getFirst();long revision=((Number)row.get("config_revision")).longValue();
