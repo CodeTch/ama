@@ -1,5 +1,6 @@
 package ama.file;
 
+import ama.storage.ManagedBackendId;
 import ama.storage.internal.ServiceTls;
 
 import java.io.*;
@@ -20,6 +21,24 @@ public final class FileServiceMain {
         Properties p = new Properties();
         try (var in = Files.newInputStream(Path.of(args[0]))) {
             p.load(in);
+        }
+        String backendId = required(p, "backendId");
+        if (backendId.matches("[0-9a-f]{64}")) {
+            Path root = Path.of(required(p, "root")), mount = Path.of(required(p, "mountpoint"));
+            if (!root.isAbsolute()
+                    || !mount.isAbsolute()
+                    || !root.normalize().equals(root)
+                    || !mount.normalize().equals(mount)
+                    || !root.startsWith(mount))
+                throw new IllegalArgumentException("Invalid managed root");
+            String relative = root.equals(mount) ? "." : mount.relativize(root).toString();
+            ManagedBackendId.require(
+                    backendId,
+                    new ManagedBackendId.Local(
+                            required(p, "serviceOrigin"),
+                            required(p, "volumeId"),
+                            relative,
+                            required(p, "filesystem")));
         }
         var guard =
                 new MountedVolumeGuard(

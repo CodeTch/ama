@@ -1,0 +1,32 @@
+google-java-format 1.24.0 --aosp
+Source: https://repo.maven.apache.org/maven2/com/google/googlejavaformat/google-java-format/1.24.0/google-java-format-1.24.0-all-deps.jar
+SHA256: 812f805f58112460edf01bf202a8e61d0fd1f35c0d4fabd54220640776ec57a1
+Owned files only:
+backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java
+backend/adapters/src/main/java/ama/storage/FileBackendDefinitions.java
+backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java
+backend/adapters/src/main/java/ama/storage/JdbcFileUploads.java
+backend/adapters/src/main/java/ama/storage/ManagedBackendAdapters.java
+backend/adapters/src/test/java/ama/storage/ManagedBackendIdentityTest.java
+backend/api/src/main/java/ama/api/FileConfiguration.java
+backend/api/src/main/java/ama/api/FileController.java
+backend/api/src/main/java/ama/api/FileErrors.java
+backend/api/src/test/java/ama/api/FileConfigurationTest.java
+backend/contracts/src/main/java/ama/contract/FileContracts.java
+backend/core/src/main/java/ama/storage/FilePurposePolicy.java
+backend/core/src/main/java/ama/storage/FileReferencePolicy.java
+backend/core/src/main/java/ama/storage/FileRegistry.java
+backend/core/src/main/java/ama/storage/FileUploads.java
+backend/core/src/main/java/ama/storage/ManagedBackendId.java
+backend/integration-tests/src/test/java/ama/storage/FileBackendBindingIT.java
+backend/integration-tests/src/test/java/ama/storage/FileRegistryHttpIT.java
+backend/integration-tests/src/test/java/ama/storage/FileRegistryRestartIT.java
+backend/integration-tests/src/test/java/ama/storage/FileRegistryUploadIT.java
+backend/integration-tests/src/test/java/ama/storage/ManagedLocalFixture.java
+backend/integration-tests/src/test/java/ama/storage/ManagedRegistryFixture.java
+backend/integration-tests/src/test/java/ama/storage/RegistryApiProcess.java
+backend/integration-tests/src/test/java/ama/storage/RegistryDeclaredError.java
+backend/integration-tests/src/test/java/ama/storage/RegistryObservedStorage.java
+backend/integration-tests/src/test/java/ama/storage/RegistryProbeSource.java
+backend/integration-tests/src/test/java/ama/storage/RegistryProductionConfigProcess.java
+backend/file-service/src/main/java/ama/file/FileServiceMain.java

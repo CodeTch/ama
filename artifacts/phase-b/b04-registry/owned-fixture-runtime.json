@@ -1,0 +1,50 @@
+[
+  {
+    "name": "ama-test-b01-999352219d61",
+    "arguments": [
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_0900_ai_ci",
+      "--default-time-zone=+00:00",
+      "--innodb-use-native-aio=0"
+    ],
+    "actualPorts": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "45333"
+        }
+      ]
+    }
+  },
+  {
+    "name": "ama-test-b01-ca05078d2c9e",
+    "arguments": [
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_0900_ai_ci",
+      "--default-time-zone=+00:00",
+      "--innodb-use-native-aio=0"
+    ],
+    "actualPorts": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "46515"
+        }
+      ]
+    }
+  },
+  {
+    "name": "ama-b04-java-44ef702b9e",
+    "arguments": [
+      "rustfs"
+    ],
+    "actualPorts": {
+      "9000/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "47779"
+        }
+      ]
+    }
+  }
+]
