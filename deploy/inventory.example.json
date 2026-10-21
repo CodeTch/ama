@@ -1,0 +1,527 @@
+{
+  "schemaVersion": 1,
+  "inventoryId": "pending",
+  "database": {
+    "mode": "private-ha"
+  },
+  "storage": {
+    "type": "local",
+    "backendId": "local-primary",
+    "root": null
+  },
+  "nodes": [
+    {
+      "id": null,
+      "vmId": null,
+      "hostId": null,
+      "storageDomain": null,
+      "powerDomain": null,
+      "os": "RHEL",
+      "version": "8.10",
+      "arch": "x86_64",
+      "vcpus": 16,
+      "memoryGiB": 32
+    },
+    {
+      "id": null,
+      "vmId": null,
+      "hostId": null,
+      "storageDomain": null,
+      "powerDomain": null,
+      "os": "RHEL",
+      "version": "8.10",
+      "arch": "x86_64",
+      "vcpus": 16,
+      "memoryGiB": 32
+    }
+  ],
+  "virtualization": {
+    "product": null,
+    "version": null
+  },
+  "faultDomains": {
+    "antiAffinity": null,
+    "sharedRiskAcknowledged": null
+  },
+  "ingress": {
+    "mode": null
+  },
+  "fencing": {
+    "enabled": null,
+    "provider": null,
+    "agent": null,
+    "managementPathIndependent": null,
+    "powerOffVerified": null,
+    "targets": [
+      {
+        "nodeId": null,
+        "vmId": null
+      },
+      {
+        "nodeId": null,
+        "vmId": null
+      }
+    ]
+  },
+  "replication": {
+    "protocol": "C",
+    "network": {
+      "id": null,
+      "independent": null,
+      "rttMs": null,
+      "throughputMbps": null,
+      "packetLossPercent": null
+    },
+    "volumes": [
+      {
+        "id": null,
+        "filesystem": "xfs",
+        "mountPoint": null,
+        "devices": {},
+        "capacityGiB": {},
+        "mountedOn": [],
+        "primaryOn": [],
+        "replicas": {},
+        "protectedComponents": [
+          "mysql-data",
+          "local-files",
+          "upload-staging",
+          "recovery-manifests"
+        ],
+        "componentPaths": {
+          "mysql-data": null,
+          "local-files": null,
+          "upload-staging": null,
+          "recovery-manifests": null
+        },
+        "filesystemUuid": null,
+        "observedMountUuid": null
+      }
+    ]
+  },
+  "cluster": {
+    "manager": "pacemaker",
+    "singleLifecycleManager": null,
+    "fencingBeforePromotion": null,
+    "twoNodePolicyReviewed": null,
+    "startupFencing": null,
+    "singlePrimary": null,
+    "mountExclusive": null,
+    "orderedColocated": null,
+    "automaticFailback": null,
+    "rejoinRequiresResync": null,
+    "refusePromotionOnUnknown": null
+  },
+  "evidence": {
+    "PR-01": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-02": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-03": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-04": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-05": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-06": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-07": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-08": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-09": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-10": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-11": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-12": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-13": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-14": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PR-15": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PL-01": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PL-02": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PL-03": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PL-04": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "PL-05": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    }
+  },
+  "drills": {
+    "HA-01": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-02": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-03": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-04": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-05": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-06": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-07": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-08": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-09": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-10": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-11": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-12": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-13": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    },
+    "HA-14": {
+      "status": "pending",
+      "observedAt": null,
+      "recordedBy": null,
+      "reviewedBy": null,
+      "inventorySha256": null,
+      "summary": null,
+      "artifact": {
+        "reference": null,
+        "sha256": null
+      }
+    }
+  }
+}
