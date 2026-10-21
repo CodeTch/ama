@@ -32,3 +32,7 @@ All formal SQL files001/002/005/006/007/008 retain the reviewed BASE bytes. V007
 Ignored allowlisted evidence: `artifacts/phase-b/b02-historical-target/` in the owning worktree. It contains actual RED/GREEN logs and XML, both initial-empty inventories, post-run history/DDL/metadata, unchanged SQL SHA comparison, process-local wrapper source and redacted argument structure, host AIO snapshot, actual second startup failure state/log and explicit first-log-loss observation. Credential/env files are excluded. The coordinator report records the final commit and complete owned range.
 
 No all/web/OpenAPI reruns were needed or run for unchanged production. The producer implementation and full B02 ACL closure remain OPEN; no company calls, main merge, push or subagents occurred.
+
+## Coordinator adoption
+
+Fullownedf4e2c6f..3c425110 independently SPECpass/codequalityAPPROVE0findings, rootreportread. Integrated1bbc69e,2paths exactsourcebeforethisstatusappend;all35allowlisted evidencecopied/hashverified. Everyoriginalassertion retained; historicaltestnowexplicit007withoutproductiontargetswitch. SQL/production/globalhelperunchanged. SQLfunctionalqualificationusesreportednativeAIOoffonlytwofreshfixtures, notproductionI/O/capacity. FullB02ACL/APIstillOPEN. [Independent review](identity-historical-target-independent-review.md). Noextratests/DBoperationsformechanicaladoption.
