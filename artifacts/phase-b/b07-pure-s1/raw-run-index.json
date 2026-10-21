@@ -1,0 +1,968 @@
+[
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/01-codec-red.log",
+    "buildSuccess": false,
+    "setupError": true,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/02-codec-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.canonical.CanonicalValueCodecTest.cancellationDuringScanSortAndHashNeverReturnsSuccess",
+      "ama.canonical.CanonicalValueCodecTest.everyCanonicalBudgetBoundaryAndPlusOne",
+      "ama.canonical.CanonicalValueCodecTest.literalPrimitiveVectors",
+      "ama.canonical.CanonicalValueCodecTest.unsignedUtf8SortPreservesListOrderAndExactControls"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 5, Failures: 4, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 4, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/03-codec-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/04-catalog-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.SourceAndSupportTest.danglingDuplicateRangeAndPartialScopeNeverSucceed",
+      "ama.minutes.contract.SourceAndSupportTest.deterministicAliasesTranscriptFirstAndExactDedup",
+      "ama.minutes.contract.SourceAndSupportTest.scalarAnchorHashesWholeTextAndFormatsCanonicalAscii",
+      "ama.minutes.contract.SourceAndSupportTest.unitMembershipUsesSavedPhysicalParagraphGapsAndVersion"
+    ],
+    "testErrors": [
+      "ama.minutes.contract.SourceAndSupportTest.aliasesAndFullTargetsValidatedWithoutInferringTruth",
+      "ama.minutes.contract.SourceAndSupportTest.backgroundOnlyActionsStayUnsupportedAndSuggestionsNeverAcceptIdentity"
+    ],
+    "testSummaries": [
+      "Tests run: 6, Failures: 4, Errors: 2, Skipped: 0",
+      "Tests run: 6, Failures: 4, Errors: 2, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/05-catalog-assertion-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.SourceAndSupportTest.aliasesAndFullTargetsValidatedWithoutInferringTruth",
+      "ama.minutes.contract.SourceAndSupportTest.backgroundOnlyActionsStayUnsupportedAndSuggestionsNeverAcceptIdentity",
+      "ama.minutes.contract.SourceAndSupportTest.danglingDuplicateRangeAndPartialScopeNeverSucceed",
+      "ama.minutes.contract.SourceAndSupportTest.deterministicAliasesTranscriptFirstAndExactDedup",
+      "ama.minutes.contract.SourceAndSupportTest.scalarAnchorHashesWholeTextAndFormatsCanonicalAscii",
+      "ama.minutes.contract.SourceAndSupportTest.unitMembershipUsesSavedPhysicalParagraphGapsAndVersion"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 6, Failures: 6, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 6, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/06-catalog-green.log",
+    "buildSuccess": false,
+    "setupError": true,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/07-catalog-green.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.SourceAndSupportTest.deterministicAliasesTranscriptFirstAndExactDedup"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 6, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/08-catalog-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/09-json-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.json.StrictMinutesJsonReaderTest.cancellationReadFailuresAndInterruptedIoAreRedactedAndPreserveOwnership",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.perFactoryTokenNameStringDepthAndMembershipLimits",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.strictSchemaUnknownEscapedDuplicateMissingAndEof",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.utf8DecoderRejectsMalformedSuffixBomOtherEncodingsAndEscapedSurrogates"
+    ],
+    "testErrors": [
+      "ama.minutes.json.StrictMinutesJsonReaderTest.allSevenKindsEmptyDirectoriesTitleAndNonBmpBody",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.exactWireBoundaryPlusOneSentinelAndNoCloseOnEveryOutcome",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.rawActionSuggestionsStrictNumbersDatesAndScalarOffsets"
+    ],
+    "testSummaries": [
+      "Tests run: 7, Failures: 4, Errors: 3, Skipped: 0",
+      "Tests run: 7, Failures: 4, Errors: 3, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/10-json-assertion-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.json.StrictMinutesJsonReaderTest.allSevenKindsEmptyDirectoriesTitleAndNonBmpBody",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.cancellationReadFailuresAndInterruptedIoAreRedactedAndPreserveOwnership",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.exactWireBoundaryPlusOneSentinelAndNoCloseOnEveryOutcome",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.perFactoryTokenNameStringDepthAndMembershipLimits",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.rawActionSuggestionsStrictNumbersDatesAndScalarOffsets",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.strictSchemaUnknownEscapedDuplicateMissingAndEof",
+      "ama.minutes.json.StrictMinutesJsonReaderTest.utf8DecoderRejectsMalformedSuffixBomOtherEncodingsAndEscapedSurrogates"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 7, Failures: 7, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 7, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/11-json-green.log",
+    "buildSuccess": false,
+    "setupError": true,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/12-json-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/13-graph-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [
+      "ama.minutes.contract.StoredSourceGraphTest.ambiguousPinnedParserSelectionRejectsInsteadOfChoosingOrder",
+      "ama.minutes.contract.StoredSourceGraphTest.cycleBudgetAndCancellationApplyAcrossAllOrigins",
+      "ama.minutes.contract.StoredSourceGraphTest.onePhysicalLocatorKeepsBothActualNoteInputsAndParserContexts",
+      "ama.minutes.contract.StoredSourceGraphTest.ordinaryCopiedLocalElementNeverAcceptsAttractiveHistoricalInput",
+      "ama.minutes.contract.StoredSourceGraphTest.suppliedMembershipMustBeExactBijection"
+    ],
+    "testSummaries": [
+      "Tests run: 5, Failures: 0, Errors: 5, Skipped: 0",
+      "Tests run: 5, Failures: 0, Errors: 5, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/14-graph-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.StoredSourceGraphTest.ambiguousPinnedParserSelectionRejectsInsteadOfChoosingOrder",
+      "ama.minutes.contract.StoredSourceGraphTest.cycleBudgetAndCancellationApplyAcrossAllOrigins",
+      "ama.minutes.contract.StoredSourceGraphTest.onePhysicalLocatorKeepsBothActualNoteInputsAndParserContexts",
+      "ama.minutes.contract.StoredSourceGraphTest.ordinaryCopiedLocalElementNeverAcceptsAttractiveHistoricalInput",
+      "ama.minutes.contract.StoredSourceGraphTest.suppliedMembershipMustBeExactBijection"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 5, Failures: 5, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 5, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/15-graph-green.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.StoredSourceGraphTest.ambiguousPinnedParserSelectionRejectsInsteadOfChoosingOrder",
+      "ama.minutes.contract.StoredSourceGraphTest.cycleBudgetAndCancellationApplyAcrossAllOrigins",
+      "ama.minutes.contract.StoredSourceGraphTest.onePhysicalLocatorKeepsBothActualNoteInputsAndParserContexts",
+      "ama.minutes.contract.StoredSourceGraphTest.ordinaryCopiedLocalElementNeverAcceptsAttractiveHistoricalInput",
+      "ama.minutes.contract.StoredSourceGraphTest.suppliedMembershipMustBeExactBijection"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 5, Failures: 5, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 5, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/16-graph-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/17-independent-vectors.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/18-profiles-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.HashProfilesTest.completeIndependentConfirmationVectorAndFourMarkSetOrder",
+      "ama.minutes.contract.HashProfilesTest.completeIndependentReviewTargetAndSourcesVectors",
+      "ama.minutes.contract.HashProfilesTest.confirmationCannotClaimValidatedRawProfileChainWhenNoApprovedSchemaExists",
+      "ama.minutes.contract.HashProfilesTest.reviewSourcesRejectsSupportiveSubsetAndFullContentChangesTargetHash"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 4, Failures: 4, Errors: 0, Skipped: 0",
+      "Tests run: 4, Failures: 4, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/19-independent-vectors-fixed.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/20-profiles-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.HashProfilesTest.completeIndependentConfirmationVectorAndFourMarkSetOrder",
+      "ama.minutes.contract.HashProfilesTest.completeIndependentReviewTargetAndSourcesVectors",
+      "ama.minutes.contract.HashProfilesTest.confirmationCannotClaimValidatedRawProfileChainWhenNoApprovedSchemaExists",
+      "ama.minutes.contract.HashProfilesTest.reviewSourcesRejectsSupportiveSubsetAndFullContentChangesTargetHash"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 4, Failures: 4, Errors: 0, Skipped: 0",
+      "Tests run: 4, Failures: 4, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/21-profiles-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/22-independent-generation.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/23-generation-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.GenerationFingerprintTest.completeIndependentEmptyGenerationVector",
+      "ama.minutes.contract.GenerationFingerprintTest.computeCannotPretendUninterpretedArchiveFactsAreValidated",
+      "ama.minutes.contract.GenerationFingerprintTest.fixedFenceChangesDigestAndRowBaseMustMatch",
+      "ama.minutes.contract.GenerationFingerprintTest.taskVerificationRejectsCrossInputAndMissingOrConflictingHistoricalFences"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 4, Failures: 4, Errors: 0, Skipped: 0",
+      "Tests run: 4, Failures: 4, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/24-generation-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/25-independent-final.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/26-final-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.FinalAndCoverageTest.independentFullFinalProjectionAndFrozenMembershipIgnoresLaterReview",
+      "ama.minutes.contract.FinalAndCoverageTest.latestContraryExactScopeWinsAndPartialReviewsNeverGiveWholeCredit",
+      "ama.minutes.contract.FinalAndCoverageTest.newTargetOrHashInvalidatesReviewAndMissingFinalInputFails"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 3, Failures: 3, Errors: 0, Skipped: 0",
+      "Tests run: 3, Failures: 3, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/27-final-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/28-material-profile-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.HashProfilesTest.materialReviewCannotBypassOwningRawArchiveChain"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 1, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 1, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/29-material-profile-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/30-config-reader-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.ConfigWireReaderTest.adoptedRawVectorsReadTheirExactIdentitiesAndHashes"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 3, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 3, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/31-config-reader-green.log",
+    "buildSuccess": false,
+    "setupError": true,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/32-config-reader-green.log",
+    "buildSuccess": false,
+    "setupError": true,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/33-config-reader-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/34-independent-processing.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/35-config-binding-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.ConfigBindingsTest.draftComputeNeedsNoOwnStoredFingerprintTaskOrOutputRevision",
+      "ama.config.json.ConfigBindingsTest.invalidRawOrIncompleteArchiveClosureCannotMintBinding",
+      "ama.config.json.ConfigBindingsTest.storedVerifyRequiresActualDigestTaskAndProducerChain"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 3, Failures: 3, Errors: 0, Skipped: 0",
+      "Tests run: 3, Failures: 3, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/36-config-binding-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/37-raw-integration-green.log",
+    "buildSuccess": false,
+    "setupError": true,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/38-raw-integration-green.log",
+    "buildSuccess": false,
+    "setupError": true,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/39-raw-integration-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 12, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/40-independent-full-chain.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/41-raw-generation-draft-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.RawHashChainTest.rawFullGenerationComputesBeforeOwnRowTaskAndOutputExist"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 2, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 2, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/42-raw-generation-draft-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 2, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 2, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/43-independent-reload-final.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/44-raw-full-chain.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/45-private-bindings-green.log",
+    "buildSuccess": false,
+    "setupError": true,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/46-private-bindings-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/47-depth-audio-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.SourceAndSupportTest.syntheticAudioVersionHasNullMaterialAndParserFields"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 7, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/48-audio-green-depth-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.ArchiveBudgetTest.independentExactCumulativeBudgetAcceptsAllFiveRawDocuments"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 15, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 15, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/49-depth-budget-green.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 15, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 15, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/50-shared-depth-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 15, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 15, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/51-independent-occurrences.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/52-orphan-membership-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.minutes.contract.StoredSourceGraphTest.orphanStoredMembershipCannotBeIgnoredAsAnUnrelatedUsage"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 7, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/53-orphan-membership-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/54-pinned-rowset-budget-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.RawHashChainTest.pinnedCanonicalBudgetAlsoProtectsTemplateRowsetBeforeItsDigestIsHidden"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 1, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 1, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/55-pinned-rowset-budget-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/56-task-identity-red-output-boundaries.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.RawHashChainTest.storedTaskIdentityFactsCanSupplyCompleteHistoricalGenerationFence"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 9, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 1, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 10, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/57-task-identity-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/58-independent-control-json.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/59-config-canonical-error-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.ConfigWireReaderTest.canonicalControlEscapesAndSupplementaryConfigTextArePreserved",
+      "ama.config.json.ConfigWireReaderTest.unknownProcessingKindIsNotARecognizedFutureCapability"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 5, Failures: 2, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 2, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/60-config-canonical-error-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 8, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/61-fact-copy-budget-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.contract.MinutesFactBudgetTest.factBagChecksCallerLimitBeforeAnyLargeDefensiveCopy"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 1, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 1, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/62-fact-copy-budget-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/63-catalog-copy-budget-red.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.contract.MinutesFactBudgetTest.catalogSnapshotAlsoChecksItsBoundBeforeDefensiveCopy"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 2, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 2, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/64-nested-fact-caps-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 2, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 2, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 14, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/65-independent-expanded-vectors.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/66-actual-matrix-first-run.log",
+    "buildSuccess": false,
+    "setupError": true,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/67-expanded-vectors-corrected.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/68-actual-matrix-test-run.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.RawHashChainTest.presentContradictorySuggestionNeverFallsBackToIntrinsicTranscript"
+    ],
+    "testErrors": [
+      "ama.config.json.RawHashChainTest.actualBodyActionDetectionBackgroundAndIntrinsicMatrixMatchesFullIndependentFinal"
+    ],
+    "testSummaries": [
+      "Tests run: 11, Failures: 1, Errors: 1, Skipped: 0",
+      "Tests run: 11, Failures: 1, Errors: 1, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/69-expanded-vectors-final.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/70-actual-matrix-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 11, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 11, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/71-final-limit-regressions-first-run.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.ConfigBindingsTest.matchingArchiveIdentityCannotSubstituteDifferentRawDefinitionOrExtraNodes"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 16, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 22, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/72-final-limit-regressions-green.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.ConfigBindingsTest.matchingArchiveIdentityCannotSubstituteDifferentRawDefinitionOrExtraNodes"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 16, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 22, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/73-final-limit-regressions-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 16, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 22, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/74-manual-vector.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/75-final-reload-future-checks.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [
+      "ama.config.json.RawHashChainTest.savedManualChildUsesExactBodyMarksAndInheritedOriginalProcessingProfile"
+    ],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 13, Failures: 1, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 19, Failures: 1, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/76-manual-vector-exact-saved-newline.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/77-final-reload-future-green.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 13, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 19, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/78-complete-owned-suite.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 2, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 2, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 32, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 16, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 15, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 13, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 63, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/79-canonical-runner.log",
+    "buildSuccess": true,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": [
+      "Tests run: 13, Failures: 0, Errors: 0, Skipped: 0",
+      "Tests run: 13, Failures: 0, Errors: 0, Skipped: 0"
+    ]
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/80-source-audit-tool-error.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  },
+  {
+    "path": "artifacts/phase-b/b07-pure-s1/raw/81-source-audit-green.log",
+    "buildSuccess": false,
+    "setupError": false,
+    "assertionFailures": [],
+    "testErrors": [],
+    "testSummaries": []
+  }
+]

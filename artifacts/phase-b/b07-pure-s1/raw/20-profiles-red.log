@@ -1,0 +1,137 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ama-parent                                                         [pom]
+[INFO] ama-contracts                                                      [jar]
+[INFO] ama-core                                                           [jar]
+[INFO] 
+[INFO] ---------------------------< ama:ama-parent >---------------------------
+[INFO] Building ama-parent 0.1.0-SNAPSHOT                                 [1/3]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] -------------------------< ama:ama-contracts >--------------------------
+[INFO] Building ama-contracts 0.1.0-SNAPSHOT                              [2/3]
+[INFO]   from backend/contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/contracts/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/contracts/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/contracts/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-contracts ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-contracts ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ----------------------------< ama:ama-core >----------------------------
+[INFO] Building ama-core 0.1.0-SNAPSHOT                                   [3/3]
+[INFO]   from backend/core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-core ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/core/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/core/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-core ---
+[INFO] Copying 12 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-core ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.minutes.contract.HashProfilesTest
+[ERROR] Tests run: 4, Failures: 4, Errors: 0, Skipped: 0, Time elapsed: 0.268 s <<< FAILURE! -- in ama.minutes.contract.HashProfilesTest
+[ERROR] ama.minutes.contract.HashProfilesTest.completeIndependentConfirmationVectorAndFourMarkSetOrder -- Time elapsed: 0.131 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <060000000000000003040000000000000004646174610600000000000000040400000000000000076261746368496404000000000000002430303030303030302d303030302d303030302d303030302d3030303030303030303030320400000000000000096d656574696e67496404000000000000002430303030303030302d303030302d303030302d303030302d30303030303030303030303104000000000000000a7265766973696f6e496404000000000000002430303030303030302d303030302d303030302d303030302d3030303030303030303030350400000000000000087365676d656e7473050000000000000001060000000000000009040000000000000004626f64790400000000000000096d656574696e672037040000000000000005656e644d73000400000000000000056d61726b730500000000000000000400000000000000076f7264696e616c0300000000000000010400000000000000097365676d656e74496404000000000000002430303030303030302d303030302d303030302d303030302d30303030303030303030303604000000000000000c736f7572636546696c65496404000000000000002430303030303030302d303030302d303030302d303030302d30303030303030303030303304000000000000000f736f75726365506172616772617068030000000000000004040000000000000009737065616b657249640004000000000000000773746172744d73000400000000000000046b696e640400000000000000175452414e5343524950545f434f4e4649524d4154494f4e04000000000000000770726f66696c6504000000000000001e616d612e7472616e7363726970742d636f6e6669726d6174696f6e2e7631> but was: <06000000000000000304000000000000000464617461000400000000000000046b696e640400000000000000175452414e5343524950545f434f4e4649524d4154494f4e04000000000000000770726f66696c6504000000000000001e616d612e7472616e7363726970742d636f6e6669726d6174696f6e2e7631>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:179)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1188)
+	at ama.minutes.contract.HashProfilesTest.vector(HashProfilesTest.java:31)
+	at ama.minutes.contract.HashProfilesTest.completeIndependentConfirmationVectorAndFourMarkSetOrder(HashProfilesTest.java:36)
+
+[ERROR] ama.minutes.contract.HashProfilesTest.confirmationCannotClaimValidatedRawProfileChainWhenNoApprovedSchemaExists -- Time elapsed: 0.039 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Expected ama.contract.MinutesContracts.Failure to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:74)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3223)
+	at ama.minutes.contract.StoredSourceGraphTest.fails(StoredSourceGraphTest.java:50)
+	at ama.minutes.contract.HashProfilesTest.confirmationCannotClaimValidatedRawProfileChainWhenNoApprovedSchemaExists(HashProfilesTest.java:61)
+
+[ERROR] ama.minutes.contract.HashProfilesTest.reviewSourcesRejectsSupportiveSubsetAndFullContentChangesTargetHash -- Time elapsed: 0.026 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Expected ama.contract.MinutesContracts.Failure to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:74)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3223)
+	at ama.minutes.contract.StoredSourceGraphTest.fails(StoredSourceGraphTest.java:50)
+	at ama.minutes.contract.HashProfilesTest.reviewSourcesRejectsSupportiveSubsetAndFullContentChangesTargetHash(HashProfilesTest.java:53)
+
+[ERROR] ama.minutes.contract.HashProfilesTest.completeIndependentReviewTargetAndSourcesVectors -- Time elapsed: 0.019 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <06000000000000000304000000000000000464617461060000000000000005040000000000000006616e63686f72060000000000000005040000000000000003656e6403000000000000000304000000000000000d736368656d6156657273696f6e04000000000000000d616d612e616e63686f722e763104000000000000000573746172740300000000000000000400000000000000107461726765745465787453686132353604000000000000004061616366623636333762643064663232333836343163356231353839386431613631646633313537623164306234303939663539306663306230623666626264040000000000000004756e697404000000000000000e554e49434f44455f5343414c4152040000000000000007636f6e74656e74060000000000000004040000000000000006616374696f6e00040000000000000004626f647904000000000000000641f09f98804204000000000000000863617465676f727904000000000000000a434f4e434c5553494f4e0400000000000000057469746c65000400000000000000096d656574696e67496404000000000000002430303030303030302d303030302d303030302d303030302d30303030303030303030303104000000000000000a7265766965774b696e6404000000000000000e534f555243455f535550504f5254040000000000000006746172676574060000000000000005040000000000000002696404000000000000002430303030303030302d303030302d303030302d303030302d3030303030303030303031320400000000000000046b696e64040000000000000007454c454d454e5404000000000000000f6d696e757465735265766973696f6e00040000000000000005736574496404000000000000002430303030303030302d303030302d303030302d303030302d30303030303030303030313104000000000000000b7365745265766973696f6e0300000000000000010400000000000000046b696e6404000000000000000d5245564945575f54415247455404000000000000000770726f66696c65040000000000000014616d612e726573756c742d7265766965772e7632> but was: <06000000000000000304000000000000000464617461000400000000000000046b696e6404000000000000000d5245564945575f54415247455404000000000000000770726f66696c65040000000000000014616d612e726573756c742d7265766965772e7632>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:179)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1188)
+	at ama.minutes.contract.HashProfilesTest.vector(HashProfilesTest.java:31)
+	at ama.minutes.contract.HashProfilesTest.completeIndependentReviewTargetAndSourcesVectors(HashProfilesTest.java:47)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   HashProfilesTest.completeIndependentConfirmationVectorAndFourMarkSetOrder:36->vector:31 expected: <060000000000000003040000000000000004646174610600000000000000040400000000000000076261746368496404000000000000002430303030303030302d303030302d303030302d303030302d3030303030303030303030320400000000000000096d656574696e67496404000000000000002430303030303030302d303030302d303030302d303030302d30303030303030303030303104000000000000000a7265766973696f6e496404000000000000002430303030303030302d303030302d303030302d303030302d3030303030303030303030350400000000000000087365676d656e7473050000000000000001060000000000000009040000000000000004626f64790400000000000000096d656574696e672037040000000000000005656e644d73000400000000000000056d61726b730500000000000000000400000000000000076f7264696e616c0300000000000000010400000000000000097365676d656e74496404000000000000002430303030303030302d303030302d303030302d303030302d30303030303030303030303604000000000000000c736f7572636546696c65496404000000000000002430303030303030302d303030302d303030302d303030302d30303030303030303030303304000000000000000f736f75726365506172616772617068030000000000000004040000000000000009737065616b657249640004000000000000000773746172744d73000400000000000000046b696e640400000000000000175452414e5343524950545f434f4e4649524d4154494f4e04000000000000000770726f66696c6504000000000000001e616d612e7472616e7363726970742d636f6e6669726d6174696f6e2e7631> but was: <06000000000000000304000000000000000464617461000400000000000000046b696e640400000000000000175452414e5343524950545f434f4e4649524d4154494f4e04000000000000000770726f66696c6504000000000000001e616d612e7472616e7363726970742d636f6e6669726d6174696f6e2e7631>
+[ERROR]   HashProfilesTest.completeIndependentReviewTargetAndSourcesVectors:47->vector:31 expected: <06000000000000000304000000000000000464617461060000000000000005040000000000000006616e63686f72060000000000000005040000000000000003656e6403000000000000000304000000000000000d736368656d6156657273696f6e04000000000000000d616d612e616e63686f722e763104000000000000000573746172740300000000000000000400000000000000107461726765745465787453686132353604000000000000004061616366623636333762643064663232333836343163356231353839386431613631646633313537623164306234303939663539306663306230623666626264040000000000000004756e697404000000000000000e554e49434f44455f5343414c4152040000000000000007636f6e74656e74060000000000000004040000000000000006616374696f6e00040000000000000004626f647904000000000000000641f09f98804204000000000000000863617465676f727904000000000000000a434f4e434c5553494f4e0400000000000000057469746c65000400000000000000096d656574696e67496404000000000000002430303030303030302d303030302d303030302d303030302d30303030303030303030303104000000000000000a7265766965774b696e6404000000000000000e534f555243455f535550504f5254040000000000000006746172676574060000000000000005040000000000000002696404000000000000002430303030303030302d303030302d303030302d303030302d3030303030303030303031320400000000000000046b696e64040000000000000007454c454d454e5404000000000000000f6d696e757465735265766973696f6e00040000000000000005736574496404000000000000002430303030303030302d303030302d303030302d303030302d30303030303030303030313104000000000000000b7365745265766973696f6e0300000000000000010400000000000000046b696e6404000000000000000d5245564945575f54415247455404000000000000000770726f66696c65040000000000000014616d612e726573756c742d7265766965772e7632> but was: <06000000000000000304000000000000000464617461000400000000000000046b696e6404000000000000000d5245564945575f54415247455404000000000000000770726f66696c65040000000000000014616d612e726573756c742d7265766965772e7632>
+[ERROR]   HashProfilesTest.confirmationCannotClaimValidatedRawProfileChainWhenNoApprovedSchemaExists:61 Expected ama.contract.MinutesContracts.Failure to be thrown, but nothing was thrown.
+[ERROR]   HashProfilesTest.reviewSourcesRejectsSupportiveSubsetAndFullContentChangesTargetHash:53 Expected ama.contract.MinutesContracts.Failure to be thrown, but nothing was thrown.
+[INFO] 
+[ERROR] Tests run: 4, Failures: 4, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ama-parent 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] ama-parent ......................................... SUCCESS [  0.007 s]
+[INFO] ama-contracts ...................................... SUCCESS [  1.347 s]
+[ERROR] ama-core ........................................... FAILURE [  1.961 s]
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.437 s
+[INFO] Finished at: 2026-10-22T05:22:49+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.6:test (default-test) on project ama-core: There are test failures.
+[ERROR] 
+[ERROR] See /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/core/target/surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-core

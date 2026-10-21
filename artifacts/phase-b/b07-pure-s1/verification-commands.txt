@@ -1,0 +1,12 @@
+Working directory: /home/tanren/ama/.worktrees/phase-b-minutes-pure
+Runtime initialized by sourcing the private pinned environment; the environment file/values are not archived.
+Final independent vectors:
+python3 artifacts/phase-b/b07-pure-s1/independent_vectors.py
+Final owned suite:
+./mvnw -B -ntp -pl backend/adapters -am -Dtest=MinutesFactBudgetTest,CanonicalValueCodecTest,SourceAndSupportTest,StoredSourceGraphTest,HashProfilesTest,GenerationFingerprintTest,FinalAndCoverageTest,StrictMinutesJsonReaderTest,OutputBudgetBoundaryTest,ConfigWireReaderTest,ConfigBindingsTest,ArchiveBudgetTest,RawHashChainTest -Dsurefire.failIfNoSpecifiedTests=false test
+Canonical runner:
+python3 tools/checks/run.py unit RawHashChainTest
+Whitespace check after explicit staging:
+git diff --cached --check
+Integrity check:
+sha256sum -c artifacts/phase-b/b07-pure-s1/SHA256SUMS
