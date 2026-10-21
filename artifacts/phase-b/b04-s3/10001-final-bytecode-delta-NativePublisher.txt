@@ -1,0 +1,11 @@
+--- frozen10001
++++ finalcanonical
+@@ -330,7 +330,7 @@
+      411: lload         18
+      413: aload         21
+      415: invokedynamic #CP,  0            // InvokeDynamic #CP:get:(Lama/storage/s3/NativePublisher;Ljava/lang/String;Ljava/lang/String;IJLsoftware/amazon/awssdk/core/sync/RequestBody;)Ljava/util/function/Supplier;
+-     420: invokevirtual #CP                // Method ama/storage/s3/S3Objects.call:(Ljava/util/function/Supplier;)Ljava/lang/Object;
++     420: invokevirtual #CP                // Method ama/storage/s3/S3Objects.streaming:(Ljava/util/function/Supplier;)Ljava/lang/Object;
+      423: checkcast     #CP                // class software/amazon/awssdk/services/s3/model/UploadPartResponse
+      426: astore        22
+      428: aload         22

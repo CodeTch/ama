@@ -1,0 +1,119 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ama-parent                                                         [pom]
+[INFO] ama-contracts                                                      [jar]
+[INFO] ama-core                                                           [jar]
+[INFO] ama-adapters                                                       [jar]
+[INFO] ama-file-service                                                   [jar]
+[INFO] 
+[INFO] ---------------------------< ama:ama-parent >---------------------------
+[INFO] Building ama-parent 0.1.0-SNAPSHOT                                 [1/5]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.10.0:tree (default-cli) @ ama-parent ---
+[INFO] ama:ama-parent:pom:0.1.0-SNAPSHOT
+[INFO] 
+[INFO] -------------------------< ama:ama-contracts >--------------------------
+[INFO] Building ama-contracts 0.1.0-SNAPSHOT                              [2/5]
+[INFO]   from backend/contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.10.0:tree (default-cli) @ ama-contracts ---
+[INFO] ama:ama-contracts:jar:0.1.0-SNAPSHOT
+[INFO] 
+[INFO] ----------------------------< ama:ama-core >----------------------------
+[INFO] Building ama-core 0.1.0-SNAPSHOT                                   [3/5]
+[INFO]   from backend/core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.10.0:tree (default-cli) @ ama-core ---
+[INFO] ama:ama-core:jar:0.1.0-SNAPSHOT
+[INFO] \- ama:ama-contracts:jar:0.1.0-SNAPSHOT:compile
+[INFO] 
+[INFO] --------------------------< ama:ama-adapters >--------------------------
+[INFO] Building ama-adapters 0.1.0-SNAPSHOT                               [4/5]
+[INFO]   from backend/adapters/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.10.0:tree (default-cli) @ ama-adapters ---
+[INFO] ama:ama-adapters:jar:0.1.0-SNAPSHOT
+[INFO] +- software.amazon.awssdk:s3:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:aws-xml-protocol:jar:2.56.0:compile
+[INFO] |  |  \- software.amazon.awssdk:aws-query-protocol:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:protocol-core:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:arns:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:profiles:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:crt-core:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:http-auth:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:identity-spi:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:http-auth-spi:jar:2.56.0:compile
+[INFO] |  |  \- org.reactivestreams:reactive-streams:jar:1.0.4:compile
+[INFO] |  +- software.amazon.awssdk:http-auth-aws:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:checksums:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:checksums-spi:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:retries-spi:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:sdk-core:jar:2.56.0:compile
+[INFO] |  |  +- software.amazon.awssdk:retries:jar:2.56.0:compile
+[INFO] |  |  \- org.slf4j:slf4j-api:jar:2.0.18:compile
+[INFO] |  +- software.amazon.awssdk:auth:jar:2.56.0:compile
+[INFO] |  |  +- software.amazon.awssdk:http-auth-aws-eventstream:jar:2.56.0:compile
+[INFO] |  |  \- software.amazon.eventstream:eventstream:jar:1.0.1:compile
+[INFO] |  +- software.amazon.awssdk:http-client-spi:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:regions:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:annotations:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:utils:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:aws-core:jar:2.56.0:compile
+[INFO] |  |  \- software.amazon.awssdk:utils-lite:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:metrics-spi:jar:2.56.0:compile
+[INFO] |  +- software.amazon.awssdk:json-utils:jar:2.56.0:compile
+[INFO] |  |  \- software.amazon.awssdk:third-party-jackson-core:jar:2.56.0:compile
+[INFO] |  \- software.amazon.awssdk:endpoints-spi:jar:2.56.0:compile
+[INFO] +- software.amazon.awssdk:url-connection-client:jar:2.56.0:compile
+[INFO] +- com.fasterxml.jackson.core:jackson-databind:jar:2.21.5:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.21:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-core:jar:2.21.5:compile
+[INFO] +- ama:ama-core:jar:0.1.0-SNAPSHOT:compile
+[INFO] |  \- ama:ama-contracts:jar:0.1.0-SNAPSHOT:compile
+[INFO] +- org.springframework:spring-jdbc:jar:7.0.9:compile
+[INFO] |  +- org.springframework:spring-beans:jar:7.0.9:compile
+[INFO] |  +- org.springframework:spring-core:jar:7.0.9:compile
+[INFO] |  |  +- commons-logging:commons-logging:jar:1.3.6:compile
+[INFO] |  |  \- org.jspecify:jspecify:jar:1.0.1:compile
+[INFO] |  \- org.springframework:spring-tx:jar:7.0.9:compile
+[INFO] +- org.flywaydb:flyway-core:jar:12.4.0:compile
+[INFO] |  \- tools.jackson.core:jackson-databind:jar:3.1.5:compile
+[INFO] |     \- tools.jackson.core:jackson-core:jar:3.1.5:compile
+[INFO] +- org.flywaydb:flyway-mysql:jar:12.4.0:compile
+[INFO] \- com.mysql:mysql-connector-j:jar:9.7.0:runtime
+[INFO] 
+[INFO] ------------------------< ama:ama-file-service >------------------------
+[INFO] Building ama-file-service 0.1.0-SNAPSHOT                           [5/5]
+[INFO]   from backend/file-service/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.10.0:tree (default-cli) @ ama-file-service ---
+[INFO] ama:ama-file-service:jar:0.1.0-SNAPSHOT
+[INFO] +- ama:ama-adapters:jar:0.1.0-SNAPSHOT:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.21.5:compile
+[INFO] |  |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.21:compile
+[INFO] |  |  \- com.fasterxml.jackson.core:jackson-core:jar:2.21.5:compile
+[INFO] |  \- ama:ama-core:jar:0.1.0-SNAPSHOT:compile
+[INFO] |     \- ama:ama-contracts:jar:0.1.0-SNAPSHOT:compile
+[INFO] \- net.java.dev.jna:jna:jar:5.18.1:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ama-parent 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] ama-parent ......................................... SUCCESS [ 15.282 s]
+[INFO] ama-contracts ...................................... SUCCESS [  0.019 s]
+[INFO] ama-core ........................................... SUCCESS [  0.048 s]
+[INFO] ama-adapters ....................................... SUCCESS [  0.209 s]
+[INFO] ama-file-service ................................... SUCCESS [  0.043 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  19.044 s
+[INFO] Finished at: 2026-10-22T01:57:59+08:00
+[INFO] ------------------------------------------------------------------------

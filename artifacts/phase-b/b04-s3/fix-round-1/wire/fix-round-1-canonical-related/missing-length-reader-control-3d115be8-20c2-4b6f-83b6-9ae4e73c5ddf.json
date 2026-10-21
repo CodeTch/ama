@@ -1,0 +1,29 @@
+[ {
+  "method" : "GET",
+  "path" : "/v3-control-f113a84a-751b-44f5-8854-fdd75327dffc/control/length",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "3",
+    "etag" : "\"5289df737df57326fcdd22597afb1fac\""
+  },
+  "upstreamBytes" : 3,
+  "downstreamBytes" : 3,
+  "fault" : true
+}, {
+  "method" : "GET",
+  "path" : "/v3-control-f113a84a-751b-44f5-8854-fdd75327dffc/control/length",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "3",
+    "etag" : "\"5289df737df57326fcdd22597afb1fac\""
+  },
+  "upstreamBytes" : 3,
+  "downstreamBytes" : 3,
+  "fault" : false
+} ]

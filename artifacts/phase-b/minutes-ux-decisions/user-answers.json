@@ -1,0 +1,16 @@
+{
+  "source": "Direct human user reply in current Codex conversation",
+  "recordedAtUtc": "2026-10-21T22:38:29.631071+00:00",
+  "answers": [
+    {
+      "questionItemId": "[\"request_user_input_async\",\"call_a54fb91880a2433a9aebf3393a709040\",0]",
+      "question": "原需求要求“首次生成成功后参会人即可查看”，B-07 细则则要求“候选明确采用后才更新正文”。首版纪要采用哪种流程？已有纪要的重新生成始终保留为候选，须负责人明确采用。",
+      "answer": "首版自动保存：仅在尚无有效正文、无人编辑且版本未变化时生效（推荐）"
+    },
+    {
+      "questionItemId": "[\"request_user_input_async\",\"call_a54fb91880a2433a9aebf3393a709040\",1]",
+      "question": "对于重要结论和行动项，引用能定位并不代表内容已经证实。证据核对采用哪种流程？这会落实为版本记录和最终确认校验。",
+      "answer": "先标“待核对”，负责人核对原文后确认；依据不足可改为待确认事项（推荐）"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+sudo: a password is required
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-file-registry/tools/dev/s3_fixture.py", line 57, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "/home/tanren/ama/.worktrees/phase-b-file-registry/tools/dev/s3_fixture.py", line 36, in main
+    subprocess.run(['sudo','-n','install','-d','-o','10001','-g','10001','-m','750',str(HOME/name)],check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['sudo', '-n', 'install', '-d', '-o', '10001', '-g', '10001', '-m', '750', '/home/tanren/ama/.worktrees/phase-b-file-registry/.tools/s3-registry/data']' returned non-zero exit status 1.

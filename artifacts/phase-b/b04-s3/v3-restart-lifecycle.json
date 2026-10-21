@@ -1,0 +1,64 @@
+{
+  "started": "2026-10-21T18:20:13.578877+00:00",
+  "fixture": {
+    "id": "54dc7cc4db251d2942c70f40834716d76b83d4c85ee778ef8a5fda1074273c9a",
+    "name": "ama-b04-java-fabcfbf531",
+    "port": 44789,
+    "image": "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+    "owner": "ama-b04-java-s3-phase-b-storage-s3-s3-java-v3restart",
+    "workspace": "/home/tanren/ama/.worktrees/phase-b-storage-s3"
+  },
+  "before": {
+    "Id": "54dc7cc4db251d2942c70f40834716d76b83d4c85ee778ef8a5fda1074273c9a",
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 66545,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-21T18:18:27.023338057Z",
+      "FinishedAt": "0001-01-01T00:00:00Z"
+    },
+    "Image": "sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+    "owner": "ama-b04-java-s3-phase-b-storage-s3-s3-java-v3restart",
+    "ports": {
+      "9000/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "44789"
+        }
+      ]
+    }
+  },
+  "after": {
+    "Id": "54dc7cc4db251d2942c70f40834716d76b83d4c85ee778ef8a5fda1074273c9a",
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 67082,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-21T18:20:14.776572449Z",
+      "FinishedAt": "2026-10-21T18:20:13.950877566Z"
+    },
+    "Image": "sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+    "owner": "ama-b04-java-s3-phase-b-storage-s3-s3-java-v3restart",
+    "ports": {
+      "9000/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "44789"
+        }
+      ]
+    }
+  },
+  "unsignedHTTPReady": false
+}

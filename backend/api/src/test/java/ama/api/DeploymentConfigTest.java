@@ -95,7 +95,8 @@ class DeploymentConfigTest {
         }
     }
     private ConfigurableApplicationContext start(String... extra) {
-        var args = new java.util.ArrayList<>(java.util.List.of("--server.port=0", "--management.server.port=0", "--logging.level.root=ERROR"));
+        // These historical tests isolate DB liveness; managed file readiness has its own real HTTP IT.
+        var args = new java.util.ArrayList<>(java.util.List.of("--server.port=0", "--management.server.port=0", "--logging.level.root=ERROR", "--management.endpoint.health.group.ready.include=readinessState,db"));
         args.addAll(java.util.List.of(extra));
         return new SpringApplicationBuilder(ApiApplication.class).run(args.toArray(String[]::new));
     }

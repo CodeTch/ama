@@ -1,0 +1,95 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  └─ S3MissingLengthIT ✔
+│     ├─ missingLengthsAreTypedAndCannotExhaustRangeAdmission(String) ✔
+│     │  ├─ [1] "HEAD" ✘ untyped missing-length failures=[java.lang.NullPointerException, java.lang.NullPointerException, java.lang.NullPointerException, java.lang.NullPointerException] ==> expected: <true> but was: <false>
+│     │  ├─ [2] "close" 16738 ms ✘ proxy still has active exchanges; counters are incomplete
+│     │  └─ [3] "chunked" 17133 ms ✘ proxy still has active exchanges; counters are incomplete
+│     └─ allActualByteReadersRejectMissingLengthsWithSanitizedStorageError(String) ✔
+│        ├─ [1] "control" ✘ Unexpected exception type thrown, expected: <ama.contract.StorageContracts.StorageException> but was: <java.lang.NullPointerException>
+│        ├─ [2] "stat" ✘ Unexpected exception type thrown, expected: <ama.contract.StorageContracts.StorageException> but was: <java.lang.NullPointerException>
+│        └─ [3] "staging" ✘ Unexpected exception type thrown, expected: <ama.contract.StorageContracts.StorageException> but was: <java.lang.NullPointerException>
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Failures (6):
+  JUnit Jupiter:S3MissingLengthIT:missingLengthsAreTypedAndCannotExhaustRangeAdmission(String):[1] "HEAD"
+    MethodSource [className = 'ama.storage.s3.S3MissingLengthIT', methodName = 'missingLengthsAreTypedAndCannotExhaustRangeAdmission', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: untyped missing-length failures=[java.lang.NullPointerException, java.lang.NullPointerException, java.lang.NullPointerException, java.lang.NullPointerException] ==> expected: <true> but was: <false>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+       org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:48)
+       org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:204)
+       ama.storage.s3.S3MissingLengthIT.missingLengthsAreTypedAndCannotExhaustRangeAdmission(S3MissingLengthIT.java:47)
+  JUnit Jupiter:S3MissingLengthIT:missingLengthsAreTypedAndCannotExhaustRangeAdmission(String):[2] "close"
+    MethodSource [className = 'ama.storage.s3.S3MissingLengthIT', methodName = 'missingLengthsAreTypedAndCannotExhaustRangeAdmission', methodParameterTypes = 'java.lang.String']
+    => java.lang.AssertionError: proxy still has active exchanges; counters are incomplete
+       ama.storage.s3.WireProxy.settle(WireProxy.java:284)
+       ama.storage.s3.S3MissingLengthIT.missingLengthsAreTypedAndCannotExhaustRangeAdmission(S3MissingLengthIT.java:39)
+  JUnit Jupiter:S3MissingLengthIT:missingLengthsAreTypedAndCannotExhaustRangeAdmission(String):[3] "chunked"
+    MethodSource [className = 'ama.storage.s3.S3MissingLengthIT', methodName = 'missingLengthsAreTypedAndCannotExhaustRangeAdmission', methodParameterTypes = 'java.lang.String']
+    => java.lang.AssertionError: proxy still has active exchanges; counters are incomplete
+       ama.storage.s3.WireProxy.settle(WireProxy.java:284)
+       ama.storage.s3.S3MissingLengthIT.missingLengthsAreTypedAndCannotExhaustRangeAdmission(S3MissingLengthIT.java:39)
+  JUnit Jupiter:S3MissingLengthIT:allActualByteReadersRejectMissingLengthsWithSanitizedStorageError(String):[1] "control"
+    MethodSource [className = 'ama.storage.s3.S3MissingLengthIT', methodName = 'allActualByteReadersRejectMissingLengthsWithSanitizedStorageError', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception type thrown, expected: <ama.contract.StorageContracts.StorageException> but was: <java.lang.NullPointerException>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:68)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+       org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3223)
+       ama.storage.s3.S3ReliabilityIT.error(S3ReliabilityIT.java:35)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "software.amazon.awssdk.services.s3.model.GetObjectResponse.contentLength()" is null
+       ama.storage.s3.S3Objects.get(S3Objects.java:104)
+       ama.storage.s3.S3MissingLengthIT.lambda$allActualByteReadersRejectMissingLengthsWithSanitizedStorageError$6(S3MissingLengthIT.java:70)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:54)
+       [...]
+  JUnit Jupiter:S3MissingLengthIT:allActualByteReadersRejectMissingLengthsWithSanitizedStorageError(String):[2] "stat"
+    MethodSource [className = 'ama.storage.s3.S3MissingLengthIT', methodName = 'allActualByteReadersRejectMissingLengthsWithSanitizedStorageError', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception type thrown, expected: <ama.contract.StorageContracts.StorageException> but was: <java.lang.NullPointerException>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:68)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+       org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3223)
+       ama.storage.s3.S3ReliabilityIT.error(S3ReliabilityIT.java:35)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "software.amazon.awssdk.services.s3.model.GetObjectResponse.contentLength()" is null
+       ama.storage.s3.S3Objects.stat(S3Objects.java:182)
+       ama.storage.s3.S3MissingLengthIT.lambda$allActualByteReadersRejectMissingLengthsWithSanitizedStorageError$6(S3MissingLengthIT.java:71)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:54)
+       [...]
+  JUnit Jupiter:S3MissingLengthIT:allActualByteReadersRejectMissingLengthsWithSanitizedStorageError(String):[3] "staging"
+    MethodSource [className = 'ama.storage.s3.S3MissingLengthIT', methodName = 'allActualByteReadersRejectMissingLengthsWithSanitizedStorageError', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception type thrown, expected: <ama.contract.StorageContracts.StorageException> but was: <java.lang.NullPointerException>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:68)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+       org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3223)
+       ama.storage.s3.S3ReliabilityIT.error(S3ReliabilityIT.java:35)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "software.amazon.awssdk.services.s3.model.GetObjectResponse.contentLength()" is null
+       ama.storage.s3.Staging.verifyChunk(Staging.java:123)
+       ama.storage.s3.Staging.stage(Staging.java:93)
+       ama.storage.s3.S3MissingLengthIT.lambda$allActualByteReadersRejectMissingLengthsWithSanitizedStorageError$6(S3MissingLengthIT.java:72)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:54)
+       [...]
+
+Test run finished after 38931 ms
+[         6 containers found      ]
+[         0 containers skipped    ]
+[         6 containers started    ]
+[         0 containers aborted    ]
+[         6 containers successful ]
+[         0 containers failed     ]
+[         6 tests found           ]
+[         0 tests skipped         ]
+[         6 tests started         ]
+[         0 tests aborted         ]
+[         0 tests successful      ]
+[         6 tests failed          ]
+

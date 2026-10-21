@@ -1,0 +1,35 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  └─ S3LayoutV3IT ✔
+│     └─ listExact199AndExtensionsCoexistWithCanonicalNarrowPrefixesAndCursorIsolation() ✘ expected=prefix=data%2Fv3%2Ffaaf5f5bda33df3816d4c45b189c7dbec465c3e6c1f2a7b5d09f7ca054e5b47f%2Fxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%7E%2Fx007e actual=[/v3-data-c4f30d13-a844-470e-8ec2-87de671b84de?list-type=2&max-keys=1&prefix=data%2Fv3%2Ffaaf5f5bda33df3816d4c45b189c7dbec465c3e6c1f2a7b5d09f7ca054e5b47f%2Fxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~%2Fx007e] ==> expected: <true> but was: <false>
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Failures (1):
+  JUnit Jupiter:S3LayoutV3IT:listExact199AndExtensionsCoexistWithCanonicalNarrowPrefixesAndCursorIsolation()
+    MethodSource [className = 'ama.storage.s3.S3LayoutV3IT', methodName = 'listExact199AndExtensionsCoexistWithCanonicalNarrowPrefixesAndCursorIsolation', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: expected=prefix=data%2Fv3%2Ffaaf5f5bda33df3816d4c45b189c7dbec465c3e6c1f2a7b5d09f7ca054e5b47f%2Fxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%7E%2Fx007e actual=[/v3-data-c4f30d13-a844-470e-8ec2-87de671b84de?list-type=2&max-keys=1&prefix=data%2Fv3%2Ffaaf5f5bda33df3816d4c45b189c7dbec465c3e6c1f2a7b5d09f7ca054e5b47f%2Fxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~%2Fx007e] ==> expected: <true> but was: <false>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+       org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:48)
+       org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:204)
+       ama.storage.s3.S3LayoutV3IT.listExact199AndExtensionsCoexistWithCanonicalNarrowPrefixesAndCursorIsolation(S3LayoutV3IT.java:45)
+
+Test run finished after 4247 ms
+[         4 containers found      ]
+[         0 containers skipped    ]
+[         4 containers started    ]
+[         0 containers aborted    ]
+[         4 containers successful ]
+[         0 containers failed     ]
+[         1 tests found           ]
+[         0 tests skipped         ]
+[         1 tests started         ]
+[         0 tests aborted         ]
+[         0 tests successful      ]
+[         1 tests failed          ]
+

@@ -1,0 +1,106 @@
+# MySQL fixture startup failure evidence
+
+CI-FIXTURE-01, 2026-10-22. BASE `0daecad85d348305c11982b5f0a7e2536a47434d`.
+
+`tools/dev/mysql_fixture.py` previously removed a failed startup container before
+preserving its diagnostics. A removal exception also replaced the original
+readiness failure. This maintenance change preserves the original exception and
+traceback, including when capture, cleanup, or diagnostic-note attachment fails.
+
+After a successful `docker run`, a startup failure now writes `failure.json` and,
+when safe, the last 200 Docker log lines to `docker.log` in that start's existing
+`.tools/mysql-fixture/ama-test-b01-<generated>` directory. The generated directory
+is private (0700); diagnostic files are created/chmodded to 0600 before writing.
+Both generated passwords are retained only in memory for exact-value redaction.
+Both stdout and stderr from Docker logs are redacted. Without both redaction
+inputs, logs and inspect data are omitted. Outcomes use fixed safe strings;
+capture and cleanup exceptions, their command arguments, and full inspect data
+are never copied into diagnostics or exception notes.
+
+The new bounded inspect command selects only name, image reference/ID, fixture
+label, status/exit/OOM/error, and configured host port bindings. Python rebuilds
+that allowlist before serialization. Cleanup requires the exact generated name,
+label `ama.test-fixture=b01`, pinned image reference, and exactly one
+`3306/tcp` binding to `127.0.0.1`. Configured bindings are checked because exited
+containers may lack active network port mappings. Unavailable, malformed, or
+mismatching proof refuses removal. Safe diagnostic state and redacted logs must
+both be persisted before removal. Failure to read or persist the logs also
+refuses removal, retaining the original container for diagnosis. Each new Docker
+inspect/log/remove subprocess has a 10-second timeout and captures stderr without
+printing it.
+
+Successful startup, CLI, pinned image, launch arguments, readiness behavior,
+default native AIO profile, and explicit stop behavior retain their existing
+contracts. A launch failure remains outside the cleanup handler, avoiding
+removal of a pre-existing conflicting name. This does not address the historical
+host native-AIO exhaustion or change SQL/schema behavior.
+
+## Verification
+
+- First RED against the unchanged implementation: eight test methods, nine
+  assertion failures (including five ownership/binding subcases), one missing
+  `failure.json` error, and two passing existing-behavior cases. The missing-file
+  error demonstrates absent evidence, rather than a discovery/setup failure.
+- A baseline replay with credential-safe assertion rendering reproduced the
+  same eight-method RED result (`red-safe.log`). The first exploratory RED log
+  rendered synthetic test-only password strings in an exception comparison;
+  assertions now use fixed messages and that exploratory log is excluded from
+  the evidence adoption allowlist. No real generated credentials were used.
+- A second RED caught note-attachment failure replacing the original exception:
+  12 methods, one expected assertion failure (`red-note.log`).
+- Focused GREEN: 12 methods, zero failures/errors/skips. Cases cover ordering,
+  selected-field filtering, both passwords and both log streams, permissions,
+  bounded subprocesses, original error/traceback preservation, refusal paths,
+  malformed state, unknown redaction inputs, interruption, successful startup,
+  and launch-conflict behavior. Docker/subprocess boundaries are mocked.
+- Existing Python gate: 86 executed, zero failures, zero skips in two discovery
+  directories (34 checks tests including the 12 focused cases; 52 probe tests).
+  These counts overlap and must not be added together. The existing probe suite
+  uses a local `127.0.0.1` HTTP stub. Running that gate exceeded this task brief's
+  narrower no-network constraint; no external endpoint, real Docker, or DB was
+  called. This verification deviation is recorded for independent review.
+- `git diff --check` passes for the owned source/test/record.
+
+Commands (from the isolated worktree):
+
+```text
+python3 artifacts/phase-b/ci-fixture-01/red_replay.py
+python3 -m unittest discover -s tools/checks/tests -p test_mysql_fixture.py -v
+python3 -c 'from tools.checks.run import python_tests; raise SystemExit(python_tests())'
+git diff --check
+```
+
+Ignored raw evidence is explicitly allowlisted by
+`artifacts/phase-b/ci-fixture-01/ALLOWLIST.txt` and hashed by the adjacent
+`SHA256SUMS`. No credential directory is included. Independent review/adoption
+and any live Docker validation remain separate from this mocked qualification.
+
+## Review fix round 1: retain containers when log preservation fails
+
+Independent review I1 found that the initial implementation still removed the
+container after a log-read or `docker.log` write failure if the separate
+`failure.json` write succeeded. This could lose the exact MySQL startup evidence
+again. The cleanup guard now requires `logs=captured`, which is set only after
+safe redaction and successful log persistence, together with ownership proof and
+the preceding successful state-evidence write.
+
+The prior log-read test's contrary removal expectation was corrected, and a
+separate `docker.log`-only write failure case lets all `failure.json` writes
+succeed. Both cases assert no removal, `inspect=captured`, `logs=failed`,
+`cleanup=refused`, the same original exception/traceback, and no secret values in
+diagnostics, notes, or stdout.
+
+Fix BASE: `3d7aec112a6c04aff22708c6e1a78769c9432c84`. The unchanged focused command
+first produced **13 methods, two expected assertion failures**, then **13 passed,
+zero failures/errors/skips** after the guard change. No aggregate gate or other
+suite was rerun. Historical counts above describe the original implementation
+and overlap with these regression cases; they are not additive. New raw evidence
+is separate under `artifacts/phase-b/ci-fixture-01/fix-round-1`, with its own
+`ALLOWLIST.txt` and `SHA256SUMS`. Original evidence bytes remain unchanged.
+
+
+## Coordinator adoption
+
+Full owned range0daecad..3d7aec1 was independently reviewed; ImportantI1 (log capture/write failure still allowed removal) was fixed in fdcdc92. Fresh scoped re-review closes I1 and approves spec/quality, no new findings; coordinator read both full reviews and the complete original/fix report. Both implementation commits integrated as81e1d75/cd96ec1, all3owned paths byte-identical to final source before this adoption appendix. Final focused13 passed; historical86 aggregate overlaps focused12 and contains the disclosed authorized local HTTP stub, not a company/external call. Counts are not added. No new tests/Docker/DB actions for mechanical adoption.
+
+All14 explicitly allowlisted original/fix evidence and metadata files independently SHA-verified and copied under `artifacts/phase-b/ci-fixture-evidence/source-captures/`; original raw reports separately preserved with SHA under `coordinator-reports/`. No env/credentials or arbitrary directories copied. The initial review remains as history; only its I1 is closed by the fix review. See [implementation](mysql-fixture-failure-implementation-report.md), [initial review](mysql-fixture-failure-independent-review.md), [fix review](mysql-fixture-failure-fix-independent-review.md). Qualification is mocked subprocess behavior only; no live Docker/template/native-AIO or application/phase acceptance inferred. SQL, production profiles, existing fixtures/history and original plans unchanged.

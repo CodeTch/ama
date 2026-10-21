@@ -1,0 +1,189 @@
+{
+  "base": "0d2079cd64e5b61bc5787ca5adfaa782e5cd4a40",
+  "initial_proposal_base": "0812b6da0b143544de4075929b5dd01568547d14",
+  "preservation_verified": [
+    {
+      "source": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "preserved": "docs/database/design-history/B00-1.2/2026-10-21-ama-database-design.md",
+      "sha256": "d7a0fc3988fe0b41fbd84bb7c69b96d344f6ed8fca07be312d10fc31630541bd"
+    },
+    {
+      "source": "docs/database/ama-data-dictionary.md",
+      "preserved": "docs/database/design-history/B00-1.2/ama-data-dictionary.md",
+      "sha256": "9e2f80080fc1757295b66e920d54152018f35fbe733458af8a6032a4b2ccc7d9"
+    },
+    {
+      "source": "docs/database/ama-schema-draft.sql",
+      "preserved": "docs/database/design-history/B00-1.2/ama-schema-draft.sql",
+      "sha256": "402def655f133ab10caa44b94e89ed6692756623d32705e6ab63c8176d79c362"
+    },
+    {
+      "source": "tools/checks/database_design.py",
+      "preserved": "docs/database/design-history/B00-1.2/database_design.py",
+      "sha256": "41793c7f9b46dd0a88f8a24e037bd7b14348ccb1b7562c3e90ddf27dd6ec78c6"
+    }
+  ],
+  "frozen_inputs_verified": {
+    "backend/adapters/src/main/resources/db/migration/V001__foundation.sql": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+    "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+    "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+    "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+    "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+    "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+    "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+    "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+    "tools/dev/mysql_fixture.py": "16adedcda37c55a7e0621756d4b1ffb1aa1a24453a99a6712108d277142d2efd",
+    "docs/database/migration-register.md": "7055c294cb166d3a60028e37d047fa6e39c83fda47ea91182259766450a36af6",
+    "docs/acceptance/b/database-upload-addendum-metadata-evidence.json": "3de8041db8860f1547ff53a94b4ddd79470c4881340111fdafbc3ce5322399ad",
+    "docs/acceptance/b/database-metadata-evidence.json": "3ada3636bdfcecdf5502dca48378b11f26b88e827f8fe6ab05efec9fee679d54"
+  },
+  "original_tables": 85,
+  "new_tables": [
+    "action_suggestion",
+    "background_note",
+    "background_note_source",
+    "final_result_review",
+    "result_review",
+    "result_review_evidence",
+    "sensitive_detection",
+    "sensitive_detection_source"
+  ],
+  "all_original_columns_tables_foreign_keys_unchanged": true,
+  "all_original_CREATE_blocks_unchanged_except": [
+    "sensitive_exclusion"
+  ],
+  "added_old_table_index_rows": [
+    {
+      "seq": 3,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "sensitive_exclusion",
+      "column": "category",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    }
+  ],
+  "added_old_table_checks": [
+    {
+      "name": "ck_sensitive_exclusion_0",
+      "table": "sensitive_exclusion",
+      "clause": "(`category` in (_ascii\\'INTERNAL_BUSINESS_DATA\\',_ascii\\'POLITICAL_SENSITIVE\\'))",
+      "enforced": "YES"
+    }
+  ],
+  "v011_proof": [
+    {
+      "table": "input_batch",
+      "declaration_and_FK_sha256": "e000270d1e1ad8c32df3f60cea984b7a1d6d70783c594bd9214e81f5adff0440",
+      "byte_equal": true,
+      "metadata_equal": {
+        "tables": true,
+        "columns": true,
+        "indexes": true,
+        "checks": true,
+        "foreign_keys": true
+      },
+      "incoming_FK_unchanged": true
+    },
+    {
+      "table": "input_batch_file",
+      "declaration_and_FK_sha256": "41c85060ff6b000fa7d2603c8b41d3c79fa62848ce0759703fe8009aa5daa2cc",
+      "byte_equal": true,
+      "metadata_equal": {
+        "tables": true,
+        "columns": true,
+        "indexes": true,
+        "checks": true,
+        "foreign_keys": true
+      },
+      "incoming_FK_unchanged": true
+    },
+    {
+      "table": "transcript_revision",
+      "declaration_and_FK_sha256": "d9fcd873cdecbebe6690bce1588241dd620322b415a8dd2e700fea89d1c69c32",
+      "byte_equal": true,
+      "metadata_equal": {
+        "tables": true,
+        "columns": true,
+        "indexes": true,
+        "checks": true,
+        "foreign_keys": true
+      },
+      "incoming_FK_unchanged": true
+    },
+    {
+      "table": "transcript_segment",
+      "declaration_and_FK_sha256": "b136985681664d2bf327cea74c6aea3cf0c996acd24ec36abfc3f15149764bb6",
+      "byte_equal": true,
+      "metadata_equal": {
+        "tables": true,
+        "columns": true,
+        "indexes": true,
+        "checks": true,
+        "foreign_keys": true
+      },
+      "incoming_FK_unchanged": true
+    },
+    {
+      "table": "transcript_confirmation",
+      "declaration_and_FK_sha256": "99e8721d35d056b59cccc823399f2768c795e206c94b5e544791d33062edb5f7",
+      "byte_equal": true,
+      "metadata_equal": {
+        "tables": true,
+        "columns": true,
+        "indexes": true,
+        "checks": true,
+        "foreign_keys": true
+      },
+      "incoming_FK_unchanged": true
+    },
+    {
+      "table": "speaker",
+      "declaration_and_FK_sha256": "10b9aecd3f403b6bbb0cd54917f675922db6239033388d5954a7dd7f712f7fab",
+      "byte_equal": true,
+      "metadata_equal": {
+        "tables": true,
+        "columns": true,
+        "indexes": true,
+        "checks": true,
+        "foreign_keys": true
+      },
+      "incoming_FK_unchanged": true
+    },
+    {
+      "table": "transcription_input",
+      "declaration_and_FK_sha256": "ac93d94b42c1bb7e191d3c1de621472e9b6f122c0945425d26f43faeaf285219",
+      "byte_equal": true,
+      "metadata_equal": {
+        "tables": true,
+        "columns": true,
+        "indexes": true,
+        "checks": true,
+        "foreign_keys": true
+      },
+      "incoming_FK_unchanged": true
+    },
+    {
+      "table": "transcript_segment_mark",
+      "declaration_and_FK_sha256": "ff86ee7dfd57cc449eedc954218102f012cc23bc460ca76945504fa9330dda99",
+      "byte_equal": true,
+      "metadata_equal": {
+        "tables": true,
+        "columns": true,
+        "indexes": true,
+        "checks": true,
+        "foreign_keys": true
+      },
+      "incoming_FK_unchanged": true
+    }
+  ],
+  "new_table_metadata_counts": {
+    "tables": 8,
+    "columns": 35,
+    "indexes": 36,
+    "checks": 9,
+    "foreign_keys": 17
+  },
+  "scope": "source bytes and actual MySQL metadata equivalence; no application acceptance"
+}

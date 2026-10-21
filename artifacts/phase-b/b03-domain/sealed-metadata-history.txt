@@ -1,0 +1,503 @@
+@@version	@@innodb_use_native_aio	@@time_zone
+8.4.6	0	+00:00
+installed_rank	version	description	type	script	checksum	installed_on	success
+1	001	foundation	SQL	V001__foundation.sql	1201435595	2026-10-21 20:01:54	1
+2	002	identity acl	SQL	V002__identity_acl.sql	1757300424	2026-10-21 20:01:54	1
+3	005	tasks outbox	SQL	V005__tasks_outbox.sql	-1999355348	2026-10-21 20:01:54	1
+4	006	audit metadata	SQL	V006__audit_metadata.sql	-1744360556	2026-10-21 20:01:55	1
+5	007	identity sessions	SQL	V007__identity_sessions.sql	157746768	2026-10-21 20:01:56	1
+6	008	meeting schema	SQL	V008__meeting_schema.sql	-1747387036	2026-10-21 20:01:59	1
+7	009	file schema	SQL	V009__file_schema.sql	-287948759	2026-10-21 20:02:02	1
+8	010	reliable execution	SQL	V010__reliable_execution.sql	-1187397378	2026-10-21 20:02:05	1
+table_count
+31
+TABLE_NAME	COLUMN_NAME	ORDINAL_POSITION	COLUMN_TYPE	IS_NULLABLE	COLUMN_DEFAULT	COLLATION_NAME	EXTRA
+audit_event	id	1	bigint unsigned	NO	NULL	NULL	auto_increment
+audit_event	actor_id	2	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+audit_event	action	3	varchar(64)	NO	NULL	ascii_bin	
+audit_event	resource_id	4	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+audit_event	revision	5	bigint unsigned	NO	NULL	NULL	
+audit_event	result	6	varchar(64)	NO	NULL	ascii_bin	
+audit_event	trace_id	7	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+audit_event	occurred_at	8	datetime(6)	NO	NULL	NULL	
+department	enterprise_id	1	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+department	display_name	2	longtext	NO	NULL	utf8mb4_0900_ai_ci	
+department	parent_id	3	varchar(255)	YES	NULL	utf8mb4_0900_bin	
+department	verified_at	4	datetime(6)	NO	NULL	NULL	
+durable_task	id	1	char(36)	NO	NULL	ascii_bin	
+durable_task	task_type	2	varchar(64)	NO	NULL	ascii_bin	
+durable_task	pool	3	varchar(64)	NO	NULL	ascii_bin	
+durable_task	subject_kind	4	varchar(64)	NO	NULL	ascii_bin	
+durable_task	subject_id	5	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+durable_task	producer_key	6	char(64)	NO	NULL	ascii_bin	
+durable_task	input_kind	7	varchar(64)	NO	NULL	ascii_bin	
+durable_task	input_id	8	char(36)	NO	NULL	ascii_bin	
+durable_task	input_fingerprint	9	char(64)	NO	NULL	ascii_bin	
+durable_task	business_version	10	bigint unsigned	NO	NULL	NULL	
+durable_task	cancel_epoch	11	bigint unsigned	NO	NULL	NULL	
+durable_task	priority	12	int	NO	NULL	NULL	
+durable_task	state	13	varchar(64)	NO	READY	ascii_bin	
+durable_task	attempt	14	bigint unsigned	NO	0	NULL	
+durable_task	max_attempts	15	bigint unsigned	NO	NULL	NULL	
+durable_task	lease_owner	16	varchar(64)	YES	NULL	ascii_bin	
+durable_task	expires_at	17	datetime(6)	YES	NULL	NULL	
+durable_task	available_at	18	datetime(6)	NO	NULL	NULL	
+durable_task	created_at	19	datetime(6)	NO	NULL	NULL	
+durable_task	output_kind	20	varchar(64)	YES	NULL	ascii_bin	
+durable_task	output_id	21	char(36)	YES	NULL	ascii_bin	
+durable_task	last_error	22	varchar(64)	YES	NULL	ascii_bin	
+enterprise_identity	enterprise_id	1	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+enterprise_identity	display_name	2	longtext	NO	NULL	utf8mb4_0900_ai_ci	
+enterprise_identity	department	3	varchar(255)	NO		utf8mb4_0900_ai_ci	
+enterprise_identity	status	4	varchar(64)	NO	NULL	ascii_bin	
+enterprise_identity	platform_admin	5	tinyint(1)	NO	0	NULL	
+enterprise_identity	department_id	6	varchar(255)	YES	NULL	utf8mb4_0900_bin	
+enterprise_identity	session_generation	7	bigint unsigned	NO	0	NULL	
+enterprise_identity	verified_at	8	datetime(6)	NO	NULL	NULL	
+external_execution	id	1	char(36)	NO	NULL	ascii_bin	
+external_execution	operation_id	2	char(36)	NO	NULL	ascii_bin	
+external_execution	execution_no	3	bigint unsigned	NO	NULL	NULL	
+external_execution	task_id	4	char(36)	NO	NULL	ascii_bin	
+external_execution	task_attempt	5	bigint unsigned	YES	NULL	NULL	
+external_execution	state	6	varchar(64)	NO	NULL	ascii_bin	
+external_execution	request_hash	7	char(64)	NO	NULL	ascii_bin	
+external_execution	request_manifest	8	longtext	NO	NULL	utf8mb4_0900_ai_ci	
+external_execution	created_at	9	datetime(6)	NO	NULL	NULL	
+external_execution	marked_at	10	datetime(6)	YES	NULL	NULL	
+external_execution	finished_at	11	datetime(6)	YES	NULL	NULL	
+external_execution	no_effect_basis	12	varchar(64)	YES	NULL	ascii_bin	
+external_execution	no_effect_evidence	13	longtext	YES	NULL	utf8mb4_0900_ai_ci	
+external_execution	no_effect_verified_at	14	datetime(6)	YES	NULL	NULL	
+external_operation	id	1	char(36)	NO	NULL	ascii_bin	
+external_operation	operation_kind	2	varchar(64)	NO	NULL	ascii_bin	
+external_operation	business_key	3	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+external_operation	request_hash	4	char(64)	NO	NULL	ascii_bin	
+external_operation	state	5	varchar(64)	NO	NULL	ascii_bin	
+external_operation	marked_at	6	datetime(6)	NO	NULL	NULL	
+external_operation	next_check_at	7	datetime(6)	NO	NULL	NULL	
+external_operation	reconcile_epoch	8	bigint unsigned	NO	0	NULL	
+external_operation	reconcile_owner	9	varchar(64)	YES	NULL	ascii_bin	
+external_operation	reconcile_expires_at	10	datetime(6)	YES	NULL	NULL	
+external_operation	external_result_id	11	longtext	YES	NULL	utf8mb4_0900_ai_ci	
+external_operation	last_error	12	varchar(64)	YES	NULL	ascii_bin	
+external_operation	subject_kind	13	varchar(64)	NO	NULL	ascii_bin	
+external_operation	subject_id	14	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+external_operation	current_execution_no	15	bigint unsigned	NO	NULL	NULL	
+file_cleanup	id	1	char(36)	NO	NULL	ascii_bin	
+file_cleanup	file_id	2	char(36)	YES	NULL	ascii_bin	
+file_cleanup	backend_id	3	varchar(64)	NO	NULL	ascii_bin	
+file_cleanup	namespace	4	varchar(64)	NO	NULL	ascii_bin	
+file_cleanup	object_key	5	varchar(512)	NO	NULL	ascii_bin	
+file_cleanup	expected_location_revision	6	bigint unsigned	YES	NULL	NULL	
+file_cleanup	expected_reference_epoch	7	bigint unsigned	YES	NULL	NULL	
+file_cleanup	state	8	varchar(64)	NO	NULL	ascii_bin	
+file_cleanup	not_before	9	datetime(6)	NO	NULL	NULL	
+file_cleanup	attempt	10	bigint unsigned	NO	0	NULL	
+file_cleanup	last_error	11	varchar(64)	YES	NULL	ascii_bin	
+file_object	id	1	char(36)	NO	NULL	ascii_bin	
+file_object	meeting_id	2	char(36)	YES	NULL	ascii_bin	
+file_object	backend_id	3	varchar(64)	NO	NULL	ascii_bin	
+file_object	storage_type	4	varchar(64)	NO	NULL	ascii_bin	
+file_object	namespace	5	varchar(64)	NO	NULL	ascii_bin	
+file_object	object_key	6	varchar(512)	NO	NULL	ascii_bin	
+file_object	provider_version_id	7	longtext	YES	NULL	utf8mb4_0900_ai_ci	
+file_object	display_name	8	longtext	NO	NULL	utf8mb4_0900_ai_ci	
+file_object	size_bytes	9	bigint unsigned	NO	NULL	NULL	
+file_object	sha256	10	char(64)	NO	NULL	ascii_bin	
+file_object	location_revision	11	bigint unsigned	NO	0	NULL	
+file_object	state	12	varchar(64)	NO	NULL	ascii_bin	
+file_object	reference_epoch	13	bigint unsigned	NO	0	NULL	
+file_object	created_at	14	datetime(6)	NO	NULL	NULL	
+file_reference	file_id	1	char(36)	NO	NULL	ascii_bin	
+file_reference	owner_kind	2	varchar(64)	NO	NULL	ascii_bin	
+file_reference	owner_id	3	char(36)	NO	NULL	ascii_bin	
+file_reference	purpose	4	varchar(64)	NO	NULL	ascii_bin	
+flyway_schema_history	installed_rank	1	int	NO	NULL	NULL	
+flyway_schema_history	version	2	varchar(50)	YES	NULL	utf8mb4_0900_ai_ci	
+flyway_schema_history	description	3	varchar(200)	NO	NULL	utf8mb4_0900_ai_ci	
+flyway_schema_history	type	4	varchar(20)	NO	NULL	utf8mb4_0900_ai_ci	
+flyway_schema_history	script	5	varchar(1000)	NO	NULL	utf8mb4_0900_ai_ci	
+flyway_schema_history	checksum	6	int	YES	NULL	NULL	
+flyway_schema_history	installed_by	7	varchar(100)	NO	NULL	utf8mb4_0900_ai_ci	
+flyway_schema_history	installed_on	8	timestamp	NO	CURRENT_TIMESTAMP	NULL	DEFAULT_GENERATED
+flyway_schema_history	execution_time	9	int	NO	NULL	NULL	
+flyway_schema_history	success	10	tinyint(1)	NO	NULL	NULL	
+idempotency_record	scope_hash	1	char(64)	NO	NULL	ascii_bin	
+idempotency_record	actor_id	2	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+idempotency_record	resource_id	3	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+idempotency_record	operation	4	varchar(64)	NO	NULL	ascii_bin	
+idempotency_record	key_hash	5	char(64)	NO	NULL	ascii_bin	
+idempotency_record	request_hash	6	char(64)	NO	NULL	ascii_bin	
+idempotency_record	state	7	varchar(64)	NO	NULL	ascii_bin	
+idempotency_record	result_id	8	char(36)	YES	NULL	ascii_bin	
+idempotency_record	http_status	9	smallint unsigned	NO	NULL	NULL	
+idempotency_record	created_at	10	datetime(6)	NO	NULL	NULL	
+identity_session	token_hash	1	char(64)	NO	NULL	ascii_bin	
+identity_session	enterprise_id	2	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+identity_session	csrf_token	3	char(43)	NO	NULL	ascii_bin	
+identity_session	expires_at	4	datetime(6)	NO	NULL	NULL	
+identity_session	revoked_at	5	datetime(6)	YES	NULL	NULL	
+identity_session	session_generation	6	bigint unsigned	NO	NULL	NULL	
+identity_session	issued_at	7	datetime(6)	NO	NULL	NULL	
+meeting	id	1	char(36)	NO	NULL	ascii_bin	
+meeting	owner_id	2	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+meeting	revision	3	bigint unsigned	NO	0	NULL	
+meeting	cancel_epoch	4	bigint unsigned	NO	0	NULL	
+meeting	access_revision	5	bigint unsigned	NO	0	NULL	
+meeting	stage	6	varchar(64)	NO	NULL	ascii_bin	
+meeting	lifecycle	7	varchar(64)	NO	ACTIVE	ascii_bin	
+meeting	governance_state	8	varchar(64)	NO	ACTIVE	ascii_bin	
+meeting	ever_published	9	tinyint unsigned	NO	0	NULL	
+meeting	info_revision_id	10	char(36)	YES	NULL	ascii_bin	
+meeting	roster_revision_id	11	char(36)	YES	NULL	ascii_bin	
+meeting	transcript_confirmation_id	12	char(36)	YES	NULL	ascii_bin	
+meeting	minutes_revision_id	13	char(36)	YES	NULL	ascii_bin	
+meeting	final_confirmation_id	14	char(36)	YES	NULL	ascii_bin	
+meeting	actual_meeting_date	15	date	YES	NULL	NULL	
+meeting	created_at	16	datetime(6)	NO	NULL	NULL	
+meeting	updated_at	17	datetime(6)	NO	NULL	NULL	
+meeting	transcript_revision_id	18	char(36)	YES	NULL	ascii_bin	
+meeting	material_snapshot_id	19	char(36)	YES	NULL	ascii_bin	
+meeting	template_revision_id	20	char(36)	YES	NULL	ascii_bin	
+meeting	element_set_id	21	char(36)	YES	NULL	ascii_bin	
+meeting	exclusion_revision_id	22	char(36)	YES	NULL	ascii_bin	
+meeting	generation_fingerprint	23	char(64)	YES	NULL	ascii_bin	
+meeting	needs_generation	24	tinyint unsigned	NO	0	NULL	
+meeting	materials_pending	25	tinyint unsigned	NO	0	NULL	
+meeting_access_grant	meeting_id	1	char(36)	NO	NULL	ascii_bin	
+meeting_access_grant	enterprise_id	2	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+meeting_access_grant	action	3	varchar(64)	NO	NULL	ascii_bin	
+meeting_access_grant	roster_id	4	char(36)	NO	NULL	ascii_bin	
+meeting_access_grant	confirmed_at	5	datetime(6)	NO	NULL	NULL	
+meeting_acl	meeting_id	1	varchar(255)	NO	NULL	utf8mb4_bin	
+meeting_acl	enterprise_id	2	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+meeting_acl	action	3	varchar(16)	NO	NULL	utf8mb4_0900_ai_ci	
+meeting_acl	confirmed_at	4	datetime(6)	YES	NULL	NULL	
+meeting_info_revision	id	1	char(36)	NO	NULL	ascii_bin	
+meeting_info_revision	meeting_id	2	char(36)	NO	NULL	ascii_bin	
+meeting_info_revision	revision	3	bigint unsigned	NO	NULL	NULL	
+meeting_info_revision	name	4	longtext	YES	NULL	utf8mb4_0900_ai_ci	
+meeting_info_revision	category_id	5	varchar(255)	YES	NULL	utf8mb4_0900_bin	
+meeting_info_revision	summary	6	longtext	YES	NULL	utf8mb4_0900_ai_ci	
+meeting_info_revision	actual_meeting_date	7	date	YES	NULL	NULL	
+meeting_info_revision	created_by	8	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+meeting_info_revision	created_at	9	datetime(6)	NO	NULL	NULL	
+meeting_person_search	meeting_id	1	char(36)	NO	NULL	ascii_bin	
+meeting_person_search	roster_id	2	char(36)	NO	NULL	ascii_bin	
+meeting_person_search	member_id	3	char(36)	NO	NULL	ascii_bin	
+meeting_person_search	name_search	4	longtext	NO	NULL	utf8mb4_0900_as_ci	
+meeting_search_projection	meeting_id	1	char(36)	NO	NULL	ascii_bin	
+meeting_search_projection	info_revision_id	2	char(36)	YES	NULL	ascii_bin	
+meeting_search_projection	roster_revision_id	3	char(36)	YES	NULL	ascii_bin	
+meeting_search_projection	name_search	4	longtext	YES	NULL	utf8mb4_0900_as_ci	
+meeting_search_projection	number_search	5	varchar(36)	NO	NULL	utf8mb4_0900_as_ci	
+meeting_search_projection	category_id	6	varchar(255)	YES	NULL	utf8mb4_0900_bin	
+meeting_search_projection	meeting_revision	7	bigint unsigned	NO	NULL	NULL	
+model_capacity	model	1	varchar(64)	NO	NULL	ascii_bin	
+model_capacity	capacity	2	int unsigned	NO	NULL	NULL	
+model_capacity	config_revision	3	bigint unsigned	NO	NULL	NULL	
+model_capacity	enabled	4	tinyint unsigned	NO	0	NULL	
+model_capacity	cutoff_policy	5	varchar(64)	NO	NULL	ascii_bin	
+model_reservation	id	1	char(36)	NO	NULL	ascii_bin	
+model_reservation	model	2	varchar(64)	NO	NULL	ascii_bin	
+model_reservation	execution_id	3	char(36)	NO	NULL	ascii_bin	
+model_reservation	config_revision	4	bigint unsigned	NO	NULL	NULL	
+model_reservation	safe_deadline	5	datetime(6)	YES	NULL	NULL	
+model_reservation	created_at	6	datetime(6)	NO	NULL	NULL	
+model_reservation	settled_at	7	datetime(6)	YES	NULL	NULL	
+outbox_consumer	consumer_id	1	varchar(64)	NO	NULL	ascii_bin	
+outbox_consumer	cursor	2	bigint unsigned	NO	0	NULL	
+outbox_consumer	epoch	3	bigint unsigned	NO	0	NULL	
+outbox_consumer	lease_owner	4	varchar(64)	YES	NULL	ascii_bin	
+outbox_consumer	expires_at	5	datetime(6)	YES	NULL	NULL	
+role_assignment	enterprise_id	1	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+role_assignment	role	2	varchar(64)	NO	NULL	ascii_bin	
+role_assignment	assigned_at	3	datetime(6)	NO	NULL	NULL	
+roster_member	roster_id	1	char(36)	NO	NULL	ascii_bin	
+roster_member	member_id	2	char(36)	NO	NULL	ascii_bin	
+roster_member	enterprise_id	3	varchar(255)	YES	NULL	utf8mb4_0900_bin	
+roster_member	display_name	4	longtext	NO	NULL	utf8mb4_0900_ai_ci	
+roster_member	member_kind	5	varchar(64)	NO	NULL	ascii_bin	
+roster_revision	id	1	char(36)	NO	NULL	ascii_bin	
+roster_revision	meeting_id	2	char(36)	NO	NULL	ascii_bin	
+roster_revision	revision	3	bigint unsigned	NO	NULL	NULL	
+roster_revision	state	4	varchar(64)	NO	NULL	ascii_bin	
+roster_revision	confirmed_at	5	datetime(6)	YES	NULL	NULL	
+roster_revision	confirmed_by	6	varchar(255)	YES	NULL	utf8mb4_0900_bin	
+storage_backend	id	1	varchar(64)	NO	NULL	ascii_bin	
+storage_backend	storage_type	2	varchar(64)	NO	NULL	ascii_bin	
+storage_backend	status	3	varchar(64)	NO	NULL	ascii_bin	
+storage_backend	config_revision	4	bigint unsigned	NO	NULL	NULL	
+task_attempt	task_id	1	char(36)	NO	NULL	ascii_bin	
+task_attempt	attempt	2	bigint unsigned	NO	NULL	NULL	
+task_attempt	owner	3	varchar(64)	NO	NULL	ascii_bin	
+task_attempt	started_at	4	datetime(6)	NO	NULL	NULL	
+task_attempt	ended_at	5	datetime(6)	YES	NULL	NULL	
+task_attempt	outcome	6	varchar(64)	YES	NULL	ascii_bin	
+task_attempt	error_code	7	varchar(64)	YES	NULL	ascii_bin	
+task_outbox	sequence_id	1	bigint unsigned	NO	NULL	NULL	
+task_outbox	event_type	2	varchar(64)	NO	NULL	ascii_bin	
+task_outbox	task_id	3	char(36)	YES	NULL	ascii_bin	
+task_outbox	subject_kind	4	varchar(64)	NO	NULL	ascii_bin	
+task_outbox	subject_id	5	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+task_outbox	subject_revision	6	bigint unsigned	NO	NULL	NULL	
+task_outbox	reference_kind	7	varchar(64)	NO	NULL	ascii_bin	
+task_outbox	reference_id	8	char(36)	NO	NULL	ascii_bin	
+task_outbox	occurred_at	9	datetime(6)	NO	NULL	NULL	
+task_outbox_sequence	id	1	int	NO	NULL	NULL	
+task_outbox_sequence	next_id	2	bigint unsigned	NO	1	NULL	
+task_subject	subject_kind	1	varchar(64)	NO	NULL	ascii_bin	
+task_subject	subject_id	2	varchar(255)	NO	NULL	utf8mb4_0900_bin	
+task_subject	business_version	3	bigint unsigned	NO	NULL	NULL	
+task_subject	cancel_epoch	4	bigint unsigned	NO	NULL	NULL	
+task_subject	deleted	5	tinyint unsigned	NO	0	NULL	
+upload_part	upload_id	1	char(36)	NO	NULL	ascii_bin	
+upload_part	part_no	2	bigint unsigned	NO	NULL	NULL	
+upload_part	size_bytes	3	bigint unsigned	NO	NULL	NULL	
+upload_part	sha256	4	char(64)	NO	NULL	ascii_bin	
+upload_part	provider_token	5	longtext	YES	NULL	utf8mb4_0900_ai_ci	
+upload_session	id	1	char(36)	NO	NULL	ascii_bin	
+upload_session	meeting_id	2	char(36)	NO	NULL	ascii_bin	
+upload_session	backend_id	3	varchar(64)	NO	NULL	ascii_bin	
+upload_session	namespace	4	varchar(64)	NO	NULL	ascii_bin	
+upload_session	object_key	5	varchar(512)	NO	NULL	ascii_bin	
+upload_session	cancel_epoch	6	bigint unsigned	NO	NULL	NULL	
+upload_session	expected_size	7	bigint unsigned	NO	NULL	NULL	
+upload_session	expected_sha256	8	char(64)	YES	NULL	ascii_bin	
+upload_session	provider_upload_token	9	longtext	YES	NULL	utf8mb4_0900_ai_ci	
+upload_session	state	10	varchar(64)	NO	NULL	ascii_bin	
+upload_session	completed_file_id	11	char(36)	YES	NULL	ascii_bin	
+upload_session	created_at	12	datetime(6)	NO	NULL	NULL	
+upload_session	updated_at	13	datetime(6)	NO	NULL	NULL	
+upload_session	display_name	14	longtext	NO	NULL	utf8mb4_0900_ai_ci	
+upload_session	purpose	15	varchar(64)	NO	NULL	ascii_bin	
+TABLE_NAME	INDEX_NAME	NON_UNIQUE	SEQ_IN_INDEX	COLUMN_NAME	SUB_PART	INDEX_TYPE	IS_VISIBLE
+audit_event	audit_resource_time	1	1	resource_id	NULL	BTREE	YES
+audit_event	audit_resource_time	1	2	occurred_at	NULL	BTREE	YES
+audit_event	audit_resource_time	1	3	id	NULL	BTREE	YES
+audit_event	audit_trace	1	1	trace_id	NULL	BTREE	YES
+audit_event	PRIMARY	0	1	id	NULL	BTREE	YES
+department	fk_department_0	1	1	parent_id	NULL	BTREE	YES
+department	PRIMARY	0	1	enterprise_id	NULL	BTREE	YES
+durable_task	PRIMARY	0	1	id	NULL	BTREE	YES
+durable_task	task_expired	1	1	pool	NULL	BTREE	YES
+durable_task	task_expired	1	2	state	NULL	BTREE	YES
+durable_task	task_expired	1	3	expires_at	NULL	BTREE	YES
+durable_task	task_expired	1	4	id	NULL	BTREE	YES
+durable_task	task_producer	0	1	producer_key	NULL	BTREE	YES
+durable_task	task_ready	1	1	pool	NULL	BTREE	YES
+durable_task	task_ready	1	2	state	NULL	BTREE	YES
+durable_task	task_ready	1	3	available_at	NULL	BTREE	YES
+durable_task	task_ready	1	4	id	NULL	BTREE	YES
+durable_task	task_subject_history	1	1	subject_kind	NULL	BTREE	YES
+durable_task	task_subject_history	1	2	subject_id	NULL	BTREE	YES
+durable_task	task_subject_history	1	3	created_at	NULL	BTREE	YES
+durable_task	task_subject_history	1	4	id	NULL	BTREE	YES
+enterprise_identity	fk_enterprise_identity_0	1	1	department_id	NULL	BTREE	YES
+enterprise_identity	PRIMARY	0	1	enterprise_id	NULL	BTREE	YES
+external_execution	external_execution_number	0	1	operation_id	NULL	BTREE	YES
+external_execution	external_execution_number	0	2	execution_no	NULL	BTREE	YES
+external_execution	external_execution_task	0	1	task_id	NULL	BTREE	YES
+external_execution	PRIMARY	0	1	id	NULL	BTREE	YES
+external_operation	external_due	1	1	state	NULL	BTREE	YES
+external_operation	external_due	1	2	next_check_at	NULL	BTREE	YES
+external_operation	external_due	1	3	id	NULL	BTREE	YES
+external_operation	external_key	0	1	operation_kind	NULL	BTREE	YES
+external_operation	external_key	0	2	business_key	NULL	BTREE	YES
+external_operation	fk_external_operation_0	1	1	subject_kind	NULL	BTREE	YES
+external_operation	fk_external_operation_0	1	2	subject_id	NULL	BTREE	YES
+external_operation	PRIMARY	0	1	id	NULL	BTREE	YES
+file_cleanup	cleanup_due	1	1	state	NULL	BTREE	YES
+file_cleanup	cleanup_due	1	2	not_before	NULL	BTREE	YES
+file_cleanup	cleanup_due	1	3	id	NULL	BTREE	YES
+file_cleanup	cleanup_target	0	1	backend_id	NULL	BTREE	YES
+file_cleanup	cleanup_target	0	2	namespace	NULL	BTREE	YES
+file_cleanup	cleanup_target	0	3	object_key	NULL	BTREE	YES
+file_cleanup	fk_file_cleanup_0	1	1	file_id	NULL	BTREE	YES
+file_cleanup	PRIMARY	0	1	id	NULL	BTREE	YES
+file_object	file_cleanup	1	1	state	NULL	BTREE	YES
+file_object	file_cleanup	1	2	created_at	NULL	BTREE	YES
+file_object	file_cleanup	1	3	id	NULL	BTREE	YES
+file_object	file_location	0	1	backend_id	NULL	BTREE	YES
+file_object	file_location	0	2	namespace	NULL	BTREE	YES
+file_object	file_location	0	3	object_key	NULL	BTREE	YES
+file_object	file_meeting	1	1	meeting_id	NULL	BTREE	YES
+file_object	file_meeting	1	2	state	NULL	BTREE	YES
+file_object	file_meeting	1	3	id	NULL	BTREE	YES
+file_object	PRIMARY	0	1	id	NULL	BTREE	YES
+file_reference	file_ref_owner	1	1	owner_kind	NULL	BTREE	YES
+file_reference	file_ref_owner	1	2	owner_id	NULL	BTREE	YES
+file_reference	file_ref_owner	1	3	file_id	NULL	BTREE	YES
+file_reference	PRIMARY	0	1	file_id	NULL	BTREE	YES
+file_reference	PRIMARY	0	2	owner_kind	NULL	BTREE	YES
+file_reference	PRIMARY	0	3	owner_id	NULL	BTREE	YES
+file_reference	PRIMARY	0	4	purpose	NULL	BTREE	YES
+flyway_schema_history	flyway_schema_history_s_idx	1	1	success	NULL	BTREE	YES
+flyway_schema_history	PRIMARY	0	1	installed_rank	NULL	BTREE	YES
+idempotency_record	PRIMARY	0	1	scope_hash	NULL	BTREE	YES
+identity_session	PRIMARY	0	1	token_hash	NULL	BTREE	YES
+identity_session	session_identity	1	1	enterprise_id	NULL	BTREE	YES
+identity_session	session_identity	1	2	expires_at	NULL	BTREE	YES
+meeting	meeting_owner_date	1	1	owner_id	NULL	BTREE	YES
+meeting	meeting_owner_date	1	2	lifecycle	NULL	BTREE	YES
+meeting	meeting_owner_date	1	3	actual_meeting_date	NULL	BTREE	YES
+meeting	meeting_owner_date	1	4	id	NULL	BTREE	YES
+meeting	meeting_owner_updated	1	1	owner_id	NULL	BTREE	YES
+meeting	meeting_owner_updated	1	2	lifecycle	NULL	BTREE	YES
+meeting	meeting_owner_updated	1	3	updated_at	NULL	BTREE	YES
+meeting	meeting_owner_updated	1	4	id	NULL	BTREE	YES
+meeting	meeting_stage_date	1	1	lifecycle	NULL	BTREE	YES
+meeting	meeting_stage_date	1	2	stage	NULL	BTREE	YES
+meeting	meeting_stage_date	1	3	actual_meeting_date	NULL	BTREE	YES
+meeting	meeting_stage_date	1	4	id	NULL	BTREE	YES
+meeting	meeting_stage_updated	1	1	lifecycle	NULL	BTREE	YES
+meeting	meeting_stage_updated	1	2	stage	NULL	BTREE	YES
+meeting	meeting_stage_updated	1	3	updated_at	NULL	BTREE	YES
+meeting	meeting_stage_updated	1	4	id	NULL	BTREE	YES
+meeting	PRIMARY	0	1	id	NULL	BTREE	YES
+meeting_access_grant	access_person_meeting	1	1	enterprise_id	NULL	BTREE	YES
+meeting_access_grant	access_person_meeting	1	2	action	NULL	BTREE	YES
+meeting_access_grant	access_person_meeting	1	3	meeting_id	NULL	BTREE	YES
+meeting_access_grant	fk_meeting_access_grant_2	1	1	roster_id	NULL	BTREE	YES
+meeting_access_grant	PRIMARY	0	1	meeting_id	NULL	BTREE	YES
+meeting_access_grant	PRIMARY	0	2	enterprise_id	NULL	BTREE	YES
+meeting_access_grant	PRIMARY	0	3	action	NULL	BTREE	YES
+meeting_acl	fk_acl_identity	1	1	enterprise_id	NULL	BTREE	YES
+meeting_acl	PRIMARY	0	1	meeting_id	NULL	BTREE	YES
+meeting_acl	PRIMARY	0	2	enterprise_id	NULL	BTREE	YES
+meeting_acl	PRIMARY	0	3	action	NULL	BTREE	YES
+meeting_info_revision	fk_meeting_info_revision_1	1	1	created_by	NULL	BTREE	YES
+meeting_info_revision	info_revision	0	1	meeting_id	NULL	BTREE	YES
+meeting_info_revision	info_revision	0	2	revision	NULL	BTREE	YES
+meeting_info_revision	PRIMARY	0	1	id	NULL	BTREE	YES
+meeting_person_search	fk_meeting_person_search_1	1	1	roster_id	NULL	BTREE	YES
+meeting_person_search	fk_meeting_person_search_1	1	2	member_id	NULL	BTREE	YES
+meeting_person_search	PRIMARY	0	1	meeting_id	NULL	BTREE	YES
+meeting_person_search	PRIMARY	0	2	member_id	NULL	BTREE	YES
+meeting_search_projection	fk_meeting_search_projection_1	1	1	info_revision_id	NULL	BTREE	YES
+meeting_search_projection	fk_meeting_search_projection_2	1	1	roster_revision_id	NULL	BTREE	YES
+meeting_search_projection	PRIMARY	0	1	meeting_id	NULL	BTREE	YES
+meeting_search_projection	search_category	1	1	category_id	NULL	BTREE	YES
+meeting_search_projection	search_category	1	2	meeting_id	NULL	BTREE	YES
+model_capacity	PRIMARY	0	1	model	NULL	BTREE	YES
+model_reservation	model_deadline	1	1	model	NULL	BTREE	YES
+model_reservation	model_deadline	1	2	settled_at	NULL	BTREE	YES
+model_reservation	model_deadline	1	3	safe_deadline	NULL	BTREE	YES
+model_reservation	PRIMARY	0	1	id	NULL	BTREE	YES
+model_reservation	reservation_execution	0	1	execution_id	NULL	BTREE	YES
+outbox_consumer	PRIMARY	0	1	consumer_id	NULL	BTREE	YES
+role_assignment	PRIMARY	0	1	enterprise_id	NULL	BTREE	YES
+role_assignment	PRIMARY	0	2	role	NULL	BTREE	YES
+roster_member	fk_roster_member_1	1	1	enterprise_id	NULL	BTREE	YES
+roster_member	PRIMARY	0	1	roster_id	NULL	BTREE	YES
+roster_member	PRIMARY	0	2	member_id	NULL	BTREE	YES
+roster_member	roster_person	0	1	roster_id	NULL	BTREE	YES
+roster_member	roster_person	0	2	enterprise_id	NULL	BTREE	YES
+roster_revision	fk_roster_revision_1	1	1	confirmed_by	NULL	BTREE	YES
+roster_revision	PRIMARY	0	1	id	NULL	BTREE	YES
+roster_revision	roster_revision	0	1	meeting_id	NULL	BTREE	YES
+roster_revision	roster_revision	0	2	revision	NULL	BTREE	YES
+storage_backend	PRIMARY	0	1	id	NULL	BTREE	YES
+task_attempt	PRIMARY	0	1	task_id	NULL	BTREE	YES
+task_attempt	PRIMARY	0	2	attempt	NULL	BTREE	YES
+task_outbox	fk_task_outbox_0	1	1	task_id	NULL	BTREE	YES
+task_outbox	outbox_subject	1	1	subject_kind	NULL	BTREE	YES
+task_outbox	outbox_subject	1	2	subject_id	NULL	BTREE	YES
+task_outbox	outbox_subject	1	3	sequence_id	NULL	BTREE	YES
+task_outbox	PRIMARY	0	1	sequence_id	NULL	BTREE	YES
+task_outbox_sequence	PRIMARY	0	1	id	NULL	BTREE	YES
+task_subject	PRIMARY	0	1	subject_kind	NULL	BTREE	YES
+task_subject	PRIMARY	0	2	subject_id	NULL	BTREE	YES
+upload_part	PRIMARY	0	1	upload_id	NULL	BTREE	YES
+upload_part	PRIMARY	0	2	part_no	NULL	BTREE	YES
+upload_session	fk_upload_session_2	1	1	completed_file_id	NULL	BTREE	YES
+upload_session	PRIMARY	0	1	id	NULL	BTREE	YES
+upload_session	upload_meeting	1	1	meeting_id	NULL	BTREE	YES
+upload_session	upload_meeting	1	2	state	NULL	BTREE	YES
+upload_session	upload_meeting	1	3	id	NULL	BTREE	YES
+upload_session	upload_target	0	1	backend_id	NULL	BTREE	YES
+upload_session	upload_target	0	2	namespace	NULL	BTREE	YES
+upload_session	upload_target	0	3	object_key	NULL	BTREE	YES
+CONSTRAINT_NAME	CHECK_CLAUSE
+chk_acl_action	(`action` in (_utf8mb4\'READ\',_utf8mb4\'EDIT\',_utf8mb4\'MANAGE\'))
+ck_durable_task_0	(`state` in (_ascii\'READY\',_ascii\'RUNNING\',_ascii\'RECONCILING\',_ascii\'SUCCEEDED\',_ascii\'FAILED\',_ascii\'CANCELLED\',_ascii\'STALE\'))
+ck_durable_task_1	(`max_attempts` > 0)
+ck_durable_task_2	((`state` <> _ascii\'RUNNING\') or ((`lease_owner` is not null) and (`expires_at` is not null)))
+ck_enterprise_identity_0	(`status` in (_utf8mb4\'ACTIVE\',_utf8mb4\'DISABLED\'))
+ck_external_execution_0	(`execution_no` > 0)
+ck_external_execution_1	(`state` in (_ascii\'PREPARED\',_ascii\'MARKED\',_ascii\'UNKNOWN\',_ascii\'SUCCEEDED\',_ascii\'FAILED\'))
+ck_external_execution_2	((`state` <> _ascii\'MARKED\') or ((`task_attempt` is not null) and (`marked_at` is not null)))
+ck_external_execution_3	((`no_effect_basis` is null) or (`no_effect_basis` in (_ascii\'NOT_SENT\',_ascii\'DEFINITIVE_REJECTION\',_ascii\'PROVEN_CUTOFF_FENCED\')))
+ck_external_execution_4	(((`no_effect_basis` is null) and (`no_effect_evidence` is null) and (`no_effect_verified_at` is null)) or ((`state` = _ascii\'FAILED\') and (`no_effect_basis` is not null) and (`no_effect_evidence` is not null) and (`no_effect_verified_at` is not null) and (`finished_at` is not null)))
+ck_external_operation_0	(`state` in (_ascii\'MARKED\',_ascii\'UNKNOWN\',_ascii\'RETRY_QUEUED\',_ascii\'SUCCEEDED\',_ascii\'FAILED\',_ascii\'MANUAL_REQUIRED\'))
+ck_external_operation_1	(`current_execution_no` > 0)
+ck_file_cleanup_0	(`state` in (_ascii\'PENDING\',_ascii\'RUNNING\',_ascii\'FAILED\',_ascii\'COMPLETE\'))
+ck_file_object_0	(`storage_type` in (_ascii\'local\',_ascii\'s3\'))
+ck_file_object_1	(`state` in (_ascii\'AVAILABLE\',_ascii\'DELETE_PENDING\',_ascii\'DELETED\'))
+ck_idempotency_record_0	(`state` in (_utf8mb4\'SUCCEEDED\',_utf8mb4\'REJECTED\'))
+ck_identity_session_0	(`expires_at` > `issued_at`)
+ck_meeting_0	(`stage` in (_ascii\'ENTRY\',_ascii\'TRANSCRIPT_PENDING\',_ascii\'TRANSCRIPT_FAILED\',_ascii\'MINUTES_PENDING\',_ascii\'MINUTES_FAILED\',_ascii\'READY_TO_PUBLISH\',_ascii\'PUBLISH_FAILED\',_ascii\'PUBLISHED\'))
+ck_meeting_1	(`lifecycle` in (_ascii\'ACTIVE\',_ascii\'DELETING\',_ascii\'DELETED\'))
+ck_meeting_2	(`governance_state` in (_ascii\'ACTIVE\',_ascii\'WITHDRAW_PENDING\',_ascii\'WITHDRAWN\',_ascii\'OBSOLETE_PENDING\',_ascii\'OBSOLETE\'))
+ck_meeting_3	(`ever_published` in (0,1))
+ck_meeting_4	(`needs_generation` in (0,1))
+ck_meeting_5	(`materials_pending` in (0,1))
+ck_meeting_access_grant_0	(`action` = _ascii\'READ\')
+ck_model_capacity_0	(`capacity` > 0)
+ck_model_capacity_1	(`enabled` in (0,1))
+ck_model_capacity_2	(`cutoff_policy` in (_utf8mb4\'PROVEN_DEADLINE\',_utf8mb4\'EXPLICIT_SETTLEMENT\'))
+ck_role_assignment_0	(`role` in (_utf8mb4\'USER\',_utf8mb4\'PLATFORM_ADMIN\'))
+ck_roster_member_0	(`member_kind` in (_ascii\'ENTERPRISE\',_ascii\'EXTERNAL\'))
+ck_roster_member_1	(((`member_kind` = _ascii\'ENTERPRISE\') and (`enterprise_id` is not null)) or ((`member_kind` = _ascii\'EXTERNAL\') and (`enterprise_id` is null)))
+ck_roster_revision_0	(`state` in (_ascii\'DRAFT\',_ascii\'CONFIRMED\'))
+ck_roster_revision_1	(((`state` = _ascii\'DRAFT\') and (`confirmed_at` is null) and (`confirmed_by` is null)) or ((`state` = _ascii\'CONFIRMED\') and (`confirmed_at` is not null) and (`confirmed_by` is not null)))
+ck_storage_backend_0	(`storage_type` in (_utf8mb4\'local\',_utf8mb4\'s3\'))
+ck_storage_backend_1	(`status` in (_utf8mb4\'WRITABLE\',_utf8mb4\'READ_ONLY\',_utf8mb4\'DISABLED\'))
+ck_task_outbox_sequence_0	(`id` = 1)
+ck_task_outbox_sequence_1	(`next_id` > 0)
+ck_task_subject_0	(`deleted` in (0,1))
+ck_upload_part_0	(`part_no` > 0)
+ck_upload_session_0	(`state` in (_ascii\'OPEN\',_ascii\'FINALIZING\',_ascii\'COMPLETED\',_ascii\'ABORTED\',_ascii\'FAILED\'))
+TABLE_NAME	CONSTRAINT_NAME	COLUMN_NAME	REFERENCED_TABLE_NAME	REFERENCED_COLUMN_NAME	ORDINAL_POSITION
+department	fk_department_0	parent_id	department	enterprise_id	1
+durable_task	fk_durable_task_0	subject_kind	task_subject	subject_kind	1
+durable_task	fk_durable_task_0	subject_id	task_subject	subject_id	2
+enterprise_identity	fk_enterprise_identity_0	department_id	department	enterprise_id	1
+external_execution	fk_external_execution_0	operation_id	external_operation	id	1
+external_execution	fk_external_execution_1	task_id	durable_task	id	1
+external_operation	fk_external_operation_0	subject_kind	task_subject	subject_kind	1
+external_operation	fk_external_operation_0	subject_id	task_subject	subject_id	2
+file_cleanup	fk_file_cleanup_0	file_id	file_object	id	1
+file_cleanup	fk_file_cleanup_1	backend_id	storage_backend	id	1
+file_object	fk_file_object_0	meeting_id	meeting	id	1
+file_object	fk_file_object_1	backend_id	storage_backend	id	1
+file_reference	fk_file_reference_0	file_id	file_object	id	1
+identity_session	fk_identity_session_0	enterprise_id	enterprise_identity	enterprise_id	1
+meeting	fk_meeting_0	owner_id	enterprise_identity	enterprise_id	1
+meeting_access_grant	fk_meeting_access_grant_0	meeting_id	meeting	id	1
+meeting_access_grant	fk_meeting_access_grant_1	enterprise_id	enterprise_identity	enterprise_id	1
+meeting_access_grant	fk_meeting_access_grant_2	roster_id	roster_revision	id	1
+meeting_acl	fk_acl_identity	enterprise_id	enterprise_identity	enterprise_id	1
+meeting_info_revision	fk_meeting_info_revision_0	meeting_id	meeting	id	1
+meeting_info_revision	fk_meeting_info_revision_1	created_by	enterprise_identity	enterprise_id	1
+meeting_person_search	fk_meeting_person_search_0	meeting_id	meeting	id	1
+meeting_person_search	fk_meeting_person_search_1	roster_id	roster_member	roster_id	1
+meeting_person_search	fk_meeting_person_search_1	member_id	roster_member	member_id	2
+meeting_search_projection	fk_meeting_search_projection_0	meeting_id	meeting	id	1
+meeting_search_projection	fk_meeting_search_projection_1	info_revision_id	meeting_info_revision	id	1
+meeting_search_projection	fk_meeting_search_projection_2	roster_revision_id	roster_revision	id	1
+model_reservation	fk_model_reservation_0	model	model_capacity	model	1
+model_reservation	fk_model_reservation_1	execution_id	external_execution	id	1
+role_assignment	fk_role_assignment_0	enterprise_id	enterprise_identity	enterprise_id	1
+roster_member	fk_roster_member_0	roster_id	roster_revision	id	1
+roster_member	fk_roster_member_1	enterprise_id	enterprise_identity	enterprise_id	1
+roster_revision	fk_roster_revision_0	meeting_id	meeting	id	1
+roster_revision	fk_roster_revision_1	confirmed_by	enterprise_identity	enterprise_id	1
+task_attempt	fk_task_attempt_0	task_id	durable_task	id	1
+task_outbox	fk_task_outbox_0	task_id	durable_task	id	1
+upload_part	fk_upload_part_0	upload_id	upload_session	id	1
+upload_session	fk_upload_session_0	meeting_id	meeting	id	1
+upload_session	fk_upload_session_1	backend_id	storage_backend	id	1
+upload_session	fk_upload_session_2	completed_file_id	file_object	id	1
+meetings	subjects	tasks	task_bound_events	domain_events
+127	127	0	0	248

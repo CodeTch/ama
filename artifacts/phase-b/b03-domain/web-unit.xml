@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="JSON response preserves caller headers while sending JSON accept and cookie credentials" time="0.052599" classname="test"/>
+	<testcase name="empty successful response resolves without a JSON parse error" time="0.007966" classname="test"/>
+	<testcase name="unauthorized response returns a safe typed error without private backend messages" time="0.008579" classname="test"/>
+	<testcase name="non-JSON service error is normalized without leaking response body" time="0.006696" classname="test"/>
+	<testcase name="malformed successful JSON rejects with a response error" time="0.006516" classname="test"/>
+	<testcase name="network failure is normalized for consumers" time="0.001955" classname="test"/>
+	<testcase name="caller cancellation remains an AbortError" time="0.001199" classname="test"/>
+	<testcase name="cancellation while reading the response body remains an AbortError" time="0.032847" classname="test"/>
+	<!-- tests 8 -->
+	<!-- suites 0 -->
+	<!-- pass 8 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 645.976642 -->
+</testsuites>

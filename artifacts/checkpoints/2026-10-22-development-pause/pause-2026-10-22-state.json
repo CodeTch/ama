@@ -1,0 +1,42 @@
+{
+  "recordedAtUtc": "2026-10-21T22:49:14.958385+00:00",
+  "reason": "User explicitly paused development and requested a durable handoff. Both active agents interrupted.",
+  "trees": [
+    {
+      "name": "main",
+      "path": "/home/tanren/ama",
+      "branch": "main",
+      "head": "15b0a6bc4872cbed209c38474c3b1e425397e972",
+      "status": "M docs/superpowers/plans/2026-10-21-ama-delivery-plan.md\n M docs/superpowers/plans/2026-10-21-ama-phase-b.md"
+    },
+    {
+      "name": "integration",
+      "path": "/home/tanren/ama/.worktrees/phase-a",
+      "branch": "codex/phase-b-foundation",
+      "head": "b938cb14275955cc860c806a7fb9de95565f5b65",
+      "status": ""
+    },
+    {
+      "name": "b04",
+      "path": "/home/tanren/ama/.worktrees/phase-b-file-registry",
+      "branch": "codex/phase-b-file-registry",
+      "head": "45dc8ed27449de191400c858b88413a518842f21",
+      "status": ""
+    },
+    {
+      "name": "b07-s1",
+      "path": "/home/tanren/ama/.worktrees/phase-b-minutes-pure",
+      "branch": "codex/phase-b-minutes-pure",
+      "head": "7e052a88fcd03d60523d013839701dd35a7f2b48",
+      "status": ""
+    },
+    {
+      "name": "d01",
+      "path": "/home/tanren/ama/.worktrees/phase-b-provenance-design",
+      "branch": "codex/phase-b-provenance-design",
+      "head": "214a63d978e4c04c0b3aec1c99d8d0ce3c093d9d",
+      "status": ""
+    }
+  ],
+  "processes": []
+}

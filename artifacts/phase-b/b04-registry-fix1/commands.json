@@ -1,0 +1,54 @@
+[
+  {
+    "run": "red-local-01",
+    "backend": "local",
+    "workdir": "/home/tanren/ama/.worktrees/phase-b-file-registry",
+    "setup": [
+      "source /home/tanren/ama/.worktrees/phase-a/.tools/env.sh",
+      "source .tools/mysql-fixture/ama-test-b01-999352219d61/env.sh"
+    ],
+    "command": "python3 tools/checks/run.py it FileRegistryUploadIT#downloadFilename*",
+    "log": "red-local-01.log",
+    "note": "Canonical reactor executes the same 67 unit cases before these four selected IT methods; do not count overlap as new distinct cases."
+  },
+  {
+    "run": "red-s3-01",
+    "backend": "s3",
+    "workdir": "/home/tanren/ama/.worktrees/phase-b-file-registry",
+    "setup": [
+      "source /home/tanren/ama/.worktrees/phase-a/.tools/env.sh",
+      "source .tools/mysql-fixture/ama-test-b01-ca05078d2c9e/env.sh",
+      "source .tools/s3-registry/env.sh",
+      "export AMA_STORAGE_CONTRACT=s3"
+    ],
+    "command": "python3 tools/checks/run.py it FileRegistryUploadIT#downloadFilename*",
+    "log": "red-s3-01.log",
+    "note": "Canonical reactor executes the same 67 unit cases before these four selected IT methods; do not count overlap as new distinct cases."
+  },
+  {
+    "run": "green-local-01",
+    "backend": "local",
+    "workdir": "/home/tanren/ama/.worktrees/phase-b-file-registry",
+    "setup": [
+      "source /home/tanren/ama/.worktrees/phase-a/.tools/env.sh",
+      "source .tools/mysql-fixture/ama-test-b01-999352219d61/env.sh"
+    ],
+    "command": "python3 tools/checks/run.py it FileRegistryUploadIT#downloadFilename*",
+    "log": "green-local-01.log",
+    "note": "Canonical reactor executes the same 67 unit cases before these four selected IT methods; do not count overlap as new distinct cases."
+  },
+  {
+    "run": "green-s3-01",
+    "backend": "s3",
+    "workdir": "/home/tanren/ama/.worktrees/phase-b-file-registry",
+    "setup": [
+      "source /home/tanren/ama/.worktrees/phase-a/.tools/env.sh",
+      "source .tools/mysql-fixture/ama-test-b01-ca05078d2c9e/env.sh",
+      "source .tools/s3-registry/env.sh",
+      "export AMA_STORAGE_CONTRACT=s3"
+    ],
+    "command": "python3 tools/checks/run.py it FileRegistryUploadIT#downloadFilename*",
+    "log": "green-s3-01.log",
+    "note": "Canonical reactor executes the same 67 unit cases before these four selected IT methods; do not count overlap as new distinct cases."
+  }
+]

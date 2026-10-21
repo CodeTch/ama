@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: AMA internal API foundation
   version: 0.1.0
-  description: Only internal runtime probes are delivered in phase A-01.
+  description: Runtime probes, shared enterprise sessions and revisioned meeting drafts. Real company sign-in, directory and category dictionary qualification remain prerequisites.
 servers:
   - url: http://127.0.0.1:8081
     description: Loopback management listener; never publish through the public ingress.
@@ -11,3 +11,36 @@ paths:
     $ref: './health.yaml#/live'
   /internal/health/ready:
     $ref: './health.yaml#/ready'
+  /api/v1/session:
+    $ref: './identity.yaml#/session'
+  /api/v1/session/logout:
+    $ref: './identity.yaml#/logout'
+  /api/v1/session/logout-all:
+    $ref: './identity.yaml#/logoutAll'
+  /api/v1/directory/people:
+    $ref: './identity.yaml#/people'
+  /api/v1/meetings:
+    $ref: './meetings.yaml#/collection'
+  /api/v1/meetings/{id}:
+    $ref: './meetings.yaml#/item'
+  /api/v1/meetings/{id}/info:
+    $ref: './meetings.yaml#/info'
+  /api/v1/meetings/{id}/roster-confirmations:
+    $ref: './meetings.yaml#/confirmations'
+  /api/v1/meetings/{id}/uploads:
+    $ref: './files.yaml#/begin'
+  /api/v1/uploads/{id}/parts/{part}:
+    $ref: './files.yaml#/part'
+  /api/v1/uploads/{id}/completion:
+    $ref: './files.yaml#/completion'
+  /api/v1/uploads/{id}:
+    $ref: './files.yaml#/abort'
+  /api/v1/files/{id}/content:
+    $ref: './files.yaml#/content'
+components:
+  securitySchemes:
+    enterpriseSession:
+      type: apiKey
+      in: cookie
+      name: __Host-AMA_SESSION
+      description: Opaque server session; Secure, HttpOnly, Path=/, SameSite=Lax. No production sign-in or test-login route exists pending the company protocol.

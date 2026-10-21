@@ -1,0 +1,48 @@
+{
+  "tables": {
+    "expected": 8,
+    "actual": 8,
+    "equal": true,
+    "missing": [],
+    "extra": []
+  },
+  "columns": {
+    "expected": 63,
+    "actual": 63,
+    "equal": true,
+    "missing": [],
+    "extra": []
+  },
+  "indexes": {
+    "expected": 39,
+    "actual": 38,
+    "equal": false,
+    "missing": [
+      {
+        "seq": 1,
+        "name": "fk_transcription_input_3",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "material_snapshot_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      }
+    ],
+    "extra": []
+  },
+  "checks": {
+    "expected": 13,
+    "actual": 13,
+    "equal": true,
+    "missing": [],
+    "extra": []
+  },
+  "foreign_keys": {
+    "expected": 22,
+    "actual": 22,
+    "equal": true,
+    "missing": [],
+    "extra": []
+  }
+}

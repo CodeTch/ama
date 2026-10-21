@@ -44,6 +44,275 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Resolve current shared database session
+         * @description Rechecks ACTIVE identity, generation, expiration and revocation on each request. Response is not cached; raw session token is never returned.
+         */
+        get: operations["currentSession"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/session/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke the current server session on both nodes */
+        post: operations["logoutSession"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/session/logout-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Advance the authenticated identity generation to revoke all its sessions
+         * @description Identity comes exclusively from the authenticated server session. Browser identity or role claims are never accepted.
+         */
+        post: operations["logoutAllSessions"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/directory/people": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search enterprise people by stable identity
+         * @description Company directory protocol is pending, so production returns a safe 503. Controlled test projections keep same-name people distinct by stable ID and department. This does not create an account or meeting authorization.
+         */
+        get: operations["searchDirectoryPeople"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create an empty meeting owned by the current active identity
+         * @description No name, category, date or roster is required. The actual meeting date remains null. Same-key replay returns the original ID, revision and ENTRY stage after current authorization is checked.
+         */
+        post: operations["createMeeting"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        /**
+         * Read currently valid saved meeting information
+         * @description Rechecks shared ACTIVE identity and owner or current confirmed enterprise membership. Members receive only saved information and the current confirmed roster; rosterDraft and rosterDraftId are null. Only the owner receives a pending saved roster draft. No candidates, AI guesses or unsaved client values are returned. All responses are no-store. This is not a list or search endpoint.
+         */
+        get: operations["getSavedMeeting"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save human information and a separate pending roster using revision CAS
+         * @description Owner only. Fields are a complete saved value; omitted optional text/date become null. rosterDraftIds contains exact stable enterprise IDs, without case/whitespace normalization. externalRosterNames are display-only people and never grant access. A changed roster creates a draft without changing current grants or confirmed search names. Name and summary have no product character limit; the configurable transport budget rejects oversized bodies without truncation. Non-null category requires an approved dictionary; production remains unavailable until that company/config port is qualified. Published or governed meetings cannot be edited.
+         */
+        put: operations["saveMeetingInfo"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/roster-confirmations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Explicitly confirm the latest saved roster draft
+         * @description Owner only, independent of missing name/category/date. CAS pins the current saved draft; no client roster or candidate is accepted. Creates an immutable confirmed version, checks exact ACTIVE enterprise identities, replaces effective READ grants and current name projection atomically. Empty roster is legal. Prior confirmed access remains in effect until this request commits. A historical replay returns its original revision and never reactivates its old grants.
+         */
+        post: operations["confirmMeetingRoster"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/uploads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Accept a pinned upload after durable storage begin and database commit */
+        post: operations["beginFileUpload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/uploads/{id}/parts/{part}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** Accept immutable verified bytes and commit a server-owned receipt */
+        put: operations["writeFileUploadPart"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/uploads/{id}/completion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Freeze every committed receipt then durably publish and atomically register one file */
+        post: operations["completeFileUpload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/uploads/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Abort only OPEN uploads; FINALIZING conflicts and completed files are preserved */
+        delete: operations["abortFileUpload"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/files/{id}/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        /**
+         * Read only through fresh meeting authorization and a registered current business reference
+         * @description UPLOAD_SESSION is technical durability protection and never a business read grant. Unknown reference kinds and unavailable production domain policies are unreadable. Backend keys, provider tokens and physical locations never appear in responses. Pre-open authorization is implemented; D06 owns periodic in-stream revocation.
+         */
+        get: operations["downloadBusinessFile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -51,6 +320,111 @@ export interface components {
         Health: {
             /** @enum {string} */
             status: "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
+        };
+        Actor: {
+            /** @description Exact company stable ID; case and trailing spaces are significant */
+            enterpriseId: string;
+            /** @enum {string} */
+            status: "ACTIVE" | "DISABLED";
+            /** @description Platform privileges only; never a meeting body override */
+            roles: ("USER" | "PLATFORM_ADMIN")[];
+        };
+        Session: {
+            actor: components["schemas"]["Actor"];
+            csrfToken: string;
+            /** Format: date-time */
+            expiresAt: string;
+        };
+        BusinessError: {
+            error: {
+                /** @enum {string} */
+                code: "UNAUTHENTICATED" | "FORBIDDEN" | "INVALID_ARGUMENT" | "IDENTITY_UNAVAILABLE" | "IDENTITY_PROVIDER_UNAVAILABLE" | "MEETING_FORBIDDEN" | "MEETING_CONFLICT" | "CATEGORY_DICTIONARY_UNAVAILABLE" | "REQUEST_TOO_LARGE" | "FILE_PURPOSE_UNAVAILABLE" | "FILE_CONFLICT" | "FILE_NOT_FOUND" | "FILE_STORAGE_UNAVAILABLE" | "FILE_INVALID_RANGE";
+                message: string;
+                /** Format: uuid */
+                traceId: string;
+            };
+        };
+        Person: {
+            stableId: string;
+            displayName: string;
+            department: string | null;
+            active: boolean;
+        };
+        PeoplePage: {
+            items: components["schemas"]["Person"][];
+            nextCursor: string | null;
+        };
+        Mutation: {
+            /** Format: uuid */
+            id: string;
+            /** Format: int64 */
+            revision: number;
+        };
+        Member: {
+            /** Format: uuid */
+            memberId: string;
+            enterpriseId: string | null;
+            displayName: string;
+            /** @enum {string} */
+            memberKind: "ENTERPRISE" | "EXTERNAL";
+        };
+        Saved: components["schemas"]["Mutation"] & {
+            /** Format: int64 */
+            accessRevision: number;
+            /** @enum {string} */
+            stage: "ENTRY" | "TRANSCRIPT_PENDING" | "TRANSCRIPT_FAILED" | "MINUTES_PENDING" | "MINUTES_FAILED" | "READY_TO_PUBLISH" | "PUBLISH_FAILED" | "PUBLISHED";
+            name: string | null;
+            category: string | null;
+            summary: string | null;
+            /** Format: date */
+            occurredOn: string | null;
+            /** Format: uuid */
+            confirmedRosterId: string | null;
+            confirmedRoster: components["schemas"]["Member"][];
+            /** Format: uuid */
+            rosterDraftId: string | null;
+            rosterDraft: components["schemas"]["Member"][] | null;
+        };
+        /** Format: int64 */
+        ExpectedRevision: number;
+        SaveInfo: {
+            expectedRevision: components["schemas"]["ExpectedRevision"];
+            name?: string | null;
+            category?: string | null;
+            summary?: string | null;
+            /** Format: date */
+            occurredOn?: string | null;
+            rosterDraftIds: string[];
+            externalRosterNames?: string[] | null;
+        };
+        Hash: string;
+        Begin: {
+            purpose: string;
+            /** @description Exact stored/display value; never an object key or path. No product character quota. The HTTP download filename has a separate bounded transport representation. */
+            name: string;
+            /** Format: int64 */
+            size: number;
+            sha256?: components["schemas"]["Hash"] | null;
+        };
+        Accepted: {
+            /** Format: uuid */
+            uploadId: string;
+            /**
+             * Format: int64
+             * @description Technical suggestion only; restart never re-slices accepted receipts.
+             */
+            partSize: number;
+        };
+        Completion: {
+            parts: {
+                part: number;
+                sha256: components["schemas"]["Hash"];
+            }[];
+            sha256: components["schemas"]["Hash"];
+        };
+        Completed: {
+            /** Format: uuid */
+            fileId: string;
         };
     };
     responses: {
@@ -70,8 +444,116 @@ export interface components {
                 };
             };
         };
+        /** @description Session absent, expired, revoked, disabled or from an old generation */
+        Unauthenticated: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Denied meeting access, wrong listener or failed Origin/CSRF policy */
+        BusinessForbidden: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Identity database or unqualified company provider unavailable */
+        Unavailable: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Invalid directory page request */
+        Invalid: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Same key with different payload, stale expectedRevision, no pending draft, inactive/unknown roster identity, or immutable published state. No partial effects; retain client input. */
+        Conflict: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Body exceeds meeting.http.max-request-bytes (default 8388608 bytes). Configurable transport budget, not a product name or summary limit; no truncation. */
+        TooLarge: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Shared database or approved category dictionary unavailable; no fabricated enterprise options. */
+        MeetingUnavailable: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description No available authorized business file or upload */
+        Missing: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Different request, frozen or terminated session, publication or cancellation fence */
+        files_Conflict: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Unconfigured or disabled purpose/storage, or unknown transaction acknowledgment; retry the same request */
+        files_Unavailable: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Requested single range is invalid or unsatisfiable */
+        Range: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
     };
-    parameters: never;
+    parameters: {
+        /** @description Must exactly match the configured allowed origin */
+        Origin: string;
+        /** @description Independent session-bound token returned by currentSession */
+        Csrf: string;
+        /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+        Key: string;
+        /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+        Id: string;
+    };
     requestBodies: never;
     headers: never;
     pathItems: never;
@@ -136,6 +618,461 @@ export interface operations {
                     "application/vnd.spring-boot.actuator.v3+json": components["schemas"]["Health"];
                 };
             };
+        };
+    };
+    currentSession: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Authenticated identity and session-bound CSRF token */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Session"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    logoutSession: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Session revoked; secure host-only cookie expired */
+            204: {
+                headers: {
+                    "Set-Cookie"?: string;
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    logoutAllSessions: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All sessions for this identity revoked; cookie expired */
+            204: {
+                headers: {
+                    "Set-Cookie"?: string;
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    searchDirectoryPeople: {
+        parameters: {
+            query?: {
+                query?: string;
+                /** @description Opaque next-page cursor from the prior response */
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of directory entries */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PeoplePage"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    createMeeting: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": Record<string, never>;
+            };
+        };
+        responses: {
+            /** @description Original created draft, including on replay */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mutation"] & {
+                        /** @constant */
+                        stage: "ENTRY";
+                    };
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            409: components["responses"]["Conflict"];
+            413: components["responses"]["TooLarge"];
+            503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    getSavedMeeting: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Authorized saved projection */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Saved"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    saveMeetingInfo: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveInfo"];
+            };
+        };
+        responses: {
+            /** @description Original accepted meeting ID and revision, including on replay */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mutation"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            409: components["responses"]["Conflict"];
+            413: components["responses"]["TooLarge"];
+            503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    confirmMeetingRoster: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevision: components["schemas"]["ExpectedRevision"];
+                };
+            };
+        };
+        responses: {
+            /** @description Original accepted meeting ID and revision, including on replay */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mutation"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            409: components["responses"]["Conflict"];
+            413: components["responses"]["TooLarge"];
+            503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    beginFileUpload: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Begin"];
+            };
+        };
+        responses: {
+            /** @description Committed result after current authorization */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Accepted"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            404: components["responses"]["Missing"];
+            409: components["responses"]["files_Conflict"];
+            413: components["responses"]["TooLarge"];
+            503: components["responses"]["files_Unavailable"];
+        };
+    };
+    writeFileUploadPart: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+                "X-Checksum-SHA256": components["schemas"]["Hash"];
+                "Content-Length": number;
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+                part: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/octet-stream": string;
+            };
+        };
+        responses: {
+            /** @description Verified durable part receipt committed; same content replays */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            404: components["responses"]["Missing"];
+            409: components["responses"]["files_Conflict"];
+            413: components["responses"]["TooLarge"];
+            503: components["responses"]["files_Unavailable"];
+        };
+    };
+    completeFileUpload: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Completion"];
+            };
+        };
+        responses: {
+            /** @description Committed result after current authorization */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Completed"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            404: components["responses"]["Missing"];
+            409: components["responses"]["files_Conflict"];
+            413: components["responses"]["TooLarge"];
+            503: components["responses"]["files_Unavailable"];
+        };
+    };
+    abortFileUpload: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed abort or authorized unchanged terminal replay */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            404: components["responses"]["Missing"];
+            409: components["responses"]["files_Conflict"];
+            413: components["responses"]["TooLarge"];
+            503: components["responses"]["files_Unavailable"];
+        };
+    };
+    downloadBusinessFile: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description One bytes range, including open-ended or suffix ranges; multiple ranges are rejected. */
+                Range?: string;
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete authorized content */
+            200: {
+                headers: {
+                    /** @description At most 1024 ASCII bytes for the whole value. Safe ASCII fallback download plus the complete RFC5987 UTF-8 name when it fits; otherwise a Unicode-scalar-safe transport prefix ending in ... . Full stored/display name is unchanged. */
+                    "Content-Disposition"?: string;
+                    "Accept-Ranges"?: "bytes";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+            /** @description Exactly the selected single byte range; the same bounded Content-Disposition filename policy applies as for complete content. */
+            206: {
+                headers: {
+                    "Content-Range"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            404: components["responses"]["Missing"];
+            409: components["responses"]["files_Conflict"];
+            413: components["responses"]["TooLarge"];
+            416: components["responses"]["Range"];
+            503: components["responses"]["files_Unavailable"];
         };
     };
 }

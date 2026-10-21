@@ -1,0 +1,46 @@
+--- frozen10001
++++ finalcanonical
+@@ -230,24 +230,25 @@
+       41: invokevirtual #CP                // Method ama/storage/s3/S3Objects.optional:(Ljava/lang/String;)[B
+       44: astore_3
+       45: aload_3
+-      46: ifnull        68
+-      49: aload_3
+-      50: aload_0
+-      51: getfield      #CP                // Field layout:Lama/storage/s3/S3Layout;
+-      54: aload_1
+-      55: invokevirtual #CP                // Method ama/storage/s3/S3Layout.binding:(Lama/contract/StorageContracts$StorageKey;)[B
+-      58: invokestatic  #CP                // Method java/util/Arrays.equals:([B[B)Z
+-      61: ifne          68
+-      64: invokestatic  #CP                // Method ama/storage/s3/ControlCodec.unavailable:()Lama/contract/StorageContracts$StorageException;
+-      67: athrow
+-      68: aload_0
+-      69: getfield      #CP                // Field io:Lama/storage/s3/S3Objects;
+-      72: aload_0
+-      73: aload_2
+-      74: invokedynamic #CP,  0            // InvokeDynamic #CP:get:(Lama/storage/s3/S3FileStorage;Ljava/lang/String;)Ljava/util/function/Supplier;
+-      79: invokevirtual #CP                // Method ama/storage/s3/S3Objects.call:(Ljava/util/function/Supplier;)Ljava/lang/Object;
+-      82: pop
+-      83: return
++      46: ifnonnull     50
++      49: return
++      50: aload_3
++      51: aload_0
++      52: getfield      #CP                // Field layout:Lama/storage/s3/S3Layout;
++      55: aload_1
++      56: invokevirtual #CP                // Method ama/storage/s3/S3Layout.binding:(Lama/contract/StorageContracts$StorageKey;)[B
++      59: invokestatic  #CP                // Method java/util/Arrays.equals:([B[B)Z
++      62: ifne          69
++      65: invokestatic  #CP                // Method ama/storage/s3/ControlCodec.unavailable:()Lama/contract/StorageContracts$StorageException;
++      68: athrow
++      69: aload_0
++      70: getfield      #CP                // Field io:Lama/storage/s3/S3Objects;
++      73: aload_0
++      74: aload_2
++      75: invokedynamic #CP,  0            // InvokeDynamic #CP:get:(Lama/storage/s3/S3FileStorage;Ljava/lang/String;)Ljava/util/function/Supplier;
++      80: invokevirtual #CP                // Method ama/storage/s3/S3Objects.call:(Ljava/util/function/Supplier;)Ljava/lang/Object;
++      83: pop
++      84: return
+ 
+   public ama.contract.StorageContracts$UploadToken beginUpload(ama.contract.StorageContracts$UploadSpec);
+     Code:

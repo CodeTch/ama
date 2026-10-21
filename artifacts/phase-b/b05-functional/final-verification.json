@@ -1,0 +1,28 @@
+{
+  "target_metadata_exact_match": true,
+  "counts": {
+    "tables": 10,
+    "columns": 91,
+    "indexes": 43,
+    "checks": 16,
+    "foreign_keys": 10
+  },
+  "independent_source_sha256": "3de8041db8860f1547ff53a94b4ddd79470c4881340111fdafbc3ce5322399ad",
+  "final_positive_native_aio": "0",
+  "recovery_unchanged": {
+    "container_id": true,
+    "args": true,
+    "mounts": true,
+    "loopback_port": true,
+    "port_bindings": true,
+    "metadata": true,
+    "show_create": true,
+    "migration_sha256": true
+  },
+  "recovery_history_unchanged": true,
+  "recovery_row_counts_not_reduced": true,
+  "recovery_elapsed": {
+    "from_real_db_connectable_to_completed_ms": 1476
+  },
+  "all_containers_preserved": true
+}

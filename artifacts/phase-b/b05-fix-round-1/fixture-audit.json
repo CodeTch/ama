@@ -1,0 +1,91 @@
+{
+  "captured_at_utc": "2026-10-21T19:39:57.955998+00:00",
+  "container": "ama-test-b01-3ee46f689f9a",
+  "id": "59f3de25efa7156e89329880ccfbd4d51bd2f52d735ead9fca64745c28eb3dcb",
+  "auto_remove": false,
+  "mounts": [
+    {
+      "Type": "volume",
+      "Name": "492fc746d1d2aa690a724c6c95fc5caaf15c0321b92081bb0ff7a92059588b1a",
+      "Source": "/var/lib/docker/volumes/492fc746d1d2aa690a724c6c95fc5caaf15c0321b92081bb0ff7a92059588b1a/_data",
+      "Destination": "/var/lib/mysql",
+      "Driver": "local",
+      "Mode": "",
+      "RW": true,
+      "Propagation": ""
+    }
+  ],
+  "ports": {
+    "3306/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "45951"
+      }
+    ]
+  },
+  "args": [
+    "--character-set-server=utf8mb4",
+    "--collation-server=utf8mb4_0900_ai_ci",
+    "--default-time-zone=+00:00",
+    "--innodb-use-native-aio=OFF"
+  ],
+  "state": "running",
+  "runtime": {
+    "version": "8.4.6",
+    "isolation": "REPEATABLE-READ",
+    "time_zone": "+00:00",
+    "native_aio": 0
+  },
+  "history": [
+    {
+      "rank": 1,
+      "success": 1,
+      "version": "001",
+      "checksum": 1201435595
+    },
+    {
+      "rank": 2,
+      "success": 1,
+      "version": "002",
+      "checksum": 1757300424
+    },
+    {
+      "rank": 3,
+      "success": 1,
+      "version": "005",
+      "checksum": -1999355348
+    },
+    {
+      "rank": 4,
+      "success": 1,
+      "version": "006",
+      "checksum": -1744360556
+    },
+    {
+      "rank": 5,
+      "success": 1,
+      "version": "007",
+      "checksum": 157746768
+    },
+    {
+      "rank": 6,
+      "success": 1,
+      "version": "008",
+      "checksum": -1747387036
+    },
+    {
+      "rank": 7,
+      "success": 1,
+      "version": "009",
+      "checksum": -287948759
+    },
+    {
+      "rank": 8,
+      "success": 1,
+      "version": "010",
+      "checksum": -1187397378
+    }
+  ],
+  "v010_sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+  "scope": "Read-only audit of only the already-owned positive fixture. No restart/reset/repair/remove or other-fixture access in fix round."
+}

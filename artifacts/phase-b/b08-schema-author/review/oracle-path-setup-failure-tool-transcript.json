@@ -1,0 +1,7 @@
+{
+  "kind": "transcription_of_original_tool_result_stderr_not_original_redirected_file",
+  "command": "python3 docs/acceptance/b/publication-schema-preparation.py > .tools/publication-schema-review/oracle-extraction.json",
+  "output": "Traceback (most recent call last):\n  File \"/home/tanren/ama/.worktrees/phase-b-publication-schema/docs/acceptance/b/publication-schema-preparation.py\", line 44, in <module>\n    assert target.read_bytes() == oracle_bytes, 'preserve independent oracle bytes'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: preserve independent oracle bytes\n",
+  "outer_grouped_command_exit": 0,
+  "note": "Oracle command raised assertion; later inspection commands continued. Original stdout file is zero bytes and retained. No old oracle write occurred. Neither this preparation failure nor wrapper FileNotFoundError is feature RED."
+}

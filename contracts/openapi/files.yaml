@@ -1,0 +1,546 @@
+{
+  "begin": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "post": {
+      "operationId": "beginFileUpload",
+      "summary": "Accept a pinned upload after durable storage begin and database commit",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        },
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "responses": {
+        "201": {
+          "description": "Committed result after current authorization",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Accepted"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "./identity.yaml#/Invalid"
+        },
+        "401": {
+          "$ref": "./identity.yaml#/Unauthenticated"
+        },
+        "403": {
+          "$ref": "./identity.yaml#/BusinessForbidden"
+        },
+        "404": {
+          "$ref": "#/Missing"
+        },
+        "409": {
+          "$ref": "#/Conflict"
+        },
+        "413": {
+          "$ref": "./meetings.yaml#/TooLarge"
+        },
+        "503": {
+          "$ref": "#/Unavailable"
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/Begin"
+            }
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ]
+  },
+  "part": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "put": {
+      "operationId": "writeFileUploadPart",
+      "summary": "Accept immutable verified bytes and commit a server-owned receipt",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        },
+        {
+          "name": "part",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+          }
+        },
+        {
+          "name": "X-Checksum-SHA256",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "$ref": "#/Hash"
+          }
+        },
+        {
+          "name": "Content-Length",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "Verified durable part receipt committed; same content replays"
+        },
+        "400": {
+          "$ref": "./identity.yaml#/Invalid"
+        },
+        "401": {
+          "$ref": "./identity.yaml#/Unauthenticated"
+        },
+        "403": {
+          "$ref": "./identity.yaml#/BusinessForbidden"
+        },
+        "404": {
+          "$ref": "#/Missing"
+        },
+        "409": {
+          "$ref": "#/Conflict"
+        },
+        "413": {
+          "$ref": "./meetings.yaml#/TooLarge"
+        },
+        "503": {
+          "$ref": "#/Unavailable"
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/octet-stream": {
+            "schema": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ]
+  },
+  "completion": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "post": {
+      "operationId": "completeFileUpload",
+      "summary": "Freeze every committed receipt then durably publish and atomically register one file",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed result after current authorization",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Completed"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "./identity.yaml#/Invalid"
+        },
+        "401": {
+          "$ref": "./identity.yaml#/Unauthenticated"
+        },
+        "403": {
+          "$ref": "./identity.yaml#/BusinessForbidden"
+        },
+        "404": {
+          "$ref": "#/Missing"
+        },
+        "409": {
+          "$ref": "#/Conflict"
+        },
+        "413": {
+          "$ref": "./meetings.yaml#/TooLarge"
+        },
+        "503": {
+          "$ref": "#/Unavailable"
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/Completion"
+            }
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ]
+  },
+  "abort": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "delete": {
+      "operationId": "abortFileUpload",
+      "summary": "Abort only OPEN uploads; FINALIZING conflicts and completed files are preserved",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "Committed abort or authorized unchanged terminal replay"
+        },
+        "400": {
+          "$ref": "./identity.yaml#/Invalid"
+        },
+        "401": {
+          "$ref": "./identity.yaml#/Unauthenticated"
+        },
+        "403": {
+          "$ref": "./identity.yaml#/BusinessForbidden"
+        },
+        "404": {
+          "$ref": "#/Missing"
+        },
+        "409": {
+          "$ref": "#/Conflict"
+        },
+        "413": {
+          "$ref": "./meetings.yaml#/TooLarge"
+        },
+        "503": {
+          "$ref": "#/Unavailable"
+        }
+      }
+    },
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ]
+  },
+  "content": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "get": {
+      "operationId": "downloadBusinessFile",
+      "summary": "Read only through fresh meeting authorization and a registered current business reference",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Range",
+          "in": "header",
+          "required": false,
+          "schema": {
+            "type": "string"
+          },
+          "description": "One bytes range, including open-ended or suffix ranges; multiple ranges are rejected."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Complete authorized content",
+          "headers": {
+            "Content-Disposition": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "At most 1024 ASCII bytes for the whole value. Safe ASCII fallback download plus the complete RFC5987 UTF-8 name when it fits; otherwise a Unicode-scalar-safe transport prefix ending in ... . Full stored/display name is unchanged."
+            },
+            "Accept-Ranges": {
+              "schema": {
+                "type": "string",
+                "const": "bytes"
+              }
+            }
+          },
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "206": {
+          "description": "Exactly the selected single byte range; the same bounded Content-Disposition filename policy applies as for complete content.",
+          "headers": {
+            "Content-Range": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "416": {
+          "$ref": "#/Range"
+        },
+        "400": {
+          "$ref": "./identity.yaml#/Invalid"
+        },
+        "401": {
+          "$ref": "./identity.yaml#/Unauthenticated"
+        },
+        "403": {
+          "$ref": "./identity.yaml#/BusinessForbidden"
+        },
+        "404": {
+          "$ref": "#/Missing"
+        },
+        "409": {
+          "$ref": "#/Conflict"
+        },
+        "413": {
+          "$ref": "./meetings.yaml#/TooLarge"
+        },
+        "503": {
+          "$ref": "#/Unavailable"
+        }
+      },
+      "description": "UPLOAD_SESSION is technical durability protection and never a business read grant. Unknown reference kinds and unavailable production domain policies are unreadable. Backend keys, provider tokens and physical locations never appear in responses. Pre-open authorization is implemented; D06 owns periodic in-stream revocation."
+    },
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ]
+  },
+  "Hash": {
+    "type": "string",
+    "pattern": "^[0-9a-fA-F]{64}$"
+  },
+  "Begin": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "purpose",
+      "name",
+      "size"
+    ],
+    "properties": {
+      "purpose": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_-]{1,64}$"
+      },
+      "name": {
+        "type": "string",
+        "description": "Exact stored/display value; never an object key or path. No product character quota. The HTTP download filename has a separate bounded transport representation."
+      },
+      "size": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "sha256": {
+        "oneOf": [
+          {
+            "$ref": "#/Hash"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "Accepted": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "uploadId",
+      "partSize"
+    ],
+    "properties": {
+      "uploadId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "partSize": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 1,
+        "description": "Technical suggestion only; restart never re-slices accepted receipts."
+      }
+    }
+  },
+  "Completed": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "fileId"
+    ],
+    "properties": {
+      "fileId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "Completion": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "parts",
+      "sha256"
+    ],
+    "properties": {
+      "parts": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "part",
+            "sha256"
+          ],
+          "properties": {
+            "part": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "sha256": {
+              "$ref": "#/Hash"
+            }
+          }
+        }
+      },
+      "sha256": {
+        "$ref": "#/Hash"
+      }
+    }
+  },
+  "Missing": {
+    "description": "No available authorized business file or upload",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "./identity.yaml#/BusinessError"
+        }
+      }
+    }
+  },
+  "Conflict": {
+    "description": "Different request, frozen or terminated session, publication or cancellation fence",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "./identity.yaml#/BusinessError"
+        }
+      }
+    }
+  },
+  "Unavailable": {
+    "description": "Unconfigured or disabled purpose/storage, or unknown transaction acknowledgment; retry the same request",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "./identity.yaml#/BusinessError"
+        }
+      }
+    }
+  },
+  "Range": {
+    "description": "Requested single range is invalid or unsatisfiable",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "./identity.yaml#/BusinessError"
+        }
+      }
+    }
+  }
+}

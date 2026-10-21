@@ -1,0 +1,695 @@
+openapi: 3.1.0
+info:
+  title: AMA internal API foundation
+  version: 0.1.0
+  description: Runtime probes, shared enterprise sessions and revisioned meeting drafts. Real company sign-in, directory and category dictionary qualification remain prerequisites.
+servers:
+  - url: http://127.0.0.1:8081
+    description: Loopback management listener; never publish through the public ingress.
+paths:
+  /internal/health/live:
+    get:
+      operationId: internalLiveness
+      summary: Process liveness independent of database availability
+      description: Accessible only on the management listener from explicitly allowed source networks. Forwarded headers do not grant access.
+      responses:
+        '200':
+          description: Process is alive
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '503':
+          description: Process is stopping or broken
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /internal/health/ready:
+    get:
+      operationId: internalReadiness
+      summary: Admission readiness requires a real database connection
+      description: A missing or failed MySQL dependency returns 503 while liveness remains independent. Internal access uses the management listener and source network policy.
+      responses:
+        '200':
+          description: Application accepts traffic and JDBC dependency is healthy
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '503':
+          description: Database unavailable or application refusing traffic
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /api/v1/session:
+    servers:
+      - url: http://127.0.0.1:8080
+        description: Public API listener behind the deployment TLS ingress
+    get:
+      operationId: currentSession
+      summary: Resolve current shared database session
+      description: Rechecks ACTIVE identity, generation, expiration and revocation on each request. Response is not cached; raw session token is never returned.
+      security:
+        - enterpriseSession: []
+      responses:
+        '200':
+          description: Authenticated identity and session-bound CSRF token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/BusinessForbidden'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+  /api/v1/session/logout:
+    servers:
+      - url: http://127.0.0.1:8080
+    post:
+      operationId: logoutSession
+      summary: Revoke the current server session on both nodes
+      security:
+        - enterpriseSession: []
+      parameters:
+        - $ref: '#/components/parameters/Origin'
+        - $ref: '#/components/parameters/Csrf'
+      responses:
+        '204':
+          description: Session revoked; secure host-only cookie expired
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/BusinessForbidden'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+  /api/v1/session/logout-all:
+    servers:
+      - url: http://127.0.0.1:8080
+    post:
+      operationId: logoutAllSessions
+      summary: Advance the authenticated identity generation to revoke all its sessions
+      description: Identity comes exclusively from the authenticated server session. Browser identity or role claims are never accepted.
+      security:
+        - enterpriseSession: []
+      parameters:
+        - $ref: '#/components/parameters/Origin'
+        - $ref: '#/components/parameters/Csrf'
+      responses:
+        '204':
+          description: All sessions for this identity revoked; cookie expired
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/BusinessForbidden'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+  /api/v1/directory/people:
+    servers:
+      - url: http://127.0.0.1:8080
+    get:
+      operationId: searchDirectoryPeople
+      summary: Search enterprise people by stable identity
+      description: Company directory protocol is pending, so production returns a safe 503. Controlled test projections keep same-name people distinct by stable ID and department. This does not create an account or meeting authorization.
+      security:
+        - enterpriseSession: []
+      parameters:
+        - name: query
+          in: query
+          schema:
+            type: string
+            default: ''
+        - name: cursor
+          in: query
+          description: Opaque next-page cursor from the prior response
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: A page of directory entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeoplePage'
+        '400':
+          $ref: '#/components/responses/Invalid'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/BusinessForbidden'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+  /api/v1/meetings:
+    servers:
+      - url: http://127.0.0.1:8080
+    post:
+      operationId: createMeeting
+      summary: Create an empty meeting owned by the current active identity
+      description: No name, category, date or roster is required. The actual meeting date remains null. Same-key replay returns the original ID, revision and ENTRY stage after current authorization is checked.
+      security:
+        - enterpriseSession: []
+      parameters:
+        - $ref: '#/components/parameters/Key'
+        - $ref: '#/components/parameters/Origin'
+        - $ref: '#/components/parameters/Csrf'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              maxProperties: 0
+      responses:
+        '201':
+          description: Original created draft, including on replay
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Mutation'
+                  - type: object
+                    required:
+                      - stage
+                    properties:
+                      stage:
+                        type: string
+                        const: ENTRY
+        '400':
+          $ref: '#/components/responses/Invalid'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/BusinessForbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '413':
+          $ref: '#/components/responses/TooLarge'
+        '503':
+          $ref: '#/components/responses/MeetingUnavailable'
+  /api/v1/meetings/{id}:
+    servers:
+      - url: http://127.0.0.1:8080
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getSavedMeeting
+      summary: Read currently valid saved meeting information
+      description: Rechecks shared ACTIVE identity and owner or current confirmed enterprise membership. Members receive only saved information and the current confirmed roster; rosterDraft and rosterDraftId are null. Only the owner receives a pending saved roster draft. No candidates, AI guesses or unsaved client values are returned. All responses are no-store. This is not a list or search endpoint.
+      security:
+        - enterpriseSession: []
+      responses:
+        '200':
+          description: Authorized saved projection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Saved'
+        '400':
+          $ref: '#/components/responses/Invalid'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/BusinessForbidden'
+        '503':
+          $ref: '#/components/responses/MeetingUnavailable'
+  /api/v1/meetings/{id}/info:
+    servers:
+      - url: http://127.0.0.1:8080
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    put:
+      operationId: saveMeetingInfo
+      summary: Save human information and a separate pending roster using revision CAS
+      description: Owner only. Fields are a complete saved value; omitted optional text/date become null. rosterDraftIds contains exact stable enterprise IDs, without case/whitespace normalization. externalRosterNames are display-only people and never grant access. A changed roster creates a draft without changing current grants or confirmed search names. Name and summary have no product character limit; the configurable transport budget rejects oversized bodies without truncation. Non-null category requires an approved dictionary; production remains unavailable until that company/config port is qualified. Published or governed meetings cannot be edited.
+      security:
+        - enterpriseSession: []
+      parameters:
+        - $ref: '#/components/parameters/Key'
+        - $ref: '#/components/parameters/Origin'
+        - $ref: '#/components/parameters/Csrf'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveInfo'
+      responses:
+        '200':
+          description: Original accepted meeting ID and revision, including on replay
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mutation'
+        '400':
+          $ref: '#/components/responses/Invalid'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/BusinessForbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '413':
+          $ref: '#/components/responses/TooLarge'
+        '503':
+          $ref: '#/components/responses/MeetingUnavailable'
+  /api/v1/meetings/{id}/roster-confirmations:
+    servers:
+      - url: http://127.0.0.1:8080
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    post:
+      operationId: confirmMeetingRoster
+      summary: Explicitly confirm the latest saved roster draft
+      description: Owner only, independent of missing name/category/date. CAS pins the current saved draft; no client roster or candidate is accepted. Creates an immutable confirmed version, checks exact ACTIVE enterprise identities, replaces effective READ grants and current name projection atomically. Empty roster is legal. Prior confirmed access remains in effect until this request commits. A historical replay returns its original revision and never reactivates its old grants.
+      security:
+        - enterpriseSession: []
+      parameters:
+        - $ref: '#/components/parameters/Key'
+        - $ref: '#/components/parameters/Origin'
+        - $ref: '#/components/parameters/Csrf'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - expectedRevision
+              properties:
+                expectedRevision:
+                  $ref: '#/components/schemas/ExpectedRevision'
+      responses:
+        '200':
+          description: Original accepted meeting ID and revision, including on replay
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mutation'
+        '400':
+          $ref: '#/components/responses/Invalid'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/BusinessForbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '413':
+          $ref: '#/components/responses/TooLarge'
+        '503':
+          $ref: '#/components/responses/MeetingUnavailable'
+components:
+  securitySchemes:
+    enterpriseSession:
+      type: apiKey
+      in: cookie
+      name: __Host-AMA_SESSION
+      description: Opaque server session; Secure, HttpOnly, Path=/, SameSite=Lax. No production sign-in or test-login route exists pending the company protocol.
+  schemas:
+    Health:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - UP
+            - DOWN
+            - OUT_OF_SERVICE
+            - UNKNOWN
+    Actor:
+      type: object
+      additionalProperties: false
+      required:
+        - enterpriseId
+        - status
+        - roles
+      properties:
+        enterpriseId:
+          type: string
+          description: Exact company stable ID; case and trailing spaces are significant
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - DISABLED
+        roles:
+          type: array
+          uniqueItems: true
+          description: Platform privileges only; never a meeting body override
+          items:
+            type: string
+            enum:
+              - USER
+              - PLATFORM_ADMIN
+    Session:
+      type: object
+      additionalProperties: false
+      required:
+        - actor
+        - csrfToken
+        - expiresAt
+      properties:
+        actor:
+          $ref: '#/components/schemas/Actor'
+        csrfToken:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+    BusinessError:
+      type: object
+      additionalProperties: false
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required:
+            - code
+            - message
+            - traceId
+          properties:
+            code:
+              type: string
+              enum:
+                - UNAUTHENTICATED
+                - FORBIDDEN
+                - INVALID_ARGUMENT
+                - IDENTITY_UNAVAILABLE
+                - IDENTITY_PROVIDER_UNAVAILABLE
+                - MEETING_FORBIDDEN
+                - MEETING_CONFLICT
+                - CATEGORY_DICTIONARY_UNAVAILABLE
+                - REQUEST_TOO_LARGE
+            message:
+              type: string
+            traceId:
+              type: string
+              format: uuid
+    Person:
+      type: object
+      additionalProperties: false
+      required:
+        - stableId
+        - displayName
+        - department
+        - active
+      properties:
+        stableId:
+          type: string
+        displayName:
+          type: string
+        department:
+          type:
+            - string
+            - 'null'
+        active:
+          type: boolean
+    PeoplePage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - nextCursor
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+        nextCursor:
+          type:
+            - string
+            - 'null'
+    Mutation:
+      type: object
+      required:
+        - id
+        - revision
+      properties:
+        id:
+          type: string
+          format: uuid
+        revision:
+          type: integer
+          format: int64
+          minimum: 0
+    Member:
+      type: object
+      required:
+        - memberId
+        - enterpriseId
+        - displayName
+        - memberKind
+      properties:
+        memberId:
+          type: string
+          format: uuid
+        enterpriseId:
+          type:
+            - string
+            - 'null'
+        displayName:
+          type: string
+        memberKind:
+          type: string
+          enum:
+            - ENTERPRISE
+            - EXTERNAL
+    Saved:
+      allOf:
+        - $ref: '#/components/schemas/Mutation'
+        - type: object
+          required:
+            - accessRevision
+            - stage
+            - name
+            - category
+            - summary
+            - occurredOn
+            - confirmedRosterId
+            - confirmedRoster
+            - rosterDraftId
+            - rosterDraft
+          properties:
+            accessRevision:
+              type: integer
+              format: int64
+            stage:
+              type: string
+              enum:
+                - ENTRY
+                - TRANSCRIPT_PENDING
+                - TRANSCRIPT_FAILED
+                - MINUTES_PENDING
+                - MINUTES_FAILED
+                - READY_TO_PUBLISH
+                - PUBLISH_FAILED
+                - PUBLISHED
+            name:
+              type:
+                - string
+                - 'null'
+            category:
+              type:
+                - string
+                - 'null'
+            summary:
+              type:
+                - string
+                - 'null'
+            occurredOn:
+              type:
+                - string
+                - 'null'
+              format: date
+            confirmedRosterId:
+              type:
+                - string
+                - 'null'
+              format: uuid
+            confirmedRoster:
+              type: array
+              items:
+                $ref: '#/components/schemas/Member'
+            rosterDraftId:
+              type:
+                - string
+                - 'null'
+              format: uuid
+            rosterDraft:
+              type:
+                - array
+                - 'null'
+              items:
+                $ref: '#/components/schemas/Member'
+    ExpectedRevision:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854776000
+    SaveInfo:
+      type: object
+      additionalProperties: false
+      required:
+        - expectedRevision
+        - rosterDraftIds
+      properties:
+        expectedRevision:
+          $ref: '#/components/schemas/ExpectedRevision'
+        name:
+          type:
+            - string
+            - 'null'
+        category:
+          type:
+            - string
+            - 'null'
+          minLength: 1
+          maxLength: 255
+        summary:
+          type:
+            - string
+            - 'null'
+        occurredOn:
+          type:
+            - string
+            - 'null'
+          format: date
+        rosterDraftIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            minLength: 1
+            maxLength: 255
+        externalRosterNames:
+          type:
+            - array
+            - 'null'
+          items:
+            type: string
+            minLength: 1
+  responses:
+    Forbidden:
+      description: Source network or listener is not authorized
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required:
+              - error
+            properties:
+              error:
+                type: object
+                additionalProperties: false
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: string
+                    const: FORBIDDEN
+                  message:
+                    type: string
+                    const: Access denied
+    Unauthenticated:
+      description: Session absent, expired, revoked, disabled or from an old generation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BusinessError'
+    BusinessForbidden:
+      description: Denied meeting access, wrong listener or failed Origin/CSRF policy
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BusinessError'
+    Unavailable:
+      description: Identity database or unqualified company provider unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BusinessError'
+    Invalid:
+      description: Invalid directory page request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BusinessError'
+    Conflict:
+      description: Same key with different payload, stale expectedRevision, no pending draft, inactive/unknown roster identity, or immutable published state. No partial effects; retain client input.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BusinessError'
+    TooLarge:
+      description: Body exceeds meeting.http.max-request-bytes (default 8388608 bytes). Configurable transport budget, not a product name or summary limit; no truncation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BusinessError'
+    MeetingUnavailable:
+      description: Shared database or approved category dictionary unavailable; no fabricated enterprise options.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BusinessError'
+  parameters:
+    Origin:
+      name: Origin
+      in: header
+      required: true
+      description: Must exactly match the configured allowed origin
+      schema:
+        type: string
+    Csrf:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      description: Independent session-bound token returned by currentSession
+      schema:
+        type: string
+    Key:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 1
+      description: Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL.
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Canonical lowercase full UUID, also the meeting number; knowing it grants no access.

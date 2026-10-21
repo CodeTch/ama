@@ -1,0 +1,22 @@
+{
+  "base": "7f061e8a9d55f5b0db92762692edbe61123d400b",
+  "head": "d9428eeb0c696b6d21c6303ffd1e8ac115ff56ce",
+  "all_paths": 95,
+  "source_paths": [
+    "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+    "backend/integration-tests/src/test/java/ama/db/PublicationSchemaIT.java",
+    "backend/integration-tests/src/test/resources/ama/db/publication-schema-b00-1.3.json",
+    "docs/acceptance/b/publication-schema-implementation-report.md",
+    "docs/acceptance/b/publication-schema-preparation.md",
+    "docs/acceptance/b/publication-schema-preparation.py"
+  ],
+  "artifact_paths": 89,
+  "all_final_worktree_files_equal_HEAD": true,
+  "total_final_bytes": 2957128,
+  "full_diff_bytes": 3033686,
+  "full_diff_sha256": "fc73fcceba147a20b421db6c4c3fd4d19f7c65b2ff54d2dbd55b781932e55220",
+  "source_diff_bytes": 98790,
+  "source_diff_sha256": "4aa9f7402cbc4ec9f3e4e45e86a5d506ef618f1e98d9d3b869472cef77acd770",
+  "author_report_sha256": "60cc8d2d93c59a592188d5957cf15f4b5d266a11abb80b2296c9965f0cdd3426",
+  "author_pathmap_sha256": "28d4c4e576c577b61fdcd8b196bdb7073190929f9061708fdd0562d8f13edffc"
+}

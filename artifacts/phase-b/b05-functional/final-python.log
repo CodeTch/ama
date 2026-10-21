@@ -1,0 +1,94 @@
+test_aggregate_accepts_real_python_execution_with_fresh_counts (test_run.AggregatePythonTests.test_aggregate_accepts_real_python_execution_with_fresh_counts) ... ok
+test_aggregate_records_actual_python_failure (test_run.AggregatePythonTests.test_aggregate_records_actual_python_failure) ... ok
+test_aggregate_rejects_empty_python_discovery (test_run.AggregatePythonTests.test_aggregate_rejects_empty_python_discovery) ... ok
+test_aggregate_rejects_partial_python_skip (test_run.AggregatePythonTests.test_aggregate_rejects_partial_python_skip) ... ok
+test_aggregate_rejects_required_skipped_python_case (test_run.AggregatePythonTests.test_aggregate_rejects_required_skipped_python_case) ... ok
+test_python_worker_failure_preserves_exit_and_rejects_stale_evidence (test_run.AggregatePythonTests.test_python_worker_failure_preserves_exit_and_rejects_stale_evidence) ... ok
+test_all_skipped_tests_is_failure (test_run.RunnerTests.test_all_skipped_tests_is_failure) ... ok
+test_canonical_future_modes_fail_explicitly_until_registered (test_run.RunnerTests.test_canonical_future_modes_fail_explicitly_until_registered) ... ok
+test_fresh_real_execution_is_success (test_run.RunnerTests.test_fresh_real_execution_is_success) ... ok
+test_integration_wildcard_dispatches_only_discovered_it_classes (test_run.RunnerTests.test_integration_wildcard_dispatches_only_discovered_it_classes) ... ok
+test_skipped_required_case_is_failure_even_if_others_pass (test_run.RunnerTests.test_skipped_required_case_is_failure_even_if_others_pass) ... ok
+test_subprocess_failure_cannot_pass_with_old_success_reports (test_run.RunnerTests.test_subprocess_failure_cannot_pass_with_old_success_reports) ... ok
+test_unit_discovers_tests_in_core_module (test_run.RunnerTests.test_unit_discovers_tests_in_core_module) ... ok
+test_unit_wildcard_dispatches_only_discovered_unit_classes (test_run.RunnerTests.test_unit_wildcard_dispatches_only_discovered_unit_classes) ... ok
+test_unknown_group_is_failure (test_run.RunnerTests.test_unknown_group_is_failure) ... ok
+test_zero_executed_tests_is_failure (test_run.RunnerTests.test_zero_executed_tests_is_failure) ... ok
+test_zero_matches_is_failure (test_run.RunnerTests.test_zero_matches_is_failure) ... ok
+test_no_delivered_python_cases_is_failure (test_run.WebRunnerTests.test_no_delivered_python_cases_is_failure) ... FAIL: invalid or missing fresh Python evidence: [Errno 2] No such file or directory: '/tmp/tmp1mmn5e3a/artifacts/checks/python.json'; evidence=/tmp/tmp1mmn5e3a/artifacts/checks/python.json; log=/tmp/tmp1mmn5e3a/artifacts/checks/python.log
+ok
+test_node_junit_direct_cases_are_counted_and_skips_rejected (test_run.WebRunnerTests.test_node_junit_direct_cases_are_counted_and_skips_rejected) ... PASS: executed=1, failures=0; evidence=/tmp/tmpirc0by6k/node.xml
+FAIL: executed=1, failures=0, skipped=1; a zero/pending/skipped run is not PASS
+FAIL: executed=1, failures=1, skipped=0; a zero/pending/skipped run is not PASS
+ok
+test_python_discovery_counts_all_delivered_directories_and_rejects_skips (test_run.WebRunnerTests.test_python_discovery_counts_all_delivered_directories_and_rejects_skips) ... PASS: Python executed=2, failed=0, skipped=0; directories=2; evidence=/tmp/tmpyva5og0c/artifacts/checks/python.json; log=/tmp/tmpyva5og0c/artifacts/checks/python.log
+FAIL: Python executed=1, failed=0, skipped=1; directories=2; evidence=/tmp/tmpyva5og0c/artifacts/checks/python.json; log=/tmp/tmpyva5og0c/artifacts/checks/python.log
+ok
+test_registered_web_suites_execute_actual_tests_and_count_reports (test_run.WebRunnerTests.test_registered_web_suites_execute_actual_tests_and_count_reports) ... PASS: executed=2, failures=0; evidence=/tmp/tmp2s3jujph/artifacts/web/web.xml
+PASS: executed=2, failures=0; evidence=/tmp/tmpt483ev4u/artifacts/web/visual.xml
+PASS: executed=2, failures=0; evidence=/tmp/tmpej4w5bms/artifacts/web/e2e.xml
+ok
+test_zero_web_matches_cannot_launch_a_false_success (test_run.WebRunnerTests.test_zero_web_matches_cannot_launch_a_false_success) ... FAIL: zero matching web tests for 'missing.test.ts'
+ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 3.498s
+
+OK
+test_approved_ui_decisions_no_longer_request_approval (test_contracts.ContractTests.test_approved_ui_decisions_no_longer_request_approval) ... ok
+test_cli_is_offline_explicit_and_errors_do_not_leak (test_contracts.ContractTests.test_cli_is_offline_explicit_and_errors_do_not_leak) ... ok
+test_cli_pending_exit_and_strict_input_errors (test_contracts.ContractTests.test_cli_pending_exit_and_strict_input_errors) ... ok
+test_complete_catalog_does_not_block_independent_implementation (test_contracts.ContractTests.test_complete_catalog_does_not_block_independent_implementation) ... ok
+test_complete_passed_evidence_still_requires_platform_validation (test_contracts.ContractTests.test_complete_passed_evidence_still_requires_platform_validation) ... ok
+test_distinct_evidence_references_do_not_conflict (test_contracts.ContractTests.test_distinct_evidence_references_do_not_conflict) ... ok
+test_duplicate_and_unknown_records_fail_closed (test_contracts.ContractTests.test_duplicate_and_unknown_records_fail_closed) ... ok
+test_failed_or_conflicting_evidence_does_not_become_pending (test_contracts.ContractTests.test_failed_or_conflicting_evidence_does_not_become_pending) ... ok
+test_governance_framework_allows_independent_work_without_qualification (test_contracts.ContractTests.test_governance_framework_allows_independent_work_without_qualification) ... ok
+test_malformed_manifest_never_crashes_or_passes (test_contracts.ContractTests.test_malformed_manifest_never_crashes_or_passes) ... ok
+test_missing_contract_is_blocked (test_contracts.ContractTests.test_missing_contract_is_blocked) ... ok
+test_partial_decisions_only_request_unresolved_fields (test_contracts.ContractTests.test_partial_decisions_only_request_unresolved_fields) ... ok
+test_passed_claim_cannot_verify_external_contract (test_contracts.ContractTests.test_passed_claim_cannot_verify_external_contract) ... ok
+test_reference_expiry_policy_is_not_treated_as_a_credential (test_contracts.ContractTests.test_reference_expiry_policy_is_not_treated_as_a_credential) ... ok
+test_references_are_opaque_and_malformed_values_are_suppressed (test_contracts.ContractTests.test_references_are_opaque_and_malformed_values_are_suppressed) ... ok
+test_secret_fields_are_redacted (test_contracts.ContractTests.test_secret_fields_are_redacted) ... ok
+test_cli_never_executes_commands_or_opens_network_even_without_configuration (test_ha_preflight.PreflightTests.test_cli_never_executes_commands_or_opens_network_even_without_configuration) ... ok
+test_cli_outputs_json_and_safe_exit_codes_without_evaluating_inventory_text (test_ha_preflight.PreflightTests.test_cli_outputs_json_and_safe_exit_codes_without_evaluating_inventory_text) ... ok
+test_cluster_ingress_still_needs_fencing_with_all_platform_data (test_ha_preflight.PreflightTests.test_cluster_ingress_still_needs_fencing_with_all_platform_data) ... ok
+test_complete_scoped_evidence_can_satisfy_each_supported_combination (test_ha_preflight.PreflightTests.test_complete_scoped_evidence_can_satisfy_each_supported_combination) ... ok
+test_distinct_volumes_cannot_claim_the_same_normalized_active_mount (test_ha_preflight.PreflightTests.test_distinct_volumes_cannot_claim_the_same_normalized_active_mount) ... ok
+test_evidence_must_be_current_structured_independently_reviewed_and_scope_bound (test_ha_preflight.PreflightTests.test_evidence_must_be_current_structured_independently_reviewed_and_scope_bound) ... ok
+test_example_preserves_pending_operations_and_requires_no_s3_for_local (test_ha_preflight.PreflightTests.test_example_preserves_pending_operations_and_requires_no_s3_for_local) ... ok
+test_external_filer_metadata_requires_platform_database_evidence (test_ha_preflight.PreflightTests.test_external_filer_metadata_requires_platform_database_evidence) ... ok
+test_localStillNeedsFencingWithExternalDatabase (test_ha_preflight.PreflightTests.test_localStillNeedsFencingWithExternalDatabase) ... ok
+test_malformed_inputs_return_blockers_instead_of_crashing (test_ha_preflight.PreflightTests.test_malformed_inputs_return_blockers_instead_of_crashing) ... ok
+test_missing_or_malformed_drill_evidence_blocks_only_recovery_claim (test_ha_preflight.PreflightTests.test_missing_or_malformed_drill_evidence_blocks_only_recovery_claim) ... ok
+test_platform_database_and_s3_use_platform_and_ingress_evidence (test_ha_preflight.PreflightTests.test_platform_database_and_s3_use_platform_and_ingress_evidence) ... ok
+test_private_s3_missing_protected_component_is_blocked (test_ha_preflight.PreflightTests.test_private_s3_missing_protected_component_is_blocked) ... ok
+test_unsafe_mount_replica_disk_and_resource_facts_cannot_be_overridden_by_evidence (test_ha_preflight.PreflightTests.test_unsafe_mount_replica_disk_and_resource_facts_cannot_be_overridden_by_evidence) ... ok
+test_unsafe_topology_cannot_pass (test_ha_preflight.PreflightTests.test_unsafe_topology_cannot_pass) ... ok
+test_actual_inflight_is_bounded_and_queue_delay_is_counted (test_model_probe.ModelProbeTests.test_actual_inflight_is_bounded_and_queue_delay_is_counted) ... ok
+test_ambiguous_network_failure_stops_admissions_and_retains_capacity (test_model_probe.ModelProbeTests.test_ambiguous_network_failure_stops_admissions_and_retains_capacity) ... ok
+test_cli_writes_report_and_safe_diagnostics (test_model_probe.ModelProbeTests.test_cli_writes_report_and_safe_diagnostics) ... ok
+test_complete_content_length_response_remains_valid (test_model_probe.ModelProbeTests.test_complete_content_length_response_remains_valid) ... ok
+test_empty_audio_and_oversized_config_preflight_without_requests (test_model_probe.ModelProbeTests.test_empty_audio_and_oversized_config_preflight_without_requests) ... ok
+test_environment_proxy_credentials_and_redirects_are_not_inherited (test_model_probe.ModelProbeTests.test_environment_proxy_credentials_and_redirects_are_not_inherited) ... ok
+test_http_errors_count_and_do_not_expose_response_or_retry (test_model_probe.ModelProbeTests.test_http_errors_count_and_do_not_expose_response_or_retry) ... ok
+test_incomplete_content_length_is_unknown_transport_not_valid_json (test_model_probe.ModelProbeTests.test_incomplete_content_length_is_unknown_transport_not_valid_json) ... ok
+test_invalid_audio_is_rejected_before_any_request (test_model_probe.ModelProbeTests.test_invalid_audio_is_rejected_before_any_request) ... ok
+test_invalid_configuration_never_reaches_server (test_model_probe.ModelProbeTests.test_invalid_configuration_never_reaches_server) ... ok
+test_invalid_response_shapes_are_rejected (test_model_probe.ModelProbeTests.test_invalid_response_shapes_are_rejected) ... ok
+test_missing_text_is_invalid_response (test_model_probe.ModelProbeTests.test_missing_text_is_invalid_response) ... ok
+test_optional_tokens_are_observed_without_becoming_required (test_model_probe.ModelProbeTests.test_optional_tokens_are_observed_without_becoming_required) ... ok
+test_paced_arrivals_do_not_count_prearrival_wait_as_queue (test_model_probe.ModelProbeTests.test_paced_arrivals_do_not_count_prearrival_wait_as_queue) ... ok
+test_run_budget_stops_admissions_without_dropping_planned_work (test_model_probe.ModelProbeTests.test_run_budget_stops_admissions_without_dropping_planned_work) ... ok
+test_text_protocols_use_documented_payload_and_explicit_auth (test_model_probe.ModelProbeTests.test_text_protocols_use_documented_payload_and_explicit_auth) ... ok
+test_time_units_map_milliseconds_to_source_offset (test_model_probe.ModelProbeTests.test_time_units_map_milliseconds_to_source_offset) ... ok
+test_timeout_keeps_request_accounted (test_model_probe.ModelProbeTests.test_timeout_keeps_request_accounted) ... ok
+test_timeout_statistics_mark_censored_observations (test_model_probe.ModelProbeTests.test_timeout_statistics_mark_censored_observations) ... ok
+test_unknown_configuration_does_not_silently_drop_platform_options (test_model_probe.ModelProbeTests.test_unknown_configuration_does_not_silently_drop_platform_options) ... ok
+test_wav_encoding_matches_endpoint (test_model_probe.ModelProbeTests.test_wav_encoding_matches_endpoint) ... ok
+
+----------------------------------------------------------------------
+Ran 52 tests in 2.459s
+
+OK

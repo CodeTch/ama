@@ -1,0 +1,37 @@
+{
+  "command": [
+    "./mvnw",
+    "-B",
+    "-ntp",
+    "-pl",
+    "backend/integration-tests",
+    "-am",
+    "-Dtest=NoUnitTestsForContractOnlyFix",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dit.test=MeetingRevisionIT#staleRevisionPreservesCurrentValue+participantsCannotWriteAndPlatformAdminCannotRead+unavailableCategoryDictionaryDoesNotBlockEmptyDraft+configuredTransportBudgetRejectsWholeRequestWithoutTruncation",
+    "-Dfailsafe.failIfNoSpecifiedTests=false",
+    "verify"
+  ],
+  "selector": "MeetingRevisionIT#staleRevisionPreservesCurrentValue+participantsCannotWriteAndPlatformAdminCannotRead+unavailableCategoryDictionaryDoesNotBlockEmptyDraft+configuredTransportBudgetRejectsWholeRequestWithoutTruncation",
+  "start_utc": "2026-10-21T20:48:22.872126+00:00",
+  "source_sha256": {
+    "contracts/openapi/identity.yaml": "b2bef6bfef0916e677db837889eb1f1e64d56002b2818c83783caa3188842d84",
+    "contracts/openapi/meetings.yaml": "751e8e68332524083377ed8a1d6977c668128b8fe743df9bc0ea3c2848ab4789",
+    "backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java": "1616c3dbcc1ec50c91d6f9b8bb6657c077e3442b891ffcaee3d76e243690d538",
+    "backend/integration-tests/src/test/java/ama/meeting/MeetingRevisionIT.java": "fcff90df12115e390c3a87ce8f3664f3da57971e2a0f819036bf2a74a900b901"
+  },
+  "exit_code": 1,
+  "end_utc": "2026-10-21T20:48:46.100299+00:00",
+  "suite": {
+    "tests": 4,
+    "failures": 4,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    "unavailableCategoryDictionaryDoesNotBlockEmptyDraft",
+    "participantsCannotWriteAndPlatformAdminCannotRead",
+    "staleRevisionPreservesCurrentValue",
+    "configuredTransportBudgetRejectsWholeRequestWithoutTruncation"
+  ]
+}

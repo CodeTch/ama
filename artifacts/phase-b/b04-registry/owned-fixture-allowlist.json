@@ -1,0 +1,59 @@
+[
+  {
+    "id": "708d907b550d825e55bd2cf899019f682e81dda81ff28bc180833e25bd85e225",
+    "name": "/ama-test-b01-999352219d61",
+    "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "imageId": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "state": "running",
+    "memory": 1073741824,
+    "memorySwap": 1073741824,
+    "nanoCpus": 2000000000,
+    "pidsLimit": 256,
+    "ports": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": ""
+        }
+      ]
+    }
+  },
+  {
+    "id": "1fff7395d8b0a8fdbb9618905524dca091340de4dd8733cad5e7a141de288c0f",
+    "name": "/ama-test-b01-ca05078d2c9e",
+    "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "imageId": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "state": "running",
+    "memory": 1073741824,
+    "memorySwap": 1073741824,
+    "nanoCpus": 2000000000,
+    "pidsLimit": 256,
+    "ports": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": ""
+        }
+      ]
+    }
+  },
+  {
+    "id": "8b66f79c464d347a54bfae81a01f89a3b4fb170616daf54da0536c4c4c20d4cf",
+    "name": "/ama-b04-java-44ef702b9e",
+    "image": "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+    "imageId": "sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+    "state": "running",
+    "memory": 2147483648,
+    "memorySwap": 2147483648,
+    "nanoCpus": 2000000000,
+    "pidsLimit": 256,
+    "ports": {
+      "9000/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "47779"
+        }
+      ]
+    }
+  }
+]

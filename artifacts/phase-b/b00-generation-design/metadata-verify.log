@@ -1,0 +1,22 @@
+{
+  "design_version": "B00-1.3-review",
+  "mysql_version": "8.4.6",
+  "container": "ama-test-b01-991f0386f26d",
+  "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "ddl_sha256": "ebf1eae51b303d00b2ed35c4fbd5ba4c166813564032875a6ba0fb35ba743c93",
+  "counts": {
+    "tables": 93,
+    "columns": 709,
+    "index_definitions": 290,
+    "index_columns": 441,
+    "checks": 109,
+    "foreign_key_constraints": 196,
+    "foreign_key_columns": 203
+  },
+  "behavior": [
+    "invalid storage enum rejected (3819)",
+    "unknown identity FK rejected (1452)",
+    "CHECK comparer preserves operator grouping and literal case"
+  ],
+  "scope": "DDL and all metadata only; not domain/concurrency/performance/integration acceptance"
+}

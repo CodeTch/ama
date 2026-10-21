@@ -1,0 +1,145 @@
+
+    @Test void allFiveActualMetadataGroupsEqualIndependentAdoptedOracle() throws Exception {
+        JsonNode expected=oracle().path("metadata");
+        for(var query:metadataQueries().entrySet()) {
+            var actual=new ArrayList<JsonNode>();
+            for(String row:jdbc.queryForList(query.getValue(),String.class)) {
+                JsonNode parsed=JSON.readTree(row);
+                if(TABLES.contains(parsed.path("table").asText())) actual.add(parsed);
+            }
+            assertEquals(expected.path(query.getKey()),JSON.valueToTree(actual),query.getKey()+": exact independently filtered B00-1.3 actual metadata");
+        }
+    }
+
+    @Test void upgradePreservesLowerRowsDdlMetadataHistoryAndBothRerunsExecuteZero() throws Exception {
+        assertEquals(FULL,guardKnownHistory());
+        assertEquals(lowerBefore,lowerSnapshot());
+        var all=new TreeSet<String>(); lowerBefore.path("ddl").fieldNames().forEachRemaining(all::add); all.addAll(TABLES);
+        assertEquals(all,new TreeSet<>(setup.queryForList("SELECT table_name FROM information_schema.tables WHERE table_schema=DATABASE()",String.class)));
+        JsonNode before=fullSnapshot();
+        assertEquals(0,migrate("013")); historicalFlyway().validate();
+        assertEquals(before,fullSnapshot()); writeEvidence("private-target-rerun-zero.json",before);
+        assertEquals(0,new SchemaMigrator(source).migrate());
+        assertEquals(before,fullSnapshot()); writeEvidence("production-latest-rerun-zero.json",before);
+        verifyLowerHashes();
+    }
+
+    @Test void finalConfirmationRequiresAllFrozenParentsAndUniqueMeetingRevision() {
+        seedPublication();
+        error(1062,"INSERT INTO final_confirmation SELECT 'duplicate',meeting_id,meeting_revision,info_revision_id,roster_revision_id,transcript_confirmation_id,minutes_revision_id,material_snapshot_id,element_set_id,template_revision_id,exclusion_revision_id,source_manifest_hash,input_fingerprint,confirmed_by,confirmed_at FROM final_confirmation");
+        error(1264,"UPDATE final_confirmation SET meeting_revision=-1");
+        for(String column:List.of("info_revision_id","roster_revision_id","transcript_confirmation_id","minutes_revision_id","element_set_id","template_revision_id","exclusion_revision_id","source_manifest_hash","input_fingerprint","confirmed_by","confirmed_at")) error(1048,"UPDATE final_confirmation SET `"+column+"`=NULL");
+        assertNull(jdbc.queryForObject("SELECT material_snapshot_id FROM final_confirmation",String.class));
+        // Deferred material FK preserves the physical column/index; app must forbid use until V017.
+        jdbc.update("UPDATE final_confirmation SET material_snapshot_id='future-material'");
+        assertEquals("future-material",jdbc.queryForObject("SELECT material_snapshot_id FROM final_confirmation",String.class));
+    }
+
+    @Test void publicationStatesAndOneRootPerMeetingAndBusinessKeyArePhysical() {
+        seedPublication();
+        for(String state:List.of("READY","RUNNING","RECONCILING","FAILED","SUCCEEDED")) jdbc.update("UPDATE publication SET state=?",state);
+        for(String state:List.of("ready","UNKNOWN","WITHDRAWN")) error(3819,"UPDATE publication SET state=?",state);
+        error(1264,"UPDATE publication SET revision=-1");
+        error(1062,"INSERT INTO publication SELECT 'duplicate',meeting_id,confirmation_id,'other-key',library_id,folder_id,state,revision,created_at,published_at FROM publication");
+        secondPublication();
+        error(1062,"UPDATE publication SET business_key='business-key' WHERE id='publication-two'");
+        jdbc.update("UPDATE publication SET business_key='BUSINESS-KEY' WHERE id='publication-two'");
+        assertEquals(2,jdbc.queryForObject("SELECT COUNT(*) FROM publication",Integer.class));
+        for(String column:List.of("confirmation_id","business_key","library_id","folder_id","state","created_at")) error(1048,"UPDATE publication SET `"+column+"`=NULL WHERE id='publication'");
+    }
+
+    @Test void attemptsKeepExactKindsOutcomesAndConcreteExecutionParents() {
+        seedPublication();
+        for(String kind:List.of("PUBLISH","RECONCILE","WITHDRAW","OBSOLETE")) jdbc.update("UPDATE publication_attempt SET kind=?",kind);
+        for(String state:List.of("PENDING","SUCCESS","FAILED","UNKNOWN")) jdbc.update("UPDATE publication_attempt SET outcome=?",state);
+        error(3819,"UPDATE publication_attempt SET kind='publish'");
+        error(3819,"UPDATE publication_attempt SET kind='RETRY'");
+        error(3819,"UPDATE publication_attempt SET outcome='SUCCEEDED'");
+        error(3819,"UPDATE publication_attempt SET outcome='unknown'");
+        for(String column:List.of("publication_id","confirmation_id","operation_id","execution_id","kind","outcome","created_at")) error(1048,"UPDATE publication_attempt SET `"+column+"`=NULL");
+        assertEquals("execution",jdbc.queryForObject("SELECT a.execution_id FROM publication_attempt a JOIN external_execution e ON e.id=a.execution_id JOIN external_operation o ON o.id=a.operation_id WHERE e.operation_id=o.id",String.class));
+    }
+
+    @Test void externalMappingIsUniqueWithExactProviderAndDocumentIdsAndUnicodeUrl() {
+        seedPublication(); secondPublication();
+        error(1062,"INSERT INTO external_document_mapping SELECT publication_id,'other-provider','other-document',document_url,authority_state,verified_at FROM external_document_mapping");
+        error(1062,"INSERT INTO external_document_mapping SELECT 'publication-two',provider_id,external_document_id,document_url,authority_state,verified_at FROM external_document_mapping");
+        jdbc.update("INSERT INTO external_document_mapping VALUES ('publication-two','PROVIDER','document','https://example.invalid/second','ACTIVE',?)",AT);
+        jdbc.update("DELETE FROM external_document_mapping WHERE publication_id='publication-two'");
+        jdbc.update("INSERT INTO external_document_mapping VALUES ('publication-two','provider','DOCUMENT','https://example.invalid/second','ACTIVE',?)",AT);
+        assertEquals(2,jdbc.queryForObject("SELECT COUNT(*) FROM external_document_mapping",Integer.class));
+        for(String state:List.of("ACTIVE","WITHDRAWN","OBSOLETE","UNKNOWN")) jdbc.update("UPDATE external_document_mapping SET authority_state=?",state);
+        error(3819,"UPDATE external_document_mapping SET authority_state='active'");
+        error(3819,"UPDATE external_document_mapping SET authority_state='SUCCEEDED'");
+        String url="https://example.invalid/会议😀𠮷?x=é&y=值".repeat(3000);
+        jdbc.update("UPDATE external_document_mapping SET document_url=? WHERE publication_id='publication'",url);
+        assertEquals(url,jdbc.queryForObject("SELECT document_url FROM external_document_mapping WHERE publication_id='publication'",String.class));
+        for(String column:List.of("provider_id","external_document_id","document_url","authority_state","verified_at")) error(1048,"UPDATE external_document_mapping SET `"+column+"`=NULL WHERE publication_id='publication'");
+    }
+
+    @Test void frozenReviewMembershipHasBothPhysicalParentsUniqueJoinAndRestrict() {
+        seedPublication();
+        error(1452,"INSERT INTO final_result_review VALUES ('missing-confirmation','review')");
+        error(1452,"INSERT INTO final_result_review VALUES ('final','missing-review')");
+        error(1062,"INSERT INTO final_result_review VALUES ('final','review')");
+        error(1451,"DELETE FROM result_review WHERE id='review'");
+        error(1451,"DELETE FROM final_confirmation WHERE id='final'");
+        assertEquals(List.of("review"),jdbc.queryForList("SELECT review_id FROM final_result_review WHERE confirmation_id='final'",String.class));
+        jdbc.update("INSERT INTO result_review VALUES ('new-review',?,2,'SOURCE_SUPPORT','element',NULL,'anchor',?,?,'test-profile','SUPPORTED',?,?)",MEETING,HASH,HASH,OWNER,AT);
+        assertEquals(List.of("review"),jdbc.queryForList("SELECT review_id FROM final_result_review WHERE confirmation_id='final'",String.class),"new assertions do not automatically become frozen membership");
+        jdbc.update("DELETE FROM final_result_review WHERE confirmation_id='final'");
+        assertEquals(1,jdbc.queryForObject("SELECT COUNT(*) FROM result_review WHERE id='review'",Integer.class));
+    }
+
+    @Test void everyDeployedFkRejectsMissingParentsAndReferencedRowsRestrictDelete() throws Exception {
+        seedPublication();
+        var keys=new LinkedHashMap<String,List<String>>();
+        for(JsonNode row:oracle().path("metadata").path("foreign_keys")) keys.computeIfAbsent(row.path("table").asText()+"/"+row.path("name").asText(),unused->new ArrayList<>()).add(row.path("column").asText());
+        assertEquals(18,keys.size());
+        for(var key:keys.entrySet()) {
+            String table=key.getKey().split("/")[0];
+            String assignments=key.getValue().stream().map(column->"`"+column+"`='missing-parent'").collect(java.util.stream.Collectors.joining(","));
+            error(1452,"UPDATE `"+table+"` SET "+assignments);
+        }
+        for(String table:List.of("meeting_info_revision","roster_revision","transcript_confirmation","minutes_revision","element_set","template_revision","exclusion_revision","enterprise_identity","publication","final_confirmation","external_operation","external_execution","result_review")) error(1451,"DELETE FROM `"+table+"`");
+    }
+
+    @Test void rawSqlBoundariesLeaveAuthoritySameMeetingHashesAndExecutionConsistencyToApplication() throws Exception {
+        seedPublication(); secondPublication();
+        jdbc.update("UPDATE final_confirmation SET meeting_id='meeting-two',confirmed_by=?,source_manifest_hash='unverified',input_fingerprint='unchecked' WHERE id='final'",OWNER);
+        jdbc.update("UPDATE result_review SET meeting_id='meeting-two',reviewed_by='unknown-reviewer' WHERE id='review'");
+        jdbc.update("UPDATE publication_attempt SET confirmation_id='final-two'");
+        jdbc.update("INSERT INTO external_operation(id,operation_kind,business_key,request_hash,state,marked_at,next_check_at,subject_kind,subject_id,current_execution_no) VALUES ('other-operation','TEST_SCHEMA','different',?,'MARKED',?,?,'MEETING',?,1)",HASH,AT,AT,MEETING);
+        jdbc.update("UPDATE publication_attempt SET operation_id='other-operation'");
+        jdbc.update("UPDATE external_document_mapping SET document_url='javascript:unchecked',authority_state='ACTIVE'");
+        assertEquals(0,jdbc.queryForObject("SELECT COUNT(*) FROM publication p JOIN final_confirmation f ON f.id=p.confirmation_id WHERE p.id='publication' AND p.meeting_id=f.meeting_id",Integer.class));
+        assertEquals(0,jdbc.queryForObject("SELECT COUNT(*) FROM publication_attempt a JOIN external_execution e ON e.id=a.execution_id WHERE a.operation_id=e.operation_id",Integer.class));
+        assertEquals("unknown-reviewer",jdbc.queryForObject("SELECT reviewed_by FROM result_review WHERE id='review'",String.class));
+        assertEquals("unverified",jdbc.queryForObject("SELECT source_manifest_hash FROM final_confirmation WHERE id='final'",String.class));
+        writeEvidence("application-boundaries.json",Map.of("application_rejection_test",false,"raw_sql_accepted",List.of("cross-meeting frozen parent and publication reference","existing confirmer without proof of owner authority","unknown review identity","unchecked source manifest and input hash","attempt confirmation differs from publication confirmation","operation differs from execution parent operation","unvalidated URL and unverified provider authority"),"material_nonnull", "physically accepted with deferred fk_final_confirmation_9; Application B must forbid until V017"));
+    }
+
+    private JsonNode oracle() throws Exception {
+        try(var in=getClass().getResourceAsStream("/ama/db/publication-schema-b00-1.3.json")) { assertNotNull(in); return JSON.readTree(in); }
+    }
+
+    private void seedPublication() {
+        jdbc.update("INSERT INTO roster_revision VALUES ('roster',?,0,'CONFIRMED',?,?)",MEETING,AT,OWNER);
+        jdbc.update("INSERT INTO external_operation(id,operation_kind,business_key,request_hash,state,marked_at,next_check_at,subject_kind,subject_id,current_execution_no) VALUES ('operation','TEST_SCHEMA','operation-key',?,'MARKED',?,?,'MEETING',?,1)",HASH,AT,AT,MEETING);
+        jdbc.update("INSERT INTO external_execution(id,operation_id,execution_no,task_id,state,request_hash,request_manifest,created_at) VALUES ('execution','operation',1,'b08-lower-task','PREPARED',?,'synthetic manifest',?)",HASH,AT);
+        finalConfirmation("final",MEETING,0);
+        jdbc.update("INSERT INTO publication VALUES ('publication',?,'final','business-key','library','folder','READY',0,?,NULL)",MEETING,AT);
+        jdbc.update("INSERT INTO publication_attempt VALUES ('attempt','publication','final','operation','PUBLISH','PENDING',?,NULL,'execution')",AT);
+        jdbc.update("INSERT INTO external_document_mapping VALUES ('publication','provider','document','https://example.invalid/document','ACTIVE',?)",AT);
+        jdbc.update("INSERT INTO final_result_review VALUES ('final','review')");
+    }
+
+    private void finalConfirmation(String id,String meeting,long revision) {
+        jdbc.update("INSERT INTO final_confirmation VALUES (?,?,?,'b08-lower-info','roster','b08-confirmation','minutes',NULL,'set','template-revision','exclusion',?,?,?,?)",id,meeting,revision,HASH,HASH,OWNER,AT);
+    }
+
+    private void secondPublication() {
+        jdbc.update("INSERT INTO meeting(id,owner_id,stage,created_at,updated_at) VALUES ('meeting-two',?,'ENTRY',?,?)",OWNER,AT,AT);
+        finalConfirmation("final-two","meeting-two",1);
+        jdbc.update("INSERT INTO publication VALUES ('publication-two','meeting-two','final-two','other-key','library','folder','READY',0,?,NULL)",AT);
+    }

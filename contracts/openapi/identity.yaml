@@ -1,0 +1,224 @@
+session:
+  servers:
+    - url: http://127.0.0.1:8080
+      description: Public API listener behind the deployment TLS ingress
+  get:
+    operationId: currentSession
+    summary: Resolve current shared database session
+    description: Rechecks ACTIVE identity, generation, expiration and revocation on each request. Response is not cached; raw session token is never returned.
+    security:
+      - enterpriseSession: []
+    responses:
+      '200':
+        description: Authenticated identity and session-bound CSRF token
+        content:
+          application/json:
+            schema:
+              $ref: '#/Session'
+      '401':
+        $ref: '#/Unauthenticated'
+      '403':
+        $ref: '#/BusinessForbidden'
+      '503':
+        $ref: '#/Unavailable'
+people:
+  servers:
+    - url: http://127.0.0.1:8080
+  get:
+    operationId: searchDirectoryPeople
+    summary: Search enterprise people by stable identity
+    description: Company directory protocol is pending, so production returns a safe 503. Controlled test projections keep same-name people distinct by stable ID and department. This does not create an account or meeting authorization.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: cursor
+        in: query
+        description: Opaque next-page cursor from the prior response
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+    responses:
+      '200':
+        description: A page of directory entries
+        content:
+          application/json:
+            schema:
+              $ref: '#/PeoplePage'
+      '400':
+        $ref: '#/Invalid'
+      '401':
+        $ref: '#/Unauthenticated'
+      '403':
+        $ref: '#/BusinessForbidden'
+      '503':
+        $ref: '#/Unavailable'
+logout:
+  servers:
+    - url: http://127.0.0.1:8080
+  post:
+    operationId: logoutSession
+    summary: Revoke the current server session on both nodes
+    security:
+      - enterpriseSession: []
+    parameters:
+      - $ref: '#/Origin'
+      - $ref: '#/Csrf'
+    responses:
+      '204':
+        description: Session revoked; secure host-only cookie expired
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+      '401':
+        $ref: '#/Unauthenticated'
+      '403':
+        $ref: '#/BusinessForbidden'
+      '503':
+        $ref: '#/Unavailable'
+logoutAll:
+  servers:
+    - url: http://127.0.0.1:8080
+  post:
+    operationId: logoutAllSessions
+    summary: Advance the authenticated identity generation to revoke all its sessions
+    description: Identity comes exclusively from the authenticated server session. Browser identity or role claims are never accepted.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - $ref: '#/Origin'
+      - $ref: '#/Csrf'
+    responses:
+      '204':
+        description: All sessions for this identity revoked; cookie expired
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+      '401':
+        $ref: '#/Unauthenticated'
+      '403':
+        $ref: '#/BusinessForbidden'
+      '503':
+        $ref: '#/Unavailable'
+Origin:
+  name: Origin
+  in: header
+  required: true
+  description: Must exactly match the configured allowed origin
+  schema:
+    type: string
+Csrf:
+  name: X-CSRF-Token
+  in: header
+  required: true
+  description: Independent session-bound token returned by currentSession
+  schema:
+    type: string
+Session:
+  type: object
+  additionalProperties: false
+  required: [actor, csrfToken, expiresAt]
+  properties:
+    actor:
+      $ref: '#/Actor'
+    csrfToken:
+      type: string
+    expiresAt:
+      type: string
+      format: date-time
+Actor:
+  type: object
+  additionalProperties: false
+  required: [enterpriseId, status, roles]
+  properties:
+    enterpriseId:
+      type: string
+      description: Exact company stable ID; case and trailing spaces are significant
+    status:
+      type: string
+      enum: [ACTIVE, DISABLED]
+    roles:
+      type: array
+      uniqueItems: true
+      description: Platform privileges only; never a meeting body override
+      items:
+        type: string
+        enum: [USER, PLATFORM_ADMIN]
+Person:
+  type: object
+  additionalProperties: false
+  required: [stableId, displayName, department, active]
+  properties:
+    stableId:
+      type: string
+    displayName:
+      type: string
+    department:
+      type: [string, 'null']
+    active:
+      type: boolean
+PeoplePage:
+  type: object
+  additionalProperties: false
+  required: [items, nextCursor]
+  properties:
+    items:
+      type: array
+      items:
+        $ref: '#/Person'
+    nextCursor:
+      type: [string, 'null']
+BusinessError:
+  type: object
+  additionalProperties: false
+  required: [error]
+  properties:
+    error:
+      type: object
+      additionalProperties: false
+      required: [code, message, traceId]
+      properties:
+        code:
+          type: string
+          enum: [UNAUTHENTICATED, FORBIDDEN, INVALID_ARGUMENT, IDENTITY_UNAVAILABLE, IDENTITY_PROVIDER_UNAVAILABLE, MEETING_FORBIDDEN, MEETING_CONFLICT, CATEGORY_DICTIONARY_UNAVAILABLE, REQUEST_TOO_LARGE, FILE_PURPOSE_UNAVAILABLE, FILE_CONFLICT, FILE_NOT_FOUND, FILE_STORAGE_UNAVAILABLE, FILE_INVALID_RANGE]
+        message:
+          type: string
+        traceId:
+          type: string
+          format: uuid
+Unauthenticated:
+  description: Session absent, expired, revoked, disabled or from an old generation
+  content:
+    application/json:
+      schema:
+        $ref: '#/BusinessError'
+BusinessForbidden:
+  description: Denied meeting access, wrong listener or failed Origin/CSRF policy
+  content:
+    application/json:
+      schema:
+        $ref: '#/BusinessError'
+Invalid:
+  description: Invalid directory page request
+  content:
+    application/json:
+      schema:
+        $ref: '#/BusinessError'
+Unavailable:
+  description: Identity database or unqualified company provider unavailable
+  content:
+    application/json:
+      schema:
+        $ref: '#/BusinessError'

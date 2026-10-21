@@ -1,0 +1,45 @@
+{
+  "status": "root fullSQLread and pre-first-formal SHA registration; not implementation acceptance",
+  "candidate": "/home/tanren/ama/.worktrees/phase-b-transcript-schema/backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+  "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+  "size": 10941,
+  "reviewedDDLsha256": "402def655f133ab10caa44b94e89ed6692756623d32705e6ab63c8176d79c362",
+  "exactCreateTables": [
+    "input_batch",
+    "input_batch_file",
+    "speaker",
+    "transcript_confirmation",
+    "transcript_revision",
+    "transcript_segment",
+    "transcript_segment_mark",
+    "transcription_input"
+  ],
+  "exactForeignKeyConstraints": [
+    "fk_input_batch_0",
+    "fk_input_batch_file_0",
+    "fk_input_batch_file_1",
+    "fk_speaker_0",
+    "fk_speaker_1",
+    "fk_speaker_2",
+    "fk_transcript_confirmation_0",
+    "fk_transcript_confirmation_1",
+    "fk_transcript_confirmation_2",
+    "fk_transcript_revision_0",
+    "fk_transcript_revision_1",
+    "fk_transcript_revision_2",
+    "fk_transcript_revision_3",
+    "fk_transcript_revision_4",
+    "fk_transcript_segment_0",
+    "fk_transcript_segment_1",
+    "fk_transcript_segment_2",
+    "fk_transcript_segment_mark_0",
+    "fk_transcription_input_0",
+    "fk_transcription_input_1",
+    "fk_transcription_input_2"
+  ],
+  "onlyDeferredForeignKey": "fk_transcription_input_3",
+  "otherExecutableStatements": [
+    "SET NAMES utf8mb4",
+    "SET time_zone = '+00:00'"
+  ]
+}

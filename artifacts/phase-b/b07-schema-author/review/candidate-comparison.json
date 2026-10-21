@@ -1,0 +1,79 @@
+{
+  "candidate_sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+  "candidate_bytes": 21260,
+  "create_count": 19,
+  "exact_create_blocks": true,
+  "deployed_fk_count": 44,
+  "deferred_fk_count": 2,
+  "explicit_deferred_indexes": [
+    "CREATE INDEX fk_generation_input_5 ON generation_input (material_snapshot_id);",
+    "CREATE INDEX fk_source_locator_3 ON source_locator (material_revision_id);"
+  ],
+  "all_create_before_fk": true,
+  "oracle_sha256": "d051aaa95aeec4497f38e48190f4f396d7356ea69089196c8617119f66e9f987",
+  "counts": {
+    "tables": 19,
+    "columns": 123,
+    "indexes": 92,
+    "checks": 21,
+    "foreign_keys": 45
+  },
+  "deployed_lower_parents": [
+    "audit_event",
+    "department",
+    "durable_task",
+    "enterprise_identity",
+    "external_execution",
+    "external_operation",
+    "file_cleanup",
+    "file_object",
+    "file_reference",
+    "idempotency_record",
+    "identity_session",
+    "input_batch",
+    "input_batch_file",
+    "meeting",
+    "meeting_access_grant",
+    "meeting_acl",
+    "meeting_info_revision",
+    "meeting_person_search",
+    "meeting_search_projection",
+    "model_capacity",
+    "model_reservation",
+    "outbox_consumer",
+    "role_assignment",
+    "roster_member",
+    "roster_revision",
+    "speaker",
+    "storage_backend",
+    "task_attempt",
+    "task_outbox",
+    "task_outbox_sequence",
+    "task_subject",
+    "transcript_confirmation",
+    "transcript_revision",
+    "transcript_segment",
+    "transcript_segment_mark",
+    "transcription_input",
+    "upload_part",
+    "upload_session"
+  ],
+  "excluded_foreign_keys": [
+    {
+      "table": "generation_input",
+      "name": "fk_generation_input_5",
+      "column": "material_snapshot_id",
+      "target": "material_snapshot",
+      "remote": "id",
+      "reserved_version": "V017"
+    },
+    {
+      "table": "source_locator",
+      "name": "fk_source_locator_3",
+      "column": "material_revision_id",
+      "target": "material_revision",
+      "remote": "id",
+      "reserved_version": "V017"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  └─ S3LayoutV3Test ✔
+│     ├─ escapesAndShallowSegmentationPreserveExactOrderAndPrefix() ✘ expected: <a.0b.1c~007e> but was: <a.b/c~007e>
+│     └─ ordinary512AndExactBudgetHaveBoundedPhysicalSegments() ✘ expected: <true> but was: <false>
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Failures (2):
+  JUnit Jupiter:S3LayoutV3Test:escapesAndShallowSegmentationPreserveExactOrderAndPrefix()
+    MethodSource [className = 'ama.storage.s3.S3LayoutV3Test', methodName = 'escapesAndShallowSegmentationPreserveExactOrderAndPrefix', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: expected: <a.0b.1c~007e> but was: <a.b/c~007e>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+       org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:179)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1188)
+       ama.storage.s3.S3LayoutV3Test.escapesAndShallowSegmentationPreserveExactOrderAndPrefix(S3LayoutV3Test.java:28)
+  JUnit Jupiter:S3LayoutV3Test:ordinary512AndExactBudgetHaveBoundedPhysicalSegments()
+    MethodSource [className = 'ama.storage.s3.S3LayoutV3Test', methodName = 'ordinary512AndExactBudgetHaveBoundedPhysicalSegments', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+       org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:41)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:35)
+       org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:195)
+       ama.storage.s3.S3LayoutV3Test.ordinary512AndExactBudgetHaveBoundedPhysicalSegments(S3LayoutV3Test.java:14)
+
+Test run finished after 835 ms
+[         4 containers found      ]
+[         0 containers skipped    ]
+[         4 containers started    ]
+[         0 containers aborted    ]
+[         4 containers successful ]
+[         0 containers failed     ]
+[         2 tests found           ]
+[         0 tests skipped         ]
+[         2 tests started         ]
+[         0 tests aborted         ]
+[         0 tests successful      ]
+[         2 tests failed          ]
+

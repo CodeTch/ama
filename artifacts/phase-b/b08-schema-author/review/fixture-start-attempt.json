@@ -1,0 +1,25 @@
+{
+  "created_utc": "2026-10-21T21:39:36.876604+00:00",
+  "run_arguments": [
+    "run",
+    "--cpus=2",
+    "--memory=1g",
+    "--memory-swap=1g",
+    "--pids-limit=256",
+    "-d",
+    "--name",
+    "ama-test-b01-ee4d94105bb9",
+    "--label",
+    "ama.test-fixture=b01",
+    "--publish",
+    "127.0.0.1::3306",
+    "--env-file",
+    "/home/tanren/ama/.worktrees/phase-b-publication-schema/.tools/mysql-fixture/ama-test-b01-ee4d94105bb9/mysql.env",
+    "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "--character-set-server=utf8mb4",
+    "--collation-server=utf8mb4_0900_ai_ci",
+    "--default-time-zone=+00:00",
+    "--innodb-use-native-aio=OFF"
+  ],
+  "name": "ama-test-b01-ee4d94105bb9"
+}

@@ -1,0 +1,17 @@
+# B05 fix round 1 evidence
+
+Fix BASE is `682a7bfaef45f6ed3fec38df99e85a7b78d450d7`. This directory is separate from the sealed initial delivery. No initial log, report, manifest, SQL, source archive or stash was overwritten.
+
+`red.log/xml` executed four new cases against unchanged BASE adapters: all four assertions failed, no setup errors/skips. The I1 log records actual committed in-flight2 with capacity1 and both revisions2. The two I2 cases returned STALE_TOKEN after the controlled writer committed; the ambient case allowed the callback and terminal write. `red-source/` retains exact two BASE adapter sources plus the four-case test variant and `red-source-sha256.json` hashes them.
+
+`bounded-red.log/xml` selected the subsequently added bounded-rediscovery case against the same unchanged BASE adapters. It failed because the call returned instead of throwing; no setup error/skip. `bounded-red-test-source.java` retains its full five-case source variant, also used by final GREEN runs.
+
+`green.log/xml`: all five new tests passed. `focused-regression.log` and its three explicitly copied XMLs: ReviewConcurrencyIT5 + ExternalExecutionIT10 + ModelPermitIT7 =22 passed. Each Maven invocation also ran the normal33 reactor Java unit tests; these are incidental repeated unit executions, not additional distinct IT cases. Final units are under `focused-unit-xml/`. No unchanged worker process/recovery IT, database restart, broad whole-B or platform qualification was rerun.
+
+ProbeSource delegates SQL to real MySQL and forces/verifies connection REPEATABLE READ. Latches gate actual prepare/execute/commit boundaries. I1's B admission holds an uncommitted reservation/model lock before configuration attempts B; fixed code counts only after all sorted model locks. I2 writers hold the real subject lock while the observer finishes discovery and attempts that subject. The retry-generation trace includes a full rollback before acquiring the expanded task set. Bounded churn uses real explicit zero-effect retries/markers but no remote calls, and resubmits the same original authoritative fact after the explicit retry-required error.
+
+`fixture-audit.json` is a read-only audit of only the existing positive ID59f3de... on actual loopback45951, MySQL8.4.6, RR, UTC, nativeAIO0 and unchanged8 successful history entries. No other fixture was accessed in this fix round. The intentional RED rows remain in that fixture, including the demonstrated invalid capacity floor under a unique test model; no history/data reset or attempted repair hides the failure. Each test uses unique real test subjects/immutable rows/model names.
+
+`initial-delivery-preservation.json` records all201 baseline path hashes before changes. `preservation-verification.json` verifies every BASE Git blob,198 unchanged current paths, only3 explicitly changed initial source paths, and all144 sealed initial evidence entries. V010 bytes/checksum remain frozen. `source-allowlist.json` identifies6 final changed/new source/contract/handbook paths. `evidence-allowlist.json` hashes every file in this directory except itself. The separate delivery report is excluded from these manifests to avoid self-reference and records their SHA values plus exact final HEAD in the coordinator copy.
+
+No credential-bearing env file is included. `secret-exclusion-check.json` records literal local fixture-password scan results without values. Raw Maven logs retain original trailing whitespace; source/docs whitespace checks are clean.

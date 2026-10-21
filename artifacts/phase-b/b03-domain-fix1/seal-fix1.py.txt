@@ -1,0 +1,40 @@
+import hashlib,json,pathlib,shlex,subprocess,xml.etree.ElementTree as ET
+root=pathlib.Path.cwd(); out=root/'artifacts/phase-b/b03-domain-fix1'; baseline=json.loads((out/'baseline.json').read_text())
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+allowed={'backend/integration-tests/src/test/java/ama/meeting/MeetingRevisionIT.java','web/src/shared/api/generated.ts'}
+changed=[p for p,digest in baseline['original_owned_paths'].items() if sha(root/p)!=digest]
+assert set(changed)==allowed,changed
+old=root/'artifacts/phase-b/b03-domain'; oldmanifest=json.loads((old/'sha256-manifest.json').read_text())
+assert all(sha(old/p)==digest for p,digest in oldmanifest.items())
+report=pathlib.Path('/home/tanren/ama/.worktrees/phase-a/.superpowers/sdd/2026-10-21-ama-phase-b/task-B-03-domain-report.md')
+assert sha(report)==baseline['original_report_sha256']
+source_paths=['backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java','backend/integration-tests/src/test/java/ama/meeting/MeetingRevisionIT.java','contracts/openapi/identity.yaml','web/src/shared/api/generated.ts']
+actual=subprocess.check_output(['git','diff','--name-only',baseline['base']],text=True).splitlines()
+assert set(actual)==set(source_paths)-{source_paths[0]},actual
+sql_files=sorted((root/'backend/adapters/src/main/resources/db/migration').glob('*.sql'))
+for p in sql_files:
+    assert sha(p)==hashlib.sha256(subprocess.check_output(['git','show',baseline['base']+':'+str(p.relative_to(root))])).hexdigest()
+name='ama-test-b01-936fd5c24ae5'
+assert subprocess.check_output(['docker','inspect','--format','{{.Id}}',name],text=True).strip()=='5b5c1baba667ab43cca1ec76a2e5417ebb26bcbae780ad224cfdb49994f272c8'
+sql='SELECT @@version,@@innodb_use_native_aio; SELECT installed_rank,version,script,checksum,success FROM flyway_schema_history ORDER BY installed_rank;'
+cmd='MYSQL_PWD="$MYSQL_PASSWORD" mysql --protocol=TCP -h127.0.0.1 --user="$MYSQL_USER" "$MYSQL_DATABASE" --batch --raw -e '+shlex.quote(sql)
+history=subprocess.check_output(['docker','exec',name,'sh','-c',cmd])
+(out/'history-after.txt').write_bytes(history)
+assert history==(out/'history-before.txt').read_bytes()
+counts={}
+for phase in ('red','green'):
+    suite=ET.parse(out/(phase+'.xml')).getroot()
+    counts[phase]={k:int(suite.get(k,0)) for k in ('tests','failures','errors','skipped')}
+assert counts=={'red':{'tests':4,'failures':4,'errors':0,'skipped':0},'green':{'tests':4,'failures':0,'errors':0,'skipped':0}}
+checks=json.loads((out/'contract-runs.json').read_text()); assert len(checks)==4 and all(r['exit_code']==0 for r in checks)
+summary={'base':baseline['base'],'source_sha256':{p:sha(root/p) for p in source_paths},'test_counts':counts,'original_report_sha256':sha(report),'old_archive_manifest_sha256':sha(old/'sha256-manifest.json'),'original_archive_files_unchanged':len(oldmanifest)+1,'original_owned_paths_unchanged':len(baseline['original_owned_paths'])-len(changed),'original_owned_paths_changed_for_fix':changed,'sql_files_unchanged':{p.name:sha(p) for p in sql_files},'fixture_history_unchanged':True,'production_runtime_unchanged':True}
+(out/'verification.json').write_text(json.dumps(summary,indent=2)+'\n')
+for script in ('capture-fix1.py','run-fix1.py','check-fix1.py','seal-fix1.py'):
+    (out/(script+'.txt')).write_bytes((root/'.tools'/script).read_bytes())
+env=(root/'.tools/mysql-fixture'/name/'mysql.env').read_text()
+secrets=[line.split('=',1)[1].encode() for line in env.splitlines() if line.startswith(('MYSQL_PASSWORD=','MYSQL_ROOT_PASSWORD='))]
+files=sorted(p for p in out.rglob('*') if p.is_file() and p.name!='sha256-manifest.json')
+assert all(not any(secret in p.read_bytes() for secret in secrets) for p in files),'Private fixture credential found in evidence'
+manifest={str(p.relative_to(out)):sha(p) for p in files}
+(out/'sha256-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+print(json.dumps({'tests':counts,'old_report':sha(report),'old_archive_files_unchanged':len(oldmanifest)+1,'new_evidence_files':len(files)+1,'manifest_sha256':sha(out/'sha256-manifest.json'),'credential_scan':'PASS'},indent=2))

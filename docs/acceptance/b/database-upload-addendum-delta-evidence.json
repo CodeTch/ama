@@ -1,0 +1,63 @@
+{
+  "base": "a13e0cddd890b02e66f5189d6036bf7afed8b8e7",
+  "baseline_design_version": "B00-1.1-review",
+  "proposed_design_version": "B00-1.2-review",
+  "baseline_ddl_sha256": "16d69102d5b775130efac720a31794fcedf0ff27f4f0002ef3fb9756a605d183",
+  "proposed_ddl_sha256": "402def655f133ab10caa44b94e89ed6692756623d32705e6ab63c8176d79c362",
+  "baseline_evidence_sha256": "3ada3636bdfcecdf5502dca48378b11f26b88e827f8fe6ab05efec9fee679d54",
+  "proposed_evidence_sha256": "3de8041db8860f1547ff53a94b4ddd79470c4881340111fdafbc3ce5322399ad",
+  "comparison": "Parsed every full metadata array; all preexisting rows byte-equivalent as JSON values, only the two appended upload_session column rows differ. Generated dictionary/DDL/ER exact sync verified. No existing fixture was queried or changed.",
+  "metadata_delta": {
+    "tables": {
+      "removed": [],
+      "added": []
+    },
+    "columns": {
+      "removed": [],
+      "added": [
+        {
+          "type": "longtext",
+          "extra": "",
+          "table": "upload_session",
+          "column": "display_name",
+          "default": null,
+          "ordinal": 14,
+          "nullable": "NO",
+          "collation": "utf8mb4_0900_ai_ci"
+        },
+        {
+          "type": "varchar(64)",
+          "extra": "",
+          "table": "upload_session",
+          "column": "purpose",
+          "default": null,
+          "ordinal": 15,
+          "nullable": "NO",
+          "collation": "ascii_bin"
+        }
+      ]
+    },
+    "indexes": {
+      "removed": [],
+      "added": []
+    },
+    "checks": {
+      "removed": [],
+      "added": []
+    },
+    "foreign_keys": {
+      "removed": [],
+      "added": []
+    }
+  },
+  "preserved_base_file_sha256": {
+    "docs/acceptance/b/database-metadata-evidence.json": "3ada3636bdfcecdf5502dca48378b11f26b88e827f8fe6ab05efec9fee679d54",
+    "docs/acceptance/b/database-design-review.md": "feded94b4dfcfd380ae945da57b84b8f8ac869fb70eff34484a7b4596d16378b",
+    "docs/acceptance/b/database-design-independent-review.md": "a02e8ee972055043e54bb3bc63cf31a834764184e096b2167458e461f70f328a",
+    "docs/acceptance/b/database-design-initial-review.md": "37b95092b3aa246b5fe8f99c6d94b0c63d66ab80a93790560ba81efece17cba4",
+    "backend/adapters/src/main/resources/db/migration/V001__foundation.sql": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+    "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+    "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7"
+  },
+  "scope": "Structural and byte-preservation self-check; not independent review or application recovery validation"
+}

@@ -1,0 +1,12 @@
+{
+  "audit_event": [
+    "--- \n",
+    "+++ \n",
+    "@@ -10,4 +10,4 @@\n",
+    "   PRIMARY KEY (`id`),",
+    "   KEY `audit_resource_time` (`resource_id`,`occurred_at`,`id`),",
+    "   KEY `audit_trace` (`trace_id`)",
+    "-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+    "+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+  ]
+}
