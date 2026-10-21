@@ -120,6 +120,67 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(decisions["D-10"]["category"], "product-specification")
         self.assertEqual(decisions["D-14"]["category"], "platform-evidence")
 
+    def test_approved_ui_decisions_no_longer_request_approval(self):
+        report = check({"contracts": []})
+        decisions = {d["id"]: d for d in report["decisions"]}
+        for ident in ("D-01", "D-03", "D-18"):
+            with self.subTest(ident=ident):
+                self.assertEqual(decisions[ident]["status"], "adopted")
+                self.assertEqual(decisions[ident]["pendingFields"], [])
+                self.assertEqual(decisions[ident]["blockedTasks"], [])
+                self.assertTrue(decisions[ident]["affectedTasks"])
+                self.assertTrue(all(ident not in phase["decisionGates"]
+                                    for phase in report["continuation"].values()))
+
+    def test_partial_decisions_only_request_unresolved_fields(self):
+        decisions = {d["id"]: d for d in check({"contracts": []})["decisions"]}
+        resolved = {
+            "D-04": {"multiplePrimaryFiles", "audioVideoMix", "transcriptAudioMix", "ordering"},
+            "D-06": {"conflictRecovery"},
+            "D-10": {"recipientScope", "externalRecipients", "linkBodyAttachment",
+                     "snapshotVersion", "permissionRecheck", "unknownResultReconciliation", "retryPolicy"},
+            "D-11": {"reviewStates", "consent", "revocation", "configurationApproval", "publishRollback"},
+            "D-15": {"voiceConsent", "humanConfirmation", "accessGrantRules"},
+        }
+        unresolved = {
+            "D-04": {"formats", "sizes", "durations"},
+            "D-05": {"requestBudget", "parsingBudget", "uploadBudget"},
+            "D-06": {"perEditorSaveTiming", "saveIndicator", "leaveReminder"},
+            "D-07": {"degradedConfirmationAllowed", "explicitApproval", "auditReason", "eligibility"},
+            "D-10": {"senderAuthorization", "template", "messageKey"},
+            "D-11": {"roles", "dataPurpose", "evaluationDataset", "retention"},
+            "D-15": {"externalIdentity", "responsiblePersonMapping"},
+            "D-16": {"formats", "ocrAvailability"},
+            "D-17": {"temporaryRetention", "backupDeletion", "auditRetention"},
+        }
+        for ident, fields in resolved.items():
+            with self.subTest(resolved=ident):
+                self.assertTrue(fields.isdisjoint(decisions[ident]["pendingFields"]))
+        for ident, fields in unresolved.items():
+            with self.subTest(unresolved=ident):
+                self.assertEqual(decisions[ident]["status"], "pending")
+                self.assertTrue(fields.issubset(decisions[ident]["pendingFields"]))
+                self.assertTrue(decisions[ident]["blockedTasks"])
+
+    def test_governance_framework_allows_independent_work_without_qualification(self):
+        fields = {name: "documented" for name in (
+            "protocol authorizedSender quotas queryableMessageId deduplication "
+            "recipients contentMode unknownResultPolicy").split()}
+        fields["credentialReference"] = "controlled:test-mail-credentials"
+        complete_mail = {"id": "INT-07", "fields": fields, "evidence": [
+            {"reference": "controlled:mail-report", "outcome": "passed"}]}
+        for records in ([], [complete_mail]):
+            with self.subTest(mail_evidence=bool(records)):
+                report = check({"contracts": records})
+                governance = report["continuation"]["E"]
+                self.assertEqual(governance["implementation"], "may-continue")
+                self.assertTrue(all(phase["qualification"] == "pending"
+                                    for phase in report["continuation"].values()))
+                self.assertTrue({"D-10", "D-11", "D-15"}.issubset(governance["decisionGates"]))
+                self.assertTrue({"INT-07", "INT-09"}.issubset(governance["externalGates"]))
+                self.assertTrue(all(c["status"] == "pending" for c in report["checks"]))
+                self.assertFalse(report["integrationVerified"])
+
     def test_cli_is_offline_explicit_and_errors_do_not_leak(self):
         with tempfile.TemporaryDirectory() as directory:
             manifest = Path(directory) / "manifest.json"
