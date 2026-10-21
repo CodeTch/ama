@@ -5,11 +5,11 @@ Date: 2026-10-22. Author owns this isolated implementation; fresh independent SP
 ## Revision and scope
 
 BASE: 8da440d39e1b8e8dcdfc34722908d29b5aa3aa8a
-Verified source HEAD: 83f1db9a650ae087d3120fb28171b7a9cf1f5882
+Verified source/test/evidence HEAD: 1281feb9ec20927855fac8994afd45e47e67eb38
 Tree: /home/tanren/ama/.worktrees/phase-b-minutes-pure
 Branch: codex/phase-b-minutes-pure
 
-Source/evidence commit contains 258 changed paths, 32 new production Java files, 13 owned test suites, complete independent vectors and raw verification archive. The documentation-only report commit follows it; delivery HEAD is recorded in the root SDD handoff and parent message. All source/tests are committed after actual verification. Full BASE..source-HEAD paths, plus this report, are listed below, not just HEAD~1.
+Full BASE..verified-HEAD range contains 273 changed paths (including this report), 32 new production Java files, 13 owned test suites, complete independent vectors and raw verification archive. The documentation-only report commit follows it; delivery HEAD is recorded in the root SDD handoff and parent message. All source/tests are committed after actual verification. Full BASE..verified-HEAD paths are listed below, not just HEAD~1.
 
 Adopted normative inputs:
 * B07 final proposal eaae0ee74d2330cb4bcd32525e445e3809c238e139574477306c761742b96f05.
@@ -31,7 +31,7 @@ Only POM changes: versionless managed jackson-core in adapters (actual managed 2
 
 ## Executed verification
 
-Final exact owned Maven selector command is in verification-commands.txt and raw/78-complete-owned-suite.log. It ran all 13 owned suites: 97 unique tests, failures=0, errors=0, skipped=0. Fresh XML was captured before the canonical runner removed stale report files.
+Final exact owned Maven selector command is in verification-commands.txt and raw/82-complete-owned-final-utf32-domains.log. Round 82 added explicit UTF-32LE/BE rejection and separator/profile/kind-domain assertions within the existing test methods; production sources were unchanged after round 78. It ran all 13 owned suites: 97 unique tests, failures=0, errors=0, skipped=0. Round 78 XML was captured before the canonical runner removed stale reports; final round 82 XML is preserved separately in junit/final-owned.
 
 Canonical command: python3 tools/checks/run.py unit RawHashChainTest. raw/79-canonical-runner.log reports PASS executed=13, failures=0; all eight reactor modules compiled. These 13 are a subset of the same 97 tests and are not double-counted. No DB/IT/legacy/S3/native tests were selected.
 
@@ -58,7 +58,7 @@ Raw evidence is preserved without stripping earlier failures. raw-run-index.json
 * Nine raw rounds contain POM/compile setup errors: 01, 06, 11, 31, 32, 37, 38, 45, 66. They are preserved and excluded from meaningful assertion-RED claims.
 * Round 68 used an incorrect BODY anchor and expected a weaker missing-suggestion error; fixtures corrected before round 70. Rounds 71/72 used ineffective fixture mutation strings; corrected against actual literal processing config before round 73. Round 75's independent manual fixture contained literal backslash+n while Java saved LF; corrected to explicit scalar LF before round 77. No production change was needed for those fixture corrections.
 * The read-only source audit initially matched an ObjectMapper comment; corrected to actual code/import checks. raw/80 explains that tooling false positive; raw/81 and source-audit.json record the successful scope audit.
-* Final git diff --cached --check passed. SHA256SUMS verified all 257 explicitly allowed payloads before source commit; payload-allowlist.txt is explicit. SHA256SUMS excludes itself. .gitattributes preserves exact raw/JUnit/vector bytes with -text and scopes raw log/JUnit whitespace suppression only to this new archive. Existing reports/raw archives were unchanged.
+* Final git diff --cached --check passed. SHA256SUMS verified all 271 explicitly allowed payloads before the final source/test/evidence commit; payload-allowlist.txt is explicit. SHA256SUMS excludes itself. .gitattributes preserves exact raw/JUnit/vector bytes with -text and scopes raw log/JUnit whitespace suppression only to this new archive. Existing reports/raw archives were unchanged.
 
 ## Independent bytes and behavioral coverage
 
@@ -68,7 +68,7 @@ Complete domains include confirmation empty/four marks, generation FULL/EMPTY, r
 
 Assertions cover:
 * Literal primitive binary tags/lengths, U+E000 vs U+10000 key order, controls/separators, list ordering/domain isolation, duplicate object entries, canonical limits/cancellation, each mark add/remove and duplicate/four-enum order.
-* Actual Jackson streaming schema, seven categories/directories, two sensitivity labels, exact field/EOF/escaped-duplicate grammar, malformed UTF-8 suffix/BOM/UTF16/lone escaped surrogates, strict numeric/date/ID/range errors, no-close/sentinel/failed stream/interrupt/redaction.
+* Actual Jackson streaming schema, seven categories/directories, two sensitivity labels, exact field/EOF/escaped-duplicate grammar, malformed UTF-8 suffix/BOM/UTF16/UTF32/lone escaped surrogates, strict numeric/date/ID/range errors, no-close/sentinel/failed stream/interrupt/redaction.
 * Exact model limit and one-over checks for wire/depth/tokens/name/string UTF16/UTF8/scalars/aggregate; all six element/detection/note/ref/evidence/membership containers; exact cumulative config budgets and every lower-by-one bound.
 * Actual BODY/ACTION suggestion/detection/background/intrinsic transcript stored chains, exact one-locator six-use matrix and dual-parser projection; bijection/orphan/ambiguous/cross-version/cycle/node/depth/cancellation failures. Ordinary copied local material stays unsupported.
 * PINNED set graph resolves the actual historical input's raw archives/fingerprint and every agreeing immutable fence. Contradictory saved suggestion cannot fall back; conflicting historical task cannot be ignored.
@@ -90,7 +90,7 @@ No DB/Docker/service/HTTP/network/model/Worker/API/OpenAPI/generated type/runtim
 
 Fresh independent full-owned SPEC and quality review is required before root adoption. The author does not self-approve.
 
-## All owned paths: full BASE..source HEAD plus report
+## All owned paths: full BASE..verified HEAD (273 paths)
 
 * .gitattributes
 * artifacts/phase-b/b07-pure-s1/SHA256SUMS
@@ -111,6 +111,19 @@ Fresh independent full-owned SPEC and quality review is required before root ado
 * artifacts/phase-b/b07-pure-s1/junit/complete-owned/TEST-ama.minutes.contract.StoredSourceGraphTest.xml
 * artifacts/phase-b/b07-pure-s1/junit/complete-owned/TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml
 * artifacts/phase-b/b07-pure-s1/junit/complete-owned/TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.canonical.CanonicalValueCodecTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.config.json.ArchiveBudgetTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.config.json.ConfigBindingsTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.config.json.ConfigWireReaderTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.config.json.RawHashChainTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.contract.MinutesFactBudgetTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.minutes.contract.FinalAndCoverageTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.minutes.contract.GenerationFingerprintTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.minutes.contract.HashProfilesTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.minutes.contract.SourceAndSupportTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.minutes.contract.StoredSourceGraphTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml
+* artifacts/phase-b/b07-pure-s1/junit/final-owned/TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml
 * artifacts/phase-b/b07-pure-s1/meaningful-tdd-methods.txt
 * artifacts/phase-b/b07-pure-s1/observed-assertion-failures.txt
 * artifacts/phase-b/b07-pure-s1/payload-allowlist.txt
@@ -196,6 +209,7 @@ Fresh independent full-owned SPEC and quality review is required before root ado
 * artifacts/phase-b/b07-pure-s1/raw/79-canonical-runner.log
 * artifacts/phase-b/b07-pure-s1/raw/80-source-audit-tool-error.log
 * artifacts/phase-b/b07-pure-s1/raw/81-source-audit-green.log
+* artifacts/phase-b/b07-pure-s1/raw/82-complete-owned-final-utf32-domains.log
 * artifacts/phase-b/b07-pure-s1/source-audit.json
 * artifacts/phase-b/b07-pure-s1/source-paths.txt
 * artifacts/phase-b/b07-pure-s1/verification-commands.txt
