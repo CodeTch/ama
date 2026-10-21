@@ -1,0 +1,33 @@
+# B02 identity/session/security prerequisite
+
+Implementation evidence, pending independent review. Full B02 remains open for B03/V008 owner/effective confirmed READ grants and roster authorization tests. No protected meeting route or legacy ACL authorization is delivered here.
+
+Production resolves existing opaque sessions from shared MySQL, checking ACTIVE status, exact identity ID, generation, expiry and revocation on every request. Single logout records revocation; all logout and identity disable/re-enable advance generation under an identity row lock. Changes and minimal audit share B01's transaction/connection. Lifecycle verification records the controlled system actor SYSTEM_IDENTITY_SYNC; it does not impersonate the affected employee. Role assignment grants platform privileges only. Production company session issuance and directory adapters deliberately return unavailable until the actual company contracts are qualified; there is no password, callback, test-login or identity-header path.
+
+Public routes are GET `/api/v1/session`, GET `/api/v1/directory/people`, POST `/api/v1/session/logout`, POST `/api/v1/session/logout-all`. Production directory currently returns safe503. Writes require one exact allowed Origin and one independent session CSRF header; duplicate headers fail closed. Configure `identity.allowed-origin` with an origin such as `https://meetings.example.invalid` (synthetic example). An empty setting denies writes; opaque origins, userinfo, path, query and fragment are rejected at startup. `identity.mode` accepts only `company`, including in a production assembly with a test profile name. Test adapters live only in test sources and require the test profile.
+
+The cookie helper uses `__Host-AMA_SESSION`, Secure, HttpOnly, Path=/, SameSite=Lax and explicit expiry. Raw session tokens are never returned by GET session, stored in MySQL or included in diagnostic strings. Session CSRF is returned only in the authenticated no-store response and is redacted in diagnostics. The application does not cache authorization. Public business routes reject the management listener; existing health listener/network controls remain independent.
+
+## Migration and compatibility
+
+V001/V002/V005/V006 remain unchanged. V007 `V007__identity_sessions.sql` was frozen with coordinator acknowledgment before first Flyway execution at SHA256 `859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d`; Flyway checksum `157746768`. No subsequent byte change occurred. V007 owns canonical department, role, identity generation/verification and session generation/issuance fields, exact NO PAD IDs and constraints. The old display department/admin columns remain expand-window metadata, never authority; legacy ACL is preserved only for later coordinated handling.
+
+V007 refuses nonempty legacy identity/session/ACL inputs before permanent DDL. Such records lack authoritative department/status verification, issuance dates and confirmed-grant origins. No dates/IDs are fabricated and no rows are coerced, deleted or silently revoked. Existing installations need a separately reviewed authoritative mapping/backfill and recovery plan. A failed nontransactional Flyway history is evidence requiring assessment, not an invitation to repair/reset it.
+
+Positive formal fixture: owned `ama-test-b01-c8517df9ef69`, loopback45905; read-only confirmed empty before applying the reviewed V006 and frozen V007. History001→002→005→006→007 all success1. Separate refusal fixture: owned `ama-test-b01-768977c381e0`, loopback46617; history001→002→005→006 success1 then007 success0, preserved. Old B02 fixture45635 and B01 fixture45443 were untouched. Separate raw-DDL review-only sandbox44735 was explicitly identified before candidate execution and never used Flyway.
+
+## Verification
+
+- `python3 tools/checks/run.py it IdentityAccessIT`: 18 tests, zero failures/errors/skips, two real loopback API nodes and real MySQL8.4.6. Covers revoke/disable-reenable, exact IDs and immediate roles, CSRF/Origin including duplicate attacks, failed-audit rollback, concurrent all-revoke, node restart, directory same-name/department/paging, forged browser claims and listener isolation.
+- `python3 tools/checks/run.py it IdentityMigrationIT`: 1 test, zero failures/errors/skips; ordered migration, repeated migration no-op, NO PAD case/trailing space distinction, long display names, verification/department/role/session constraints and absence of future meeting/roster/grant tables.
+- `python3 tools/checks/run.py it IdentityMigrationRefusalIT`: 1 test in a separate initially empty fixture, zero failures/errors/skips. All legacy rows and three source table definitions remain identical after expected refusal; failed history is preserved. Run this only in a new dedicated fixture, never the positive or preserved failure fixture.
+- `python3 tools/checks/run.py all`: 74 Python +8 web +28 Java unit tests, no failures/skips; OpenAPI validation/bundle2 checks. Includes existing health/liveness/readiness regressions.
+- Generated TypeScript matches OpenAPI byte-for-byte; web typecheck passed. No browser UI changed.
+
+Behavioral RED evidence includes the original anonymous403 vs401, contract role mutation/invalid identity/time precision, removal of the generation predicate causing revived old sessions, secret diagnostic output, invalid Origin startup, and duplicate Origin/CSRF requests incorrectly returning204. The latter defects were fixed and the full18-test suite passed. Preparation while V006 was gated had compile-only RED for some new classes; compilation failure is not represented as a behavioral assertion failure. Canonical migration refusal/positive tests passed on their first formal execution after review-only validation; SQL was never edited to obtain GREEN.
+
+Detailed chronology, full source list, signatures, fixture ownership and raw evidence paths are in the coordinator's `task-B-02-prerequisite-report.md`. Local raw logs, final DDL/metadata/history and frozen SQL copies are retained under `artifacts/phase-b/b02-prerequisite/`. Actual company protocol, role/department mapping, lifetime/disable propagation, real login/logout/disable evidence and production integration approval remain pending.
+
+## 协调采用记录
+
+2026-10-22：完整前置任务经独立 spec/quality 评审通过，无发现项；来源39b447d集成bec9393，29路径逐字节相同、V007冻结SHA不变。仅采用身份前置，不关闭本文件已有完整B02及公司协议前置条件。实际测试和历史失败保全见 [实现报告](identity-prerequisite-implementation-report.md) 与 [独立评审](identity-prerequisite-independent-review.md)。

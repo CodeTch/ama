@@ -44,6 +44,83 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Resolve current shared database session
+         * @description Rechecks ACTIVE identity, generation, expiration and revocation on each request. Response is not cached; raw session token is never returned.
+         */
+        get: operations["currentSession"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/session/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke the current server session on both nodes */
+        post: operations["logoutSession"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/session/logout-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Advance the authenticated identity generation to revoke all its sessions
+         * @description Identity comes exclusively from the authenticated server session. Browser identity or role claims are never accepted.
+         */
+        post: operations["logoutAllSessions"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/directory/people": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search enterprise people by stable identity
+         * @description Company directory protocol is pending, so production returns a safe 503. Controlled test projections keep same-name people distinct by stable ID and department. This does not create an account or meeting authorization.
+         */
+        get: operations["searchDirectoryPeople"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -51,6 +128,39 @@ export interface components {
         Health: {
             /** @enum {string} */
             status: "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
+        };
+        Actor: {
+            /** @description Exact company stable ID; case and trailing spaces are significant */
+            enterpriseId: string;
+            /** @enum {string} */
+            status: "ACTIVE" | "DISABLED";
+            /** @description Platform privileges only; never a meeting body override */
+            roles: ("USER" | "PLATFORM_ADMIN")[];
+        };
+        Session: {
+            actor: components["schemas"]["Actor"];
+            csrfToken: string;
+            /** Format: date-time */
+            expiresAt: string;
+        };
+        BusinessError: {
+            error: {
+                /** @enum {string} */
+                code: "UNAUTHENTICATED" | "FORBIDDEN" | "INVALID_ARGUMENT" | "IDENTITY_UNAVAILABLE" | "IDENTITY_PROVIDER_UNAVAILABLE";
+                message: string;
+                /** Format: uuid */
+                traceId: string;
+            };
+        };
+        Person: {
+            stableId: string;
+            displayName: string;
+            department: string | null;
+            active: boolean;
+        };
+        PeoplePage: {
+            items: components["schemas"]["Person"][];
+            nextCursor: string | null;
         };
     };
     responses: {
@@ -70,8 +180,49 @@ export interface components {
                 };
             };
         };
+        /** @description Session absent, expired, revoked, disabled or from an old generation */
+        Unauthenticated: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Wrong listener or failed Origin/CSRF policy */
+        BusinessForbidden: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Identity database or unqualified company provider unavailable */
+        Unavailable: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Invalid directory page request */
+        Invalid: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
     };
-    parameters: never;
+    parameters: {
+        /** @description Must exactly match the configured allowed origin */
+        Origin: string;
+        /** @description Independent session-bound token returned by currentSession */
+        Csrf: string;
+    };
     requestBodies: never;
     headers: never;
     pathItems: never;
@@ -136,6 +287,112 @@ export interface operations {
                     "application/vnd.spring-boot.actuator.v3+json": components["schemas"]["Health"];
                 };
             };
+        };
+    };
+    currentSession: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Authenticated identity and session-bound CSRF token */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Session"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    logoutSession: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Session revoked; secure host-only cookie expired */
+            204: {
+                headers: {
+                    "Set-Cookie"?: string;
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    logoutAllSessions: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All sessions for this identity revoked; cookie expired */
+            204: {
+                headers: {
+                    "Set-Cookie"?: string;
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    searchDirectoryPeople: {
+        parameters: {
+            query?: {
+                query?: string;
+                /** @description Opaque next-page cursor from the prior response */
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of directory entries */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PeoplePage"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["Unavailable"];
         };
     };
 }

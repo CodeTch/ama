@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-file-schema/artifacts/phase-b/b04-schema/verify_delivery.py", line 24, in <module>
+    count('configuration_error_not_red', folder/'pre-red-fixture-path-error.xml', (1,0,1,0))
+  File "/home/tanren/ama/.worktrees/phase-b-file-schema/artifacts/phase-b/b04-schema/verify_delivery.py", line 15, in count
+    assert tuple(data.values()) == expected, (name, data, expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('configuration_error_not_red', {'tests': 1, 'failures': 1, 'errors': 0, 'skipped': 0}, (1, 0, 1, 0))

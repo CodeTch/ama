@@ -25,9 +25,9 @@
 |目标版本|拥有任务|原计划占位|计划内容/依赖|当前状态|
 |---|---|---|---|---|
 |V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|来源 f5b4495+0e8f698 → 集成751d31c+95a264e；冻结f36…；独立复审支持新建确认空白fixture限定采用，历史偏差保留|
-|V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|首次正式应用前已冻结 SHA859970b8…；实现未评审/未集成，执行结果待登记|
-|V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|候选已冻结 SHAfa44424a…；尚未应用/评审，须先收到已审V007|
-|V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|预留，未编写；上传补充设计门已通过|
+|V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|来源39b447d → 集成bec9393；SHA859970b8…冻结；前置实现独立评审通过，正例/隔离拒绝证据已保全；完整B02授权切换待V008|
+|V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|来源ff22197 → 集成dac4cc1；SHAfa44424a…冻结，结构前置独立Approved0findings；正例与两类拒绝已保全，完整B03/B02授权仍OPEN|
+|V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|来源45715b6+fd3c3d8 → 集成1a00ca4；SHA79f04898…冻结，结构前置独立Approved0findings/95已选用例通过；完整B04仍OPEN|
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|预留，未编写|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|预留，未编写|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
@@ -86,3 +86,37 @@ R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑�
 ## V008 候选冻结与依赖门（2026-10-22）
 
 文件 `V008__meeting_schema.sql`，拥有者工作树 `phase-b-meeting-schema`，SHA256 **`fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3`** 已由协调者读文件核对。八表及15个FK约束/16个FK列为作者候选说明，尚非实现验收；已正式迁移的低集合只在新独有 fixture `ama-test-b01-7b3ec2548012:45527` 做了缺表RED。V008尚未执行，必须等待独立评审通过的V007并获得协调者执行通知；没有占位V007、越序或未审peer脚本。候选从此次交付冻结，任何修正先报告协调者登记新版本；正式执行/history/metadata/回归/独立评审待记录。
+
+## V007 实施评审采用记录（2026-10-22，身份前置范围）
+
+来源 `39b447d43a91cc0692a5d43ee109fcc82d37d6db`，完整 owned 评审基线 `a4ed859..39b447d`（之前机械合入的已审根内容不重复计为本任务），独立评审 spec compliant / quality Approved，Critical/Important/Minor 均无。集成 `bec93930657c349a9662eea5a347c55186fa18fe` 的29个交付路径与来源逐字节一致。V007 SHA `859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d` 再次复核，Flyway checksum `157746768` 不变。
+
+首次执行前冻结记录保留。新独有正例 `ama-test-b01-c8517df9ef69:45905` 的001/002/005/006/007全部success=1；另建负例 `ama-test-b01-768977c381e0:46617` 保留007 success=0、原三张身份/会话/ACL表DDL及行不变，不重置或repair。正式升级拒绝无权威来源的旧身份/会话/ACL数据；没有猜测日期、部门、权限或默认READY。旧B02库、B01失败库均未触碰。
+
+实际身份18、迁移1、隔离拒绝1通过；回归Python74/web8/Java28/OpenAPI2及生成类型校验通过，最后Java修改后重跑完整身份18和Java单元，未重复不变套件。当前采用仅身份/会话/目录接口及安全前置；MeetingAccess仍为契约，公司SSO/人员目录仍不可用，完整B02对象授权待V008后独立实现评审，不据此验收完整B阶段。见 [独立评审](../acceptance/b/identity-prerequisite-independent-review.md)、[实现报告](../acceptance/b/identity-prerequisite-implementation-report.md)。45个原始证据文件与SHA清单已逐字节保存在 `artifacts/phase-b/b02-prerequisite/`，未复制凭证。此次集成不操作数据库或重复已有测试。
+
+## V008 实施评审采用记录（2026-10-22，八表结构前置）
+
+来源 `ff22197f5f6231aeb689e035f4435ddbbcbcf114`，完整owned基线 `62a8ec5..ff22197`，独立 spec compliant / quality Approved，Critical/Important/Minor均无。集成 `dac4cc11bf07c8a2c81eeafed541687d5beb3a69`，5个交付路径与来源逐字节一致。V008 SHA `fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3` 再次复核，Flyway checksum `-1747387036`；此前9572b5a预执行冻结记录保留，应用后无字节修改。
+
+实际8表/71列/24索引定义及47索引列/12CHECK/15FK及16FK列，与已审B00-1.2独立实测子集完全一致。正例 `ama-test-b01-7b3ec2548012:45527` 保留001→002→005→006→007→008全部success1；独立draft拒绝 `ama-test-b01-90171737c2cf:46377` 和timestamped拒绝 `ama-test-b01-79de6fc2da7a:45069` 各保留008 success0及原DDL/ACL行，不reset/repair。首成功和后续正例快照分别标注，不冒称同一时刻。
+
+实际结构6、隔离拒绝1+1、Foundation正常路径13、IdentityAccess18、后端单元28全部0failure/error/skip；首升级1与结构6重叠不重复计数。45原始证据及SHA清单已核对/保全于 `artifacts/phase-b/b03-schema/`。未重复原V006破坏失败history的参数负例，历史IdentityMigrationIT的latest007假定未运行且另行修正显式target007，绝不把未选测试计通过。见 [实施报告](../acceptance/b/meeting-schema-prerequisite-implementation-report.md)、[独立审查](../acceptance/b/meeting-schema-prerequisite-independent-review.md)。
+
+仅解锁V009结构依赖，完整B03会议业务/版本/幂等/投影/subject/outbox和B02对象授权待V010后实施评审；不启用业务写，不创造旧ACL来源，不批准实际有数据安装升级或公司生产环境。此次机械集成只验证字节与范围，未重复已通过且未改变的测试，未操作数据库。
+
+## V009 首次正式应用前冻结（2026-10-22）
+
+拥有者 `phase-b-file-schema`，文件 `V009__file_schema.sql`，SHA256 **`79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d`**，7239bytes。协调者已完整读取文件、重新计算SHA，并程序核对六CREATE及9FK与已审B00-1.2审阅DDL对应块逐字节一致；仅部署注释/SET是前置，不含seed/额外表/IF NOT EXISTS。原冻结低集合不变；V008已独立采用，见2a569eb。
+
+作者已在新独有确认空白 `ama-test-b01-204cc11baabc:45041` 执行已审低集合到008，报告六表missing真实RED1failure/0error/0skip并保留低集合快照。较早helper路径错误另存不算RED。当前V009未执行、未实施评审；此处仅完成首次正式应用前冻结及受控执行依赖门，不提前验收。此次共享后的字节永久冻结；任何修正先由协调者登记有序新版本，不改此SQL或repair。正式执行checksum/history/meta/回归/独立评审待另行登记。
+
+## V009 实施评审采用记录（2026-10-22，六表结构前置）
+
+完整owned基线 `2a569eb..fd3c3d86e1c7998f95ded65704c3453579116d06` 包含准备提交45715b6和最终交付，独立 SPEC compliant / quality Approved，Critical/Important/Minor均无。协调者先接入准备提交再最终提交，未把机械merge dcc5302当review BASE；接入完成 `1a00ca41775303da6637eba74b2b5d633616fc83` 时63交付路径均与作者finalHEAD逐字节相同。V009 SHA `79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d` 不变，Flyway checksum `-287948759`。b3c00ce预执行冻结早于01:51:49首次应用，原低集合不变。
+
+实际6表/53列/16索引定义与36索引列/7CHECK/9FK，独立B00-1.2源、期望、首成功/最终/独立Foundation快照完全匹配。正例 `ama-test-b01-204cc11baabc:45041` 从未reset，27表及001→002→005→006→007→008→009全部success1；独立新Foundation `ama-test-b01-2281b6270fc4:46305` 只运行已选正常路径，保留相同7版本successhistory。真实缺表RED与配置错误分别保全；没有修改冻结SQL、repair或失败history清除。
+
+最终schema8/Foundation正常13/local contract7/local durability39/Java units28均0failure/error/skip，95不同已选用例；重复首成功8和附带单元不重加。55原始证据及SHA清单保留在 `artifacts/phase-b/b04-schema/`，完整独立核对通过；源/raw报告另存 `b04-schema-coordinator-reports/` 以保全换行前原始字节。见 [实施报告](../acceptance/b/file-schema-implementation-report.md)、[独立审查](../acceptance/b/file-schema-independent-review.md)。
+
+仅解锁V010结构依赖；公共注册/权限/回执冻结/文件先持久化再DB登记、孤儿不可读及引用epoch清理、双后端闭环、完整B03/B04与生产写入仍OPEN。不重复已通过未改变的测试来制造集成通过，也未在此机械集成操作数据库。
