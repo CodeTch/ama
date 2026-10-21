@@ -22,6 +22,19 @@ public interface FileStoragePort {
     void delete(StorageKey key);
     UploadToken beginUpload(UploadSpec spec);
     PartReceipt writePart(UploadToken token, int part, InputStream body, long size, String sha256);
+
+    /**
+     * Completes exactly the supplied trusted immutable receipt manifest. It must be nonempty,
+     * unique, ascending and contiguous from 1, and belong to this upload session. Actual selected
+     * bytes must match their receipts, total the upload's expected size, and match the whole SHA-256.
+     * Other physically stored parts are unselected technical artifacts: they neither enter the
+     * result nor block a valid selection. Callers with a business receipt registry must still match
+     * client requests to all committed receipts before freezing this manifest.
+     *
+     * <p>A valid completion freezes this exact manifest and hash. The same request replays; a
+     * different valid manifest conflicts even if it produces identical bytes. A bad whole hash while
+     * open remains retryable. After the decision, writes fail and abort preserves completion.
+     */
     StoredBlob complete(UploadToken token, List<PartReceipt> parts, String sha256);
     void abort(UploadToken token);
     BlobPage list(String backendId, String namespace, String prefix, String cursor, int limit);

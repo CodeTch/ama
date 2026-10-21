@@ -98,8 +98,17 @@ class FileStorageContractIT {
                         int n;
 
                         public int read() throws IOException {
-                            if (n++ == 1) throw new IOException("injected stream loss");
+                            if (n++ > 0) throw new IOException("injected stream loss");
                             return 'a';
+                        }
+
+                        @Override
+                        public int read(byte[] b, int offset, int length) throws IOException {
+                            if (length == 0) return 0;
+                            // Default InputStream bulk reads can swallow an exception after a
+                            // byte. Emit one byte, then persistently fail subsequent reads.
+                            b[offset] = (byte) read();
+                            return 1;
                         }
                     };
             error(ErrorCode.STORAGE_UNAVAILABLE, () -> s.put(key("interrupted"), broken, 3, abc));
@@ -152,6 +161,39 @@ class FileStorageContractIT {
             error(
                     ErrorCode.INVALID_UPLOAD_STATE,
                     () -> s.writePart(aborted, 1, body("abc"), 3, hash(bytes("abc"))));
+        }
+    }
+
+    @ParameterizedTest(name = "local: completion excludes unselected part [{0}]")
+    @ValueSource(strings = {"", "xyz"})
+    void localMultipartCompletionSelectsSuppliedReceipts(String unselected) throws Exception {
+        try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
+            var s = fixture.startServer();
+            var token = s.beginUpload(new UploadSpec("local", "meeting", "selected", 3));
+            String abc = hash(bytes("abc"));
+            var selected = s.writePart(token, 1, body("abc"), 3, abc);
+            // Storage accepted these bytes, but the caller never committed this receipt into
+            // its frozen manifest (e.g. receipt commit lost to OPEN -> FINALIZING).
+            var extra =
+                    s.writePart(
+                            token,
+                            2,
+                            body(unselected),
+                            bytes(unselected).length,
+                            hash(bytes(unselected)));
+            var result = s.complete(token, List.of(selected), abc);
+            assertEquals(new StoredBlob(key("selected"), 3, abc, null), result);
+            assertArrayEquals(bytes("abc"), read(s, key("selected"), 0, 3));
+            assertEquals(result, s.complete(token, List.of(selected), abc));
+            // Even a zero-byte addition changes the decided manifest despite identical bytes.
+            error(
+                    unselected.isEmpty() ? ErrorCode.CONFLICT : ErrorCode.SIZE_MISMATCH,
+                    () -> s.complete(token, List.of(selected, extra), abc));
+            error(
+                    ErrorCode.INVALID_UPLOAD_STATE,
+                    () -> s.writePart(token, 3, body(""), 0, hash(bytes(""))));
+            s.abort(token);
+            assertEquals(result, s.complete(token, List.of(selected), abc));
         }
     }
 
