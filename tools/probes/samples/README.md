@@ -86,6 +86,8 @@ python3 -m unittest discover -s tools/probes/tests -v
 
 HTTP 429、其他非 200、无效/缺字段响应、网络错误、超时、预算停止均保留在 errors、原始样本和对应有观测的时延中。未发送项 serviceMs=null；TIMEOUT、NETWORK_ERROR、未发项为删失观测，其端到端等待只代表已观测下限。含删失值的分位数不能作成功请求延迟或 SLA 达标证明。
 
+删失按时延字段分别统计：已启动请求的 queueMs 已完整测得，即使随后超时或断链也不计为队列删失；未启动项的队列等待仍为删失。样本级 latencyCensored 描述服务/端到端完成是否未知，不能直接套用到已测完的队列时间。声明 Content-Length 却提前结束的响应按未知传输失败处理，不接受其中恰好可解析的 JSON 前缀。
+
 超时或不确定网络失败停止本批新准入，等待已有调用收尾；`inflight.unknownServerAtEnd/reservedAtEnd` 保留旧服务端工作可能仍执行的额度，`clientAtEnd=0` 不代表服务端已取消。不得循环重跑补足吞吐：平台确认完成/取消或提供安全截止、全局额度后才能释放未知额度。探针没有跨进程全局租约，不适合多进程叠加运行。
 
 `offeredRequestsPerSecond` 是配置到达速率；突发批次为 null。`observedRequestsPerSecond` 仅为尝试数/本批客户端墙钟观察时间，不能当作稳定可用吞吐。未发、超时、响应无效和质量失败必须共同评估，HTTP 200 数量不能证明容量。
