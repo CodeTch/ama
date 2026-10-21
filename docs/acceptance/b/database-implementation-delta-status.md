@@ -20,6 +20,8 @@
 
 |DIFF-14 纪要目录/未选敏感项/建议/人类复核持久化|设计已补齐，运行时OPEN|1.3新增八表及排除双标签PK/CHECK，实际93表709列；[独立评审](database-generation-addendum-independent-review.md)0findings。V012七表/V013最终membership与业务权限/哈希/复核/最终确认未实施，两项交互选择pending。|
 
+|DIFF-15 跨来源复制后的解析上下文/使用项追溯|发现技术缺口，D01设计及运行时OPEN|[纯S1修订契约](../../superpowers/specs/2026-10-22-ama-minutes-contract.md)只明确使用项投影和不支持路径失败，未新增持久来源边。[D01必做设计](material-provenance-design-prerequisite.md)须在复杂材料/一般来源重绑定启用前独立评审；不是删除需求或完整B07验收。|
+
 R1检索共同F、R2完整规范名/摘要碰撞、R3专题说明、R4逻辑operation/append-only execution、R5转写不可变输入、R6片段多标记的设计修正已独立关闭；其领域运行时实现仍由对应V008/010/011/012/023与任务评审逐项证明，不以DDL元数据替代行为。1.2的upload_session.display_name/purpose已随V009结构独立采用，公开FINALIZING注册协议仍待完整B04；存储已选清单修复只是其中的必要边界。
 
 B03结构完成、V009结构完成后分别追加实际采用提交及回归；B05和后续消费者交付时逐项更新。本表不代签独立评审、最终B阶段验收、真实公司联调、100录音/300在线容量或RHEL/fencing恢复资格。
