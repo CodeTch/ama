@@ -1,6 +1,6 @@
 # B00-1.2 上传元数据定向补充记录
 
-2026-10-22。**作者自审完成；待协调者安排独立 BASE..HEAD 增量评审，尚未采用。** 1.1 是此前已经采用的基线；其 R1—R6 全部关闭、旧评审报告、完整 metadata 及 fixture 历史保持原样，本记录不替代或重签旧独立结论。
+2026-10-22。**独立增量评审已通过，协调者采用为 B00-1.2-review 当前设计基线。** 1.1 是此前已经采用的基线；其 R1—R6 全部关闭、旧评审报告、完整 metadata 及 fixture 历史保持原样，本记录不替代或重签旧独立结论。
 
 ## 精确范围与依据
 
@@ -48,3 +48,10 @@ python3 tools/checks/database_design.py verify --container ama-test-b01-86500692
 尚待 B-04 的行为证据：真实 API＋MySQL 跨进程 begin→restart→complete 的 name/purpose round trip，长名称/中文/引号/反斜杠/换行无损，未知/停用/无权用途，冻结前后重启与迟到分片，同请求双完成/异请求冲突，存储成功 DB 提交失败的不可读孤儿与单次登记，complete/abort/delete竞争，以及两个后端共同契约和 S3 transport 适配。没有运行 Maven/应用恢复/并发/性能/HA/公司集成测试。本轮证明结构可建且一致、设计链可追踪，不能关闭这些实施义务。
 
 独立评审由协调者对精确 BASE..HEAD 安排；在该结论之前本版保持 **pending independent review**。V009 仅在通过该门后消费，若已有缺列 V009 则按 registry 从 V028+ 前向迁移，不改旧脚本或猜造历史值。
+
+## 协调者采用记录
+
+- 作者 `40cd72717abf079d3373c072eddea19f881a8916`，范围 `a13e0cd..40cd727`；独立 `/root/b00_upload_review` 判定 spec compliant、quality Approved，Critical/Important/Minor 均0，原始报告见 [独立评审](database-upload-addendum-independent-review.md)。
+- 原字节集成 `33dd83f`；除中央迁移登记保留协调者 V006 时间线记录外，七个对应路径与作者 HEAD 完全一致。采用只更新状态/保存原报告，不改已验证生成 DDL/数据字典/ER，DDL SHA256 仍为 `402def655f133ab10caa44b94e89ed6692756623d32705e6ab63c8176d79c362`。
+- 1.1 历史 metadata、原始三份评审和全部冻结旧 SQL 保留；V006 偏差由独立记录处理，不由本次评审覆盖或免除。
+- 允许后续 B-04/V009 消费两列及恢复协议；真实应用恢复、并发、权限、文件登记和两个后端共同契约仍未验收。

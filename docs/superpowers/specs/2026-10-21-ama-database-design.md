@@ -1,6 +1,6 @@
 # AMA 数据库详细设计基线
 
-拟议版本：**B00-1.2-review**，2026-10-22；状态：**上传元数据定向补充，待独立增量评审，尚未采用**。已采用的 **B00-1.1-review** 及 R1—R6 独立关闭结论保持有效；本次仅补上传初始化名称/用途的持久化与恢复约束，B-04/V009 实施前须完成本增量评审。不是阶段 B 实现完成、平台联调、容量或上线批准。增量 BASE `a13e0cd`，工作树 `/home/tanren/ama/.worktrees/phase-b-upload-design`；[本次范围与证据](../../acceptance/b/database-upload-addendum-review.md)。
+设计版本：**B00-1.2-review**，2026-10-22；状态：**上传元数据定向补充已通过独立增量评审，采用为当前设计基线**。已采用的 **B00-1.1-review** 及 R1—R6 独立关闭结论保持有效；本次仅补上传初始化名称/用途的持久化与恢复约束，本增量设计门已通过，B-04/V009 仍须完成自己的实施与回归审查。不是阶段 B 实现完成、平台联调、容量或上线批准。增量 BASE `a13e0cd`，工作树 `/home/tanren/ama/.worktrees/phase-b-upload-design`；[本次范围与证据](../../acceptance/b/database-upload-addendum-review.md)。
 
 既有采用历史：首版 `c73a765` 有六项 Important，未采用；`bd43ca3` 修正列表共同查询、个人名称去重、专题说明、同确认发布重试、转写处理快照与片段标记，经独立复审全部关闭，集成 `69f33a8`＋`bca9b89`，由 `6dd2cdd` 采用为 1.1。原始 BASE `e8c88d2aaed1a19b0d0202ddce9cb51ee01d84ee`、FIX_BASE `c73a7656fc1c5c2cb07d8b94ead68122059b549f` 与原工作树 `/home/tanren/ama/.worktrees/phase-b-database-design` 仅指该历史版；原评审及 metadata 文件保持原字节。
 
