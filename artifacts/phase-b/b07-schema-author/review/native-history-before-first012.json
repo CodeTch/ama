@@ -1,0 +1,179 @@
+{
+  "captured_utc": "2026-10-21T20:54:09.167873+00:00",
+  "stage": "before-first012",
+  "inspection": {
+    "id": "b62b9b2b8f2b7bb47db21fa4561c90e3ba325138250975531f5585e16ede460e",
+    "name": "/ama-test-b01-feb4b5365dae",
+    "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "image_id": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "label": "b01",
+    "args": [
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_0900_ai_ci",
+      "--default-time-zone=+00:00",
+      "--innodb-use-native-aio=OFF"
+    ],
+    "ports": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "44915"
+        }
+      ]
+    },
+    "mounts": [
+      {
+        "Destination": "/var/lib/mysql",
+        "Driver": "local",
+        "Mode": "",
+        "Name": "483a44f8cb8e92977279e7280ca61ccdfab37221326d79e1d44f87ec276069a1",
+        "Propagation": "",
+        "RW": true,
+        "Source": "/var/lib/docker/volumes/483a44f8cb8e92977279e7280ca61ccdfab37221326d79e1d44f87ec276069a1/_data",
+        "Type": "volume"
+      }
+    ],
+    "auto_remove": false
+  },
+  "clock": {
+    "native_aio": 0,
+    "server_utc": "2026-10-21 20:54:09.148051",
+    "server_epoch": 1792616049,
+    "server_version": "8.4.6",
+    "system_time_zone": "UTC",
+    "session_time_zone": "+00:00"
+  },
+  "history": [
+    {
+      "rank": 1,
+      "type": "SQL",
+      "script": "V001__foundation.sql",
+      "success": 1,
+      "version": "001",
+      "checksum": 1201435595,
+      "description": "foundation",
+      "installed_by": "ama_test",
+      "execution_time": 132,
+      "installed_epoch": 1792615617,
+      "installed_on_utc": "2026-10-21 20:46:57.000000"
+    },
+    {
+      "rank": 2,
+      "type": "SQL",
+      "script": "V002__identity_acl.sql",
+      "success": 1,
+      "version": "002",
+      "checksum": 1757300424,
+      "description": "identity acl",
+      "installed_by": "ama_test",
+      "execution_time": 313,
+      "installed_epoch": 1792615617,
+      "installed_on_utc": "2026-10-21 20:46:57.000000"
+    },
+    {
+      "rank": 3,
+      "type": "SQL",
+      "script": "V005__tasks_outbox.sql",
+      "success": 1,
+      "version": "005",
+      "checksum": -1999355348,
+      "description": "tasks outbox",
+      "installed_by": "ama_test",
+      "execution_time": 578,
+      "installed_epoch": 1792615618,
+      "installed_on_utc": "2026-10-21 20:46:58.000000"
+    },
+    {
+      "rank": 4,
+      "type": "SQL",
+      "script": "V006__audit_metadata.sql",
+      "success": 1,
+      "version": "006",
+      "checksum": -1744360556,
+      "description": "audit metadata",
+      "installed_by": "ama_test",
+      "execution_time": 268,
+      "installed_epoch": 1792615618,
+      "installed_on_utc": "2026-10-21 20:46:58.000000"
+    },
+    {
+      "rank": 5,
+      "type": "SQL",
+      "script": "V007__identity_sessions.sql",
+      "success": 1,
+      "version": "007",
+      "checksum": 157746768,
+      "description": "identity sessions",
+      "installed_by": "ama_test",
+      "execution_time": 868,
+      "installed_epoch": 1792615619,
+      "installed_on_utc": "2026-10-21 20:46:59.000000"
+    },
+    {
+      "rank": 6,
+      "type": "SQL",
+      "script": "V008__meeting_schema.sql",
+      "success": 1,
+      "version": "008",
+      "checksum": -1747387036,
+      "description": "meeting schema",
+      "installed_by": "ama_test",
+      "execution_time": 4528,
+      "installed_epoch": 1792615623,
+      "installed_on_utc": "2026-10-21 20:47:03.000000"
+    },
+    {
+      "rank": 7,
+      "type": "SQL",
+      "script": "V009__file_schema.sql",
+      "success": 1,
+      "version": "009",
+      "checksum": -287948759,
+      "description": "file schema",
+      "installed_by": "ama_test",
+      "execution_time": 3180,
+      "installed_epoch": 1792615627,
+      "installed_on_utc": "2026-10-21 20:47:07.000000"
+    },
+    {
+      "rank": 8,
+      "type": "SQL",
+      "script": "V010__reliable_execution.sql",
+      "success": 1,
+      "version": "010",
+      "checksum": -1187397378,
+      "description": "reliable execution",
+      "installed_by": "ama_test",
+      "execution_time": 3108,
+      "installed_epoch": 1792615630,
+      "installed_on_utc": "2026-10-21 20:47:10.000000"
+    },
+    {
+      "rank": 9,
+      "type": "SQL",
+      "script": "V011__transcript_schema.sql",
+      "success": 1,
+      "version": "011",
+      "checksum": -286330771,
+      "description": "transcript schema",
+      "installed_by": "ama_test",
+      "execution_time": 4470,
+      "installed_epoch": 1792615634,
+      "installed_on_utc": "2026-10-21 20:47:14.000000"
+    },
+    {
+      "rank": 10,
+      "type": "SQL",
+      "script": "V011_1__transcript_material_index.sql",
+      "success": 1,
+      "version": "011.1",
+      "checksum": -570494170,
+      "description": "transcript material index",
+      "installed_by": "ama_test",
+      "execution_time": 50,
+      "installed_epoch": 1792615635,
+      "installed_on_utc": "2026-10-21 20:47:15.000000"
+    }
+  ],
+  "jdbc_timestamp_note": "Original snapshots stringify JDBC timestamps in JVM Asia/Shanghai; only these native DATE_FORMAT/epoch fields are server UTC."
+}

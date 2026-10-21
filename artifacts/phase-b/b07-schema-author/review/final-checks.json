@@ -1,0 +1,111 @@
+{
+  "status": "AUTHOR_EXECUTED_FUNCTIONAL_GREEN_NOT_INDEPENDENT_ACCEPTANCE",
+  "checked_utc": "2026-10-21T20:57:15.934578+00:00",
+  "integration": {
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "unit_tests": 62,
+  "unit_suites": [
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.storage.StorageRouterTest.xml",
+      "tests": 8
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "tests": 5
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "tests": 4
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.task.TaskMetadataTest.xml",
+      "tests": 2
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "tests": 19
+    },
+    {
+      "path": "backend/api/target/surefire-reports/TEST-ama.api.DeploymentConfigTest.xml",
+      "tests": 9
+    },
+    {
+      "path": "backend/api/target/surefire-reports/TEST-ama.api.IdentityContractsTest.xml",
+      "tests": 3
+    },
+    {
+      "path": "backend/api/target/surefire-reports/TEST-ama.api.IdentitySecurityTest.xml",
+      "tests": 6
+    },
+    {
+      "path": "backend/integration-tests/target/surefire-reports/TEST-ama.storage.ContractFixtureTest.xml",
+      "tests": 1
+    },
+    {
+      "path": "backend/integration-tests/target/surefire-reports/TEST-ama.support.ContractClientTest.xml",
+      "tests": 2
+    },
+    {
+      "path": "backend/worker/target/surefire-reports/TEST-ama.worker.WorkerLoopTest.xml",
+      "tests": 3
+    }
+  ],
+  "metadata_counts": {
+    "tables": 19,
+    "columns": 123,
+    "indexes": 92,
+    "checks": 21,
+    "foreign_keys": 45
+  },
+  "lower_tables_including_history": 39,
+  "final_tables_including_history": 58,
+  "target_rows_after_rollback": 0,
+  "lower_rows_ddl_metadata_history_and_sha_preserved": true,
+  "private_target_rerun_migrations": 0,
+  "production_latest_rerun_migrations": 0,
+  "exact_same_complete_snapshot_sha256": "97e08a0988ab9f058f5bb0e1704ae3b2db1e80425efb18e0500ed8d011f5cde6",
+  "candidate_sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+  "oracle_sha256": "d051aaa95aeec4497f38e48190f4f396d7356ea69089196c8617119f66e9f987",
+  "native_first_apply": {
+    "rank": 11,
+    "type": "SQL",
+    "script": "V012__minutes_evidence.sql",
+    "success": 1,
+    "version": "012",
+    "checksum": 2101765957,
+    "description": "minutes evidence",
+    "installed_by": "ama_test",
+    "execution_time": 10135,
+    "installed_epoch": 1792616106,
+    "installed_on_utc": "2026-10-21 20:55:06.000000"
+  },
+  "central_ack": {
+    "status": "EXPLICIT_ROOT_FIRST_APPLY_ACK",
+    "register_commit": "7b80ae282ac898af5cf0685267eb408ffde11ae5",
+    "central_freeze_utc": "2026-10-21 20:53:07 UTC",
+    "ack_utc": "2026-10-21T20:53:38.528017+00:00",
+    "frozen_sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+    "frozen_bytes": 21260,
+    "authorized_fixture_id": "b62b9b2b8f2b7bb47db21fa4561c90e3ba325138250975531f5585e16ede460e",
+    "authorized_fixture_name": "ama-test-b01-feb4b5365dae",
+    "authorized_loopback_port": 44915,
+    "authorized_lower_versions": [
+      "001",
+      "002",
+      "005",
+      "006",
+      "007",
+      "008",
+      "009",
+      "010",
+      "011",
+      "011.1"
+    ],
+    "root_message": "Root full-read complete bytes, registered committed freeze, explicitly authorizes first V012 on same exact owned fixture only. SQL failure stops without reset/repair/overwrite; future correction centrally allocated."
+  },
+  "boundaries": "Physical CHECK/FK/uniqueness and format only; accepted raw SQL identity/meeting/target/hash examples do not prove application authority, hash correctness, semantic truth, complete sources or immutable history."
+}

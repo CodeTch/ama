@@ -1,0 +1,24 @@
+{
+  "status": "EXPLICIT_ROOT_FIRST_APPLY_ACK",
+  "register_commit": "7b80ae282ac898af5cf0685267eb408ffde11ae5",
+  "central_freeze_utc": "2026-10-21 20:53:07 UTC",
+  "ack_utc": "2026-10-21T20:53:38.528017+00:00",
+  "frozen_sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+  "frozen_bytes": 21260,
+  "authorized_fixture_id": "b62b9b2b8f2b7bb47db21fa4561c90e3ba325138250975531f5585e16ede460e",
+  "authorized_fixture_name": "ama-test-b01-feb4b5365dae",
+  "authorized_loopback_port": 44915,
+  "authorized_lower_versions": [
+    "001",
+    "002",
+    "005",
+    "006",
+    "007",
+    "008",
+    "009",
+    "010",
+    "011",
+    "011.1"
+  ],
+  "root_message": "Root full-read complete bytes, registered committed freeze, explicitly authorizes first V012 on same exact owned fixture only. SQL failure stops without reset/repair/overwrite; future correction centrally allocated."
+}
