@@ -18,7 +18,7 @@
 |DIFF-12 旧队列草稿反序/懒建subject|OPEN|原稿/日志已归档保全；新替代实现及fix1 b126db2已完整独立复审采用。领域显式fence/独立operation token运行时和各消费者须分别评审。|
 |DIFF-13 旧permit隐式配置/无证释放|OPEN|原稿保全；新JDBC配置/准入/执行绑定及排序全模型预锁/RR计数修复已独立复审采用；真实quota/cutoff资格仍OPEN。|
 
-|DIFF-14 纪要目录/未选敏感项/建议/人类复核持久化|设计已补齐，运行时OPEN|1.3新增八表及排除双标签PK/CHECK，实际93表709列；[独立评审](database-generation-addendum-independent-review.md)0findings。V012七表已随十九表结构独立采用；V013最终membership及双physicalFK结构已独立PASS采用；业务权限/哈希/复核/最终确认未实施，两项交互选择pending。|
+|DIFF-14 纪要目录/未选敏感项/建议/人类复核持久化|设计已补齐，运行时OPEN|1.3新增八表及排除双标签PK/CHECK，实际93表709列；[独立评审](database-generation-addendum-independent-review.md)0findings。V012七表已随十九表结构独立采用；V013最终membership及双physicalFK结构已独立PASS采用；业务权限/哈希/复核/最终确认未实施；两项交互选择已由用户确认，见[首版与核对规则](../../superpowers/specs/2026-10-22-ama-minutes-ux-decisions.md)，实现和验收仍OPEN。|
 
 |DIFF-15 跨来源复制后的解析上下文/使用项追溯|发现技术缺口，D01设计及运行时OPEN|[纯S1修订契约](../../superpowers/specs/2026-10-22-ama-minutes-contract.md)只明确使用项投影和不支持路径失败，未新增持久来源边。[D01必做设计](material-provenance-design-prerequisite.md)须在复杂材料/一般来源重绑定启用前独立评审；不是删除需求或完整B07验收。|
 
