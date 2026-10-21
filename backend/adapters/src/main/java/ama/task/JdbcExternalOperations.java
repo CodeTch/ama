@@ -77,7 +77,20 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   var seen=operation(token.operationId(),false,false);if(seen.isEmpty())return false;var rows=lock(seen.orElseThrow(),false);if(rows.isEmpty())return false;var l=rows.orElseThrow();if(!valid(l.op(),l.execution(),token))return false;
   j.update("UPDATE external_operation SET reconcile_expires_at=UTC_TIMESTAMP(6)+INTERVAL 20 SECOND,next_check_at=UTC_TIMESTAMP(6)+INTERVAL 20 SECOND WHERE id=?",token.operationId());return true;
  });}
- @Override public ObservationResult observe(OperationToken token,ExternalObservation observation,Runnable effects){revokeCallAuthority(token);return q.work(()->{
+ private static final int OBSERVATION_DISCOVERY_ATTEMPTS=4;
+ private static final class RediscoverObservation extends RuntimeException {}
+ @Override public ObservationResult observe(OperationToken token,ExternalObservation observation,Runnable effects){
+  independent();revokeCallAuthority(token);
+  for(int attempt=0;attempt<OBSERVATION_DISCOVERY_ATTEMPTS;attempt++){
+   try{return q.work(()->observeCurrent(token,observation,effects));}
+   catch(RediscoverObservation changed){
+    // q.work has rolled back and released every subject/task/operation lock and the RR ReadView.
+    // Never discover and lock a newly current task while retaining the previous operation lock.
+   }
+  }
+  throw new ObservationRetryRequiredException();
+ }
+ private ObservationResult observeCurrent(OperationToken token,ExternalObservation observation,Runnable effects){
   var seen=operation(token.operationId(),false,false);if(seen.isEmpty())return ObservationResult.STALE_TOKEN;
   // Lock ALL involved tasks before operation when handling an old-generation contradiction.
   var current=seen.orElseThrow();var old=execution(current.id(),token.executionNo(),false,false);
@@ -85,11 +98,20 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   var currentEx=execution(current.id(),current.execution(),false,false).orElseThrow();
   var currentTask=q.row(currentEx.task(),false,false).orElseThrow();var oldTask=q.row(old.orElseThrow().task(),false,false).orElseThrow();
   var domain=q.lockDomain(currentTask.spec(),false).orElseThrow();
-  for(String id:new TreeSet<>(List.of(currentTask.id(),oldTask.id())))q.row(id,true,false).orElseThrow();
-  var o=operation(current.id(),true,false).orElseThrow();if(o.execution()!=current.execution())return ObservationResult.STALE_TOKEN;
-  var e=execution(o.id(),o.execution(),true,false).orElseThrow();
+  var heldTasks=new HashMap<String,JdbcTaskQueue.Row>();
+  for(String id:new TreeSet<>(List.of(currentTask.id(),oldTask.id())))heldTasks.put(id,q.row(id,true,false).orElseThrow());
+  currentTask=heldTasks.get(currentTask.id());oldTask=heldTasks.get(oldTask.id());
+  var o=operation(current.id(),true,false).orElseThrow();
+  if(o.execution()!=current.execution())throw new RediscoverObservation();
+  var heldExecutions=new HashMap<Long,Execution>();
+  for(long number:new TreeSet<>(List.of(o.execution(),token.executionNo())))
+   heldExecutions.put(number,execution(o.id(),number,true,false).orElseThrow());
+  var e=heldExecutions.get(o.execution());var tokenExecution=heldExecutions.get(token.executionNo());
+  if(!e.task().equals(currentTask.id())||!tokenExecution.task().equals(oldTask.id()))throw new RediscoverObservation();
+  if(!tokenExecution.id().equals(token.executionId())||!o.subject().equals(token.subject()))return ObservationResult.STALE_TOKEN;
   if(!valid(o,e,token)){
-   if(observation.outcome()==ExternalOutcome.SUCCEEDED&&old.orElseThrow().state().equals("FAILED")&&old.orElseThrow().basis()!=null){
+   if(observation.outcome()==ExternalOutcome.SUCCEEDED&&tokenExecution.state().equals("FAILED")
+      &&tokenExecution.basis()!=null&&tokenExecution.evidence()!=null&&tokenExecution.verified()!=null){
     q.policy(oldTask.spec()).validateExternalObservation(oldTask.spec(),observation);
     j.update("UPDATE external_operation SET state='MANUAL_REQUIRED',last_error='CONTRADICTORY_SUCCESS',external_result_id=?,reconcile_epoch=reconcile_epoch+1 WHERE id=?",observation.externalResultId(),o.id());
     q.event("EXTERNAL_CONTRADICTION",oldTask);return ObservationResult.QUARANTINED;
@@ -109,7 +131,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   j.update("UPDATE external_operation SET state=?,external_result_id=?,last_error=? WHERE id=?",state,observation.externalResultId(),observation.errorCode(),o.id());
   q.finish(currentTask,canApply?state:"STALE",canApply?observation.errorCode():"BUSINESS_FENCED",canApply?observation.output():null);
   return canApply?ObservationResult.APPLIED:ObservationResult.RECORDED_FENCED;
- });}
+ }
  @Override public String retryAfterZeroEffect(String id,long expected,TaskSpec next,ExternalRequest request){return q.work(()->{
   // Serialize the subject before creating a consistent-read snapshot or looking up the producer.
   q.lockDomain(next,false).orElseThrow();q.policy(next).validateInput(next);q.policy(next).validateExternalRequest(next,request);
