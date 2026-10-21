@@ -28,8 +28,8 @@
 |V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|来源39b447d → 集成bec9393；SHA859970b8…冻结；前置实现独立评审通过，正例/隔离拒绝证据已保全；完整B02授权切换待V008|
 |V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|来源ff22197 → 集成dac4cc1；SHAfa44424a…冻结，结构前置独立Approved0findings；正例与两类拒绝已保全，完整B03/B02授权仍OPEN|
 |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|来源45715b6+fd3c3d8 → 集成1a00ca4；SHA79f04898…冻结，结构前置独立Approved0findings/95已选用例通过；完整B04仍OPEN|
-|V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|候选03e89cc8…已共享冻结；正式应用及完整并发实现评审待完成|
-|V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|预留，未编写|
+|V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|03e89cc8…冻结/首次成功；完整框架及fix1已独立采用（8a3b77b/e9d2eca/a79ce67），真实公司/领域消费者门另计|
+|V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|正式候选a926c8b5…共享冻结，root静态核对完成；第一次应用待中央ACK/历史记录|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
 |V013|B-08|原V008|final_confirmation、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
@@ -144,3 +144,11 @@ R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑�
 V01003e89cc8…/35136bytes/checksum-1187397378不变，首次冻结和成功观察保留，旧001/002/005/006/007/008/009校验不改。原201Git对象/144sealed证据/原始预备stash和29项新fix证据均保全。修复只改运行时代码，没有重写SQL、repair、reset或新增DBrestart。详细采用范围、原47IT与fix5/受影响22的执行区别、实际本地DB恢复1476ms、独立observe与同事实重交规则见[框架采用记录](../acceptance/b/task-execution-adoption.md)。
 
 只解锁兼容B03/B02ACL业务开发和不变V011子集正式迁移的受控验证。V011首次正式应用仍需root完整SQL读取、SHA登记与ACK；完整B04/B06以后消费者及B阶段验收不提前通过。真实SSO/模型/知识库/邮件/额度cutoff与RHEL原生I/O/HA/容量前置继续保留。
+
+## V011 首次正式应用前冻结（2026-10-22）
+
+拥有者phase-b-transcript-schema，正式文件V011__transcript_schema.sql，SHA256 **a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb**，10941bytes。root已完整读取，并独立程序核对8CREATE逐字及21deployed FK逐行等于独立采用B00-1.2 DDL402def65…；只有fk_transcription_input_3→material_snapshot延至V017。除UTF8/UTC两个SET外无额外DDL/DML/seed/IF NOT EXISTS。八CREATE全部早于FK，processing/source循环用先建表后外键处理。
+
+中央冻结记录时间：2026-10-22T04:08:19.900881+08:00。完整候选字节及比较JSON保存在artifacts/phase-b/b06-schema-freeze；原准备raw-review-only副本及compile-only记录不改称正式应用。作者报告新独有ama-test-b01-59f108f79cad:45591 initial0tables、实际nativeAIO0、001/002/005/006/007/008/009/010八版本success；真实缺八表RED1assertfailure/0error/0skip，早先Flyway target011无SQL的配置错误单独保留不算RED。中央ACK需核对既有安全capture后单独发出，不能因本记录提前执行。
+
+自正式共享起字节永久冻结；任何后续问题先登记新有序版本，不修改SQL、repair/reset/outOfOrder。此处不提前验收V011/B06业务/格式/确认/标记服务，也不表示公司或容量/原生I/O资格。仅B00-1.2不变八表子集；V012目录/复核增量设计仍待独立评审，不随本冻结获采用。
