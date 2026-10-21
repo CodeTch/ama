@@ -30,8 +30,7 @@ final class RangeReader {
                                                 .bucket(io.config.dataBucket())
                                                 .key(physical)
                                                 .build()));
-        long size = head.contentLength();
-        if (size < 0) throw ControlCodec.unavailable();
+        long size = S3Objects.contentLength(head.contentLength());
         if (offset > size || length > size - offset)
             throw new StorageException(ErrorCode.INVALID_RANGE);
         if (length == 0) return InputStream.nullInputStream();
@@ -48,61 +47,70 @@ final class RangeReader {
             request.ifMatch(head.eTag());
         }
         var in = io.raw(request.build());
-        var response = in.response();
-        if (response.sdkHttpResponse().statusCode() != 206
-                || response.contentLength() != length
-                || !("bytes " + offset + "-" + (offset + length - 1) + "/" + size)
-                        .equals(response.contentRange())
-                || (concrete && !version.equals(response.versionId()))
-                || !Objects.equals(head.eTag(), response.eTag())) {
-            io.release(in);
+        boolean transferred = false;
+        try {
+            var response = in.response();
+            if (response.sdkHttpResponse().statusCode() != 206
+                    || S3Objects.contentLength(response.contentLength()) != length
+                    || !("bytes " + offset + "-" + (offset + length - 1) + "/" + size)
+                            .equals(response.contentRange())
+                    || (concrete && !version.equals(response.versionId()))
+                    || !Objects.equals(head.eTag(), response.eTag())) {
+                throw ControlCodec.unavailable();
+            }
+            InputStream result =
+                    new InputStream() {
+                        long left = length;
+                        boolean closed;
+
+                        private IOException fail() {
+                            close();
+                            return new IOException("STORAGE_UNAVAILABLE");
+                        }
+
+                        @Override
+                        public int read() throws IOException {
+                            byte[] one = new byte[1];
+                            return read(one, 0, 1) == -1 ? -1 : one[0] & 255;
+                        }
+
+                        @Override
+                        public int read(byte[] b, int off, int len) throws IOException {
+                            Objects.checkFromIndexSize(off, len, b.length);
+                            if (len == 0) return 0;
+                            if (closed) {
+                                if (left == 0) return -1;
+                                throw new IOException("STORAGE_UNAVAILABLE");
+                            }
+                            try {
+                                if (left == 0) {
+                                    if (in.read() != -1) throw fail();
+                                    close();
+                                    return -1;
+                                }
+                                int n = in.read(b, off, (int) Math.min(len, left));
+                                if (n < 0) throw fail();
+                                left -= n;
+                                return n;
+                            } catch (IOException | RuntimeException e) {
+                                throw fail();
+                            }
+                        }
+
+                        @Override
+                        public void close() {
+                            if (!closed) {
+                                closed = true;
+                                io.release(in);
+                            }
+                        }
+                    };
+            transferred = true;
+            return result;
+        } catch (RuntimeException e) {
             throw ControlCodec.unavailable();
+        } finally {
+            if (!transferred) io.release(in);
         }
-        return new InputStream() {
-            long left = length;
-            boolean closed;
-
-            private IOException fail() {
-                close();
-                return new IOException("STORAGE_UNAVAILABLE");
-            }
-
-            @Override
-            public int read() throws IOException {
-                byte[] one = new byte[1];
-                return read(one, 0, 1) == -1 ? -1 : one[0] & 255;
-            }
-
-            @Override
-            public int read(byte[] b, int off, int len) throws IOException {
-                Objects.checkFromIndexSize(off, len, b.length);
-                if (len == 0) return 0;
-                if (closed) {
-                    if (left == 0) return -1;
-                    throw new IOException("STORAGE_UNAVAILABLE");
-                }
-                try {
-                    if (left == 0) {
-                        if (in.read() != -1) throw fail();
-                        close();
-                        return -1;
-                    }
-                    int n = in.read(b, off, (int) Math.min(len, left));
-                    if (n < 0) throw fail();
-                    left -= n;
-                    return n;
-                } catch (IOException | RuntimeException e) {
-                    throw fail();
-                }
-            }
-
-            @Override
-            public void close() {
-                if (!closed) {
-                    closed = true;
-                    io.release(in);
-                }
-            }
-        };
     }
 }

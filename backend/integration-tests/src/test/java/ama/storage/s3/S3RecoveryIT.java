@@ -28,30 +28,30 @@ class S3RecoveryIT {
                     data.length,
                     ControlCodec.hash(data));
             proxy.settle();
-            proxy.events.clear();
+            proxy.reset();
             try (var in = s.read(key("larger-range"), data.length / 2, 1)) {
                 assertArrayEquals(bytes("q"), in.readAllBytes());
             }
             proxy.settle();
             assertEquals(
                     1,
-                    proxy.events.stream()
+                    proxy.snapshot().stream()
                             .filter(e -> e.method().equals("GET") && e.path().contains("/data/v3/"))
                             .count());
             assertEquals(
                     1,
-                    proxy.events.stream()
+                    proxy.snapshot().stream()
                             .filter(e -> e.path().contains("/data/v3/"))
                             .mapToLong(WireProxy.Event::upstreamBytes)
                             .sum());
             capture("range-64MiB-one", proxy);
-            proxy.events.clear();
+            proxy.reset();
             try (var in = s.read(key("larger-range"), 0, data.length)) {
                 assertEquals('q', in.read());
             }
             proxy.settle();
             long bytes =
-                    proxy.events.stream()
+                    proxy.snapshot().stream()
                             .filter(e -> e.path().contains("/data/v3/"))
                             .mapToLong(WireProxy.Event::upstreamBytes)
                             .sum();

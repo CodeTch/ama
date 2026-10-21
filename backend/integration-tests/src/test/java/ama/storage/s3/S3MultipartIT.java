@@ -40,11 +40,11 @@ class S3MultipartIT {
             proxy.settle();
             assertEquals(
                     1,
-                    proxy.events.stream()
+                    proxy.snapshot().stream()
                             .filter(e -> e.method().equals("PUT") && e.path().contains("/data/v3/"))
                             .count());
             assertEquals(
-                    0, proxy.events.stream().filter(e -> e.path().contains("partNumber=")).count());
+                    0, proxy.snapshot().stream().filter(e -> e.path().contains("partNumber=")).count());
             capture("10001-tiny-logical", proxy);
         }
     }
@@ -80,7 +80,7 @@ class S3MultipartIT {
             assertEquals(expected, s.complete(t, List.of(p1, p2, p3), expected).sha256());
             proxy.settle();
             var uploads =
-                    proxy.events.stream()
+                    proxy.snapshot().stream()
                             .filter(
                                     e ->
                                             e.method().equals("PUT")

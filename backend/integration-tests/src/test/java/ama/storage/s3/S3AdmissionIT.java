@@ -9,9 +9,9 @@ import java.util.*;
 import java.util.concurrent.*;
 import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.core.interceptor.*;
-import software.amazon.awssdk.core.retry.RetryPolicy;
 import software.amazon.awssdk.http.urlconnection.*;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.retries.StandardRetryStrategy;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.UploadPartRequest;
 
@@ -74,7 +74,7 @@ class S3AdmissionIT {
                               .build()))
               .overrideConfiguration(
                   b ->
-                      b.retryPolicy(RetryPolicy.none())
+                      b.retryStrategy(StandardRetryStrategy.builder().maxAttempts(1).build())
                           .apiCallTimeout(Duration.ofSeconds(20))
                           .addExecutionInterceptor(barrier))
               .build()) {

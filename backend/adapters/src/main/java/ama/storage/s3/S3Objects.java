@@ -98,11 +98,16 @@ final class S3Objects {
         }
     }
 
+    static long contentLength(Long value) {
+        if (value == null || value < 0) throw ControlCodec.unavailable();
+        return value;
+    }
+
     byte[] get(String key) {
         var in = raw(GetObjectRequest.builder().bucket(config.controlBucket()).key(key).build());
         try {
-            long n = in.response().contentLength();
-            if (n < 0 || n > ControlCodec.MAX) throw ControlCodec.unavailable();
+            long n = contentLength(in.response().contentLength());
+            if (n > ControlCodec.MAX) throw ControlCodec.unavailable();
             byte[] bytes = in.readNBytes((int) n + 1);
             if (bytes.length != n) throw ControlCodec.unavailable();
             return bytes;
@@ -171,6 +176,7 @@ final class S3Objects {
     BlobStat stat(String physical) {
         var in = raw(GetObjectRequest.builder().bucket(config.dataBucket()).key(physical).build());
         try {
+            long expected = contentLength(in.response().contentLength());
             var digest = ControlCodec.digest();
             long n = 0;
             byte[] buf = new byte[64 * 1024];
@@ -179,7 +185,7 @@ final class S3Objects {
                 n = Math.addExact(n, k);
                 digest.update(buf, 0, k);
             }
-            if (n != in.response().contentLength()) throw ControlCodec.unavailable();
+            if (n != expected) throw ControlCodec.unavailable();
             return new BlobStat(n, ControlCodec.hex(digest.digest()), in.response().versionId());
         } catch (IOException | ArithmeticException e) {
             throw ControlCodec.unavailable();

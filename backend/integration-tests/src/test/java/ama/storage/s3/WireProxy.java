@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /** Test-only streaming HTTP proxy. Preserves signed Host, counts bytes read from real upstream. */
 final class WireProxy implements AutoCloseable {
@@ -34,7 +35,7 @@ final class WireProxy implements AutoCloseable {
   final ServerSocket listener;
   final URI upstream;
   final ExecutorService pool = Executors.newCachedThreadPool();
-  final List<Event> events = new CopyOnWriteArrayList<>();
+  private final List<Event> events = new ArrayList<>();
   final AtomicReference<Fault> fault = new AtomicReference<>();
   final AtomicInteger active = new AtomicInteger();
   final AtomicInteger upstreamActive = new AtomicInteger(), peakUpstream = new AtomicInteger();
@@ -48,7 +49,9 @@ final class WireProxy implements AutoCloseable {
           while (!closed)
             try {
               Socket socket = listener.accept();
-              active.incrementAndGet();
+              synchronized (events) {
+                active.incrementAndGet();
+              }
               pool.submit(() -> handle(socket));
             } catch (IOException e) {
               if (!closed) throw new UncheckedIOException(e);
@@ -180,6 +183,10 @@ final class WireProxy implements AutoCloseable {
       if (f != null && f.action.equals("wrong-range")) outgoing.put("content-range", "bytes 0-0/1");
       if (f != null && f.action.equals("overlong"))
         outgoing.put("content-length", Long.toString(body + 1));
+      if (f != null && Set.of("omit-length", "chunked-no-length").contains(f.action))
+        outgoing.remove("content-length");
+      boolean chunked = f != null && f.action.equals("chunked-no-length");
+      if (chunked) outgoing.put("transfer-encoding", "chunked");
       if (f != null && f.action.equals("wrong-version"))
         outgoing.put("x-amz-version-id", "wrong-version");
       if (f != null && Set.of("error200", "error409", "error412", "nosuch").contains(f.action)) {
@@ -233,9 +240,15 @@ final class WireProxy implements AutoCloseable {
           upstreamActive.decrementAndGet();
           upstreamInFlight = false;
         }
+        if (chunked) text(clientOut, Integer.toHexString(k) + "\r\n");
         clientOut.write(b, 0, k);
+        if (chunked) text(clientOut, "\r\n");
         clientOut.flush();
         sent += k;
+      }
+      if (chunked && received == body) {
+        text(clientOut, "0\r\n\r\n");
+        clientOut.flush();
       }
       if (f != null) f.reached.countDown();
     } catch (Exception e) {
@@ -247,31 +260,54 @@ final class WireProxy implements AutoCloseable {
         if (request.containsKey(k)) safe.put(k, request.get(k));
       safe.put("signed", Boolean.toString(request.containsKey("authorization")));
       // Native UploadId and credentials never enter retained events.
-      events.add(
-          new Event(
-              method,
-              path.replaceAll("uploadId=[^& ]+", "uploadId=REDACTED"),
-              Map.copyOf(safe),
-              status,
-              response.entrySet().stream()
-                  .filter(
-                      e ->
-                          Set.of("content-length", "content-range", "x-amz-version-id", "etag")
-                              .contains(e.getKey()))
-                  .collect(
-                      java.util.stream.Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
-              received,
-              sent,
-              injected));
-      active.decrementAndGet();
+      synchronized (events) {
+        events.add(
+            new Event(
+                method,
+                path.replaceAll("uploadId=[^& ]+", "uploadId=REDACTED"),
+                Map.copyOf(safe),
+                status,
+                response.entrySet().stream()
+                    .filter(
+                        e ->
+                            Set.of("content-length", "content-range", "x-amz-version-id", "etag")
+                                .contains(e.getKey()))
+                    .collect(
+                        java.util.stream.Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                received,
+                sent,
+                injected));
+        active.decrementAndGet();
+      }
     }
   }
 
   void settle() throws InterruptedException {
+    settled(() -> null);
+  }
+
+  List<Event> snapshot() throws InterruptedException {
+    return settled(() -> List.copyOf(events));
+  }
+
+  void reset() throws InterruptedException {
+    settled(
+        () -> {
+          events.clear();
+          return null;
+        });
+  }
+
+  private <T> T settled(Supplier<T> action) throws InterruptedException {
     long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
-    while (active.get() != 0 && System.nanoTime() < deadline) Thread.sleep(10);
-    if (active.get() != 0)
-      throw new AssertionError("proxy still has active exchanges; counters are incomplete");
+    while (true) {
+      synchronized (events) {
+        if (active.get() == 0) return action.get();
+      }
+      if (System.nanoTime() >= deadline)
+        throw new AssertionError("proxy still has active exchanges; counters are incomplete");
+      Thread.sleep(10);
+    }
   }
 
   @Override

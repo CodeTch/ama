@@ -73,7 +73,7 @@ class S3LayoutV3IT {
                                 .toList());
             }
             proxy.settle();
-            int count = proxy.events.size();
+            int count = proxy.snapshot().size();
             error(
                     ErrorCode.INVALID_ARGUMENT,
                     () ->
@@ -88,7 +88,7 @@ class S3LayoutV3IT {
                             s.beginUpload(
                                     new UploadSpec(f.config.backendId(), ns, ".".repeat(512), 0)));
             proxy.settle();
-            assertEquals(count, proxy.events.size());
+            assertEquals(count, proxy.snapshot().size());
             var removed = new StorageKey(f.config.backendId(), ns, "a".repeat(512));
             s.delete(removed);
             error(ErrorCode.NOT_FOUND, () -> s.stat(removed));
@@ -121,7 +121,7 @@ class S3LayoutV3IT {
                         hash(name.length() + ""));
             for (String prefix : List.of("", p, "a".repeat(198) + "/", "a".repeat(198) + "~")) {
                 proxy.settle();
-                proxy.events.clear();
+                proxy.reset();
                 List<String> found = new ArrayList<>();
                 String cursor = null;
                 do {
@@ -135,7 +135,7 @@ class S3LayoutV3IT {
                 String query = layout.prefix("meeting", prefix);
                 capture("v3-boundary-list", proxy);
                 assertTrue(
-                        proxy.events.stream()
+                        proxy.snapshot().stream()
                                 .filter(e -> e.path().contains("list-type="))
                                 .allMatch(
                                         e ->

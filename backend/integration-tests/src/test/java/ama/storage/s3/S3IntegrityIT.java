@@ -36,7 +36,7 @@ class S3IntegrityIT {
             s.put(key("p/a"), body("a"), 1, hash("a"));
             s.put(key("p/b"), body("b"), 1, hash("b"));
             proxy.settle();
-            proxy.events.clear();
+            proxy.reset();
             var pause = proxy.arm("pause", p -> p.startsWith("GET ") && p.contains("list-type="));
             var pending = pool.submit(() -> s.list("s3", "meeting", "p/", null, 1));
             assertTrue(pause.reached.await(15, TimeUnit.SECONDS));
@@ -56,7 +56,7 @@ class S3IntegrityIT {
             assertNull(second.nextCursor());
             proxy.settle();
             assertEquals(
-                    2, proxy.events.stream().filter(e -> e.path().contains("list-type=")).count());
+                    2, proxy.snapshot().stream().filter(e -> e.path().contains("list-type=")).count());
             capture("v3-delete-short-page", proxy);
         }
     }

@@ -44,7 +44,8 @@ class S3ReliabilityIT {
     Files.createDirectories(root);
     var json = new com.fasterxml.jackson.databind.ObjectMapper();
     json.writerWithDefaultPrettyPrinter()
-        .writeValue(root.resolve(name + "-" + UUID.randomUUID() + ".json").toFile(), proxy.events);
+        .writeValue(
+            root.resolve(name + "-" + UUID.randomUUID() + ".json").toFile(), proxy.snapshot());
   }
 
   @Test
@@ -56,7 +57,7 @@ class S3ReliabilityIT {
       Arrays.fill(big, (byte) 'x');
       s.put(key("large"), new ByteArrayInputStream(big), big.length, ControlCodec.hash(big));
       proxy.settle();
-      proxy.events.clear();
+      proxy.reset();
       for (long offset : new long[] {0, 8193, big.length - 1})
         try (var in = s.read(key("large"), offset, 1)) {
           assertArrayEquals(bytes("x"), in.readAllBytes());
@@ -72,7 +73,7 @@ class S3ReliabilityIT {
       error(ErrorCode.INVALID_RANGE, () -> s.read(key("large"), big.length, 1));
       proxy.settle();
       var gets =
-          proxy.events.stream()
+          proxy.snapshot().stream()
               .filter(e -> e.method().equals("GET") && e.path().contains("/data/v3/"))
               .toList();
       assertEquals(3, gets.size());
@@ -80,29 +81,29 @@ class S3ReliabilityIT {
       assertTrue(
           gets.stream().allMatch(e -> e.status() == 206 && e.request().containsKey("if-match")));
       assertTrue(
-          proxy.events.stream()
+          proxy.snapshot().stream()
               .filter(e -> e.method().equals("HEAD"))
               .allMatch(e -> e.upstreamBytes() == 0));
       capture("range-one-zero-invalid", proxy);
-      proxy.events.clear();
+      proxy.reset();
       try (var in = s.read(key("large"), 0, big.length)) {
         assertEquals('x', in.read());
       }
       proxy.settle();
       long cancel =
-          proxy.events.stream()
+          proxy.snapshot().stream()
               .filter(e -> e.path().contains("/data/v3/"))
               .mapToLong(WireProxy.Event::upstreamBytes)
               .sum();
       assertEquals(
           1,
-          proxy.events.stream()
+          proxy.snapshot().stream()
               .filter(e -> e.method().equals("GET") && e.path().contains("/data/v3/"))
               .count());
       assertTrue(cancel < 1024 * 1024, "cancellation drains object: " + cancel);
       capture("range-cancel", proxy);
       for (String fault : List.of("ignore-range", "wrong-range", "overlong", "truncate")) {
-        proxy.events.clear();
+        proxy.reset();
         proxy.arm(fault, p -> p.startsWith("GET ") && p.contains("/data/v3/"));
         if (fault.equals("truncate"))
           try (var in = s.read(key("large"), 0, 100)) {
@@ -111,14 +112,14 @@ class S3ReliabilityIT {
         else error(ErrorCode.STORAGE_UNAVAILABLE, () -> s.read(key("large"), 0, big.length));
         proxy.settle();
         assertTrue(
-            proxy.events.stream()
+            proxy.snapshot().stream()
                     .filter(e -> e.path().contains("/data/v3/"))
                     .mapToLong(WireProxy.Event::upstreamBytes)
                     .sum()
                 < 1024 * 1024);
         assertEquals(
             1,
-            proxy.events.stream()
+            proxy.snapshot().stream()
                 .filter(e -> e.method().equals("GET") && e.path().contains("/data/v3/"))
                 .count());
         capture("range-" + fault, proxy);
@@ -166,11 +167,11 @@ class S3ReliabilityIT {
           "unknown native upload must remain retained");
       capture("response-loss", proxy);
       assertTrue(
-          proxy.events.stream()
+          proxy.snapshot().stream()
               .filter(e -> e.method().equals("PUT") && !e.path().contains("partNumber="))
               .allMatch(e -> "*".equals(e.request().get("if-none-match"))));
       assertTrue(
-          proxy.events.stream()
+          proxy.snapshot().stream()
               .filter(e -> e.method().equals("POST") && e.path().contains("uploadId="))
               .allMatch(e -> "*".equals(e.request().get("if-none-match"))));
     }
@@ -278,7 +279,7 @@ class S3ReliabilityIT {
         capture("key-identity-setup", proxy);
       }
       proxy.settle();
-      proxy.events.clear();
+      proxy.reset();
       List<String> found = new ArrayList<>();
       String cursor = null;
       do {
@@ -288,7 +289,7 @@ class S3ReliabilityIT {
       } while (cursor != null);
       assertEquals(keys.stream().filter(k -> k.startsWith("p/")).sorted().toList(), found);
       proxy.settle();
-      var lists = proxy.events.stream().filter(e -> e.path().contains("list-type=")).toList();
+      var lists = proxy.snapshot().stream().filter(e -> e.path().contains("list-type=")).toList();
       assertEquals(4, lists.size());
       assertTrue(
           lists.stream()

@@ -2,9 +2,9 @@ package ama.storage.s3;
 
 import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
-import software.amazon.awssdk.core.retry.RetryPolicy;
 import software.amazon.awssdk.http.urlconnection.*;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.retries.StandardRetryStrategy;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
@@ -77,7 +77,8 @@ public final class S3Fixture implements AutoCloseable {
                                                 .build()))
                 .overrideConfiguration(
                         ClientOverrideConfiguration.builder()
-                                .retryPolicy(RetryPolicy.none())
+                                .retryStrategy(
+                                        StandardRetryStrategy.builder().maxAttempts(1).build())
                                 .build())
                 .build();
     }

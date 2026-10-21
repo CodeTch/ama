@@ -19,7 +19,7 @@ class S3ReplayBudgetIT {
                 byte[] data = new byte[mib * 1024 * 1024];
                 Arrays.fill(data, (byte) 7);
                 proxy.settle();
-                proxy.events.clear();
+                proxy.reset();
                 s.put(
                         key("replay-" + mib),
                         new ByteArrayInputStream(data),
@@ -27,7 +27,7 @@ class S3ReplayBudgetIT {
                         ControlCodec.hash(data));
                 proxy.settle();
                 long bytes =
-                        proxy.events.stream()
+                        proxy.snapshot().stream()
                                 .filter(
                                         e ->
                                                 e.method().equals("GET")
@@ -36,7 +36,7 @@ class S3ReplayBudgetIT {
                                 .mapToLong(WireProxy.Event::upstreamBytes)
                                 .sum();
                 long parts =
-                        proxy.events.stream()
+                        proxy.snapshot().stream()
                                 .filter(
                                         e ->
                                                 e.method().equals("PUT")
