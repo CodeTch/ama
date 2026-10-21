@@ -69,8 +69,12 @@ final class LocalFixture implements AutoCloseable {
     }
 
     LocalFileClient startServer() throws Exception {
+        return startServer(DurabilityHooks.NONE);
+    }
+
+    LocalFileClient startServer(DurabilityHooks hooks) throws Exception {
         ensurePki();
-        store = open(DurabilityHooks.NONE);
+        store = open(hooks);
         server =
                 new InternalFileController(
                         store,

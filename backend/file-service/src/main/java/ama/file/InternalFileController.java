@@ -214,38 +214,40 @@ public final class InternalFileController implements AutoCloseable {
     }
 
     private void read(HttpsExchange exchange, Request request) throws IOException {
-        long size = store.stat(request.key()).size();
-        long offset = request.offset() == null ? 0 : request.offset();
-        long length = request.length() == null ? size : request.length();
-        int status = 200;
-        List<String> ranges = exchange.getRequestHeaders().get("Range");
-        if (ranges != null) {
-            long[] range;
-            try {
-                if (ranges.size() != 1) throw new StorageException(ErrorCode.INVALID_RANGE);
-                range = range(ranges.getFirst(), size);
+        try (var opened = store.openRead(request.key())) {
+            long size = opened.size();
+            long offset = request.offset() == null ? 0 : request.offset();
+            long length = request.length() == null ? size : request.length();
+            int status = 200;
+            List<String> ranges = exchange.getRequestHeaders().get("Range");
+            if (ranges != null) {
+                long[] range;
+                try {
+                    if (ranges.size() != 1) throw new StorageException(ErrorCode.INVALID_RANGE);
+                    range = range(ranges.getFirst(), size);
+                } catch (StorageException e) {
+                    exchange.getResponseHeaders().set("Content-Range", "bytes */" + size);
+                    throw e;
+                }
+                offset = range[0];
+                length = range[1];
+                status = 206;
+                exchange.getResponseHeaders()
+                        .set(
+                                "Content-Range",
+                                "bytes " + offset + "-" + (offset + length - 1) + "/" + size);
+            }
+            try (InputStream in = opened.range(offset, length)) {
+                exchange.getResponseHeaders().set("Accept-Ranges", "bytes");
+                exchange.getResponseHeaders().set("Content-Type", "application/octet-stream");
+                exchange.getResponseHeaders().set("Content-Length", Long.toString(length));
+                exchange.sendResponseHeaders(status, length == 0 ? -1 : length);
+                in.transferTo(exchange.getResponseBody());
             } catch (StorageException e) {
-                exchange.getResponseHeaders().set("Content-Range", "bytes */" + size);
+                if (e.code() == ErrorCode.INVALID_RANGE)
+                    exchange.getResponseHeaders().set("Content-Range", "bytes */" + size);
                 throw e;
             }
-            offset = range[0];
-            length = range[1];
-            status = 206;
-            exchange.getResponseHeaders()
-                    .set(
-                            "Content-Range",
-                            "bytes " + offset + "-" + (offset + length - 1) + "/" + size);
-        }
-        try (InputStream in = store.read(request.key(), offset, length)) {
-            exchange.getResponseHeaders().set("Accept-Ranges", "bytes");
-            exchange.getResponseHeaders().set("Content-Type", "application/octet-stream");
-            exchange.getResponseHeaders().set("Content-Length", Long.toString(length));
-            exchange.sendResponseHeaders(status, length == 0 ? -1 : length);
-            in.transferTo(exchange.getResponseBody());
-        } catch (StorageException e) {
-            if (e.code() == ErrorCode.INVALID_RANGE)
-                exchange.getResponseHeaders().set("Content-Range", "bytes */" + size);
-            throw e;
         }
     }
 

@@ -221,6 +221,7 @@ public final class LinuxFiles {
             n = C.read(fd.value(), bytes, length);
         } while (n < 0 && Native.getLastError() == 4);
         if (n < 0) throw unavailable();
+        hooks.afterRead(fd.value(), Math.toIntExact(n));
         return n == 0 ? -1 : Math.toIntExact(n);
     }
 

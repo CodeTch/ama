@@ -146,20 +146,29 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
 
     @Override
     public InputStream read(StorageKey key, long offset, long length) {
+        var opened = openRead(key);
+        try {
+            return opened.range(offset, length);
+        } catch (RuntimeException e) {
+            opened.close();
+            throw e;
+        }
+    }
+
+    /** Size and stream belong to this one no-follow, verified file descriptor. */
+    OpenedBlob openRead(StorageKey key) {
         try (var dir = object(key, false)) {
             var data = fs.file(dir, "data", false);
             try {
                 long size = fs.identity(data).size();
-                if (offset < 0 || length < 0 || offset > size || length > size - offset)
-                    throw new StorageException(ErrorCode.INVALID_RANGE);
-                fs.seek(data, offset);
                 check();
                 var directoryIdentity = fs.identity(dir);
                 String name = ImmutableFiles.hash(json(key));
                 verifyNamed(objects, name, directoryIdentity);
-                return fs.input(
+                return new OpenedBlob(
+                        fs,
                         data,
-                        length,
+                        size,
                         () -> {
                             check();
                             verifyNamed(objects, name, directoryIdentity);
@@ -235,7 +244,7 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
             after = c.last;
         }
         String last = after;
-        TreeMap<String, BlobItem> found = new TreeMap<>();
+        TreeMap<String, StorageKey> found = new TreeMap<>();
         fs.visit(
                 objects,
                 name -> {
@@ -252,7 +261,7 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
                             // Keep only limit+1 candidates even for a large namespace.
                             if (found.size() <= limit
                                     || key.objectKey().compareTo(found.lastKey()) < 0) {
-                                found.put(key.objectKey(), new BlobItem(key, stat(key)));
+                                found.put(key.objectKey(), key);
                                 if (found.size() > limit + 1) found.pollLastEntry();
                             }
                         }
@@ -272,8 +281,10 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
                                                         prefix,
                                                         found.lastKey())))
                         : null;
+        List<BlobItem> items = new ArrayList<>();
+        for (StorageKey key : found.values()) items.add(new BlobItem(key, stat(key)));
         check();
-        return new BlobPage(new ArrayList<>(found.values()), next);
+        return new BlobPage(items, next);
     }
 
     @Override

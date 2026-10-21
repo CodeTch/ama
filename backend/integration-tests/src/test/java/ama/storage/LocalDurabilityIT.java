@@ -226,6 +226,224 @@ class LocalDurabilityIT {
         }
     }
 
+    private static class ReadObserver implements DurabilityHooks {
+        final AtomicLong payloadBytes = new AtomicLong();
+
+        @Override
+        public void before(String operation) {}
+
+        @Override
+        public void afterRead(int descriptor, int count) {
+            if (descriptorPath(descriptor).endsWith("/data")) payloadBytes.addAndGet(count);
+        }
+    }
+
+    private static String descriptorPath(int descriptor) {
+        try {
+            return Files.readSymbolicLink(Path.of("/proc/self/fd/" + descriptor)).toString();
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
+
+    private static String readMetadata(StorageKey key) throws Exception {
+        return Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(
+                        new ObjectMapper()
+                                .writeValueAsBytes(
+                                        new Request(
+                                                key, null, null, null, null, null, null, null, null,
+                                                null, null, null, null, null)));
+    }
+
+    @Test
+    void httpRangeReadsOnlyRequestedPayloadAndInvalidOrEmptyReadsNone() throws Exception {
+        var observer = new ReadObserver();
+        try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
+            var client = fixture.startServer(observer);
+            byte[] value = new byte[2 * 1024 * 1024];
+            Arrays.fill(value, (byte) 'z');
+            fixture.store.put(KEY, new ByteArrayInputStream(value), value.length, hash(value));
+            long baseline = LocalFixture.volumeDescriptors(fixture.root);
+            try (var http =
+                    HttpClient.newBuilder().sslContext(LocalFixture.tls("writer")).build()) {
+                for (String range :
+                        List.of(
+                                "bytes=2097150-2097151",
+                                "bytes=-2",
+                                "bytes=2097152-",
+                                "bytes=0-1,3-4")) {
+                    observer.payloadBytes.set(0);
+                    var response =
+                            http.send(
+                                    HttpRequest.newBuilder(fixture.uri.resolve("/internal/v1/read"))
+                                            .POST(HttpRequest.BodyPublishers.noBody())
+                                            .header("X-Ama-Request", readMetadata(KEY))
+                                            .header("Range", range)
+                                            .build(),
+                                    HttpResponse.BodyHandlers.ofByteArray());
+                    boolean valid =
+                            range.equals("bytes=-2") || range.equals("bytes=2097150-2097151");
+                    assertEquals(valid ? 206 : 416, response.statusCode());
+                    assertEquals(valid ? 2 : 0, observer.payloadBytes.get(), range);
+                    if (valid) assertArrayEquals(bytes("zz"), response.body());
+                }
+            }
+            observer.payloadBytes.set(0);
+            assertArrayEquals(new byte[0], read(client, KEY, value.length, 0));
+            assertEquals(0, observer.payloadBytes.get());
+            observer.payloadBytes.set(0);
+            assertEquals(hash(value), client.stat(KEY).sha256());
+            assertEquals(
+                    value.length, observer.payloadBytes.get(), "stat still verifies all bytes");
+            awaitDescriptors(fixture, baseline);
+        }
+    }
+
+    @Test
+    void httpSizeAndBodyStayOnTheOpenedInodeDuringLeafReplacement() throws Exception {
+        var entered = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        var armed = new AtomicBoolean();
+        var observer =
+                new ReadObserver() {
+                    @Override
+                    public void afterRead(int descriptor, int count) {
+                        super.afterRead(descriptor, count);
+                        if (count > 0
+                                && descriptorPath(descriptor).endsWith("/data")
+                                && armed.compareAndSet(true, false)) {
+                            entered.countDown();
+                            try {
+                                if (!release.await(5, TimeUnit.SECONDS))
+                                    throw new AssertionError("release timed out");
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                                throw new AssertionError(e);
+                            }
+                        }
+                    }
+                };
+        try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
+            fixture.startServer(observer);
+            byte[] value = new byte[256 * 1024];
+            Arrays.fill(value, (byte) 'z');
+            fixture.store.put(KEY, new ByteArrayInputStream(value), value.length, hash(value));
+            long baseline = LocalFixture.volumeDescriptors(fixture.root);
+            try (var http =
+                    HttpClient.newBuilder().sslContext(LocalFixture.tls("writer")).build()) {
+                armed.set(true);
+                var response =
+                        http.sendAsync(
+                                HttpRequest.newBuilder(fixture.uri.resolve("/internal/v1/read"))
+                                        .POST(HttpRequest.BodyPublishers.noBody())
+                                        .header("X-Ama-Request", readMetadata(KEY))
+                                        .build(),
+                                HttpResponse.BodyHandlers.ofByteArray());
+                try {
+                    assertTrue(entered.await(5, TimeUnit.SECONDS));
+                    fixture.store.delete(KEY);
+                    fixture.store.put(KEY, body("abc"), 3, ABC);
+                } finally {
+                    release.countDown();
+                }
+                var result = response.get(5, TimeUnit.SECONDS);
+                assertEquals(200, result.statusCode());
+                assertEquals(
+                        Long.toString(value.length),
+                        result.headers().firstValue("Content-Length").orElseThrow());
+                assertArrayEquals(value, result.body());
+            }
+            awaitDescriptors(fixture, baseline);
+            assertArrayEquals(bytes("abc"), read(fixture.store, KEY, 0, 3));
+        }
+    }
+
+    @Test
+    void listingHashesOnlyTheFinalPageNotLookaheadOrEvictedCandidates() throws Exception {
+        var observer = new ReadObserver();
+        try (var fixture = new LocalFixture(temporary.resolve("volume"));
+                var store = fixture.open(observer)) {
+            byte[] value = new byte[256 * 1024];
+            for (int i = 9; i >= 0; i--)
+                store.put(
+                        key("page/" + i),
+                        new ByteArrayInputStream(value),
+                        value.length,
+                        hash(value));
+            observer.payloadBytes.set(0);
+            var page = store.list("local", KEY.namespace(), "page/", null, 1);
+            assertEquals(List.of(key("page/0")), page.items().stream().map(BlobItem::key).toList());
+            assertNotNull(page.nextCursor());
+            assertEquals(value.length, observer.payloadBytes.get());
+        }
+    }
+
+    private static void awaitDescriptors(LocalFixture fixture, long baseline) throws Exception {
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+        while (LocalFixture.volumeDescriptors(fixture.root) != baseline
+                && System.nanoTime() < deadline) Thread.sleep(20);
+        assertEquals(baseline, LocalFixture.volumeDescriptors(fixture.root));
+    }
+
+    @Test
+    void peerResetBeforeHeadersBoundsPayloadWorkAndReleasesDescriptors() throws Exception {
+        var entered = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        var resumed = new CountDownLatch(1);
+        var armed = new AtomicBoolean();
+        var observer =
+                new ReadObserver() {
+                    @Override
+                    public void afterRead(int descriptor, int count) {
+                        super.afterRead(descriptor, count);
+                        if (count > 0
+                                && descriptorPath(descriptor).endsWith("/key")
+                                && armed.compareAndSet(true, false)) {
+                            entered.countDown();
+                            try {
+                                if (!release.await(5, TimeUnit.SECONDS))
+                                    throw new AssertionError("release timed out");
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                                throw new AssertionError(e);
+                            }
+                            resumed.countDown();
+                        }
+                    }
+                };
+        try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
+            fixture.startServer(observer);
+            byte[] value = new byte[8 * 1024 * 1024];
+            fixture.store.put(KEY, new ByteArrayInputStream(value), value.length, hash(value));
+            observer.payloadBytes.set(0);
+            long baseline = LocalFixture.volumeDescriptors(fixture.root);
+            try (var socket =
+                    LocalFixture.tls("writer")
+                            .getSocketFactory()
+                            .createSocket("localhost", fixture.uri.getPort())) {
+                socket.setSoLinger(true, 0);
+                armed.set(true);
+                String request =
+                        "POST /internal/v1/read HTTP/1.1\r\nHost: localhost\r\nX-Ama-Request: "
+                                + readMetadata(KEY)
+                                + "\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
+                socket.getOutputStream()
+                        .write(request.getBytes(java.nio.charset.StandardCharsets.US_ASCII));
+                socket.getOutputStream().flush();
+                assertTrue(entered.await(5, TimeUnit.SECONDS));
+            } finally {
+                release.countDown();
+            }
+            assertTrue(resumed.await(5, TimeUnit.SECONDS));
+            awaitDescriptors(fixture, baseline);
+            assertTrue(
+                    observer.payloadBytes.get() <= 65536,
+                    "reset is detected on response writes; no pre-header payload scan");
+        }
+    }
+
     @Test
     void cancelledHttpReadReleasesTheServerFileDescriptor() throws Exception {
         try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
