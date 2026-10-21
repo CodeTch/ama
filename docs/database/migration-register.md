@@ -31,7 +31,7 @@
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|03e89cc8…冻结/首次成功；完整框架及fix1已独立采用（8a3b77b/e9d2eca/a79ce67），真实公司/领域消费者门另计|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|a926c8b5…冻结；首次success/旧缺索引失败原件保留，配合V011.1结构独立PASS，归集022f68a/71c7c5c/1d710f9；完整B06仍OPEN|
 |V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|9efc688e…冻结；ACK后rank10首次success/checksum-570494170；实际11suite全通过/五组元数据一致，独立PASS采用；仅纠正索引|
-|V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|预留，未编写|
+|V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|10742ca2…完整21260bytes候选已中央完整读取/静态逐字节比对，首次应用前冻结；仅自有b62b9b2b…:44915，须本记录commit后另行ACK；尚未应用|
 |V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
 |V015|C-03|原V010|correction/edit_operation；speaker基础已在V011，任何必要扩展另在本号|预留，未编写|
@@ -186,3 +186,14 @@ V012/V013尚无正式共享/应用脚本；如实施时实际状态不同，停�
 完整0d2079cd..aef885d经fresh独立SPEC/QUALITY PASS0findings，归集022f68a/71c7c5c/1d710f9，51paths字节验证。原V011a926c8b5…以及中央新登记V011.1的9efc688e…均与首次应用前冻结副本一致，不修改已应用/共享迁移。11.1仅增加遗漏的材料FK支撑索引，FK仍V017；实际metadata8/63/39/13/22相等，纠正后suite11/0/0/0，原行/DDL/historyprefix保留，两次rerun各0。时间按原生UTC/epoch读取，原JDBC Asia/Shanghai显示原件保留。[实施采用](../acceptance/b/transcript-schema-implementation-report.md)、[独立评审](../acceptance/b/transcript-schema-independent-review.md)。
 
 V012结构工作可按已采用1.3继续准备，其最终正式SQL仍必须中央完整阅读/SHA冻结提交/ACK后才首次应用；尤其保留延后FK的全部已评审支撑索引，不能再次删减oracle。完整B06/后续领域与B最终验收仍OPEN，未知/失败/高于11且缺11.1的库不在本路径许可内。
+
+
+## V012 首次正式应用前冻结（2026-10-22）
+
+文件V012__minutes_evidence.sql，21260bytes，SHA256 **10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7**。完整候选已在root阅读，十九CREATE与已采用B00-1.3完全同字节，所有CREATE后再建立44部署FK；只延后fk_generation_input_5(material_snapshot_id→material_snapshot.id)与fk_source_locator_3(material_revision_id→material_revision.id)至V017，并显式保留这两个索引。没有未来材料/最终membership表、schema新设计、seed、IFNOTEXISTS、旧SQL修改或重编号。
+
+root独立从actual1.3metadata a6c758d4…过滤验证oracle d051aaa9…；目标19表123列92索引列21CHECK45FK列，仅过滤两个未部署FK。完整SQL/来源比较/原始RED和lower snapshots保存在artifacts/phase-b/b07-schema-freeze。冻结UTC：2026-10-21T20:53:07.558007+00:00。
+
+只限新独有fixture ama-test-b01-feb4b5365dae，完整ID b62b9b2b8f2b7bb47db21fa4561c90e3ba325138250975531f5585e16ede460e，127.0.0.1:44915；原0表/MySQL8.4.6/nativeAIO0功能限定。lower001→002→005→006→007→008→009→010→011→011.1全部success、checksum及源SHA一致，已真实缺十九表assertionRED1/1/0/0，RED前后旧行/DDL/metadata/history不变（after仅多源SHA记录key）。JDBC原installed_on字符串按Asia/Shanghai显示，不标成serverUTC；原生UTC/epoch补证在最终交付保留。
+
+本记录commit后root单独发送精确SHA ACK，拥有者才可按原候选字节复制到正式location、首次Flyway012并运行完整物理suite、五组actualmetadata/旧数据与historyprefix/重复迁移0验证。候选自共享起已冻结，任何问题保留原件并统一登记前向新版本；不改旧迁移/oracle、repair/reset/outOfOrder。未知/失败/高版本缺低号库不在许可范围。B07契约两项来源追溯修订不改变这十九表；复杂材料运行时仍受前置门限制，完整B07/B最终验收未获通过。

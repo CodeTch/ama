@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-21T20:53:07.558007+00:00",
+  "candidateSha": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+  "bytes": 21260,
+  "rootFullSQLRead": true,
+  "rootIndependent19Creates44FKsAndOracleGroups": "exact19/123/92/21/45; only2materialFKsdeferred, bothbackingindexesretained",
+  "lowerHistoryExactVersions": [
+    "001",
+    "002",
+    "005",
+    "006",
+    "007",
+    "008",
+    "009",
+    "010",
+    "011",
+    "011.1"
+  ],
+  "allLowerChecksumsAndSourceSHAExact": true,
+  "beforeAfterREDLowerSnapshotAllKeysUnchanged": true,
+  "red": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "noActive012AtCapture": true,
+  "fixture": "b62b9b2b8f2b7bb47db21fa4561c90e3ba325138250975531f5585e16ede460e",
+  "loopback": "127.0.0.1:44915",
+  "ownerPrepHead": "b750f3fb1f44d9fe2aa8b421056469da42efbf16"
+}
