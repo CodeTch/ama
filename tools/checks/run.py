@@ -68,7 +68,10 @@ def java_tests(selector="*", integration=False):
         module = next(module for module in modules if source.is_relative_to(ROOT / module))
         reports.add(ROOT / module / "target" / report_kind / f"TEST-{package}.{source.stem}.xml")
     command = [str(ROOT / "mvnw"), "-B", "-ntp", "-pl", ",".join(modules), "-am"]
-    command += [f"-Dit.test={selector}", "-Dfailsafe.failIfNoSpecifiedTests=false", "verify"] if integration else [f"-Dtest={selector}", "-Dsurefire.failIfNoSpecifiedTests=false", "test"]
+    # Expand discovered classes: Maven wildcard overrides would mix unit and IT cases.
+    method = "#" + selector.split("#", 1)[1] if "#" in selector else ""
+    discovered_selector = ",".join(sorted({path.stem + method for path in matched}))
+    command += [f"-Dit.test={discovered_selector}", "-Dfailsafe.failIfNoSpecifiedTests=false", "verify"] if integration else [f"-Dtest={discovered_selector}", "-Dsurefire.failIfNoSpecifiedTests=false", "test"]
     return execute(command, ROOT, sorted(reports))
 
 def contracts():
