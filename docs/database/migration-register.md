@@ -1,6 +1,6 @@
 # AMA 统一 migration-register
 
-版本 B00-1.1-review，2026-10-21；首轮独立评审R1—R6定向修正。这是迁移所有权/顺序登记，不是执行记录。独立复审前新表/改表不得最终验收。Flyway执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL多语句不是可整体ROLLBACK的事务，MySQL atomic DDL只保证单条语句原子；中途失败检查实际schema并前滚修复。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
+版本 B00-1.1-review，2026-10-22；R1—R6 修正已通过独立复审，设计基线已采用。这是迁移所有权/顺序登记，不是执行记录。实现仍须按统一新版本修正差异、回归并独立评审后验收。Flyway执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL多语句不是可整体ROLLBACK的事务，MySQL atomic DDL只保证单条语句原子；中途失败检查实际schema并前滚修复。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
 
 ## 冻结输入与原哈希
 
