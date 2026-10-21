@@ -63,6 +63,19 @@ class ContractTests(unittest.TestCase):
                 self.assertEqual(publication["status"], "failed")
                 self.assertIn("B-08", publication["blockedTasks"])
 
+    def test_distinct_evidence_references_do_not_conflict(self):
+        for second_outcome, expected_status in (("pending", "pending"), ("failed", "failed")):
+            with self.subTest(second_outcome=second_outcome):
+                report = check({"contracts": [{"id": "INT-01", "evidence": [
+                    {"reference": "controlled:protocol-review", "outcome": "passed"},
+                    {"reference": "controlled:disable-propagation-test", "outcome": second_outcome}]}]})
+                identity = report["checks"][0]
+                self.assertEqual(identity["status"], expected_status)
+                self.assertNotIn("conflicting-evidence-outcomes", identity["evidence"]["issues"])
+                if second_outcome == "failed":
+                    self.assertIn("reported-evidence-failure", identity["evidence"]["issues"])
+                self.assertNotIn("controlled:protocol-review", json.dumps(report))
+
     def test_references_are_opaque_and_malformed_values_are_suppressed(self):
         for reference in ("file:///etc/passwd", "https://user:SECRET@company.test",
                           "env:SECRET", {"token": "SECRET"}, None):

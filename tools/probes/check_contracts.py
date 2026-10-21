@@ -127,7 +127,7 @@ def check_contracts(manifest: dict) -> dict:
                 issues.append("invalid-evidence")
             else:
                 received = len(evidence)
-                outcomes = set()
+                outcomes_by_reference = {}
                 for entry in evidence:
                     if (not isinstance(entry, dict) or set(entry) != {"reference", "outcome"}
                             or not _controlled_reference(entry.get("reference"))
@@ -135,10 +135,10 @@ def check_contracts(manifest: dict) -> dict:
                             or entry["outcome"] not in {"passed", "failed", "pending"}):
                         issues.append("invalid-evidence-entry")
                     else:
-                        outcomes.add(entry["outcome"])
-                if "failed" in outcomes:
+                        outcomes_by_reference.setdefault(entry["reference"], set()).add(entry["outcome"])
+                if any("failed" in outcomes for outcomes in outcomes_by_reference.values()):
                     issues.append("reported-evidence-failure")
-                if len(outcomes) > 1:
+                if any(len(outcomes) > 1 for outcomes in outcomes_by_reference.values()):
                     issues.append("conflicting-evidence-outcomes")
             if issues:
                 status = "failed"
