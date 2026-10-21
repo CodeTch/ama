@@ -30,7 +30,7 @@
 |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|来源45715b6+fd3c3d8 → 集成1a00ca4；SHA79f04898…冻结，结构前置独立Approved0findings/95已选用例通过；完整B04仍OPEN|
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|03e89cc8…冻结/首次成功；完整框架及fix1已独立采用（8a3b77b/e9d2eca/a79ce67），真实公司/领域消费者门另计|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|正式候选a926c8b5…共享冻结，root静态核对完成；第一次应用待中央ACK/历史记录|
-|V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|新分配，待实际Flyway排序验证及最终SHA预执行ACK|
+|V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|已验证pinnedFlyway011<011.1<012；9efc688e…共享冻结/root完整SQL核对，首次应用等中央ACK|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
 |V013|B-08|原V008|final_confirmation、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
@@ -165,3 +165,11 @@ V01003e89cc8…/35136bytes/checksum-1187397378不变，首次冻结和成功观�
 统一登记**V011.1**（文件V011_1__transcript_material_index.sql）归B06，只补已评审而遗漏的索引；V011与所有低版本不可重写或repair。V012—V027原整数预留和所有者保持不变，下一新增整数仍V028。不得为了补此索引提前应用V028后再outOfOrder回填低号。
 
 只允许root逐案登记阶段补丁号；父版本已冻结，下一整数阶段尚未应用，且实际pinnedFlyway必须验证011 < 011.1 < 012和最终真实history顺序，才可在严格匹配的已知fixture应用。已应用更高版本的库不属于本次许可，停止并单独审阅前向路径，禁止启用outOfOrder/repair。V012依赖相应B06修正正式采用。候选补丁最终SQL/SHA仍须root完整读取、登记及独立ACK前不得第一次执行。此修正不新增设计范围，设计基线本就包含索引；B06结构验收仍OPEN。
+
+### V011.1 首次正式应用前冻结
+
+文件V011_1__transcript_material_index.sql，397bytes，SHA256 **9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713**。root已完整读取并验证唯一执行语句CREATE INDEX fk_transcription_input_3 ON transcription_input (material_snapshot_id)，没有IF NOT EXISTS、改列、改行或材料FK。原V011 a926c8b5…保持不变。
+
+实际pinnedFlyway12.4.0 MigrationVersion与ResourceNameParser离线检查证明011<011.1<012，filename解析011.1且valid，未打开DB连接。root复核probe源SHA与实际JAR SHA c3f93df1…；完整来源/probe/JSON/候选字节保存在artifacts/phase-b/b06-index-patch-freeze。冻结记录时间：2026-10-22T04:17:13.930896+08:00。
+
+本记录commit后root另发ACK，仅限原487a1cd59…:45591、known successful history至011且无更高版本的独有fixture。正式执行后验证actual history顺序/checksum、只增一索引、原rows/DDL/historyprefix不变、全suite与latest rerun0；失败证据不删除，未通过不验收。不授权任何其他小数版本、V012抢跑或生产调用。
