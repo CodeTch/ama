@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: AMA internal API foundation
   version: 0.1.0
-  description: Runtime probes and the B02 identity prerequisite. Enterprise sign-in and final meeting authorization remain pending qualification.
+  description: Runtime probes, shared enterprise sessions and revisioned meeting drafts. Real company sign-in, directory and category dictionary qualification remain prerequisites.
 servers:
   - url: http://127.0.0.1:8081
     description: Loopback management listener; never publish through the public ingress.
@@ -19,6 +19,14 @@ paths:
     $ref: './identity.yaml#/logoutAll'
   /api/v1/directory/people:
     $ref: './identity.yaml#/people'
+  /api/v1/meetings:
+    $ref: './meetings.yaml#/collection'
+  /api/v1/meetings/{id}:
+    $ref: './meetings.yaml#/item'
+  /api/v1/meetings/{id}/info:
+    $ref: './meetings.yaml#/info'
+  /api/v1/meetings/{id}/roster-confirmations:
+    $ref: './meetings.yaml#/confirmations'
 components:
   securitySchemes:
     enterpriseSession:
