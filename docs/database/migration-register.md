@@ -1,6 +1,6 @@
 # AMA 统一 migration-register
 
-版本 B00-1.1-review，2026-10-22；R1—R6 修正已通过独立复审，设计基线已采用。这是迁移所有权/顺序登记，不是执行记录。实现仍须按统一新版本修正差异、回归并独立评审后验收。Flyway执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL多语句不是可整体ROLLBACK的事务，MySQL atomic DDL只保证单条语句原子；中途失败检查实际schema并前滚修复。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
+版本 B00-1.2-review（上传补充已独立评审并采用），2026-10-22；已采用 B00-1.1-review 的 R1—R6 独立关闭结论不变。这是迁移所有权/顺序登记，不是执行记录。实现仍须按统一新版本修正差异、回归并独立评审后验收。Flyway执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL多语句不是可整体ROLLBACK的事务，MySQL atomic DDL只保证单条语句原子；中途失败检查实际schema并前滚修复。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
 
 ## 冻结输入与原哈希
 
@@ -24,10 +24,10 @@
 
 |目标版本|拥有任务|原计划占位|计划内容/依赖|当前状态|
 |---|---|---|---|---|
-|V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|预留，未编写|
+|V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|来源 f5b4495+0e8f698 → 集成751d31c+95a264e；冻结f36…；独立复审支持新建确认空白fixture限定采用，历史偏差保留|
 |V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|预留，未编写|
 |V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|预留，未编写|
-|V009|B-04|原V004|backend/file/reference/upload/part/cleanup；依赖V008|预留，未编写|
+|V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|预留，未编写；上传补充设计门已通过|
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|预留，未编写|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|预留，未编写|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
@@ -49,11 +49,29 @@
 
 B-09、C-05、C-07 无专属新DDL；C-02复用媒体/转写/任务，D-03复用V012；E/F只在对应能力启用时迁移。迁移的实际内容须从目标设计计算与各自既有schema的增量，不能把审阅CREATE全文复制成V006。完整审阅库的跨域FK统一在所有表后建立；正式环境每阶段仅建立可满足依赖的FK，应用不允许写尚未部署的非空引用。speaker基础提前进入B-06，C-03复用而不重建。
 
+## V006 当前冻结、限定采用与时间线偏差保留
+
+来源 `codex/phase-b-audit-delta` 的 `f5b44955318564ecc68ce6b2d5a2274c46d35cc2` 包含 `V006__audit_metadata.sql`，当前共享/最终实测 SHA256 为 `f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f`，Flyway checksum `-1744360556`。成功回归后保留的元数据快照来自拥有者 fixture `ama-test-b01-fb4e04459580`（127.0.0.1:45443），该快照 history 为001→002→005→006，均success=1。随后日志修复的聚焦负例测试将同一自有一次性 fixture 留在预期 failed V006 状态；旧成功快照不冒称当前库状态。当前文件从该提交起冻结，不得因评审修改字节、改名、重编号或repair。
+
+执行时间线另有一项已向用户报告的偏差：作者首次私有 fixture GREEN 使用 `e1af32204c0b75d6ef922ca1e5677e259b0d4c4c47b43c3945f52bde314d8e8d`，之后增加冗余的 `CHAR_LENGTH(result)>64` 预检，再重置该自有一次性 fixture 并验证当前 `f36b…`。这不符合“已应用或共享的迁移保持不变”的要求；不能因尚未提交而豁免，也不能事后改称 review-only。作者正在保全原字节、原始运行日志和两份哈希并准确记录可观察影响；独立复审支持当前冻结版本仅用于新建、独立所有且确认空白的 fixture；历史违规仍保留为 PARTIAL，不能重述为规则合规。原始首次执行哈希的来源是作者恢复的源码与说明，最终哈希及当前数据库元数据有直接实测证据；不把恢复说明当独立现场观察。
+
+不得将当前 V006 自动用于持有旧 checksum 的库。发现旧版本 history/未知来源时立即停止，保留库与证据并提交单独可审阅的恢复方案；不更改 checksum、不启用 outOfOrder、不覆盖原脚本。当前共享文件也不通过恢复成旧字节来制造第二次修改。后续所有正式迁移首次应用前记录 SHA，首次应用（包括私有 fixture）后即冻结；结构修正必须先由协调者登记有序新版本，不由实施者自行猜号。
+
+## V006 实施采用记录（2026-10-22，限定新空测试库）
+
+完整初审 `45ce136..f5b4495` spec compliant/quality Approved，无 Critical/Important，预期负例日志为 Minor；修复 `f5b4495..0e8f698` 经独立增量复审日志问题 ADDRESSED、无新增破坏，历史 B01-IMM-01 保留 PARTIAL。采用精确当前 SHA `f36b…` 用于新建、独立所有且先确认空白的受控测试库；旧 checksum、已有失败 history、未知来源及未确认空白环境均不在该批准范围，先保全并单独审阅恢复方案。不会对作者当前失败 fixture 执行重置或修复来伪装成功。
+
+实现与修复集成 `751d31c`、`95a264e`；完整 source/测试/helper/归档与作者 `0e8f698` 一致。当前 V001/V002/V005/V006 SHA 全部复核，e1af 历史源码已逐字节保存在 `docs/database/migration-history/V006-e1af3220.sql.txt`，位于所有 Flyway location 之外。真实测试、前后元数据和 Flyway history 见 [实施记录](../acceptance/b/audit-metadata-delta.md)、[初审](../acceptance/b/audit-metadata-delta-independent-review.md)、[增量复审](../acceptance/b/audit-metadata-delta-fix-independent-review.md)；原始日志/XML/两份SQL字节与SHA清单另保存在 `artifacts/phase-b/b01-audit-delta/`。记录不批准任何旧库 repair、重置或 checksum 替换。
+
 ## 兼容/回滚和验收义务
 
 ### B00-1.1评审修正的迁移边界
 
 R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑根、V023专题名称，owner身份锁＋完整规范名碰撞复核，不加名称上限；R3→V023 description LONGTEXT NULL；R4→V010逻辑操作/执行分离及quota执行关联、V013发布attempt引用，新task可以在同business_key/confirmation下追加执行；R5→V011转写输入与结果双向追溯，V017才启用非空材料FK；R6→V011片段标记，C-03复用保存/确认失效/hash规则。这些预留均尚无正式SQL/应用记录，因此是在评审前完善设计，不修改任何已应用/冻结脚本。若接收方已有更高版本或此前草案结构，先报告实际元数据并另从V028分配前向增量，不覆盖旧版本。B00-1.0不可采用，不能把旧79表证据替代1.1完整新库验证。
+
+### B00-1.2 上传补充的迁移边界（已独立评审采用）
+
+唯一结构增量为 upload_session 追加 display_name 与 purpose，两列无默认且非空，其他表/索引/CHECK/FK不变；现有 token/hash/part 字段的业务语义与写入/恢复协议同步明确。它们属于尚未实施的 B-04/V009，不新增迁移号，不修改已冻结 V001/V002/V005，不重开 1.1 的 R1—R6。独立评审通过后，B-04 才按完整 V001→002→005→006→007→008→009 路径在自有库实现并验证；不得复制本审阅完整 CREATE 为正式迁移。若接收方已执行缺列的 V009 或其他较高版本，先报告实际元数据及旧会话的真实 name/purpose 来源，由协调者从 V028+ 登记前向增量和回填/隔离方案；不得猜值、截断名称、用默认用途伪造历史或修改已应用脚本。本次仅在新建独有空审阅库验证完整目标 DDL，旧 1.1 fixture/证据不改。
 
 每次登记实际脚本补文件名、commit、SHA256、执行库/时间（不记凭证）、Flyway history、前后DDL元数据diff、应用版本窗口和回归链接。独立评审通过设计不等于允许跳过各任务真实持久化/并发/权限测试。
 

@@ -1,6 +1,8 @@
 # AMA 数据库详细设计基线
 
-设计版本：**B00-1.1-review**，2026-10-21；状态：R1—R6 修正已于 2026-10-22 通过独立增量复审，**采用为数据库设计基线**；实施差异继续按拥有任务闭环。首版 c73a765 有六项 Important，不能采用；本版修复列表共同查询、个人名称去重、专题说明、同确认发布重试、转写处理快照与片段标记。不是阶段 B 实现完成、平台联调、容量或上线批准。原始BASE `e8c88d2aaed1a19b0d0202ddce9cb51ee01d84ee`；FIX_BASE `c73a7656fc1c5c2cb07d8b94ead68122059b549f`，唯一设计工作树 `/home/tanren/ama/.worktrees/phase-b-database-design`。
+设计版本：**B00-1.2-review**，2026-10-22；状态：**上传元数据定向补充已通过独立增量评审，采用为当前设计基线**。已采用的 **B00-1.1-review** 及 R1—R6 独立关闭结论保持有效；本次仅补上传初始化名称/用途的持久化与恢复约束，本增量设计门已通过，B-04/V009 仍须完成自己的实施与回归审查。不是阶段 B 实现完成、平台联调、容量或上线批准。增量 BASE `a13e0cd`，工作树 `/home/tanren/ama/.worktrees/phase-b-upload-design`；[本次范围与证据](../../acceptance/b/database-upload-addendum-review.md)。
+
+既有采用历史：首版 `c73a765` 有六项 Important，未采用；`bd43ca3` 修正列表共同查询、个人名称去重、专题说明、同确认发布重试、转写处理快照与片段标记，经独立复审全部关闭，集成 `69f33a8`＋`bca9b89`，由 `6dd2cdd` 采用为 1.1。原始 BASE `e8c88d2aaed1a19b0d0202ddce9cb51ee01d84ee`、FIX_BASE `c73a7656fc1c5c2cb07d8b94ead68122059b549f` 与原工作树 `/home/tanren/ama/.worktrees/phase-b-database-design` 仅指该历史版；原评审及 metadata 文件保持原字节。
 
 绑定依据为架构 v0.2 第 6、8—10、12、14 节、需求对应清单 v0.2、A-02 决定台账与接口清单，以及用户已确认的 `2026-10-21-ama-product-supplement.md`。补充规格优先于旧台账中“建议/待确认”措辞：实际日期可选、转写显式保存、纪要显式及自动保存、人工标题保护、同批音视频可合并而不与纯转写混批、邮件仅受控链接和已确认且仍可读的企业参会人、治理候选/审核/生效、声纹用途授权可撤销、配置独立审批和新修订回滚。公司协议和运维证据仍 pending；测试 manifest 的空 fields/evidence 不构成认证。
 
@@ -152,6 +154,35 @@ consumer按sequence升序取有界页，成功完成连续前缀后推进cursor�
 ## 文件、上传、录音及删除
 
 受管文件始终通过 file_id 路由 backend/type/namespace/object_key/provider_version/size/sha256；业务表不存物理根目录或公开签名URL。local无需S3配置，后端类型与ID不可改含义。put/complete先确保持久化文件与目录（或S3已验证durable响应），然后登记file/引用/业务状态，再返回成功。DB回滚的孤儿不在file表/无业务引用，不可读；枚举清理记录受限前缀及固定后端，保护仍在途upload/recording与恢复窗口，不能把本地文件＋DB当跨资源事务。
+
+### B00-1.2 上传业务元数据补充（待独立评审）
+
+具体缺口来自 B-04 的既定 HTTP 契约：初始化 `POST /meetings/{id}/uploads {purpose,name,size,sha256}` 返回 uploadId/partSize；完成请求只含 `{parts:[{part,sha256}],sha256}`，不重传 name/purpose。`StorageContracts.UploadSpec` 只有 backendId/namespace/objectKey/expectedSize；`LocalUploadJournal.begin` 将这一 spec 持久化，不能恢复业务名称或用途。`file_object.display_name` 只能在完整 blob durable 后登记；不得提前插 AVAILABLE 文件来保存初始化参数。因此唯一结构增量是 `upload_session.display_name LONGTEXT NOT NULL` 与 `purpose VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL`，追加到原字段清单后，不改变已采用列顺序或其他表结构。
+
+名称完整保存初始化原值，重启、完成、重放均不另从浏览器、文件路径、对象键或临时内存推导；它是展示数据，不参与物理路径和 shell，输出按具体 HTML/HTTP 上下文安全编码，不在数据库做通用转义。LONGTEXT 沿用已有 `file_object.display_name` 的容量语义，不新增产品名称字数上限。purpose 沿用现有 CODE 与 `file_reference.purpose` 类型；服务端只接受配置中已启用且当前身份有权使用的安全 ASCII 码，并按精确大小写比较。配置码限定为非空 ASCII 字母/数字/下划线/连字符且能无截断放入既有 CODE，校验由 B-04 服务承担；64 是内部协议码的既有存储预算，不是用户文件名、文件大小或用途数量限制。本补充不创造产品用途清单、公司分类字典或新授权角色，未知/停用/无权用途拒绝。
+
+|既定输入或恢复事实|持久事实及消费者|B-04 必验路径（本轮未执行应用测试）|
+|---|---|---|
+|begin.name|upload_session.display_name；完成后逐值复制到 file_object.display_name|含中文、引号、反斜杠、换行及长名称，API 进程重启后完成，完整值无损且不作路径|
+|begin.purpose|upload_session.purpose；完成引用账本使用相同 purpose；后续领域绑定再次验证用途|begin 后重启且完成请求不含 purpose；不能借重放改变用途或绕过停用/权限|
+|存储端 begin 返回 UploadToken|backend_id＋既有 provider_upload_token 保存其 sessionId，local 也必须保存；字段名称不变|API 重启后重建同 token；默认后端变化仍回原后端|
+|complete 的决定|FINALIZING＋全部不可变 upload_part 行＋expected_size/expected_sha256＋固定位置|冻结后/API 重启/存储成功但 DB 失败，恢复同一清单与同一结果|
+
+初始化先检查已提交的幂等结果，命中时重新鉴权并返回原 uploadId；未命中则验证身份、会议写权限、生命周期和启用用途，生成服务端位置，在 DB 事务外调用已固定后端的 beginUpload。返回存储 token 后，按统一锁序重新验证当前身份/会议/cancel_epoch/用途；把 name、purpose、固定位置、大小/hash、完整内部 token 与 OPEN 会话在一个事务提交，提交后才向客户端返回 uploadId。既有幂等作用域行及结果与会话同事务提交；相同请求重放返回同 uploadId，不再次受理会话；并发初始请求在最终幂等唯一键冲突后回读获胜结果，未被受理的存储 token 走技术暂存对账。存储 begin 成功但事务失败/进程崩溃产生未受理的技术暂存会话，不登记可用文件；按 B-04 对账和保护窗口处理。持久业务会话 ID 与存储 sessionId 不要求相同；provider_upload_token 是该内部不透明 sessionId 的保存槽，不能猜测两者相等。已受理会话必须非空；本轮保留既有可空 DDL，由领域不变量保证。
+
+上传分片只信任实际存储成功、校验通过的服务端 PartReceipt。存储 I/O 不持长 DB 事务；回执落库时按统一锁序锁 session，重新验证 OPEN/身份/会议/epoch，INSERT `(upload_id,part_no)` 的 size/hash/provider_token。同号同内容重传返回原回执，不替换；同号异内容冲突。所有适配器必须保证同一逻辑分片的已接纳字节/回执不可被迟到写入覆盖。若 I/O 成功后 DB 提交失败可按相同内容重放补登记；若已退出 OPEN，不补登记或返回分片成功。不能仅锁数据库而让 provider 原地覆盖已冻结分片。
+
+完成在短事务中先锁 session，再读取其全部已接纳分片，要求客户端 part/hash 清单恰好匹配全体服务端行，唯一、按 1 起连续递增且大小总和用防溢出运算等于 expected_size，拒绝缺漏、额外及另一会话回执。客户端不提交或决定 provider_token。完整 sha256 与非空预声明值一致；若 expected_sha256 初始为空，本事务填入完成请求的规范化完整 hash。只有上述检查通过才将 OPEN 条件更新为 FINALIZING，并实际提交后调用存储 complete。FINALIZING 永不回 OPEN，所有分片行、完整 hash、名称、用途、位置及 token 自此冻结；它们就是可恢复完整决定，不新增 JSON manifest、fingerprint 或 revision 列。每个改变分片集合的路径必须先锁同一 session，故冻结事务与落库竞争有唯一胜者。
+
+重启或响应丢失后，FINALIZING 只从这些持久行重建相同 token/PartReceipt 清单/hash并安全重放 complete，或对固定目标进行实际 size/完整 SHA256 核验并由适配器重新确保持久化后对账；仅 stat/read 可见不等于 durable 证明，local 恢复须重新满足文件/目录同步保证。不能使用 ETag、客户端 receipt 或当前默认后端代替。未知存储结果保持 FINALIZING，不改 FAILED/OPEN 触发新内容；只有证明未发布且无仍可发布的在途操作才可终结 FAILED。ABORTED/FAILED 不复活；普通 abort 仅在 OPEN 下原子赢得 ABORTED 决定，再幂等中止存储，失败由恢复流程重试；FINALIZING 的 abort 返回冲突，COMPLETED 的 abort 为保留文件的幂等无操作。删除仍先设置会议栅栏，任何迟到完成在登记事务重新验证后失效，最多形成不可读孤儿。
+
+文件完整 durable 且大小/完整 hash 验证一致后，登记事务按身份→subject→meeting→upload→file/refs 顺序复查身份/权限、会议生命周期、cancel_epoch、用途仍启用且有权、会话仍 FINALIZING 及固定决定。插入 AVAILABLE file，display_name 从 session 完整复制；同时写 completed_file_id、COMPLETED 及引用账本，随后才返回 fileId。具体上传结果引用由 B-04 注册器登记 `owner_kind=UPLOAD_SESSION, owner_id=upload_session.id, purpose=upload_session.purpose`，验证同会议及 completed_file_id 指向该文件；这是技术 owner 类型，不新增产品用途。保留此引用直到后续领域在同事务建立自己的引用并显式解除上传引用，或明确删除上传结果/会议，不能把已返回 fileId 的上传当无引用孤儿。用途仍以 session 与各具体业务引用为事实，不给 file_object 另添用途字段；一个文件可被多个合法引用使用，每次绑定由领域按原上传用途核验，不信任浏览器改用途。
+
+同一 session 的双完成登记串行；后到者只在完整持久清单/hash相同且重新鉴权后返回已存 completed_file_id，不另建 file。blob 成功而登记事务失败时无 AVAILABLE/引用/COMPLETED 半提交，重试仍由同一 FINALIZING 决定恢复原名称/用途并完成一次登记。完成后的清单/hash/result 保留到明确的生命周期清理，以支持相同请求重放；不能清空 parts 再声称可比较旧完成请求。后续领域解除上传引用后 session.completed_file_id 仍是重放关联，文件清理须按已有业务列＋引用账本交叉核验并显式处理该关联；不存在以 TTL 自动删历史或绕过 RESTRICT 的路径。
+
+本补充不新增 creator_id：现有会议 owner/MeetingAccess 决定每次操作权限，初始化操作者由既有审计/幂等作用域记录，不发明“仅最初上传人可续传”规则。不新增 part_size：HTTP 返回值是客户端分片建议，持久恢复依据实际已接纳 receipt/size，不按当前配置重切片或因配置改变拒绝旧合法逻辑分片。现有 FileStoragePort.writePart 接受通用逻辑分片；S3 适配器须以其受保护暂存/合并实现合法 transport parts，并持久化自身恢复清单，不能只对 S3 降低共同契约。具体 S3 暂存/合并、迟到 I/O 与 complete/abort 竞争仍为 B-04 独立实现/契约验证义务，不是本次数据库结构证据。如需变更共同协商约束或确有额外持久字段，先报告并单独评审，不从本补充推导已批准的新字段、固定传输大小或产品文件上限。
+
+### 原有录音与删除边界（继续适用）
 
 上传完成/重复完成核对相同size/hash/part清单和epoch；不同请求冲突；位置固定不受默认后端变化影响。删除任务先锁根校验从未成功发布、非录音/暂停、非发布进行/未知，设置DELETING及epoch/access_revision，阻断所有读取和新写；旧worker和已签发上传完成必须复查。清理按引用账本与业务列交叉校验，锁file无引用且位置/epoch匹配时标DELETE_PENDING；提交后删除物理对象/目录持久化，再标DELETED。禁止新引用待删文件。失败保留可重试状态；全部正文、版本、缓存和导出/文件清理完成才 deletion.COMPLETE/根DELETED。知识库引用只解除本会议关联，禁止删除公司知识库文件。
 
@@ -386,6 +417,8 @@ erDiagram
         char_36_ completed_file_id FK
         datetime_6_ created_at
         datetime_6_ updated_at
+        longtext display_name
+        varchar_64_ purpose
     }
     upload_part {
         char_36_ upload_id PK,FK

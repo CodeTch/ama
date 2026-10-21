@@ -11,7 +11,7 @@ import re
 import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VERSION = 'B00-1.1-review'
+VERSION = 'B00-1.2-review'
 TABLES = []
 ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
 KEY = 'varchar(255) COLLATE utf8mb4_0900_bin'
@@ -337,6 +337,18 @@ table('transcript_segment_mark','B-06/C-03','V011','R6 片段多选标记随转�
     pk='revision_id,segment_id,mark',fks=[fk('revision_id,segment_id','transcript_segment','revision_id,segment_id')],checks=[enum('mark','KEY,CONCLUSION,DISPUTE,GENERATION_FOCUS')],
     policy='同段可0..4类，PK禁止重复；增删标记与片段保存产生新revision，旧标记不UPDATE/DELETE。规范排序的标记集进入确认content_hash/纪要inputFingerprint；确认后任何标记改动清当前转写/最终确认并要求重新确认，不证明内容真实；只作生成参考')
 
+# Scoped upload addendum atop adopted 1.1; no other table/constraint changes.
+upload=next(t for t in TABLES if t['name']=='upload_session')
+upload['cols'].extend([
+    text('display_name','初始化 name 原值；仅展示数据，不作路径、不新增产品长度上限；创建后不可改'),
+    code('purpose','初始化时服务端校验的已启用且有权用途码；创建后不可改，不是公司字典声明')
+])
+next(c for c in upload['cols'] if c['name']=='provider_upload_token')['meaning']='内部存储 UploadToken.sessionId；与 backend_id 重建完整 token；已受理会话必须非空，仅服务端使用'
+next(c for c in upload['cols'] if c['name']=='expected_sha256')['meaning']='预声明完整SHA256；若初始NULL，在OPEN转FINALIZING事务填入完成请求哈希，之后不可变'
+upload['policy']='初始化成功前提交名称/用途/固定位置/存储token；OPEN下提交不可变分片；锁session冻结全部分片及完整hash后单向FINALIZING，不回OPEN；重启据行及分片恢复，完成在durable blob后同事务登记file/引用并写completed_file_id；名称复制到file_object，purpose保留在会话及引用账本；终态重放仍鉴权，删除按依赖显式清理'
+part=next(t for t in TABLES if t['name']=='upload_part')
+part['policy']='只登记实际durable且校验通过的服务端PartReceipt；锁session确认OPEN后INSERT，同号同size/hash重放原回执，异内容冲突；不UPDATE已接纳回执，不信任客户端provider token；FINALIZING后集合冻结且禁止增删改，迟到I/O不能登记；完成重放/恢复仍需保留完整清单，清理走显式生命周期'
+
 def cname(t, n): return f"ck_{t['name']}_{n}"
 def fname(t, n): return f"fk_{t['name']}_{n}"
 def sql():
@@ -521,7 +533,8 @@ def verify(container, metadata_only=False):
         assert p.returncode!=0 and ('3819' in p.stderr or '1452' in p.stderr), 'Expected CHECK/FK rejection'
     counts=dict(tables=len(actual['tables']),columns=len(actual['columns']),index_definitions=len({(x['table'],x['name']) for x in actual['indexes']}),index_columns=len(actual['indexes']),checks=len(actual['checks']),foreign_key_constraints=len({(x['table'],x['name']) for x in actual['foreign_keys']}),foreign_key_columns=len(actual['foreign_keys']))
     evidence=dict(design_version=VERSION,mysql_version=version,container=container,image=meta['Config']['Image'],ddl_sha256=hashlib.sha256(sql().encode()).hexdigest(),counts=counts,metadata=actual,behavior=['invalid storage enum rejected (3819)','unknown identity FK rejected (1452)','CHECK comparer preserves operator grouping and literal case'],scope='DDL and all metadata only; not domain/concurrency/performance/integration acceptance')
-    path=ROOT/'docs/acceptance/b/database-metadata-evidence.json'
+    # Preserve the adopted 1.1 evidence bytes; this edition has its own full capture.
+    path=ROOT/'docs/acceptance/b/database-upload-addendum-metadata-evidence.json'
     path.write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:v for k,v in evidence.items() if k!='metadata'},ensure_ascii=False,indent=2))
 
