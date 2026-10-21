@@ -42,7 +42,7 @@ management:
         live:
           include: livenessState
         ready:
-          include: readinessState,db
+          include: readinessState,db,fileStorage
 database:
   mode: ${DATABASE_MODE:private-ha}
 storage:

@@ -1,0 +1,77 @@
+# File registry consumer contract — pending independent adoption
+
+This implementation starts at `8da440d39e1b8e8dcdfc34722908d29b5aa3aa8a` and uses immutable V009 with the reviewed migration set through V011.1. Root publishes the reviewed implementation commit after independent SPEC and quality review. This handbook does not activate B06, company purpose providers, cleanup or a production S3 endpoint.
+
+## Transaction and capability contract
+
+`FileUploads.begin/part/complete/abort` own independent short transactions and reject an ambient transaction. All storage I/O occurs between transactions. Every mutation rechecks the current ACTIVE identity, subject and meeting through the reviewed B03 `MeetingAccess`, owner EDIT, ACTIVE lifecycle/governance, current cancellation epoch, enabled technical purpose, and never-published constraint. Unchanged completion/abort replay may return an existing result while currently authorized. Historical owner status or an earlier session check is insufficient.
+
+Use exactly the same DataSource object, TransactionRunner, MeetingAccess, audit and shared JdbcOutbox as the surrounding domain. Registry composition in a caller transaction is:
+
+1. Acquire `FileRegistry.lock(actor, meetingId, action)` once as the initial identity → subject → meeting prelock. Do not call `MeetingAccess.lock` first or again. `registry.access(held)` returns the exact B03 capability for the domain to reuse.
+2. Acquire every domain entity/version/current-pointer lock before session/file/task locks. `registry.prelock(held, new Reference(kind, ownerId, purpose), fileId)` invokes the registered policy's `prelock` under that root. The policy must not discover another identity/root or perform network I/O. Its returned domain proof stays private to that policy.
+3. `registry.resolve(fileId)` exposes internal metadata only within the same live registry-authorized transaction and meeting. It is not a browser permission or a business read grant. The caller still needs the authoritative domain proof before content/binding.
+4. Call `bindAll(List<Binding>)` once for all files. Each `Binding` contains the opaque `LockedReference`, expected locationRevision and optional exact business upload UUID for handoff. A single `bind` delegates to a one-element batch. The registry prelocks all original upload sessions in sorted session UUID order, then all files in sorted UUID order, then changes references. Repeated single-file bind calls in one transaction are rejected: use the batch to preserve lock ordering.
+5. The policy's `validate` checks the prelocked actual same-meeting immutable owner/version, current pointer/eligibility, file UUID and hash, and original purpose. It must not acquire new domain locks, perform I/O or rediscover roots. The registry independently verifies original completed upload location, size/hash, epoch and purpose, plus AVAILABLE state and expected location revision.
+6. The caller appends metadata audit and events and calls the shared outbox `flush()` last. No SQL, network call, standalone domain service or new lock may follow that flush. Registry binding intentionally does not flush prematurely.
+
+Capabilities are bound to the issuing registry and actual Spring DataSource transaction holder; expired or foreign handles fail. Public opaque interfaces do not make user implementations valid capabilities. Policies are trusted server registrations, not browser booleans. Domain code must retain its returned handle during composition.
+
+## References and purpose
+
+`UPLOAD_SESSION` is reserved technical protection and cannot be registered as a business reference policy. Completion creates that reference atomically with AVAILABLE file and COMPLETED session, incrementing reference_epoch. It never grants business download access. Production business policy registrations start empty. Production purpose policy also starts unavailable until an actual technical purpose provider is installed.
+
+B06 later owns real `INPUT_BATCH_FILE` policy registration. Actual V011 input_batch_file rows have no purpose column. A binding must validate the original upload_session.purpose, enabled controlled purpose policy, real file/hash/meeting/version and current transcript pointer; it must not infer purpose from a file name, client label, invented column or hash alone. The integration tests register a controlled policy against actual V011 rows and current root data only in their test composition. There is no production TEST grant or completed B06 integration.
+
+Successful handoff adds the validated business reference, removes only the exact UPLOAD_SESSION reference requested by that binding, and increments reference_epoch in the same transaction. Retained upload_session.completed_file_id and frozen upload_part receipts allow completion replay. Unknown kinds, invalid current pointers, cross-meeting files, wrong original purpose, DELETE_PENDING/DELETED, wrong epoch or wrong location revision fail closed. No cleanup worker or physical delete API is activated; real retention/quiescent absence policies and D07 deletion remain separate work. Unknown and recoverable session history is retained.
+
+## Upload and HTTP protocol
+
+POST `/api/v1/meetings/{id}/uploads` accepts purpose, complete Unicode name, nonnegative size and optional SHA-256 with an Idempotency-Key. It returns business uploadId and suggested partSize only after database commit. The bounded UUID-derived ASCII storage key is independent of the display name. Durable session fields contain backend/namespace/key, actual opaque provider upload token, epoch, size/hash, exact name and purpose. A full matching request replays the same session; changed request is 409. Concurrent losing provider begins remain unaccepted technical artifacts, not AVAILABLE files.
+
+PUT `/api/v1/uploads/{id}/parts/{part}` requires Content-Length and X-Checksum-SHA256. The real adapter verifies content durably outside the transaction. The final current-authorized OPEN transaction accepts part number, actual size/hash and provider token. Same-content replay retains the original receipt; changed content conflicts. Storage success without a committed receipt is retried with identical bytes. A part completing after FINALIZING is rejected, never acknowledged as accepted.
+
+POST `/api/v1/uploads/{id}/completion` receives ordered client part/hash pairs plus whole SHA-256. It compares every committed receipt, exact count/order/contiguous numbering from one, each hash, and overflow-safe size sum against expected size. It freezes whole SHA and OPEN → FINALIZING in a short committed transaction. No path reopens that state. Recovery reuses the full persisted name/purpose/token/key and receipts, repeats actual adapter complete/durability work, and reauthorizes before atomically registering one file/result. Unknown/lost storage acknowledgments leave FINALIZING. Lost database acknowledgment is resolved by replaying the same committed decision. Stat/read does not replace native durability proof.
+
+DELETE `/api/v1/uploads/{id}` commits OPEN → ABORTED before storage abort. Repeated abort retries provider abort. FINALIZING conflicts; COMPLETED preserves the result. No TTL purge or blind cleanup is performed.
+
+GET `/api/v1/files/{id}/content` performs fresh identity/meeting READ and current registered business-reference proof before opening the pinned backend. The upload owner alone or possession of fileId does not qualify. Single bytes ranges, suffix/open-ended ranges, 206/416 Content-Range and exact Content-Length are supported. Disposition uses a safe ASCII fallback plus full UTF-8 percent-encoded name. Streams are closed on success or disconnect. Provider locators, receipts, credentials and private paths are never browser DTOs/errors. D06 periodic in-stream revocation remains later.
+
+The configured HTTP request budget defaults to 8 MiB and rejects oversized transport bodies without truncation. `files.http.max-request-bytes` and `files.part-size` are technical deployment values; no new product filename/count/size quota is imposed. A zero-length file can use one verified zero-length part. Shared OpenAPI error schema includes FILE_PURPOSE_UNAVAILABLE/FILE_STORAGE_UNAVAILABLE (503), FILE_CONFLICT (409), FILE_NOT_FOUND (404) and FILE_INVALID_RANGE (416), as well as existing identity/meeting/argument/budget errors.
+
+## Frozen managed backend identity profile v1
+
+The approved original proposal is preserved verbatim with SHA-256 in `artifacts/phase-b/b04-registry/binding-proposal-original.md` and `.sha256`. This section states the approved explicit grammar and count clarification. No S1 codec is consumed.
+
+Encoding is a four-byte big-endian field count, including the first domain/version field. Each field then consists of a four-byte big-endian UTF-8 byte length and exact UTF-8 bytes. Strings are non-null and unpaired UTF-16 surrogates are rejected before UTF-8 encoding. SHA-256 of that byte sequence is exactly 64 lowercase hexadecimal ASCII characters, the backend ID. The ID itself and S3's inner physicalBinding are never included in this outer hash, avoiding recursion.
+
+| Type | Fields in exact order |
+| --- | --- |
+| Local (6 fields) | `ama-managed-local-v1`, serviceOrigin, volumeId, relativeRoot, filesystem, `local-layout-v1` |
+| S3 (8 fields) | `ama-managed-s3-v1`, endpoint, region, dataBucket, controlBucket, pathStyle (`true` or `false`), keyBudget (canonical decimal), `layout-v3-199-200-8` |
+
+An origin is exactly `scheme://host:port`. Scheme is lowercase `https` for local, lowercase `http` or `https` for S3. Port is explicitly present, decimal 1..65535 with no leading zeros. Host is one of:
+
+- Lowercase ASCII DNS labels separated by dots; every label has 1..63 characters, starts/ends with `[a-z0-9]`, and interior characters are `[a-z0-9-]`. No trailing dot or empty label. Single-label names such as localhost are permitted.
+- Canonical dotted IPv4: four decimal 0..255 octets, no leading zeros except the single digit zero. An all-numeric/dot host must use this form.
+- Bracketed IPv6 with exactly eight groups of four lowercase hexadecimal digits, separated by colons. Compression, zone identifiers and embedded IPv4 spelling are rejected.
+
+No DNS lookup or URI alias normalization occurs. No userinfo, path (including trailing slash), query, fragment, Unicode host or omitted default port is accepted. Operators must provide the canonical spelling, including `:443`/`:80` when applicable.
+
+Local relativeRoot is `.` when root equals mountpoint; otherwise it is nonempty POSIX components separated by single `/`, with no absolute prefix, backslash, empty component, `.`/`..` component or control character. Volume ID and filesystem are explicit logical identities; filesystem uses lowercase `[a-z0-9_+-]+`. FileServiceMain independently recomputes the same ID from its protected serviceOrigin, volumeId, actual root relative to actual mountpoint, and filesystem before opening storage. Existing MountedVolumeGuard continues its kernel mount/device/source/volume-marker/root/active-role checks. Changing only service-side root cannot reuse the ID. Managed 64-hex IDs have no bypass flag. Arbitrary opaque IDs remain available only to independently composed infrastructure ports/tests, and cannot enter B04's managed catalog.
+
+Node-specific absolute mountpoint, device/source spelling, bind address, role-file path/current role and PKI are excluded. A stable VIP/DNS serviceOrigin, replicated logical volume ID and same relative root/filesystem retain the ID across nodes; this does not prove HA/fencing or volume authenticity. S3 credentials, certificates, timeout, admission, chunk/native/object budgets and retries are excluded from physical identity. Credential/runtime rotation therefore does not change the ID. API configuration is rebuilt on restart; S3's credential supplier re-reads its Environment, while local TLS context is rebuilt during configuration. No external immutable configuration platform is required.
+
+Every configured definition and historical session/file routing rederives the ID. Physical changes require a new ID and retained old definitions for old files. Missing/mismatching historical definitions reject routing; they never fall back to the current default. Changing a DNS service's actual data behind the same logical service identity or forging all protected mount identities remains a deployment integrity issue; the codec does not claim to solve that.
+
+## Production configuration and readiness
+
+`files.backends` is a comma-separated list of safe ASCII aliases. Each `files.<alias>.` defines required `id`, `type` (`local` or `s3`), positive `revision`, and optional `status` (`WRITABLE`, `READ_ONLY`, `DISABLED`; default WRITABLE). `files.default` selects one configured alias for new uploads. The legacy storage placeholder properties do not define a managed registry backend.
+
+Local additionally requires `service-origin`, `volume-id`, `relative-root`, `filesystem`, and deployment-private `key-store`, `key-store-password`, `trust-store`, `trust-store-password`. Production S3 requires a canonical HTTPS `endpoint` (HTTP is accepted only by independently injected controlled test adapters), `region`, `data-bucket`, `control-bucket`, deployment-private `access-key`/`secret-key`, and explicit `maximum-object-bytes`; optional `path-style=true`, `key-budget=1024`, `chunk-bytes=8388608`, `admission=8`, `timeout-ms=20000`. Secrets are never database fields or acceptance artifacts. Production S3 uses the JVM TLS trust configuration through the SDK URLConnection HTTP client; inject the company CA in a deployment-owned trust store via JVM `-Djavax.net.ssl.trustStore=/protected/path/truststore` and `-Djavax.net.ssl.trustStoreType=PKCS12` (with its password supplied by the protected launcher, never acceptance logs). The default is the JDK trust store. There is no trust-all, hostname-verification bypass, production HTTP flag or implicit company CA import; endpoint/certificate qualification remains deployment work.
+
+Configuration verifies actual adapter access, records matching storage_backend type/status/config_revision, rejects rollback or same-revision status changes, and cannot redefine a managed ID. Operational status changes use a higher revision. WRITABLE accepts new operations; READ_ONLY preserves reading and already-frozen completion recovery while refusing new init/parts/freezing; DISABLED denies I/O. Default changes affect only new init. The readiness group includes real configured file storage; empty configuration or unavailable default is DOWN/503. Production still needs actual purpose/reference providers before useful business upload/download is enabled.
+
+## Evidence limits
+
+The focused acceptance suite uses only newly owned native local/mTLS, MySQL and controlled RustFS/S3 fixtures, with small payloads. It proves registry business composition separately from previously reviewed native infrastructure tests. Real API JVM termination/restart is distinct from the separate application-context restart test. Independent Python byte construction supplies codec golden vectors. Fresh production API/native-service JVMs reject same-ID bucket/root replacement. No company endpoint qualification, production deployment, two-node takeover, power-loss, heavy 10001-part rerun, B06 integration or D07 deletion is claimed.
