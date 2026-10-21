@@ -1,12 +1,14 @@
 """Fail-closed local verification. All Java counts come from fresh JUnit XML."""
 import argparse
 import fnmatch
+import json
 import pathlib
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+PYTHON_SUITE = pathlib.Path(__file__).with_name("python_suite.py")
 
 def execute(command, cwd, reports):
     """Remove stale reports, run the command, and require executed passing tests."""
@@ -72,6 +74,27 @@ def contracts():
         print(f"FAIL: OpenAPI validator unavailable: {error}", file=sys.stderr)
         return 1
 
+def python_tests():
+    """Require fresh executed/failed/skipped unittest evidence, not just exit zero."""
+    report = ROOT / "artifacts/checks/python.json"
+    report.parent.mkdir(parents=True, exist_ok=True)
+    report.unlink(missing_ok=True)
+    log = report.with_suffix(".log")
+    result = None
+    try:
+        with log.open("w") as output:
+            result = subprocess.run([sys.executable, str(PYTHON_SUITE), str(ROOT / "tools/checks/tests"), str(report)], cwd=ROOT, stdout=output, stderr=subprocess.STDOUT, check=False)
+        counts = json.loads(report.read_text())
+        executed, failed, skipped = (int(counts[key]) for key in ("executed", "failed", "skipped"))
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        print(f"FAIL: invalid or missing fresh Python evidence: {error}; evidence={report}; log={log}", file=sys.stderr)
+        return result.returncode if result is not None and result.returncode > 0 else 1
+    passed = result.returncode == 0 and executed > 0 and failed == 0 and skipped == 0
+    print(f"{'PASS' if passed else 'FAIL'}: Python executed={executed}, failed={failed}, skipped={skipped}; evidence={report}; log={log}", flush=True)
+    if result.returncode:
+        return result.returncode if result.returncode > 0 else 1
+    return 0 if passed else 1
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("group", choices=["unit", "it", "web", "e2e", "visual", "contract", "load", "ops", "all"])
@@ -86,9 +109,9 @@ def main(argv=None):
         return 1
     if args.selector:
         parser.error("all does not accept a selector")
-    python_result = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tools/checks/tests"], cwd=ROOT)
-    if python_result.returncode:
-        return python_result.returncode
+    python_result = python_tests()
+    if python_result:
+        return python_result
     result = contracts()
     if result:
         return result
