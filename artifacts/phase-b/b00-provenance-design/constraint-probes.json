@@ -1,0 +1,175 @@
+{
+  "container": "ama-test-b01-28337bd74163",
+  "container_id": "2e5c579812838d46a89be4472eaccc1ca1fefd137048d0ea3018cd781588a11e",
+  "scope": "actual SQL constraints and explicit accepted boundary witnesses; connection reopen only, not database restart or runtime acceptance",
+  "probes": [
+    {
+      "probe": "initial-business-zero",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "persist-owned-synthetic-seed",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "reopen-reconstruct-mixed-evidence-without-candidate-query",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "mixed-note-exact-input-context",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "action-evidence-independent-of-suggestion",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "zero-evidence-context-root",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "duplicate-generation-context",
+      "expected_error": 1062,
+      "observed_error": 1062,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "generated-context-missing-input",
+      "expected_error": 3819,
+      "observed_error": 3819,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "manual-context-with-input",
+      "expected_error": 3819,
+      "observed_error": 3819,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "unknown-origin-tag",
+      "expected_error": 3819,
+      "observed_error": 3819,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "unknown-context-FK",
+      "expected_error": 1452,
+      "observed_error": 1452,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "duplicate-material-selection",
+      "expected_error": 1062,
+      "observed_error": 1062,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "restrict-context-delete",
+      "expected_error": 1451,
+      "observed_error": 1451,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "restrict-selected-document-delete",
+      "expected_error": 1451,
+      "observed_error": 1451,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "profile-sidecar-deletion-is-domain-obligation",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": true,
+      "expectation_met": true
+    },
+    {
+      "probe": "missing-selection-is-domain-obligation",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": true,
+      "expectation_met": true
+    },
+    {
+      "probe": "wrong-document-material-is-domain-obligation",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": true,
+      "expectation_met": true
+    },
+    {
+      "probe": "cross-meeting-is-domain-obligation",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": true,
+      "expectation_met": true
+    },
+    {
+      "probe": "legacy-null-is-unavailable-not-current",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": true,
+      "expectation_met": true
+    },
+    {
+      "probe": "unused-unit-retained-in-complete-document",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "revocation-preserves-origin-not-access",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": true,
+      "expectation_met": true
+    },
+    {
+      "probe": "duplicate-occurrence-key-rejected",
+      "expected_error": 1062,
+      "observed_error": 1062,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "final-reopen-unchanged-origin",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": false,
+      "expectation_met": true
+    },
+    {
+      "probe": "native-utc-epoch",
+      "expected_error": null,
+      "observed_error": null,
+      "boundary": false,
+      "expectation_met": true
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+# New seed augments synthetic B00 relations; all values are schema-only fixtures.
+for n in (1,2):
+    add('material_reference',id=uid('material'+str(n)),meeting_id=m,kind='LOCAL',file_id=uid('file'),state='ACTIVE')
+    add('material_revision',id=uid('mr'+str(n)),reference_id=uid('material'+str(n)),revision=1,content_file_id=uid('file'),content_hash=sha,parse_state='READY',created_at=now)
+add('material_snapshot',id=uid('snapshot'),meeting_id=m,revision=1,input_fingerprint=sha,applied_at=now)
+add('material_snapshot_item',snapshot_id=uid('snapshot'),material_revision_id=uid('mr1'),ordinal=1)
+for n in (1,2):
+    add('parsed_document',id=uid('doc'+str(n)),material_revision_id=uid('mr1'),parser_version='P'+str(n),text_file_id=uid('file'),state='READY',unit_count=2)
+    add('parsed_document_profile',document_id=uid('doc'+str(n)),format='PDF',parser_config_version='P'+str(n),parser_config_sha256=str(n)*64)
+    for ordinal,page in ((1,1),(2,5)):
+        add('parsed_unit',document_id=uid('doc'+str(n)),ordinal=ordinal,kind='PAGE',page_no=page,body='parser '+str(n)+' page '+str(page))
+add('generation_input',id=uid('input2'),meeting_id=m,transcript_confirmation_id=uid('transcript-confirmation'),material_snapshot_id=uid('snapshot'),template_revision_id=uid('template-revision'),exclusion_revision_id=uid('exclusion'),prompt_version='synthetic-v2',model_config_version='synthetic-v2',base_revision=1,input_fingerprint='b'*64,scope='FULL')
+seed.append('UPDATE generation_input SET material_snapshot_id='+val(uid('snapshot'))+' WHERE id='+val(uid('input'))+';')
+def context(name,origin='GENERATION_INPUT',input_name='input',meeting=m):
+    return insert('source_context',id=uid(name),meeting_id=meeting,origin_kind=origin,generation_input_id=uid(input_name) if input_name else None,transcript_confirmation_id=uid('transcript-confirmation'),material_snapshot_id=uid('snapshot'),catalog_version='synthetic-material-v2',catalog_sha256=sha,created_at=now)
+for n,input_name in ((1,'input'),(2,'input2')):
+    seed.append(context('context'+str(n),input_name=input_name))
+    add('source_context_material',context_id=uid('context'+str(n)),material_revision_id=uid('mr1'),parsed_document_id=uid('doc'+str(n)))
+seed.append(context('manual','MANUAL_SELECTION',None))
+add('source_context_material',context_id=uid('manual'),material_revision_id=uid('mr1'),parsed_document_id=uid('doc2'))
+add('source_locator',id=uid('pdf-locator'),meeting_id=m,kind='PDF_PAGE',file_id=uid('file'),page_no=1)
+seed.append('UPDATE minutes_element SET source_context_id='+val(uid('context1'))+';')
+seed.append('UPDATE evidence_link SET source_context_id='+val(uid('context1'))+',locator_id='+val(uid('pdf-locator'))+';')
+add('evidence_link',id=uid('rebound'),locator_id=uid('pdf-locator'),element_id=uid('element'),support_state='PARTIAL',target_anchor='new ACTION basis',source_context_id=uid('manual'))
+add('background_note',id=uid('note2'),set_id=uid('set'),input_id=uid('input2'),ordinal=2,body='Same text can have a different exact parser')
+add('background_note_source',note_id=uid('note2'),locator_id=uid('pdf-locator'))
+seed.append('UPDATE background_note_source SET locator_id='+val(uid('pdf-locator'))+' WHERE note_id='+val(uid('note'))+';')
+# Identical historical candidate set/content associations never participate in origin resolution.
+add('task_subject',subject_kind='MEETING',subject_id=m,business_version=1,cancel_epoch=0)
+for n,inp in ((1,'input'),(2,'input2')):
+    add('durable_task',id=uid('task'+str(n)),task_type='MINUTES',pool='MODEL',subject_kind='MEETING',subject_id=m,producer_key=str(n)*64,input_kind='GENERATION_INPUT',input_id=uid(inp),input_fingerprint=str(n)*64,business_version=1,cancel_epoch=0,priority=0,max_attempts=1,available_at=now,created_at=now)
+    add('generation_candidate',id=uid('candidate'+str(n)),meeting_id=m,input_id=uid(inp),task_id=uid('task'+str(n)),element_set_id=uid('set'),base_revision=1,input_fingerprint=str(n)*64,state='STALE',created_at=now)
+# Copy/partial replace/restoration are explicit new IDs with per-row inherited context.
+for suffix,revision in (('copy',2),('partial',3),('restore',4)):
+    add('element_set',id=uid('set-'+suffix),meeting_id=m,revision=revision,created_at=now)
+    for n in (1,2):
+        basis='context2' if suffix=='partial' and n==2 else 'context1'
+        add('minutes_element',id=uid(suffix+str(n)),set_id=uid('set-'+suffix),category='DISCUSSION',ordinal=n,body='same discussion',support_state='PARTIAL',source_context_id=uid(basis))
+        add('evidence_link',id=uid('e-'+suffix+str(n)),locator_id=uid('pdf-locator'),element_id=uid(suffix+str(n)),support_state='PARTIAL',target_anchor='same anchor',source_context_id=uid(basis))
+add('minutes_element',id=uid('zero-evidence'),set_id=uid('set-copy'),category='DECISION',ordinal=1,body='explicit unsupported basis',support_state='UNSUPPORTED',source_context_id=uid('context2'))
+cli=['docker','exec','-i',container,'sh','-c','MYSQL_PWD="$MYSQL_PASSWORD" mysql --protocol=TCP -h127.0.0.1 --user="$MYSQL_USER" "$MYSQL_DATABASE" --batch --raw --skip-column-names']
+records=[]
+def execute(name,sql,error=None,output=None,boundary=False):
+    p=subprocess.run(cli,input=sql,text=True,capture_output=True)
+    # Save before assertions: rejected, failed and successful attempts all survive.
+    raw=dict(probe=name,sql=sql,exit_code=p.returncode,stdout=p.stdout,stderr=p.stderr,database_boundary_witness=boundary)
+    with (OUT/'probes-raw.jsonl').open('a') as f:f.write(json.dumps(raw,ensure_ascii=False)+'\n')
+    code=re.search(r'ERROR (\d+)',p.stderr)
+    if error:assert p.returncode!=0 and code and int(code[1])==error,(name,p.stderr)
+    else:
+        assert p.returncode==0,(name,p.stderr)
+        if output is not None:assert p.stdout.strip()==output,(name,p.stdout,output)
+    records.append(dict(probe=name,expected_error=error,observed_error=int(code[1]) if code else None,boundary=boundary,expectation_met=True))
+def run(name,sql,error=None,output=None,boundary=False):
+    execute(name,'SET NAMES utf8mb4; SET time_zone="+00:00"; START TRANSACTION;\n'+sql+'\nROLLBACK;',error,output,boundary)
+assert not (OUT/'seed-committed.json').exists(), 'Never reseed or reset an existing fixture'
+execute('initial-business-zero','SELECT COUNT(*) FROM meeting;',output='0')
+execute('persist-owned-synthetic-seed','SET NAMES utf8mb4; SET time_zone="+00:00"; START TRANSACTION;\n'+'\n'.join(seed)+'\nCOMMIT;')
+(OUT/'seed-committed.json').write_text(json.dumps({'container':container,'seed_sha256':hashlib.sha256('\n'.join(seed).encode()).hexdigest(),'scope':'schema-only synthetic; configs deliberately not executable'})+'\n')
+query="SELECT p.parser_config_version,COUNT(*) FROM evidence_link e JOIN source_context_material s ON s.context_id=e.source_context_id JOIN parsed_document_profile p ON p.document_id=s.parsed_document_id WHERE e.locator_id="+val(uid('pdf-locator'))+" GROUP BY p.parser_config_version ORDER BY p.parser_config_version;"
+run('reopen-reconstruct-mixed-evidence-without-candidate-query',query,output='P1\t7\nP2\t2')
+run('mixed-note-exact-input-context',"SELECT p.parser_config_version FROM background_note n JOIN source_context c ON c.generation_input_id=n.input_id JOIN source_context_material s ON s.context_id=c.id JOIN parsed_document_profile p ON p.document_id=s.parsed_document_id ORDER BY n.ordinal;",output='P1\nP2')
+run('action-evidence-independent-of-suggestion',"SELECT p.parser_config_version,c.origin_kind,a.input_id=e.source_context_id FROM evidence_link e JOIN action_suggestion a ON a.element_id=e.element_id JOIN source_context c ON c.id=e.source_context_id JOIN source_context_material s ON s.context_id=c.id JOIN parsed_document_profile p ON p.document_id=s.parsed_document_id WHERE e.id="+val(uid('rebound'))+';',output='P2\tMANUAL_SELECTION\t0')
+run('zero-evidence-context-root',"SELECT c.origin_kind,COUNT(e.id) FROM minutes_element m JOIN source_context c ON c.id=m.source_context_id LEFT JOIN evidence_link e ON e.element_id=m.id WHERE m.id="+val(uid('zero-evidence'))+' GROUP BY c.origin_kind;',output='GENERATION_INPUT\t0')
+run('duplicate-generation-context',context('dup'),1062)
+run('generated-context-missing-input',context('bad','GENERATION_INPUT',None),3819)
+run('manual-context-with-input',context('bad','MANUAL_SELECTION','input'),3819)
+run('unknown-origin-tag',context('bad','GENERATED',None),3819)
+run('unknown-context-FK',insert('source_context_material',context_id=uid('missing'),material_revision_id=uid('mr1'),parsed_document_id=uid('doc1')),1452)
+run('duplicate-material-selection',insert('source_context_material',context_id=uid('context1'),material_revision_id=uid('mr1'),parsed_document_id=uid('doc2')),1062)
+run('restrict-context-delete','DELETE FROM source_context WHERE id='+val(uid('context1'))+';',1451)
+run('restrict-selected-document-delete','DELETE FROM parsed_document WHERE id='+val(uid('doc1'))+';',1451)
+run('profile-sidecar-deletion-is-domain-obligation','DELETE FROM parsed_document_profile WHERE document_id='+val(uid('doc1'))+'; SELECT COUNT(*) FROM parsed_document_profile WHERE document_id='+val(uid('doc1'))+';',output='0',boundary=True)
+run('missing-selection-is-domain-obligation',context('incomplete','MANUAL_SELECTION',None)+' SELECT COUNT(*) FROM source_context_material WHERE context_id='+val(uid('incomplete'))+';',output='0',boundary=True)
+run('wrong-document-material-is-domain-obligation',context('wrong','MANUAL_SELECTION',None)+insert('source_context_material',context_id=uid('wrong'),material_revision_id=uid('mr2'),parsed_document_id=uid('doc1'))+' SELECT s.material_revision_id=d.material_revision_id FROM source_context_material s JOIN parsed_document d ON d.id=s.parsed_document_id WHERE s.context_id='+val(uid('wrong'))+';',output='0',boundary=True)
+run('cross-meeting-is-domain-obligation',context('cross','MANUAL_SELECTION',None,mb)+' SELECT c.meeting_id=t.meeting_id FROM source_context c JOIN transcript_confirmation t ON t.id=c.transcript_confirmation_id WHERE c.id='+val(uid('cross'))+';',output='0',boundary=True)
+run('legacy-null-is-unavailable-not-current',insert('minutes_element',id=uid('legacy'),set_id=uid('set'),category='DISCUSSION',ordinal=10,body='legacy',support_state='PARTIAL')+' SELECT source_context_id IS NULL FROM minutes_element WHERE id='+val(uid('legacy'))+';',output='1',boundary=True)
+run('unused-unit-retained-in-complete-document','SELECT page_no FROM parsed_unit WHERE document_id='+val(uid('doc1'))+' ORDER BY ordinal;',output='1\n5')
+run('revocation-preserves-origin-not-access',"UPDATE material_reference SET state='REMOVED'; SELECT COUNT(*) FROM source_context_material; SELECT COUNT(*) FROM material_reference WHERE state='ACTIVE';",output='3\n0',boundary=True)
+run('duplicate-occurrence-key-rejected',insert('background_note_source',note_id=uid('note2'),locator_id=uid('pdf-locator')),1062)
+execute('final-reopen-unchanged-origin',query,output='P1\t7\nP2\t2')
+execute('native-utc-epoch','SELECT UTC_TIMESTAMP(6),UNIX_TIMESTAMP(UTC_TIMESTAMP(6)),@@innodb_use_native_aio;')
+(OUT/'constraint-probes.json').write_text(json.dumps(dict(container=container,container_id=proof['id'],scope='actual SQL constraints and explicit accepted boundary witnesses; connection reopen only, not database restart or runtime acceptance',probes=records),ensure_ascii=False,indent=2)+'\n')
+print(json.dumps(dict(probes=len(records),boundaries=sum(x.get('boundary',False) for x in records))))

@@ -1,4 +1,4 @@
-# AMA 数据字典 — B00-1.3-review
+# AMA 数据字典 — B00-1.4-proposed
 
 生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。
 
@@ -103,6 +103,9 @@
 |result_review|B-07/D-03/B-08|V012|人类对精确目标内容和完整证据集合的不可变断言|
 |result_review_evidence|B-07/D-03/B-08|V012|复核实际使用的完整证据集合，不只存支持项|
 |final_result_review|B-08|V013|最终确认冻结精确复核成员，不读取以后最新复核|
+|source_context|D-01/B-07|UNASSIGNED-D01|不可变完整来源选择；生成与人工选择显式分型|
+|source_context_material|D-01/B-07|UNASSIGNED-D01|上下文内每个材料版本唯一明确选择解析文档|
+|parsed_document_profile|D-01|UNASSIGNED-D01|解析文档的明确格式及不可变解析配置归档引用|
 
 ## audit_event
 
@@ -941,14 +944,17 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |ordinal|`bigint unsigned`|否|无|同类顺序|
 |body|`longtext`|否|无|内容|
 |support_state|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|该版本创建时的冻结分类；不能单独证明当前人工复核充分性，参见result_review|
+|source_context_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|不可变来源选择；NULL仅历史未知；v3新写必填由服务验证|
 
 主键：`id`。
 - 唯一约束 `element_order(set_id,category,ordinal)`：分类顺序。
+- 索引 `minutes_element_context(source_context_id,id)`：历史来源选择反向依赖。
 - CHECK `ck_minutes_element_0`：`category IN ('OVERVIEW','DISCUSSION','CONCLUSION','ACTION','RISK','OPEN_QUESTION','DISAGREEMENT')`。
 - CHECK `ck_minutes_element_1`：`support_state IN ('SUPPORTED','PARTIAL','UNSUPPORTED','NOT_EXTRACTED')`。
 - FK `fk_minutes_element_0`：`set_id` → `element_set(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_minutes_element_1`：`source_context_id` → `source_context(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理；B00-1.3当前人工支持由精确result_review决定，旧support_state不原地改写；新目标内容/来源/版本使旧断言失效。
+更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理；B00-1.3当前人工支持由精确result_review决定，旧support_state不原地改写；新目标内容/来源/版本使旧断言失效；B00-1.4-proposed来源basis由自身source_context_id确定，人工改写不声称模型生成；evidence自身上下文优先，不能从要素/正文/ACTION建议推断。新v3写NULL由应用拒绝；旧NULL明确不可恢复。
 
 ## action_item
 
@@ -1074,17 +1080,20 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |minutes_revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|目标正文版本；二选一|
 |support_state|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|该版本创建时的冻结分类；不能单独证明当前人工复核充分性，参见result_review|
 |target_anchor|`longtext`|否|无|正文段锚或要素局部锚|
+|source_context_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|不可变来源选择；NULL仅历史未知；v3新写必填由服务验证|
 
 主键：`id`。
 - 索引 `evidence_element(element_id,locator_id)`：要素来源追踪。
 - 索引 `evidence_minutes(minutes_revision_id,locator_id)`：正文引用。
+- 索引 `evidence_link_context(source_context_id,id)`：历史来源选择反向依赖。
 - CHECK `ck_evidence_link_0`：`(element_id IS NULL) <> (minutes_revision_id IS NULL)`。
 - CHECK `ck_evidence_link_1`：`support_state IN ('SUPPORTED','PARTIAL','UNSUPPORTED')`。
 - FK `fk_evidence_link_0`：`locator_id` → `source_locator(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_evidence_link_1`：`element_id` → `minutes_element(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_evidence_link_2`：`minutes_revision_id` → `minutes_revision(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_evidence_link_3`：`source_context_id` → `source_context(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理；B00-1.3当前人工支持由精确result_review决定，旧support_state不原地改写；新目标内容/来源/版本使旧断言失效。
+更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理；B00-1.3当前人工支持由精确result_review决定，旧support_state不原地改写；新目标内容/来源/版本使旧断言失效；B00-1.4-proposed来源basis由自身source_context_id确定，人工改写不声称模型生成；evidence自身上下文优先，不能从要素/正文/ACTION建议推断。新v3写NULL由应用拒绝；旧NULL明确不可恢复。
 
 ## final_confirmation
 
@@ -2222,3 +2231,70 @@ R6 片段多选标记随转写版本冻结；不是纪要要素。所属 B-06/C-
 - FK `fk_final_result_review_1`：`review_id` → `result_review(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
 更新/删除与完整性：与V013 final_confirmation同时建表并立即有两个physical FK；不新增deferredFK。最终确认同事务验证同会议/精确minutes和element_set/当前适用复核，成员与完整复核投影进入source_manifest_hash；以后新断言不能改旧membership。先删除membership再清confirmation/review。
+
+## source_context
+
+不可变完整来源选择；生成与人工选择显式分型。所属 D-01/B-07，计划 UNASSIGNED-D01。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|内部 UUID；服务器生成，永不复用|
+|meeting_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|所属会议|
+|origin_kind|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|GENERATION_INPUT 或 MANUAL_SELECTION|
+|generation_input_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|仅生成上下文的精确输入；人工为NULL|
+|transcript_confirmation_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|冻结已确认转写|
+|material_snapshot_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|冻结材料集合；NULL显式EMPTY|
+|catalog_version|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|可恢复不可变CATALOG版本|
+|catalog_sha256|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|归档CATALOG原始字节SHA256|
+|created_at|`datetime(6)`|否|无|服务器UTC微秒创建时间|
+
+主键：`id`。
+- 唯一约束 `context_generation(generation_input_id)`：每个生成输入至多一个上下文；人工NULL可多行。
+- 索引 `context_meeting(meeting_id,id)`：会议完整历史枚举。
+- CHECK `ck_source_context_0`：`origin_kind IN ('GENERATION_INPUT','MANUAL_SELECTION')`。
+- CHECK `ck_source_context_1`：`(origin_kind='GENERATION_INPUT' AND generation_input_id IS NOT NULL) OR (origin_kind='MANUAL_SELECTION' AND generation_input_id IS NULL)`。
+- CHECK `ck_source_context_2`：`REGEXP_LIKE(catalog_sha256, '^[0-9a-f]{64}$', 'c')`。
+- FK `fk_source_context_0`：`meeting_id` → `meeting(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_source_context_1`：`generation_input_id` → `generation_input(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_source_context_2`：`transcript_confirmation_id` → `transcript_confirmation(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_source_context_3`：`material_snapshot_id` → `material_snapshot(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：完整不可变来源快照；服务验证同会议/确认状态/完整材料/精确配置依赖和权限。生成input与context内容一致；人工不伪造生成。持根锁与使用者及文件账本原子提交；历史引用RESTRICT，无自动TTL。
+
+## source_context_material
+
+上下文内每个材料版本唯一明确选择解析文档。所属 D-01/B-07，计划 UNASSIGNED-D01。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|context_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|不可变来源上下文|
+|material_revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|完整快照材料版本|
+|parsed_document_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|该材料的精确解析输出；不取latest|
+
+主键：`context_id,material_revision_id`。
+- 索引 `selection_document(parsed_document_id,context_id)`：旧解析输出仅被复制证据引用仍受保护。
+- 索引 `selection_material(material_revision_id,context_id)`：材料历史依赖。
+- FK `fk_source_context_material_0`：`context_id` → `source_context(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_source_context_material_1`：`material_revision_id` → `material_revision(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_source_context_material_2`：`parsed_document_id` → `parsed_document(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：服务验证与快照items双射、document确属revision、READY/文本完整和唯一profile；FK只证存在。完整集合原子INSERT后不可增删；全图解除后才可清理。
+
+## parsed_document_profile
+
+解析文档的明确格式及不可变解析配置归档引用。所属 D-01，计划 UNASSIGNED-D01。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|document_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|精确解析文档|
+|format|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|PDF/PPT/WORD/TXT；不能从unit种类或文件名猜测|
+|parser_config_version|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|可恢复归档PARSER_CONFIG版本|
+|parser_config_sha256|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|解析配置归档原始字节SHA256|
+
+主键：`document_id`。
+- 索引 `profile_parser(parser_config_version,document_id)`：配置历史依赖枚举。
+- CHECK `ck_parsed_document_profile_0`：`format IN ('PDF','PPT','WORD','TXT')`。
+- CHECK `ck_parsed_document_profile_1`：`REGEXP_LIKE(parser_config_sha256, '^[0-9a-f]{64}$', 'c')`。
+- FK `fk_parsed_document_profile_0`：`document_id` → `parsed_document(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：与实际解析输出原子创建；服务验证parser_version等于归档version、格式和映射匹配；缺少sidecar为legacy unavailable，禁止推测/补造READY。配置归档保留由领域负责，非跨库FK。

@@ -11,7 +11,7 @@ import re
 import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VERSION = 'B00-1.3-review'
+VERSION = 'B00-1.4-proposed'
 TABLES = []
 ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
 KEY = 'varchar(255) COLLATE utf8mb4_0900_bin'
@@ -401,6 +401,31 @@ next(c for c in final['cols'] if c['name']=='source_manifest_hash')['meaning']='
 final['policy'] += '；B00-1.3同事务写final_result_review，历史读取该冻结成员，不随新review改变；全部业务/权限/敏感/来源检查仍由B08负责'
 
 
+# B00-1.4-proposed: unassigned correction; historical sources remain sealed.
+table('source_context','D-01/B-07','UNASSIGNED-D01','不可变完整来源选择；生成与人工选择显式分型',[
+    ident(),ref('meeting_id','所属会议'),code('origin_kind','GENERATION_INPUT 或 MANUAL_SELECTION'),ref('generation_input_id','仅生成上下文的精确输入；人工为NULL',True),ref('transcript_confirmation_id','冻结已确认转写'),ref('material_snapshot_id','冻结材料集合；NULL显式EMPTY',True),col('catalog_version',KEY,'可恢复不可变CATALOG版本'),fingerprint('catalog_sha256','归档CATALOG原始字节SHA256'),ts('created_at','服务器UTC微秒创建时间')],
+    indexes=[idx('context_generation','generation_input_id','每个生成输入至多一个上下文；人工NULL可多行',True),idx('context_meeting','meeting_id,id','会议完整历史枚举')],
+    fks=[fk('meeting_id','meeting'),fk('generation_input_id','generation_input'),fk('transcript_confirmation_id','transcript_confirmation'),fk('material_snapshot_id','material_snapshot')],
+    checks=[enum('origin_kind','GENERATION_INPUT,MANUAL_SELECTION'),"(origin_kind='GENERATION_INPUT' AND generation_input_id IS NOT NULL) OR (origin_kind='MANUAL_SELECTION' AND generation_input_id IS NULL)","REGEXP_LIKE(catalog_sha256, '^[0-9a-f]{64}$', 'c')"],
+    policy='完整不可变来源快照；服务验证同会议/确认状态/完整材料/精确配置依赖和权限。生成input与context内容一致；人工不伪造生成。持根锁与使用者及文件账本原子提交；历史引用RESTRICT，无自动TTL')
+table('source_context_material','D-01/B-07','UNASSIGNED-D01','上下文内每个材料版本唯一明确选择解析文档',[
+    ref('context_id','不可变来源上下文'),ref('material_revision_id','完整快照材料版本'),ref('parsed_document_id','该材料的精确解析输出；不取latest')],pk='context_id,material_revision_id',
+    indexes=[idx('selection_document','parsed_document_id,context_id','旧解析输出仅被复制证据引用仍受保护'),idx('selection_material','material_revision_id,context_id','材料历史依赖')],
+    fks=[fk('context_id','source_context'),fk('material_revision_id','material_revision'),fk('parsed_document_id','parsed_document')],
+    policy='服务验证与快照items双射、document确属revision、READY/文本完整和唯一profile；FK只证存在。完整集合原子INSERT后不可增删；全图解除后才可清理')
+table('parsed_document_profile','D-01','UNASSIGNED-D01','解析文档的明确格式及不可变解析配置归档引用',[
+    ref('document_id','精确解析文档'),code('format','PDF/PPT/WORD/TXT；不能从unit种类或文件名猜测'),col('parser_config_version',KEY,'可恢复归档PARSER_CONFIG版本'),fingerprint('parser_config_sha256','解析配置归档原始字节SHA256')],pk='document_id',
+    indexes=[idx('profile_parser','parser_config_version,document_id','配置历史依赖枚举')],fks=[fk('document_id','parsed_document')],
+    checks=[enum('format','PDF,PPT,WORD,TXT'),"REGEXP_LIKE(parser_config_sha256, '^[0-9a-f]{64}$', 'c')"],
+    policy='与实际解析输出原子创建；服务验证parser_version等于归档version、格式和映射匹配；缺少sidecar为legacy unavailable，禁止推测/补造READY。配置归档保留由领域负责，非跨库FK')
+for name in ('minutes_element','evidence_link'):
+    t=next(t for t in TABLES if t['name']==name)
+    t['cols'].append(ref('source_context_id','不可变来源选择；NULL仅历史未知；v3新写必填由服务验证',True))
+    t['indexes'].append(idx(name+'_context','source_context_id,id','历史来源选择反向依赖'))
+    t['fks'].append(fk('source_context_id','source_context'))
+    t['policy'] += '；B00-1.4-proposed来源basis由自身source_context_id确定，人工改写不声称模型生成；evidence自身上下文优先，不能从要素/正文/ACTION建议推断。新v3写NULL由应用拒绝；旧NULL明确不可恢复'
+
+
 def cname(t, n): return f"ck_{t['name']}_{n}"
 def fname(t, n): return f"fk_{t['name']}_{n}"
 def sql():
@@ -464,10 +489,18 @@ def er():
 def generated():
     return {'docs/database/ama-schema-draft.sql':sql(),'docs/database/ama-data-dictionary.md':dictionary()}
 
+def record_mysql(container, query, result):
+    # Append-only raw query evidence; SQL is synthetic design/metadata only.
+    out=ROOT/'artifacts/phase-b/b00-provenance-design/mysql-raw.jsonl'
+    with out.open('a') as stream:
+        stream.write(json.dumps(dict(container=container,query=query,exit_code=result.returncode,stdout=result.stdout,stderr=result.stderr),ensure_ascii=False)+'\n')
+
 def mysql(container, query):
-    # Credentials remain inside the NEW fixture container. No remote host accepted.
-    return subprocess.check_output(['docker','exec','-i',container,'sh','-c',
-        'MYSQL_PWD="$MYSQL_PASSWORD" mysql --protocol=TCP -h127.0.0.1 --user="$MYSQL_USER" "$MYSQL_DATABASE" --batch --raw --skip-column-names'],input=query,text=True)
+    result=subprocess.run(['docker','exec','-i',container,'sh','-c',
+        'MYSQL_PWD="$MYSQL_PASSWORD" mysql --protocol=TCP -h127.0.0.1 --user="$MYSQL_USER" "$MYSQL_DATABASE" --batch --raw --skip-column-names'],input=query,text=True,capture_output=True)
+    record_mysql(container,query,result)
+    result.check_returncode()
+    return result.stdout
 
 def check_ast(expression):
     """Compare CHECK semantics while preserving AND/OR grouping and literal case.
@@ -538,11 +571,14 @@ def verify(container, metadata_only=False):
     if not re.fullmatch(r'ama-test-b01-[a-f0-9]{12}',container) or not local.is_file():
         raise SystemExit('Refusing: fixture must be created in THIS worktree by mysql_fixture.py')
     meta=json.loads(subprocess.check_output(['docker','inspect',container],text=True))[0]
-    initial=json.loads((ROOT/'artifacts/phase-b/b00-generation-design/fixture-initial.json').read_text())
+    initial=json.loads((ROOT/'artifacts/phase-b/b00-provenance-design/fixture-initial.json').read_text())
     assert initial['owned_worktree']==str(ROOT) and initial['container']==container
     assert meta['Id']==initial['id'] and meta['Image']==initial['image_id']
     assert meta['Config']['Image']==initial['image_reference'] and meta['Mounts']==initial['mounts']
     assert initial['initial_tables']==0 and initial['native_aio']==0
+    assert initial['resources']=={k:meta['HostConfig'][k] for k in ('NanoCpus','Memory','MemorySwap','PidsLimit')}
+    assert initial['resources']==dict(NanoCpus=2000000000,Memory=1073741824,MemorySwap=1073741824,PidsLimit=256)
+    assert meta['HostConfig']['AutoRemove'] is False
     assert mysql(container,'SELECT @@innodb_use_native_aio;').strip()=='0'
     assert meta['Config']['Labels'].get('ama.test-fixture')=='b01'
     assert all(x['HostIp']=='127.0.0.1' for x in meta['NetworkSettings']['Ports']['3306/tcp'])
@@ -553,7 +589,7 @@ def verify(container, metadata_only=False):
     if not metadata_only:
         assert mysql(container,"SELECT count(*) FROM information_schema.tables WHERE table_schema=DATABASE();").strip()=='0', 'Fixture not empty: refusing to alter'
     version=mysql(container,'SELECT VERSION();').strip()
-    assert version.startswith('8.4.'), version
+    assert version == '8.4.6', version
     if not metadata_only: mysql(container,sql())
     queries={
       'tables':"SELECT JSON_OBJECT('table',TABLE_NAME,'engine',ENGINE,'collation',TABLE_COLLATION) FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() ORDER BY TABLE_NAME;",
@@ -593,12 +629,16 @@ def verify(container, metadata_only=False):
     # Behavioral negative checks on independent leaf roots, not a duplicate of generation.
     for statement in ["INSERT INTO storage_backend VALUES ('bad','invalid','WRITABLE',1);", "INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (REPEAT('a',64),'missing',0,REPEAT('a',43),'2026-01-01','2026-01-02');"]:
         p=subprocess.run(['docker','exec','-i',container,'sh','-c','MYSQL_PWD="$MYSQL_PASSWORD" mysql --protocol=TCP -h127.0.0.1 --user="$MYSQL_USER" "$MYSQL_DATABASE" --batch'],input=statement,text=True,capture_output=True)
+        record_mysql(container,statement,p)
         assert p.returncode!=0 and ('3819' in p.stderr or '1452' in p.stderr), 'Expected CHECK/FK rejection'
     counts=dict(tables=len(actual['tables']),columns=len(actual['columns']),index_definitions=len({(x['table'],x['name']) for x in actual['indexes']}),index_columns=len(actual['indexes']),checks=len(actual['checks']),foreign_key_constraints=len({(x['table'],x['name']) for x in actual['foreign_keys']}),foreign_key_columns=len(actual['foreign_keys']))
     evidence=dict(design_version=VERSION,mysql_version=version,container=container,image=meta['Config']['Image'],ddl_sha256=hashlib.sha256(sql().encode()).hexdigest(),counts=counts,metadata=actual,behavior=['invalid storage enum rejected (3819)','unknown identity FK rejected (1452)','CHECK comparer preserves operator grouping and literal case'],scope='DDL and all metadata only; not domain/concurrency/performance/integration acceptance')
     # Preserve all adopted 1.1/1.2 evidence bytes; this edition has its own capture.
-    path=ROOT/'docs/acceptance/b/database-generation-addendum-metadata-evidence.json'
-    path.write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+    path=ROOT/'docs/acceptance/b/database-material-provenance-addendum-metadata-evidence.json'
+    if path.exists():
+        assert json.loads(path.read_text()) == evidence, 'Existing evidence differs; preserve before new checkpoint'
+    else:
+        path.write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:v for k,v in evidence.items() if k!='metadata'},ensure_ascii=False,indent=2))
 
 if __name__=='__main__':

@@ -1,0 +1,24 @@
+# B00-1.4-proposed: unassigned correction; historical sources remain sealed.
+table('source_context','D-01/B-07','UNASSIGNED-D01','不可变完整来源选择；生成与人工选择显式分型',[
+    ident(),ref('meeting_id','所属会议'),code('origin_kind','GENERATION_INPUT 或 MANUAL_SELECTION'),ref('generation_input_id','仅生成上下文的精确输入；人工为NULL',True),ref('transcript_confirmation_id','冻结已确认转写'),ref('material_snapshot_id','冻结材料集合；NULL显式EMPTY',True),col('catalog_version',KEY,'可恢复不可变CATALOG版本'),fingerprint('catalog_sha256','归档CATALOG原始字节SHA256'),ts('created_at','服务器UTC微秒创建时间')],
+    indexes=[idx('context_generation','generation_input_id','每个生成输入至多一个上下文；人工NULL可多行',True),idx('context_meeting','meeting_id,id','会议完整历史枚举')],
+    fks=[fk('meeting_id','meeting'),fk('generation_input_id','generation_input'),fk('transcript_confirmation_id','transcript_confirmation'),fk('material_snapshot_id','material_snapshot')],
+    checks=[enum('origin_kind','GENERATION_INPUT,MANUAL_SELECTION'),"(origin_kind='GENERATION_INPUT' AND generation_input_id IS NOT NULL) OR (origin_kind='MANUAL_SELECTION' AND generation_input_id IS NULL)","REGEXP_LIKE(catalog_sha256, '^[0-9a-f]{64}$', 'c')"],
+    policy='完整不可变来源快照；服务验证同会议/确认状态/完整材料/精确配置依赖和权限。生成input与context内容一致；人工不伪造生成。持根锁与使用者及文件账本原子提交；历史引用RESTRICT，无自动TTL')
+table('source_context_material','D-01/B-07','UNASSIGNED-D01','上下文内每个材料版本唯一明确选择解析文档',[
+    ref('context_id','不可变来源上下文'),ref('material_revision_id','完整快照材料版本'),ref('parsed_document_id','该材料的精确解析输出；不取latest')],pk='context_id,material_revision_id',
+    indexes=[idx('selection_document','parsed_document_id,context_id','旧解析输出仅被复制证据引用仍受保护'),idx('selection_material','material_revision_id,context_id','材料历史依赖')],
+    fks=[fk('context_id','source_context'),fk('material_revision_id','material_revision'),fk('parsed_document_id','parsed_document')],
+    policy='服务验证与快照items双射、document确属revision、READY/文本完整和唯一profile；FK只证存在。完整集合原子INSERT后不可增删；全图解除后才可清理')
+table('parsed_document_profile','D-01','UNASSIGNED-D01','解析文档的明确格式及不可变解析配置归档引用',[
+    ref('document_id','精确解析文档'),code('format','PDF/PPT/WORD/TXT；不能从unit种类或文件名猜测'),col('parser_config_version',KEY,'可恢复归档PARSER_CONFIG版本'),fingerprint('parser_config_sha256','解析配置归档原始字节SHA256')],pk='document_id',
+    indexes=[idx('profile_parser','parser_config_version,document_id','配置历史依赖枚举')],fks=[fk('document_id','parsed_document')],
+    checks=[enum('format','PDF,PPT,WORD,TXT'),"REGEXP_LIKE(parser_config_sha256, '^[0-9a-f]{64}$', 'c')"],
+    policy='与实际解析输出原子创建；服务验证parser_version等于归档version、格式和映射匹配；缺少sidecar为legacy unavailable，禁止推测/补造READY。配置归档保留由领域负责，非跨库FK')
+for name in ('minutes_element','evidence_link'):
+    t=next(t for t in TABLES if t['name']==name)
+    t['cols'].append(ref('source_context_id','不可变来源选择；NULL仅历史未知；v3新写必填由服务验证',True))
+    t['indexes'].append(idx(name+'_context','source_context_id,id','历史来源选择反向依赖'))
+    t['fks'].append(fk('source_context_id','source_context'))
+    t['policy'] += '；B00-1.4-proposed来源basis由自身source_context_id确定，人工改写不声称模型生成；evidence自身上下文优先，不能从要素/正文/ACTION建议推断。新v3写NULL由应用拒绝；旧NULL明确不可恢复'
+
