@@ -1,0 +1,537 @@
+{
+  "base": "0d2079cd64e5b61bc5787ca5adfaa782e5cd4a40",
+  "reviewedHead": "68aa0957a3fcb69630fee96075055edb3a3cde42",
+  "integrationCommits": [
+    "e89d7e595d9fc09e5138ba5fb46766c3bb6340b1",
+    "6445f06d28ab7537db1e50c08019b20247f029f3",
+    "f97ba33b708c69bbd8ddb7a43d7acc8e1404fba5"
+  ],
+  "all105PathsByteExactBeforeCoordinatorAppendix": true,
+  "paths": [
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/baseline.json",
+      "bytes": 10538,
+      "sha256": "63eafc5f9014c30004e37823cff539e1653b2d5526741525c2b62bec213930d1"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/capture-fix1.py.txt",
+      "bytes": 2130,
+      "sha256": "5a625090465cab96cad6fc4428778d3da8282ab95f1f21ef2de348bb9cd55417"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/check-api.log",
+      "bytes": 287,
+      "sha256": "624e439dddd5fa95d2af714c7452eb0b0dd5373f2760a3191879d59a5813cd9e"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/check-fix1.py.txt",
+      "bytes": 1155,
+      "sha256": "5112f3560a58db8c255f4925c6103ceb3216ed07796f324939425e44e0a9cc10"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/contract-runs.json",
+      "bytes": 1036,
+      "sha256": "38f9c834d6e673fd068adbf9f3decf9bd3684f3d7960d637acb611f44333aec2"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/fixture-ownership.json",
+      "bytes": 404,
+      "sha256": "cb95a12f2424b34ac018082954bbb493337b2f8e6410c4e67c603b2d751053a0"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/generate-api.log",
+      "bytes": 219,
+      "sha256": "803182b5cd1e0d935abba6231d321ea78fc16bf4a04ae6358b6ef48578cb6024"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/green-run.json",
+      "bytes": 1725,
+      "sha256": "2fbc92b802cd16e29de24d6769b926f8ca27347033c92d4035d3c11f974c5574"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/green.log",
+      "bytes": 13572,
+      "sha256": "06d9281030f9e18db4bb6d5f367a5b0028e317b4fbddaefca39105c0248a51f5"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/green.xml",
+      "bytes": 34879,
+      "sha256": "5e906b1471c7fbd37be891b64871422c07f69449aa6e9b07ef1331ba974ff0a2"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/history-after.txt",
+      "bytes": 440,
+      "sha256": "e783725fca89f13355cd1270d4d0cf1e911ae2aebd79604700ca106e70837d14"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/history-before.txt",
+      "bytes": 440,
+      "sha256": "e783725fca89f13355cd1270d4d0cf1e911ae2aebd79604700ca106e70837d14"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/identity-before.yaml",
+      "bytes": 5918,
+      "sha256": "b2bef6bfef0916e677db837889eb1f1e64d56002b2818c83783caa3188842d84"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/openapi-bundle.yaml",
+      "bytes": 22764,
+      "sha256": "9ff9aaddd9e226d60358b5b8e369800f6c962c31b58042178adf307b36732380"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/openapi.log",
+      "bytes": 596,
+      "sha256": "3f4d83ac7642fbd679d86b632a27f00e4c3cce0048911ddf226ea88cb712777c"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/red-run.json",
+      "bytes": 1725,
+      "sha256": "8bfb61b4e724c6aa4ac05c2c71a4f2b7178cfc2d81803ee2acb6eae9a289151a"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/red.log",
+      "bytes": 21200,
+      "sha256": "3da317ef78a21b4f63fac2d640d97c663ccd76a2b8c0d024b28e27c0d0dd7fd7"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/red.xml",
+      "bytes": 40757,
+      "sha256": "773eb74326b8806daac90cfcad9e282067117cb96a36db83d6489fcd1af0d68f"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/run-fix1.py.txt",
+      "bytes": 1781,
+      "sha256": "3c014f8facde6ddf2eea8884bbb9a984d338305a1ea5c80c756cc2c22d70e5c3"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/seal-fix1.py.txt",
+      "bytes": 4126,
+      "sha256": "7663c51691707527ada6fd4c251eeff03d45e94ea4a4c04d80da66b34fd9dede"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/sha256-manifest.json",
+      "bytes": 2041,
+      "sha256": "84019ae61a68fe2c03fd7960a5f08669f46b9e6bfede6cdd82a30786b74531a5"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/typecheck.log",
+      "bytes": 47,
+      "sha256": "5a7861bf500fed5eb8cc7a5852ab85e8b7232540715a3d293c8860085605d8ad"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain-fix1/verification.json",
+      "bytes": 2171,
+      "sha256": "b53833ce6e4b6b6bdd271b8244d30b7424512e02fe3d09135dbdca15d8d2ba55"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/concurrency-boundary-final.log",
+      "bytes": 18465,
+      "sha256": "1ec4a14f8cf600548a3ba96522408f33f87c0559b58f129720bdd43dc120f6d5"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/concurrency-boundary-final.xml",
+      "bytes": 35623,
+      "sha256": "e9633fa76c420b7df452c1cf672d6f6f452a8a4ffb38ccb2311a01a9607fc824"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/concurrency-final.log",
+      "bytes": 19042,
+      "sha256": "3048d9c09560a2c654b4eadfd6d50b23efe6588a42ff3e9a58744e60761e0e27"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/concurrency-final.xml",
+      "bytes": 35461,
+      "sha256": "e6311ce1d2c22fc813f5819b89f8de7e7b786dbfad7609b25a0c80240ef81533"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/concurrency-red.log",
+      "bytes": 20125,
+      "sha256": "b8e4317818c04874e40f9b981dbd91e355b17ce3fbdf5f9b02ba5acca1faa0eb"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/concurrency-red.xml",
+      "bytes": 36198,
+      "sha256": "48074bf3f2f5515e409dd2a73341b03b4a69556c2da13c1e1bb0d4d4571b0472"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/edge-red-corrected.log",
+      "bytes": 22230,
+      "sha256": "085b41e35793dc254b6b71d0236ffc3be1671e4760f5d2acee2098a1b63414f8"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/edge-red-corrected.xml",
+      "bytes": 38433,
+      "sha256": "65b8cbb9fb63682591dd03d2ae635acfee68bb08ec978b75058df0bd8582e544"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/edge-red.log",
+      "bytes": 27297,
+      "sha256": "5056a1afc8e076f0b7901c6b7cf3279f3eee5166461a0f3080bd2b0d70f28672"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/edge-red.xml",
+      "bytes": 43494,
+      "sha256": "a977f0017c4df92beefa3b4cc637ce18ee93c21410146a930f56bb595142bd81"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/expanded.log",
+      "bytes": 16197,
+      "sha256": "8bfa042f851c6ab00f5fcde20ec8df3fefe88649867589a64046d04a379acb3c"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/expanded.xml",
+      "bytes": 35635,
+      "sha256": "c5d09b4eff7182901eb07df132bcd9c592982534a9ee29e94e68cc6c9c98bd48"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/final-metadata-history.txt",
+      "bytes": 31958,
+      "sha256": "1abb1e41a5b82155c327ad70ee6e7da5fea543783883c27a91c4a7eb61043709"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/fixture-ownership.json",
+      "bytes": 865,
+      "sha256": "ec45510bda57a6b8d3bc713cf8e7d39a0dc1f1c178dadbae1ce759ba3c5df6c6"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/fixture-start.txt",
+      "bytes": 219,
+      "sha256": "be63e13269b8b38ab5cd8ce825c17510a53f1282bc192b6cb4859df5b9464fd8"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/full-first.log",
+      "bytes": 8087,
+      "sha256": "9d8745db6ae3b0b4c34b191a60903506b4c175c2dd449a1b017f977d257fb08f"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/generated-api-check.log",
+      "bytes": 288,
+      "sha256": "a7c0b4dbf15da37cbe56a5f094402301ecac541aac49d2c4aad6b89b1390590e"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/generated-api-final.log",
+      "bytes": 220,
+      "sha256": "c7a297f0912e2fc2696de349489a41b3f524792bbeb4b2129fa3cc09b4b113b4"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/generated-api.log",
+      "bytes": 220,
+      "sha256": "6d6d83bd96653dc7c9526de3331895663e9a94353fc9d228ce01a17819223cba"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/green-first.log",
+      "bytes": 17575,
+      "sha256": "372296890e8237d3d8061c08ff6226aac2d4d46e138593eaa027b54fb465d9a1"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/green-first.xml",
+      "bytes": 34241,
+      "sha256": "3cb56a14f002d31c9d6eaf91bef29638135849acc8a61a379b7b4848339a9aca"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/initial-empty.txt",
+      "bytes": 78,
+      "sha256": "5cd83631695803627ff679cce914eac9af911c65d306d1546a6be52f7f426421"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/interrupted-selector-record.md",
+      "bytes": 2241,
+      "sha256": "95b98b9b8ad5ff7ca2d3762eb55a345a654904dcfe3d9885e9093b646d3687a3"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/migration-sha-before.json",
+      "bytes": 783,
+      "sha256": "7cd90377cca1edf9924e565a9ff3a6691cb57a0ece457f56dfd813f2244be4e0"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/migration-sha-final.json",
+      "bytes": 783,
+      "sha256": "7cd90377cca1edf9924e565a9ff3a6691cb57a0ece457f56dfd813f2244be4e0"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/npm-install.log",
+      "bytes": 72,
+      "sha256": "9fd942002735aa2e9e2ff946129aee1c7c55a50f5ea6e27460b7efd46864d1ba"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/openapi-final.log",
+      "bytes": 596,
+      "sha256": "5e925a037ed1d02fac5ca6622de73a0e5effec48db4238109a7311abc1d96df3"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/openapi.log",
+      "bytes": 974,
+      "sha256": "edd3fc7d0d24bcb69f94359880852bee7e4d4948ab1a444f6af6c23c42a89de3"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/owned-fixture-wrapper.py.txt",
+      "bytes": 692,
+      "sha256": "a8256de8744bf6b5330e10d4f677d306011e6f4a79b2095d06a55685d32939d7"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/red-authenticated.log",
+      "bytes": 26568,
+      "sha256": "b4209b6a445682528e27d87f4ba4f3e12306c5711a44197b41c26841f6afdd4f"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/red-authenticated.xml",
+      "bytes": 43740,
+      "sha256": "22a5436a519dadf6dd7f64fa7f6f213811264d9e10b8c859e7a1b766fcb459aa"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/red-expanded.log",
+      "bytes": 26671,
+      "sha256": "13107cdad86cf1ec5ee2503bb205ebc07fa59881b35204a94ba93b81bf9bce31"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/red-expanded.xml",
+      "bytes": 43738,
+      "sha256": "9d72363aa555d4ce97e9b5a3a74d777a814ed46486e4b42e83bc704c3d5d2619"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/red.log",
+      "bytes": 23251,
+      "sha256": "46fee7b77c3592308d523cce61e2570ba17d580dbe2e3a25098c3d1a551fb586"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/red.xml",
+      "bytes": 38175,
+      "sha256": "e04256fb708b6af32b83beb71ff03742099960fc903beb19a375a2d8c46619ef"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/revision-final-attempt1.log",
+      "bytes": 16315,
+      "sha256": "c103d8fb2ec805045db06320d97b7ad09f3abd1dec15c3d34ebd5be1bc3ec13b"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/revision-final-attempt1.xml",
+      "bytes": 36138,
+      "sha256": "387b887e56d635a5cbf8978f06351f0c0cd140f6d99d76cf9a2b84165fe272a8"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/revision-final.log",
+      "bytes": 16513,
+      "sha256": "1c33887556c32e57039f0c146b0e899220dd5043797c9f3ef96b20ded10557f2"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/revision-final.xml",
+      "bytes": 36792,
+      "sha256": "49357fa450d847e838c1c33f1ab7d4f76c57e42741bfdb74f5b287c92795a542"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/sealed-metadata-history.txt",
+      "bytes": 31958,
+      "sha256": "ddcb23ca81fa2ec01aa144a3b724eb908e2ae19344f497a845c4322c77b82444"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/sha256-manifest.json",
+      "bytes": 5792,
+      "sha256": "ad52ff4b8591a7c342bb15af4493fd937c440e58d858d8d78a67994f5fbee108"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/test-counts.json",
+      "bytes": 2732,
+      "sha256": "b012065904341fec8c15a7804db61ba8eee9f71e60d9749836075c371aa58a9e"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-final.log",
+      "bytes": 14945,
+      "sha256": "3f11c3e635bb86aa45b616f76f908520341f57ad7cb6f4222b6649e52f05a5fe"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.api.DeploymentConfigTest.xml",
+      "bytes": 32760,
+      "sha256": "0fbc084fe3c56cff1a8a88b5eff8eb9c51e1ab47905fb94282d25d2ac94bfcaa"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.api.IdentityContractsTest.xml",
+      "bytes": 32047,
+      "sha256": "b7e2e7df5c870013cc21a33e09685c07f15023ecdc1777dff1a914b3f61385f9"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.api.IdentitySecurityTest.xml",
+      "bytes": 32444,
+      "sha256": "6e51f871f6f1424be05e77e6f95042adf317beb7f47e65b9d9c08521883ca49d"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.storage.ContractFixtureTest.xml",
+      "bytes": 31792,
+      "sha256": "1a945a1cb676dfd8182c0655dfabab2007ff3630e21d607482d7002bc1a4ff37"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.storage.StorageRouterTest.xml",
+      "bytes": 16358,
+      "sha256": "cb09e833a838be7326651ab167536ef0f33ade094e15fe9b88421382ed524a5e"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "bytes": 16051,
+      "sha256": "89a37322d2b8029bd67e25fc8b7b8ab986d7b6362b221895279acf9d6fd94f85"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "bytes": 15920,
+      "sha256": "11231bc0da7869b50635b803af0383eb974c5d73db61fba1542ceec591946f23"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.support.ContractClientTest.xml",
+      "bytes": 31962,
+      "sha256": "40ad11fd1d2da685684e2424d115d4e810d3cd863540223c61668d64a7ba713c"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.task.TaskMetadataTest.xml",
+      "bytes": 15596,
+      "sha256": "1a9cc7f797aaba2fefd004e92109d101a0d5620698e2c4b23d03ea694f4ec526"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "bytes": 18020,
+      "sha256": "3b63b930cbab1e558b18604558d2dac9205d52fe38a30ab80489a3c66ebc99c3"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/unit-xml/TEST-ama.worker.WorkerLoopTest.xml",
+      "bytes": 7326,
+      "sha256": "e9e6669413c28c2f3aeaa3bf15d9bffea0e156f65b8c057c7454a0477138e16d"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/web-npm-install.log",
+      "bytes": 141,
+      "sha256": "5a033ec09933e3f45b9f234d06c439cac902278dc337dac9b275c1ed2fca1945"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/web-typecheck-final.log",
+      "bytes": 47,
+      "sha256": "5a7861bf500fed5eb8cc7a5852ab85e8b7232540715a3d293c8860085605d8ad"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/web-typecheck.log",
+      "bytes": 47,
+      "sha256": "5a7861bf500fed5eb8cc7a5852ab85e8b7232540715a3d293c8860085605d8ad"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/web-unit.log",
+      "bytes": 112,
+      "sha256": "d8098af3ff2b8b2c25158021675e09f3327e9e6f76c94e6465e22e145f8cf642"
+    },
+    {
+      "path": "artifacts/phase-b/b03-domain/web-unit.xml",
+      "bytes": 1161,
+      "sha256": "7660ff296e444faf3b34d77edb4a7ed3d931ee9a70421f9a67bdd861dcbb198a"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "bytes": 7119,
+      "sha256": "fed80e7055dda4abb1b079d3f4eefaa302a76ea99347e46122e2db5575ff76d7"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java",
+      "bytes": 15218,
+      "sha256": "23658df7c27230606bd50ec149e42b460f352aab1878907b66c34df43be94111"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/MeetingDigests.java",
+      "bytes": 1906,
+      "sha256": "7fdd3457b02e7d5adbf01581fe3d06472d4c8eb53e0ffebf37eb87e7b60120bd"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/MeetingEventReferences.java",
+      "bytes": 2042,
+      "sha256": "f71327bf182dac843e0eee8ad016b58101137815c50a1f8aeb8f46d9338a19b8"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MeetingConfiguration.java",
+      "bytes": 1553,
+      "sha256": "4baffe9d2e01106b2061411eaf9f0b2f9915cdfce9e7baa3fc19c63edc888763"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MeetingController.java",
+      "bytes": 5009,
+      "sha256": "764df7970d294ee7154c19d69eed9a455a563f34e7eec39f721674437df6928d"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MeetingErrors.java",
+      "bytes": 1125,
+      "sha256": "4d8a4abfbb05614a9e45fb4373a1789e05df5fac9df7255c0b0e46dcfbc1b9b7"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/MeetingContracts.java",
+      "bytes": 2399,
+      "sha256": "2c4cf8a968397f7128dad5f0dad6be91d712b2f75328f07fc16a91dd646ec94b"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/access/MeetingAccess.java",
+      "bytes": 971,
+      "sha256": "14bc02c2fad7d0251c0278f5322a2b3e7cf1d2b88c42ee6e669d6f5a5f361dc7"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/meeting/CategoryDictionary.java",
+      "bytes": 242,
+      "sha256": "0a854be8661630b700d0d930b9a4d22988ae3f86d0d9dcbba8b197008a2d6db7"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/meeting/MeetingRepository.java",
+      "bytes": 548,
+      "sha256": "1750fcd42ed696f1c0c33c90c7f71b74579cef022abec3eb81b0963116a5bafa"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/meeting/MeetingService.java",
+      "bytes": 859,
+      "sha256": "c6f4143f6f92ee48b6296c6117582be70e5d8684a7044343e06616630587f634"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/meeting/RosterService.java",
+      "bytes": 612,
+      "sha256": "f446f71d0feac1a87dd84fcb39939b00804f569d6fed9f00a657820db3b8c0b4"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java",
+      "bytes": 4872,
+      "sha256": "1616c3dbcc1ec50c91d6f9b8bb6657c077e3442b891ffcaee3d76e243690d538"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/meeting/MeetingConcurrencyIT.java",
+      "bytes": 13198,
+      "sha256": "ec3a1d20605be74131350fd02848fd8bd64ece9e26a6862f215cfe2651ccb3d3"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/meeting/MeetingRevisionIT.java",
+      "bytes": 28686,
+      "sha256": "fcff90df12115e390c3a87ce8f3664f3da57971e2a0f819036bf2a74a900b901"
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "bytes": 1313,
+      "sha256": "9d069d9ba55277ed88d58bdcf17f9c117a792fd0118bcf2723643aee90644d86"
+    },
+    {
+      "path": "contracts/openapi/identity.yaml",
+      "bytes": 6030,
+      "sha256": "1556f20df7e4499034dfa2e31f9502fd3b57ac9214a552b8352d240c7210ef92"
+    },
+    {
+      "path": "contracts/openapi/meetings.yaml",
+      "bytes": 9429,
+      "sha256": "751e8e68332524083377ed8a1d6977c668128b8fe743df9bc0ea3c2848ab4789"
+    },
+    {
+      "path": "docs/acceptance/b/meeting-domain-integration.md",
+      "bytes": 11925,
+      "sha256": "2678848389cecdc719526f52d401e31d1f75bebc4a71b75068a000b61cfc2f36"
+    },
+    {
+      "path": "web/src/shared/api/generated.ts",
+      "bytes": 27242,
+      "sha256": "909e2bcde9e9133044a483290eb00c4c02bc4a127c9b6fcc4efa4f16618222b0"
+    }
+  ]
+}

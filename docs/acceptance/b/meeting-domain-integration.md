@@ -48,3 +48,7 @@ Final verification: MeetingRevisionIT 30 cases and MeetingConcurrencyIT 5 cases,
 The fixture uses only the explicitly authorized process-local native-AIO-off option, not a global sysctl or shared helper modification. It is local functional evidence, not native I/O/capacity qualification. No test resets/repairs/drops the fixture schema, and all failed/other-owner fixtures remain untouched. Synthetic negative cases intentionally retain malformed authorization fixtures for fail-closed tests; this is not a reusable company dataset.
 
 Real company SSO/session issuance, directory/disable freshness and stable-ID mapping, approved category dictionary, external-person identity mapping, result-domain callbacks, full production rollout, security qualification and independent spec/quality reviews remain explicit prerequisites. No company calls, external delivery, push or main-branch merge occurred.
+
+## Coordinator adoption
+
+The complete source plus fix1 at68aa0957 has now passed independent full/scoped reviews and is adopted. Read meeting-domain-adoption.md first for exact commits, corrected shared error contract and remaining composition/company/production limits. Earlier submitted/pending prose above is preserved implementation history; it is not a new approval request.

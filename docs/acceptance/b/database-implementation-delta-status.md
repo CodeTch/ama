@@ -5,7 +5,7 @@
 |差异|当前状态|代码、证据和剩余门|
 |---|---|---|
 |DIFF-01 审计标识/索引/微秒|新受控空库范围已修正并独立评审|V006 f36…；[实施](audit-metadata-delta.md)及其独立初审/复审。B01-IMM-01历史应用后改字节偏差永久保留PARTIAL，不以本功能修正消除；旧checksum/失败/未知库先单独审阅恢复，不repair。|
-|DIFF-02 草稿/有效ACL混合|OPEN|V007拒绝无来源旧数据；V008有效grant/roster结构已真实验证并独立采用（ff22197）；运行时owner/确认来源/撤权/admin正文拒绝与文件再鉴权待完整B02/B03/B04。|
+|DIFF-02 草稿/有效ACL混合|OPEN|V007拒绝无来源旧数据；V008有效grant/roster结构已真实验证并独立采用（ff22197）；B03/剩余B02 MeetingAccess完整运行时+fix1已独立采用，owner/有效确认来源/撤权/admin正文拒绝有35实际领域用例；文件再鉴权仍待B04，实际公司身份联调仍待提供。|
 |DIFF-03 会话代际/精确ID|受控身份前置已修正并独立评审|V007/JDBC每请求共享解析、generation、身份变更和双节点18测试；[实施](identity-prerequisite.md)、[独立评审](identity-prerequisite-independent-review.md)。实际SSO签发/停用传播及公司协议仍未资格验证。|
 |DIFF-04 外部调用前持久marker|OPEN|V010已按冻结03e89cc8…首次正式成功，完整实现及fix1 b126db2已独立复审采用；marker/commit-ACK/execution/进程故障及迟到事实隔离证据已核对，真实公司零效果/截止证明仍待资格验证。|
 |DIFF-05 统一锁序|OPEN|B05显式flush-last、subject/root/task及独立model事务已有真实MySQL交付证据，独立复审采用，observe独立事务与整事务rediscovery契约明确；各领域消费者和删除路径仍未启用，不能据基础层测试关闭全局锁序。|
