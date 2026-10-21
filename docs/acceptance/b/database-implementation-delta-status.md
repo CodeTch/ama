@@ -12,9 +12,9 @@
 |DIFF-06 producer/attempt/上限/typed输入|OPEN|V010和实际队列、crash cap/同键异体/旧尝试写回测试待实施；编译或Worker3单测不关闭此项。|
 |DIFF-07 提交顺序/consumer前缀|OPEN|序列与显式最终flush/consumer协议已设计；延迟commit/rollback/前缀ACK/lease/争用待V010真实测试。|
 |DIFF-08 额度deadline/配置/执行绑定|OPEN|NULL保守占额及配置授权已设计；旧草稿保全不复用。无真实平台cutoff保证，不释放未知占额或自动开启模型容量。|
-|DIFF-09 文件/DB跨资源边界|OPEN|ports/native基础设施和[选定清单修复](local-upload-selection.md)已评审；JavaS3正在实现，V009结构准备。公共DB注册/回滚孤儿不可读/引用与epoch清理及两后端闭环未完成。|
+|DIFF-09 文件/DB跨资源边界|OPEN|ports/native基础设施和[选定清单修复](local-upload-selection.md)已评审；JavaS3正在实现，V009六表结构已独立采用；公共DB注册/回滚孤儿不可读/引用与epoch清理及两后端闭环未完成。|
 |DIFF-10 快照/候选/根指针|OPEN|V011—013及领域服务未实施；版本/epoch/冻结输入/needs_generation/迟到结果保护待实际回归。|
-|DIFF-11 迁移次序冲突|机制已落实，逐号持续验证|原001/002/005归集并逐字节冻结，003/004永久空；[统一登记](../../database/migration-register.md)006—027已分配，各新号必须root预执行SHAACK。当前已审到008，不提前声称后续迁移全部通过。|
+|DIFF-11 迁移次序冲突|机制已落实，逐号持续验证|原001/002/005归集并逐字节冻结，003/004永久空；[统一登记](../../database/migration-register.md)006—027已分配，各新号必须root预执行SHAACK。当前已审到009，不提前声称后续迁移全部通过。|
 |DIFF-12 旧队列草稿反序/懒建subject|OPEN|原稿/日志已归档，准备分支移出active source，不代表新替代实现已通过。领域显式fence、独立operation token及真实回归待B05及消费者。|
 |DIFF-13 旧permit隐式配置/无证释放|OPEN|原稿保全；新接口failclosed，不存在已合入的新JDBC实现或真实quota/cutoff资格。待B05实现、排序配置锁和execution绑定测试。|
 
