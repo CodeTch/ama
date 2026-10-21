@@ -6,11 +6,11 @@
 
 **Architecture:** 以已确认的 v0.2 为唯一总体架构基线；模块化 Java 后端，API/实时/Worker 隔离，Vue 前端复刻原型。数据库来源和文件后端独立配置，领域状态与版本统一，不为部署方式复制业务代码。
 
-**Tech Stack:** Java 21、Spring Boot 4.x、MySQL 8.4 LTS、Vue 3/TypeScript/Vite、local/S3、Podman；JUnit、Maven Surefire/Failsafe、Vitest、Playwright。精确补丁版本在 A-01 锁定。
+**Tech Stack:** Java 21、Spring Boot 4.x、MySQL 8.4 LTS、Vue 3/TypeScript/Vite、local/S3、Podman；JUnit、Maven Surefire/Failsafe、Node 原生测试/tsx、Playwright。精确补丁版本在 A-01 锁定。
 
 **Spec:** [已确认架构 v0.2](../specs/2026-10-21-ama-architecture-design.md)、[需求对应](../specs/2026-10-21-ama-requirements-matrix.md)、[部署前置条件](../specs/2026-10-21-ama-deployment-prerequisites.md)。
 
-状态：2026-10-21，实施计划待用户评审并选择执行方式。本轮只制定计划；以下路径、接口和命令是待实现的交付约定，不代表文件或程序已经存在。全部任务初始未开始，不提交完成勾选。工作量按真实完成速度再估算，不在未知团队投入及接口交付时间时承诺上线日期。
+状态：2026-10-21，架构与实施计划已确认，已选择按任务由子代理实现并独立审查。阶段 A 本地工程与验证工具已交付；B…F 尚未开始，公司接口和运维前置条件继续按任务保留。下列路径/接口是跨阶段交付约定，未实现部分不得视为已存在。
 
 ## Global Constraints
 
@@ -77,7 +77,7 @@ A-01 建立 `tools/checks/run.py`，后续任务的命令均从仓库根目录�
 
 - `unit`：Maven Surefire 按类选择 `*Test`；聚合模块允许无同名测试，但最终报告必须有匹配用例。
 - `it`：Failsafe 的 `-Dit.test=<Class> verify`，真实测试 MySQL；`contract` 另读取 `AMA_TEST_*` 公司测试配置，不向生产地址默认发送请求。[Failsafe 官方命令](https://maven.apache.org/surefire/maven-failsafe-plugin/examples/single-test.html)
-- `web`：`npm --prefix web run test -- <selector>`，脚本为 `vitest run`；`e2e/visual` 调用 Playwright 并保留 trace/截图差异。[Vitest CLI](https://vitest.dev/guide/cli.html) · [Playwright 断言](https://playwright.dev/docs/test-assertions)
+- `web`：统一入口选择当前已注册的 `web/tests/unit/*.test.ts`，通过锁定的 `tsx --test --test-reporter=junit` 执行 Node 原生传输单测并检查新鲜 JUnit 结果；`e2e/visual` 调用 Playwright，正常运行禁止写入缺失基准，保留 trace/截图差异。后续组件单测按需要补充，外部 runner 接口不变。[Playwright 断言](https://playwright.dev/docs/test-assertions)
 - `load/ops`：在 C-07/F-01 注册明确的场景，不允许 selector 作为任意 shell 命令执行。破坏性演练只接收已批准的测试环境清单。
 
 每任务的测试步骤写出名称、输入和关键断言；代码片段是测试核心断言，数据准备在同一步描述。A-01 提供 `ApiReply(int status, JsonNode body)` HTTP 测试工具和测试故障注入设施，故障控制只存在测试进程，不暴露生产后门。领域测试使用任务内创建的夹具，禁止生产测试共享状态。
@@ -129,8 +129,8 @@ SSO/人员接口阻塞 B-02 真联调；模型容量阻塞 A-03/C-06/F-04 实测
 - [ ] 每阶段交付 `docs/acceptance/<phase>/summary.md`，包含演示步骤、失败/越权案例、真实/模拟标识和未通过项目。
 - [ ] 性能/故障报告包含环境、版本、样本、请求分布、原始指标和时间线，不只写结论。
 - [ ] 每阶段复核本表覆盖；变更影响接口、数据或安全边界时先修订相关规格，不重新打开无关已批准范围。
-- [ ] 执行入口为 A-01；初次执行前读取 using-git-worktrees，建立/复用合适隔离工作区。本轮不创建实现分支或安装依赖。
+- [ ] 执行入口为 A-01；初次执行前读取 using-git-worktrees，建立/复用合适隔离工作区。阶段 A 已建立隔离开发工作树并安装工作树内锁定工具链；后续任务继续遵循隔离与依赖校验约定。
 
-计划评审后选择执行方式：建议按任务由实现代理与独立审查代理推进，因为跨模块版本、文件持久化和外部副作用的错误会影响真实会议数据；也可由当前会话顺序实现，阶段结束统一独立审查。此处只是建议，尚未派发代理，也未启动编码。
+用户已选择按任务由实现代理与独立审查代理推进。阶段 A 的每任务实现、独立审查及修复复审已完成；后续仍先写行为测试、提交任务范围、独立审查，不自动推送或合并主分支。
 
 阶段 A 本地交付和后续前置条件见[验收报告](../../acceptance/a/summary.md)；公司真实联调及部署资格仍按各阶段门禁收口。

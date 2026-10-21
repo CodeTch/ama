@@ -6,7 +6,7 @@
 
 **Architecture:** 为已批准的模块化应用建立工程契约与 UI 基准。外部探针默认不执行生产调用；运维验证与业务开发分开推进。
 
-**Tech Stack:** Java 21、Spring Boot 4.x、Maven、Vue 3/TypeScript、Python 3 标准库探针、JUnit/Vitest/Playwright。
+**Tech Stack:** Java 21、Spring Boot 4.x、Maven、Vue 3/TypeScript、Python 3 标准库探针、JUnit/Node 原生测试（tsx）/Playwright。
 
 **Spec:** [架构 v0.2](../specs/2026-10-21-ama-architecture-design.md) 第 1—5、11、13—15 节；[总计划](2026-10-21-ama-delivery-plan.md)。
 
