@@ -7,10 +7,14 @@
 |版本/原文件|SHA-256|执行/共享状态|所有者/输入|
 |---|---|---|---|
 |V001__foundation.sql|`1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335`|B01已应用独有fixture，已共享提交；冻结|B-01；phase-a HEAD e8c88d2；所有输入树同字节|
-|V002__identity_acl.sql|`68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0`|B02未提交草案，已应用其独有fixture；保留原字节|B-02；phase-b-identity HEAD 344597250accf16f8a1e56713e9aec6045ba28e5|
-|V005__tasks_outbox.sql|`55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7`|B05未提交草案，尚未应用任何库；用户冻结，不能重写|B-05；phase-b-tasks HEAD 344597250accf16f8a1e56713e9aec6045ba28e5|
+|V002__identity_acl.sql|`68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0`|原字节已归集；来源 checkpoint e9990c8 → 集成 4e35683；此前仅应用 B02 独有 fixture|B-02；原输入 HEAD 3445972；保存提交 e9990c8|
+|V005__tasks_outbox.sql|`55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7`|原字节已归集；来源 checkpoint daa1c3d → 集成 bcf040b；此前未应用；冻结|B-05；原输入 HEAD 3445972；保存提交 daa1c3d|
 
 路径均为对应工作树 `backend/adapters/src/main/resources/db/migration/`。协调者保全副本在 phase-a 的 `.superpowers/sdd/2026-10-21-ama-phase-b/b00-frozen-migrations/`。不采用任何已有fixture，不改变原 migration 的 checksum。根当前已有工作不等于相应任务最终通过。
+
+## 冻结旧集合归集记录（2026-10-22）
+
+设计采用提交 `6dd2cdd` 后，协调者已将仅含 V002/V005 原 SQL 的保存提交分别归集为 `4e35683`、`bcf040b`；V001/V002/V005 三个文件的完整 SHA256 均与上表冻结输入逐字节一致。正式 location 只含这三个版本，没有 V003/V004，没有夹带未验证 Java。此记录完成首次 V006+ 的**代码归集前置门**，不表示已在任何库执行新的迁移。各任务仍必须在自己的受控 fixture 验证 001→002→005→后续登记版本的真实升级路径及 Flyway history；旧设计实现差异仍未关闭。
 
 ## 分配规则和计划占位映射
 
