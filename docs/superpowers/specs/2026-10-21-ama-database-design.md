@@ -1,6 +1,6 @@
 # AMA 数据库详细设计基线
 
-设计版本：**B00-1.0-review**，2026-10-21；状态：作者自审及真实结构验证，**待独立评审**。不是阶段 B 实现完成、平台联调、容量或上线批准。代码输入 BASE `e8c88d2aaed1a19b0d0202ddce9cb51ee01d84ee`，唯一设计工作树 `/home/tanren/ama/.worktrees/phase-b-database-design`。
+设计版本：**B00-1.1-review**，2026-10-21；状态：独立评审 R1—R6 定向修订，**待增量复审**。首版 c73a765 有六项 Important，不能采用；本版修复列表共同查询、个人名称去重、专题说明、同确认发布重试、转写处理快照与片段标记。不是阶段 B 实现完成、平台联调、容量或上线批准。原始BASE `e8c88d2aaed1a19b0d0202ddce9cb51ee01d84ee`；FIX_BASE `c73a7656fc1c5c2cb07d8b94ead68122059b549f`，唯一设计工作树 `/home/tanren/ama/.worktrees/phase-b-database-design`。
 
 绑定依据为架构 v0.2 第 6、8—10、12、14 节、需求对应清单 v0.2、A-02 决定台账与接口清单，以及用户已确认的 `2026-10-21-ama-product-supplement.md`。补充规格优先于旧台账中“建议/待确认”措辞：实际日期可选、转写显式保存、纪要显式及自动保存、人工标题保护、同批音视频可合并而不与纯转写混批、邮件仅受控链接和已确认且仍可读的企业参会人、治理候选/审核/生效、声纹用途授权可撤销、配置独立审批和新修订回滚。公司协议和运维证据仍 pending；测试 manifest 的空 fields/evidence 不构成认证。
 
@@ -45,6 +45,9 @@ DATETIME(6) 写 UTC；应用进入事务设置 `time_zone='+00:00'`，Java Insta
 |audit actor/resource/trace、历史created_by|B-01 保存事件发生时标识，不强制外部主体永存；活动行为仍验身份|只保留最小审计；不能以审计保留正文；不级联删除安全记录|
 |category、prompt/model version、external ID|配置/平台适配器校验白名单、存在性、固定版本、访问权；未提供真实选项不伪造|版本不可原地改含义，旧成果继续可追溯；撤销只阻断后续生效|
 |generation target_element 与 source/evidence 的输入集合归属|B-07/D-03 验目标属于当前 element_set，源属于该确认转写或材料快照；页/段/时间范围真实存在|恢复/采用产生新版本与新引用；不改旧来源来“补证据”|
+|minutes_template.current_revision_id → template_revision|B-07/D-04 验同template_id及owner，根name与当前修订name同事务一致|改名新增修订；历史名称不占当前命名空间；禁止悬空当前指针|
+|external_operation.current_execution_no → external_execution(operation_id,execution_no)|B-05/B-08 锁subject/根/task/operation，CAS追加执行并验证同subject；不更换逻辑business_key|旧执行冻结保留，reconcile_epoch跨执行递增；UNKNOWN不得追加发送|
+|transcription_input/source_revision 与输出revision/task|B-06/C-02/C-03/D-01 验同会议、同batch、source是已存在稿且不能为输出或其子孙；task typed input必须此快照|恢复/手工保存继承原processing_input；删除按反向生成依赖清理，不把历史输入改成当前设置|
 |B阶段可空 material_snapshot、speaker、material locator|B-06/B-07 只允许尚未启用功能对应 NULL；D-01/C-03 开始非空写入前对应表/FK迁移已完成|审阅库建完整 FK；正式迁移按 registry 顺序，禁止 B-01 一次建全部未来表|
 
 全局物理删除需要先解除 generation/exclusion/locator 等可能形成环的内容引用，再按拓扑逆序清理；FK 全为 RESTRICT，删除协调器显式规划同会议集，不能临时关闭 FOREIGN_KEY_CHECKS。跨会议共享模板、目录和治理数据不随会议级联删除。D-07 对 tombstone 的不可读、业务内容清除、文件删除、最小审计分别给证据。其他领域仍引用的受管文件不能当“删除成功已清除”，需移除会议关联并按批准范围证明没有会议正文副本留下；语料复用/法律保留没有企业规则时不开启。
@@ -59,10 +62,10 @@ DATETIME(6) 写 UTC；应用进入事务设置 `time_zone='+00:00'`，Java Insta
 2. `task_subject` fence；创建时 UUID 已确定，先插入 fence 再插入领域根。相同请求受幂等唯一键保护。
 3. 领域聚合根（会议/治理根），再领域不可变版本、名单、ACL、发布根等按固定表名/主键顺序；需要修改的当前行预先锁齐，不在 callback 临时寻找另一个根。
 4. 上传/录音会话与段（固定先 session 后 part），再 `file_object` 按ID，再 `file_reference`/upload_part/chunk/cleanup。引用新增和物理清理认领都走同一 file 锁；不得持 file 锁后再回头锁 meeting。清理使用先读候选ID、不加锁→按本顺序重读复验。
-5. `durable_task`、`task_attempt`、`external_operation`（按任务ID再操作ID）。完成事务在第3级预先锁领域根；回调只能修改已锁同聚合数据，禁止外部I/O及引入更低等级锁。新插入不可变结果在已锁根下分配，无需反向锁旧域行。
+5. `durable_task`、`task_attempt`、`external_operation`、`external_execution`（按任务ID、操作ID、执行代际）。完成事务在第3级预先锁领域根；回调只能修改已锁同聚合数据，禁止外部I/O及引入更低等级锁。新插入不可变结果在已锁根下分配，无需反向锁旧域行。安全重试先非锁读出旧task ID，再按此顺序复验并锁全部旧/新task后推进operation，不得先锁operation再回锁旧task。
 6. 审计 append，最后 `task_outbox_sequence(id=1)`、outbox INSERT，立即 COMMIT；分配序号之后不得再锁上述行，也不得调用网络。
 
-`model_capacity`/reservation 准入使用**独立短事务**：先锁已提交的 external_operation，复验独立operation token/expiry/state，再锁 model、reservation（FK的父operation已锁）。不锁subject/meeting/task/outbox、不回调领域，任何路径不得 model→operation 反序。完成/对账后的额度终结在本地业务事务提交后另事务依 operation→model→reservation 顺序幂等执行；遗漏会保守多占额，不会超发。外部操作历史只有reservation已按批准策略解除后才可清理。`outbox_consumer` 独立领取/续租；同库消费者要应用领域效果时先进入上述1—5级，再锁 consumer，完成效果和cursor，最后outbox序列；不得持consumer后回调领域。跨领域消费建议按事件入幂等键并重新开启标准业务事务。
+`model_capacity`/reservation 准入使用**独立短事务**：先锁已提交的 external_operation及当前external_execution，复验operation token/execution_no/expiry/state，再锁model、reservation（FK父execution已锁）。不锁subject/meeting/task/outbox、不回调领域，任何路径不得model→operation/execution反序。完成/对账后的额度终结在本地业务事务提交后另事务依operation→execution→model→reservation顺序幂等执行；每次执行独立占额，遗漏会保守多占额，不会超发。外部执行历史只有reservation按批准策略解除后才可清理。`outbox_consumer`独立领取/续租；同库消费者要应用领域效果时先进入上述1—5级，再锁consumer，完成效果和cursor，最后outbox序列；不得持consumer后回调领域。跨领域消费建议按事件入幂等键并重新开启标准业务事务。
 
 普通领取不能用一个锁 JOIN 先抢 task 再抢 subject。扫描 READY due 与 RUNNING expired 两个候选索引，非锁定得到小批ID；逐候选先 `SELECT task_subject ... FOR UPDATE SKIP LOCKED`，再根（若需判定领域状态），再 task `FOR UPDATE SKIP LOCKED`，重新验证状态/到期/版本/epoch，成功递增attempt并插attempt行。被锁候选跳过，不能阻塞后面全部工作。扫描分页有上限，每5秒执行，20秒租约、每5秒独立心跳；公平性按池配额＋队列等待时间提升排序，不能以 priority 永久饿死低优先级。具体吞吐和计划必须由 B-05/C-07 实测，不用本次建表证明30秒目标。
 
@@ -78,9 +81,29 @@ SKIP LOCKED 只处理行锁并返回不一致视图，因此只用于队列候�
 
 幂等作用域是 actor/resource/operation/Idempotency-Key 的长度前缀编码 SHA256，保存完整请求摘要。同scope不同摘要409；同摘要返回原安全对象ID/状态并再次鉴权；不得重执行外部效果。并发唯一键插入等待获胜事务提交后比摘要；业务回滚幂等行也回滚。对任务 enqueue 使用独立 producer_key，领域操作稳定键＋输入指纹生成，冲突比较完整spec。无默许TTL清除已完成key导致重复创建。普通保存使用CAS；两个窗口只有一个版本更新成功。
 
+## 个人名称和专题说明（R2/R3）
+
+个人模板及专题分别在当前用户个人范围去重；技术等价规则固定为 Unicode NFC 后剔除首尾 Unicode White_Space，内部空白保留、字母大小写保留，完整规范结果按utf8mb4_0900_bin/UTF-8字节比较。纯空白名称拒绝，不截断、不新增产品最大字数。展示名保存用户提交值；完整规范名为LONGTEXT，name_hash为规范名完整UTF-8 SHA256。摘要索引**非唯一**：哈希相同需逐项完整二进制比较，完整相同才重名，碰撞但完整不同允许；不得用ai_ci列比较或“哈希相同即冲突”。这与列表搜索的英文大小写不敏感是不同语义。
+
+创建、改名以及释放当前名字的删除都先锁 `enterprise_identity(owner_id) FOR UPDATE`，作为该用户命名空间串行化锁（全局锁序第1级，早于subject/模板/专题根）。即使两个请求各创建不同随机UUID，仍竞争同一已存在owner行；不存在身份拒绝，不懒建独立锁。锁内计算规范名/摘要，按(owner_id,name_hash)读完整候选、排除当前根ID并比较；之后按全局顺序锁根并CAS，写名称、revision、audit并提交。模板和专题查询各自表，彼此不占名字；不同用户同名允许。批量多用户锁按二进制owner排序，禁止拿到根锁后才补owner锁。
+
+`minutes_template` 是逻辑模板根，只登记当前名称与current_revision_id；`template_revision`保留每版名称/主题且不变。新建根与首版在同事务建立，当前指针由应用验证同template_id；改名追加修订并更新根，旧名称只保留历史、不阻止以后新模板使用。内置模板owner=NULL，由受控配置维护，个人不能修改；个人范围查重不借历史版本或他人名字阻止创建。B-07/V012建立逻辑根，D-04复用，不创建第二套模板版本。
+
+`topic.description LONGTEXT NULL` 保存可选说明，未填写/空串规范为NULL，不加产品字数上限。创建保存name/description；修改同时携expectedRevision，名称冲突或CAS失败整笔回滚且保留原说明。说明单独修改也递增专题revision，重新读取与分组展示均取此持久值；不改变会议正文/确认/ACL。仅空专题可删除，删除走同owner锁释放当前名字。D-08/V023拥有持久化及并发验证。
+
 ## 工作稿、快照、候选与最终确认
 
 转写 RAW/ENHANCED/WORKING/CANDIDATE 为不同不可变revision；保存产生新revision，稳定segment ID与实际源文件定位保留；纯转写可无时间、无说话人，不造音频。确认前校验已保存非空有效正文、零PENDING纠错、来源完整、当前revision及权限；插入 transcript_confirmation 并更新当前指针，可靠任务/outbox 同事务。B初始输入可无材料，指纹把NULL材料规范化为空集合；材料已启用后不得用NULL绕过未应用变更。
+
+**R5：确认前的处理来源必须可恢复。** `input_batch/input_batch_file`只负责不可变主文件及顺序；新 `transcription_input`独立冻结batch、处理类型IMPORT/ASR/ENHANCE、重新增强所据已保存source_revision、明确应用material_snapshot、parser/model/prompt配置固定版本、处理配置完整安全manifest及schema版本、base_revision/cancel_epoch和inputFingerprint。不能用依赖已确认转写的generation_input代替它，也不能只留下哈希再读取meeting当前材料/“latest”配置。无模型的纯导入明确model/prompt=NULL且parser必填，未用提示词的模型步骤prompt=NULL，manifest标识确实未使用；ASR/ENHANCE的model配置必填，ENHANCE必须有已存在源稿。配置manifest保存可恢复的步骤/版本/来源引用、禁止密钥/正文副本，真实内容仍经受控文件引用取用。
+
+B-06/V011中的材料以material_mode=EMPTY、material_snapshot_id=NULL代表规范空集合，不代表未知；指纹编码明确EMPTY及输入schema版本。D-01启用非空材料前，V017先建立material_snapshot及transcription_input→material_snapshot FK；PINNED必须有具体快照且同会议。材料应用后重新增强在subject/根锁下冻结新transcription_input并同事务入队，旧输入/人工稿/确认/纪要仍保留。task.input_kind=`TRANSCRIPTION_INPUT`、input_id=本快照ID，task.input_fingerprint必须相同；结果transcript_revision.processing_input_id/producer_task_id反向关联这次输入/任务，batch必须与输入batch相同。链式模型步骤在前一步完成事务内另建该步transcription_input：继承固定batch/材料/配置来源，将具体前一步输出ID、父输入ID及步骤配置写入新的config_manifest，计算本步fingerprint再入队；不得回填原快照或从当前根取变化中的值。若前一步为已保存转写，source_revision_id同时指向它；其他媒体中间结果用manifest的受控typed引用并验证其同会议和已保存状态。
+
+人工WORKING保存或恢复历史创建新revision并继承被编辑/恢复稿的processing_input_id；其来源不能换成会议当前应用材料。输入指纹体现处理输入，确认content_hash另覆盖本次实际保存正文/来源/标记，二者不能混用。迟到结果只有subject版本/epoch、任务token和该inputFingerprint均匹配才可按候选链登记，不移动当前稿；新材料重增强期间人工编辑导致冲突保留历史候选。来源合法性按processing_input固定batch/源稿/材料清单验证，历史查看和恢复使用该链，不追随当前配置。
+
+**R6：片段标记是持久输入。** `transcript_segment_mark(revision_id,segment_id,mark)`复合PK表示0到4类多选且单类不重复；只允许KEY=关键、CONCLUSION=结论、DISPUTE=争议、GENERATION_FOCUS=重点生成，FK指该版本片段。增选/取消均随显式保存创建新transcript_revision：复制未改片段/标记，再应用指定标记集，旧稿及确认快照不变。标记不改原文、不证明真实，重点生成只供参考。
+
+确认content_hash按schema版本、稳定segment_id/顺序、正文、来源、说话人和每段按固定枚举序排序的**完整标记集合（含空集）**编码；generation_input指纹除确认ID还包含该content_hash，重新增强输入含source_revision完整内容/标记摘要。已经确认后改动任何这四类生成参考标记，保存事务必须清空当前transcript_confirmation_id和final_confirmation_id、递增meeting.revision/subject.business_version、标needs_generation=1；重新确认前禁止继续生成/最终确认。旧确认/纪要/标记仍可按旧版本查看；已发布只读不能改标记。B-06/V011建立表和hash规则，C-03复用编辑入口并验证并发保存/确认失效。
 
 generation_input 固定确认转写、材料集合、模板、排除集、要素集、prompt/model版本、生成scope、基线revision；按schema版本、字段类型与稳定排序做规范化编码后 SHA256。空集合与缺失/未知不可混同；指纹包含源文件版本/哈希与来源清单，不以更新时间猜版本。模板空/内置和排除空集也有受控版本；模型/提示词配置B阶段允许受控文件版本，绝不固定写“latest”。
 
@@ -96,19 +119,27 @@ generation_input 固定确认转写、材料集合、模板、排除集、要素
 
 每任务 max_attempts 必须由受控任务策略明确赋值（开发初始5；是可配技术策略，不是公司承诺），包括崩溃回收；没有效果且确定可重试时退避5/10/20/40秒加有界抖动，第5次终结FAILED。用户重试产生新 task/producer_key 保留原输入；不是重置旧 attempt。参数/权限错误直接FAILED；旧业务版STALE，取消CANCELLED并保留最小诊断；不靠无限RUNNING回收耗尽平台额度。
 
-任务粒度为一次固定输入的处理步骤/外部调用；同一模型的多个音频窗口/片段或分段生成应分别入队，以各自稳定输入指纹和producer_key去重，不能在一个task内循环发出未登记的多个同类效果。流水线下一步在前一步完成事务中以typed输出快照入队；一个task每种operation_kind唯一，不重写旧operation来隐藏多次调用。任务/操作进入未知后只由独立对账流收敛，不从普通自动重试路径重新发网络。
+任务粒度为一次固定输入的处理步骤/外部调用；同一模型的多个音频窗口/片段或分段生成分别入队，以各自稳定输入指纹和producer_key去重，不能在一个task内循环发出未登记的多个同类效果。流水线下一步在前一步完成事务中以typed输出快照入队；每个外部调用task只拥有一条external_execution，稳定external_operation可在确定零效果后拥有多代执行，不重写旧行隐藏调用历史。任务/操作进入未知后只由独立对账流收敛，不从普通自动重试路径重新发网络。
 
-任何可能引起外部结果的调用（模型生成、知识库创建/治理、邮件）先 `beginExternal`：锁subject→根（冻结发布成果及拒绝编辑/删除）→task→operation；验证当前租约，插 external_operation(MARKED, stable business_key, request_hash, origin_attempt)，task转RECONCILING、记outbox，**实际提交后才允许发网络**。入口必须拒绝已有 ambient transaction（或专用事务完成回调在真实afterCommit调度）；仅 REQUIRED 返回不等于提交，禁止在外层事务尚未commit时调用。若提交成功但发出前崩溃，MARKED也作为结果未知处理，不能假定未调用。
+任何可能引起外部结果的调用先`beginExternal`：锁subject→根（冻结发布成果及拒绝编辑/删除）→task→operation→execution；验证task当前租约。首次建立稳定external_operation(subject、operation_kind、business_key、逻辑内容request_hash、current_execution_no=1)，并插execution(task_id、task_attempt、完整请求hash/manifest、MARKED、marked_at)；安全retry则只将已登记的当前PREPARED执行转MARKED。task转RECONCILING、operation转MARKED、记outbox，**实际提交后才允许发网络**。逻辑operation不再只有一个task外键；每次调用由execution精确归属新task/attempt。入口拒绝ambient事务或专用真实afterCommit调度；REQUIRED返回不等于提交。提交后发出前崩溃仍作为未知，不能假定未调用。
 
-普通claimer完全排除RECONCILING。独立reconciler非锁扫描 due operation，再按subject→根→task→operation锁定，CAS领取 reconcile_epoch/owner/expiry（同20秒、5秒心跳策略）后短事务提交，外部查询在锁外。写回必须持有当前独立对账token；过期旧worker即便得到成功也不能以旧任务attempt完成，提交安全观察值供当前对账者重验/查询，不能抢回所有权。确定外部成功记operation/映射后，在同业务版本/未删且合法状态时完成域效果；版本失效只保存诊断或隔离候选，永不覆盖当前稿。对账信息不受原任务租约过期丢弃，外部已发生事实必须收敛。
+普通claimer完全排除RECONCILING。独立reconciler扫描MARKED/UNKNOWN且due的operation，非锁读当前execution/task ID，再按subject→根→task→operation→execution锁定并复验current_execution_no未变，CAS领取reconcile_epoch/owner/expiry（20秒、5秒心跳）后短事务提交。查询在锁外；结果写回须(operation_id,execution_no,reconcile_epoch,owner,未过期)全部匹配。旧worker不能凭旧task/operation token完成；可提交安全观察值供当前所有者权威复查，不能抢回所有权。确定成功记当前execution/operation及映射，在同业务版本/epoch且合法状态时完成领域；失效结果仅诊断/隔离候选。原task租约过期不丢弃外部事实，执行切换也不能静默忽略矛盾成功。
 
-beginExternal 初次提交同时令 reconcile_epoch=1、reconcile_owner=发起Worker、reconcile_expires_at=DB now+20秒、next_check_at=该截止，返回独立operation token；初始调用者也按该token续租和登记结果，原task token不再有完成权。接管只在operation租约失效且到next_check_at后发生。调用前再验token只保护本地决定，不能消除“检查后暂停、醒来才发出”的外部竞态；平台未提供幂等创建时，安全重放证明还必须排除旧发送者在截止后重新发起（如服务端强制请求绝对截止/调用fence，或已确认旧执行者被隔离）。仅本地lease过期或等待一段时间不构成该证明。无此能力就保持UNKNOWN/MANUAL_REQUIRED，不能自动第二次发出。
+beginExternal初次提交令reconcile_epoch=1、owner=发起Worker、expires=DB now+20秒、next_check_at=该截止，返回含execution_no的独立token；之后每次安全retry/接管/标记只递增reconcile_epoch，**永不重置为1**。初始调用者也按独立token登记结果，原task token无完成权。接管只在operation租约失效且due后发生。调用前再验token不能消除“检查后暂停、醒来才发出”的外部竞态；非幂等平台安全重放还必须排除旧发送者在截止后重新发起（服务端强制绝对截止/fence或确认执行者隔离）。仅lease到期/等待不构成证明，无能力保持UNKNOWN/MANUAL_REQUIRED。
 
 `NOT_FOUND`不是确定未执行：原请求可能仍在途、平台读可能最终一致。只有平台原生幂等创建（相同键相同效果已验证）或明确安全截止＋唯一可查回/草稿提交协议证明不会迟到创建，才允许按同键重放；否则继续UNKNOWN或MANUAL_REQUIRED，禁止第二次创建。UNKNOWN不当作FAILED，不允许编辑后另起发布；无幂等/可靠查回能力的知识库/邮件为真实集成阻塞。本地唯一键只限制本地记录，不能证明外部唯一。
 
-publication 每会议一个根。稳定 business_key=`publicationId + confirmationId`无歧义编码，所有尝试保留当次confirmation/operation。确定失败且证明零效果才可同发布根绑定新confirmation并生成该确认的稳定业务键；SUCCEEDED后不允许换绑定/重试创建。成功映射 provider+externalDocumentId唯一、ever_published=1，与task/audit/outbox原子。撤回/废止先本地不可读并记治理请求，再网络同步；未知继续阻断。外部回调验签/去重/时效后查权威状态，不以乱序事件恢复终态；敏感读取权威状态无法确认则拒绝。
+**R4：同确认重试的可执行协议。** publication每会议一个根，业务键始终为`publicationId + confirmationId`无歧义编码；external_operation唯一(operation_kind,business_key)代表稳定逻辑效果，external_execution唯一(operation_id,execution_no)及unique(task_id)代表追加执行。请求已明确失败且**确定零外部效果**时，当前execution置FAILED并记录no_effect_basis（NOT_SENT/DEFINITIVE_REJECTION/PROVEN_CUTOFF_FENCED）、受控证据引用、verified_at和finished_at，operation及旧task终结FAILED。HTTP超时、普通NOT_FOUND、lease过期不能填该证明。
 
-模型额度准入与短任务租约独立：按operation→model→reservation锁序复验当前独立token、显式容量、enabled/config_revision，计数未settled reservation后插入；持有reservation才调用。marker已提交而准入失败只能由仍持有效operation token的初始发送流程明确终结“本次未调用”，不得让通用worker自行回READY；接管者不能仅凭暂未查到reservation推断未发送或安全重试。timeout/cancel/lease失效不释放额度。safe_deadline只来自平台证据并截断到微秒；无安全截止使用NULL保守占额直到确定终结，未配置容量fail-closed。缩容不能低于在途量；禁用不删除活跃reservations。终结提交后再幂等释放额度；崩溃遗漏释放由operation确定状态对账回收。
+用户保持原confirmation重试时无需新确认：按幂等→身份→subject→publication根→相关task→operation→旧execution锁序，重新验证原确认仍有效、权限/目标、从未成功、operation=FAILED及完整零效果证明。CAS current_execution_no=N→N+1并递增reconcile_epoch以永久隔离旧token，创建新task（producer_key含operation.id及新execution_no）及PREPARED execution（完整请求hash/manifest、task_attempt/marked_at=NULL），operation=RETRY_QUEUED，publication=READY，与审计/outbox一并提交。旧task/execution/confirmation全保留、同business_key不变。PREPARED不代表已经调用；普通claimer只领取其新READY task，到beginExternal才按上一段真正提交marker并调用。RETRY_QUEUED不进入未知结果查回扫描；崩溃在marker前由B-05普通租约恢复，若无调用就达max_attempts，当前token流程以NOT_SENT证明终结FAILED。
+
+同键双击重放同一次受理结果；不同请求键的并发retry在同subject/operation锁下只有第一笔从FAILED推进，第二笔看到RETRY_QUEUED/MARKED返回已有执行或明确冲突，不能追加第二条发送。旧执行迟到结果因execution_no/epoch不匹配不能提交当前效果；若出现与确定零效果证明矛盾的成功观察，记录安全诊断并进入MANUAL_REQUIRED/权威查回，阻断下一次发送，不能将其直接改为普通FAILED；平台若违反已验证截止/拒绝保证则集成资格失败。
+
+成功一次将当前execution/operation/publication置SUCCEEDED、写唯一provider+externalDocumentId映射及ever_published=1，task/audit/outbox同事务，之后不允许再发。真实内容修改后才新增confirmation并产生新逻辑键，不能为重试假造确认。每execution完整manifest保留当次库/目录，明确零效果后可按产品规则修正目标；平台适配器必须证实稳定业务键下的失败重试/更正目标语义，若供应商缓存失败或拒绝同键变参而无安全协议则报平台前置，不能偷偷更换稳定业务键。撤回/废止仍先本地阻断、外部对账，不允许恢复终态。
+
+operation.request_hash固定编码schema版本、operation_kind、business_key、confirmation_id及确认内容hash；execution.request_hash另编码上述逻辑hash与本次完整library_id/folder_id、渲染及发送配置固定版本、请求参数清单。目录/连接配置的纯投递更正与新执行受理在同事务保存到publication当前目标及新execution manifest，使用publication.revision CAS；它不修改已确认正文或meeting业务revision，不以投递配置改变强迫重新确认。若某配置实际改变确认内容，则走原内容修改/重新确认规则。B-08必须测试“失效目录明确拒绝且零效果→同confirmation更正目录→新execution完整hash改变、逻辑hash和业务键不变→成功”；适配器上线前用平台证据验证此请求参数/幂等键契约。平台不允许同键变参时，该分支保持明确失败并提示真实接口能力阻塞，不发新键绕过、不泛称平台已支持安全重试。
+
+模型额度按operation→execution→model→reservation锁序复验当前独立token/执行号和enabled/config_revision，计数未settled reservation后按execution_id唯一插入，持有本执行reservation才调用。marker已提交而准入失败只能由有效token流程明确终结本execution“未调用”；接管者不能凭暂未查到reservation推断安全重发。timeout/cancel/lease失效不释放额度；有证明的safe_deadline微秒归一，无证据NULL保守占额直到明确终结。未知容量fail-closed、缩容不得低于在途量；execution确定终结提交后另事务幂等释放，崩溃遗漏由确定执行状态对账回收，不能凭逻辑operation的新一代状态释放旧执行未知额度。
 
 邮件批次 `mail_job` 绑定协调task及保存版本，每个 `mail_recipient` 对应独立发送task/operation和 `jobId+enterpriseId` 消息键。发送前再验企业成员已确认、当前READ、负责人发件权限和发布/撤回状态，只发送受控版本链接。批次部分成功时，SENT收件人永不重发，只对UNKNOWN收件人按其键查回；无需假设供应商批量发送原子性。无单消息幂等/查回能力时保留UNKNOWN/MANUAL_REQUIRED，不能重新发整批。
 
@@ -128,10 +159,34 @@ consumer按sequence升序取有界页，成功完成连续前缀后推进cursor�
 
 ## 查询与容量验证计划
 
+**R1 列表契约。** 会议编号采用持久且不可变的 `meeting.id` 完整36字符UUID，同时用于展示/复制/包含搜索；不取页内序号、不另造未存储短编号，也不把知道编号当授权。`meeting_search_projection`保存当前已保存名称、number_search、category及当前info/confirmed-roster指针；`meeting_person_search`只从 `meeting.roster_revision_id` 所指CONFIRMED名单的完整display_name生成，草稿、AI/声纹候选、行动项负责人不加入。外部业务人员只有在该名单明确确认后才可被已授权用户按名搜索，这不赋予其访问权。B-03同事务随信息保存/名单确认更新投影，根任何revision变化都同步投影版本；旧名随旧名单只保留在历史，不混入当前列表搜索。投影不替代授权事实。
+
+公共基础关系F：先限制当前身份ACTIVE/有权scope（owned=owner；participating=有效confirmed READ grant），lifecycle=ACTIVE、governance=ACTIVE，再组合**同一组**q、stage、categoryId、topicId/topicMode、from/to。q仅为“当前会议名称 OR 完整会议编号 OR 当前已确认参会人员姓名”的包含匹配；搜索列统一utf8mb4_0900_as_ci，英文不区分大小写，不回写binary身份ID。绑定参数先把`=`转`==`、`%`转`=%`、`_`转`=_`，再加两端`%`并用`ESCAPE '='`。不把摘要/正文搜索当作这个列表q；其他正文检索能力另在有权版本中处理。
+
+categoryId非空时精确匹配企业分类稳定ID；未填写分类仅在不限定分类时出现，显示“其他”不是一个伪造分类键。from/to分别可空，按上海实际DATE包含两端；任一日期条件存在即排除NULL日期，不用created_at。stage映射到已定服务端阶段条件。topicMode=ALL/ID/UNASSIGNED：ID要求topic.owner_id=当前用户并按topic.id精确EXISTS；UNASSIGNED要求不存在关联当前用户个人专题的meeting_topic；ALL不加该谓词。用户不能用他人的专题ID探测会议；我参与的视图不显示个人专题字段，若传他人专题ID仍拒绝。专题组织不能扩大F的ACL范围。
+
+实现使用参数化、可组合谓词构建器产生**唯一的F定义**（同一请求只读一致性视图）；list=F按updated_at DESC,id DESC稳定分页，total=COUNT(F)，stageCounts=F按stage聚合，topicGroups=F按当前用户专题关联聚合并加UNASSIGNED组。多名命中用EXISTS而非JOIN展开，所以每会议在F仅一行；专题组内COUNT DISTINCT meeting_id并与组内条目使用同一F。不得在total/counts/group中忽略q、分类、所选stage、专题或日期，也不默认在counts偷偷移除当前stage条件。切换列表/分组沿用同一筛选，归集只改组织信息。数据库先利用权限/分类/专题/日期/更新时间索引缩小候选，再执行真实包含匹配；普通B-tree不能加速任意前导通配。
+
+查询骨架（省略同一谓词构建器内其余绑定项，不允许每个统计接口另写条件）：
+
+```sql
+SELECT m.id
+FROM meeting m
+JOIN meeting_search_projection p ON p.meeting_id=m.id
+WHERE /* ACTIVE身份、owned/participating ACL、生命周期、治理、stage/date/category/topic共同谓词 */
+      p.meeting_revision=m.revision
+  AND (:q_absent OR p.name_search LIKE :pattern ESCAPE '='
+       OR p.number_search LIKE :pattern ESCAPE '='
+       OR EXISTS (SELECT 1 FROM meeting_person_search n
+                  WHERE n.meeting_id=m.id AND n.roster_id=m.roster_revision_id
+                    AND n.name_search LIKE :pattern ESCAPE '='))
+ORDER BY m.updated_at DESC,m.id DESC;
+```
+
 |查询/边界|形态与索引顺序|容量假设及后续验证拥有者|
 |---|---|---|
-|负责/参与列表|先 owner_id 或 access_grant.enterprise_id/action 过滤，再 lifecycle/governance、stage/date；meeting_owner_date(owner,lifecycle,date,id)，access_person_meeting(person,action,meeting)|至少10万会议、1000人、多名单分布；B-03/D-02真实EXPLAIN ANALYZE与分页/total/stageCounts一致性|
-|名称/摘要/正文包含检索|授权范围内 `LIKE CONCAT('%', escaped_q, '%') ESCAPE '='`；必须将`%`,`_`,`=`按字面转义；正文只最新有效或发布快照|普通B-tree不能加速前导通配；不拿FULLTEXT近似替代。D-02用授权候选量/长中文数据实测，超预算调整投影或有界后台查询并增量评审，不静默截断结果|
+|负责/参与列表与共同筛选|meeting_owner_updated(owner,lifecycle,updated_at,id)、meeting_owner_date(owner,lifecycle,date,id)、meeting_stage_updated(lifecycle,stage,updated_at,id)、access_person_meeting(person,action,meeting)；search_category(category,meeting)；meeting_topic(topic,meeting)及其meeting FK索引支持EXISTS/NOT EXISTS|至少10万会议、1000人、多名单分布；B-03/D-02/D-08真实EXPLAIN ANALYZE与list/total/stageCounts/topicGroups共同F一致性|
+|名称/编号/已确认人员姓名包含检索|projection PK meeting；person PK(meeting,member)，冻结roster/member FK；英文大小写不敏感as_ci、字面通配转义；任一字段命中|B-03/V008建投影，D-02维护/查询；B-tree不能优化前导通配，不拿FULLTEXT替代。含长中文/大小写/多人同名/旧名单/未确认候选/未知日期/分类/专题组合实测|
 |任务领取|分开 task_ready(pool,state,available_at,id) 与 task_expired(pool,state,expires_at,id)；小批候选后按锁序重验|B-05 EXPLAIN、锁行跳过、5秒扫描、20秒租约，DB健康30秒重新可领目标；C-07加入实时/离线公平性|
 |续租/提交|PK task.id，再精准attempt/owner/version/epoch；subject复合PK|B-05旧attempt、暂停handler、真实时间续租、DB恢复；不是本次结构验收|
 |版本历史|各领域(meeting_id,revision)唯一B-tree，倒序keyset|至少100万transcript_segment与长文本；B-06/D-04验证恢复新版本及完整稿检索|
@@ -139,11 +194,11 @@ consumer按sequence升序取有界页，成功完成连续前缀后推进cursor�
 |文件清理|file_meeting(meeting,state,id)，cleanup_due(state,not_before,id)，file_ref_owner(kind,id,file)；清理前锁file再NOT EXISTS全账本|B-04/D-07 orphan/并发引用/位置迁移/删除失败回归；不得用估算refcount替代证明|
 |录音/事件|chunk(part,seq)，subtitle(session,event_seq)，outbox(subject_kind,subject_id,sequence_id)|100场每2秒约50分片/s、180000分片/小时；C-07两小时＋八小时稳定性，含全局序列争用|
 
-列表结果/total/stageCounts必须用相同权限及治理谓词，同一只读一致性视图或说明快照边界。无实际日期的NULL单独排序稳定并提供id tie-breaker。授权失败不要通过总数/全文命中泄露正文。吞吐目标100录音+200编辑/回看、20回听、10编辑、5离线任务；每节点API20/RT10/worker10初始连接配额需重算所有消费者。此处只是设计假设，不是EXPLAIN或性能报告。
+列表/total/stageCounts/topicGroups必须共享上述全部F谓词及一致性视图；默认updated_at DESC,id DESC，日期仅筛选而不替换默认顺序。授权失败不要通过总数/人员命中泄露资料。吞吐目标100录音+200编辑/回看、20回听、10编辑、5离线任务；每节点API20/RT10/worker10初始连接配额需重算所有消费者。此处只是设计假设，不是EXPLAIN或性能报告。
 
 ## 分期迁移、兼容和回滚
 
-V001/V002/V005冻结原字节；不得修改已应用/共享/暂停脚本或填V003/V004空位。登记册分配V006起增量，B-01不得代其他领域创建全套表。审阅DDL为了独立完整元数据核对在一次性库创建全部79表，绝不替代正式Flyway迁移。旧表 `meeting_acl` 仅过渡保留，目标有效权限表为 `meeting_access_grant`，不得无来源自动迁移旧“已确认”记录。
+V001/V002/V005冻结原字节；不得修改已应用/共享/暂停脚本或填V003/V004空位。登记册分配V006起增量，B-01不得代其他领域创建全套表。审阅DDL为了独立完整元数据核对在一次性库创建全部85表，绝不替代正式Flyway迁移。旧表 `meeting_acl` 仅过渡保留，目标有效权限表为 `meeting_access_grant`，不得无来源自动迁移旧“已确认”记录。1.1修正都归尚未实现的V008/V010/V011/V012/V013/V017/V023预留设计，不是改写已应用版本；首次正式迁移仍须执行登记册旧集合归集门。
 
 正式扩展：新增列先nullable或显式安全默认，双读/双写窗口受版本标记控制；唯一/检查/FK前审计脏数据与二进制排序冲突，不能INSERT IGNORE吞损。把V001标识改为binary前验证既有长度/相等性；将V002身份投影/role/session_generation转移后，所有节点切到共享即时撤销与新ACL路径。V005缺字段回填完整spec、producer_key、max_attempts以及external marker，旧RUNNING必须排空/确认无外部未知，不能凭空升级成安全重试；维护期间停止领取再上线新worker。
 
@@ -394,11 +449,9 @@ erDiagram
     }
     external_operation {
         char_36_ id PK
-        char_36_ task_id FK
         varchar_64_ operation_kind
         varchar_255_ business_key
         char_64_ request_hash
-        bigint origin_attempt
         varchar_64_ state
         datetime_6_ marked_at
         datetime_6_ next_check_at
@@ -407,6 +460,9 @@ erDiagram
         datetime_6_ reconcile_expires_at
         longtext external_result_id
         varchar_64_ last_error
+        varchar_64_ subject_kind FK
+        varchar_255_ subject_id FK
+        bigint current_execution_no
     }
     task_outbox_sequence {
         int id PK
@@ -440,7 +496,7 @@ erDiagram
     model_reservation {
         char_36_ id PK
         varchar_64_ model FK
-        char_36_ operation_id FK
+        char_36_ execution_id FK
         bigint config_revision
         datetime_6_ safe_deadline
         datetime_6_ created_at
@@ -470,6 +526,8 @@ erDiagram
         char_64_ input_fingerprint
         varchar_255_ created_by
         datetime_6_ created_at
+        char_36_ processing_input_id FK
+        char_36_ producer_task_id FK
     }
     transcript_segment {
         char_36_ revision_id PK,FK
@@ -492,7 +550,7 @@ erDiagram
     }
     template_revision {
         char_36_ id PK
-        char_36_ template_id
+        char_36_ template_id FK
         bigint revision
         varchar_255_ owner_id FK
         longtext name
@@ -632,6 +690,7 @@ erDiagram
         varchar_64_ outcome
         datetime_6_ created_at
         datetime_6_ finished_at
+        char_36_ execution_id FK
     }
     external_document_mapping {
         char_36_ publication_id PK,FK
@@ -818,6 +877,9 @@ erDiagram
         longtext name
         bigint revision
         datetime_6_ created_at
+        longtext description
+        longtext name_normalized
+        char_64_ name_hash
     }
     meeting_topic {
         char_36_ topic_id PK,FK
@@ -941,6 +1003,71 @@ erDiagram
         char_36_ operation_id FK
         varchar_255_ message_key
     }
+    meeting_search_projection {
+        char_36_ meeting_id PK,FK
+        char_36_ info_revision_id FK
+        char_36_ roster_revision_id FK
+        longtext name_search
+        varchar_36_ number_search
+        varchar_255_ category_id
+        bigint meeting_revision
+    }
+    meeting_person_search {
+        char_36_ meeting_id PK,FK
+        char_36_ roster_id FK
+        char_36_ member_id PK,FK
+        longtext name_search
+    }
+    minutes_template {
+        char_36_ id PK
+        varchar_255_ owner_id FK
+        longtext name
+        longtext name_normalized
+        char_64_ name_hash
+        char_36_ current_revision_id
+        bigint revision
+        datetime_6_ created_at
+    }
+    external_execution {
+        char_36_ id PK
+        char_36_ operation_id FK
+        bigint execution_no
+        char_36_ task_id FK
+        bigint task_attempt
+        varchar_64_ state
+        char_64_ request_hash
+        longtext request_manifest
+        datetime_6_ created_at
+        datetime_6_ marked_at
+        datetime_6_ finished_at
+        varchar_64_ no_effect_basis
+        longtext no_effect_evidence
+        datetime_6_ no_effect_verified_at
+    }
+    transcription_input {
+        char_36_ id PK
+        char_36_ meeting_id FK
+        char_36_ batch_id FK
+        varchar_64_ kind
+        char_36_ source_revision_id FK
+        char_36_ material_snapshot_id FK
+        varchar_64_ material_mode
+        varchar_255_ processing_config_version
+        varchar_255_ parser_version
+        varchar_255_ model_config_version
+        varchar_255_ prompt_version
+        int manifest_schema_version
+        longtext config_manifest
+        char_64_ input_fingerprint
+        bigint base_revision
+        bigint cancel_epoch
+        datetime_6_ created_at
+    }
+    transcript_segment_mark {
+        char_36_ revision_id PK,FK
+        char_36_ segment_id PK,FK
+        varchar_64_ mark PK
+    }
     department o|--o{ department : fk_department_0
     department o|--o{ enterprise_identity : fk_enterprise_identity_0
     enterprise_identity ||--o{ role_assignment : fk_role_assignment_0
@@ -967,16 +1094,18 @@ erDiagram
     storage_backend ||--o{ file_cleanup : fk_file_cleanup_1
     task_subject ||--o{ durable_task : fk_durable_task_0
     durable_task ||--o{ task_attempt : fk_task_attempt_0
-    durable_task ||--o{ external_operation : fk_external_operation_0
+    task_subject ||--o{ external_operation : fk_external_operation_0
     durable_task o|--o{ task_outbox : fk_task_outbox_0
     model_capacity ||--o{ model_reservation : fk_model_reservation_0
-    external_operation ||--o| model_reservation : fk_model_reservation_1
+    external_execution ||--o| model_reservation : fk_model_reservation_1
     meeting ||--o{ input_batch : fk_input_batch_0
     input_batch ||--o{ input_batch_file : fk_input_batch_file_0
     file_object ||--o{ input_batch_file : fk_input_batch_file_1
     meeting ||--o{ transcript_revision : fk_transcript_revision_0
     input_batch ||--o{ transcript_revision : fk_transcript_revision_1
     transcript_revision o|--o{ transcript_revision : fk_transcript_revision_2
+    transcription_input ||--o{ transcript_revision : fk_transcript_revision_3
+    durable_task o|--o{ transcript_revision : fk_transcript_revision_4
     transcript_revision ||--o{ transcript_segment : fk_transcript_segment_0
     file_object ||--o{ transcript_segment : fk_transcript_segment_1
     speaker o|--o{ transcript_segment : fk_transcript_segment_2
@@ -984,6 +1113,7 @@ erDiagram
     transcript_revision ||--o{ transcript_confirmation : fk_transcript_confirmation_1
     enterprise_identity ||--o{ transcript_confirmation : fk_transcript_confirmation_2
     enterprise_identity o|--o{ template_revision : fk_template_revision_0
+    minutes_template ||--o{ template_revision : fk_template_revision_1
     meeting ||--o{ generation_input : fk_generation_input_0
     transcript_confirmation ||--o{ generation_input : fk_generation_input_1
     template_revision ||--o{ generation_input : fk_generation_input_2
@@ -1027,6 +1157,7 @@ erDiagram
     publication ||--o{ publication_attempt : fk_publication_attempt_0
     final_confirmation ||--o{ publication_attempt : fk_publication_attempt_1
     external_operation ||--o{ publication_attempt : fk_publication_attempt_2
+    external_execution ||--o{ publication_attempt : fk_publication_attempt_3
     publication ||--o| external_document_mapping : fk_external_document_mapping_0
     publication ||--o{ publication_governance : fk_publication_governance_0
     external_operation ||--o{ publication_governance : fk_publication_governance_1
@@ -1103,4 +1234,17 @@ erDiagram
     mail_job ||--o{ mail_recipient : fk_mail_recipient_0
     enterprise_identity ||--o{ mail_recipient : fk_mail_recipient_1
     external_operation ||--o| mail_recipient : fk_mail_recipient_2
+    meeting ||--o| meeting_search_projection : fk_meeting_search_projection_0
+    meeting_info_revision o|--o{ meeting_search_projection : fk_meeting_search_projection_1
+    roster_revision o|--o{ meeting_search_projection : fk_meeting_search_projection_2
+    meeting ||--o{ meeting_person_search : fk_meeting_person_search_0
+    roster_member ||--o{ meeting_person_search : fk_meeting_person_search_1
+    enterprise_identity o|--o{ minutes_template : fk_minutes_template_0
+    external_operation ||--o{ external_execution : fk_external_execution_0
+    durable_task ||--o| external_execution : fk_external_execution_1
+    meeting ||--o{ transcription_input : fk_transcription_input_0
+    input_batch ||--o{ transcription_input : fk_transcription_input_1
+    transcript_revision o|--o{ transcription_input : fk_transcription_input_2
+    material_snapshot o|--o{ transcription_input : fk_transcription_input_3
+    transcript_segment ||--o{ transcript_segment_mark : fk_transcript_segment_mark_0
 ```

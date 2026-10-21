@@ -1,4 +1,4 @@
-# AMA 数据字典 — B00-1.0-review
+# AMA 数据字典 — B00-1.1-review
 
 生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。
 
@@ -89,6 +89,12 @@
 |configuration_release|E-03|V026|配置发布/回滚均新增记录|
 |mail_job|E-04|V027|已保存版本受控链接邮件；不含正文附件/外部邮箱|
 |mail_recipient|E-04|V027|固定企业收件人集合；发送前再验证有效名单和ACL|
+|meeting_search_projection|B-03/D-02|V008|R1 列表当前名称/编号及筛选字段投影；与根修改同事务|
+|meeting_person_search|B-03/D-02|V008|R1 当前已确认名单姓名投影；草稿和AI候选绝不进入|
+|minutes_template|B-07/D-04|V012|R2 模板逻辑根与当前个人名称；历史名称不占用命名空间|
+|external_execution|B-05/B-08|V010|R4 稳定逻辑操作下的追加执行尝试；支持同确认零效果失败重试|
+|transcription_input|B-06/C-02/C-03/D-01|V011|R5 转写导入/识别/重新增强不可变输入快照，独立于纪要generation_input|
+|transcript_segment_mark|B-06/C-03|V011|R6 片段多选标记随转写版本冻结；不是纪要要素|
 
 ## audit_event
 
@@ -218,6 +224,8 @@
 主键：`id`。
 - 索引 `meeting_owner_date(owner_id,lifecycle,actual_meeting_date,id)`：负责会议日期分页。
 - 索引 `meeting_stage_date(lifecycle,stage,actual_meeting_date,id)`：授权后阶段统计/日期分页。
+- 索引 `meeting_owner_updated(owner_id,lifecycle,updated_at,id)`：负责列表默认更新时间倒序。
+- 索引 `meeting_stage_updated(lifecycle,stage,updated_at,id)`：阶段过滤后的默认稳定倒序。
 - CHECK `ck_meeting_0`：`stage IN ('ENTRY','TRANSCRIPT_PENDING','TRANSCRIPT_FAILED','MINUTES_PENDING','MINUTES_FAILED','READY_TO_PUBLISH','PUBLISH_FAILED','PUBLISHED')`。
 - CHECK `ck_meeting_1`：`lifecycle IN ('ACTIVE','DELETING','DELETED')`。
 - CHECK `ck_meeting_2`：`governance_state IN ('ACTIVE','WITHDRAW_PENDING','WITHDRAWN','OBSOLETE_PENDING','OBSOLETE')`。
@@ -581,28 +589,29 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |字段|MySQL 类型/排序规则|可空|默认|含义|
 |---|---|---|---|---|
 |id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|内部 UUID；服务器生成，永不复用|
-|task_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|唯一拥有任务|
 |operation_kind|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|MODEL_GENERATE/PUBLISH/WITHDRAW/MAIL等|
 |business_key|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|稳定外部幂等/查回键|
-|request_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|不可变外部请求摘要|
-|origin_attempt|`bigint unsigned`|否|无|发起调用的任务attempt|
+|request_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|逻辑内容摘要：固定confirmation/body及业务操作；不替代每次完整请求摘要|
 |state|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|调用/对账状态|
-|marked_at|`datetime(6)`|否|无|提交marker时间；先于网络调用|
+|marked_at|`datetime(6)`|否|无|首次before-external marker实际提交时间|
 |next_check_at|`datetime(6)`|否|无|下次对账|
 |reconcile_epoch|`bigint unsigned`|否|0|独立对账租约代际|
 |reconcile_owner|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|是|无|对账者|
 |reconcile_expires_at|`datetime(6)`|是|无|对账租约DB截止|
 |external_result_id|`longtext`|是|无|外部结果定位|
 |last_error|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|是|无|安全错误码|
+|subject_kind|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|聚合类型|
+|subject_id|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|聚合ID|
+|current_execution_no|`bigint unsigned`|否|无|当前执行代际；初次1|
 
 主键：`id`。
-- 唯一约束 `external_task(task_id,operation_kind)`：每任务每效果类型单一操作。
 - 唯一约束 `external_key(operation_kind,business_key)`：同类型业务键唯一。
 - 索引 `external_due(state,next_check_at,id)`：到期对账。
-- CHECK `ck_external_operation_0`：`state IN ('MARKED','UNKNOWN','SUCCEEDED','FAILED','MANUAL_REQUIRED')`。
-- FK `fk_external_operation_0`：`task_id` → `durable_task(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- CHECK `ck_external_operation_0`：`state IN ('MARKED','UNKNOWN','RETRY_QUEUED','SUCCEEDED','FAILED','MANUAL_REQUIRED')`。
+- CHECK `ck_external_operation_1`：`current_execution_no > 0`。
+- FK `fk_external_operation_0`：`subject_kind,subject_id` → `task_subject(subject_kind,subject_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：MARKED 与任务 RECONCILING 在调用前原子提交；不把 MARKED 当尚未调用；对账只查询/幂等协议重放；没有可靠协议转 MANUAL_REQUIRED 阻断；删除/版本失效仍可登记外部真实结果但禁止写回业务正文。
+更新/删除与完整性：operation_kind/business_key全历史唯一；不归单个task。current_execution_no由同聚合锁下CAS；独立reconcile_epoch跨执行永久递增、不清零。当前执行由(operation_id,no)应用校验。仅FAILED且当前execution有确定零效果证据可追加执行；UNKNOWN禁止重发。
 
 ## task_outbox_sequence
 
@@ -684,19 +693,19 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |---|---|---|---|---|
 |id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|内部 UUID；服务器生成，永不复用|
 |model|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|模型|
-|operation_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|外部操作唯一关联|
+|execution_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|具体外部调用执行；独立占额|
 |config_revision|`bigint unsigned`|否|无|准入配置版本|
 |safe_deadline|`datetime(6)`|是|无|平台证明截止；不支持时NULL|
 |created_at|`datetime(6)`|否|无|准入时间|
 |settled_at|`datetime(6)`|是|无|明确终结才释放|
 
 主键：`id`。
-- 唯一约束 `reservation_operation(operation_id)`：调用唯一占额。
+- 唯一约束 `reservation_execution(execution_id)`：每实际执行单独占额。
 - 索引 `model_deadline(model,settled_at,safe_deadline)`：计数活跃及到期回收。
 - FK `fk_model_reservation_0`：`model` → `model_capacity(model)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
-- FK `fk_model_reservation_1`：`operation_id` → `external_operation(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_model_reservation_1`：`execution_id` → `external_execution(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：单独准入事务锁 model；持有许可后才调用。lease/HTTP超时不得释放；未知deadline允许无限占额且告警，默认未配置容量拒绝调用；缩容低于活跃数拒绝，禁用只阻断新准入。
+更新/删除与完整性：独立准入事务按operation→当前execution→model→reservation锁序，复验独立token/执行号及配置；持有本执行许可后才调用。lease/HTTP超时不释放，未知deadline保守占额；execution明确终结后单独幂等结算，不以逻辑操作新执行状态释放旧执行额度。
 
 ## input_batch
 
@@ -751,6 +760,8 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |input_fingerprint|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|规范化输入版本集合的 SHA-256|
 |created_by|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|创建者|
 |created_at|`datetime(6)`|否|无|保存时间|
+|processing_input_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|固定处理/增强输入；手工修订继承父处理来源|
+|producer_task_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|产生本结果任务；人工保存为空|
 
 主键：`id`。
 - 唯一约束 `transcript_history(meeting_id,revision)`：唯一版本与历史。
@@ -758,8 +769,10 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - FK `fk_transcript_revision_0`：`meeting_id` → `meeting(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_transcript_revision_1`：`batch_id` → `input_batch(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_transcript_revision_2`：`parent_id` → `transcript_revision(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_transcript_revision_3`：`processing_input_id` → `transcription_input(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_transcript_revision_4`：`producer_task_id` → `durable_task(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
+更新/删除与完整性：各稿不可变；生成结果input_fingerprint必须等于processing_input输入指纹，producer_task.spec.input_id必须同该输入。WORKING/恢复稿继承具体父稿处理来源，不能改用当前材料配置；确认content_hash另含已保存片段与多选标记。
 
 ## transcript_segment
 
@@ -827,8 +840,9 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - 索引 `template_owner(owner_id,template_id,revision)`：本人模板列表。
 - CHECK `ck_template_revision_0`：`theme_count BETWEEN 1 AND 8`。
 - FK `fk_template_revision_0`：`owner_id` → `enterprise_identity(enterprise_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_template_revision_1`：`template_id` → `minutes_template(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
+更新/删除与完整性：不可变历史；owner_id必须与minutes_template一致，name是该修订的展示名；当前名称只由逻辑根登记；根当前指针由服务校验同template_id并同事务更新，避免循环FK。
 
 ## generation_input
 
@@ -1116,13 +1130,13 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |published_at|`datetime(6)`|是|无|确定成功时间|
 
 主键：`id`。
-- 唯一约束 `publication_meeting(meeting_id)`：每会议唯一发布根；失败可同根换确认且先证明无外部成功。
+- 唯一约束 `publication_meeting(meeting_id)`：每会议唯一发布根；确定零效果失败可原确认追加执行，真实内容修改才换确认。
 - 唯一约束 `publication_key(business_key)`：外部业务键唯一。
 - CHECK `ck_publication_0`：`state IN ('READY','RUNNING','RECONCILING','FAILED','SUCCEEDED')`。
 - FK `fk_publication_0`：`meeting_id` → `meeting(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_publication_1`：`confirmation_id` → `final_confirmation(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：失败且证明没有效果才允许新确认重新提交；每确认业务键固定，旧尝试保留；SUCCEEDED从不回退；RUNNING/RECONCILING阻止编辑/删除/第二发布。
+更新/删除与完整性：同confirmation确定零效果失败后可原确认重试：复用稳定publication/business_key/operation，追加external_execution及新task，不要求新确认；双重retry在subject/根/operation锁下只接受一次。更换confirmation仅真实修改重新确认时允许。SUCCEEDED永不重试，UNKNOWN不重发。
 
 ## publication_attempt
 
@@ -1138,6 +1152,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |outcome|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|结果状态|
 |created_at|`datetime(6)`|否|无|开始时间|
 |finished_at|`datetime(6)`|是|无|终结时间|
+|execution_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|具体发布/查回操作对应执行|
 
 主键：`id`。
 - 索引 `publication_attempt_history(publication_id,created_at,id)`：治理历史。
@@ -1146,6 +1161,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - FK `fk_publication_attempt_0`：`publication_id` → `publication(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_publication_attempt_1`：`confirmation_id` → `final_confirmation(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_publication_attempt_2`：`operation_id` → `external_operation(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_publication_attempt_3`：`execution_id` → `external_execution(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
 更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
 
@@ -1592,12 +1608,16 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |name|`longtext`|否|无|名称|
 |revision|`bigint unsigned`|否|无|专题CAS|
 |created_at|`datetime(6)`|否|无|创建时间|
+|description|`longtext`|是|无|R3 可选专题说明；未填写/空串归一为NULL|
+|name_normalized|`longtext COLLATE utf8mb4_0900_bin`|否|无|R2 NFC及首尾Unicode空白剔除后的完整名称|
+|name_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|完整name_normalized UTF-8字节SHA256，仅候选桶|
 
 主键：`id`。
 - 索引 `topic_owner(owner_id,id)`：个人专题。
+- 索引 `topic_name_bucket(owner_id,name_hash,id)`：非唯一摘要桶；持owner身份行锁后完整二进制名称复核。
 - FK `fk_topic_0`：`owner_id` → `enterprise_identity(enterprise_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
+更新/删除与完整性：个人名称不能为空；创建/改名先锁owner企业身份行，再按统一顺序锁专题并CAS revision；摘要相同逐项比较完整规范化名称，仅完整相同冲突；说明与名称同事务保存；空专题才能删除。
 
 ## meeting_topic
 
@@ -1883,3 +1903,153 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - FK `fk_mail_recipient_2`：`operation_id` → `external_operation(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
 更新/删除与完整性：协调任务展开每收件人独立durable task/operation；发送前复验确认名单、有效READ和治理状态；部分成功只对未知收件人查回，已SENT永不再次发送；不是重新发送整批。
+
+## meeting_search_projection
+
+R1 列表当前名称/编号及筛选字段投影；与根修改同事务。所属 B-03/D-02，计划 V008。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|meeting_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|会议；公开复制/搜索编号就是完整meeting.id|
+|info_revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|当前已保存基础信息；初始为空|
+|roster_revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|当前确认名单；未确认为空|
+|name_search|`longtext COLLATE utf8mb4_0900_as_ci`|是|无|当前名称；英文大小写不敏感，非正文|
+|number_search|`varchar(36) COLLATE utf8mb4_0900_as_ci`|否|无|完整36字符meeting.id的搜索投影|
+|category_id|`varchar(255) COLLATE utf8mb4_0900_bin`|是|无|当前分类；NULL映射显示其他|
+|meeting_revision|`bigint unsigned`|否|无|投影对应根修订|
+
+主键：`meeting_id`。
+- 索引 `search_category(category_id,meeting_id)`：分类先筛再包含匹配。
+- FK `fk_meeting_search_projection_0`：`meeting_id` → `meeting(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_meeting_search_projection_1`：`info_revision_id` → `meeting_info_revision(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_meeting_search_projection_2`：`roster_revision_id` → `roster_revision(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：服务端同事务维护；不是异步最终一致授权源。查询先根/ACL过滤，投影revision/指针须与根相符；正文/摘要不参加列表q匹配；根删除同步清理。
+
+## meeting_person_search
+
+R1 当前已确认名单姓名投影；草稿和AI候选绝不进入。所属 B-03/D-02，计划 V008。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|meeting_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|会议|
+|roster_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|当前CONFIRMED名单|
+|member_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|冻结名单项|
+|name_search|`longtext COLLATE utf8mb4_0900_as_ci`|否|无|该已确认名单中的完整显示名|
+
+主键：`meeting_id,member_id`。
+- FK `fk_meeting_person_search_0`：`meeting_id` → `meeting(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_meeting_person_search_1`：`roster_id,member_id` → `roster_member(roster_id,member_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：名单明确确认时与有效ACL同事务替换；包含确认的企业/外部业务人员显示名但不授予权限；目录改名不改冻结名单；查询按meeting_id EXISTS避免多人命中重复会议。
+
+## minutes_template
+
+R2 模板逻辑根与当前个人名称；历史名称不占用命名空间。所属 B-07/D-04，计划 V012。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|内部 UUID；服务器生成，永不复用|
+|owner_id|`varchar(255) COLLATE utf8mb4_0900_bin`|是|无|个人所有者；内置模板NULL|
+|name|`longtext`|否|无|当前完整展示名|
+|name_normalized|`longtext COLLATE utf8mb4_0900_bin`|否|无|NFC及首尾Unicode空白剔除后的完整当前名称|
+|name_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|完整规范化名称SHA256；非唯一摘要桶|
+|current_revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|当前template_revision；同模板应用完整性|
+|revision|`bigint unsigned`|否|无|逻辑根CAS|
+|created_at|`datetime(6)`|否|无|创建时间|
+
+主键：`id`。
+- 索引 `template_name_bucket(owner_id,name_hash,id)`：同个人当前名称候选；允许摘要碰撞但禁止完整同名。
+- FK `fk_minutes_template_0`：`owner_id` → `enterprise_identity(enterprise_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：个人创建/改名锁owner身份行串行；完整规范名二进制比较；内置由受控配置维护。改名产生新template_revision并CAS当前指针；旧revision名可读但不参与当前重名判断；不可跨所有者引用。
+
+## external_execution
+
+R4 稳定逻辑操作下的追加执行尝试；支持同确认零效果失败重试。所属 B-05/B-08，计划 V010。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|内部 UUID；服务器生成，永不复用|
+|operation_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|稳定逻辑操作|
+|execution_no|`bigint unsigned`|否|无|同操作单调1起代际|
+|task_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|本次新任务唯一拥有者|
+|task_attempt|`bigint unsigned`|是|无|before-call时实际领取attempt；排队时NULL|
+|state|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|执行状态|
+|request_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|本次完整请求含目标位置的不可变SHA256|
+|request_manifest|`longtext`|否|无|版本化安全请求清单：确认/目标ID/配置/固定输入引用；不含密钥|
+|created_at|`datetime(6)`|否|无|入队/创建时间|
+|marked_at|`datetime(6)`|是|无|本次实际before-call提交时间；PREPARED为NULL|
+|finished_at|`datetime(6)`|是|无|确定终结时间|
+|no_effect_basis|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|是|无|明确零效果证明类别；UNKNOWN/NOT_FOUND不可填写|
+|no_effect_evidence|`longtext`|是|无|受控证明引用及必要事实；无凭证/正文|
+|no_effect_verified_at|`datetime(6)`|是|无|证明核验时间|
+
+主键：`id`。
+- 唯一约束 `external_execution_number(operation_id,execution_no)`：一个操作每代一次。
+- 唯一约束 `external_execution_task(task_id)`：一个外部调用任务只拥有一次执行。
+- CHECK `ck_external_execution_0`：`execution_no > 0`。
+- CHECK `ck_external_execution_1`：`state IN ('PREPARED','MARKED','UNKNOWN','SUCCEEDED','FAILED')`。
+- CHECK `ck_external_execution_2`：`state <> 'MARKED' OR (task_attempt IS NOT NULL AND marked_at IS NOT NULL)`。
+- CHECK `ck_external_execution_3`：`no_effect_basis IS NULL OR no_effect_basis IN ('NOT_SENT','DEFINITIVE_REJECTION','PROVEN_CUTOFF_FENCED')`。
+- CHECK `ck_external_execution_4`：`(no_effect_basis IS NULL AND no_effect_evidence IS NULL AND no_effect_verified_at IS NULL) OR (state='FAILED' AND no_effect_basis IS NOT NULL AND no_effect_evidence IS NOT NULL AND no_effect_verified_at IS NOT NULL AND finished_at IS NOT NULL)`。
+- FK `fk_external_execution_0`：`operation_id` → `external_operation(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_external_execution_1`：`task_id` → `durable_task(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：请求/任务/代际创建后不改；仅状态和证明由当前独立operation token推进，终结后冻结。新retry追加行，不删除旧行/改原task。跨执行旧token不能写当前结果；原task失败历史保留。确定零效果证明还必须排除旧发送者迟到重新发出。
+
+## transcription_input
+
+R5 转写导入/识别/重新增强不可变输入快照，独立于纪要generation_input。所属 B-06/C-02/C-03/D-01，计划 V011。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|内部 UUID；服务器生成，永不复用|
+|meeting_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|会议|
+|batch_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|原始有序主文件集合|
+|kind|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|IMPORT/ASR/ENHANCE|
+|source_revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|重新增强所据已保存转写；首次导入/ASR为空|
+|material_snapshot_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|明确应用材料快照；B未启用或空集合为NULL|
+|material_mode|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|EMPTY或PINNED，NULL不表示未知|
+|processing_config_version|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|完整处理配置清单固定版本|
+|parser_version|`varchar(255) COLLATE utf8mb4_0900_bin`|是|无|使用解析器时必填；纯ASR可空|
+|model_config_version|`varchar(255) COLLATE utf8mb4_0900_bin`|是|无|模型调用固定配置；纯导入可空|
+|prompt_version|`varchar(255) COLLATE utf8mb4_0900_bin`|是|无|使用提示词时固定版本；无提示词步骤可空|
+|manifest_schema_version|`int unsigned`|否|无|可恢复输入清单schema版本|
+|config_manifest|`longtext`|否|无|不可变规范化配置/步骤/来源引用清单；不含密钥或可变latest|
+|input_fingerprint|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|规范化输入版本集合的 SHA-256|
+|base_revision|`bigint unsigned`|否|无|受理时会议修订|
+|cancel_epoch|`bigint unsigned`|否|无|受理取消代际|
+|created_at|`datetime(6)`|否|无|与任务一同提交时间|
+
+主键：`id`。
+- 索引 `transcription_input_history(meeting_id,created_at,id)`：处理输入历史追溯。
+- CHECK `ck_transcription_input_0`：`kind IN ('IMPORT','ASR','ENHANCE')`。
+- CHECK `ck_transcription_input_1`：`material_mode IN ('EMPTY','PINNED')`。
+- CHECK `ck_transcription_input_2`：`(material_mode='EMPTY' AND material_snapshot_id IS NULL) OR (material_mode='PINNED' AND material_snapshot_id IS NOT NULL)`。
+- CHECK `ck_transcription_input_3`：`kind <> 'ENHANCE' OR source_revision_id IS NOT NULL`。
+- CHECK `ck_transcription_input_4`：`kind <> 'IMPORT' OR parser_version IS NOT NULL`。
+- CHECK `ck_transcription_input_5`：`kind='IMPORT' OR model_config_version IS NOT NULL`。
+- CHECK `ck_transcription_input_6`：`manifest_schema_version > 0`。
+- FK `fk_transcription_input_0`：`meeting_id` → `meeting(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_transcription_input_1`：`batch_id` → `input_batch(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_transcription_input_2`：`source_revision_id` → `transcript_revision(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_transcription_input_3`：`material_snapshot_id` → `material_snapshot(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：B只EMPTY/NULL且规范空集合入指纹；D01非空写入前V017加material FK，审阅库完整建FK。typed task input=TRANSCRIPTION_INPUT/id，输出revision反向引用本输入；手工保存/恢复继承原处理来源，不读meeting可变材料/配置。FK/source_revision同会议应用校验；历史删除先清源引用，禁止循环或子孙作为source。
+
+## transcript_segment_mark
+
+R6 片段多选标记随转写版本冻结；不是纪要要素。所属 B-06/C-03，计划 V011。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|已保存转写版本|
+|segment_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|该版本稳定段|
+|mark|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|KEY关键/CONCLUSION结论/DISPUTE争议/GENERATION_FOCUS重点生成|
+
+主键：`revision_id,segment_id,mark`。
+- CHECK `ck_transcript_segment_mark_0`：`mark IN ('KEY','CONCLUSION','DISPUTE','GENERATION_FOCUS')`。
+- FK `fk_transcript_segment_mark_0`：`revision_id,segment_id` → `transcript_segment(revision_id,segment_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：同段可0..4类，PK禁止重复；增删标记与片段保存产生新revision，旧标记不UPDATE/DELETE。规范排序的标记集进入确认content_hash/纪要inputFingerprint；确认后任何标记改动清当前转写/最终确认并要求重新确认，不证明内容真实；只作生成参考。
