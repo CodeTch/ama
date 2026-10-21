@@ -3,6 +3,8 @@
 <dependencies>
 <dependency><groupId>ama</groupId><artifactId>ama-adapters</artifactId><version>${project.version}</version>
 <exclusions>
+<exclusion><groupId>software.amazon.awssdk</groupId><artifactId>s3</artifactId></exclusion>
+<exclusion><groupId>software.amazon.awssdk</groupId><artifactId>url-connection-client</artifactId></exclusion>
 <exclusion><groupId>org.springframework</groupId><artifactId>spring-jdbc</artifactId></exclusion>
 <exclusion><groupId>org.flywaydb</groupId><artifactId>flyway-core</artifactId></exclusion>
 <exclusion><groupId>org.flywaydb</groupId><artifactId>flyway-mysql</artifactId></exclusion>
