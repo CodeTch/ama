@@ -50,7 +50,12 @@ class FileSchemaMigrationIT {
         String container = System.getenv("AMA_TEST_CONTAINER");
         assertNotNull(container, "explicit helper-owned fixture required");
         assertTrue(container.matches("ama-test-b01-[0-9a-f]{12}"));
-        assertTrue(Files.isRegularFile(Path.of(".tools/mysql-fixture", container, "env.sh")),
+        Path worktree = Path.of("").toAbsolutePath();
+        while (worktree != null && !Files.isRegularFile(worktree.resolve("tools/dev/mysql_fixture.py"))) {
+            worktree = worktree.getParent();
+        }
+        assertNotNull(worktree, "must run inside the AMA checkout");
+        assertTrue(Files.isRegularFile(worktree.resolve(".tools/mysql-fixture").resolve(container).resolve("env.sh")),
                 "fixture must be created in THIS worktree");
         Process inspection = new ProcessBuilder("docker", "inspect", container).start();
         JsonNode metadata = JSON.readTree(inspection.getInputStream()).get(0);
@@ -78,6 +83,9 @@ class FileSchemaMigrationIT {
             assertTrue(versions.equals(LOWER) || versions.equals(List.of("001","002","005","006","007","008","009")),
                     "only known successful owned lower/full history may be reused: " + versions);
         }
+        // Reject a different frozen checksum BEFORE any seed write on reuse.
+        Flyway.configure().dataSource(source).locations("classpath:db/migration")
+                .cleanDisabled(true).load().validate();
         // Seed only test data AFTER all lower migrations, before the upgrade.
         setup.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',?)", owner, "结构测试身份", AT);
         setup.update("INSERT INTO meeting(id,owner_id,stage,created_at,updated_at) VALUES (?,?,'ENTRY',?,?)", meeting, owner, AT, AT);
@@ -144,24 +152,33 @@ class FileSchemaMigrationIT {
         assertEquals(0, jdbc.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=0", Integer.class));
         assertEquals(lowerHistory, jdbc.queryForList("SELECT * FROM flyway_schema_history WHERE version<>'009' ORDER BY installed_rank"),
                 "frozen lower checksums and every history field must remain unchanged");
+        var expectedTables = new TreeSet<>(lowerRows.keySet());
+        expectedTables.addAll(TABLES);
+        expectedTables.add("flyway_schema_history");
+        assertEquals(expectedTables, new TreeSet<>(jdbc.queryForList(
+                "SELECT table_name FROM information_schema.tables WHERE table_schema=DATABASE()", String.class)),
+                "V009 may add only its six assigned tables");
         for (String table : lowerRows.keySet()) {
             assertEquals(lowerDdl.get(table), jdbc.queryForMap("SHOW CREATE TABLE `" + table + "`").get("Create Table"), table + " DDL");
             assertEquals(lowerRows.get(table), jdbc.queryForList("SELECT * FROM `" + table + "`"), table + " data");
         }
+        var finalHistory = jdbc.queryForList("SELECT * FROM flyway_schema_history ORDER BY installed_rank");
         assertEquals(0, migrate("009"));
+        assertEquals(finalHistory, jdbc.queryForList("SELECT * FROM flyway_schema_history ORDER BY installed_rank"));
         Map<String, String> hashes = Map.of(
                 "V001__foundation.sql", "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
                 "V002__identity_acl.sql", "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
                 "V005__tasks_outbox.sql", "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
                 "V006__audit_metadata.sql", "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
-                "V007__identity_sessions.sql", "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d");
+                "V007__identity_sessions.sql", "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+                "V008__meeting_schema.sql", "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+                "V009__file_schema.sql", "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d");
         for (var entry : hashes.entrySet()) {
             try (var sql = getClass().getResourceAsStream("/db/migration/" + entry.getKey())) {
                 assertNotNull(sql, entry.getKey());
                 assertEquals(entry.getValue(), HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(sql.readAllBytes())), entry.getKey());
             }
         }
-        // Reviewed V008 and frozen V009 hashes are added only after their gates.
     }
 
     @Test void enumChecksRejectInvalidBackendFileUploadAndCleanupStates() {
