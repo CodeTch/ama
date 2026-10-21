@@ -1,0 +1,11 @@
+import datetime,json,pathlib,subprocess
+out=pathlib.Path('artifacts/phase-b/b03-domain-fix1'); records=[]
+for name,command in [('openapi',['python3','tools/checks/run.py','contract','OpenApi']),('generate-api',['npm','--prefix','web','run','generate:api']),('check-api',['npm','--prefix','web','run','check:api']),('typecheck',['npm','--prefix','web','run','typecheck'])]:
+    record={'name':name,'command':command,'start_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+    with (out/(name+'.log')).open('wb') as log: result=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT)
+    record.update(exit_code=result.returncode,end_utc=datetime.datetime.now(datetime.timezone.utc).isoformat()); records.append(record)
+    (out/'contract-runs.json').write_text(json.dumps(records,indent=2)+'\n')
+    print(json.dumps(record),flush=True)
+    assert result.returncode==0,name+' failed'
+(out/'openapi-bundle.yaml').write_bytes(pathlib.Path('artifacts/openapi/api.yaml').read_bytes())
+(out/'identity-before.yaml').write_bytes(subprocess.check_output(['git','show','9f2da58e2bee76741e5b5aab2c22d83c7b46ab67:contracts/openapi/identity.yaml']))

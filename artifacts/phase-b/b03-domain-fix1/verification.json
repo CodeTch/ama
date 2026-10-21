@@ -1,0 +1,43 @@
+{
+  "base": "9f2da58e2bee76741e5b5aab2c22d83c7b46ab67",
+  "source_sha256": {
+    "backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java": "1616c3dbcc1ec50c91d6f9b8bb6657c077e3442b891ffcaee3d76e243690d538",
+    "backend/integration-tests/src/test/java/ama/meeting/MeetingRevisionIT.java": "fcff90df12115e390c3a87ce8f3664f3da57971e2a0f819036bf2a74a900b901",
+    "contracts/openapi/identity.yaml": "1556f20df7e4499034dfa2e31f9502fd3b57ac9214a552b8352d240c7210ef92",
+    "web/src/shared/api/generated.ts": "909e2bcde9e9133044a483290eb00c4c02bc4a127c9b6fcc4efa4f16618222b0"
+  },
+  "test_counts": {
+    "red": {
+      "tests": 4,
+      "failures": 4,
+      "errors": 0,
+      "skipped": 0
+    },
+    "green": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "original_report_sha256": "3c37268121fb46f2319b4df66ab674f5e4888d902b2c0657faf8e4a106cd622e",
+  "old_archive_manifest_sha256": "ad52ff4b8591a7c342bb15af4493fd937c440e58d858d8d78a67994f5fbee108",
+  "original_archive_files_unchanged": 60,
+  "original_owned_paths_unchanged": 77,
+  "original_owned_paths_changed_for_fix": [
+    "backend/integration-tests/src/test/java/ama/meeting/MeetingRevisionIT.java",
+    "web/src/shared/api/generated.ts"
+  ],
+  "sql_files_unchanged": {
+    "V001__foundation.sql": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+    "V002__identity_acl.sql": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+    "V005__tasks_outbox.sql": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+    "V006__audit_metadata.sql": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+    "V007__identity_sessions.sql": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+    "V008__meeting_schema.sql": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+    "V009__file_schema.sql": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+    "V010__reliable_execution.sql": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db"
+  },
+  "fixture_history_unchanged": true,
+  "production_runtime_unchanged": true
+}

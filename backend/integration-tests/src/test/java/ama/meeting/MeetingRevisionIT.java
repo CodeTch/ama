@@ -81,7 +81,9 @@ class MeetingRevisionIT {
     @Test void staleRevisionPreservesCurrentValue()throws Exception{
         String id=create();
         assertEquals(200,call("PUT","/"+id+"/info",info(0,"current",List.of()),"save-one",token).statusCode());
-        assertEquals(409,call("PUT","/"+id+"/info",info(0,"stale",List.of()),"save-two",token).statusCode());
+        var stale=call("PUT","/"+id+"/info",info(0,"stale",List.of()),"save-two",token);
+        assertEquals(409,stale.statusCode());
+        DeclaredErrorResponse.assertMatches("/api/v1/meetings/{id}/info","put",stale);
         assertEquals("current",body(call("GET","/"+id,"",null,token)).get("name").asText());
     }
     @Test void draftRosterDoesNotGrantAccess()throws Exception{
@@ -127,7 +129,9 @@ class MeetingRevisionIT {
         String id=create();
         call("PUT","/"+id+"/info",info(0,"saved",List.of(member)),"d",token);
         assertEquals(200,call("POST","/"+id+"/roster-confirmations","{\"expectedRevision\":1}","c",token).statusCode());
-        assertEquals(403,call("PUT","/"+id+"/info",info(2,"hijack",List.of()),"m",memberToken).statusCode());
+        var forbidden=call("PUT","/"+id+"/info",info(2,"hijack",List.of()),"m",memberToken);
+        assertEquals(403,forbidden.statusCode());
+        DeclaredErrorResponse.assertMatches("/api/v1/meetings/{id}/info","put",forbidden);
         assertEquals(403,call("POST","/"+id+"/roster-confirmations","{\"expectedRevision\":2}","m",memberToken).statusCode());
         String admin="admin-"+UUID.randomUUID(),adminToken=identity(admin);
         j.update("INSERT INTO role_assignment VALUES (?,'PLATFORM_ADMIN',UTC_TIMESTAMP(6))",admin);
@@ -156,7 +160,9 @@ class MeetingRevisionIT {
     }
     @Test void unavailableCategoryDictionaryDoesNotBlockEmptyDraft()throws Exception{
         String id=create();String payload=info(0,"name",List.of()).replace("\"category\":null","\"category\":\"unapproved\"");
-        assertEquals(503,call("PUT","/"+id+"/info",payload,"category",token).statusCode());
+        var unavailable=call("PUT","/"+id+"/info",payload,"category",token);
+        assertEquals(503,unavailable.statusCode());
+        DeclaredErrorResponse.assertMatches("/api/v1/meetings/{id}/info","put",unavailable);
         assertEquals(0L,j.queryForObject("SELECT revision FROM meeting WHERE id=?",Long.class,id));
     }
     Actor actor(String id){return new Actor(id,Status.ACTIVE,Set.of(Role.USER));}
@@ -338,7 +344,9 @@ class MeetingRevisionIT {
         var previous=app;
         try(var limited=startApp("--meeting.http.max-request-bytes=1024")){
             app=limited;String id=create();
-            assertEquals(413,call("PUT","/"+id+"/info",info(0,"x".repeat(2048),List.of()),"large",token).statusCode());
+            var tooLarge=call("PUT","/"+id+"/info",info(0,"x".repeat(2048),List.of()),"large",token);
+            assertEquals(413,tooLarge.statusCode());
+            DeclaredErrorResponse.assertMatches("/api/v1/meetings/{id}/info","put",tooLarge);
             assertEquals(0L,j.queryForObject("SELECT revision FROM meeting WHERE id=?",Long.class,id));
             assertEquals(200,call("PUT","/"+id+"/info",info(0,"short",List.of()),"large",token).statusCode());
         }finally{app=previous;}

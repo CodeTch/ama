@@ -1,0 +1,53 @@
+[
+  {
+    "name": "openapi",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "contract",
+      "OpenApi"
+    ],
+    "start_utc": "2026-10-21T20:49:24.722041+00:00",
+    "exit_code": 0,
+    "end_utc": "2026-10-21T20:49:28.833436+00:00"
+  },
+  {
+    "name": "generate-api",
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "generate:api"
+    ],
+    "start_utc": "2026-10-21T20:49:28.833822+00:00",
+    "exit_code": 0,
+    "end_utc": "2026-10-21T20:49:29.505367+00:00"
+  },
+  {
+    "name": "check-api",
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "check:api"
+    ],
+    "start_utc": "2026-10-21T20:49:29.505898+00:00",
+    "exit_code": 0,
+    "end_utc": "2026-10-21T20:49:30.230230+00:00"
+  },
+  {
+    "name": "typecheck",
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "typecheck"
+    ],
+    "start_utc": "2026-10-21T20:49:30.230605+00:00",
+    "exit_code": 0,
+    "end_utc": "2026-10-21T20:49:32.651729+00:00"
+  }
+]

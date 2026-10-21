@@ -1,0 +1,12 @@
+
+> check:openapi
+> redocly lint contracts/openapi/api.yaml --config redocly.yaml && redocly bundle contracts/openapi/api.yaml --config redocly.yaml --output artifacts/openapi/api.yaml
+
+validating contracts/openapi/api.yaml...
+contracts/openapi/api.yaml: validated in 22ms
+
+Woohoo! Your API description is valid. 🎉
+
+bundling contracts/openapi/api.yaml...
+📦 Created a bundle for contracts/openapi/api.yaml at artifacts/openapi/api.yaml 27ms.
+PASS: checks=2 (OpenAPI validation, external-reference merge); evidence=/home/tanren/ama/.worktrees/phase-b-meeting-domain/artifacts/openapi/api.yaml
