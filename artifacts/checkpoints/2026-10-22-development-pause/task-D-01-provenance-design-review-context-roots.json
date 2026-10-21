@@ -1,0 +1,59 @@
+{
+  "scope": "Synthetic set-algebra counterexample to addendum line 155; not a runtime, valid archive or full-domain hash fixture.",
+  "authority": {
+    "basis": "addendum:55",
+    "independentEvidence": "addendum:57",
+    "manualRebind": "addendum:97",
+    "allReachedRows": "addendum:126",
+    "exactClosure": "addendum:155"
+  },
+  "input": {
+    "elements": [
+      {
+        "id": "E",
+        "source_context_id": "C1"
+      }
+    ],
+    "evidence": [
+      {
+        "id": "EV",
+        "element_id": "E",
+        "source_context_id": "C2"
+      }
+    ],
+    "contexts": [
+      {
+        "id": "C1",
+        "origin_kind": "GENERATION_INPUT",
+        "generation_input_id": "G1"
+      },
+      {
+        "id": "C2",
+        "origin_kind": "MANUAL_SELECTION",
+        "generation_input_id": null
+      }
+    ],
+    "directoryUsages": [],
+    "exclusionUsages": []
+  },
+  "line155Projection": {
+    "zeroEvidenceElementRoots": [],
+    "usageRoots": [
+      "C2"
+    ],
+    "exactContextClosure": [
+      "C2"
+    ],
+    "retainedElementBasisMissing": [
+      "C1"
+    ]
+  },
+  "rowset126Projection": {
+    "reachedFromFullRowElementsAndEvidence": [
+      "C1",
+      "C2"
+    ]
+  },
+  "correction": "State domain-by-domain whether all included element basis IDs are mandatory roots. Recommended: include every included minutes_element.source_context_id independently of evidence count, plus usage roots; retain no-fake-EVIDENCE rule. Use identical exact root derivation for rowset/PINNED graph/final and the selected element for review.",
+  "limitations": "This demonstrates incompatible closure recipes only. It does not claim an executed bad final or digest collision. Generation input rowset hashing and regeneration/final gates may independently catch or prevent specific final paths; they do not define which exact SourceGraph contextRows list a validator must accept."
+}

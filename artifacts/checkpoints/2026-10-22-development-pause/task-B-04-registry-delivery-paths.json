@@ -1,0 +1,1092 @@
+{
+  "base": "8da440d39e1b8e8dcdfc34722908d29b5aa3aa8a",
+  "head": "d1e47ca69e68caa6bd51fee1706998b3e6cd2506",
+  "paths": [
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/.gitattributes",
+      "bytes": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab",
+      "git_blob": "b746772b6cda0edb9a3995c3f95e0dde764ed2ae"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/SHA256SUMS",
+      "bytes": 2710,
+      "sha256": "4bd99a72a4dab5ca97ee7b62565ebdfc5336a5beb653dff7a29b6cf8c7ae76bb",
+      "git_blob": "ca848969d013f422375750747ab5e7ef1d9b47af"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/artifact-allowlist.json",
+      "bytes": 2058,
+      "sha256": "25a7e3ec274fec74ae55f47782cbcf57d1fc28d7d353f23d92e8a31e2386a6f8",
+      "git_blob": "0c37585aa7c03e772e5dc5d506b7758ae466c67f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/correction-report.md",
+      "bytes": 2796,
+      "sha256": "d2b0189d8ccbad4714ad68478d471e48c4a74c35629f7a6d5ee5d6010c4eda24",
+      "git_blob": "e9400490c55a15724705bce9163bd46953e5a8ae"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/execution-index.json",
+      "bytes": 2958,
+      "sha256": "54eac90c4fe55f5a52d9066642d95310760990040d200ad292484281cd13140a",
+      "git_blob": "d84883726189adc01c8b2619250487d65706b588"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-01.log",
+      "bytes": 18689,
+      "sha256": "90b6b6a134db009dfeae261a30c966afe9239cbffa0e0fe112573712e257e6b4",
+      "git_blob": "e80cd292e39cbfa4128012318d9a096376b71e9e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-01/TEST-ama.storage.FileBackendCatalogIT.xml",
+      "bytes": 34356,
+      "sha256": "d15c303ef91d6e05c85a50d9c1c4579e9da7101e4a5aeb2322d4120616c5e534",
+      "git_blob": "5fe44389b92c4a853a8846f7a6422b54e26e5423"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.api.DeploymentConfigTest.xml",
+      "bytes": 32697,
+      "sha256": "77766bc9fc46bdacea4a827ccedcc13d8195eb815e4ed27aed1eaa3761be3de0",
+      "git_blob": "3dedfbe2c7b3802967ae423d089bee608f35fc3b"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.api.FileConfigurationTest.xml",
+      "bytes": 31771,
+      "sha256": "e20bf90727ad61200a9f1aa5a8b3c3f877a2a36b7766151dc0b3ba8b5540e058",
+      "git_blob": "b16c573f978ce869134d6948de0b1c8c2244aff0"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.api.IdentityContractsTest.xml",
+      "bytes": 31985,
+      "sha256": "3294654713a22dd5cb1e9a050c5c4a05e3a6ff46411e660be9b3d0c193335fd4",
+      "git_blob": "69c8b0deb64b4991df09a1df5b870ad764d45384"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.api.IdentitySecurityTest.xml",
+      "bytes": 32382,
+      "sha256": "2b82ddebe7d3f08c2ef5bcecd6ccf92cd52cd3c9957e057d62614ecacccdf5fb",
+      "git_blob": "c6532d70d18ed9e30e08c2442e98f175d7fb602a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.storage.ContractFixtureTest.xml",
+      "bytes": 31863,
+      "sha256": "9ac7a2431431e6d75eb8159bd96bfe993ec4591da78b0adfa97b85cde8d4e1f3",
+      "git_blob": "92fefb116513d7f12ef4be377045edfbe1ca8e75"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "bytes": 15799,
+      "sha256": "80761a44179f695faa9f0715af2a77aac89585b343a2e044bffe58c43162de1f",
+      "git_blob": "8569b9edb9622318ec974dca8e8ce7aca455be43"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.storage.StorageRouterTest.xml",
+      "bytes": 16251,
+      "sha256": "b97b37e3fe0f131f1ac8bb01b8cf45d7078f59a813b4cec2c1f9344302b1c212",
+      "git_blob": "833467936f96b3a1d240f3a338bc760915c5ad12"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "bytes": 15944,
+      "sha256": "fcdbbbc299cb0658667a29b04e3c2246ace3f40c4dc1e068f3b4a9d39f885b3b",
+      "git_blob": "1a611b4eefc25d3e5cb8ea3a1d11f60e621bc5a5"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "bytes": 15813,
+      "sha256": "4abdda1289991bc2564f9185256284fb2bd2f72a62750b8ab2c76c2de7f78df2",
+      "git_blob": "03a18955cd7764c6ef393d6ccb92fdb408babc07"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.support.ContractClientTest.xml",
+      "bytes": 32033,
+      "sha256": "77614506a010cc598d94f20895fe037cd9092d712a96182b5549601cec4d76cf",
+      "git_blob": "4cf776c6acf48e002aa23b760092774910ad958d"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.task.TaskMetadataTest.xml",
+      "bytes": 15489,
+      "sha256": "3a37e8732ab45d08ebf4e0df0956b06583099a8f3c578435b05f1d3c10f13317",
+      "git_blob": "d3accbd3a36cf50d72c590e316ca6c626e4d400f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "bytes": 17914,
+      "sha256": "65eb04b5c1f21300447d1bef208f3a9bf7efd6402640beb3c40722b6c7d18c84",
+      "git_blob": "912dd9ac1a165a2bf2ff2953674f1f3bc77d6c92"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.worker.WorkerLoopTest.xml",
+      "bytes": 7221,
+      "sha256": "1858719e491353988164fb83c9b727da84c363f536e8efd9b8563cc986cff434",
+      "git_blob": "ec7440e0af338f963bdf4dbb4f95e7a4a61f0c28"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/initial-checkpoint.txt",
+      "bytes": 238,
+      "sha256": "756b24e01344f1590855a505ac9fe8f30741fda8a01fe2a8cb6b04800a20d81f",
+      "git_blob": "1ffcda4e56f840deb9c26ed41f06dccb2e047bdb"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/initial-report-5e7022c.md",
+      "bytes": 16574,
+      "sha256": "784439d049801e7ed9cb0dea224e0b749ad213459c4f6e6e0ce2186021cc0176",
+      "git_blob": "72d6982e9e0653fb075bcd66e23950ba919355cd"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/owned-source-sha256.txt",
+      "bytes": 390,
+      "sha256": "6c077a5ac08acb598533aa6a750d5e4b18576f93fe046db7d1dee9deef609df1",
+      "git_blob": "7efa311e668226c827174bc7d524656f5558ad5c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/red-01.log",
+      "bytes": 24306,
+      "sha256": "ba2abf78917f0cb46c9528b0cd4209818c428613b55f75bbd64f1350c4cde100",
+      "git_blob": "11792b526b2db6f496e8297f4bdab6dfbcd0421a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/red-01/TEST-ama.storage.FileBackendCatalogIT.xml",
+      "bytes": 39778,
+      "sha256": "0fbcd4e167bf547cbed76dcbd7459867f625641ea136c48fd2e00e272699e3ea",
+      "git_blob": "68ddb3cb043d8df1750cd0262c28a4743fb67ded"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/secret-scan.txt",
+      "bytes": 171,
+      "sha256": "9d5ca72711aeea2302a545ed933a0ba8e38eb99e11b869e9c4543239a03a4845",
+      "git_blob": "d2e032143dca144b0d26e658c593dba7a7928edb"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/.gitattributes",
+      "bytes": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab",
+      "git_blob": "b746772b6cda0edb9a3995c3f95e0dde764ed2ae"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/SHA256SUMS",
+      "bytes": 13244,
+      "sha256": "9a13b6a6691ae100452c3f731e9629cad1ea8fa62b9bc84165cd943c7c21b317",
+      "git_blob": "58111ebf3f8e814bb5a9f6b41a21ec930fe116b0"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/artifact-allowlist.json",
+      "bytes": 10385,
+      "sha256": "7eb8717da1c95460c2966b3a1ba2f5766ff53d2d782df0e1461ffa874f0fc287",
+      "git_blob": "07cdbe37a238ff1ad5604e8157d8403b9d21cc4a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/binding-proposal-original.md",
+      "bytes": 4660,
+      "sha256": "4c875f973b0e4274391fbaae9f22e2fad1fbbf535bc79b7146cf6ad44755f8fc",
+      "git_blob": "2c32ad23adbc69fffa55a002df528832aec2eaca"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/binding-proposal-original.sha256",
+      "bytes": 117,
+      "sha256": "b15a64f1c164efe8906b7d98413b5143f531e6eb14c27a148544fedb77936243",
+      "git_blob": "637534b1a9a6450b45934baf592aad25637e4f48"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/0e2183c0-48eb-45b1-8b93-fb3c822a1ba1-changed-root.log",
+      "bytes": 802,
+      "sha256": "1b49096c62f240920a205e81b0b94d1f7c1d20083c640c65d185a7c2427347ba",
+      "git_blob": "f516b05f740f072aaed58e2d756e5aaca689a4ea"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/7057ab51-fe15-4cf9-91e2-45ef3182e93b-changed-root.log",
+      "bytes": 801,
+      "sha256": "2e71ead18c846a6c76428b716f730f55e7e64c8cfe46616d0fa96401d9f750f5",
+      "git_blob": "714aa6b4f5dba15a878a4c1fa4b7639ba52b1327"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/changed-bucket-10243961277836225338.log",
+      "bytes": 14619,
+      "sha256": "e1f84148b4028c24dbfef7330424b01e7f9e9feeefe3c68371efac84dc58b36a",
+      "git_blob": "6a93d35eedbaaafa8fc0e7e63911b52bf88aa3fd"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/changed-bucket-9577179853945388074.log",
+      "bytes": 14618,
+      "sha256": "0316f7bc227d4d42c4cb6368a7795816947fda3488d36f9c43dd8c36168e7e28",
+      "git_blob": "fc925486033a6ef127dc487dbed8a24a272097d2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/service-10543062983691038489-managed-service.log",
+      "bytes": 12,
+      "sha256": "815b6335be0575cbcb7b0cbcf37737f1470be617bbf2bc256d996f03e461cabb",
+      "git_blob": "4078f33c16255d3deb450dbf6758abe1020930b2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/service-16690790236498495847-managed-service.log",
+      "bytes": 12,
+      "sha256": "2ef49aad42066e05eecab018d6ee2389566d206da1d5b943d092b47b6b0b3910",
+      "git_blob": "10d63cd34ac4eede47fb6f43c770f38d0a8dc1c0"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-15163355516771041098/ac2b7c2d-3918-42fa-9c5a-7e25d689ec4b-api.log",
+      "bytes": 21,
+      "sha256": "4b28f39662fd771afa14d65cfdb4fd3c4066d898cc45286e6d03003f52de09dd",
+      "git_blob": "6f0ea1899c23a6d93478dae87112be1f1f4f96f7"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-15163355516771041098/bde2b08d-0b2a-4a6c-9e2c-29f990c9425e-api.log",
+      "bytes": 21,
+      "sha256": "43efc5cb24ebe52fa1f426c81e6eaf40fc88b05dc5f777a0c2960f2de2b6c9a7",
+      "git_blob": "e3374d0f6e2d43cb259abf9a7bf0ab1cfbe4842b"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-15163355516771041098/e22c5ff9-9529-4331-89f6-1c6e488b9b48-api.log",
+      "bytes": 21,
+      "sha256": "49aa5f9946c1c0d4012bdade610966f01a421a5070bb22857878fbd8181a5e10",
+      "git_blob": "fef083418990a1c2338ef2b322e248383bc506e4"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-15163355516771041098/f68be306-2628-48ce-ac76-9f67ee476230-api.log",
+      "bytes": 21,
+      "sha256": "cbf6b3225d8ef6f49e8dd67e766c9a2ae486f7051cd7cd6fce09f55094225172",
+      "git_blob": "37a29f20530876efc606e4ddd080d6c0447c4c13"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-2875877213872317467/0b4f1017-08df-40dd-a168-785a07e91c6f-api.log",
+      "bytes": 21,
+      "sha256": "194859cf648efda99b0158629d64de808a73ef4c2a0fcb4cc6722da5f86185a8",
+      "git_blob": "668a4e3588c36d01df69980b65b883e54dddea6a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-2875877213872317467/24fd67ec-d19c-4c33-9231-6e4dc7735c58-api.log",
+      "bytes": 21,
+      "sha256": "061bd9d7265206e6309c8c755a852c427b23ef188b318486ff399f4e39f3d131",
+      "git_blob": "02c0822f31c0c2a3a8aeda7dfe0bc1cc75d4374c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-2875877213872317467/28e9fbb7-29fe-4807-a860-97628a9b281b-api.log",
+      "bytes": 21,
+      "sha256": "9e8aa87f650aa85b8c6939160bfc4e45eccd3473375f83d5c6f6053be3e2d7eb",
+      "git_blob": "678cf18f9d4a62d5659fc6e64536e9abb73a4b17"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-2875877213872317467/4a53aada-9e6e-4d15-a81e-ab89a8d6ba2d-api.log",
+      "bytes": 21,
+      "sha256": "67fb9d4f22d30a2fd68a201996b577ddfce93a8d3c93b9b587012b1c7f34397e",
+      "git_blob": "a4ef39cabdfdb7e9653304750f9b79eb943b33e2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-2875877213872317467/native-managed-service.log",
+      "bytes": 12,
+      "sha256": "b4c6d326d4fb4f9babec4b33248089a043825864f4afa80b3d22a2c0c7c0ef4a",
+      "git_blob": "127fd8c004ca849eb40802ce07242bb763ec0276"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-9234292948113892092/1e7979a0-29fb-4bff-85d6-95c818a4cc0d-api.log",
+      "bytes": 21,
+      "sha256": "e1ba924282eb5db16c3744eb16ee6448e14ae5594b7d7e2958fdcaa33a995e9a",
+      "git_blob": "2be08c745b7a3af553ec8f5c1fd9093361a880bb"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-9234292948113892092/81b52bdd-3964-4f1f-91b2-c4ac5e56bdee-api.log",
+      "bytes": 21,
+      "sha256": "82634ff7338405bbc3a5c099d64ce767ad3758f7019a8d5a7fe5a0780715b190",
+      "git_blob": "ef74c4de9b4cdca3516025b78d6aa85f5bb09213"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-9234292948113892092/d00584a9-b66d-410c-b747-0362769ea5b1-api.log",
+      "bytes": 21,
+      "sha256": "5bf9988c1a76a57a35c1720f469c8743a86c538bf434eb192f2d570c94f18c2c",
+      "git_blob": "b5b94013e0243a6d1f0bfc977bec8eebe7d71856"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-9234292948113892092/d305d6ef-8c2a-4188-bd98-68e7a0c5c77e-api.log",
+      "bytes": 21,
+      "sha256": "6b0015c457ea84b347768e5ab53feb90a525262233c912750a2c4c6bea5fec7e",
+      "git_blob": "b06d85de164a46da3a227b9daf49c48128b51f61"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-9234292948113892092/native-process.log",
+      "bytes": 12,
+      "sha256": "bc06a6214775304f97a9519a1d450004dec9954a509bd14e0b3acd79ec9c8132",
+      "git_blob": "c8007ee56e07c4b7afe97c0dca3e1400c0f18121"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/config-http-final.log",
+      "bytes": 16478,
+      "sha256": "b1a877e7fc2ee8ebb9726749c18ae82388ca092d99df6338f6a7e99b88af4517",
+      "git_blob": "1cce61ce189b84a02dd1f3b4b60ea76c9005d76d"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/config-http-final/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "bytes": 33683,
+      "sha256": "3ae70ef76328495dcacdca07ef582a9b44c1efbd30fb47a3aaec9498fffc91a4",
+      "git_blob": "3a97f6cbbe4ae275b189b86baabdd896fa0e331e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/diagnostic-orphan-01.log",
+      "bytes": 16486,
+      "sha256": "18a8aa027ff397223c6f2b49e2e5e76026d4bd7756ae494527f64ca7f2042bd3",
+      "git_blob": "236b2f473d019d8c203daa793732fda0bbeef7a6"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/diagnostic-orphan-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 33680,
+      "sha256": "7fc390b89c9046424f9444ec503993255e946634b105fe498f6a81c56bb7e648",
+      "git_blob": "07975b075e69ba3ded6fb40f57cf75df2e2dc159"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/execution-index.json",
+      "bytes": 12857,
+      "sha256": "3a24ff553cc809cf7ecbfa6cd45a9af7751afbb8e69ae13dc1b288141266da44",
+      "git_blob": "60f27fd180645d56239cf1f3fe1db9797c0a13d3"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/faults-02.log",
+      "bytes": 17413,
+      "sha256": "9bab6bfb087bcdb5904776a3d31b6fe1f78cfdb5a0f3aabb845cc855b15fdf5f",
+      "git_blob": "3016abeeb03f855523f45667bffaf383107ff96b"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/faults-02/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 35819,
+      "sha256": "1c7d790422dac0251225602579d240d7254ddedd41f4fd71267bf9e67514bc26",
+      "git_blob": "e8c5a539179f465aaaa8efb36c57ffa945df27b7"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/formatting.txt",
+      "bytes": 2196,
+      "sha256": "94afc3cc7b6e1cb767d3e546f00a6f561206c11822debe04faf2e50711d0004e",
+      "git_blob": "1cfe0385ce6172071958c5a926701352ef6daa60"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/generated-after.sha256",
+      "bytes": 98,
+      "sha256": "4f6f543155eb76c28865c28c194299dfebaefbb43df0d55f863bd11fc73c8e20",
+      "git_blob": "6ae7d078aaf75d7028300729fa7cccb6e978b3fe"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/generated-before.sha256",
+      "bytes": 98,
+      "sha256": "4f6f543155eb76c28865c28c194299dfebaefbb43df0d55f863bd11fc73c8e20",
+      "git_blob": "6ae7d078aaf75d7028300729fa7cccb6e978b3fe"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/green-purpose-01.log",
+      "bytes": 17815,
+      "sha256": "277c56fbe609e781d324cfe6fba0d76869d261ebedc35f5e0e0f3d45b1b41bca",
+      "git_blob": "6c14d862f67399e21b868ad6c59ae961a08e13ea"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/green-purpose-01/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "bytes": 33180,
+      "sha256": "89cac23b1477927b8077d4e4b935e6d72827755e73a0fd57b599fed9bf5f0b60",
+      "git_blob": "89326f246076e8b7c121317843fca87ac1ffc267"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/immutable-sql-check.txt",
+      "bytes": 843,
+      "sha256": "8e7bcd599df21864c28471363e6b923b4297049713913759d3f0f844d47b1b61",
+      "git_blob": "1be528a8278b70469b4b2afaec1912c2d828860b"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/independent-vectors-check.txt",
+      "bytes": 60,
+      "sha256": "9c34ccd87b278d20f5efc4ed8b096beda13f80b1cf88e4495f7e3793f5a363ca",
+      "git_blob": "335bbc50df320d60605f358ce9b0d8ae90e647a2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-binding-01.log",
+      "bytes": 16073,
+      "sha256": "c53190663f734b0da566ad42846b25e45e0a72ce094efd65c31d9a765e7b120f",
+      "git_blob": "dcc7bb448f2bd7845e6ae589eae9bdd8850c6a7b"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-binding-01/TEST-ama.storage.FileBackendBindingIT.xml",
+      "bytes": 32082,
+      "sha256": "60e1f072464802a8b50f8a1efd517c579325db186b4894efe482cc0526c7f02c",
+      "git_blob": "8e9cdc596e548c03673e4084b429bc563bfd9a0c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-binding-final.log",
+      "bytes": 15758,
+      "sha256": "47116be89199a63a836613201723c6842eb9181c6c3c6635c89bbd826adc00bc",
+      "git_blob": "ace1ba8441b5401d18eb24e7d9f23857f65ddc54"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-binding-final/TEST-ama.storage.FileBackendBindingIT.xml",
+      "bytes": 32081,
+      "sha256": "513df48b054b249ed0055de5b4eb1427e857e75889efc7ccf52e6e73997d0c2e",
+      "git_blob": "279d1fc97173811b891e72fc2c1bc8bc70e48bd3"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-binding-independent-vectors.json",
+      "bytes": 1134,
+      "sha256": "f7ab99080f2a90a8c55d7b0288fe9748de1852dc84eadeba406c37e61ffa4d9e",
+      "git_blob": "ab16db0cf54ced327e735a9c3f25d2f0a155ddf2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-01.log",
+      "bytes": 20398,
+      "sha256": "856c392087a67a43d10bbe09e673fad1c2453e0237d11ca4261ead24ae4979fe",
+      "git_blob": "612258c6b20daa24be344e51b4c610f5a06d7c54"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 38230,
+      "sha256": "d5fd188ad42129e174ea968d3220f54bdee8339d7de16279848a13be88d207ea",
+      "git_blob": "c9d9895e30067079215a33855935f90b35acab53"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-02.log",
+      "bytes": 10265,
+      "sha256": "6af3e075a0de6b04747d8d1abd8b98619b9253f7abdf0e493ef6d994d8bf337c",
+      "git_blob": "96840a363dd66fe1a7d2a08359a1770c7859d034"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-03.log",
+      "bytes": 17874,
+      "sha256": "d99108ded2f948e4b4907dce5ad37f59f56acdbe97d39d94f6eb68fda11ca438",
+      "git_blob": "383bb8742c585622fe91883726d7228c9105c6af"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-03/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 38962,
+      "sha256": "5029a37eceac568f2d88d9361fcf82516679c41c158ffe4bad05232d1ff3af09",
+      "git_blob": "b2e8396713f481fc89b93f55f781716e96c4131a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-restart-02.log",
+      "bytes": 157,
+      "sha256": "0bd53a5c021314ddd8bdcfcc8b4ba4f445c15b034be0be6b51df9d9e4595cc2c",
+      "git_blob": "bbb87e5b9505625dd825c02d8b062a2dc3a340a2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-restart-02/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 38962,
+      "sha256": "5029a37eceac568f2d88d9361fcf82516679c41c158ffe4bad05232d1ff3af09",
+      "git_blob": "b2e8396713f481fc89b93f55f781716e96c4131a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-restart-03.log",
+      "bytes": 16129,
+      "sha256": "8dcdbae8d0ad349f8d86ef1a92b12256d3d8a688b07a38cb449c56c38a51bb03",
+      "git_blob": "858efc984b976e19893a9d77f5fbd40ea999671a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-restart-03/TEST-ama.storage.FileRegistryRestartIT.xml",
+      "bytes": 32595,
+      "sha256": "bd03a059946fd855c2c46d9f4ba494ac8670229ef8dce8a4def17bc1b12727d0",
+      "git_blob": "a17c177c65fbe68cabcc009639d348a256555e35"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-s3-01.log",
+      "bytes": 18921,
+      "sha256": "d7d896bffd2990f47f9f3205ef905f588251e8ed73f0d8a8b34a0066a2db4c14",
+      "git_blob": "9080c41d858c00823480593475e3780e722f38f7"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-s3-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 40451,
+      "sha256": "72d5991e1ccee436bf7b24547f3f25a79fb065cb0cc97ef63cc0e46f17c2e55d",
+      "git_blob": "e4bb96bdbea352da25d32157fd01d3a03ff83af7"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-s3-restart-01.log",
+      "bytes": 18274,
+      "sha256": "ca1f5338eafe6eb2728b3c4b62427912efff1aa6f5b4ccadf4be64cd026d36b6",
+      "git_blob": "de4d09430fa79112e4d6634b922080acfd3c0eb9"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-s3-restart-01/TEST-ama.storage.FileRegistryRestartIT.xml",
+      "bytes": 32594,
+      "sha256": "e67da7c6689546d21b22a2c522394fcc63c5838b7691594837353a701b2079bd",
+      "git_blob": "563de182f5278f0f5e4590d813953ee08a26f58c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/migration-source-sha256.txt",
+      "bytes": 1412,
+      "sha256": "ac3cdc856507d4b47c5ceae55c31e000ea4b8e2499a29e09fc9b190c311dddc5",
+      "git_blob": "89a12e1df0ef2a62d147b16dc11f5f541f8141c2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/mysql-s3-start.log",
+      "bytes": 218,
+      "sha256": "96ab3e21bc979f7f97b5339430f100a0d25fcf5a721e00c2cd7ddd88fc90e7e0",
+      "git_blob": "ee519ee09932d9ef246cc671c3bd1a9388172338"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/mysql-start.log",
+      "bytes": 218,
+      "sha256": "321274f77ea898fe88dd3185682769c173637fedac443aa381cf5e4016ec2f97",
+      "git_blob": "8f4e7db3414346449b2a78dee0860ed24aedd6c2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/openapi-01.log",
+      "bytes": 1545,
+      "sha256": "4a34e971d2dbfcdf57cec0fa7c28460e4a2f884485e9ee14970df61277d47983",
+      "git_blob": "c2b489de30e73700b5130b1197d1ecc5b62ae093"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/openapi-final.log",
+      "bytes": 1546,
+      "sha256": "2e3d1c4220d5e52b377dba53713376e657e761fa093fddb58a4532f806087fa3",
+      "git_blob": "b2fceffd7e781396ab6348cb39d904db5475cd2b"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/owned-fixture-allowlist.json",
+      "bytes": 1724,
+      "sha256": "78953fc7f0d09772293231af573568fbf668d17de63121cc8120fd6f83d2e954",
+      "git_blob": "eb8c52577c0bea7a3785c213d09c151e7e6fd7cb"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/owned-fixture-runtime.json",
+      "bytes": 972,
+      "sha256": "7aeb9ff90ef721e6ccbb13289586566725387b9ac0bf231cf5cae9e2d19ae0f7",
+      "git_blob": "ae1c623982a3eab439193933251425f9987a6146"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/owned-mysql-wrapper.py",
+      "bytes": 752,
+      "sha256": "90037e2d3d2005175f2781ebefa753c30950e6ff4c2a6ffb37981a7fbf522cc0",
+      "git_blob": "20159d38c7b20f0f0c489c19a693946f3c41267a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/owned-source-paths.txt",
+      "bytes": 2259,
+      "sha256": "060863b7e236b42fc05862d1048b1d4e6a5913648f61bfecdd805ccf890bc328",
+      "git_blob": "634b4b35a17fb2fc099fbdc01ae74f25bc9dd282"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/owned-source-sha256.txt",
+      "bytes": 4635,
+      "sha256": "6579a37876a8957adc62c08029a8dc34d62fb0e38f1ce6888841b07ac8ee25ac",
+      "git_blob": "f1a8c94c7f1d7ee806e30af7aa658e3cab1cfc19"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/read-source-sha256.txt",
+      "bytes": 1611,
+      "sha256": "386ab36f9cfd81d47f614b0c2dd011b2af77f968e8e66a7e7bc3cd67ee63185e",
+      "git_blob": "ea8f871d09033578da50d2ba27d726685c4064b4"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-binding-codec-01.log",
+      "bytes": 8442,
+      "sha256": "d2d2837a3cd80deff8dd0e7daf5ef171223474440ae0e768b77da2557d9ea7ef",
+      "git_blob": "4092e1acebf1abe90349b8740820876b2d0aaae9"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-binding-codec-01/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "bytes": 16263,
+      "sha256": "1bdc5668c1d4fc1639b51754e03ec588d6951c24788e6ef46e9c0364de8f5a85",
+      "git_blob": "d72cdc367d991176ae0533470ca90982cb497786"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-bindings-01.log",
+      "bytes": 19854,
+      "sha256": "a90643a746663275c06904d84db99f2b3efce4c85110ca7fa04049bb43633468",
+      "git_blob": "b5ed2303ccade749880b97a69529ba9be382684e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-bindings-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 37316,
+      "sha256": "7e6eab60f481e08de8515bff25411dc131a7cc528b4a26a3ca9c03e458106bab",
+      "git_blob": "9754e0a5cc97b2cc7bdd0404e59e242cc6c10183"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-bindings-02.log",
+      "bytes": 18771,
+      "sha256": "653747670f635f216fb5029f3072650b28029af2b69d6ccc10f4d5064f3cfbde",
+      "git_blob": "1c61267a04ce7615fba4a1a719655ce59a5b4711"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-bindings-02/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 37238,
+      "sha256": "dcda8a6fd3bc40e263aed6c5a64e0f898a9c953a1e8516db7a9db69c40244229",
+      "git_blob": "bea63c2e2ee3b5675a607460885fdaade02fc014"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-empty-backend-01.log",
+      "bytes": 37729,
+      "sha256": "e4dd0d22c0300f0c48d920fcd3b73643fc238fc151752df1dc243e9ba2cd9bbd",
+      "git_blob": "ca2997b1380eef4ade69c7e13d16b55f689bb1aa"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-empty-backend-01/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "bytes": 53246,
+      "sha256": "9b3c154d39e762458327db748005c8f8e17ea3d3fafa2823db947a3f0079cf96",
+      "git_blob": "931773599cf8e411df4de6f3b1e8b1500605f573"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-faults-01.log",
+      "bytes": 78083,
+      "sha256": "e8834f680ffe3f5fbbb153d6da155c4cb4a193da050d98ac3a76f50aa31ab3df",
+      "git_blob": "497dfa2da1c1e1e0165092e51fe772ebd45da493"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-faults-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 96323,
+      "sha256": "20a14e5af7dc17b6984abbbaac34de01b544cf415d3980ebccb02c662050d1f3",
+      "git_blob": "150ecff456b961431aee5cbab3449cf551a5795f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-http-01.log",
+      "bytes": 21807,
+      "sha256": "553979ad49151e3d8273725045929220c89aa70dad0a3da7825fa86c35e43556",
+      "git_blob": "b03af3089e0ddc69ef7d5d46792f4a493a2f843f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-http-01/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "bytes": 36010,
+      "sha256": "62e1b16e270fa20b6b06a3a8a15df1ea2baeda6464c89aefcceac03ed330fbd7",
+      "git_blob": "c76c482d99a667190c1d199250f357e6448ca820"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-http-02.log",
+      "bytes": 18207,
+      "sha256": "dbb3f2f72817fa5e97c4e7f8d8c6045fa267bd3798ea529eb58080f45ee59866",
+      "git_blob": "1a42c85322f5f8165f060111f2376193a0e17ef9"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-http-02/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "bytes": 34085,
+      "sha256": "55ee8c2f83ea275f1c3da62eaa5065b80b1eb5c8445c0ac30b173dcef3cc1f38",
+      "git_blob": "31c3ec0d78ba191d64153afab43a0b0508ff0a9c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-openapi-01.log",
+      "bytes": 19612,
+      "sha256": "9f1ce1744bf94d3add05350c533e454420a15b8e3f4890c16169f7393111d4aa",
+      "git_blob": "fd152b751da929a56b56af3c88e93b102aeb8d5e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-openapi-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 37464,
+      "sha256": "1ad53b1c9523636bb2bd385f5225af6dcbaecffbc9565259cc718937c10908c8",
+      "git_blob": "dae95eaff63df0726f96ae6fd47d3a00a763ebd3"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-production-tls-01.log",
+      "bytes": 9076,
+      "sha256": "b0173211a288476faac7cf5925daed9f8e0307db6a3f06de04a8081513af39ae",
+      "git_blob": "6676322f854d5d8e2eb0a120480b7ff1a2e2b8b5"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-production-tls-01/TEST-ama.api.FileConfigurationTest.xml",
+      "bytes": 31762,
+      "sha256": "59799b3ad0258576b1c619600358e096b4d0a9086efa21f9ee2083e4d4d933af",
+      "git_blob": "2f20194e108634e6f31196e1c7dcdbb743b57f77"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-readiness-01.log",
+      "bytes": 18284,
+      "sha256": "0767ba3fa9c618a84f984d7853122e44238bfaa60f55f17e8104d44b870ac513",
+      "git_blob": "434ddc3d03fecfc3d7348fa7dfcb2eb30da0ce50"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-readiness-01/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "bytes": 34077,
+      "sha256": "c45de23a4fe19cb7a19cf9048da2ecef0785d1038596f0503f44a03ac23b0872",
+      "git_blob": "da1e4970b63ab7b3a8fbfee958f1ee517b2ea349"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-reference-01.log",
+      "bytes": 19759,
+      "sha256": "091959ed6c6ff0d806b066c7acdb4c3ea06ec019c19ff67121dd395a23bee890",
+      "git_blob": "8f46fbfad4064500d0ae23608b1ac29f5b2f3820"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-reference-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 35921,
+      "sha256": "419b304f43761818b94977d4e6faaebefcbe3255d039e507e475669c2709acec",
+      "git_blob": "050ecae52ddd62adce31d69edf2744a121002389"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-workflow-01.log",
+      "bytes": 29923,
+      "sha256": "2ad6c97cbf81e6b0432c40a114331049d8d1a36844dda6feb606b2cac9b8ec62",
+      "git_blob": "1e7f2071ca2be0ff086e2668e4d425d466cca541"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-workflow-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 46657,
+      "sha256": "0582f73009d18ea9ce8b4090e384ff8f0b7f1bd8d028c9c4cb2b764496c5c41e",
+      "git_blob": "df3c09f654e705e0187cae10154be28a5ac20f72"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/reference-02.log",
+      "bytes": 17412,
+      "sha256": "5ad395adee1cdf78b18f500900afdf7d53f358e98611dba155174ce5f6b902ac",
+      "git_blob": "1871ca5bd099da2fc1b86028cd9a0d8d395724d3"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/reference-02/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 34863,
+      "sha256": "168ae6473e9e09f02dc8cc2ca24c61029f7e0e9acc673d2c81c2c7f30ea1771f",
+      "git_blob": "51f882f4e4da0e6fa8f069de7a9b8fabb59453a9"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/restart-local-01.log",
+      "bytes": 17299,
+      "sha256": "2a7c75330c1bad62ebedde81947080ad43752d2648428784c48f516fa809ae04",
+      "git_blob": "802ad14d9abcea77007906d25dd5e45fec939d81"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/restart-local-01/TEST-ama.storage.FileRegistryRestartIT.xml",
+      "bytes": 32595,
+      "sha256": "cd48cb0f82dfcc88a5b5b0159c4ace372ebb2ac5c2f37c6ec4b33e561d7d3432",
+      "git_blob": "1ef7b162be2295f6107460cbfd36730c03bc6cbc"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/s3-start-02.log",
+      "bytes": 49,
+      "sha256": "2334f9c0bde579ff7149a4f8b61fe42016ce1570e176fb01ab0359096404a98a",
+      "git_blob": "bdaca0108a3cc9afdbd6745d1021d4c9a810af4d"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/s3-start.log",
+      "bytes": 793,
+      "sha256": "11eecb07615330705ecb422f2688f8c2339cfb8941e0466deceea2ddcc59b436",
+      "git_blob": "8a1e8ea8a09ff8b24ed8074fac0deb90268c50c4"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/secret-scan.txt",
+      "bytes": 239,
+      "sha256": "79d40cbe5ba04edf83a9911b90f5585ca4809e0bc8a15ab66a9b43a74a4d9263",
+      "git_blob": "1f4415454a289aa175451878896b370b7425bbe1"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/source-diff-check.txt",
+      "bytes": 188,
+      "sha256": "2a9fbb6373c868db35acee6c0d2b8e2b21c6915845bc5440b2d784aa9ca571a5",
+      "git_blob": "527a826d6e7a06329dd6d3709c2da4c3fcb23a93"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final.log",
+      "bytes": 15521,
+      "sha256": "fa60e63b16b062c0537a5fbed503d420e14c8ed08fc74d083f821a3575832a21",
+      "git_blob": "5530a2dcb2480a0f8189f09952259be2c43274fa"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.api.DeploymentConfigTest.xml",
+      "bytes": 32793,
+      "sha256": "c53bd22dd22a1ca7d6a14c8d8168089a1a77f96c9ad1d6a358d2c8f57766187d",
+      "git_blob": "05508bb17036a7247199b63a39b3decbf8584ef5"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.api.FileConfigurationTest.xml",
+      "bytes": 31867,
+      "sha256": "20aecd393d803d60888d7964d540af3df11158965d877820cb3e215ce9b1687f",
+      "git_blob": "90be743b2c1f8acae95186263e83b42de9935b95"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.api.IdentityContractsTest.xml",
+      "bytes": 32080,
+      "sha256": "8fa1d93fb590fabaaef0e442d06e7b8bf6efa31afb28b250863ecb5188b1e81a",
+      "git_blob": "f0a1b04f824f85e84b0b50e1f1a54f2d3e543c83"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.api.IdentitySecurityTest.xml",
+      "bytes": 32477,
+      "sha256": "13d086306156f5cc27534eec6119643a8a2ed1281701ca2faeb067b3e5e412db",
+      "git_blob": "0f65fabcfab79f000785861b39a39a668ab516c5"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.storage.ContractFixtureTest.xml",
+      "bytes": 31820,
+      "sha256": "dd881de4730dd3de461f7a1ed5741ab96f1dc73b4517e1153953eeeb80efb10e",
+      "git_blob": "5a58de6aeaf9b03ae1699a73cd4d9516b13cce3a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "bytes": 15942,
+      "sha256": "2232e3c3add185b01b95653d5e807aed4ccf104c9c9c95e10f30d7746efae206",
+      "git_blob": "3139a449f6492cbc99bc003fb5c372542679102b"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.storage.StorageRouterTest.xml",
+      "bytes": 16394,
+      "sha256": "e218a9a57c32ba035f4537f2e6231ab52f8f0613e4fa1f03cdc9564ee856fa5f",
+      "git_blob": "1be890dbd24fd4ce4ecb505c7474e4dbee5ebc95"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "bytes": 16087,
+      "sha256": "7f72e764653f22474c7884661d0472a40d09a881dfccd4562570196e65ddd7a5",
+      "git_blob": "a1854e6773eca82cf85e66871b0f1f19d24d0cca"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "bytes": 15956,
+      "sha256": "a43fe19e085d9f651259036a89c3c381a31e3dff3b7a5e5eb6303eb9eb44ede1",
+      "git_blob": "0042d3f636c6149744ab0ca0336c2f6748465ca0"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.support.ContractClientTest.xml",
+      "bytes": 31990,
+      "sha256": "62c80b44dbf37e2f2a31bb30f1c45545e06952eafcbef36fa913d9a19a995741",
+      "git_blob": "060d38491e928aa0a89e7b3cb412b73364fdb67a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.task.TaskMetadataTest.xml",
+      "bytes": 15631,
+      "sha256": "40a1f15c91cd99f462137825cae8cc5abb085102de82934ddbc5d939a895962a",
+      "git_blob": "be40bd669ba6151eb1fbfb3c6cc5d457352bedfb"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "bytes": 18056,
+      "sha256": "abbea0bfe8419d4b8d95b8b2e6acbdd49b4dfed0b3c0428dacf80586b4a32ab3",
+      "git_blob": "6d2aff76b31e36eb09d8c5d19cabf303550ea8de"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.worker.WorkerLoopTest.xml",
+      "bytes": 7364,
+      "sha256": "ff01fa169f23f2da8b23ca6314e8207545a80c1918f7ed75e98312ee6d079dec",
+      "git_blob": "88cd1382e7cbb29e2f0d810f0b6019e6e2781bb2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/verify-independent-vectors.py",
+      "bytes": 656,
+      "sha256": "3a4bc4fb752ded31913c05b2275073ab146a2a1ddded1e6febc0d337c9a0d39f",
+      "git_blob": "59ca7ebc570c3e144d1ba97b98278bd38337ee87"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/workflow-02.log",
+      "bytes": 8355,
+      "sha256": "d6ffc5244d922fe833a9f43fd752bed2853cdd018f7728aa777c67804d50d81e",
+      "git_blob": "a8eb0fe365e0c3726eac5fbc406d0ce3413e0fe7"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/workflow-03.log",
+      "bytes": 17413,
+      "sha256": "9ad6f03d764e5e2c8d289bdb59b023b83c680eed2313a4a810d552e0c7754d40",
+      "git_blob": "561db4ac8ee2ab59417151618a00406835f3b16a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/workflow-03/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "bytes": 34716,
+      "sha256": "ea0509f8323b362c4fc6da09efecaf57fd3e34c4de66ce601162edf64ab827f9",
+      "git_blob": "cce25164a19e5475d921ce78b7a9357d0b6efddd"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java",
+      "bytes": 6390,
+      "sha256": "5c0140194d39846800af968441a2a87807bff7873325235e03d707262ec91f0f",
+      "git_blob": "9c89fb9b3472cc8b8c5dd1600eda9d5a3c2d31e4"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/FileBackendDefinitions.java",
+      "bytes": 703,
+      "sha256": "0efed46db6c5c836c7f2c1d0935dce4b878bc73ce8bea1487ffc390c5c5b600a",
+      "git_blob": "092dff5bbb14794edbbb1788a41c9e89f09fe7df"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java",
+      "bytes": 19872,
+      "sha256": "59722488c5b9b762c0c27f05efb85dc0bc2622e0cb8bdbeb03f107dcd1814123",
+      "git_blob": "5d8907e644f19ec42c4bda6f6d346c0c4ae4238e"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/JdbcFileUploads.java",
+      "bytes": 25015,
+      "sha256": "cf3c274731272b20233e29f20398ed34ad0ca82712a33b00cd8e8ce415d403f9",
+      "git_blob": "14b7b45f5eddb6ebd9ee244436c501940574f5f8"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/ManagedBackendAdapters.java",
+      "bytes": 1489,
+      "sha256": "8fd0811667c837eeb9a3ead005d3350a5a6f2318446ec5d891bdbadd75b2d73b",
+      "git_blob": "b9490748d7e0cafbe1bfb3eb4fc25e490db8bc4e"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/storage/ManagedBackendIdentityTest.java",
+      "bytes": 5478,
+      "sha256": "4770d470e4a50b619632b9e3ceefa9dc3f982c13451022a8bd2cb72b734516e4",
+      "git_blob": "06026219afe9050fadfc5effd2c5f5d29817af5d"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/FileConfiguration.java",
+      "bytes": 7619,
+      "sha256": "eee76074cb198996bde4aa78c4a716176eff2a4aa6017c50fe1281f3788ca11d",
+      "git_blob": "b95e73650d5b3b94087b566a397ca260b8bdacb7"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/FileController.java",
+      "bytes": 9222,
+      "sha256": "4a63a06b216ea57f37032f129627a54a2366d0f2b9728ba6cd0ba12ab564f924",
+      "git_blob": "b3f51c155030cf5743b4f3f45867232e28464edd"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/FileErrors.java",
+      "bytes": 3120,
+      "sha256": "128b447c162287881ea7b6b86adac9c6a022bed17999d3fb3f37a63ad70ceaf0",
+      "git_blob": "b87f38fef5adad4df182d67341ad433ca519dcc7"
+    },
+    {
+      "path": "backend/api/src/main/resources/application.yml",
+      "bytes": 1510,
+      "sha256": "65330b6da9450734717073c5be1dfdfa709db684cb05f4a55edd988ba8208197",
+      "git_blob": "7e2dccda918007ec61f9dbec91745b7f518adfe4"
+    },
+    {
+      "path": "backend/api/src/test/java/ama/api/DeploymentConfigTest.java",
+      "bytes": 7176,
+      "sha256": "1f0dc1b4ef5a4d6db2dc8387788c3054f69e1b0edbcbf6025010ff07bd66146f",
+      "git_blob": "5883e19b55ae26e3f3d20e54ec70d8fda3d53ce5"
+    },
+    {
+      "path": "backend/api/src/test/java/ama/api/FileConfigurationTest.java",
+      "bytes": 1989,
+      "sha256": "52233a5a18c84025d6269efd30b74217656d1dea90dceba154014548e4527773",
+      "git_blob": "8992f73987af5db6d3fa3a6ef4bacee6243ae181"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/FileContracts.java",
+      "bytes": 2469,
+      "sha256": "c636ac582d29db54bfffd5a8ed01078721535101798aa41b646d201d5324b237",
+      "git_blob": "d87e25b5ca4b29723efdecbb03abc36b8f761243"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/FilePurposePolicy.java",
+      "bytes": 438,
+      "sha256": "59235a4816d38f58d91db0da24c1f43f0b8aa2431b4b5a6c44c7c6c83e28adbe",
+      "git_blob": "5d306a7fb5e655a12e7827873f0e9b35fe72a17f"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/FileReferencePolicy.java",
+      "bytes": 940,
+      "sha256": "66258abaff4831f590ef7c0716c8f4175659efe5fceb17bc19520b2cdb89cb2b",
+      "git_blob": "4c5136e216178f4e10d548f52619090a4b58f211"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/FileRegistry.java",
+      "bytes": 2302,
+      "sha256": "bbdaaa59dab9c4a3f6b5221982048696b9762fa2d0432ecdd775ed672314d7ab",
+      "git_blob": "4a46055bb300c12aad67ad3db85ba2c356644183"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/FileUploads.java",
+      "bytes": 673,
+      "sha256": "94c40a860fe3b51148bb0d67adbb9f48f09ea4d7f603197074d349998e641a68",
+      "git_blob": "9f3c8f69dd44c988caa8582f8d344a46eb8746da"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/ManagedBackendId.java",
+      "bytes": 5851,
+      "sha256": "85c03af9addb307b58749407e252ec853a8076b0d61b4b4afe16195ba55c3640",
+      "git_blob": "15b939c0cb1081cb3c17053d39c77338290f0578"
+    },
+    {
+      "path": "backend/file-service/src/main/java/ama/file/FileServiceMain.java",
+      "bytes": 4760,
+      "sha256": "9489e0910700c312eaffd76c5e46c5d75d03f78afbad5888a8ab3c585232429d",
+      "git_blob": "f174c8f529738348cb87135b6d7ee1ab6796d29a"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/FileBackendBindingIT.java",
+      "bytes": 4515,
+      "sha256": "42c92f4f3f637e299533d8a88be3dd8d993c546b276ce4445b3d92fb7f329bbc",
+      "git_blob": "f2bc040f2ce79cbb2bec3a851f38f087fdf38950"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/FileBackendCatalogIT.java",
+      "bytes": 8600,
+      "sha256": "0debd740e7f3d8c162002817e814885a3ae4eb8da62152c463c4c77736d9843f",
+      "git_blob": "1b97402718b52676fea7202f80f059022f1e98ee"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/FileRegistryHttpIT.java",
+      "bytes": 9103,
+      "sha256": "e483eed5b2fc41db496ab04eb637422a1ad3080816436c3b77d8b8dbd7e14534",
+      "git_blob": "8d4817dde14a70f60265454f3d749f17fb208a71"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/FileRegistryRestartIT.java",
+      "bytes": 9463,
+      "sha256": "55cf021b38bd656542fd42fcf177e3404283366c84a028795eba494a583be327",
+      "git_blob": "6357379fbc645b95f34c247d9b7a20da54fbfc9c"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/FileRegistryUploadIT.java",
+      "bytes": 59354,
+      "sha256": "5ce929946c4577823a7f8c531678dd912eb7c443b4c8960236332294d5977b0b",
+      "git_blob": "690e134fc3ea10420e55242d7e22abd2a31670b8"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/ManagedLocalFixture.java",
+      "bytes": 5383,
+      "sha256": "b369b5281d2f6615efc3f4544c8112745f42d5d45ee3f56e8e7dfc3fd84e71cb",
+      "git_blob": "84a0ef92b17171fa06d47cd32503b8c0b634d9ba"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/ManagedRegistryFixture.java",
+      "bytes": 1652,
+      "sha256": "76c9dd46809061a8658966073bca3dd69bf7dc1a0b4ac965f2c94cd4063f04e5",
+      "git_blob": "7e015738bf840266f93d41d3e02fb3e24280cdb0"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/RegistryApiProcess.java",
+      "bytes": 5901,
+      "sha256": "bf0d0ac3d8bc73c22572a1796080ad888918d19154c2db44e2a0ab1e1b7b9549",
+      "git_blob": "83b9e86cc5f0791ca3635a4d8c6f4d3360623587"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/RegistryDeclaredError.java",
+      "bytes": 6138,
+      "sha256": "9cb89badb6b82002097e99d6ae8983f13ef120c0eda76637ffcf9a6ecc345c65",
+      "git_blob": "59322898e5c376c9f1c6a2085ff851c4006f55d7"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/RegistryObservedStorage.java",
+      "bytes": 1966,
+      "sha256": "2af43f086506bce301c86fe1aa4a98aac2ea0c3a63e25765f32af2e6c94667e3",
+      "git_blob": "c6c7251e0be07d727e63cd7d9442cae0bcad4477"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/RegistryProbeSource.java",
+      "bytes": 4248,
+      "sha256": "3b3c409c3ce62894350e040c0ba28a968fd097103e9f7fac9c24f99e696b9744",
+      "git_blob": "79c11afb212642f2482dae4288aeac4ffa4949c6"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/RegistryProductionConfigProcess.java",
+      "bytes": 1337,
+      "sha256": "2dec36c272045160837a9680296f3a609aecc8aefe350841b1d45f70e34abc50",
+      "git_blob": "022a404dbbfaf643a04daf568632eed2a6cbc12f"
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "bytes": 1638,
+      "sha256": "ff50ccdbf6ff0159afa1d0a7efa57ed0241995cf5970cdc84fc0cfcfffd376e2",
+      "git_blob": "a4104c1fb6642838dfc5aa54c8f6ecdecb4e082e"
+    },
+    {
+      "path": "contracts/openapi/files.yaml",
+      "bytes": 12356,
+      "sha256": "963dff51e7e36106564fd6cdc529d55966ec710ba005fdafb6ec043708028ba4",
+      "git_blob": "56458d3bde6e362ea7b0639ccabc359c4372e6db"
+    },
+    {
+      "path": "contracts/openapi/identity.yaml",
+      "bytes": 6133,
+      "sha256": "25a23f5c9aecb7d4e7e688e2c72b287b05a2ff71b1fe0b85924bad55860c999e",
+      "git_blob": "c5da190152c7a1f0b2896a13750c151e47051c1d"
+    },
+    {
+      "path": "docs/acceptance/b/file-backend-binding-proposal.md",
+      "bytes": 4660,
+      "sha256": "4c875f973b0e4274391fbaae9f22e2fad1fbbf535bc79b7146cf6ad44755f8fc",
+      "git_blob": "2c32ad23adbc69fffa55a002df528832aec2eaca"
+    },
+    {
+      "path": "docs/acceptance/b/file-registry-integration.md",
+      "bytes": 15715,
+      "sha256": "c60f33843b50301124c78bab99485231a2ba1c571b246b5d5f39ad404ccc2e0b",
+      "git_blob": "ea070325a2d1ff2d6fc28f826f4ff092a90e840b"
+    },
+    {
+      "path": "web/src/shared/api/generated.ts",
+      "bytes": 41562,
+      "sha256": "a71071c73bbb89550fb24d07763f4acadb9db510fb40e7454ea0e29234998eb7",
+      "git_blob": "65161594bd3b631ff1e1f13b65b53951c28fa398"
+    }
+  ]
+}

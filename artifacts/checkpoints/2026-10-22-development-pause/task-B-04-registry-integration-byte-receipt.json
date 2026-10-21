@@ -1,0 +1,1171 @@
+{
+  "recordedAtUtc": "2026-10-21T22:45:42.934749+00:00",
+  "rootBefore": "ba5d199c8134a8425ed0ef8f5112f8ade4e7fd91",
+  "rootAfter": "b938cb14275955cc860c806a7fb9de95565f5b65",
+  "ownerBase": "8da440d39e1b8e8dcdfc34722908d29b5aa3aa8a",
+  "ownerHead": "45dc8ed27449de191400c858b88413a518842f21",
+  "commits": [
+    {
+      "source": "5e7022c20c9389ad319157320408901f3df089ac",
+      "integrated": "b6d5930eb1f74e3311cd34f8bf730d5c99063ef4"
+    },
+    {
+      "source": "d1e47ca69e68caa6bd51fee1706998b3e6cd2506",
+      "integrated": "a1545a26ddcbaabb20d24d9e839b762d6544dc86"
+    },
+    {
+      "source": "45dc8ed27449de191400c858b88413a518842f21",
+      "integrated": "b938cb14275955cc860c806a7fb9de95565f5b65"
+    }
+  ],
+  "paths": [
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/.gitattributes",
+      "size": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/SHA256SUMS",
+      "size": 2710,
+      "sha256": "4bd99a72a4dab5ca97ee7b62565ebdfc5336a5beb653dff7a29b6cf8c7ae76bb"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/artifact-allowlist.json",
+      "size": 2058,
+      "sha256": "25a7e3ec274fec74ae55f47782cbcf57d1fc28d7d353f23d92e8a31e2386a6f8"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/correction-report.md",
+      "size": 2796,
+      "sha256": "d2b0189d8ccbad4714ad68478d471e48c4a74c35629f7a6d5ee5d6010c4eda24"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/execution-index.json",
+      "size": 2958,
+      "sha256": "54eac90c4fe55f5a52d9066642d95310760990040d200ad292484281cd13140a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-01.log",
+      "size": 18689,
+      "sha256": "90b6b6a134db009dfeae261a30c966afe9239cbffa0e0fe112573712e257e6b4"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-01/TEST-ama.storage.FileBackendCatalogIT.xml",
+      "size": 34356,
+      "sha256": "d15c303ef91d6e05c85a50d9c1c4579e9da7101e4a5aeb2322d4120616c5e534"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.api.DeploymentConfigTest.xml",
+      "size": 32697,
+      "sha256": "77766bc9fc46bdacea4a827ccedcc13d8195eb815e4ed27aed1eaa3761be3de0"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.api.FileConfigurationTest.xml",
+      "size": 31771,
+      "sha256": "e20bf90727ad61200a9f1aa5a8b3c3f877a2a36b7766151dc0b3ba8b5540e058"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.api.IdentityContractsTest.xml",
+      "size": 31985,
+      "sha256": "3294654713a22dd5cb1e9a050c5c4a05e3a6ff46411e660be9b3d0c193335fd4"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.api.IdentitySecurityTest.xml",
+      "size": 32382,
+      "sha256": "2b82ddebe7d3f08c2ef5bcecd6ccf92cd52cd3c9957e057d62614ecacccdf5fb"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.storage.ContractFixtureTest.xml",
+      "size": 31863,
+      "sha256": "9ac7a2431431e6d75eb8159bd96bfe993ec4591da78b0adfa97b85cde8d4e1f3"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "size": 15799,
+      "sha256": "80761a44179f695faa9f0715af2a77aac89585b343a2e044bffe58c43162de1f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.storage.StorageRouterTest.xml",
+      "size": 16251,
+      "sha256": "b97b37e3fe0f131f1ac8bb01b8cf45d7078f59a813b4cec2c1f9344302b1c212"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "size": 15944,
+      "sha256": "fcdbbbc299cb0658667a29b04e3c2246ace3f40c4dc1e068f3b4a9d39f885b3b"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "size": 15813,
+      "sha256": "4abdda1289991bc2564f9185256284fb2bd2f72a62750b8ab2c76c2de7f78df2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.support.ContractClientTest.xml",
+      "size": 32033,
+      "sha256": "77614506a010cc598d94f20895fe037cd9092d712a96182b5549601cec4d76cf"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.task.TaskMetadataTest.xml",
+      "size": 15489,
+      "sha256": "3a37e8732ab45d08ebf4e0df0956b06583099a8f3c578435b05f1d3c10f13317"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "size": 17914,
+      "sha256": "65eb04b5c1f21300447d1bef208f3a9bf7efd6402640beb3c40722b6c7d18c84"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/green-unit-reports/TEST-ama.worker.WorkerLoopTest.xml",
+      "size": 7221,
+      "sha256": "1858719e491353988164fb83c9b727da84c363f536e8efd9b8563cc986cff434"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/initial-checkpoint.txt",
+      "size": 238,
+      "sha256": "756b24e01344f1590855a505ac9fe8f30741fda8a01fe2a8cb6b04800a20d81f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/initial-report-5e7022c.md",
+      "size": 16574,
+      "sha256": "784439d049801e7ed9cb0dea224e0b749ad213459c4f6e6e0ce2186021cc0176"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/owned-source-sha256.txt",
+      "size": 390,
+      "sha256": "6c077a5ac08acb598533aa6a750d5e4b18576f93fe046db7d1dee9deef609df1"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/red-01.log",
+      "size": 24306,
+      "sha256": "ba2abf78917f0cb46c9528b0cd4209818c428613b55f75bbd64f1350c4cde100"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/red-01/TEST-ama.storage.FileBackendCatalogIT.xml",
+      "size": 39778,
+      "sha256": "0fbcd4e167bf547cbed76dcbd7459867f625641ea136c48fd2e00e272699e3ea"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-config-race/secret-scan.txt",
+      "size": 171,
+      "sha256": "9d5ca72711aeea2302a545ed933a0ba8e38eb99e11b869e9c4543239a03a4845"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/.gitattributes",
+      "size": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/SHA256SUMS",
+      "size": 4732,
+      "sha256": "68dafc71a09625efda4bd8b87d00052bf57691363378c283933bc406b69aded8"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/artifact-allowlist.json",
+      "size": 3600,
+      "sha256": "b8e17c519be4ad66467263fabb9f35df4158d6dbecd781789159827a86c51ef6"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/commands.json",
+      "size": 2361,
+      "sha256": "0f4ffa966b7ade1a4f8b33fd1c5c9834a003ac8e52e7797a2d83c03a62a17bd9"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/contract-scope-check.json",
+      "size": 279,
+      "sha256": "24610861ee5fb1694417cc287c90938a15e83e5a1d8916efef41d1e769d01218"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/execution-index.json",
+      "size": 3375,
+      "sha256": "f435734d1d849cf2c6247b090dd94309f519621464849ee1822ea921f03b9fcd"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/generated-check.log",
+      "size": 30,
+      "sha256": "2fc64bac02ac4cf39207db106f663d18a74456f7927f87f437c2d041aa095a98"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/generated.sha256",
+      "size": 98,
+      "sha256": "22a3998c418670984c3c46649f847cde662cc79ac95d0ffb9e27df6e1ac92b8d"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-local-01.log",
+      "size": 18401,
+      "sha256": "f1d9d6820573614fb9299aaed6dc17fa0f42fcdf0644d9047c4c391e28b9b91d"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-local-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 35198,
+      "sha256": "28abf3915e2d2e9ca90b517140f2c21d26c0bb2c8d95b550975683be229dacc2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-s3-01.log",
+      "size": 17586,
+      "sha256": "84153dd1f594f4eed77572ca7b9f1ae1e8d0e0ca24387f4b4af2aa004f0f93c2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-s3-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 34830,
+      "sha256": "b3bb67a928b89f325b37f235ea6e2f720c8123e6b3b0b52f1fa1d156e1c71d91"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.api.DeploymentConfigTest.xml",
+      "size": 32719,
+      "sha256": "39b0b74d9a4cbe64e8f8edf295a68754717b09aac534aa1bff5b0c6800b5bb31"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.api.FileConfigurationTest.xml",
+      "size": 31791,
+      "sha256": "f44c51b4cdbe499af5e7aa6d35963b61aa2d177ca32d3d3669c26355055b419c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.api.IdentityContractsTest.xml",
+      "size": 32005,
+      "sha256": "d7790cb7bb7ac3cb00b402074703ab64206bd836e844edb4dff471c41c53da5d"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.api.IdentitySecurityTest.xml",
+      "size": 32401,
+      "sha256": "fd83ccc133ce7e8ed5e3d1bb89da27f253f04f52f95d735a21c7cc72a95f6d13"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.storage.ContractFixtureTest.xml",
+      "size": 31881,
+      "sha256": "36ed9e4b8b6d929840190ecabbb0f4af063cf47a5de3f2b9cd3bcaf5041e5484"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "size": 15815,
+      "sha256": "0c0c0c1eea392ba66b63663806db914e5ca9881dde8a6bd9158105dc8ef3d5f3"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.storage.StorageRouterTest.xml",
+      "size": 16269,
+      "sha256": "c7671810da1e57375c710b62cb5071e1493c2e2a4b431cb2f834714adc332770"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "size": 15962,
+      "sha256": "1b4c4e2b35049da072f969a6ea6bf150620906656c77109171de500aec807dca"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "size": 15831,
+      "sha256": "bc9edaedc6bd60f08918df858f0549c6874679c5bff7ed039394465d6af65d19"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.support.ContractClientTest.xml",
+      "size": 32051,
+      "sha256": "f309343ada1aa082dacfb4ed6eda5fb4a5d7144849c8fd078b37279da588e921"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.task.TaskMetadataTest.xml",
+      "size": 15506,
+      "sha256": "c12d18479494e892cf8290a7c312e3e532b2a212397124de5bf43473c9383866"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "size": 17931,
+      "sha256": "1e72227b5bc3aa970d6b2e05f335fd86eef97db84dfe0b002604e556f056725e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/green-unit-reports/TEST-ama.worker.WorkerLoopTest.xml",
+      "size": 7238,
+      "sha256": "deecc8b415b2ebbc5b230f5673ccf340f0f3aecf71387ea51bc7a4de5b600962"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/header-policy.md",
+      "size": 3189,
+      "sha256": "51bb078213b65db13201f7ad6e7c8ac1fc401397edfef2e7ee4f0634568c833d"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/openapi-01.log",
+      "size": 1547,
+      "sha256": "22377d6d3bbd7c0c30587ac57eace1256b7f5b85ed16ca4160fbdcb7e686dd84"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/owned-source-sha256.txt",
+      "size": 717,
+      "sha256": "e939b0be595bf456f29a22fd9a9f061eede8069fe3a9d1ae8a6cb207c8409a29"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/preservation-check.json",
+      "size": 724,
+      "sha256": "5b05dc881267c9b6315b2e2fedbeccd9c1f54fefee3b676831ecb706eae93a5d"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/red-local-01.log",
+      "size": 70276,
+      "sha256": "b9672990c4ac8c3df900ef2a2a2b3f13d65a4ad0c47ff4eeaa93ad3dda3241c5"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/red-local-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 86077,
+      "sha256": "6b4ae61eec18ef0dbebafe8b22bb5193b10330561c7de6829615c80f6c8c4dc2"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/red-local-source-sha256.txt",
+      "size": 411,
+      "sha256": "02730d4cac0220a94fe70b1b1ca1fc1bf933f3353b1bb33b772e939b6f45fe08"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/red-s3-01.log",
+      "size": 70258,
+      "sha256": "f1b2a6a4e94a41b082635f384ec21bb6db66913fada9176b0dc06b9cba02fe5a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/red-s3-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 85717,
+      "sha256": "b2b0c55c7c9ebfc227690f88567cea89f52d7cbbe4854d82a741ab96b1b47b8a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/red-s3-source-sha256.txt",
+      "size": 411,
+      "sha256": "9d213f5d09aa332c083b57666b5ad089789cc17ee94013f634f6bb71845a1d30"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/review-inputs-sha256.json",
+      "size": 1666,
+      "sha256": "f9dda427555b9861d9950d00a1fdbce97d316432b5f9c4e8b7b267cca6912aa0"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/review-inputs/b04-header-review-probe/HeaderReviewProbe.java",
+      "size": 3862,
+      "sha256": "efc11e2849134afeb9c921cc9e1e4fe98571710a9acc7e3abbd0b1d670d16a34"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/review-inputs/b04-header-review-probe/evidence-manifest.json",
+      "size": 1371,
+      "sha256": "a1e029b32e46eee062f74904ebcffd0b3c66ca37be0411125dd9b4269350a1dc"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/review-inputs/b04-header-review-probe/invocation.json",
+      "size": 13746,
+      "sha256": "5c1ad38a14a6894e490ded9f677137a22dc5a1412c8a376316a20a6c8c63a886"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/review-inputs/b04-header-review-probe/probe.log",
+      "size": 14154,
+      "sha256": "a5329df26c56d9ddc1d6b4a1d477ae89dd379eb01556baa6b9d892253f055878"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/review-inputs/task-B-04-registry-fix1-brief.md",
+      "size": 4485,
+      "sha256": "cd5055f67af55f3f30e8d2e863e008e0296dddbb08d6383ac50f3059f3edbb93"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/review-inputs/task-B-04-registry-report.md",
+      "size": 20920,
+      "sha256": "20e0f2ed68670e4605026917fbe0c82424642d7a8d77ca637a3e54176d8147bb"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/review-inputs/task-B-04-registry-review.md",
+      "size": 23038,
+      "sha256": "508a1aecf3f0205171b821ace2a837564b7ddba1a64bc972535607b317f70f0c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/secret-scan.txt",
+      "size": 216,
+      "sha256": "1cb3d8764807628cc15f288aa4fbe700241cc6fcb93814c090efb4a0c5de9c65"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/source-diff-check.txt",
+      "size": 153,
+      "sha256": "375212dc871cae7c073b2f9af41de4164083a4cfbbf7e06dd6c9ce3c0132b417"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry-fix1/start-181-paths.json",
+      "size": 36191,
+      "sha256": "0e420bdf96e5500bee68657b42cb58ae4b8cb90c43990272dc8c6ebab142f83e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/.gitattributes",
+      "size": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/SHA256SUMS",
+      "size": 13244,
+      "sha256": "9a13b6a6691ae100452c3f731e9629cad1ea8fa62b9bc84165cd943c7c21b317"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/artifact-allowlist.json",
+      "size": 10385,
+      "sha256": "7eb8717da1c95460c2966b3a1ba2f5766ff53d2d782df0e1461ffa874f0fc287"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/binding-proposal-original.md",
+      "size": 4660,
+      "sha256": "4c875f973b0e4274391fbaae9f22e2fad1fbbf535bc79b7146cf6ad44755f8fc"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/binding-proposal-original.sha256",
+      "size": 117,
+      "sha256": "b15a64f1c164efe8906b7d98413b5143f531e6eb14c27a148544fedb77936243"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/0e2183c0-48eb-45b1-8b93-fb3c822a1ba1-changed-root.log",
+      "size": 802,
+      "sha256": "1b49096c62f240920a205e81b0b94d1f7c1d20083c640c65d185a7c2427347ba"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/7057ab51-fe15-4cf9-91e2-45ef3182e93b-changed-root.log",
+      "size": 801,
+      "sha256": "2e71ead18c846a6c76428b716f730f55e7e64c8cfe46616d0fa96401d9f750f5"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/changed-bucket-10243961277836225338.log",
+      "size": 14619,
+      "sha256": "e1f84148b4028c24dbfef7330424b01e7f9e9feeefe3c68371efac84dc58b36a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/changed-bucket-9577179853945388074.log",
+      "size": 14618,
+      "sha256": "0316f7bc227d4d42c4cb6368a7795816947fda3488d36f9c43dd8c36168e7e28"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/service-10543062983691038489-managed-service.log",
+      "size": 12,
+      "sha256": "815b6335be0575cbcb7b0cbcf37737f1470be617bbf2bc256d996f03e461cabb"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-binding/service-16690790236498495847-managed-service.log",
+      "size": 12,
+      "sha256": "2ef49aad42066e05eecab018d6ee2389566d206da1d5b943d092b47b6b0b3910"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-15163355516771041098/ac2b7c2d-3918-42fa-9c5a-7e25d689ec4b-api.log",
+      "size": 21,
+      "sha256": "4b28f39662fd771afa14d65cfdb4fd3c4066d898cc45286e6d03003f52de09dd"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-15163355516771041098/bde2b08d-0b2a-4a6c-9e2c-29f990c9425e-api.log",
+      "size": 21,
+      "sha256": "43efc5cb24ebe52fa1f426c81e6eaf40fc88b05dc5f777a0c2960f2de2b6c9a7"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-15163355516771041098/e22c5ff9-9529-4331-89f6-1c6e488b9b48-api.log",
+      "size": 21,
+      "sha256": "49aa5f9946c1c0d4012bdade610966f01a421a5070bb22857878fbd8181a5e10"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-15163355516771041098/f68be306-2628-48ce-ac76-9f67ee476230-api.log",
+      "size": 21,
+      "sha256": "cbf6b3225d8ef6f49e8dd67e766c9a2ae486f7051cd7cd6fce09f55094225172"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-2875877213872317467/0b4f1017-08df-40dd-a168-785a07e91c6f-api.log",
+      "size": 21,
+      "sha256": "194859cf648efda99b0158629d64de808a73ef4c2a0fcb4cc6722da5f86185a8"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-2875877213872317467/24fd67ec-d19c-4c33-9231-6e4dc7735c58-api.log",
+      "size": 21,
+      "sha256": "061bd9d7265206e6309c8c755a852c427b23ef188b318486ff399f4e39f3d131"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-2875877213872317467/28e9fbb7-29fe-4807-a860-97628a9b281b-api.log",
+      "size": 21,
+      "sha256": "9e8aa87f650aa85b8c6939160bfc4e45eccd3473375f83d5c6f6053be3e2d7eb"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-2875877213872317467/4a53aada-9e6e-4d15-a81e-ab89a8d6ba2d-api.log",
+      "size": 21,
+      "sha256": "67fb9d4f22d30a2fd68a201996b577ddfce93a8d3c93b9b587012b1c7f34397e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-2875877213872317467/native-managed-service.log",
+      "size": 12,
+      "sha256": "b4c6d326d4fb4f9babec4b33248089a043825864f4afa80b3d22a2c0c7c0ef4a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-9234292948113892092/1e7979a0-29fb-4bff-85d6-95c818a4cc0d-api.log",
+      "size": 21,
+      "sha256": "e1ba924282eb5db16c3744eb16ee6448e14ae5594b7d7e2958fdcaa33a995e9a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-9234292948113892092/81b52bdd-3964-4f1f-91b2-c4ac5e56bdee-api.log",
+      "size": 21,
+      "sha256": "82634ff7338405bbc3a5c099d64ce767ad3758f7019a8d5a7fe5a0780715b190"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-9234292948113892092/d00584a9-b66d-410c-b747-0362769ea5b1-api.log",
+      "size": 21,
+      "sha256": "5bf9988c1a76a57a35c1720f469c8743a86c538bf434eb192f2d570c94f18c2c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-9234292948113892092/d305d6ef-8c2a-4188-bd98-68e7a0c5c77e-api.log",
+      "size": 21,
+      "sha256": "6b0015c457ea84b347768e5ab53feb90a525262233c912750a2c4c6bea5fec7e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/child-process-logs/registry-restart/processes-9234292948113892092/native-process.log",
+      "size": 12,
+      "sha256": "bc06a6214775304f97a9519a1d450004dec9954a509bd14e0b3acd79ec9c8132"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/config-http-final.log",
+      "size": 16478,
+      "sha256": "b1a877e7fc2ee8ebb9726749c18ae82388ca092d99df6338f6a7e99b88af4517"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/config-http-final/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "size": 33683,
+      "sha256": "3ae70ef76328495dcacdca07ef582a9b44c1efbd30fb47a3aaec9498fffc91a4"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/diagnostic-orphan-01.log",
+      "size": 16486,
+      "sha256": "18a8aa027ff397223c6f2b49e2e5e76026d4bd7756ae494527f64ca7f2042bd3"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/diagnostic-orphan-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 33680,
+      "sha256": "7fc390b89c9046424f9444ec503993255e946634b105fe498f6a81c56bb7e648"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/execution-index.json",
+      "size": 12857,
+      "sha256": "3a24ff553cc809cf7ecbfa6cd45a9af7751afbb8e69ae13dc1b288141266da44"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/faults-02.log",
+      "size": 17413,
+      "sha256": "9bab6bfb087bcdb5904776a3d31b6fe1f78cfdb5a0f3aabb845cc855b15fdf5f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/faults-02/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 35819,
+      "sha256": "1c7d790422dac0251225602579d240d7254ddedd41f4fd71267bf9e67514bc26"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/formatting.txt",
+      "size": 2196,
+      "sha256": "94afc3cc7b6e1cb767d3e546f00a6f561206c11822debe04faf2e50711d0004e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/generated-after.sha256",
+      "size": 98,
+      "sha256": "4f6f543155eb76c28865c28c194299dfebaefbb43df0d55f863bd11fc73c8e20"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/generated-before.sha256",
+      "size": 98,
+      "sha256": "4f6f543155eb76c28865c28c194299dfebaefbb43df0d55f863bd11fc73c8e20"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/green-purpose-01.log",
+      "size": 17815,
+      "sha256": "277c56fbe609e781d324cfe6fba0d76869d261ebedc35f5e0e0f3d45b1b41bca"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/green-purpose-01/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "size": 33180,
+      "sha256": "89cac23b1477927b8077d4e4b935e6d72827755e73a0fd57b599fed9bf5f0b60"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/immutable-sql-check.txt",
+      "size": 843,
+      "sha256": "8e7bcd599df21864c28471363e6b923b4297049713913759d3f0f844d47b1b61"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/independent-vectors-check.txt",
+      "size": 60,
+      "sha256": "9c34ccd87b278d20f5efc4ed8b096beda13f80b1cf88e4495f7e3793f5a363ca"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-binding-01.log",
+      "size": 16073,
+      "sha256": "c53190663f734b0da566ad42846b25e45e0a72ce094efd65c31d9a765e7b120f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-binding-01/TEST-ama.storage.FileBackendBindingIT.xml",
+      "size": 32082,
+      "sha256": "60e1f072464802a8b50f8a1efd517c579325db186b4894efe482cc0526c7f02c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-binding-final.log",
+      "size": 15758,
+      "sha256": "47116be89199a63a836613201723c6842eb9181c6c3c6635c89bbd826adc00bc"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-binding-final/TEST-ama.storage.FileBackendBindingIT.xml",
+      "size": 32081,
+      "sha256": "513df48b054b249ed0055de5b4eb1427e857e75889efc7ccf52e6e73997d0c2e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-binding-independent-vectors.json",
+      "size": 1134,
+      "sha256": "f7ab99080f2a90a8c55d7b0288fe9748de1852dc84eadeba406c37e61ffa4d9e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-01.log",
+      "size": 20398,
+      "sha256": "856c392087a67a43d10bbe09e673fad1c2453e0237d11ca4261ead24ae4979fe"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 38230,
+      "sha256": "d5fd188ad42129e174ea968d3220f54bdee8339d7de16279848a13be88d207ea"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-02.log",
+      "size": 10265,
+      "sha256": "6af3e075a0de6b04747d8d1abd8b98619b9253f7abdf0e493ef6d994d8bf337c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-03.log",
+      "size": 17874,
+      "sha256": "d99108ded2f948e4b4907dce5ad37f59f56acdbe97d39d94f6eb68fda11ca438"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-03/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 38962,
+      "sha256": "5029a37eceac568f2d88d9361fcf82516679c41c158ffe4bad05232d1ff3af09"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-restart-02.log",
+      "size": 157,
+      "sha256": "0bd53a5c021314ddd8bdcfcc8b4ba4f445c15b034be0be6b51df9d9e4595cc2c"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-restart-02/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 38962,
+      "sha256": "5029a37eceac568f2d88d9361fcf82516679c41c158ffe4bad05232d1ff3af09"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-restart-03.log",
+      "size": 16129,
+      "sha256": "8dcdbae8d0ad349f8d86ef1a92b12256d3d8a688b07a38cb449c56c38a51bb03"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-local-restart-03/TEST-ama.storage.FileRegistryRestartIT.xml",
+      "size": 32595,
+      "sha256": "bd03a059946fd855c2c46d9f4ba494ac8670229ef8dce8a4def17bc1b12727d0"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-s3-01.log",
+      "size": 18921,
+      "sha256": "d7d896bffd2990f47f9f3205ef905f588251e8ed73f0d8a8b34a0066a2db4c14"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-s3-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 40451,
+      "sha256": "72d5991e1ccee436bf7b24547f3f25a79fb065cb0cc97ef63cc0e46f17c2e55d"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-s3-restart-01.log",
+      "size": 18274,
+      "sha256": "ca1f5338eafe6eb2728b3c4b62427912efff1aa6f5b4ccadf4be64cd026d36b6"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/managed-s3-restart-01/TEST-ama.storage.FileRegistryRestartIT.xml",
+      "size": 32594,
+      "sha256": "e67da7c6689546d21b22a2c522394fcc63c5838b7691594837353a701b2079bd"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/migration-source-sha256.txt",
+      "size": 1412,
+      "sha256": "ac3cdc856507d4b47c5ceae55c31e000ea4b8e2499a29e09fc9b190c311dddc5"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/mysql-s3-start.log",
+      "size": 218,
+      "sha256": "96ab3e21bc979f7f97b5339430f100a0d25fcf5a721e00c2cd7ddd88fc90e7e0"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/mysql-start.log",
+      "size": 218,
+      "sha256": "321274f77ea898fe88dd3185682769c173637fedac443aa381cf5e4016ec2f97"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/openapi-01.log",
+      "size": 1545,
+      "sha256": "4a34e971d2dbfcdf57cec0fa7c28460e4a2f884485e9ee14970df61277d47983"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/openapi-final.log",
+      "size": 1546,
+      "sha256": "2e3d1c4220d5e52b377dba53713376e657e761fa093fddb58a4532f806087fa3"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/owned-fixture-allowlist.json",
+      "size": 1724,
+      "sha256": "78953fc7f0d09772293231af573568fbf668d17de63121cc8120fd6f83d2e954"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/owned-fixture-runtime.json",
+      "size": 972,
+      "sha256": "7aeb9ff90ef721e6ccbb13289586566725387b9ac0bf231cf5cae9e2d19ae0f7"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/owned-mysql-wrapper.py",
+      "size": 752,
+      "sha256": "90037e2d3d2005175f2781ebefa753c30950e6ff4c2a6ffb37981a7fbf522cc0"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/owned-source-paths.txt",
+      "size": 2259,
+      "sha256": "060863b7e236b42fc05862d1048b1d4e6a5913648f61bfecdd805ccf890bc328"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/owned-source-sha256.txt",
+      "size": 4635,
+      "sha256": "6579a37876a8957adc62c08029a8dc34d62fb0e38f1ce6888841b07ac8ee25ac"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/read-source-sha256.txt",
+      "size": 1611,
+      "sha256": "386ab36f9cfd81d47f614b0c2dd011b2af77f968e8e66a7e7bc3cd67ee63185e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-binding-codec-01.log",
+      "size": 8442,
+      "sha256": "d2d2837a3cd80deff8dd0e7daf5ef171223474440ae0e768b77da2557d9ea7ef"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-binding-codec-01/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "size": 16263,
+      "sha256": "1bdc5668c1d4fc1639b51754e03ec588d6951c24788e6ef46e9c0364de8f5a85"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-bindings-01.log",
+      "size": 19854,
+      "sha256": "a90643a746663275c06904d84db99f2b3efce4c85110ca7fa04049bb43633468"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-bindings-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 37316,
+      "sha256": "7e6eab60f481e08de8515bff25411dc131a7cc528b4a26a3ca9c03e458106bab"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-bindings-02.log",
+      "size": 18771,
+      "sha256": "653747670f635f216fb5029f3072650b28029af2b69d6ccc10f4d5064f3cfbde"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-bindings-02/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 37238,
+      "sha256": "dcda8a6fd3bc40e263aed6c5a64e0f898a9c953a1e8516db7a9db69c40244229"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-empty-backend-01.log",
+      "size": 37729,
+      "sha256": "e4dd0d22c0300f0c48d920fcd3b73643fc238fc151752df1dc243e9ba2cd9bbd"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-empty-backend-01/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "size": 53246,
+      "sha256": "9b3c154d39e762458327db748005c8f8e17ea3d3fafa2823db947a3f0079cf96"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-faults-01.log",
+      "size": 78083,
+      "sha256": "e8834f680ffe3f5fbbb153d6da155c4cb4a193da050d98ac3a76f50aa31ab3df"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-faults-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 96323,
+      "sha256": "20a14e5af7dc17b6984abbbaac34de01b544cf415d3980ebccb02c662050d1f3"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-http-01.log",
+      "size": 21807,
+      "sha256": "553979ad49151e3d8273725045929220c89aa70dad0a3da7825fa86c35e43556"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-http-01/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "size": 36010,
+      "sha256": "62e1b16e270fa20b6b06a3a8a15df1ea2baeda6464c89aefcceac03ed330fbd7"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-http-02.log",
+      "size": 18207,
+      "sha256": "dbb3f2f72817fa5e97c4e7f8d8c6045fa267bd3798ea529eb58080f45ee59866"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-http-02/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "size": 34085,
+      "sha256": "55ee8c2f83ea275f1c3da62eaa5065b80b1eb5c8445c0ac30b173dcef3cc1f38"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-openapi-01.log",
+      "size": 19612,
+      "sha256": "9f1ce1744bf94d3add05350c533e454420a15b8e3f4890c16169f7393111d4aa"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-openapi-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 37464,
+      "sha256": "1ad53b1c9523636bb2bd385f5225af6dcbaecffbc9565259cc718937c10908c8"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-production-tls-01.log",
+      "size": 9076,
+      "sha256": "b0173211a288476faac7cf5925daed9f8e0307db6a3f06de04a8081513af39ae"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-production-tls-01/TEST-ama.api.FileConfigurationTest.xml",
+      "size": 31762,
+      "sha256": "59799b3ad0258576b1c619600358e096b4d0a9086efa21f9ee2083e4d4d933af"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-readiness-01.log",
+      "size": 18284,
+      "sha256": "0767ba3fa9c618a84f984d7853122e44238bfaa60f55f17e8104d44b870ac513"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-readiness-01/TEST-ama.storage.FileRegistryHttpIT.xml",
+      "size": 34077,
+      "sha256": "c45de23a4fe19cb7a19cf9048da2ecef0785d1038596f0503f44a03ac23b0872"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-reference-01.log",
+      "size": 19759,
+      "sha256": "091959ed6c6ff0d806b066c7acdb4c3ea06ec019c19ff67121dd395a23bee890"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-reference-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 35921,
+      "sha256": "419b304f43761818b94977d4e6faaebefcbe3255d039e507e475669c2709acec"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-workflow-01.log",
+      "size": 29923,
+      "sha256": "2ad6c97cbf81e6b0432c40a114331049d8d1a36844dda6feb606b2cac9b8ec62"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/red-workflow-01/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 46657,
+      "sha256": "0582f73009d18ea9ce8b4090e384ff8f0b7f1bd8d028c9c4cb2b764496c5c41e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/reference-02.log",
+      "size": 17412,
+      "sha256": "5ad395adee1cdf78b18f500900afdf7d53f358e98611dba155174ce5f6b902ac"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/reference-02/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 34863,
+      "sha256": "168ae6473e9e09f02dc8cc2ca24c61029f7e0e9acc673d2c81c2c7f30ea1771f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/restart-local-01.log",
+      "size": 17299,
+      "sha256": "2a7c75330c1bad62ebedde81947080ad43752d2648428784c48f516fa809ae04"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/restart-local-01/TEST-ama.storage.FileRegistryRestartIT.xml",
+      "size": 32595,
+      "sha256": "cd48cb0f82dfcc88a5b5b0159c4ace372ebb2ac5c2f37c6ec4b33e561d7d3432"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/s3-start-02.log",
+      "size": 49,
+      "sha256": "2334f9c0bde579ff7149a4f8b61fe42016ce1570e176fb01ab0359096404a98a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/s3-start.log",
+      "size": 793,
+      "sha256": "11eecb07615330705ecb422f2688f8c2339cfb8941e0466deceea2ddcc59b436"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/secret-scan.txt",
+      "size": 239,
+      "sha256": "79d40cbe5ba04edf83a9911b90f5585ca4809e0bc8a15ab66a9b43a74a4d9263"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/source-diff-check.txt",
+      "size": 188,
+      "sha256": "2a9fbb6373c868db35acee6c0d2b8e2b21c6915845bc5440b2d784aa9ca571a5"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final.log",
+      "size": 15521,
+      "sha256": "fa60e63b16b062c0537a5fbed503d420e14c8ed08fc74d083f821a3575832a21"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.api.DeploymentConfigTest.xml",
+      "size": 32793,
+      "sha256": "c53bd22dd22a1ca7d6a14c8d8168089a1a77f96c9ad1d6a358d2c8f57766187d"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.api.FileConfigurationTest.xml",
+      "size": 31867,
+      "sha256": "20aecd393d803d60888d7964d540af3df11158965d877820cb3e215ce9b1687f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.api.IdentityContractsTest.xml",
+      "size": 32080,
+      "sha256": "8fa1d93fb590fabaaef0e442d06e7b8bf6efa31afb28b250863ecb5188b1e81a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.api.IdentitySecurityTest.xml",
+      "size": 32477,
+      "sha256": "13d086306156f5cc27534eec6119643a8a2ed1281701ca2faeb067b3e5e412db"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.storage.ContractFixtureTest.xml",
+      "size": 31820,
+      "sha256": "dd881de4730dd3de461f7a1ed5741ab96f1dc73b4517e1153953eeeb80efb10e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "size": 15942,
+      "sha256": "2232e3c3add185b01b95653d5e807aed4ccf104c9c9c95e10f30d7746efae206"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.storage.StorageRouterTest.xml",
+      "size": 16394,
+      "sha256": "e218a9a57c32ba035f4537f2e6231ab52f8f0613e4fa1f03cdc9564ee856fa5f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "size": 16087,
+      "sha256": "7f72e764653f22474c7884661d0472a40d09a881dfccd4562570196e65ddd7a5"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "size": 15956,
+      "sha256": "a43fe19e085d9f651259036a89c3c381a31e3dff3b7a5e5eb6303eb9eb44ede1"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.support.ContractClientTest.xml",
+      "size": 31990,
+      "sha256": "62c80b44dbf37e2f2a31bb30f1c45545e06952eafcbef36fa913d9a19a995741"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.task.TaskMetadataTest.xml",
+      "size": 15631,
+      "sha256": "40a1f15c91cd99f462137825cae8cc5abb085102de82934ddbc5d939a895962a"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "size": 18056,
+      "sha256": "abbea0bfe8419d4b8d95b8b2e6acbdd49b4dfed0b3c0428dacf80586b4a32ab3"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/unit-final/TEST-ama.worker.WorkerLoopTest.xml",
+      "size": 7364,
+      "sha256": "ff01fa169f23f2da8b23ca6314e8207545a80c1918f7ed75e98312ee6d079dec"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/verify-independent-vectors.py",
+      "size": 656,
+      "sha256": "3a4bc4fb752ded31913c05b2275073ab146a2a1ddded1e6febc0d337c9a0d39f"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/workflow-02.log",
+      "size": 8355,
+      "sha256": "d6ffc5244d922fe833a9f43fd752bed2853cdd018f7728aa777c67804d50d81e"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/workflow-03.log",
+      "size": 17413,
+      "sha256": "9ad6f03d764e5e2c8d289bdb59b023b83c680eed2313a4a810d552e0c7754d40"
+    },
+    {
+      "path": "artifacts/phase-b/b04-registry/workflow-03/TEST-ama.storage.FileRegistryUploadIT.xml",
+      "size": 34716,
+      "sha256": "ea0509f8323b362c4fc6da09efecaf57fd3e34c4de66ce601162edf64ab827f9"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java",
+      "size": 6390,
+      "sha256": "5c0140194d39846800af968441a2a87807bff7873325235e03d707262ec91f0f"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/FileBackendDefinitions.java",
+      "size": 703,
+      "sha256": "0efed46db6c5c836c7f2c1d0935dce4b878bc73ce8bea1487ffc390c5c5b600a"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java",
+      "size": 19872,
+      "sha256": "59722488c5b9b762c0c27f05efb85dc0bc2622e0cb8bdbeb03f107dcd1814123"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/JdbcFileUploads.java",
+      "size": 25015,
+      "sha256": "cf3c274731272b20233e29f20398ed34ad0ca82712a33b00cd8e8ce415d403f9"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/ManagedBackendAdapters.java",
+      "size": 1489,
+      "sha256": "8fd0811667c837eeb9a3ead005d3350a5a6f2318446ec5d891bdbadd75b2d73b"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/storage/ManagedBackendIdentityTest.java",
+      "size": 5478,
+      "sha256": "4770d470e4a50b619632b9e3ceefa9dc3f982c13451022a8bd2cb72b734516e4"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/FileConfiguration.java",
+      "size": 7619,
+      "sha256": "eee76074cb198996bde4aa78c4a716176eff2a4aa6017c50fe1281f3788ca11d"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/FileController.java",
+      "size": 10438,
+      "sha256": "6070a0669c98d6cb40bb57923caaf847730bf51e63d051436aba88e9b1f99cd9"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/FileErrors.java",
+      "size": 3120,
+      "sha256": "128b447c162287881ea7b6b86adac9c6a022bed17999d3fb3f37a63ad70ceaf0"
+    },
+    {
+      "path": "backend/api/src/main/resources/application.yml",
+      "size": 1510,
+      "sha256": "65330b6da9450734717073c5be1dfdfa709db684cb05f4a55edd988ba8208197"
+    },
+    {
+      "path": "backend/api/src/test/java/ama/api/DeploymentConfigTest.java",
+      "size": 7176,
+      "sha256": "1f0dc1b4ef5a4d6db2dc8387788c3054f69e1b0edbcbf6025010ff07bd66146f"
+    },
+    {
+      "path": "backend/api/src/test/java/ama/api/FileConfigurationTest.java",
+      "size": 1989,
+      "sha256": "52233a5a18c84025d6269efd30b74217656d1dea90dceba154014548e4527773"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/FileContracts.java",
+      "size": 2469,
+      "sha256": "c636ac582d29db54bfffd5a8ed01078721535101798aa41b646d201d5324b237"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/FilePurposePolicy.java",
+      "size": 438,
+      "sha256": "59235a4816d38f58d91db0da24c1f43f0b8aa2431b4b5a6c44c7c6c83e28adbe"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/FileReferencePolicy.java",
+      "size": 940,
+      "sha256": "66258abaff4831f590ef7c0716c8f4175659efe5fceb17bc19520b2cdb89cb2b"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/FileRegistry.java",
+      "size": 2302,
+      "sha256": "bbdaaa59dab9c4a3f6b5221982048696b9762fa2d0432ecdd775ed672314d7ab"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/FileUploads.java",
+      "size": 673,
+      "sha256": "94c40a860fe3b51148bb0d67adbb9f48f09ea4d7f603197074d349998e641a68"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/ManagedBackendId.java",
+      "size": 5851,
+      "sha256": "85c03af9addb307b58749407e252ec853a8076b0d61b4b4afe16195ba55c3640"
+    },
+    {
+      "path": "backend/file-service/src/main/java/ama/file/FileServiceMain.java",
+      "size": 4760,
+      "sha256": "9489e0910700c312eaffd76c5e46c5d75d03f78afbad5888a8ab3c585232429d"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/FileBackendBindingIT.java",
+      "size": 4515,
+      "sha256": "42c92f4f3f637e299533d8a88be3dd8d993c546b276ce4445b3d92fb7f329bbc"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/FileBackendCatalogIT.java",
+      "size": 8600,
+      "sha256": "0debd740e7f3d8c162002817e814885a3ae4eb8da62152c463c4c77736d9843f"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/FileRegistryHttpIT.java",
+      "size": 9103,
+      "sha256": "e483eed5b2fc41db496ab04eb637422a1ad3080816436c3b77d8b8dbd7e14534"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/FileRegistryRestartIT.java",
+      "size": 9463,
+      "sha256": "55cf021b38bd656542fd42fcf177e3404283366c84a028795eba494a583be327"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/FileRegistryUploadIT.java",
+      "size": 66208,
+      "sha256": "61a2352852299f22c30aac28d9e26180b653190114de14a25fa54d3000094761"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/ManagedLocalFixture.java",
+      "size": 5383,
+      "sha256": "b369b5281d2f6615efc3f4544c8112745f42d5d45ee3f56e8e7dfc3fd84e71cb"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/ManagedRegistryFixture.java",
+      "size": 1652,
+      "sha256": "76c9dd46809061a8658966073bca3dd69bf7dc1a0b4ac965f2c94cd4063f04e5"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/RegistryApiProcess.java",
+      "size": 5901,
+      "sha256": "bf0d0ac3d8bc73c22572a1796080ad888918d19154c2db44e2a0ab1e1b7b9549"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/RegistryDeclaredError.java",
+      "size": 6138,
+      "sha256": "9cb89badb6b82002097e99d6ae8983f13ef120c0eda76637ffcf9a6ecc345c65"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/RegistryObservedStorage.java",
+      "size": 2364,
+      "sha256": "cf20ebca75d2878c654357871ce04c5e184a1b8a383fc05181ced5f1ee9d5472"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/RegistryProbeSource.java",
+      "size": 4248,
+      "sha256": "3b3c409c3ce62894350e040c0ba28a968fd097103e9f7fac9c24f99e696b9744"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/RegistryProductionConfigProcess.java",
+      "size": 1337,
+      "sha256": "2dec36c272045160837a9680296f3a609aecc8aefe350841b1d45f70e34abc50"
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "size": 1638,
+      "sha256": "ff50ccdbf6ff0159afa1d0a7efa57ed0241995cf5970cdc84fc0cfcfffd376e2"
+    },
+    {
+      "path": "contracts/openapi/files.yaml",
+      "size": 12788,
+      "sha256": "c7990e9b865562d916c63b21b34ebb4ac616e4b67473b638e94075d3d2ec07b5"
+    },
+    {
+      "path": "contracts/openapi/identity.yaml",
+      "size": 6133,
+      "sha256": "25a23f5c9aecb7d4e7e688e2c72b287b05a2ff71b1fe0b85924bad55860c999e"
+    },
+    {
+      "path": "docs/acceptance/b/file-backend-binding-proposal.md",
+      "size": 4660,
+      "sha256": "4c875f973b0e4274391fbaae9f22e2fad1fbbf535bc79b7146cf6ad44755f8fc"
+    },
+    {
+      "path": "docs/acceptance/b/file-registry-integration.md",
+      "size": 16272,
+      "sha256": "00553b228d7e5cfe6d6cbcfb8fd6acadec1a43b0de55a0d020c032b914f06c58"
+    },
+    {
+      "path": "web/src/shared/api/generated.ts",
+      "size": 42002,
+      "sha256": "9fbc1f6b829333be0095f86f14b4c6bf5489c8d06be86a756547e6eb699df983"
+    }
+  ],
+  "count": 227,
+  "totalBytes": 3608418,
+  "allFilesEqualOwnerHead": true,
+  "lowerSqlCount": 12,
+  "allLowerSqlUnchanged": true,
+  "reviewHashes": {
+    "task-B-04-registry-report.md": "20e0f2ed68670e4605026917fbe0c82424642d7a8d77ca637a3e54176d8147bb",
+    "task-B-04-registry-review.md": "508a1aecf3f0205171b821ace2a837564b7ddba1a64bc972535607b317f70f0c",
+    "task-B-04-registry-fix1-report.md": "55f0bcef30c5ce5502e3162369a42440a222226f73c2315bdf2f2e791f1f0e28",
+    "task-B-04-registry-fix1-review.md": "5e4eabc79cf1b4ef09caf592fa811028b1aecf74a576610dd2b4dbc6d981ee0d"
+  },
+  "testsRerun": false,
+  "reason": "Exact reviewed nonoverlapping source adoption; no new executable delta."
+}
