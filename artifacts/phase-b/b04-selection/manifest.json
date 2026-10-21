@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-22",
+  "base": "9572b5a",
+  "branch": "codex/phase-b-storage-selection",
+  "scope": "DB-free local selected-manifest correction; pending independent review; not whole B-04 or HA qualification",
+  "environment": "Pinned phase-a/.tools/env.sh; WSL2/ext4; actual loopback mTLS/native files/process kills",
+  "runner_admission": "Existing controlled fixture env sourced only for canonical guard; no SQL or DB tests executed",
+  "commands": {
+    "red-contract": "python3 tools/checks/run.py it FileStorageContractIT#localMultipartCompletionSelectsSuppliedReceipts",
+    "red-durability": "python3 tools/checks/run.py it LocalDurabilityIT#multipartSelectedPartsAndCompletedResultSurviveActualProcessKill+fullHashMismatchDoesNotPoisonCompletionRetry",
+    "green-contract-attempt1": "python3 tools/checks/run.py it FileStorageContractIT",
+    "green-stream-fixture": "python3 tools/checks/run.py it FileStorageContractIT#localRejectsUnverifiedBytes",
+    "green-contract": "python3 tools/checks/run.py it FileStorageContractIT",
+    "green-durability": "python3 tools/checks/run.py it LocalDurabilityIT"
+  },
+  "junit_results": {
+    "red-contract.xml": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 2,
+      "skipped": 0
+    },
+    "red-durability.xml": {
+      "tests": 3,
+      "failures": 1,
+      "errors": 2,
+      "skipped": 0
+    },
+    "green-contract-attempt1.xml": {
+      "tests": 7,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "green-stream-fixture.xml": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "green-contract.xml": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "green-durability.xml": {
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "green-unit-TEST-ama.storage.StorageRouterTest.xml": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "green-unit-TEST-ama.api.DeploymentConfigTest.xml": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "green-unit-TEST-ama.support.ContractClientTest.xml": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "sha256": {
+    "green-contract-attempt1.log": "33947b7edc9ce4106132944a3ce6ac7226873e773bbf2be5354e4455b102cec2",
+    "green-contract-attempt1.xml": "99bb8a70f3a656735f5325f9378308d5993989cd717f4a0f286d696537ac69b3",
+    "green-contract.log": "aaa9648fc7c8b4b53d1463c24facced45fb363d71e62da179d6b5d935d3e3fa4",
+    "green-contract.xml": "63e754dc4ba57a48ec0dc75ca229d83f973b05a684ac3e90265330fe92c8de47",
+    "green-durability.log": "e948fff990d691884271b8f109c011bc6489c922f2a5628fba00c004e9aab1fd",
+    "green-durability.xml": "7b91ba0c8ca73a1a2d27d550a23962ee86331997c479c0488cc44258789b715c",
+    "green-stream-fixture.log": "00c3dab84d85a0f9a3786e1ca1659a66c62aeeb8386ea3f3085a48a9d761879f",
+    "green-stream-fixture.xml": "daff223bba3e51cade6a3d006e6c3fc74a3fcfa478ffb485adb281e4af13fad4",
+    "green-unit-TEST-ama.api.DeploymentConfigTest.xml": "198d0eab9ed8a7f11eed285b80e129a9c9eb6445c612ce308e7993beac2ea1ae",
+    "green-unit-TEST-ama.storage.StorageRouterTest.xml": "9d8921b4c7a2326c1b0decef682cfb34ff2c33a6d62faa60aff18b6f600aeba3",
+    "green-unit-TEST-ama.support.ContractClientTest.xml": "0ac504ce378fcbfe89cc26f06c49338e854d56b376cafa86b1b2305ab666885b",
+    "red-contract.log": "357b5364f455af4c09fbb2d86dcfc941be4b2386a518dc237d6c23537393d761",
+    "red-contract.xml": "5243f2fe3585aa70c5fc6e9acae206813bc5361d18f166368205c76795869a0c",
+    "red-durability.log": "da63b0cfa49e0f07335b5d460995b88bd653545f1ce7f2fb5d0191b1806ee906",
+    "red-durability.xml": "d57e32d9d8d9823ad8a0e4393c7d9b25a4113905386fbf86b7d14a90aae78a00",
+    "toolchain.log": "974d6af84a3c8f1d3bcd89ff2344ef9c5ca993829cd89c8c274a4672284580dc"
+  }
+}

@@ -122,13 +122,22 @@ class LocalDurabilityIT {
         }
     }
 
-    @Test
-    void multipartAcceptedPartsAndCompletedResultSurviveActualProcessKill() throws Exception {
+    @ParameterizedTest(name = "selected completion survives process kill with extra [{0}]")
+    @ValueSource(strings = {"", "xyz"})
+    void multipartSelectedPartsAndCompletedResultSurviveActualProcessKill(String unselected)
+            throws Exception {
         try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
             var s = fixture.startProcess();
             s.put(key("ordinary"), body("abc"), 3, ABC);
             var token = s.beginUpload(new UploadSpec("local", "meeting", "notes/a", 3));
             var receipt = s.writePart(token, 1, body("abc"), 3, ABC);
+            var extra =
+                    s.writePart(
+                            token,
+                            2,
+                            body(unselected),
+                            bytes(unselected).length,
+                            hash(bytes(unselected)));
             fixture.killProcess();
             s = fixture.startProcess();
             assertArrayEquals(bytes("abc"), read(s, key("ordinary"), 0, 3));
@@ -137,6 +146,20 @@ class LocalDurabilityIT {
             s = fixture.startProcess();
             assertEquals(result, s.complete(token, List.of(receipt), ABC));
             assertArrayEquals(bytes("abc"), read(s, KEY, 0, 3));
+            var restarted = s;
+            error(
+                    unselected.isEmpty() ? ErrorCode.CONFLICT : ErrorCode.SIZE_MISMATCH,
+                    () -> restarted.complete(token, List.of(receipt, extra), ABC));
+            error(
+                    ErrorCode.INVALID_UPLOAD_STATE,
+                    () -> restarted.writePart(token, 3, body(""), 0, hash(bytes(""))));
+            restarted.abort(token);
+            assertEquals(result, restarted.complete(token, List.of(receipt), ABC));
+            assertArrayEquals(
+                    bytes(unselected),
+                    Files.readAllBytes(
+                            fixture.root.resolve("uploads").resolve(token.sessionId())
+                                    .resolve("part-2")));
         }
     }
 
@@ -146,6 +169,7 @@ class LocalDurabilityIT {
                 var s = fixture.open(DurabilityHooks.NONE)) {
             var token = s.beginUpload(new UploadSpec("local", "meeting", "notes/a", 3));
             var receipt = s.writePart(token, 1, body("abc"), 3, ABC);
+            s.writePart(token, 2, body(""), 0, hash(bytes("")));
             error(
                     ErrorCode.CHECKSUM_MISMATCH,
                     () -> s.complete(token, List.of(receipt), hash(bytes("xyz"))));
@@ -154,13 +178,9 @@ class LocalDurabilityIT {
     }
 
     @Test
-    void completeRejectsMissingAndUnlistedAcceptedParts() throws Exception {
+    void completeRejectsMissingSelectedPart() throws Exception {
         try (var fixture = new LocalFixture(temporary.resolve("volume"));
                 var s = fixture.open(DurabilityHooks.NONE)) {
-            var token = s.beginUpload(new UploadSpec("local", "meeting", "notes/a", 3));
-            var receipt = s.writePart(token, 1, body("abc"), 3, ABC);
-            s.writePart(token, 2, body(""), 0, hash(bytes("")));
-            error(ErrorCode.INVALID_ARGUMENT, () -> s.complete(token, List.of(receipt), ABC));
             var other = s.beginUpload(new UploadSpec("local", "meeting", "other", 3));
             error(
                     ErrorCode.NOT_FOUND,

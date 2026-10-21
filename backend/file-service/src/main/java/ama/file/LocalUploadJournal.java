@@ -114,19 +114,6 @@ final class LocalUploadJournal {
                 total += part.size();
             }
             if (total != spec.expectedSize()) throw new StorageException(ErrorCode.SIZE_MISMATCH);
-            final int count = parts.size();
-            fs.visit(
-                    dir,
-                    name -> {
-                        if (name.startsWith("part-")) {
-                            try {
-                                if (Integer.parseInt(name.substring(5)) > count)
-                                    throw new StorageException(ErrorCode.INVALID_ARGUMENT);
-                            } catch (NumberFormatException e) {
-                                throw LinuxFiles.unavailable();
-                            }
-                        }
-                    });
             byte[] decision = LocalFileStore.json(plan);
             if (fs.exists(dir, "decision")
                     && !Arrays.equals(files.bytes(dir, "decision", 1048576), decision))
