@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="ama.worker.WorkerLoopTest" time="5.273" tests="3" errors="0" skipped="0" failures="0" flakes="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="ama.worker.WorkerLoopTest" time="5.283" tests="3" errors="0" skipped="0" failures="0" flakes="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="java.vm.specification.version" value="21"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/lib"/>
-    <property name="sun.java.command" value="/home/tanren/ama/.worktrees/phase-b-tasks/backend/worker/target/surefire/surefirebooter-20261022031055473_9.jar /home/tanren/ama/.worktrees/phase-b-tasks/backend/worker/target/surefire 2026-10-22T03-10-32_537-jvmRun1 surefire-20261022031055473_7tmp surefire_2-20261022031055473_8tmp"/>
+    <property name="sun.java.command" value="/home/tanren/ama/.worktrees/phase-b-tasks/backend/worker/target/surefire/surefirebooter-20261022031521682_9.jar /home/tanren/ama/.worktrees/phase-b-tasks/backend/worker/target/surefire 2026-10-22T03-15-00_930-jvmRun1 surefire-20261022031521682_7tmp surefire_2-20261022031521682_8tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/tanren/ama/.worktrees/phase-b-tasks/backend/worker/target/test-classes:/home/tanren/ama/.worktrees/phase-b-tasks/backend/worker/target/classes:/home/tanren/ama/.worktrees/phase-b-tasks/backend/core/target/ama-core-0.1.0-SNAPSHOT.jar:/home/tanren/ama/.worktrees/phase-b-tasks/backend/contracts/target/ama-contracts-0.1.0-SNAPSHOT.jar:/home/tanren/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/home/tanren/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/home/tanren/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/tanren/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/home/tanren/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/tanren/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/home/tanren/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/home/tanren/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/home/tanren/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -27,7 +27,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="/home/tanren/ama/.worktrees/phase-b-tasks/backend/worker/target/surefire/surefirebooter-20261022031055473_9.jar"/>
+    <property name="surefire.real.class.path" value="/home/tanren/ama/.worktrees/phase-b-tasks/backend/worker/target/surefire/surefirebooter-20261022031521682_9.jar"/>
     <property name="failsafe.failIfNoSpecifiedTests" value="false"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.12.1+1-LTS"/>
@@ -46,7 +46,7 @@
     <property name="user.dir" value="/home/tanren/ama/.worktrees/phase-b-tasks/backend/worker"/>
     <property name="os.arch" value="amd64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="it.test" value="ExternalExecutionIT,ModelPermitIT"/>
+    <property name="it.test" value="B05SchemaIT"/>
     <property name="native.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
     <property name="java.vm.info" value="mixed mode, sharing"/>
@@ -56,7 +56,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="independentHeartbeatRunsDuringBlockedHandler" classname="ama.worker.WorkerLoopTest" time="5.079"/>
-  <testcase name="boundedPoolStartsSecondHandlerOnlyAfterFirstReturns" classname="ama.worker.WorkerLoopTest" time="0.158"/>
+  <testcase name="independentHeartbeatRunsDuringBlockedHandler" classname="ama.worker.WorkerLoopTest" time="5.089"/>
+  <testcase name="boundedPoolStartsSecondHandlerOnlyAfterFirstReturns" classname="ama.worker.WorkerLoopTest" time="0.157"/>
   <testcase name="blockedCpuHandlerDoesNotConsumeIoCapacity" classname="ama.worker.WorkerLoopTest" time="0.006"/>
 </testsuite>
