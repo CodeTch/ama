@@ -1,6 +1,7 @@
 import { defineConfig } from '@playwright/test';
 process.env.NO_PROXY = process.env.no_proxy = 'localhost,127.0.0.1,127.0.0.2';
 export default defineConfig({
+ updateSnapshots: 'none',
  testDir: './tests', testMatch: /(?:visual|e2e)\/.*\.spec\.ts/, fullyParallel: false,
  forbidOnly: true, retries: 0, reporter: [['list'], ['junit', { outputFile: process.env.PLAYWRIGHT_JUNIT_OUTPUT_FILE || '../artifacts/web/playwright.xml' }]],
  outputDir: '../artifacts/web/test-results',
