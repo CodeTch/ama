@@ -227,6 +227,7 @@ def validate_topology(inventory: dict) -> dict:
         component_paths = {}
         volume_ids = set()
         active_nodes = set()
+        active_mounts = set()
         for raw_volume in volumes:
             volume = _object(raw_volume)
             volume_id = volume.get('id')
@@ -254,6 +255,12 @@ def validate_topology(inventory: dict) -> dict:
                     'PR-04', 'XFS must be mounted only on its sole active Primary')
             if single_active:
                 active_nodes.add(mounted[0])
+                if _path(volume.get('mountPoint')):
+                    mount_path = PurePosixPath('/' + volume['mountPoint'].lstrip('/'))
+                    mount_identity = (mounted[0], mount_path)
+                    require(mount_identity not in active_mounts, 'PR-04',
+                            'Distinct volumes cannot share a normalized active mount path')
+                    active_mounts.add(mount_identity)
             replicas = _object(volume.get('replicas'))
             require(bool(node_ids) and set(replicas) == node_ids
                     and all(value == 'UpToDate' for value in replicas.values()),

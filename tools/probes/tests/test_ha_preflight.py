@@ -224,6 +224,34 @@ class PreflightTests(unittest.TestCase):
                 self.assertFalse(result['canDeploy'])
                 self.assertFalse(result['canClaimAutomaticRecovery'])
 
+    # Different devices/UUIDs cannot both be visible at one normalized active mount.
+    def test_distinct_volumes_cannot_claim_the_same_normalized_active_mount(self):
+        for mount, can_deploy in [('/srv', False), ('/srv/', False),
+                                  ('/srv/./', False), ('/srv//', False), ('//srv', False),
+                                  ('/database', True)]:
+            with self.subTest(second_mount=mount):
+                inventory = supplied_inventory()
+                files = inventory['replication']['volumes'][0]
+                database = copy.deepcopy(files)
+                database.update(
+                    id='test-database-volume', mountPoint=mount,
+                    filesystemUuid='aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+                    observedMountUuid='aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+                    devices={'test-a': '/dev/test-database', 'test-b': '/dev/test-database'},
+                    protectedComponents=['mysql-data'],
+                    componentPaths={'mysql-data': mount.rstrip('/') + '/mysql-data'},
+                )
+                files['protectedComponents'].remove('mysql-data')
+                del files['componentPaths']['mysql-data']
+                inventory['replication']['volumes'].append(database)
+                result = self.validator()(attach_evidence(inventory))
+                self.assertEqual(can_deploy, result['canDeploy'])
+                self.assertEqual(can_deploy, result['canClaimAutomaticRecovery'])
+                if can_deploy:
+                    self.assertEqual([], result['blockers'])
+                else:
+                    self.assertIn('PR-04', [item['id'] for item in result['blockers']])
+
     # A bool, stale report, self-review or changed topology must never qualify.
     def test_evidence_must_be_current_structured_independently_reviewed_and_scope_bound(self):
         for bad in [True, {}, {'status': 'passed'}, None]:
