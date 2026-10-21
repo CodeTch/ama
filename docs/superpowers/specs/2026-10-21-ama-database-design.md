@@ -1,6 +1,8 @@
 # AMA 数据库详细设计基线
 
-设计版本：**B00-1.2-review**，2026-10-22；状态：**上传元数据定向补充已通过独立增量评审，采用为当前设计基线**。已采用的 **B00-1.1-review** 及 R1—R6 独立关闭结论保持有效；本次仅补上传初始化名称/用途的持久化与恢复约束，本增量设计门已通过，B-04/V009 仍须完成自己的实施与回归审查。不是阶段 B 实现完成、平台联调、容量或上线批准。增量 BASE `a13e0cd`，工作树 `/home/tanren/ama/.worktrees/phase-b-upload-design`；[本次范围与证据](../../acceptance/b/database-upload-addendum-review.md)。
+设计版本：**B00-1.3-review**，2026-10-22；状态：**生成结果关系持久化方案已获根任务技术 ACK，详细设计及独立评审待完成；不得据此声称 B07/正式迁移/生产通过**。已采用的 B00-1.2（85表/674列，含1.1 R1—R6）保持历史效力；本版新增8表，仅改变原表 sensitive_exclusion 的多标签主键和 CHECK。基线 `0d2079cd64e5b61bc5787ca5adfaa782e5cd4a40`，工作树 `/home/tanren/ama/.worktrees/phase-b-generation-design`；[本次记录](../../acceptance/b/database-generation-addendum-review.md)。
+
+1.2 原始状态全文、设计/字典/DDL/声明源字节及SHA已保存于 [design-history/B00-1.2](../../database/design-history/B00-1.2/manifest.json)。原上传补充段标题曾写“待独立评审”，但同版本顶部及采用记录已明确通过；本版只更正当前标题并保留此前原字节，不重签或覆盖1.2评审。
 
 既有采用历史：首版 `c73a765` 有六项 Important，未采用；`bd43ca3` 修正列表共同查询、个人名称去重、专题说明、同确认发布重试、转写处理快照与片段标记，经独立复审全部关闭，集成 `69f33a8`＋`bca9b89`，由 `6dd2cdd` 采用为 1.1。原始 BASE `e8c88d2aaed1a19b0d0202ddce9cb51ee01d84ee`、FIX_BASE `c73a7656fc1c5c2cb07d8b94ead68122059b549f` 与原工作树 `/home/tanren/ama/.worktrees/phase-b-database-design` 仅指该历史版；原评审及 metadata 文件保持原字节。
 
@@ -115,6 +117,65 @@ generation_input 固定确认转写、材料集合、模板、排除集、要素
 
 来源定位按 TRANSCRIPT/AUDIO/PDF_PAGE/PPT_PAGE/WORD_PARAGRAPH/TEXT_PARAGRAPH/KNOWLEDGE_VERSION 分类型；对应字段必填且非适用字段由schema拒绝，页段真实存在，所有引用属于固定输入集合。证据只指向具体要素/正文版本；背景材料不能独自支持重要会议结论和行动，未证实为UNSUPPORTED/PARTIAL，不能造置信度。排除设置不删除源、核心要素或改变ACL，只有下一次生成应用，并在最终确认复验人工加回的冲突。
 
+## B00-1.3 生成结果持久化增量（技术方案已 ACK，独立设计评审待完成）
+
+根任务已完整阅读初稿 SHA `6abe12335303c176331089814e56aee32aae7b2c01a77ecc3cd9741350b044ff` 并裁定继续详细设计。初稿/报告原字节由根保存；此处落实裁定，不把初稿推荐项或待答用户问题变成产品规则。
+新增七张目录/建议/复核表属于已有预留 V012；`final_result_review`属于已有 V013，与 `final_confirmation`同批创建并立即具有指向确认与复核的两个 physical FK。没有新增 deferred FK、空子表、迁移编号或 registry 修改。完整审阅 DDL 在设计库一次建立全部表和全部 FK，不替代分期正式迁移。
+
+|原始需求/缺口|实体和保证|未由schema证明的部分|
+|---|---|---|
+|模块III 6.4 未选敏感检测及同位置两个标签|sensitive_detection + sensitive_detection_source；来源无序集、同类序号唯一；exclusion PK含category|检测完备性/隐含泄漏、人类核对、源权限|
+|模块III 6.3/7 背景补充和来源|background_note + background_note_source；逐条保存input_id和正文|背景不能冒充会议决定；语义质量|
+|模块III 6.6 原始负责人/日期建议未核实|action_suggestion与已接受action_item分离，继承精确input_id|企业人员选择、外部负责人待定；不授ACL|
+|模块III 6.5/7、IV 5.3 精确证据复核|result_review + result_review_evidence；完整target/source hashes、服务器身份/时间|人类断言不等于真值；同会议/目标/集合/身份由事务核验|
+|模块IV 5.4 最终历史不可变|final_result_review冻结精确成员，进入source_manifest_hash|最终业务检查和发布仍由B08实现|
+
+七类主体要素枚举、已有 generation_input 及其固定版本图不变；新增表逐字段/PK/索引/CHECK/FK见完整字典。没有源文摘录副本、原始模型JSON或新文件元数据附件。来源alias/UTF8、anchor/hash编码与语义coverage仍依单独B07契约；这里规定必须记录哪些事实，不擅自采纳尚未评审的codec。
+SOURCE_SUPPORT与ACTION_FIELDS严格分离。`minutes_element/evidence_link.support_state`保留创建时分类；当前人工支持必须查精确断言，最终历史必须查冻结成员。第一次自动有效保存与明确采用、逐项核对与合并确认两个交互问题仍待用户答复。字段允许明确adopt+review在同事务新建目标和新的断言，绝不自动复制历史review信用，也不强制额外点击。
+
+### 集合、序号与去重
+
+A detection is one model directory entry with one category and a nonempty set of sources; ordinal is one-based response order within that category. A note is one background entry in one-based order. Preserve distinct model entries even when their text/source sets happen to match; do not silently merge summaries. Response-local keys are validated then mapped to new UUIDs, not stored as database IDs.
+Source relations are unordered sets: duplicate identical locator IDs reject during validation, PK protects persistence. Exact physical locator dedup is per meeting and full typed locator projection (including revision/file/material version); under root lock compare all nullable fields and exact section_path bytes. No lossy hash-only uniqueness or product length restriction. Equivalent location uses one server locator ID across both labels.
+Exclusion is the set of (locator_id,category) within one exclusion_revision. Selecting a multi-source detection expands all its locators under its own category. Overlapping detections union these pairs. Clearing a row unselects only that category/location; other label survives. Display selected state derives from these pairs, not a mutable flag on detection. Partial overlap shows partial selection; directory counts count detection entries per label, not unique physical locations.
+A new exclusion revision freezes the complete selection; empty set remains explicit existing empty revision. Exclusion behavior applies the union of selected physical source locations, but persistence/fingerprint/audit retain both labels. Copy-on-write never edits source text, existing body, old detections or old exclusion rows.
+Review evidence is an unordered, duplicate-free set of existing evidence IDs. review_no is an append sequence allocated MAX(review_no)+1 under the meeting root lock, not a global AUTO_INCREMENT or wall-clock ordering. It is independent of content revisions. All content-bearing rows are immutable; only existing candidate decision state and meeting/subject pointers follow existing CAS rules.
+
+### 精确复核断言与失效
+
+SOURCE_SUPPORT reviews one exact element text span or one exact minutes body span. target_anchor uses the separately approved B07 anchor contract (unit, range, exact text hash); its encoding is not adopted by this schema proposal. Review cannot target a directory note as an important meeting decision. ACTION_FIELDS reviews the complete saved action tuple: exact element body/category plus owner_enterprise_id, owner_display and due_on including NULL.
+`hash_profile` resolves an archived immutable nonsecret profile defining canonical typed encoding and domain separation. target_hash covers meeting, exact target row ID, its set/revision, exact full target content and anchor (or complete action tuple); source_set_hash covers every selected evidence ID, exact target/anchor, complete locator union, source role, immutable confirmation/file/material versions and content hashes. Canonical set sort is unsigned binary stable IDs. Do not hash display URLs or current/latest material/config.
+The reviewed set must equal the complete persisted evidence set intersecting the reviewed target range, not a client-chosen supportive subset; for ACTION_FIELDS use all element evidence. Range membership/bounds, hash equality and same-meeting checks are recomputed from locked immutable rows. Empty/partial sources can be honestly reviewed UNSUPPORTED/PARTIAL. Background-only evidence cannot establish a meeting conclusion or action, including after a human click.
+The schema records a human assertion, not proof of semantic truth. SOURCE_SUPPORT=SUPPORTED requires an explicit authorized source-support attestation with the target and complete source set shown and readable. No model output, valid source ID, generation/adoption click or generic final button alone generates this assertion.
+Per-item attestation versus an explicitly worded combined final confirmation is **pending user answer**. Both write the same rows; a combined transaction may create several explicit assertions and final memberships atomically. This proposal adds no required extra UI click or invented corporate reviewer role. Meeting owner rights and independent source access are validated by existing ports; management role alone does not grant them.
+reviewed_by is server-derived stable enterprise identity, reviewed_at is server UTC microsecond time. Client submits expected root revision, exact target/source hashes, claimed outcome and the content-specific review intent; server recomputes all of them except human judgment. Logs/audit hold IDs/outcomes only, never copied excerpts.
+Existing minutes_element/evidence_link.support_state remains the immutable classification at that result version's creation. It cannot alone establish current reviewed support. Effective reviewed status is the latest review_no for the exact target ID/kind/anchor/hash/source-set combination; latest PARTIAL/UNSUPPORTED supersedes earlier SUPPORTED. Concurrent reviews use CAS; do not use “any historical SUPPORTED”. Full-element support requires approved coverage rules over all relevant statements, not one supported span. Those semantic rules remain a contract prerequisite.
+A review write advances meeting.revision/subject.business_version and clears current final_confirmation_id; it does not rewrite body or the frozen classification. New content/source/anchor/version IDs invalidate prior reviews for current support even if rendered wording matches. Candidate adoption or restore never copies old reviewer identity/time into a new attestation. An explicit content-specific adopt+review intent may atomically create the new target and a fresh attestation with current actor/time/recomputed hashes; it does not require a second click merely because the new target ID is allocated in that transaction. Old review remains inspectable as history only.
+At final confirmation, choose exact applicable review IDs under root lock, insert final_result_review rows, and include those IDs plus full review projections and source graph in existing final_confirmation.source_manifest_hash. Hash/profile must be reproducible from stored rows. Later reviews cannot change this membership or historical manifest. Do not resolve a past final snapshot with a newest-review query.
+ACTION_FIELDS=CONFIRMED is independent of SOURCE_SUPPORT. It confirms accepted field choices, never evidence sufficiency or access. A human save creates a new element_set/element/action_item and review bound to that exact accepted tuple; missing owner/date may remain NULL under current rules. No raw suggestion is copied into accepted owner/date fields merely because structurally valid. External-owner resolution remains disabled/pending, not guessed.
+
+### 候选、有效稿、历史与权限
+
+Completion validates the full output, maps typed sources, and inserts candidate minutes/set/elements/evidence plus all five directory/suggestion tables in one transaction. A failed child insert leaves no partial candidate. Initial action_item owner_enterprise_id/owner_display/due_on stay NULL; model values live only in action_suggestion. Initial support is conservative/unreviewed under separately approved policy, never SUPPORTED by structural validity.
+Candidate directories belong to candidate.element_set_id. All display paths must check owner/version reachability; the existence of a minutes_revision/element_set row does not make it an effective participant-readable version. No candidate directory leaks through generic list/history endpoints.
+Adoption checks unchanged root/base/input fingerprint and current confirmed settings; creates new effective minutes/set/element rows, remaps directory/suggestion/evidence rows, and retains original candidate history. Link exact old/new source locators; no copying review credit to new target IDs. HUMAN title is preserved; linked title changes require explicit relink; unsaved editor text remains protected outside worker state. ELEMENT adoption affects only intended element set; body stays saved old version and needs_generation is set.
+First result guarded automatic save versus explicit adoption remains **pending user answer**. This schema works with either authorized policy; no enabling column/state implies one. Until resolved, implementation cannot silently expose first candidate as effective or treat adoption/final confirmation as automatic source attestation. A future guarded auto-first path must use the same atomic adoption/CAS/protection checks.
+Manual element edits create new sets and retain unchanged directory/suggestion rows by copying to the new owner IDs; each copied detection/note/suggestion retains its own input_id, not a new model origin. Fresh generated rows have candidate.input_id; partial regeneration may carry unchanged rows with older pinned inputs, checked per row. Deleted elements omit their action_suggestion/action_item rows in the new set. Body-only edits create minutes revisions without rewriting core elements/directories. Changes to source evidence create a new target version, not repair history in place.
+Restore previews exact old content/settings/source availability, then creates new revisions and remapped rows, clears final confirmation and rechecks exclusions/current source constraints. It never rewinds IDs/revisions or revives review credit. Historical candidates, detections, suggestions and reviews remain immutable; no TTL or product history limit.
+Owner can inspect candidates/history through EDIT-authorized routes; confirmed participants see only permitted effective saved versions/history per existing policy, including sensitive core entries, and never pending candidates. Published reads bind the fixed final graph. Sensitive selection does not hide core detections or alter meeting ACL.
+Every locator/excerpt read independently checks source permission/status/version. Render source excerpt from authorized immutable source only; no invented or copied fallback excerpt. Raw owner mentions are meeting content, not enterprise identity or authorization. Review record possession grants no meeting/source rights. Withdrawal/invalidation/tombstone blocks ordinary read/export/reuse as adopted.
+
+### 完整性、事务与删除
+
+On every write resolve meeting via authoritative parent rows. set→candidate/input, each locator→confirmed transcript segment or exact pinned batch/material snapshot, evidence→same target and meeting, review→same meeting/target/evidence, final membership→same final minutes/set are checked in owning transaction. UUID validity and individual FKs are insufficient. Source kinds/nonnull union, actual locator bounds and background-vs-meeting role are validated; nonempty materials still await D01, never silently resolved to latest.
+All writes follow B00 global order: request idempotency→active identity/authorization rows→task_subject→meeting→fixed-order domain rows→file locks/refs if needed→durable_task/attempt/operation/execution→audit→outbox sequence. No network or late lower-order lock inside result/review callbacks. Reviewed-by identity is authenticated before subject/root locks; ACL is rechecked while locked.
+Worker commit rechecks undeleted/nonpublished root, subject business_version/cancel_epoch, task attempt/owner/token/unexpired DB lease, immutable task input ID/fingerprint, candidate base revision, current confirmation and settings. Candidate+all children+task success/output ref+audit/outbox commit together. Unique candidate_task makes duplicate completion compare/reuse one full result, not duplicate directories. Fenced/expired/stale result cannot alter effective pointers or attach partial metadata.
+Review/adoption/exclusion/manual save/finalization each use idempotency+expectedRevision CAS. Multi-item final review is all-or-nothing. A stale UI or revoked identity/source access causes rollback with safe codes and input preservation. Review and candidate completion cannot race unnoticed because both lock subject/root and advance/validate the same fence.
+The proposed tables add no file-reference kinds. Reuse existing source locator/file ledger rules; a reused locator's underlying immutable source retains its existing managed references. Register any newly introduced real source reference through its owner/file ledger in the same transaction, never treat a source join as permission or unmanaged file retention.
+Deletion first fences/tombstones meeting and cancels work under existing order; ordinary read is blocked before cleanup. Clear current pointers, freeze minimal diagnostic IDs, and use existing meeting deletion dependency plan. For this delta delete final_result_review before final/reviews; result_review_evidence before reviews/evidence; directory joins before detection/note/locators; action_suggestion before elements. Then remove existing candidate/input/exclusion/evidence graphs in dependency order, file references under file locks, and clean bytes only when no approved references remain.
+No foreign-key disabling, recursive cascade, source deletion on unselect, shared-template deletion or automatic historical cleanup. Historical reviewer identity need not survive directory removal; review content/hash/source IDs are business data and removed with authorized meeting content, leaving only existing minimal audit policy. Retention/legal-hold ambiguity blocks cleanup, not permission bypass.
+
+
 ## 租约、外部效果与对账协议
 
 普通领取只针对 READY 或已过期且未标记外部效果的 RUNNING。领取递增attempt，归属worker，expiry=DB now+20秒；续租须同attempt/owner、expiry严格大于DB now、版本/epoch匹配、未删除。过期不能续活。完成先按统一锁序锁根/task，核对完整不可变spec、fingerprint、business_version、cancel_epoch、attempt/owner与仍有效租约，然后同事务写领域结果、task、attempt、audit/outbox；检查失败不执行效果。`completeWithEffects` 优先；裸complete返回false后调用者不得继续写业务。
@@ -155,7 +216,7 @@ consumer按sequence升序取有界页，成功完成连续前缀后推进cursor�
 
 受管文件始终通过 file_id 路由 backend/type/namespace/object_key/provider_version/size/sha256；业务表不存物理根目录或公开签名URL。local无需S3配置，后端类型与ID不可改含义。put/complete先确保持久化文件与目录（或S3已验证durable响应），然后登记file/引用/业务状态，再返回成功。DB回滚的孤儿不在file表/无业务引用，不可读；枚举清理记录受限前缀及固定后端，保护仍在途upload/recording与恢复窗口，不能把本地文件＋DB当跨资源事务。
 
-### B00-1.2 上传业务元数据补充（待独立评审）
+### B00-1.2 上传业务元数据补充（已采用；原待评审标题见保全历史）
 
 具体缺口来自 B-04 的既定 HTTP 契约：初始化 `POST /meetings/{id}/uploads {purpose,name,size,sha256}` 返回 uploadId/partSize；完成请求只含 `{parts:[{part,sha256}],sha256}`，不重传 name/purpose。`StorageContracts.UploadSpec` 只有 backendId/namespace/objectKey/expectedSize；`LocalUploadJournal.begin` 将这一 spec 持久化，不能恢复业务名称或用途。`file_object.display_name` 只能在完整 blob durable 后登记；不得提前插 AVAILABLE 文件来保存初始化参数。因此唯一结构增量是 `upload_session.display_name LONGTEXT NOT NULL` 与 `purpose VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL`，追加到原字段清单后，不改变已采用列顺序或其他表结构。
 
@@ -222,6 +283,8 @@ ORDER BY m.updated_at DESC,m.id DESC;
 |续租/提交|PK task.id，再精准attempt/owner/version/epoch；subject复合PK|B-05旧attempt、暂停handler、真实时间续租、DB恢复；不是本次结构验收|
 |版本历史|各领域(meeting_id,revision)唯一B-tree，倒序keyset|至少100万transcript_segment与长文本；B-06/D-04验证恢复新版本及完整稿检索|
 |来源追踪|segment(revision,id)，evidence_element(element,locator)，evidence_minutes(minutes,locator)|D-03/D-06页段/媒体定位与跨会议伪造拒绝；不以多表无界N+1加载|
+|敏感/背景目录|detection_order(set,category,ordinal)、background_order(set,ordinal)，每页来源join以PK批量查；reverse(locator,id)支持删除依赖|B07/D03真实含双标签、共享locator、部分选中、长背景及混合origin input；页面批量而非无界N+1，无产品上限|
+|复核/最终清单|review_element(element,kind,review_no)、review_minutes(minutes,kind,review_no)、review_sequence(meeting,no)；final PK(confirmation,review)|目标ID/完整anchor/hash在索引桶内逐项精确复核；禁止只选任意SUPPORTED，禁止最新复核替代历史membership；B08/D03实际EXPLAIN和并发CAS尚待实现|
 |文件清理|file_meeting(meeting,state,id)，cleanup_due(state,not_before,id)，file_ref_owner(kind,id,file)；清理前锁file再NOT EXISTS全账本|B-04/D-07 orphan/并发引用/位置迁移/删除失败回归；不得用估算refcount替代证明|
 |录音/事件|chunk(part,seq)，subtitle(session,event_seq)，outbox(subject_kind,subject_id,sequence_id)|100场每2秒约50分片/s、180000分片/小时；C-07两小时＋八小时稳定性，含全局序列争用|
 
@@ -229,16 +292,20 @@ ORDER BY m.updated_at DESC,m.id DESC;
 
 ## 分期迁移、兼容和回滚
 
-V001/V002/V005冻结原字节；不得修改已应用/共享/暂停脚本或填V003/V004空位。登记册分配V006起增量，B-01不得代其他领域创建全套表。审阅DDL为了独立完整元数据核对在一次性库创建全部85表，绝不替代正式Flyway迁移。旧表 `meeting_acl` 仅过渡保留，目标有效权限表为 `meeting_access_grant`，不得无来源自动迁移旧“已确认”记录。1.1修正都归尚未实现的V008/V010/V011/V012/V013/V017/V023预留设计，不是改写已应用版本；首次正式迁移仍须执行登记册旧集合归集门。
+V001/V002/V005冻结原字节；不得修改已应用/共享/暂停脚本或填V003/V004空位。登记册分配V006起增量，B-01不得代其他领域创建全套表。审阅DDL为了独立完整元数据核对在独有一次性设计库创建全部93表，绝不替代正式Flyway迁移。旧表 `meeting_acl` 仅过渡保留，目标有效权限表为 `meeting_access_grant`，不得无来源自动迁移旧“已确认”记录。1.1修正当时归V008/V010/V011/V012/V013/V017/V023预留设计；本版基线中V008/V010已采用，其正式SQL同V001—V010其他已存在脚本全部冻结，不能把历史“尚未实现”当成当前修改许可；首次正式迁移仍须执行登记册旧集合归集门。
 
 正式扩展：新增列先nullable或显式安全默认，双读/双写窗口受版本标记控制；唯一/检查/FK前审计脏数据与二进制排序冲突，不能INSERT IGNORE吞损。把V001标识改为binary前验证既有长度/相等性；将V002身份投影/role/session_generation转移后，所有节点切到共享即时撤销与新ACL路径。V005缺字段回填完整spec、producer_key、max_attempts以及external marker，旧RUNNING必须排空/确认无外部未知，不能凭空升级成安全重试；维护期间停止领取再上线新worker。
 
 应用回滚只允许回到兼容新增schema的版本。已产生新权限/任务/外部操作数据后，不可回滚到旧ACL或旧worker语义；停止写入并前滚修复，或使用受控恢复点且先对账所有外部效果。收缩旧列/表需要全部节点完成切换、历史/引用保留与备份恢复验证、独立新迁移号；无通用DROP回滚。本设计不提供未经批准的删除迁移。迁移由单一runner执行，Flyway历史校验防止并发自动迁移。
 
+B00-1.3只改变仍未编写/共享的V012排除主键与新七表，V013新增最终复核成员表；部署前必须复核真实迁移状态。如果接收方V012/V013已共享或已应用，停止并报告，由协调者分配前向增量；本任务不消费V028，不覆盖历史。V011八表完整DDL/FK/index/列/CHECK保持1.2相同，无新增incoming FK。
+
 ## 未定范围、责任方和解锁条件
 
 |待落实输入|已完整确定的本地结构/行为|责任方及门槛|
 |---|---|---|
+|生成首版有效保存/证据复核交互|候选和有效版本分离；内容级adopt+review可同事务，新身份/时间/目标hash，不复制旧信用|用户两项回答仍pending；不得默认自动首存或自动证实|
+|anchor/hash/profile与语义coverage|result_review保存完整精确目标与来源集摘要、profile版本与身份时间|B07单独契约评审；未定义覆盖规则不得把局部SUPPORTED当整条充分|
 |SSO/目录协议、稳定ID长度、会话寿命、停用传播|身份/部门/角色/会话generation/有效ACL完整；生产签发fail-closed|身份/目录平台 INT-01/02；B-02真联调前提交版本化协议与撤销双节点证据|
 |模型容量、安全调用截止、真实流式与稳定字幕语义|capacity/reservation/operation字段和无截止保守占额已定；不造配额|模型平台 INT-03/04；B-05/B-07/C实调用前证据，超过ID预算先迁移|
 |知识库幂等/可靠查回、签名回调、权威ACL|publication/attempt/mapping/operation/receipt完整；UNKNOWN阻断|知识库平台 INT-05/06；B-08/D-05真实成功资格前竞态/迟到/查回验证|
@@ -647,7 +714,7 @@ erDiagram
     sensitive_exclusion {
         char_36_ revision_id PK,FK
         char_36_ locator_id PK,FK
-        varchar_64_ category
+        varchar_64_ category PK
         longtext reason
     }
     generation_candidate {
@@ -1101,6 +1168,57 @@ erDiagram
         char_36_ segment_id PK,FK
         varchar_64_ mark PK
     }
+    sensitive_detection {
+        char_36_ id PK
+        char_36_ set_id FK
+        char_36_ input_id FK
+        varchar_64_ category
+        bigint ordinal
+    }
+    sensitive_detection_source {
+        char_36_ detection_id PK,FK
+        char_36_ locator_id PK,FK
+    }
+    background_note {
+        char_36_ id PK
+        char_36_ set_id FK
+        char_36_ input_id FK
+        bigint ordinal
+        longtext body
+    }
+    background_note_source {
+        char_36_ note_id PK,FK
+        char_36_ locator_id PK,FK
+    }
+    action_suggestion {
+        char_36_ element_id PK,FK
+        char_36_ input_id FK
+        longtext owner_mention
+        date due_on
+    }
+    result_review {
+        char_36_ id PK
+        char_36_ meeting_id FK
+        bigint review_no
+        varchar_64_ review_kind
+        char_36_ element_id FK
+        char_36_ minutes_revision_id FK
+        longtext target_anchor
+        char_64_ target_hash
+        char_64_ source_set_hash
+        varchar_255_ hash_profile
+        varchar_64_ outcome
+        varchar_255_ reviewed_by
+        datetime_6_ reviewed_at
+    }
+    result_review_evidence {
+        char_36_ review_id PK,FK
+        char_36_ evidence_id PK,FK
+    }
+    final_result_review {
+        char_36_ confirmation_id PK,FK
+        char_36_ review_id PK,FK
+    }
     department o|--o{ department : fk_department_0
     department o|--o{ enterprise_identity : fk_enterprise_identity_0
     enterprise_identity ||--o{ role_assignment : fk_role_assignment_0
@@ -1280,4 +1398,21 @@ erDiagram
     transcript_revision o|--o{ transcription_input : fk_transcription_input_2
     material_snapshot o|--o{ transcription_input : fk_transcription_input_3
     transcript_segment ||--o{ transcript_segment_mark : fk_transcript_segment_mark_0
+    element_set ||--o{ sensitive_detection : fk_sensitive_detection_0
+    generation_input ||--o{ sensitive_detection : fk_sensitive_detection_1
+    sensitive_detection ||--o{ sensitive_detection_source : fk_sensitive_detection_source_0
+    source_locator ||--o{ sensitive_detection_source : fk_sensitive_detection_source_1
+    element_set ||--o{ background_note : fk_background_note_0
+    generation_input ||--o{ background_note : fk_background_note_1
+    background_note ||--o{ background_note_source : fk_background_note_source_0
+    source_locator ||--o{ background_note_source : fk_background_note_source_1
+    minutes_element ||--o| action_suggestion : fk_action_suggestion_0
+    generation_input ||--o{ action_suggestion : fk_action_suggestion_1
+    meeting ||--o{ result_review : fk_result_review_0
+    minutes_element o|--o{ result_review : fk_result_review_1
+    minutes_revision o|--o{ result_review : fk_result_review_2
+    result_review ||--o{ result_review_evidence : fk_result_review_evidence_0
+    evidence_link ||--o{ result_review_evidence : fk_result_review_evidence_1
+    final_confirmation ||--o{ final_result_review : fk_final_result_review_0
+    result_review ||--o{ final_result_review : fk_final_result_review_1
 ```

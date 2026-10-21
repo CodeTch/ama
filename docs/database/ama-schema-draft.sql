@@ -1,4 +1,4 @@
--- B00-1.2-review: REVIEW ONLY; never place this file in Flyway locations.
+-- B00-1.3-review: REVIEW ONLY; never place this file in Flyway locations.
 
 -- All future tables exist ONLY in the disposable review database.
 
@@ -638,7 +638,8 @@ CREATE TABLE sensitive_exclusion (
   `locator_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `category` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `reason` longtext NULL,
-  PRIMARY KEY (revision_id,locator_id)
+  PRIMARY KEY (revision_id,locator_id,category),
+  CONSTRAINT ck_sensitive_exclusion_0 CHECK (category IN ('INTERNAL_BUSINESS_DATA','POLITICAL_SENSITIVE'))
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 -- Owner B-07; planned V012: 生成结果候选；迟到结果不直接覆盖
@@ -1362,6 +1363,107 @@ CREATE TABLE transcript_segment_mark (
   CONSTRAINT ck_transcript_segment_mark_0 CHECK (mark IN ('KEY','CONCLUSION','DISPUTE','GENERATION_FOCUS'))
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
+-- Owner B-07/D-03; planned V012: 未选择也保留的敏感检测目录；不属于七类主体要素
+
+CREATE TABLE sensitive_detection (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `set_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `input_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `category` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `ordinal` bigint unsigned NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX detection_order (set_id,category,ordinal),
+  CONSTRAINT ck_sensitive_detection_0 CHECK (ordinal > 0),
+  CONSTRAINT ck_sensitive_detection_1 CHECK (category IN ('INTERNAL_BUSINESS_DATA','POLITICAL_SENSITIVE'))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-07/D-03; planned V012: 敏感检测的完整无序来源集合
+
+CREATE TABLE sensitive_detection_source (
+  `detection_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `locator_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  PRIMARY KEY (detection_id,locator_id),
+  INDEX detection_source_reverse (locator_id,detection_id)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-07/D-03; planned V012: 生成背景补充正文；不冒充会议发言/决定/行动
+
+CREATE TABLE background_note (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `set_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `input_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `ordinal` bigint unsigned NOT NULL,
+  `body` longtext NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX background_order (set_id,ordinal),
+  CONSTRAINT ck_background_note_0 CHECK (ordinal > 0)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-07/D-03; planned V012: 背景补充的完整来源集合
+
+CREATE TABLE background_note_source (
+  `note_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `locator_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  PRIMARY KEY (note_id,locator_id),
+  INDEX background_source_reverse (locator_id,note_id)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-07/D-03; planned V012: 未核实的模型负责人原文和日期建议；与接受字段分离
+
+CREATE TABLE action_suggestion (
+  `element_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `input_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `owner_mention` longtext NULL,
+  `due_on` date NULL,
+  PRIMARY KEY (element_id)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-07/D-03/B-08; planned V012: 人类对精确目标内容和完整证据集合的不可变断言
+
+CREATE TABLE result_review (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `review_no` bigint unsigned NOT NULL,
+  `review_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `element_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `minutes_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `target_anchor` longtext NULL,
+  `target_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `source_set_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `hash_profile` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `outcome` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `reviewed_by` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `reviewed_at` datetime(6) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX review_sequence (meeting_id,review_no),
+  INDEX review_element (element_id,review_kind,review_no),
+  INDEX review_minutes (minutes_revision_id,review_kind,review_no),
+  CONSTRAINT ck_result_review_0 CHECK (review_no > 0),
+  CONSTRAINT ck_result_review_1 CHECK ((element_id IS NULL) <> (minutes_revision_id IS NULL)),
+  CONSTRAINT ck_result_review_2 CHECK (review_kind IN ('SOURCE_SUPPORT','ACTION_FIELDS')),
+  CONSTRAINT ck_result_review_3 CHECK ((review_kind='SOURCE_SUPPORT' AND target_anchor IS NOT NULL AND outcome IN ('SUPPORTED','PARTIAL','UNSUPPORTED')) OR (review_kind='ACTION_FIELDS' AND element_id IS NOT NULL AND target_anchor IS NULL AND outcome='CONFIRMED')),
+  CONSTRAINT ck_result_review_4 CHECK (REGEXP_LIKE(target_hash, '^[0-9a-f]{64}$', 'c')),
+  CONSTRAINT ck_result_review_5 CHECK (REGEXP_LIKE(source_set_hash, '^[0-9a-f]{64}$', 'c'))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-07/D-03/B-08; planned V012: 复核实际使用的完整证据集合，不只存支持项
+
+CREATE TABLE result_review_evidence (
+  `review_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `evidence_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  PRIMARY KEY (review_id,evidence_id),
+  INDEX review_evidence_reverse (evidence_id,review_id)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-08; planned V013: 最终确认冻结精确复核成员，不读取以后最新复核
+
+CREATE TABLE final_result_review (
+  `confirmation_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `review_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  PRIMARY KEY (confirmation_id,review_id),
+  INDEX final_review_reverse (review_id,confirmation_id)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
 ALTER TABLE department ADD CONSTRAINT fk_department_0 FOREIGN KEY (parent_id) REFERENCES department (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE enterprise_identity ADD CONSTRAINT fk_enterprise_identity_0 FOREIGN KEY (department_id) REFERENCES department (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
@@ -1719,5 +1821,39 @@ ALTER TABLE transcription_input ADD CONSTRAINT fk_transcription_input_2 FOREIGN 
 ALTER TABLE transcription_input ADD CONSTRAINT fk_transcription_input_3 FOREIGN KEY (material_snapshot_id) REFERENCES material_snapshot (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE transcript_segment_mark ADD CONSTRAINT fk_transcript_segment_mark_0 FOREIGN KEY (revision_id,segment_id) REFERENCES transcript_segment (revision_id,segment_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE sensitive_detection ADD CONSTRAINT fk_sensitive_detection_0 FOREIGN KEY (set_id) REFERENCES element_set (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE sensitive_detection ADD CONSTRAINT fk_sensitive_detection_1 FOREIGN KEY (input_id) REFERENCES generation_input (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE sensitive_detection_source ADD CONSTRAINT fk_sensitive_detection_source_0 FOREIGN KEY (detection_id) REFERENCES sensitive_detection (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE sensitive_detection_source ADD CONSTRAINT fk_sensitive_detection_source_1 FOREIGN KEY (locator_id) REFERENCES source_locator (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE background_note ADD CONSTRAINT fk_background_note_0 FOREIGN KEY (set_id) REFERENCES element_set (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE background_note ADD CONSTRAINT fk_background_note_1 FOREIGN KEY (input_id) REFERENCES generation_input (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE background_note_source ADD CONSTRAINT fk_background_note_source_0 FOREIGN KEY (note_id) REFERENCES background_note (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE background_note_source ADD CONSTRAINT fk_background_note_source_1 FOREIGN KEY (locator_id) REFERENCES source_locator (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE action_suggestion ADD CONSTRAINT fk_action_suggestion_0 FOREIGN KEY (element_id) REFERENCES minutes_element (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE action_suggestion ADD CONSTRAINT fk_action_suggestion_1 FOREIGN KEY (input_id) REFERENCES generation_input (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE result_review ADD CONSTRAINT fk_result_review_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE result_review ADD CONSTRAINT fk_result_review_1 FOREIGN KEY (element_id) REFERENCES minutes_element (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE result_review ADD CONSTRAINT fk_result_review_2 FOREIGN KEY (minutes_revision_id) REFERENCES minutes_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE result_review_evidence ADD CONSTRAINT fk_result_review_evidence_0 FOREIGN KEY (review_id) REFERENCES result_review (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE result_review_evidence ADD CONSTRAINT fk_result_review_evidence_1 FOREIGN KEY (evidence_id) REFERENCES evidence_link (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE final_result_review ADD CONSTRAINT fk_final_result_review_0 FOREIGN KEY (confirmation_id) REFERENCES final_confirmation (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE final_result_review ADD CONSTRAINT fk_final_result_review_1 FOREIGN KEY (review_id) REFERENCES result_review (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 INSERT INTO task_outbox_sequence(id,next_id) VALUES(1,1);

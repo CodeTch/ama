@@ -1,4 +1,4 @@
-# AMA 数据字典 — B00-1.2-review
+# AMA 数据字典 — B00-1.3-review
 
 生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。
 
@@ -95,6 +95,14 @@
 |external_execution|B-05/B-08|V010|R4 稳定逻辑操作下的追加执行尝试；支持同确认零效果失败重试|
 |transcription_input|B-06/C-02/C-03/D-01|V011|R5 转写导入/识别/重新增强不可变输入快照，独立于纪要generation_input|
 |transcript_segment_mark|B-06/C-03|V011|R6 片段多选标记随转写版本冻结；不是纪要要素|
+|sensitive_detection|B-07/D-03|V012|未选择也保留的敏感检测目录；不属于七类主体要素|
+|sensitive_detection_source|B-07/D-03|V012|敏感检测的完整无序来源集合|
+|background_note|B-07/D-03|V012|生成背景补充正文；不冒充会议发言/决定/行动|
+|background_note_source|B-07/D-03|V012|背景补充的完整来源集合|
+|action_suggestion|B-07/D-03|V012|未核实的模型负责人原文和日期建议；与接受字段分离|
+|result_review|B-07/D-03/B-08|V012|人类对精确目标内容和完整证据集合的不可变断言|
+|result_review_evidence|B-07/D-03/B-08|V012|复核实际使用的完整证据集合，不只存支持项|
+|final_result_review|B-08|V013|最终确认冻结精确复核成员，不读取以后最新复核|
 
 ## audit_event
 
@@ -932,7 +940,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |category|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|七类之一|
 |ordinal|`bigint unsigned`|否|无|同类顺序|
 |body|`longtext`|否|无|内容|
-|support_state|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|有据/部分/无据/未提取|
+|support_state|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|该版本创建时的冻结分类；不能单独证明当前人工复核充分性，参见result_review|
 
 主键：`id`。
 - 唯一约束 `element_order(set_id,category,ordinal)`：分类顺序。
@@ -940,7 +948,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - CHECK `ck_minutes_element_1`：`support_state IN ('SUPPORTED','PARTIAL','UNSUPPORTED','NOT_EXTRACTED')`。
 - FK `fk_minutes_element_0`：`set_id` → `element_set(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
+更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理；B00-1.3当前人工支持由精确result_review决定，旧support_state不原地改写；新目标内容/来源/版本使旧断言失效。
 
 ## action_item
 
@@ -957,7 +965,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - FK `fk_action_item_0`：`element_id` → `minutes_element(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_action_item_1`：`owner_enterprise_id` → `enterprise_identity(enterprise_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
+更新/删除与完整性：仅人工明确保存后的接受字段；生成初始owner/date均NULL，模型提议在action_suggestion。人工字段保存建立新要素版本并写新ACTION_FIELDS复核，缺少截止不强补；外部负责人规则未定不启用；角色/名字/负责人不授权。
 
 ## exclusion_revision
 
@@ -987,11 +995,12 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |category|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|原文两类敏感分类的稳定配置键|
 |reason|`longtext`|是|无|排除说明|
 
-主键：`revision_id,locator_id`。
+主键：`revision_id,locator_id,category`。
+- CHECK `ck_sensitive_exclusion_0`：`category IN ('INTERNAL_BUSINESS_DATA','POLITICAL_SENSITIVE')`。
 - FK `fk_sensitive_exclusion_0`：`revision_id` → `exclusion_revision(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_sensitive_exclusion_1`：`locator_id` → `source_locator(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
+更新/删除与完整性：不可变选择集；PK保留同一locator的两个标签，不复制物理locator绕过去重。勾选多来源检测展开同category全部locator；重叠项按(locator,category)并集，取消只影响对应标签/位置。下一次生成应用，不删除检测/原文/要素、不改ACL。
 
 ## generation_candidate
 
@@ -1063,7 +1072,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |locator_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|源定位|
 |element_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|目标要素；二选一|
 |minutes_revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|目标正文版本；二选一|
-|support_state|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|支持程度|
+|support_state|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|该版本创建时的冻结分类；不能单独证明当前人工复核充分性，参见result_review|
 |target_anchor|`longtext`|否|无|正文段锚或要素局部锚|
 
 主键：`id`。
@@ -1075,7 +1084,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - FK `fk_evidence_link_1`：`element_id` → `minutes_element(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_evidence_link_2`：`minutes_revision_id` → `minutes_revision(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
+更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理；B00-1.3当前人工支持由精确result_review决定，旧support_state不原地改写；新目标内容/来源/版本使旧断言失效。
 
 ## final_confirmation
 
@@ -1094,7 +1103,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |element_set_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|要素集合|
 |template_revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|模板|
 |exclusion_revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|排除设置|
-|source_manifest_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|冻结 evidence_link/locator 集合摘要|
+|source_manifest_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|冻结证据/来源及final_result_review精确成员与完整复核投影摘要；不得重查最新复核|
 |input_fingerprint|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|规范化输入版本集合的 SHA-256|
 |confirmed_by|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|确认负责人|
 |confirmed_at|`datetime(6)`|否|无|确认时间|
@@ -1112,7 +1121,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - FK `fk_final_confirmation_8`：`confirmed_by` → `enterprise_identity(enterprise_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_final_confirmation_9`：`material_snapshot_id` → `material_snapshot(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
+更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理；B00-1.3同事务写final_result_review，历史读取该冻结成员，不随新review改变；全部业务/权限/敏感/来源检查仍由B08负责。
 
 ## publication
 
@@ -2055,3 +2064,161 @@ R6 片段多选标记随转写版本冻结；不是纪要要素。所属 B-06/C-
 - FK `fk_transcript_segment_mark_0`：`revision_id,segment_id` → `transcript_segment(revision_id,segment_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
 更新/删除与完整性：同段可0..4类，PK禁止重复；增删标记与片段保存产生新revision，旧标记不UPDATE/DELETE。规范排序的标记集进入确认content_hash/纪要inputFingerprint；确认后任何标记改动清当前转写/最终确认并要求重新确认，不证明内容真实；只作生成参考。
+
+## sensitive_detection
+
+未选择也保留的敏感检测目录；不属于七类主体要素。所属 B-07/D-03，计划 V012。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|内部 UUID；服务器生成，永不复用|
+|set_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|所属不可变要素集|
+|input_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|该检测原始生成输入；复制保留|
+|category|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|两类敏感标签之一|
+|ordinal|`bigint unsigned`|否|无|同类别1起展示顺序|
+
+主键：`id`。
+- 唯一约束 `detection_order(set_id,category,ordinal)`：同类条目顺序唯一。
+- CHECK `ck_sensitive_detection_0`：`ordinal > 0`。
+- CHECK `ck_sensitive_detection_1`：`category IN ('INTERNAL_BUSINESS_DATA','POLITICAL_SENSITIVE')`。
+- FK `fk_sensitive_detection_0`：`set_id` → `element_set(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_sensitive_detection_1`：`input_id` → `generation_input(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：完整输出同事务插入；每项至少一个来源由服务校验。双标签同位置是不同检测；不同输出项不按相似文本/来源静默合并。摘录从有权不可变源读取，不保存模型伪摘录；历史/候选访问受拥有版本控制。
+
+## sensitive_detection_source
+
+敏感检测的完整无序来源集合。所属 B-07/D-03，计划 V012。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|detection_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|检测条目|
+|locator_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|原始生成输入内精确来源|
+
+主键：`detection_id,locator_id`。
+- 索引 `detection_source_reverse(locator_id,detection_id)`：定位引用与删除检查。
+- FK `fk_sensitive_detection_source_0`：`detection_id` → `sensitive_detection(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_sensitive_detection_source_1`：`locator_id` → `source_locator(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：同检测不重复来源；服务校验同会议且在检测input固定确认/材料集合中；与检测原子写入，零来源拒绝。先删此关系再清检测/来源；不授予源权限。
+
+## background_note
+
+生成背景补充正文；不冒充会议发言/决定/行动。所属 B-07/D-03，计划 V012。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|内部 UUID；服务器生成，永不复用|
+|set_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|所属不可变要素集|
+|input_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|本条原始生成输入；复制保留|
+|ordinal|`bigint unsigned`|否|无|目录1起顺序|
+|body|`longtext`|否|无|必要的生成背景正文；非原始模型JSON或源文副本|
+
+主键：`id`。
+- 唯一约束 `background_order(set_id,ordinal)`：背景目录顺序唯一。
+- CHECK `ck_background_note_0`：`ordinal > 0`。
+- FK `fk_background_note_0`：`set_id` → `element_set(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_background_note_1`：`input_id` → `generation_input(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：非空文本与至少一精确来源由验证器/事务保障；无新产品字数上限。新版本复制保留origin input；不得独自证明重要会议结论/行动，历史保留，删除先删来源关系。
+
+## background_note_source
+
+背景补充的完整来源集合。所属 B-07/D-03，计划 V012。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|note_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|背景条目|
+|locator_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|该input内不可变来源|
+
+主键：`note_id,locator_id`。
+- 索引 `background_source_reverse(locator_id,note_id)`：来源引用与删除。
+- FK `fk_background_note_source_0`：`note_id` → `background_note(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_background_note_source_1`：`locator_id` → `source_locator(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：PK为无序集合去重；同会议/固定输入成员校验，非空集合与正文原子提交。来源角色由固定图推导，不能因输出声称会议依据而改角色；读时独立源ACL。
+
+## action_suggestion
+
+未核实的模型负责人原文和日期建议；与接受字段分离。所属 B-07/D-03，计划 V012。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|element_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|确属ACTION的生成要素|
+|input_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|这条建议原始生成输入；复制保留|
+|owner_mention|`longtext`|是|无|原始负责人提议；不是企业ID/授权，非空值须非空白|
+|due_on|`date`|是|无|结构有效但尚未核实的建议日期；未知NULL|
+
+主键：`element_id`。
+- FK `fk_action_suggestion_0`：`element_id` → `minutes_element(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_action_suggestion_1`：`input_id` → `generation_input(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：每个生成ACTION一行，可双NULL；源复用该element证据不伪造字段级依据。模型值不写入action_item接受字段；人工明确保存/复核形成新要素/action_item及新ACTION_FIELDS断言。外部负责人规则pending；人物选择不授予会议权限。
+
+## result_review
+
+人类对精确目标内容和完整证据集合的不可变断言。所属 B-07/D-03/B-08，计划 V012。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|内部 UUID；服务器生成，永不复用|
+|meeting_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|所属会议|
+|review_no|`bigint unsigned`|否|无|持meeting根锁分配的单调复核序号|
+|review_kind|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|来源支持或行动字段确认|
+|element_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|要素目标；与正文目标二选一|
+|minutes_revision_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|正文目标；与要素二选一|
+|target_anchor|`longtext`|是|无|SOURCE_SUPPORT精确范围的版本化规范anchor；ACTION_FIELDS为NULL|
+|target_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|含精确目标ID/版本/全文/anchor或完整行动元组的摘要|
+|source_set_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|完整证据/定位/来源角色与版本内容hash集合摘要；空集显式编码|
+|hash_profile|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|可恢复不可变规范编码/域分离配置版本，不用latest|
+|outcome|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|SUPPORTED/PARTIAL/UNSUPPORTED或CONFIRMED|
+|reviewed_by|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|服务器验证的企业稳定身份；事件时值，不因目录删除丢历史|
+|reviewed_at|`datetime(6)`|否|无|服务器UTC微秒复核时间|
+
+主键：`id`。
+- 唯一约束 `review_sequence(meeting_id,review_no)`：同会议复核顺序唯一。
+- 索引 `review_element(element_id,review_kind,review_no)`：当前目标复核历史。
+- 索引 `review_minutes(minutes_revision_id,review_kind,review_no)`：正文范围复核历史。
+- CHECK `ck_result_review_0`：`review_no > 0`。
+- CHECK `ck_result_review_1`：`(element_id IS NULL) <> (minutes_revision_id IS NULL)`。
+- CHECK `ck_result_review_2`：`review_kind IN ('SOURCE_SUPPORT','ACTION_FIELDS')`。
+- CHECK `ck_result_review_3`：`(review_kind='SOURCE_SUPPORT' AND target_anchor IS NOT NULL AND outcome IN ('SUPPORTED','PARTIAL','UNSUPPORTED')) OR (review_kind='ACTION_FIELDS' AND element_id IS NOT NULL AND target_anchor IS NULL AND outcome='CONFIRMED')`。
+- CHECK `ck_result_review_4`：`REGEXP_LIKE(target_hash, '^[0-9a-f]{64}$', 'c')`。
+- CHECK `ck_result_review_5`：`REGEXP_LIKE(source_set_hash, '^[0-9a-f]{64}$', 'c')`。
+- FK `fk_result_review_0`：`meeting_id` → `meeting(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_result_review_1`：`element_id` → `minutes_element(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_result_review_2`：`minutes_revision_id` → `minutes_revision(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：仅明确内容级人工意图可写；active身份/owner及源ACL、完整来源/目标/hash、ACTION实际类型由拥有事务重验，非FK reviewed_by保留事件时身份。最新相同目标/范围/来源review_no决定断言，不能取任意历史SUPPORTED；根revision/fence前进、final指针清空。新target不继承旧review信用；内容级adopt+review可原子创建新actor/time/hash断言。最终确认只读冻结membership；不把人工断言当语义真值或权限。
+
+## result_review_evidence
+
+复核实际使用的完整证据集合，不只存支持项。所属 B-07/D-03/B-08，计划 V012。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|review_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|不可变复核|
+|evidence_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|精确不可变目标的证据|
+
+主键：`review_id,evidence_id`。
+- 索引 `review_evidence_reverse(evidence_id,review_id)`：历史依赖与删除。
+- FK `fk_result_review_evidence_0`：`review_id` → `result_review(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_result_review_evidence_1`：`evidence_id` → `evidence_link(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：集合必须等于目标范围相关全部证据；空集合显式hash但不得SOURCE_SUPPORT=SUPPORTED。FK仅证存在；同会议/同target/范围/来源版本/hash由事务重算。不可在复核提交后追加/删减；删除时先解除本关系。
+
+## final_result_review
+
+最终确认冻结精确复核成员，不读取以后最新复核。所属 B-08，计划 V013。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|confirmation_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|本次最终确认|
+|review_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|本次选用的精确复核|
+
+主键：`confirmation_id,review_id`。
+- 索引 `final_review_reverse(review_id,confirmation_id)`：历史确认依赖。
+- FK `fk_final_result_review_0`：`confirmation_id` → `final_confirmation(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_final_result_review_1`：`review_id` → `result_review(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：与V013 final_confirmation同时建表并立即有两个physical FK；不新增deferredFK。最终确认同事务验证同会议/精确minutes和element_set/当前适用复核，成员与完整复核投影进入source_manifest_hash；以后新断言不能改旧membership。先删除membership再清confirmation/review。

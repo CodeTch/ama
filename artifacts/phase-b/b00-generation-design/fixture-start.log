@@ -1,0 +1,48 @@
+Owned fixture: ama-test-b01-991f0386f26d; loopback port 44649; schema ama_b01_fixture
+Source credentials locally: /home/tanren/ama/.worktrees/phase-b-generation-design/.tools/mysql-fixture/ama-test-b01-991f0386f26d/env.sh
+{
+  "owned_worktree": "/home/tanren/ama/.worktrees/phase-b-generation-design",
+  "container": "ama-test-b01-991f0386f26d",
+  "id": "a5bd8e25f6047c542e94af6aac5bec68e60532c183d460714586480b2e22add3",
+  "image_reference": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "image_id": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "labels": {
+    "ama.test-fixture": "b01",
+    "desktop.docker.io/wsl-distro": "Ubuntu-24.04"
+  },
+  "mounts": [
+    {
+      "Type": "volume",
+      "Name": "6b52ad2c92b76275d8bedc1f18eed0bbbb947a79e897df36125f444b30873c06",
+      "Source": "/var/lib/docker/volumes/6b52ad2c92b76275d8bedc1f18eed0bbbb947a79e897df36125f444b30873c06/_data",
+      "Destination": "/var/lib/mysql",
+      "Driver": "local",
+      "Mode": "",
+      "RW": true,
+      "Propagation": ""
+    }
+  ],
+  "ports": {
+    "3306/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "44649"
+      }
+    ]
+  },
+  "command": [
+    "--character-set-server=utf8mb4",
+    "--collation-server=utf8mb4_0900_ai_ci",
+    "--default-time-zone=+00:00",
+    "--innodb-use-native-aio=OFF"
+  ],
+  "auto_remove": false,
+  "mysql_version": "8.4.6",
+  "native_aio": 0,
+  "initial_tables": 0,
+  "schema": "ama_b01_fixture",
+  "environment_source": "/home/tanren/ama/.worktrees/phase-a/.tools/env.sh",
+  "environment_sha256": "6f25be38756c782d7345aacf3b4f5a525c0de6d3db246487ed560b6d55983dbc",
+  "aio_max_nr": "65536",
+  "helper_sha256": "16adedcda37c55a7e0621756d4b1ffb1aa1a24453a99a6712108d277142d2efd"
+}
