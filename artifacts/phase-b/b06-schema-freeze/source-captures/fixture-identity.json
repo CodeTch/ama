@@ -1,0 +1,45 @@
+{
+  "run_arguments": [
+    "run",
+    "-d",
+    "--name",
+    "ama-test-b01-59f108f79cad",
+    "--label",
+    "ama.test-fixture=b01",
+    "--publish",
+    "127.0.0.1::3306",
+    "--env-file",
+    "/home/tanren/ama/.worktrees/phase-b-transcript-schema/.tools/mysql-fixture/ama-test-b01-59f108f79cad/mysql.env",
+    "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "--character-set-server=utf8mb4",
+    "--collation-server=utf8mb4_0900_ai_ci",
+    "--default-time-zone=+00:00",
+    "--innodb-use-native-aio=OFF"
+  ],
+  "name": "ama-test-b01-59f108f79cad",
+  "inspection": {
+    "id": "487a1cd59234e10967d6a8c5fa8d4fec7abd94fd038d976f00a1003783cdfd19",
+    "name": "/ama-test-b01-59f108f79cad",
+    "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "label": "b01",
+    "args": [
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_0900_ai_ci",
+      "--default-time-zone=+00:00",
+      "--innodb-use-native-aio=OFF"
+    ],
+    "ports": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "45591"
+        }
+      ]
+    }
+  },
+  "mysql_version": "8.4.6",
+  "initial_table_count": 0,
+  "innodb_use_native_aio": 0,
+  "credential_file_exported": false,
+  "purpose": "functional V011 schema only; no production IO/capacity qualification"
+}
