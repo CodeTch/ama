@@ -25,7 +25,7 @@
 |目标版本|拥有任务|原计划占位|计划内容/依赖|当前状态|
 |---|---|---|---|---|
 |V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|来源 f5b4495+0e8f698 → 集成751d31c+95a264e；冻结f36…；独立复审支持新建确认空白fixture限定采用，历史偏差保留|
-|V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|首次正式应用前已冻结 SHA859970b8…；实现未评审/未集成，执行结果待登记|
+|V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|来源39b447d → 集成bec9393；SHA859970b8…冻结；前置实现独立评审通过，正例/隔离拒绝证据已保全；完整B02授权切换待V008|
 |V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|候选已冻结 SHAfa44424a…；尚未应用/评审，须先收到已审V007|
 |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|预留，未编写；上传补充设计门已通过|
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|预留，未编写|
@@ -86,3 +86,11 @@ R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑�
 ## V008 候选冻结与依赖门（2026-10-22）
 
 文件 `V008__meeting_schema.sql`，拥有者工作树 `phase-b-meeting-schema`，SHA256 **`fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3`** 已由协调者读文件核对。八表及15个FK约束/16个FK列为作者候选说明，尚非实现验收；已正式迁移的低集合只在新独有 fixture `ama-test-b01-7b3ec2548012:45527` 做了缺表RED。V008尚未执行，必须等待独立评审通过的V007并获得协调者执行通知；没有占位V007、越序或未审peer脚本。候选从此次交付冻结，任何修正先报告协调者登记新版本；正式执行/history/metadata/回归/独立评审待记录。
+
+## V007 实施评审采用记录（2026-10-22，身份前置范围）
+
+来源 `39b447d43a91cc0692a5d43ee109fcc82d37d6db`，完整 owned 评审基线 `a4ed859..39b447d`（之前机械合入的已审根内容不重复计为本任务），独立评审 spec compliant / quality Approved，Critical/Important/Minor 均无。集成 `bec93930657c349a9662eea5a347c55186fa18fe` 的29个交付路径与来源逐字节一致。V007 SHA `859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d` 再次复核，Flyway checksum `157746768` 不变。
+
+首次执行前冻结记录保留。新独有正例 `ama-test-b01-c8517df9ef69:45905` 的001/002/005/006/007全部success=1；另建负例 `ama-test-b01-768977c381e0:46617` 保留007 success=0、原三张身份/会话/ACL表DDL及行不变，不重置或repair。正式升级拒绝无权威来源的旧身份/会话/ACL数据；没有猜测日期、部门、权限或默认READY。旧B02库、B01失败库均未触碰。
+
+实际身份18、迁移1、隔离拒绝1通过；回归Python74/web8/Java28/OpenAPI2及生成类型校验通过，最后Java修改后重跑完整身份18和Java单元，未重复不变套件。当前采用仅身份/会话/目录接口及安全前置；MeetingAccess仍为契约，公司SSO/人员目录仍不可用，完整B02对象授权待V008后独立实现评审，不据此验收完整B阶段。见 [独立评审](../acceptance/b/identity-prerequisite-independent-review.md)、[实现报告](../acceptance/b/identity-prerequisite-implementation-report.md)。45个原始证据文件与SHA清单已逐字节保存在 `artifacts/phase-b/b02-prerequisite/`，未复制凭证。此次集成不操作数据库或重复已有测试。

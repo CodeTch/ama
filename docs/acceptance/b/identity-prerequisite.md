@@ -27,3 +27,7 @@ Positive formal fixture: owned `ama-test-b01-c8517df9ef69`, loopback45905; read-
 Behavioral RED evidence includes the original anonymous403 vs401, contract role mutation/invalid identity/time precision, removal of the generation predicate causing revived old sessions, secret diagnostic output, invalid Origin startup, and duplicate Origin/CSRF requests incorrectly returning204. The latter defects were fixed and the full18-test suite passed. Preparation while V006 was gated had compile-only RED for some new classes; compilation failure is not represented as a behavioral assertion failure. Canonical migration refusal/positive tests passed on their first formal execution after review-only validation; SQL was never edited to obtain GREEN.
 
 Detailed chronology, full source list, signatures, fixture ownership and raw evidence paths are in the coordinator's `task-B-02-prerequisite-report.md`. Local raw logs, final DDL/metadata/history and frozen SQL copies are retained under `artifacts/phase-b/b02-prerequisite/`. Actual company protocol, role/department mapping, lifetime/disable propagation, real login/logout/disable evidence and production integration approval remain pending.
+
+## 协调采用记录
+
+2026-10-22：完整前置任务经独立 spec/quality 评审通过，无发现项；来源39b447d集成bec9393，29路径逐字节相同、V007冻结SHA不变。仅采用身份前置，不关闭本文件已有完整B02及公司协议前置条件。实际测试和历史失败保全见 [实现报告](identity-prerequisite-implementation-report.md) 与 [独立评审](identity-prerequisite-independent-review.md)。
