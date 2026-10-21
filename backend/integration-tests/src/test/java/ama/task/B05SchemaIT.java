@@ -5,10 +5,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 class B05SchemaIT {
+ @org.junit.jupiter.api.BeforeEach void prepareHistoricalTarget(){migrateTaskSchema(MysqlTestDatabase.dataSource());}
+ /** Historical V010 oracle on an owned target-010 fixture; never resets or downgrades existing history. */
+ private int migrateTaskSchema(javax.sql.DataSource source){
+  return Flyway.configure().dataSource(source).locations("classpath:db/migration")
+   .initSql("SET NAMES utf8mb4; SET time_zone = '+00:00'")
+   .target("010").cleanDisabled(true).load().migrate().migrationsExecuted;
+ }
  @Test void tenTablesAndExecutionFenceExist() {
   var source=MysqlTestDatabase.dataSource(); var j=new JdbcTemplate(source);
-  if(j.queryForObject("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()",Integer.class)==0)
-   Flyway.configure().dataSource(source).target("009").cleanDisabled(true).load().migrate();
   assertEquals(10,j.queryForObject("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('task_subject','durable_task','task_attempt','external_operation','external_execution','task_outbox','task_outbox_sequence','outbox_consumer','model_capacity','model_reservation')",Integer.class));
  }
 
@@ -24,5 +29,5 @@ class B05SchemaIT {
   queries.put("foreign_keys","SELECT JSON_OBJECT('table',k.TABLE_NAME,'name',k.CONSTRAINT_NAME,'column',k.COLUMN_NAME,'ordinal',k.ORDINAL_POSITION,'target',k.REFERENCED_TABLE_NAME,'remote',k.REFERENCED_COLUMN_NAME,'delete',r.DELETE_RULE,'update',r.UPDATE_RULE) FROM information_schema.KEY_COLUMN_USAGE k JOIN information_schema.REFERENTIAL_CONSTRAINTS r ON r.CONSTRAINT_SCHEMA=k.CONSTRAINT_SCHEMA AND r.CONSTRAINT_NAME=k.CONSTRAINT_NAME WHERE k.CONSTRAINT_SCHEMA=DATABASE() AND k.REFERENCED_TABLE_NAME IS NOT NULL ORDER BY k.TABLE_NAME,k.CONSTRAINT_NAME,k.ORDINAL_POSITION;");
   for(var query:queries.entrySet()){var actual=new java.util.ArrayList<com.fasterxml.jackson.databind.JsonNode>();for(var text:j.queryForList(query.getValue(),String.class)){var row=json.readTree(text);if(names.contains(row.get("table").asText()))actual.add(row);}assertEquals(expected.get(query.getKey()),json.valueToTree(actual),query.getKey());}
  }
- @Test void orderedHistoryAndFrozenChecksumRerunZero(){var source=MysqlTestDatabase.dataSource();var j=new JdbcTemplate(source);assertEquals(java.util.List.of("001","002","005","006","007","008","009","010"),j.queryForList("SELECT version FROM flyway_schema_history WHERE success=1 ORDER BY installed_rank",String.class));assertEquals(-1187397378,j.queryForObject("SELECT checksum FROM flyway_schema_history WHERE version='010'",Integer.class));assertEquals(0,Flyway.configure().dataSource(source).cleanDisabled(true).load().migrate().migrationsExecuted);}
+ @Test void orderedHistoryAndFrozenChecksumRerunZero(){var source=MysqlTestDatabase.dataSource();var j=new JdbcTemplate(source);assertEquals(java.util.List.of("001","002","005","006","007","008","009","010"),j.queryForList("SELECT version FROM flyway_schema_history WHERE success=1 ORDER BY installed_rank",String.class));assertEquals(-1187397378,j.queryForObject("SELECT checksum FROM flyway_schema_history WHERE version='010'",Integer.class));assertEquals(0,migrateTaskSchema(source));}
 }

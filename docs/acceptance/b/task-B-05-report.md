@@ -27,7 +27,7 @@ The guard cannot intercept arbitrary caller-issued JDBC SQL after flush. Such SQ
 
 ## Frozen V010 and schema evidence
 
-`V010__reliable_execution.sql`: 35,136 bytes, SHA-256 **03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db**, Flyway checksum **-1187397378**. Root explicitly ACKed this SHA before the first formal apply; central freeze record commit `2f621d65b17ba1b22987c36b47f8e2ec35d6dfbf`. No byte changed after sharing/applying. Root maintains the central migration registry; this owner did not edit it. Lower V001/002/005/006/007/008/009 remain unchanged; full ordered successful history has 8 entries after V010. No repair, reset, outOfOrder or placeholder migration.
+`V010__reliable_execution.sql`: 35,136 bytes, SHA-256 **03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db**, Flyway checksum **-1187397378**. Root explicitly ACKed this SHA before the first formal apply; central freeze record commit `2f621d65b17ba1b22987c36b47f8e2ec35d6dfbf`. No byte changed after sharing/applying. Root maintains the central migration registry; this owner did not edit it. Lower V001/002/005/006/007/008/009 remain unchanged; full ordered successful history has 8 entries after V010. No repair, reset, outOfOrder or placeholder migration. B05SchemaIT now pins only its private historical migration helper to010 (same reviewed pattern as IdentityMigrationIT007); it does not reset/downgrade a newer fixture. Production SchemaMigrator remains latest; behavior tests are unchanged.
 
 Migration performs conservative preflight before permanent DDL: exact lower table/column/index/check/FK metadata; all legacy task/outbox/reservation/capacity data empty; singleton sequence exactly (1,1); retained subjects only exact binary MEETING roots matching active lifecycle/revision/epoch. Five hex-encoded metadata groups were independently decoded and verified by root against the reviewed lower set. Migration uses minimal ALTERs for six legacy tables and creates four additions; it does not drop/recreate entire existing tables.
 
@@ -64,11 +64,11 @@ Final evidence contains **47 distinct B05 IT cases** across final passing invoca
 |OutboxFenceIT|7|final-owned-green.log/XML|
 |OutboxConsumerIT|2|final-owned-green.log/XML|
 |WorkerProcessIT|3|final-owned-green.log/XML|
-|B05SchemaIT|3|final-owned-green.log/XML|
+|B05SchemaIT|3|historical-target010-green.log/XML (also full group)|
 |DatabaseRecoveryIT|1|fixed-recovery-and-reconciler.log/XML|
 |ReconciliationWorkerIT|1|fixed-recovery-and-reconciler.log/XML|
 
-Latest follow-up source changes only weak-identity authority storage and a copied/reconciliation/duplicate token admission test; External10/Model7 and all Java33 passed. Initial 44-case full-group pass remains the evidence for unchanged queue/outbox/process code; claims are not based on stale XML from other invocations.
+Authority-lifecycle follow-up changed only weak-identity authority storage and a copied/reconciliation/duplicate token admission test; External10/Model7 and all Java33 passed. A subsequent coordinator-requested historical-oracle maintenance pinned B05SchemaIT to a private target010 helper; its canonical3 cases and incidental Java33 passed without altering production migration behavior. Initial 44-case full-group pass remains the evidence for unchanged queue/outbox/process code; claims are not based on stale XML from other invocations.
 
 All actual earlier IT invocation counts are preserved below as tests/failures/errors/skips, with incidental unit executions separately listed by `execution-manifest.json`:
 
@@ -94,6 +94,7 @@ All actual earlier IT invocation counts are preserved below as tests/failures/er
 |fixed-recovery-and-reconciler|2/0/0/0|actual stable-endpoint restart and independent reconciliation GREEN|
 |final-owned-green|44/0/0/0|entire core owned class selection passed|
 |final-authority-lifecycle|17/0/0/0|affected external/admission cases, including added copied/duplicate/reconciliation authority test|
+|historical-target010-green|3/0/0/0|canonical historical schema test with private target010, production latest unaffected|
 
 Web first launch failed before execution because this tree lacked node_modules; failure retained. Pinned `npm ci --ignore-scripts` installed exact lockfile dependencies without source changes, then8 actual tests passed. Python74 passed. Java33 comprises metadata2, storage8, API deployment9/identity3/security6, worker3, contract-client2. No skipped test is counted as passing. Early wildcard XML archives may include stale unselected classes; only per-class counts in each invocation log are counted, and final selected XML directories were copied by explicit class names.
 
