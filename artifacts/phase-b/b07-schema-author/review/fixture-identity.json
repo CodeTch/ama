@@ -1,0 +1,63 @@
+{
+  "created_utc": "2026-10-21T20:45:39.206588+00:00",
+  "run_arguments": [
+    "run",
+    "-d",
+    "--name",
+    "ama-test-b01-feb4b5365dae",
+    "--label",
+    "ama.test-fixture=b01",
+    "--publish",
+    "127.0.0.1::3306",
+    "--env-file",
+    "/home/tanren/ama/.worktrees/phase-b-generation-schema/.tools/mysql-fixture/ama-test-b01-feb4b5365dae/mysql.env",
+    "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "--character-set-server=utf8mb4",
+    "--collation-server=utf8mb4_0900_ai_ci",
+    "--default-time-zone=+00:00",
+    "--innodb-use-native-aio=OFF"
+  ],
+  "name": "ama-test-b01-feb4b5365dae",
+  "inspection": {
+    "id": "b62b9b2b8f2b7bb47db21fa4561c90e3ba325138250975531f5585e16ede460e",
+    "name": "/ama-test-b01-feb4b5365dae",
+    "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "image_id": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "label": "b01",
+    "args": [
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_0900_ai_ci",
+      "--default-time-zone=+00:00",
+      "--innodb-use-native-aio=OFF"
+    ],
+    "ports": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "44915"
+        }
+      ]
+    },
+    "mounts": [
+      {
+        "Destination": "/var/lib/mysql",
+        "Driver": "local",
+        "Mode": "",
+        "Name": "483a44f8cb8e92977279e7280ca61ccdfab37221326d79e1d44f87ec276069a1",
+        "Propagation": "",
+        "RW": true,
+        "Source": "/var/lib/docker/volumes/483a44f8cb8e92977279e7280ca61ccdfab37221326d79e1d44f87ec276069a1/_data",
+        "Type": "volume"
+      }
+    ],
+    "auto_remove": false
+  },
+  "mysql_version": "8.4.6",
+  "initial_table_count": 0,
+  "innodb_use_native_aio": 0,
+  "server_utc": "2026-10-21 20:45:55.024593",
+  "server_epoch": 1792615555,
+  "session_time_zone": "+00:00",
+  "credential_file_exported": false,
+  "purpose": "functional V012 schema only; no native IO/capacity/HA qualification"
+}
