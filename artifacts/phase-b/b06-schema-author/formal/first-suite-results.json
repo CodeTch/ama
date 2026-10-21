@@ -1,0 +1,57 @@
+{
+  "suite": "ama.db.TranscriptSchemaIT",
+  "tests": 11,
+  "failures": 1,
+  "errors": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "historyBatchFileOrderSegmentOrderAndConfirmationUniquenessAreEnforced",
+      "status": "PASS"
+    },
+    {
+      "name": "allFiveActualMetadataGroupsEqualTheIndependentAdoptedOracle",
+      "status": "FAIL"
+    },
+    {
+      "name": "processingInputChecksPreserveRequiredAndNullableVersionSemanticsAndMaterialDeferral",
+      "status": "PASS"
+    },
+    {
+      "name": "plaintextRetainsNullableTimesParagraphAndSpeakerWhilePartialOrReversedTimesFail",
+      "status": "PASS"
+    },
+    {
+      "name": "everyDeployedForeignKeyRejectsOrphansIncludingTheCircularProvenanceLinks",
+      "status": "PASS"
+    },
+    {
+      "name": "allFourMarksCoexistAndDuplicatesArePreventedPerCompositeSegment",
+      "status": "PASS"
+    },
+    {
+      "name": "allEightAssignedTablesExist",
+      "status": "PASS"
+    },
+    {
+      "name": "productionLatestMigratorKeepsTheQualifiedSchemaAndRowsUnchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "checksEnforceEveryVocabularyAndAcceptTheirAdoptedValues",
+      "status": "PASS"
+    },
+    {
+      "name": "orderedUpgradePreservesAllLowerRowsDdlMetadataHistoryAndFrozenBytesAndRerunsZero",
+      "status": "PASS"
+    },
+    {
+      "name": "binarySourceReferencesAndNoPadHumanIdentityIdsRemainExactAndLongUnicodeSurvives",
+      "status": "PASS"
+    }
+  ],
+  "full_after_upgrade_equals_after_tests": true,
+  "frozen_v011_sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+  "overall_schema_acceptance": "NOT_GREEN_MISSING_ONE_ADOPTED_INDEX",
+  "no_unit_tests_selected": true
+}
