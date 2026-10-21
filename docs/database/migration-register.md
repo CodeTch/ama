@@ -26,7 +26,7 @@
 |---|---|---|---|---|
 |V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|来源 f5b4495+0e8f698 → 集成751d31c+95a264e；冻结f36…；独立复审支持新建确认空白fixture限定采用，历史偏差保留|
 |V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|来源39b447d → 集成bec9393；SHA859970b8…冻结；前置实现独立评审通过，正例/隔离拒绝证据已保全；完整B02授权切换待V008|
-|V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|候选已冻结 SHAfa44424a…；尚未应用/评审，须先收到已审V007|
+|V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|来源ff22197 → 集成dac4cc1；SHAfa44424a…冻结，结构前置独立Approved0findings；正例与两类拒绝已保全，完整B03/B02授权仍OPEN|
 |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|预留，未编写；上传补充设计门已通过|
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|预留，未编写|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|预留，未编写|
@@ -94,3 +94,13 @@ R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑�
 首次执行前冻结记录保留。新独有正例 `ama-test-b01-c8517df9ef69:45905` 的001/002/005/006/007全部success=1；另建负例 `ama-test-b01-768977c381e0:46617` 保留007 success=0、原三张身份/会话/ACL表DDL及行不变，不重置或repair。正式升级拒绝无权威来源的旧身份/会话/ACL数据；没有猜测日期、部门、权限或默认READY。旧B02库、B01失败库均未触碰。
 
 实际身份18、迁移1、隔离拒绝1通过；回归Python74/web8/Java28/OpenAPI2及生成类型校验通过，最后Java修改后重跑完整身份18和Java单元，未重复不变套件。当前采用仅身份/会话/目录接口及安全前置；MeetingAccess仍为契约，公司SSO/人员目录仍不可用，完整B02对象授权待V008后独立实现评审，不据此验收完整B阶段。见 [独立评审](../acceptance/b/identity-prerequisite-independent-review.md)、[实现报告](../acceptance/b/identity-prerequisite-implementation-report.md)。45个原始证据文件与SHA清单已逐字节保存在 `artifacts/phase-b/b02-prerequisite/`，未复制凭证。此次集成不操作数据库或重复已有测试。
+
+## V008 实施评审采用记录（2026-10-22，八表结构前置）
+
+来源 `ff22197f5f6231aeb689e035f4435ddbbcbcf114`，完整owned基线 `62a8ec5..ff22197`，独立 spec compliant / quality Approved，Critical/Important/Minor均无。集成 `dac4cc11bf07c8a2c81eeafed541687d5beb3a69`，5个交付路径与来源逐字节一致。V008 SHA `fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3` 再次复核，Flyway checksum `-1747387036`；此前9572b5a预执行冻结记录保留，应用后无字节修改。
+
+实际8表/71列/24索引定义及47索引列/12CHECK/15FK及16FK列，与已审B00-1.2独立实测子集完全一致。正例 `ama-test-b01-7b3ec2548012:45527` 保留001→002→005→006→007→008全部success1；独立draft拒绝 `ama-test-b01-90171737c2cf:46377` 和timestamped拒绝 `ama-test-b01-79de6fc2da7a:45069` 各保留008 success0及原DDL/ACL行，不reset/repair。首成功和后续正例快照分别标注，不冒称同一时刻。
+
+实际结构6、隔离拒绝1+1、Foundation正常路径13、IdentityAccess18、后端单元28全部0failure/error/skip；首升级1与结构6重叠不重复计数。45原始证据及SHA清单已核对/保全于 `artifacts/phase-b/b03-schema/`。未重复原V006破坏失败history的参数负例，历史IdentityMigrationIT的latest007假定未运行且另行修正显式target007，绝不把未选测试计通过。见 [实施报告](../acceptance/b/meeting-schema-prerequisite-implementation-report.md)、[独立审查](../acceptance/b/meeting-schema-prerequisite-independent-review.md)。
+
+仅解锁V009结构依赖，完整B03会议业务/版本/幂等/投影/subject/outbox和B02对象授权待V010后实施评审；不启用业务写，不创造旧ACL来源，不批准实际有数据安装升级或公司生产环境。此次机械集成只验证字节与范围，未重复已通过且未改变的测试，未操作数据库。

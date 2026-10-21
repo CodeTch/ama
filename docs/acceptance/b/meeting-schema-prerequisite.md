@@ -52,3 +52,7 @@ Ignored runtime evidence is under this worktree's `artifacts/phase-b/b03-schema/
 Historical TDD evidence is retained separately: initial unavailable-V007 setup error (1 error, not valid RED), then before writing V008 an intended missing-eight-tables failure against frozen001→002→005→006 (1 failure /0 errors/0 skips). No placeholder/unreviewed V007 or review-only relabeling was used.
 
 Server-side same-meeting/confirmed ACTIVE membership, immutable saved history, correct current pointers, projection/fence/outbox atomicity, replay reauthorization, HTTP conflicts and API concurrent edits remain later domain-service obligations. Old business writers/worker semantics must stay stopped until compatible reviewed domain prerequisites and all instances are deployed. There was no production/company connection, external effect, push, main-checkout modification or child agent.
+
+## Coordinator adoption
+
+Scoped independent spec compliant / quality Approved with0findings, sourceff22197 integrateddac4cc1; all5 ownedpaths exactsource andV008SHAunchanged. Independent full report is [here](meeting-schema-prerequisite-independent-review.md). Onlyschema prerequisite adopted; completeB03/B02/runtime/company gates remainOPEN. NoDBoperation or redundanttest rerun for mechanicalintegration.
