@@ -1,0 +1,50 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ama-parent                                                         [pom]
+[INFO] ama-contracts                                                      [jar]
+[INFO] ama-core                                                           [jar]
+[INFO] ama-adapters                                                       [jar]
+[INFO] ama-file-service                                                   [jar]
+[WARNING] The POM for org.apache.maven.plugins:maven-dependency-plugin:jar:3.10.0 is missing, no dependency information available
+[WARNING] Failed to retrieve plugin descriptor for org.apache.maven.plugins:maven-dependency-plugin:3.10.0: Plugin org.apache.maven.plugins:maven-dependency-plugin:3.10.0 or one of its dependencies could not be resolved:
+	Cannot access central (https://repo.maven.apache.org/maven2) in offline mode and the artifact org.apache.maven.plugins:maven-dependency-plugin:jar:3.10.0 has not been downloaded from it before.
+
+[WARNING] The POM for org.apache.maven.plugins:maven-clean-plugin:jar:3.5.0 is missing, no dependency information available
+[WARNING] Failed to retrieve plugin descriptor for org.apache.maven.plugins:maven-clean-plugin:3.5.0: Plugin org.apache.maven.plugins:maven-clean-plugin:3.5.0 or one of its dependencies could not be resolved:
+	Cannot access central (https://repo.maven.apache.org/maven2) in offline mode and the artifact org.apache.maven.plugins:maven-clean-plugin:jar:3.5.0 has not been downloaded from it before.
+
+[WARNING] The POM for org.apache.maven.plugins:maven-install-plugin:jar:3.1.4 is missing, no dependency information available
+[WARNING] Failed to retrieve plugin descriptor for org.apache.maven.plugins:maven-install-plugin:3.1.4: Plugin org.apache.maven.plugins:maven-install-plugin:3.1.4 or one of its dependencies could not be resolved:
+	Cannot access central (https://repo.maven.apache.org/maven2) in offline mode and the artifact org.apache.maven.plugins:maven-install-plugin:jar:3.1.4 has not been downloaded from it before.
+
+[WARNING] The POM for org.apache.maven.plugins:maven-deploy-plugin:jar:3.1.4 is missing, no dependency information available
+[WARNING] Failed to retrieve plugin descriptor for org.apache.maven.plugins:maven-deploy-plugin:3.1.4: Plugin org.apache.maven.plugins:maven-deploy-plugin:3.1.4 or one of its dependencies could not be resolved:
+	Cannot access central (https://repo.maven.apache.org/maven2) in offline mode and the artifact org.apache.maven.plugins:maven-deploy-plugin:jar:3.1.4 has not been downloaded from it before.
+
+[WARNING] The POM for org.apache.maven.plugins:maven-site-plugin:jar:3.22.0 is missing, no dependency information available
+[WARNING] Failed to retrieve plugin descriptor for org.apache.maven.plugins:maven-site-plugin:3.22.0: Plugin org.apache.maven.plugins:maven-site-plugin:3.22.0 or one of its dependencies could not be resolved:
+	Cannot access central (https://repo.maven.apache.org/maven2) in offline mode and the artifact org.apache.maven.plugins:maven-site-plugin:jar:3.22.0 has not been downloaded from it before.
+
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ama-parent 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] ama-parent ......................................... SKIPPED
+[INFO] ama-contracts ...................................... SKIPPED
+[INFO] ama-core ........................................... SKIPPED
+[INFO] ama-adapters ....................................... SKIPPED
+[INFO] ama-file-service ................................... SKIPPED
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.860 s
+[INFO] Finished at: 2026-10-22T01:57:13+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] No plugin found for prefix 'dependency' in the current project and in the plugin groups [org.cyclonedx, org.flywaydb, io.github.git-commit-id, org.jooq, org.jetbrains.kotlin, org.liquibase, org.graalvm.buildtools, io.github.ascopes, org.springframework.boot, org.apache.maven.plugins, org.codehaus.mojo] available from the repositories [local (/home/tanren/.m2/repository), central (https://repo.maven.apache.org/maven2)] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/NoPluginFoundForPrefixException

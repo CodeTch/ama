@@ -1,0 +1,45 @@
+[ {
+  "method" : "PUT",
+  "path" : "/v3-control-383b18f1-32f6-40b5-b614-229fe9c8afbf/staging/v1/1302dd07-11c4-4ce1-9764-c596fd47c148/acb8b434-a3e2-4280-8c86-0c0e9bf04002/chunk/0",
+  "request" : {
+    "if-none-match" : "*",
+    "content-length" : "296",
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "0",
+    "etag" : "\"5289df737df57326fcdd22597afb1fac\""
+  },
+  "upstreamBytes" : 0,
+  "downstreamBytes" : 0,
+  "fault" : false
+}, {
+  "method" : "GET",
+  "path" : "/v3-control-383b18f1-32f6-40b5-b614-229fe9c8afbf/staging/v1/1302dd07-11c4-4ce1-9764-c596fd47c148/acb8b434-a3e2-4280-8c86-0c0e9bf04002/chunk/0",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "3",
+    "etag" : "\"5289df737df57326fcdd22597afb1fac\""
+  },
+  "upstreamBytes" : 3,
+  "downstreamBytes" : 3,
+  "fault" : true
+}, {
+  "method" : "GET",
+  "path" : "/v3-control-383b18f1-32f6-40b5-b614-229fe9c8afbf/control/length",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "3",
+    "etag" : "\"5289df737df57326fcdd22597afb1fac\""
+  },
+  "upstreamBytes" : 3,
+  "downstreamBytes" : 3,
+  "fault" : false
+} ]

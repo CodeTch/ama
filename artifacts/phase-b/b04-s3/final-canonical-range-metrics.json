@@ -1,0 +1,373 @@
+{
+  "final-s3-regression/range-64MiB-cancel-6c201592-081f-4021-b3f7-ede94fc97043.json": {
+    "sha256": "156464514279577de940730236134ec62ca5e5b12f2dc15bcf425ff8b123252a",
+    "allRequests": 4,
+    "controlBodyBytes": 2214,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-67108863",
+        "status": 206,
+        "upstreamBytes": 15516,
+        "downstreamBytes": 14068
+      }
+    ]
+  },
+  "final-s3-regression/range-64MiB-one-828245b9-581d-45ec-bc2c-7e4caa8c409c.json": {
+    "sha256": "5666a83b08960195871b534a7060800dd0eb32ecbc3807c5d927f085abf0221a",
+    "allRequests": 4,
+    "controlBodyBytes": 2214,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=33554432-33554432",
+        "status": 206,
+        "upstreamBytes": 1,
+        "downstreamBytes": 1
+      }
+    ]
+  },
+  "final-s3-regression/range-cancel-7f4ad734-7377-4afb-a3b6-88bc98509bc4.json": {
+    "sha256": "97428e6da063c2e73831c0e7697f46c580f0a70b0fb20ad607745b93b2ba743d",
+    "allRequests": 4,
+    "controlBodyBytes": 2200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-16777215",
+        "status": 206,
+        "upstreamBytes": 67357,
+        "downstreamBytes": 64285
+      }
+    ]
+  },
+  "final-s3-regression/range-ignore-range-39287cd6-8235-4041-970e-dcf4ca3341a2.json": {
+    "sha256": "2d581ac05180f8bd56f75c9a32e689447c40507ebb572cefee4775b32e348dc0",
+    "allRequests": 4,
+    "controlBodyBytes": 2200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-16777215",
+        "status": 206,
+        "upstreamBytes": 15517,
+        "downstreamBytes": 14069
+      }
+    ]
+  },
+  "final-s3-regression/range-one-zero-invalid-442189f3-df85-4fe3-a9af-4532acd22ef0.json": {
+    "sha256": "7d20f122d05d2b56bfcffcc33c128438cd3330dd3df88a1b8877796500d3e7d3",
+    "allRequests": 21,
+    "controlBodyBytes": 13200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-0",
+        "status": 206,
+        "upstreamBytes": 1,
+        "downstreamBytes": 1
+      },
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=8193-8193",
+        "status": 206,
+        "upstreamBytes": 1,
+        "downstreamBytes": 1
+      },
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=16777215-16777215",
+        "status": 206,
+        "upstreamBytes": 1,
+        "downstreamBytes": 1
+      },
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      }
+    ]
+  },
+  "final-s3-regression/range-truncate-6e2cf345-1a1e-45ab-87e4-1e5e525d66ce.json": {
+    "sha256": "2e292d842f1f3f20a9b886e24e76fc2d4cfaea79f8033d2339edb20b065dc464",
+    "allRequests": 4,
+    "controlBodyBytes": 2200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-99",
+        "status": 206,
+        "upstreamBytes": 50,
+        "downstreamBytes": 50
+      }
+    ]
+  },
+  "final-s3-regression/range-wrong-range-12c61b94-f49c-42cb-be0f-5725b5715a8c.json": {
+    "sha256": "2d581ac05180f8bd56f75c9a32e689447c40507ebb572cefee4775b32e348dc0",
+    "allRequests": 4,
+    "controlBodyBytes": 2200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-16777215",
+        "status": 206,
+        "upstreamBytes": 15517,
+        "downstreamBytes": 14069
+      }
+    ]
+  },
+  "range-length/range-cancel-b2837999-351c-40a5-9c44-178c7137e90d.json": {
+    "sha256": "31d9ebb85776b4666a89bcc3f6ebfe423408aaa8b406a951a944b39757af9bb1",
+    "allRequests": 4,
+    "controlBodyBytes": 2200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-16777215",
+        "status": 206,
+        "upstreamBytes": 15517,
+        "downstreamBytes": 14069
+      }
+    ]
+  },
+  "range-length/range-ignore-range-2239cdb9-56a6-4c25-ae6b-38ac99c8e696.json": {
+    "sha256": "3f1c2eb57502e1d90472e04b84f2264fcd77f450b9011b08e58f210f37140631",
+    "allRequests": 4,
+    "controlBodyBytes": 2200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-16777215",
+        "status": 206,
+        "upstreamBytes": 15517,
+        "downstreamBytes": 14069
+      }
+    ]
+  },
+  "range-length/range-one-zero-invalid-29710542-cd00-461a-b779-14429e755ebc.json": {
+    "sha256": "a985cae231b92ffb4dd4b61261f3103f29d35c0ae183489433b0778037d4e15b",
+    "allRequests": 21,
+    "controlBodyBytes": 13200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-0",
+        "status": 206,
+        "upstreamBytes": 1,
+        "downstreamBytes": 1
+      },
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=8193-8193",
+        "status": 206,
+        "upstreamBytes": 1,
+        "downstreamBytes": 1
+      },
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=16777215-16777215",
+        "status": 206,
+        "upstreamBytes": 1,
+        "downstreamBytes": 1
+      },
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      }
+    ]
+  },
+  "range-length/range-overlong-cf3e0947-0a51-4445-aaee-57dabb51c9b3.json": {
+    "sha256": "3f1c2eb57502e1d90472e04b84f2264fcd77f450b9011b08e58f210f37140631",
+    "allRequests": 4,
+    "controlBodyBytes": 2200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-16777215",
+        "status": 206,
+        "upstreamBytes": 15517,
+        "downstreamBytes": 14069
+      }
+    ]
+  },
+  "range-length/range-truncate-9ae8f4ff-6a0b-4076-bc36-188ce49ce441.json": {
+    "sha256": "c089706dac2362468e66a43e4d75d2e2286c0f46cb82c2059857eb78fd05f862",
+    "allRequests": 4,
+    "controlBodyBytes": 2200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-99",
+        "status": 206,
+        "upstreamBytes": 50,
+        "downstreamBytes": 50
+      }
+    ]
+  },
+  "range-length/range-wrong-range-ebb735bc-6e50-40eb-9a6a-9c9e29e05df2.json": {
+    "sha256": "3f1c2eb57502e1d90472e04b84f2264fcd77f450b9011b08e58f210f37140631",
+    "allRequests": 4,
+    "controlBodyBytes": 2200,
+    "finalRequests": [
+      {
+        "method": "HEAD",
+        "range": null,
+        "status": 200,
+        "upstreamBytes": 0,
+        "downstreamBytes": 0
+      },
+      {
+        "method": "GET",
+        "range": "bytes=0-16777215",
+        "status": 206,
+        "upstreamBytes": 15517,
+        "downstreamBytes": 14069
+      }
+    ]
+  }
+}

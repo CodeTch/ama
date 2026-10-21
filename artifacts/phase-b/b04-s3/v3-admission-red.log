@@ -1,0 +1,35 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  └─ S3AdmissionIT ✔
+│     └─ concurrentNativeBodiesCannotConsumeTheirOwnStagingRequestAdmission() 12378 ms ✘ nested staging admission failures=[ama.contract.StorageContracts$StorageException: STORAGE_UNAVAILABLE, ama.contract.StorageContracts$StorageException: STORAGE_UNAVAILABLE] ==> expected: <true> but was: <false>
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Failures (1):
+  JUnit Jupiter:S3AdmissionIT:concurrentNativeBodiesCannotConsumeTheirOwnStagingRequestAdmission()
+    MethodSource [className = 'ama.storage.s3.S3AdmissionIT', methodName = 'concurrentNativeBodiesCannotConsumeTheirOwnStagingRequestAdmission', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: nested staging admission failures=[ama.contract.StorageContracts$StorageException: STORAGE_UNAVAILABLE, ama.contract.StorageContracts$StorageException: STORAGE_UNAVAILABLE] ==> expected: <true> but was: <false>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+       org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:48)
+       org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:204)
+       ama.storage.s3.S3AdmissionIT.concurrentNativeBodiesCannotConsumeTheirOwnStagingRequestAdmission(S3AdmissionIT.java:42)
+
+Test run finished after 12642 ms
+[         4 containers found      ]
+[         0 containers skipped    ]
+[         4 containers started    ]
+[         0 containers aborted    ]
+[         4 containers successful ]
+[         0 containers failed     ]
+[         1 tests found           ]
+[         0 tests skipped         ]
+[         1 tests started         ]
+[         0 tests aborted         ]
+[         0 tests successful      ]
+[         1 tests failed          ]
+

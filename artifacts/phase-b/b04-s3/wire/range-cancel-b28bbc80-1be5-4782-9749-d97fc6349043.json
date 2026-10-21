@@ -1,0 +1,46 @@
+[ {
+  "method" : "GET",
+  "path" : "/control-918af96a-09b5-4d7a-b875-f966436d4c1e/keys/v1/0a69ac763d4a5d88904beac6a9f81707d357825ea1299b6755a73acd4fb47eb4/spec",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "196",
+    "etag" : "\"21b67772c1fdf1f2104a8c9eef5c87cc\""
+  },
+  "upstreamBytes" : 196,
+  "downstreamBytes" : 196,
+  "fault" : false
+}, {
+  "method" : "HEAD",
+  "path" : "/data-918af96a-09b5-4d7a-b875-f966436d4c1e/data/v2/s3/meeting/large",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "16777216",
+    "etag" : "\"5284f58560e28daff8c02c577a77378e-4\""
+  },
+  "upstreamBytes" : 0,
+  "downstreamBytes" : 0,
+  "fault" : false
+}, {
+  "method" : "GET",
+  "path" : "/data-918af96a-09b5-4d7a-b875-f966436d4c1e/data/v2/s3/meeting/large",
+  "request" : {
+    "range" : "bytes=0-16777215",
+    "signed" : "true",
+    "if-match" : "\"5284f58560e28daff8c02c577a77378e-4\""
+  },
+  "status" : 206,
+  "response" : {
+    "content-length" : "16777216",
+    "content-range" : "bytes 0-16777215/16777216",
+    "etag" : "\"5284f58560e28daff8c02c577a77378e-4\""
+  },
+  "upstreamBytes" : 67461,
+  "downstreamBytes" : 64389,
+  "fault" : false
+} ]

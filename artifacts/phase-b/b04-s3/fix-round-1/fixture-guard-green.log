@@ -1,0 +1,11 @@
+test_cpu_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_cpu_bound_drift_is_rejected) ... ok
+test_exact_id_must_match_inspected_response (test_s3_fixture.OwnedFixtureGuardTest.test_exact_id_must_match_inspected_response) ... ok
+test_exact_owned_profile_is_accepted (test_s3_fixture.OwnedFixtureGuardTest.test_exact_owned_profile_is_accepted) ... ok
+test_existing_owner_image_memory_ports_and_mount_guards_remain (test_s3_fixture.OwnedFixtureGuardTest.test_existing_owner_image_memory_ports_and_mount_guards_remain) ... ok
+test_pid_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_pid_bound_drift_is_rejected) ... ok
+test_swap_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_swap_bound_drift_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.007s
+
+OK

@@ -1,0 +1,70 @@
+[ {
+  "method" : "GET",
+  "path" : "/v3-control-c4f30d13-a844-470e-8ec2-87de671b84de/scopes/v3/faaf5f5bda33df3816d4c45b189c7dbec465c3e6c1f2a7b5d09f7ca054e5b47f/spec",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "1108",
+    "etag" : "\"97c132def5725dfdf9980549bade5b99\""
+  },
+  "upstreamBytes" : 1108,
+  "downstreamBytes" : 1108,
+  "fault" : false
+}, {
+  "method" : "GET",
+  "path" : "/v3-data-c4f30d13-a844-470e-8ec2-87de671b84de?list-type=2&max-keys=1&prefix=data%2Fv3%2Ffaaf5f5bda33df3816d4c45b189c7dbec465c3e6c1f2a7b5d09f7ca054e5b47f%2Fxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.%2Fx1",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "1007"
+  },
+  "upstreamBytes" : 1007,
+  "downstreamBytes" : 1007,
+  "fault" : false
+}, {
+  "method" : "GET",
+  "path" : "/v3-control-c4f30d13-a844-470e-8ec2-87de671b84de/scopes/v3/faaf5f5bda33df3816d4c45b189c7dbec465c3e6c1f2a7b5d09f7ca054e5b47f/spec",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "1108",
+    "etag" : "\"97c132def5725dfdf9980549bade5b99\""
+  },
+  "upstreamBytes" : 1108,
+  "downstreamBytes" : 1108,
+  "fault" : false
+}, {
+  "method" : "GET",
+  "path" : "/v3-control-c4f30d13-a844-470e-8ec2-87de671b84de/keys/v3/bfb6263cef695bc37da86c366f779aab46e8757f39d1a44777fcc852fc6b04ff/spec",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "1482",
+    "etag" : "\"8b46a9307decf19e57efed644c73b032\""
+  },
+  "upstreamBytes" : 1482,
+  "downstreamBytes" : 1482,
+  "fault" : false
+}, {
+  "method" : "GET",
+  "path" : "/v3-data-c4f30d13-a844-470e-8ec2-87de671b84de/data/v3/faaf5f5bda33df3816d4c45b189c7dbec465c3e6c1f2a7b5d09f7ca054e5b47f/xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa./x1b",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "3",
+    "etag" : "\"3644a684f98ea8fe223c713b77189a77\""
+  },
+  "upstreamBytes" : 3,
+  "downstreamBytes" : 3,
+  "fault" : false
+} ]

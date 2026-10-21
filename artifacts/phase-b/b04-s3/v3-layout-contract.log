@@ -1,0 +1,52 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  ├─ S3LayoutV3IT ✔
+│  │  ├─ forcedScopeBindingCollisionFailsClosedAndAbsentScopeListsEmpty() ✔
+│  │  ├─ listExact199AndExtensionsCoexistWithCanonicalNarrowPrefixesAndCursorIsolation() ✘ expected: <true> but was: <false>
+│  │  └─ real512And1024BoundaryKeysUseShallowSignedRequestsAndNoOverbudgetIO() ✔
+│  └─ FileStorageContractIT ✔
+│     ├─ localImmutableContract(String) ✔
+│     │  └─ "local": immutable bytes, exact ranges and content conflicts ✔
+│     ├─ localMultipartContract(String) ✔
+│     │  └─ "local": multipart replay, ordered receipts, terminal states ✔
+│     ├─ localListingContract(String) ✔
+│     │  └─ "local": bounded listing and cursor isolation ✔
+│     ├─ localMultipartCompletionSelectsSuppliedReceipts(String) ✔
+│     │  ├─ local: completion excludes unselected part [""] ✔
+│     │  └─ local: completion excludes unselected part ["xyz"] ✔
+│     ├─ localConcurrentWinner(String) ✔
+│     │  └─ "local": concurrent clients have one immutable winner ✔
+│     └─ localRejectsUnverifiedBytes(String) ✔
+│        └─ "local": size, checksum, interrupted stream ✔
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Failures (1):
+  JUnit Jupiter:S3LayoutV3IT:listExact199AndExtensionsCoexistWithCanonicalNarrowPrefixesAndCursorIsolation()
+    MethodSource [className = 'ama.storage.s3.S3LayoutV3IT', methodName = 'listExact199AndExtensionsCoexistWithCanonicalNarrowPrefixesAndCursorIsolation', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+       org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:41)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:35)
+       org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:195)
+       ama.storage.s3.S3LayoutV3IT.listExact199AndExtensionsCoexistWithCanonicalNarrowPrefixesAndCursorIsolation(S3LayoutV3IT.java:44)
+
+Test run finished after 19605 ms
+[        11 containers found      ]
+[         0 containers skipped    ]
+[        11 containers started    ]
+[         0 containers aborted    ]
+[        11 containers successful ]
+[         0 containers failed     ]
+[        10 tests found           ]
+[         0 tests skipped         ]
+[        10 tests started         ]
+[         0 tests aborted         ]
+[         9 tests successful      ]
+[         1 tests failed          ]
+

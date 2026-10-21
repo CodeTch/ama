@@ -1,0 +1,39 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  └─ ContractFixtureTest ✔
+│     └─ unknownBackendSelectorCannotSilentlyRunLocalInstead() ✘ Exception in thread "main" java.lang.AssertionError: unknown selector silently selected a backend
+│              	at ama.storage.ContractFixtureTest.main(ContractFixtureTest.java:18)
+│               ==> expected: <0> but was: <1>
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Failures (1):
+  JUnit Jupiter:ContractFixtureTest:unknownBackendSelectorCannotSilentlyRunLocalInstead()
+    MethodSource [className = 'ama.storage.ContractFixtureTest', methodName = 'unknownBackendSelectorCannotSilentlyRunLocalInstead', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: Exception in thread "main" java.lang.AssertionError: unknown selector silently selected a backend
+	at ama.storage.ContractFixtureTest.main(ContractFixtureTest.java:18)
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+       org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:152)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:590)
+       ama.storage.ContractFixtureTest.unknownBackendSelectorCannotSilentlyRunLocalInstead(ContractFixtureTest.java:13)
+
+Test run finished after 864 ms
+[         4 containers found      ]
+[         0 containers skipped    ]
+[         4 containers started    ]
+[         0 containers aborted    ]
+[         4 containers successful ]
+[         0 containers failed     ]
+[         1 tests found           ]
+[         0 tests skipped         ]
+[         1 tests started         ]
+[         0 tests aborted         ]
+[         0 tests successful      ]
+[         1 tests failed          ]
+

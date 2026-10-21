@@ -1,0 +1,29 @@
+{
+  "time": "2026-10-21T17:53:56.885518+00:00",
+  "base": "cc1f1792a900686caee3c3b74ab354582b0315e3",
+  "files": {
+    "pom.xml": "488e5289becb2bce7f77d998f514cb6e3a1f3364916675af03ecfffde95f907d",
+    "backend/adapters/pom.xml": "642846d573a5e78959be183b19eb3cd7f86155c6dc87011baec9dedde4cc668d",
+    "backend/file-service/pom.xml": "72decbbe37c753ae39b6c8d37c4b5d253e7ed672131d83c85dd0cbed2a142d1a",
+    "backend/integration-tests/src/test/java/ama/storage/FileStorageContractIT.java": "3149822eb51f3ebdece68236c6a486bb1480668b3ae76f4a4f70c5f48fba9a02",
+    "backend/integration-tests/src/test/java/ama/storage/ContractFixture.java": "041a3185f65a176c43ae5c0550826202568167fbd11b67c8008b4ccd610f6e96",
+    "tools/dev/s3_fixture.py": "9ad3e5acda73ecb724e2541cfd240cbf4a78118f7a64273d1fcbeb8b02847003",
+    "backend/adapters/src/main/java/ama/storage/s3/SessionJournal.java": "45db57bb62feb6a3ad9ba85d1aa41653a8d565b1198b4ff81f422750404e5484",
+    "backend/adapters/src/main/java/ama/storage/s3/RangeReader.java": "90bb2526b1c596fcd1df1590ff15585d853ec13833d4451e631cebd1d3b26259",
+    "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java": "8f893648e85cde854fe4ee991a496ab50812a1a8b19a789580f4a0f48bb7fcc2",
+    "backend/adapters/src/main/java/ama/storage/s3/S3Layout.java": "95b4e7eeb35789194bc6f4cb1cee80b41721ae55ba0a67f88e0a451152348877",
+    "backend/adapters/src/main/java/ama/storage/s3/NativePublisher.java": "6beed2c23a30104e8e0875d58db508027ecec4b011a408dd7f19d1367c378a45",
+    "backend/adapters/src/main/java/ama/storage/s3/Staging.java": "8237c11ea9c401fd1b68b7174f100fdc8121e9088109cb0ce81d44fa6638a8c2",
+    "backend/adapters/src/main/java/ama/storage/s3/ControlCodec.java": "19f44a84772dadc4228dc11125654652c95d6982873f937a348b0fd50806a320",
+    "backend/adapters/src/main/java/ama/storage/s3/S3Objects.java": "266fa5e03e5e031f5f3509de14fe9e4586f3996486f1e6066f9129c74849b3fa",
+    "backend/adapters/src/main/java/ama/storage/s3/S3Config.java": "a798e01aff25c9a4654ea077c6376bf99f7e98d318b4d42e2088df7683fe2ec4",
+    "backend/adapters/src/test/java/ama/storage/s3/S3ProtocolTest.java": "55661d9a2e65977c47313deda01b4512a5ef7541434869021118aaa787eee51b",
+    "backend/integration-tests/src/test/java/ama/storage/s3/S3MultipartIT.java": "6ada15374d22b5b4319214263855d01afb39d75c572785cc654add68638fd595",
+    "backend/integration-tests/src/test/java/ama/storage/s3/S3Fixture.java": "6485f1ab5ea2bde0f5489d14924f81170f4daa27f353585932ca8bb9fc176122",
+    "backend/integration-tests/src/test/java/ama/storage/s3/S3ReliabilityIT.java": "4d9691ed4fee23077fea212ea26c484adc27189f8513a57a2fa30bac5bfe366e",
+    "backend/integration-tests/src/test/java/ama/storage/s3/S3ConcurrencyIT.java": "7d7c5a18065176be01ea7581a4a84621d0da7d86ae94641cf891043c4c59ecc9",
+    "backend/integration-tests/src/test/java/ama/storage/s3/S3Process.java": "cc8ec45d76d13c878a228b7ff017b678afd4bf9f7d4c44c0d295d45644f993fb",
+    "backend/integration-tests/src/test/java/ama/storage/s3/WireProxy.java": "8aad7102bf9f4eda71dd47a95d985e95c741af3fdbfdb443bc31ac89cbe86065"
+  },
+  "archiveSHA256": "68674b9dfa709302ac2cb1b5c6dd31ed1cccd73a767b04181eb2c8ccfd1952be"
+}

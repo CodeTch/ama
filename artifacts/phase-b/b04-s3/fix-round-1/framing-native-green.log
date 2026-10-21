@@ -1,0 +1,35 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  ├─ S3MissingLengthIT ✔
+│  │  ├─ missingLengthsAreTypedAndCannotExhaustRangeAdmission(String) ✔
+│  │  │  ├─ [1] "HEAD" ✔
+│  │  │  ├─ [2] "close" ✔
+│  │  │  └─ [3] "chunked" ✔
+│  │  └─ allActualByteReadersRejectMissingLengthsWithSanitizedStorageError(String) ✔
+│  │     ├─ [1] "control" ✔
+│  │     ├─ [2] "stat" ✔
+│  │     └─ [3] "staging" ✔
+│  └─ S3MultipartIT ✔
+│     └─ nativeCompleteCommittedResponseLossAndEmbeddedErrorReconcile(String) ✔
+│        ├─ [1] "drop" ✔
+│        └─ [2] "error200" 10069 ms ✔
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Test run finished after 30854 ms
+[         8 containers found      ]
+[         0 containers skipped    ]
+[         8 containers started    ]
+[         0 containers aborted    ]
+[         8 containers successful ]
+[         0 containers failed     ]
+[         8 tests found           ]
+[         0 tests skipped         ]
+[         8 tests started         ]
+[         0 tests aborted         ]
+[         8 tests successful      ]
+[         0 tests failed          ]
+

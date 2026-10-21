@@ -12,7 +12,7 @@
 |DIFF-06 producer/attempt/上限/typed输入|OPEN|V010首次成功元数据与B00-1.2相等；实际队列/crash cap/同键异体/旧尝试写回已交47个不同IT的组合证据，完整实现及领域typed输入消费者仍待独立评审，不以旧Worker3单测验收。|
 |DIFF-07 提交顺序/consumer前缀|OPEN|序列与显式最终flush/consumer已有延迟commit、rollback、前缀ACK、lease及争用交付证据；独立审查尚未完成，真实远端投递/后续领域消费仍OPEN。|
 |DIFF-08 额度deadline/配置/执行绑定|OPEN|新执行绑定/NULL保守占额/配置与settlement实现已交独立审查，旧草稿保全不复用；实际公司额度/cutoff仍未资格验证，不释放未知占额或自动开启模型容量。|
-|DIFF-09 文件/DB跨资源边界|OPEN|ports/native基础设施和[选定清单修复](local-upload-selection.md)已评审；JavaS3完整交付独立审查发现nullable长度异常资源释放缺陷，原作者fix1进行中；V009六表结构已独立采用；公共DB注册/回滚孤儿不可读/引用与epoch清理及两后端闭环未完成。|
+|DIFF-09 文件/DB跨资源边界|OPEN|ports/native基础设施和[选定清单修复](local-upload-selection.md)已评审；JavaS3完整交付及nullable长度资源释放等fix1已独立复审全部关闭并采用（43b33ba/a46d218）；V009六表结构已独立采用；公共DB注册/回滚孤儿不可读/引用与epoch清理及两后端闭环未完成。|
 |DIFF-10 快照/候选/根指针|OPEN|V011—013及领域服务未实施；版本/epoch/冻结输入/needs_generation/迟到结果保护待实际回归。|
 |DIFF-11 迁移次序冲突|机制已落实，逐号持续验证|原001/002/005归集并逐字节冻结，003/004永久空；[统一登记](../../database/migration-register.md)006—027已分配，各新号必须root预执行SHAACK。当前独立采用到009；010已首次正式应用/元数据匹配但完整实施评审尚未完成，不提前声称后续迁移全部验收。|
 |DIFF-12 旧队列草稿反序/懒建subject|OPEN|原稿/日志已归档保全；新替代实现682a7bf已提交完整独立审查，尚未接入。领域显式fence/独立operation token运行时和各消费者须分别评审。|
