@@ -1,0 +1,364 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ama-parent                                                         [pom]
+[INFO] ama-contracts                                                      [jar]
+[INFO] ama-core                                                           [jar]
+[INFO] ama-adapters                                                       [jar]
+[INFO] ama-api                                                            [jar]
+[INFO] ama-file-service                                                   [jar]
+[INFO] ama-worker                                                         [jar]
+[INFO] ama-integration-tests                                              [jar]
+[INFO] 
+[INFO] ---------------------------< ama:ama-parent >---------------------------
+[INFO] Building ama-parent 0.1.0-SNAPSHOT                                 [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] -------------------------< ama:ama-contracts >--------------------------
+[INFO] Building ama-contracts 0.1.0-SNAPSHOT                              [2/8]
+[INFO]   from backend/contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/contracts/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/contracts/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/contracts/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-contracts ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-contracts ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-contracts ---
+[INFO] 
+[INFO] ----------------------------< ama:ama-core >----------------------------
+[INFO] Building ama-core 0.1.0-SNAPSHOT                                   [3/8]
+[INFO]   from backend/core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-core ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/core/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/core/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-core ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/core/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-core ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-core ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-core ---
+[INFO] 
+[INFO] --------------------------< ama:ama-adapters >--------------------------
+[INFO] Building ama-adapters 0.1.0-SNAPSHOT                               [4/8]
+[INFO]   from backend/adapters/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-adapters ---
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] Copying 10 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-adapters ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-adapters ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/adapters/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-adapters ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-adapters ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.task.TaskMetadataTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.142 s -- in ama.task.TaskMetadataTest
+[INFO] Running ama.transcript.TextTranscriptParserTest
+[INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.271 s -- in ama.transcript.TextTranscriptParserTest
+[INFO] Running ama.storage.ManagedBackendIdentityTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.053 s -- in ama.storage.ManagedBackendIdentityTest
+[INFO] Running ama.storage.StorageRouterTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.057 s -- in ama.storage.StorageRouterTest
+[INFO] Running ama.storage.s3.S3LayoutV3Test
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.571 s -- in ama.storage.s3.S3LayoutV3Test
+[INFO] Running ama.storage.s3.S3ProtocolTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.027 s -- in ama.storage.s3.S3ProtocolTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 42, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-adapters ---
+[INFO] 
+[INFO] ----------------------------< ama:ama-api >-----------------------------
+[INFO] Building ama-api 0.1.0-SNAPSHOT                                    [5/8]
+[INFO]   from backend/api/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-api ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-api ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-api ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/api/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-api ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-api ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.api.DeploymentConfigTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.43 s -- in ama.api.DeploymentConfigTest
+[INFO] Running ama.api.IdentityContractsTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s -- in ama.api.IdentityContractsTest
+[INFO] Running ama.api.IdentitySecurityTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.231 s -- in ama.api.IdentitySecurityTest
+[INFO] Running ama.api.FileConfigurationTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 s -- in ama.api.FileConfigurationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-api ---
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ama-api ---
+[INFO] Attaching repackaged archive /home/tanren/ama/.worktrees/phase-b-file-registry/backend/api/target/ama-api-0.1.0-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ------------------------< ama:ama-file-service >------------------------
+[INFO] Building ama-file-service 0.1.0-SNAPSHOT                           [6/8]
+[INFO]   from backend/file-service/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-file-service ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/file-service/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/file-service/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-file-service ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-file-service ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/file-service/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-file-service ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-file-service ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-file-service ---
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ama-file-service ---
+[INFO] Attaching repackaged archive /home/tanren/ama/.worktrees/phase-b-file-registry/backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ---------------------------< ama:ama-worker >---------------------------
+[INFO] Building ama-worker 0.1.0-SNAPSHOT                                 [7/8]
+[INFO]   from backend/worker/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-worker ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/worker/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/worker/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-worker ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-worker ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/worker/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-worker ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-worker ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.worker.WorkerLoopTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.322 s -- in ama.worker.WorkerLoopTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-worker ---
+[INFO] Building jar: /home/tanren/ama/.worktrees/phase-b-file-registry/backend/worker/target/ama-worker-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------------< ama:ama-integration-tests >----------------------
+[INFO] Building ama-integration-tests 0.1.0-SNAPSHOT                      [8/8]
+[INFO]   from backend/integration-tests/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-integration-tests ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/integration-tests/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-file-registry/backend/integration-tests/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-integration-tests ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-integration-tests ---
+[INFO] Copying 5 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-integration-tests ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 64 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] /home/tanren/ama/.worktrees/phase-b-file-registry/backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java: Some input files use or override a deprecated API.
+[INFO] /home/tanren/ama/.worktrees/phase-b-file-registry/backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-integration-tests ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.storage.ContractFixtureTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.187 s -- in ama.storage.ContractFixtureTest
+[INFO] Running ama.support.ContractClientTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.577 s -- in ama.support.ContractClientTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-integration-tests ---
+[INFO] Skipping packaging of the jar
+[INFO] 
+[INFO] --- failsafe:3.5.6:integration-test (default) @ ama-integration-tests ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.storage.FileBackendCatalogIT
+06:04:42.959 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:45333/ama_b01_fixture (MySQL 8.4)
+06:04:43.172 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 10 migrations (execution time 00:00.068s)
+06:04:43.204 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 011.1
+06:04:43.210 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+06:04:47.085 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:45333/ama_b01_fixture (MySQL 8.4)
+06:04:47.145 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 10 migrations (execution time 00:00.022s)
+06:04:47.166 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 011.1
+06:04:47.168 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+06:04:47.631 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:45333/ama_b01_fixture (MySQL 8.4)
+06:04:47.684 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 10 migrations (execution time 00:00.021s)
+06:04:47.707 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 011.1
+06:04:47.709 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+[ERROR] Tests run: 3, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 5.969 s <<< FAILURE! -- in ama.storage.FileBackendCatalogIT
+[ERROR] ama.storage.FileBackendCatalogIT.racedNewerRevisionIsNotOverwrittenOrAcceptedAsOlderConfiguration -- Time elapsed: 0.543 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: superseded configuration must fail startup ==> expected: <false> but was: <true>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertFalse.failNotFalse(AssertFalse.java:69)
+	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:41)
+	at org.junit.jupiter.api.Assertions.assertFalse(Assertions.java:255)
+	at ama.storage.FileBackendCatalogIT.racedNewerRevisionIsNotOverwrittenOrAcceptedAsOlderConfiguration(FileBackendCatalogIT.java:56)
+
+[ERROR] ama.storage.FileBackendCatalogIT.identicalConcurrentFirstRegistrationsBothSucceed -- Time elapsed: 0.329 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.util.concurrent.ExecutionException: org.springframework.dao.DuplicateKeyException: PreparedStatementCallback; SQL [INSERT INTO storage_backend(id,storage_type,status,config_revision) VALUES (?,?,?,?)]; Duplicate entry '0650908d6817b08fe53af869c8de1dfb356685974b2eb65d72150b0b36cb6981' for key 'storage_backend.PRIMARY'
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:80)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:61)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3355)
+	at ama.storage.FileBackendCatalogIT.identicalConcurrentFirstRegistrationsBothSucceed(FileBackendCatalogIT.java:33)
+Caused by: java.util.concurrent.ExecutionException: org.springframework.dao.DuplicateKeyException: PreparedStatementCallback; SQL [INSERT INTO storage_backend(id,storage_type,status,config_revision) VALUES (?,?,?,?)]; Duplicate entry '0650908d6817b08fe53af869c8de1dfb356685974b2eb65d72150b0b36cb6981' for key 'storage_backend.PRIMARY'
+	at java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:205)
+	at ama.storage.FileBackendCatalogIT.lambda$identicalConcurrentFirstRegistrationsBothSucceed$1(FileBackendCatalogIT.java:33)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:76)
+	... 3 more
+Caused by: org.springframework.dao.DuplicateKeyException: PreparedStatementCallback; SQL [INSERT INTO storage_backend(id,storage_type,status,config_revision) VALUES (?,?,?,?)]; Duplicate entry '0650908d6817b08fe53af869c8de1dfb356685974b2eb65d72150b0b36cb6981' for key 'storage_backend.PRIMARY'
+	at org.springframework.jdbc.support.SQLExceptionSubclassTranslator.doTranslate(SQLExceptionSubclassTranslator.java:104)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:102)
+	at org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1549)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:689)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:966)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:1010)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:1020)
+	at ama.storage.FileBackendCatalog.configure(FileBackendCatalog.java:57)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '0650908d6817b08fe53af869c8de1dfb356685974b2eb65d72150b0b36cb6981' for key 'storage_backend.PRIMARY'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at org.springframework.jdbc.core.JdbcTemplate.lambda$update$0(JdbcTemplate.java:971)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:670)
+	... 9 more
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   FileBackendCatalogIT.identicalConcurrentFirstRegistrationsBothSucceed:33 Unexpected exception thrown: java.util.concurrent.ExecutionException: org.springframework.dao.DuplicateKeyException: PreparedStatementCallback; SQL [INSERT INTO storage_backend(id,storage_type,status,config_revision) VALUES (?,?,?,?)]; Duplicate entry '0650908d6817b08fe53af869c8de1dfb356685974b2eb65d72150b0b36cb6981' for key 'storage_backend.PRIMARY'
+[ERROR]   FileBackendCatalogIT.racedNewerRevisionIsNotOverwrittenOrAcceptedAsOlderConfiguration:56 superseded configuration must fail startup ==> expected: <false> but was: <true>
+[INFO] 
+[ERROR] Tests run: 3, Failures: 2, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.5.6:verify (default) @ ama-integration-tests ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ama-parent 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] ama-parent ......................................... SUCCESS [  0.005 s]
+[INFO] ama-contracts ...................................... SUCCESS [  1.793 s]
+[INFO] ama-core ........................................... SUCCESS [  0.115 s]
+[INFO] ama-adapters ....................................... SUCCESS [  3.189 s]
+[INFO] ama-api ............................................ SUCCESS [ 16.166 s]
+[INFO] ama-file-service ................................... SUCCESS [  0.147 s]
+[INFO] ama-worker ......................................... SUCCESS [  6.533 s]
+[ERROR] ama-integration-tests .............................. FAILURE [ 16.960 s]
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  45.906 s
+[INFO] Finished at: 2026-10-22T06:04:48+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.5.6:verify (default) on project ama-integration-tests: There are test failures.
+[ERROR] 
+[ERROR] See /home/tanren/ama/.worktrees/phase-b-file-registry/backend/integration-tests/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-integration-tests
+FAIL: subprocess exited 1
