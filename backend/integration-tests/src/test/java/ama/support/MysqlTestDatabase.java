@@ -7,6 +7,18 @@ import javax.sql.DataSource;
 public final class MysqlTestDatabase {
     private MysqlTestDatabase() {}
 
+    /** Destroys all objects only in the explicitly guarded disposable fixture schema. */
+    public static DataSource reset() {
+        var source = dataSource();
+        try (var connection = source.getConnection(); var statement = connection.createStatement()) {
+            statement.execute("DROP DATABASE ama_b01_fixture");
+            statement.execute("CREATE DATABASE ama_b01_fixture CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci");
+            return source;
+        } catch (java.sql.SQLException failure) {
+            throw new IllegalStateException("Owned disposable fixture schema reset failed", failure);
+        }
+    }
+
     public static DataSource dataSource() {
         String url = System.getenv("AMA_TEST_DATABASE_URL");
         String container = System.getenv("AMA_TEST_CONTAINER");
