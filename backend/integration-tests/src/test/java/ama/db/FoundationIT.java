@@ -2,6 +2,7 @@ package ama.db;
 
 import ama.support.MysqlTestDatabase;
 import ama.support.ExpectedRollbackError;
+import ama.support.ExpectedAuditMigrationFailure;
 import ama.audit.JdbcAuditAdapter;
 import ama.contract.AuditContracts.AuditEvent;
 import java.time.Instant;
@@ -320,8 +321,13 @@ class FoundationIT {
         var originalHistory = jdbc.queryForList("SELECT * FROM flyway_schema_history ORDER BY installed_rank");
         var migrator = Flyway.configure().dataSource(source).locations("classpath:db/migration").target("006")
                 .initSql("SET sql_mode=''; SET NAMES utf8mb4; SET time_zone='+00:00'").cleanDisabled(true).load();
-        var failure = assertThrows(FlywayException.class, migrator::migrate);
-        assertTrue(failure.getMessage().contains("chk_audit_v006_metadata_compatible"), failure.getMessage());
+        try (var expectedLog = new ExpectedAuditMigrationFailure()) {
+            var failure = assertThrows(FlywayException.class, migrator::migrate);
+            assertTrue(failure.getMessage().contains("chk_audit_v006_metadata_compatible"), failure.getMessage());
+            assertEquals(List.of("Migration of schema `ama_b01_fixture` to version \"006 - audit metadata\" "
+                    + "failed! Please restore backups and roll back database and code!"), expectedLog.messages(),
+                    "exactly the expected Flyway V006 rejection event is captured");
+        }
         assertEquals(originalRows, auditRows(), "failure must preserve the incompatible source values");
         assertEquals(originalColumns, jdbc.queryForList("SHOW FULL COLUMNS FROM audit_event"),
                 "preflight rejects values before any audit ALTER; multi-statement DDL is not claimed transactional");
