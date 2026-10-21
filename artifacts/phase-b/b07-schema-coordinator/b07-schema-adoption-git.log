@@ -1,0 +1,76 @@
+[codex/phase-b-foundation 72e1d9e] test(db): prepare V012 oracle and missing-schema RED checkpoint
+ Date: Thu Oct 22 04:50:24 2026 +0800
+ 25 files changed, 17343 insertions(+)
+ create mode 100644 artifacts/phase-b/b07-schema-author/.gitattributes
+ create mode 100644 artifacts/phase-b/b07-schema-author/checkpoint-manifest.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/formal/after-red.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/formal/initial-empty.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/formal/lower-before.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/formal/owned-fixture.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/V012__minutes_evidence.sql.review-only
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/__pycache__/start_fixture.cpython-312.pyc
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/candidate-comparison.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/fixture-identity.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/fixture-start-attempt.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/fixture-start.log
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/initial-V012__minutes_evidence.sql.review-only
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/initial-shell-redirection-error.log
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/preparation.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/red.log
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/red.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/start_fixture.py
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/test-compile-final-checkpoint.log
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/test-compile.log
+ create mode 100644 backend/integration-tests/src/test/java/ama/db/MinutesSchemaIT.java
+ create mode 100644 backend/integration-tests/src/test/resources/ama/db/minutes-schema-b00-1.3.json
+ create mode 100644 docs/acceptance/b/generation-schema-implementation-report.md
+ create mode 100644 docs/acceptance/b/generation-schema-preparation.md
+ create mode 100644 docs/acceptance/b/generation-schema-preparation.py
+[codex/phase-b-foundation 82f2e6a] test(db): complete checkpoint evidence allowlist
+ Date: Thu Oct 22 04:50:48 2026 +0800
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+[codex/phase-b-foundation e6fe625] feat(db): apply frozen V012 generation schema with physical evidence
+ Date: Thu Oct 22 04:59:50 2026 +0800
+ 43 files changed, 44037 insertions(+), 14 deletions(-)
+ create mode 100644 artifacts/phase-b/b07-schema-author/checkpoint-source/backend/integration-tests/src/test/java/ama/db/MinutesSchemaIT.java
+ create mode 100644 artifacts/phase-b/b07-schema-author/checkpoint-source/backend/integration-tests/src/test/resources/ama/db/minutes-schema-b00-1.3.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/checkpoint-source/docs/acceptance/b/generation-schema-implementation-report.md
+ create mode 100644 artifacts/phase-b/b07-schema-author/checkpoint-source/docs/acceptance/b/generation-schema-preparation.md
+ create mode 100644 artifacts/phase-b/b07-schema-author/checkpoint-source/docs/acceptance/b/generation-schema-preparation.py
+ create mode 100644 artifacts/phase-b/b07-schema-author/checkpoint-source/manifest.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/compiled/MinutesSchemaIT.class
+ create mode 100644 artifacts/phase-b/b07-schema-author/compiled/V012__minutes_evidence.sql
+ create mode 100644 artifacts/phase-b/b07-schema-author/compiled/minutes-schema-b00-1.3.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/final-manifest.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/formal/after-tests.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/formal/after-upgrade.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/formal/application-boundaries.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/formal/private-target-rerun-zero.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/formal/production-latest-rerun-zero.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/formal/root-ack.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/capture_native_history.py
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/checkpoint-coordinator-report.md
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/final-checks.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/final-checks.log
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/final_checks.py
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/first-full.log
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/first-full.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/native-after.log
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/native-before.log
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/native-final.log
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/native-history-after-first012.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/native-history-before-first012.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/native-history-final.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/review/root-ack.json
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/adapters/TEST-ama.storage.StorageRouterTest.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/adapters/TEST-ama.storage.s3.S3LayoutV3Test.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/adapters/TEST-ama.storage.s3.S3ProtocolTest.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/adapters/TEST-ama.task.TaskMetadataTest.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/adapters/TEST-ama.transcript.TextTranscriptParserTest.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/api/TEST-ama.api.DeploymentConfigTest.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/api/TEST-ama.api.IdentityContractsTest.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/api/TEST-ama.api.IdentitySecurityTest.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/integration-tests/TEST-ama.storage.ContractFixtureTest.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/integration-tests/TEST-ama.support.ContractClientTest.xml
+ create mode 100644 artifacts/phase-b/b07-schema-author/unit-xml/worker/TEST-ama.worker.WorkerLoopTest.xml
+ create mode 100644 backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql

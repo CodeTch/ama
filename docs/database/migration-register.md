@@ -31,7 +31,7 @@
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|03e89cc8…冻结/首次成功；完整框架及fix1已独立采用（8a3b77b/e9d2eca/a79ce67），真实公司/领域消费者门另计|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|a926c8b5…冻结；首次success/旧缺索引失败原件保留，配合V011.1结构独立PASS，归集022f68a/71c7c5c/1d710f9；完整B06仍OPEN|
 |V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|9efc688e…冻结；ACK后rank10首次success/checksum-570494170；实际11suite全通过/五组元数据一致，独立PASS采用；仅纠正索引|
-|V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|10742ca2…完整21260bytes候选已中央完整读取/静态逐字节比对，首次应用前冻结；仅自有b62b9b2b…:44915，须本记录commit后另行ACK；尚未应用|
+|V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|10742ca2…冻结/ACK后首次success checksum2101765957；实际19/123/92/21/45、11IT通过，fresh独立PASS0findings采用；完整B07仍OPEN|
 |V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
 |V015|C-03|原V010|correction/edit_operation；speaker基础已在V011，任何必要扩展另在本号|预留，未编写|
@@ -197,3 +197,10 @@ root独立从actual1.3metadata a6c758d4…过滤验证oracle d051aaa9…；目�
 只限新独有fixture ama-test-b01-feb4b5365dae，完整ID b62b9b2b8f2b7bb47db21fa4561c90e3ba325138250975531f5585e16ede460e，127.0.0.1:44915；原0表/MySQL8.4.6/nativeAIO0功能限定。lower001→002→005→006→007→008→009→010→011→011.1全部success、checksum及源SHA一致，已真实缺十九表assertionRED1/1/0/0，RED前后旧行/DDL/metadata/history不变（after仅多源SHA记录key）。JDBC原installed_on字符串按Asia/Shanghai显示，不标成serverUTC；原生UTC/epoch补证在最终交付保留。
 
 本记录commit后root单独发送精确SHA ACK，拥有者才可按原候选字节复制到正式location、首次Flyway012并运行完整物理suite、五组actualmetadata/旧数据与historyprefix/重复迁移0验证。候选自共享起已冻结，任何问题保留原件并统一登记前向新版本；不改旧迁移/oracle、repair/reset/outOfOrder。未知/失败/高版本缺低号库不在许可范围。B07契约两项来源追溯修订不改变这十九表；复杂材料运行时仍受前置门限制，完整B07/B最终验收未获通过。
+
+
+## V012 结构正式采用（2026-10-22）
+
+完整来源260b6f84..234e6e2（全部三owned提交）经fresh独立SPEC PASS/QUALITY APPROVED0P0—P3；归集72e1d9e4、82f2e6a8、e6fe625c，67paths逐字节验证。正式SQL10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7、21260B、checksum2101765957不变；目标19表123列92indexcols21CHECK45FKcols一致，oldlower10行/DDL/historyprefix保留，private012/latest各0。无SQL修正/repair/reset/outOfOrder。[实施采用](../acceptance/b/generation-schema-implementation-report.md)和[独立评审](../acceptance/b/generation-schema-independent-review.md)。
+
+冻结记录20:53:07.558007UTC为root capture，Git中央冻结7b80ae28时间20:53:08UTC，均早于ACK20:53:38.528及应用20:55:06。原时间/epoch证据不改写。V013仍仅预留未写，正式首次应用需要新的完整SQL/SHA登记提交和ACK。B07全业务、V017材料FK/来源持久化与两个UX门仍未验收；下个新整数28及旧所有权保持。

@@ -181,3 +181,13 @@ history immutability, concurrency and both pending UX questions remain OPEN.
 No application runtime or provider/company/SSO/model/KB/mail behavior was enabled,
 and no push/main merge occurred. Final fresh full-range independent SPEC and
 quality review is required; these author checks do not self-sign that gate.
+
+## 协调者结构采用记录（2026-10-22）
+
+完整260b6f84..234e6e2（含两个准备提交）经fresh独立SPEC PASS/QUALITY APPROVED、0P0—P3，原件SHA0caf432a…；三提交归集为72e1d9e4、82f2e6a8、e6fe625c。67个最终路径在协调附注前与审查路径SHA/Git blob逐字节相同。作者60payload/finalmanifest和原checkpoint/source/报告完整保留；协调者另归档原始报告/评审/路径表/归集log和字节验证清单(-text)。[完整独立评审](generation-schema-independent-review.md)。没有为机械归集重复跑库或测试。
+
+采用仅结构前置：V012完整SQL10742ca2…/21260bytes/checksum2101765957不变；实际目标19/123/92/21/45、11IT/0fail/0error/0skip，原lower10文件和DDL/行/元数据/history前缀保留，两个rerun各0。首次应用后未修SQL或oracle，两个延后材料FK索引均显式保留。确认时间区分：root读取/静态冻结capture20:53:07.558007UTC，Git中央冻结commit7b80ae28实际20:53:08UTC(epoch1792615988)，ACK20:53:38.528017，首次应用20:55:06(epoch1792616106)。原UTC/epoch与JDBCAsiaShanghai原件均保留。
+
+generation-schema-preparation.py仍固定十个低版本的历史准备上下文；在原e568028/b750f3f checkout复现，不能削弱guard来强迫当前已含V012位置重跑。完整B00来源和元数据未变。不相关locator列的schema/prose差异由应用严格union验证承担，物理CHECK未更改。四个接受的rawSQL边界证据不能被当成权限/同会议/真实hash/语义拒绝测试。
+
+V013可按已审1.3继续准备；完整B07领域/模型/档案恢复/来源验证/CAS/事务/候选/最终确认和两个交互仍OPEN，结构采用不打开最终B验收、业务Worker、复杂材料或真实公司/生产/HA/nativeI/O/容量资格。
