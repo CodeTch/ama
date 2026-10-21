@@ -34,4 +34,3 @@
 **Scoped code quality: APPROVED.** The minimal production guard and focused regressions address the demonstrated defect without identified direct regression.
 
 **Fix round: All findings addressed, no new Critical/Important breakage.** I1 is closed. Approval is limited to this fix round and saved mocked qualification; no live qualification is claimed.
-
