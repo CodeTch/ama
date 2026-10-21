@@ -27,6 +27,13 @@ def execute(command, cwd, reports):
                 continue
             root = ET.parse(report).getroot()
             suites = [root] if root.tag == "testsuite" else list(root.iter("testsuite"))
+            # Node 22's built-in JUnit reporter emits direct testcase children.
+            if not suites and root.tag == "testsuites":
+                cases = root.findall("testcase")
+                skipped_cases = sum(case.find("skipped") is not None for case in cases)
+                executed += len(cases) - skipped_cases
+                skipped += skipped_cases
+                failures += sum(case.find("failure") is not None or case.find("error") is not None for case in cases)
             for suite in suites:
                 executed += int(suite.get("tests", "0")) - int(suite.get("skipped", "0"))
                 skipped += int(suite.get("skipped", "0"))
@@ -72,6 +79,50 @@ def contracts():
         print(f"FAIL: OpenAPI validator unavailable: {error}", file=sys.stderr)
         return 1
 
+def web_tests(group, selector="*"):
+    """Register delivered web suites, with fresh JUnit counts through execute()."""
+    folder = {"web": "unit", "e2e": "e2e", "visual": "visual"}[group]
+    suffix = "*.test.ts" if group == "web" else "*.spec.ts"
+    sources = sorted((ROOT / "web/tests" / folder).rglob(suffix))
+    matched = [path for path in sources if fnmatch.fnmatchcase(path.name, selector)]
+    if not matched:
+        print(f"FAIL: zero matching {group} tests for {selector!r}", file=sys.stderr)
+        return 1
+    report = ROOT / "artifacts/web" / f"{group}.xml"
+    report.parent.mkdir(parents=True, exist_ok=True)
+    binaries = ROOT / "web/node_modules/.bin"
+    if group == "web":
+        command = [str(binaries / "tsx"), "--test", "--test-reporter=junit", f"--test-reporter-destination={report}"]
+    else:
+        command = ["env", f"PLAYWRIGHT_JUNIT_OUTPUT_FILE={report}", str(binaries / "playwright"), "test"]
+    command += [str(path.relative_to(ROOT / "web")) for path in matched]
+    return execute(command, ROOT / "web", [report])
+
+def python_tests():
+    """Discover every currently delivered Python test directory, excluding dependency trees."""
+    import os
+    directories = set()
+    for parent, children, files in os.walk(ROOT):
+        children[:] = [name for name in children if name not in {"node_modules", ".git", ".tools", ".worktrees", "artifacts", "__pycache__", ".venv"}]
+        if any(fnmatch.fnmatchcase(name, "test_*.py") for name in files):
+            directories.add(pathlib.Path(parent))
+    if not directories:
+        print("FAIL: zero delivered Python test directories", file=sys.stderr)
+        return 1
+    # A fresh interpreter per directory avoids basename/module collisions across suites.
+    script = """import sys, unittest
+suite = unittest.defaultTestLoader.discover(sys.argv[1])
+result = unittest.TextTestRunner(verbosity=2).run(suite)
+print(f'Python executed={result.testsRun}, skipped={len(result.skipped)}', flush=True)
+raise SystemExit(0 if result.testsRun > 0 and result.wasSuccessful() and not result.skipped else 1)
+"""
+    for directory in sorted(directories):
+        result = subprocess.run([sys.executable, "-c", script, str(directory)], cwd=ROOT, check=False)
+        if result.returncode:
+            return result.returncode if result.returncode > 0 else 1
+    print(f"PASS: Python test directories={len(directories)}", flush=True)
+    return 0
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("group", choices=["unit", "it", "web", "e2e", "visual", "contract", "load", "ops", "all"])
@@ -79,6 +130,8 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.group in ("unit", "it"):
         return java_tests(args.selector or "*", args.group == "it")
+    if args.group in ("web", "e2e", "visual"):
+        return web_tests(args.group, args.selector or "*")
     if args.group == "contract" and args.selector == "OpenApi":
         return contracts()
     if args.group != "all":
@@ -86,9 +139,13 @@ def main(argv=None):
         return 1
     if args.selector:
         parser.error("all does not accept a selector")
-    python_result = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tools/checks/tests"], cwd=ROOT)
-    if python_result.returncode:
-        return python_result.returncode
+    python_result = python_tests()
+    if python_result:
+        return python_result
+    if (ROOT / "web/tests/unit").exists():
+        result = web_tests("web")
+        if result:
+            return result
     result = contracts()
     if result:
         return result

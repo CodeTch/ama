@@ -1,0 +1,271 @@
+{
+  "text": "我的会议\n我的语料反馈\n演示引导\n重置演示数据\n林\n林晓芸\n会议负责人 · 权益投资部\n我的会议\n集中管理你负责和参与的会议，从录音采集、AI增强转写到纪要生成与发布，让会议内容可核对、结论可追溯、成果随时回看。\n开始录音\n导入会议\n我负责的\n我参与的\n状态:\n全部会议\n类别:\n全部分类\n专题:\n全部专题\n未归入专题\n2026年权益投资经营复盘\n重点产品季度复盘\n风险预算专题\n产品策略调研\n会议日期:\n开始日期 - 结束日期\n清空筛选\n\t会议\t会议分类\t参会人\t当前状态\t会议日期\t时长\t专题\t更新时间\t发布知识库\t操作\n\t四季度投研协同与重点产品风险复盘会（长转写演示）\nDEMO-TRANSCRIPT-LONG-20261020\n\t专题讨论会\t沈明远、林晓芸、周正豪 等6人\t转写待处理\t2026-10-20\t00:45:00\t\n未归入专题\n\t2026/10/21 20:54:00\t--\t\n删除\n\n\t2026年权益投资经营复盘 · 季度经营进展复盘（1）\nMOCK-20261020-OWNED-1-1\n\t经营分析会\t林晓芸、沈明远、周正豪\t会议采集\t2026-10-20\t--\t\n2026年权益投资经营复盘\n\t2026/10/20 16:00:00\t--\t\n删除\n\n\t重点产品季度复盘 · 重点产品策略评审（1）\nMOCK-20261020-OWNED-2-1\n\t产品复盘会\t林晓芸、沈明远、周正豪\t转写待处理\t2026-10-18\t--\t\n重点产品季度复盘\n\t2026/10/18 14:14:22\t--\t\n删除\n\n\t风险预算专题 · 组合风险预算讨论（1）\nMOCK-20261020-OWNED-3-1\n\t风险评审会\t林晓芸、沈明远、周正豪\t转写失败\n转写或增强失败\n\t2026-10-16\t--\t\n风险预算专题\n\t2026/10/16 16:28:44\t--\t\n删除\n重试转写\n\n\t产品策略调研 · 投研协同周例会（1）\nMOCK-20261020-OWNED-4-1\n\t调研讨论会\t林晓芸、沈明远、周正豪\t纪要待处理\t2026-10-14\t--\t\n产品策略调研\n\t2026/10/14 14:42:06\t--\t\n删除\n\n\t跨部门协同 · 渠道服务方案沟通（1）\nMOCK-20261020-OWNED-5-1\n\t周例会\t林晓芸、沈明远、周正豪\t纪要生成失败\t2026-10-12\t--\t\n未归入专题\n\t2026/10/12 16:56:28\t--\t\n删除\n重试纪要\n\n\t2026年权益投资经营复盘 · 客户需求与产品安排（1）\nMOCK-20261020-OWNED-6-1\n\t专题讨论会\t林晓芸、沈明远、周正豪\t待发布\t2026-10-10\t--\t\n2026年权益投资经营复盘\n\t2026/10/10 14:10:50\t--\t\n删除\n\n\t重点产品季度复盘 · 策略研究阶段研讨（1）\nMOCK-20261020-OWNED-7-1\n\t项目筹备会\t林晓芸、沈明远、周正豪\t发布失败\t2026-10-08\t--\t\n重点产品季度复盘\n\t2026/10/08 16:24:12\t--\t\n删除\n重试发布\n\n\t风险预算专题 · 发布成果归档核对（1）\nMOCK-20261020-OWNED-8-1\n\t策略研讨会\t林晓芸、沈明远、周正豪\t已发布\t2026-10-06\t--\t\n风险预算专题\n\t2026/10/06 14:38:34\t招商基金投研知识库 / 权益投资 / 经营分析会议 / 2026年三季度\t\n删除\n\n\t产品策略调研 · 季度经营进展复盘（2）\nMOCK-20261020-OWNED-1-2\n\t产品复盘会\t林晓芸、沈明远、周正豪\t会议采集\t2026-10-04\t00:00:05\t\n产品策略调研\n\t2026/10/04 16:52:56\t--\t\n删除\n共 34 条 · 1/4 页\n‹\n1\n2\n3\n4\n›\n当前页面数据均为产品演示用模拟数据，不代表招商基金真实业务信息。\n当前原型为纯前端交互演示，不连接招商基金真实业务系统。当前原型仅展示会议负责人的相关功能。",
+  "header": "<div class=\"topbar\">\n    <div class=\"topbar-heading\"><button class=\"topbar-home\" data-act=\"go\" data-to=\"/meetings\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-3px\"><path d=\"M8 6h13M8 12h13M8 18h13\"></path><circle cx=\"4\" cy=\"6\" r=\"1.4\"></circle><circle cx=\"4\" cy=\"12\" r=\"1.4\"></circle><circle cx=\"4\" cy=\"18\" r=\"1.4\"></circle></svg> 我的会议</button></div>\n    <div class=\"topbar-right\">\n     <button class=\"btn sm ghost\" data-act=\"go\" data-to=\"/feedback\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-3px\"><path d=\"M4 5h16v11H9l-5 4V5Z\"></path></svg> 我的语料反馈</button>\n     <button class=\"btn sm ghost\" data-act=\"openGuide\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-3px\"><circle cx=\"12\" cy=\"12\" r=\"9\"></circle><path d=\"M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.8.4-1.1.9-1.1 1.8\"></path><circle cx=\"12\" cy=\"17\" r=\".6\"></circle></svg> 演示引导</button>\n     <button class=\"btn sm ghost\" data-act=\"askReset\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-3px\"><path d=\"M3 12a9 9 0 1 0 3-6.7\"></path><path d=\"M3 4v5h5\"></path></svg> 重置演示数据</button>\n     <div class=\"role-chip\"><div class=\"avatar o\">林</div>\n      <div><div class=\"rc-name\">林晓芸</div><div class=\"rc-role\">会议负责人 · 权益投资部</div></div></div>\n    </div>\n   </div>",
+  "head": "<div class=\"page-head\"><div><div class=\"page-title\">我的会议</div><div class=\"page-desc\">集中管理你负责和参与的会议，从录音采集、AI增强转写到纪要生成与发布，让会议内容可核对、结论可追溯、成果随时回看。</div></div><div class=\"page-actions\"><button class=\"btn primary\" data-act=\"onlineStart\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-3px\"><rect x=\"9\" y=\"3\" width=\"6\" height=\"11\" rx=\"3\"></rect><path d=\"M5 11a7 7 0 0 0 14 0\"></path><path d=\"M12 18v3\"></path></svg> 开始录音</button><button class=\"btn\" data-act=\"go\" data-to=\"/meeting/new\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-3px\"><path d=\"M12 5v14M5 12h14\"></path></svg> 导入会议</button></div></div>",
+  "styles": [
+    {
+      "class": "layout",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 1331.15625,
+        "top": 0,
+        "right": 1024,
+        "bottom": 1331.15625,
+        "left": 0
+      },
+      "style": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(37, 40, 54)",
+        "fontSize": "14px",
+        "borderRadius": "0px",
+        "height": "1331.16px",
+        "padding": "0px",
+        "lineHeight": "21.7px"
+      }
+    },
+    {
+      "class": "topbar",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 56,
+        "top": 0,
+        "right": 1024,
+        "bottom": 56,
+        "left": 0
+      },
+      "style": {
+        "backgroundColor": "rgb(255, 255, 255)",
+        "color": "rgb(37, 40, 54)",
+        "fontSize": "14px",
+        "borderRadius": "0px",
+        "height": "56px",
+        "padding": "0px 24px",
+        "lineHeight": "21.7px"
+      }
+    },
+    {
+      "class": "btn sm ghost",
+      "rect": {
+        "x": 467.21875,
+        "y": 14,
+        "width": 115,
+        "height": 27,
+        "top": 14,
+        "right": 582.21875,
+        "bottom": 41,
+        "left": 467.21875
+      },
+      "style": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(111, 116, 130)",
+        "fontSize": "12px",
+        "borderRadius": "7px",
+        "height": "27px",
+        "padding": "4px 10px",
+        "lineHeight": "normal"
+      }
+    },
+    {
+      "class": "btn sm ghost",
+      "rect": {
+        "x": 592.21875,
+        "y": 14,
+        "width": 91,
+        "height": 27,
+        "top": 14,
+        "right": 683.21875,
+        "bottom": 41,
+        "left": 592.21875
+      },
+      "style": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(111, 116, 130)",
+        "fontSize": "12px",
+        "borderRadius": "7px",
+        "height": "27px",
+        "padding": "4px 10px",
+        "lineHeight": "normal"
+      }
+    },
+    {
+      "class": "btn sm ghost",
+      "rect": {
+        "x": 693.21875,
+        "y": 14,
+        "width": 115,
+        "height": 27,
+        "top": 14,
+        "right": 808.21875,
+        "bottom": 41,
+        "left": 693.21875
+      },
+      "style": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(111, 116, 130)",
+        "fontSize": "12px",
+        "borderRadius": "7px",
+        "height": "27px",
+        "padding": "4px 10px",
+        "lineHeight": "normal"
+      }
+    },
+    {
+      "class": "content",
+      "rect": {
+        "x": 0,
+        "y": 56,
+        "width": 1024,
+        "height": 1275.15625,
+        "top": 56,
+        "right": 1024,
+        "bottom": 1331.15625,
+        "left": 0
+      },
+      "style": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(37, 40, 54)",
+        "fontSize": "14px",
+        "borderRadius": "0px",
+        "height": "1275.16px",
+        "padding": "24px",
+        "lineHeight": "21.7px"
+      }
+    },
+    {
+      "class": "page-head",
+      "rect": {
+        "x": 24,
+        "y": 80,
+        "width": 976,
+        "height": 67.6875,
+        "top": 80,
+        "right": 1000,
+        "bottom": 147.6875,
+        "left": 24
+      },
+      "style": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(37, 40, 54)",
+        "fontSize": "14px",
+        "borderRadius": "0px",
+        "height": "67.6875px",
+        "padding": "0px",
+        "lineHeight": "21.7px"
+      }
+    },
+    {
+      "class": "page-title",
+      "rect": {
+        "x": 24,
+        "y": 80,
+        "width": 734,
+        "height": 40.296875,
+        "top": 80,
+        "right": 758,
+        "bottom": 120.296875,
+        "left": 24
+      },
+      "style": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(17, 24, 73)",
+        "fontSize": "26px",
+        "borderRadius": "0px",
+        "height": "40.2969px",
+        "padding": "0px",
+        "lineHeight": "40.3px"
+      }
+    },
+    {
+      "class": "page-desc",
+      "rect": {
+        "x": 24,
+        "y": 124.296875,
+        "width": 734,
+        "height": 23.390625,
+        "top": 124.296875,
+        "right": 758,
+        "bottom": 147.6875,
+        "left": 24
+      },
+      "style": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(111, 116, 130)",
+        "fontSize": "13px",
+        "borderRadius": "0px",
+        "height": "23.3906px",
+        "padding": "0px",
+        "lineHeight": "23.4px"
+      }
+    },
+    {
+      "class": "page-actions",
+      "rect": {
+        "x": 778,
+        "y": 80,
+        "width": 222,
+        "height": 37,
+        "top": 80,
+        "right": 1000,
+        "bottom": 117,
+        "left": 778
+      },
+      "style": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(37, 40, 54)",
+        "fontSize": "14px",
+        "borderRadius": "0px",
+        "height": "37px",
+        "padding": "0px",
+        "lineHeight": "21.7px"
+      }
+    },
+    {
+      "class": "btn primary",
+      "rect": {
+        "x": 778,
+        "y": 80,
+        "width": 106,
+        "height": 37,
+        "top": 80,
+        "right": 884,
+        "bottom": 117,
+        "left": 778
+      },
+      "style": {
+        "backgroundColor": "rgb(255, 107, 26)",
+        "color": "rgb(255, 255, 255)",
+        "fontSize": "13px",
+        "borderRadius": "9px",
+        "height": "37px",
+        "padding": "8px 16px",
+        "lineHeight": "normal"
+      }
+    },
+    {
+      "class": "btn",
+      "rect": {
+        "x": 894,
+        "y": 80,
+        "width": 106,
+        "height": 37,
+        "top": 80,
+        "right": 1000,
+        "bottom": 117,
+        "left": 894
+      },
+      "style": {
+        "backgroundColor": "rgb(255, 255, 255)",
+        "color": "rgb(37, 40, 54)",
+        "fontSize": "13px",
+        "borderRadius": "9px",
+        "height": "37px",
+        "padding": "8px 16px",
+        "lineHeight": "normal"
+      }
+    }
+  ]
+}

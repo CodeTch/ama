@@ -87,5 +87,58 @@ class RunnerTests(unittest.TestCase):
             runner.ROOT = root
             self.assertEqual(0, runner.java_tests("CoreTest"))
 
+
+class WebRunnerTests(unittest.TestCase):
+    def runner(self, root):
+        spec = importlib.util.spec_from_file_location("ama_web_runner", RUNNER)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        module.ROOT = root
+        return module
+
+    def test_registered_web_suites_execute_actual_tests_and_count_reports(self):
+        # Catches missing dispatch, wrong cwd/report paths and treating discovery as execution.
+        for group, relative in [("web", "unit/client.test.ts"), ("visual", "visual/shell.spec.ts"), ("e2e", "e2e/shell.spec.ts")]:
+            with self.subTest(group=group), tempfile.TemporaryDirectory() as directory:
+                root=pathlib.Path(directory)
+                source=root / "web/tests" / relative
+                source.parent.mkdir(parents=True)
+                source.write_text("// discovery fixture")
+                binary=root / "web/node_modules/.bin" / ("tsx" if group=="web" else "playwright")
+                binary.parent.mkdir(parents=True)
+                binary.write_text('#!/usr/bin/env python3\nfrom pathlib import Path\np=Path("../artifacts/web/'+group+'.xml")\np.parent.mkdir(parents=True,exist_ok=True)\np.write_text(\'<testsuite tests="2" failures="0" errors="0" skipped="0"/>\')\n')
+                binary.chmod(0o755)
+                self.assertEqual(0,self.runner(root).web_tests(group,source.name))
+
+    def test_zero_web_matches_cannot_launch_a_false_success(self):
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertNotEqual(0,self.runner(pathlib.Path(directory)).web_tests("web","missing.test.ts"))
+
+    def test_python_discovery_counts_all_delivered_directories_and_rejects_skips(self):
+        # Two real temporary Python suites; deleting a directory from discovery loses its count.
+        with tempfile.TemporaryDirectory() as directory:
+            root=pathlib.Path(directory)
+            for folder,name in [("tools/checks/tests","one"),("tools/probes/tests","two")]:
+                target=root / folder
+                target.mkdir(parents=True)
+                (target / ("test_"+name+".py")).write_text("import unittest\nclass Suite(unittest.TestCase):\n def test_real(self): self.assertEqual(4,2+2)\n")
+            runner=self.runner(root)
+            self.assertEqual(0,runner.python_tests())
+            (root / "tools/probes/tests/test_two.py").write_text("import unittest\nclass Suite(unittest.TestCase):\n @unittest.skip('pending')\n def test_real(self): pass\n")
+            self.assertNotEqual(0,runner.python_tests())
+
+    def test_node_junit_direct_cases_are_counted_and_skips_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=pathlib.Path(directory)
+            runner=self.runner(root)
+            report=root / "node.xml"
+            for xml, want in [('<testsuites><testcase name="actual"/></testsuites>',0),('<testsuites><testcase name="pending"><skipped/></testcase><testcase name="pass"/></testsuites>',1),('<testsuites><testcase name="broken"><failure/></testcase></testsuites>',1)]:
+                code="from pathlib import Path; Path('node.xml').write_text("+repr(xml)+")"
+                self.assertEqual(want,runner.execute([sys.executable,"-c",code],root,[report]))
+
+    def test_no_delivered_python_cases_is_failure(self):
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertNotEqual(0,self.runner(pathlib.Path(directory)).python_tests())
+
 if __name__ == "__main__":
     unittest.main()
