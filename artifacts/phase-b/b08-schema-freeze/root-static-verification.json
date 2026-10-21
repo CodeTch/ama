@@ -1,0 +1,48 @@
+{
+  "captured_utc": "2026-10-21T21:47:04.731880+00:00",
+  "scope": "root pre-first-apply static and preserved-evidence verification; no database action",
+  "checkpoint": "1c8d3ef154933c93efb6dac427d5a6800d59da3f",
+  "candidate_bytes": 7661,
+  "candidate_sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+  "exact_create_blocks": [
+    "external_document_mapping",
+    "final_confirmation",
+    "final_result_review",
+    "publication",
+    "publication_attempt"
+  ],
+  "exact_deployed_fk_constraints": 18,
+  "deferred_fk_with_explicit_backing_index": "fk_final_confirmation_9",
+  "oracle_counts": {
+    "tables": 5,
+    "columns": 42,
+    "indexes": 30,
+    "checks": 4,
+    "foreign_keys": 18
+  },
+  "oracle_sha256": "0ae0d6550bee43740dd4633ab4eb05196b3fc04f9d3ea1bbe9cf81e776d557ff",
+  "lower_source_files_equal_root_BASE_owner": 11,
+  "available_historical_frozen_copies_equal": [
+    "V001__foundation.sql",
+    "V002__identity_acl.sql",
+    "V005__tasks_outbox.sql",
+    "V009__file_schema.sql",
+    "V010__reliable_execution.sql",
+    "V011__transcript_schema.sql",
+    "V012__minutes_evidence.sql"
+  ],
+  "lower_deployed_tables": 57,
+  "lower_snapshot_original_keys_equal": true,
+  "native_lower_history_all_success": 11,
+  "red_tests_failures_errors_skipped": [
+    1,
+    1,
+    0,
+    0
+  ],
+  "checkpoint_manifest_entries_verified_against_Git_blobs": 43,
+  "formal_v013_absent_at_verification": true,
+  "fixture_id": "45e74f283bd96e71a876a303ffede564306d77da91b54fc7e73b2ec0a1bef36d",
+  "fixture_name": "/ama-test-b01-ee4d94105bb9",
+  "loopback_port": 46539
+}

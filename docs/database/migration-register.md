@@ -32,7 +32,7 @@
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|a926c8b5…冻结；首次success/旧缺索引失败原件保留，配合V011.1结构独立PASS，归集022f68a/71c7c5c/1d710f9；完整B06仍OPEN|
 |V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|9efc688e…冻结；ACK后rank10首次success/checksum-570494170；实际11suite全通过/五组元数据一致，独立PASS采用；仅纠正索引|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|10742ca2…冻结/ACK后首次success checksum2101765957；实际19/123/92/21/45、11IT通过，fresh独立PASS0findings采用；完整B07仍OPEN|
-|V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
+|V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|1de37066…首次应用前冻结；五表候选已逐表核对，登记提交后另发ACK；实际升级与独立结构评审仍待执行|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
 |V015|C-03|原V010|correction/edit_operation；speaker基础已在V011，任何必要扩展另在本号|预留，未编写|
 |V016|C-04/C-06|原V011|recording/session/part/chunk、subtitle；依赖V009/010/014|预留，未编写|
@@ -204,3 +204,16 @@ root独立从actual1.3metadata a6c758d4…过滤验证oracle d051aaa9…；目�
 完整来源260b6f84..234e6e2（全部三owned提交）经fresh独立SPEC PASS/QUALITY APPROVED0P0—P3；归集72e1d9e4、82f2e6a8、e6fe625c，67paths逐字节验证。正式SQL10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7、21260B、checksum2101765957不变；目标19表123列92indexcols21CHECK45FKcols一致，oldlower10行/DDL/historyprefix保留，private012/latest各0。无SQL修正/repair/reset/outOfOrder。[实施采用](../acceptance/b/generation-schema-implementation-report.md)和[独立评审](../acceptance/b/generation-schema-independent-review.md)。
 
 冻结记录20:53:07.558007UTC为root capture，Git中央冻结7b80ae28时间20:53:08UTC，均早于ACK20:53:38.528及应用20:55:06。原时间/epoch证据不改写。V013仍仅预留未写，正式首次应用需要新的完整SQL/SHA登记提交和ACK。B07全业务、V017材料FK/来源持久化与两个UX门仍未验收；下个新整数28及旧所有权保持。
+
+
+## V013 首次正式应用前冻结（2026-10-22）
+
+文件 V013__publications.sql，7661 bytes，SHA256 **1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c**。协调者已完整阅读全部 SQL，独立验证五个 CREATE 与已采用 B00-1.3 逐字节一致，所有 CREATE 后再建立十八条外键。仅 fk_final_confirmation_9（material_snapshot_id → material_snapshot.id）延后至 V017，并显式保留同名支撑索引；final_result_review 本次具备 final_confirmation 和 result_review 两条物理外键。没有新设计、seed、IF NOT EXISTS 或旧迁移修改。
+
+独立过滤原实际元数据 a6c758d4…，与作者 oracle 0ae0d6550bee43740dd4633ab4eb05196b3fc04f9d3ea1bbe9cf81e776d557ff 完全相等：5 表、42 列、30 索引列、4 CHECK、18 外键列。十八条外键目标均在已部署的五十七张低版本表或本次五张表中。十一份低版本 SQL 均与协调树、精确 BASE 7f061e8 和作者树同字节，实际 history 为 001→002→005→006→007→008→009→010→011→011.1→012，全 success 且 checksum 与既有登记相符。RED 前后旧行、DDL、五组元数据和 history 不变。
+
+只限新独有功能 fixture ama-test-b01-ee4d94105bb9，完整 ID 45e74f283bd96e71a876a303ffede564306d77da91b54fc7e73b2ec0a1bef36d，127.0.0.1:46539。初始零表、MySQL 8.4.6、实际 native AIO=0、2 CPU/1 GiB/无额外 swap/256 PIDs 已保留选定证据；不代表生产原生 I/O、容量或 HA 资格。真实缺五表 RED 为 1 test/1 assertion failure/0 errors/0 skips；十项完整结构测试当前只编译，未执行。原生 UTC/epoch 的十一条低版本 history 与 JDBC Asia/Shanghai 显示原件分别保存。
+
+完整候选、原始候选、独立比对和十二份原始来源/验证文件及 SHA 清单存于 artifacts/phase-b/b08-schema-freeze。静态核对采集时间为 **2026-10-21T21:47:04.731880+00:00**；这是采集时间，实际中央 Git 冻结提交秒、ACK 时间和首次数据库应用时间另行记录，不能混称。作者准备 checkpoint 为 1c8d3ef154933c93efb6dac427d5a6800d59da3f，其中四十三项清单均已按该提交 Git blob 复核。
+
+本记录提交后协调者另发精确 SHA ACK，作者才可将同字节候选放入正式 location，在上述同一 fixture 首次应用 V013，再运行完整物理约束、五组元数据、旧行/DDL/history 前缀和 private013/latest 重跑零增量检查。此处不代表结构独立评审通过、完整 B08 或阶段 B 验收，也不启用真实发布或公司接口。候选自共享起永久冻结；任何问题保留失败状态与原件，先统一登记有序前向版本，不改旧 SQL/oracle、不 reset、repair 或 outOfOrder。
