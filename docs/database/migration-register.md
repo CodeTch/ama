@@ -29,8 +29,8 @@
 |V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|来源ff22197 → 集成dac4cc1；SHAfa44424a…冻结，结构前置独立Approved0findings；正例与两类拒绝已保全，完整B03/B02授权仍OPEN|
 |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|来源45715b6+fd3c3d8 → 集成1a00ca4；SHA79f04898…冻结，结构前置独立Approved0findings/95已选用例通过；完整B04仍OPEN|
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|03e89cc8…冻结/首次成功；完整框架及fix1已独立采用（8a3b77b/e9d2eca/a79ce67），真实公司/领域消费者门另计|
-|V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|正式候选a926c8b5…共享冻结，root静态核对完成；第一次应用待中央ACK/历史记录|
-|V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|已验证pinnedFlyway011<011.1<012；9efc688e…共享冻结/root完整SQL核对，首次应用等中央ACK|
+|V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|a926c8b5…冻结；首次success/旧缺索引失败原件保留，配合V011.1结构独立PASS，归集022f68a/71c7c5c/1d710f9；完整B06仍OPEN|
+|V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|9efc688e…冻结；ACK后rank10首次success/checksum-570494170；实际11suite全通过/五组元数据一致，独立PASS采用；仅纠正索引|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|预留，未编写|
 |V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
@@ -179,3 +179,10 @@ V01003e89cc8…/35136bytes/checksum-1187397378不变，首次冻结和成功观�
 来源0d2079cd..7fb166b，fresh独立SPEC/QUALITY PASS、0findings，采用8e44080。93表709列实际元数据与字典/ER/DDL一致；原85表仅sensitive_exclusion PK增加category及两类CHECK，其他原表/字段/FK和V011八表子集不变。七新表V012，final_result_review随parentV013立即建physicalFK，不新增deferredFK、JSON附件owner kind或generation_input字段。详见[设计采用](../acceptance/b/database-generation-addendum-review.md)与[独立评审](../acceptance/b/database-generation-addendum-independent-review.md)。
 
 V012/V013尚无正式共享/应用脚本；如实施时实际状态不同，停止并统一登记前向修正，不以设计采用改写历史。V011.1另行处理旧索引漏项，其SQL验收另审。首结果保存及证据核对交互仍pending，结构不推断业务许可。
+
+
+## V011＋V011.1 纠正结构正式采用（2026-10-22）
+
+完整0d2079cd..aef885d经fresh独立SPEC/QUALITY PASS0findings，归集022f68a/71c7c5c/1d710f9，51paths字节验证。原V011a926c8b5…以及中央新登记V011.1的9efc688e…均与首次应用前冻结副本一致，不修改已应用/共享迁移。11.1仅增加遗漏的材料FK支撑索引，FK仍V017；实际metadata8/63/39/13/22相等，纠正后suite11/0/0/0，原行/DDL/historyprefix保留，两次rerun各0。时间按原生UTC/epoch读取，原JDBC Asia/Shanghai显示原件保留。[实施采用](../acceptance/b/transcript-schema-implementation-report.md)、[独立评审](../acceptance/b/transcript-schema-independent-review.md)。
+
+V012结构工作可按已采用1.3继续准备，其最终正式SQL仍必须中央完整阅读/SHA冻结提交/ACK后才首次应用；尤其保留延后FK的全部已评审支撑索引，不能再次删减oracle。完整B06/后续领域与B最终验收仍OPEN，未知/失败/高于11且缺11.1的库不在本路径许可内。

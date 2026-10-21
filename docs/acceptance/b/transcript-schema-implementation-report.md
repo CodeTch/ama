@@ -144,3 +144,13 @@ batch/source/snapshot membership, immutable history, saved confirmation
 eligibility and content-hash rules also remain business obligations where these
 individual FKs cannot prove them. No production configuration or business API
 was enabled, no company call was made, and no push or main merge was performed.
+
+## 协调者采用记录（2026-10-22）
+
+完整来源0d2079cd..aef885d经fresh独立SPEC/QUALITY PASS、0findings，准备/实现/原始日志属性三提交分别归集为022f68a、71c7c5c、1d710f9。51个交付路径在协调附注前与最终来源和Git blob逐字节相同；44证据路径及历史失败保留，[独立评审](transcript-schema-independent-review.md)和原始报告/SHA另存artifacts/phase-b/b06-schema-coordinator。V011与V011.1冻结字节不变。
+
+本次只采用结构前置：实际纠正suite11/0/0/0，8表63列39索引列13CHECK22FK列；唯一修正为补索引，旧行、旧DDL及history前缀不变，历史target和production latest重复迁移各0项。首次11/1失败、setup错误及JDBC时区误标签原件全部保留，不计成功。没有为机械归集重复运行数据库测试。
+
+transcript-schema-preparation.py 是固定B00-1.2 DDL SHA402def65…和元数据3de8041…的历史复现脚本，须在原准备/来源提交所处1.2上下文复现。当前根已升级1.3，不在当前DDL上强制重跑或修改旧预期；旧DDL已归档docs/database/design-history/B00-1.2/，独立评审与协调者已确认1.3八目标表及部署FK子集完全未变。正式11/11.1和oracle均保留原字节。
+
+材料FK仍延后V017，B运行时只能EMPTY/NULL。完整B06解析调度/API、同会议/来源完整性、确认/标记/hash、并发/权限及后续V012/V013仍须实现与独立评审。此结构采用不提前打开B阶段最终验收、真实公司/容量/原生I/O/HA资格。
