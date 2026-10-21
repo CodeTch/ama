@@ -51,7 +51,7 @@ B-09、C-05、C-07 无专属新DDL；C-02复用媒体/转写/任务，D-03复用
 
 ## V006 当前冻结与时间线偏差（采用待复审）
 
-来源 `codex/phase-b-audit-delta` 的 `f5b44955318564ecc68ce6b2d5a2274c46d35cc2` 包含 `V006__audit_metadata.sql`，当前共享/最终实测 SHA256 为 `f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f`，Flyway checksum `-1744360556`。拥有者 fixture `ama-test-b01-fb4e04459580`（127.0.0.1:45443）最终 history 为001→002→005→006，均success=1。当前文件从该提交起冻结，不得因评审修改字节、改名、重编号或repair。
+来源 `codex/phase-b-audit-delta` 的 `f5b44955318564ecc68ce6b2d5a2274c46d35cc2` 包含 `V006__audit_metadata.sql`，当前共享/最终实测 SHA256 为 `f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f`，Flyway checksum `-1744360556`。成功回归后保留的元数据快照来自拥有者 fixture `ama-test-b01-fb4e04459580`（127.0.0.1:45443），该快照 history 为001→002→005→006，均success=1。随后日志修复的聚焦负例测试将同一自有一次性 fixture 留在预期 failed V006 状态；旧成功快照不冒称当前库状态。当前文件从该提交起冻结，不得因评审修改字节、改名、重编号或repair。
 
 执行时间线另有一项已向用户报告的偏差：作者首次私有 fixture GREEN 使用 `e1af32204c0b75d6ef922ca1e5677e259b0d4c4c47b43c3945f52bde314d8e8d`，之后增加冗余的 `CHAR_LENGTH(result)>64` 预检，再重置该自有一次性 fixture 并验证当前 `f36b…`。这不符合“已应用或共享的迁移保持不变”的要求；不能因尚未提交而豁免，也不能事后改称 review-only。作者正在保全原字节、原始运行日志和两份哈希并准确记录可观察影响；独立复审前不采用该实现。原始首次执行哈希的来源是作者恢复的源码与说明，最终哈希及当前数据库元数据有直接实测证据；不把恢复说明当独立现场观察。
 
