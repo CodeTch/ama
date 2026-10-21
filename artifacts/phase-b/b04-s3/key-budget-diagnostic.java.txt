@@ -1,0 +1,38 @@
+package ama.storage.s3;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+
+import java.util.*;
+
+class S3KeyBudgetDiagnosticIT {
+    @Test
+    void qualifiedPhysicalKeyBudgetMustCoverOrdinary512CharacterGeneratedKey() {
+        try (var f = new S3Fixture("s3")) {
+            Map<String, String> results = new LinkedHashMap<>();
+            for (int n : new int[] {255, 256, 512, 1024})
+                for (boolean segmented : new boolean[] {false, true}) {
+                    String key =
+                            segmented
+                                    ? ("a/".repeat(n / 2) + (n % 2 == 0 ? "" : "a"))
+                                    : "a".repeat(n);
+                    try {
+                        f.admin.putObject(
+                                b -> b.bucket(f.config.dataBucket()).key(key).ifNoneMatch("*"),
+                                RequestBody.fromBytes(new byte[0]));
+                        results.put(n + "/" + segmented, "200");
+                    } catch (S3Exception e) {
+                        results.put(
+                                n + "/" + segmented,
+                                e.statusCode() + "/" + e.awsErrorDetails().errorCode());
+                    }
+                }
+            System.out.println("KEY-BUDGET-DIAGNOSTIC " + results);
+            assertEquals("200", results.get("512/false"));
+        }
+    }
+}

@@ -1,0 +1,33 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+payload=16777216 nativeParts=4 stagingGETBody=75497472
+payload=67108864 nativeParts=13 stagingGETBody=293601280
+╷
+├─ JUnit Jupiter ✔
+│  ├─ S3ReplayBudgetIT ✔
+│  │  └─ nativeIntervalReplayReadsBoundedMultipleOfActualPayload() 34505 ms ✔
+│  ├─ S3RecoveryIT ✔
+│  │  ├─ largerObjectReadCancellationHasSameFixedTransportBound() 26913 ms ✔
+│  │  ├─ corruptedSpecOrResultCannotBeTrustedAndFalseMetadataIsNotAContentDigest() ✔
+│  │  ├─ lostNativePartResponseKeepsFrozenManifestAndCanRebuild() ✔
+│  │  └─ overlappingHelpersUseDistinctNativeIdsAndPreserveCompleteDecision() ✔
+│  └─ S3MultipartIT ✔
+│     └─ emptyLogicalPartsAndMixedBoundariesUseLegalNativeIntervals() ✔
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Test run finished after 88711 ms
+[         6 containers found      ]
+[         0 containers skipped    ]
+[         6 containers started    ]
+[         0 containers aborted    ]
+[         6 containers successful ]
+[         0 containers failed     ]
+[         6 tests found           ]
+[         0 tests skipped         ]
+[         6 tests started         ]
+[         0 tests aborted         ]
+[         6 tests successful      ]
+[         0 tests failed          ]
+

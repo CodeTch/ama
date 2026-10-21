@@ -1,0 +1,40 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  └─ S3LayoutV3IT ✔
+│     └─ deleteNeverRemovesAnUnboundPhysicalObject() ✘ The specified key does not exist. (Service: S3, Status Code: 404, Request ID: 3ff0eec6-e045-4d8b-bc13-9d03e66d98c8) (SDK Attempt Count: 1)
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Failures (1):
+  JUnit Jupiter:S3LayoutV3IT:deleteNeverRemovesAnUnboundPhysicalObject()
+    MethodSource [className = 'ama.storage.s3.S3LayoutV3IT', methodName = 'deleteNeverRemovesAnUnboundPhysicalObject', methodParameterTypes = '']
+    => software.amazon.awssdk.services.s3.model.NoSuchKeyException: The specified key does not exist. (Service: S3, Status Code: 404, Request ID: 3ff0eec6-e045-4d8b-bc13-9d03e66d98c8) (SDK Attempt Count: 1)
+       software.amazon.awssdk.services.s3.model.NoSuchKeyException$BuilderImpl.build(NoSuchKeyException.java:150)
+       software.amazon.awssdk.services.s3.model.NoSuchKeyException$BuilderImpl.build(NoSuchKeyException.java:98)
+       software.amazon.awssdk.core.internal.http.pipeline.stages.utils.RetryableStageHelper.retryPolicyDisallowedRetryException(RetryableStageHelper.java:251)
+       software.amazon.awssdk.core.internal.http.pipeline.stages.RetryableStage.execute(RetryableStage.java:86)
+       software.amazon.awssdk.core.internal.http.pipeline.stages.RetryableStage.execute(RetryableStage.java:39)
+       software.amazon.awssdk.core.internal.http.pipeline.RequestPipelineBuilder$ComposingRequestPipelineStage.execute(RequestPipelineBuilder.java:206)
+       software.amazon.awssdk.core.internal.http.StreamManagingStage.execute(StreamManagingStage.java:53)
+       software.amazon.awssdk.core.internal.http.StreamManagingStage.execute(StreamManagingStage.java:35)
+       software.amazon.awssdk.core.internal.http.pipeline.stages.ApiCallTimeoutTrackingStage.executeWithTimer(ApiCallTimeoutTrackingStage.java:82)
+       software.amazon.awssdk.core.internal.http.pipeline.stages.ApiCallTimeoutTrackingStage.execute(ApiCallTimeoutTrackingStage.java:62)
+       [...]
+
+Test run finished after 4338 ms
+[         4 containers found      ]
+[         0 containers skipped    ]
+[         4 containers started    ]
+[         0 containers aborted    ]
+[         4 containers successful ]
+[         0 containers failed     ]
+[         1 tests found           ]
+[         0 tests skipped         ]
+[         1 tests started         ]
+[         0 tests aborted         ]
+[         0 tests successful      ]
+[         1 tests failed          ]
+

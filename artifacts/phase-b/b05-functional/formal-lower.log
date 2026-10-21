@@ -1,0 +1,15 @@
+Pre-migration table count: 0
+02:33:20.729 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:45979/ama_b01_fixture (MySQL 8.4)
+02:33:20.930 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Schema history table `ama_b01_fixture`.`flyway_schema_history` does not exist yet
+02:33:20.939 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 7 migrations (execution time 00:00.049s)
+02:33:20.984 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Creating Schema History table `ama_b01_fixture`.`flyway_schema_history` ...
+02:33:21.288 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: << Empty Schema >>
+02:33:21.322 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_b01_fixture` to version "001 - foundation"
+02:33:21.642 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_b01_fixture` to version "002 - identity acl"
+02:33:22.256 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_b01_fixture` to version "005 - tasks outbox"
+02:33:23.179 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_b01_fixture` to version "006 - audit metadata"
+02:33:23.575 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_b01_fixture` to version "007 - identity sessions"
+02:33:24.912 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_b01_fixture` to version "008 - meeting schema"
+02:33:30.605 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_b01_fixture` to version "009 - file schema"
+02:33:34.729 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 7 migrations to schema `ama_b01_fixture`, now at version v009 (execution time 00:12.944s)
+Applied migrations: 7

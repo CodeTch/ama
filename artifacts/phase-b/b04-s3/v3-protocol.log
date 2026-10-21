@@ -1,0 +1,92 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  ├─ S3LayoutV3IT ✔
+│  │  ├─ forcedScopeBindingCollisionFailsClosedAndAbsentScopeListsEmpty() ✔
+│  │  ├─ listExact199AndExtensionsCoexistWithCanonicalNarrowPrefixesAndCursorIsolation() ✔
+│  │  └─ real512And1024BoundaryKeysUseShallowSignedRequestsAndNoOverbudgetIO() ✔
+│  ├─ FileStorageContractIT ✔
+│  │  ├─ localImmutableContract(String) ✔
+│  │  │  └─ "local": immutable bytes, exact ranges and content conflicts ✔
+│  │  ├─ localMultipartContract(String) ✔
+│  │  │  └─ "local": multipart replay, ordered receipts, terminal states ✔
+│  │  ├─ localListingContract(String) ✔
+│  │  │  └─ "local": bounded listing and cursor isolation ✔
+│  │  ├─ localMultipartCompletionSelectsSuppliedReceipts(String) ✔
+│  │  │  ├─ local: completion excludes unselected part [""] ✔
+│  │  │  └─ local: completion excludes unselected part ["xyz"] ✔
+│  │  ├─ localConcurrentWinner(String) ✔
+│  │  │  └─ "local": concurrent clients have one immutable winner ✔
+│  │  └─ localRejectsUnverifiedBytes(String) ✔
+│  │     └─ "local": size, checksum, interrupted stream ✔
+│  ├─ S3ReliabilityIT ✔
+│  │  ├─ distinctJvmWritersHaveOneWinnerInEveryVersionMode(String) ✔
+│  │  │  ├─ [1] "never" ✔
+│  │  │  ├─ [2] "Enabled" ✔
+│  │  │  └─ [3] "Suspended" ✔
+│  │  ├─ killedJvmResumesFrozenDecisionUsingOnlyToken(String) ✔
+│  │  │  ├─ [1] "/terminal" 11870 ms ✔
+│  │  │  ├─ [2] "/known-upload" 11493 ms ✔
+│  │  │  └─ [3] "/result" 11603 ms ✔
+│  │  ├─ immutableResponseLossReconcilesFixedKeysAndRetainsUnknownCreate() 12019 ms ✔
+│  │  ├─ scopedProviderListingAndUnicodeKeyIdentity() ✔
+│  │  ├─ rangesTransferOnlyRequestedFinalPayloadAndAbortWithoutDrain() ✔
+│  │  └─ wrongWholeHashIsRetryableAndCorruptSelectedBytesFailClosed() ✔
+│  ├─ S3ConcurrencyIT ✔
+│  │  ├─ conditionalCompletionErrorsAfterActualCommitReconcile(String) ✔
+│  │  │  ├─ [1] "error409" ✔
+│  │  │  ├─ [2] "error412" ✔
+│  │  │  └─ [3] "nosuch" ✔
+│  │  ├─ independentJvmCompleteCompleteAndPutCompleteRaces(String) ✔
+│  │  │  ├─ [1] "never" 12524 ms ✔
+│  │  │  ├─ [2] "Enabled" 14889 ms ✔
+│  │  │  └─ [3] "Suspended" 12732 ms ✔
+│  │  └─ headGetRacePinsConcreteVersionOrRequiresOpaqueValidator(String) ✔
+│  │     ├─ [1] "never" ✘ Expected java.util.concurrent.ExecutionException to be thrown, but nothing was thrown.
+│  │     ├─ [2] "Enabled" ✔
+│  │     └─ [3] "Suspended" ✘ Expected java.util.concurrent.ExecutionException to be thrown, but nothing was thrown.
+│  ├─ S3RecoveryIT ✔
+│  │  ├─ largerObjectReadCancellationHasSameFixedTransportBound() 45586 ms ✔
+│  │  ├─ corruptedSpecOrResultCannotBeTrustedAndFalseMetadataIsNotAContentDigest() ✔
+│  │  ├─ lostNativePartResponseKeepsFrozenManifestAndCanRebuild() ✔
+│  │  └─ overlappingHelpersUseDistinctNativeIdsAndPreserveCompleteDecision() ✔
+│  └─ S3MultipartIT ✔
+│     ├─ emptyLogicalPartsAndMixedBoundariesUseLegalNativeIntervals() ✔
+│     └─ completeAbortRaceHasOneTerminalAndNeverTwoPublicationDecisions() ✔
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Failures (2):
+  JUnit Jupiter:S3ConcurrencyIT:headGetRacePinsConcreteVersionOrRequiresOpaqueValidator(String):[1] "never"
+    MethodSource [className = 'ama.storage.s3.S3ConcurrencyIT', methodName = 'headGetRacePinsConcreteVersionOrRequiresOpaqueValidator', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Expected java.util.concurrent.ExecutionException to be thrown, but nothing was thrown.
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:74)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+       org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3223)
+       ama.storage.s3.S3ConcurrencyIT.headGetRacePinsConcreteVersionOrRequiresOpaqueValidator(S3ConcurrencyIT.java:54)
+  JUnit Jupiter:S3ConcurrencyIT:headGetRacePinsConcreteVersionOrRequiresOpaqueValidator(String):[3] "Suspended"
+    MethodSource [className = 'ama.storage.s3.S3ConcurrencyIT', methodName = 'headGetRacePinsConcreteVersionOrRequiresOpaqueValidator', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Expected java.util.concurrent.ExecutionException to be thrown, but nothing was thrown.
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:74)
+       org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+       org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3223)
+       ama.storage.s3.S3ConcurrencyIT.headGetRacePinsConcreteVersionOrRequiresOpaqueValidator(S3ConcurrencyIT.java:54)
+
+Test run finished after 219337 ms
+[        20 containers found      ]
+[         0 containers skipped    ]
+[        20 containers started    ]
+[         0 containers aborted    ]
+[        20 containers successful ]
+[         0 containers failed     ]
+[        35 tests found           ]
+[         0 tests skipped         ]
+[        35 tests started         ]
+[         0 tests aborted         ]
+[        33 tests successful      ]
+[         2 tests failed          ]
+

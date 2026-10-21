@@ -1,0 +1,190 @@
+617087:
+2026-10-22 01:56:52
+Full thread dump OpenJDK 64-Bit Server VM (21.0.12.1+1-LTS mixed mode, sharing):
+
+Threads class SMR info:
+_java_thread_list=0x00007cbb88002040, length=11, elements={
+0x00007cbc1402aef0, 0x00007cbc14134c40, 0x00007cbc141361b0, 0x00007cbc14137930,
+0x00007cbc14138f70, 0x00007cbc1413a510, 0x00007cbc1413c0d0, 0x00007cbc1413d790,
+0x00007cbc14149630, 0x00007cbc1414ca60, 0x00007cbb88000ff0
+}
+
+"main" #1 [617098] prio=5 os_prio=0 cpu=3218.40ms elapsed=528.80s tid=0x00007cbc1402aef0 nid=617098 runnable  [0x00007cbc1c112000]
+   java.lang.Thread.State: RUNNABLE
+	at java.net.Inet6AddressImpl.lookupAllHostAddr(java.base@21.0.12.1/Native Method)
+	at java.net.Inet6AddressImpl.lookupAllHostAddr(java.base@21.0.12.1/Inet6AddressImpl.java:52)
+	at java.net.InetAddress$PlatformResolver.lookupByName(java.base@21.0.12.1/InetAddress.java:1211)
+	at java.net.InetAddress.getAddressesFromNameService(java.base@21.0.12.1/InetAddress.java:1828)
+	at java.net.InetAddress$NameServiceAddresses.get(java.base@21.0.12.1/InetAddress.java:1139)
+	at java.net.InetAddress.getAllByName0(java.base@21.0.12.1/InetAddress.java:1818)
+	at java.net.InetAddress.getAllByName(java.base@21.0.12.1/InetAddress.java:1688)
+	at org.apache.http.impl.conn.SystemDefaultDnsResolver.resolve(SystemDefaultDnsResolver.java:45)
+	at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:112)
+	at org.apache.http.impl.conn.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:376)
+	at org.apache.http.impl.execchain.MainClientExec.establishRoute(MainClientExec.java:393)
+	at org.apache.http.impl.execchain.MainClientExec.execute(MainClientExec.java:236)
+	at org.apache.http.impl.execchain.ProtocolExec.execute(ProtocolExec.java:186)
+	at org.apache.http.impl.execchain.RetryExec.execute(RetryExec.java:89)
+	at org.apache.http.impl.execchain.ServiceUnavailableRetryExec.execute(ServiceUnavailableRetryExec.java:85)
+	at org.apache.http.impl.execchain.RedirectExec.execute(RedirectExec.java:110)
+	at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185)
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:72)
+	at org.eclipse.aether.transport.apache.ApacheTransporter.execute(ApacheTransporter.java:477)
+	at org.eclipse.aether.transport.apache.ApacheTransporter.implGet(ApacheTransporter.java:437)
+	at org.eclipse.aether.spi.connector.transport.AbstractTransporter.get(AbstractTransporter.java:64)
+	at org.eclipse.aether.connector.basic.BasicRepositoryConnector$GetTaskRunner.runTask(BasicRepositoryConnector.java:553)
+	at org.eclipse.aether.connector.basic.BasicRepositoryConnector$TaskRunner.run(BasicRepositoryConnector.java:484)
+	at org.eclipse.aether.connector.basic.BasicRepositoryConnector.get(BasicRepositoryConnector.java:310)
+	at org.eclipse.aether.internal.impl.filter.FilteringRepositoryConnector.get(FilteringRepositoryConnector.java:95)
+	at org.eclipse.aether.internal.impl.offline.OfflineRepositoryConnector.get(OfflineRepositoryConnector.java:82)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.performDownloads(DefaultArtifactResolver.java:551)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:435)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:217)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:197)
+	at org.apache.maven.repository.internal.DefaultArtifactDescriptorReader.loadPom(DefaultArtifactDescriptorReader.java:310)
+	at org.apache.maven.repository.internal.DefaultArtifactDescriptorReader.readArtifactDescriptor(DefaultArtifactDescriptorReader.java:246)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.readArtifactDescriptor(DefaultRepositorySystem.java:273)
+	at org.apache.maven.plugin.internal.DefaultPluginDependenciesResolver.resolve(DefaultPluginDependenciesResolver.java:112)
+	at org.apache.maven.plugin.internal.DefaultMavenPluginManager.lambda$getPluginDescriptor$0(DefaultMavenPluginManager.java:188)
+	at org.apache.maven.plugin.internal.DefaultMavenPluginManager$$Lambda/0x00007cbba0220b40.load(Unknown Source)
+	at org.apache.maven.plugin.DefaultPluginDescriptorCache.get(DefaultPluginDescriptorCache.java:80)
+	- locked <0x000000069a371aa8> (a org.apache.maven.plugin.DefaultPluginDescriptorCache$CacheKey)
+	at org.apache.maven.plugin.internal.DefaultMavenPluginManager.getPluginDescriptor(DefaultMavenPluginManager.java:186)
+	at org.apache.maven.plugin.DefaultBuildPluginManager.loadPlugin(DefaultBuildPluginManager.java:82)
+	at org.apache.maven.plugin.prefix.internal.DefaultPluginPrefixResolver.doResolveFromProject(DefaultPluginPrefixResolver.java:168)
+	at org.apache.maven.plugin.prefix.internal.DefaultPluginPrefixResolver.resolveFromProject(DefaultPluginPrefixResolver.java:153)
+	at org.apache.maven.plugin.prefix.internal.DefaultPluginPrefixResolver.resolve(DefaultPluginPrefixResolver.java:114)
+	at org.apache.maven.lifecycle.internal.MojoDescriptorCreator.findPluginForPrefix(MojoDescriptorCreator.java:249)
+	at org.apache.maven.lifecycle.internal.MojoDescriptorCreator.getMojoDescriptor(MojoDescriptorCreator.java:211)
+	at org.apache.maven.lifecycle.internal.DefaultLifecycleTaskSegmentCalculator.calculateTaskSegments(DefaultLifecycleTaskSegmentCalculator.java:97)
+	at org.apache.maven.lifecycle.internal.DefaultLifecycleTaskSegmentCalculator.calculateTaskSegments(DefaultLifecycleTaskSegmentCalculator.java:79)
+	at org.apache.maven.lifecycle.internal.LifecycleStarter.execute(LifecycleStarter.java:87)
+	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:267)
+	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:179)
+	at org.apache.maven.DefaultMaven.execute(DefaultMaven.java:105)
+	at org.apache.maven.cli.MavenCli.execute(MavenCli.java:1017)
+	at org.apache.maven.cli.MavenCli.doMain(MavenCli.java:299)
+	at org.apache.maven.cli.MavenCli.main(MavenCli.java:219)
+	at java.lang.invoke.DirectMethodHandle$Holder.invokeStatic(java.base@21.0.12.1/DirectMethodHandle$Holder)
+	at java.lang.invoke.LambdaForm$MH/0x00007cbba0010000.invoke(java.base@21.0.12.1/LambdaForm$MH)
+	at java.lang.invoke.LambdaForm$MH/0x00007cbba0010400.invokeExact_MT(java.base@21.0.12.1/LambdaForm$MH)
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invokeImpl(java.base@21.0.12.1/DirectMethodHandleAccessor.java:155)
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invoke(java.base@21.0.12.1/DirectMethodHandleAccessor.java:103)
+	at java.lang.reflect.Method.invoke(java.base@21.0.12.1/Method.java:580)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced(Launcher.java:255)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.launch(Launcher.java:201)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode(Launcher.java:362)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.main(Launcher.java:314)
+	at java.lang.invoke.LambdaForm$DMH/0x00007cbba0008000.invokeStatic(java.base@21.0.12.1/LambdaForm$DMH)
+	at java.lang.invoke.LambdaForm$MH/0x00007cbba0009400.invoke(java.base@21.0.12.1/LambdaForm$MH)
+	at java.lang.invoke.Invokers$Holder.invokeExact_MT(java.base@21.0.12.1/Invokers$Holder)
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invokeImpl(java.base@21.0.12.1/DirectMethodHandleAccessor.java:154)
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invoke(java.base@21.0.12.1/DirectMethodHandleAccessor.java:103)
+	at java.lang.reflect.Method.invoke(java.base@21.0.12.1/Method.java:580)
+	at org.apache.maven.wrapper.BootstrapMainStarter.start(BootstrapMainStarter.java:52)
+	at org.apache.maven.wrapper.WrapperExecutor.execute(WrapperExecutor.java:161)
+	at org.apache.maven.wrapper.MavenWrapperMain.main(MavenWrapperMain.java:73)
+
+"Reference Handler" #9 [617106] daemon prio=10 os_prio=0 cpu=1.83ms elapsed=528.77s tid=0x00007cbc14134c40 nid=617106 waiting on condition  [0x00007cbbf4722000]
+   java.lang.Thread.State: RUNNABLE
+	at java.lang.ref.Reference.waitForReferencePendingList(java.base@21.0.12.1/Native Method)
+	at java.lang.ref.Reference.processPendingReferences(java.base@21.0.12.1/Reference.java:246)
+	at java.lang.ref.Reference$ReferenceHandler.run(java.base@21.0.12.1/Reference.java:208)
+
+"Finalizer" #10 [617107] daemon prio=8 os_prio=0 cpu=0.52ms elapsed=528.77s tid=0x00007cbc141361b0 nid=617107 in Object.wait()  [0x00007cbbf4622000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait0(java.base@21.0.12.1/Native Method)
+	- waiting on <0x0000000688800078> (a java.lang.ref.NativeReferenceQueue$Lock)
+	at java.lang.Object.wait(java.base@21.0.12.1/Object.java:366)
+	at java.lang.Object.wait(java.base@21.0.12.1/Object.java:339)
+	at java.lang.ref.NativeReferenceQueue.await(java.base@21.0.12.1/NativeReferenceQueue.java:48)
+	at java.lang.ref.ReferenceQueue.remove0(java.base@21.0.12.1/ReferenceQueue.java:158)
+	at java.lang.ref.NativeReferenceQueue.remove(java.base@21.0.12.1/NativeReferenceQueue.java:89)
+	- locked <0x0000000688800078> (a java.lang.ref.NativeReferenceQueue$Lock)
+	at java.lang.ref.Finalizer$FinalizerThread.run(java.base@21.0.12.1/Finalizer.java:173)
+
+"Signal Dispatcher" #11 [617108] daemon prio=9 os_prio=0 cpu=14.54ms elapsed=528.77s tid=0x00007cbc14137930 nid=617108 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Service Thread" #12 [617109] daemon prio=9 os_prio=0 cpu=0.66ms elapsed=528.77s tid=0x00007cbc14138f70 nid=617109 runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Monitor Deflation Thread" #13 [617110] daemon prio=9 os_prio=0 cpu=74.64ms elapsed=528.77s tid=0x00007cbc1413a510 nid=617110 runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"C2 CompilerThread0" #14 [617111] daemon prio=9 os_prio=0 cpu=1675.99ms elapsed=528.77s tid=0x00007cbc1413c0d0 nid=617111 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+   No compile task
+
+"C1 CompilerThread0" #22 [617112] daemon prio=9 os_prio=0 cpu=557.51ms elapsed=528.77s tid=0x00007cbc1413d790 nid=617112 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+   No compile task
+
+"Notification Thread" #26 [617113] daemon prio=9 os_prio=0 cpu=0.14ms elapsed=528.77s tid=0x00007cbc14149630 nid=617113 runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Common-Cleaner" #27 [617114] daemon prio=8 os_prio=0 cpu=2.69ms elapsed=528.76s tid=0x00007cbc1414ca60 nid=617114 waiting on condition  [0x00007cbb9ee2e000]
+   java.lang.Thread.State: TIMED_WAITING (parking)
+	at jdk.internal.misc.Unsafe.park(java.base@21.0.12.1/Native Method)
+	- parking to wait for  <0x00000006888008f0> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.12.1/LockSupport.java:269)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(java.base@21.0.12.1/AbstractQueuedSynchronizer.java:1886)
+	at java.lang.ref.ReferenceQueue.await(java.base@21.0.12.1/ReferenceQueue.java:71)
+	at java.lang.ref.ReferenceQueue.remove0(java.base@21.0.12.1/ReferenceQueue.java:143)
+	at java.lang.ref.ReferenceQueue.remove(java.base@21.0.12.1/ReferenceQueue.java:218)
+	at jdk.internal.ref.CleanerImpl.run(java.base@21.0.12.1/CleanerImpl.java:140)
+	at java.lang.Thread.runWith(java.base@21.0.12.1/Thread.java:1596)
+	at java.lang.Thread.run(java.base@21.0.12.1/Thread.java:1583)
+	at jdk.internal.misc.InnocuousThread.run(java.base@21.0.12.1/InnocuousThread.java:186)
+
+"Attach Listener" #49 [624210] daemon prio=9 os_prio=0 cpu=0.86ms elapsed=0.10s tid=0x00007cbb88000ff0 nid=624210 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"G1 Conc#3" os_prio=0 cpu=9.04ms elapsed=525.40s tid=0x00007cbbe8002070 nid=617174 runnable  
+
+"G1 Conc#2" os_prio=0 cpu=7.05ms elapsed=525.40s tid=0x00007cbbe8001700 nid=617173 runnable  
+
+"G1 Conc#1" os_prio=0 cpu=6.66ms elapsed=525.40s tid=0x00007cbbe8000d90 nid=617172 runnable  
+
+"GC Thread#13" os_prio=0 cpu=1.83ms elapsed=525.40s tid=0x00007cbb8c018360 nid=617171 runnable  
+
+"GC Thread#12" os_prio=0 cpu=0.32ms elapsed=525.40s tid=0x00007cbb8c017b20 nid=617170 runnable  
+
+"GC Thread#11" os_prio=0 cpu=0.29ms elapsed=525.40s tid=0x00007cbb8c017320 nid=617169 runnable  
+
+"GC Thread#10" os_prio=0 cpu=1.47ms elapsed=525.40s tid=0x00007cbb8c016d60 nid=617168 runnable  
+
+"GC Thread#9" os_prio=0 cpu=0.69ms elapsed=525.40s tid=0x00007cbb8c0169b0 nid=617167 runnable  
+
+"GC Thread#8" os_prio=0 cpu=12.99ms elapsed=528.32s tid=0x00007cbb8c00e2b0 nid=617146 runnable  
+
+"GC Thread#7" os_prio=0 cpu=12.96ms elapsed=528.32s tid=0x00007cbb8c00d750 nid=617145 runnable  
+
+"GC Thread#6" os_prio=0 cpu=11.91ms elapsed=528.32s tid=0x00007cbb8c00cc10 nid=617144 runnable  
+
+"GC Thread#5" os_prio=0 cpu=12.88ms elapsed=528.32s tid=0x00007cbb8c00c0f0 nid=617143 runnable  
+
+"GC Thread#4" os_prio=0 cpu=13.20ms elapsed=528.32s tid=0x00007cbb8c00b600 nid=617142 runnable  
+
+"GC Thread#3" os_prio=0 cpu=12.95ms elapsed=528.32s tid=0x00007cbb8c00ab10 nid=617141 runnable  
+
+"GC Thread#2" os_prio=0 cpu=13.36ms elapsed=528.32s tid=0x00007cbb8c00a1e0 nid=617140 runnable  
+
+"GC Thread#1" os_prio=0 cpu=13.00ms elapsed=528.32s tid=0x00007cbb8c009a20 nid=617139 runnable  
+
+"VM Thread" os_prio=0 cpu=36.18ms elapsed=528.78s tid=0x00007cbc141290e0 nid=617105 runnable  
+
+"VM Periodic Task Thread" os_prio=0 cpu=411.82ms elapsed=528.78s tid=0x00007cbc14116e30 nid=617104 waiting on condition  
+
+"G1 Service" os_prio=0 cpu=31.54ms elapsed=528.80s tid=0x00007cbc140fdb20 nid=617103 runnable  
+
+"G1 Refine#0" os_prio=0 cpu=0.14ms elapsed=528.80s tid=0x00007cbc140fcb60 nid=617102 runnable  
+
+"G1 Conc#0" os_prio=0 cpu=6.99ms elapsed=528.80s tid=0x00007cbc140623f0 nid=617101 runnable  
+
+"G1 Main Marker" os_prio=0 cpu=1.41ms elapsed=528.80s tid=0x00007cbc14061420 nid=617100 runnable  
+
+"GC Thread#0" os_prio=0 cpu=13.50ms elapsed=528.80s tid=0x00007cbc14054200 nid=617099 runnable  
+
+JNI global refs: 24, weak refs: 0
+

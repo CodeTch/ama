@@ -1,0 +1,30 @@
+{
+  "id": "54dc7cc4db251d2942c70f40834716d76b83d4c85ee778ef8a5fda1074273c9a",
+  "owner": "ama-b04-java-s3-phase-b-storage-s3-s3-java-v3restart",
+  "image": "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+  "limits": {
+    "NanoCpus": 2000000000,
+    "Memory": 2147483648,
+    "MemorySwap": 2147483648,
+    "PidsLimit": 256,
+    "PortBindings": {
+      "9000/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "44789"
+        }
+      ]
+    }
+  },
+  "mounts": [
+    {
+      "Source": "/home/tanren/ama/.worktrees/phase-b-storage-s3/.tools/s3-java-v3restart/data",
+      "Destination": "/data"
+    },
+    {
+      "Source": "/home/tanren/ama/.worktrees/phase-b-storage-s3/.tools/s3-java-v3restart/logs",
+      "Destination": "/logs"
+    }
+  ],
+  "operation": "read-only inspect; no restart/stop"
+}

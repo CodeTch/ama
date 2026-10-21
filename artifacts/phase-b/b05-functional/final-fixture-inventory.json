@@ -1,0 +1,149 @@
+{
+  "captured_at_utc": "2026-10-21T19:09:37.664140+00:00",
+  "fixtures": [
+    {
+      "name": "ama-test-b01-5833aa5fe461",
+      "id": "67067c4754f141f9dbce873f00c8c065aebc52fd1db0018b81905779e21643d1",
+      "state": "running",
+      "auto_remove": false,
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "e6bec76a30b5703efe9ed707df90650378d3902f1425b296415bcdcd9b16b317",
+          "Source": "/var/lib/docker/volumes/e6bec76a30b5703efe9ed707df90650378d3902f1425b296415bcdcd9b16b317/_data",
+          "Destination": "/var/lib/mysql",
+          "Driver": "local",
+          "Mode": "",
+          "RW": true,
+          "Propagation": ""
+        }
+      ],
+      "ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "45009"
+          }
+        ]
+      },
+      "args": [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_0900_ai_ci",
+        "--default-time-zone=+00:00",
+        "--innodb-use-native-aio=OFF"
+      ],
+      "labels": {
+        "ama.test-fixture": "b01",
+        "desktop.docker.io/wsl-distro": "Ubuntu-24.04"
+      }
+    },
+    {
+      "name": "ama-test-b01-3ee46f689f9a",
+      "id": "59f3de25efa7156e89329880ccfbd4d51bd2f52d735ead9fca64745c28eb3dcb",
+      "state": "running",
+      "auto_remove": false,
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "492fc746d1d2aa690a724c6c95fc5caaf15c0321b92081bb0ff7a92059588b1a",
+          "Source": "/var/lib/docker/volumes/492fc746d1d2aa690a724c6c95fc5caaf15c0321b92081bb0ff7a92059588b1a/_data",
+          "Destination": "/var/lib/mysql",
+          "Driver": "local",
+          "Mode": "",
+          "RW": true,
+          "Propagation": ""
+        }
+      ],
+      "ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "45951"
+          }
+        ]
+      },
+      "args": [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_0900_ai_ci",
+        "--default-time-zone=+00:00",
+        "--innodb-use-native-aio=OFF"
+      ],
+      "labels": {
+        "ama.test-fixture": "b01",
+        "desktop.docker.io/wsl-distro": "Ubuntu-24.04"
+      }
+    },
+    {
+      "name": "ama-test-b01-5a929c100b88",
+      "id": "8fb7c13c01f0ad66b0951d64de0b8e2dc76b709df635ceaa382f669425e4c982",
+      "state": "running",
+      "auto_remove": false,
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "419eca11e3605eaf1fe2accfbf5d19fcd7ab4b2a2cfd5f6e52f71a9998febb92",
+          "Source": "/var/lib/docker/volumes/419eca11e3605eaf1fe2accfbf5d19fcd7ab4b2a2cfd5f6e52f71a9998febb92/_data",
+          "Destination": "/var/lib/mysql",
+          "Driver": "local",
+          "Mode": "",
+          "RW": true,
+          "Propagation": ""
+        }
+      ],
+      "ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "46509"
+          }
+        ]
+      },
+      "args": [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_0900_ai_ci",
+        "--default-time-zone=+00:00",
+        "--innodb-use-native-aio=OFF"
+      ],
+      "labels": {
+        "ama.test-fixture": "b01",
+        "desktop.docker.io/wsl-distro": "Ubuntu-24.04"
+      }
+    },
+    {
+      "name": "ama-test-b01-4a85d5a1df1a",
+      "id": "e89aea35e05b2534d81091812bb2ef9e721acdc5e537fac44add6d209430b090",
+      "state": "running",
+      "auto_remove": false,
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "2f875c825167ae5a675a4f5c6558a0e1043ff0861641f8f1ad087234205d5f37",
+          "Source": "/var/lib/docker/volumes/2f875c825167ae5a675a4f5c6558a0e1043ff0861641f8f1ad087234205d5f37/_data",
+          "Destination": "/var/lib/mysql",
+          "Driver": "local",
+          "Mode": "",
+          "RW": true,
+          "Propagation": ""
+        }
+      ],
+      "ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "44847"
+          }
+        ]
+      },
+      "args": [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_0900_ai_ci",
+        "--default-time-zone=+00:00",
+        "--innodb-use-native-aio=OFF"
+      ],
+      "labels": {
+        "ama.test-fixture": "b01",
+        "desktop.docker.io/wsl-distro": "Ubuntu-24.04"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "fix_base": "682a7bfaef45f6ed3fec38df99e85a7b78d450d7",
+  "paths_sha256": {
+    "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java": "c5718a5710f4f97c7f24ff64e93cc9865d9d7d91b36ba71b4290932911df9263",
+    "backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java": "229db724cc7eec612060eaed2b689258485dae861c3202d4cd665b902619281d",
+    "backend/core/src/main/java/ama/task/ExternalOperationPort.java": "6230e84a6294c5252d149db66d8ba1ef2eca50bb2e26eff5b4a25851eecdee08",
+    "backend/core/src/main/java/ama/task/ObservationRetryRequiredException.java": "63214b6807acdb7981ff1a6555e6d35925d081a06a5a896f77376ff2f7a5725b",
+    "backend/integration-tests/src/test/java/ama/task/ReviewConcurrencyIT.java": "c77660ea044240c49acd96273455f425b3fd7f9c7308568ce5f953ee53b7b917",
+    "docs/acceptance/b/task-B-05-fix1-integration.md": "8ced6bae34471f2269eb4ad8979a5120b6c8c9d4dc6a194f87908180218e5e76"
+  },
+  "note": "Delivery report is outside this source manifest to avoid self-reference. Final coordinator report records exact commit and these manifest SHA values."
+}

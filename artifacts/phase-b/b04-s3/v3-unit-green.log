@@ -1,0 +1,41 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  ├─ S3LayoutV3Test ✔
+│  │  ├─ escapesAndShallowSegmentationPreserveExactOrderAndPrefix() ✔
+│  │  └─ ordinary512AndExactBudgetHaveBoundedPhysicalSegments() ✔
+│  └─ S3ProtocolTest ✔
+│     ├─ keyEncodingPreservesCodeUnitsPrefixesAndOrderWithoutNormalizing() ✘ expected: <[a, aa, a/, a?, z, ~007e, ~00e9, ~d800, ~d83d~de00, ~ffff]> but was: <[a, aa, a.1, a?, z, ~007e, ~00e9, ~d800, ~d83d~de00, ~ffff]>
+│     ├─ nativePlannerUsesOverflowSafeCeilingAndNeverLogicalPartNumbers() ✔
+│     └─ canonicalRecordsRejectTrailingTruncatedUnknownSchemaAndNoncanonicalNumbers() ✔
+├─ JUnit Platform Suite ✔
+└─ JUnit Vintage ✔
+
+Failures (1):
+  JUnit Jupiter:S3ProtocolTest:keyEncodingPreservesCodeUnitsPrefixesAndOrderWithoutNormalizing()
+    MethodSource [className = 'ama.storage.s3.S3ProtocolTest', methodName = 'keyEncodingPreservesCodeUnitsPrefixesAndOrderWithoutNormalizing', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: expected: <[a, aa, a/, a?, z, ~007e, ~00e9, ~d800, ~d83d~de00, ~ffff]> but was: <[a, aa, a.1, a?, z, ~007e, ~00e9, ~d800, ~d83d~de00, ~ffff]>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+       org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:179)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1188)
+       ama.storage.s3.S3ProtocolTest.keyEncodingPreservesCodeUnitsPrefixesAndOrderWithoutNormalizing(S3ProtocolTest.java:20)
+
+Test run finished after 1058 ms
+[         5 containers found      ]
+[         0 containers skipped    ]
+[         5 containers started    ]
+[         0 containers aborted    ]
+[         5 containers successful ]
+[         0 containers failed     ]
+[         5 tests found           ]
+[         0 tests skipped         ]
+[         5 tests started         ]
+[         0 tests aborted         ]
+[         4 tests successful      ]
+[         1 tests failed          ]
+

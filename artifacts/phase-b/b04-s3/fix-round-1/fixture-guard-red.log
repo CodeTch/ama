@@ -1,0 +1,127 @@
+test_cpu_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_cpu_bound_drift_is_rejected) ... 
+  test_cpu_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_cpu_bound_drift_is_rejected) (value=0) ... FAIL
+  test_cpu_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_cpu_bound_drift_is_rejected) (value=1000000000) ... FAIL
+  test_cpu_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_cpu_bound_drift_is_rejected) (value=4000000000) ... FAIL
+  test_cpu_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_cpu_bound_drift_is_rejected) (value=None) ... FAIL
+test_exact_id_must_match_inspected_response (test_s3_fixture.OwnedFixtureGuardTest.test_exact_id_must_match_inspected_response) ... FAIL
+test_exact_owned_profile_is_accepted (test_s3_fixture.OwnedFixtureGuardTest.test_exact_owned_profile_is_accepted) ... ok
+test_existing_owner_image_memory_ports_and_mount_guards_remain (test_s3_fixture.OwnedFixtureGuardTest.test_existing_owner_image_memory_ports_and_mount_guards_remain) ... ok
+test_pid_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_pid_bound_drift_is_rejected) ... 
+  test_pid_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_pid_bound_drift_is_rejected) (value=-1) ... FAIL
+  test_pid_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_pid_bound_drift_is_rejected) (value=0) ... FAIL
+  test_pid_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_pid_bound_drift_is_rejected) (value=512) ... FAIL
+  test_pid_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_pid_bound_drift_is_rejected) (value=None) ... FAIL
+test_swap_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_swap_bound_drift_is_rejected) ... 
+  test_swap_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_swap_bound_drift_is_rejected) (value=-1) ... FAIL
+  test_swap_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_swap_bound_drift_is_rejected) (value=0) ... FAIL
+  test_swap_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_swap_bound_drift_is_rejected) (value=4294967296) ... FAIL
+  test_swap_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_swap_bound_drift_is_rejected) (value=None) ... FAIL
+
+======================================================================
+FAIL: test_cpu_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_cpu_bound_drift_is_rejected) (value=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 49, in test_cpu_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_cpu_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_cpu_bound_drift_is_rejected) (value=1000000000)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 49, in test_cpu_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_cpu_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_cpu_bound_drift_is_rejected) (value=4000000000)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 49, in test_cpu_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_cpu_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_cpu_bound_drift_is_rejected) (value=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 49, in test_cpu_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_exact_id_must_match_inspected_response (test_s3_fixture.OwnedFixtureGuardTest.test_exact_id_must_match_inspected_response)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 67, in test_exact_id_must_match_inspected_response
+    with self.assertRaises(AssertionError): self.inspect(self.state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_pid_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_pid_bound_drift_is_rejected) (value=-1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 63, in test_pid_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_pid_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_pid_bound_drift_is_rejected) (value=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 63, in test_pid_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_pid_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_pid_bound_drift_is_rejected) (value=512)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 63, in test_pid_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_pid_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_pid_bound_drift_is_rejected) (value=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 63, in test_pid_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_swap_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_swap_bound_drift_is_rejected) (value=-1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 56, in test_swap_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_swap_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_swap_bound_drift_is_rejected) (value=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 56, in test_swap_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_swap_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_swap_bound_drift_is_rejected) (value=4294967296)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 56, in test_swap_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_swap_bound_drift_is_rejected (test_s3_fixture.OwnedFixtureGuardTest.test_swap_bound_drift_is_rejected) (value=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-storage-s3/tools/dev/tests/test_s3_fixture.py", line 56, in test_swap_bound_drift_is_rejected
+    with self.assertRaises(AssertionError): self.inspect(state)
+AssertionError: AssertionError not raised
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.012s
+
+FAILED (failures=13)

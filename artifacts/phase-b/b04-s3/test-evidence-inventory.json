@@ -1,0 +1,819 @@
+{
+  "contract-attempt1": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "contract-attempt1.xml",
+        "name": "ama.storage.FileStorageContractIT",
+        "sha256": "01a28ad28e03578b2eb4864ff721282fe00aab476b2a0a1293769b86a0c5858e"
+      }
+    ]
+  },
+  "multipart-bounded": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "multipart-bounded.xml",
+        "name": "ama.storage.s3.S3MultipartIT",
+        "sha256": "fd808197b613bcc5b7f282af1c39a91c3950f156df40fd9294b395b6faf582ff"
+      }
+    ]
+  },
+  "multipart-attempt2": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 7,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "multipart-attempt2.xml",
+        "name": "ama.storage.s3.S3MultipartIT",
+        "sha256": "f9e63f42f433ffdd43ea97142531b293b65c4afbc1c037f42976e5b37827d786"
+      }
+    ]
+  },
+  "list-diagnostic": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "list-diagnostic.xml",
+        "name": "ama.storage.s3.S3ReliabilityIT",
+        "sha256": "41c1d4a01f80cbb6667cb92c8fbc302b91a9f1cbf195c9cd756ede90908e8801"
+      }
+    ]
+  },
+  "multipart-attempt1": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 7,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "multipart-attempt1.xml",
+        "name": "ama.storage.s3.S3MultipartIT",
+        "sha256": "753572a14d8b97eb500a624d570f4545f9f76a47b231eb97ebf7a40244b30690"
+      }
+    ]
+  },
+  "reliability-attempt1": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "reliability-attempt1.xml",
+        "name": "ama.storage.s3.S3ReliabilityIT",
+        "sha256": "14d1906d7949da818fbfae0542e1c921ab69b7d27e5d2c72593363e7b63d948c"
+      }
+    ]
+  },
+  "key-budget-diagnostic": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "key-budget-diagnostic.xml",
+        "name": "ama.storage.s3.S3KeyBudgetDiagnosticIT",
+        "sha256": "28b3ce04ccf049c2b9e4c12d469b710b9cee1a588d7090704ff67afcbe8abfae"
+      }
+    ]
+  },
+  "red-contract": {
+    "tests": 7,
+    "failures": 2,
+    "errors": 5,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "red-contract.xml",
+        "name": "ama.storage.FileStorageContractIT",
+        "sha256": "7f6c92c66524b9dfb38a76264a8fe093b4ca0f9b971003ddee552af53b7547dd"
+      }
+    ]
+  },
+  "v3-canonical-final-s3-regression-xml": {
+    "tests": 23,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-canonical-final-s3-regression-xml/TEST-ama.storage.s3.S3IntegrityIT.xml",
+        "name": "ama.storage.s3.S3IntegrityIT",
+        "sha256": "e815abd2146b9523efd4bbf34c95ca45fe2132c512033bd961bc0a59d45624f7"
+      },
+      {
+        "file": "v3-canonical-final-s3-regression-xml/TEST-ama.storage.s3.S3ReliabilityIT.xml",
+        "name": "ama.storage.s3.S3ReliabilityIT",
+        "sha256": "0336fe5711d663f38910be66b0133e5079108cc4ecbe668cc22157c519ca8a90"
+      },
+      {
+        "file": "v3-canonical-final-s3-regression-xml/TEST-ama.storage.s3.S3AdmissionIT.xml",
+        "name": "ama.storage.s3.S3AdmissionIT",
+        "sha256": "94d5b17fa2036dc7e08ae6894452460b56c2b7371b9348876054520fd50d9594"
+      },
+      {
+        "file": "v3-canonical-final-s3-regression-xml/TEST-ama.storage.s3.S3RecoveryIT.xml",
+        "name": "ama.storage.s3.S3RecoveryIT",
+        "sha256": "2c371204c70496a63f117fbf977ba9627f4b0597988bc9d68eda3599868011d5"
+      },
+      {
+        "file": "v3-canonical-final-s3-regression-xml/TEST-ama.storage.s3.S3NativeRaceIT.xml",
+        "name": "ama.storage.s3.S3NativeRaceIT",
+        "sha256": "592b2592e7ef46c209a899169441c4a5e3606fc5addda9ef5b46a17af61865ef"
+      },
+      {
+        "file": "v3-canonical-final-s3-regression-xml/TEST-ama.storage.s3.S3ReplayBudgetIT.xml",
+        "name": "ama.storage.s3.S3ReplayBudgetIT",
+        "sha256": "ecaf443881c14ca30f04e6dc5a61921a9f54998dbb8ffc3561ab9773780e1a3e"
+      }
+    ]
+  },
+  "focus-concurrency": {
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "focus-concurrency/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "9da45ba2330c710c1fa1ea537de0cd828f94288d850b19f8ec0b8d8e159467f3"
+      },
+      {
+        "file": "focus-concurrency/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "9c6a4a9c53aabf4de1a3e3a3ee36748b66d4c1d99f36032b1b32cb0b3c50a8e5"
+      },
+      {
+        "file": "focus-concurrency/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "bb70ad6dca49ae6253b05f24b5fc0afb850985e953b54e29eea59bd63ff6557a"
+      }
+    ]
+  },
+  "v3-canonical-final-s3-contract-xml": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-canonical-final-s3-contract-xml/TEST-ama.storage.FileStorageContractIT.xml",
+        "name": "ama.storage.FileStorageContractIT",
+        "sha256": "a46beb3909bb8f7e870de6a4f1b61f90d070bb2fd32f5cfdbe782d78f06b8f65"
+      }
+    ]
+  },
+  "v3-10001-final": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-10001-final/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "6dc3bda04335e8db90c3155861d7f9085d41e84dae790f21d62e452e34b82fae"
+      },
+      {
+        "file": "v3-10001-final/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "6894567c3c7929888943c0adaedc248c61f939d0fe3214c6227315ba3a28774f"
+      },
+      {
+        "file": "v3-10001-final/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "fab101047909ba61e09ba301f30953cfcebfeaf29d4d256e611df2f58606b19a"
+      }
+    ]
+  },
+  "v3-canonical-range-length-xml": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-canonical-range-length-xml/TEST-ama.storage.s3.S3ReliabilityIT.xml",
+        "name": "ama.storage.s3.S3ReliabilityIT",
+        "sha256": "b4a56d2221e0b3250846c90f4ac9992d8e01465e5e18c5e9dd0f3a8bcb95ef3c"
+      }
+    ]
+  },
+  "v3-unit-green2": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-unit-green2/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "b83075eebb597c458c7cbdd63323bff9078ec354ae9545c7b451f676f9cc5227"
+      },
+      {
+        "file": "v3-unit-green2/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "ecea332307801324e6489a5a2916b2bb2422f8f68e36ea62c15a6992219ff1ab"
+      },
+      {
+        "file": "v3-unit-green2/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "de13b05966d81f001b2cf25618fae82b84053b9fcb402ae966a9b9f0fe9e6206"
+      }
+    ]
+  },
+  "v3-layout-contract": {
+    "tests": 10,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-layout-contract/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "880dbffd68ae1fb4232377feca3f8eb94e897bca47b418b46bc96c8edd5e542d"
+      },
+      {
+        "file": "v3-layout-contract/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "7b462fafe2ad3abd9413e20886fee57b2f052f089bd469ad2a9f336cdf584592"
+      },
+      {
+        "file": "v3-layout-contract/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "10c47a029463b950060e5e0dc704567205fa99554dc71556f87e348adf93b7a8"
+      }
+    ]
+  },
+  "v3-selector-behavior-red": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-selector-behavior-red/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "ec916d7e7aa3d2107769c4b76302eff4fcbf1d3ae97470fcdfb492e512ecad7b"
+      },
+      {
+        "file": "v3-selector-behavior-red/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "9bcd492ea14d9f8de3287c3c18b81b11c567c47df7421ef382a8440675de0555"
+      },
+      {
+        "file": "v3-selector-behavior-red/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "cc792261825fb32c18119c9ea482b49ef99d76c6907b1f676e10de15f343b40d"
+      }
+    ]
+  },
+  "v3-integrity": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-integrity/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "7ebc8a02405c5e1191bbf2037451c5cac543364c4daaa8ae7b3188341ec1fef4"
+      },
+      {
+        "file": "v3-integrity/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "4b937b91bde8c5d4388fc532d2ab9a193cacd3f1211963f24b008e0f1d6d0f52"
+      },
+      {
+        "file": "v3-integrity/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "8c4cf059d8f6ee53274a9b808791aaeb4c349e4a371e791960e4d54f17304744"
+      }
+    ]
+  },
+  "v3-delete-binding-red": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-delete-binding-red/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "41daab9757aae8f3970355efe95611ae2ae7a6253a29b63052f7e90754b3a5d0"
+      },
+      {
+        "file": "v3-delete-binding-red/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "bf6d9f9bd55706df1884d698bb23508534bf24347f34821be9b6f5d1186c9ccb"
+      },
+      {
+        "file": "v3-delete-binding-red/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "8a4ceab8b0bf276599b81b63c3069ea251ca3b46e38040dc94ec92be0f6ea8ea"
+      }
+    ]
+  },
+  "v3-unit-red": {
+    "tests": 2,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-unit-red/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "2b4253a7dbc37f4d33e687416aa21475a87744c567311b89b1c81c662ab6596e"
+      },
+      {
+        "file": "v3-unit-red/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "5b3c2100ee1ba9cf0d95461805a5462fccebf3c00811e06544d5a0449104279b"
+      },
+      {
+        "file": "v3-unit-red/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "ac6fc0d7fcdd83fcfb0ff62e93c164a2c6e9ed7b2b94c6f502f69acff137f3f3"
+      }
+    ]
+  },
+  "v3-admission-green": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-admission-green/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "52939eb0c4f345e901f50e85c546eb5988abbe91d59c202af25cd77d2612411e"
+      },
+      {
+        "file": "v3-admission-green/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "43a0a43c17ef1eff4d4dce1314e574a1b4317a66ddd627e2f4ee3c124d6baa8d"
+      },
+      {
+        "file": "v3-admission-green/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "a254eba47d8e0fafc0f85b452e5e796f08ceac39180a9fd1df10362183c0bd5c"
+      }
+    ]
+  },
+  "v3-unit-green": {
+    "tests": 5,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-unit-green/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "7ab2e4d44d3024ba7c7113de4efe751bcf6c287faa3f6b5005f2c13f1c1a77fa"
+      },
+      {
+        "file": "v3-unit-green/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "abb23c2813b9ea627daab1c1d0ea6c0a29d487c68fac26576a88c07df1e0fcbf"
+      },
+      {
+        "file": "v3-unit-green/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "dd75531ac1b89f63fdde5ef22843492efa58374c7afa948c5cc5ffac6f13aabf"
+      }
+    ]
+  },
+  "v3-canonical-multipart-boundaries-xml": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-canonical-multipart-boundaries-xml/TEST-ama.storage.s3.S3MultipartIT.xml",
+        "name": "ama.storage.s3.S3MultipartIT",
+        "sha256": "37abd2f6cea7ee415e9daff74556e80cfa7ec28fa197d089a6541b679986c0cc"
+      }
+    ]
+  },
+  "v3-canonical-reliability-xml": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-canonical-reliability-xml/TEST-ama.storage.s3.S3ReliabilityIT.xml",
+        "name": "ama.storage.s3.S3ReliabilityIT",
+        "sha256": "9ed6ecb2724a476d276c9bf06676f0e1efa2ffec66a9c1bdd1a8e30496d220da"
+      }
+    ]
+  },
+  "final-canonical-unit-admission-xml": {
+    "tests": 38,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "final-canonical-unit-admission-xml/TEST-ama.api.IdentityContractsTest.xml",
+        "name": "ama.api.IdentityContractsTest",
+        "sha256": "985023d5584b821a6a112167f58d3f064a10cdd332cfb7b29051ba8af82e6378"
+      },
+      {
+        "file": "final-canonical-unit-admission-xml/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+        "name": "ama.storage.s3.S3LayoutV3Test",
+        "sha256": "a41e6f9c61b8c011989817cf02a2b4215e568b97bfc122a34a4e655af6e4f37e"
+      },
+      {
+        "file": "final-canonical-unit-admission-xml/TEST-ama.storage.ContractFixtureTest.xml",
+        "name": "ama.storage.ContractFixtureTest",
+        "sha256": "1ae361ec8d948b7d4bb4035b03a4b1c18784923b5c37672b39d9bb41da321baa"
+      },
+      {
+        "file": "final-canonical-unit-admission-xml/TEST-ama.support.ContractClientTest.xml",
+        "name": "ama.support.ContractClientTest",
+        "sha256": "9dfc9724a07cc0c888ea9a05946e666074aff3d5aa5fe553963d93c73c6bba46"
+      },
+      {
+        "file": "final-canonical-unit-admission-xml/TEST-ama.storage.StorageRouterTest.xml",
+        "name": "ama.storage.StorageRouterTest",
+        "sha256": "698c2ca0affd56ab125d6e46978d277d138ba17059a859ad7d6b910d0f9d0fcf"
+      },
+      {
+        "file": "final-canonical-unit-admission-xml/TEST-ama.storage.s3.S3ProtocolTest.xml",
+        "name": "ama.storage.s3.S3ProtocolTest",
+        "sha256": "f67e8c63689f573456a0c8c9a8808b0781677a446579d6e8994346ff5b50e736"
+      },
+      {
+        "file": "final-canonical-unit-admission-xml/TEST-ama.api.IdentitySecurityTest.xml",
+        "name": "ama.api.IdentitySecurityTest",
+        "sha256": "0accc4cb88215ed5e2873f4f36ccc1431fc364388ef39ad090d85574e6e355c6"
+      },
+      {
+        "file": "final-canonical-unit-admission-xml/TEST-ama.api.DeploymentConfigTest.xml",
+        "name": "ama.api.DeploymentConfigTest",
+        "sha256": "effb9130233329c90eb971043291aadd212cbbd610ea86c3092ea6265c842f47"
+      }
+    ]
+  },
+  "v3-replay-green": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-replay-green/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "a6246171facee8a34b7cdb2527bc0e61303a4088ba581fb27d591389a703e54e"
+      },
+      {
+        "file": "v3-replay-green/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "64653ac8b9035c3170afb661e505075d2e5460c22a0e321bdfaff53095802ba9"
+      },
+      {
+        "file": "v3-replay-green/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "da6dc82fc3d2e98d978937d7d3e4a50ad57e68f920dbb48bcc722dd22b1965fb"
+      }
+    ]
+  },
+  "v3-replay-red": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-replay-red/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "c7f703f62bb4ef8595dd02f4d8fcff4c523a196c4787315a517436d4f7f578a2"
+      },
+      {
+        "file": "v3-replay-red/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "e52ed73fb3596ef36ed3fc143dea5c2215d3a6893e185aab219a93f6c834826c"
+      },
+      {
+        "file": "v3-replay-red/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "2581aeb9155686783cf9d54f1fbd0a595ce6c05a29595664304ff749dd10238c"
+      }
+    ]
+  },
+  "v3-selector-red": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-selector-red/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "c858caabacb32667c0cd393032e9ad44380c71260aafe47f421032bb6c3fa677"
+      },
+      {
+        "file": "v3-selector-red/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "e1bf877ebb29ccccf6da34fb0f17c9bafeeac3f25ea034eb05c0b5771e7c3dc5"
+      },
+      {
+        "file": "v3-selector-red/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "aa822baa8babf84f14bbc37f26b78381abcd3ba6d96d48ee0ed271cd557523ef"
+      }
+    ]
+  },
+  "v3-final-common-layout": {
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-final-common-layout/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "ee35668014fe27b5b51e87809aa3bb04d8762d0d9944a10fba1385bb4fb892bc"
+      },
+      {
+        "file": "v3-final-common-layout/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "eadf63ae58ba83bf20c5f60180155fcceafcc1d0da98a9fc248635480b4e8ecc"
+      },
+      {
+        "file": "v3-final-common-layout/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "db2381ed3758c9ee21cf920f44ff9af5504a8c38decd63186f1f5aeb89db43cd"
+      }
+    ]
+  },
+  "v3-canonical-unit-xml": {
+    "tests": 36,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-canonical-unit-xml/TEST-ama.api.IdentityContractsTest.xml",
+        "name": "ama.api.IdentityContractsTest",
+        "sha256": "3615fe2141d1cde3e98dc917aab882beabbff0b92da1ebfb08a327b38ec7db49"
+      },
+      {
+        "file": "v3-canonical-unit-xml/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+        "name": "ama.storage.s3.S3LayoutV3Test",
+        "sha256": "61927e40259581ce17d99e02bbfc4cf86381370cd39f2ceefd476265f5fc3caf"
+      },
+      {
+        "file": "v3-canonical-unit-xml/TEST-ama.support.ContractClientTest.xml",
+        "name": "ama.support.ContractClientTest",
+        "sha256": "c976efd2c73db8a354743bf467093950a5efbbd8b2579772a513642013ebd7d5"
+      },
+      {
+        "file": "v3-canonical-unit-xml/TEST-ama.storage.StorageRouterTest.xml",
+        "name": "ama.storage.StorageRouterTest",
+        "sha256": "a51d4b1456d1ee4f7efd13a1abf0c7114c020c0cea846d4f7f88850d593fa516"
+      },
+      {
+        "file": "v3-canonical-unit-xml/TEST-ama.storage.s3.S3ProtocolTest.xml",
+        "name": "ama.storage.s3.S3ProtocolTest",
+        "sha256": "b74c9a704fb1c8a7bd32a3e9cad49dd1f06b8a0a7c7ca8326dba977737a9e40c"
+      },
+      {
+        "file": "v3-canonical-unit-xml/TEST-ama.api.IdentitySecurityTest.xml",
+        "name": "ama.api.IdentitySecurityTest",
+        "sha256": "520e63fe44754fc92130b964e440fae4086792587273c843f779126e93beb172"
+      },
+      {
+        "file": "v3-canonical-unit-xml/TEST-ama.api.DeploymentConfigTest.xml",
+        "name": "ama.api.DeploymentConfigTest",
+        "sha256": "7da6cdaa38a462d02675b2d17e4e707949253eb42090944aacebbe782ed19268"
+      }
+    ]
+  },
+  "v3-canonical-local-contract-xml": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-canonical-local-contract-xml/TEST-ama.storage.FileStorageContractIT.xml",
+        "name": "ama.storage.FileStorageContractIT",
+        "sha256": "87f736e3d8fac1597f1e4e1968bd230959086364ef95a03d29e1f831f4c21e86"
+      }
+    ]
+  },
+  "v3-list-diagnostic": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-list-diagnostic/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "6d3296a7161514bbf7b50a7cdf1a351f74c9494196840bce8a2ff6a71dab501e"
+      },
+      {
+        "file": "v3-list-diagnostic/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "5628963b37b44f5742bb769ce1b5cb4333bd9e5fbc3b150af3e0880b064d7539"
+      },
+      {
+        "file": "v3-list-diagnostic/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "58340893e18a39cc5f6b569eb1bc4165d74ec3471e7622348899cf7155ec1201"
+      }
+    ]
+  },
+  "focus-larger-range": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "focus-larger-range/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "487b453b45ed2ec3f6807e6dba545c77a874fc7bdec4074abb5e7b6061405b03"
+      },
+      {
+        "file": "focus-larger-range/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "b736c06dcef3d76ccaf6c59436b69929fe00e4d7d4d4d198b940f33ae2ec0918"
+      },
+      {
+        "file": "focus-larger-range/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "b674093c00e7a5df1089f9f2cbb6b45f1ef1b7e686d1a6cd1f0d407b4755a79a"
+      }
+    ]
+  },
+  "v3-admission-red": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-admission-red/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "3765928fccedebf52d3cbb1b3d9a7e716bfe1f244884871f10b9aed60cebe25b"
+      },
+      {
+        "file": "v3-admission-red/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "b263a6fdc8ee6cf640971aa250ad945d4d4f5ed511098396b6aa53152cb2541e"
+      },
+      {
+        "file": "v3-admission-red/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "106319306a69995d4fff40d29abc106ed7c69861e637a977590cf241a0d76718"
+      }
+    ]
+  },
+  "v3-selector-green": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-selector-green/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "a2af6f97c2ae99aab02b420aae22c09b57d94a9cb831922c15ed39f36252b55a"
+      },
+      {
+        "file": "v3-selector-green/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "7cb0d441b0514418c8fd52feea2a7e3421dc53667f77e29ee845ae6b9f49efd4"
+      },
+      {
+        "file": "v3-selector-green/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "21c5885055a6ff1283cf7196e86a6b0e4fdc4791e12a46a7a059ff9031e9e749"
+      }
+    ]
+  },
+  "v3-unit-final": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-unit-final/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "ff693b4aef8a8cd71fea36be9d5fffaaec05ed522306a5469e54839bd9bd1c70"
+      },
+      {
+        "file": "v3-unit-final/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "8c7b61080cbf09aada8a9a733a6218380df9197be6fa1333c2abf91bb1c6fd5b"
+      },
+      {
+        "file": "v3-unit-final/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "6cf61b68ca9772b85685a080c5f618cfb8228cf465110007c3ddd19995da3025"
+      }
+    ]
+  },
+  "v3-protocol": {
+    "tests": 35,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-protocol/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "8e54df4829b021ba4343b90cc7c77f80ac3dfe04475709eb069de6212d57a1a3"
+      },
+      {
+        "file": "v3-protocol/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "005bcdd9e5be555ab0ac3f62069d914c35996270846aa42e5482b0a4bc0050ae"
+      },
+      {
+        "file": "v3-protocol/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "b14a674912421a7e71117619182bc75797ea3d74cc5b7bd7b56edab7edd0d2e4"
+      }
+    ]
+  },
+  "v3-canonical-s3-contract-xml": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-canonical-s3-contract-xml/TEST-ama.storage.FileStorageContractIT.xml",
+        "name": "ama.storage.FileStorageContractIT",
+        "sha256": "1a8ec082ef983b62388783f80bec922f75c04da4c38121ca007b636a25d312c7"
+      }
+    ]
+  },
+  "focus-recovery-range": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "focus-recovery-range/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "6e4d786402f2bc69bfe33a210b8da1b34ea2cd53f4b4b8805fbf688fee9f3ed4"
+      },
+      {
+        "file": "focus-recovery-range/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "b0221bb1f31793e0e355d0bc0af268c305fe7242e338811868412e6cb38eb2b4"
+      },
+      {
+        "file": "focus-recovery-range/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "4df98e1e41bb5316ed23df52193d8ebbd6b50d02141a35ddeffe8e4185e1770b"
+      }
+    ]
+  },
+  "v3-native-races": {
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "file": "v3-native-races/TEST-junit-jupiter.xml",
+        "name": "JUnit Jupiter",
+        "sha256": "ec79826c518395021a3825b0067b36a1c4d9ad9a8d2584b58af383e938b8d4a5"
+      },
+      {
+        "file": "v3-native-races/TEST-junit-platform-suite.xml",
+        "name": "JUnit Platform Suite",
+        "sha256": "b1c40955348ee929356e659f4b3fff35c45e2471aedbc4844aab675da215ff17"
+      },
+      {
+        "file": "v3-native-races/TEST-junit-vintage.xml",
+        "name": "JUnit Vintage",
+        "sha256": "1a1ea207671b6dd62a22edfe8b27332efb33e3671e6236ec5659d83a89183490"
+      }
+    ]
+  }
+}

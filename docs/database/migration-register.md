@@ -136,3 +136,11 @@ R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑�
 实际正例为 `ama-test-b01-3ee46f689f9a:45979`。中央冻结提交2f621d6时间02:37:14(+08)，执行前快照02:38:11、首次应用日志02:38:18—02:38:25、首成功快照02:38:44，顺序一致。001/002/005/006/007/008/009/010全部success1，V010 Flyway checksum **`-1187397378`**；当前03e89cc8…字节仍冻结。协调者独立程序比较正式十表全部5组元数据与B00-1.2原始独立完整快照，10表/91列/43索引列/16CHECK/10FK列全部相等。原低版本checksum未变。
 
 两个时间点快照和各自SHA分别保存在 `artifacts/phase-b/b05-first-formal/`，它们是历史观察，不冒称后续行为测试后的当前库。实际@@innodb_use_native_aio=0，按上述仅新独有功能fixture的process-local例外，不作I/O/容量资格。并发、外部未知查回、额度、Outbox、崩溃与所有领域消费者仍待完整实现回归和独立评审，当前不据此开启生产写入或验收B05。
+
+## V010 实施评审采用记录（2026-10-22）
+
+完整owned基线0daecad85..682a7bf，初审两处Important经fix682a7bf..b126db2关闭；fresh scoped SPEC PASS / quality APPROVED、0新问题。采用8a3b77b/e9d2eca/a79ce67。235路径中234逐字节一致，父POM仅保留S3BOM并插入worker的机械合并，另经独立评审；合并后真实canonical unit62/0/0/0。
+
+V01003e89cc8…/35136bytes/checksum-1187397378不变，首次冻结和成功观察保留，旧001/002/005/006/007/008/009校验不改。原201Git对象/144sealed证据/原始预备stash和29项新fix证据均保全。修复只改运行时代码，没有重写SQL、repair、reset或新增DBrestart。详细采用范围、原47IT与fix5/受影响22的执行区别、实际本地DB恢复1476ms、独立observe与同事实重交规则见[框架采用记录](../acceptance/b/task-execution-adoption.md)。
+
+只解锁兼容B03/B02ACL业务开发和不变V011子集正式迁移的受控验证。V011首次正式应用仍需root完整SQL读取、SHA登记与ACK；完整B04/B06以后消费者及B阶段验收不提前通过。真实SSO/模型/知识库/邮件/额度cutoff与RHEL原生I/O/HA/容量前置继续保留。

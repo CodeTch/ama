@@ -1,0 +1,127 @@
+{
+  "profile": "combined reviewed B05+S3+UTF8parser+CI, same source except mechanical POM union; no controlledMySQLfixture operation",
+  "counts": [
+    62,
+    0,
+    0,
+    0
+  ],
+  "files": {
+    "adapters-TEST-ama.storage.StorageRouterTest.xml": {
+      "sha256": "0dbde6d88334700e12320641c422be775fd17e98195018960ca6099f71e5042f",
+      "counts": [
+        8,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/adapters/target/surefire-reports/TEST-ama.storage.StorageRouterTest.xml"
+    },
+    "adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml": {
+      "sha256": "5577bce8562ab5abc3c68fc65cc568ad727353a4cdda4b7b28ae77d09c273c8a",
+      "counts": [
+        5,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/adapters/target/surefire-reports/TEST-ama.storage.s3.S3LayoutV3Test.xml"
+    },
+    "adapters-TEST-ama.storage.s3.S3ProtocolTest.xml": {
+      "sha256": "06330d7c83749b6a2757e09b83a82c68c40c4c9e074796e9463864d842e34cab",
+      "counts": [
+        4,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/adapters/target/surefire-reports/TEST-ama.storage.s3.S3ProtocolTest.xml"
+    },
+    "adapters-TEST-ama.task.TaskMetadataTest.xml": {
+      "sha256": "5b8bd2bb0adcdfa166d304ecfb57bd8c074e3480237219bb92807941f3e83d4f",
+      "counts": [
+        2,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/adapters/target/surefire-reports/TEST-ama.task.TaskMetadataTest.xml"
+    },
+    "adapters-TEST-ama.transcript.TextTranscriptParserTest.xml": {
+      "sha256": "f45045ce8fd9552e6dec2a94b671ed38245568af260a1ad1b979ea4be2287d90",
+      "counts": [
+        19,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/adapters/target/surefire-reports/TEST-ama.transcript.TextTranscriptParserTest.xml"
+    },
+    "api-TEST-ama.api.DeploymentConfigTest.xml": {
+      "sha256": "b819594e66f6c0d82e386f65ace439bfa70e90e0b6d61c7c6827390eaa4aae02",
+      "counts": [
+        9,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/api/target/surefire-reports/TEST-ama.api.DeploymentConfigTest.xml"
+    },
+    "api-TEST-ama.api.IdentityContractsTest.xml": {
+      "sha256": "86400d6beba7d92e27829d91d565a24af8e03f8e3842020effe3092fb1976230",
+      "counts": [
+        3,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/api/target/surefire-reports/TEST-ama.api.IdentityContractsTest.xml"
+    },
+    "api-TEST-ama.api.IdentitySecurityTest.xml": {
+      "sha256": "46dcbb1d8facddf10fef6c3812022bb8fd951f1addf2c671c15e646df97b37eb",
+      "counts": [
+        6,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/api/target/surefire-reports/TEST-ama.api.IdentitySecurityTest.xml"
+    },
+    "integration-tests-TEST-ama.storage.ContractFixtureTest.xml": {
+      "sha256": "ed2cecc354958bfc6a1832e5e700ec626deec9d7b09c3c697d874927d9c685db",
+      "counts": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/integration-tests/target/surefire-reports/TEST-ama.storage.ContractFixtureTest.xml"
+    },
+    "integration-tests-TEST-ama.support.ContractClientTest.xml": {
+      "sha256": "35f01703cf63c4c04bd07304b14bf3c43844d3dfe4bece0cd54ca25c6b8d61db",
+      "counts": [
+        2,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/integration-tests/target/surefire-reports/TEST-ama.support.ContractClientTest.xml"
+    },
+    "worker-TEST-ama.worker.WorkerLoopTest.xml": {
+      "sha256": "4b8c492158cbdc65f3a0f923fda607d8bb6df84afbef32a4474f7063159ddef2",
+      "counts": [
+        3,
+        0,
+        0,
+        0
+      ],
+      "source": "/home/tanren/ama/.worktrees/phase-a/backend/worker/target/surefire-reports/TEST-ama.worker.WorkerLoopTest.xml"
+    },
+    "b05-combined-unit.log": {
+      "sha256": "bfe7d9ee0fa407ba32cf14a70afc77fcdab6e9cb7351c1ed57ed3b0efcdba20a"
+    },
+    "b05-combined-setup-invalid-selector.log": {
+      "sha256": "d6b7e3e686bdced49c618753dd2a1b2d701a792a5fbaad01f8f058e0618d1542"
+    }
+  }
+}

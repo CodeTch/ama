@@ -1,0 +1,70 @@
+[ {
+  "method" : "GET",
+  "path" : "/v3-control-06939409-c2ac-42db-8bb3-7ee4ce501abb/scopes/v3/53b96e4bd2acc07d77b900e9ca22523f1e26d7d0a0fcff960c5ff9d2e40e9858/spec",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "1108",
+    "etag" : "\"4d81a74ce443fc83138827a328088288\""
+  },
+  "upstreamBytes" : 1108,
+  "downstreamBytes" : 1108,
+  "fault" : false
+}, {
+  "method" : "GET",
+  "path" : "/v3-data-06939409-c2ac-42db-8bb3-7ee4ce501abb?list-type=2&max-keys=1&prefix=data%2Fv3%2F53b96e4bd2acc07d77b900e9ca22523f1e26d7d0a0fcff960c5ff9d2e40e9858%2Fxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~%2Fx007e",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "1012"
+  },
+  "upstreamBytes" : 1012,
+  "downstreamBytes" : 1012,
+  "fault" : false
+}, {
+  "method" : "GET",
+  "path" : "/v3-control-06939409-c2ac-42db-8bb3-7ee4ce501abb/scopes/v3/53b96e4bd2acc07d77b900e9ca22523f1e26d7d0a0fcff960c5ff9d2e40e9858/spec",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "1108",
+    "etag" : "\"4d81a74ce443fc83138827a328088288\""
+  },
+  "upstreamBytes" : 1108,
+  "downstreamBytes" : 1108,
+  "fault" : false
+}, {
+  "method" : "GET",
+  "path" : "/v3-control-06939409-c2ac-42db-8bb3-7ee4ce501abb/keys/v3/fdb475fb119ad8dcfb2083d56ec58a14e707ed8cb3fe09587ceda3fa2d73df4b/spec",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "1480",
+    "etag" : "\"ea996841589463aaf52e1b0e8ee636cf\""
+  },
+  "upstreamBytes" : 1480,
+  "downstreamBytes" : 1480,
+  "fault" : false
+}, {
+  "method" : "GET",
+  "path" : "/v3-data-06939409-c2ac-42db-8bb3-7ee4ce501abb/data/v3/53b96e4bd2acc07d77b900e9ca22523f1e26d7d0a0fcff960c5ff9d2e40e9858/xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~/x007e",
+  "request" : {
+    "signed" : "true"
+  },
+  "status" : 200,
+  "response" : {
+    "content-length" : "3",
+    "etag" : "\"84d9ee44e457ddef7f2c4f25dc8fa865\""
+  },
+  "upstreamBytes" : 3,
+  "downstreamBytes" : 3,
+  "fault" : false
+} ]

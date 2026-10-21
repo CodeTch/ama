@@ -49,7 +49,7 @@ class FileStorageContractIT {
     @ParameterizedTest(name = "{0}: immutable bytes, exact ranges and content conflicts")
     @ValueSource(strings = {"local"})
     void localImmutableContract(String backend) throws Exception {
-        try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
+        try (var fixture = new ContractFixture(temporary.resolve("volume"))) {
             var s = fixture.startServer();
             byte[] value = bytes("0123456789");
             String hash = hash(value);
@@ -87,7 +87,7 @@ class FileStorageContractIT {
     @ParameterizedTest(name = "{0}: size, checksum, interrupted stream")
     @ValueSource(strings = {"local"})
     void localRejectsUnverifiedBytes(String backend) throws Exception {
-        try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
+        try (var fixture = new ContractFixture(temporary.resolve("volume"))) {
             var s = fixture.startServer();
             String abc = hash(bytes("abc"));
             error(ErrorCode.SIZE_MISMATCH, () -> s.put(key("short"), body("ab"), 3, abc));
@@ -120,7 +120,7 @@ class FileStorageContractIT {
     @ParameterizedTest(name = "{0}: multipart replay, ordered receipts, terminal states")
     @ValueSource(strings = {"local"})
     void localMultipartContract(String backend) throws Exception {
-        try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
+        try (var fixture = new ContractFixture(temporary.resolve("volume"))) {
             var s = fixture.startServer();
             var token = s.beginUpload(new UploadSpec("local", "meeting", "multi", 6));
             assertEquals("local", token.backendId());
@@ -167,7 +167,7 @@ class FileStorageContractIT {
     @ParameterizedTest(name = "local: completion excludes unselected part [{0}]")
     @ValueSource(strings = {"", "xyz"})
     void localMultipartCompletionSelectsSuppliedReceipts(String unselected) throws Exception {
-        try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
+        try (var fixture = new ContractFixture(temporary.resolve("volume"))) {
             var s = fixture.startServer();
             var token = s.beginUpload(new UploadSpec("local", "meeting", "selected", 3));
             String abc = hash(bytes("abc"));
@@ -200,7 +200,7 @@ class FileStorageContractIT {
     @ParameterizedTest(name = "{0}: concurrent clients have one immutable winner")
     @ValueSource(strings = {"local"})
     void localConcurrentWinner(String backend) throws Exception {
-        try (var fixture = new LocalFixture(temporary.resolve("volume"));
+        try (var fixture = new ContractFixture(temporary.resolve("volume"));
                 var pool = Executors.newFixedThreadPool(2)) {
             var first = fixture.startServer();
             var second = fixture.client("writer");
@@ -242,7 +242,7 @@ class FileStorageContractIT {
     @ParameterizedTest(name = "{0}: bounded listing and cursor isolation")
     @ValueSource(strings = {"local"})
     void localListingContract(String backend) throws Exception {
-        try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
+        try (var fixture = new ContractFixture(temporary.resolve("volume"))) {
             var s = fixture.startServer();
             String hash = hash(bytes("a"));
             for (String name : List.of("prefix/c", "prefix/a", "prefix/b", "other"))

@@ -1,0 +1,102 @@
+{
+  "capture": "/home/tanren/ama/.worktrees/phase-b-tasks/artifacts/phase-b/b05-functional/final-positive-snapshot.json",
+  "tables": 31,
+  "history": [
+    {
+      "type": "SQL",
+      "script": "V001__foundation.sql",
+      "success": 1,
+      "version": "001",
+      "checksum": 1201435595,
+      "description": "foundation",
+      "installed_by": "ama_test",
+      "installed_on": "2026-10-21 18:33:21.000000",
+      "execution_time": 211,
+      "installed_rank": 1
+    },
+    {
+      "type": "SQL",
+      "script": "V002__identity_acl.sql",
+      "success": 1,
+      "version": "002",
+      "checksum": 1757300424,
+      "description": "identity acl",
+      "installed_by": "ama_test",
+      "installed_on": "2026-10-21 18:33:22.000000",
+      "execution_time": 528,
+      "installed_rank": 2
+    },
+    {
+      "type": "SQL",
+      "script": "V005__tasks_outbox.sql",
+      "success": 1,
+      "version": "005",
+      "checksum": -1999355348,
+      "description": "tasks outbox",
+      "installed_by": "ama_test",
+      "installed_on": "2026-10-21 18:33:23.000000",
+      "execution_time": 864,
+      "installed_rank": 3
+    },
+    {
+      "type": "SQL",
+      "script": "V006__audit_metadata.sql",
+      "success": 1,
+      "version": "006",
+      "checksum": -1744360556,
+      "description": "audit metadata",
+      "installed_by": "ama_test",
+      "installed_on": "2026-10-21 18:33:23.000000",
+      "execution_time": 321,
+      "installed_rank": 4
+    },
+    {
+      "type": "SQL",
+      "script": "V007__identity_sessions.sql",
+      "success": 1,
+      "version": "007",
+      "checksum": 157746768,
+      "description": "identity sessions",
+      "installed_by": "ama_test",
+      "installed_on": "2026-10-21 18:33:24.000000",
+      "execution_time": 1254,
+      "installed_rank": 5
+    },
+    {
+      "type": "SQL",
+      "script": "V008__meeting_schema.sql",
+      "success": 1,
+      "version": "008",
+      "checksum": -1747387036,
+      "description": "meeting schema",
+      "installed_by": "ama_test",
+      "installed_on": "2026-10-21 18:33:30.000000",
+      "execution_time": 5736,
+      "installed_rank": 6
+    },
+    {
+      "type": "SQL",
+      "script": "V009__file_schema.sql",
+      "success": 1,
+      "version": "009",
+      "checksum": -287948759,
+      "description": "file schema",
+      "installed_by": "ama_test",
+      "installed_on": "2026-10-21 18:33:34.000000",
+      "execution_time": 4030,
+      "installed_rank": 7
+    },
+    {
+      "type": "SQL",
+      "script": "V010__reliable_execution.sql",
+      "success": 1,
+      "version": "010",
+      "checksum": -1187397378,
+      "description": "reliable execution",
+      "installed_by": "ama_test",
+      "installed_on": "2026-10-21 18:38:25.000000",
+      "execution_time": 6976,
+      "installed_rank": 8
+    }
+  ]
+}

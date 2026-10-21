@@ -1,0 +1,89 @@
+Compiled from "ClientOverrideConfiguration.java"
+public interface software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder extends software.amazon.awssdk.utils.builder.CopyableBuilder<software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder, software.amazon.awssdk.core.client.config.ClientOverrideConfiguration> {
+  public default software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder putHeader(java.lang.String, java.lang.String);
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder putHeader(java.lang.String, java.util.List<java.lang.String>);
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder headers(java.util.Map<java.lang.String, java.util.List<java.lang.String>>);
+  public abstract java.util.Map<java.lang.String, java.util.List<java.lang.String>> headers();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder retryPolicy(software.amazon.awssdk.core.retry.RetryPolicy);
+  public default software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder retryPolicy(java.util.function.Consumer<software.amazon.awssdk.core.retry.RetryPolicy$Builder>);
+  public default software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder retryPolicy(software.amazon.awssdk.core.retry.RetryMode);
+  public abstract software.amazon.awssdk.core.retry.RetryPolicy retryPolicy();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder retryStrategy(software.amazon.awssdk.retries.api.RetryStrategy);
+  public default software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder retryStrategy(software.amazon.awssdk.core.retry.RetryMode);
+  public default software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder retryStrategy(java.util.function.Consumer<software.amazon.awssdk.retries.api.RetryStrategy$Builder<?, ?>>);
+  public abstract software.amazon.awssdk.retries.api.RetryStrategy retryStrategy();
+  public abstract software.amazon.awssdk.core.retry.RetryMode retryMode();
+  public abstract java.util.function.Consumer<software.amazon.awssdk.retries.api.RetryStrategy$Builder<?, ?>> retryStrategyConfigurator();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder executionInterceptors(java.util.List<software.amazon.awssdk.core.interceptor.ExecutionInterceptor>);
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder addExecutionInterceptor(software.amazon.awssdk.core.interceptor.ExecutionInterceptor);
+  public abstract java.util.List<software.amazon.awssdk.core.interceptor.ExecutionInterceptor> executionInterceptors();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder scheduledExecutorService(java.util.concurrent.ScheduledExecutorService);
+  public abstract java.util.concurrent.ScheduledExecutorService scheduledExecutorService();
+  public abstract <T> software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder putAdvancedOption(software.amazon.awssdk.core.client.config.SdkAdvancedClientOption<T>, T);
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder advancedOptions(java.util.Map<software.amazon.awssdk.core.client.config.SdkAdvancedClientOption<?>, ?>);
+  public abstract software.amazon.awssdk.utils.AttributeMap advancedOptions();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder apiCallTimeout(java.time.Duration);
+  public abstract java.time.Duration apiCallTimeout();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder apiCallAttemptTimeout(java.time.Duration);
+  public abstract java.time.Duration apiCallAttemptTimeout();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder defaultProfileFileSupplier(java.util.function.Supplier<software.amazon.awssdk.profiles.ProfileFile>);
+  public abstract java.util.function.Supplier<software.amazon.awssdk.profiles.ProfileFile> defaultProfileFileSupplier();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder defaultProfileFile(software.amazon.awssdk.profiles.ProfileFile);
+  public abstract software.amazon.awssdk.profiles.ProfileFile defaultProfileFile();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder defaultProfileName(java.lang.String);
+  public abstract java.lang.String defaultProfileName();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder metricPublishers(java.util.List<software.amazon.awssdk.metrics.MetricPublisher>);
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder addMetricPublisher(software.amazon.awssdk.metrics.MetricPublisher);
+  public abstract java.util.List<software.amazon.awssdk.metrics.MetricPublisher> metricPublishers();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder executionAttributes(software.amazon.awssdk.core.interceptor.ExecutionAttributes);
+  public abstract <T> software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder putExecutionAttribute(software.amazon.awssdk.core.interceptor.ExecutionAttribute<T>, T);
+  public abstract software.amazon.awssdk.core.interceptor.ExecutionAttributes executionAttributes();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder compressionConfiguration(software.amazon.awssdk.core.CompressionConfiguration);
+  public default software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder compressionConfiguration(java.util.function.Consumer<software.amazon.awssdk.core.CompressionConfiguration$Builder>);
+  public abstract software.amazon.awssdk.core.CompressionConfiguration compressionConfiguration();
+  public abstract software.amazon.awssdk.core.client.config.ClientOverrideConfiguration$Builder appId(java.lang.String);
+  public abstract java.lang.String appId();
+}
+Compiled from "StandardRetryStrategy.java"
+public interface software.amazon.awssdk.retries.StandardRetryStrategy extends software.amazon.awssdk.retries.api.RetryStrategy {
+  public static software.amazon.awssdk.retries.StandardRetryStrategy$Builder builder();
+  public static software.amazon.awssdk.retries.StandardRetryStrategy$Builder builder(java.lang.Boolean);
+  public abstract software.amazon.awssdk.retries.StandardRetryStrategy$Builder toBuilder();
+  public default software.amazon.awssdk.retries.api.RetryStrategy$Builder toBuilder();
+}
+Compiled from "StandardRetryStrategy.java"
+public interface software.amazon.awssdk.retries.StandardRetryStrategy$Builder extends software.amazon.awssdk.retries.api.RetryStrategy$Builder<software.amazon.awssdk.retries.StandardRetryStrategy$Builder, software.amazon.awssdk.retries.StandardRetryStrategy> {
+  public abstract software.amazon.awssdk.retries.StandardRetryStrategy$Builder circuitBreakerEnabled(java.lang.Boolean);
+  public abstract software.amazon.awssdk.retries.StandardRetryStrategy build();
+  public default software.amazon.awssdk.retries.api.RetryStrategy build();
+  public default java.lang.Object build();
+}
+Compiled from "RetryStrategy.java"
+public interface software.amazon.awssdk.retries.api.RetryStrategy extends software.amazon.awssdk.utils.SdkAutoCloseable {
+  public abstract software.amazon.awssdk.retries.api.AcquireInitialTokenResponse acquireInitialToken(software.amazon.awssdk.retries.api.AcquireInitialTokenRequest);
+  public default java.util.concurrent.CompletableFuture<software.amazon.awssdk.retries.api.AcquireInitialTokenResponse> acquireInitialTokenAsync(software.amazon.awssdk.retries.api.AcquireInitialTokenRequest);
+  public abstract software.amazon.awssdk.retries.api.RefreshRetryTokenResponse refreshRetryToken(software.amazon.awssdk.retries.api.RefreshRetryTokenRequest);
+  public default java.util.concurrent.CompletableFuture<software.amazon.awssdk.retries.api.RefreshRetryTokenResponse> refreshRetryTokenAsync(software.amazon.awssdk.retries.api.RefreshRetryTokenRequest);
+  public abstract software.amazon.awssdk.retries.api.RecordSuccessResponse recordSuccess(software.amazon.awssdk.retries.api.RecordSuccessRequest);
+  public abstract int maxAttempts();
+  public default boolean useClientDefaults();
+  public abstract software.amazon.awssdk.retries.api.RetryStrategy$Builder<?, ?> toBuilder();
+  public default void close();
+}
+Compiled from "RetryStrategy.java"
+public interface software.amazon.awssdk.retries.api.RetryStrategy$Builder<B extends software.amazon.awssdk.retries.api.RetryStrategy$Builder<B, T>, T extends software.amazon.awssdk.retries.api.RetryStrategy> extends software.amazon.awssdk.utils.builder.SdkBuilder<B, T> {
+  public abstract B retryOnException(java.util.function.Predicate<java.lang.Throwable>);
+  public default B retryOnException(java.lang.Class<? extends java.lang.Throwable>);
+  public default B retryOnExceptionInstanceOf(java.lang.Class<? extends java.lang.Throwable>);
+  public default B retryOnExceptionOrCause(java.lang.Class<? extends java.lang.Throwable>);
+  public default B retryOnExceptionOrCauseInstanceOf(java.lang.Class<? extends java.lang.Throwable>);
+  public default B retryOnRootCause(java.lang.Class<? extends java.lang.Throwable>);
+  public default B retryOnRootCauseInstanceOf(java.lang.Class<? extends java.lang.Throwable>);
+  public abstract B maxAttempts(int);
+  public abstract B backoffStrategy(software.amazon.awssdk.retries.api.BackoffStrategy);
+  public abstract B throttlingBackoffStrategy(software.amazon.awssdk.retries.api.BackoffStrategy);
+  public abstract B treatAsThrottling(java.util.function.Predicate<java.lang.Throwable>);
+  public default B useClientDefaults(boolean);
+  public abstract T build();
+  public default java.lang.Object build();
+}

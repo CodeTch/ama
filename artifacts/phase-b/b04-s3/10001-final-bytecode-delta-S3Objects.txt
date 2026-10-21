@@ -1,0 +1,132 @@
+--- frozen10001
++++ finalcanonical
+@@ -5,6 +5,8 @@
+   final ama.storage.s3.S3Config config;
+ 
+   private final java.util.concurrent.Semaphore requests;
++
++  private final java.util.concurrent.Semaphore streamingRequests;
+ 
+   ama.storage.s3.S3Objects(software.amazon.awssdk.services.s3.S3Client, ama.storage.s3.S3Config);
+     Code:
+@@ -23,31 +25,72 @@
+       20: invokevirtual #CP                 // Method ama/storage/s3/S3Config.admission:()I
+       23: invokespecial #CP                 // Method java/util/concurrent/Semaphore."<init>":(I)V
+       26: putfield      #CP                 // Field requests:Ljava/util/concurrent/Semaphore;
+-      29: return
++      29: aload_0
++      30: new           #CP                 // class java/util/concurrent/Semaphore
++      33: dup
++      34: aload_2
++      35: invokevirtual #CP                 // Method ama/storage/s3/S3Config.admission:()I
++      38: iconst_1
++      39: isub
++      40: invokespecial #CP                 // Method java/util/concurrent/Semaphore."<init>":(I)V
++      43: putfield      #CP                 // Field streamingRequests:Ljava/util/concurrent/Semaphore;
++      46: return
+ 
+   private void acquire();
+     Code:
+        0: aload_0
+-       1: getfield      #CP                 // Field requests:Ljava/util/concurrent/Semaphore;
+-       4: aload_0
+-       5: getfield      #CP                 // Field config:Lama/storage/s3/S3Config;
+-       8: invokevirtual #CP                 // Method ama/storage/s3/S3Config.timeout:()Ljava/time/Duration;
+-      11: invokevirtual #CP                 // Method java/time/Duration.toMillis:()J
+-      14: getstatic     #CP                 // Field java/util/concurrent/TimeUnit.MILLISECONDS:Ljava/util/concurrent/TimeUnit;
+-      17: invokevirtual #CP                 // Method java/util/concurrent/Semaphore.tryAcquire:(JLjava/util/concurrent/TimeUnit;)Z
+-      20: ifne          27
+-      23: invokestatic  #CP                 // Method ama/storage/s3/ControlCodec.unavailable:()Lama/contract/StorageContracts$StorageException;
+-      26: athrow
+-      27: goto          41
+-      30: astore_1
+-      31: invokestatic  #CP                 // Method java/lang/Thread.currentThread:()Ljava/lang/Thread;
+-      34: invokevirtual #CP                 // Method java/lang/Thread.interrupt:()V
+-      37: invokestatic  #CP                 // Method ama/storage/s3/ControlCodec.unavailable:()Lama/contract/StorageContracts$StorageException;
+-      40: athrow
+-      41: return
+-    Exception table:
+-       from    to  target type
+-           0    27    30   Class java/lang/InterruptedException
++       1: aload_0
++       2: getfield      #CP                 // Field requests:Ljava/util/concurrent/Semaphore;
++       5: invokevirtual #CP                 // Method acquire:(Ljava/util/concurrent/Semaphore;)V
++       8: return
++
++  private void acquire(java.util.concurrent.Semaphore);
++    Code:
++       0: aload_1
++       1: aload_0
++       2: getfield      #CP                 // Field config:Lama/storage/s3/S3Config;
++       5: invokevirtual #CP                 // Method ama/storage/s3/S3Config.timeout:()Ljava/time/Duration;
++       8: invokevirtual #CP                 // Method java/time/Duration.toMillis:()J
++      11: getstatic     #CP                 // Field java/util/concurrent/TimeUnit.MILLISECONDS:Ljava/util/concurrent/TimeUnit;
++      14: invokevirtual #CP                 // Method java/util/concurrent/Semaphore.tryAcquire:(JLjava/util/concurrent/TimeUnit;)Z
++      17: ifne          24
++      20: invokestatic  #CP                 // Method ama/storage/s3/ControlCodec.unavailable:()Lama/contract/StorageContracts$StorageException;
++      23: athrow
++      24: goto          38
++      27: astore_2
++      28: invokestatic  #CP                 // Method java/lang/Thread.currentThread:()Ljava/lang/Thread;
++      31: invokevirtual #CP                 // Method java/lang/Thread.interrupt:()V
++      34: invokestatic  #CP                 // Method ama/storage/s3/ControlCodec.unavailable:()Lama/contract/StorageContracts$StorageException;
++      37: athrow
++      38: return
++    Exception table:
++       from    to  target type
++           0    24    27   Class java/lang/InterruptedException
++
++  <T> T streaming(java.util.function.Supplier<T>);
++    Code:
++       0: aload_0
++       1: aload_0
++       2: getfield      #CP                 // Field streamingRequests:Ljava/util/concurrent/Semaphore;
++       5: invokevirtual #CP                 // Method acquire:(Ljava/util/concurrent/Semaphore;)V
++       8: aload_0
++       9: aload_1
++      10: invokevirtual #CP                 // Method call:(Ljava/util/function/Supplier;)Ljava/lang/Object;
++      13: astore_2
++      14: aload_0
++      15: getfield      #CP                 // Field streamingRequests:Ljava/util/concurrent/Semaphore;
++      18: invokevirtual #CP                 // Method java/util/concurrent/Semaphore.release:()V
++      21: aload_2
++      22: areturn
++      23: astore_3
++      24: aload_0
++      25: getfield      #CP                 // Field streamingRequests:Ljava/util/concurrent/Semaphore;
++      28: invokevirtual #CP                 // Method java/util/concurrent/Semaphore.release:()V
++      31: aload_3
++      32: athrow
++    Exception table:
++       from    to  target type
++           8    14    23   any
+ 
+   <T> T call(java.util.function.Supplier<T>);
+     Code:
+@@ -88,13 +131,13 @@
+   static ama.contract.StorageContracts$StorageException mapped(software.amazon.awssdk.services.s3.model.S3Exception);
+     Code:
+        0: aload_0
+-       1: invokevirtual #CP                 // Method software/amazon/awssdk/services/s3/model/S3Exception.awsErrorDetails:()Lsoftware/amazon/awssdk/awscore/exception/AwsErrorDetails;
++       1: invokevirtual #CP                // Method software/amazon/awssdk/services/s3/model/S3Exception.awsErrorDetails:()Lsoftware/amazon/awssdk/awscore/exception/AwsErrorDetails;
+        4: ifnonnull     12
+-       7: ldc           #CP                 // String
++       7: ldc           #CP                // String
+        9: goto          19
+       12: aload_0
+-      13: invokevirtual #CP                 // Method software/amazon/awssdk/services/s3/model/S3Exception.awsErrorDetails:()Lsoftware/amazon/awssdk/awscore/exception/AwsErrorDetails;
+-      16: invokevirtual #CP                 // Method software/amazon/awssdk/awscore/exception/AwsErrorDetails.errorCode:()Ljava/lang/String;
++      13: invokevirtual #CP                // Method software/amazon/awssdk/services/s3/model/S3Exception.awsErrorDetails:()Lsoftware/amazon/awssdk/awscore/exception/AwsErrorDetails;
++      16: invokevirtual #CP                // Method software/amazon/awssdk/awscore/exception/AwsErrorDetails.errorCode:()Ljava/lang/String;
+       19: astore_1
+       20: new           #CP                 // class ama/contract/StorageContracts$StorageException
+       23: dup
+@@ -270,7 +313,7 @@
+       14: aload_1
+       15: aload_2
+       16: invokedynamic #CP,  0            // InvokeDynamic #CP:get:(Lama/storage/s3/S3Objects;Ljava/lang/String;[B)Ljava/util/function/Supplier;
+-      21: invokevirtual #CP                // Method call:(Ljava/util/function/Supplier;)Ljava/lang/Object;
++      21: invokevirtual #CP                 // Method call:(Ljava/util/function/Supplier;)Ljava/lang/Object;
+       24: pop
+       25: goto          48
+       28: astore_3

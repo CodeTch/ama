@@ -1,0 +1,70 @@
+task_subject	CREATE TABLE `task_subject` (
+  `subject_kind` varchar(64) COLLATE utf8mb4_0900_bin NOT NULL,
+  `subject_id` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `business_version` bigint NOT NULL,
+  `cancel_epoch` bigint NOT NULL,
+  PRIMARY KEY (`subject_kind`,`subject_id`),
+  CONSTRAINT `task_subject_chk_1` CHECK (((`business_version` >= 0) and (`cancel_epoch` >= 0)))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_bin
+
+durable_task	CREATE TABLE `durable_task` (
+  `id` char(36) COLLATE utf8mb4_0900_bin NOT NULL,
+  `task_type` varchar(64) COLLATE utf8mb4_0900_bin NOT NULL,
+  `pool` varchar(64) COLLATE utf8mb4_0900_bin NOT NULL,
+  `subject_kind` varchar(64) COLLATE utf8mb4_0900_bin NOT NULL,
+  `subject_id` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `input_reference` varchar(512) COLLATE utf8mb4_0900_bin NOT NULL,
+  `input_fingerprint` varchar(128) COLLATE utf8mb4_0900_bin NOT NULL,
+  `business_version` bigint NOT NULL,
+  `cancel_epoch` bigint NOT NULL,
+  `priority` int NOT NULL,
+  `state` varchar(20) COLLATE utf8mb4_0900_bin NOT NULL DEFAULT 'READY',
+  `attempt` bigint NOT NULL DEFAULT '0',
+  `lease_owner` varchar(128) COLLATE utf8mb4_0900_bin DEFAULT NULL,
+  `expires_at` datetime(6) DEFAULT NULL,
+  `available_at` datetime(6) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `output_reference` varchar(512) COLLATE utf8mb4_0900_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `task_claim` (`pool`,`state`,`available_at`,`priority`),
+  KEY `subject_kind` (`subject_kind`,`subject_id`),
+  CONSTRAINT `durable_task_ibfk_1` FOREIGN KEY (`subject_kind`, `subject_id`) REFERENCES `task_subject` (`subject_kind`, `subject_id`),
+  CONSTRAINT `durable_task_chk_1` CHECK (((`business_version` >= 0) and (`cancel_epoch` >= 0) and (`attempt` >= 0))),
+  CONSTRAINT `durable_task_chk_2` CHECK ((`state` in (_utf8mb4'READY',_utf8mb4'RUNNING',_utf8mb4'RECONCILING',_utf8mb4'SUCCEEDED',_utf8mb4'FAILED')))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_bin
+
+task_outbox	CREATE TABLE `task_outbox` (
+  `sequence_id` bigint NOT NULL,
+  `event_type` varchar(32) COLLATE utf8mb4_0900_bin NOT NULL,
+  `task_id` char(36) COLLATE utf8mb4_0900_bin NOT NULL,
+  `reference` varchar(512) COLLATE utf8mb4_0900_bin NOT NULL,
+  `occurred_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`sequence_id`),
+  KEY `task_id` (`task_id`),
+  CONSTRAINT `task_outbox_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `durable_task` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_bin
+
+model_capacity	CREATE TABLE `model_capacity` (
+  `model` varchar(128) COLLATE utf8mb4_0900_bin NOT NULL,
+  `capacity` int NOT NULL,
+  PRIMARY KEY (`model`),
+  CONSTRAINT `model_capacity_chk_1` CHECK ((`capacity` > 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_bin
+
+model_reservation	CREATE TABLE `model_reservation` (
+  `id` char(36) COLLATE utf8mb4_0900_bin NOT NULL,
+  `model` varchar(128) COLLATE utf8mb4_0900_bin NOT NULL,
+  `safe_deadline` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `model_deadline` (`model`,`safe_deadline`),
+  CONSTRAINT `model_reservation_ibfk_1` FOREIGN KEY (`model`) REFERENCES `model_capacity` (`model`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_bin
+
+task_outbox_sequence	CREATE TABLE `task_outbox_sequence` (
+  `id` int NOT NULL,
+  `next_id` bigint NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+RAW REVIEW ONLY, NO FLYWAY V010 db5d10fddb023333ff97583a1e259d4c706b2e430904891e3a8e1fc39899fa61
+Raw candidate applied; never formal V010 history
