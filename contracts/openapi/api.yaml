@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: AMA internal API foundation
   version: 0.1.0
-  description: Only internal runtime probes are delivered in phase A-01.
+  description: Runtime probes and the B02 identity prerequisite. Enterprise sign-in and final meeting authorization remain pending qualification.
 servers:
   - url: http://127.0.0.1:8081
     description: Loopback management listener; never publish through the public ingress.
@@ -11,3 +11,18 @@ paths:
     $ref: './health.yaml#/live'
   /internal/health/ready:
     $ref: './health.yaml#/ready'
+  /api/v1/session:
+    $ref: './identity.yaml#/session'
+  /api/v1/session/logout:
+    $ref: './identity.yaml#/logout'
+  /api/v1/session/logout-all:
+    $ref: './identity.yaml#/logoutAll'
+  /api/v1/directory/people:
+    $ref: './identity.yaml#/people'
+components:
+  securitySchemes:
+    enterpriseSession:
+      type: apiKey
+      in: cookie
+      name: __Host-AMA_SESSION
+      description: Opaque server session; Secure, HttpOnly, Path=/, SameSite=Lax. No production sign-in or test-login route exists pending the company protocol.
