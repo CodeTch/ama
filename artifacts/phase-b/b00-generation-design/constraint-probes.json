@@ -1,0 +1,192 @@
+{
+  "container": "ama-test-b01-991f0386f26d",
+  "container_id": "a5bd8e25f6047c542e94af6aac5bec68e60532c183d460714586480b2e22add3",
+  "scope": "actual relational checks and explicit limits; not application/ACL/semantic acceptance",
+  "probes": [
+    {
+      "probe": "multi-label-and-UTF8-lossless",
+      "database_boundary_witness": false,
+      "exit_code": 0,
+      "mysql_error": null,
+      "output": "2\t1\nE8838CE699AFEFBC9AE794B20AE4B999F09F9880EFBC8CE4BB85E8838CE699AFE8A1A5E58585E38082\nE2809CE78E8BE5B7A5E2809D0AE5B09AE5BE85E698A0E5B084F09F9880\t2026-11-01\n1",
+      "expectation_met": true
+    },
+    {
+      "probe": "unselect-one-label-retains-other",
+      "database_boundary_witness": false,
+      "exit_code": 0,
+      "mysql_error": null,
+      "output": "POLITICAL_SENSITIVE\n2",
+      "expectation_met": true
+    },
+    {
+      "probe": "duplicate-selected-label",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 1062,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "invalid-sensitive-category",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 3819,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "duplicate-directory-order",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 1062,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "invalid-zero-ordinal",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 3819,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "duplicate-source-set-member",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 1062,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "unknown-source-FK",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 1452,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "restrict-reviewed-evidence-delete",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 1451,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "restrict-final-review-delete",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 1451,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "final-confirmation-parent-FK",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 1452,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "final-review-parent-FK",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 1452,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "two-targets",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 3819,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "zero-targets",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 3819,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "action-on-body",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 3819,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "invalid-outcome",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 3819,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "source-without-anchor",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 3819,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "uppercase-hash",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 3819,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "nonhex-hash",
+      "database_boundary_witness": false,
+      "exit_code": 1,
+      "mysql_error": 3819,
+      "output": "",
+      "expectation_met": true
+    },
+    {
+      "probe": "unknown-reviewer-identity-not-an-FK",
+      "database_boundary_witness": true,
+      "exit_code": 0,
+      "mysql_error": null,
+      "output": "0",
+      "expectation_met": true
+    },
+    {
+      "probe": "cross-meeting-review-not-FK-enforced",
+      "database_boundary_witness": true,
+      "exit_code": 0,
+      "mysql_error": null,
+      "output": "0",
+      "expectation_met": true
+    },
+    {
+      "probe": "other-target-evidence-not-FK-enforced",
+      "database_boundary_witness": true,
+      "exit_code": 0,
+      "mysql_error": null,
+      "output": "0",
+      "expectation_met": true
+    },
+    {
+      "probe": "content-hash-mismatch-not-CHECK-enforced",
+      "database_boundary_witness": true,
+      "exit_code": 0,
+      "mysql_error": null,
+      "output": "0",
+      "expectation_met": true
+    }
+  ],
+  "all_probe_business_rows_after_rollback": 0
+}

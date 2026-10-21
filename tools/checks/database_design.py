@@ -11,7 +11,7 @@ import re
 import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VERSION = 'B00-1.2-review'
+VERSION = 'B00-1.3-review'
 TABLES = []
 ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
 KEY = 'varchar(255) COLLATE utf8mb4_0900_bin'
@@ -349,6 +349,58 @@ upload['policy']='初始化成功前提交名称/用途/固定位置/存储token
 part=next(t for t in TABLES if t['name']=='upload_part')
 part['policy']='只登记实际durable且校验通过的服务端PartReceipt；锁session确认OPEN后INSERT，同号同size/hash重放原回执，异内容冲突；不UPDATE已接纳回执，不信任客户端provider token；FINALIZING后集合冻结且禁止增删改，迟到I/O不能登记；完成重放/恢复仍需保留完整清单，清理走显式生命周期'
 
+# B00-1.3: normalized generated directories and exact human review provenance.
+# Root proposal ACK 2026-10-22; only one of the original 85 physical tables changes.
+exclusion=next(t for t in TABLES if t['name']=='sensitive_exclusion')
+exclusion['pk']=['revision_id','locator_id','category']
+exclusion['checks']=[enum('category','INTERNAL_BUSINESS_DATA,POLITICAL_SENSITIVE')]
+exclusion['policy']='不可变选择集；PK保留同一locator的两个标签，不复制物理locator绕过去重。勾选多来源检测展开同category全部locator；重叠项按(locator,category)并集，取消只影响对应标签/位置。下一次生成应用，不删除检测/原文/要素、不改ACL'
+table('sensitive_detection','B-07/D-03','V012','未选择也保留的敏感检测目录；不属于七类主体要素',[
+    ident(),ref('set_id','所属不可变要素集'),ref('input_id','该检测原始生成输入；复制保留'),code('category','两类敏感标签之一'),num('ordinal','同类别1起展示顺序')],
+    indexes=[idx('detection_order','set_id,category,ordinal','同类条目顺序唯一',True)],fks=[fk('set_id','element_set'),fk('input_id','generation_input')],
+    checks=['ordinal > 0',enum('category','INTERNAL_BUSINESS_DATA,POLITICAL_SENSITIVE')],
+    policy='完整输出同事务插入；每项至少一个来源由服务校验。双标签同位置是不同检测；不同输出项不按相似文本/来源静默合并。摘录从有权不可变源读取，不保存模型伪摘录；历史/候选访问受拥有版本控制')
+table('sensitive_detection_source','B-07/D-03','V012','敏感检测的完整无序来源集合',[
+    ref('detection_id','检测条目'),ref('locator_id','原始生成输入内精确来源')],pk='detection_id,locator_id',
+    indexes=[idx('detection_source_reverse','locator_id,detection_id','定位引用与删除检查')],fks=[fk('detection_id','sensitive_detection'),fk('locator_id','source_locator')],
+    policy='同检测不重复来源；服务校验同会议且在检测input固定确认/材料集合中；与检测原子写入，零来源拒绝。先删此关系再清检测/来源；不授予源权限')
+table('background_note','B-07/D-03','V012','生成背景补充正文；不冒充会议发言/决定/行动',[
+    ident(),ref('set_id','所属不可变要素集'),ref('input_id','本条原始生成输入；复制保留'),num('ordinal','目录1起顺序'),text('body','必要的生成背景正文；非原始模型JSON或源文副本')],
+    indexes=[idx('background_order','set_id,ordinal','背景目录顺序唯一',True)],fks=[fk('set_id','element_set'),fk('input_id','generation_input')],checks=['ordinal > 0'],
+    policy='非空文本与至少一精确来源由验证器/事务保障；无新产品字数上限。新版本复制保留origin input；不得独自证明重要会议结论/行动，历史保留，删除先删来源关系')
+table('background_note_source','B-07/D-03','V012','背景补充的完整来源集合',[
+    ref('note_id','背景条目'),ref('locator_id','该input内不可变来源')],pk='note_id,locator_id',
+    indexes=[idx('background_source_reverse','locator_id,note_id','来源引用与删除')],fks=[fk('note_id','background_note'),fk('locator_id','source_locator')],
+    policy='PK为无序集合去重；同会议/固定输入成员校验，非空集合与正文原子提交。来源角色由固定图推导，不能因输出声称会议依据而改角色；读时独立源ACL')
+table('action_suggestion','B-07/D-03','V012','未核实的模型负责人原文和日期建议；与接受字段分离',[
+    ref('element_id','确属ACTION的生成要素'),ref('input_id','这条建议原始生成输入；复制保留'),text('owner_mention','原始负责人提议；不是企业ID/授权，非空值须非空白',True),col('due_on','date','结构有效但尚未核实的建议日期；未知NULL',True)],
+    pk='element_id',fks=[fk('element_id','minutes_element'),fk('input_id','generation_input')],
+    policy='每个生成ACTION一行，可双NULL；源复用该element证据不伪造字段级依据。模型值不写入action_item接受字段；人工明确保存/复核形成新要素/action_item及新ACTION_FIELDS断言。外部负责人规则pending；人物选择不授予会议权限')
+table('result_review','B-07/D-03/B-08','V012','人类对精确目标内容和完整证据集合的不可变断言',[
+    ident(),ref('meeting_id','所属会议'),num('review_no','持meeting根锁分配的单调复核序号'),code('review_kind','来源支持或行动字段确认'),ref('element_id','要素目标；与正文目标二选一',True),ref('minutes_revision_id','正文目标；与要素二选一',True),text('target_anchor','SOURCE_SUPPORT精确范围的版本化规范anchor；ACTION_FIELDS为NULL',True),
+    fingerprint('target_hash','含精确目标ID/版本/全文/anchor或完整行动元组的摘要'),fingerprint('source_set_hash','完整证据/定位/来源角色与版本内容hash集合摘要；空集显式编码'),col('hash_profile',KEY,'可恢复不可变规范编码/域分离配置版本，不用latest'),code('outcome','SUPPORTED/PARTIAL/UNSUPPORTED或CONFIRMED'),col('reviewed_by',KEY,'服务器验证的企业稳定身份；事件时值，不因目录删除丢历史'),ts('reviewed_at','服务器UTC微秒复核时间')],
+    indexes=[idx('review_sequence','meeting_id,review_no','同会议复核顺序唯一',True),idx('review_element','element_id,review_kind,review_no','当前目标复核历史'),idx('review_minutes','minutes_revision_id,review_kind,review_no','正文范围复核历史')],
+    fks=[fk('meeting_id','meeting'),fk('element_id','minutes_element'),fk('minutes_revision_id','minutes_revision')],
+    checks=['review_no > 0','(element_id IS NULL) <> (minutes_revision_id IS NULL)',enum('review_kind','SOURCE_SUPPORT,ACTION_FIELDS'),"(review_kind='SOURCE_SUPPORT' AND target_anchor IS NOT NULL AND outcome IN ('SUPPORTED','PARTIAL','UNSUPPORTED')) OR (review_kind='ACTION_FIELDS' AND element_id IS NOT NULL AND target_anchor IS NULL AND outcome='CONFIRMED')","REGEXP_LIKE(target_hash, '^[0-9a-f]{64}$', 'c')","REGEXP_LIKE(source_set_hash, '^[0-9a-f]{64}$', 'c')"],
+    policy='仅明确内容级人工意图可写；active身份/owner及源ACL、完整来源/目标/hash、ACTION实际类型由拥有事务重验，非FK reviewed_by保留事件时身份。最新相同目标/范围/来源review_no决定断言，不能取任意历史SUPPORTED；根revision/fence前进、final指针清空。新target不继承旧review信用；内容级adopt+review可原子创建新actor/time/hash断言。最终确认只读冻结membership；不把人工断言当语义真值或权限')
+table('result_review_evidence','B-07/D-03/B-08','V012','复核实际使用的完整证据集合，不只存支持项',[
+    ref('review_id','不可变复核'),ref('evidence_id','精确不可变目标的证据')],pk='review_id,evidence_id',
+    indexes=[idx('review_evidence_reverse','evidence_id,review_id','历史依赖与删除')],fks=[fk('review_id','result_review'),fk('evidence_id','evidence_link')],
+    policy='集合必须等于目标范围相关全部证据；空集合显式hash但不得SOURCE_SUPPORT=SUPPORTED。FK仅证存在；同会议/同target/范围/来源版本/hash由事务重算。不可在复核提交后追加/删减；删除时先解除本关系')
+table('final_result_review','B-08','V013','最终确认冻结精确复核成员，不读取以后最新复核',[
+    ref('confirmation_id','本次最终确认'),ref('review_id','本次选用的精确复核')],pk='confirmation_id,review_id',
+    indexes=[idx('final_review_reverse','review_id,confirmation_id','历史确认依赖')],fks=[fk('confirmation_id','final_confirmation'),fk('review_id','result_review')],
+    policy='与V013 final_confirmation同时建表并立即有两个physical FK；不新增deferredFK。最终确认同事务验证同会议/精确minutes和element_set/当前适用复核，成员与完整复核投影进入source_manifest_hash；以后新断言不能改旧membership。先删除membership再清confirmation/review')
+for name in ('minutes_element','evidence_link'):
+    t=next(t for t in TABLES if t['name']==name)
+    next(c for c in t['cols'] if c['name']=='support_state')['meaning']='该版本创建时的冻结分类；不能单独证明当前人工复核充分性，参见result_review'
+    t['policy'] += '；B00-1.3当前人工支持由精确result_review决定，旧support_state不原地改写；新目标内容/来源/版本使旧断言失效'
+next(t for t in TABLES if t['name']=='action_item')['policy']='仅人工明确保存后的接受字段；生成初始owner/date均NULL，模型提议在action_suggestion。人工字段保存建立新要素版本并写新ACTION_FIELDS复核，缺少截止不强补；外部负责人规则未定不启用；角色/名字/负责人不授权'
+final=next(t for t in TABLES if t['name']=='final_confirmation')
+next(c for c in final['cols'] if c['name']=='source_manifest_hash')['meaning']='冻结证据/来源及final_result_review精确成员与完整复核投影摘要；不得重查最新复核'
+final['policy'] += '；B00-1.3同事务写final_result_review，历史读取该冻结成员，不随新review改变；全部业务/权限/敏感/来源检查仍由B08负责'
+
+
 def cname(t, n): return f"ck_{t['name']}_{n}"
 def fname(t, n): return f"fk_{t['name']}_{n}"
 def sql():
@@ -439,6 +491,11 @@ def check_ast(expression):
         if peek()=='(':
             take('('); value=disjunction(); take(')'); return value
         value=take()
+        if peek()=='(':
+            assert value.lower()=='regexp_like', 'Unsupported CHECK function'
+            take('('); args=[disjunction()]
+            while peek()==',': take(); args.append(disjunction())
+            take(')'); return ('call',value.lower(),tuple(args))
         return ('literal',value) if value.startswith("'") or value.isdigit() else ('identifier',value.lower())
     def comparison():
         left=atom(); op=peek()
@@ -481,6 +538,12 @@ def verify(container, metadata_only=False):
     if not re.fullmatch(r'ama-test-b01-[a-f0-9]{12}',container) or not local.is_file():
         raise SystemExit('Refusing: fixture must be created in THIS worktree by mysql_fixture.py')
     meta=json.loads(subprocess.check_output(['docker','inspect',container],text=True))[0]
+    initial=json.loads((ROOT/'artifacts/phase-b/b00-generation-design/fixture-initial.json').read_text())
+    assert initial['owned_worktree']==str(ROOT) and initial['container']==container
+    assert meta['Id']==initial['id'] and meta['Image']==initial['image_id']
+    assert meta['Config']['Image']==initial['image_reference'] and meta['Mounts']==initial['mounts']
+    assert initial['initial_tables']==0 and initial['native_aio']==0
+    assert mysql(container,'SELECT @@innodb_use_native_aio;').strip()=='0'
     assert meta['Config']['Labels'].get('ama.test-fixture')=='b01'
     assert all(x['HostIp']=='127.0.0.1' for x in meta['NetworkSettings']['Ports']['3306/tcp'])
     for path, expected in generated().items(): assert (ROOT/path).read_text()==expected, path+' drift'
@@ -533,8 +596,8 @@ def verify(container, metadata_only=False):
         assert p.returncode!=0 and ('3819' in p.stderr or '1452' in p.stderr), 'Expected CHECK/FK rejection'
     counts=dict(tables=len(actual['tables']),columns=len(actual['columns']),index_definitions=len({(x['table'],x['name']) for x in actual['indexes']}),index_columns=len(actual['indexes']),checks=len(actual['checks']),foreign_key_constraints=len({(x['table'],x['name']) for x in actual['foreign_keys']}),foreign_key_columns=len(actual['foreign_keys']))
     evidence=dict(design_version=VERSION,mysql_version=version,container=container,image=meta['Config']['Image'],ddl_sha256=hashlib.sha256(sql().encode()).hexdigest(),counts=counts,metadata=actual,behavior=['invalid storage enum rejected (3819)','unknown identity FK rejected (1452)','CHECK comparer preserves operator grouping and literal case'],scope='DDL and all metadata only; not domain/concurrency/performance/integration acceptance')
-    # Preserve the adopted 1.1 evidence bytes; this edition has its own full capture.
-    path=ROOT/'docs/acceptance/b/database-upload-addendum-metadata-evidence.json'
+    # Preserve all adopted 1.1/1.2 evidence bytes; this edition has its own capture.
+    path=ROOT/'docs/acceptance/b/database-generation-addendum-metadata-evidence.json'
     path.write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:v for k,v in evidence.items() if k!='metadata'},ensure_ascii=False,indent=2))
 
