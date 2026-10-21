@@ -25,7 +25,7 @@
 |目标版本|拥有任务|原计划占位|计划内容/依赖|当前状态|
 |---|---|---|---|---|
 |V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|来源 f5b4495+0e8f698 → 集成751d31c+95a264e；冻结f36…；独立复审支持新建确认空白fixture限定采用，历史偏差保留|
-|V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|预留，未编写|
+|V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|首次正式应用前已冻结 SHA859970b8…；实现未评审/未集成，执行结果待登记|
 |V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|预留，未编写|
 |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|预留，未编写；上传补充设计门已通过|
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|预留，未编写|
@@ -78,3 +78,7 @@ R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑�
 扩展→回填审计→约束→读写切换→受控收缩。所有FK指向显式PK/unique，不启用非唯一键兼容开关；目标schema的跨表同会议关系仍需应用事务验证。[MySQL 8.4 FK](https://dev.mysql.com/doc/refman/8.4/en/create-table-foreign-keys.html) 旧身份表或ACL中无法证明确认来源的数据不得转成有效授权；旧task未知效果必须隔离对账，不能默认READY。新增schema保持旧应用可读期间也必须禁止旧ACL/旧worker语义继续写入；若不能兼容，先停止业务写与worker、升级全部实例后恢复。
 
 仅做文档的 B-00 不执行上述任何正式迁移。不对公司/生产数据库操作，不重写冻结脚本，不启用自动历史清除。回滚应用不能恢复旧权限缺陷/未知效果重试语义；新数据已写入后前滚修复优先，恢复备份还须核对文件和外部效果，不依赖数据库单独回滚跨资源副作用。
+
+## V007 首次正式应用前冻结（2026-10-22）
+
+拥有者工作树 `phase-b-identity`，执行通知时 HEAD `a4ed859bb7d678d7c821646ab75ee959163bb767`，文件 `V007__identity_sessions.sql` 的 SHA256 **`859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d`** 已由协调者读文件重新核对。单独标记的 raw-DDL 设计验证使用新 sandbox `ama-test-b01-5e2d9b66e6c2:44735`，没有 Flyway/history，不当成正式迁移应用记录。首次正式正例目标为新独有 `ama-test-b01-c8517df9ef69:45905`，拥有者已只读确认所有权/loopback/0表。此版本从首次正式应用或共享起永久冻结；后续修正先统一登记有序新版本，不改字节。正式执行/history/metadata/回归和独立实现评审仍待登记，不提前验收。
