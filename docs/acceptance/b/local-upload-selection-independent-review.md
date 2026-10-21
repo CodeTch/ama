@@ -79,3 +79,5 @@ Fresh read-only Git checks confirm the requested HEAD, one owned commit and 22 p
 ## Coordinator disposition
 
 Behavior/spec and quality PASS adopted for the narrow source change; Minor M1 wording correction delegated to original author, with raw log/XML bytes preserved. Whole B04 and later public DB/S3 qualification remain open. No test rerun or DB operation performed for this integration.
+
+M1 closure: source b2f933c wording-only follow-up independently rereviewed ADDRESSED/specPASS/qualityPASS, no new findings. All16 raw captures and manifest other fields unchanged. See [wording review](local-upload-selection-wording-review.md). No tests repeated or fixture operations for this correction/adoption.
