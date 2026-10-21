@@ -121,6 +121,95 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/meetings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create an empty meeting owned by the current active identity
+         * @description No name, category, date or roster is required. The actual meeting date remains null. Same-key replay returns the original ID, revision and ENTRY stage after current authorization is checked.
+         */
+        post: operations["createMeeting"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        /**
+         * Read currently valid saved meeting information
+         * @description Rechecks shared ACTIVE identity and owner or current confirmed enterprise membership. Members receive only saved information and the current confirmed roster; rosterDraft and rosterDraftId are null. Only the owner receives a pending saved roster draft. No candidates, AI guesses or unsaved client values are returned. All responses are no-store. This is not a list or search endpoint.
+         */
+        get: operations["getSavedMeeting"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save human information and a separate pending roster using revision CAS
+         * @description Owner only. Fields are a complete saved value; omitted optional text/date become null. rosterDraftIds contains exact stable enterprise IDs, without case/whitespace normalization. externalRosterNames are display-only people and never grant access. A changed roster creates a draft without changing current grants or confirmed search names. Name and summary have no product character limit; the configurable transport budget rejects oversized bodies without truncation. Non-null category requires an approved dictionary; production remains unavailable until that company/config port is qualified. Published or governed meetings cannot be edited.
+         */
+        put: operations["saveMeetingInfo"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/roster-confirmations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Explicitly confirm the latest saved roster draft
+         * @description Owner only, independent of missing name/category/date. CAS pins the current saved draft; no client roster or candidate is accepted. Creates an immutable confirmed version, checks exact ACTIVE enterprise identities, replaces effective READ grants and current name projection atomically. Empty roster is legal. Prior confirmed access remains in effect until this request commits. A historical replay returns its original revision and never reactivates its old grants.
+         */
+        post: operations["confirmMeetingRoster"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -161,6 +250,49 @@ export interface components {
         PeoplePage: {
             items: components["schemas"]["Person"][];
             nextCursor: string | null;
+        };
+        Mutation: {
+            /** Format: uuid */
+            id: string;
+            /** Format: int64 */
+            revision: number;
+        };
+        Member: {
+            /** Format: uuid */
+            memberId: string;
+            enterpriseId: string | null;
+            displayName: string;
+            /** @enum {string} */
+            memberKind: "ENTERPRISE" | "EXTERNAL";
+        };
+        Saved: components["schemas"]["Mutation"] & {
+            /** Format: int64 */
+            accessRevision: number;
+            /** @enum {string} */
+            stage: "ENTRY" | "TRANSCRIPT_PENDING" | "TRANSCRIPT_FAILED" | "MINUTES_PENDING" | "MINUTES_FAILED" | "READY_TO_PUBLISH" | "PUBLISH_FAILED" | "PUBLISHED";
+            name: string | null;
+            category: string | null;
+            summary: string | null;
+            /** Format: date */
+            occurredOn: string | null;
+            /** Format: uuid */
+            confirmedRosterId: string | null;
+            confirmedRoster: components["schemas"]["Member"][];
+            /** Format: uuid */
+            rosterDraftId: string | null;
+            rosterDraft: components["schemas"]["Member"][] | null;
+        };
+        /** Format: int64 */
+        ExpectedRevision: number;
+        SaveInfo: {
+            expectedRevision: components["schemas"]["ExpectedRevision"];
+            name?: string | null;
+            category?: string | null;
+            summary?: string | null;
+            /** Format: date */
+            occurredOn?: string | null;
+            rosterDraftIds: string[];
+            externalRosterNames?: string[] | null;
         };
     };
     responses: {
@@ -216,12 +348,43 @@ export interface components {
                 "application/json": components["schemas"]["BusinessError"];
             };
         };
+        /** @description Same key with different payload, stale expectedRevision, no pending draft, inactive/unknown roster identity, or immutable published state. No partial effects; retain client input. */
+        Conflict: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Body exceeds meeting.http.max-request-bytes (default 8388608 bytes). Configurable transport budget, not a product name or summary limit; no truncation. */
+        TooLarge: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Shared database or approved category dictionary unavailable; no fabricated enterprise options. */
+        MeetingUnavailable: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
     };
     parameters: {
         /** @description Must exactly match the configured allowed origin */
         Origin: string;
         /** @description Independent session-bound token returned by currentSession */
         Csrf: string;
+        /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+        Key: string;
+        /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+        Id: string;
     };
     requestBodies: never;
     headers: never;
@@ -393,6 +556,155 @@ export interface operations {
             401: components["responses"]["Unauthenticated"];
             403: components["responses"]["BusinessForbidden"];
             503: components["responses"]["Unavailable"];
+        };
+    };
+    createMeeting: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": Record<string, never>;
+            };
+        };
+        responses: {
+            /** @description Original created draft, including on replay */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mutation"] & {
+                        /** @constant */
+                        stage: "ENTRY";
+                    };
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            409: components["responses"]["Conflict"];
+            413: components["responses"]["TooLarge"];
+            503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    getSavedMeeting: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Authorized saved projection */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Saved"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    saveMeetingInfo: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveInfo"];
+            };
+        };
+        responses: {
+            /** @description Original accepted meeting ID and revision, including on replay */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mutation"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            409: components["responses"]["Conflict"];
+            413: components["responses"]["TooLarge"];
+            503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    confirmMeetingRoster: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevision: components["schemas"]["ExpectedRevision"];
+                };
+            };
+        };
+        responses: {
+            /** @description Original accepted meeting ID and revision, including on replay */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mutation"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            409: components["responses"]["Conflict"];
+            413: components["responses"]["TooLarge"];
+            503: components["responses"]["MeetingUnavailable"];
         };
     };
 }

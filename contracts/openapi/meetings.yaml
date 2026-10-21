@@ -1,0 +1,287 @@
+collection:
+  servers:
+    - url: http://127.0.0.1:8080
+  post:
+    operationId: createMeeting
+    summary: Create an empty meeting owned by the current active identity
+    description: No name, category, date or roster is required. The actual meeting date remains null. Same-key replay returns the original ID, revision and ENTRY stage after current authorization is checked.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - $ref: '#/Key'
+      - $ref: './identity.yaml#/Origin'
+      - $ref: './identity.yaml#/Csrf'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            maxProperties: 0
+    responses:
+      '201':
+        description: Original created draft, including on replay
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/Mutation'
+                - type: object
+                  required: [stage]
+                  properties:
+                    stage:
+                      type: string
+                      const: ENTRY
+      '400':
+        $ref: './identity.yaml#/Invalid'
+      '401':
+        $ref: './identity.yaml#/Unauthenticated'
+      '403':
+        $ref: './identity.yaml#/BusinessForbidden'
+      '409':
+        $ref: '#/Conflict'
+      '413':
+        $ref: '#/TooLarge'
+      '503':
+        $ref: '#/MeetingUnavailable'
+item:
+  servers:
+    - url: http://127.0.0.1:8080
+  parameters:
+    - $ref: '#/Id'
+  get:
+    operationId: getSavedMeeting
+    summary: Read currently valid saved meeting information
+    description: Rechecks shared ACTIVE identity and owner or current confirmed enterprise membership. Members receive only saved information and the current confirmed roster; rosterDraft and rosterDraftId are null. Only the owner receives a pending saved roster draft. No candidates, AI guesses or unsaved client values are returned. All responses are no-store. This is not a list or search endpoint.
+    security:
+      - enterpriseSession: []
+    responses:
+      '200':
+        description: Authorized saved projection
+        content:
+          application/json:
+            schema:
+              $ref: '#/Saved'
+      '400':
+        $ref: './identity.yaml#/Invalid'
+      '401':
+        $ref: './identity.yaml#/Unauthenticated'
+      '403':
+        $ref: './identity.yaml#/BusinessForbidden'
+      '503':
+        $ref: '#/MeetingUnavailable'
+info:
+  servers:
+    - url: http://127.0.0.1:8080
+  parameters:
+    - $ref: '#/Id'
+  put:
+    operationId: saveMeetingInfo
+    summary: Save human information and a separate pending roster using revision CAS
+    description: Owner only. Fields are a complete saved value; omitted optional text/date become null. rosterDraftIds contains exact stable enterprise IDs, without case/whitespace normalization. externalRosterNames are display-only people and never grant access. A changed roster creates a draft without changing current grants or confirmed search names. Name and summary have no product character limit; the configurable transport budget rejects oversized bodies without truncation. Non-null category requires an approved dictionary; production remains unavailable until that company/config port is qualified. Published or governed meetings cannot be edited.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - $ref: '#/Key'
+      - $ref: './identity.yaml#/Origin'
+      - $ref: './identity.yaml#/Csrf'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/SaveInfo'
+    responses:
+      '200':
+        description: Original accepted meeting ID and revision, including on replay
+        content:
+          application/json:
+            schema:
+              $ref: '#/Mutation'
+      '400':
+        $ref: './identity.yaml#/Invalid'
+      '401':
+        $ref: './identity.yaml#/Unauthenticated'
+      '403':
+        $ref: './identity.yaml#/BusinessForbidden'
+      '409':
+        $ref: '#/Conflict'
+      '413':
+        $ref: '#/TooLarge'
+      '503':
+        $ref: '#/MeetingUnavailable'
+confirmations:
+  servers:
+    - url: http://127.0.0.1:8080
+  parameters:
+    - $ref: '#/Id'
+  post:
+    operationId: confirmMeetingRoster
+    summary: Explicitly confirm the latest saved roster draft
+    description: Owner only, independent of missing name/category/date. CAS pins the current saved draft; no client roster or candidate is accepted. Creates an immutable confirmed version, checks exact ACTIVE enterprise identities, replaces effective READ grants and current name projection atomically. Empty roster is legal. Prior confirmed access remains in effect until this request commits. A historical replay returns its original revision and never reactivates its old grants.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - $ref: '#/Key'
+      - $ref: './identity.yaml#/Origin'
+      - $ref: './identity.yaml#/Csrf'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [expectedRevision]
+            properties:
+              expectedRevision:
+                $ref: '#/ExpectedRevision'
+    responses:
+      '200':
+        description: Original accepted meeting ID and revision, including on replay
+        content:
+          application/json:
+            schema:
+              $ref: '#/Mutation'
+      '400':
+        $ref: './identity.yaml#/Invalid'
+      '401':
+        $ref: './identity.yaml#/Unauthenticated'
+      '403':
+        $ref: './identity.yaml#/BusinessForbidden'
+      '409':
+        $ref: '#/Conflict'
+      '413':
+        $ref: '#/TooLarge'
+      '503':
+        $ref: '#/MeetingUnavailable'
+Id:
+  name: id
+  in: path
+  required: true
+  schema:
+    type: string
+    format: uuid
+  description: Canonical lowercase full UUID, also the meeting number; knowing it grants no access.
+Key:
+  name: Idempotency-Key
+  in: header
+  required: true
+  schema:
+    type: string
+    minLength: 1
+  description: Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL.
+ExpectedRevision:
+  type: integer
+  format: int64
+  minimum: 0
+  maximum: 9223372036854775806
+Mutation:
+  type: object
+  required: [id, revision]
+  properties:
+    id:
+      type: string
+      format: uuid
+    revision:
+      type: integer
+      format: int64
+      minimum: 0
+SaveInfo:
+  type: object
+  additionalProperties: false
+  required: [expectedRevision, rosterDraftIds]
+  properties:
+    expectedRevision:
+      $ref: '#/ExpectedRevision'
+    name:
+      type: [string, 'null']
+    category:
+      type: [string, 'null']
+      minLength: 1
+      maxLength: 255
+    summary:
+      type: [string, 'null']
+    occurredOn:
+      type: [string, 'null']
+      format: date
+    rosterDraftIds:
+      type: array
+      uniqueItems: true
+      items:
+        type: string
+        minLength: 1
+        maxLength: 255
+    externalRosterNames:
+      type: [array, 'null']
+      items:
+        type: string
+        minLength: 1
+Member:
+  type: object
+  required: [memberId, enterpriseId, displayName, memberKind]
+  properties:
+    memberId:
+      type: string
+      format: uuid
+    enterpriseId:
+      type: [string, 'null']
+    displayName:
+      type: string
+    memberKind:
+      type: string
+      enum: [ENTERPRISE, EXTERNAL]
+Saved:
+  allOf:
+    - $ref: '#/Mutation'
+    - type: object
+      required: [accessRevision, stage, name, category, summary, occurredOn, confirmedRosterId, confirmedRoster, rosterDraftId, rosterDraft]
+      properties:
+        accessRevision:
+          type: integer
+          format: int64
+        stage:
+          type: string
+          enum: [ENTRY, TRANSCRIPT_PENDING, TRANSCRIPT_FAILED, MINUTES_PENDING, MINUTES_FAILED, READY_TO_PUBLISH, PUBLISH_FAILED, PUBLISHED]
+        name:
+          type: [string, 'null']
+        category:
+          type: [string, 'null']
+        summary:
+          type: [string, 'null']
+        occurredOn:
+          type: [string, 'null']
+          format: date
+        confirmedRosterId:
+          type: [string, 'null']
+          format: uuid
+        confirmedRoster:
+          type: array
+          items:
+            $ref: '#/Member'
+        rosterDraftId:
+          type: [string, 'null']
+          format: uuid
+        rosterDraft:
+          type: [array, 'null']
+          items:
+            $ref: '#/Member'
+Conflict:
+  description: Same key with different payload, stale expectedRevision, no pending draft, inactive/unknown roster identity, or immutable published state. No partial effects; retain client input.
+  content:
+    application/json:
+      schema:
+        $ref: './identity.yaml#/BusinessError'
+TooLarge:
+  description: Body exceeds meeting.http.max-request-bytes (default 8388608 bytes). Configurable transport budget, not a product name or summary limit; no truncation.
+  content:
+    application/json:
+      schema:
+        $ref: './identity.yaml#/BusinessError'
+MeetingUnavailable:
+  description: Shared database or approved category dictionary unavailable; no fabricated enterprise options.
+  content:
+    application/json:
+      schema:
+        $ref: './identity.yaml#/BusinessError'

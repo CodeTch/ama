@@ -1,0 +1,14 @@
+import importlib.util
+from pathlib import Path
+spec = importlib.util.spec_from_file_location('fixture', 'tools/dev/mysql_fixture.py')
+f = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(f)
+original = f.docker
+def owned_docker(*args):
+    if args and args[0] == 'run':
+        args = (*args, '--innodb-use-native-aio=OFF')
+    return original(*args)
+f.docker = owned_docker
+# Preserve any failed owned container; no cleanup/reset permission in this task.
+f.failure_command = lambda *args: (_ for _ in ()).throw(RuntimeError('preserve fixture')) if args[0] == 'rm' else __import__('subprocess').run(['docker', *args],capture_output=True,text=True,timeout=10,check=True)
+f.start()
