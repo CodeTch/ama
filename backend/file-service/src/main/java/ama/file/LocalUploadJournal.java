@@ -196,7 +196,18 @@ final class LocalUploadJournal {
     }
 
     void abort(UploadToken token) {
-        try (var dir = session(token)) {
+        LinuxFiles.Fd directory;
+        try {
+            directory = session(token);
+        } catch (StorageException e) {
+            if (e.code() != ErrorCode.NOT_FOUND) throw e;
+            // Only a missing session is an idempotent abort. Publication failures are not.
+            fs.sync(store.uploads, true);
+            fs.sync(store.root, true);
+            store.check();
+            return;
+        }
+        try (var dir = directory) {
             if (fs.exists(dir, "decision")) {
                 try (var decision = fs.file(dir, "decision", false)) {
                     fs.sync(decision, false);
@@ -215,11 +226,6 @@ final class LocalUploadJournal {
                     });
             for (String name : names) fs.unlink(dir, name);
             ack(token.sessionId(), dir);
-        } catch (StorageException e) {
-            if (e.code() != ErrorCode.NOT_FOUND) throw e;
-            fs.sync(store.uploads, true);
-            fs.sync(store.root, true);
-            store.check();
         }
     }
 }

@@ -227,6 +227,25 @@ class LocalDurabilityIT {
     }
 
     @Test
+    void cancelledHttpReadReleasesTheServerFileDescriptor() throws Exception {
+        try (var fixture = new LocalFixture(temporary.resolve("volume"))) {
+            var client = fixture.startServer();
+            byte[] value = new byte[4 * 1024 * 1024];
+            Arrays.fill(value, (byte) 'z');
+            fixture.store.put(KEY, new ByteArrayInputStream(value), value.length, hash(value));
+            long baseline = LocalFixture.volumeDescriptors(fixture.root);
+            try (var in = client.read(KEY, 0, value.length)) {
+                assertEquals('z', in.read());
+            }
+            long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+            while (LocalFixture.volumeDescriptors(fixture.root) != baseline
+                    && System.nanoTime() < deadline) Thread.sleep(20);
+            assertEquals(baseline, LocalFixture.volumeDescriptors(fixture.root));
+            assertEquals(value.length, client.stat(KEY).size());
+        }
+    }
+
+    @Test
     void closedReadStreamsReleaseNativeDescriptors() throws Exception {
         try (var fixture = new LocalFixture(temporary.resolve("volume"));
                 var s = fixture.open(DurabilityHooks.NONE)) {
@@ -259,6 +278,10 @@ class LocalDurabilityIT {
                         }
                     };
             error(ErrorCode.STORAGE_UNAVAILABLE, () -> s.put(KEY, changed, 3, ABC));
+            // Once admission is lost, failure cleanup must not issue further volume mutations.
+            try (var staged = Files.list(fixture.root.resolve("staging"))) {
+                assertEquals(1, staged.count());
+            }
             error(ErrorCode.STORAGE_UNAVAILABLE, () -> s.stat(KEY));
             Files.writeString(fixture.role, "active-instance");
             assertEquals(ABC, s.put(KEY, body("abc"), 3, ABC).sha256());
@@ -323,6 +346,52 @@ class LocalDurabilityIT {
                                     new MountedVolumeGuard(c),
                                     DurabilityHooks.NONE));
             assertFalse(Files.exists(temporary.resolve("absent")));
+        }
+    }
+
+    @Test
+    void abortDoesNotSwallowLostTombstonePublication() throws Exception {
+        AtomicBoolean armed = new AtomicBoolean();
+        AtomicReference<Path> tombstone = new AtomicReference<>();
+        try (var fixture = new LocalFixture(temporary.resolve("volume"));
+                var s =
+                        fixture.open(
+                                op -> {
+                                    if (armed.get() && op.equals("UNLINK")) {
+                                        try {
+                                            Files.deleteIfExists(tombstone.get());
+                                        } catch (IOException e) {
+                                            throw new UncheckedIOException(e);
+                                        }
+                                    }
+                                })) {
+            var token = s.beginUpload(new UploadSpec("local", "meeting", "notes/a", 3));
+            tombstone.set(
+                    fixture.root.resolve("uploads").resolve(token.sessionId()).resolve("aborted"));
+            armed.set(true);
+            assertThrows(StorageException.class, () -> s.abort(token));
+            armed.set(false);
+            s.abort(token);
+            error(ErrorCode.INVALID_UPLOAD_STATE, () -> s.writePart(token, 1, body("abc"), 3, ABC));
+        }
+    }
+
+    @Test
+    void deleteRejectsAnExistingSymlinkLeaf() throws Exception {
+        Path outside = temporary.resolve("outside");
+        Files.writeString(outside, "outside");
+        LocalFixture.privateMode(outside, false);
+        try (var fixture = new LocalFixture(temporary.resolve("volume"));
+                var s = fixture.open(DurabilityHooks.NONE)) {
+            s.put(KEY, body("abc"), 3, ABC);
+            try (var directories = Files.list(fixture.root.resolve("objects"))) {
+                Path data = directories.findFirst().orElseThrow().resolve("data");
+                Files.delete(data);
+                Files.createSymbolicLink(data, outside);
+                error(ErrorCode.STORAGE_UNAVAILABLE, () -> s.delete(KEY));
+                assertTrue(Files.isSymbolicLink(data));
+            }
+            assertEquals("outside", Files.readString(outside));
         }
     }
 

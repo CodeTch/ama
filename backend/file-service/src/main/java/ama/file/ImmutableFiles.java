@@ -106,6 +106,8 @@ final class ImmutableFiles {
         } finally {
             if (created) {
                 try {
+                    // Admission loss forbids even best-effort cleanup mutations on this volume.
+                    guard.run();
                     fs.unlink(staging, temp);
                 } catch (RuntimeException ignored) {
                     /* Failed operation remains failed; unacknowledged staging is recoverable garbage. */

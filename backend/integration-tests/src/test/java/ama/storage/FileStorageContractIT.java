@@ -79,6 +79,8 @@ class FileStorageContractIT {
             s.delete(key("path/a"));
             s.delete(key("path/a"));
             error(ErrorCode.NOT_FOUND, () -> s.stat(key("path/a")));
+            assertEquals(0, s.put(key("empty"), body(""), 0, hash(bytes(""))).size());
+            assertArrayEquals(new byte[0], read(s, key("empty"), 0, 0));
         }
     }
 

@@ -194,6 +194,8 @@ public final class LinuxFiles {
 
     public void unlink(Fd dir, String name) {
         component(name);
+        // Reject existing symlinks/nonregular leaves, while preserving idempotent absence.
+        exists(dir, name);
         hooks.before("UNLINK");
         if (C.unlinkat(dir.value(), name, 0) < 0 && Native.getLastError() != 2) throw unavailable();
         sync(dir, true);
