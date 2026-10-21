@@ -3,11 +3,17 @@
 From the repository root in Linux/WSL:
 
 ```sh
-. /home/tanren/ama/.worktrees/phase-a/.tools/env.sh
+python3 tools/bootstrap.py
+. .tools/env.sh
 npm ci --ignore-scripts
 npm --prefix web ci --ignore-scripts
-npm --prefix web exec playwright install chromium
 npm --prefix web run dev
+```
+
+To run the browser-backed `e2e` or `visual` modes, install the pinned Chromium browser once after installing web dependencies:
+
+```sh
+npm --prefix web exec playwright install chromium
 ```
 
 Node/npm pins match the root: 22.23.4 / 10.9.9. Open `/meetings` on Vite's printed local URL. Deployment of the built SPA must serve `web/dist/index.html` for client routes such as `/meetings`; this task does not publish a deployment. The test server binds loopback 127.0.0.2:4275 to avoid the current WSL mirrored-network black hole on unused 127.0.0.1 ports. Test proxy exclusions contain exact loopback addresses because wildcard NO_PROXY patterns are not portable.
