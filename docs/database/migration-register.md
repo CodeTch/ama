@@ -20,7 +20,7 @@
 
 首次执行任何 V006 或更高版本前，协调者必须先完成**冻结旧集合归集门**：B-02/B-05 拥有者各提交仅含原字节 V002/V005 的保存commit（不夹带未验证Java）；协调者将 V001/V002/V005 归集到同一正式migration location并复核本表SHA。新空库按V001→V002→V005顺序执行；只有V001的既有库先补V002再V005，B02库已有V001/V002则先V005。B05输入库只有V001且V005从未应用，同样先V002再V005。以上归集不表示旧设计获实现验收，服务/Worker在V006—V013修正并检查前不得开启新业务写。各领域开发/CI也使用相同完整集合，禁止在未包含V005的B02树先运行V009，再事后插入低号。若发现某库已应用高版本却缺冻结低版本，停止该库迁移并由DB负责人提供可审阅恢复/新库迁移方案；不打开outOfOrder、不repair checksum、不改旧脚本。归集是设计通过后由协调者安排的实施动作，本B00不提交旧SQL到产品路径。
 
-冻结高水位 V005；V003/V004 永久留空，不补低号。以下 V006…V027 为一次性连续预留的依赖顺序，在登记中即明确所有者。实施者只消费自己的预留号；新增需求从**V028**向上由协调者登记后分配，禁止并行猜号。预留不代表脚本存在或已应用；已登记的版本不得转让其他领域。若某预留无结构变更，标记“未使用、永久保留”，不能在更高版本应用后回填。B/C/D/E 原计划文件中的文件名占位不改写历史，只由后续taskbrief消费此映射。
+冻结高水位 V005；V003/V004 永久留空，不补低号。以下 V006…V027 为一次性连续预留的依赖顺序，在登记中即明确所有者。实施者只消费自己的预留号；新的整数阶段版本从**V028**向上由协调者登记后分配；已冻结版本的必要修正可由协调者在下一整数版本尚未应用前统一登记该阶段小数补丁号（详见V011.1裁定），实施者不得自行使用，禁止并行猜号。预留不代表脚本存在或已应用；已登记的版本不得转让其他领域。若某预留无结构变更，标记“未使用、永久保留”，不能在更高版本应用后回填。B/C/D/E 原计划文件中的文件名占位不改写历史，只由后续taskbrief消费此映射。
 
 |目标版本|拥有任务|原计划占位|计划内容/依赖|当前状态|
 |---|---|---|---|---|
@@ -30,6 +30,7 @@
 |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|来源45715b6+fd3c3d8 → 集成1a00ca4；SHA79f04898…冻结，结构前置独立Approved0findings/95已选用例通过；完整B04仍OPEN|
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|03e89cc8…冻结/首次成功；完整框架及fix1已独立采用（8a3b77b/e9d2eca/a79ce67），真实公司/领域消费者门另计|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|正式候选a926c8b5…共享冻结，root静态核对完成；第一次应用待中央ACK/历史记录|
+|V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|新分配，待实际Flyway排序验证及最终SHA预执行ACK|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
 |V013|B-08|原V008|final_confirmation、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
@@ -152,3 +153,15 @@ V01003e89cc8…/35136bytes/checksum-1187397378不变，首次冻结和成功观�
 中央冻结记录时间：2026-10-22T04:08:19.900881+08:00。完整候选字节及比较JSON保存在artifacts/phase-b/b06-schema-freeze；原准备raw-review-only副本及compile-only记录不改称正式应用。作者报告新独有ama-test-b01-59f108f79cad:45591 initial0tables、实际nativeAIO0、001/002/005/006/007/008/009/010八版本success；真实缺八表RED1assertfailure/0error/0skip，早先Flyway target011无SQL的配置错误单独保留不算RED。中央ACK需核对既有安全capture后单独发出，不能因本记录提前执行。
 
 自正式共享起字节永久冻结；任何后续问题先登记新有序版本，不修改SQL、repair/reset/outOfOrder。此处不提前验收V011/B06业务/格式/确认/标记服务，也不表示公司或容量/原生I/O资格。仅B00-1.2不变八表子集；V012目录/复核增量设计仍待独立评审，不随本冻结获采用。
+
+### V011 首次成功及未通过的结构验收
+
+精确ownfixture487a1cd59…:45591在ACK后首次V011成功，installed_rank9、success1、actualchecksum-286330771，原SQL a926c8b5…不变。UTC原生clock/history补证为2026-10-21 20:10:05，epoch1792613405；原snapshot的04:10:05字符串来自JDBC Timestamp.toString按Asia/Shanghai渲染，不能误标为server UTC。两份原始/校正解释证据均保留，不改原snapshot。
+
+首次完整suite11tests/1failure/0errors/0skips：结构比对发现唯一缺失fk_transcription_input_3(material_snapshot_id)索引。原因是完整B00 DDL由材料FK隐式创建该索引，FK延后时正式V011没有显式保留索引；不能把预期索引从oracle删除来宣称通过。root独立比较确认tables8/8、columns63/63、CHECK13/13、FKcolumns22/22一致，而indexes38/39，只有这一个missing、无extra。其余10项通过不替代全suite验收；首次失败和旧SQL/history全部保留。
+
+### 中央前向修正裁定：V011.1
+
+统一登记**V011.1**（文件V011_1__transcript_material_index.sql）归B06，只补已评审而遗漏的索引；V011与所有低版本不可重写或repair。V012—V027原整数预留和所有者保持不变，下一新增整数仍V028。不得为了补此索引提前应用V028后再outOfOrder回填低号。
+
+只允许root逐案登记阶段补丁号；父版本已冻结，下一整数阶段尚未应用，且实际pinnedFlyway必须验证011 < 011.1 < 012和最终真实history顺序，才可在严格匹配的已知fixture应用。已应用更高版本的库不属于本次许可，停止并单独审阅前向路径，禁止启用outOfOrder/repair。V012依赖相应B06修正正式采用。候选补丁最终SQL/SHA仍须root完整读取、登记及独立ACK前不得第一次执行。此修正不新增设计范围，设计基线本就包含索引；B06结构验收仍OPEN。
