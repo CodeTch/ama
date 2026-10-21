@@ -1,0 +1,213 @@
+{
+  "scope": "Selected schema/backend/Foundation regressions only; not all integration tests or full B04 acceptance",
+  "unique_selected_passing_cases": 95,
+  "java_units_total": 28,
+  "first_green_overlaps_final": true,
+  "results": {
+    "configuration_error_not_red": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        ""
+      ]
+    },
+    "real_red": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "sixTablesMatchIndependentAdoptedMysqlMetadata"
+      ]
+    },
+    "first_green_overlaps_final_cases": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "namesPurposeAndOptionalProviderProvenanceRoundTripWithoutTruncation",
+        "physicalLocationsAreUniqueAndCaseSensitiveInAllThreeLedgers",
+        "enumChecksRejectInvalidBackendFileUploadAndCleanupStates",
+        "partsAndReferenceKeysRejectDuplicatesAndInvalidPartNumbers",
+        "sixTablesMatchIndependentAdoptedMysqlMetadata",
+        "foreignKeysRejectMissingMeetingBackendFileAndUpload",
+        "orderedUpgradePreservesEveryLowerTableAndRowAndRerunsZero",
+        "referencedParentsCannotBeDeletedOrRenamed"
+      ]
+    },
+    "final_file_schema": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "namesPurposeAndOptionalProviderProvenanceRoundTripWithoutTruncation",
+        "physicalLocationsAreUniqueAndCaseSensitiveInAllThreeLedgers",
+        "enumChecksRejectInvalidBackendFileUploadAndCleanupStates",
+        "partsAndReferenceKeysRejectDuplicatesAndInvalidPartNumbers",
+        "sixTablesMatchIndependentAdoptedMysqlMetadata",
+        "foreignKeysRejectMissingMeetingBackendFileAndUpload",
+        "orderedUpgradePreservesEveryLowerTableAndRowAndRerunsZero",
+        "referencedParentsCannotBeDeletedOrRenamed"
+      ]
+    },
+    "foundation_selected_normal": {
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "auditCannotAutocommitWithoutCallerTransaction",
+        "independentMigratorsWaitForDatabaseLockThenApplyOnce",
+        "successfulTransactionStoresUtf8mb4AndUtcMetadata",
+        "frozenBaselineUpgradesWithoutChangingRowsOrHistory",
+        "auditJoinsExternalSpringTransactionAndRollsBackWithIt",
+        "connectionLossRollsBackAndFreshJdbcRecovers",
+        "nestedRequiredCannotCommitAfterInnerFailureIsCaught",
+        "auditNanosecondsTruncateToUtcMicrosecondsRegardlessOfJvmTimezone",
+        "rollbackDoesNotLeaveSuccessAudit",
+        "checkedExceptionRollsBackBusinessAndAudit",
+        "migrationAppliesOnce",
+        "auditIdentifiersMatchCaseAndTrailingSpacesExactly",
+        "consecutiveResetsRemoveTablesFromLaterMigrations(Path)"
+      ]
+    },
+    "local_contract": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "localImmutableContract(String)[1]",
+        "localMultipartContract(String)[1]",
+        "localListingContract(String)[1]",
+        "localMultipartCompletionSelectsSuppliedReceipts(String)[1]",
+        "localMultipartCompletionSelectsSuppliedReceipts(String)[2]",
+        "localConcurrentWinner(String)[1]",
+        "localRejectsUnverifiedBytes(String)[1]"
+      ]
+    },
+    "local_durability": {
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "peerResetBeforeHeadersBoundsPayloadWorkAndReleasesDescriptors",
+        "deleteDirectorySyncFailureIsNotSuccessAndRetryIsDurable",
+        "replacingObjectDirectoryAtPublicationCannotReceiveSuccess",
+        "replacingStagedNameAtLinkCannotPublishAnAcknowledgedSymlink",
+        "mtlsRejectsMissingUntrustedExpiredAndUnassignedClient(String)[1]",
+        "mtlsRejectsMissingUntrustedExpiredAndUnassignedClient(String)[2]",
+        "mtlsRejectsMissingUntrustedExpiredAndUnassignedClient(String)[3]",
+        "mtlsRejectsMissingUntrustedExpiredAndUnassignedClient(String)[4]",
+        "httpSizeAndBodyStayOnTheOpenedInodeDuringLeafReplacement",
+        "injectedNativeOperationFailureCannotAcknowledge(String)[1]",
+        "injectedNativeOperationFailureCannotAcknowledge(String)[2]",
+        "injectedNativeOperationFailureCannotAcknowledge(String)[3]",
+        "injectedNativeOperationFailureCannotAcknowledge(String)[4]",
+        "injectedNativeOperationFailureCannotAcknowledge(String)[5]",
+        "lossAfterPublicationBeforeAckIsRejected(String)[1]",
+        "lossAfterPublicationBeforeAckIsRejected(String)[2]",
+        "httpRangeReadsOnlyRequestedPayloadAndInvalidOrEmptyReadsNone",
+        "deleteRejectsAnExistingSymlinkLeaf",
+        "absentRootWrongSentinelWrongDeviceAndUnsafePermissionsFailClosed",
+        "multipartCompleteAbortRacePreservesTerminalWinner",
+        "multipartSelectedPartsAndCompletedResultSurviveActualProcessKill(String)[1]",
+        "multipartSelectedPartsAndCompletedResultSurviveActualProcessKill(String)[2]",
+        "replacementBetweenStreamingAndPublishCannotEscapeAnchors",
+        "activeRoleLossDuringStreamingRejectsAckAndAllAccess",
+        "symlinkLeafAndParentCannotReadOrWriteOutsideVolume",
+        "cancelledHttpReadReleasesTheServerFileDescriptor",
+        "kernelMountIdentityLossCannotFallThroughToUnderlyingDirectory",
+        "durablePutIsReadableAfterStoreRestart",
+        "abortDoesNotSwallowLostTombstonePublication",
+        "listingHashesOnlyTheFinalPageNotLookaheadOrEvictedCandidates",
+        "streamingTransferExceedsFileProcessHeapWithoutBufferingWholeBlob",
+        "httpSingleRangeSuffixAndUnsatisfiableResponseAreExplicit",
+        "replayMustReestablishFileAndDirectoryDurability",
+        "mtlsClientRejectsUntrustedServerAndMissingPkiConfiguration",
+        "closedReadStreamsReleaseNativeDescriptors",
+        "completeRejectsMissingSelectedPart",
+        "fullHashMismatchDoesNotPoisonCompletionRetry",
+        "missingSentinelAndDetachedRootAreStorageOutages",
+        "mtlsReaderCanReadButCannotMutateAndClientChecksServerHostname"
+      ]
+    },
+    "unit:ama.storage.StorageRouterTest": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "callerCannotReplaceBackendDefinitionAfterConstruction",
+        "defaultChangePreservesHistoricalKeysAndActiveUploads",
+        "uploadAndMetadataCannotCarryMissingIdentityOrReceipt",
+        "everyOperationUsesExplicitBackendAndPreservesArguments",
+        "unsafeLogicalKeysAreRejectedBeforeRouting",
+        "metadataRejectsFalseHashesAndNegativeSizes",
+        "blobPageCannotBeChangedByCaller",
+        "missingHistoricalBackendFailsClosedWithoutFallback"
+      ]
+    },
+    "unit:ama.api.DeploymentConfigTest": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "allFourDatabaseStorageCombinationsAreIndependent",
+        "localStartsWithoutS3Credentials",
+        "invalidConfigurationRejectedWithoutEchoingSecrets",
+        "readinessFailsWhenDatabaseUnavailable",
+        "untrustedNetworkCannotReadHealthAndForwardedHeadersAreIgnored",
+        "readinessRecoversFromRealDatabaseOutage",
+        "s3RejectsEachMissingRequiredFieldAndMalformedEndpoint",
+        "healthIsNotExposedOnPublicListener",
+        "s3MissingEndpointRejected"
+      ]
+    },
+    "unit:ama.api.IdentityContractsTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "invalidActorCannotEnterAuthorizationBoundary",
+        "sessionTimestampsTruncateInsteadOfRound",
+        "actorCannotCarryMutablePrivileges"
+      ]
+    },
+    "unit:ama.api.IdentitySecurityTest": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "cookieUsesHostBoundaryAndNeverExposesCsrf",
+        "productionIssuerCannotIssueEvenWithValidLocalIdentity",
+        "sessionDiagnosticsRedactSecretsAndTruncateIssuedExpiry",
+        "opaqueOrNonOriginConfigurationIsRejected",
+        "databaseFailureProducesSafeUnavailableBusinessError",
+        "testModeConfigurationCannotStartProductionAssembly"
+      ]
+    },
+    "unit:ama.support.ContractClientTest": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "testcase_names": [
+        "preservesStatusAndJsonBodyAcrossRealHttp",
+        "rejectsCrossOriginRequestsBeforeSendingHeaders"
+      ]
+    }
+  },
+  "final_metadata_matches_independent_b00": true,
+  "first_and_final_positive_history_identical": true,
+  "both_owned_fixture_histories_successful": true,
+  "frozen_v009_sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d"
+}

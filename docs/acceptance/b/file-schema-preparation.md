@@ -1,5 +1,7 @@
 # B04 six-table schema preparation checkpoint
 
+Historical checkpoint at 45715b6; retained to distinguish compilation-only preparation from the later [real schema prerequisite](file-schema-prerequisite.md).
+
 Status: PREPARATION ONLY / NOT VALIDATED / dependency gate pending. Full B04 remains OPEN.
 
 Worktree: /home/tanren/ama/.worktrees/phase-b-file-schema
