@@ -106,3 +106,69 @@ Author self-review found no remaining scoped implementation issue. Root independ
 review of the full BASE-to-HEAD delta is still required before integration and
 accepting DIFF-01 closure. The formal implementer report is the phase-a orchestration record
 `.superpowers/sdd/2026-10-21-ama-phase-b/task-B-01-delta-report.md`.
+
+## Applied-migration immutability deviation and containment
+
+V006 was **not byte-identical from its first successful application through final
+GREEN**. The first successful task-owned fixture run (`green.log`) used source SHA
+`e1af32204c0b75d6ef922ca1e5677e259b0d4c4c47b43c3945f52bde314d8e8d`.
+After that application, the implementer added the explicit
+`OR CHAR_LENGTH(result) > 64` preflight clause and subsequently reset the owned
+disposable fixture for final verification. That edit produced current SHA
+`f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f`.
+Changing an already-applied migration violated the applied-migration freeze rule,
+even though the initial application was confined to the implementer's disposable
+fixture. Earlier wording "final V006 bytes" must not imply unchanged bytes across
+those two runs.
+
+The added guard is redundant for the frozen V001 `result varchar(64)` source, so
+both scripts describe the same target schema and valid data, but **their migration
+checksums differ**. Resetting the disposable fixture destroyed its initial history;
+the captured final successful history belongs to the f36 script and must not be
+presented as history for e1af. No checksum repair, outOfOrder, renumbering or history
+retrofit occurred. All earlier logs/XML and final metadata capture remain intact.
+
+The exact initial source was recovered by removing only that added clause from the
+current source and verifying the full e1af SHA before preservation. Verbatim bytes
+are quarantined in
+[`migration-history/V006-e1af3220.sql.txt`](../../database/migration-history/V006-e1af3220.sql.txt),
+outside every Flyway location. It is historical evidence, **never an upgrade input,
+renamed replacement or script to execute**. The hash provenance is recovered source
+matching the implementer's recorded hash; initial GREEN logs support execution,
+not an independently witnessed hash capture or a preserved initial Flyway history.
+Coordinator copies of both byte sets are also retained in the orchestration folder.
+
+Every migration execution in the implementer's tool record targeted only
+`ama-test-b01-fb4e04459580`; no commit/push/merge in that record contained e1af.
+The worktree was on a shared filesystem, and no global inventory
+of other consumers/databases was performed, so absence of any unobserved e1af
+consumer is not asserted. Any environment with an old checksum must **stop** and
+receive a separately reviewed recovery plan; validation bypass, automatic repair
+and silent replacement are forbidden. Current active **f36 remains the canonical
+frozen input** and has not changed since f5b4495. No new version is allocated here.
+Root decides adoption after independently reviewing this containment record.
+
+## B01D-M1 logging polish
+
+The three intentional preflight failures now use a test-only, current-thread
+Logback filter inside try-with-resources. It matches only the exact DbMigrate ERROR
+for this fixture's V006 failure, asserts exactly one expected event per case, and
+returns NEUTRAL for every other message/level/logger/thread/throwable. Closing the
+scope removes and stops the filter even if assertions fail; no logger level or
+global mute is installed.
+
+Focused command:
+
+```sh
+python3 tools/checks/run.py it FoundationIT#incompatibleLegacyMetadataFailsBeforeConversionEvenWithoutStrictMode
+```
+
+Result: **3 tests, 0 failures, 0 errors, 0 skips**, canonical PASS. Maven's normal
+verify lifecycle also ran its existing **19 unit tests**, all passing; the full
+regression command was not repeated. New evidence is
+`artifacts/b01-delta/fix1-negative.log` and `fix1-negative-FoundationIT.xml`; the log
+contains no ERROR or generic restore/rollback instruction. Existing row/column/
+history/failure-boundary assertions remain in those three passing cases. Because
+these are negative tests, the disposable fixture is intentionally left at their
+asserted failed V006 state; the preserved earlier successful metadata describes
+the final GREEN run, not the fixture state after this focused run.
