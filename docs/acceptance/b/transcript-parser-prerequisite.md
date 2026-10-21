@@ -130,3 +130,8 @@ class. It does not execute API, IT, database, H2, Docker, server, web or Python
 aggregate suites. Ignored local evidence lives under
 `artifacts/phase-b/b06-parser`; the coordinator report records exact counts,
 source/commit identities and an explicit raw-artifact allowlist and SHA-256s.
+
+
+## Coordinator adoption
+
+Fullownedc370aa2..9ae6280 independently SPECcompliant/qualityApproved0findings; coordinator read full implementation/review reports. Integratedf3f5d8c, all4owned paths byte-identical before this appendix. Final focused19 tests passed; previous15RED/15GREEN overlap and are not added. All11rawcaptures+manifest independently SHA-verified/copied to `artifacts/phase-b/b06-parser/`; both raw reports preserved separately with SHA before public-copy newline normalization. See [implementation](transcript-parser-implementation-report.md), [independent review](transcript-parser-independent-review.md). No extra tests/DB/network actions for mechanical adoption. StrictUTF8 profile remains unwired: production format/size activation, fullB06/V011/input/ACL/confirmation/marks/fingerprints and company qualification remain OPEN; no SQL or existing plan changed.
