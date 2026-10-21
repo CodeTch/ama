@@ -24,7 +24,7 @@
 
 |目标版本|拥有任务|原计划占位|计划内容/依赖|当前状态|
 |---|---|---|---|---|
-|V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|来源 f5b4495 已编写、私有 fixture 应用；当前 SHA 已冻结，尚未集成；采用待时间线偏差及日志修复复审|
+|V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|来源 f5b4495+0e8f698 → 集成751d31c+95a264e；冻结f36…；独立复审支持新建确认空白fixture限定采用，历史偏差保留|
 |V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|预留，未编写|
 |V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|预留，未编写|
 |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|预留，未编写；上传补充设计门已通过|
@@ -49,13 +49,19 @@
 
 B-09、C-05、C-07 无专属新DDL；C-02复用媒体/转写/任务，D-03复用V012；E/F只在对应能力启用时迁移。迁移的实际内容须从目标设计计算与各自既有schema的增量，不能把审阅CREATE全文复制成V006。完整审阅库的跨域FK统一在所有表后建立；正式环境每阶段仅建立可满足依赖的FK，应用不允许写尚未部署的非空引用。speaker基础提前进入B-06，C-03复用而不重建。
 
-## V006 当前冻结与时间线偏差（采用待复审）
+## V006 当前冻结、限定采用与时间线偏差保留
 
 来源 `codex/phase-b-audit-delta` 的 `f5b44955318564ecc68ce6b2d5a2274c46d35cc2` 包含 `V006__audit_metadata.sql`，当前共享/最终实测 SHA256 为 `f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f`，Flyway checksum `-1744360556`。成功回归后保留的元数据快照来自拥有者 fixture `ama-test-b01-fb4e04459580`（127.0.0.1:45443），该快照 history 为001→002→005→006，均success=1。随后日志修复的聚焦负例测试将同一自有一次性 fixture 留在预期 failed V006 状态；旧成功快照不冒称当前库状态。当前文件从该提交起冻结，不得因评审修改字节、改名、重编号或repair。
 
-执行时间线另有一项已向用户报告的偏差：作者首次私有 fixture GREEN 使用 `e1af32204c0b75d6ef922ca1e5677e259b0d4c4c47b43c3945f52bde314d8e8d`，之后增加冗余的 `CHAR_LENGTH(result)>64` 预检，再重置该自有一次性 fixture 并验证当前 `f36b…`。这不符合“已应用或共享的迁移保持不变”的要求；不能因尚未提交而豁免，也不能事后改称 review-only。作者正在保全原字节、原始运行日志和两份哈希并准确记录可观察影响；独立复审前不采用该实现。原始首次执行哈希的来源是作者恢复的源码与说明，最终哈希及当前数据库元数据有直接实测证据；不把恢复说明当独立现场观察。
+执行时间线另有一项已向用户报告的偏差：作者首次私有 fixture GREEN 使用 `e1af32204c0b75d6ef922ca1e5677e259b0d4c4c47b43c3945f52bde314d8e8d`，之后增加冗余的 `CHAR_LENGTH(result)>64` 预检，再重置该自有一次性 fixture 并验证当前 `f36b…`。这不符合“已应用或共享的迁移保持不变”的要求；不能因尚未提交而豁免，也不能事后改称 review-only。作者正在保全原字节、原始运行日志和两份哈希并准确记录可观察影响；独立复审支持当前冻结版本仅用于新建、独立所有且确认空白的 fixture；历史违规仍保留为 PARTIAL，不能重述为规则合规。原始首次执行哈希的来源是作者恢复的源码与说明，最终哈希及当前数据库元数据有直接实测证据；不把恢复说明当独立现场观察。
 
 不得将当前 V006 自动用于持有旧 checksum 的库。发现旧版本 history/未知来源时立即停止，保留库与证据并提交单独可审阅的恢复方案；不更改 checksum、不启用 outOfOrder、不覆盖原脚本。当前共享文件也不通过恢复成旧字节来制造第二次修改。后续所有正式迁移首次应用前记录 SHA，首次应用（包括私有 fixture）后即冻结；结构修正必须先由协调者登记有序新版本，不由实施者自行猜号。
+
+## V006 实施采用记录（2026-10-22，限定新空测试库）
+
+完整初审 `45ce136..f5b4495` spec compliant/quality Approved，无 Critical/Important，预期负例日志为 Minor；修复 `f5b4495..0e8f698` 经独立增量复审日志问题 ADDRESSED、无新增破坏，历史 B01-IMM-01 保留 PARTIAL。采用精确当前 SHA `f36b…` 用于新建、独立所有且先确认空白的受控测试库；旧 checksum、已有失败 history、未知来源及未确认空白环境均不在该批准范围，先保全并单独审阅恢复方案。不会对作者当前失败 fixture 执行重置或修复来伪装成功。
+
+实现与修复集成 `751d31c`、`95a264e`；完整 source/测试/helper/归档与作者 `0e8f698` 一致。当前 V001/V002/V005/V006 SHA 全部复核，e1af 历史源码已逐字节保存在 `docs/database/migration-history/V006-e1af3220.sql.txt`，位于所有 Flyway location 之外。真实测试、前后元数据和 Flyway history 见 [实施记录](../acceptance/b/audit-metadata-delta.md)、[初审](../acceptance/b/audit-metadata-delta-independent-review.md)、[增量复审](../acceptance/b/audit-metadata-delta-fix-independent-review.md)；原始日志/XML/两份SQL字节与SHA清单另保存在 `artifacts/phase-b/b01-audit-delta/`。记录不批准任何旧库 repair、重置或 checksum 替换。
 
 ## 兼容/回滚和验收义务
 

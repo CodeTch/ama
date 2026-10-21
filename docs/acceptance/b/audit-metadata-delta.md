@@ -172,3 +172,9 @@ history/failure-boundary assertions remain in those three passing cases. Because
 these are negative tests, the disposable fixture is intentionally left at their
 asserted failed V006 state; the preserved earlier successful metadata describes
 the final GREEN run, not the fixture state after this focused run.
+
+## Coordinator adoption and preserved deviation
+
+Full initial review approved the scoped implementation; fix review addressed B01D-M1 without active SQL changes. Original reports: [initial](audit-metadata-delta-independent-review.md), [fix and containment](audit-metadata-delta-fix-independent-review.md). Source f5b4495/0e8f698 integrated as 751d31c/95a264e. Coordinator accepts exact frozen f36 for NEW, independently owned, confirmed-empty controlled fixtures only. Existing prior successful MySQL16-case and all-regression evidence plus focused3-case logging fix support that scope; no redundant broad suite was rerun for status-only adoption.
+
+B01-IMM-01 remains PARTIAL: containment is documented, the historical applied-byte change and lost initial fixture history cannot be undone. This is not historical immutability compliance. An old checksum, failed history or unknown provenance requires a stop and separately reviewed recovery; no such repair/reset or validation bypass is approved. The original failing author fixture remains preserved. Other tasks must record SHA before first official application and freeze immediately afterward. Deployment/platform/HA and other B-domain obligations remain open.
