@@ -235,7 +235,7 @@ export interface components {
         BusinessError: {
             error: {
                 /** @enum {string} */
-                code: "UNAUTHENTICATED" | "FORBIDDEN" | "INVALID_ARGUMENT" | "IDENTITY_UNAVAILABLE" | "IDENTITY_PROVIDER_UNAVAILABLE";
+                code: "UNAUTHENTICATED" | "FORBIDDEN" | "INVALID_ARGUMENT" | "IDENTITY_UNAVAILABLE" | "IDENTITY_PROVIDER_UNAVAILABLE" | "MEETING_FORBIDDEN" | "MEETING_CONFLICT" | "CATEGORY_DICTIONARY_UNAVAILABLE" | "REQUEST_TOO_LARGE";
                 message: string;
                 /** Format: uuid */
                 traceId: string;
@@ -321,7 +321,7 @@ export interface components {
                 "application/json": components["schemas"]["BusinessError"];
             };
         };
-        /** @description Wrong listener or failed Origin/CSRF policy */
+        /** @description Denied meeting access, wrong listener or failed Origin/CSRF policy */
         BusinessForbidden: {
             headers: {
                 [name: string]: unknown;

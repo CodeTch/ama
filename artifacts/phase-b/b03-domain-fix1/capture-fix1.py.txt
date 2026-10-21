@@ -1,0 +1,25 @@
+import hashlib,json,pathlib,shlex,subprocess
+root=pathlib.Path.cwd(); out=root/'artifacts/phase-b/b03-domain-fix1';out.mkdir(exist_ok=True)
+base='9f2da58e2bee76741e5b5aab2c22d83c7b46ab67'
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==base
+paths=subprocess.check_output(['git','diff','--name-only','0d2079cd64e5b61bc5787ca5adfaa782e5cd4a40',base],text=True).splitlines()
+assert len(paths)==79
+report=pathlib.Path('/home/tanren/ama/.worktrees/phase-a/.superpowers/sdd/2026-10-21-ama-phase-b/task-B-03-domain-report.md')
+review=report.with_name('task-B-03-domain-review.md')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+baseline={'base':base,'original_report_sha256':sha(report),'review_sha256':sha(review),'original_owned_paths':{p:sha(root/p) for p in paths}}
+assert baseline['review_sha256']=='07267eebf253bd3bc7862231095e041a8279b6b1ef3b3f449ab19e12a0d1c97b'
+(out/'baseline.json').write_text(json.dumps(baseline,indent=2)+'\n')
+(out/'.gitattributes').write_text('* -text\n')
+name='ama-test-b01-936fd5c24ae5'
+fmt='{"id":{{json .Id}},"name":{{json .Name}},"image":{{json .Config.Image}},"ports":{{json .NetworkSettings.Ports}},"args":{{json .Args}}}'
+owned=subprocess.check_output(['docker','inspect','--format',fmt,name],text=True)
+state=json.loads(owned)
+assert state['id']=='5b5c1baba667ab43cca1ec76a2e5417ebb26bcbae780ad224cfdb49994f272c8'
+assert state['ports']['3306/tcp']==[{'HostIp':'127.0.0.1','HostPort':'46085'}]
+(out/'fixture-ownership.json').write_text(owned)
+sql='SELECT @@version,@@innodb_use_native_aio; SELECT installed_rank,version,script,checksum,success FROM flyway_schema_history ORDER BY installed_rank;'
+cmd='MYSQL_PWD="$MYSQL_PASSWORD" mysql --protocol=TCP -h127.0.0.1 --user="$MYSQL_USER" "$MYSQL_DATABASE" --batch --raw -e '+shlex.quote(sql)
+history=subprocess.check_output(['docker','exec',name,'sh','-c',cmd],text=True)
+(out/'history-before.txt').write_text(history)
+print(json.dumps({'baseline_paths':len(paths),'original_report_sha256':baseline['original_report_sha256'],'review_sha256':baseline['review_sha256'],'fixture':state,'history':history},indent=2))
