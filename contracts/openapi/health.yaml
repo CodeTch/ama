@@ -1,0 +1,68 @@
+live:
+  get:
+    operationId: internalLiveness
+    summary: Process liveness independent of database availability
+    description: Accessible only on the management listener from explicitly allowed source networks. Forwarded headers do not grant access.
+    responses:
+      '200':
+        description: Process is alive
+        content:
+          application/vnd.spring-boot.actuator.v3+json:
+            schema:
+              $ref: '#/Health'
+      '503':
+        description: Process is stopping or broken
+        content:
+          application/vnd.spring-boot.actuator.v3+json:
+            schema:
+              $ref: '#/Health'
+      '403':
+        $ref: '#/Forbidden'
+ready:
+  get:
+    operationId: internalReadiness
+    summary: Admission readiness requires a real database connection
+    description: A missing or failed MySQL dependency returns 503 while liveness remains independent. Internal access uses the management listener and source network policy.
+    responses:
+      '200':
+        description: Application accepts traffic and JDBC dependency is healthy
+        content:
+          application/vnd.spring-boot.actuator.v3+json:
+            schema:
+              $ref: '#/Health'
+      '503':
+        description: Database unavailable or application refusing traffic
+        content:
+          application/vnd.spring-boot.actuator.v3+json:
+            schema:
+              $ref: '#/Health'
+      '403':
+        $ref: '#/Forbidden'
+Health:
+  type: object
+  additionalProperties: false
+  required: [status]
+  properties:
+    status:
+      type: string
+      enum: [UP, DOWN, OUT_OF_SERVICE, UNKNOWN]
+Forbidden:
+  description: Source network or listener is not authorized
+  content:
+    application/json:
+      schema:
+        type: object
+        additionalProperties: false
+        required: [error]
+        properties:
+          error:
+            type: object
+            additionalProperties: false
+            required: [code, message]
+            properties:
+              code:
+                type: string
+                const: FORBIDDEN
+              message:
+                type: string
+                const: Access denied

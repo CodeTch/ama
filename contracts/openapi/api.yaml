@@ -1,0 +1,13 @@
+openapi: 3.1.0
+info:
+  title: AMA internal API foundation
+  version: 0.1.0
+  description: Only internal runtime probes are delivered in phase A-01.
+servers:
+  - url: http://127.0.0.1:8081
+    description: Loopback management listener; never publish through the public ingress.
+paths:
+  /internal/health/live:
+    $ref: './health.yaml#/live'
+  /internal/health/ready:
+    $ref: './health.yaml#/ready'

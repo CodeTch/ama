@@ -1,0 +1,10 @@
+{
+  "name": "ama",
+  "private": true,
+  "engines": { "node": "22.23.4", "npm": "10.9.9" },
+  "packageManager": "npm@10.9.9",
+  "scripts": {
+    "check:openapi": "redocly lint contracts/openapi/api.yaml --config redocly.yaml && redocly bundle contracts/openapi/api.yaml --config redocly.yaml --output artifacts/openapi/api.yaml"
+  },
+  "devDependencies": { "@redocly/cli": "2.66.1" }
+}

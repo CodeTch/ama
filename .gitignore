@@ -1,1 +1,15 @@
 /.worktrees/
+.tools/
+**/target/
+**/node_modules/
+**/__pycache__/
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+private-samples/
+test-audio/
+artifacts/
+.superpowers/
