@@ -1,4 +1,4 @@
--- B00-1.1-review: REVIEW ONLY; never place this file in Flyway locations.
+-- B00-1.2-review: REVIEW ONLY; never place this file in Flyway locations.
 
 -- All future tables exist ONLY in the disposable review database.
 
@@ -263,6 +263,8 @@ CREATE TABLE upload_session (
   `completed_file_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL,
+  `display_name` longtext NOT NULL,
+  `purpose` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   PRIMARY KEY (id),
   INDEX upload_meeting (meeting_id,state,id),
   UNIQUE INDEX upload_target (backend_id,namespace,object_key),

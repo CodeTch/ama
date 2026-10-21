@@ -1,6 +1,6 @@
 # AMA 统一 migration-register
 
-版本 B00-1.1-review，2026-10-22；R1—R6 修正已通过独立复审，设计基线已采用。这是迁移所有权/顺序登记，不是执行记录。实现仍须按统一新版本修正差异、回归并独立评审后验收。Flyway执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL多语句不是可整体ROLLBACK的事务，MySQL atomic DDL只保证单条语句原子；中途失败检查实际schema并前滚修复。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
+版本 B00-1.2-review（拟议上传补充，待独立增量评审），2026-10-22；已采用 B00-1.1-review 的 R1—R6 独立关闭结论不变。这是迁移所有权/顺序登记，不是执行记录。实现仍须按统一新版本修正差异、回归并独立评审后验收。Flyway执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL多语句不是可整体ROLLBACK的事务，MySQL atomic DDL只保证单条语句原子；中途失败检查实际schema并前滚修复。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
 
 ## 冻结输入与原哈希
 
@@ -27,7 +27,7 @@
 |V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|预留，未编写|
 |V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|预留，未编写|
 |V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|预留，未编写|
-|V009|B-04|原V004|backend/file/reference/upload/part/cleanup；依赖V008|预留，未编写|
+|V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含1.2拟议 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|预留，未编写；上传补充待独立评审后消费|
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|预留，未编写|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|预留，未编写|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
@@ -54,6 +54,10 @@ B-09、C-05、C-07 无专属新DDL；C-02复用媒体/转写/任务，D-03复用
 ### B00-1.1评审修正的迁移边界
 
 R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑根、V023专题名称，owner身份锁＋完整规范名碰撞复核，不加名称上限；R3→V023 description LONGTEXT NULL；R4→V010逻辑操作/执行分离及quota执行关联、V013发布attempt引用，新task可以在同business_key/confirmation下追加执行；R5→V011转写输入与结果双向追溯，V017才启用非空材料FK；R6→V011片段标记，C-03复用保存/确认失效/hash规则。这些预留均尚无正式SQL/应用记录，因此是在评审前完善设计，不修改任何已应用/冻结脚本。若接收方已有更高版本或此前草案结构，先报告实际元数据并另从V028分配前向增量，不覆盖旧版本。B00-1.0不可采用，不能把旧79表证据替代1.1完整新库验证。
+
+### B00-1.2 上传补充的迁移边界（待独立评审）
+
+唯一结构增量为 upload_session 追加 display_name 与 purpose，两列无默认且非空，其他表/索引/CHECK/FK不变；现有 token/hash/part 字段的业务语义与写入/恢复协议同步明确。它们属于尚未实施的 B-04/V009，不新增迁移号，不修改已冻结 V001/V002/V005，不重开 1.1 的 R1—R6。独立评审通过后，B-04 才按完整 V001→002→005→006→007→008→009 路径在自有库实现并验证；不得复制本审阅完整 CREATE 为正式迁移。若接收方已执行缺列的 V009 或其他较高版本，先报告实际元数据及旧会话的真实 name/purpose 来源，由协调者从 V028+ 登记前向增量和回填/隔离方案；不得猜值、截断名称、用默认用途伪造历史或修改已应用脚本。本次仅在新建独有空审阅库验证完整目标 DDL，旧 1.1 fixture/证据不改。
 
 每次登记实际脚本补文件名、commit、SHA256、执行库/时间（不记凭证）、Flyway history、前后DDL元数据diff、应用版本窗口和回归链接。独立评审通过设计不等于允许跳过各任务真实持久化/并发/权限测试。
 
