@@ -1,4 +1,4 @@
-# AMA 数据字典 — B00-1.1-review
+# AMA 数据字典 — B00-1.2-review
 
 生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。
 
@@ -443,12 +443,14 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |object_key|`varchar(512) CHARACTER SET ascii COLLATE ascii_bin`|否|无|服务生成目标键|
 |cancel_epoch|`bigint unsigned`|否|无|创建时会议取消代际|
 |expected_size|`bigint unsigned`|否|无|期望大小|
-|expected_sha256|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|是|无|可选预声明校验|
-|provider_upload_token|`longtext`|是|无|仅适配器可读供应商上传标识|
+|expected_sha256|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|是|无|预声明完整SHA256；若初始NULL，在OPEN转FINALIZING事务填入完成请求哈希，之后不可变|
+|provider_upload_token|`longtext`|是|无|内部存储 UploadToken.sessionId；与 backend_id 重建完整 token；已受理会话必须非空，仅服务端使用|
 |state|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|会话状态|
 |completed_file_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|完成文件；重复完成返回同 ID|
 |created_at|`datetime(6)`|否|无|创建时间|
 |updated_at|`datetime(6)`|否|无|最近活动|
+|display_name|`longtext`|否|无|初始化 name 原值；仅展示数据，不作路径、不新增产品长度上限；创建后不可改|
+|purpose|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|初始化时服务端校验的已启用且有权用途码；创建后不可改，不是公司字典声明|
 
 主键：`id`。
 - 索引 `upload_meeting(meeting_id,state,id)`：删除与在途枚举。
@@ -458,7 +460,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - FK `fk_upload_session_1`：`backend_id` → `storage_backend(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 - FK `fk_upload_session_2`：`completed_file_id` → `file_object(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
+更新/删除与完整性：初始化成功前提交名称/用途/固定位置/存储token；OPEN下提交不可变分片；锁session冻结全部分片及完整hash后单向FINALIZING，不回OPEN；重启据行及分片恢复，完成在durable blob后同事务登记file/引用并写completed_file_id；名称复制到file_object，purpose保留在会话及引用账本；终态重放仍鉴权，删除按依赖显式清理。
 
 ## upload_part
 
@@ -476,7 +478,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - CHECK `ck_upload_part_0`：`part_no > 0`。
 - FK `fk_upload_part_0`：`upload_id` → `upload_session(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：版本/快照 INSERT 后不可改写；可变状态仅由所属领域服务 CAS；历史无自动过期；会议删除按依赖逆序显式清理。
+更新/删除与完整性：只登记实际durable且校验通过的服务端PartReceipt；锁session确认OPEN后INSERT，同号同size/hash重放原回执，异内容冲突；不UPDATE已接纳回执，不信任客户端provider token；FINALIZING后集合冻结且禁止增删改，迟到I/O不能登记；完成重放/恢复仍需保留完整清单，清理走显式生命周期。
 
 ## file_cleanup
 
