@@ -327,7 +327,8 @@
             "Content-Disposition": {
               "schema": {
                 "type": "string"
-              }
+              },
+              "description": "At most 1024 ASCII bytes for the whole value. Safe ASCII fallback download plus the complete RFC5987 UTF-8 name when it fits; otherwise a Unicode-scalar-safe transport prefix ending in ... . Full stored/display name is unchanged."
             },
             "Accept-Ranges": {
               "schema": {
@@ -346,7 +347,7 @@
           }
         },
         "206": {
-          "description": "Exactly the selected single byte range",
+          "description": "Exactly the selected single byte range; the same bounded Content-Disposition filename policy applies as for complete content.",
           "headers": {
             "Content-Range": {
               "schema": {
@@ -415,7 +416,7 @@
       },
       "name": {
         "type": "string",
-        "description": "Exact display value; never an object key or path. No product character quota."
+        "description": "Exact stored/display value; never an object key or path. No product character quota. The HTTP download filename has a separate bounded transport representation."
       },
       "size": {
         "type": "integer",

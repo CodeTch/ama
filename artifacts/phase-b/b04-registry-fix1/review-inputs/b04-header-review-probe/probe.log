@@ -1,0 +1,173 @@
+PORT=44751 responseHeaderLimit=8192
+RESULT name=normal range=false status=200 bodyBytes=3 dispositionBytes=58
+RESULT name=normal range=true status=206 bodyBytes=1 dispositionBytes=58
+RESULT name=long range=false status=500 bodyBytes=0 dispositionBytes=0
+RESULT name=long range=true status=500 bodyBytes=0 dispositionBytes=0
+
+STDERR
+Oct 22, 2026 6:16:28 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-127.0.0.1-auto-1"]
+Oct 22, 2026 6:16:28 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 22, 2026 6:16:28 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.24]
+Oct 22, 2026 6:16:28 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-127.0.0.1-auto-1-44751"]
+Oct 22, 2026 6:16:29 AM org.apache.catalina.core.StandardWrapperValve invoke
+SEVERE: Servlet.service() for servlet [probe] in context with path [] threw exception
+java.io.IOException: org.apache.coyote.http11.HeadersTooLargeException: An attempt was made to write more data to the response headers than there was room available in the buffer. Increase maxHttpHeaderSize on the connector or write less data into the response headers.
+	at HeaderReviewProbe$1.doGet(HeaderReviewProbe.java:39)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:132)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:535)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:86)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:71)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:347)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:406)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:71)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1307)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:2036)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:74)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:949)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:483)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:74)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.apache.coyote.http11.HeadersTooLargeException: An attempt was made to write more data to the response headers than there was room available in the buffer. Increase maxHttpHeaderSize on the connector or write less data into the response headers.
+	at org.apache.coyote.http11.Http11OutputBuffer.checkLengthBeforeWrite(Http11OutputBuffer.java:484)
+	at org.apache.coyote.http11.Http11OutputBuffer.write(Http11OutputBuffer.java:440)
+	at org.apache.coyote.http11.Http11OutputBuffer.write(Http11OutputBuffer.java:427)
+	at org.apache.coyote.http11.Http11OutputBuffer.sendHeader(Http11OutputBuffer.java:389)
+	at org.apache.coyote.http11.Http11Processor.writeHeaders(Http11Processor.java:1074)
+	at org.apache.coyote.http11.Http11Processor.prepareResponse(Http11Processor.java:1061)
+	at org.apache.coyote.AbstractProcessor.action(AbstractProcessor.java:414)
+	at org.apache.coyote.Response.action(Response.java:240)
+	at org.apache.coyote.Response.commit(Response.java:549)
+	at org.apache.catalina.connector.OutputBuffer.doFlush(OutputBuffer.java:275)
+	at org.apache.catalina.connector.OutputBuffer.close(OutputBuffer.java:235)
+	at org.apache.catalina.connector.OutputBuffer.updateBytesWritten(OutputBuffer.java:448)
+	at org.apache.catalina.connector.OutputBuffer.writeBytes(OutputBuffer.java:381)
+	at org.apache.catalina.connector.OutputBuffer.write(OutputBuffer.java:352)
+	at org.apache.catalina.connector.CoyoteOutputStream.write(CoyoteOutputStream.java:110)
+	at java.base/java.io.ByteArrayInputStream.transferTo(ByteArrayInputStream.java:213)
+	at ama.api.FileController.content(FileController.java:129)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at HeaderReviewProbe$1.doGet(HeaderReviewProbe.java:38)
+	... 19 more
+
+Oct 22, 2026 6:16:29 AM org.apache.coyote.http11.Http11Processor service
+SEVERE: Error processing request
+org.apache.coyote.http11.HeadersTooLargeException: An attempt was made to write more data to the response headers than there was room available in the buffer. Increase maxHttpHeaderSize on the connector or write less data into the response headers.
+	at org.apache.coyote.http11.Http11OutputBuffer.checkLengthBeforeWrite(Http11OutputBuffer.java:484)
+	at org.apache.coyote.http11.Http11OutputBuffer.write(Http11OutputBuffer.java:440)
+	at org.apache.coyote.http11.Http11OutputBuffer.write(Http11OutputBuffer.java:427)
+	at org.apache.coyote.http11.Http11OutputBuffer.sendHeader(Http11OutputBuffer.java:389)
+	at org.apache.coyote.http11.Http11Processor.writeHeaders(Http11Processor.java:1074)
+	at org.apache.coyote.http11.Http11Processor.prepareResponse(Http11Processor.java:1061)
+	at org.apache.coyote.AbstractProcessor.action(AbstractProcessor.java:414)
+	at org.apache.coyote.Response.action(Response.java:240)
+	at org.apache.coyote.Response.commit(Response.java:549)
+	at org.apache.catalina.connector.OutputBuffer.doFlush(OutputBuffer.java:275)
+	at org.apache.catalina.connector.OutputBuffer.close(OutputBuffer.java:235)
+	at org.apache.catalina.connector.Response.finishResponse(Response.java:426)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:376)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:406)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:71)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1307)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:2036)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:74)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:949)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:483)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:74)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+Oct 22, 2026 6:16:29 AM org.apache.catalina.core.StandardWrapperValve invoke
+SEVERE: Servlet.service() for servlet [probe] in context with path [] threw exception
+java.io.IOException: org.apache.coyote.http11.HeadersTooLargeException: An attempt was made to write more data to the response headers than there was room available in the buffer. Increase maxHttpHeaderSize on the connector or write less data into the response headers.
+	at HeaderReviewProbe$1.doGet(HeaderReviewProbe.java:39)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:132)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:535)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:86)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:71)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:347)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:406)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:71)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1307)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:2036)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:74)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:949)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:483)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:74)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.apache.coyote.http11.HeadersTooLargeException: An attempt was made to write more data to the response headers than there was room available in the buffer. Increase maxHttpHeaderSize on the connector or write less data into the response headers.
+	at org.apache.coyote.http11.Http11OutputBuffer.checkLengthBeforeWrite(Http11OutputBuffer.java:484)
+	at org.apache.coyote.http11.Http11OutputBuffer.write(Http11OutputBuffer.java:440)
+	at org.apache.coyote.http11.Http11OutputBuffer.write(Http11OutputBuffer.java:427)
+	at org.apache.coyote.http11.Http11OutputBuffer.sendHeader(Http11OutputBuffer.java:389)
+	at org.apache.coyote.http11.Http11Processor.writeHeaders(Http11Processor.java:1074)
+	at org.apache.coyote.http11.Http11Processor.prepareResponse(Http11Processor.java:1061)
+	at org.apache.coyote.AbstractProcessor.action(AbstractProcessor.java:414)
+	at org.apache.coyote.Response.action(Response.java:240)
+	at org.apache.coyote.Response.commit(Response.java:549)
+	at org.apache.catalina.connector.OutputBuffer.doFlush(OutputBuffer.java:275)
+	at org.apache.catalina.connector.OutputBuffer.close(OutputBuffer.java:235)
+	at org.apache.catalina.connector.OutputBuffer.updateBytesWritten(OutputBuffer.java:448)
+	at org.apache.catalina.connector.OutputBuffer.writeBytes(OutputBuffer.java:381)
+	at org.apache.catalina.connector.OutputBuffer.write(OutputBuffer.java:352)
+	at org.apache.catalina.connector.CoyoteOutputStream.write(CoyoteOutputStream.java:110)
+	at java.base/java.io.ByteArrayInputStream.transferTo(ByteArrayInputStream.java:213)
+	at ama.api.FileController.content(FileController.java:129)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at HeaderReviewProbe$1.doGet(HeaderReviewProbe.java:38)
+	... 19 more
+
+Oct 22, 2026 6:16:29 AM org.apache.coyote.http11.Http11Processor service
+SEVERE: Error processing request
+org.apache.coyote.http11.HeadersTooLargeException: An attempt was made to write more data to the response headers than there was room available in the buffer. Increase maxHttpHeaderSize on the connector or write less data into the response headers.
+	at org.apache.coyote.http11.Http11OutputBuffer.checkLengthBeforeWrite(Http11OutputBuffer.java:484)
+	at org.apache.coyote.http11.Http11OutputBuffer.write(Http11OutputBuffer.java:440)
+	at org.apache.coyote.http11.Http11OutputBuffer.write(Http11OutputBuffer.java:427)
+	at org.apache.coyote.http11.Http11OutputBuffer.sendHeader(Http11OutputBuffer.java:389)
+	at org.apache.coyote.http11.Http11Processor.writeHeaders(Http11Processor.java:1074)
+	at org.apache.coyote.http11.Http11Processor.prepareResponse(Http11Processor.java:1061)
+	at org.apache.coyote.AbstractProcessor.action(AbstractProcessor.java:414)
+	at org.apache.coyote.Response.action(Response.java:240)
+	at org.apache.coyote.Response.commit(Response.java:549)
+	at org.apache.catalina.connector.OutputBuffer.doFlush(OutputBuffer.java:275)
+	at org.apache.catalina.connector.OutputBuffer.close(OutputBuffer.java:235)
+	at org.apache.catalina.connector.Response.finishResponse(Response.java:426)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:376)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:406)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:71)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1307)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:2036)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:74)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:949)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:483)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:74)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+Oct 22, 2026 6:16:29 AM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler ["http-nio-127.0.0.1-auto-1-44751"]
+Oct 22, 2026 6:16:29 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+Oct 22, 2026 6:16:29 AM org.apache.catalina.loader.WebappClassLoaderBase checkThreadLocalsForLeaks
+WARNING: You need to add "--add-opens=java.base/java.lang=ALL-UNNAMED" to the JVM command line arguments to enable ThreadLocal memory leak detection. Alternatively, you can suppress this warning by disabling ThreadLocal memory leak detection.
+Oct 22, 2026 6:16:29 AM org.apache.catalina.loader.WebappClassLoaderBase clearReferencesRmiTargets
+WARNING: You need to add "--add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED" to the JVM command line arguments to enable RMI Target memory leak detection. Alternatively, you can suppress this warning by disabling RMI Target memory leak detection.
+Oct 22, 2026 6:16:29 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-127.0.0.1-auto-1-44751"]
+Oct 22, 2026 6:16:29 AM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["http-nio-127.0.0.1-auto-1-44751"]
+
+EXIT 0

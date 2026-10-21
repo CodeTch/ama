@@ -400,7 +400,7 @@ export interface components {
         Hash: string;
         Begin: {
             purpose: string;
-            /** @description Exact display value; never an object key or path. No product character quota. */
+            /** @description Exact stored/display value; never an object key or path. No product character quota. The HTTP download filename has a separate bounded transport representation. */
             name: string;
             /** Format: int64 */
             size: number;
@@ -1046,6 +1046,7 @@ export interface operations {
             /** @description Complete authorized content */
             200: {
                 headers: {
+                    /** @description At most 1024 ASCII bytes for the whole value. Safe ASCII fallback download plus the complete RFC5987 UTF-8 name when it fits; otherwise a Unicode-scalar-safe transport prefix ending in ... . Full stored/display name is unchanged. */
                     "Content-Disposition"?: string;
                     "Accept-Ranges"?: "bytes";
                     [name: string]: unknown;
@@ -1054,7 +1055,7 @@ export interface operations {
                     "application/octet-stream": string;
                 };
             };
-            /** @description Exactly the selected single byte range */
+            /** @description Exactly the selected single byte range; the same bounded Content-Disposition filename policy applies as for complete content. */
             206: {
                 headers: {
                     "Content-Range"?: string;

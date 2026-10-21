@@ -20,6 +20,10 @@ import java.util.*;
 
 @RestController
 class FileController {
+    private static final int CONTENT_DISPOSITION_BYTES = 1024;
+    private static final String DISPOSITION_PREFIX =
+            "attachment; filename=\"download\"; filename*=UTF-8''";
+    private static final String TRUNCATION_MARKER = "...";
     private final FileUploads uploads;
     private final FileRegistry registry;
     private final long budget;
@@ -115,8 +119,7 @@ class FileController {
             response.setContentLengthLong(download.length());
             response.setHeader(
                     "Content-Disposition",
-                    "attachment; filename=\"download\"; filename*=UTF-8''"
-                            + encoded(download.file().displayName()));
+                    DISPOSITION_PREFIX + encoded(download.file().displayName()));
             if (range != null)
                 response.setHeader(
                         "Content-Range",
@@ -131,19 +134,37 @@ class FileController {
     }
 
     private static String encoded(String value) {
-        StringBuilder result = new StringBuilder();
-        for (byte b : value.getBytes(java.nio.charset.StandardCharsets.UTF_8)) {
-            int c = b & 255;
-            if ((c >= 'a' && c <= 'z')
-                    || (c >= 'A' && c <= 'Z')
-                    || (c >= '0' && c <= '9')
-                    || c == '-'
-                    || c == '.'
-                    || c == '_') result.append((char) c);
-            else
-                result.append('%')
-                        .append("0123456789ABCDEF".charAt(c >> 4))
-                        .append("0123456789ABCDEF".charAt(c & 15));
+        int limit = CONTENT_DISPOSITION_BYTES - DISPOSITION_PREFIX.length();
+        StringBuilder result = new StringBuilder(limit);
+        int prefixWithMarker = 0;
+        for (int index = 0; index < value.length(); ) {
+            int codePoint = value.codePointAt(index);
+            index += Character.charCount(codePoint);
+            // At most one Unicode scalar is encoded before checking the bounded header budget.
+            StringBuilder scalar = new StringBuilder(12);
+            byte[] bytes = new String(Character.toChars(codePoint))
+                    .getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            for (byte b : bytes) {
+                int c = b & 255;
+                if ((c >= 'a' && c <= 'z')
+                        || (c >= 'A' && c <= 'Z')
+                        || (c >= '0' && c <= '9')
+                        || c == '-'
+                        || c == '.'
+                        || c == '_') scalar.append((char) c);
+                else
+                    scalar.append('%')
+                            .append("0123456789ABCDEF".charAt(c >> 4))
+                            .append("0123456789ABCDEF".charAt(c & 15));
+            }
+            if (result.length() + scalar.length() > limit) {
+                result.setLength(prefixWithMarker);
+                return result.append(TRUNCATION_MARKER).toString();
+            }
+            result.append(scalar);
+            // Retain a scalar boundary for truncation without reserving space on exact-fit names.
+            if (result.length() <= limit - TRUNCATION_MARKER.length())
+                prefixWithMarker = result.length();
         }
         return result.toString();
     }
