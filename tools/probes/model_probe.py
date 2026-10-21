@@ -214,6 +214,11 @@ def _request(c, url, path, duration, index, queued_at):
             data = response.read(MAX_RESPONSE_BYTES + 1)
             if len(data) > MAX_RESPONSE_BYTES:
                 raise ValueError('response limit exceeded')
+            # Bounded read(amount) can return early EOF without IncompleteRead.
+            # A declared body remainder is unfinished transport, even if its
+            # received prefix is valid JSON. Keep the conservative unknown slot.
+            if response.length not in (None, 0):
+                raise http.client.IncompleteRead(b'', response.length)
             ranges, optional = _response(data, c['protocol'], duration * 1000, c['source_offset_ms'])
             row['sourceRangesMs'], row['optionalFields'] = ranges, optional
     except (TimeoutError, socket.timeout):
@@ -302,7 +307,11 @@ def probe(config: dict, wav_paths: list[str]) -> dict:
     timing = {}
     for field in ('queueMs', 'serviceMs', 'endToEndMs'):
         timing[field] = _stats([r[field] for r in rows])
-        timing[field]['censoredCount'] = sum(r['latencyCensored'] and r[field] is not None for r in rows)
+        # Worker start completes queue measurement, even if service later times
+        # out. Only jobs without a worker/service observation have censored queue.
+        timing[field]['censoredCount'] = sum(
+            (r['serviceMs'] is None if field == 'queueMs' else r['latencyCensored'])
+            and r[field] is not None for r in rows)
     return dict(protocol=c['protocol'], capacityStatus='PENDING_REAL_ENVIRONMENT',
                 audioSeconds=sum(row['audioSeconds'] for row in rows),
                 submittedAudioSeconds=sum(row['audioSeconds'] for row in rows if row['sent']),

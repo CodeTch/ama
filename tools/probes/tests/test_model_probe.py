@@ -120,6 +120,35 @@ class ModelProbeTests(unittest.TestCase):
         self.assertEqual(report['serviceMs']['count'], 1)
         self.assertNotIn('secret-body', json.dumps(report))
 
+    def test_incomplete_content_length_is_unknown_transport_not_valid_json(self):
+        # A syntactically valid prefix cannot satisfy an unfinished HTTP response.
+        prefix = b'{"text":""}'
+        with fake_service(prefix, headers={'Content-Length': str(len(prefix) + 10),
+                                          'Connection': 'close'}) as (url, records, _):
+            report = self.run_probe(url, 'punc', text='synthetic input', repeats=2)
+        self.assertEqual(report['validCount'], 0)
+        self.assertEqual(report['errors']['NETWORK_ERROR'], 1)
+        self.assertEqual(report['errors']['NOT_SENT_UNKNOWN_SERVER_WORK'], 1)
+        self.assertEqual(report['requestCount'], 2)
+        self.assertEqual(report['sentCount'], 1)
+        self.assertEqual(report['notSentCount'], 1)
+        self.assertEqual(len(records), 1)
+        self.assertEqual(report['inflight']['unknownServerAtEnd'], 1)
+        self.assertEqual(report['inflight']['reservedAtEnd'], 1)
+        self.assertEqual(report['samples'][0]['httpStatus'], 200)
+        self.assertTrue(report['samples'][0]['serverWorkUnknown'])
+
+    def test_complete_content_length_response_remains_valid(self):
+        # Rejecting every declared-length response would also hide the framing bug.
+        body = b'{"text":""}'
+        with fake_service(body, headers={'Content-Length': str(len(body))}) as (url, records, _):
+            report = self.run_probe(url, 'punc', text='synthetic input', repeats=2)
+        self.assertEqual(report['validCount'], 2)
+        self.assertEqual(report['sentCount'], 2)
+        self.assertEqual(len(records), 2)
+        self.assertEqual(report['errors'], {})
+        self.assertEqual(report['inflight']['unknownServerAtEnd'], 0)
+
     def test_timeout_keeps_request_accounted(self):
         with fake_service({'text': 'late'}, delay=0.15) as (url, records, peak):
             report = self.run_probe(url, timeout_seconds=0.03, repeats=4)
@@ -244,6 +273,12 @@ class ModelProbeTests(unittest.TestCase):
         self.assertIn('censoredCount', report['serviceMs'])
         self.assertEqual(report['serviceMs']['censoredCount'], 1)
         self.assertEqual(report['endToEndMs']['censoredCount'], 2)
+        self.assertEqual(report['queueMs']['count'], 2)
+        self.assertEqual(report['queueMs']['censoredCount'], 1)
+        self.assertTrue(report['samples'][0]['sent'])
+        self.assertIsNotNone(report['samples'][0]['serviceMs'])
+        self.assertFalse(report['samples'][1]['sent'])
+        self.assertIsNone(report['samples'][1]['serviceMs'])
         self.assertTrue(all(row['latencyCensored'] for row in report['samples']))
 
     def test_run_budget_stops_admissions_without_dropping_planned_work(self):
