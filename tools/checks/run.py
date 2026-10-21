@@ -1,12 +1,14 @@
 """Fail-closed local verification. All Java counts come from fresh JUnit XML."""
 import argparse
 import fnmatch
+import json
 import pathlib
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+PYTHON_SUITE = pathlib.Path(__file__).with_name("python_suite.py")
 
 def execute(command, cwd, reports):
     """Remove stale reports, run the command, and require executed passing tests."""
@@ -99,29 +101,45 @@ def web_tests(group, selector="*"):
     return execute(command, ROOT / "web", [report])
 
 def python_tests():
-    """Discover every currently delivered Python test directory, excluding dependency trees."""
+    """Use the reviewed accounting worker for every delivered Python test directory."""
     import os
     directories = set()
     for parent, children, files in os.walk(ROOT):
         children[:] = [name for name in children if name not in {"node_modules", ".git", ".tools", ".worktrees", "artifacts", "__pycache__", ".venv"}]
         if any(fnmatch.fnmatchcase(name, "test_*.py") for name in files):
             directories.add(pathlib.Path(parent))
-    if not directories:
-        print("FAIL: zero delivered Python test directories", file=sys.stderr)
-        return 1
-    # A fresh interpreter per directory avoids basename/module collisions across suites.
-    script = """import sys, unittest
-suite = unittest.defaultTestLoader.discover(sys.argv[1])
-result = unittest.TextTestRunner(verbosity=2).run(suite)
-print(f'Python executed={result.testsRun}, skipped={len(result.skipped)}', flush=True)
-raise SystemExit(0 if result.testsRun > 0 and result.wasSuccessful() and not result.skipped else 1)
-"""
-    for directory in sorted(directories):
-        result = subprocess.run([sys.executable, "-c", script, str(directory)], cwd=ROOT, check=False)
-        if result.returncode:
-            return result.returncode if result.returncode > 0 else 1
-    print(f"PASS: Python test directories={len(directories)}", flush=True)
-    return 0
+    # Preserve the worker's fail-closed missing/empty-discovery behavior on a fresh checkout.
+    directories = sorted(directories) or [ROOT / "tools/checks/tests"]
+    report = ROOT / "artifacts/checks/python.json"
+    report.parent.mkdir(parents=True, exist_ok=True)
+    report.unlink(missing_ok=True)
+    log = report.with_suffix(".log")
+    totals = dict(discovered=0, executed=0, failed=0, skipped=0)
+    evidence = []
+    result = None
+    status = 0
+    try:
+        with log.open("w") as output:
+            for index, directory in enumerate(directories):
+                fresh = report if len(directories) == 1 else report.with_name(f"python-{index}.json")
+                fresh.unlink(missing_ok=True)
+                result = subprocess.run([sys.executable, str(PYTHON_SUITE), str(directory), str(fresh)], cwd=ROOT, stdout=output, stderr=subprocess.STDOUT, check=False)
+                counts = json.loads(fresh.read_text())
+                for key in totals:
+                    totals[key] += int(counts[key])
+                evidence.append({"directory": str(directory.relative_to(ROOT)), "report": str(fresh), **counts})
+                passed = result.returncode == 0 and int(counts["executed"]) > 0 and int(counts["failed"]) == 0 and int(counts["skipped"]) == 0
+                if not passed and not status:
+                    status = result.returncode if result.returncode > 0 else 1
+        if len(directories) > 1:
+            report.write_text(json.dumps({**totals, "directories": evidence}, indent=2) + "\n")
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        print(f"FAIL: invalid or missing fresh Python evidence: {error}; evidence={report}; log={log}", file=sys.stderr)
+        return result.returncode if result is not None and result.returncode > 0 else 1
+    passed = status == 0 and totals["executed"] > 0 and totals["failed"] == 0 and totals["skipped"] == 0
+    print(f"{'PASS' if passed else 'FAIL'}: Python executed={totals['executed']}, failed={totals['failed']}, skipped={totals['skipped']}; directories={len(directories)}; evidence={report}; log={log}", flush=True)
+    return status if status else 0 if passed else 1
+
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
