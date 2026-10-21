@@ -4,7 +4,7 @@
   "branch": "codex/phase-b-storage-selection",
   "scope": "DB-free local selected-manifest correction; pending independent review; not whole B-04 or HA qualification",
   "environment": "Pinned phase-a/.tools/env.sh; WSL2/ext4; actual loopback mTLS/native files/process kills",
-  "runner_admission": "Existing controlled fixture env sourced only for canonical guard; no SQL or DB tests executed",
+  "runner_admission": "Existing controlled MySQL fixture env sourced only for canonical guard; no connection to or SQL/reset/migration/other operation on that fixture and no public business MySQL integration tests; existing reactor units include their own H2 TCP readiness/outage test and deliberately unavailable loopback MySQL endpoint probe",
   "commands": {
     "red-contract": "python3 tools/checks/run.py it FileStorageContractIT#localMultipartCompletionSelectsSuppliedReceipts",
     "red-durability": "python3 tools/checks/run.py it LocalDurabilityIT#multipartSelectedPartsAndCompletedResultSurviveActualProcessKill+fullHashMismatchDoesNotPoisonCompletionRetry",
