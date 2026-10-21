@@ -2,6 +2,7 @@ package ama.storage;
 
 import ama.contract.FileContracts.*;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.*;
@@ -51,31 +52,61 @@ public final class FileBackendCatalog {
             var existing =
                     j.queryForList(
                             "SELECT storage_type,config_revision,status FROM storage_backend WHERE"
-                                + " id=?",
+                                    + " id=?",
                             b.id());
-            if (existing.isEmpty())
-                j.update(
-                        "INSERT INTO storage_backend(id,storage_type,status,config_revision) VALUES"
-                            + " (?,?,?,?)",
-                        b.id(),
-                        b.type(),
-                        b.status(),
-                        b.revision());
-            else {
+            if (existing.isEmpty()) {
+                try {
+                    j.update(
+                            "INSERT INTO storage_backend(id,storage_type,status,config_revision)"
+                                + " VALUES (?,?,?,?)",
+                            b.id(),
+                            b.type(),
+                            b.status(),
+                            b.revision());
+                    continue;
+                } catch (DuplicateKeyException concurrentRegistration) {
+                    // Another node may have accepted this exact definition after our empty read.
+                    // Re-read and validate; a duplicate never authorizes overwriting its meaning.
+                    existing =
+                            j.queryForList(
+                                    "SELECT storage_type,config_revision,status FROM"
+                                        + " storage_backend WHERE id=?",
+                                    b.id());
+                    if (existing.size() != 1) throw concurrentRegistration;
+                }
+            }
+            {
                 var old = existing.getFirst();
                 long rev = ((Number) old.get("config_revision")).longValue();
                 if (!b.type().equals(old.get("storage_type"))
                         || rev > b.revision()
                         || (rev == b.revision() && !b.status().equals(old.get("status"))))
                     throw new IllegalStateException("Backend configuration revision mismatch");
-                if (rev < b.revision())
-                    j.update(
-                            "UPDATE storage_backend SET status=?,config_revision=? WHERE id=? AND"
-                                + " config_revision=?",
-                            b.status(),
-                            b.revision(),
-                            b.id(),
-                            rev);
+                if (rev < b.revision()) {
+                    int changed =
+                            j.update(
+                                    "UPDATE storage_backend SET status=?,config_revision=? WHERE"
+                                        + " id=? AND config_revision=?",
+                                    b.status(),
+                                    b.revision(),
+                                    b.id(),
+                                    rev);
+                    if (changed != 1) {
+                        var current =
+                                j.queryForList(
+                                        "SELECT storage_type,config_revision,status FROM"
+                                            + " storage_backend WHERE id=?",
+                                        b.id());
+                        if (current.size() != 1
+                                || !b.type().equals(current.getFirst().get("storage_type"))
+                                || b.revision()
+                                        != ((Number) current.getFirst().get("config_revision"))
+                                                .longValue()
+                                || !b.status().equals(current.getFirst().get("status")))
+                            throw new IllegalStateException(
+                                    "Backend configuration changed concurrently");
+                    }
+                }
             }
         }
     }
@@ -105,7 +136,7 @@ public final class FileBackendCatalog {
         var row =
                 j.queryForList(
                         "SELECT storage_type,config_revision,status FROM storage_backend WHERE"
-                            + " id=?",
+                                + " id=?",
                         id);
         if (row.size() != 1
                 || !b.type().equals(row.getFirst().get("storage_type"))
