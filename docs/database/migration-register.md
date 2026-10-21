@@ -27,7 +27,7 @@
 |V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|来源 f5b4495+0e8f698 → 集成751d31c+95a264e；冻结f36…；独立复审支持新建确认空白fixture限定采用，历史偏差保留|
 |V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|来源39b447d → 集成bec9393；SHA859970b8…冻结；前置实现独立评审通过，正例/隔离拒绝证据已保全；完整B02授权切换待V008|
 |V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|来源ff22197 → 集成dac4cc1；SHAfa44424a…冻结，结构前置独立Approved0findings；正例与两类拒绝已保全，完整B03/B02授权仍OPEN|
-|V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|预留，未编写；上传补充设计门已通过|
+|V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|最终候选SHA79f04898…已根核对/预应用冻结；尚未执行/实现评审，等待受控正式测试|
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|预留，未编写|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|预留，未编写|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
@@ -104,3 +104,9 @@ R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑�
 实际结构6、隔离拒绝1+1、Foundation正常路径13、IdentityAccess18、后端单元28全部0failure/error/skip；首升级1与结构6重叠不重复计数。45原始证据及SHA清单已核对/保全于 `artifacts/phase-b/b03-schema/`。未重复原V006破坏失败history的参数负例，历史IdentityMigrationIT的latest007假定未运行且另行修正显式target007，绝不把未选测试计通过。见 [实施报告](../acceptance/b/meeting-schema-prerequisite-implementation-report.md)、[独立审查](../acceptance/b/meeting-schema-prerequisite-independent-review.md)。
 
 仅解锁V009结构依赖，完整B03会议业务/版本/幂等/投影/subject/outbox和B02对象授权待V010后实施评审；不启用业务写，不创造旧ACL来源，不批准实际有数据安装升级或公司生产环境。此次机械集成只验证字节与范围，未重复已通过且未改变的测试，未操作数据库。
+
+## V009 首次正式应用前冻结（2026-10-22）
+
+拥有者 `phase-b-file-schema`，文件 `V009__file_schema.sql`，SHA256 **`79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d`**，7239bytes。协调者已完整读取文件、重新计算SHA，并程序核对六CREATE及9FK与已审B00-1.2审阅DDL对应块逐字节一致；仅部署注释/SET是前置，不含seed/额外表/IF NOT EXISTS。原冻结低集合不变；V008已独立采用，见2a569eb。
+
+作者已在新独有确认空白 `ama-test-b01-204cc11baabc:45041` 执行已审低集合到008，报告六表missing真实RED1failure/0error/0skip并保留低集合快照。较早helper路径错误另存不算RED。当前V009未执行、未实施评审；此处仅完成首次正式应用前冻结及受控执行依赖门，不提前验收。此次共享后的字节永久冻结；任何修正先由协调者登记有序新版本，不改此SQL或repair。正式执行checksum/history/meta/回归/独立评审待另行登记。
