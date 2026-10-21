@@ -1,0 +1,40 @@
+{
+  "tests": 11,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "full_after_upgrade_equals_after_tests": true,
+  "metadata": {
+    "tables": {
+      "expected": 8,
+      "actual": 8,
+      "equal": true
+    },
+    "columns": {
+      "expected": 63,
+      "actual": 63,
+      "equal": true
+    },
+    "indexes": {
+      "expected": 39,
+      "actual": 39,
+      "equal": true
+    },
+    "checks": {
+      "expected": 13,
+      "actual": 13,
+      "equal": true
+    },
+    "foreign_keys": {
+      "expected": 22,
+      "actual": 22,
+      "equal": true
+    }
+  },
+  "selected_unit_tests": 0,
+  "production_latest_rerun": 0,
+  "historical_group_rerun": 0,
+  "overall": "AUTHOR_FUNCTIONAL_GREEN_INDEPENDENT_REVIEW_REQUIRED",
+  "original_v011_suite": "11 tests, 1 metadata failure, retained without alteration",
+  "schema_group_target": "011.1"
+}

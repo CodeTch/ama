@@ -1,0 +1,158 @@
+-- REVIEW-ONLY PREPARATION. OUTSIDE FLYWAY. NOT FROZEN OR AUTHORIZED FOR APPLICATION.
+-- Exact adopted eight CREATE statements, then 21 deployed FKs; material FK deferred to V017.
+-- No database execution is permitted before root formal resumption and freeze SHA ACK.
+
+CREATE TABLE input_batch (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `input_fingerprint` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `base_revision` bigint unsigned NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT ck_input_batch_0 CHECK (kind IN ('TRANSCRIPT','MEDIA'))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE input_batch_file (
+  `batch_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `ordinal` bigint unsigned NOT NULL,
+  `file_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `sha256` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  PRIMARY KEY (batch_id,ordinal),
+  UNIQUE INDEX batch_file_unique (batch_id,file_id),
+  CONSTRAINT ck_input_batch_file_0 CHECK (ordinal > 0)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE speaker (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `display_name` longtext NOT NULL,
+  `enterprise_id` varchar(255) COLLATE utf8mb4_0900_bin NULL,
+  `identity_source` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `merged_into_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `revision` bigint unsigned NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT ck_speaker_0 CHECK (identity_source IN ('ANONYMOUS','HUMAN','VOICE_CANDIDATE'))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE transcript_confirmation (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `content_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `confirmed_by` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `confirmed_at` datetime(6) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX transcript_confirm_once (meeting_id,revision_id)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE transcript_revision (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `revision` bigint unsigned NOT NULL,
+  `kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `batch_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `parent_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `input_fingerprint` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `created_by` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `processing_input_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `producer_task_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX transcript_history (meeting_id,revision),
+  CONSTRAINT ck_transcript_revision_0 CHECK (kind IN ('RAW','ENHANCED','WORKING','CANDIDATE'))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE transcript_segment (
+  `revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `segment_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `ordinal` bigint unsigned NOT NULL,
+  `body` longtext NOT NULL,
+  `source_file_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `source_paragraph` bigint unsigned NULL,
+  `start_ms` bigint unsigned NULL,
+  `end_ms` bigint unsigned NULL,
+  `speaker_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  PRIMARY KEY (revision_id,segment_id),
+  UNIQUE INDEX segment_order (revision_id,ordinal),
+  CONSTRAINT ck_transcript_segment_0 CHECK ((start_ms IS NULL AND end_ms IS NULL) OR (start_ms IS NOT NULL AND end_ms IS NOT NULL AND end_ms >= start_ms))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE transcript_segment_mark (
+  `revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `segment_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `mark` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  PRIMARY KEY (revision_id,segment_id,mark),
+  CONSTRAINT ck_transcript_segment_mark_0 CHECK (mark IN ('KEY','CONCLUSION','DISPUTE','GENERATION_FOCUS'))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+CREATE TABLE transcription_input (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `batch_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `source_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `material_snapshot_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `material_mode` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `processing_config_version` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `parser_version` varchar(255) COLLATE utf8mb4_0900_bin NULL,
+  `model_config_version` varchar(255) COLLATE utf8mb4_0900_bin NULL,
+  `prompt_version` varchar(255) COLLATE utf8mb4_0900_bin NULL,
+  `manifest_schema_version` int unsigned NOT NULL,
+  `config_manifest` longtext NOT NULL,
+  `input_fingerprint` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `base_revision` bigint unsigned NOT NULL,
+  `cancel_epoch` bigint unsigned NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (id),
+  INDEX transcription_input_history (meeting_id,created_at,id),
+  CONSTRAINT ck_transcription_input_0 CHECK (kind IN ('IMPORT','ASR','ENHANCE')),
+  CONSTRAINT ck_transcription_input_1 CHECK (material_mode IN ('EMPTY','PINNED')),
+  CONSTRAINT ck_transcription_input_2 CHECK ((material_mode='EMPTY' AND material_snapshot_id IS NULL) OR (material_mode='PINNED' AND material_snapshot_id IS NOT NULL)),
+  CONSTRAINT ck_transcription_input_3 CHECK (kind <> 'ENHANCE' OR source_revision_id IS NOT NULL),
+  CONSTRAINT ck_transcription_input_4 CHECK (kind <> 'IMPORT' OR parser_version IS NOT NULL),
+  CONSTRAINT ck_transcription_input_5 CHECK (kind='IMPORT' OR model_config_version IS NOT NULL),
+  CONSTRAINT ck_transcription_input_6 CHECK (manifest_schema_version > 0)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+ALTER TABLE input_batch ADD CONSTRAINT fk_input_batch_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE input_batch_file ADD CONSTRAINT fk_input_batch_file_0 FOREIGN KEY (batch_id) REFERENCES input_batch (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE input_batch_file ADD CONSTRAINT fk_input_batch_file_1 FOREIGN KEY (file_id) REFERENCES file_object (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_revision ADD CONSTRAINT fk_transcript_revision_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_revision ADD CONSTRAINT fk_transcript_revision_1 FOREIGN KEY (batch_id) REFERENCES input_batch (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_revision ADD CONSTRAINT fk_transcript_revision_2 FOREIGN KEY (parent_id) REFERENCES transcript_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_revision ADD CONSTRAINT fk_transcript_revision_3 FOREIGN KEY (processing_input_id) REFERENCES transcription_input (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_revision ADD CONSTRAINT fk_transcript_revision_4 FOREIGN KEY (producer_task_id) REFERENCES durable_task (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_segment ADD CONSTRAINT fk_transcript_segment_0 FOREIGN KEY (revision_id) REFERENCES transcript_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_segment ADD CONSTRAINT fk_transcript_segment_1 FOREIGN KEY (source_file_id) REFERENCES file_object (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_segment ADD CONSTRAINT fk_transcript_segment_2 FOREIGN KEY (speaker_id) REFERENCES speaker (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_confirmation ADD CONSTRAINT fk_transcript_confirmation_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_confirmation ADD CONSTRAINT fk_transcript_confirmation_1 FOREIGN KEY (revision_id) REFERENCES transcript_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_confirmation ADD CONSTRAINT fk_transcript_confirmation_2 FOREIGN KEY (confirmed_by) REFERENCES enterprise_identity (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE speaker ADD CONSTRAINT fk_speaker_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE speaker ADD CONSTRAINT fk_speaker_1 FOREIGN KEY (enterprise_id) REFERENCES enterprise_identity (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE speaker ADD CONSTRAINT fk_speaker_2 FOREIGN KEY (merged_into_id) REFERENCES speaker (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcription_input ADD CONSTRAINT fk_transcription_input_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcription_input ADD CONSTRAINT fk_transcription_input_1 FOREIGN KEY (batch_id) REFERENCES input_batch (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcription_input ADD CONSTRAINT fk_transcription_input_2 FOREIGN KEY (source_revision_id) REFERENCES transcript_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_segment_mark ADD CONSTRAINT fk_transcript_segment_mark_0 FOREIGN KEY (revision_id,segment_id) REFERENCES transcript_segment (revision_id,segment_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
