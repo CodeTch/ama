@@ -28,7 +28,7 @@
 |V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|来源39b447d → 集成bec9393；SHA859970b8…冻结；前置实现独立评审通过，正例/隔离拒绝证据已保全；完整B02授权切换待V008|
 |V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|来源ff22197 → 集成dac4cc1；SHAfa44424a…冻结，结构前置独立Approved0findings；正例与两类拒绝已保全，完整B03/B02授权仍OPEN|
 |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|来源45715b6+fd3c3d8 → 集成1a00ca4；SHA79f04898…冻结，结构前置独立Approved0findings/95已选用例通过；完整B04仍OPEN|
-|V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|预留，未编写|
+|V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|候选03e89cc8…已共享冻结；正式应用及完整并发实现评审待完成|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|预留，未编写|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
 |V013|B-08|原V008|final_confirmation、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
@@ -120,3 +120,13 @@ R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑�
 最终schema8/Foundation正常13/local contract7/local durability39/Java units28均0failure/error/skip，95不同已选用例；重复首成功8和附带单元不重加。55原始证据及SHA清单保留在 `artifacts/phase-b/b04-schema/`，完整独立核对通过；源/raw报告另存 `b04-schema-coordinator-reports/` 以保全换行前原始字节。见 [实施报告](../acceptance/b/file-schema-implementation-report.md)、[独立审查](../acceptance/b/file-schema-independent-review.md)。
 
 仅解锁V010结构依赖；公共注册/权限/回执冻结/文件先持久化再DB登记、孤儿不可读及引用epoch清理、双后端闭环、完整B03/B04与生产写入仍OPEN。不重复已通过未改变的测试来制造集成通过，也未在此机械集成操作数据库。
+
+## V010 首次正式应用前冻结（2026-10-22）
+
+拥有者 `phase-b-tasks`，文件 `V010__reliable_execution.sql`，SHA256 **`03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db`**，35136bytes/225lines。协调者已完整读取SQL并重新计算SHA；程序解码全部五组hex JSON预检，与先前已独立采用的B04低集合历史快照逐项核对：6表/33列/16索引列/4CHECK/4FK列完全一致。单独标记的raw-review-only sandbox `ama-test-b01-5833aa5fe461:45009` 设计实测十表/91列/43索引列/16CHECK/10FK列与B00-1.2独立完整元数据子集相等；它没有正式V010 history，原raw候选及哈希/过程保留，不改称正式应用。
+
+正式脚本在所有永久DDL之前验证完整已审低版本history、旧task/outbox/reservation/capacity为空、outbox序列恰为(1,1)、保留subject只对应当前ACTIVE且version/epoch精确匹配的MEETING；精确结构预检拒绝漂移/额外目标表。只对已证空表删除旧列并增量ALTER，不DROP整个旧表、不猜输入/额度、不重置序列或fabricate旧来源。新建四表并建立已部署FK；多语句DDL并非整体可回滚，失败须保全history/schema后单独审阅前滚恢复。
+
+本次只允许该精确冻结候选在拥有者新建、独立所有、先确认空白且按001→002→005→006→007→008→009成功顺序初始化的拟正例 `127.0.0.1:45979`（精确容器名须拥有者执行前捕获核对）及后续明确独有受控fixture验证；正式首次执行时间、checksum、history/前后元数据与行为回归另登记。拟正例已报告只执行temporary preflight成功、没有永久V010 DDL。本记录不提前验收实现/消费者或开启生产业务写。若容器名与实际不符，以拥有者捕获的精确身份更新后才执行，不凭端口认领。
+
+从此次共享起字节永久冻结；任何缺陷先由协调者统一登记有序新版本，不修改此文件、repair或重置失败history。当前主机AIO资源耗尽下，新独有功能SQL fixture的process-local native-AIO-off例外须记录实际参数和@@值，仅证明功能，不代表原I/O或100录音/300在线容量资格。完整B05并发/崩溃/模型占额/Outbox独立评审仍OPEN。
