@@ -4,6 +4,7 @@ import ama.contract.AuditContracts.AuditEvent;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -31,7 +32,7 @@ public final class JdbcAuditAdapter implements AuditPort {
             }
             jdbc.update("INSERT INTO audit_event(actor_id, action, resource_id, revision, result, trace_id, occurred_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     event.actorId(), event.action(), event.resourceId(), event.revision(), event.result(),
-                    event.traceId(), LocalDateTime.ofInstant(event.time(), ZoneOffset.UTC));
+                    event.traceId(), LocalDateTime.ofInstant(event.time().truncatedTo(ChronoUnit.MICROS), ZoneOffset.UTC));
         } catch (SQLException failure) {
             throw new IllegalStateException("Audit transaction connection unavailable", failure);
         } finally {
