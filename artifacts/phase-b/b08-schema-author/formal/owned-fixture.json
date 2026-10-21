@@ -1,0 +1,42 @@
+{
+  "created_utc" : "2026-10-21T21:39:36.876604+00:00",
+  "run_arguments" : [ "run", "--cpus=2", "--memory=1g", "--memory-swap=1g", "--pids-limit=256", "-d", "--name", "ama-test-b01-ee4d94105bb9", "--label", "ama.test-fixture=b01", "--publish", "127.0.0.1::3306", "--env-file", "/home/tanren/ama/.worktrees/phase-b-publication-schema/.tools/mysql-fixture/ama-test-b01-ee4d94105bb9/mysql.env", "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_0900_ai_ci", "--default-time-zone=+00:00", "--innodb-use-native-aio=OFF" ],
+  "name" : "ama-test-b01-ee4d94105bb9",
+  "inspection" : {
+    "id" : "45e74f283bd96e71a876a303ffede564306d77da91b54fc7e73b2ec0a1bef36d",
+    "name" : "/ama-test-b01-ee4d94105bb9",
+    "image" : "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "image_id" : "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "label" : "b01",
+    "args" : [ "--character-set-server=utf8mb4", "--collation-server=utf8mb4_0900_ai_ci", "--default-time-zone=+00:00", "--innodb-use-native-aio=OFF" ],
+    "ports" : {
+      "3306/tcp" : [ {
+        "HostIp" : "127.0.0.1",
+        "HostPort" : "46539"
+      } ]
+    },
+    "mounts" : [ {
+      "Destination" : "/var/lib/mysql",
+      "Driver" : "local",
+      "Mode" : "",
+      "Name" : "37d9b14978c5c440df3af572caf8a5b780c7968bb8a683d8ac1374598f3f8134",
+      "Propagation" : "",
+      "RW" : true,
+      "Source" : "/var/lib/docker/volumes/37d9b14978c5c440df3af572caf8a5b780c7968bb8a683d8ac1374598f3f8134/_data",
+      "Type" : "volume"
+    } ],
+    "auto_remove" : false,
+    "nano_cpus" : 2000000000,
+    "memory" : 1073741824,
+    "memory_swap" : 1073741824,
+    "pids_limit" : 256
+  },
+  "mysql_version" : "8.4.6",
+  "initial_table_count" : 0,
+  "innodb_use_native_aio" : 0,
+  "server_utc" : "2026-10-21 21:39:57.977945",
+  "server_epoch" : 1792618797,
+  "session_time_zone" : "+00:00",
+  "credential_file_exported" : false,
+  "purpose" : "functional V013 schema only; no native IO/capacity/HA qualification"
+}
