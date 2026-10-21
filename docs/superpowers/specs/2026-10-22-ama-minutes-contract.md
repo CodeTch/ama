@@ -20,3 +20,10 @@
 实施门：S1 独立作者只实现上述纯类型/codec/catalog/hash/JSON 与有意义测试，不接 DB、文件解析器、模型、网络、Spring bean、Worker、ACL、采用/最终确认流程。所有 supplied-fact 图检查必须有预算、取消和环检测。不得复制不存在的 evidence.input_id、添加 manifest/profile 列或 JSON 附件类型。正式 SQL 单独按照 B00-1.3/V012 审查，不由本记录启用。
 
 两个用户交互选择（首结果自动保存或显式采用、逐项或合并核对）仍 pending，任何推荐项不作默认启用。真实模型协议/质量、配置档案、来源权限、CAS/fence/事务/归档恢复、B08/公司/运维资格仍待后续证明。纯 S1 实现还须 TDD、实际回归及 fresh 独立 SPEC/quality 后才采用代码。
+
+
+## 已采用的恢复格式补充与表数组展开
+
+[配置格式补充](2026-10-22-ama-config-wire-contract.md)已独立PASS并采用，只补raw archive/manifest和恢复链的精确格式。其draft compute与stored verify规则适用于接线，原六域内容语义不变，新增TRANSCRIPTION_INPUT纯域不对应DB新kind。
+
+对原ROWSET表项约定的具体展开：FINAL_SOURCES.directoryRows和exclusionRows直接为按表名排序的[{name,rows}]，不再额外包{tables}。directoryRows恰为五个目录/建议表；exclusionRows恰为exclusion_revision和sensitive_exclusion，空rows仍显式存在，各表行按完整PK排序。单表evidenceRows/reviewRows/reviewEvidenceRows/finalReviewRows保持直接FullRow数组。这是实现和独立向量须一致遵循的展开，不改旧原稿字节。
