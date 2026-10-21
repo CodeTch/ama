@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-provenance-design/artifacts/phase-b/b00-provenance-design/design_validation.py", line 36, in <module>
+    entries=immutable['files'] if isinstance(immutable,dict) else immutable
+            ~~~~~~~~~^^^^^^^^^
+KeyError: 'files'

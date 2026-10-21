@@ -1,4 +1,4 @@
--- B00-1.3-review: REVIEW ONLY; never place this file in Flyway locations.
+-- B00-1.4-proposed: REVIEW ONLY; never place this file in Flyway locations.
 
 -- All future tables exist ONLY in the disposable review database.
 
@@ -604,8 +604,10 @@ CREATE TABLE minutes_element (
   `ordinal` bigint unsigned NOT NULL,
   `body` longtext NOT NULL,
   `support_state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `source_context_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
   PRIMARY KEY (id),
   UNIQUE INDEX element_order (set_id,category,ordinal),
+  INDEX minutes_element_context (source_context_id,id),
   CONSTRAINT ck_minutes_element_0 CHECK (category IN ('OVERVIEW','DISCUSSION','CONCLUSION','ACTION','RISK','OPEN_QUESTION','DISAGREEMENT')),
   CONSTRAINT ck_minutes_element_1 CHECK (support_state IN ('SUPPORTED','PARTIAL','UNSUPPORTED','NOT_EXTRACTED'))
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
@@ -692,9 +694,11 @@ CREATE TABLE evidence_link (
   `minutes_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
   `support_state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `target_anchor` longtext NOT NULL,
+  `source_context_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
   PRIMARY KEY (id),
   INDEX evidence_element (element_id,locator_id),
   INDEX evidence_minutes (minutes_revision_id,locator_id),
+  INDEX evidence_link_context (source_context_id,id),
   CONSTRAINT ck_evidence_link_0 CHECK ((element_id IS NULL) <> (minutes_revision_id IS NULL)),
   CONSTRAINT ck_evidence_link_1 CHECK (support_state IN ('SUPPORTED','PARTIAL','UNSUPPORTED'))
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
@@ -1464,6 +1468,50 @@ CREATE TABLE final_result_review (
   INDEX final_review_reverse (review_id,confirmation_id)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
+-- Owner D-01/B-07; planned UNASSIGNED-D01: 不可变完整来源选择；生成与人工选择显式分型
+
+CREATE TABLE source_context (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `origin_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `generation_input_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `transcript_confirmation_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `material_snapshot_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `catalog_version` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `catalog_sha256` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX context_generation (generation_input_id),
+  INDEX context_meeting (meeting_id,id),
+  CONSTRAINT ck_source_context_0 CHECK (origin_kind IN ('GENERATION_INPUT','MANUAL_SELECTION')),
+  CONSTRAINT ck_source_context_1 CHECK ((origin_kind='GENERATION_INPUT' AND generation_input_id IS NOT NULL) OR (origin_kind='MANUAL_SELECTION' AND generation_input_id IS NULL)),
+  CONSTRAINT ck_source_context_2 CHECK (REGEXP_LIKE(catalog_sha256, '^[0-9a-f]{64}$', 'c'))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner D-01/B-07; planned UNASSIGNED-D01: 上下文内每个材料版本唯一明确选择解析文档
+
+CREATE TABLE source_context_material (
+  `context_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `material_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `parsed_document_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  PRIMARY KEY (context_id,material_revision_id),
+  INDEX selection_document (parsed_document_id,context_id),
+  INDEX selection_material (material_revision_id,context_id)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner D-01; planned UNASSIGNED-D01: 解析文档的明确格式及不可变解析配置归档引用
+
+CREATE TABLE parsed_document_profile (
+  `document_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `format` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `parser_config_version` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `parser_config_sha256` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  PRIMARY KEY (document_id),
+  INDEX profile_parser (parser_config_version,document_id),
+  CONSTRAINT ck_parsed_document_profile_0 CHECK (format IN ('PDF','PPT','WORD','TXT')),
+  CONSTRAINT ck_parsed_document_profile_1 CHECK (REGEXP_LIKE(parser_config_sha256, '^[0-9a-f]{64}$', 'c'))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
 ALTER TABLE department ADD CONSTRAINT fk_department_0 FOREIGN KEY (parent_id) REFERENCES department (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE enterprise_identity ADD CONSTRAINT fk_enterprise_identity_0 FOREIGN KEY (department_id) REFERENCES department (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
@@ -1578,6 +1626,8 @@ ALTER TABLE element_set ADD CONSTRAINT fk_element_set_0 FOREIGN KEY (meeting_id)
 
 ALTER TABLE minutes_element ADD CONSTRAINT fk_minutes_element_0 FOREIGN KEY (set_id) REFERENCES element_set (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
+ALTER TABLE minutes_element ADD CONSTRAINT fk_minutes_element_1 FOREIGN KEY (source_context_id) REFERENCES source_context (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
 ALTER TABLE action_item ADD CONSTRAINT fk_action_item_0 FOREIGN KEY (element_id) REFERENCES minutes_element (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE action_item ADD CONSTRAINT fk_action_item_1 FOREIGN KEY (owner_enterprise_id) REFERENCES enterprise_identity (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
@@ -1611,6 +1661,8 @@ ALTER TABLE evidence_link ADD CONSTRAINT fk_evidence_link_0 FOREIGN KEY (locator
 ALTER TABLE evidence_link ADD CONSTRAINT fk_evidence_link_1 FOREIGN KEY (element_id) REFERENCES minutes_element (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE evidence_link ADD CONSTRAINT fk_evidence_link_2 FOREIGN KEY (minutes_revision_id) REFERENCES minutes_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE evidence_link ADD CONSTRAINT fk_evidence_link_3 FOREIGN KEY (source_context_id) REFERENCES source_context (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE final_confirmation ADD CONSTRAINT fk_final_confirmation_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
@@ -1855,5 +1907,21 @@ ALTER TABLE result_review_evidence ADD CONSTRAINT fk_result_review_evidence_1 FO
 ALTER TABLE final_result_review ADD CONSTRAINT fk_final_result_review_0 FOREIGN KEY (confirmation_id) REFERENCES final_confirmation (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE final_result_review ADD CONSTRAINT fk_final_result_review_1 FOREIGN KEY (review_id) REFERENCES result_review (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE source_context ADD CONSTRAINT fk_source_context_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE source_context ADD CONSTRAINT fk_source_context_1 FOREIGN KEY (generation_input_id) REFERENCES generation_input (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE source_context ADD CONSTRAINT fk_source_context_2 FOREIGN KEY (transcript_confirmation_id) REFERENCES transcript_confirmation (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE source_context ADD CONSTRAINT fk_source_context_3 FOREIGN KEY (material_snapshot_id) REFERENCES material_snapshot (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE source_context_material ADD CONSTRAINT fk_source_context_material_0 FOREIGN KEY (context_id) REFERENCES source_context (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE source_context_material ADD CONSTRAINT fk_source_context_material_1 FOREIGN KEY (material_revision_id) REFERENCES material_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE source_context_material ADD CONSTRAINT fk_source_context_material_2 FOREIGN KEY (parsed_document_id) REFERENCES parsed_document (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE parsed_document_profile ADD CONSTRAINT fk_parsed_document_profile_0 FOREIGN KEY (document_id) REFERENCES parsed_document (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 INSERT INTO task_outbox_sequence(id,next_id) VALUES(1,1);

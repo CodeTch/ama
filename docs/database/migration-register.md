@@ -224,3 +224,7 @@ root独立从actual1.3metadata a6c758d4…过滤验证oracle d051aaa9…；目�
 完整来源7f061e8a..d9428eeb包含准备及最终两项提交，fresh 独立 SPEC PASS/技术质量 APPROVED、0P0—P3；协调者完整阅读后归集 ee0bcd2/9bb6fe2，追加协调说明前95路径逐字节相同。SQL7661B/SHA1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c/checksum-847352333保持冻结，十八条外键、唯一延后材料索引和双成员外键不变。实际5/42/30/4/18、10IT零失败，旧行/DDL/五组元数据/十一项history前缀保留，private013/latest各零增量。中央冻结epoch1792619280 < ACK21:48:36.027422 < 首次应用epoch1792619379，原始证据不改。详见[采用记录](../acceptance/b/publication-schema-adoption.md)和[独立审查](../acceptance/b/publication-schema-independent-review.md)。
 
 只采用结构前置，不启用发布业务、公司接口或最终B验收。V017材料/来源设计、B06/B07/B08服务和两个交互门继续保留；后续版本所有权及下一新增整数V028不变，不修改任何已有SQL或失败history。
+
+## 2026-10-22 D01 provenance design proposal — no migration allocated
+
+B00-1.4-proposed adds source_context/source_context_material/parsed_document_profile and nullable minutes_element/evidence_link.source_context_id in the review-only complete-schema draft. [Detailed addendum](../superpowers/specs/2026-10-22-ama-material-provenance-addendum.md) and [actual isolated validation](../acceptance/b/database-material-provenance-addendum-review.md) require fresh independent SPEC/quality review before adoption. No new version is assigned; UNASSIGNED-D01 in the review draft is a design label, not a Flyway version. Root centrally allocates a compatible ordered forward correction after review. All formal001..013 including011.1 remain immutable. Existing reserved D01/V017 descriptions do not authorize editing/applying that version, out-of-order execution or runtime enablement.

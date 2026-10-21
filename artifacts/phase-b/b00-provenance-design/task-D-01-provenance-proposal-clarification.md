@@ -1,0 +1,57 @@
+# D01 provenance proposal clarification — normative delta 1
+
+2026-10-22. Overrides only the points below in proposal SHA `f8d6236c8d324630959e72a3f00cc312bf97273abba573fc9649164944753fc5`; that original remains byte-identical. Still DESIGN ONLY; no sandbox DDL, formal migration or runtime activation has occurred. Three relations/two nullable context columns remain the proposed schema.
+
+## 1. Domain-specific origins: no current-input fingerprint in its own preimage
+
+The proposal's shorthand “each usage carries generationInputFingerprint” applies to **saved historical input usages**, not to the current input being computed. Exact domain dispatch is:
+
+|Domain|Source graph scope|Generated origin projection|
+|---|---|---|
+|GENERATION_INPUT v3 current source catalog / own sourceContext|Current context raw row, complete parser selections/profiles, confirmed segment/source catalog and exclusions|No SourceUsage origin is emitted here. Current input ID and context ID are fixed references; its own fingerprint is absent, not NULL/wildcard/zero/placeholder.|
+|GENERATION_INPUT v3 PINNED elements.sourceGraph|Only previously saved input-set element evidence and directory memberships; no body evidence and **no applied exclusion usages**, as already specified by adopted fix1|`{kind:"SOURCE_CONTEXT",contextId,originKind,generationInputId,generationInputFingerprint}`. Generated origins must be **strictly earlier existing inputs**, never current input or any descendant. Compare each exact stored fingerprint only after independent verification under that historical input's own profile/fence. Manual origin generation fields are both NULL by its real tagged union.|
+|REVIEW_SOURCES v3|Exact saved target's complete evidence membership|Same six fields; all generated inputs are already stored and independently verified. No current-input-draft alternative is accepted.|
+|FINAL_SOURCES v3|All frozen body/set evidence, directories and applied exclusion usages|Same six fields; final body's generated context is already stored, so its exact saved input fingerprint is included. Recompute/verify that input first using the generation rule above; no final/review digest is a dependency of the generation digest.|
+
+In GENERATION_INPUT v3, both EMPTY and PINNED exclusion objects add required `appliedContextId` equal to the current sourceContext.row.id. EMPTY keeps its exact empty entry list; PINNED keeps its complete sorted `(locatorId,locator,category,reasonHash)` entries. This is the complete applied-context binding for the generation manifest: raw context row and parser selections are already included at top level. It does not embed a FINAL-style EXCLUSION SourceUsage or a current fingerprint. Exclusions must resolve in this current context's full catalog before computing the digest.
+
+For saved final hashing, construct EXCLUSION usages from each frozen exclusion PK and the final body's exact generated context. Their generationInputFingerprint is the already computed stored digest. Thus the directed dependency is generation raw context/selection/exclusion → generation digest → final exclusion usage/final digest, never a fixed point. Restoring/editing the saved body does not change this chain. An inherited set claiming the in-progress input ID as its origin is a cycle and fails INPUT_INVALID, even if a caller supplies a plausible digest.
+
+Zero-evidence element source_context_id values are explicit context roots of PINNED element/final closure, alongside usage-derived contexts. They never fabricate an EVIDENCE usage. Context closure must equal the union of those roots and the source context of each expected usage; selection rows/profile rows are complete for each reached context. REVIEW_SOURCES includes the reviewed element's basis context as a context root even if its evidence list is empty; SOURCE_SUPPORT cannot become SUPPORTED merely from that basis context.
+
+### Concrete nonempty-exclusion draft vector
+
+The attached complete synthetic GENERATION_INPUT v3 envelope has one confirmed transcript locator, one INTERNAL_BUSINESS_DATA exclusion and EMPTY materials/elements, with current input `10000000-0000-4000-8000-000000000003`, context `...0002`. It contains all 15 config profile refs and every adopted generation data field plus sourceContext/appliedContextId. It has **zero** inputFingerprint or generationInputFingerprint fields anywhere. Historical-set sourceGraph is absent because elements is explicitly EMPTY. Exclusion membership is nonempty, so this is not an empty-exclusion shortcut.
+
+- `task-D-01-provenance-draft-exclusion-vector.json`: exact typed envelope; SHA `cf92b5e0066edf40845977684e80de58895f43d25b13ec5361549edf7b02ecde`.
+- `task-D-01-provenance-draft-exclusion-vector.hex`: independent canonical bytes rendered as hex; 6,871 encoded bytes; hex-file SHA `cc90c587d0f30f27a84da6239ad660d3002e711859869dfe7a001eb57909ea73`.
+- Business digest from a standalone Python implementation of the adopted tag/u64be/UTF8 encoding: `015a3a30f9970d41ef3ac45209794c7a4367e494b53a4f314f6cd0f0d3728112`.
+
+These are projection/acyclicity vectors, not valid archive-binding fixtures: the configuration/content hashes are explicitly synthetic values. No real parser/task/ACL/model success is claimed. After acknowledgment the owned artifact will preserve the independent encoder and add perturbation/complete historical-context vectors. Stored verification compares the computed digest with the actual saved input/TaskSpec, but those values are never fed into draft compute.
+
+## 2. Several immutable parser versions of one format in one catalog
+
+Replace `formats:[{format,parser:Ref}]` with exact `bindings:[{format,parser:Ref}]`; a catalog definition is `{contract:"ama.material-catalog.v2",bindings:[Binding]}`. `version` is an arbitrary immutable archive Version (as parser selection is semantic configuration); definitionSchema/contract dispatch fixes the recognized algorithm. Two PDF bindings with parser P1 and parser P2 are legal in the same catalog. EMPTY bindings is valid only when there is no material selection.
+
+Binding identity is `(format,parser.artifactType,parser.version)` with artifactType exactly PARSER_CONFIG. Reject duplicates, same identity with conflicting SHA, or a parser archive whose declared format differs from binding.format. Bindings sort by unsigned UTF8 bytes of format, then unsigned UTF8 parser.version; SHA is never a tie-breaker that permits conflicting identities. Each unique parser Ref has one catalog dependency with exact slot `PARSER_SHA256_` + its 64 lowercase SHA hex digits (78 ASCII characters). Dependency objects themselves sort by their full ASCII slot strings, alongside the exact CANONICAL_CODEC slot. Recompute slot from the validated raw archive SHA; reject missing/extra/duplicate slots or mismatched refs. Slot strings are config-wire tokens, not database CODE values, so they are not silently truncated to64. No version string, URL, command or filename is encoded into a dependency slot.
+
+Each source_context_material selects one exact parsed_document. That document's parsed_document_profile supplies `(format,parser_config_version,parser_config_sha256)` and must match exactly one catalog binding and that archive's full recognized parser definition. There is no default parser by format and no query of all documents followed by newest/first selection. Every selected material document can use a different explicit binding. The complete graph includes all declared catalog dependencies, even if this particular snapshot does not use every supported binding; these are reachable dependencies, not unrelated extra archive roots.
+
+Concrete valid selection: snapshot S contains revisions RA for PDF file FA and RB for PDF file FB. Context C selects `(C,RA,DA)` where DA/profile=(PDF,P1,H1), and `(C,RB,DB)` where DB/profile=(PDF,P2,H2). C's catalog has both sorted bindings and both SHA-named dependency slots. Catalog enumerates all DA and DB units. FA/page1 and FB/page1 remain distinct physical locators; no reparse or latest lookup. A second context C2 may select a new parser output for RA while old C still selects DA. If selection references a parser binding absent from the catalog, fail PROFILE_UNAVAILABLE; missing selection fails PROVENANCE_UNAVAILABLE. Multiple unselected possible documents do not make a persisted exact selection ambiguous; ambiguity exists only while trying to resolve an absent/conflicting selection and cannot be repaired by collection order.
+
+The original same-full-physical-locator conflict rule within a single context remains separate from multiple-parser-per-format support. It is not triggered simply because two PDF files use two parser versions. Parsed-document selection is by exact PK, not `(format,parserVersion)` discovery.
+
+## 3. Directory edit coverage correction
+
+The original generated/copy-only wording was too narrow for **editing directory prose**, although it was intended to reject invented multi-origin synthesis. Original requirement module III §6.5 says edits preserve source relations; final prototype `AM_GROUPS.content.keys` includes `bg`, `amEntries` includes those paragraphs, and `amEditParagraph` changes text while preserving sources. These concrete operations are required and supported:
+
+|Directory operation|Persistent result and source rule|
+|---|---|
+|Edit background-note prose|Create new element_set and new background_note ID/body, copy each original source membership, preserve original input_id and therefore exact original context/parser selection; copy remaining directories. The input is the origin of the inherited source basis, **not a claim that the newly edited text was model-generated**. New body/row IDs enter rowset/final hashes. Mark body generation pending and clear final; no source-support credit is inferred.|
+|Sensitive select/unselect / select-all|Create new exclusion revision with exact complete physical/category pair set; directory rows/source memberships remain readable. The original note/detection source contexts are preserved; next input's context owns applied exclusion usage. No copied source excerpt is edited or persisted.|
+|Copy, partial replace, restore edited directories|New directory IDs/owner set, exact saved edited body and original input/membership contexts; generated replacement entries use their own new input. Identical prose is never a join key. Old rows remain immutable.|
+|Related materials edit|Add/remove/update explicit material references and create a new applied material snapshot per D01; this does not rewrite historical directory input/context or silently replace parser choices.|
+
+No confirmed source text is editable through the sensitive/source excerpt drawer. The cited requirement/prototype does not supply a separate operation that merges arbitrary origins into one background-note source membership set; such an invented synthesis is not needed to preserve the original edit behavior. Ordinary element/body evidence rebind remains fully supported by its per-evidence context, including ACTION independent of its old suggestion. If a future product operation adds manual directory **source replacement**, it must explicitly define its membership provenance before enabling that operation; prose editing and all existing required operations are not held behind it.
+
+All other original proposal boundaries remain unchanged. Root review/acknowledgment of this delta precedes any new review-only sandbox DDL; independent final SPEC/quality review still precedes formal schema or runtime use.

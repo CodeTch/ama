@@ -1,0 +1,1269 @@
+[
+  {
+    "table": "audit_event",
+    "columns": [
+      "id",
+      "actor_id",
+      "action",
+      "resource_id",
+      "revision",
+      "result",
+      "trace_id",
+      "occurred_at"
+    ],
+    "digest": "770b1a74c76b03cefe8206cb123366df82ca43b73d77ee1acef62403dadbf994"
+  },
+  {
+    "table": "department",
+    "columns": [
+      "enterprise_id",
+      "display_name",
+      "parent_id",
+      "verified_at"
+    ],
+    "digest": "081ace511b21b0ff515848fce05f8dd1947b247edbf0650973ec4500c56cea1c"
+  },
+  {
+    "table": "enterprise_identity",
+    "columns": [
+      "enterprise_id",
+      "display_name",
+      "department_id",
+      "status",
+      "session_generation",
+      "verified_at"
+    ],
+    "digest": "ee22dbee0d1f87df8684c72447eeae8723bd4c96d8ef59c493dfb7351eba4c97"
+  },
+  {
+    "table": "role_assignment",
+    "columns": [
+      "enterprise_id",
+      "role",
+      "assigned_at"
+    ],
+    "digest": "af87648218c805293fd677934d7a7464cea1730e4c1070469d0b01a8cb48a7ae"
+  },
+  {
+    "table": "identity_session",
+    "columns": [
+      "token_hash",
+      "enterprise_id",
+      "session_generation",
+      "csrf_token",
+      "issued_at",
+      "expires_at",
+      "revoked_at"
+    ],
+    "digest": "48b688187cf1ffd3bc6df57a8f565acb7bc21a88e1e1c42e31ad9475b67b7bd5"
+  },
+  {
+    "table": "meeting",
+    "columns": [
+      "id",
+      "owner_id",
+      "revision",
+      "cancel_epoch",
+      "access_revision",
+      "stage",
+      "lifecycle",
+      "governance_state",
+      "ever_published",
+      "info_revision_id",
+      "roster_revision_id",
+      "transcript_confirmation_id",
+      "minutes_revision_id",
+      "final_confirmation_id",
+      "actual_meeting_date",
+      "created_at",
+      "updated_at",
+      "transcript_revision_id",
+      "material_snapshot_id",
+      "template_revision_id",
+      "element_set_id",
+      "exclusion_revision_id",
+      "generation_fingerprint",
+      "needs_generation",
+      "materials_pending"
+    ],
+    "digest": "04144940593f71f4810434f3d8cfa6414651cd5c1dcf844bca4d4d64da25591d"
+  },
+  {
+    "table": "meeting_info_revision",
+    "columns": [
+      "id",
+      "meeting_id",
+      "revision",
+      "name",
+      "category_id",
+      "summary",
+      "actual_meeting_date",
+      "created_by",
+      "created_at"
+    ],
+    "digest": "faa61018287535b25626e62f49d66de1e2e03f983057db81e8f0ce0e520e1a9a"
+  },
+  {
+    "table": "roster_revision",
+    "columns": [
+      "id",
+      "meeting_id",
+      "revision",
+      "state",
+      "confirmed_at",
+      "confirmed_by"
+    ],
+    "digest": "0f1a6dfa84e968458390bc4b0d5bd829487249cd5ab0a73246f216ba5f478ef6"
+  },
+  {
+    "table": "roster_member",
+    "columns": [
+      "roster_id",
+      "member_id",
+      "enterprise_id",
+      "display_name",
+      "member_kind"
+    ],
+    "digest": "c73acbf1b84f581a9519f8baaaa346b981b983da4a747ec3a91c245340d81581"
+  },
+  {
+    "table": "meeting_access_grant",
+    "columns": [
+      "meeting_id",
+      "enterprise_id",
+      "action",
+      "roster_id",
+      "confirmed_at"
+    ],
+    "digest": "ade1d46bc72c08bd2a06047b8e7f8a1f763f9370db16a5faa754df900037d05b"
+  },
+  {
+    "table": "idempotency_record",
+    "columns": [
+      "scope_hash",
+      "actor_id",
+      "resource_id",
+      "operation",
+      "key_hash",
+      "request_hash",
+      "state",
+      "result_id",
+      "http_status",
+      "created_at"
+    ],
+    "digest": "86650aa1bd29f310f7bc09503d91e4c76408660f577051a856bc12cfe45ae4bc"
+  },
+  {
+    "table": "info_suggestion",
+    "columns": [
+      "id",
+      "meeting_id",
+      "base_revision",
+      "input_fingerprint",
+      "proposed_info",
+      "state"
+    ],
+    "digest": "5f8af36a57c2f19abe618c96a82e6ffe86c4e07323c619f97e4fc965583c9045"
+  },
+  {
+    "table": "storage_backend",
+    "columns": [
+      "id",
+      "storage_type",
+      "status",
+      "config_revision"
+    ],
+    "digest": "bd02775889535008eca6fffce3a3bd30664927aedeaaa7f1ef8a75654d08c175"
+  },
+  {
+    "table": "file_object",
+    "columns": [
+      "id",
+      "meeting_id",
+      "backend_id",
+      "storage_type",
+      "namespace",
+      "object_key",
+      "provider_version_id",
+      "display_name",
+      "size_bytes",
+      "sha256",
+      "location_revision",
+      "state",
+      "reference_epoch",
+      "created_at"
+    ],
+    "digest": "a26ebe0087ca10e39fc211c294906711b2087f250c6150c15c00718a89c38e59"
+  },
+  {
+    "table": "file_reference",
+    "columns": [
+      "file_id",
+      "owner_kind",
+      "owner_id",
+      "purpose"
+    ],
+    "digest": "e8c40ac5d5838096622b9e1ad4c9edbe92c0b7df8cd641865aee81fc579a7327"
+  },
+  {
+    "table": "upload_session",
+    "columns": [
+      "id",
+      "meeting_id",
+      "backend_id",
+      "namespace",
+      "object_key",
+      "cancel_epoch",
+      "expected_size",
+      "expected_sha256",
+      "provider_upload_token",
+      "state",
+      "completed_file_id",
+      "created_at",
+      "updated_at",
+      "display_name",
+      "purpose"
+    ],
+    "digest": "f95b1eedbff7ba32ecb9ce505c102cfa0c4054289eb3cbe584eb4031cdfb0527"
+  },
+  {
+    "table": "upload_part",
+    "columns": [
+      "upload_id",
+      "part_no",
+      "size_bytes",
+      "sha256",
+      "provider_token"
+    ],
+    "digest": "1d37efaee3c831a30a7d9f9a4cb1cdb2e9fc11ac4cc92028ea13a90ea1e3e8d0"
+  },
+  {
+    "table": "file_cleanup",
+    "columns": [
+      "id",
+      "file_id",
+      "backend_id",
+      "namespace",
+      "object_key",
+      "expected_location_revision",
+      "expected_reference_epoch",
+      "state",
+      "not_before",
+      "attempt",
+      "last_error"
+    ],
+    "digest": "6ceb676195a9713b7344a573671c848709de7b7c38730c1601d98f6aca384261"
+  },
+  {
+    "table": "task_subject",
+    "columns": [
+      "subject_kind",
+      "subject_id",
+      "business_version",
+      "cancel_epoch",
+      "deleted"
+    ],
+    "digest": "b9a88ee515d2942fe9f4cb81c1a08cfe996ee6e924a7dcc0f8b8762e82cc59af"
+  },
+  {
+    "table": "durable_task",
+    "columns": [
+      "id",
+      "task_type",
+      "pool",
+      "subject_kind",
+      "subject_id",
+      "producer_key",
+      "input_kind",
+      "input_id",
+      "input_fingerprint",
+      "business_version",
+      "cancel_epoch",
+      "priority",
+      "state",
+      "attempt",
+      "max_attempts",
+      "lease_owner",
+      "expires_at",
+      "available_at",
+      "created_at",
+      "output_kind",
+      "output_id",
+      "last_error"
+    ],
+    "digest": "325594c71153ecda4a92c35cead2d9674d59676600c640ae02b3562f6eff1cf4"
+  },
+  {
+    "table": "task_attempt",
+    "columns": [
+      "task_id",
+      "attempt",
+      "owner",
+      "started_at",
+      "ended_at",
+      "outcome",
+      "error_code"
+    ],
+    "digest": "928c27a830f10d638265bb64f17c3af68e31c30dfd94637814a924b8084daa01"
+  },
+  {
+    "table": "external_operation",
+    "columns": [
+      "id",
+      "operation_kind",
+      "business_key",
+      "request_hash",
+      "state",
+      "marked_at",
+      "next_check_at",
+      "reconcile_epoch",
+      "reconcile_owner",
+      "reconcile_expires_at",
+      "external_result_id",
+      "last_error",
+      "subject_kind",
+      "subject_id",
+      "current_execution_no"
+    ],
+    "digest": "9047cb0d5b5c8d0d06307cef6379453714325b5335421e4ede6a1254e81b452a"
+  },
+  {
+    "table": "task_outbox_sequence",
+    "columns": [
+      "id",
+      "next_id"
+    ],
+    "digest": "b678e1300c4baa5f68abbd65a5b8ca1e34e37eab9bf85c2c7031a7f7a0017ffa"
+  },
+  {
+    "table": "task_outbox",
+    "columns": [
+      "sequence_id",
+      "event_type",
+      "task_id",
+      "subject_kind",
+      "subject_id",
+      "subject_revision",
+      "reference_kind",
+      "reference_id",
+      "occurred_at"
+    ],
+    "digest": "4c8fc77f66c6c8aa9e2790b4c38d165a5ec88ecc12439b27f74867309c5ad390"
+  },
+  {
+    "table": "outbox_consumer",
+    "columns": [
+      "consumer_id",
+      "cursor",
+      "epoch",
+      "lease_owner",
+      "expires_at"
+    ],
+    "digest": "cf92906252a47bd3a5343894aa48ef3a7ea073ce477360923516c89fbcfb3678"
+  },
+  {
+    "table": "model_capacity",
+    "columns": [
+      "model",
+      "capacity",
+      "config_revision",
+      "enabled",
+      "cutoff_policy"
+    ],
+    "digest": "2691040a466c0e187af0a4805f2e88ac47f3676cf79ea74b62d69e563a543640"
+  },
+  {
+    "table": "model_reservation",
+    "columns": [
+      "id",
+      "model",
+      "execution_id",
+      "config_revision",
+      "safe_deadline",
+      "created_at",
+      "settled_at"
+    ],
+    "digest": "f582b91a39e1e763dafeac4190884bb3729b26e708730f27c6e2698c256d59e8"
+  },
+  {
+    "table": "input_batch",
+    "columns": [
+      "id",
+      "meeting_id",
+      "kind",
+      "input_fingerprint",
+      "base_revision",
+      "created_at"
+    ],
+    "digest": "56c36d58cda2becb070fc4b76672d99ab45d7e1c34062b08e7e4cb0f859703da"
+  },
+  {
+    "table": "input_batch_file",
+    "columns": [
+      "batch_id",
+      "ordinal",
+      "file_id",
+      "sha256"
+    ],
+    "digest": "c71703b1398b42b0b71e5a7e85d88cb1d29121676fe91d2827620a02e2bb185f"
+  },
+  {
+    "table": "transcript_revision",
+    "columns": [
+      "id",
+      "meeting_id",
+      "revision",
+      "kind",
+      "batch_id",
+      "parent_id",
+      "input_fingerprint",
+      "created_by",
+      "created_at",
+      "processing_input_id",
+      "producer_task_id"
+    ],
+    "digest": "ca7a877f40653570ff269f44fead4c1fe9697b7d5eb3ef0e9543344238df7049"
+  },
+  {
+    "table": "transcript_segment",
+    "columns": [
+      "revision_id",
+      "segment_id",
+      "ordinal",
+      "body",
+      "source_file_id",
+      "source_paragraph",
+      "start_ms",
+      "end_ms",
+      "speaker_id"
+    ],
+    "digest": "242b1245a8422ea619827b6566f753c9277bea40b96779ed6042c8d353cef403"
+  },
+  {
+    "table": "transcript_confirmation",
+    "columns": [
+      "id",
+      "meeting_id",
+      "revision_id",
+      "content_hash",
+      "confirmed_by",
+      "confirmed_at"
+    ],
+    "digest": "4e2475443b7fb8e3f80c5b17d57e1eeaa8e7ad6c5289640eb7adb3fb3245ea2d"
+  },
+  {
+    "table": "template_revision",
+    "columns": [
+      "id",
+      "template_id",
+      "revision",
+      "owner_id",
+      "name",
+      "themes",
+      "theme_count",
+      "created_at"
+    ],
+    "digest": "78d1648928b59b4e651f95d85ca2b5d54ea1d4968d0c6de70592e199d116deec"
+  },
+  {
+    "table": "generation_input",
+    "columns": [
+      "id",
+      "meeting_id",
+      "transcript_confirmation_id",
+      "material_snapshot_id",
+      "template_revision_id",
+      "exclusion_revision_id",
+      "element_set_id",
+      "prompt_version",
+      "model_config_version",
+      "base_revision",
+      "input_fingerprint",
+      "scope",
+      "target_element_id"
+    ],
+    "digest": "bacb7631b0aa54e9ea8b524151557e8f18153b735214991562fa965050896ae2"
+  },
+  {
+    "table": "minutes_revision",
+    "columns": [
+      "id",
+      "meeting_id",
+      "revision",
+      "parent_id",
+      "title",
+      "title_origin",
+      "body",
+      "generation_input_id",
+      "created_by",
+      "created_at"
+    ],
+    "digest": "3b8c79df3bf1e846101c797ed3fc29eeff5295ba1e77d2f169414086cfdd1812"
+  },
+  {
+    "table": "element_set",
+    "columns": [
+      "id",
+      "meeting_id",
+      "revision",
+      "created_at"
+    ],
+    "digest": "6190a0f1ca80b4bf16fd61b692439902a741bcd6116e1c63aebda3246bcf8047"
+  },
+  {
+    "table": "minutes_element",
+    "columns": [
+      "id",
+      "set_id",
+      "category",
+      "ordinal",
+      "body",
+      "support_state"
+    ],
+    "digest": "cd4eebb9b46c561a8893a1a973c38bd855075ed6c18da0db7d9e427d79e56759"
+  },
+  {
+    "table": "action_item",
+    "columns": [
+      "element_id",
+      "owner_enterprise_id",
+      "owner_display",
+      "due_on"
+    ],
+    "digest": "005770bc08c7edcd5409b7ac2c50c3836884c1d2bb241f0c0d5da21447abc877"
+  },
+  {
+    "table": "exclusion_revision",
+    "columns": [
+      "id",
+      "meeting_id",
+      "revision",
+      "created_at"
+    ],
+    "digest": "6190a0f1ca80b4bf16fd61b692439902a741bcd6116e1c63aebda3246bcf8047"
+  },
+  {
+    "table": "sensitive_exclusion",
+    "columns": [
+      "revision_id",
+      "locator_id",
+      "category",
+      "reason"
+    ],
+    "digest": "24ab2573285d3c5fa3ef4a52bff8a9e757b100652f17edf96781c28e21774139"
+  },
+  {
+    "table": "generation_candidate",
+    "columns": [
+      "id",
+      "meeting_id",
+      "input_id",
+      "task_id",
+      "minutes_revision_id",
+      "element_set_id",
+      "base_revision",
+      "input_fingerprint",
+      "state",
+      "created_at",
+      "decided_at"
+    ],
+    "digest": "89afa2edda34afd1bf74c47a40f54ec900902be9577968a0b31263a21930bc22"
+  },
+  {
+    "table": "source_locator",
+    "columns": [
+      "id",
+      "meeting_id",
+      "kind",
+      "transcript_revision_id",
+      "segment_id",
+      "file_id",
+      "material_revision_id",
+      "page_no",
+      "paragraph_no",
+      "section_path",
+      "start_ms",
+      "end_ms"
+    ],
+    "digest": "f59eb99f3a037702d443f2c06e92cf1b4b06908cc08599c8b572ef2c443ab3d6"
+  },
+  {
+    "table": "evidence_link",
+    "columns": [
+      "id",
+      "locator_id",
+      "element_id",
+      "minutes_revision_id",
+      "support_state",
+      "target_anchor"
+    ],
+    "digest": "a38f4da151d08ca8fc4cc04d29eedb69a9ccb7f4298199c5047bd8bbcb1120d2"
+  },
+  {
+    "table": "final_confirmation",
+    "columns": [
+      "id",
+      "meeting_id",
+      "meeting_revision",
+      "info_revision_id",
+      "roster_revision_id",
+      "transcript_confirmation_id",
+      "minutes_revision_id",
+      "material_snapshot_id",
+      "element_set_id",
+      "template_revision_id",
+      "exclusion_revision_id",
+      "source_manifest_hash",
+      "input_fingerprint",
+      "confirmed_by",
+      "confirmed_at"
+    ],
+    "digest": "71ba8a4ebbad8c6c14209721c775d9dbb640ed184906aded619b94f80acf88ad"
+  },
+  {
+    "table": "publication",
+    "columns": [
+      "id",
+      "meeting_id",
+      "confirmation_id",
+      "business_key",
+      "library_id",
+      "folder_id",
+      "state",
+      "revision",
+      "created_at",
+      "published_at"
+    ],
+    "digest": "060ec09cbe68f2a9aab52e6869345fe634532d4d7d5e2ad072e35244294dbc76"
+  },
+  {
+    "table": "publication_attempt",
+    "columns": [
+      "id",
+      "publication_id",
+      "confirmation_id",
+      "operation_id",
+      "kind",
+      "outcome",
+      "created_at",
+      "finished_at",
+      "execution_id"
+    ],
+    "digest": "cddcb77138785e42c33efeb04b5f6faf85ee4c7b9a75539fa182e1c4218047f5"
+  },
+  {
+    "table": "external_document_mapping",
+    "columns": [
+      "publication_id",
+      "provider_id",
+      "external_document_id",
+      "document_url",
+      "authority_state",
+      "verified_at"
+    ],
+    "digest": "4889d451ae4b4d41544e803e586329a8d494e878bfd86ac7d43926b10c35d39e"
+  },
+  {
+    "table": "publication_governance",
+    "columns": [
+      "id",
+      "publication_id",
+      "action",
+      "reason",
+      "actor_id",
+      "state",
+      "operation_id",
+      "created_at"
+    ],
+    "digest": "2703fa281221783cbbc97957288570d851cb5b806d942b81caa2968c8b6340d0"
+  },
+  {
+    "table": "external_event_receipt",
+    "columns": [
+      "provider_id",
+      "event_id",
+      "payload_hash",
+      "received_at",
+      "processed_at"
+    ],
+    "digest": "161b8edb888ecddb6cb82c6de8a68b7f436c8e3e43839342c4eb8b18916ecc6a"
+  },
+  {
+    "table": "media_source",
+    "columns": [
+      "id",
+      "batch_id",
+      "normalized_file_id",
+      "sample_rate",
+      "channels",
+      "bits_per_sample",
+      "sample_count"
+    ],
+    "digest": "6de0a92d01ed4cdd8ae9f2059cb96787f7c6b0443f0ab36e5428f4dade35b734"
+  },
+  {
+    "table": "media_source_span",
+    "columns": [
+      "media_id",
+      "ordinal",
+      "source_file_id",
+      "source_start_sample",
+      "global_start_sample",
+      "sample_count"
+    ],
+    "digest": "3bb9b6b5e91ac58ce74754cdb2dfe3d11d95bdb6034f7935053065e8429b000c"
+  },
+  {
+    "table": "speaker",
+    "columns": [
+      "id",
+      "meeting_id",
+      "display_name",
+      "enterprise_id",
+      "identity_source",
+      "merged_into_id",
+      "revision"
+    ],
+    "digest": "5b7cd3eb26df52c3e336e4342134e69f300a9e6625c760346b7c42841f0fa82f"
+  },
+  {
+    "table": "correction",
+    "columns": [
+      "id",
+      "meeting_id",
+      "revision_id",
+      "segment_id",
+      "proposed_text",
+      "state",
+      "revision"
+    ],
+    "digest": "d86ac8829952dbe02da0322e26c78b6684ab6758cdd47a3e6918c1fa33e1eacf"
+  },
+  {
+    "table": "edit_operation",
+    "columns": [
+      "id",
+      "meeting_id",
+      "before_revision_id",
+      "after_revision_id",
+      "kind",
+      "reverts_id",
+      "actor_id",
+      "created_at"
+    ],
+    "digest": "0c7db1cb1ca7495b5c27230451ce7775b96e75160e2dcf338e86f4c991157ac0"
+  },
+  {
+    "table": "recording_session",
+    "columns": [
+      "id",
+      "meeting_id",
+      "backend_id",
+      "state",
+      "writer_epoch",
+      "writer_id",
+      "writer_expires_at",
+      "cancel_epoch",
+      "archive_file_id"
+    ],
+    "digest": "552c4d9b97e5e759d8e8de162babbb5e9672f74d6862760468c827c04acd2bb2"
+  },
+  {
+    "table": "recording_part",
+    "columns": [
+      "id",
+      "session_id",
+      "ordinal",
+      "highest_contiguous_seq",
+      "final_seq",
+      "sample_count"
+    ],
+    "digest": "f68ef8760640635fbe891d1d707812e2d596c11e49948459410084699bf67192"
+  },
+  {
+    "table": "recording_chunk",
+    "columns": [
+      "part_id",
+      "seq",
+      "writer_epoch",
+      "sample_start",
+      "sample_count",
+      "sha256",
+      "file_id",
+      "persisted_at"
+    ],
+    "digest": "6ecd6b453d12abaee9998f2ca7b82eb39eef03af8cc9477b0276235429d9c38a"
+  },
+  {
+    "table": "subtitle_revision",
+    "columns": [
+      "session_id",
+      "segment_id",
+      "revision",
+      "part_id",
+      "state",
+      "body",
+      "start_ms",
+      "end_ms",
+      "event_sequence"
+    ],
+    "digest": "2ebba61e3c5cecc1663439e726a1596d024bd6fb93da91b97c7ada17d07ae21a"
+  },
+  {
+    "table": "material_reference",
+    "columns": [
+      "id",
+      "meeting_id",
+      "kind",
+      "provider_id",
+      "external_id",
+      "file_id",
+      "state"
+    ],
+    "digest": "22e5eebea16aef0130a61e7d88d2fcc0810d49862a13f962f454d3d5f8b97b5d"
+  },
+  {
+    "table": "material_revision",
+    "columns": [
+      "id",
+      "reference_id",
+      "revision",
+      "external_version",
+      "content_file_id",
+      "content_hash",
+      "parse_state",
+      "created_at"
+    ],
+    "digest": "ff4274a70717e2255c18de778e9c79abce899fe928378ce961e684c8e272ecd7"
+  },
+  {
+    "table": "material_snapshot",
+    "columns": [
+      "id",
+      "meeting_id",
+      "revision",
+      "input_fingerprint",
+      "applied_at"
+    ],
+    "digest": "165a2abd77fcabaa0ebbb37218151c1f30fd34b7d94738893434ff4057b85f20"
+  },
+  {
+    "table": "material_snapshot_item",
+    "columns": [
+      "snapshot_id",
+      "material_revision_id",
+      "ordinal"
+    ],
+    "digest": "7e109cacbc6dd586fb60fbe100ed7472ffe1206be263382d76fdd580948b95b4"
+  },
+  {
+    "table": "parsed_document",
+    "columns": [
+      "id",
+      "material_revision_id",
+      "parser_version",
+      "text_file_id",
+      "state",
+      "unit_count",
+      "error_code"
+    ],
+    "digest": "3cdde1a67cd8d46b70edb95e0cf98b8d8bb6252f0de681a30bcabbf4d869eedb"
+  },
+  {
+    "table": "parsed_unit",
+    "columns": [
+      "document_id",
+      "ordinal",
+      "kind",
+      "page_no",
+      "paragraph_no",
+      "section_path",
+      "body"
+    ],
+    "digest": "a855081933a593837f1e323402723be565d255f1bdd11b18c8207550df4a9a49"
+  },
+  {
+    "table": "export_job",
+    "columns": [
+      "id",
+      "meeting_id",
+      "minutes_revision_id",
+      "confirmation_id",
+      "format",
+      "task_id",
+      "output_file_id",
+      "access_revision",
+      "state"
+    ],
+    "digest": "faf219df8824fb1c55c5ca843e27cecec685bea2019dcc6f131714f4c77eea69"
+  },
+  {
+    "table": "meeting_deletion",
+    "columns": [
+      "id",
+      "meeting_id",
+      "cancel_epoch",
+      "state",
+      "task_id",
+      "requested_at",
+      "completed_at"
+    ],
+    "digest": "b8446886a9abe4b37f441d9f30088d7134ac81ed3bc2098a108d0258ad5afaa3"
+  },
+  {
+    "table": "topic",
+    "columns": [
+      "id",
+      "owner_id",
+      "name",
+      "revision",
+      "created_at",
+      "description",
+      "name_normalized",
+      "name_hash"
+    ],
+    "digest": "f6b5dfa56eff51e2a69e1482fd7d50e347731a37156b228996cbe8b0cb89b9f2"
+  },
+  {
+    "table": "meeting_topic",
+    "columns": [
+      "topic_id",
+      "meeting_id",
+      "added_at"
+    ],
+    "digest": "aa9dfed90b12d70b3db0f0d9e17ad9ff451c0de38e6653529e378353a35b67ae"
+  },
+  {
+    "table": "corpus_feedback",
+    "columns": [
+      "id",
+      "meeting_id",
+      "source_revision_id",
+      "submitted_by",
+      "category",
+      "comment",
+      "state",
+      "revision",
+      "reviewed_by",
+      "review_reason",
+      "created_at",
+      "reviewed_at"
+    ],
+    "digest": "bde6245fd16473f532515c590c221fad08f2332c311ba2d55f9b5c86028b5a16"
+  },
+  {
+    "table": "feedback_segment",
+    "columns": [
+      "feedback_id",
+      "revision_id",
+      "segment_id"
+    ],
+    "digest": "8525aa9efc21beb87ebb42974ceb210380ec375e394551df1ebd73e5d7f1e61e"
+  },
+  {
+    "table": "corpus_revision",
+    "columns": [
+      "id",
+      "feedback_id",
+      "revision",
+      "content_file_id",
+      "state",
+      "purpose",
+      "approved_at"
+    ],
+    "digest": "122edbc90b2bae3bb9c266c421e99049e79d1fcdacf9808417bc9094dbd6a68a"
+  },
+  {
+    "table": "voiceprint_consent",
+    "columns": [
+      "id",
+      "subject_id",
+      "purpose",
+      "consent_reference",
+      "state",
+      "revision",
+      "granted_at",
+      "revoked_at",
+      "revoked_by",
+      "revocation_reason"
+    ],
+    "digest": "ca69e045a3ba77dd10445604fa5a36f4263d189489106bf085f3eefcc41482ae"
+  },
+  {
+    "table": "voiceprint_sample",
+    "columns": [
+      "id",
+      "consent_id",
+      "sample_file_id",
+      "model_version",
+      "dimension",
+      "encrypted_embedding_file_id",
+      "key_reference",
+      "state",
+      "revision",
+      "reviewed_by",
+      "reviewed_at",
+      "review_reason",
+      "revoked_at"
+    ],
+    "digest": "adf6d506eac7bd1b73cfd2b3c3df66e0c36d8c71656aa8a6ba0fe2eb33ed4f71"
+  },
+  {
+    "table": "evaluation_dataset",
+    "columns": [
+      "id",
+      "version_key",
+      "manifest_file_id",
+      "purpose",
+      "content_hash",
+      "created_at"
+    ],
+    "digest": "d42622659932e61285b3016c4778307ccb4a19b8ea5ebda54170f4e8654268af"
+  },
+  {
+    "table": "configuration_revision",
+    "columns": [
+      "id",
+      "kind",
+      "revision",
+      "configuration",
+      "content_hash",
+      "state",
+      "created_by",
+      "reviewed_by",
+      "created_at",
+      "reviewed_at"
+    ],
+    "digest": "a2c53b76696363934baa1c62e4df1e8579270436e510890bdec160ceec474915"
+  },
+  {
+    "table": "evaluation_run",
+    "columns": [
+      "id",
+      "dataset_id",
+      "model_config_version",
+      "prompt_version",
+      "task_id",
+      "state",
+      "sample_count",
+      "metrics",
+      "errors_file_id",
+      "created_at"
+    ],
+    "digest": "12bb31bf08fa28b037d990b9b1b3dd329f4d4f80cb7e3eb953e0c5b7f76f2918"
+  },
+  {
+    "table": "configuration_release",
+    "columns": [
+      "id",
+      "kind",
+      "revision",
+      "configuration_id",
+      "evaluation_run_id",
+      "rollback_of_id",
+      "released_by",
+      "released_at"
+    ],
+    "digest": "914e87b046e130c9d075aaebae4f0bd9c91574a728704cc31ace7a1c4760a02b"
+  },
+  {
+    "table": "mail_job",
+    "columns": [
+      "id",
+      "meeting_id",
+      "minutes_revision_id",
+      "confirmation_id",
+      "sender_id",
+      "task_id",
+      "business_key",
+      "state",
+      "created_at",
+      "sent_at"
+    ],
+    "digest": "bd45a472462ae6ac6ae3cbcf4616062bb3e4527fbd080b1137739990cc563a88"
+  },
+  {
+    "table": "mail_recipient",
+    "columns": [
+      "mail_job_id",
+      "enterprise_id",
+      "state",
+      "provider_message_id",
+      "operation_id",
+      "message_key"
+    ],
+    "digest": "4c804e05e3868a4fc3e6057afad8ae2c485549f2db42d9e2d60cc2e7f5ea5ca7"
+  },
+  {
+    "table": "meeting_search_projection",
+    "columns": [
+      "meeting_id",
+      "info_revision_id",
+      "roster_revision_id",
+      "name_search",
+      "number_search",
+      "category_id",
+      "meeting_revision"
+    ],
+    "digest": "e53251bbbf3486e3a5ea32a04df0b32a3c82479c8f8a83e8725edc6db1bd0e48"
+  },
+  {
+    "table": "meeting_person_search",
+    "columns": [
+      "meeting_id",
+      "roster_id",
+      "member_id",
+      "name_search"
+    ],
+    "digest": "86e4dc24a50013f79cc13afe56afd1cdca5bfe9df8d55c2490f7ec35a3b04010"
+  },
+  {
+    "table": "minutes_template",
+    "columns": [
+      "id",
+      "owner_id",
+      "name",
+      "name_normalized",
+      "name_hash",
+      "current_revision_id",
+      "revision",
+      "created_at"
+    ],
+    "digest": "9b25b9bf5acdfb18cd1d59a82526120a32e93ba8d7afbc6ba4c69cf33aab91b5"
+  },
+  {
+    "table": "external_execution",
+    "columns": [
+      "id",
+      "operation_id",
+      "execution_no",
+      "task_id",
+      "task_attempt",
+      "state",
+      "request_hash",
+      "request_manifest",
+      "created_at",
+      "marked_at",
+      "finished_at",
+      "no_effect_basis",
+      "no_effect_evidence",
+      "no_effect_verified_at"
+    ],
+    "digest": "9c02bf3dac2edb1abfe2181af566406565e3f4ba21a0f92e8e3b28e9ff71bd85"
+  },
+  {
+    "table": "transcription_input",
+    "columns": [
+      "id",
+      "meeting_id",
+      "batch_id",
+      "kind",
+      "source_revision_id",
+      "material_snapshot_id",
+      "material_mode",
+      "processing_config_version",
+      "parser_version",
+      "model_config_version",
+      "prompt_version",
+      "manifest_schema_version",
+      "config_manifest",
+      "input_fingerprint",
+      "base_revision",
+      "cancel_epoch",
+      "created_at"
+    ],
+    "digest": "fcecc53c9b5515cc948dae6d98ab2ae4627a8a06a6d65e66d569036424e64da1"
+  },
+  {
+    "table": "transcript_segment_mark",
+    "columns": [
+      "revision_id",
+      "segment_id",
+      "mark"
+    ],
+    "digest": "bb51b885e0a83f55c35ecfe250b4b81c5e3c806a9a85dd62fb52a7a9eeeb7940"
+  },
+  {
+    "table": "sensitive_detection",
+    "columns": [
+      "id",
+      "set_id",
+      "input_id",
+      "category",
+      "ordinal"
+    ],
+    "digest": "3811b8015305256134ffbdb41f02e946e1dd9ba3563ef60f9d30aa5b76375138"
+  },
+  {
+    "table": "sensitive_detection_source",
+    "columns": [
+      "detection_id",
+      "locator_id"
+    ],
+    "digest": "79cf6d78618fc3bf4d7092bb58ceb6d6847da2edc25b64547a62bd7a88aacaa9"
+  },
+  {
+    "table": "background_note",
+    "columns": [
+      "id",
+      "set_id",
+      "input_id",
+      "ordinal",
+      "body"
+    ],
+    "digest": "4ec88faeec4527169cd2e5db1dd90993a93634854ddc656c4d2f1da84a987c7b"
+  },
+  {
+    "table": "background_note_source",
+    "columns": [
+      "note_id",
+      "locator_id"
+    ],
+    "digest": "af37e7b5402c9c24d8e3e4989bb498a665778eee93f6993e0c8f4f4280acf104"
+  },
+  {
+    "table": "action_suggestion",
+    "columns": [
+      "element_id",
+      "input_id",
+      "owner_mention",
+      "due_on"
+    ],
+    "digest": "4b29b9bb12d34204c2317488d2bde99173389cce4c2482f4c96c89d270737c43"
+  },
+  {
+    "table": "result_review",
+    "columns": [
+      "id",
+      "meeting_id",
+      "review_no",
+      "review_kind",
+      "element_id",
+      "minutes_revision_id",
+      "target_anchor",
+      "target_hash",
+      "source_set_hash",
+      "hash_profile",
+      "outcome",
+      "reviewed_by",
+      "reviewed_at"
+    ],
+    "digest": "6ebd6bfbf6564efabc6057df06c288646a555e2319d1982d8d586ba81af3c2fe"
+  },
+  {
+    "table": "result_review_evidence",
+    "columns": [
+      "review_id",
+      "evidence_id"
+    ],
+    "digest": "94ff9d695b4864800b2d7c16e379e1b698f55f91645c6b7a9b7dc3bfc9807718"
+  },
+  {
+    "table": "final_result_review",
+    "columns": [
+      "confirmation_id",
+      "review_id"
+    ],
+    "digest": "a4bd3c1223e37dbcb59d2baed5cd5dc5117416bde2a06871caf342536fe062b1"
+  }
+]

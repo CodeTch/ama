@@ -1,0 +1,87 @@
+{
+  "locatorRows": [
+    {
+      "id": "L",
+      "file": "F",
+      "page": 1
+    }
+  ],
+  "contextRows": [
+    {
+      "id": "C1",
+      "generationInputId": "G1",
+      "generationInputFingerprint": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "id": "C2",
+      "generationInputId": "G2",
+      "generationInputFingerprint": "2222222222222222222222222222222222222222222222222222222222222222"
+    }
+  ],
+  "contextMaterialRows": [
+    {
+      "context_id": "C1",
+      "material_revision_id": "R",
+      "parsed_document_id": "D1"
+    },
+    {
+      "context_id": "C2",
+      "material_revision_id": "R",
+      "parsed_document_id": "D2"
+    }
+  ],
+  "parserProfileRows": [
+    {
+      "document_id": "D1",
+      "format": "PDF",
+      "parser_config_version": "P1",
+      "parser_config_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "document_id": "D2",
+      "format": "PDF",
+      "parser_config_version": "P2",
+      "parser_config_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+    }
+  ],
+  "sourceUsages": [
+    {
+      "key": [
+        "EVIDENCE",
+        "E1"
+      ],
+      "locator": "L",
+      "context": "C1"
+    },
+    {
+      "key": [
+        "EVIDENCE",
+        "E2"
+      ],
+      "locator": "L",
+      "context": "C2"
+    },
+    {
+      "key": [
+        "BACKGROUND",
+        "N1",
+        "L"
+      ],
+      "locator": "L",
+      "context": "C1"
+    },
+    {
+      "key": [
+        "BACKGROUND",
+        "N2",
+        "L"
+      ],
+      "locator": "L",
+      "context": "C2"
+    }
+  ],
+  "contextRoots": [
+    "C1",
+    "C2"
+  ]
+}

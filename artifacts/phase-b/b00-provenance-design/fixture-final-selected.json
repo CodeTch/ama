@@ -1,0 +1,37 @@
+{
+  "id": "2e5c579812838d46a89be4472eaccc1ca1fefd137048d0ea3018cd781588a11e",
+  "name": "/ama-test-b01-28337bd74163",
+  "image": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "image_reference": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "labels": {
+    "ama.test-fixture": "b01",
+    "desktop.docker.io/wsl-distro": "Ubuntu-24.04"
+  },
+  "mounts": [
+    {
+      "Destination": "/var/lib/mysql",
+      "Driver": "local",
+      "Mode": "",
+      "Name": "e8c6e59edb370efa6b6c7c0fc6f0d7df461d7ddaeb4955582d5a630fc47dd26e",
+      "Propagation": "",
+      "RW": true,
+      "Source": "/var/lib/docker/volumes/e8c6e59edb370efa6b6c7c0fc6f0d7df461d7ddaeb4955582d5a630fc47dd26e/_data",
+      "Type": "volume"
+    }
+  ],
+  "ports": {
+    "3306/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "44837"
+      }
+    ]
+  },
+  "running": true,
+  "started_at": "2026-10-21T22:25:16.758319908Z",
+  "auto_remove": false,
+  "nano_cpus": 2000000000,
+  "memory": 1073741824,
+  "memory_swap": 1073741824,
+  "pids_limit": 256
+}

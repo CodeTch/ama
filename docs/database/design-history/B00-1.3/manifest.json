@@ -1,0 +1,30 @@
+{
+  "version": "B00-1.3 preserved before B00-1.4-proposed edits",
+  "base": "91774bd4eeca2c3f3233f0e6733b32c2abef28fc",
+  "files": [
+    {
+      "source": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "copy": "docs/database/design-history/B00-1.3/2026-10-21-ama-database-design.md",
+      "bytes": 113660,
+      "sha256": "c4ae00740c7d72e2945d0f67a926631bba198c7ecde2a46cd66523293b21e8d4"
+    },
+    {
+      "source": "docs/database/ama-data-dictionary.md",
+      "copy": "docs/database/design-history/B00-1.3/ama-data-dictionary.md",
+      "bytes": 156475,
+      "sha256": "7d34063a86573c6812924a27fff6dc5f2b98cc849dabafb16b9487074fac1d8b"
+    },
+    {
+      "source": "docs/database/ama-schema-draft.sql",
+      "copy": "docs/database/design-history/B00-1.3/ama-schema-draft.sql",
+      "bytes": 110504,
+      "sha256": "ebf1eae51b303d00b2ed35c4fbd5ba4c166813564032875a6ba0fb35ba743c93"
+    },
+    {
+      "source": "tools/checks/database_design.py",
+      "copy": "docs/database/design-history/B00-1.3/database_design.py",
+      "bytes": 100351,
+      "sha256": "8a7db792bb23b13d0d79ed3142f8dcebe0762cc4f6aefe6e2b1656fa34f95ebc"
+    }
+  ]
+}

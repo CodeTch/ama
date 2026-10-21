@@ -3,3 +3,8 @@
 /artifacts/phase-b/b07-pure-s1/junit/** -text -whitespace
 /backend/adapters/src/test/resources/ama/config/** -text
 /backend/core/src/test/resources/ama/minutes/vectors/** -text
+docs/database/design-history/B00-1.3/** -text
+artifacts/phase-b/b00-provenance-design/** -text
+docs/acceptance/b/database-material-provenance-addendum-metadata-evidence.json -text
+# Preserve authored raw schema fragment including its intentional terminal blank line.
+artifacts/phase-b/b00-provenance-design/schema-addition.py.txt whitespace=-blank-at-eof
