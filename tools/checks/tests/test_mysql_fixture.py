@@ -138,12 +138,32 @@ class FixtureFailureTests(unittest.TestCase):
         self.assertEqual(self.outcome()["cleanup"], "failed")
         self.assert_no_secrets("\n".join(self.diagnostics().values()))
 
-    def test_log_failure_preserves_original_and_records_safe_outcome(self):
-        self.logs_error = subprocess.TimeoutExpired(["synthetic", self.password], 10)
+    def test_log_read_failure_preserves_container_and_original_failure(self):
+        self.logs_error = subprocess.TimeoutExpired(["synthetic", self.password, self.root_password], 10)
         self.assert_original()
+        self.assertEqual(traceback.extract_tb(self.error.__traceback__)[-1].name, "command")
+        self.assertEqual(self.outcome()["inspect"], "captured")
         self.assertEqual(self.outcome()["logs"], "failed")
-        self.assertEqual(self.outcome()["cleanup"], "removed")
-        self.assert_no_secrets("\n".join(self.diagnostics().values()))
+        self.assertEqual(self.outcome()["cleanup"], "refused")
+        self.assertNotIn("rm", self.events)
+        self.assert_no_secrets("\n".join(self.diagnostics().values()) + self.stdout +
+                               str(getattr(self.error, "__notes__", [])))
+
+    def test_log_persistence_failure_preserves_container_and_original_failure(self):
+        original_write = pathlib.Path.write_text
+        def write(path, *args, **kwargs):
+            if path.name == "docker.log":
+                raise OSError(self.password + self.root_password)
+            return original_write(path, *args, **kwargs)
+        with patch.object(pathlib.Path, "write_text", write):
+            self.assert_original()
+        self.assertEqual(traceback.extract_tb(self.error.__traceback__)[-1].name, "command")
+        self.assertEqual(self.outcome()["inspect"], "captured")
+        self.assertEqual(self.outcome()["logs"], "failed")
+        self.assertEqual(self.outcome()["cleanup"], "refused")
+        self.assertNotIn("rm", self.events)
+        self.assert_no_secrets("\n".join(self.diagnostics().values()) + self.stdout +
+                               str(getattr(self.error, "__notes__", [])))
 
     def test_inspect_failure_refuses_removal(self):
         self.inspect_error = RuntimeError(self.root_password)
