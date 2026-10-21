@@ -44,25 +44,27 @@ CATALOG = [
 ]
 
 # Differences D-* are decisions, not implementation task D-*.
+# Approved policy: docs/superpowers/specs/2026-10-21-ama-product-supplement.md.
+# Remaining fields are unresolved details; adopted policy never qualifies services.
 DECISIONS = [
-    ("D-01", "product-specification", "产品", "C-03", "保留全部纠错能力，优先复刻最终视觉；布局待 UI 规格确认，不从旧脚本推断生产行为", "inlineOrSidebar correctionActions sourceNavigation"),
+    ("D-01", "adopted", "产品", "C-03", "使用原型最终行内纠错入口，保留完整纠错动作和来源抽屉；不删除需求要求的能力", ""),
     ("D-02", "adopted", "产品", "B-09 C-01 D-02", "新导入入口使用统一信息抽屉，不恢复内嵌信息区", ""),
-    ("D-03", "product-specification", "产品", "D-02", "业务日期未知不填造；确认日期编辑入口", "optionalDateEntry unknownDateDisplay editPermissions"),
-    ("D-04", "product-specification", "产品＋模型", "B-06 C-01 C-02", "保留多段排序；合法组合及格式/大小/时长逐项确认，不默认任意混合", "multiplePrimaryFiles audioVideoMix transcriptAudioMix ordering formats sizes durations"),
+    ("D-03", "adopted", "产品", "D-02", "负责人在统一信息抽屉编辑可选实际会议日期，未知数据保持空；各视图依原需求/原型显示空态或“--”，不以创建日期替代", ""),
+    ("D-04", "product-specification", "产品＋模型", "B-06 C-01 C-02", "单批可按顺序合并多个音视频；单批可处理多个纯转写文档；不在同一处理批次混合音视频和转写文档。未证明的格式仍按能力矩阵说明", "formats sizes durations"),
     ("D-05", "product-specification", "产品＋安全", "B-03 B-04 B-06 C-01 D-02", "不新增产品名称字数上限；公开技术资源保护", "requestBudget parsingBudget uploadBudget capabilityDisplay errorBehavior"),
-    ("D-06", "product-specification", "产品", "B-06 C-03 D-04 D-05 D-06", "纪要自动保存、离开提醒；确认导出使用已保存版本", "perEditorSaveTiming saveIndicator conflictRecovery leaveReminder"),
+    ("D-06", "product-specification", "产品", "B-06 C-03 D-04 D-05 D-06", "转写保留显式保存；纪要保留显式保存及自动保存，失败/冲突保留草稿，确认/导出只用已保存版本；保留离开提醒；仅纪要自动保存触发时机、保存指示及离开提醒交互细节待补充", "perEditorSaveTiming saveIndicator leaveReminder"),
     ("D-07", "product-specification", "产品", "B-06 C-03", "默认纠错零待处理才确认", "degradedConfirmationAllowed explicitApproval auditReason eligibility"),
     ("D-08", "adopted", "产品", "B-08 D-05", "发布成功只读；保留历史；撤回/废止不得恢复或再次发布", ""),
     ("D-09", "adopted", "产品", "B-07 D-03", "七类主体为概述、讨论、结论、行动、风险、待确认、分歧；其他为辅助目录", ""),
-    ("D-10", "product-specification", "产品＋邮件平台", "E-04", "邮件专项规格；受控链接仅为建议", "recipientScope externalRecipients senderAuthorization linkBodyAttachment template snapshotVersion permissionRecheck messageKey unknownResultReconciliation retryPolicy"),
-    ("D-11", "product-specification", "产品＋安全", "E-01 E-02 E-03", "治理专项规格", "roles reviewStates dataPurpose evaluationDataset consent revocation retention configurationApproval publishRollback"),
+    ("D-10", "product-specification", "产品＋邮件平台", "E-04", "负责人只能发给仍有查看权限的已确认企业参会人，不向外部邮箱发送；只发送绑定已保存版本的受控链接，不附正文或文件；发送前重验权限和发布/撤回状态；结果 UNKNOWN 先查回，不能盲目重发", "senderAuthorization template messageKey"),
+    ("D-11", "product-specification", "产品＋安全", "E-01 E-02 E-03", "反馈、声纹与配置均有候选/审核/生效记录；审核权不隐含原会议正文读取权；声纹需明确用途授权，可撤销；配置发布支持独立审批和回滚，只允许已定义配置键，不能填写任意命令或任意 URL；开发验证使用受控测试角色与合成数据，不等于企业安全审批；企业角色、允许用途及保留/删除策略未落实前，不启用全局数据复用、真实声纹登记或自动清理", "roles dataPurpose evaluationDataset retention"),
     ("D-12", "platform-evidence", "模型平台", "A-03 C-02 C-06 F-04", "短窗口 HTTP 先验证；定位与身份能力不足显式降级", "streamingProtocol wordTimestamps throughput onlineIdentity degradedDisplay"),
     ("D-13", "platform-evidence", "产品＋桌面运维", "C-05 C-07 F-05", "站内跳转保持；休眠关闭不承诺录音", "browserBaseline backgroundRecording sleepCloseBehavior deviceLimits"),
     ("D-14", "platform-evidence", "知识库平台", "B-08 D-05 F-02 F-05", "稳定业务键查回、签名事件与对账；缺能力不得伪造成功", "idempotentLookup signedEvents withdrawal permissionSync reconciliationWindow"),
-    ("D-15", "product-specification", "产品＋安全", "B-02 D-02 E-02", "外部身份与企业账号分开；候选实名人工确认不产生授权", "externalIdentity responsiblePersonMapping voiceConsent humanConfirmation accessGrantRules"),
+    ("D-15", "product-specification", "产品＋安全", "B-02 D-02 E-02", "外部身份与企业账号分开；候选实名人工确认不产生授权；声纹需明确用途授权，可撤销；身份候选不授权会议访问；企业角色、允许用途及保留/删除策略未落实前，不启用全局数据复用或真实声纹登记", "externalIdentity responsiblePersonMapping"),
     ("D-16", "product-specification", "产品＋运维", "B-06 D-01 D-06", "支持矩阵；无 OCR 的扫描件明确不可解析，保留来源定位", "formats scannedDocuments ocrAvailability sourceLocator failureDisplay"),
     ("D-17", "product-specification", "产品＋安全＋运维", "D-07 F-03 F-05", "历史不自动清理；仅校验无引用中间产物可清理", "temporaryRetention referenceValidation backupDeletion auditRetention restoreDeletionProtection"),
-    ("D-18", "product-specification", "产品", "D-04", "标题与会议名分开版本化，使用已保存标题发布", "manualTitleProtection renamePropagation titleVersion conflictPolicy"),
+    ("D-18", "adopted", "产品", "D-04", "人工标题不被 AI 或会议改名自动覆盖；重新联动只能由用户显式操作；标题与会议名分开版本化，使用已保存标题发布", ""),
     ("D-19", "adopted", "用户已确认；开发＋运维落实", "B-04 F-01 F-02 F-03", "local / s3 与 MySQL 来源独立；local 不要求 S3；会话固定后端、历史按原记录路由", ""),
 ]
 
@@ -157,7 +159,7 @@ def check_contracts(manifest: dict) -> dict:
     continuation = {}
     for phase in "BCDEF":
         continuation[phase] = {
-            "implementation": "may-continue" if phase != "E" else "specification-first",
+            "implementation": "may-continue",
             "qualification": "pending",
             "externalGates": [c["id"] for c in checks if any(t.startswith(phase + "-") for t in c["blockedTasks"])],
             "decisionGates": [d["id"] for d in decisions if any(t.startswith(phase + "-") for t in d["blockedTasks"])],
