@@ -32,7 +32,7 @@
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|a926c8b5…冻结；首次success/旧缺索引失败原件保留，配合V011.1结构独立PASS，归集022f68a/71c7c5c/1d710f9；完整B06仍OPEN|
 |V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|9efc688e…冻结；ACK后rank10首次success/checksum-570494170；实际11suite全通过/五组元数据一致，独立PASS采用；仅纠正索引|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|10742ca2…冻结/ACK后首次success checksum2101765957；实际19/123/92/21/45、11IT通过，fresh独立PASS0findings采用；完整B07仍OPEN|
-|V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|1de37066…首次应用前冻结；五表候选已逐表核对，登记提交后另发ACK；实际升级与独立结构评审仍待执行|
+|V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|1de37066…冻结/ACK后rank12首次success checksum-847352333；实际5/42/30/4/18、10IT通过，独立PASS0findings采用ee0bcd2/9bb6fe2；完整B08仍OPEN|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
 |V015|C-03|原V010|correction/edit_operation；speaker基础已在V011，任何必要扩展另在本号|预留，未编写|
 |V016|C-04/C-06|原V011|recording/session/part/chunk、subtitle；依赖V009/010/014|预留，未编写|
@@ -217,3 +217,10 @@ root独立从actual1.3metadata a6c758d4…过滤验证oracle d051aaa9…；目�
 完整候选、原始候选、独立比对和十二份原始来源/验证文件及 SHA 清单存于 artifacts/phase-b/b08-schema-freeze。静态核对采集时间为 **2026-10-21T21:47:04.731880+00:00**；这是采集时间，实际中央 Git 冻结提交秒、ACK 时间和首次数据库应用时间另行记录，不能混称。作者准备 checkpoint 为 1c8d3ef154933c93efb6dac427d5a6800d59da3f，其中四十三项清单均已按该提交 Git blob 复核。
 
 本记录提交后协调者另发精确 SHA ACK，作者才可将同字节候选放入正式 location，在上述同一 fixture 首次应用 V013，再运行完整物理约束、五组元数据、旧行/DDL/history 前缀和 private013/latest 重跑零增量检查。此处不代表结构独立评审通过、完整 B08 或阶段 B 验收，也不启用真实发布或公司接口。候选自共享起永久冻结；任何问题保留失败状态与原件，先统一登记有序前向版本，不改旧 SQL/oracle、不 reset、repair 或 outOfOrder。
+
+
+## V013 结构正式采用（2026-10-22）
+
+完整来源7f061e8a..d9428eeb包含准备及最终两项提交，fresh 独立 SPEC PASS/技术质量 APPROVED、0P0—P3；协调者完整阅读后归集 ee0bcd2/9bb6fe2，追加协调说明前95路径逐字节相同。SQL7661B/SHA1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c/checksum-847352333保持冻结，十八条外键、唯一延后材料索引和双成员外键不变。实际5/42/30/4/18、10IT零失败，旧行/DDL/五组元数据/十一项history前缀保留，private013/latest各零增量。中央冻结epoch1792619280 < ACK21:48:36.027422 < 首次应用epoch1792619379，原始证据不改。详见[采用记录](../acceptance/b/publication-schema-adoption.md)和[独立审查](../acceptance/b/publication-schema-independent-review.md)。
+
+只采用结构前置，不启用发布业务、公司接口或最终B验收。V017材料/来源设计、B06/B07/B08服务和两个交互门继续保留；后续版本所有权及下一新增整数V028不变，不修改任何已有SQL或失败history。

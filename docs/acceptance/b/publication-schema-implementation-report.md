@@ -77,3 +77,8 @@ The schema likewise does not prove immutable snapshots/membership, stable busine
 The preparation script intentionally belongs to the historical eleven-lower checkpoint. Its file-count guard refuses the current active013 checkout; do not weaken it for reruns. Preserve original candidate and checkpoint source/report copies rather than rewriting historical evidence.
 
 Fresh independent full-range SPEC and quality review remains required. Full B08 workflow/API/worker/KB/reconcile/idempotency/CAS/fencing/authority/semantic/source/hash/URL validation, company contracts and both pending UX gates remain OPEN. No real publication/mail/model/SSO/KB/company call, production/HA/native-I/O/capacity validation, push or main merge is claimed.
+
+
+## Coordinator adoption — current bounded status
+
+The original author report above is retained. Full source range7f061e8a..d9428eeb passed fresh independent SPEC/quality review with zero P0–P3 findings and was adopted as ee0bcd2/9bb6fe2. All95paths were byte-exact before this coordinator appendix; original final-source report bytes are separately sealed in artifacts/phase-b/b08-schema-coordinator. See [adoption](publication-schema-adoption.md) and [full independent review](publication-schema-independent-review.md). No mechanical adoption test/DB operation was performed. This accepts only V013 structure, not full B08/runtime/platform/production or either pending UX choice.

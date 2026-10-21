@@ -13,12 +13,12 @@
 |DIFF-07 提交顺序/consumer前缀|OPEN|序列与显式最终flush/consumer已有延迟commit、rollback、前缀ACK、lease及争用交付证据；基础实现已独立复审采用，真实远端投递/后续领域消费仍OPEN。|
 |DIFF-08 额度deadline/配置/执行绑定|OPEN|新执行绑定/NULL保守占额/批量配置完整预锁与settlement实现已独立复审采用，旧草稿保全不复用；实际公司额度/cutoff仍未资格验证，不释放未知占额或自动开启模型容量。|
 |DIFF-09 文件/DB跨资源边界|OPEN|ports/native基础设施和[选定清单修复](local-upload-selection.md)已评审；JavaS3完整交付及nullable长度资源释放等fix1已独立复审全部关闭并采用（43b33ba/a46d218）；V009六表结构已独立采用；公共DB注册/回滚孤儿不可读/引用与epoch清理及两后端闭环未完成。|
-|DIFF-10 快照/候选/根指针|OPEN|V011/11.1结构前置已独立PASS采用（022f68a/71c7c5c/1d710f9）；8/63/39/13/22实际元数据一致，首轮索引失败和新版本修正证据保留。V012结构也已独立PASS采用（19/123/92/21/45、11IT实际通过），V013和领域版本/epoch/冻结输入/needs_generation/迟到保护仍OPEN。|
-|DIFF-11 迁移次序冲突|机制已落实，逐号持续验证|原001/002/005归集并逐字节冻结，003/004永久空；[统一登记](../../database/migration-register.md)006—027已分配，各新号必须root预执行SHAACK。当前结构独立采用到012（全部旧SQL不变，V011遗漏索引以中央11.1新号修正）；不提前声称后续迁移全部验收。|
+|DIFF-10 快照/候选/根指针|OPEN|V011/11.1结构前置已独立PASS采用（022f68a/71c7c5c/1d710f9）；8/63/39/13/22实际元数据一致，首轮索引失败和新版本修正证据保留。V012结构也已独立PASS采用（19/123/92/21/45、11IT实际通过），V013五表结构也已独立PASS采用（5/42/30/4/18、10IT），领域版本/epoch/冻结输入/needs_generation/迟到保护仍OPEN。|
+|DIFF-11 迁移次序冲突|机制已落实，逐号持续验证|原001/002/005归集并逐字节冻结，003/004永久空；[统一登记](../../database/migration-register.md)006—027已分配，各新号必须root预执行SHAACK。当前结构独立采用到013（全部旧SQL不变，V011遗漏索引以中央11.1新号修正）；不提前声称后续迁移全部验收。|
 |DIFF-12 旧队列草稿反序/懒建subject|OPEN|原稿/日志已归档保全；新替代实现及fix1 b126db2已完整独立复审采用。领域显式fence/独立operation token运行时和各消费者须分别评审。|
 |DIFF-13 旧permit隐式配置/无证释放|OPEN|原稿保全；新JDBC配置/准入/执行绑定及排序全模型预锁/RR计数修复已独立复审采用；真实quota/cutoff资格仍OPEN。|
 
-|DIFF-14 纪要目录/未选敏感项/建议/人类复核持久化|设计已补齐，运行时OPEN|1.3新增八表及排除双标签PK/CHECK，实际93表709列；[独立评审](database-generation-addendum-independent-review.md)0findings。V012七表已随十九表结构独立采用；V013最终membership与业务权限/哈希/复核/最终确认未实施，两项交互选择pending。|
+|DIFF-14 纪要目录/未选敏感项/建议/人类复核持久化|设计已补齐，运行时OPEN|1.3新增八表及排除双标签PK/CHECK，实际93表709列；[独立评审](database-generation-addendum-independent-review.md)0findings。V012七表已随十九表结构独立采用；V013最终membership及双physicalFK结构已独立PASS采用；业务权限/哈希/复核/最终确认未实施，两项交互选择pending。|
 
 |DIFF-15 跨来源复制后的解析上下文/使用项追溯|发现技术缺口，D01设计及运行时OPEN|[纯S1修订契约](../../superpowers/specs/2026-10-22-ama-minutes-contract.md)只明确使用项投影和不支持路径失败，未新增持久来源边。[D01必做设计](material-provenance-design-prerequisite.md)须在复杂材料/一般来源重绑定启用前独立评审；不是删除需求或完整B07验收。|
 
