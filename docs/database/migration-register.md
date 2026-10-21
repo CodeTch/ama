@@ -1,6 +1,6 @@
 # AMA 统一 migration-register
 
-版本 B00-1.0-review，2026-10-21。这是迁移所有权/顺序登记，不是执行记录。独立评审前新表/改表不得最终验收。Flyway 执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL 多语句不是可整体 ROLLBACK 的事务，MySQL atomic DDL 只保证单条语句原子；中途失败须检查实际schema并前滚修复，不能假设未提交。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
+版本 B00-1.1-review，2026-10-21；首轮独立评审R1—R6定向修正。这是迁移所有权/顺序登记，不是执行记录。独立复审前新表/改表不得最终验收。Flyway执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL多语句不是可整体ROLLBACK的事务，MySQL atomic DDL只保证单条语句原子；中途失败检查实际schema并前滚修复。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
 
 ## 冻结输入与原哈希
 
@@ -22,22 +22,22 @@
 |---|---|---|---|---|
 |V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|预留，未编写|
 |V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|预留，未编写|
-|V008|B-03＋B-02授权切换|原V003|meeting/info/roster/member/idempotency/meeting_access_grant；依赖V007，验证旧ACL迁移来源|预留，未编写|
+|V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|预留，未编写|
 |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；依赖V008|预留，未编写|
-|V010|B-05|V005不变|修正既有subject/task/outbox/permit并补attempt、external_operation、consumer；依赖V008/009领域契约|预留，未编写|
-|V011|B-06|原V006|输入批次/文件、转写/片段/确认、speaker基础；依赖V008—010|预留，未编写|
-|V012|B-07|原V007|模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
-|V013|B-08|原V008|final_confirmation、publication/attempt/mapping；依赖V012；material指针B只能NULL|预留，未编写|
+|V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|预留，未编写|
+|V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|预留，未编写|
+|V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
+|V013|B-08|原V008|final_confirmation、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
 |V015|C-03|原V010|correction/edit_operation；speaker基础已在V011，任何必要扩展另在本号|预留，未编写|
 |V016|C-04/C-06|原V011|recording/session/part/chunk、subtitle；依赖V009/010/014|预留，未编写|
-|V017|D-01|原V012|material/reference/revision/snapshot/items/parsed_document/unit；为已有generation/final/locator加材料FK后才允许非空|预留，未编写|
+|V017|D-01|原V012|material/reference/revision/snapshot/items/parsed_document/unit；为已有transcription_input/generation/final/locator加材料FK后才允许非空，不能用可变meeting当前指针代旧输入|预留，未编写|
 |V018|D-02/D-03|原无固定号（必要增量）|info_suggestion；列表/来源完整性加强；既有要素/排除不重复建|预留，未编写|
 |V019|D-04|原V013|消费V012模板/版本/候选；必要索引或功能扩展需增量评审；若无DDL则永久保留空号|预留，未编写|
 |V020|D-05|原无固定号（必要增量）|publication_governance、external_event_receipt；依赖V013/010|预留，未编写|
 |V021|D-06|原V014|export_job；依赖V009/010/012/013|预留，未编写|
 |V022|D-07|原无固定号（必要增量）|meeting_deletion；消费V009清理；依赖V008/010|预留，未编写|
-|V023|D-08|原V015|topic/meeting_topic；依赖V008/013|预留，未编写|
+|V023|D-08|原V015|topic/meeting_topic含R2完整规范名/非唯一摘要桶、R3可选description；依赖V008/013，命名空间锁复用V007 identity行|预留，未编写|
 |V024|E-01|原V016|feedback/feedback_segment/corpus_revision；依赖V009/011；治理权限门|预留，未编写|
 |V025|E-02|原V017|voiceprint_consent/sample；依赖V007/009；用途/保留安全门|预留，未编写|
 |V026|E-03|原V018|evaluation_dataset/run、configuration_revision/release；依赖V009/010；配置白名单/评测门|预留，未编写|
@@ -46,6 +46,10 @@
 B-09、C-05、C-07 无专属新DDL；C-02复用媒体/转写/任务，D-03复用V012；E/F只在对应能力启用时迁移。迁移的实际内容须从目标设计计算与各自既有schema的增量，不能把审阅CREATE全文复制成V006。完整审阅库的跨域FK统一在所有表后建立；正式环境每阶段仅建立可满足依赖的FK，应用不允许写尚未部署的非空引用。speaker基础提前进入B-06，C-03复用而不重建。
 
 ## 兼容/回滚和验收义务
+
+### B00-1.1评审修正的迁移边界
+
+R1→V008/D-02列表共同F及当前确认姓名投影；R2→V012模板逻辑根、V023专题名称，owner身份锁＋完整规范名碰撞复核，不加名称上限；R3→V023 description LONGTEXT NULL；R4→V010逻辑操作/执行分离及quota执行关联、V013发布attempt引用，新task可以在同business_key/confirmation下追加执行；R5→V011转写输入与结果双向追溯，V017才启用非空材料FK；R6→V011片段标记，C-03复用保存/确认失效/hash规则。这些预留均尚无正式SQL/应用记录，因此是在评审前完善设计，不修改任何已应用/冻结脚本。若接收方已有更高版本或此前草案结构，先报告实际元数据并另从V028分配前向增量，不覆盖旧版本。B00-1.0不可采用，不能把旧79表证据替代1.1完整新库验证。
 
 每次登记实际脚本补文件名、commit、SHA256、执行库/时间（不记凭证）、Flyway history、前后DDL元数据diff、应用版本窗口和回归链接。独立评审通过设计不等于允许跳过各任务真实持久化/并发/权限测试。
 

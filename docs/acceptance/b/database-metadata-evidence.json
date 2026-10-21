@@ -1,17 +1,17 @@
 {
-  "design_version": "B00-1.0-review",
+  "design_version": "B00-1.1-review",
   "mysql_version": "8.4.6",
-  "container": "ama-test-b01-b901c0503cf5",
+  "container": "ama-test-b01-01baa6c89b08",
   "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
-  "ddl_sha256": "a2bdcdaf65abc29f3a2c6e498c95220aeb3fe9b09698c529b831484712e999df",
+  "ddl_sha256": "16d69102d5b775130efac720a31794fcedf0ff27f4f0002ef3fb9756a605d183",
   "counts": {
-    "tables": 79,
-    "columns": 612,
-    "index_definitions": 247,
-    "index_columns": 363,
-    "checks": 85,
-    "foreign_key_constraints": 162,
-    "foreign_key_columns": 166
+    "tables": 85,
+    "columns": 672,
+    "index_definitions": 270,
+    "index_columns": 404,
+    "checks": 99,
+    "foreign_key_constraints": 179,
+    "foreign_key_columns": 186
   },
   "metadata": {
     "tables": [
@@ -107,6 +107,11 @@
       },
       {
         "table": "external_event_receipt",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "external_execution",
         "engine": "InnoDB",
         "collation": "utf8mb4_0900_ai_ci"
       },
@@ -236,6 +241,16 @@
         "collation": "utf8mb4_0900_ai_ci"
       },
       {
+        "table": "meeting_person_search",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "meeting_search_projection",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
         "table": "meeting_topic",
         "engine": "InnoDB",
         "collation": "utf8mb4_0900_ai_ci"
@@ -247,6 +262,11 @@
       },
       {
         "table": "minutes_revision",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "minutes_template",
         "engine": "InnoDB",
         "collation": "utf8mb4_0900_ai_ci"
       },
@@ -387,6 +407,16 @@
       },
       {
         "table": "transcript_segment",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "transcript_segment_mark",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "transcription_input",
         "engine": "InnoDB",
         "collation": "utf8mb4_0900_ai_ci"
       },
@@ -1875,7 +1905,7 @@
       {
         "type": "char(36)",
         "extra": "",
-        "table": "external_operation",
+        "table": "external_execution",
         "column": "id",
         "default": null,
         "ordinal": 1,
@@ -1885,10 +1915,140 @@
       {
         "type": "char(36)",
         "extra": "",
-        "table": "external_operation",
-        "column": "task_id",
+        "table": "external_execution",
+        "column": "operation_id",
         "default": null,
         "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "external_execution",
+        "column": "execution_no",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "task_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "external_execution",
+        "column": "task_attempt",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "state",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "request_hash",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "external_execution",
+        "column": "request_manifest",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "marked_at",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "finished_at",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "no_effect_basis",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "external_execution",
+        "column": "no_effect_evidence",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "no_effect_verified_at",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
         "nullable": "NO",
         "collation": "ascii_bin"
       },
@@ -1898,7 +2058,7 @@
         "table": "external_operation",
         "column": "operation_kind",
         "default": null,
-        "ordinal": 3,
+        "ordinal": 2,
         "nullable": "NO",
         "collation": "ascii_bin"
       },
@@ -1908,7 +2068,7 @@
         "table": "external_operation",
         "column": "business_key",
         "default": null,
-        "ordinal": 4,
+        "ordinal": 3,
         "nullable": "NO",
         "collation": "utf8mb4_0900_bin"
       },
@@ -1918,19 +2078,9 @@
         "table": "external_operation",
         "column": "request_hash",
         "default": null,
-        "ordinal": 5,
+        "ordinal": 4,
         "nullable": "NO",
         "collation": "ascii_bin"
-      },
-      {
-        "type": "bigint unsigned",
-        "extra": "",
-        "table": "external_operation",
-        "column": "origin_attempt",
-        "default": null,
-        "ordinal": 6,
-        "nullable": "NO",
-        "collation": null
       },
       {
         "type": "varchar(64)",
@@ -1938,7 +2088,7 @@
         "table": "external_operation",
         "column": "state",
         "default": null,
-        "ordinal": 7,
+        "ordinal": 5,
         "nullable": "NO",
         "collation": "ascii_bin"
       },
@@ -1948,7 +2098,7 @@
         "table": "external_operation",
         "column": "marked_at",
         "default": null,
-        "ordinal": 8,
+        "ordinal": 6,
         "nullable": "NO",
         "collation": null
       },
@@ -1958,7 +2108,7 @@
         "table": "external_operation",
         "column": "next_check_at",
         "default": null,
-        "ordinal": 9,
+        "ordinal": 7,
         "nullable": "NO",
         "collation": null
       },
@@ -1968,7 +2118,7 @@
         "table": "external_operation",
         "column": "reconcile_epoch",
         "default": "0",
-        "ordinal": 10,
+        "ordinal": 8,
         "nullable": "NO",
         "collation": null
       },
@@ -1978,7 +2128,7 @@
         "table": "external_operation",
         "column": "reconcile_owner",
         "default": null,
-        "ordinal": 11,
+        "ordinal": 9,
         "nullable": "YES",
         "collation": "ascii_bin"
       },
@@ -1988,7 +2138,7 @@
         "table": "external_operation",
         "column": "reconcile_expires_at",
         "default": null,
-        "ordinal": 12,
+        "ordinal": 10,
         "nullable": "YES",
         "collation": null
       },
@@ -1998,7 +2148,7 @@
         "table": "external_operation",
         "column": "external_result_id",
         "default": null,
-        "ordinal": 13,
+        "ordinal": 11,
         "nullable": "YES",
         "collation": "utf8mb4_0900_ai_ci"
       },
@@ -2008,9 +2158,39 @@
         "table": "external_operation",
         "column": "last_error",
         "default": null,
-        "ordinal": 14,
+        "ordinal": 12,
         "nullable": "YES",
         "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "subject_kind",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "subject_id",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "external_operation",
+        "column": "current_execution_no",
+        "default": null,
+        "ordinal": 15,
+        "nullable": "NO",
+        "collation": null
       },
       {
         "type": "char(36)",
@@ -4035,6 +4215,116 @@
       {
         "type": "char(36)",
         "extra": "",
+        "table": "meeting_person_search",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_person_search",
+        "column": "roster_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_person_search",
+        "column": "member_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "meeting_person_search",
+        "column": "name_search",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_as_ci"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "info_revision_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "roster_revision_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "name_search",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_as_ci"
+      },
+      {
+        "type": "varchar(36)",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "number_search",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_as_ci"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "category_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "meeting_search_projection",
+        "column": "meeting_revision",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
         "table": "meeting_topic",
         "column": "topic_id",
         "default": null,
@@ -4223,6 +4513,86 @@
         "collation": null
       },
       {
+        "type": "char(36)",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "owner_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "name",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "name_normalized",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "name_hash",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "current_revision_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "revision",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
         "type": "varchar(64)",
         "extra": "",
         "table": "model_capacity",
@@ -4296,7 +4666,7 @@
         "type": "char(36)",
         "extra": "",
         "table": "model_reservation",
-        "column": "operation_id",
+        "column": "execution_id",
         "default": null,
         "ordinal": 3,
         "nullable": "NO",
@@ -4711,6 +5081,16 @@
         "ordinal": 8,
         "nullable": "YES",
         "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "publication_attempt",
+        "column": "execution_id",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": "ascii_bin"
       },
       {
         "type": "char(36)",
@@ -5883,6 +6263,36 @@
         "collation": null
       },
       {
+        "type": "longtext",
+        "extra": "",
+        "table": "topic",
+        "column": "description",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "topic",
+        "column": "name_normalized",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "topic",
+        "column": "name_hash",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
         "type": "char(36)",
         "extra": "",
         "table": "transcript_confirmation",
@@ -6035,6 +6445,26 @@
       {
         "type": "char(36)",
         "extra": "",
+        "table": "transcript_revision",
+        "column": "processing_input_id",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "producer_task_id",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
         "table": "transcript_segment",
         "column": "revision_id",
         "default": null,
@@ -6121,6 +6551,206 @@
         "ordinal": 9,
         "nullable": "YES",
         "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_segment_mark",
+        "column": "revision_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_segment_mark",
+        "column": "segment_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "transcript_segment_mark",
+        "column": "mark",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "batch_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "kind",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "source_revision_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "material_snapshot_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "material_mode",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "processing_config_version",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "parser_version",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "model_config_version",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "prompt_version",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "int unsigned",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "manifest_schema_version",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "config_manifest",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "input_fingerprint",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "base_revision",
+        "default": null,
+        "ordinal": 15,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "cancel_epoch",
+        "default": null,
+        "ordinal": 16,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 17,
+        "nullable": "NO",
+        "collation": null
       },
       {
         "type": "char(36)",
@@ -7436,6 +8066,46 @@
       },
       {
         "seq": 1,
+        "name": "external_execution_number",
+        "type": "BTREE",
+        "table": "external_execution",
+        "column": "operation_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "external_execution_number",
+        "type": "BTREE",
+        "table": "external_execution",
+        "column": "execution_no",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "external_execution_task",
+        "type": "BTREE",
+        "table": "external_execution",
+        "column": "task_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "external_execution",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
         "name": "external_due",
         "type": "BTREE",
         "table": "external_operation",
@@ -7486,22 +8156,22 @@
       },
       {
         "seq": 1,
-        "name": "external_task",
+        "name": "fk_external_operation_0",
         "type": "BTREE",
         "table": "external_operation",
-        "column": "task_id",
+        "column": "subject_kind",
         "prefix": null,
-        "unique": 1,
+        "unique": 0,
         "direction": "A"
       },
       {
         "seq": 2,
-        "name": "external_task",
+        "name": "fk_external_operation_0",
         "type": "BTREE",
         "table": "external_operation",
-        "column": "operation_kind",
+        "column": "subject_id",
         "prefix": null,
-        "unique": 1,
+        "unique": 0,
         "direction": "A"
       },
       {
@@ -8616,6 +9286,46 @@
       },
       {
         "seq": 1,
+        "name": "meeting_owner_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "meeting_owner_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "lifecycle",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "meeting_owner_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "updated_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "meeting_owner_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
         "name": "meeting_stage_date",
         "type": "BTREE",
         "table": "meeting",
@@ -8647,6 +9357,46 @@
       {
         "seq": 4,
         "name": "meeting_stage_date",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "meeting_stage_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "lifecycle",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "meeting_stage_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "stage",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "meeting_stage_updated",
+        "type": "BTREE",
+        "table": "meeting",
+        "column": "updated_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "meeting_stage_updated",
         "type": "BTREE",
         "table": "meeting",
         "column": "id",
@@ -8806,6 +9556,96 @@
       },
       {
         "seq": 1,
+        "name": "fk_meeting_person_search_1",
+        "type": "BTREE",
+        "table": "meeting_person_search",
+        "column": "roster_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "fk_meeting_person_search_1",
+        "type": "BTREE",
+        "table": "meeting_person_search",
+        "column": "member_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_person_search",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_person_search",
+        "column": "member_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_meeting_search_projection_1",
+        "type": "BTREE",
+        "table": "meeting_search_projection",
+        "column": "info_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_meeting_search_projection_2",
+        "type": "BTREE",
+        "table": "meeting_search_projection",
+        "column": "roster_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "meeting_search_projection",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "search_category",
+        "type": "BTREE",
+        "table": "meeting_search_projection",
+        "column": "category_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "search_category",
+        "type": "BTREE",
+        "table": "meeting_search_projection",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
         "name": "fk_meeting_topic_1",
         "type": "BTREE",
         "table": "meeting_topic",
@@ -8928,6 +9768,46 @@
         "seq": 1,
         "name": "PRIMARY",
         "type": "BTREE",
+        "table": "minutes_template",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "template_name_bucket",
+        "type": "BTREE",
+        "table": "minutes_template",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "template_name_bucket",
+        "type": "BTREE",
+        "table": "minutes_template",
+        "column": "name_hash",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "template_name_bucket",
+        "type": "BTREE",
+        "table": "minutes_template",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
         "table": "model_capacity",
         "column": "model",
         "prefix": null,
@@ -8976,10 +9856,10 @@
       },
       {
         "seq": 1,
-        "name": "reservation_operation",
+        "name": "reservation_execution",
         "type": "BTREE",
         "table": "model_reservation",
-        "column": "operation_id",
+        "column": "execution_id",
         "prefix": null,
         "unique": 1,
         "direction": "A"
@@ -9100,6 +9980,16 @@
         "type": "BTREE",
         "table": "publication_attempt",
         "column": "operation_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_publication_attempt_3",
+        "type": "BTREE",
+        "table": "publication_attempt",
+        "column": "execution_id",
         "prefix": null,
         "unique": 0,
         "direction": "A"
@@ -9786,6 +10676,36 @@
       },
       {
         "seq": 1,
+        "name": "topic_name_bucket",
+        "type": "BTREE",
+        "table": "topic",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "topic_name_bucket",
+        "type": "BTREE",
+        "table": "topic",
+        "column": "name_hash",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "topic_name_bucket",
+        "type": "BTREE",
+        "table": "topic",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
         "name": "topic_owner",
         "type": "BTREE",
         "table": "topic",
@@ -9870,6 +10790,26 @@
         "type": "BTREE",
         "table": "transcript_revision",
         "column": "parent_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcript_revision_3",
+        "type": "BTREE",
+        "table": "transcript_revision",
+        "column": "processing_input_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcript_revision_4",
+        "type": "BTREE",
+        "table": "transcript_revision",
+        "column": "producer_task_id",
         "prefix": null,
         "unique": 0,
         "direction": "A"
@@ -9962,6 +10902,106 @@
         "column": "ordinal",
         "prefix": null,
         "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcript_segment_mark",
+        "column": "revision_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcript_segment_mark",
+        "column": "segment_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcript_segment_mark",
+        "column": "mark",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcription_input_1",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "batch_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcription_input_2",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "source_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcription_input_3",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "material_snapshot_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "transcription_input_history",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "transcription_input_history",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "created_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "transcription_input_history",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
         "direction": "A"
       },
       {
@@ -10269,9 +11309,45 @@
         "enforced": "YES"
       },
       {
+        "name": "ck_external_execution_0",
+        "table": "external_execution",
+        "clause": "(`execution_no` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_execution_1",
+        "table": "external_execution",
+        "clause": "(`state` in (_ascii\\'PREPARED\\',_ascii\\'MARKED\\',_ascii\\'UNKNOWN\\',_ascii\\'SUCCEEDED\\',_ascii\\'FAILED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_execution_2",
+        "table": "external_execution",
+        "clause": "((`state` <> _ascii\\'MARKED\\') or ((`task_attempt` is not null) and (`marked_at` is not null)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_execution_3",
+        "table": "external_execution",
+        "clause": "((`no_effect_basis` is null) or (`no_effect_basis` in (_ascii\\'NOT_SENT\\',_ascii\\'DEFINITIVE_REJECTION\\',_ascii\\'PROVEN_CUTOFF_FENCED\\')))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_execution_4",
+        "table": "external_execution",
+        "clause": "(((`no_effect_basis` is null) and (`no_effect_evidence` is null) and (`no_effect_verified_at` is null)) or ((`state` = _ascii\\'FAILED\\') and (`no_effect_basis` is not null) and (`no_effect_evidence` is not null) and (`no_effect_verified_at` is not null) and (`finished_at` is not null)))",
+        "enforced": "YES"
+      },
+      {
         "name": "ck_external_operation_0",
         "table": "external_operation",
-        "clause": "(`state` in (_ascii\\'MARKED\\',_ascii\\'UNKNOWN\\',_ascii\\'SUCCEEDED\\',_ascii\\'FAILED\\',_ascii\\'MANUAL_REQUIRED\\'))",
+        "clause": "(`state` in (_ascii\\'MARKED\\',_ascii\\'UNKNOWN\\',_ascii\\'RETRY_QUEUED\\',_ascii\\'SUCCEEDED\\',_ascii\\'FAILED\\',_ascii\\'MANUAL_REQUIRED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_operation_1",
+        "table": "external_operation",
+        "clause": "(`current_execution_no` > 0)",
         "enforced": "YES"
       },
       {
@@ -10638,6 +11714,54 @@
         "name": "ck_transcript_segment_0",
         "table": "transcript_segment",
         "clause": "(((`start_ms` is null) and (`end_ms` is null)) or ((`start_ms` is not null) and (`end_ms` is not null) and (`end_ms` >= `start_ms`)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcript_segment_mark_0",
+        "table": "transcript_segment_mark",
+        "clause": "(`mark` in (_ascii\\'KEY\\',_ascii\\'CONCLUSION\\',_ascii\\'DISPUTE\\',_ascii\\'GENERATION_FOCUS\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_0",
+        "table": "transcription_input",
+        "clause": "(`kind` in (_ascii\\'IMPORT\\',_ascii\\'ASR\\',_ascii\\'ENHANCE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_1",
+        "table": "transcription_input",
+        "clause": "(`material_mode` in (_ascii\\'EMPTY\\',_ascii\\'PINNED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_2",
+        "table": "transcription_input",
+        "clause": "(((`material_mode` = _ascii\\'EMPTY\\') and (`material_snapshot_id` is null)) or ((`material_mode` = _ascii\\'PINNED\\') and (`material_snapshot_id` is not null)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_3",
+        "table": "transcription_input",
+        "clause": "((`kind` <> _ascii\\'ENHANCE\\') or (`source_revision_id` is not null))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_4",
+        "table": "transcription_input",
+        "clause": "((`kind` <> _ascii\\'IMPORT\\') or (`parser_version` is not null))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_5",
+        "table": "transcription_input",
+        "clause": "((`kind` = _ascii\\'IMPORT\\') or (`model_config_version` is not null))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_6",
+        "table": "transcription_input",
+        "clause": "(`manifest_schema_version` > 0)",
         "enforced": "YES"
       },
       {
@@ -11079,14 +12203,44 @@
         "ordinal": 1
       },
       {
-        "name": "fk_external_operation_0",
-        "table": "external_operation",
+        "name": "fk_external_execution_0",
+        "table": "external_execution",
+        "column": "operation_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "external_operation",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_external_execution_1",
+        "table": "external_execution",
         "column": "task_id",
         "delete": "RESTRICT",
         "remote": "id",
         "target": "durable_task",
         "update": "RESTRICT",
         "ordinal": 1
+      },
+      {
+        "name": "fk_external_operation_0",
+        "table": "external_operation",
+        "column": "subject_kind",
+        "delete": "RESTRICT",
+        "remote": "subject_kind",
+        "target": "task_subject",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_external_operation_0",
+        "table": "external_operation",
+        "column": "subject_id",
+        "delete": "RESTRICT",
+        "remote": "subject_id",
+        "target": "task_subject",
+        "update": "RESTRICT",
+        "ordinal": 2
       },
       {
         "name": "fk_feedback_segment_0",
@@ -11699,6 +12853,66 @@
         "ordinal": 1
       },
       {
+        "name": "fk_meeting_person_search_0",
+        "table": "meeting_person_search",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_person_search_1",
+        "table": "meeting_person_search",
+        "column": "roster_id",
+        "delete": "RESTRICT",
+        "remote": "roster_id",
+        "target": "roster_member",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_person_search_1",
+        "table": "meeting_person_search",
+        "column": "member_id",
+        "delete": "RESTRICT",
+        "remote": "member_id",
+        "target": "roster_member",
+        "update": "RESTRICT",
+        "ordinal": 2
+      },
+      {
+        "name": "fk_meeting_search_projection_0",
+        "table": "meeting_search_projection",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_search_projection_1",
+        "table": "meeting_search_projection",
+        "column": "info_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting_info_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_meeting_search_projection_2",
+        "table": "meeting_search_projection",
+        "column": "roster_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "roster_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
         "name": "fk_meeting_topic_0",
         "table": "meeting_topic",
         "column": "topic_id",
@@ -11759,6 +12973,16 @@
         "ordinal": 1
       },
       {
+        "name": "fk_minutes_template_0",
+        "table": "minutes_template",
+        "column": "owner_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
         "name": "fk_model_reservation_0",
         "table": "model_reservation",
         "column": "model",
@@ -11771,10 +12995,10 @@
       {
         "name": "fk_model_reservation_1",
         "table": "model_reservation",
-        "column": "operation_id",
+        "column": "execution_id",
         "delete": "RESTRICT",
         "remote": "id",
-        "target": "external_operation",
+        "target": "external_execution",
         "update": "RESTRICT",
         "ordinal": 1
       },
@@ -11855,6 +13079,16 @@
         "delete": "RESTRICT",
         "remote": "id",
         "target": "external_operation",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_publication_attempt_3",
+        "table": "publication_attempt",
+        "column": "execution_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "external_execution",
         "update": "RESTRICT",
         "ordinal": 1
       },
@@ -12139,6 +13373,16 @@
         "ordinal": 1
       },
       {
+        "name": "fk_template_revision_1",
+        "table": "template_revision",
+        "column": "template_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_template",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
         "name": "fk_topic_0",
         "table": "topic",
         "column": "owner_id",
@@ -12209,6 +13453,26 @@
         "ordinal": 1
       },
       {
+        "name": "fk_transcript_revision_3",
+        "table": "transcript_revision",
+        "column": "processing_input_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "transcription_input",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_revision_4",
+        "table": "transcript_revision",
+        "column": "producer_task_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "durable_task",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
         "name": "fk_transcript_segment_0",
         "table": "transcript_segment",
         "column": "revision_id",
@@ -12235,6 +13499,66 @@
         "delete": "RESTRICT",
         "remote": "id",
         "target": "speaker",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_segment_mark_0",
+        "table": "transcript_segment_mark",
+        "column": "revision_id",
+        "delete": "RESTRICT",
+        "remote": "revision_id",
+        "target": "transcript_segment",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_segment_mark_0",
+        "table": "transcript_segment_mark",
+        "column": "segment_id",
+        "delete": "RESTRICT",
+        "remote": "segment_id",
+        "target": "transcript_segment",
+        "update": "RESTRICT",
+        "ordinal": 2
+      },
+      {
+        "name": "fk_transcription_input_0",
+        "table": "transcription_input",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcription_input_1",
+        "table": "transcription_input",
+        "column": "batch_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "input_batch",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcription_input_2",
+        "table": "transcription_input",
+        "column": "source_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "transcript_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcription_input_3",
+        "table": "transcription_input",
+        "column": "material_snapshot_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "material_snapshot",
         "update": "RESTRICT",
         "ordinal": 1
       },

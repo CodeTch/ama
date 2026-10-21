@@ -1,4 +1,4 @@
--- B00-1.0-review: REVIEW ONLY; never place this file in Flyway locations.
+-- B00-1.1-review: REVIEW ONLY; never place this file in Flyway locations.
 
 -- All future tables exist ONLY in the disposable review database.
 
@@ -101,6 +101,8 @@ CREATE TABLE meeting (
   PRIMARY KEY (id),
   INDEX meeting_owner_date (owner_id,lifecycle,actual_meeting_date,id),
   INDEX meeting_stage_date (lifecycle,stage,actual_meeting_date,id),
+  INDEX meeting_owner_updated (owner_id,lifecycle,updated_at,id),
+  INDEX meeting_stage_updated (lifecycle,stage,updated_at,id),
   CONSTRAINT ck_meeting_0 CHECK (stage IN ('ENTRY','TRANSCRIPT_PENDING','TRANSCRIPT_FAILED','MINUTES_PENDING','MINUTES_FAILED','READY_TO_PUBLISH','PUBLISH_FAILED','PUBLISHED')),
   CONSTRAINT ck_meeting_1 CHECK (lifecycle IN ('ACTIVE','DELETING','DELETED')),
   CONSTRAINT ck_meeting_2 CHECK (governance_state IN ('ACTIVE','WITHDRAW_PENDING','WITHDRAWN','OBSOLETE_PENDING','OBSOLETE')),
@@ -363,11 +365,9 @@ CREATE TABLE task_attempt (
 
 CREATE TABLE external_operation (
   `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
-  `task_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `operation_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `business_key` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
   `request_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
-  `origin_attempt` bigint unsigned NOT NULL,
   `state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `marked_at` datetime(6) NOT NULL,
   `next_check_at` datetime(6) NOT NULL,
@@ -376,11 +376,14 @@ CREATE TABLE external_operation (
   `reconcile_expires_at` datetime(6) NULL,
   `external_result_id` longtext NULL,
   `last_error` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `subject_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `subject_id` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `current_execution_no` bigint unsigned NOT NULL,
   PRIMARY KEY (id),
-  UNIQUE INDEX external_task (task_id,operation_kind),
   UNIQUE INDEX external_key (operation_kind,business_key),
   INDEX external_due (state,next_check_at,id),
-  CONSTRAINT ck_external_operation_0 CHECK (state IN ('MARKED','UNKNOWN','SUCCEEDED','FAILED','MANUAL_REQUIRED'))
+  CONSTRAINT ck_external_operation_0 CHECK (state IN ('MARKED','UNKNOWN','RETRY_QUEUED','SUCCEEDED','FAILED','MANUAL_REQUIRED')),
+  CONSTRAINT ck_external_operation_1 CHECK (current_execution_no > 0)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 -- Owner B-05; planned V010: 提交序列锁，避免 AUTO_INCREMENT 先提交高号跳漏
@@ -439,13 +442,13 @@ CREATE TABLE model_capacity (
 CREATE TABLE model_reservation (
   `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `model` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
-  `operation_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `execution_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `config_revision` bigint unsigned NOT NULL,
   `safe_deadline` datetime(6) NULL,
   `created_at` datetime(6) NOT NULL,
   `settled_at` datetime(6) NULL,
   PRIMARY KEY (id),
-  UNIQUE INDEX reservation_operation (operation_id),
+  UNIQUE INDEX reservation_execution (execution_id),
   INDEX model_deadline (model,settled_at,safe_deadline)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
@@ -486,6 +489,8 @@ CREATE TABLE transcript_revision (
   `input_fingerprint` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `created_by` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
   `created_at` datetime(6) NOT NULL,
+  `processing_input_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `producer_task_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
   PRIMARY KEY (id),
   UNIQUE INDEX transcript_history (meeting_id,revision),
   CONSTRAINT ck_transcript_revision_0 CHECK (kind IN ('RAW','ENHANCED','WORKING','CANDIDATE'))
@@ -743,6 +748,7 @@ CREATE TABLE publication_attempt (
   `outcome` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `created_at` datetime(6) NOT NULL,
   `finished_at` datetime(6) NULL,
+  `execution_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   PRIMARY KEY (id),
   INDEX publication_attempt_history (publication_id,created_at,id),
   CONSTRAINT ck_publication_attempt_0 CHECK (kind IN ('PUBLISH','RECONCILE','WITHDRAW','OBSOLETE')),
@@ -1048,8 +1054,12 @@ CREATE TABLE topic (
   `name` longtext NOT NULL,
   `revision` bigint unsigned NOT NULL,
   `created_at` datetime(6) NOT NULL,
+  `description` longtext NULL,
+  `name_normalized` longtext COLLATE utf8mb4_0900_bin NOT NULL,
+  `name_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   PRIMARY KEY (id),
-  INDEX topic_owner (owner_id,id)
+  INDEX topic_owner (owner_id,id),
+  INDEX topic_name_bucket (owner_id,name_hash,id)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 -- Owner D-08; planned V023: 本人负责且已发布会议归集
@@ -1243,6 +1253,113 @@ CREATE TABLE mail_recipient (
   CONSTRAINT ck_mail_recipient_0 CHECK (state IN ('PENDING','SENT','FAILED','UNKNOWN','REVOKED'))
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
+-- Owner B-03/D-02; planned V008: R1 列表当前名称/编号及筛选字段投影；与根修改同事务
+
+CREATE TABLE meeting_search_projection (
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `info_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `roster_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `name_search` longtext COLLATE utf8mb4_0900_as_ci NULL,
+  `number_search` varchar(36) COLLATE utf8mb4_0900_as_ci NOT NULL,
+  `category_id` varchar(255) COLLATE utf8mb4_0900_bin NULL,
+  `meeting_revision` bigint unsigned NOT NULL,
+  PRIMARY KEY (meeting_id),
+  INDEX search_category (category_id,meeting_id)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-03/D-02; planned V008: R1 当前已确认名单姓名投影；草稿和AI候选绝不进入
+
+CREATE TABLE meeting_person_search (
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `roster_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `member_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `name_search` longtext COLLATE utf8mb4_0900_as_ci NOT NULL,
+  PRIMARY KEY (meeting_id,member_id)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-07/D-04; planned V012: R2 模板逻辑根与当前个人名称；历史名称不占用命名空间
+
+CREATE TABLE minutes_template (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `owner_id` varchar(255) COLLATE utf8mb4_0900_bin NULL,
+  `name` longtext NOT NULL,
+  `name_normalized` longtext COLLATE utf8mb4_0900_bin NOT NULL,
+  `name_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `current_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `revision` bigint unsigned NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (id),
+  INDEX template_name_bucket (owner_id,name_hash,id)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-05/B-08; planned V010: R4 稳定逻辑操作下的追加执行尝试；支持同确认零效果失败重试
+
+CREATE TABLE external_execution (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `operation_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `execution_no` bigint unsigned NOT NULL,
+  `task_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `task_attempt` bigint unsigned NULL,
+  `state` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `request_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `request_manifest` longtext NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `marked_at` datetime(6) NULL,
+  `finished_at` datetime(6) NULL,
+  `no_effect_basis` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `no_effect_evidence` longtext NULL,
+  `no_effect_verified_at` datetime(6) NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX external_execution_number (operation_id,execution_no),
+  UNIQUE INDEX external_execution_task (task_id),
+  CONSTRAINT ck_external_execution_0 CHECK (execution_no > 0),
+  CONSTRAINT ck_external_execution_1 CHECK (state IN ('PREPARED','MARKED','UNKNOWN','SUCCEEDED','FAILED')),
+  CONSTRAINT ck_external_execution_2 CHECK (state <> 'MARKED' OR (task_attempt IS NOT NULL AND marked_at IS NOT NULL)),
+  CONSTRAINT ck_external_execution_3 CHECK (no_effect_basis IS NULL OR no_effect_basis IN ('NOT_SENT','DEFINITIVE_REJECTION','PROVEN_CUTOFF_FENCED')),
+  CONSTRAINT ck_external_execution_4 CHECK ((no_effect_basis IS NULL AND no_effect_evidence IS NULL AND no_effect_verified_at IS NULL) OR (state='FAILED' AND no_effect_basis IS NOT NULL AND no_effect_evidence IS NOT NULL AND no_effect_verified_at IS NOT NULL AND finished_at IS NOT NULL))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-06/C-02/C-03/D-01; planned V011: R5 转写导入/识别/重新增强不可变输入快照，独立于纪要generation_input
+
+CREATE TABLE transcription_input (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `batch_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `source_revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `material_snapshot_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+  `material_mode` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `processing_config_version` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+  `parser_version` varchar(255) COLLATE utf8mb4_0900_bin NULL,
+  `model_config_version` varchar(255) COLLATE utf8mb4_0900_bin NULL,
+  `prompt_version` varchar(255) COLLATE utf8mb4_0900_bin NULL,
+  `manifest_schema_version` int unsigned NOT NULL,
+  `config_manifest` longtext NOT NULL,
+  `input_fingerprint` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `base_revision` bigint unsigned NOT NULL,
+  `cancel_epoch` bigint unsigned NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (id),
+  INDEX transcription_input_history (meeting_id,created_at,id),
+  CONSTRAINT ck_transcription_input_0 CHECK (kind IN ('IMPORT','ASR','ENHANCE')),
+  CONSTRAINT ck_transcription_input_1 CHECK (material_mode IN ('EMPTY','PINNED')),
+  CONSTRAINT ck_transcription_input_2 CHECK ((material_mode='EMPTY' AND material_snapshot_id IS NULL) OR (material_mode='PINNED' AND material_snapshot_id IS NOT NULL)),
+  CONSTRAINT ck_transcription_input_3 CHECK (kind <> 'ENHANCE' OR source_revision_id IS NOT NULL),
+  CONSTRAINT ck_transcription_input_4 CHECK (kind <> 'IMPORT' OR parser_version IS NOT NULL),
+  CONSTRAINT ck_transcription_input_5 CHECK (kind='IMPORT' OR model_config_version IS NOT NULL),
+  CONSTRAINT ck_transcription_input_6 CHECK (manifest_schema_version > 0)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-06/C-03; planned V011: R6 片段多选标记随转写版本冻结；不是纪要要素
+
+CREATE TABLE transcript_segment_mark (
+  `revision_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `segment_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `mark` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  PRIMARY KEY (revision_id,segment_id,mark),
+  CONSTRAINT ck_transcript_segment_mark_0 CHECK (mark IN ('KEY','CONCLUSION','DISPUTE','GENERATION_FOCUS'))
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
 ALTER TABLE department ADD CONSTRAINT fk_department_0 FOREIGN KEY (parent_id) REFERENCES department (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE enterprise_identity ADD CONSTRAINT fk_enterprise_identity_0 FOREIGN KEY (department_id) REFERENCES department (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
@@ -1295,13 +1412,13 @@ ALTER TABLE durable_task ADD CONSTRAINT fk_durable_task_0 FOREIGN KEY (subject_k
 
 ALTER TABLE task_attempt ADD CONSTRAINT fk_task_attempt_0 FOREIGN KEY (task_id) REFERENCES durable_task (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
-ALTER TABLE external_operation ADD CONSTRAINT fk_external_operation_0 FOREIGN KEY (task_id) REFERENCES durable_task (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE external_operation ADD CONSTRAINT fk_external_operation_0 FOREIGN KEY (subject_kind,subject_id) REFERENCES task_subject (subject_kind,subject_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE task_outbox ADD CONSTRAINT fk_task_outbox_0 FOREIGN KEY (task_id) REFERENCES durable_task (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE model_reservation ADD CONSTRAINT fk_model_reservation_0 FOREIGN KEY (model) REFERENCES model_capacity (model) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
-ALTER TABLE model_reservation ADD CONSTRAINT fk_model_reservation_1 FOREIGN KEY (operation_id) REFERENCES external_operation (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE model_reservation ADD CONSTRAINT fk_model_reservation_1 FOREIGN KEY (execution_id) REFERENCES external_execution (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE input_batch ADD CONSTRAINT fk_input_batch_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
@@ -1314,6 +1431,10 @@ ALTER TABLE transcript_revision ADD CONSTRAINT fk_transcript_revision_0 FOREIGN 
 ALTER TABLE transcript_revision ADD CONSTRAINT fk_transcript_revision_1 FOREIGN KEY (batch_id) REFERENCES input_batch (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE transcript_revision ADD CONSTRAINT fk_transcript_revision_2 FOREIGN KEY (parent_id) REFERENCES transcript_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_revision ADD CONSTRAINT fk_transcript_revision_3 FOREIGN KEY (processing_input_id) REFERENCES transcription_input (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_revision ADD CONSTRAINT fk_transcript_revision_4 FOREIGN KEY (producer_task_id) REFERENCES durable_task (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE transcript_segment ADD CONSTRAINT fk_transcript_segment_0 FOREIGN KEY (revision_id) REFERENCES transcript_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
@@ -1328,6 +1449,8 @@ ALTER TABLE transcript_confirmation ADD CONSTRAINT fk_transcript_confirmation_1 
 ALTER TABLE transcript_confirmation ADD CONSTRAINT fk_transcript_confirmation_2 FOREIGN KEY (confirmed_by) REFERENCES enterprise_identity (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE template_revision ADD CONSTRAINT fk_template_revision_0 FOREIGN KEY (owner_id) REFERENCES enterprise_identity (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE template_revision ADD CONSTRAINT fk_template_revision_1 FOREIGN KEY (template_id) REFERENCES minutes_template (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE generation_input ADD CONSTRAINT fk_generation_input_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
@@ -1414,6 +1537,8 @@ ALTER TABLE publication_attempt ADD CONSTRAINT fk_publication_attempt_0 FOREIGN 
 ALTER TABLE publication_attempt ADD CONSTRAINT fk_publication_attempt_1 FOREIGN KEY (confirmation_id) REFERENCES final_confirmation (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE publication_attempt ADD CONSTRAINT fk_publication_attempt_2 FOREIGN KEY (operation_id) REFERENCES external_operation (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE publication_attempt ADD CONSTRAINT fk_publication_attempt_3 FOREIGN KEY (execution_id) REFERENCES external_execution (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE external_document_mapping ADD CONSTRAINT fk_external_document_mapping_0 FOREIGN KEY (publication_id) REFERENCES publication (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
@@ -1566,5 +1691,31 @@ ALTER TABLE mail_recipient ADD CONSTRAINT fk_mail_recipient_0 FOREIGN KEY (mail_
 ALTER TABLE mail_recipient ADD CONSTRAINT fk_mail_recipient_1 FOREIGN KEY (enterprise_id) REFERENCES enterprise_identity (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE mail_recipient ADD CONSTRAINT fk_mail_recipient_2 FOREIGN KEY (operation_id) REFERENCES external_operation (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE meeting_search_projection ADD CONSTRAINT fk_meeting_search_projection_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE meeting_search_projection ADD CONSTRAINT fk_meeting_search_projection_1 FOREIGN KEY (info_revision_id) REFERENCES meeting_info_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE meeting_search_projection ADD CONSTRAINT fk_meeting_search_projection_2 FOREIGN KEY (roster_revision_id) REFERENCES roster_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE meeting_person_search ADD CONSTRAINT fk_meeting_person_search_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE meeting_person_search ADD CONSTRAINT fk_meeting_person_search_1 FOREIGN KEY (roster_id,member_id) REFERENCES roster_member (roster_id,member_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE minutes_template ADD CONSTRAINT fk_minutes_template_0 FOREIGN KEY (owner_id) REFERENCES enterprise_identity (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE external_execution ADD CONSTRAINT fk_external_execution_0 FOREIGN KEY (operation_id) REFERENCES external_operation (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE external_execution ADD CONSTRAINT fk_external_execution_1 FOREIGN KEY (task_id) REFERENCES durable_task (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcription_input ADD CONSTRAINT fk_transcription_input_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcription_input ADD CONSTRAINT fk_transcription_input_1 FOREIGN KEY (batch_id) REFERENCES input_batch (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcription_input ADD CONSTRAINT fk_transcription_input_2 FOREIGN KEY (source_revision_id) REFERENCES transcript_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcription_input ADD CONSTRAINT fk_transcription_input_3 FOREIGN KEY (material_snapshot_id) REFERENCES material_snapshot (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE transcript_segment_mark ADD CONSTRAINT fk_transcript_segment_mark_0 FOREIGN KEY (revision_id,segment_id) REFERENCES transcript_segment (revision_id,segment_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 INSERT INTO task_outbox_sequence(id,next_id) VALUES(1,1);

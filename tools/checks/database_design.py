@@ -11,7 +11,7 @@ import re
 import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VERSION = 'B00-1.0-review'
+VERSION = 'B00-1.1-review'
 TABLES = []
 ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
 KEY = 'varchar(255) COLLATE utf8mb4_0900_bin'
@@ -257,6 +257,85 @@ recipient['cols'].extend([ref('operation_id','该收件人独立发送/查回操
 recipient['fks'].append(fk('operation_id','external_operation'))
 recipient['indexes'].extend([idx('mail_recipient_operation','operation_id','每外部发送只对应一个收件人',True),idx('mail_recipient_key','message_key','单收件人消息幂等键',True)])
 recipient['policy']='协调任务展开每收件人独立durable task/operation；发送前复验确认名单、有效READ和治理状态；部分成功只对未知收件人查回，已SENT永不再次发送；不是重新发送整批'
+
+# Independent review round 1: R1-R6. These are review-target changes only; reserved
+# domain migrations remain unimplemented and frozen V001/V002/V005 are untouched.
+table('meeting_search_projection','B-03/D-02','V008','R1 列表当前名称/编号及筛选字段投影；与根修改同事务',[
+    ref('meeting_id','会议；公开复制/搜索编号就是完整meeting.id'),ref('info_revision_id','当前已保存基础信息；初始为空',True),ref('roster_revision_id','当前确认名单；未确认为空',True),
+    col('name_search','longtext COLLATE utf8mb4_0900_as_ci','当前名称；英文大小写不敏感，非正文',True),
+    col('number_search','varchar(36) COLLATE utf8mb4_0900_as_ci','完整36字符meeting.id的搜索投影'),
+    col('category_id',KEY,'当前分类；NULL映射显示其他',True),num('meeting_revision','投影对应根修订')],pk='meeting_id',
+    indexes=[idx('search_category','category_id,meeting_id','分类先筛再包含匹配')],fks=[fk('meeting_id','meeting'),fk('info_revision_id','meeting_info_revision'),fk('roster_revision_id','roster_revision')],
+    policy='服务端同事务维护；不是异步最终一致授权源。查询先根/ACL过滤，投影revision/指针须与根相符；正文/摘要不参加列表q匹配；根删除同步清理')
+table('meeting_person_search','B-03/D-02','V008','R1 当前已确认名单姓名投影；草稿和AI候选绝不进入',[
+    ref('meeting_id','会议'),ref('roster_id','当前CONFIRMED名单'),ident('member_id','冻结名单项'),col('name_search','longtext COLLATE utf8mb4_0900_as_ci','该已确认名单中的完整显示名')],
+    pk='meeting_id,member_id',fks=[fk('meeting_id','meeting'),fk('roster_id,member_id','roster_member','roster_id,member_id')],
+    policy='名单明确确认时与有效ACL同事务替换；包含确认的企业/外部业务人员显示名但不授予权限；目录改名不改冻结名单；查询按meeting_id EXISTS避免多人命中重复会议')
+meeting['indexes'].extend([idx('meeting_owner_updated','owner_id,lifecycle,updated_at,id','负责列表默认更新时间倒序'),idx('meeting_stage_updated','lifecycle,stage,updated_at,id','阶段过滤后的默认稳定倒序')])
+topic=next(t for t in TABLES if t['name']=='topic')
+topic['cols'].extend([text('description','R3 可选专题说明；未填写/空串归一为NULL',True),text('name_normalized','R2 NFC及首尾Unicode空白剔除后的完整名称'),fingerprint('name_hash','完整name_normalized UTF-8字节SHA256，仅候选桶')])
+topic['indexes'].append(idx('topic_name_bucket','owner_id,name_hash,id','非唯一摘要桶；持owner身份行锁后完整二进制名称复核'))
+topic['policy']='个人名称不能为空；创建/改名先锁owner企业身份行，再按统一顺序锁专题并CAS revision；摘要相同逐项比较完整规范化名称，仅完整相同冲突；说明与名称同事务保存；空专题才能删除'
+next(c for c in topic['cols'] if c['name']=='name_normalized')['type']='longtext COLLATE utf8mb4_0900_bin'
+table('minutes_template','B-07/D-04','V012','R2 模板逻辑根与当前个人名称；历史名称不占用命名空间',[
+    ident(),col('owner_id',KEY,'个人所有者；内置模板NULL',True),text('name','当前完整展示名'),text('name_normalized','NFC及首尾Unicode空白剔除后的完整当前名称'),fingerprint('name_hash','完整规范化名称SHA256；非唯一摘要桶'),ref('current_revision_id','当前template_revision；同模板应用完整性'),num('revision','逻辑根CAS'),ts('created_at','创建时间')],
+    indexes=[idx('template_name_bucket','owner_id,name_hash,id','同个人当前名称候选；允许摘要碰撞但禁止完整同名')],fks=[fk('owner_id','enterprise_identity','enterprise_id')],
+    policy='个人创建/改名锁owner身份行串行；完整规范名二进制比较；内置由受控配置维护。改名产生新template_revision并CAS当前指针；旧revision名可读但不参与当前重名判断；不可跨所有者引用')
+template=next(t for t in TABLES if t['name']=='template_revision')
+next(c for t in TABLES if t['name']=='minutes_template' for c in t['cols'] if c['name']=='name_normalized')['type']='longtext COLLATE utf8mb4_0900_bin'
+template['fks'].append(fk('template_id','minutes_template'))
+template['policy']='不可变历史；owner_id必须与minutes_template一致，name是该修订的展示名；当前名称只由逻辑根登记；根当前指针由服务校验同template_id并同事务更新，避免循环FK'
+
+# R4: stable business operation survives failed executions. Each new task owns an
+# append-only execution row, not a replacement logical business key.
+operation=next(t for t in TABLES if t['name']=='external_operation')
+operation['cols']=[c for c in operation['cols'] if c['name'] not in ('task_id','origin_attempt')]
+operation['cols'].extend([code('subject_kind','聚合类型'),col('subject_id',KEY,'聚合ID'),num('current_execution_no','当前执行代际；初次1')])
+for c in operation['cols']:
+    if c['name']=='request_hash': c['meaning']='逻辑内容摘要：固定confirmation/body及业务操作；不替代每次完整请求摘要'
+    if c['name']=='marked_at': c['meaning']='首次before-external marker实际提交时间'
+operation['indexes']=[i for i in operation['indexes'] if i['name']!='external_task']
+operation['fks']=[fk('subject_kind,subject_id','task_subject','subject_kind,subject_id')]
+operation['checks']=[enum('state','MARKED,UNKNOWN,RETRY_QUEUED,SUCCEEDED,FAILED,MANUAL_REQUIRED'),'current_execution_no > 0']
+operation['policy']='operation_kind/business_key全历史唯一；不归单个task。current_execution_no由同聚合锁下CAS；独立reconcile_epoch跨执行永久递增、不清零。当前执行由(operation_id,no)应用校验。仅FAILED且当前execution有确定零效果证据可追加执行；UNKNOWN禁止重发'
+table('external_execution','B-05/B-08','V010','R4 稳定逻辑操作下的追加执行尝试；支持同确认零效果失败重试',[
+    ident(),ref('operation_id','稳定逻辑操作'),num('execution_no','同操作单调1起代际'),ref('task_id','本次新任务唯一拥有者'),num('task_attempt','before-call时实际领取attempt；排队时NULL',nullable=True),
+    code('state','执行状态'),fingerprint('request_hash','本次完整请求含目标位置的不可变SHA256'),text('request_manifest','版本化安全请求清单：确认/目标ID/配置/固定输入引用；不含密钥'),
+    ts('created_at','入队/创建时间'),ts('marked_at','本次实际before-call提交时间；PREPARED为NULL',True),ts('finished_at','确定终结时间',True),
+    code('no_effect_basis','明确零效果证明类别；UNKNOWN/NOT_FOUND不可填写',True),text('no_effect_evidence','受控证明引用及必要事实；无凭证/正文',True),ts('no_effect_verified_at','证明核验时间',True)],
+    indexes=[idx('external_execution_number','operation_id,execution_no','一个操作每代一次',True),idx('external_execution_task','task_id','一个外部调用任务只拥有一次执行',True)],
+    fks=[fk('operation_id','external_operation'),fk('task_id','durable_task')],
+    checks=['execution_no > 0',enum('state','PREPARED,MARKED,UNKNOWN,SUCCEEDED,FAILED'),"state <> 'MARKED' OR (task_attempt IS NOT NULL AND marked_at IS NOT NULL)","no_effect_basis IS NULL OR no_effect_basis IN ('NOT_SENT','DEFINITIVE_REJECTION','PROVEN_CUTOFF_FENCED')","(no_effect_basis IS NULL AND no_effect_evidence IS NULL AND no_effect_verified_at IS NULL) OR (state='FAILED' AND no_effect_basis IS NOT NULL AND no_effect_evidence IS NOT NULL AND no_effect_verified_at IS NOT NULL AND finished_at IS NOT NULL)"],
+    policy='请求/任务/代际创建后不改；仅状态和证明由当前独立operation token推进，终结后冻结。新retry追加行，不删除旧行/改原task。跨执行旧token不能写当前结果；原task失败历史保留。确定零效果证明还必须排除旧发送者迟到重新发出')
+reservation=next(t for t in TABLES if t['name']=='model_reservation')
+reservation['cols']=[ref('execution_id','具体外部调用执行；独立占额') if c['name']=='operation_id' else c for c in reservation['cols']]
+reservation['indexes']=[idx('reservation_execution','execution_id','每实际执行单独占额',True) if i['name']=='reservation_operation' else i for i in reservation['indexes']]
+reservation['fks']=[fk('execution_id','external_execution') if f['cols']==['operation_id'] else f for f in reservation['fks']]
+reservation['policy']='独立准入事务按operation→当前execution→model→reservation锁序，复验独立token/执行号及配置；持有本执行许可后才调用。lease/HTTP超时不释放，未知deadline保守占额；execution明确终结后单独幂等结算，不以逻辑操作新执行状态释放旧执行额度'
+publication_attempt=next(t for t in TABLES if t['name']=='publication_attempt')
+publication_attempt['cols'].append(ref('execution_id','具体发布/查回操作对应执行'))
+publication_attempt['fks'].append(fk('execution_id','external_execution'))
+publication=next(t for t in TABLES if t['name']=='publication')
+publication['policy']='同confirmation确定零效果失败后可原确认重试：复用稳定publication/business_key/operation，追加external_execution及新task，不要求新确认；双重retry在subject/根/operation锁下只接受一次。更换confirmation仅真实修改重新确认时允许。SUCCEEDED永不重试，UNKNOWN不重发'
+next(i for i in publication['indexes'] if i['name']=='publication_meeting')['reason']='每会议唯一发布根；确定零效果失败可原确认追加执行，真实内容修改才换确认'
+
+# R5/R6: pre-confirmation processing provenance and immutable segment annotations.
+table('transcription_input','B-06/C-02/C-03/D-01','V011','R5 转写导入/识别/重新增强不可变输入快照，独立于纪要generation_input',[
+    ident(),ref('meeting_id','会议'),ref('batch_id','原始有序主文件集合'),code('kind','IMPORT/ASR/ENHANCE'),ref('source_revision_id','重新增强所据已保存转写；首次导入/ASR为空',True),
+    ref('material_snapshot_id','明确应用材料快照；B未启用或空集合为NULL',True),code('material_mode','EMPTY或PINNED，NULL不表示未知'),
+    col('processing_config_version',KEY,'完整处理配置清单固定版本'),col('parser_version',KEY,'使用解析器时必填；纯ASR可空',True),col('model_config_version',KEY,'模型调用固定配置；纯导入可空',True),col('prompt_version',KEY,'使用提示词时固定版本；无提示词步骤可空',True),
+    col('manifest_schema_version','int unsigned','可恢复输入清单schema版本'),text('config_manifest','不可变规范化配置/步骤/来源引用清单；不含密钥或可变latest'),fingerprint(),num('base_revision','受理时会议修订'),num('cancel_epoch','受理取消代际'),ts('created_at','与任务一同提交时间')],
+    indexes=[idx('transcription_input_history','meeting_id,created_at,id','处理输入历史追溯')],fks=[fk('meeting_id','meeting'),fk('batch_id','input_batch'),fk('source_revision_id','transcript_revision'),fk('material_snapshot_id','material_snapshot')],
+    checks=[enum('kind','IMPORT,ASR,ENHANCE'),enum('material_mode','EMPTY,PINNED'),"(material_mode='EMPTY' AND material_snapshot_id IS NULL) OR (material_mode='PINNED' AND material_snapshot_id IS NOT NULL)","kind <> 'ENHANCE' OR source_revision_id IS NOT NULL","kind <> 'IMPORT' OR parser_version IS NOT NULL","kind='IMPORT' OR model_config_version IS NOT NULL",'manifest_schema_version > 0'],
+    policy='B只EMPTY/NULL且规范空集合入指纹；D01非空写入前V017加material FK，审阅库完整建FK。typed task input=TRANSCRIPTION_INPUT/id，输出revision反向引用本输入；手工保存/恢复继承原处理来源，不读meeting可变材料/配置。FK/source_revision同会议应用校验；历史删除先清源引用，禁止循环或子孙作为source')
+transcript=next(t for t in TABLES if t['name']=='transcript_revision')
+transcript['cols'].extend([ref('processing_input_id','固定处理/增强输入；手工修订继承父处理来源'),ref('producer_task_id','产生本结果任务；人工保存为空',True)])
+transcript['fks'].extend([fk('processing_input_id','transcription_input'),fk('producer_task_id','durable_task')])
+transcript['policy']='各稿不可变；生成结果input_fingerprint必须等于processing_input输入指纹，producer_task.spec.input_id必须同该输入。WORKING/恢复稿继承具体父稿处理来源，不能改用当前材料配置；确认content_hash另含已保存片段与多选标记'
+table('transcript_segment_mark','B-06/C-03','V011','R6 片段多选标记随转写版本冻结；不是纪要要素',[
+    ref('revision_id','已保存转写版本'),ident('segment_id','该版本稳定段'),code('mark','KEY关键/CONCLUSION结论/DISPUTE争议/GENERATION_FOCUS重点生成')],
+    pk='revision_id,segment_id,mark',fks=[fk('revision_id,segment_id','transcript_segment','revision_id,segment_id')],checks=[enum('mark','KEY,CONCLUSION,DISPUTE,GENERATION_FOCUS')],
+    policy='同段可0..4类，PK禁止重复；增删标记与片段保存产生新revision，旧标记不UPDATE/DELETE。规范排序的标记集进入确认content_hash/纪要inputFingerprint；确认后任何标记改动清当前转写/最终确认并要求重新确认，不证明内容真实；只作生成参考')
 
 def cname(t, n): return f"ck_{t['name']}_{n}"
 def fname(t, n): return f"fk_{t['name']}_{n}"
