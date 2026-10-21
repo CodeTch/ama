@@ -1,6 +1,6 @@
 # AMA 统一 migration-register
 
-版本 B00-1.2-review（上传补充已独立评审并采用），2026-10-22；已采用 B00-1.1-review 的 R1—R6 独立关闭结论不变。这是迁移所有权/顺序登记，不是执行记录。实现仍须按统一新版本修正差异、回归并独立评审后验收。Flyway执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL多语句不是可整体ROLLBACK的事务，MySQL atomic DDL只保证单条语句原子；中途失败检查实际schema并前滚修复。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
+版本 B00-1.3-review（纪要目录及复核增量已独立评审；原1.2上传补充保留），2026-10-22；已采用 B00-1.1-review 的 R1—R6 独立关闭结论不变。这是迁移所有权/顺序登记，不是执行记录。实现仍须按统一新版本修正差异、回归并独立评审后验收。Flyway执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL多语句不是可整体ROLLBACK的事务，MySQL atomic DDL只保证单条语句原子；中途失败检查实际schema并前滚修复。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
 
 ## 冻结输入与原哈希
 
@@ -31,8 +31,8 @@
 |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|03e89cc8…冻结/首次成功；完整框架及fix1已独立采用（8a3b77b/e9d2eca/a79ce67），真实公司/领域消费者门另计|
 |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|正式候选a926c8b5…共享冻结，root静态核对完成；第一次应用待中央ACK/历史记录|
 |V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|已验证pinnedFlyway011<011.1<012；9efc688e…共享冻结/root完整SQL核对，首次应用等中央ACK|
-|V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；依赖V011；material指针B只能NULL|预留，未编写|
-|V013|B-08|原V008|final_confirmation、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
+|V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|预留，未编写|
+|V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|预留，未编写|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
 |V015|C-03|原V010|correction/edit_operation；speaker基础已在V011，任何必要扩展另在本号|预留，未编写|
 |V016|C-04/C-06|原V011|recording/session/part/chunk、subtitle；依赖V009/010/014|预留，未编写|
@@ -173,3 +173,9 @@ V01003e89cc8…/35136bytes/checksum-1187397378不变，首次冻结和成功观�
 实际pinnedFlyway12.4.0 MigrationVersion与ResourceNameParser离线检查证明011<011.1<012，filename解析011.1且valid，未打开DB连接。root复核probe源SHA与实际JAR SHA c3f93df1…；完整来源/probe/JSON/候选字节保存在artifacts/phase-b/b06-index-patch-freeze。冻结记录时间：2026-10-22T04:17:13.930896+08:00。
 
 本记录commit后root另发ACK，仅限原487a1cd59…:45591、known successful history至011且无更高版本的独有fixture。正式执行后验证actual history顺序/checksum、只增一索引、原rows/DDL/historyprefix不变、全suite与latest rerun0；失败证据不删除，未通过不验收。不授权任何其他小数版本、V012抢跑或生产调用。
+
+## B00-1.3 设计增量采用（不代表正式迁移）
+
+来源0d2079cd..7fb166b，fresh独立SPEC/QUALITY PASS、0findings，采用8e44080。93表709列实际元数据与字典/ER/DDL一致；原85表仅sensitive_exclusion PK增加category及两类CHECK，其他原表/字段/FK和V011八表子集不变。七新表V012，final_result_review随parentV013立即建physicalFK，不新增deferredFK、JSON附件owner kind或generation_input字段。详见[设计采用](../acceptance/b/database-generation-addendum-review.md)与[独立评审](../acceptance/b/database-generation-addendum-independent-review.md)。
+
+V012/V013尚无正式共享/应用脚本；如实施时实际状态不同，停止并统一登记前向修正，不以设计采用改写历史。V011.1另行处理旧索引漏项，其SQL验收另审。首结果保存及证据核对交互仍pending，结构不推断业务许可。

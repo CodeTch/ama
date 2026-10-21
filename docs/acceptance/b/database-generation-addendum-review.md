@@ -54,3 +54,11 @@ DDL SHA256 **`ebf1eae51b303d00b2ed35c4fbd5ba4c166813564032875a6ba0fb35ba743c93`*
 - B07 anchor/hash/profile/Unicode/source-alias与支持coverage契约仍单独评审；immutable配置/解析版本必须可恢复。未知外部负责人、人类源支持判断、两项待答交互问题、公司SSO/模型/材料权限和真实平台能力不能由schema推定。
 - V012/V013真正编写前复核未共享/未应用；若已共享或应用，报告实际元数据，由根分配前向增量，不能改写旧迁移或自取V028。V011继续消费完全不变的1.2八表子集。
 - 根安排fresh independent design/spec+quality review，对精确 `0d2079cd64e5b61bc5787ca5adfaa782e5cd4a40..提交HEAD` 审查；本作者不自签独立结论，不修改原评审/总计划。
+
+## 协调采用补记
+
+2026-10-22：完整owned0d2079cd..7fb166b的独立SPEC/QUALITY均PASS，Critical/Important/Minor均0。root完整读取两份报告后采用为B00-1.3-review，集成8e44080，34路径在本补记前与作者finalHEAD逐字节相同。93表/709列/290索引定义441索引列/109CHECK/196FK203FK列为独有MySQL8.4.6实测；23关系探针中4项刻意展示应用边界，不冒称应用拒绝验证。
+
+[完整独立评审](database-generation-addendum-independent-review.md)。审阅DDL SHA ebf1eae51b303d00b2ed35c4fbd5ba4c166813564032875a6ba0fb35ba743c93；实际元数据SHA a6c758d488c490c97bb373f404bc25c5b50db001e7c0dcb82dfcf9a6668f7aa5。旧1.2四文件/所有原迁移不变；原始报告另存coordinator-reports及SHA清单。此次机械采用未操作DB或重复验证。
+
+本次只采用设计。七张新表归V012，最终复核membership归V013；两项产品交互选择仍pending，不由结构默认启用。正式迁移、codec/coverage和业务权限/事务/语义证据待各自任务。V011漏索引另由中央V011.1前向修正，本评审不代签该正式迁移。
