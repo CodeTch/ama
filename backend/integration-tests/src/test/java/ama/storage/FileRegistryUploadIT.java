@@ -930,6 +930,147 @@ class FileRegistryUploadIT {
     }
 
     @Test
+    void downloadFilenameLongUnicodeFullPreservesMetadata() throws Exception {
+        String name = "文".repeat(1000);
+        String transport = downloadNamed(name, null);
+        assertTrue(transport.endsWith("..."));
+        assertTrue(name.startsWith(transport.substring(0, transport.length() - 3)));
+    }
+
+    @Test
+    void downloadFilenameLongUnicodeRangePreservesMetadata() throws Exception {
+        String name = "文".repeat(1000);
+        String transport = downloadNamed(name, "bytes=1-3");
+        assertTrue(transport.endsWith("..."));
+        assertTrue(name.startsWith(transport.substring(0, transport.length() - 3)));
+    }
+
+    @Test
+    void downloadFilenameNormalUnicodeRemainsExact() throws Exception {
+        String name = "会议 \"'/%\r\n😀.txt";
+        assertEquals(name, downloadNamed(name, null));
+    }
+
+    @Test
+    void downloadFilenameScalarBoundaryIsSafe() throws Exception {
+        assertEquals("a".repeat(974), downloadNamed("a".repeat(974), null));
+        assertEquals("a".repeat(962) + "😀", downloadNamed("a".repeat(962) + "😀", null));
+        assertEquals("a".repeat(963) + "...", downloadNamed("a".repeat(963) + "😀", null));
+        assertEquals("a".repeat(971) + "...", downloadNamed("a".repeat(974) + "😀", null));
+        assertEquals("文".repeat(107) + "...", downloadNamed("文".repeat(108) + "😀", null));
+    }
+
+    /** Uses the real authenticated controller, DB reference policy and native backend stream. */
+    String downloadNamed(String name, String range) throws Exception {
+        var created = call("POST", "/meetings", "{}", UUID.randomUUID().toString(), null);
+        assertEquals(201, created.statusCode(), created.body());
+        meeting = body(created).get("id").asText();
+        var init =
+                call(
+                        "POST",
+                        "/meetings/" + meeting + "/uploads",
+                        request(name, "abcdef"),
+                        UUID.randomUUID().toString(),
+                        null);
+        assertEquals(201, init.statusCode(), init.body());
+        String upload = body(init).get("uploadId").asText();
+        assertEquals(204, part(upload, 1, "abcdef").statusCode());
+        var complete = complete(upload, "abcdef", "abcdef");
+        assertEquals(200, complete.statusCode(), complete.body());
+        String file = body(complete).get("fileId").asText(), batch = actualBatch(file);
+        j.update(
+                "INSERT INTO file_reference(file_id,owner_kind,owner_id,purpose) VALUES"
+                    + " (?,'INPUT_BATCH_FILE',?,'CONTROLLED_INPUT')",
+                file,
+                batch);
+        assertDownloadNames(name, upload, file);
+        var closed = new java.util.concurrent.CountDownLatch(1);
+        observed.afterReadClose.set(closed::countDown);
+        var request =
+                HttpRequest.newBuilder(
+                                URI.create(
+                                        "http://127.0.0.1:"
+                                                + app.getEnvironment()
+                                                        .getProperty("local.server.port")
+                                                + "/api/v1/files/"
+                                                + file
+                                                + "/content"))
+                        .header("Cookie", "__Host-AMA_SESSION=" + token);
+        if (range != null) request.header("Range", range);
+        HttpResponse<byte[]> response;
+        try (var client = HttpClient.newHttpClient()) {
+            response = client.send(request.GET().build(), HttpResponse.BodyHandlers.ofByteArray());
+        }
+        assertTrue(
+                closed.await(5, java.util.concurrent.TimeUnit.SECONDS),
+                "actual backend stream must close");
+        assertDownloadNames(name, upload, file);
+        String header = response.headers().firstValue("Content-Disposition").orElse("");
+        System.out.println(
+                "Filename transport: backend="
+                        + fixture.binding.type()
+                        + " nameScalars="
+                        + name.codePointCount(0, name.length())
+                        + " range="
+                        + range
+                        + " status="
+                        + response.statusCode()
+                        + " dispositionBytes="
+                        + header.length()
+                        + " bodyBytes="
+                        + response.body().length
+                        + " backendClosed=true metadataPreserved=true");
+        assertEquals(range == null ? 200 : 206, response.statusCode());
+        assertArrayEquals(
+                (range == null ? "abcdef" : "bcd").getBytes(StandardCharsets.UTF_8),
+                response.body());
+        assertEquals(
+                range == null ? "6" : "3",
+                response.headers().firstValue("Content-Length").orElseThrow());
+        if (range != null)
+            assertEquals(
+                    "bytes 1-3/6", response.headers().firstValue("Content-Range").orElseThrow());
+        assertTrue(
+                header.length() <= 1024, "whole disposition value exceeds technical byte budget");
+        assertTrue(
+                header.chars().allMatch(c -> c >= 32 && c <= 126),
+                "header must be printable ASCII");
+        String prefix = "attachment; filename=\"download\"; filename*=UTF-8''";
+        assertTrue(header.startsWith(prefix));
+        String encoded = header.substring(prefix.length());
+        assertTrue(
+                encoded.matches("(?:[A-Za-z0-9._-]|%[0-9A-F]{2})*"),
+                "complete safe percent triplets required");
+        var bytes = new java.io.ByteArrayOutputStream();
+        for (int i = 0; i < encoded.length(); i++) {
+            char c = encoded.charAt(i);
+            if (c == '%') {
+                bytes.write(Integer.parseInt(encoded.substring(i + 1, i + 3), 16));
+                i += 2;
+            } else bytes.write(c);
+        }
+        return StandardCharsets.UTF_8
+                .newDecoder()
+                .onMalformedInput(java.nio.charset.CodingErrorAction.REPORT)
+                .onUnmappableCharacter(java.nio.charset.CodingErrorAction.REPORT)
+                .decode(java.nio.ByteBuffer.wrap(bytes.toByteArray()))
+                .toString();
+    }
+
+    void assertDownloadNames(String name, String upload, String file) {
+        assertEquals(
+                name,
+                j.queryForObject(
+                        "SELECT display_name FROM upload_session WHERE id=?",
+                        String.class,
+                        upload));
+        assertEquals(
+                name,
+                j.queryForObject(
+                        "SELECT display_name FROM file_object WHERE id=?", String.class, file));
+    }
+
+    @Test
     void actualFileErrorsConformToDeclaredSharedResponseUnion() throws Exception {
         String id = begin("abc");
         part(id, 1, "abc");

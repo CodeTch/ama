@@ -13,6 +13,7 @@ final class RegistryObservedStorage implements FileStoragePort {
             afterPart = new AtomicReference<>(),
             beforeComplete = new AtomicReference<>(),
             afterComplete = new AtomicReference<>();
+    final AtomicReference<Runnable> afterReadClose = new AtomicReference<>();
 
     RegistryObservedStorage(FileStoragePort actual) {
         this.actual = actual;
@@ -32,7 +33,16 @@ final class RegistryObservedStorage implements FileStoragePort {
     }
 
     public InputStream read(StorageKey k, long o, long n) {
-        return actual.read(k, o, n);
+        var body = actual.read(k, o, n);
+        var closed = afterReadClose.getAndSet(null);
+        if (closed == null) return body;
+        return new java.io.FilterInputStream(body) {
+            @Override
+            public void close() throws java.io.IOException {
+                super.close();
+                closed.run();
+            }
+        };
     }
 
     public void delete(StorageKey k) {
