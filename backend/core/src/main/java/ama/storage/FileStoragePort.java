@@ -7,7 +7,8 @@ import java.util.List;
 /**
  * Internal immutable-blob port. Authorization and registry commits belong to the caller.
  * Implementations verify actual size/SHA-256 before reporting success. Logical keys may
- * never be overwritten; providerVersionId is provenance, not mutable-version selection.
+ * never be overwritten. put/complete replay of the same key and actual content succeeds;
+ * differing content for an existing key fails with CONFLICT. providerVersionId is provenance, not mutable-version selection.
  * Reads return exactly [offset, offset + length), reject invalid/overflow/out-of-bounds
  * ranges with INVALID_RANGE, and allow a zero-length read at EOF. Callers close streams.
  * Upload tokens pin a backend for the session. Complete and abort are idempotent;
