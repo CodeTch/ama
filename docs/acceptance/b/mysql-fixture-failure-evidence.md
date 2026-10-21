@@ -97,3 +97,10 @@ suite was rerun. Historical counts above describe the original implementation
 and overlap with these regression cases; they are not additive. New raw evidence
 is separate under `artifacts/phase-b/ci-fixture-01/fix-round-1`, with its own
 `ALLOWLIST.txt` and `SHA256SUMS`. Original evidence bytes remain unchanged.
+
+
+## Coordinator adoption
+
+Full owned range0daecad..3d7aec1 was independently reviewed; ImportantI1 (log capture/write failure still allowed removal) was fixed in fdcdc92. Fresh scoped re-review closes I1 and approves spec/quality, no new findings; coordinator read both full reviews and the complete original/fix report. Both implementation commits integrated as81e1d75/cd96ec1, all3owned paths byte-identical to final source before this adoption appendix. Final focused13 passed; historical86 aggregate overlaps focused12 and contains the disclosed authorized local HTTP stub, not a company/external call. Counts are not added. No new tests/Docker/DB actions for mechanical adoption.
+
+All14 explicitly allowlisted original/fix evidence and metadata files independently SHA-verified and copied under `artifacts/phase-b/ci-fixture-evidence/source-captures/`; original raw reports separately preserved with SHA under `coordinator-reports/`. No env/credentials or arbitrary directories copied. The initial review remains as history; only its I1 is closed by the fix review. See [implementation](mysql-fixture-failure-implementation-report.md), [initial review](mysql-fixture-failure-independent-review.md), [fix review](mysql-fixture-failure-fix-independent-review.md). Qualification is mocked subprocess behavior only; no live Docker/template/native-AIO or application/phase acceptance inferred. SQL, production profiles, existing fixtures/history and original plans unchanged.
