@@ -4,10 +4,10 @@ import ama.contract.StorageContracts.*;
 import ama.storage.FileStoragePort;
 
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
-import software.amazon.awssdk.core.retry.RetryPolicy;
 import software.amazon.awssdk.http.urlconnection.ProxyConfiguration;
 import software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.retries.StandardRetryStrategy;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.*;
@@ -50,7 +50,10 @@ public final class S3FileStorage implements FileStoragePort, AutoCloseable {
                                 ClientOverrideConfiguration.builder()
                                         .apiCallTimeout(config.timeout())
                                         .apiCallAttemptTimeout(config.timeout())
-                                        .retryPolicy(RetryPolicy.none())
+                                        .retryStrategy(
+                                                StandardRetryStrategy.builder()
+                                                        .maxAttempts(1)
+                                                        .build())
                                         .build())
                         .build();
         io = new S3Objects(client, config);

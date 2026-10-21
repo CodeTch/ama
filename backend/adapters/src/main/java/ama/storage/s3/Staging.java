@@ -120,7 +120,8 @@ final class Staging {
         try {
             if (size < 1
                     || size > io.config.chunkBytes()
-                    || stream.response().contentLength() != size) throw ControlCodec.unavailable();
+                    || S3Objects.contentLength(stream.response().contentLength()) != size)
+                throw ControlCodec.unavailable();
             byte[] bytes = stream.readNBytes((int) size + 1);
             if (bytes.length != size || !ControlCodec.hash(bytes).equals(hash))
                 throw ControlCodec.unavailable();

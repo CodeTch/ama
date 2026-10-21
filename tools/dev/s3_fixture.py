@@ -11,9 +11,13 @@ def run(*args):
 def inspect_owned():
     record = json.loads((HOME/'fixture.json').read_text())
     state = json.loads(run('docker','inspect',record['id']))[0]
+    assert state['Id'] == record['id']
     assert state['Config']['Labels']['ama.owner'] == OWNER
     assert state['Config']['Image'] == IMAGE
     assert state['HostConfig']['Memory'] == 2*1024**3
+    assert state['HostConfig']['MemorySwap'] == 2*1024**3
+    assert state['HostConfig']['NanoCpus'] == 2_000_000_000
+    assert state['HostConfig']['PidsLimit'] == 256
     assert state['HostConfig']['PortBindings']['9000/tcp'] == [{'HostIp':'127.0.0.1','HostPort':str(record['port'])}]
     assert {(m['Source'],m['Destination']) for m in state['Mounts']} == {(str(HOME/'data'),'/data'),(str(HOME/'logs'),'/logs')}
     return record

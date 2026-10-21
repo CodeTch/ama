@@ -72,13 +72,13 @@ class S3NativeRaceIT {
                 }
             proxy.settle();
             assertTrue(
-                    proxy.events.stream()
+                    proxy.snapshot().stream()
                             .filter(
                                     e ->
                                             e.method().equals("POST")
                                                     && e.path().contains("uploadId="))
                             .allMatch(e -> "*".equals(e.request().get("if-none-match"))));
-            assertTrue(proxy.events.stream().anyMatch(e -> e.path().contains("partNumber=")));
+            assertTrue(proxy.snapshot().stream().anyMatch(e -> e.path().contains("partNumber=")));
             capture("v3-native-process-race-" + mode, proxy);
         }
     }
