@@ -160,6 +160,54 @@ class RunnerTests(unittest.TestCase):
                 self.assertEqual(0, runner.java_tests("CoreTest"))
             self.assertIn("PASS: executed=1", output.getvalue())
 
+    def test_unit_wildcard_dispatches_only_discovered_unit_classes(self):
+        # The emitted Maven selection is our boundary; * would also run DatabaseIT.
+        runner = load_runner()
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            folder = root / "backend/core/src/test/java/ama"
+            folder.mkdir(parents=True)
+            for name in ["CoreTest", "ExtraTest", "DatabaseIT"]:
+                (folder / (name + ".java")).write_text("package ama; class " + name + " {}")
+            (root / "backend/core/pom.xml").write_text("<project/>")
+            wrapper = root / "mvnw"
+            wrapper.write_text("#!/usr/bin/env python3\nimport json,sys\nfrom pathlib import Path\nPath('selection.json').write_text(json.dumps(sys.argv[1:]))\np=Path('backend/core/target/surefire-reports/TEST-ama.CoreTest.xml')\np.parent.mkdir(parents=True,exist_ok=True)\np.write_text('<testsuite tests=\"1\" failures=\"0\" errors=\"0\" skipped=\"0\"/>')\n")
+            wrapper.chmod(0o755)
+            runner.ROOT = root
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(0, runner.java_tests("*"))
+            args = json.loads((root / "selection.json").read_text())
+            selection = next(arg.removeprefix("-Dtest=") for arg in args if arg.startswith("-Dtest="))
+            self.assertEqual({"CoreTest", "ExtraTest"}, set(selection.split(",")))
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(0, runner.java_tests("CoreTest#check"))
+            args = json.loads((root / "selection.json").read_text())
+            self.assertIn("-Dtest=CoreTest#check", args)
+
+    def test_integration_wildcard_dispatches_only_discovered_it_classes(self):
+        # Failsafe -Dit.test=* must not include the module's ordinary helper tests.
+        runner = load_runner()
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            folder = root / "backend/integration-tests/src/test/java/ama"
+            folder.mkdir(parents=True)
+            for name in ["CoreIT", "ExtraIT", "HelperTest"]:
+                (folder / (name + ".java")).write_text("package ama; class " + name + " {}")
+            (root / "backend/integration-tests/pom.xml").write_text("<project/>")
+            wrapper = root / "mvnw"
+            wrapper.write_text("#!/usr/bin/env python3\nimport json,sys\nfrom pathlib import Path\nPath('selection.json').write_text(json.dumps(sys.argv[1:]))\np=Path('backend/integration-tests/target/failsafe-reports/TEST-ama.CoreIT.xml')\np.parent.mkdir(parents=True,exist_ok=True)\np.write_text('<testsuite tests=\"1\" failures=\"0\" errors=\"0\" skipped=\"0\"/>')\n")
+            wrapper.chmod(0o755)
+            runner.ROOT = root
+            with patch.dict("os.environ", {"AMA_TEST_DATABASE_URL": "jdbc:mysql://127.0.0.1/unused"}), contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(0, runner.java_tests("*", integration=True))
+            args = json.loads((root / "selection.json").read_text())
+            selection = next(arg.removeprefix("-Dit.test=") for arg in args if arg.startswith("-Dit.test="))
+            self.assertEqual({"CoreIT", "ExtraIT"}, set(selection.split(",")))
+            with patch.dict("os.environ", {"AMA_TEST_DATABASE_URL": "jdbc:mysql://127.0.0.1/unused"}), contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(0, runner.java_tests("CoreIT#rollback", integration=True))
+            args = json.loads((root / "selection.json").read_text())
+            self.assertIn("-Dit.test=CoreIT#rollback", args)
+
 
 class WebRunnerTests(unittest.TestCase):
     def runner(self, root):

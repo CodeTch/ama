@@ -3,6 +3,8 @@ spring:
     name: ama-api
   main:
     banner-mode: 'off'
+  flyway:
+    enabled: false
   datasource:
     url: ${DATABASE_URL:jdbc:mysql://127.0.0.1:3306/ama?connectTimeout=1000&socketTimeout=1000}
     username: ${DATABASE_USERNAME:ama}
@@ -13,6 +15,11 @@ spring:
       validation-timeout: 500
       maximum-pool-size: 20
       minimum-idle: 0
+      data-source-properties:
+        characterEncoding: UTF-8
+        connectionCollation: utf8mb4_0900_ai_ci
+        connectionTimeZone: UTC
+        forceConnectionTimeZoneToSession: true
 server:
   port: ${PORT:8080}
   forward-headers-strategy: none

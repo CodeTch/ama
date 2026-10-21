@@ -33,9 +33,11 @@ Verification entrypoint: `python3 tools/checks/run.py <unit|it|web|e2e|visual|co
 
 - `unit DeploymentConfigTest`: Surefire class/method selection, with actual executed count and fresh JUnit evidence paths. `unit ContractClientTest` exercises the test-only HTTP helper against a local HTTP server.
 - `contract OpenApi`: validate OpenAPI 3.1 and merge external references into `artifacts/openapi/api.yaml` with pinned Redocly CLI. Other contract selectors require later registered corporate fixtures, never default production requests.
-- `it <Class>`: Failsafe `-Dit.test=<Class> verify`; requires registered `*IT` tests and explicit `AMA_TEST_DATABASE_URL=jdbc:mysql:...` for an approved test dependency. No MySQL integration cases are delivered in this task.
+- `it <Class>`: Failsafe `-Dit.test=<Class> verify`; requires registered `*IT` tests and explicit `AMA_TEST_DATABASE_URL=jdbc:mysql:...` for an approved test dependency. B-01 delivers real MySQL FoundationIT; see [persistence setup](persistence.md).
 - `web <selector>` runs registered web unit tests; `e2e <selector>` and `visual <selector>` run their registered browser suites. Install Chromium with `npm --prefix web exec playwright install chromium` before running either browser mode. Selectors are test-file patterns, never shell commands.
 - `load` and `ops` remain unregistered. `contract OpenApi` runs the delivered OpenAPI validation/merge; other corporate contract selectors remain unregistered pending approved fixtures.
 - `all`: convenience suite for every current Python test directory, web unit tests, OpenAPI validation/merge and all Java unit/helper tests. Browser modes remain explicit. Passing these checks does not imply external qualification passed.
 
 Zero matches, zero executed tests, any skipped required test, unavailable tooling or subprocess failures never return PASS. Subprocess exit codes are preserved. Test-only HTTP/database fixtures own their cleanup. JUnit reports are under `backend/*/target/surefire-reports/`; OpenAPI bundle is under `artifacts/openapi/`.
+
+MySQL migration, transaction/audit boundaries and disposable fixture setup: [persistence foundation](persistence.md).
