@@ -1,7 +1,8 @@
 package ama.identity;
 
-import ama.db.SchemaMigrator;
 import ama.support.MysqlTestDatabase;
+import javax.sql.DataSource;
+import org.flywaydb.core.Flyway;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class IdentityMigrationIT {
     @Test void emptyLegacySetUpgradesInOrderAndUsesNoPadIds() {
         var source = MysqlTestDatabase.reset();
-        new SchemaMigrator(source).migrate();
+        migrateIdentitySchema(source);
         var jdbc = new JdbcTemplate(source);
         assertEquals(java.util.List.of("001","002","005","006","007"), jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE success=1 ORDER BY installed_rank", String.class));
-        assertEquals(0, new SchemaMigrator(source).migrate());
+        assertEquals(0, migrateIdentitySchema(source));
         for (String id : java.util.List.of("Case", "case", "Case ")) {
             jdbc.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,'姓名','ACTIVE','2026-10-21')", id);
         }
@@ -29,5 +30,12 @@ class IdentityMigrationIT {
         assertThrows(RuntimeException.class, () -> jdbc.update("INSERT INTO role_assignment VALUES ('Case','INVALID','2026-10-21')"));
         assertThrows(RuntimeException.class, () -> jdbc.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at,revoked_at) VALUES (?, 'Case',0,?,'2026-10-22','2026-10-21',NULL)", "a".repeat(64), "b".repeat(43)));
         assertEquals(0, jdbc.queryForObject("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('meeting','roster_revision','meeting_access_grant')", Integer.class));
+    }
+
+    /** Historical V007 qualification must not execute later domains present on the classpath. */
+    private int migrateIdentitySchema(DataSource source) {
+        return Flyway.configure().dataSource(source).locations("classpath:db/migration")
+                .initSql("SET NAMES utf8mb4; SET time_zone = '+00:00'")
+                .target("007").cleanDisabled(true).load().migrate().migrationsExecuted;
     }
 }
