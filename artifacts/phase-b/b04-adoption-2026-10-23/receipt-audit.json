@@ -1,0 +1,34 @@
+{
+  "mainBaseline": "0676a21311f2b2193f73a5e096f4a5605ee9b41f",
+  "scope": "B04 reviewed delivery custody on resumed main; no new runtime qualification",
+  "receiptSha256": "0348399e8ba5b3962d66dac08c9b02d039ccc21943571761b37fd64936068efe",
+  "pathsChecked": 227,
+  "bytesChecked": 3608418,
+  "mismatches": [],
+  "reviewInputs": {
+    "task-B-04-registry-report.md": {
+      "sha256": "20e0f2ed68670e4605026917fbe0c82424642d7a8d77ca637a3e54176d8147bb",
+      "matchesReceipt": true
+    },
+    "task-B-04-registry-review.md": {
+      "sha256": "508a1aecf3f0205171b821ace2a837564b7ddba1a64bc972535607b317f70f0c",
+      "matchesReceipt": true
+    },
+    "task-B-04-registry-fix1-report.md": {
+      "sha256": "55f0bcef30c5ce5502e3162369a42440a222226f73c2315bdf2f2e791f1f0e28",
+      "matchesReceipt": true
+    },
+    "task-B-04-registry-fix1-review.md": {
+      "sha256": "5e4eabc79cf1b4ef09caf592fa811028b1aecf74a576610dd2b4dbc6d981ee0d",
+      "matchesReceipt": true
+    }
+  },
+  "userPlansUnchanged": {
+    "docs/superpowers/plans/2026-10-21-ama-delivery-plan.md": true,
+    "docs/superpowers/plans/2026-10-21-ama-phase-b.md": true
+  },
+  "formalSqlCount": 12,
+  "formalSqlChangedFromResumeMain": [],
+  "testsRerun": false,
+  "q401": "UNKNOWN; preserved incident is not closed by this custody audit"
+}
