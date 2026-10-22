@@ -20,6 +20,8 @@ D01 缩减离线向量 82 项、纯渲染/保全 184 项通过，旧集合规则
 
 接续集成源码 `93b2270fb98482cb0d5470d5f80a2275100abd02` 上执行 `python3 tools/checks/run.py unit`，使用公开锁定 Java21 路径、未加载私有夹具环境：26 套 179 项，0 failures/errors/skips，8 模块 SUCCESS。179 包含上述 112，不能累加为独立新用例。输出保留未改动 DeclaredErrorResponse.java 既有 deprecated API 编译提示。没有执行 IT、DB/S3 或真实服务。原始日志、26 份 fresh XML、源码哈希、审查审计和集成字节凭据在[本轮公开归档](../../artifacts/phase-b/resume-2026-10-23/SHA256SUMS)。
 
+[整分支独立审查](development-resume-independent-review-2026-10-23.md)覆盖 `0676a21311f2b2193f73a5e096f4a5605ee9b41f..05326e918be139973944bfad46e59c4fdc252e7b` 的172路径全部组合变更，SPEC/quality双PASS，0新问题，无deferred/parked finding。该结论支持上述接续优先项的组合采用，B06独立树尚未纳入该代码范围。
+
 ## B06 当前任务
 
 B04/S1 门禁通过后，已启动子代理 `b06_queue_seams`。新隔离树 `/home/tanren/ama/.worktrees/phase-b-transcript-runtime`，分支 `codex/phase-b-transcript-runtime`，BASE `6b48b2f855bbf890c3ccad68325e7fd74d434489`。该 BASE 相对上述验证源码仅新增采用文档和公开证据。
