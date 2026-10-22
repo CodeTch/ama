@@ -1,0 +1,22 @@
+-------------------------------------------------------------------------------
+Test set: ama.task.B06QueueSeamsIT
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 35.59 s <<< FAILURE! -- in ama.task.B06QueueSeamsIT
+ama.task.B06QueueSeamsIT.standaloneClaimMustLockIdentityBeforeSubject -- Time elapsed: 0.497 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: canonical identity -> subject -> meeting -> task required; actual indexes=[1, 0, 3, 5] ==> expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:41)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:228)
+	at ama.task.B06QueueSeamsIT.standaloneClaimMustLockIdentityBeforeSubject(B06QueueSeamsIT.java:95)
+
+ama.task.B06QueueSeamsIT.ambientEnqueueMustReuseAuthenticMeetingCapability -- Time elapsed: 2.798 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: authenticated ambient enqueue must reuse the already-held B03 capability without a repeated identity phase ==> expected: <null> but was: <java.lang.IllegalStateException: Identity prelock cannot follow a meeting root lock>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertNull.failNotNull(AssertNull.java:56)
+	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:40)
+	at org.junit.jupiter.api.Assertions.assertNull(Assertions.java:306)
+	at ama.task.B06QueueSeamsIT.ambientEnqueueMustReuseAuthenticMeetingCapability(B06QueueSeamsIT.java:114)
+

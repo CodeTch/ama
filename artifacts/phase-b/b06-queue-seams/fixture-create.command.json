@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "docker",
+    "run",
+    "-d",
+    "--name",
+    "ama-test-b01-ff63b53162a3",
+    "--label",
+    "ama.test-fixture=b01",
+    "--label",
+    "ama.b06.owner=queue-seams-20261023",
+    "--memory",
+    "768m",
+    "--memory-swap",
+    "768m",
+    "--cpus",
+    "1",
+    "--pids-limit",
+    "256",
+    "--publish",
+    "127.0.0.1::3306",
+    "--env-file",
+    "/home/tanren/ama/.worktrees/phase-b-transcript-runtime/.tools/b06-queue-seams/mysql.env",
+    "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "--character-set-server=utf8mb4",
+    "--collation-server=utf8mb4_0900_ai_ci",
+    "--default-time-zone=+00:00",
+    "--innodb-use-native-aio=OFF"
+  ],
+  "exit_code": 0
+}

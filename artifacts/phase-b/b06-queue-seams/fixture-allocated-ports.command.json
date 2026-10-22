@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "docker",
+    "inspect",
+    "--format",
+    "{{json .NetworkSettings.Ports}}",
+    "ama-test-b01-ff63b53162a3"
+  ],
+  "exit_code": 0
+}

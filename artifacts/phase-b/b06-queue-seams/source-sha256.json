@@ -1,0 +1,57 @@
+[
+  {
+    "path": "backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+    "sha256": "2106158f0342a5fd28c88f90b87b49d04603d2a891cfcdbe85eabfa332d4bf7e",
+    "bytes": 1306
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "sha256": "e48d64abd77984e437dc9cf2c10cf0d59eada03be3235df48b4bd289350afa70",
+    "bytes": 11390
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+    "sha256": "c5718a5710f4f97c7f24ff64e93cc9865d9d7d91b36ba71b4290932911df9263",
+    "bytes": 17486
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/task/TaskTransactionContext.java",
+    "sha256": "111780076f9b7fd49fc8bc86df24bf25d8e499a4bcc0a2fae12ed811b4214b19",
+    "bytes": 2503
+  },
+  {
+    "path": "backend/core/src/main/java/ama/access/MeetingAccess.java",
+    "sha256": "14bc02c2fad7d0251c0278f5322a2b3e7cf1d2b88c42ee6e669d6f5a5f361dc7",
+    "bytes": 971
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+    "sha256": "fed80e7055dda4abb1b079d3f4eefaa302a76ea99347e46122e2db5575ff76d7",
+    "bytes": 7119
+  },
+  {
+    "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+    "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec",
+    "bytes": 21482
+  },
+  {
+    "path": "backend/core/src/main/java/ama/config/ConfigSchema.java",
+    "sha256": "20207ac4da3ec1b9566f9ed24f812605a660fe7179dee242990c5bbd6e6badba",
+    "bytes": 10265
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java",
+    "sha256": "59722488c5b9b762c0c27f05efb85dc0bc2622e0cb8bdbeb03f107dcd1814123",
+    "bytes": 19872
+  },
+  {
+    "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+    "sha256": "5e80e2fe7215311a3b5e20a0dfbde2cea21f72615392f6aad881cab6390ab232",
+    "bytes": 6622
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/task/B06QueueSeamsIT.java",
+    "sha256": "9542456b1c5ee057d2158d4b299823659749acfabc6950ffca19e048b1578a18",
+    "bytes": 13676
+  }
+]
