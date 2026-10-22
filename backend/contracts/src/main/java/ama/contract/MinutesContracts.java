@@ -267,11 +267,11 @@ public final class MinutesContracts {
     public enum Mark { KEY,CONCLUSION,DISPUTE,GENERATION_FOCUS }
     public record ContentFile(String id,String sha256,long sizeBytes,String meetingId) {public ContentFile {uuid(id);hash(sha256);uint(sizeBytes);if(meetingId!=null)uuid(meetingId);}public ContentFile(String id,String sha256,long sizeBytes){this(id,sha256,sizeBytes,null);}}
     public enum ProfileKind { CANONICAL_CODEC,CONFIRMATION_HASH,GENERATION_HASH,ROWSET_HASH,ANCHOR,REVIEW_HASH,FINAL_SOURCES,OUTPUT_SCHEMA,VALIDATION_BUDGET,CATALOG,RENDER,EXCLUSION,SUPPORT,TITLE,CHUNK_PLAN }
-    public record Artifact(String version,String sha256,byte[] bytes) {
-        public Artifact {scalars(version);require(!version.isEmpty(),FailureCode.PROFILE_UNAVAILABLE);hash(sha256);require(bytes!=null,FailureCode.INVALID_ARGUMENT);bytes=bytes.clone();}
-        @Override public byte[] bytes(){return bytes.clone();}
-        @Override public boolean equals(Object obj){return obj instanceof Artifact a&&version.equals(a.version)&&sha256.equals(a.sha256)&&Arrays.equals(bytes,a.bytes);}
-        @Override public int hashCode(){return Objects.hash(version,sha256,Arrays.hashCode(bytes));}
+    /** Capture raw arrays with ArchiveBytes.capture(maximum, remaining, cancelled) before constructing this fact. */
+    public record Artifact(String version,String sha256,ConfigArchiveContracts.ArchiveBytes bytes) {
+        public Artifact {scalars(version);require(!version.isEmpty(),FailureCode.PROFILE_UNAVAILABLE);hash(sha256);require(bytes!=null,FailureCode.INVALID_ARGUMENT);}
+        @Override public boolean equals(Object obj){return obj instanceof Artifact a&&version.equals(a.version)&&sha256.equals(a.sha256)&&bytes.sameBytes(a.bytes);}
+        @Override public int hashCode(){return Objects.hash(version,sha256,bytes.contentHashCode());}
     }
     public record Profiles(Map<ProfileKind,Artifact> definitions) {
         public Profiles {require(definitions!=null&&definitions.keySet().equals(EnumSet.allOf(ProfileKind.class)),FailureCode.PROFILE_UNAVAILABLE);definitions=Map.copyOf(definitions);}

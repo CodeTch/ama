@@ -8,12 +8,23 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StoredSourceGraphTest {
+ @Test void artifactFactBudgetCountsUniqueAcquisitionAndRefusesWholeSnapshotExcess(){
+  var bytes=ama.contract.ConfigArchiveContracts.ArchiveBytes.capture(new byte[32],32,32,()->false);var artifact=new Artifact("synthetic",bytes.sha256(()->false),bytes);
+  var definitions=new EnumMap<ProfileKind,Artifact>(ProfileKind.class);for(var kind:ProfileKind.values())definitions.put(kind,artifact);var profiles=new Profiles(definitions);
+  var first=new GenerationConfiguration(id(8),artifact,artifact,profiles,id(9),List.of());var second=new GenerationConfiguration(id(18),artifact,artifact,profiles,id(9),List.of());
+  var tight=new GraphBudget(new CanonicalBudget(32,10,100,100,100),10,10,100);
+  assertDoesNotThrow(()->new StoredFactsIndex(new StoredProvenanceFacts(List.of(),List.of(),List.of(first,second),List.of(),100),tight,()->false));
+  fails(BUDGET_EXCEEDED,()->new StoredFactsIndex(new StoredProvenanceFacts(List.of(),List.of(),List.of(first),List.of(),100),new GraphBudget(new CanonicalBudget(31,10,100,100,100),10,10,100),()->false));
+  var other=ama.contract.ConfigArchiveContracts.ArchiveBytes.capture(new byte[16],32,32,()->false);var extra=new Artifact("extra",other.sha256(()->false),other);
+  var changed=new GenerationConfiguration(id(18),extra,artifact,profiles,id(9),List.of());
+  fails(BUDGET_EXCEEDED,()->new StoredFactsIndex(new StoredProvenanceFacts(List.of(),List.of(),List.of(first,changed),List.of(),100),tight,()->false));
+ }
  static final String H="0".repeat(64),T="2026-10-22T00:00:00.000000Z";
  static String id(int n){return "00000000-0000-0000-0000-%012d".formatted(n);}
  static FullRow row(Table table,Object... values){
   assertEquals(table.columns().size(),values.length,table.sqlName());var cells=new ArrayList<Cell>();for(var v:values)cells.add(v==null?new NullCell():v instanceof Number n?cell(n.longValue()):cell((String)v));return new FullRow(table,cells);
  }
- static Artifact artifact(String v){byte[] bytes=v.getBytes(StandardCharsets.UTF_8);return new Artifact(v,java.util.HexFormat.of().formatHex(ama.canonical.CanonicalValueCodec.digest().digest(bytes)),bytes);}
+ static Artifact artifact(String v){byte[] bytes=v.getBytes(StandardCharsets.UTF_8);var owned=ama.contract.ConfigArchiveContracts.ArchiveBytes.capture(bytes,BUDGET.canonical().maxEncodedBytes(),BUDGET.canonical().maxEncodedBytes(),()->false);return new Artifact(v,owned.sha256(()->false),owned);}
  static Profiles profiles(){var p=new EnumMap<ProfileKind,Artifact>(ProfileKind.class);for(var k:ProfileKind.values())p.put(k,artifact(switch(k){
   case CANONICAL_CODEC->"ama.canonical-value.v1";case CONFIRMATION_HASH->"ama.transcript-confirmation.v1";case GENERATION_HASH->"ama.generation-input.v2";case ROWSET_HASH->"ama.rowset.v1";case REVIEW_HASH->"ama.result-review.v2";case FINAL_SOURCES->"ama.final-sources.v2";default->k.name()+".v1";}));return new Profiles(p);}
  static GenerationConfiguration config(int input,String parser){return new GenerationConfiguration(id(input),artifact("prompt"),artifact("model"),profiles(),id(9),List.of(new ParserSelection(id(30),parser)));}

@@ -117,7 +117,7 @@ public final class ConfigBindings {
    active();return new ValidatedProcessingBinding(value,digest,codec,confirmation,processing,parser,canonical,raw);
   }
   public Artifact artifact(Ref ref){
-   refMatches(ref);var node=node(ref.identity());try{return new Artifact(ref.version(),ref.sha256(),node.bytes.openStream().readAllBytes());}catch(java.io.IOException e){throw fail(READ_FAILED);}
+   refMatches(ref);return new Artifact(ref.version(),ref.sha256(),node(ref.identity()).bytes);
   }
   public CanonicalBudget processingBudget(FullRow processing){return processingStored(processing).canonicalBudget();}
   public CanonicalBudget generationBudget(FullRow input){var config=generation(input);var profile=node(new Identity(ArtifactType.VALIDATION_BUDGET,config.profiles().definition(ProfileKind.VALIDATION_BUDGET).version()));return ConfigSchema.canonicalBudget(fields(fields(profile.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition"),"output","canonical").get("canonical"));}

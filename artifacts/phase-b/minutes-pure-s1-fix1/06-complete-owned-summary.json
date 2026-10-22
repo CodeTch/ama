@@ -1,0 +1,811 @@
+{
+  "tests": 112,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "suites": 13,
+  "results": [
+    {
+      "suite": "ama.contract.MinutesFactBudgetTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4af587e2626dfd7a19bf136d074bd6370d8735b248d62f4344ce4324b0789e1d",
+      "cases": [
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "artifactCaptureRefusesSmallMaximumAndRemainingBeforeOwnedBytesExist",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "catalogSnapshotAlsoChecksItsBoundBeforeDefensiveCopy",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "factBagChecksCallerLimitBeforeAnyLargeDefensiveCopy",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "artifactReusesBoundedIsolatedCaptureWithoutExposingMutableArray",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.minutes.contract.GenerationFingerprintTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ef80d425ce4ef1880f4a1958e606404fc33e00cc2eff7b2eb0bfe8d7537ee74b",
+      "cases": [
+        {
+          "class": "ama.minutes.contract.GenerationFingerprintTest",
+          "name": "fixedFenceChangesDigestAndRowBaseMustMatch",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.GenerationFingerprintTest",
+          "name": "completeIndependentEmptyGenerationVector",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.GenerationFingerprintTest",
+          "name": "taskVerificationRejectsCrossInputAndMissingOrConflictingHistoricalFences",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.GenerationFingerprintTest",
+          "name": "computeCannotPretendUninterpretedArchiveFactsAreValidated",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.minutes.contract.SourceAndSupportTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "9a9e24a0ee7529b96be1ad776de976fbd27e3f230e2744893b49d799c48229c4",
+      "cases": [
+        {
+          "class": "ama.minutes.contract.SourceAndSupportTest",
+          "name": "aliasesAndFullTargetsValidatedWithoutInferringTruth",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.SourceAndSupportTest",
+          "name": "deterministicAliasesTranscriptFirstAndExactDedup",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.SourceAndSupportTest",
+          "name": "scalarAnchorHashesWholeTextAndFormatsCanonicalAscii",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.SourceAndSupportTest",
+          "name": "backgroundOnlyActionsStayUnsupportedAndSuggestionsNeverAcceptIdentity",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.SourceAndSupportTest",
+          "name": "unitMembershipUsesSavedPhysicalParagraphGapsAndVersion",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.SourceAndSupportTest",
+          "name": "syntheticAudioVersionHasNullMaterialAndParserFields",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.SourceAndSupportTest",
+          "name": "danglingDuplicateRangeAndPartialScopeNeverSucceed",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.minutes.contract.StoredSourceGraphTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "6a977a3a20294539f479bb8bd97f2d4c08c5190c7c2cbb92a0598f3b70b40c85",
+      "cases": [
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "completeIndependentOccurrenceGraphPreservesBothLabelsAndEitherParserHash",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "cycleBudgetAndCancellationApplyAcrossAllOrigins",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "suppliedMembershipMustBeExactBijection",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "artifactFactBudgetCountsUniqueAcquisitionAndRefusesWholeSnapshotExcess",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "onePhysicalLocatorKeepsBothActualNoteInputsAndParserContexts",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "orphanStoredMembershipCannotBeIgnoredAsAnUnrelatedUsage",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "ordinaryCopiedLocalElementNeverAcceptsAttractiveHistoricalInput",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "ambiguousPinnedParserSelectionRejectsInsteadOfChoosingOrder",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.canonical.CanonicalValueCodecTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "7a800d8dda0f56f41d3cf000ee2145cb595fc0e15f0fabfe124701af0b5c405a",
+      "cases": [
+        {
+          "class": "ama.canonical.CanonicalValueCodecTest",
+          "name": "literalPrimitiveVectors",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.canonical.CanonicalValueCodecTest",
+          "name": "cancellationDuringScanSortAndHashNeverReturnsSuccess",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.canonical.CanonicalValueCodecTest",
+          "name": "unsignedUtf8SortPreservesListOrderAndExactControls",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.canonical.CanonicalValueCodecTest",
+          "name": "everyCanonicalBudgetBoundaryAndPlusOne",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.canonical.CanonicalValueCodecTest",
+          "name": "frozenEntriesRejectDuplicateBeforeConversionAndRejectLoneSurrogates",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.minutes.contract.FinalAndCoverageTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "7d12f32310f6974e198f043eac405f3856f1cb62fe629023cc859fc572b41c74",
+      "cases": [
+        {
+          "class": "ama.minutes.contract.FinalAndCoverageTest",
+          "name": "newTargetOrHashInvalidatesReviewAndMissingFinalInputFails",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.FinalAndCoverageTest",
+          "name": "latestContraryExactScopeWinsAndPartialReviewsNeverGiveWholeCredit",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.FinalAndCoverageTest",
+          "name": "independentFullFinalProjectionAndFrozenMembershipIgnoresLaterReview",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.minutes.contract.HashProfilesTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "edb8150f9d30cc26d01284ccccb0a86006c89fa2c7f960116ea201113770a61c",
+      "cases": [
+        {
+          "class": "ama.minutes.contract.HashProfilesTest",
+          "name": "completeIndependentConfirmationVectorAndFourMarkSetOrder",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.HashProfilesTest",
+          "name": "confirmationCannotClaimRawProfileChainWithoutConfiguredArchiveReader",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.HashProfilesTest",
+          "name": "eachSavedMarkAdditionAndRemovalChangesWholeConfirmationDomain",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.HashProfilesTest",
+          "name": "reviewSourcesRejectsSupportiveSubsetAndFullContentChangesTargetHash",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.HashProfilesTest",
+          "name": "materialReviewCannotBypassOwningRawArchiveChain",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.HashProfilesTest",
+          "name": "completeIndependentReviewTargetAndSourcesVectors",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.config.json.ArchiveBudgetTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "53f0af57b62fc44ffa47840a6880671a2f217001ac379bd440926960169b45ae",
+      "cases": [
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "independentExactCumulativeBudgetAcceptsAllFiveRawDocuments",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[1]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[2]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[3]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[4]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[5]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[6]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[7]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[8]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[9]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[10]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[11]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[12]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[13]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ArchiveBudgetTest",
+          "name": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[14]",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "cd04ae9fa47870b1ddae97f8339ebe2e8efed91b97ed021ef9c86a4e18e06c94",
+      "cases": [
+        {
+          "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+          "name": "perFactoryTokenNameStringDepthAndMembershipLimits",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+          "name": "exactWireBoundaryPlusOneSentinelAndNoCloseOnEveryOutcome",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+          "name": "cancellationReadFailuresAndInterruptedIoAreRedactedAndPreserveOwnership",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+          "name": "strictSchemaUnknownEscapedDuplicateMissingAndEof",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+          "name": "allSevenKindsEmptyDirectoriesTitleAndNonBmpBody",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+          "name": "rawActionSuggestionsStrictNumbersDatesAndScalarOffsets",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+          "name": "utf8DecoderRejectsMalformedSuffixBomOtherEncodingsAndEscapedSurrogates",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ca041c6309b436df15cd3368539be6cb8608257ac6650c6ad1ba2f43d6f611b4",
+      "cases": [
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "exactEveryScalarTokenNameDepthAndWireBoundaryAccepts",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "exactAllDirectoryAndMembershipCountsAccept",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[1]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[2]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[3]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[4]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[5]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[6]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachBoundaryPlusOneFailsWithoutPartialResult()[1]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachBoundaryPlusOneFailsWithoutPartialResult()[2]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachBoundaryPlusOneFailsWithoutPartialResult()[3]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachBoundaryPlusOneFailsWithoutPartialResult()[4]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachBoundaryPlusOneFailsWithoutPartialResult()[5]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachBoundaryPlusOneFailsWithoutPartialResult()[6]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachBoundaryPlusOneFailsWithoutPartialResult()[7]",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "name": "eachBoundaryPlusOneFailsWithoutPartialResult()[8]",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.config.json.ConfigBindingsTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "9d2b18b3b7bdac376b942c2a6751c94906e5fca0c45c100ff4841db9634cf802",
+      "cases": [
+        {
+          "class": "ama.config.json.ConfigBindingsTest",
+          "name": "storedVerifyRequiresActualDigestTaskAndProducerChain",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ConfigBindingsTest",
+          "name": "injectedParsedDtoCannotAttestRawArchiveAndCancellationNeverMintsSuccess",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ConfigBindingsTest",
+          "name": "fileMeetingSizeHashAndSavedTaskFencesAreRequiredFacts",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ConfigBindingsTest",
+          "name": "invalidRawOrIncompleteArchiveClosureCannotMintBinding",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ConfigBindingsTest",
+          "name": "draftComputeNeedsNoOwnStoredFingerprintTaskOrOutputRevision",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ConfigBindingsTest",
+          "name": "matchingArchiveIdentityCannotSubstituteDifferentRawDefinitionOrExtraNodes",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.config.json.RawHashChainTest",
+      "tests": 25,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4ba6c7d97fd3c0e37620e28265037038dfe63875b33d3f585685b4f8dd5069d5",
+      "cases": [
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1RawBackedCycleAndCancellationCannotReturnBusinessDigest",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "storedTaskIdentityFactsCanSupplyCompleteHistoricalGenerationFence",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1ValidNestedIntrinsicChainSucceedsAcrossAllBusinessEntryPoints",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1SharedLeafDepthUsesEveryPathInEitherOriginOrdering",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "pinnedCanonicalBudgetAlsoProtectsTemplateRowsetBeforeItsDigestIsHidden",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "presentContradictorySuggestionNeverFallsBackToIntrinsicTranscript",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "pinnedSetResolvesAllActualHistoricalOriginsAndMatchesIndependentBytes",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1ReviewRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "newExclusionRevisionComputesIndependentlyAndAppliedOriginRequiresExactBodyInput",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1FinalRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1OriginNodeBudgetIsUniqueAndCumulativeAcrossSharedBranches",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "exactReviewArchiveClosureAndIntrinsicConfirmationProduceIndependentHashes",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "rawFullGenerationComputesBeforeOwnRowTaskAndOutputExist",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "actualBodyActionDetectionBackgroundAndIntrinsicMatrixMatchesFullIndependentFinal",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "unrelatedCurrentConfigFactsAndQueryOrderCannotChangeHistoricalFinalHash",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "completeStoredGenerationAndFinalReloadHashesUseRawOriginalArchives",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1ContextArtifactsReuseTheSameIsolatedBoundedOriginal",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "confirmationRawChainReloadRetainsOriginalProfileAndActualContent",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "selectedReviewUsesSavedScopeAndExactFrozenMemberships",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1OuterDraftRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "savedManualChildUsesExactBodyMarksAndInheritedOriginalProcessingProfile",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1SharedHistoricalArchiveAcquisitionUsesOneCumulativeByteBudget",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1DirectStoredVerifyRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1ReusedNonleafDiamondDepthUsesCachedSubtreeHeight",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1DeepRawBackedOriginsMeetExactDepthAndRejectOneMore",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.config.json.ConfigWireReaderTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "3435967e77518eedcae82f88eac4bc8b1bffa0e64283ea8cb1050b46b55523bd",
+      "cases": [
+        {
+          "class": "ama.config.json.ConfigWireReaderTest",
+          "name": "transportRejectsDuplicateUnknownNoncanonicalAndBadUnicode",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ConfigWireReaderTest",
+          "name": "rawArraysAreIsolatedAfterBoundCheckAndCumulativeBytesCannotReset",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ConfigWireReaderTest",
+          "name": "canonicalControlEscapesAndSupplementaryConfigTextArePreserved",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ConfigWireReaderTest",
+          "name": "unknownProcessingKindIsNotARecognizedFutureCapability",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ConfigWireReaderTest",
+          "name": "recognizedFutureProcessingAndPinnedMaterialsNeverFallBackToImport",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.ConfigWireReaderTest",
+          "name": "adoptedRawVectorsReadTheirExactIdentitiesAndHashes",
+          "failure": false,
+          "error": false
+        }
+      ]
+    }
+  ]
+}

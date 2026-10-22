@@ -13,3 +13,7 @@ artifacts/phase-b/b00-provenance-design-fix1/** -text
 # Original reviewer sources retain terminal CR; offline.py also retains its blank EOF line.
 artifacts/phase-b/b00-provenance-design-fix1/original-review/task-D-01-provenance-design-review-context-roots.json whitespace=cr-at-eol
 artifacts/phase-b/b00-provenance-design-fix1/original-review/task-D-01-provenance-design-review-offline.py whitespace=cr-at-eol,-blank-at-eof
+/artifacts/phase-b/minutes-pure-s1-fix1/** -text
+/artifacts/phase-b/minutes-pure-s1-fix1/raw/** -text -whitespace
+/artifacts/phase-b/minutes-pure-s1-fix1/junit/** -text -whitespace
+/artifacts/phase-b/minutes-pure-s1-fix1/custody/** -text -whitespace

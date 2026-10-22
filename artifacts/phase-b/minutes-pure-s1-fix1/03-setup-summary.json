@@ -1,0 +1,43 @@
+{
+  "tests": 4,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "suites": 1,
+  "results": [
+    {
+      "suite": "ama.contract.MinutesFactBudgetTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2ce880a9e1122c56047ede9ef3d145a9d07eb385ea7fa1acd25a1369af7b31ad",
+      "cases": [
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "artifactCaptureRefusesSmallMaximumAndRemainingBeforeOwnedBytesExist",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "catalogSnapshotAlsoChecksItsBoundBeforeDefensiveCopy",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "factBagChecksCallerLimitBeforeAnyLargeDefensiveCopy",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "artifactReusesBoundedIsolatedCaptureWithoutExposingMutableArray",
+          "failure": false,
+          "error": false
+        }
+      ]
+    }
+  ]
+}

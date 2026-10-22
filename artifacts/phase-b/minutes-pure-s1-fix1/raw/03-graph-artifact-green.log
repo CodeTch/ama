@@ -1,0 +1,104 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ama-parent                                                         [pom]
+[INFO] ama-contracts                                                      [jar]
+[INFO] ama-core                                                           [jar]
+[INFO] ama-adapters                                                       [jar]
+[INFO] 
+[INFO] ---------------------------< ama:ama-parent >---------------------------
+[INFO] Building ama-parent 0.1.0-SNAPSHOT                                 [1/4]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] -------------------------< ama:ama-contracts >--------------------------
+[INFO] Building ama-contracts 0.1.0-SNAPSHOT                              [2/4]
+[INFO]   from backend/contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/contracts/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/contracts/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-contracts ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 9 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/contracts/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-contracts ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-contracts ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.contract.MinutesFactBudgetTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.094 s -- in ama.contract.MinutesFactBudgetTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] ----------------------------< ama:ama-core >----------------------------
+[INFO] Building ama-core 0.1.0-SNAPSHOT                                   [3/4]
+[INFO]   from backend/core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-core ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/core/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/core/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-core ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 52 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-core ---
+[INFO] Copying 54 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-core ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 6 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/core/src/test/java/ama/minutes/contract/GenerationFingerprintTest.java:[25,60] method recomputeStored in class ama.minutes.contract.GenerationFingerprint cannot be applied to given types;
+  required: ama.contract.MinutesContracts.FullRow,ama.contract.MinutesContracts.Fence,ama.contract.MinutesContracts.Profiles,ama.minutes.contract.StoredFactsIndex
+  found:    ama.contract.MinutesContracts.GenerationFacts,ama.contract.MinutesContracts.Fence,ama.contract.MinutesContracts.Profiles,ama.contract.MinutesContracts.GraphBudget,()->false
+  reason: actual and formal argument lists differ in length
+[INFO] 1 error
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ama-parent 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] ama-adapters ....................................... SKIPPED
+[INFO] ama-parent ......................................... SUCCESS [  0.003 s]
+[INFO] ama-contracts ...................................... SUCCESS [  6.250 s]
+[ERROR] ama-core ........................................... FAILURE [  1.550 s]
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  8.390 s
+[INFO] Finished at: 2026-10-23T06:57:11+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.15.0:testCompile (default-testCompile) on project ama-core: Compilation failure
+[ERROR] /home/tanren/ama/.worktrees/phase-b-minutes-pure/backend/core/src/test/java/ama/minutes/contract/GenerationFingerprintTest.java:[25,60] method recomputeStored in class ama.minutes.contract.GenerationFingerprint cannot be applied to given types;
+[ERROR]   required: ama.contract.MinutesContracts.FullRow,ama.contract.MinutesContracts.Fence,ama.contract.MinutesContracts.Profiles,ama.minutes.contract.StoredFactsIndex
+[ERROR]   found:    ama.contract.MinutesContracts.GenerationFacts,ama.contract.MinutesContracts.Fence,ama.contract.MinutesContracts.Profiles,ama.contract.MinutesContracts.GraphBudget,()->false
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-core

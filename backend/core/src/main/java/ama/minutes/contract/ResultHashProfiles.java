@@ -50,8 +50,12 @@ public final class ResultHashProfiles {
   var operation=resolver.open(facts.stored(),cancelled);String result=new ResultHashProfiles(operation.resolver()).targetBound(facts,profile,budget,cancelled);operation.finish();check(cancelled);return result;
  }
  private String targetBound(ReviewFacts facts,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
+  return targetBound(facts,profile,new StoredFactsIndex(facts.stored(),budget,cancelled));
+ }
+ private String targetBound(ReviewFacts facts,Artifact profile,StoredFactsIndex index){
+  var budget=index.budget;var cancelled=index.cancelled;
   require(profile!=null&&profile.equals(resolver.reviewProfile(profile.version(),cancelled)),PROFILE_UNAVAILABLE);
-  return DomainHash.hash(profile,REVIEW_PROFILE,"REVIEW_TARGET",targetData(facts,budget,cancelled),budget.canonical(),cancelled);
+  return DomainHash.hash(profile,REVIEW_PROFILE,"REVIEW_TARGET",targetData(facts,index),budget.canonical(),cancelled);
  }
  static List<FullRow> evidence(ReviewFacts facts,StoredFactsIndex index){
   var target=targetRow(facts,index);var rows=index.matching(Table.EVIDENCE_LINK,facts.elementId()!=null?"element_id":"minutes_revision_id",target.string("id"));var included=new ArrayList<FullRow>();
@@ -62,10 +66,13 @@ public final class ResultHashProfiles {
   var expected=new HashSet<String>();for(var row:included)expected.add(row.string("id"));require(supplied.equals(expected),SOURCE_MEMBERSHIP_MISMATCH);return included;
  }
  public CanonicalValue sourcesData(ReviewFacts facts,GraphBudget budget,BooleanSupplier cancelled){
-  var index=new StoredFactsIndex(facts.stored(),budget,cancelled);var targetData=targetData(facts,index);var rows=evidence(facts,index);
+  return sourcesData(facts,new StoredFactsIndex(facts.stored(),budget,cancelled));
+ }
+ private CanonicalValue sourcesData(ReviewFacts facts,StoredFactsIndex index){
+  var budget=index.budget;var cancelled=index.cancelled;var targetData=targetData(facts,index);var rows=evidence(facts,index);
   String targetHash=new CanonicalValueCodec().sha256(ContractValues.envelope(REVIEW_PROFILE,"REVIEW_TARGET",targetData),budget.canonical(),cancelled);
   String set=facts.elementId()==null?null:targetRow(facts,index).string("set_id");
-  var session=new StoredSourceGraph.Session(index);var selected=new HashSet<>(facts.selectedEvidenceIds());
+  var session=index.sources;var selected=new HashSet<>(facts.selectedEvidenceIds());
   var graph=session.graph(new GraphSelection(facts.meetingId(),facts.minutesRevisionId(),set,null,null),selected);session.walk(graph.sourceUsages(),facts.meetingId());
   check(cancelled);return object(field("meetingId",string(facts.meetingId())),field("targetHash",string(targetHash)),field("evidenceRows",RowValues.rows(rows,cancelled)),field("locatorRows",RowValues.rows(graph.locatorRows(),cancelled)),field("sourceUsages",RowValues.usages(graph.sourceUsages(),cancelled)));
  }
@@ -73,11 +80,15 @@ public final class ResultHashProfiles {
   var operation=resolver.open(facts.stored(),cancelled);String result=new ResultHashProfiles(operation.resolver()).sourcesBound(facts,profile,budget,cancelled);operation.finish();check(cancelled);return result;
  }
  private String sourcesBound(ReviewFacts facts,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
+  return sourcesBound(facts,profile,new StoredFactsIndex(facts.stored(),budget,cancelled));
+ }
+ private String sourcesBound(ReviewFacts facts,Artifact profile,StoredFactsIndex index){
+  var budget=index.budget;var cancelled=index.cancelled;
   require(profile!=null&&profile.equals(resolver.reviewProfile(profile.version(),cancelled)),PROFILE_UNAVAILABLE);
   // Source digests require verified owning raw archive chains; the schema interpreter is deliberately an explicit prerequisite.
-  var data=sourcesData(facts,budget,cancelled);var index=new StoredFactsIndex(facts.stored(),budget,cancelled);
+  var data=sourcesData(facts,index);
   String set=facts.elementId()==null?null:targetRow(facts,index).string("set_id");
-  var session=new StoredSourceGraph.Session(index);var graph=session.graph(new GraphSelection(facts.meetingId(),facts.minutesRevisionId(),set,null,null),new HashSet<>(facts.selectedEvidenceIds()));
+  var session=index.sources;var graph=session.graph(new GraphSelection(facts.meetingId(),facts.minutesRevisionId(),set,null,null),new HashSet<>(facts.selectedEvidenceIds()));
   OriginChainVerifier.verify(index,session,graph,resolver);
   return DomainHash.hash(profile,REVIEW_PROFILE,"REVIEW_SOURCES",data,budget.canonical(),cancelled);
  }
@@ -93,12 +104,15 @@ public final class ResultHashProfiles {
   return new ReviewFacts(review.string("meeting_id"),kind,review.nullableString("element_id"),review.nullableString("minutes_revision_id"),anchor,ids,index.facts);
  }
  public CanonicalValue finalData(FinalFacts facts,GraphBudget budget,BooleanSupplier cancelled){
-  var index=new StoredFactsIndex(facts.stored(),budget,cancelled);var finalRow=index.one(Table.FINAL_CONFIRMATION,facts.confirmationId(),PROVENANCE_UNAVAILABLE);String meeting=finalRow.string("meeting_id");
+  return finalData(facts,new StoredFactsIndex(facts.stored(),budget,cancelled));
+ }
+ private CanonicalValue finalData(FinalFacts facts,StoredFactsIndex index){
+  var budget=index.budget;var cancelled=index.cancelled;var finalRow=index.one(Table.FINAL_CONFIRMATION,facts.confirmationId(),PROVENANCE_UNAVAILABLE);String meeting=finalRow.string("meeting_id");
   var body=index.one(Table.MINUTES_REVISION,finalRow.string("minutes_revision_id"),PROVENANCE_UNAVAILABLE);index.meeting(body,meeting);
   String inputId=body.nullableString("generation_input_id");require(inputId!=null,PROFILE_UNAVAILABLE);var input=index.one(Table.GENERATION_INPUT,inputId,PROFILE_UNAVAILABLE);index.meeting(input,meeting);
   for(var column:List.of("transcript_confirmation_id","material_snapshot_id","template_revision_id","exclusion_revision_id"))require(Objects.equals(input.nullableString(column),finalRow.nullableString(column)),SOURCE_MEMBERSHIP_MISMATCH);
   require(input.string("input_fingerprint").equals(finalRow.string("input_fingerprint")),FINGERPRINT_MISMATCH);
-  var session=new StoredSourceGraph.Session(index);var graph=session.graph(new GraphSelection(meeting,body.string("id"),finalRow.string("element_set_id"),finalRow.string("exclusion_revision_id"),inputId),null);session.walk(graph.sourceUsages(),meeting);
+  var session=index.sources;var graph=session.graph(new GraphSelection(meeting,body.string("id"),finalRow.string("element_set_id"),finalRow.string("exclusion_revision_id"),inputId),null);session.walk(graph.sourceUsages(),meeting);
   var evidenceIds=new HashSet<String>();for(var usage:graph.sourceUsages())if(usage.usage() instanceof EvidenceUsage e)evidenceIds.add(e.evidenceId());
   var evidenceRows=new ArrayList<FullRow>();for(var row:index.rows(Table.EVIDENCE_LINK))if(evidenceIds.contains(row.string("id")))evidenceRows.add(row);
   var setRows=RowsetProjection.elements(index,meeting,finalRow.string("element_set_id"));
@@ -113,7 +127,7 @@ public final class ResultHashProfiles {
    require(review.string("hash_profile").equals(REVIEW_PROFILE),PROFILE_UNAVAILABLE);
    var reviewFacts=storedReview(review,index);var target=targetData(reviewFacts,index);
    String targetHash=new CanonicalValueCodec().sha256(ContractValues.envelope(review.string("hash_profile"),"REVIEW_TARGET",target),budget.canonical(),cancelled);
-   String sourcesHash=new CanonicalValueCodec().sha256(ContractValues.envelope(review.string("hash_profile"),"REVIEW_SOURCES",sourcesData(reviewFacts,budget,cancelled)),budget.canonical(),cancelled);
+   String sourcesHash=new CanonicalValueCodec().sha256(ContractValues.envelope(review.string("hash_profile"),"REVIEW_SOURCES",sourcesData(reviewFacts,index)),budget.canonical(),cancelled);
    require(targetHash.equals(review.string("target_hash"))&&sourcesHash.equals(review.string("source_set_hash")),FINGERPRINT_MISMATCH);
    reviewRows.add(review);reviewEvidence.addAll(index.matching(Table.RESULT_REVIEW_EVIDENCE,"review_id",review.string("id")));
   }
@@ -135,10 +149,10 @@ public final class ResultHashProfiles {
   for(var member:index.matching(Table.FINAL_RESULT_REVIEW,"confirmation_id",f.string("id"))){
    check(cancelled);var review=index.one(Table.RESULT_REVIEW,member.string("review_id"),PROVENANCE_UNAVAILABLE);var reviewFacts=storedReview(review,index);
    require(review.string("hash_profile").equals(REVIEW_PROFILE),PROFILE_UNAVAILABLE);var reviewProfile=resolver.review(review,facts.stored(),budget,cancelled);
-   require(target(reviewFacts,reviewProfile,budget,cancelled).equals(review.string("target_hash"))&&sources(reviewFacts,reviewProfile,budget,cancelled).equals(review.string("source_set_hash")),FINGERPRINT_MISMATCH);
+   require(targetBound(reviewFacts,reviewProfile,index).equals(review.string("target_hash"))&&sourcesBound(reviewFacts,reviewProfile,index).equals(review.string("source_set_hash")),FINGERPRINT_MISMATCH);
   }
-  var session=new StoredSourceGraph.Session(index);var graph=session.graph(new GraphSelection(f.string("meeting_id"),body.string("id"),f.string("element_set_id"),f.string("exclusion_revision_id"),inputId),null);
+  var session=index.sources;var graph=session.graph(new GraphSelection(f.string("meeting_id"),body.string("id"),f.string("element_set_id"),f.string("exclusion_revision_id"),inputId),null);
   session.walkInputs(List.of(inputId),f.string("meeting_id"));OriginChainVerifier.verify(index,session,graph,resolver);
-  return DomainHash.hash(profile,FINAL_PROFILE,"FINAL_SOURCES",finalData(facts,budget,cancelled),TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled)),cancelled);
+  return DomainHash.hash(profile,FINAL_PROFILE,"FINAL_SOURCES",finalData(facts,index),TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled)),cancelled);
  }
 }
