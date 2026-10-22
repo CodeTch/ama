@@ -1,0 +1,185 @@
+{
+  "sourceCommit": "93b2270fb98482cb0d5470d5f80a2275100abd02",
+  "command": "env JAVA_HOME=/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64 python3 tools/checks/run.py unit",
+  "exitCode": 0,
+  "suites": 26,
+  "tests": 179,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "xml": [
+    {
+      "path": "junit/adapters/TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "sha256": "b9a5127ed3ca92911370ae6bd04a748d4a98153c15d784e8cd59149f921578d4"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.config.json.ConfigBindingsTest.xml",
+      "sha256": "4488a6072f27b780af9cacd7eb08ce166bc4fa836271f2f712d000c18c9b407b"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "sha256": "f288a83b12e8fc3662e4f72ceec52101ee1ce5071548a013d129f8e63785be94"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.config.json.RawHashChainTest.xml",
+      "sha256": "e5ab2281716d6556de1e180bde34004f498a5a9c49b93a94cd4053f8d8d38b44"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "sha256": "0188874cf2859c553ed8063af8839630b34671a66789cb1550b40d1c4cdadeda"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "sha256": "b48ac1feb8c87c34d848a8b6e4398d66aae67cf08e986ba694271a8e3ce08c26"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "sha256": "c6ac9c487b6bcd2a10ef5ab4f57caab6a9e77ce62f87e90ac73bb2c58dbd0a57"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.storage.StorageRouterTest.xml",
+      "sha256": "c4bcbe71e5e55aa4ec587af6b008dee253699f692607d84c14552aa7b9c3c2b0"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "sha256": "df8555914a1576581e94a91f8e54531c821ff859f73d4eff89e3c4b3b467a1e2"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "sha256": "134624d34b8e6b57a19fab2624fa68c2bbbdf7d7567cb72fbba1a6161a0dd781"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.task.TaskMetadataTest.xml",
+      "sha256": "7a8b5accadbefb79382827258ebb11109e46e6425b45502ca44ab310b25908e7"
+    },
+    {
+      "path": "junit/adapters/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "sha256": "7b46bc1ed3a560b30c51e6b7aea3c27f2dd2f4b86fc692afc08f40e56afa5b82"
+    },
+    {
+      "path": "junit/api/TEST-ama.api.DeploymentConfigTest.xml",
+      "sha256": "fe3ad1b154a05d53767e2d159b04232bf73295ed00d7c348a2bbbb07af684853"
+    },
+    {
+      "path": "junit/api/TEST-ama.api.FileConfigurationTest.xml",
+      "sha256": "ee96fca127a6de30f43a244c56640e9b185a76f50f04e467b8fee9e1cdac8084"
+    },
+    {
+      "path": "junit/api/TEST-ama.api.IdentityContractsTest.xml",
+      "sha256": "4d807caac939c16036b7fa07b49e853eb485bdf978a6956f03d326d2fc69c508"
+    },
+    {
+      "path": "junit/api/TEST-ama.api.IdentitySecurityTest.xml",
+      "sha256": "78b121c06ab280a0fdd4e9b943ff3634a680a30209bbb3e4d73df49108f1b44a"
+    },
+    {
+      "path": "junit/contracts/TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "sha256": "a522cec8940295b43cd4a7b1b358cfc0698354d998ea152c8a617a3d362279f8"
+    },
+    {
+      "path": "junit/core/TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "sha256": "05caebaeaccd74b7be8aca905ff0d9d14da2bb6d4df0d5a8d5744030cfb91d71"
+    },
+    {
+      "path": "junit/core/TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "sha256": "c692d330a4108e8d38ba7092c5a1c01238a07ed519af6c3e1453abd8386b3f63"
+    },
+    {
+      "path": "junit/core/TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "sha256": "8d21814aa892c799d8a114f1b608cfa13724f13070d5aca9d13152776d6415b3"
+    },
+    {
+      "path": "junit/core/TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "sha256": "cfe22c2822c6525ea7b9d740be2d9a51d5bc1e4b1329868a5f5164365a68375e"
+    },
+    {
+      "path": "junit/core/TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "sha256": "932c8076a954514819424d8812e666921bce047eb6c8e1e849f519be5c73d0da"
+    },
+    {
+      "path": "junit/core/TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "sha256": "47dfacd0e3ee631e36fd36d9c04b51c086a47cc100be9220b109aa30f6bfb54c"
+    },
+    {
+      "path": "junit/integration-tests/TEST-ama.storage.ContractFixtureTest.xml",
+      "sha256": "c91ec2483eb11c11f7ba8a6d7da98dc8a640b0049e63a8c167589bd690417c2c"
+    },
+    {
+      "path": "junit/integration-tests/TEST-ama.support.ContractClientTest.xml",
+      "sha256": "f7b97c15ac4d9a86c1b9777db696f81b3e429e9476e3207b921de44ae888e48d"
+    },
+    {
+      "path": "junit/worker/TEST-ama.worker.WorkerLoopTest.xml",
+      "sha256": "6518dc02a455873f276e2bd740645136b911bf1b8d090137d8b08a9d4dba6c02"
+    }
+  ],
+  "changedSourceHashes": [
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/OriginGraphFix1Cases.java",
+      "sha256": "5789401ea935d30cad830fa1dafb82bbc4720082e6b952d8c7ef80d967641fe2"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/RawHashChainTest.java",
+      "sha256": "63b2b8780c2c87e3b3a323c47e56183f1da91f68d3daa27107915472147b8a50"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/ConfigArchiveContracts.java",
+      "sha256": "829eb6b7e1f9bc758e53d32481ae00d9b60ed073d3f9457044ebf6eeb3cfd556"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "sha256": "a37aeb05d3ae8aa95434b34c324887891262b2e63515ca4a29771e8ed3ff2db9"
+    },
+    {
+      "path": "backend/contracts/src/test/java/ama/contract/MinutesFactBudgetTest.java",
+      "sha256": "3ad2c0a8585f348a0a244492a2816f207d9733776a61554b5c90efce67c03827"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/DomainHash.java",
+      "sha256": "2de639b0714ef2fdbaa9164e741fd65806ca3029c8e688f6b9718aa19c2d94d6"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java",
+      "sha256": "9897d025afebbc9d042b148362d6ca9474099ac0a666856d476cb4d0b83a20a3"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OriginChainVerifier.java",
+      "sha256": "7c2022a0ab317829613afe6bd074e48353d825ab36c7ac8a67b2a50cb0a08af0"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+      "sha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredFactsIndex.java",
+      "sha256": "d3a1feaa336e7abef93de75ff708e3e0d0aa6de1fdaa60f03ac797db7a9a1f7d"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+      "sha256": "32f04f856dc98080e73fa8346c46e757df3db7b60c7b809c43be6174e7ba7812"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/TranscriptConfirmationHash.java",
+      "sha256": "bd4d709f659c29b8651e7ee82f7c5ade387dab3b4230302ad09780000dac274d"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/GenerationFingerprintTest.java",
+      "sha256": "542ec403f8b8dd835841ef37c2a0df3763af32d750f6118ba43029df423545cf"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/StoredSourceGraphTest.java",
+      "sha256": "2da3c1eed8202db20afc2d736bd41f1d220556ff600f66b65729b14b363ce9c1"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "sha256": "1c61311cbdc80804a989802d793e7753f5a3fe01a9929e15ef4b2ac823bdb760"
+    }
+  ],
+  "overlap": "Includes all 112 B07 owned cases; do not add counts as distinct tests",
+  "noise": "Existing unchanged integration-tests DeclaredErrorResponse.java deprecated API compiler note; no new warning in changed source",
+  "scope": "Fresh Java unit execution and compilation on adopted coordination branch; no IT/DB/S3/runtime service execution"
+}

@@ -1,0 +1,330 @@
+{
+  "ownerBase": "7e052a88fcd03d60523d013839701dd35a7f2b48",
+  "ownerHead": "13b8f1d16f85787c12626faa41c7e511403f16f9",
+  "rootBefore": "fba12b695e01788b2307f713d9a6301a9941f4d6",
+  "rootAfter": "93b2270fb98482cb0d5470d5f80a2275100abd02",
+  "changedPaths": 79,
+  "exactOwnerPayloads": 78,
+  "attributeRulesBothPreservedInOrder": true,
+  "protectedSqlAndPlansChanged": [],
+  "testsRerun": false,
+  "scope": "Exact reviewed correction adoption; attributes are the ordered union with prior root rules",
+  "pathHashes": [
+    {
+      "path": ".gitattributes",
+      "sha256": "8a54f421d6b918396a15509bb5088c097919017d610dd9febd1ec0ff8fc4bc3d"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/01-graph-red-source.sha256",
+      "sha256": "7473af50e0ed58e16441d21df7be34ecdf2dce4e4ba63a822397ac9d7e148ef2"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/01-graph-red-summary.json",
+      "sha256": "72ff07b9f3c321b0ae0389d434fd5776d5b8834d1fb174ae98bd9beafc3cac86"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/03-setup-summary.json",
+      "sha256": "8a496a74ae4d6bf249a5cb47b810bbe61d7d9088c47473d45f6adc8281a38750"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/04-green-summary.json",
+      "sha256": "ca52e16af142a79843c091ba591c259a970ea4b6bcefd3c6107621d39b1753e9"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/05-expanded-green-summary.json",
+      "sha256": "005a3f615ad77309b5205587719d50a24edb14fff34e2d50ee16a9f6eed93a0f"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/06-complete-owned-summary.json",
+      "sha256": "485dd4a388099ef31f26499b77d472b75c57c1fbaadf6b68980306a9ed1e84c4"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/07-canonical-focused-summary.json",
+      "sha256": "cea220518e77ac61dbf367e13808a829fad7bd15000807f69c5c1b5270a305da"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/SHA256SUMS",
+      "sha256": "a06c77b11c5d65da3d159138b8b917a11a71b6b4ce0e58df3965680e26835c8d"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/audit.json",
+      "sha256": "2b777b6e97931e92f9ce25f7b6e1a189c4da0f450bc95afced36c7337e697669"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/audit.py",
+      "sha256": "b54f9f433a59b39dc8194c8310886b1437dde719747ab576096b9ec0748d45c1"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/baseline-273.json",
+      "sha256": "361894e0da6863029438afcee5a60cea148d8b2f89afc7364bc78c83b825e65b"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/capture.py",
+      "sha256": "79b3ca04524bef6183cc789896a4bb3bd874cce8e15a5169d8a9be00cec8ffe4"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/consumer-handbook.md",
+      "sha256": "7b9fc894d3f5b97bd0ddcd729fb703da92447efb44bfb9d8a2fc9d0dbdfc9bc8"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/custody.json",
+      "sha256": "860203d97bcb7a006f8454cfc5ef99250a57506a9da7f3bbfba9020731315f1d"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/custody/task-B-07-pure-s1-fix1-brief.md",
+      "sha256": "45d3e6a522a87e95b5deefef1962533448ff3803d5c62d82c0415aa695f41507"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/custody/task-B-07-pure-s1-review-audit.json",
+      "sha256": "50561ce2a5a51617c3fcc8d6a0c23475766f3f9a7ed65c879c460f5a34aeda82"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/custody/task-B-07-pure-s1-review-audit.py",
+      "sha256": "b6a62ee098c3721a0b72c5242c6f4c4f5e1a56d0231da71ed5a959d4efbc88f4"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/custody/task-B-07-pure-s1-review-probe.java",
+      "sha256": "4dc8d1bb7575b201ce73017efd450417eb26cc9b791b11a3a87f3cf9132b5a63"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/custody/task-B-07-pure-s1-review-probe.log",
+      "sha256": "2be3201cdc7002e9d0d4d3ee69559227593bd7f9548aa0b4679ef014690a43e3"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/custody/task-B-07-pure-s1-review.md",
+      "sha256": "08abe8f930185d114d06eaf96debdc2f3fd1c308c000c060320ba0cc1294d186"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/delivery-paths.txt",
+      "sha256": "df386c85d45306dd49ede353c2a03633ac0f8d7f598e928f3a926d48b49084b8"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/final-source-hashes.json",
+      "sha256": "059dd4c5a4616cbe525b8d47cc82fc9aa754b9647bc880114872bd1d2a53ee2c"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/01-graph-red/TEST-ama.config.json.RawHashChainTest.xml",
+      "sha256": "d72bf3e27a0aa5b2c96e4022379cc5fe1d502b0a55cd3c9f63568158cdc20c33"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/03-setup/TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "sha256": "2ce880a9e1122c56047ede9ef3d145a9d07eb385ea7fa1acd25a1369af7b31ad"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/04-green/TEST-ama.config.json.RawHashChainTest.xml",
+      "sha256": "9330044d9c05b186f0782637df927fac933c7a4f2ea776a1f8dfdcc91426c051"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/04-green/TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "sha256": "f8f2586d0474c1b9829d9a76740ea69e1f59cb9bc06b48c9e7dd080555859386"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/04-green/TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "sha256": "15be9e8a71babe1e62c7de0a48c34a4f09950786982eadabfe281912dc8a2ad2"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/05-expanded-green/TEST-ama.config.json.RawHashChainTest.xml",
+      "sha256": "1a1e2de033b65010817f9da61ac9776f78a62ba427f602ee6ce372ca7279aa69"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/05-expanded-green/TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "sha256": "226de84ce946259e360603608d9bddb10f4217f8c9f0e7a4366df39ac4b1ecac"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/05-expanded-green/TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "sha256": "52964235f8ef233946a3c425486236708330827085b184311f7eeda3a86794aa"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "sha256": "7a800d8dda0f56f41d3cf000ee2145cb595fc0e15f0fabfe124701af0b5c405a"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "sha256": "53f0af57b62fc44ffa47840a6880671a2f217001ac379bd440926960169b45ae"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.config.json.ConfigBindingsTest.xml",
+      "sha256": "9d2b18b3b7bdac376b942c2a6751c94906e5fca0c45c100ff4841db9634cf802"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "sha256": "3435967e77518eedcae82f88eac4bc8b1bffa0e64283ea8cb1050b46b55523bd"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.config.json.RawHashChainTest.xml",
+      "sha256": "4ba6c7d97fd3c0e37620e28265037038dfe63875b33d3f585685b4f8dd5069d5"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "sha256": "4af587e2626dfd7a19bf136d074bd6370d8735b248d62f4344ce4324b0789e1d"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "sha256": "7d12f32310f6974e198f043eac405f3856f1cb62fe629023cc859fc572b41c74"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "sha256": "ef80d425ce4ef1880f4a1958e606404fc33e00cc2eff7b2eb0bfe8d7537ee74b"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "sha256": "edb8150f9d30cc26d01284ccccb0a86006c89fa2c7f960116ea201113770a61c"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "sha256": "9a9e24a0ee7529b96be1ad776de976fbd27e3f230e2744893b49d799c48229c4"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "sha256": "6a977a3a20294539f479bb8bd97f2d4c08c5190c7c2cbb92a0598f3b70b40c85"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "sha256": "ca041c6309b436df15cd3368539be6cb8608257ac6650c6ad1ba2f43d6f611b4"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/06-complete-owned/TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "sha256": "cd04ae9fa47870b1ddae97f8339ebe2e8efed91b97ed021ef9c86a4e18e06c94"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/junit/07-canonical-focused/TEST-ama.config.json.RawHashChainTest.xml",
+      "sha256": "55f27912c113236785e31c69a59092527ef10833e2bde674886f37873781c6ee"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/payload-allowlist.txt",
+      "sha256": "73de307d4c1812db56aae5e6ddd1d52cee58810f62703b75b7ad3fe539d9ecfc"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/01-graph-red.log",
+      "sha256": "1f7d9dc5cc83a8f60ce15e5d5bd2f7e00e4b3b84406351932bc590bff9082b0a"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/02-artifact-api-setup.log",
+      "sha256": "84a055bf8cc5fe0b5c6dd7d12b685cc100cf0d75b2a3813dd65da264f4728838"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/03-graph-artifact-green.log",
+      "sha256": "fa0e05d5062e338ce833db5904ab31c482006ceac4cf4536887e6bb588c2eb1f"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/04-graph-artifact-green.log",
+      "sha256": "1d0ac0b1d1dc5e8f3dec2487b02220932cf0919de906b661b7fd3d8b2951e1ef"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/05-expanded-graph-green.log",
+      "sha256": "b49feb1536716b7f1b02d143118848acdd596c5d8e1380ce44c418fcff10cf26"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/06-complete-owned-green.log",
+      "sha256": "ab2218516259e5d4b17016a2e258a0bcfcd146570ae63718d79f260072525c98"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/07-canonical-focused-green.log",
+      "sha256": "1da5f6fed90d405906d20bfa1467274a2e76e186eb9318af72f7a77f071f0bd3"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/08-toolchain.log",
+      "sha256": "fbecf18edc6aecfaf715e58bd25272088cdfae4b48fde60bad1160d0412ab506"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/09-integrity-audit.log",
+      "sha256": "a6040d6602f34bbfadc69e15bb03015bd1916088c55c6e5d1bb917fca0f72a1e"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/10-integrity-audit.log",
+      "sha256": "672499fea5324824dd891205ff42eb337a9eaa23b7e5b4b3f83289f28aa9b688"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/11-final-audit.log",
+      "sha256": "672499fea5324824dd891205ff42eb337a9eaa23b7e5b4b3f83289f28aa9b688"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/raw/12-red-source-custody.log",
+      "sha256": "c61ca0fd05d24e51ba8aea27fcdcfdb48ec605bd3635dd533bc957e7c7351277"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/red-source/OriginGraphFix1Cases.java",
+      "sha256": "5789401ea935d30cad830fa1dafb82bbc4720082e6b952d8c7ef80d967641fe2"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/red-source/RawHashChainTest.java",
+      "sha256": "b85c11efac6b5fa701abfc5ff3d9944e13a6039b191d31a902e28ab0aafe9712"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/seal.py",
+      "sha256": "396a710fde4e8a439cdb079aad2e97499ddcc165828dba9ba8c6e9f27f854755"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/verification-commands.md",
+      "sha256": "286fcf6d3cf47615eaf7dcc08156494287af96dd575558c011f310e465df3a74"
+    },
+    {
+      "path": "artifacts/phase-b/minutes-pure-s1-fix1/xml-hashes.json",
+      "sha256": "8b3ddd7e21e361787900d995b78b4a432a9593ef7ea6d581e434c9f1abccecee"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/OriginGraphFix1Cases.java",
+      "sha256": "5789401ea935d30cad830fa1dafb82bbc4720082e6b952d8c7ef80d967641fe2"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/RawHashChainTest.java",
+      "sha256": "63b2b8780c2c87e3b3a323c47e56183f1da91f68d3daa27107915472147b8a50"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/ConfigArchiveContracts.java",
+      "sha256": "829eb6b7e1f9bc758e53d32481ae00d9b60ed073d3f9457044ebf6eeb3cfd556"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "sha256": "a37aeb05d3ae8aa95434b34c324887891262b2e63515ca4a29771e8ed3ff2db9"
+    },
+    {
+      "path": "backend/contracts/src/test/java/ama/contract/MinutesFactBudgetTest.java",
+      "sha256": "3ad2c0a8585f348a0a244492a2816f207d9733776a61554b5c90efce67c03827"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/DomainHash.java",
+      "sha256": "2de639b0714ef2fdbaa9164e741fd65806ca3029c8e688f6b9718aa19c2d94d6"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java",
+      "sha256": "9897d025afebbc9d042b148362d6ca9474099ac0a666856d476cb4d0b83a20a3"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OriginChainVerifier.java",
+      "sha256": "7c2022a0ab317829613afe6bd074e48353d825ab36c7ac8a67b2a50cb0a08af0"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+      "sha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredFactsIndex.java",
+      "sha256": "d3a1feaa336e7abef93de75ff708e3e0d0aa6de1fdaa60f03ac797db7a9a1f7d"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+      "sha256": "32f04f856dc98080e73fa8346c46e757df3db7b60c7b809c43be6174e7ba7812"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/TranscriptConfirmationHash.java",
+      "sha256": "bd4d709f659c29b8651e7ee82f7c5ade387dab3b4230302ad09780000dac274d"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/GenerationFingerprintTest.java",
+      "sha256": "542ec403f8b8dd835841ef37c2a0df3763af32d750f6118ba43029df423545cf"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/StoredSourceGraphTest.java",
+      "sha256": "2da3c1eed8202db20afc2d736bd41f1d220556ff600f66b65729b14b363ce9c1"
+    },
+    {
+      "path": "docs/acceptance/b/minutes-pure-s1-fix1-report.md",
+      "sha256": "fda5077e2090469f1954fca0d139957db4cf36b89119917ccc0073b1b0591be4"
+    }
+  ]
+}

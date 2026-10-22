@@ -1,0 +1,186 @@
+{
+  "ownerBase": "214a63d978e4c04c0b3aec1c99d8d0ce3c093d9d",
+  "ownerHead": "212c794b497631b13b395c4d1436cbe306208fd4",
+  "rootBefore": "ba6306c66f43402253f9073b8c605cbaf16edbd3",
+  "rootAfter": "01ab5380f308233e4b7932096c7df2bae07e0d83",
+  "changedPaths": 43,
+  "exactOwnerPayloads": 42,
+  "attributeRulesBothPreservedInOrder": true,
+  "protectedSqlAndPlansChanged": [],
+  "testsRerun": false,
+  "scope": "Exact reviewed correction adoption; attributes are the ordered union with prior root rules",
+  "pathHashes": [
+    {
+      "path": ".gitattributes",
+      "sha256": "bca569b47ca74e9b93170d555eb60854740d4ce23135440311b0c10f80cc152b"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/before-eofattr-render-preservation-verification.json",
+      "sha256": "f0c0985adb0ad482656e9a3dd778fa3ca539aaf775165fd7135bbd7af1071213"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/before-eofattr-render-preservation.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/before-eofattr-render-preservation.stdout.txt",
+      "sha256": "dcc9e693c8cf125db1732d624120e849e7c8297f5213b2a2ec93d45d0486b972"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/context-roots-vector.json",
+      "sha256": "f50eaeb82d256c4d8a08e6104cf6ff679bc0e0b98d6a205849a4b65f97ed1089"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/context_roots_vector.py",
+      "sha256": "7846b63c73d8941bdd25091deca63ee2e1f3dbdfbbd0cf8fc5eac600f6e5fdce"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/diff-check-final.command.json",
+      "sha256": "238b20fd439e45bf0feb63c9335cbaf00456fae033dfd700a789cc1451afd52c"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/diff-check-final.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/diff-check-final.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/diff-check-run1.command.json",
+      "sha256": "02d1104d2c84cb274b44827b882096cc4be0e920d9f76681a72252c8ca0c5667"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/diff-check-run1.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/diff-check-run1.stdout.txt",
+      "sha256": "fb941b095bf4706f24b9d21cc6da5aaa36a6973e265b39411ab661f9e57ec132"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/final-verification-commands.json",
+      "sha256": "ffd829df3e7cc861dd04d11f292bf99ca3423751a38d812bb49485f57782d088"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/fix1-allowlist.sha256",
+      "sha256": "f5cdfde47e046b5bb0bfe7ca6bcd59a18569184705fcea825d899000abcdfa7c"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/fix1-allowlist.txt",
+      "sha256": "785e632f81facf379e8762e2fadc1e43422ae0285182a1772b0c090f87d6c93d"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/fix1-manifest.json",
+      "sha256": "128158fc98774a3e504b4dad5814942fb48f130f10801e07d2886e9edf21bd3e"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/old-recipe-red.command.json",
+      "sha256": "f44ba6b9ab95ba35a3e5686111c9c066df8750a516dfd773d1ee0a335fc088e4"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/old-recipe-red.stderr.txt",
+      "sha256": "5b7d5c16757cd9bdaf2a8276a66f1839ed4c4fb7c9921a5c0f50ceecd322fb2e"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/old-recipe-red.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/old-recipe-replay.stderr.txt",
+      "sha256": "28f5db4dc3fc323bece6b2c9911cf9714bdd75ea79d5e8fb5154cfcb87a319d8"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/old-recipe-replay.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/original-review/task-D-01-provenance-design-delivery-paths.json",
+      "sha256": "5fd3020b7e2866e9aa56f0c1c77ebcb1a83be06e6cba3bdb5bc8e41a7d42df70"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/original-review/task-D-01-provenance-design-fix1-brief.md",
+      "sha256": "b729049728ec174e312b8d712f4f9d5235ca813e3e14d41be9d918dbb87b6b90"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/original-review/task-D-01-provenance-design-review-context-roots.json",
+      "sha256": "6644ddf1cd0e70d334cc8d35511b309a9b4919ab1fbfe62889656c6d95dfc3c2"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/original-review/task-D-01-provenance-design-review-offline.json",
+      "sha256": "67a33ac618c8a753ac2b82b5408df63f816788538dee6955e0317e468fe95fef"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/original-review/task-D-01-provenance-design-review-offline.py",
+      "sha256": "ddfa0be3007c78b795b61455c3d48d7cfdd3a4224b70eb0ce0f02c8b41782956"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/original-review/task-D-01-provenance-design-review.md",
+      "sha256": "0803c06ab1ca427e9d8b2d2007704c07cf85cf30d959da3649374cc1574b74b0"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/package_seal.py",
+      "sha256": "3a8e863faa94f52d64a35aaec4066624db0fb23694aed553e8ec987bc895cde7"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/render-preservation-verification.json",
+      "sha256": "b1b4dccf5ac677cb4f18fbb62d164fc335d670aa18414083a77c9b902486fdcf"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/render-preservation.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/render-preservation.stdout.txt",
+      "sha256": "dcc9e693c8cf125db1732d624120e849e7c8297f5213b2a2ec93d45d0486b972"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/vector-final.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/vector-final.stdout.txt",
+      "sha256": "1951a4c428c7eac0d71f2114aa51c60fd2fce96ab9a87e7a7113ab10df12b9c5"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/vector-verify.command.json",
+      "sha256": "6ec8fdc0483a0abeff1b2ed43d78179edf8c3ed11db3535a9202c50e1b23d09d"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/vector-verify.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/vector-verify.stdout.txt",
+      "sha256": "74006210087ff2f2d3e2d3eec5fe0d142ba98e1e315caffee97bb1e8c21e7c5d"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design-fix1/verify_fix1.py",
+      "sha256": "0f1146ba9c83918be6ec7e837de74900333d59dc7d63fb288d7444a753abad55"
+    },
+    {
+      "path": "docs/acceptance/b/material-provenance-design-fix1-report.md",
+      "sha256": "dbc666f9ee299cc231f4d31b8a9cb2426d80ee32373a52064652e1b5533bc5f7"
+    },
+    {
+      "path": "docs/acceptance/b/material-provenance-design-prerequisite.md",
+      "sha256": "321b3c8352d21d753679d87133132ed7d7cef1950272e489896763a15bf4d62d"
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "sha256": "37e90f7e63bef43baca85aa12a200b4e3e006d13e548054b427ec7ee3804c290"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "sha256": "d780db0688cef336bdddee164c60772033168a448d442b74879124dc5b2c1aa0"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-22-ama-material-provenance-addendum.md",
+      "sha256": "e0aee6ac0526738920758604fa0b2eee201f7b848cdd168f249280ac6cb5f00f"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "sha256": "1c61311cbdc80804a989802d793e7753f5a3fe01a9929e15ef4b2ac823bdb760"
+    }
+  ]
+}

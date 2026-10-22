@@ -1,0 +1,116 @@
+{
+  "base": "7e052a88fcd03d60523d013839701dd35a7f2b48",
+  "head": "13b8f1d16f85787c12626faa41c7e511403f16f9",
+  "packageBytes": 857980,
+  "packageSha256": "cefcf050122a844f16bbb05e6832764f7e5aa827f5daaa6fbe8c208f80f9d628",
+  "fullDiffExact": true,
+  "payloadCount": 77,
+  "oldBaselineCount": 273,
+  "oldCurrentIdentical": 258,
+  "oldPayloadsGit": 271,
+  "oldPayloadsCurrentIdentical": 256,
+  "custodyOriginals": 6,
+  "xmlCount": 22,
+  "redFailures": [
+    {
+      "round": "01-graph-red",
+      "class": "ama.config.json.RawHashChainTest",
+      "name": "fix1SharedLeafDepthUsesEveryPathInEitherOriginOrdering",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "Expected ama.contract.MinutesContracts.Failure to be thrown, but nothing was thrown."
+    },
+    {
+      "round": "01-graph-red",
+      "class": "ama.config.json.RawHashChainTest",
+      "name": "fix1ReviewRejectsCorruptedNestedIntrinsicConfirmation",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "Expected ama.contract.MinutesContracts.Failure to be thrown, but nothing was thrown."
+    },
+    {
+      "round": "01-graph-red",
+      "class": "ama.config.json.RawHashChainTest",
+      "name": "fix1FinalRejectsCorruptedNestedIntrinsicConfirmation",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "Expected ama.contract.MinutesContracts.Failure to be thrown, but nothing was thrown."
+    },
+    {
+      "round": "01-graph-red",
+      "class": "ama.config.json.RawHashChainTest",
+      "name": "fix1OuterDraftRejectsCorruptedNestedIntrinsicConfirmation",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "Expected ama.contract.MinutesContracts.Failure to be thrown, but nothing was thrown."
+    },
+    {
+      "round": "01-graph-red",
+      "class": "ama.config.json.RawHashChainTest",
+      "name": "fix1ReusedNonleafDiamondDepthUsesCachedSubtreeHeight",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "Expected ama.contract.MinutesContracts.Failure to be thrown, but nothing was thrown."
+    }
+  ],
+  "oldTests": 97,
+  "newTests": [
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ContextArtifactsReuseTheSameIsolatedBoundedOriginal"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1DeepRawBackedOriginsMeetExactDepthAndRejectOneMore"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1DirectStoredVerifyRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1FinalRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1OriginNodeBudgetIsUniqueAndCumulativeAcrossSharedBranches"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1OuterDraftRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1RawBackedCycleAndCancellationCannotReturnBusinessDigest"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ReusedNonleafDiamondDepthUsesCachedSubtreeHeight"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ReviewRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1SharedHistoricalArchiveAcquisitionUsesOneCumulativeByteBudget"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1SharedLeafDepthUsesEveryPathInEitherOriginOrdering"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ValidNestedIntrinsicChainSucceedsAcrossAllBusinessEntryPoints"
+    ],
+    [
+      "ama.contract.MinutesFactBudgetTest",
+      "artifactCaptureRefusesSmallMaximumAndRemainingBeforeOwnedBytesExist"
+    ],
+    [
+      "ama.contract.MinutesFactBudgetTest",
+      "artifactReusesBoundedIsolatedCaptureWithoutExposingMutableArray"
+    ],
+    [
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "artifactFactBudgetCountsUniqueAcquisitionAndRefusesWholeSnapshotExcess"
+    ]
+  ],
+  "canonicalSubset": 25,
+  "authorTreeUnchanged": true
+}
