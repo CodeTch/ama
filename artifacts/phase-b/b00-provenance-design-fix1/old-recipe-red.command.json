@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "artifacts/phase-b/b00-provenance-design-fix1/context_roots_vector.py",
+    "old-recipe-red"
+  ],
+  "exitCode": 1,
+  "meaning": "Expected real assertion failure of the old literal set recipe only; not runtime RED or SQL data loss."
+}

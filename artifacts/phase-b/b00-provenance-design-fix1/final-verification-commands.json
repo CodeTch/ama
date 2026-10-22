@@ -1,0 +1,41 @@
+[
+  {
+    "label": "old-recipe-replay",
+    "command": [
+      "python3",
+      "-B",
+      "artifacts/phase-b/b00-provenance-design-fix1/context_roots_vector.py",
+      "old-recipe-red"
+    ],
+    "startedAt": "2026-10-22T22:58:46.423595+00:00",
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "runnerSha256": "7846b63c73d8941bdd25091deca63ee2e1f3dbdfbbd0cf8fc5eac600f6e5fdce"
+  },
+  {
+    "label": "vector-final",
+    "command": [
+      "python3",
+      "-B",
+      "artifacts/phase-b/b00-provenance-design-fix1/context_roots_vector.py",
+      "verify"
+    ],
+    "startedAt": "2026-10-22T22:58:46.543866+00:00",
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "runnerSha256": "7846b63c73d8941bdd25091deca63ee2e1f3dbdfbbd0cf8fc5eac600f6e5fdce"
+  },
+  {
+    "label": "render-preservation",
+    "command": [
+      "python3",
+      "-B",
+      "artifacts/phase-b/b00-provenance-design-fix1/verify_fix1.py"
+    ],
+    "startedAt": "2026-10-22T23:00:05.096169+00:00",
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "runnerSha256": "0f1146ba9c83918be6ec7e837de74900333d59dc7d63fb288d7444a753abad55",
+    "reasonForRerun": "Final exact raw-CR/blank-EOF preservation attributes; prior result retained under before-eofattr-*."
+  }
+]

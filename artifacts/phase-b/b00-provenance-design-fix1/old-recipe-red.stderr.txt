@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-provenance-design/artifacts/phase-b/b00-provenance-design-fix1/context_roots_vector.py", line 194, in <module>
+    assert actual == ["C1", "C2"], "R1 static recipe assertion: expected C1+C2, old zero-evidence recipe produced " + repr(actual)
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: R1 static recipe assertion: expected C1+C2, old zero-evidence recipe produced ['C2']

@@ -1,0 +1,1705 @@
+{
+  "base": "91774bd4eeca2c3f3233f0e6733b32c2abef28fc",
+  "head": "214a63d978e4c04c0b3aec1c99d8d0ce3c093d9d",
+  "checks": [
+    "HEAD/clean",
+    "all65 paths",
+    "custody .gitattributes",
+    "custody artifacts/phase-b/b00-provenance-design/baseline-immutable-files.json",
+    "custody artifacts/phase-b/b00-provenance-design/constraint-probes.json",
+    "custody artifacts/phase-b/b00-provenance-design/constraint_probes.py",
+    "custody artifacts/phase-b/b00-provenance-design/design-validation-final.stderr.txt",
+    "custody artifacts/phase-b/b00-provenance-design/design-validation-final.stdout.txt",
+    "custody artifacts/phase-b/b00-provenance-design/design-validation-run1.stderr.txt",
+    "custody artifacts/phase-b/b00-provenance-design/design-validation-run1.stdout.txt",
+    "custody artifacts/phase-b/b00-provenance-design/design-validation-run2.stderr.txt",
+    "custody artifacts/phase-b/b00-provenance-design/design-validation-run2.stdout.txt",
+    "custody artifacts/phase-b/b00-provenance-design/design-validation.json",
+    "custody artifacts/phase-b/b00-provenance-design/design_validation.py",
+    "custody artifacts/phase-b/b00-provenance-design/diff-check.stderr.txt",
+    "custody artifacts/phase-b/b00-provenance-design/diff-check.stdout.txt",
+    "custody artifacts/phase-b/b00-provenance-design/evidence-safety-check.json",
+    "custody artifacts/phase-b/b00-provenance-design/final-manifest.json",
+    "custody artifacts/phase-b/b00-provenance-design/fixture-final-selected.json",
+    "custody artifacts/phase-b/b00-provenance-design/fixture-initial.json",
+    "custody artifacts/phase-b/b00-provenance-design/fixture-start.stderr.txt",
+    "custody artifacts/phase-b/b00-provenance-design/fixture-start.stdout.txt",
+    "custody artifacts/phase-b/b00-provenance-design/fixture-wrapper.json",
+    "custody artifacts/phase-b/b00-provenance-design/graph-projection-vector.hex",
+    "custody artifacts/phase-b/b00-provenance-design/graph-projection-vector.json",
+    "custody artifacts/phase-b/b00-provenance-design/historical-projection-vectors.json",
+    "custody artifacts/phase-b/b00-provenance-design/metadata-recheck.stderr.txt",
+    "custody artifacts/phase-b/b00-provenance-design/metadata-recheck.stdout.txt",
+    "custody artifacts/phase-b/b00-provenance-design/metadata-verify.stderr.txt",
+    "custody artifacts/phase-b/b00-provenance-design/metadata-verify.stdout.txt",
+    "custody artifacts/phase-b/b00-provenance-design/mysql-raw.jsonl",
+    "custody artifacts/phase-b/b00-provenance-design/probes-addition.py.txt",
+    "custody artifacts/phase-b/b00-provenance-design/probes-raw.jsonl",
+    "custody artifacts/phase-b/b00-provenance-design/probes-run1.stderr.txt",
+    "custody artifacts/phase-b/b00-provenance-design/probes-run1.stdout.txt",
+    "custody artifacts/phase-b/b00-provenance-design/probes-run2.stderr.txt",
+    "custody artifacts/phase-b/b00-provenance-design/probes-run2.stdout.txt",
+    "custody artifacts/phase-b/b00-provenance-design/reopen-catalog-probes.json",
+    "custody artifacts/phase-b/b00-provenance-design/reopen-catalog-raw.jsonl",
+    "custody artifacts/phase-b/b00-provenance-design/reopen-catalog-run1.stderr.txt",
+    "custody artifacts/phase-b/b00-provenance-design/reopen-catalog-run1.stdout.txt",
+    "custody artifacts/phase-b/b00-provenance-design/reopen_and_catalog_probe.py",
+    "custody artifacts/phase-b/b00-provenance-design/root-ack-clarification.md",
+    "custody artifacts/phase-b/b00-provenance-design/root-ack.md",
+    "custody artifacts/phase-b/b00-provenance-design/schema-addition.py.txt",
+    "custody artifacts/phase-b/b00-provenance-design/seed-committed.json",
+    "custody artifacts/phase-b/b00-provenance-design/start_fixture.py",
+    "custody artifacts/phase-b/b00-provenance-design/task-D-01-provenance-design-brief.md",
+    "custody artifacts/phase-b/b00-provenance-design/task-D-01-provenance-draft-exclusion-vector-summary.json",
+    "custody artifacts/phase-b/b00-provenance-design/task-D-01-provenance-draft-exclusion-vector.hex",
+    "custody artifacts/phase-b/b00-provenance-design/task-D-01-provenance-draft-exclusion-vector.json",
+    "custody artifacts/phase-b/b00-provenance-design/task-D-01-provenance-proposal-clarification.md",
+    "custody artifacts/phase-b/b00-provenance-design/task-D-01-provenance-proposal.md",
+    "custody docs/acceptance/b/database-material-provenance-addendum-metadata-evidence.json",
+    "custody docs/acceptance/b/database-material-provenance-addendum-review.md",
+    "custody docs/acceptance/b/material-provenance-design-prerequisite.md",
+    "custody docs/database/ama-data-dictionary.md",
+    "custody docs/database/ama-schema-draft.sql",
+    "custody docs/database/design-history/B00-1.3/2026-10-21-ama-database-design.md",
+    "custody docs/database/design-history/B00-1.3/ama-data-dictionary.md",
+    "custody docs/database/design-history/B00-1.3/ama-schema-draft.sql",
+    "custody docs/database/design-history/B00-1.3/database_design.py",
+    "custody docs/database/design-history/B00-1.3/manifest.json",
+    "custody docs/database/migration-register.md",
+    "custody docs/superpowers/specs/2026-10-21-ama-database-design.md",
+    "custody docs/superpowers/specs/2026-10-22-ama-material-provenance-addendum.md",
+    "custody tools/checks/database_design.py",
+    "package task-D-01-provenance-design-full.diff",
+    "package task-D-01-provenance-design-source.full",
+    "package task-D-01-provenance-design-delivery-paths.json",
+    "source supplement exact8",
+    "full patch exact",
+    "report SHA",
+    "diff check",
+    "manifest artifacts/phase-b/b00-provenance-design/baseline-immutable-files.json",
+    "manifest artifacts/phase-b/b00-provenance-design/constraint-probes.json",
+    "manifest artifacts/phase-b/b00-provenance-design/constraint_probes.py",
+    "manifest artifacts/phase-b/b00-provenance-design/design-validation-final.stderr.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/design-validation-final.stdout.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/design-validation-run1.stderr.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/design-validation-run1.stdout.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/design-validation-run2.stderr.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/design-validation-run2.stdout.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/design-validation.json",
+    "manifest artifacts/phase-b/b00-provenance-design/design_validation.py",
+    "manifest artifacts/phase-b/b00-provenance-design/diff-check.stderr.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/diff-check.stdout.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/evidence-safety-check.json",
+    "manifest artifacts/phase-b/b00-provenance-design/fixture-final-selected.json",
+    "manifest artifacts/phase-b/b00-provenance-design/fixture-initial.json",
+    "manifest artifacts/phase-b/b00-provenance-design/fixture-start.stderr.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/fixture-start.stdout.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/fixture-wrapper.json",
+    "manifest artifacts/phase-b/b00-provenance-design/graph-projection-vector.hex",
+    "manifest artifacts/phase-b/b00-provenance-design/graph-projection-vector.json",
+    "manifest artifacts/phase-b/b00-provenance-design/historical-projection-vectors.json",
+    "manifest artifacts/phase-b/b00-provenance-design/metadata-recheck.stderr.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/metadata-recheck.stdout.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/metadata-verify.stderr.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/metadata-verify.stdout.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/mysql-raw.jsonl",
+    "manifest artifacts/phase-b/b00-provenance-design/probes-addition.py.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/probes-raw.jsonl",
+    "manifest artifacts/phase-b/b00-provenance-design/probes-run1.stderr.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/probes-run1.stdout.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/probes-run2.stderr.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/probes-run2.stdout.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/reopen-catalog-probes.json",
+    "manifest artifacts/phase-b/b00-provenance-design/reopen-catalog-raw.jsonl",
+    "manifest artifacts/phase-b/b00-provenance-design/reopen-catalog-run1.stderr.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/reopen-catalog-run1.stdout.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/reopen_and_catalog_probe.py",
+    "manifest artifacts/phase-b/b00-provenance-design/root-ack-clarification.md",
+    "manifest artifacts/phase-b/b00-provenance-design/root-ack.md",
+    "manifest artifacts/phase-b/b00-provenance-design/schema-addition.py.txt",
+    "manifest artifacts/phase-b/b00-provenance-design/seed-committed.json",
+    "manifest artifacts/phase-b/b00-provenance-design/start_fixture.py",
+    "manifest artifacts/phase-b/b00-provenance-design/task-D-01-provenance-design-brief.md",
+    "manifest artifacts/phase-b/b00-provenance-design/task-D-01-provenance-draft-exclusion-vector-summary.json",
+    "manifest artifacts/phase-b/b00-provenance-design/task-D-01-provenance-draft-exclusion-vector.hex",
+    "manifest artifacts/phase-b/b00-provenance-design/task-D-01-provenance-draft-exclusion-vector.json",
+    "manifest artifacts/phase-b/b00-provenance-design/task-D-01-provenance-proposal-clarification.md",
+    "manifest artifacts/phase-b/b00-provenance-design/task-D-01-provenance-proposal.md",
+    "manifest docs/acceptance/b/database-material-provenance-addendum-metadata-evidence.json",
+    "manifest docs/acceptance/b/database-material-provenance-addendum-review.md",
+    "manifest docs/acceptance/b/material-provenance-design-prerequisite.md",
+    "manifest docs/database/ama-data-dictionary.md",
+    "manifest docs/database/ama-schema-draft.sql",
+    "manifest docs/database/migration-register.md",
+    "manifest docs/superpowers/specs/2026-10-21-ama-database-design.md",
+    "manifest docs/superpowers/specs/2026-10-22-ama-material-provenance-addendum.md",
+    "manifest tools/checks/database_design.py",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+    "BASE immutable backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+    "BASE immutable artifacts/phase-b/b00-generation-design/fixture-initial.json",
+    "BASE immutable artifacts/phase-b/b00-generation-design/root-ack.md",
+    "BASE immutable artifacts/phase-b/b00-generation-design/fixture-final.json",
+    "BASE immutable artifacts/phase-b/b00-generation-design/delta-verify.log",
+    "BASE immutable artifacts/phase-b/b00-generation-design/requirements-brief.md",
+    "BASE immutable artifacts/phase-b/b00-generation-design/constraint_probes.py",
+    "BASE immutable artifacts/phase-b/b00-generation-design/evidence-allowlist.json",
+    "BASE immutable artifacts/phase-b/b00-generation-design/verify_delta.py",
+    "BASE immutable artifacts/phase-b/b00-generation-design/start_fixture.py",
+    "BASE immutable artifacts/phase-b/b00-generation-design/constraint-probes.json",
+    "BASE immutable artifacts/phase-b/b00-generation-design/metadata-verify.log",
+    "BASE immutable artifacts/phase-b/b00-generation-design/source-allowlist.json",
+    "BASE immutable artifacts/phase-b/b00-generation-design/generate.log",
+    "BASE immutable artifacts/phase-b/b00-generation-design/initial-proposal.md",
+    "BASE immutable artifacts/phase-b/b00-generation-design/constraint-probes.sql.txt",
+    "BASE immutable artifacts/phase-b/b00-generation-design/constraint-probes.log",
+    "BASE immutable artifacts/phase-b/b00-generation-design/initial-report.md",
+    "BASE immutable artifacts/phase-b/b00-generation-design/final-checks.log",
+    "BASE immutable artifacts/phase-b/b00-generation-design/secret-exclusion-check.json",
+    "BASE immutable artifacts/phase-b/b00-generation-design/fixture-start.log",
+    "BASE immutable artifacts/phase-b/b00-generation-design/fixture-wrapper.json",
+    "BASE immutable artifacts/phase-b/b00-generation-design/final_checks.py",
+    "BASE immutable docs/acceptance/b/database-generation-addendum-metadata-evidence.json",
+    "history BASE docs/superpowers/specs/2026-10-21-ama-database-design.md",
+    "history BASE docs/database/ama-data-dictionary.md",
+    "history BASE docs/database/ama-schema-draft.sql",
+    "history BASE tools/checks/database_design.py",
+    "exact3 added tables",
+    "all old semantics audit_event",
+    "all old semantics department",
+    "all old semantics enterprise_identity",
+    "all old semantics role_assignment",
+    "all old semantics identity_session",
+    "all old semantics meeting",
+    "all old semantics meeting_info_revision",
+    "all old semantics roster_revision",
+    "all old semantics roster_member",
+    "all old semantics meeting_access_grant",
+    "all old semantics idempotency_record",
+    "all old semantics info_suggestion",
+    "all old semantics storage_backend",
+    "all old semantics file_object",
+    "all old semantics file_reference",
+    "all old semantics upload_session",
+    "all old semantics upload_part",
+    "all old semantics file_cleanup",
+    "all old semantics task_subject",
+    "all old semantics durable_task",
+    "all old semantics task_attempt",
+    "all old semantics external_operation",
+    "all old semantics task_outbox_sequence",
+    "all old semantics task_outbox",
+    "all old semantics outbox_consumer",
+    "all old semantics model_capacity",
+    "all old semantics model_reservation",
+    "all old semantics input_batch",
+    "all old semantics input_batch_file",
+    "all old semantics transcript_revision",
+    "all old semantics transcript_segment",
+    "all old semantics transcript_confirmation",
+    "all old semantics template_revision",
+    "all old semantics generation_input",
+    "all old semantics minutes_revision",
+    "all old semantics element_set",
+    "nullable UUID minutes_element",
+    "all old semantics minutes_element",
+    "all old semantics action_item",
+    "all old semantics exclusion_revision",
+    "all old semantics sensitive_exclusion",
+    "all old semantics generation_candidate",
+    "all old semantics source_locator",
+    "nullable UUID evidence_link",
+    "all old semantics evidence_link",
+    "all old semantics final_confirmation",
+    "all old semantics publication",
+    "all old semantics publication_attempt",
+    "all old semantics external_document_mapping",
+    "all old semantics publication_governance",
+    "all old semantics external_event_receipt",
+    "all old semantics media_source",
+    "all old semantics media_source_span",
+    "all old semantics speaker",
+    "all old semantics correction",
+    "all old semantics edit_operation",
+    "all old semantics recording_session",
+    "all old semantics recording_part",
+    "all old semantics recording_chunk",
+    "all old semantics subtitle_revision",
+    "all old semantics material_reference",
+    "all old semantics material_revision",
+    "all old semantics material_snapshot",
+    "all old semantics material_snapshot_item",
+    "all old semantics parsed_document",
+    "all old semantics parsed_unit",
+    "all old semantics export_job",
+    "all old semantics meeting_deletion",
+    "all old semantics topic",
+    "all old semantics meeting_topic",
+    "all old semantics corpus_feedback",
+    "all old semantics feedback_segment",
+    "all old semantics corpus_revision",
+    "all old semantics voiceprint_consent",
+    "all old semantics voiceprint_sample",
+    "all old semantics evaluation_dataset",
+    "all old semantics configuration_revision",
+    "all old semantics evaluation_run",
+    "all old semantics configuration_release",
+    "all old semantics mail_job",
+    "all old semantics mail_recipient",
+    "all old semantics meeting_search_projection",
+    "all old semantics meeting_person_search",
+    "all old semantics minutes_template",
+    "all old semantics external_execution",
+    "all old semantics transcription_input",
+    "all old semantics transcript_segment_mark",
+    "all old semantics sensitive_detection",
+    "all old semantics sensitive_detection_source",
+    "all old semantics background_note",
+    "all old semantics background_note_source",
+    "all old semantics action_suggestion",
+    "all old semantics result_review",
+    "all old semantics result_review_evidence",
+    "all old semantics final_result_review",
+    "generated docs/database/ama-schema-draft.sql",
+    "generated docs/database/ama-data-dictionary.md",
+    "complete ER",
+    "DDL SHA",
+    "all727 columns302 indexes114 checks206 FKs exact",
+    "counts",
+    "old metadata preserved tables",
+    "old metadata preserved columns",
+    "old metadata preserved indexes",
+    "old metadata preserved checks",
+    "old metadata preserved foreign_keys",
+    "independent6871 byte vector",
+    "no own fingerprint fields",
+    "independent old vector audit_event",
+    "independent old vector department",
+    "independent old vector enterprise_identity",
+    "independent old vector role_assignment",
+    "independent old vector identity_session",
+    "independent old vector meeting",
+    "independent old vector meeting_info_revision",
+    "independent old vector roster_revision",
+    "independent old vector roster_member",
+    "independent old vector meeting_access_grant",
+    "independent old vector idempotency_record",
+    "independent old vector info_suggestion",
+    "independent old vector storage_backend",
+    "independent old vector file_object",
+    "independent old vector file_reference",
+    "independent old vector upload_session",
+    "independent old vector upload_part",
+    "independent old vector file_cleanup",
+    "independent old vector task_subject",
+    "independent old vector durable_task",
+    "independent old vector task_attempt",
+    "independent old vector external_operation",
+    "independent old vector task_outbox_sequence",
+    "independent old vector task_outbox",
+    "independent old vector outbox_consumer",
+    "independent old vector model_capacity",
+    "independent old vector model_reservation",
+    "independent old vector input_batch",
+    "independent old vector input_batch_file",
+    "independent old vector transcript_revision",
+    "independent old vector transcript_segment",
+    "independent old vector transcript_confirmation",
+    "independent old vector template_revision",
+    "independent old vector generation_input",
+    "independent old vector minutes_revision",
+    "independent old vector element_set",
+    "independent old vector minutes_element",
+    "independent old vector action_item",
+    "independent old vector exclusion_revision",
+    "independent old vector sensitive_exclusion",
+    "independent old vector generation_candidate",
+    "independent old vector source_locator",
+    "independent old vector evidence_link",
+    "independent old vector final_confirmation",
+    "independent old vector publication",
+    "independent old vector publication_attempt",
+    "independent old vector external_document_mapping",
+    "independent old vector publication_governance",
+    "independent old vector external_event_receipt",
+    "independent old vector media_source",
+    "independent old vector media_source_span",
+    "independent old vector speaker",
+    "independent old vector correction",
+    "independent old vector edit_operation",
+    "independent old vector recording_session",
+    "independent old vector recording_part",
+    "independent old vector recording_chunk",
+    "independent old vector subtitle_revision",
+    "independent old vector material_reference",
+    "independent old vector material_revision",
+    "independent old vector material_snapshot",
+    "independent old vector material_snapshot_item",
+    "independent old vector parsed_document",
+    "independent old vector parsed_unit",
+    "independent old vector export_job",
+    "independent old vector meeting_deletion",
+    "independent old vector topic",
+    "independent old vector meeting_topic",
+    "independent old vector corpus_feedback",
+    "independent old vector feedback_segment",
+    "independent old vector corpus_revision",
+    "independent old vector voiceprint_consent",
+    "independent old vector voiceprint_sample",
+    "independent old vector evaluation_dataset",
+    "independent old vector configuration_revision",
+    "independent old vector evaluation_run",
+    "independent old vector configuration_release",
+    "independent old vector mail_job",
+    "independent old vector mail_recipient",
+    "independent old vector meeting_search_projection",
+    "independent old vector meeting_person_search",
+    "independent old vector minutes_template",
+    "independent old vector external_execution",
+    "independent old vector transcription_input",
+    "independent old vector transcript_segment_mark",
+    "independent old vector sensitive_detection",
+    "independent old vector sensitive_detection_source",
+    "independent old vector background_note",
+    "independent old vector background_note_source",
+    "independent old vector action_suggestion",
+    "independent old vector result_review",
+    "independent old vector result_review_evidence",
+    "independent old vector final_result_review",
+    "author250 pure assertions rerun without writes",
+    "oracle exact historical-projection-vectors.json",
+    "oracle exact graph-projection-vector.json",
+    "oracle exact graph-projection-vector.hex",
+    "oracle exact design-validation.json",
+    "two raw metadata captures tables",
+    "two raw metadata captures columns",
+    "two raw metadata captures indexes",
+    "two raw metadata captures checks",
+    "two raw metadata captures foreign_keys",
+    "24 probes6 APP witnesses",
+    "7 reopen probes",
+    "initial zero/AIO/resources",
+    "source still clean"
+  ],
+  "check_count": 387,
+  "paths": [
+    {
+      "path": ".gitattributes",
+      "size": 355,
+      "sha256": "22840b048a8b7968fb828f17863dd9f2903ec3a714489766fbd598f3745ff370",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/baseline-immutable-files.json",
+      "size": 6204,
+      "sha256": "6ed05ad264938726225119f0d86113f037900e4785d6652652ed25f2fad47841",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/constraint-probes.json",
+      "size": 4582,
+      "sha256": "f47f3a521d2d3fe9d536e14e798de16d1282c02e59cc68f8d5f62cf28fdae25f",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/constraint_probes.py",
+      "size": 17953,
+      "sha256": "75110fdb68b077879237e5a14798a259fa01a71afd629e37fc389309962a4ca4",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/design-validation-final.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/design-validation-final.stdout.txt",
+      "size": 184,
+      "sha256": "27d5b473141ec5cae3222d2ea858e272630bc78ed8f14e12ab9aff64f3bae3d3",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/design-validation-run1.stderr.txt",
+      "size": 306,
+      "sha256": "2d33f96a35c7b2501dbc7142f7bd37df0ed6b49c0628910bdd6244bf31e1094f",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/design-validation-run1.stdout.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/design-validation-run2.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/design-validation-run2.stdout.txt",
+      "size": 184,
+      "sha256": "27d5b473141ec5cae3222d2ea858e272630bc78ed8f14e12ab9aff64f3bae3d3",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/design-validation.json",
+      "size": 12860,
+      "sha256": "9cc018523a84b690b2813922e7183b86617f51431fd64032b6ed96f921555ad6",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/design_validation.py",
+      "size": 8498,
+      "sha256": "5bac615ba7f83ddc471ede99091a93886ecc1820b8ab34998c8f75863be0d350",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/diff-check.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/diff-check.stdout.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/evidence-safety-check.json",
+      "size": 173,
+      "sha256": "0abfb0826eeeb0e6ffabc48f9b7f59863afd40e0757a24750decd44c52cd7876",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/final-manifest.json",
+      "size": 11738,
+      "sha256": "42043c464544cd078aa47b116d58bcd38e029c50944a7075fbff6dd33f0e4e1a",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/fixture-final-selected.json",
+      "size": 1094,
+      "sha256": "8e8c0ae94c98d2a2a741891134079ebb1eb71063094072f030da4c3efae00d08",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/fixture-initial.json",
+      "size": 1682,
+      "sha256": "3122e04fecf888628daa5c4338562936383701b5a9603003e318976d9164efe1",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/fixture-start.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/fixture-start.stdout.txt",
+      "size": 1904,
+      "sha256": "c3f87b50b10f0c3a8a6a4da3402ff33a10cdfcdf0a1d668c12096dc18553ef70",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/fixture-wrapper.json",
+      "size": 707,
+      "sha256": "e6621974375416ee9c25f59d9ce1bc21fea0093e0c93fa66315b5ab78c50b803",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/graph-projection-vector.hex",
+      "size": 3537,
+      "sha256": "f6f4b582071560560580f5a0585407910bcbdf29029a1bdfac10c63263047b72",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/graph-projection-vector.json",
+      "size": 1670,
+      "sha256": "50152ad3d08be219dbb4f8279d8f33b4fb1a44f6452b80f4ab929b59e49a28aa",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/historical-projection-vectors.json",
+      "size": 27999,
+      "sha256": "19dc15af6b5c4e836ef07042dcef248c38199da2ad05fc76502fa7e5eafebc0d",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/metadata-recheck.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/metadata-recheck.stdout.txt",
+      "size": 763,
+      "sha256": "b3b3dad90ea43d90c2a27c20ba5d83645c980636c0ce29a5de2777b57fe5b675",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/metadata-verify.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/metadata-verify.stdout.txt",
+      "size": 763,
+      "sha256": "b3b3dad90ea43d90c2a27c20ba5d83645c980636c0ce29a5de2777b57fe5b675",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/mysql-raw.jsonl",
+      "size": 732467,
+      "sha256": "4c9cb920279b4139263a124fb4fa9dc74909032a43b07047bfa87f2322ad5cf7",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/probes-addition.py.txt",
+      "size": 11409,
+      "sha256": "fb51d4bb7e0d0788e1050fdea72b6eb0bbc8f15582b3fc4e5a18590aa1305d55",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/probes-raw.jsonl",
+      "size": 111389,
+      "sha256": "dd5d2272bd291a0e578055bb8ab396b0d8d8c75e1f788e2b5ec6c3402490b980",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/probes-run1.stderr.txt",
+      "size": 674,
+      "sha256": "a87483397c9ce470ae2feab9fd09a48a9c4c56707e1a6e2fac04ada317fba941",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/probes-run1.stdout.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/probes-run2.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/probes-run2.stdout.txt",
+      "size": 32,
+      "sha256": "a2ac962a44748ac9c44efbd29267b805282018de14abd7ff843785f02d6072e0",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/reopen-catalog-probes.json",
+      "size": 10255,
+      "sha256": "f375893e5ca2f150d8cac37ccc379f7176e1f727db81e5a4d1d2e5ada2634e75",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/reopen-catalog-raw.jsonl",
+      "size": 9776,
+      "sha256": "a7b2d1aa19a69976379e1079f67a52cc3cd1b1eb7d36393ddd0032a7d4688905",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/reopen-catalog-run1.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/reopen-catalog-run1.stdout.txt",
+      "size": 14,
+      "sha256": "15f9623aae67ff837b7d47fe1fc144f4464f90f69587596f6983563cd8b28e67",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/reopen_and_catalog_probe.py",
+      "size": 5536,
+      "sha256": "6867b373ac9791bc811bca75e56708ceccbf77e4731c48512d5f007672cf4ce0",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/root-ack-clarification.md",
+      "size": 1114,
+      "sha256": "284ee66b45dbe2b5f89e9d5d6aed4436db999b5baa6a6f1904ae72b74468d7df",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/root-ack.md",
+      "size": 434,
+      "sha256": "eab2e8a870bb6e8e5196da144f1e0ab34074706cd2e623ee6058143353763248",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/schema-addition.py.txt",
+      "size": 4031,
+      "sha256": "8df21166b9f2e22e264c06e09ad3c0a4d0b727988ac2994d53d58f99604914e0",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/seed-committed.json",
+      "size": 197,
+      "sha256": "f3e3d63dcb40ead5e5c1fcf90b37422b1ce1f7393d1eb13af74f3ebc6410c7f7",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/start_fixture.py",
+      "size": 3434,
+      "sha256": "96da659a642d167e80a18db945be4790111ef2d7d63652a2eda9d8d19bdef695",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/task-D-01-provenance-design-brief.md",
+      "size": 9413,
+      "sha256": "a855d6970968677489260e220aa4f933bce94abf28745dd037f2ce29be92a03a",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/task-D-01-provenance-draft-exclusion-vector-summary.json",
+      "size": 503,
+      "sha256": "9dbd12c5f509545468698a71b49722b38c303e20e6abe076f1f8a9dc1bd97be3",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/task-D-01-provenance-draft-exclusion-vector.hex",
+      "size": 13743,
+      "sha256": "cc90c587d0f30f27a84da6239ad660d3002e711859869dfe7a001eb57909ea73",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/task-D-01-provenance-draft-exclusion-vector.json",
+      "size": 6951,
+      "sha256": "cf92b5e0066edf40845977684e80de58895f43d25b13ec5361549edf7b02ecde",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/task-D-01-provenance-proposal-clarification.md",
+      "size": 11535,
+      "sha256": "804eb24536f293427f5877b7358575ff0bca1c5faf23a99ba4156ac9d77c515c",
+      "kind": "artifact"
+    },
+    {
+      "path": "artifacts/phase-b/b00-provenance-design/task-D-01-provenance-proposal.md",
+      "size": 32230,
+      "sha256": "f8d6236c8d324630959e72a3f00cc312bf97273abba573fc9649164944753fc5",
+      "kind": "artifact"
+    },
+    {
+      "path": "docs/acceptance/b/database-material-provenance-addendum-metadata-evidence.json",
+      "size": 380843,
+      "sha256": "52a7ae6fe8d91192d2ddfa0c9f5cdcdb5ab4b956633805ddb21b0fb4c79739d9",
+      "kind": "artifact"
+    },
+    {
+      "path": "docs/acceptance/b/database-material-provenance-addendum-review.md",
+      "size": 6549,
+      "sha256": "7806c91eb524a436655c88fbfc47f21253ad9a751f60e803c76638e6db37be75",
+      "kind": "source"
+    },
+    {
+      "path": "docs/acceptance/b/material-provenance-design-prerequisite.md",
+      "size": 3478,
+      "sha256": "655a560051f9ba0b596efe141596f9ef76e26f465be9f200d5483f612fd278d2",
+      "kind": "source"
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "size": 163661,
+      "sha256": "018203216e9c26a7e69a0a1d4bce142e161f6bdd5c167e7b855c332e131b8e30",
+      "kind": "source"
+    },
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "size": 115260,
+      "sha256": "4c6bd89301ca6316f4469e99db333bc5440fa8dd330a907cfc685d79ff656a33",
+      "kind": "source"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.3/2026-10-21-ama-database-design.md",
+      "size": 113660,
+      "sha256": "c4ae00740c7d72e2945d0f67a926631bba198c7ecde2a46cd66523293b21e8d4",
+      "kind": "artifact"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.3/ama-data-dictionary.md",
+      "size": 156475,
+      "sha256": "7d34063a86573c6812924a27fff6dc5f2b98cc849dabafb16b9487074fac1d8b",
+      "kind": "artifact"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.3/ama-schema-draft.sql",
+      "size": 110504,
+      "sha256": "ebf1eae51b303d00b2ed35c4fbd5ba4c166813564032875a6ba0fb35ba743c93",
+      "kind": "artifact"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.3/database_design.py",
+      "size": 100351,
+      "sha256": "8a7db792bb23b13d0d79ed3142f8dcebe0762cc4f6aefe6e2b1656fa34f95ebc",
+      "kind": "artifact"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.3/manifest.json",
+      "size": 1164,
+      "sha256": "86cbeaa90878bb84ab28e83ff7a943feed59ddd1173884f6219b3490d1cd0cfa",
+      "kind": "artifact"
+    },
+    {
+      "path": "docs/database/migration-register.md",
+      "size": 42747,
+      "sha256": "63154e7c38482db834dae4ba0775d6a3b8b7c26154134784454a9f47e0c61726",
+      "kind": "source"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "size": 115821,
+      "sha256": "3f4b6a9f8b0d3ba95c08567e5a6b6f4794a1b9302d565561e12374723435f2d3",
+      "kind": "source"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-22-ama-material-provenance-addendum.md",
+      "size": 46519,
+      "sha256": "95d4df5c1367ee6d9626f8b15c1a80a0e24f6510a49f522be0d685e9477c547a",
+      "kind": "source"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "size": 105280,
+      "sha256": "b2b1545a96a87921b2c3383de7f064fb42a31fda09d63041068e23287f084b59",
+      "kind": "source"
+    }
+  ],
+  "metadata_counts": {
+    "tables": 96,
+    "columns": 727,
+    "index_definitions": 302,
+    "index_columns": 460,
+    "checks": 114,
+    "foreign_key_constraints": 206,
+    "foreign_key_columns": 213
+  },
+  "metadata_delta": {
+    "tables": [
+      {
+        "collation": "utf8mb4_0900_ai_ci",
+        "engine": "InnoDB",
+        "table": "parsed_document_profile"
+      },
+      {
+        "collation": "utf8mb4_0900_ai_ci",
+        "engine": "InnoDB",
+        "table": "source_context"
+      },
+      {
+        "collation": "utf8mb4_0900_ai_ci",
+        "engine": "InnoDB",
+        "table": "source_context_material"
+      }
+    ],
+    "columns": [
+      {
+        "collation": "ascii_bin",
+        "column": "catalog_sha256",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 8,
+        "table": "source_context",
+        "type": "char(64)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "context_id",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 1,
+        "table": "source_context_material",
+        "type": "char(36)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "document_id",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 1,
+        "table": "parsed_document_profile",
+        "type": "char(36)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "format",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 2,
+        "table": "parsed_document_profile",
+        "type": "varchar(64)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "generation_input_id",
+        "default": null,
+        "extra": "",
+        "nullable": "YES",
+        "ordinal": 4,
+        "table": "source_context",
+        "type": "char(36)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "id",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 1,
+        "table": "source_context",
+        "type": "char(36)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "material_revision_id",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 2,
+        "table": "source_context_material",
+        "type": "char(36)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "material_snapshot_id",
+        "default": null,
+        "extra": "",
+        "nullable": "YES",
+        "ordinal": 6,
+        "table": "source_context",
+        "type": "char(36)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "meeting_id",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 2,
+        "table": "source_context",
+        "type": "char(36)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "origin_kind",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 3,
+        "table": "source_context",
+        "type": "varchar(64)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "parsed_document_id",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 3,
+        "table": "source_context_material",
+        "type": "char(36)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "parser_config_sha256",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 4,
+        "table": "parsed_document_profile",
+        "type": "char(64)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "source_context_id",
+        "default": null,
+        "extra": "",
+        "nullable": "YES",
+        "ordinal": 7,
+        "table": "evidence_link",
+        "type": "char(36)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "source_context_id",
+        "default": null,
+        "extra": "",
+        "nullable": "YES",
+        "ordinal": 7,
+        "table": "minutes_element",
+        "type": "char(36)"
+      },
+      {
+        "collation": "ascii_bin",
+        "column": "transcript_confirmation_id",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 5,
+        "table": "source_context",
+        "type": "char(36)"
+      },
+      {
+        "collation": "utf8mb4_0900_bin",
+        "column": "catalog_version",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 7,
+        "table": "source_context",
+        "type": "varchar(255)"
+      },
+      {
+        "collation": "utf8mb4_0900_bin",
+        "column": "parser_config_version",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 3,
+        "table": "parsed_document_profile",
+        "type": "varchar(255)"
+      },
+      {
+        "collation": null,
+        "column": "created_at",
+        "default": null,
+        "extra": "",
+        "nullable": "NO",
+        "ordinal": 9,
+        "table": "source_context",
+        "type": "datetime(6)"
+      }
+    ],
+    "indexes": [
+      {
+        "column": "context_id",
+        "direction": "A",
+        "name": "PRIMARY",
+        "prefix": null,
+        "seq": 1,
+        "table": "source_context_material",
+        "type": "BTREE",
+        "unique": 1
+      },
+      {
+        "column": "context_id",
+        "direction": "A",
+        "name": "selection_document",
+        "prefix": null,
+        "seq": 2,
+        "table": "source_context_material",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "context_id",
+        "direction": "A",
+        "name": "selection_material",
+        "prefix": null,
+        "seq": 2,
+        "table": "source_context_material",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "document_id",
+        "direction": "A",
+        "name": "PRIMARY",
+        "prefix": null,
+        "seq": 1,
+        "table": "parsed_document_profile",
+        "type": "BTREE",
+        "unique": 1
+      },
+      {
+        "column": "document_id",
+        "direction": "A",
+        "name": "profile_parser",
+        "prefix": null,
+        "seq": 2,
+        "table": "parsed_document_profile",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "generation_input_id",
+        "direction": "A",
+        "name": "context_generation",
+        "prefix": null,
+        "seq": 1,
+        "table": "source_context",
+        "type": "BTREE",
+        "unique": 1
+      },
+      {
+        "column": "id",
+        "direction": "A",
+        "name": "PRIMARY",
+        "prefix": null,
+        "seq": 1,
+        "table": "source_context",
+        "type": "BTREE",
+        "unique": 1
+      },
+      {
+        "column": "id",
+        "direction": "A",
+        "name": "context_meeting",
+        "prefix": null,
+        "seq": 2,
+        "table": "source_context",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "id",
+        "direction": "A",
+        "name": "evidence_link_context",
+        "prefix": null,
+        "seq": 2,
+        "table": "evidence_link",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "id",
+        "direction": "A",
+        "name": "minutes_element_context",
+        "prefix": null,
+        "seq": 2,
+        "table": "minutes_element",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "material_revision_id",
+        "direction": "A",
+        "name": "PRIMARY",
+        "prefix": null,
+        "seq": 2,
+        "table": "source_context_material",
+        "type": "BTREE",
+        "unique": 1
+      },
+      {
+        "column": "material_revision_id",
+        "direction": "A",
+        "name": "selection_material",
+        "prefix": null,
+        "seq": 1,
+        "table": "source_context_material",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "material_snapshot_id",
+        "direction": "A",
+        "name": "fk_source_context_3",
+        "prefix": null,
+        "seq": 1,
+        "table": "source_context",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "meeting_id",
+        "direction": "A",
+        "name": "context_meeting",
+        "prefix": null,
+        "seq": 1,
+        "table": "source_context",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "parsed_document_id",
+        "direction": "A",
+        "name": "selection_document",
+        "prefix": null,
+        "seq": 1,
+        "table": "source_context_material",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "parser_config_version",
+        "direction": "A",
+        "name": "profile_parser",
+        "prefix": null,
+        "seq": 1,
+        "table": "parsed_document_profile",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "source_context_id",
+        "direction": "A",
+        "name": "evidence_link_context",
+        "prefix": null,
+        "seq": 1,
+        "table": "evidence_link",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "source_context_id",
+        "direction": "A",
+        "name": "minutes_element_context",
+        "prefix": null,
+        "seq": 1,
+        "table": "minutes_element",
+        "type": "BTREE",
+        "unique": 0
+      },
+      {
+        "column": "transcript_confirmation_id",
+        "direction": "A",
+        "name": "fk_source_context_2",
+        "prefix": null,
+        "seq": 1,
+        "table": "source_context",
+        "type": "BTREE",
+        "unique": 0
+      }
+    ],
+    "checks": [
+      {
+        "clause": "(((`origin_kind` = _ascii\\'GENERATION_INPUT\\') and (`generation_input_id` is not null)) or ((`origin_kind` = _ascii\\'MANUAL_SELECTION\\') and (`generation_input_id` is null)))",
+        "enforced": "YES",
+        "name": "ck_source_context_1",
+        "table": "source_context"
+      },
+      {
+        "clause": "(`format` in (_ascii\\'PDF\\',_ascii\\'PPT\\',_ascii\\'WORD\\',_ascii\\'TXT\\'))",
+        "enforced": "YES",
+        "name": "ck_parsed_document_profile_0",
+        "table": "parsed_document_profile"
+      },
+      {
+        "clause": "(`origin_kind` in (_ascii\\'GENERATION_INPUT\\',_ascii\\'MANUAL_SELECTION\\'))",
+        "enforced": "YES",
+        "name": "ck_source_context_0",
+        "table": "source_context"
+      },
+      {
+        "clause": "regexp_like(`catalog_sha256`,_ascii\\'^[0-9a-f]{64}$\\',_utf8mb4\\'c\\')",
+        "enforced": "YES",
+        "name": "ck_source_context_2",
+        "table": "source_context"
+      },
+      {
+        "clause": "regexp_like(`parser_config_sha256`,_ascii\\'^[0-9a-f]{64}$\\',_utf8mb4\\'c\\')",
+        "enforced": "YES",
+        "name": "ck_parsed_document_profile_1",
+        "table": "parsed_document_profile"
+      }
+    ],
+    "foreign_keys": [
+      {
+        "column": "context_id",
+        "delete": "RESTRICT",
+        "name": "fk_source_context_material_0",
+        "ordinal": 1,
+        "remote": "id",
+        "table": "source_context_material",
+        "target": "source_context",
+        "update": "RESTRICT"
+      },
+      {
+        "column": "document_id",
+        "delete": "RESTRICT",
+        "name": "fk_parsed_document_profile_0",
+        "ordinal": 1,
+        "remote": "id",
+        "table": "parsed_document_profile",
+        "target": "parsed_document",
+        "update": "RESTRICT"
+      },
+      {
+        "column": "generation_input_id",
+        "delete": "RESTRICT",
+        "name": "fk_source_context_1",
+        "ordinal": 1,
+        "remote": "id",
+        "table": "source_context",
+        "target": "generation_input",
+        "update": "RESTRICT"
+      },
+      {
+        "column": "material_revision_id",
+        "delete": "RESTRICT",
+        "name": "fk_source_context_material_1",
+        "ordinal": 1,
+        "remote": "id",
+        "table": "source_context_material",
+        "target": "material_revision",
+        "update": "RESTRICT"
+      },
+      {
+        "column": "material_snapshot_id",
+        "delete": "RESTRICT",
+        "name": "fk_source_context_3",
+        "ordinal": 1,
+        "remote": "id",
+        "table": "source_context",
+        "target": "material_snapshot",
+        "update": "RESTRICT"
+      },
+      {
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "name": "fk_source_context_0",
+        "ordinal": 1,
+        "remote": "id",
+        "table": "source_context",
+        "target": "meeting",
+        "update": "RESTRICT"
+      },
+      {
+        "column": "parsed_document_id",
+        "delete": "RESTRICT",
+        "name": "fk_source_context_material_2",
+        "ordinal": 1,
+        "remote": "id",
+        "table": "source_context_material",
+        "target": "parsed_document",
+        "update": "RESTRICT"
+      },
+      {
+        "column": "source_context_id",
+        "delete": "RESTRICT",
+        "name": "fk_evidence_link_3",
+        "ordinal": 1,
+        "remote": "id",
+        "table": "evidence_link",
+        "target": "source_context",
+        "update": "RESTRICT"
+      },
+      {
+        "column": "source_context_id",
+        "delete": "RESTRICT",
+        "name": "fk_minutes_element_1",
+        "ordinal": 1,
+        "remote": "id",
+        "table": "minutes_element",
+        "target": "source_context",
+        "update": "RESTRICT"
+      },
+      {
+        "column": "transcript_confirmation_id",
+        "delete": "RESTRICT",
+        "name": "fk_source_context_2",
+        "ordinal": 1,
+        "remote": "id",
+        "table": "source_context",
+        "target": "transcript_confirmation",
+        "update": "RESTRICT"
+      }
+    ]
+  },
+  "raw_records": {
+    "mysql-raw.jsonl": [
+      {
+        "label": "SELECT @@innodb_use_native_aio;",
+        "exit": 0,
+        "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT count(*) FROM information_schema.tables WHERE table_schema=DATABASE();",
+        "exit": 0,
+        "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT VERSION();",
+        "exit": 0,
+        "stdout_sha256": "829a7e51388a5180453e810cc4f82e07b11582b87d9043180ef12a1e7ba6dec5",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "-- B00-1.4-proposed: REVIEW ONLY; never place this file in Flyway locations.\n\n-- All futur",
+        "exit": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT JSON_OBJECT('table',TABLE_NAME,'engine',ENGINE,'collation',TABLE_COLLATION) FROM in",
+        "exit": 0,
+        "stdout_sha256": "0a623f1fa8426dbf98eec55f419923d80ddbada5bab9cd9cc509e68696c335a6",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT JSON_OBJECT('table',TABLE_NAME,'column',COLUMN_NAME,'ordinal',ORDINAL_POSITION,'typ",
+        "exit": 0,
+        "stdout_sha256": "b06ce882afaeb69f7994fd41da558c8621171c5dd2f2c48ad0efbf97b0a670e3",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT JSON_OBJECT('table',TABLE_NAME,'name',INDEX_NAME,'unique',1-NON_UNIQUE,'seq',SEQ_IN",
+        "exit": 0,
+        "stdout_sha256": "d7f58e12a286553d499ab50bffe81493ca10123712e5265e460a26fb0564f536",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT JSON_OBJECT('table',t.TABLE_NAME,'name',t.CONSTRAINT_NAME,'clause',c.CHECK_CLAUSE,'",
+        "exit": 0,
+        "stdout_sha256": "a6130ac2d9eebe5b86b3d722a908ad06a20ec48036acbb70cf12cc7b8329b007",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT JSON_OBJECT('table',k.TABLE_NAME,'name',k.CONSTRAINT_NAME,'column',k.COLUMN_NAME,'o",
+        "exit": 0,
+        "stdout_sha256": "c4731d077542e6eb8d5476b91f098e351911e6d588d8f99c778d26b771e451b4",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "INSERT INTO storage_backend VALUES ('bad','invalid','WRITABLE',1);",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 3819 (HY000) at line 1: Check constraint 'ck_storage_backend_0' is violated.\n",
+        "boundary": false
+      },
+      {
+        "label": "INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 1452 (23000) at line 1: Cannot add or update a child row: a foreign key constraint fails (`ama_b01_fixture`.`identity_session`, CONSTRAINT `fk_identity_session_0` FOREIGN KEY (`enterprise_id`) REFERENCES `enterprise_identity` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRIC\n",
+        "boundary": false
+      },
+      {
+        "label": "SELECT @@innodb_use_native_aio;",
+        "exit": 0,
+        "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT VERSION();",
+        "exit": 0,
+        "stdout_sha256": "829a7e51388a5180453e810cc4f82e07b11582b87d9043180ef12a1e7ba6dec5",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT JSON_OBJECT('table',TABLE_NAME,'engine',ENGINE,'collation',TABLE_COLLATION) FROM in",
+        "exit": 0,
+        "stdout_sha256": "0a623f1fa8426dbf98eec55f419923d80ddbada5bab9cd9cc509e68696c335a6",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT JSON_OBJECT('table',TABLE_NAME,'column',COLUMN_NAME,'ordinal',ORDINAL_POSITION,'typ",
+        "exit": 0,
+        "stdout_sha256": "b06ce882afaeb69f7994fd41da558c8621171c5dd2f2c48ad0efbf97b0a670e3",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT JSON_OBJECT('table',TABLE_NAME,'name',INDEX_NAME,'unique',1-NON_UNIQUE,'seq',SEQ_IN",
+        "exit": 0,
+        "stdout_sha256": "d7f58e12a286553d499ab50bffe81493ca10123712e5265e460a26fb0564f536",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT JSON_OBJECT('table',t.TABLE_NAME,'name',t.CONSTRAINT_NAME,'clause',c.CHECK_CLAUSE,'",
+        "exit": 0,
+        "stdout_sha256": "a6130ac2d9eebe5b86b3d722a908ad06a20ec48036acbb70cf12cc7b8329b007",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "SELECT JSON_OBJECT('table',k.TABLE_NAME,'name',k.CONSTRAINT_NAME,'column',k.COLUMN_NAME,'o",
+        "exit": 0,
+        "stdout_sha256": "c4731d077542e6eb8d5476b91f098e351911e6d588d8f99c778d26b771e451b4",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "INSERT INTO storage_backend VALUES ('bad','invalid','WRITABLE',1);",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 3819 (HY000) at line 1: Check constraint 'ck_storage_backend_0' is violated.\n",
+        "boundary": false
+      },
+      {
+        "label": "INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 1452 (23000) at line 1: Cannot add or update a child row: a foreign key constraint fails (`ama_b01_fixture`.`identity_session`, CONSTRAINT `fk_identity_session_0` FOREIGN KEY (`enterprise_id`) REFERENCES `enterprise_identity` (`enterprise_id`) ON DELETE RESTRICT ON UPDATE RESTRIC\n",
+        "boundary": false
+      }
+    ],
+    "probes-raw.jsonl": [
+      {
+        "label": "initial-business-zero",
+        "exit": 0,
+        "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "persist-owned-synthetic-seed",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 3819 (HY000) at line 89: Check constraint 'ck_minutes_element_0' is violated.\n",
+        "boundary": false
+      },
+      {
+        "label": "initial-business-zero",
+        "exit": 0,
+        "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "persist-owned-synthetic-seed",
+        "exit": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "reopen-reconstruct-mixed-evidence-without-candidate-query",
+        "exit": 0,
+        "stdout_sha256": "f920761ed052dd86d6552211db3877993ec4f1e308ff28cfca5f98f2a43e36de",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "mixed-note-exact-input-context",
+        "exit": 0,
+        "stdout_sha256": "35cd7b9374649b0187a8a7fee54e5a6ed8375db063eadf359501c2abac7a5f97",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "action-evidence-independent-of-suggestion",
+        "exit": 0,
+        "stdout_sha256": "2d4dc81537537d40d9e45255899b70efa68c0c3067b0ee9deb2a98a6c6203562",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "zero-evidence-context-root",
+        "exit": 0,
+        "stdout_sha256": "67867345eac697186f90605f1868465be15691b418f4d53815749caf75461550",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "duplicate-generation-context",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 1062 (23000) at line 2: Duplicate entry '76c79b21-30ee-5b3d-94bc-f06a70246c6f' for key 'source_context.context_generation'\n",
+        "boundary": false
+      },
+      {
+        "label": "generated-context-missing-input",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 3819 (HY000) at line 2: Check constraint 'ck_source_context_1' is violated.\n",
+        "boundary": false
+      },
+      {
+        "label": "manual-context-with-input",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 3819 (HY000) at line 2: Check constraint 'ck_source_context_1' is violated.\n",
+        "boundary": false
+      },
+      {
+        "label": "unknown-origin-tag",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 3819 (HY000) at line 2: Check constraint 'ck_source_context_0' is violated.\n",
+        "boundary": false
+      },
+      {
+        "label": "unknown-context-FK",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 1452 (23000) at line 2: Cannot add or update a child row: a foreign key constraint fails (`ama_b01_fixture`.`source_context_material`, CONSTRAINT `fk_source_context_material_0` FOREIGN KEY (`context_id`) REFERENCES `source_context` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT)\n",
+        "boundary": false
+      },
+      {
+        "label": "duplicate-material-selection",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 1062 (23000) at line 2: Duplicate entry 'b10f3779-7732-5884-bf6d-030285a6fb59-3b78127d-b823-5237-b35e-ac7' for key 'source_context_material.PRIMARY'\n",
+        "boundary": false
+      },
+      {
+        "label": "restrict-context-delete",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 1451 (23000) at line 2: Cannot delete or update a parent row: a foreign key constraint fails (`ama_b01_fixture`.`evidence_link`, CONSTRAINT `fk_evidence_link_3` FOREIGN KEY (`source_context_id`) REFERENCES `source_context` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT)\n",
+        "boundary": false
+      },
+      {
+        "label": "restrict-selected-document-delete",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 1451 (23000) at line 2: Cannot delete or update a parent row: a foreign key constraint fails (`ama_b01_fixture`.`parsed_document_profile`, CONSTRAINT `fk_parsed_document_profile_0` FOREIGN KEY (`document_id`) REFERENCES `parsed_document` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT)\n",
+        "boundary": false
+      },
+      {
+        "label": "profile-sidecar-deletion-is-domain-obligation",
+        "exit": 0,
+        "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "stderr": "",
+        "boundary": true
+      },
+      {
+        "label": "missing-selection-is-domain-obligation",
+        "exit": 0,
+        "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "stderr": "",
+        "boundary": true
+      },
+      {
+        "label": "wrong-document-material-is-domain-obligation",
+        "exit": 0,
+        "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "stderr": "",
+        "boundary": true
+      },
+      {
+        "label": "cross-meeting-is-domain-obligation",
+        "exit": 0,
+        "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "stderr": "",
+        "boundary": true
+      },
+      {
+        "label": "legacy-null-is-unavailable-not-current",
+        "exit": 0,
+        "stdout_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "stderr": "",
+        "boundary": true
+      },
+      {
+        "label": "unused-unit-retained-in-complete-document",
+        "exit": 0,
+        "stdout_sha256": "ffdb2b471864a2f3bbb7753ece957f6e8f0915538d88a495ac6f28d2583c44f1",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "revocation-preserves-origin-not-access",
+        "exit": 0,
+        "stdout_sha256": "0c2b7cd08e232a460db2c76518a940d33812083554b9b7156b7e3adbbccdd013",
+        "stderr": "",
+        "boundary": true
+      },
+      {
+        "label": "duplicate-occurrence-key-rejected",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ERROR 1062 (23000) at line 2: Duplicate entry '44e022f4-1b22-5335-99c1-42c5b44f7e05-f63ebb9e-b5b6-5333-a444-de8' for key 'background_note_source.PRIMARY'\n",
+        "boundary": false
+      },
+      {
+        "label": "final-reopen-unchanged-origin",
+        "exit": 0,
+        "stdout_sha256": "f920761ed052dd86d6552211db3877993ec4f1e308ff28cfca5f98f2a43e36de",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "native-utc-epoch",
+        "exit": 0,
+        "stdout_sha256": "198d8210d25d2a49eafa4423b8878f26a4d9206522d9ebf77e0560b13541eaca",
+        "stderr": "",
+        "boundary": false
+      }
+    ],
+    "reopen-catalog-raw.jsonl": [
+      {
+        "label": "multiple-historical-candidates-same-set",
+        "exit": 0,
+        "stdout_sha256": "eced89d3d847bb1df7e55adc7572396e5d67b235e7ab2f62188de3c91103e84d",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "separate-process-copy",
+        "exit": 0,
+        "stdout_sha256": "a28a5979593ec4ea05d7704094f78f0dfb9cb41c0f379c5ceb67fd5a7a249cc7",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "separate-process-partial",
+        "exit": 0,
+        "stdout_sha256": "f51c4bc2bdbbd0cc7f017abd2273622afaba13f15f7001dcdce04ca2dd3fce16",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "separate-process-restore",
+        "exit": 0,
+        "stdout_sha256": "a28a5979593ec4ea05d7704094f78f0dfb9cb41c0f379c5ceb67fd5a7a249cc7",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "two-PDF-files-two-parser-versions-in-one-context",
+        "exit": 0,
+        "stdout_sha256": "eedf910ff45a0bb2c7bd6ec336b0afcca53a0431edf938fdb4b1f1090b8fdfc5",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "background-prose-edit-preserves-P1",
+        "exit": 0,
+        "stdout_sha256": "27ae4c8af1987fafcc08e92284a94a65f541e2daae296ed69925d44a50fb72ed",
+        "stderr": "",
+        "boundary": false
+      },
+      {
+        "label": "extra-probes-rolled-back",
+        "exit": 0,
+        "stdout_sha256": "a6e2b7a040683432de03a18fd8a1939a2fdf82585b364bfc874bdd4095c4cae1",
+        "stderr": "",
+        "boundary": false
+      }
+    ]
+  },
+  "draft_bytes": 6871,
+  "draft_sha256": "015a3a30f9970d41ef3ac45209794c7a4367e494b53a4f314f6cd0f0d3728112",
+  "oracle_assertions": 250,
+  "scope": "OFFLINE ONLY; no DB/Docker/network/source writes. Recorded metadata comparison uses reviewed pure checker block; independent baseline delta and vector analyses also run."
+}

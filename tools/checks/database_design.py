@@ -12,6 +12,7 @@ import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 VERSION = 'B00-1.4-proposed'
+PROVENANCE_ROOT_RULE = 'R1上下文根：所有纳入minutes_element.source_context_id无论证据数量均为basis根，与域内精确usage上下文取并集。ROWSET v2/PINNED用已保存输入要素集全部basis及set证据/目录，排除body/applied exclusion；REVIEW_SOURCES仅选定复核要素basis及精确相交证据（正文复核无要素basis）；FINAL用全部冻结纳入要素basis及既有body/set证据、目录、applied exclusion。各根完整context/selection/profile按实际完整PK去重及unsigned UTF8排序，缺失/额外行拒绝；无usage的basis同样验证并保留依赖。basis不伪造EVIDENCE、不增加usage数、不授予支持信用；草稿仍无自身fingerprint/TaskSpec，祖先按图依赖判断。'
 TABLES = []
 ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
 KEY = 'varchar(255) COLLATE utf8mb4_0900_bin'
@@ -424,6 +425,8 @@ for name in ('minutes_element','evidence_link'):
     t['indexes'].append(idx(name+'_context','source_context_id,id','历史来源选择反向依赖'))
     t['fks'].append(fk('source_context_id','source_context'))
     t['policy'] += '；B00-1.4-proposed来源basis由自身source_context_id确定，人工改写不声称模型生成；evidence自身上下文优先，不能从要素/正文/ACTION建议推断。新v3写NULL由应用拒绝；旧NULL明确不可恢复'
+    if name == 'minutes_element':
+        t['policy'] += '；所有纳入要素basis无论证据数量均为域内根，完整选择/profile须验证与保留；根精确作用域见R1上下文根，不伪造证据或支持信用'
 
 
 def cname(t, n): return f"ck_{t['name']}_{n}"
@@ -455,7 +458,7 @@ def dictionary():
     out=[f'# AMA 数据字典 — {VERSION}', '', '生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。', '',
          '全表 InnoDB / utf8mb4_0900_ai_ci；稳定标识使用 utf8mb4_0900_bin（NO PAD），UUID/协议码/哈希用 ascii_bin。每字段的类型中明确覆盖排序规则。DATETIME(6) 一律 UTC；DATE 为 Asia/Shanghai 业务日。默认值 `无` 意味必须由应用明确赋值（可空字段默认 NULL）。主键唯一性的业务依据为稳定实体标识或明确复合业务键；UUID 不承载顺序。LONGTEXT 的物理容量不是产品字数限制。', '',
          '全部 FK 均 ON UPDATE RESTRICT / ON DELETE RESTRICT，根与历史不级联；拥有任务负责在同事务验证同会议/同所有者、状态及快照成员关系。字典中无 FK 的 typed ID 和循环当前指针见设计文档“逻辑关系与删除”，不可按裸 ID 绕过鉴权。', '',
-         '## 表清单与分期', '', '|表|任务|计划迁移|用途|','|---|---|---|---|']
+         PROVENANCE_ROOT_RULE, '', '## 表清单与分期', '', '|表|任务|计划迁移|用途|','|---|---|---|---|']
     for t in TABLES: out.append(f"|{t['name']}|{t['task']}|{t['migration']}|{t['purpose']}|")
     for t in TABLES:
         out.extend(['',f"## {t['name']}",'',f"{t['purpose']}。所属 {t['task']}，计划 {t['migration']}。",'', '|字段|MySQL 类型/排序规则|可空|默认|含义|','|---|---|---|---|---|'])
@@ -468,7 +471,7 @@ def dictionary():
     return '\n'.join(out)+'\n'
 
 def er():
-    out=['## 附录：完整 ER（由同一字段清单生成）','', 'PK/FK 明确标在字段上；每条实体存在于字典和 DDL。`o|` 表示子行允许 NULL；`||` 表示子行必有父；父到子默认零到多（复合唯一索引的更紧基数见字典）。关系标签注明实际 FK，当前指针/typed 逻辑关系在正文另表。', '', '```mermaid','erDiagram']
+    out=['## 附录：完整 ER（由同一字段清单生成）','', PROVENANCE_ROOT_RULE, '', 'PK/FK 明确标在字段上；每条实体存在于字典和 DDL。`o|` 表示子行允许 NULL；`||` 表示子行必有父；父到子默认零到多（复合唯一索引的更紧基数见字典）。关系标签注明实际 FK，当前指针/typed 逻辑关系在正文另表。', '', '```mermaid','erDiagram']
     for t in TABLES:
         fcols={c for f in t['fks'] for c in f['cols']}
         out.append('    '+t['name']+' {')
