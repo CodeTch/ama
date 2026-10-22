@@ -1,0 +1,1 @@
+The initial fixture launcher recorded requested HostConfig.PortBindings, where an ephemeral HostPort remains empty. Before any JDBC invocation, selected NetworkSettings.Ports supplied the actual allocated loopback port. Same owned container; no second creation, no restart, no reset. This preparation correction is not an assertion RED.
