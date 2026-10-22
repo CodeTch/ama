@@ -1,0 +1,1294 @@
+{
+  "scope": "Reduced synthetic R1 model only; no DB, archive retrieval or normative wire codec.\n\nThe literal expectations below are independent domain fixtures. Short IDs and\nsynthetic SHA values deliberately do not qualify a runtime/archive-bound graph.\n",
+  "assertions": 82,
+  "checks": [
+    "PINNED exact independent literal roots",
+    "PINNED complete graph accepted",
+    "PINNED two complete selections per root",
+    "PINNED two complete profiles per root",
+    "PINNED basis creates no usage",
+    "PINNED exact evidence IDs",
+    "PINNED C1 has no usage",
+    "PINNED missing contextRows",
+    "PINNED extra contextRows",
+    "PINNED duplicate full PK contextRows",
+    "PINNED missing contextMaterialRows",
+    "PINNED extra contextMaterialRows",
+    "PINNED duplicate full PK contextMaterialRows",
+    "PINNED missing parserProfileRows",
+    "PINNED extra parserProfileRows",
+    "PINNED duplicate full PK parserProfileRows",
+    "PINNED fake evidence for basis",
+    "PINNED basis catalog_sha256 affects reduced digest",
+    "PINNED basis parser_config_sha256 affects reduced digest",
+    "PINNED basis exact parser selection affects reduced digest",
+    "PINNED changed basis ID affects reduced digest",
+    "PINNED permutation canonical bytes",
+    "REVIEW_SOURCES exact independent literal roots",
+    "REVIEW_SOURCES complete graph accepted",
+    "REVIEW_SOURCES two complete selections per root",
+    "REVIEW_SOURCES two complete profiles per root",
+    "REVIEW_SOURCES basis creates no usage",
+    "REVIEW_SOURCES exact evidence IDs",
+    "REVIEW_SOURCES C1 has no usage",
+    "REVIEW_SOURCES missing contextRows",
+    "REVIEW_SOURCES extra contextRows",
+    "REVIEW_SOURCES duplicate full PK contextRows",
+    "REVIEW_SOURCES missing contextMaterialRows",
+    "REVIEW_SOURCES extra contextMaterialRows",
+    "REVIEW_SOURCES duplicate full PK contextMaterialRows",
+    "REVIEW_SOURCES missing parserProfileRows",
+    "REVIEW_SOURCES extra parserProfileRows",
+    "REVIEW_SOURCES duplicate full PK parserProfileRows",
+    "REVIEW_SOURCES fake evidence for basis",
+    "REVIEW_SOURCES basis catalog_sha256 affects reduced digest",
+    "REVIEW_SOURCES basis parser_config_sha256 affects reduced digest",
+    "REVIEW_SOURCES basis exact parser selection affects reduced digest",
+    "REVIEW_SOURCES changed basis ID affects reduced digest",
+    "REVIEW_SOURCES permutation canonical bytes",
+    "FINAL exact independent literal roots",
+    "FINAL complete graph accepted",
+    "FINAL two complete selections per root",
+    "FINAL two complete profiles per root",
+    "FINAL basis creates no usage",
+    "FINAL exact evidence IDs",
+    "FINAL C1 has no usage",
+    "FINAL missing contextRows",
+    "FINAL extra contextRows",
+    "FINAL duplicate full PK contextRows",
+    "FINAL missing contextMaterialRows",
+    "FINAL extra contextMaterialRows",
+    "FINAL duplicate full PK contextMaterialRows",
+    "FINAL missing parserProfileRows",
+    "FINAL extra parserProfileRows",
+    "FINAL duplicate full PK parserProfileRows",
+    "FINAL fake evidence for basis",
+    "FINAL basis catalog_sha256 affects reduced digest",
+    "FINAL basis parser_config_sha256 affects reduced digest",
+    "FINAL basis exact parser selection affects reduced digest",
+    "FINAL changed basis ID affects reduced digest",
+    "FINAL permutation canonical bytes",
+    "E0 selected basis exact roots",
+    "E0 selected review valid",
+    "E0 no support inferred from basis",
+    "EM selected basis exact roots",
+    "EM selected review valid",
+    "EM no support inferred from basis",
+    "BODY selected basis exact roots",
+    "BODY selected review valid",
+    "BODY no support inferred from basis",
+    "draft current input rejected even as nonusage basis",
+    "draft descendant rejected through basis dependency",
+    "persisted dependency cycle rejected",
+    "nonusage generated basis still needs saved verification",
+    "draft current exclusion context stays outside inherited graph",
+    "draft current fingerprint and own TaskSpec absent",
+    "graph ancestry independent of timestamp order"
+  ],
+  "domainVectors": {
+    "PINNED": {
+      "expectedRoots": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ],
+      "reducedSyntheticSha256": "69bda06113ee27f2b75d92d3526a306155994a529ed617963e1ec7afe8c74015",
+      "projection": {
+        "domain": "PINNED",
+        "elementRows": [
+          {
+            "id": "E0",
+            "source_context_id": "C3"
+          },
+          {
+            "id": "E1",
+            "source_context_id": "C1"
+          },
+          {
+            "id": "EM",
+            "source_context_id": "C4"
+          }
+        ],
+        "evidenceRows": [
+          {
+            "id": "EV1",
+            "element_id": "E1",
+            "context_id": "C2",
+            "start": 0,
+            "end": 5
+          },
+          {
+            "id": "EV2",
+            "element_id": "E1",
+            "context_id": "C2",
+            "start": 10,
+            "end": 20
+          },
+          {
+            "id": "EVM",
+            "element_id": "EM",
+            "context_id": "C2",
+            "start": 0,
+            "end": 5
+          }
+        ],
+        "usages": [
+          {
+            "kind": "BACKGROUND",
+            "key": [
+              "N1",
+              "L"
+            ],
+            "context_id": "C5"
+          },
+          {
+            "kind": "EVIDENCE",
+            "key": [
+              "EV1"
+            ],
+            "context_id": "C2"
+          },
+          {
+            "kind": "EVIDENCE",
+            "key": [
+              "EV2"
+            ],
+            "context_id": "C2"
+          },
+          {
+            "kind": "EVIDENCE",
+            "key": [
+              "EVM"
+            ],
+            "context_id": "C2"
+          }
+        ],
+        "contextRows": [
+          {
+            "id": "C1",
+            "meeting_id": "M",
+            "origin_kind": "GENERATION_INPUT",
+            "generation_input_id": "G1",
+            "transcript_confirmation_id": "T1",
+            "material_snapshot_id": "S1",
+            "catalog_version": "CAT1",
+            "catalog_sha256": "7b322a3b998ff81ab4e55dbc3e00d392e3e3c3523aa0a4647458cbb3062a1e93",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C2",
+            "meeting_id": "M",
+            "origin_kind": "MANUAL_SELECTION",
+            "generation_input_id": null,
+            "transcript_confirmation_id": "T2",
+            "material_snapshot_id": "S2",
+            "catalog_version": "CAT2",
+            "catalog_sha256": "ca7f9fe1307481489f1fca39a47eede27829cea651138db789d13c4111ad8487",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C3",
+            "meeting_id": "M",
+            "origin_kind": "GENERATION_INPUT",
+            "generation_input_id": "G3",
+            "transcript_confirmation_id": "T3",
+            "material_snapshot_id": "S3",
+            "catalog_version": "CAT3",
+            "catalog_sha256": "a166cb54f5d133289a32bf0bb72eeca5baa6a0428049b9cc9631d662f528a251",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C4",
+            "meeting_id": "M",
+            "origin_kind": "MANUAL_SELECTION",
+            "generation_input_id": null,
+            "transcript_confirmation_id": "T4",
+            "material_snapshot_id": "S4",
+            "catalog_version": "CAT4",
+            "catalog_sha256": "0fcb0c4ca3ae175f5e9b5a05efa041cfedc23fe37078f52b909f560673770eeb",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C5",
+            "meeting_id": "M",
+            "origin_kind": "GENERATION_INPUT",
+            "generation_input_id": "G5",
+            "transcript_confirmation_id": "T5",
+            "material_snapshot_id": "S5",
+            "catalog_version": "CAT5",
+            "catalog_sha256": "642778a87a9fcbd5ed75d57a4a9bcc750b55abc02aeefde30c6d86e74e9df3af",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          }
+        ],
+        "contextMaterialRows": [
+          {
+            "context_id": "C1",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D1RA"
+          },
+          {
+            "context_id": "C1",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D1RB"
+          },
+          {
+            "context_id": "C2",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D2RA"
+          },
+          {
+            "context_id": "C2",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D2RB"
+          },
+          {
+            "context_id": "C3",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D3RA"
+          },
+          {
+            "context_id": "C3",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D3RB"
+          },
+          {
+            "context_id": "C4",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D4RA"
+          },
+          {
+            "context_id": "C4",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D4RB"
+          },
+          {
+            "context_id": "C5",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D5RA"
+          },
+          {
+            "context_id": "C5",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D5RB"
+          }
+        ],
+        "parserProfileRows": [
+          {
+            "document_id": "D1RA",
+            "format": "PDF",
+            "parser_config_version": "P1",
+            "parser_config_sha256": "dcdad39ee4833f9c3f055fed93617aef27884054215d32330def35d261796bd1"
+          },
+          {
+            "document_id": "D1RB",
+            "format": "PDF",
+            "parser_config_version": "P1",
+            "parser_config_sha256": "dcdad39ee4833f9c3f055fed93617aef27884054215d32330def35d261796bd1"
+          },
+          {
+            "document_id": "D2RA",
+            "format": "PDF",
+            "parser_config_version": "P2",
+            "parser_config_sha256": "f2775f34f79bc6abdb5d25601fb26cb2a4954c7cb51200bcc72cf5206398816d"
+          },
+          {
+            "document_id": "D2RB",
+            "format": "PDF",
+            "parser_config_version": "P2",
+            "parser_config_sha256": "f2775f34f79bc6abdb5d25601fb26cb2a4954c7cb51200bcc72cf5206398816d"
+          },
+          {
+            "document_id": "D3RA",
+            "format": "PDF",
+            "parser_config_version": "P3",
+            "parser_config_sha256": "4a0767c307b5693e5a9dcd795627d4276000a6ee67e8c46243aeb47d1f3ecbef"
+          },
+          {
+            "document_id": "D3RB",
+            "format": "PDF",
+            "parser_config_version": "P3",
+            "parser_config_sha256": "4a0767c307b5693e5a9dcd795627d4276000a6ee67e8c46243aeb47d1f3ecbef"
+          },
+          {
+            "document_id": "D4RA",
+            "format": "PDF",
+            "parser_config_version": "P4",
+            "parser_config_sha256": "277d23971c601be27470a1bf07ac4aa3f47e54a825f2bc8e3a6cf63d4b260745"
+          },
+          {
+            "document_id": "D4RB",
+            "format": "PDF",
+            "parser_config_version": "P4",
+            "parser_config_sha256": "277d23971c601be27470a1bf07ac4aa3f47e54a825f2bc8e3a6cf63d4b260745"
+          },
+          {
+            "document_id": "D5RA",
+            "format": "PDF",
+            "parser_config_version": "P5",
+            "parser_config_sha256": "7a8dc41bb9fce9cae0ae223923d962c10da81f8e389c9e18f55f81b80ea42b83"
+          },
+          {
+            "document_id": "D5RB",
+            "format": "PDF",
+            "parser_config_version": "P5",
+            "parser_config_sha256": "7a8dc41bb9fce9cae0ae223923d962c10da81f8e389c9e18f55f81b80ea42b83"
+          }
+        ]
+      }
+    },
+    "REVIEW_SOURCES": {
+      "expectedRoots": [
+        "C1",
+        "C2"
+      ],
+      "reducedSyntheticSha256": "8bfe051d39de170a6c8d014f63ff724e5454ab2d957d81c965df955e1b7608dd",
+      "projection": {
+        "domain": "REVIEW_SOURCES",
+        "elementRows": [
+          {
+            "id": "E1",
+            "source_context_id": "C1"
+          }
+        ],
+        "evidenceRows": [
+          {
+            "id": "EV1",
+            "element_id": "E1",
+            "context_id": "C2",
+            "start": 0,
+            "end": 5
+          }
+        ],
+        "usages": [
+          {
+            "kind": "EVIDENCE",
+            "key": [
+              "EV1"
+            ],
+            "context_id": "C2"
+          }
+        ],
+        "contextRows": [
+          {
+            "id": "C1",
+            "meeting_id": "M",
+            "origin_kind": "GENERATION_INPUT",
+            "generation_input_id": "G1",
+            "transcript_confirmation_id": "T1",
+            "material_snapshot_id": "S1",
+            "catalog_version": "CAT1",
+            "catalog_sha256": "7b322a3b998ff81ab4e55dbc3e00d392e3e3c3523aa0a4647458cbb3062a1e93",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C2",
+            "meeting_id": "M",
+            "origin_kind": "MANUAL_SELECTION",
+            "generation_input_id": null,
+            "transcript_confirmation_id": "T2",
+            "material_snapshot_id": "S2",
+            "catalog_version": "CAT2",
+            "catalog_sha256": "ca7f9fe1307481489f1fca39a47eede27829cea651138db789d13c4111ad8487",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          }
+        ],
+        "contextMaterialRows": [
+          {
+            "context_id": "C1",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D1RA"
+          },
+          {
+            "context_id": "C1",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D1RB"
+          },
+          {
+            "context_id": "C2",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D2RA"
+          },
+          {
+            "context_id": "C2",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D2RB"
+          }
+        ],
+        "parserProfileRows": [
+          {
+            "document_id": "D1RA",
+            "format": "PDF",
+            "parser_config_version": "P1",
+            "parser_config_sha256": "dcdad39ee4833f9c3f055fed93617aef27884054215d32330def35d261796bd1"
+          },
+          {
+            "document_id": "D1RB",
+            "format": "PDF",
+            "parser_config_version": "P1",
+            "parser_config_sha256": "dcdad39ee4833f9c3f055fed93617aef27884054215d32330def35d261796bd1"
+          },
+          {
+            "document_id": "D2RA",
+            "format": "PDF",
+            "parser_config_version": "P2",
+            "parser_config_sha256": "f2775f34f79bc6abdb5d25601fb26cb2a4954c7cb51200bcc72cf5206398816d"
+          },
+          {
+            "document_id": "D2RB",
+            "format": "PDF",
+            "parser_config_version": "P2",
+            "parser_config_sha256": "f2775f34f79bc6abdb5d25601fb26cb2a4954c7cb51200bcc72cf5206398816d"
+          }
+        ]
+      }
+    },
+    "FINAL": {
+      "expectedRoots": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7"
+      ],
+      "reducedSyntheticSha256": "ebb94fe549521c26ff5cff2f67df8ab17829f86deb4da6ebd3784559f30f5978",
+      "projection": {
+        "domain": "FINAL",
+        "elementRows": [
+          {
+            "id": "E0",
+            "source_context_id": "C3"
+          },
+          {
+            "id": "E1",
+            "source_context_id": "C1"
+          },
+          {
+            "id": "EM",
+            "source_context_id": "C4"
+          }
+        ],
+        "evidenceRows": [
+          {
+            "id": "EV1",
+            "element_id": "E1",
+            "context_id": "C2",
+            "start": 0,
+            "end": 5
+          },
+          {
+            "id": "EV2",
+            "element_id": "E1",
+            "context_id": "C2",
+            "start": 10,
+            "end": 20
+          },
+          {
+            "id": "EVB",
+            "element_id": null,
+            "context_id": "C6",
+            "start": 0,
+            "end": 5
+          },
+          {
+            "id": "EVM",
+            "element_id": "EM",
+            "context_id": "C2",
+            "start": 0,
+            "end": 5
+          }
+        ],
+        "usages": [
+          {
+            "kind": "BACKGROUND",
+            "key": [
+              "N1",
+              "L"
+            ],
+            "context_id": "C5"
+          },
+          {
+            "kind": "EVIDENCE",
+            "key": [
+              "EV1"
+            ],
+            "context_id": "C2"
+          },
+          {
+            "kind": "EVIDENCE",
+            "key": [
+              "EV2"
+            ],
+            "context_id": "C2"
+          },
+          {
+            "kind": "EVIDENCE",
+            "key": [
+              "EVB"
+            ],
+            "context_id": "C6"
+          },
+          {
+            "kind": "EVIDENCE",
+            "key": [
+              "EVM"
+            ],
+            "context_id": "C2"
+          },
+          {
+            "kind": "EXCLUSION",
+            "key": [
+              "XR",
+              "L",
+              "A"
+            ],
+            "context_id": "C7"
+          }
+        ],
+        "contextRows": [
+          {
+            "id": "C1",
+            "meeting_id": "M",
+            "origin_kind": "GENERATION_INPUT",
+            "generation_input_id": "G1",
+            "transcript_confirmation_id": "T1",
+            "material_snapshot_id": "S1",
+            "catalog_version": "CAT1",
+            "catalog_sha256": "7b322a3b998ff81ab4e55dbc3e00d392e3e3c3523aa0a4647458cbb3062a1e93",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C2",
+            "meeting_id": "M",
+            "origin_kind": "MANUAL_SELECTION",
+            "generation_input_id": null,
+            "transcript_confirmation_id": "T2",
+            "material_snapshot_id": "S2",
+            "catalog_version": "CAT2",
+            "catalog_sha256": "ca7f9fe1307481489f1fca39a47eede27829cea651138db789d13c4111ad8487",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C3",
+            "meeting_id": "M",
+            "origin_kind": "GENERATION_INPUT",
+            "generation_input_id": "G3",
+            "transcript_confirmation_id": "T3",
+            "material_snapshot_id": "S3",
+            "catalog_version": "CAT3",
+            "catalog_sha256": "a166cb54f5d133289a32bf0bb72eeca5baa6a0428049b9cc9631d662f528a251",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C4",
+            "meeting_id": "M",
+            "origin_kind": "MANUAL_SELECTION",
+            "generation_input_id": null,
+            "transcript_confirmation_id": "T4",
+            "material_snapshot_id": "S4",
+            "catalog_version": "CAT4",
+            "catalog_sha256": "0fcb0c4ca3ae175f5e9b5a05efa041cfedc23fe37078f52b909f560673770eeb",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C5",
+            "meeting_id": "M",
+            "origin_kind": "GENERATION_INPUT",
+            "generation_input_id": "G5",
+            "transcript_confirmation_id": "T5",
+            "material_snapshot_id": "S5",
+            "catalog_version": "CAT5",
+            "catalog_sha256": "642778a87a9fcbd5ed75d57a4a9bcc750b55abc02aeefde30c6d86e74e9df3af",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C6",
+            "meeting_id": "M",
+            "origin_kind": "GENERATION_INPUT",
+            "generation_input_id": "G6",
+            "transcript_confirmation_id": "T6",
+            "material_snapshot_id": "S6",
+            "catalog_version": "CAT6",
+            "catalog_sha256": "41022e3f1c85a395084f4d29b371620d80ff8d080bf5811cd85fd452d127949e",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          },
+          {
+            "id": "C7",
+            "meeting_id": "M",
+            "origin_kind": "GENERATION_INPUT",
+            "generation_input_id": "G7",
+            "transcript_confirmation_id": "T7",
+            "material_snapshot_id": "S7",
+            "catalog_version": "CAT7",
+            "catalog_sha256": "4261a1cbd035c802e2a66cb9f97a7cb8bcf3641f2008661696a2f012c489fcd2",
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          }
+        ],
+        "contextMaterialRows": [
+          {
+            "context_id": "C1",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D1RA"
+          },
+          {
+            "context_id": "C1",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D1RB"
+          },
+          {
+            "context_id": "C2",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D2RA"
+          },
+          {
+            "context_id": "C2",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D2RB"
+          },
+          {
+            "context_id": "C3",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D3RA"
+          },
+          {
+            "context_id": "C3",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D3RB"
+          },
+          {
+            "context_id": "C4",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D4RA"
+          },
+          {
+            "context_id": "C4",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D4RB"
+          },
+          {
+            "context_id": "C5",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D5RA"
+          },
+          {
+            "context_id": "C5",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D5RB"
+          },
+          {
+            "context_id": "C6",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D6RA"
+          },
+          {
+            "context_id": "C6",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D6RB"
+          },
+          {
+            "context_id": "C7",
+            "material_revision_id": "RA",
+            "parsed_document_id": "D7RA"
+          },
+          {
+            "context_id": "C7",
+            "material_revision_id": "RB",
+            "parsed_document_id": "D7RB"
+          }
+        ],
+        "parserProfileRows": [
+          {
+            "document_id": "D1RA",
+            "format": "PDF",
+            "parser_config_version": "P1",
+            "parser_config_sha256": "dcdad39ee4833f9c3f055fed93617aef27884054215d32330def35d261796bd1"
+          },
+          {
+            "document_id": "D1RB",
+            "format": "PDF",
+            "parser_config_version": "P1",
+            "parser_config_sha256": "dcdad39ee4833f9c3f055fed93617aef27884054215d32330def35d261796bd1"
+          },
+          {
+            "document_id": "D2RA",
+            "format": "PDF",
+            "parser_config_version": "P2",
+            "parser_config_sha256": "f2775f34f79bc6abdb5d25601fb26cb2a4954c7cb51200bcc72cf5206398816d"
+          },
+          {
+            "document_id": "D2RB",
+            "format": "PDF",
+            "parser_config_version": "P2",
+            "parser_config_sha256": "f2775f34f79bc6abdb5d25601fb26cb2a4954c7cb51200bcc72cf5206398816d"
+          },
+          {
+            "document_id": "D3RA",
+            "format": "PDF",
+            "parser_config_version": "P3",
+            "parser_config_sha256": "4a0767c307b5693e5a9dcd795627d4276000a6ee67e8c46243aeb47d1f3ecbef"
+          },
+          {
+            "document_id": "D3RB",
+            "format": "PDF",
+            "parser_config_version": "P3",
+            "parser_config_sha256": "4a0767c307b5693e5a9dcd795627d4276000a6ee67e8c46243aeb47d1f3ecbef"
+          },
+          {
+            "document_id": "D4RA",
+            "format": "PDF",
+            "parser_config_version": "P4",
+            "parser_config_sha256": "277d23971c601be27470a1bf07ac4aa3f47e54a825f2bc8e3a6cf63d4b260745"
+          },
+          {
+            "document_id": "D4RB",
+            "format": "PDF",
+            "parser_config_version": "P4",
+            "parser_config_sha256": "277d23971c601be27470a1bf07ac4aa3f47e54a825f2bc8e3a6cf63d4b260745"
+          },
+          {
+            "document_id": "D5RA",
+            "format": "PDF",
+            "parser_config_version": "P5",
+            "parser_config_sha256": "7a8dc41bb9fce9cae0ae223923d962c10da81f8e389c9e18f55f81b80ea42b83"
+          },
+          {
+            "document_id": "D5RB",
+            "format": "PDF",
+            "parser_config_version": "P5",
+            "parser_config_sha256": "7a8dc41bb9fce9cae0ae223923d962c10da81f8e389c9e18f55f81b80ea42b83"
+          },
+          {
+            "document_id": "D6RA",
+            "format": "PDF",
+            "parser_config_version": "P6",
+            "parser_config_sha256": "5be82d90f83d991127a0c7deae97cf8955f85be389548f4f187d655ec2376b29"
+          },
+          {
+            "document_id": "D6RB",
+            "format": "PDF",
+            "parser_config_version": "P6",
+            "parser_config_sha256": "5be82d90f83d991127a0c7deae97cf8955f85be389548f4f187d655ec2376b29"
+          },
+          {
+            "document_id": "D7RA",
+            "format": "PDF",
+            "parser_config_version": "P7",
+            "parser_config_sha256": "5600cae44500e3b7e9dd1fd3533d7dbbfbb356cc5a3604e6df92fd50fbaa45ff"
+          },
+          {
+            "document_id": "D7RB",
+            "format": "PDF",
+            "parser_config_version": "P7",
+            "parser_config_sha256": "5600cae44500e3b7e9dd1fd3533d7dbbfbb356cc5a3604e6df92fd50fbaa45ff"
+          }
+        ]
+      }
+    },
+    "REVIEW_E0": {
+      "domain": "REVIEW_SOURCES",
+      "elementRows": [
+        {
+          "id": "E0",
+          "source_context_id": "C3"
+        }
+      ],
+      "evidenceRows": [],
+      "usages": [],
+      "contextRows": [
+        {
+          "id": "C3",
+          "meeting_id": "M",
+          "origin_kind": "GENERATION_INPUT",
+          "generation_input_id": "G3",
+          "transcript_confirmation_id": "T3",
+          "material_snapshot_id": "S3",
+          "catalog_version": "CAT3",
+          "catalog_sha256": "a166cb54f5d133289a32bf0bb72eeca5baa6a0428049b9cc9631d662f528a251",
+          "created_at": "2026-10-22T00:00:00.000000Z"
+        }
+      ],
+      "contextMaterialRows": [
+        {
+          "context_id": "C3",
+          "material_revision_id": "RA",
+          "parsed_document_id": "D3RA"
+        },
+        {
+          "context_id": "C3",
+          "material_revision_id": "RB",
+          "parsed_document_id": "D3RB"
+        }
+      ],
+      "parserProfileRows": [
+        {
+          "document_id": "D3RA",
+          "format": "PDF",
+          "parser_config_version": "P3",
+          "parser_config_sha256": "4a0767c307b5693e5a9dcd795627d4276000a6ee67e8c46243aeb47d1f3ecbef"
+        },
+        {
+          "document_id": "D3RB",
+          "format": "PDF",
+          "parser_config_version": "P3",
+          "parser_config_sha256": "4a0767c307b5693e5a9dcd795627d4276000a6ee67e8c46243aeb47d1f3ecbef"
+        }
+      ]
+    },
+    "REVIEW_EM": {
+      "domain": "REVIEW_SOURCES",
+      "elementRows": [
+        {
+          "id": "EM",
+          "source_context_id": "C4"
+        }
+      ],
+      "evidenceRows": [
+        {
+          "id": "EVM",
+          "element_id": "EM",
+          "context_id": "C2",
+          "start": 0,
+          "end": 5
+        }
+      ],
+      "usages": [
+        {
+          "kind": "EVIDENCE",
+          "key": [
+            "EVM"
+          ],
+          "context_id": "C2"
+        }
+      ],
+      "contextRows": [
+        {
+          "id": "C2",
+          "meeting_id": "M",
+          "origin_kind": "MANUAL_SELECTION",
+          "generation_input_id": null,
+          "transcript_confirmation_id": "T2",
+          "material_snapshot_id": "S2",
+          "catalog_version": "CAT2",
+          "catalog_sha256": "ca7f9fe1307481489f1fca39a47eede27829cea651138db789d13c4111ad8487",
+          "created_at": "2026-10-22T00:00:00.000000Z"
+        },
+        {
+          "id": "C4",
+          "meeting_id": "M",
+          "origin_kind": "MANUAL_SELECTION",
+          "generation_input_id": null,
+          "transcript_confirmation_id": "T4",
+          "material_snapshot_id": "S4",
+          "catalog_version": "CAT4",
+          "catalog_sha256": "0fcb0c4ca3ae175f5e9b5a05efa041cfedc23fe37078f52b909f560673770eeb",
+          "created_at": "2026-10-22T00:00:00.000000Z"
+        }
+      ],
+      "contextMaterialRows": [
+        {
+          "context_id": "C2",
+          "material_revision_id": "RA",
+          "parsed_document_id": "D2RA"
+        },
+        {
+          "context_id": "C2",
+          "material_revision_id": "RB",
+          "parsed_document_id": "D2RB"
+        },
+        {
+          "context_id": "C4",
+          "material_revision_id": "RA",
+          "parsed_document_id": "D4RA"
+        },
+        {
+          "context_id": "C4",
+          "material_revision_id": "RB",
+          "parsed_document_id": "D4RB"
+        }
+      ],
+      "parserProfileRows": [
+        {
+          "document_id": "D2RA",
+          "format": "PDF",
+          "parser_config_version": "P2",
+          "parser_config_sha256": "f2775f34f79bc6abdb5d25601fb26cb2a4954c7cb51200bcc72cf5206398816d"
+        },
+        {
+          "document_id": "D2RB",
+          "format": "PDF",
+          "parser_config_version": "P2",
+          "parser_config_sha256": "f2775f34f79bc6abdb5d25601fb26cb2a4954c7cb51200bcc72cf5206398816d"
+        },
+        {
+          "document_id": "D4RA",
+          "format": "PDF",
+          "parser_config_version": "P4",
+          "parser_config_sha256": "277d23971c601be27470a1bf07ac4aa3f47e54a825f2bc8e3a6cf63d4b260745"
+        },
+        {
+          "document_id": "D4RB",
+          "format": "PDF",
+          "parser_config_version": "P4",
+          "parser_config_sha256": "277d23971c601be27470a1bf07ac4aa3f47e54a825f2bc8e3a6cf63d4b260745"
+        }
+      ]
+    },
+    "REVIEW_BODY": {
+      "domain": "REVIEW_SOURCES",
+      "elementRows": [],
+      "evidenceRows": [
+        {
+          "id": "EVB",
+          "element_id": null,
+          "context_id": "C6",
+          "start": 0,
+          "end": 5
+        }
+      ],
+      "usages": [
+        {
+          "kind": "EVIDENCE",
+          "key": [
+            "EVB"
+          ],
+          "context_id": "C6"
+        }
+      ],
+      "contextRows": [
+        {
+          "id": "C6",
+          "meeting_id": "M",
+          "origin_kind": "GENERATION_INPUT",
+          "generation_input_id": "G6",
+          "transcript_confirmation_id": "T6",
+          "material_snapshot_id": "S6",
+          "catalog_version": "CAT6",
+          "catalog_sha256": "41022e3f1c85a395084f4d29b371620d80ff8d080bf5811cd85fd452d127949e",
+          "created_at": "2026-10-22T00:00:00.000000Z"
+        }
+      ],
+      "contextMaterialRows": [
+        {
+          "context_id": "C6",
+          "material_revision_id": "RA",
+          "parsed_document_id": "D6RA"
+        },
+        {
+          "context_id": "C6",
+          "material_revision_id": "RB",
+          "parsed_document_id": "D6RB"
+        }
+      ],
+      "parserProfileRows": [
+        {
+          "document_id": "D6RA",
+          "format": "PDF",
+          "parser_config_version": "P6",
+          "parser_config_sha256": "5be82d90f83d991127a0c7deae97cf8955f85be389548f4f187d655ec2376b29"
+        },
+        {
+          "document_id": "D6RB",
+          "format": "PDF",
+          "parser_config_version": "P6",
+          "parser_config_sha256": "5be82d90f83d991127a0c7deae97cf8955f85be389548f4f187d655ec2376b29"
+        }
+      ]
+    }
+  },
+  "acyclicDraft": {
+    "sourceContext": {
+      "row": {
+        "id": "C7",
+        "meeting_id": "M",
+        "origin_kind": "GENERATION_INPUT",
+        "generation_input_id": "G7",
+        "transcript_confirmation_id": "T7",
+        "material_snapshot_id": "S7",
+        "catalog_version": "CAT7",
+        "catalog_sha256": "4261a1cbd035c802e2a66cb9f97a7cb8bcf3641f2008661696a2f012c489fcd2",
+        "created_at": "2026-10-22T00:00:00.000000Z"
+      },
+      "materials": [
+        {
+          "context_id": "C7",
+          "material_revision_id": "RA",
+          "parsed_document_id": "D7RA"
+        },
+        {
+          "context_id": "C7",
+          "material_revision_id": "RB",
+          "parsed_document_id": "D7RB"
+        }
+      ],
+      "parserProfiles": [
+        {
+          "document_id": "D7RA",
+          "format": "PDF",
+          "parser_config_version": "P7",
+          "parser_config_sha256": "5600cae44500e3b7e9dd1fd3533d7dbbfbb356cc5a3604e6df92fd50fbaa45ff"
+        },
+        {
+          "document_id": "D7RB",
+          "format": "PDF",
+          "parser_config_version": "P7",
+          "parser_config_sha256": "5600cae44500e3b7e9dd1fd3533d7dbbfbb356cc5a3604e6df92fd50fbaa45ff"
+        }
+      ]
+    },
+    "elementsSourceGraph": {
+      "domain": "PINNED",
+      "elementRows": [
+        {
+          "id": "E0",
+          "source_context_id": "C3"
+        },
+        {
+          "id": "E1",
+          "source_context_id": "C1"
+        },
+        {
+          "id": "EM",
+          "source_context_id": "C4"
+        }
+      ],
+      "evidenceRows": [
+        {
+          "id": "EV1",
+          "element_id": "E1",
+          "context_id": "C2",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "id": "EV2",
+          "element_id": "E1",
+          "context_id": "C2",
+          "start": 10,
+          "end": 20
+        },
+        {
+          "id": "EVM",
+          "element_id": "EM",
+          "context_id": "C2",
+          "start": 0,
+          "end": 5
+        }
+      ],
+      "usages": [
+        {
+          "kind": "BACKGROUND",
+          "key": [
+            "N1",
+            "L"
+          ],
+          "context_id": "C5"
+        },
+        {
+          "kind": "EVIDENCE",
+          "key": [
+            "EV1"
+          ],
+          "context_id": "C2"
+        },
+        {
+          "kind": "EVIDENCE",
+          "key": [
+            "EV2"
+          ],
+          "context_id": "C2"
+        },
+        {
+          "kind": "EVIDENCE",
+          "key": [
+            "EVM"
+          ],
+          "context_id": "C2"
+        }
+      ],
+      "contextRows": [
+        {
+          "id": "C1",
+          "meeting_id": "M",
+          "origin_kind": "GENERATION_INPUT",
+          "generation_input_id": "G1",
+          "transcript_confirmation_id": "T1",
+          "material_snapshot_id": "S1",
+          "catalog_version": "CAT1",
+          "catalog_sha256": "7b322a3b998ff81ab4e55dbc3e00d392e3e3c3523aa0a4647458cbb3062a1e93",
+          "created_at": "2026-10-22T00:00:00.000000Z"
+        },
+        {
+          "id": "C2",
+          "meeting_id": "M",
+          "origin_kind": "MANUAL_SELECTION",
+          "generation_input_id": null,
+          "transcript_confirmation_id": "T2",
+          "material_snapshot_id": "S2",
+          "catalog_version": "CAT2",
+          "catalog_sha256": "ca7f9fe1307481489f1fca39a47eede27829cea651138db789d13c4111ad8487",
+          "created_at": "2026-10-22T00:00:00.000000Z"
+        },
+        {
+          "id": "C3",
+          "meeting_id": "M",
+          "origin_kind": "GENERATION_INPUT",
+          "generation_input_id": "G3",
+          "transcript_confirmation_id": "T3",
+          "material_snapshot_id": "S3",
+          "catalog_version": "CAT3",
+          "catalog_sha256": "a166cb54f5d133289a32bf0bb72eeca5baa6a0428049b9cc9631d662f528a251",
+          "created_at": "2026-10-22T00:00:00.000000Z"
+        },
+        {
+          "id": "C4",
+          "meeting_id": "M",
+          "origin_kind": "MANUAL_SELECTION",
+          "generation_input_id": null,
+          "transcript_confirmation_id": "T4",
+          "material_snapshot_id": "S4",
+          "catalog_version": "CAT4",
+          "catalog_sha256": "0fcb0c4ca3ae175f5e9b5a05efa041cfedc23fe37078f52b909f560673770eeb",
+          "created_at": "2026-10-22T00:00:00.000000Z"
+        },
+        {
+          "id": "C5",
+          "meeting_id": "M",
+          "origin_kind": "GENERATION_INPUT",
+          "generation_input_id": "G5",
+          "transcript_confirmation_id": "T5",
+          "material_snapshot_id": "S5",
+          "catalog_version": "CAT5",
+          "catalog_sha256": "642778a87a9fcbd5ed75d57a4a9bcc750b55abc02aeefde30c6d86e74e9df3af",
+          "created_at": "2026-10-22T00:00:00.000000Z"
+        }
+      ],
+      "contextMaterialRows": [
+        {
+          "context_id": "C1",
+          "material_revision_id": "RA",
+          "parsed_document_id": "D1RA"
+        },
+        {
+          "context_id": "C1",
+          "material_revision_id": "RB",
+          "parsed_document_id": "D1RB"
+        },
+        {
+          "context_id": "C2",
+          "material_revision_id": "RA",
+          "parsed_document_id": "D2RA"
+        },
+        {
+          "context_id": "C2",
+          "material_revision_id": "RB",
+          "parsed_document_id": "D2RB"
+        },
+        {
+          "context_id": "C3",
+          "material_revision_id": "RA",
+          "parsed_document_id": "D3RA"
+        },
+        {
+          "context_id": "C3",
+          "material_revision_id": "RB",
+          "parsed_document_id": "D3RB"
+        },
+        {
+          "context_id": "C4",
+          "material_revision_id": "RA",
+          "parsed_document_id": "D4RA"
+        },
+        {
+          "context_id": "C4",
+          "material_revision_id": "RB",
+          "parsed_document_id": "D4RB"
+        },
+        {
+          "context_id": "C5",
+          "material_revision_id": "RA",
+          "parsed_document_id": "D5RA"
+        },
+        {
+          "context_id": "C5",
+          "material_revision_id": "RB",
+          "parsed_document_id": "D5RB"
+        }
+      ],
+      "parserProfileRows": [
+        {
+          "document_id": "D1RA",
+          "format": "PDF",
+          "parser_config_version": "P1",
+          "parser_config_sha256": "dcdad39ee4833f9c3f055fed93617aef27884054215d32330def35d261796bd1"
+        },
+        {
+          "document_id": "D1RB",
+          "format": "PDF",
+          "parser_config_version": "P1",
+          "parser_config_sha256": "dcdad39ee4833f9c3f055fed93617aef27884054215d32330def35d261796bd1"
+        },
+        {
+          "document_id": "D2RA",
+          "format": "PDF",
+          "parser_config_version": "P2",
+          "parser_config_sha256": "f2775f34f79bc6abdb5d25601fb26cb2a4954c7cb51200bcc72cf5206398816d"
+        },
+        {
+          "document_id": "D2RB",
+          "format": "PDF",
+          "parser_config_version": "P2",
+          "parser_config_sha256": "f2775f34f79bc6abdb5d25601fb26cb2a4954c7cb51200bcc72cf5206398816d"
+        },
+        {
+          "document_id": "D3RA",
+          "format": "PDF",
+          "parser_config_version": "P3",
+          "parser_config_sha256": "4a0767c307b5693e5a9dcd795627d4276000a6ee67e8c46243aeb47d1f3ecbef"
+        },
+        {
+          "document_id": "D3RB",
+          "format": "PDF",
+          "parser_config_version": "P3",
+          "parser_config_sha256": "4a0767c307b5693e5a9dcd795627d4276000a6ee67e8c46243aeb47d1f3ecbef"
+        },
+        {
+          "document_id": "D4RA",
+          "format": "PDF",
+          "parser_config_version": "P4",
+          "parser_config_sha256": "277d23971c601be27470a1bf07ac4aa3f47e54a825f2bc8e3a6cf63d4b260745"
+        },
+        {
+          "document_id": "D4RB",
+          "format": "PDF",
+          "parser_config_version": "P4",
+          "parser_config_sha256": "277d23971c601be27470a1bf07ac4aa3f47e54a825f2bc8e3a6cf63d4b260745"
+        },
+        {
+          "document_id": "D5RA",
+          "format": "PDF",
+          "parser_config_version": "P5",
+          "parser_config_sha256": "7a8dc41bb9fce9cae0ae223923d962c10da81f8e389c9e18f55f81b80ea42b83"
+        },
+        {
+          "document_id": "D5RB",
+          "format": "PDF",
+          "parser_config_version": "P5",
+          "parser_config_sha256": "7a8dc41bb9fce9cae0ae223923d962c10da81f8e389c9e18f55f81b80ea42b83"
+        }
+      ]
+    },
+    "exclusion": {
+      "appliedContextId": "C7",
+      "entries": [
+        {
+          "locatorId": "L",
+          "category": "A"
+        }
+      ]
+    }
+  },
+  "limitations": "Reduced JSON digest sensitivity only; no full normative profile codec, valid raw archives, SQL, runtime, ACL, parser or adoption qualification."
+}

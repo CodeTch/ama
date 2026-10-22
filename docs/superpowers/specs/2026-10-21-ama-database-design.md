@@ -322,6 +322,8 @@ B00-1.3只改变仍未编写/共享的V012排除主键与新七表，V013新增�
 
 ## 附录：完整 ER（由同一字段清单生成）
 
+R1上下文根：所有纳入minutes_element.source_context_id无论证据数量均为basis根，与域内精确usage上下文取并集。ROWSET v2/PINNED用已保存输入要素集全部basis及set证据/目录，排除body/applied exclusion；REVIEW_SOURCES仅选定复核要素basis及精确相交证据（正文复核无要素basis）；FINAL用全部冻结纳入要素basis及既有body/set证据、目录、applied exclusion。各根完整context/selection/profile按实际完整PK去重及unsigned UTF8排序，缺失/额外行拒绝；无usage的basis同样验证并保留依赖。basis不伪造EVIDENCE、不增加usage数、不授予支持信用；草稿仍无自身fingerprint/TaskSpec，祖先按图依赖判断。
+
 PK/FK 明确标在字段上；每条实体存在于字典和 DDL。`o|` 表示子行允许 NULL；`||` 表示子行必有父；父到子默认零到多（复合唯一索引的更紧基数见字典）。关系标签注明实际 FK，当前指针/typed 逻辑关系在正文另表。
 
 ```mermaid
