@@ -18,6 +18,8 @@ public final class ConfigArchiveContracts {
   private final byte[] bytes;private ArchiveBytes(byte[] raw){bytes=raw.clone();}
   public static ArchiveBytes capture(byte[] raw,long maximum,long remaining,BooleanSupplier cancelled){require(raw!=null&&maximum>0&&remaining>=0,INVALID_ARGUMENT);check(cancelled);require(raw.length<=maximum&&raw.length<=remaining,BUDGET_EXCEEDED);var result=new ArchiveBytes(raw);check(cancelled);return result;}
   public int size(){return bytes.length;}public InputStream openStream(){return new ByteArrayInputStream(bytes);}public boolean sameBytes(byte[] candidate){return Arrays.equals(bytes,candidate);}
+  public boolean sameBytes(ArchiveBytes candidate){return candidate!=null&&Arrays.equals(bytes,candidate.bytes);}
+  public int contentHashCode(){return Arrays.hashCode(bytes);}
   public String sha256(BooleanSupplier cancelled){try{var digest=MessageDigest.getInstance("SHA-256");for(int i=0;i<bytes.length;){check(cancelled);int n=Math.min(1024,bytes.length-i);digest.update(bytes,i,n);i+=n;}check(cancelled);return HexFormat.of().formatHex(digest.digest());}catch(NoSuchAlgorithmException impossible){throw new IllegalStateException("SHA-256");}}
  }
  public record ArchiveReadBudget(long maxArtifactBytes,long maxTotalBytes,int maxArtifacts,long maxDependencies,int maxGraphDepth,long maxTokens,int maxJsonDepth,int maxNameUtf16,int maxStringUtf16,long maxStringUtf8Bytes,long maxAggregateScalars,long maxManifestBytes,int maxBatchFiles,long maxFactRows,long maxFactEdges){

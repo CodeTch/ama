@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-minutes-pure/artifacts/phase-b/minutes-pure-s1-fix1/audit.py", line 43, in <module>
+    assert sha((TREE / name).read_bytes()) == expected, name
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: .gitattributes

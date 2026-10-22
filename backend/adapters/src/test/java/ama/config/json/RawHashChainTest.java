@@ -3,6 +3,79 @@ import ama.config.*;import ama.minutes.contract.*;import ama.contract.MinutesCon
 import ama.canonical.*;import java.util.*;import java.nio.charset.StandardCharsets;import org.junit.jupiter.api.Test;
 import static ama.config.json.ConfigBindingsTest.*;import static ama.contract.MinutesContracts.*;import static ama.contract.MinutesContracts.FailureCode.*;import static org.junit.jupiter.api.Assertions.*;
 class RawHashChainTest {
+ @Test void fix1DirectStoredVerifyRejectsCorruptedNestedIntrinsicConfirmation()throws Exception{
+  var p=OriginGraphFix1Cases.nested(true);var t=p.taskSpecs().getLast();
+  assertEquals(FINGERPRINT_MISMATCH,assertThrows(Failure.class,()->service().verifyGeneration(new GenerationFacts(OriginGraphFix1Cases.NESTED,p),t,full(),GRAPH,B,()->false)).code());
+ }
+ @Test void fix1OuterDraftRejectsCorruptedNestedIntrinsicConfirmation()throws Exception{
+  var p=OriginGraphFix1Cases.nested(true);
+  assertEquals(FINGERPRINT_MISMATCH,assertThrows(Failure.class,()->new GenerationFingerprint(service(),full(),B).compute(OriginGraphFix1Cases.draft(uid(89),OriginGraphFix1Cases.OUTER_SET),p,new Fence(14,15,2),GRAPH,()->false)).code());
+ }
+ @Test void fix1ReviewRejectsCorruptedNestedIntrinsicConfirmation()throws Exception{
+  var p=OriginGraphFix1Cases.nested(true);var r=new ReviewFacts(MEETING,ReviewKind.SOURCE_SUPPORT,null,MIN,OutputValidation.anchor("body",0,4,()->false),List.of(uid(88)),p);
+  assertEquals(FINGERPRINT_MISMATCH,assertThrows(Failure.class,()->new ResultHashProfiles(service(),full(),B).sources(r,profile(full(),ArtifactType.REVIEW_HASH),GRAPH,()->false)).code());
+ }
+ @Test void fix1FinalRejectsCorruptedNestedIntrinsicConfirmation()throws Exception{
+  var p=OriginGraphFix1Cases.nested(true);
+  assertEquals(FINGERPRINT_MISMATCH,assertThrows(Failure.class,()->new ResultHashProfiles(service(),full(),B).finalSources(new FinalFacts(FINAL,p),profile(full(),ArtifactType.FINAL_SOURCES),GRAPH,()->false)).code());
+ }
+ @Test void fix1ValidNestedIntrinsicChainSucceedsAcrossAllBusinessEntryPoints()throws Exception{
+  var p=OriginGraphFix1Cases.nested(false);var r=new ReviewFacts(MEETING,ReviewKind.SOURCE_SUPPORT,null,MIN,OutputValidation.anchor("body",0,4,()->false),List.of(uid(88)),p);
+  assertDoesNotThrow(()->service().verifyGeneration(new GenerationFacts(OriginGraphFix1Cases.NESTED,p),p.taskSpecs().getLast(),full(),GRAPH,B,()->false));
+  assertDoesNotThrow(()->new GenerationFingerprint(service(),full(),B).compute(OriginGraphFix1Cases.draft(uid(89),OriginGraphFix1Cases.OUTER_SET),p,new Fence(14,15,2),GRAPH,()->false));
+  assertDoesNotThrow(()->new ResultHashProfiles(service(),full(),B).sources(r,profile(full(),ArtifactType.REVIEW_HASH),GRAPH,()->false));
+  assertDoesNotThrow(()->new ResultHashProfiles(service(),full(),B).finalSources(new FinalFacts(FINAL,p),profile(full(),ArtifactType.FINAL_SOURCES),GRAPH,()->false));
+ }
+ @Test void fix1SharedLeafDepthUsesEveryPathInEitherOriginOrdering()throws Exception{
+  for(boolean reverse:List.of(false,true)){
+   var p=OriginGraphFix1Cases.dag(reverse,false);var d=OriginGraphFix1Cases.draft(uid(150),uid(105));
+   assertDoesNotThrow(()->new GenerationFingerprint(service(),full(),B).compute(d,p,new Fence(14,15,2),new GraphBudget(GRAPH.canonical(),2,2,10000),()->false));
+   assertEquals(BUDGET_EXCEEDED,assertThrows(Failure.class,()->new GenerationFingerprint(service(),full(),B).compute(d,p,new Fence(14,15,2),new GraphBudget(GRAPH.canonical(),1,2,10000),()->false)).code());
+  }
+ }
+ @Test void fix1ReusedNonleafDiamondDepthUsesCachedSubtreeHeight()throws Exception{
+  for(boolean reverse:List.of(false,true)){
+   var p=OriginGraphFix1Cases.dag(reverse,true);var d=OriginGraphFix1Cases.draft(uid(150),uid(105));
+   assertDoesNotThrow(()->new GenerationFingerprint(service(),full(),B).compute(d,p,new Fence(14,15,2),new GraphBudget(GRAPH.canonical(),3,3,10000),()->false));
+   assertEquals(BUDGET_EXCEEDED,assertThrows(Failure.class,()->new GenerationFingerprint(service(),full(),B).compute(d,p,new Fence(14,15,2),new GraphBudget(GRAPH.canonical(),2,3,10000),()->false)).code());
+  }
+ }
+ @Test void fix1OriginNodeBudgetIsUniqueAndCumulativeAcrossSharedBranches()throws Exception{
+  var p=OriginGraphFix1Cases.dag(false,true);var d=OriginGraphFix1Cases.draft(uid(150),uid(105));
+  assertDoesNotThrow(()->new GenerationFingerprint(service(),full(),B).compute(d,p,new Fence(14,15,2),new GraphBudget(GRAPH.canonical(),3,3,10000),()->false));
+  assertEquals(BUDGET_EXCEEDED,assertThrows(Failure.class,()->new GenerationFingerprint(service(),full(),B).compute(d,p,new Fence(14,15,2),new GraphBudget(GRAPH.canonical(),3,2,10000),()->false)).code());
+ }
+ @Test void fix1DeepRawBackedOriginsMeetExactDepthAndRejectOneMore()throws Exception{
+  var p=finalStored();String previous=G;
+  for(int i=0;i<8;i++){String set=uid(201+i),input=uid(301+i);p=OriginGraphFix1Cases.origins(p,set,List.of(previous),401+i);p=OriginGraphFix1Cases.store(p,input,set);previous=input;}
+  var facts=OriginGraphFix1Cases.origins(p,uid(501),List.of(previous),502);var d=OriginGraphFix1Cases.draft(uid(503),uid(501));
+  assertDoesNotThrow(()->new GenerationFingerprint(service(),full(),B).compute(d,facts,new Fence(14,15,2),new GraphBudget(GRAPH.canonical(),9,9,10000),()->false));
+  assertEquals(BUDGET_EXCEEDED,assertThrows(Failure.class,()->new GenerationFingerprint(service(),full(),B).compute(d,facts,new Fence(14,15,2),new GraphBudget(GRAPH.canonical(),8,9,10000),()->false)).code());
+ }
+ @Test void fix1RawBackedCycleAndCancellationCannotReturnBusinessDigest()throws Exception{
+  var p=OriginGraphFix1Cases.dag(false,true);var rows=new ArrayList<>(p.rows());rows.removeIf(r->r.table()==Table.GENERATION_INPUT&&r.string("id").equals(uid(102)));
+  rows.add(OriginGraphFix1Cases.gen(uid(102),uid(105),p.taskSpecs().stream().filter(t->t.input().id().equals(uid(102))).findFirst().orElseThrow().inputFingerprint()));
+  var facts=OriginGraphFix1Cases.facts(p,rows,p.configurations(),p.taskSpecs(),p.evidenceAnchors());var d=OriginGraphFix1Cases.draft(uid(150),uid(105));
+  assertEquals(INPUT_INVALID,assertThrows(Failure.class,()->new GenerationFingerprint(service(),full(),B).compute(d,facts,new Fence(14,15,2),GRAPH,()->false)).code());
+  assertEquals(CANCELLED,assertThrows(Failure.class,()->new GenerationFingerprint(service(),full(),B).compute(d,p,new Fence(14,15,2),GRAPH,()->true)).code());
+ }
+ static ArchiveReadBudget totalBudget(long bytes){return new ArchiveReadBudget(B.maxArtifactBytes(),bytes,B.maxArtifacts(),B.maxDependencies(),B.maxGraphDepth(),B.maxTokens(),B.maxJsonDepth(),B.maxNameUtf16(),B.maxStringUtf16(),B.maxStringUtf8Bytes(),B.maxAggregateScalars(),B.maxManifestBytes(),B.maxBatchFiles(),B.maxFactRows(),B.maxFactEdges());}
+ @Test void fix1SharedHistoricalArchiveAcquisitionUsesOneCumulativeByteBudget()throws Exception{
+  var p=OriginGraphFix1Cases.nested(false);var raw=full();long exact=raw.stream().mapToLong(a->a.bytes().length).sum()+fixture("manifest").length;
+  var d=OriginGraphFix1Cases.draft(uid(89),OriginGraphFix1Cases.OUTER_SET);
+  assertDoesNotThrow(()->new GenerationFingerprint(service(),raw,totalBudget(exact)).compute(d,p,new Fence(14,15,2),GRAPH,()->false));
+  assertDoesNotThrow(()->new ResultHashProfiles(service(),raw,totalBudget(exact)).finalSources(new FinalFacts(FINAL,p),profile(raw,ArtifactType.FINAL_SOURCES),GRAPH,()->false));
+  assertEquals(BUDGET_EXCEEDED,assertThrows(Failure.class,()->new GenerationFingerprint(service(),raw,totalBudget(exact-1)).compute(d,p,new Fence(14,15,2),GRAPH,()->false)).code());
+ }
+ @Test void fix1ContextArtifactsReuseTheSameIsolatedBoundedOriginal()throws Exception{
+  var p=storedGeneration();var raw=full();var context=service().begin(p,raw,B,()->false);
+  var input=p.rows().stream().filter(r->r.table()==Table.GENERATION_INPUT).findFirst().orElseThrow();var first=context.generation(input);var second=context.generation(input);
+  assertSame(first.prompt().bytes(),second.prompt().bytes());
+  for(var kind:ProfileKind.values())assertSame(first.profiles().definition(kind).bytes(),second.profiles().definition(kind).bytes());
+  for(var archive:raw)archive.bytes()[0]='x';
+  assertEquals(first,context.generation(input));assertDoesNotThrow(context::finish);
+  assertEquals(p.configurations().getFirst(),first);
+ }
  static final String G="55555555-5555-4555-8555-555555555555",R="66666666-6666-4666-8666-666666666666",S="77777777-7777-4777-8777-777777777777",C="88888888-8888-4888-8888-888888888888",T="99999999-9999-4999-8999-999999999999",X="aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
  static final GraphBudget GRAPH=new GraphBudget(new CanonicalBudget(1000000,100,100000,100000,100000),30,100,10000);
  static String resource(String path)throws Exception{try(var in=RawHashChainTest.class.getResourceAsStream("/ama/config/"+path)){assertNotNull(in);return new String(in.readAllBytes(),StandardCharsets.UTF_8).strip();}}
@@ -28,7 +101,7 @@ class RawHashChainTest {
  }
  @Test void confirmationRawChainReloadRetainsOriginalProfileAndActualContent()throws Exception{
   var facts=beforeGeneration();var raw=archives();var profile=raw.stream().filter(a->a.claimedArtifactType()==ArtifactType.CONFIRMATION_HASH).findFirst().orElseThrow();
-  var artifact=new Artifact(profile.claimedVersion(),ArchiveBytes.capture(profile.bytes(),100000,100000,()->false).sha256(()->false),profile.bytes());
+  var owned=ArchiveBytes.capture(profile.bytes(),B.maxArtifactBytes(),B.maxTotalBytes(),()->false);var artifact=new Artifact(profile.claimedVersion(),owned.sha256(()->false),owned);
   String actual=new TranscriptConfirmationHash(service(),raw,B).hash(new ConfirmationFacts(C,facts),artifact,GRAPH,()->false);
   assertEquals(resource("full-confirmation.sha256"),actual);
  }
@@ -50,7 +123,7 @@ class RawHashChainTest {
   return new StoredProvenanceFacts(rows,p.files(),p.configurations(),List.of(new EvidenceAnchor(EV,anchor)),p.taskSpecs(),100000L);
  }
  static Artifact profile(List<RawArchive> raw,ArtifactType kind){
-  var a=raw.stream().filter(r->r.claimedArtifactType()==kind).findFirst().orElseThrow();var copy=ArchiveBytes.capture(a.bytes(),100000,100000,()->false);return new Artifact(a.claimedVersion(),copy.sha256(()->false),a.bytes());
+  var a=raw.stream().filter(r->r.claimedArtifactType()==kind).findFirst().orElseThrow();var copy=ArchiveBytes.capture(a.bytes(),B.maxArtifactBytes(),B.maxTotalBytes(),()->false);return new Artifact(a.claimedVersion(),copy.sha256(()->false),copy);
  }
  @Test void completeStoredGenerationAndFinalReloadHashesUseRawOriginalArchives()throws Exception{
   var stored=storedGeneration();var generation=new GenerationFingerprint(service(),full(),B);
@@ -174,7 +247,7 @@ class RawHashChainTest {
   var p=finalStored();var rows=new ArrayList<>(p.rows());Collections.reverse(rows);
   byte[] body="synthetic changed current prompt".getBytes(StandardCharsets.UTF_8);String sha=ArchiveBytes.capture(body,100000,100000,()->false).sha256(()->false);
   var configs=new ArrayList<>(p.configurations());var old=configs.getFirst();
-  configs.add(new GenerationConfiguration(uid(57),new Artifact("test.changed-current.2",sha,body),old.model(),old.profiles(),T,List.of()));
+  configs.add(new GenerationConfiguration(uid(57),new Artifact("test.changed-current.2",sha,ArchiveBytes.capture(body,B.maxArtifactBytes(),B.maxTotalBytes(),()->false)),old.model(),old.profiles(),T,List.of()));
   var f=new StoredProvenanceFacts(rows,p.files(),configs,p.evidenceAnchors(),p.taskSpecs(),100000L);var raw=new ArrayList<>(full());Collections.reverse(raw);
   assertEquals(resource("full-final.sha256"),new ResultHashProfiles(service(),raw,B).finalSources(new FinalFacts(FINAL,f),profile(raw,ArtifactType.FINAL_SOURCES),GRAPH,()->false));
  }

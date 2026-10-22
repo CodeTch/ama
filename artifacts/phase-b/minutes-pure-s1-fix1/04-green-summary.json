@@ -1,0 +1,159 @@
+{
+  "tests": 20,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "suites": 3,
+  "results": [
+    {
+      "suite": "ama.contract.MinutesFactBudgetTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f8f2586d0474c1b9829d9a76740ea69e1f59cb9bc06b48c9e7dd080555859386",
+      "cases": [
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "artifactCaptureRefusesSmallMaximumAndRemainingBeforeOwnedBytesExist",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "catalogSnapshotAlsoChecksItsBoundBeforeDefensiveCopy",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "factBagChecksCallerLimitBeforeAnyLargeDefensiveCopy",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.contract.MinutesFactBudgetTest",
+          "name": "artifactReusesBoundedIsolatedCaptureWithoutExposingMutableArray",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.minutes.contract.StoredSourceGraphTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "15be9e8a71babe1e62c7de0a48c34a4f09950786982eadabfe281912dc8a2ad2",
+      "cases": [
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "completeIndependentOccurrenceGraphPreservesBothLabelsAndEitherParserHash",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "cycleBudgetAndCancellationApplyAcrossAllOrigins",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "suppliedMembershipMustBeExactBijection",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "artifactFactBudgetCountsUniqueAcquisitionAndRefusesWholeSnapshotExcess",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "onePhysicalLocatorKeepsBothActualNoteInputsAndParserContexts",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "orphanStoredMembershipCannotBeIgnoredAsAnUnrelatedUsage",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "ordinaryCopiedLocalElementNeverAcceptsAttractiveHistoricalInput",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.minutes.contract.StoredSourceGraphTest",
+          "name": "ambiguousPinnedParserSelectionRejectsInsteadOfChoosingOrder",
+          "failure": false,
+          "error": false
+        }
+      ]
+    },
+    {
+      "suite": "ama.config.json.RawHashChainTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "9330044d9c05b186f0782637df927fac933c7a4f2ea776a1f8dfdcc91426c051",
+      "cases": [
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1ValidNestedIntrinsicChainSucceedsAcrossAllBusinessEntryPoints",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1SharedLeafDepthUsesEveryPathInEitherOriginOrdering",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1ReviewRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1FinalRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1OriginNodeBudgetIsUniqueAndCumulativeAcrossSharedBranches",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1OuterDraftRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1DirectStoredVerifyRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1ReusedNonleafDiamondDepthUsesCachedSubtreeHeight",
+          "failure": false,
+          "error": false
+        }
+      ]
+    }
+  ]
+}

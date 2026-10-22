@@ -1,0 +1,67 @@
+{
+  "tests": 8,
+  "failures": 5,
+  "errors": 0,
+  "skipped": 0,
+  "suites": 1,
+  "results": [
+    {
+      "suite": "ama.config.json.RawHashChainTest",
+      "tests": 8,
+      "failures": 5,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d72bf3e27a0aa5b2c96e4022379cc5fe1d502b0a55cd3c9f63568158cdc20c33",
+      "cases": [
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1ValidNestedIntrinsicChainSucceedsAcrossAllBusinessEntryPoints",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1SharedLeafDepthUsesEveryPathInEitherOriginOrdering",
+          "failure": true,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1ReviewRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": true,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1FinalRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": true,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1OriginNodeBudgetIsUniqueAndCumulativeAcrossSharedBranches",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1OuterDraftRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": true,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1DirectStoredVerifyRejectsCorruptedNestedIntrinsicConfirmation",
+          "failure": false,
+          "error": false
+        },
+        {
+          "class": "ama.config.json.RawHashChainTest",
+          "name": "fix1ReusedNonleafDiamondDepthUsesCachedSubtreeHeight",
+          "failure": true,
+          "error": false
+        }
+      ]
+    }
+  ]
+}

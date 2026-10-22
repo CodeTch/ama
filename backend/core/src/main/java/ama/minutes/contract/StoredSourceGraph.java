@@ -8,7 +8,7 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 /** Derives represented stored edges. Supplied storage authenticity and raw profile interpretation remain separate. */
 public final class StoredSourceGraph {
  public SourceGraph derive(StoredProvenanceFacts facts,GraphSelection selection,GraphBudget budget,BooleanSupplier cancelled){
-  var session=new Session(new StoredFactsIndex(facts,budget,cancelled));var graph=session.graph(selection,null);
+  var session=new StoredFactsIndex(facts,budget,cancelled).sources;var graph=session.graph(selection,null);
   session.walk(graph.sourceUsages(),selection.meetingId());check(cancelled);return graph;
  }
  public void verify(SourceGraph supplied,StoredProvenanceFacts facts,GraphSelection selection,GraphBudget budget,BooleanSupplier cancelled){
@@ -19,6 +19,8 @@ public final class StoredSourceGraph {
  }
  static final class Session {
   final StoredFactsIndex index;final BooleanSupplier cancelled;final Map<String,Catalog> catalogs=new HashMap<>();
+  final Map<String,SourceGraph> inputGraphs=new LinkedHashMap<>();
+  private final Map<String,Integer> heights=new HashMap<>();private final Set<String> visited=new HashSet<>();
   Session(StoredFactsIndex index){this.index=index;this.cancelled=index.cancelled;}
   SourceGraph graph(GraphSelection s,Set<String> evidenceFilter){
    check(cancelled);FullRow body=s.minutesRevisionId()==null?null:index.one(Table.MINUTES_REVISION,s.minutesRevisionId(),PROVENANCE_UNAVAILABLE);
@@ -143,23 +145,35 @@ public final class StoredSourceGraph {
    require(file!=null,PROVENANCE_UNAVAILABLE);
    return new CatalogFact(new TranscriptLocator(revisionId,segmentId),Role.MEETING,new TranscriptVersion(confirmation.string("id"),revisionId,batch.string("id"),file.string("file_id"),file.string("sha256")),confirmation.string("content_hash"),selected.number("ordinal"),new TranscriptBounds(revisionId,segmentId,file.string("file_id"),selected.nullableNumber("source_paragraph")));
   }
-  private record Walk(String id,Iterator<String> dependencies){}
+  private static final class Walk {
+   final String id;final Iterator<String> dependencies;int height=1;
+   Walk(String id,Collection<String> dependencies){this.id=id;this.dependencies=dependencies.iterator();}
+  }
   void walk(List<SourceUsage> usages,String meeting){
    var initial=new LinkedHashSet<String>();for(var usage:usages){check(cancelled);if(usage.origin() instanceof GenerationOrigin g)initial.add(g.inputId());if(usage.origin() instanceof AppliedOrigin g)initial.add(g.inputId());}walkInputs(initial,meeting);
   }
   void walkInputs(Collection<String> initial,String meeting){
-   var done=new HashSet<String>();var active=new HashSet<String>();var stack=new ArrayDeque<Walk>();long visited=0;
+   var active=new HashSet<String>();var stack=new ArrayDeque<Walk>();
    for(String root:initial){
-    check(cancelled);if(done.contains(root))continue;stack.push(new Walk(null,List.of(root).iterator()));
+    check(cancelled);stack.push(new Walk(null,List.of(root)));
     while(!stack.isEmpty()){
-     check(cancelled);var frame=stack.peek();if(!frame.dependencies.hasNext()){stack.pop();if(frame.id!=null){active.remove(frame.id);done.add(frame.id);}continue;}
-     String id=frame.dependencies.next();require(!active.contains(id),INPUT_INVALID);if(done.contains(id))continue;
-     require(stack.size()<=index.budget.maxOriginDepth()&&visited<index.budget.maxOriginNodes(),BUDGET_EXCEEDED);visited++;active.add(id);
+     check(cancelled);var frame=stack.peek();if(!frame.dependencies.hasNext()){
+      stack.pop();if(frame.id!=null){active.remove(frame.id);heights.put(frame.id,frame.height);extend(stack.peek(),frame.height);}continue;
+     }
+     String id=frame.dependencies.next();require(!active.contains(id),INPUT_INVALID);
+     int depth=stack.size();require(depth<=index.budget.maxOriginDepth(),BUDGET_EXCEEDED);
+     var height=heights.get(id);
+     if(height!=null){require(height<=index.budget.maxOriginDepth()-depth+1,BUDGET_EXCEEDED);extend(frame,height);continue;}
+     require(visited.size()<index.budget.maxOriginNodes(),BUDGET_EXCEEDED);visited.add(id);active.add(id);
      var input=input(id,meeting);catalog(input);var dependencies=new LinkedHashSet<String>();String set=input.nullableString("element_set_id");
-     if(set!=null){var graph=graph(new GraphSelection(meeting,null,set,null,null),null);for(var usage:graph.sourceUsages()){check(cancelled);if(usage.origin() instanceof GenerationOrigin origin)dependencies.add(origin.inputId());}}
-     stack.push(new Walk(id,dependencies.iterator()));
+     var graph=set==null?new SourceGraph(List.of(),List.of()):graph(new GraphSelection(meeting,null,set,null,null),null);inputGraphs.put(id,graph);
+     for(var usage:graph.sourceUsages()){check(cancelled);if(usage.origin() instanceof GenerationOrigin origin)dependencies.add(origin.inputId());if(usage.origin() instanceof AppliedOrigin origin)dependencies.add(origin.inputId());}
+     stack.push(new Walk(id,dependencies));
     }
    }
+  }
+  private void extend(Walk parent,int childHeight){
+   if(parent==null||parent.id==null)return;long height=(long)childHeight+1;require(height<=index.budget.maxOriginDepth(),BUDGET_EXCEEDED);parent.height=Math.max(parent.height,(int)height);
   }
  }
 }

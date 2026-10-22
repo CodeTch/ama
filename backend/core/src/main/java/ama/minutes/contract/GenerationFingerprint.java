@@ -34,7 +34,7 @@ public final class GenerationFingerprint {
   // Archived material parser-to-locator capability is a separate required D01 contract. Never enumerate existing locator rows as a complete model catalog.
   require(draft.materialSnapshotId()==null,CAPABILITY_UNAVAILABLE);
   var profiles=config.profiles();String meeting=draft.meetingId();
-  var session=new StoredSourceGraph.Session(index);
+  var session=index.sources;
   var confirmation=index.one(Table.TRANSCRIPT_CONFIRMATION,draft.transcriptConfirmationId(),PROVENANCE_UNAVAILABLE);index.meeting(confirmation,meeting);
   var confirmationData=TranscriptConfirmationHash.data(confirmation.string("id"),index);
   var confirmationProfile=profiles.definition(ProfileKind.CONFIRMATION_HASH);DomainHash.profile(confirmationProfile,TranscriptConfirmationHash.PROFILE,index.budget.canonical(),index.cancelled);
@@ -85,17 +85,17 @@ public final class GenerationFingerprint {
    field("scope",object(field("kind",string("FULL")),field("target",nil()))),
    field("base",object(field("meetingRevision",number(fence.meetingRevision())),field("subjectBusinessVersion",number(fence.subjectBusinessVersion())),field("cancelEpoch",number(fence.cancelEpoch())))));
  }
- Projection recomputeStored(GenerationFacts facts,Fence fence,Profiles profiles,GraphBudget budget,BooleanSupplier cancelled){
-  var operation=resolver.open(facts.stored(),cancelled);var result=new GenerationFingerprint(operation.resolver()).computeBound(facts,fence,profiles,budget,cancelled);var verified=operation.finish();check(cancelled);return verified==null?result:result.complete(verified);
- }
- private Projection computeBound(GenerationFacts facts,Fence fence,Profiles profiles,GraphBudget budget,BooleanSupplier cancelled){
-  var index=new StoredFactsIndex(facts.stored(),budget,cancelled);var input=index.one(Table.GENERATION_INPUT,facts.inputId(),PROVENANCE_UNAVAILABLE);
-  var bound=resolver.generation(input,facts.stored(),budget,cancelled);require(bound.equals(index.config(input))&&bound.profiles().equals(profiles),PROFILE_UNAVAILABLE);
+ Projection recomputeStored(FullRow input,Fence fence,Profiles profiles,StoredFactsIndex index){
+  var budget=index.budget;var cancelled=index.cancelled;
+  var bound=resolver.generation(input,index.facts,budget,cancelled);require(bound.equals(index.config(input))&&bound.profiles().equals(profiles),PROFILE_UNAVAILABLE);
   var confirmation=index.one(Table.TRANSCRIPT_CONFIRMATION,input.string("transcript_confirmation_id"),PROVENANCE_UNAVAILABLE);
-  String confirmationHash=new TranscriptConfirmationHash(resolver).hash(new ConfirmationFacts(confirmation.string("id"),facts.stored()),profiles.definition(ProfileKind.CONFIRMATION_HASH),budget,cancelled);
+  String confirmationHash=new TranscriptConfirmationHash(resolver).hashBound(confirmation.string("id"),profiles.definition(ProfileKind.CONFIRMATION_HASH),index);
   require(confirmationHash.equals(confirmation.string("content_hash")),FINGERPRINT_MISMATCH);
-  index.hashBudget=TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled));var manifest=data(input,fence,index);String fingerprint=DomainHash.hash(profiles.definition(ProfileKind.GENERATION_HASH),PROFILE,"GENERATION_INPUT",manifest,TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled)),cancelled);
-  check(cancelled);return new Projection(manifest,fingerprint,bound.profiles(),resolver.outputBudget(bound,cancelled),resolver.generationBudget(input,cancelled),null);
+  var previous=index.hashBudget;
+  try {
+   index.hashBudget=TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled));var manifest=data(input,fence,index);String fingerprint=DomainHash.hash(profiles.definition(ProfileKind.GENERATION_HASH),PROFILE,"GENERATION_INPUT",manifest,index.hashBudget,cancelled);
+   check(cancelled);return new Projection(manifest,fingerprint,bound.profiles(),resolver.outputBudget(bound,cancelled),resolver.generationBudget(input,cancelled),null);
+  } finally {index.hashBudget=previous;}
  }
  static void task(FullRow input,TaskSpec task){
   require(task!=null&&task.subject().kind().equals("MEETING")&&task.subject().id().equals(input.string("meeting_id"))&&task.input().kind().equals("GENERATION_INPUT")&&task.input().id().equals(input.string("id")),INPUT_INVALID);
@@ -115,9 +115,9 @@ public final class GenerationFingerprint {
  private Projection verifyBound(GenerationFacts facts,TaskSpec task,Profiles profiles,GraphBudget budget,BooleanSupplier cancelled){
   var index=new StoredFactsIndex(facts.stored(),budget,cancelled);var input=index.one(Table.GENERATION_INPUT,facts.inputId(),PROVENANCE_UNAVAILABLE);task(input,task);
   var historical=historicalFence(input,facts.stored(),cancelled);require(historical.subjectBusinessVersion()==task.businessVersion()&&historical.cancelEpoch()==task.cancelEpoch(),INPUT_INVALID);
-  var projection=recomputeStored(facts,historical,profiles,budget,cancelled);
+  var projection=recomputeStored(input,historical,profiles,index);
   require(projection.fingerprint().equals(task.inputFingerprint())&&projection.fingerprint().equals(input.string("input_fingerprint")),FINGERPRINT_MISMATCH);
-  if(input.nullableString("element_set_id")!=null){var session=new StoredSourceGraph.Session(index);var graph=session.graph(new GraphSelection(input.string("meeting_id"),null,input.string("element_set_id"),null,null),null);OriginChainVerifier.verify(index,session,graph,resolver);}
+  if(input.nullableString("element_set_id")!=null){var session=index.sources;var graph=session.graph(new GraphSelection(input.string("meeting_id"),null,input.string("element_set_id"),null,null),null);OriginChainVerifier.verify(index,session,graph,resolver);}
   return projection;
  }
 
@@ -126,11 +126,11 @@ public final class GenerationFingerprint {
   var active=operation.resolver();var config=active.generation(draft,prerequisites,cancelled);var index=new StoredFactsIndex(prerequisites,budget,cancelled);
   // A draft needs real prerequisite confirmation/processing facts, never its own row/task/output or a dummy hash.
   var confirmation=index.one(Table.TRANSCRIPT_CONFIRMATION,draft.transcriptConfirmationId(),PROVENANCE_UNAVAILABLE);
-  String confirmed=new TranscriptConfirmationHash(active).hash(new ConfirmationFacts(draft.transcriptConfirmationId(),prerequisites),config.profiles().definition(ProfileKind.CONFIRMATION_HASH),budget,cancelled);
+  String confirmed=new TranscriptConfirmationHash(active).hashBound(draft.transcriptConfirmationId(),config.profiles().definition(ProfileKind.CONFIRMATION_HASH),index);
   require(confirmed.equals(confirmation.string("content_hash")),FINGERPRINT_MISMATCH);
   index.hashBudget=TranscriptConfirmationHash.minimum(budget.canonical(),active.generationBudget(draft,cancelled));var manifest=project(draft,fence,index,config);
   if(draft.elementSetId()!=null){
-   var session=new StoredSourceGraph.Session(index);var graph=session.graph(new GraphSelection(draft.meetingId(),null,draft.elementSetId(),null,null),null);
+   var session=index.sources;var graph=session.graph(new GraphSelection(draft.meetingId(),null,draft.elementSetId(),null,null),null);
    OriginChainVerifier.verify(index,session,graph,active);
   }
   String fingerprint=DomainHash.hash(config.profiles().definition(ProfileKind.GENERATION_HASH),PROFILE,"GENERATION_INPUT",manifest,TranscriptConfirmationHash.minimum(budget.canonical(),active.generationBudget(draft,cancelled)),cancelled);

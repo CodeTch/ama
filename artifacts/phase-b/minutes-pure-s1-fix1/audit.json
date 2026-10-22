@@ -1,0 +1,189 @@
+{
+  "base": "7e052a88fcd03d60523d013839701dd35a7f2b48",
+  "baselinePathsInGit": 273,
+  "baselinePathsUnchangedNow": 258,
+  "baselinePathsIntentionallyModified": [
+    ".gitattributes",
+    "backend/adapters/src/test/java/ama/config/json/RawHashChainTest.java",
+    "backend/contracts/src/main/java/ama/contract/ConfigArchiveContracts.java",
+    "backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+    "backend/contracts/src/test/java/ama/contract/MinutesFactBudgetTest.java",
+    "backend/core/src/main/java/ama/config/ConfigBindings.java",
+    "backend/core/src/main/java/ama/minutes/contract/DomainHash.java",
+    "backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java",
+    "backend/core/src/main/java/ama/minutes/contract/OriginChainVerifier.java",
+    "backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+    "backend/core/src/main/java/ama/minutes/contract/StoredFactsIndex.java",
+    "backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+    "backend/core/src/main/java/ama/minutes/contract/TranscriptConfirmationHash.java",
+    "backend/core/src/test/java/ama/minutes/contract/GenerationFingerprintTest.java",
+    "backend/core/src/test/java/ama/minutes/contract/StoredSourceGraphTest.java"
+  ],
+  "oldPayloadsPreservedInGit": 271,
+  "oldPayloadsUnchangedNow": 256,
+  "custodyOriginalsUnchanged": 6,
+  "independentVectors": [
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/confirmation-marks.json",
+      "encodedBytes": 718,
+      "sha256": "f0aa7191c4ae95d12c716f43cce3ee468366cc4dfea21cf2a4f8a2d1f0c03026"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/confirmation.json",
+      "encodedBytes": 646,
+      "sha256": "cb9ff149976f0075e7215487dedbc15267d3fa9d79a0f99956ff087b3924c182"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/final.json",
+      "encodedBytes": 3619,
+      "sha256": "14624e2ad855366b70e3c788e921bcbb930db2b1906a586f2de5790675f2ac56"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/full-confirmation.json",
+      "encodedBytes": 638,
+      "sha256": "1dbc5181a4c390a211dee5fed9f2dd55240f587bd376f017a098f49ada83eb97"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/full-final-matrix.json",
+      "encodedBytes": 10848,
+      "sha256": "b8341f32f47d6e3de2481b21efb39ba1af1005f22acc4e21c4ed83f837840574"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/full-final-review.json",
+      "encodedBytes": 4743,
+      "sha256": "47afc43ac209218a1feae738af7e117a6656f991ec687d3ea6b2f83146d0baa8"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/full-final.json",
+      "encodedBytes": 3619,
+      "sha256": "2086e2663a1f833366256ff7a789f766c1eabbaa00cbe6fa04791b5fa4384a15"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/full-generation-excluded.json",
+      "encodedBytes": 6622,
+      "sha256": "5d3a7b2d4abb15a6571ecb2b121531b8a13132f2d48f5c90ed9a597a90e73c12"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/full-generation-pinned.json",
+      "encodedBytes": 11553,
+      "sha256": "e726f87e944c4cc3777ced581ae1305802ff4811255c847b6db820c0a2f2ca5c"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/full-generation.json",
+      "encodedBytes": 5812,
+      "sha256": "3414c1ffc1bfef43c7efea974b36a60aa6b897bd8fa38b91f40c2bb14e7cb133"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/full-manual-confirmation.json",
+      "encodedBytes": 716,
+      "sha256": "bf2b8ee8c1ed374dbd424a83a8cb1265c27a2ac0b236a0ca779755934a2496f7"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/full-review-sources.json",
+      "encodedBytes": 2282,
+      "sha256": "46f787190996097e0724b4288892243c5c7e24be9654a610db02bf010983db0b"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/full-review-target.json",
+      "encodedBytes": 799,
+      "sha256": "7246599bbdf6e7638e9b447b7edbc6e379ccfcfb13e87043423760df4ceb69a1"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/generation.json",
+      "encodedBytes": 5688,
+      "sha256": "1d0c73126efed9083285af0a49527dc3916f7607f72c2621b64f24a4398caa12"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/occurrence-graph.json",
+      "encodedBytes": 4449,
+      "sha256": "8cc36af0beda6c4552131b01c7abe2235fb7129ce1d1b3d5b0fb0dafbba78383"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/processing.json",
+      "encodedBytes": 2596,
+      "sha256": "1a4775d22a9b448a3dc77468e9a153a633f5483b65d5c806ebfe2fdb719b0c13"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/review-sources.json",
+      "encodedBytes": 2282,
+      "sha256": "c4f7416b84ae9b252fbdf6bb0f846320b2d029c6bff1a26bf185a49b5192be10"
+    },
+    {
+      "path": "backend/core/src/test/resources/ama/minutes/vectors/review-target.json",
+      "encodedBytes": 804,
+      "sha256": "23cfdb0ce79cd4a0ddf5cfce39813430ad6f09d3171612dcbc8bba3fa46e360a"
+    }
+  ],
+  "oldTests": 97,
+  "finalTests": 112,
+  "newTests": [
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ContextArtifactsReuseTheSameIsolatedBoundedOriginal"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1DeepRawBackedOriginsMeetExactDepthAndRejectOneMore"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1DirectStoredVerifyRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1FinalRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1OriginNodeBudgetIsUniqueAndCumulativeAcrossSharedBranches"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1OuterDraftRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1RawBackedCycleAndCancellationCannotReturnBusinessDigest"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ReusedNonleafDiamondDepthUsesCachedSubtreeHeight"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ReviewRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1SharedHistoricalArchiveAcquisitionUsesOneCumulativeByteBudget"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1SharedLeafDepthUsesEveryPathInEitherOriginOrdering"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ValidNestedIntrinsicChainSucceedsAcrossAllBusinessEntryPoints"
+    ],
+    [
+      "ama.contract.MinutesFactBudgetTest",
+      "artifactCaptureRefusesSmallMaximumAndRemainingBeforeOwnedBytesExist"
+    ],
+    [
+      "ama.contract.MinutesFactBudgetTest",
+      "artifactReusesBoundedIsolatedCaptureWithoutExposingMutableArray"
+    ],
+    [
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "artifactFactBudgetCountsUniqueAcquisitionAndRefusesWholeSnapshotExcess"
+    ]
+  ],
+  "canonicalSubset": 25,
+  "redAssertions": 5,
+  "setupFailureRounds": [
+    "02",
+    "03"
+  ],
+  "sourceHashes": 16,
+  "xmlHashes": 22
+}

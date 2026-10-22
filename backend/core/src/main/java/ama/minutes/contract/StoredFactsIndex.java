@@ -9,24 +9,25 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 import static ama.canonical.CanonicalValue.*;
 
 final class StoredFactsIndex {
- final StoredProvenanceFacts facts;final GraphBudget budget;final BooleanSupplier cancelled;CanonicalBudget hashBudget;
+ final StoredProvenanceFacts facts;final GraphBudget budget;final BooleanSupplier cancelled;final StoredSourceGraph.Session sources;CanonicalBudget hashBudget;
  private final Map<Table,List<FullRow>> tables=new EnumMap<>(Table.class);
  private final Map<String,ContentFile> files=new HashMap<>();private final Map<String,GenerationConfiguration> configs=new HashMap<>();private final Map<String,Anchor> anchors=new HashMap<>();
  StoredFactsIndex(StoredProvenanceFacts facts,GraphBudget budget,BooleanSupplier cancelled){
-  require(facts!=null&&budget!=null,INVALID_ARGUMENT);check(cancelled);this.facts=facts;this.budget=budget;this.cancelled=cancelled;this.hashBudget=budget.canonical();
+  require(facts!=null&&budget!=null,INVALID_ARGUMENT);check(cancelled);this.facts=facts;this.budget=budget;this.cancelled=cancelled;this.sources=new StoredSourceGraph.Session(this);this.hashBudget=budget.canonical();
   require((long)facts.rows().size()+facts.files().size()+facts.configurations().size()+facts.evidenceAnchors().size()+facts.taskSpecs().size()+facts.taskFacts().size()+facts.reviewScopes().size()<=budget.maxAggregateFacts(),BUDGET_EXCEEDED);
   var all=new ArrayList<CanonicalValue>();
   for(var row:facts.rows()){check(cancelled);tables.computeIfAbsent(row.table(),t->new ArrayList<>()).add(row);all.add(RowValues.row(row));}
   new CanonicalValueCodec().preflight(new Sequence(all),budget.canonical(),cancelled);
   for(var table:tables.values()){table.sort((a,b)->RowValues.compare(a,b,cancelled));for(int i=1;i<table.size();i++)require(RowValues.compare(table.get(i-1),table.get(i),cancelled)!=0,SOURCE_MEMBERSHIP_MISMATCH);}
   for(var file:facts.files()){check(cancelled);require(files.putIfAbsent(file.id(),file)==null,SOURCE_MEMBERSHIP_MISMATCH);}
-  long archiveBytes=0;
+  long archiveBytes=0;var acquired=new HashSet<Artifact>();
   for(var config:facts.configurations()){
    check(cancelled);require(configs.putIfAbsent(config.inputId(),config)==null,SOURCE_CONTEXT_AMBIGUOUS);
    var artifacts=new ArrayList<>(config.profiles().definitions().values());artifacts.add(config.prompt());artifacts.add(config.model());
-   for(var artifact:artifacts){check(cancelled);byte[] bytes=artifact.bytes();require(bytes.length<=budget.canonical().maxEncodedBytes()-archiveBytes,BUDGET_EXCEEDED);archiveBytes+=bytes.length;
-    var digest=CanonicalValueCodec.digest();for(int i=0;i<bytes.length;i+=Math.min(1024,bytes.length-i)){check(cancelled);digest.update(bytes,i,Math.min(1024,bytes.length-i));}
-    require(HexFormat.of().formatHex(digest.digest()).equals(artifact.sha256()),PROFILE_UNAVAILABLE);
+   for(var artifact:artifacts){check(cancelled);var bytes=artifact.bytes();require(bytes.size()<=budget.canonical().maxEncodedBytes(),BUDGET_EXCEEDED);
+    if(!acquired.add(artifact))continue;
+    require(bytes.size()<=budget.canonical().maxEncodedBytes()-archiveBytes,BUDGET_EXCEEDED);archiveBytes+=bytes.size();
+    require(bytes.sha256(cancelled).equals(artifact.sha256()),PROFILE_UNAVAILABLE);
    }
   }
   for(var anchor:facts.evidenceAnchors()){check(cancelled);require(anchors.putIfAbsent(anchor.evidenceId(),anchor.anchor())==null,SOURCE_MEMBERSHIP_MISMATCH);}

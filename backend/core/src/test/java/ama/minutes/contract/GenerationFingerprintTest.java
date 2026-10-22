@@ -22,7 +22,8 @@ class GenerationFingerprintTest {
   fails(INPUT_INVALID,()->helper.data(new GenerationFacts(id(8),facts()),new Fence(2,2,3),BUDGET,()->false));
  }
  @Test void computeCannotPretendUninterpretedArchiveFactsAreValidated(){
-  fails(PROFILE_UNAVAILABLE,()->new GenerationFingerprint().recomputeStored(new GenerationFacts(id(8),facts()),new Fence(1,2,3),profiles(),BUDGET,()->false));
+  var index=new StoredFactsIndex(facts(),BUDGET,()->false);
+  fails(PROFILE_UNAVAILABLE,()->new GenerationFingerprint().recomputeStored(index.one(Table.GENERATION_INPUT,id(8),PROVENANCE_UNAVAILABLE),new Fence(1,2,3),profiles(),index));
  }
  @Test void taskVerificationRejectsCrossInputAndMissingOrConflictingHistoricalFences(){
   var helper=new GenerationFingerprint();
