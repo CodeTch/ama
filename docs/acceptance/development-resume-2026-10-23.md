@@ -35,9 +35,21 @@ B04/S1 门禁通过后，子代理 `b06_queue_seams` 在新隔离树 `/home/tanr
 
 只创建并保留一个独有、有限资源、loopback、initial-zero MySQL 夹具，实际按原历史应用 12 个 SQL through V013。精选 B03 helper 确实调用最新 migrator 并执行零迁移。旧库/容器/S3/PKI 均未操作，无 reset/repair/outOfOrder 或私密 env/Config.Env 导出。原 SQL、计划、1740 个旧 artifact 文件与最初 RED 证据保持不变。
 
-下一交付按[原静态切分](../../artifacts/phase-b/resume-2026-10-23/task-B-06-preflight.md)和[已 ACK 技术提案](b/task-B-06-seams-proposal.md)落实：不可变配置档案索引/恢复、准确 batch 指纹及独立 literal 向量、有界完整事实读取与跨 JVM 恢复。其后才是首次真实 INPUT_BATCH_FILE 引用、导入/Worker 原子输出、保存/编辑/marks/确认和完整 API。任何结构缺口先做中央增量设计登记，不猜版本，不把提案向量当正式实现。
+## B06.2 已采用与 B06.3 接续
 
-[B06.2 准备书](b/task-B-06-archives-prepared-brief.md)由原实现子代理只读编写，协调者全文核对并修正规范入口名称后公开，状态 PREPARED / 未激活。没有执行测试、访问夹具或实现代码；建议签名、SecureDirectoryStream/目录 fsync/原子发布及有界 JDBC 行为均待实际验证。input_batch 缺 profile/version、原上传绑定及完整 B07 facts 等边界明确留待后续设计，不能用该计划授予业务引用或生产运行资格。下一次须从当前已采用基线另建独有写树，明确新夹具后激活。
+用户明确激活[B06.2 准备书](b/task-B-06-archives-prepared-brief.md)，从 BASE `ad9960595ab5de6eef7760e2c9094d23666074cb` 使用独有工作树和子代理执行四任务。原准备书与历史 PREPARED 状态保留，当前以[激活快照](b/task-B-06-archives-activation.md)、[完整采用记录](b/task-B-06-archives-adoption.md)及[消费者契约](b/task-B-06-archives-integration.md)为准，不重做本轮已完成内容。
+
+batch v1 独立 734-byte literal、不可变 index/source/offline publisher、processing-only 有界真实 JDBC facts 及跨 JVM 恢复均完成。Task2 首次 F1–F4、Task3 UTF16 F1 已版本化修复并限定独立双 PASS，原始失败/初版封存保留。四项完整作者终点依次为 `0b65a68f`、`38a321a5`、`76a50c72`、`41a41e1d`，精确采用 104/459/436/512 路径及模式；运行时最终采用终点 `821daaa05a4c4faffb924ae4c00b72cabdd62347`，完整 SHA/凭据见采用记录。
+
+重启 A 完成真实 enqueue/full TaskSpec/acceptedTask、一次外层 flush、实际提交后才 ACK 并退出；全新 B 用追加 index2 按旧 manifest refs 恢复 root.1/原摘要，另独立 draft 用 root.2。三新副本分别缺失/变异历史档案或错误 index SHA，均 unavailable、无默认回退/成功 ACK/已核对 DB 变更，原正例保留。受控 TEST policy 与合格生产上传/producer/Worker 不等同，未授予运行资格。
+
+root 在 `821daaa05a4c4faffb924ae4c00b72cabdd62347` 新鲜执行 `python3 tools/checks/run.py unit`：29 套 213 项，0 failures/errors/skips，8 模块 SUCCESS；[raw/exit/fresh XML](../../artifacts/phase-b/b06-archives/final-units/summary.json)保留原既有 deprecated API 提示。事实读端最终 12 IT 方法，重启 1 JUnit 方法/5 子 JVM 全通过。179 已含既有 S1，新增 batch6、archive28 构成 213；自动 units 与专项回归不累加。setup/编译错误不叫业务 RED，错误/零执行/skip 不叫通过。
+
+[整项独立审查原件](../../artifacts/phase-b/b06-archives/coordination/final/whole-b062-independent-review.md)覆盖 `ad9960595ab5de6eef7760e2c9094d23666074cb..adb2461bb285283663db66434d3ae64c4b4cd980` 全部 1956 路径，SPEC/quality 双 PASS，P0–P3、deferred/parked 全零；SHA256 `707538771e1b71bf9da90d79f42110edcca16904d715741d9f5371e54004f56d`。审查后仅追加报告、采用、最终核对和本接续文字，无源码/既有封存载荷变化，不扩大原审查范围。最终再验证 2840 个受保护 artifact/计划/SQL、两份用户计划四个当前/检查点路径、root attributes、main 与旧 stash，[收尾封存](../../artifacts/phase-b/b06-archives/coordination/final/SHA256SUMS)公开保留。
+
+真实 IT 只用新夹具 `ama-test-b01-a5e7d68612a4`，Task3 initial-zero 后按原 12 SQL through V013，完成后 sole custody 串行移交 Task4。history/SQL、62 份移交 manifest SHA 不变，RED/GREEN 新行/实际 releases 保留。旧库/容器/S3/PKI 未操作，无 reset/repair/outOfOrder、秘密值公开、生产或 push。执行取舍及成本见激活/采用记录：分项复审增加上下文/集成步骤，WSL Git 手工生命周期，publisher 依赖受保护本地管理根，平台不成立需适配，不提供恶意特权替换/断电/HA 资格。
+
+下一任务从本协调分支最终 clean HEAD 另行指定精确 BASE，先准备并复审 B06.3：首次真实 INPUT_BATCH_FILE 的原 upload UUID/purpose、完成 session、AVAILABLE/route/epoch 和 current/history 资格；未提交批次与真实 held capabilities 的组合需窄接口，standalone detached facts 不签发写入授权。本轮只证明已提交 metadata + detached draft + 新鲜授权/固定事实复核。input_batch profile/version 混合历史/升级须先中央 forward schema 设计，不猜迁移、不重解释旧 hash。导入/Worker 原子输出、保存/编辑/marks/确认、完整 B07 facts/API 及生产闭环仍待完成。
 
 只读集成复核另登记 [FUP-B05-CANDIDATE-01](b/task-B-05-reconciliation-candidate-followup.md)：外部对账原 LIMIT 64 单页查询在连续不可获取候选下存在后续候选不可见的公平性缺口。B06.1 没有改动该查询，当前只承诺窗口内 unknown-domain skip，不声称全局公平性。该既有问题无本轮运行时复现，留作独立精准反例/修正及后续外部 worker 激活资格；不改写过去 B05 报告或本轮封存。
 

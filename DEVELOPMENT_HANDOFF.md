@@ -8,13 +8,14 @@
 - D01 来源设计 R1（P2）已修正，独立限定复审双 PASS，设计采用；正式增量迁移尚未分配或应用，材料运行时未实现。
 - B04 公开协调采用记录及独立文档审查已补齐；B04-Q401 保持 UNKNOWN。
 - B06.1 共享身份准备协议已完成：先保留真实 MySQL RED，经技术 ACK 修正全部队列/外部事实路径，独立 SPEC/quality 双 PASS、零问题，已精确采用。见[采用记录](docs/acceptance/b/task-B-06-seams-adoption.md)及[消费者契约](docs/acceptance/b/task-B-06-seams-integration.md)。
-- 最终验证：18 项 B06 seam、26 个精选回归方法/28 次调用、26 套 179 项 Java units 全通过；179 包含既有 S1，不累加重复执行。
-- 完整 B06 仍未完成。下一交付为不可变配置档案索引/恢复、正式 batch 指纹和有界真实事实读取；随后再做首次真实文件引用、导入/Worker 原子输出、保存/编辑/marks/确认。原隔离树 `.worktrees/phase-b-transcript-runtime` 保留；下一任务须从已采用精确基线另行准备，不改写本轮封存。
-- [B06.2 准备书](docs/acceptance/b/task-B-06-archives-prepared-brief.md)已完成只读检查，状态 PREPARED / 未激活；建议接口和 FS/JDBC 行为尚待实现验证，须指定精确 BASE、独有写树及新夹具后再启动。
+- B06.1 历史验证：18 项 seam、26 个精选回归方法/28 次调用及 26 套 179 项 Java units 全通过；179 已包含既有 S1，不与本轮重复执行累加。
+- B06.2 已完成受控不可变档案、batch v1 和 processing-only 有界真实事实读取，真实 enqueue/commit ACK 后跨 JVM 恢复通过；整项独立 SPEC/quality 双 PASS、零问题。运行时采用终点 `821daaa05a4c4faffb924ae4c00b72cabdd62347`，详见[完整采用记录](docs/acceptance/b/task-B-06-archives-adoption.md)与[消费者契约](docs/acceptance/b/task-B-06-archives-integration.md)。
+- 本轮新鲜全量 Java units 为 29 套 213 项；事实读端 12 IT，重启 1 IT（5 个子 JVM，含三失败副本），全部 0 failures/errors/skips。旧 179 和各轮重跑不累加。原[B06.2 准备书](docs/acceptance/b/task-B-06-archives-prepared-brief.md)保留历史 PREPARED 原件，实际激活与执行取舍见[激活快照](docs/acceptance/b/task-B-06-archives-activation.md)。
+- 完整 B06 仍未完成。下一交付先准备并审查 B06.3：首次真实文件引用的原 upload UUID/purpose、完成 session、AVAILABLE/route/epoch、current/history 资格，以及未提交批次/held-capability 的窄事实接口。input_batch 缺 profile/version，不自动重解释旧 hash。导入/Worker 原子输出、保存/编辑/marks/确认和完整 API 仍待实施。所有原树和封存保留，下一任务从协调分支最终 clean HEAD 明确精确 BASE。
 - 既有外部对账 LIMIT 64 候选公平性缺口已登记 [FUP-B05-CANDIDATE-01](docs/acceptance/b/task-B-05-reconciliation-candidate-followup.md)，当前只读识别、未修复，不将 B06.1 的窗口内 skip 当全局公平性资格。
 
 原作者工作树、原始失败/成功证据、所有已应用 SQL、历史设计和两份用户计划均保留。B01-IMM-01 永久 PARTIAL、B04-Q401、企业接口、HA/fencing、真实容量等边界继续有效。
 
 历史顺序和保护规则见[2026-10-22暂停接续说明](docs/acceptance/development-handoff-2026-10-22.md)及[main归并记录](docs/acceptance/main-branch-integration-2026-10-22.md)。其中暂停状态、旧分支位置及当时待修问题属于历史快照；当前恢复及已关闭评审以本入口与本次恢复记录为准。
 
-后续从当前接续分支和 B06 已采用证据继续，不重做已完成任务，不以纯组件/设计/接缝修正采用替代完整运行时或阶段验收，不重置旧夹具、不改旧迁移、不向外部平台发送真实消息或发布。
+后续从当前接续分支和 B06 已采用证据继续，不重做已完成任务，不以纯组件、设计、接缝或受控档案恢复采用替代完整运行时或阶段验收，不重置旧夹具、不改旧迁移、不向外部平台发送真实消息或发布。

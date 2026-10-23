@@ -1,0 +1,56 @@
+{
+  "reviewedBase": "ad9960595ab5de6eef7760e2c9094d23666074cb",
+  "reviewedHead": "adb2461bb285283663db66434d3ae64c4b4cd980",
+  "runtimeSourceAdoptedAndTestedAt": "821daaa05a4c4faffb924ae4c00b72cabdd62347",
+  "reviewReportSha256": "707538771e1b71bf9da90d79f42110edcca16904d715741d9f5371e54004f56d",
+  "wholeReviewVerdicts": [
+    "SPEC PASS",
+    "quality PASS"
+  ],
+  "P0": 0,
+  "P1": 0,
+  "P2": 0,
+  "P3": 0,
+  "deferred": 0,
+  "parked": 0,
+  "currentSixSealHashEntries": {
+    "batch/SHA256SUMS": 103,
+    "index/fix1/FULL-CURRENT-SHA256SUMS": 458,
+    "facts/fix1/SHA256SUMS": 435,
+    "restart/SHA256SUMS": 511,
+    "coordination/components/SHA256SUMS": 49,
+    "coordination/runtime/SHA256SUMS": 394
+  },
+  "currentSixSealUnionPaths": 1956,
+  "protectedBaselineByteAndGitModeBlobPathsVerified": 2840,
+  "protectedUserPlans": [
+    {
+      "path": "artifacts/checkpoints/2026-10-22-development-pause/plans/2026-10-21-ama-delivery-plan.md",
+      "tree": "100644 blob 0d6b24464963794a908eca1dfd7e91f67dddd2f5",
+      "sha256": "a532dec6e94c53f0e81ae92f14b4f84b6a56cf9d68c37bd6e27d7903f911ffa9"
+    },
+    {
+      "path": "artifacts/checkpoints/2026-10-22-development-pause/plans/2026-10-21-ama-phase-b.md",
+      "tree": "100644 blob 8a57e19f1d55d8205c24bc9423e5529466332107",
+      "sha256": "bfa789f77b5ca90725b2c0f32977993c260ac79ab22c2fff76cd775cc104c862"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-21-ama-delivery-plan.md",
+      "tree": "100644 blob 0d6b24464963794a908eca1dfd7e91f67dddd2f5",
+      "sha256": "a532dec6e94c53f0e81ae92f14b4f84b6a56cf9d68c37bd6e27d7903f911ffa9"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-21-ama-phase-b.md",
+      "tree": "100644 blob 8a57e19f1d55d8205c24bc9423e5529466332107",
+      "sha256": "bfa789f77b5ca90725b2c0f32977993c260ac79ab22c2fff76cd775cc104c862"
+    }
+  ],
+  "protectedUserPlanLogicalDocuments": 2,
+  "protectedUserPlanCurrentAndCheckpointPaths": 4,
+  "actualNewCompileJavaPathsVerified": 19,
+  "mainUnchanged": "0676a21311f2b2193f73a5e096f4a5605ee9b41f",
+  "oldStashRetainedInReflog": "bc12e825246c60c12752129c4d512ef9c545758c",
+  "closingChangeScope": "entry/resume/adoption and new review/verification/seal only; no source or previously sealed payload changes",
+  "sourceReviewScopeExcludesTheseClosingDocumentationAdditions": true,
+  "rootPackagingSetupCorrection": "First closeout preflight assumed two protected plan paths; actual snapshot correctly contains four paths for two logical plans. It stopped before any write/commit. All four SHA/mode/blob values were unchanged. This was not test RED."
+}
