@@ -33,6 +33,7 @@
 |V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|9efc688e…冻结；ACK后rank10首次success/checksum-570494170；实际11suite全通过/五组元数据一致，独立PASS采用；仅纠正索引|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|10742ca2…冻结/ACK后首次success checksum2101765957；实际19/123/92/21/45、11IT通过，fresh独立PASS0findings采用；完整B07仍OPEN|
 |V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|1de37066…冻结/ACK后rank12首次success checksum-847352333；实际5/42/30/4/18、10IT通过，独立PASS0findings采用ee0bcd2/9bb6fe2；完整B08仍OPEN|
+|V013.1|B-06/B-07 本地受控运行时 / remaining Task2|2026-10-23 中央阶段补丁|仅 input_batch_fingerprint_profile 与 meeting_minutes_editor_guard 两侧表；依赖原 V013；保留 V014..027/下一整数 V028|设计与 SQL 候选独立 PASS；实际 pinned Flyway 排序/命名及本轮独有 fixture 十二条成功前缀已核对；仅登记号，最终字节冻结/单独 ACK/首次应用仍未执行|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
 |V015|C-03|原V010|correction/edit_operation；speaker基础已在V011，任何必要扩展另在本号|预留，未编写|
 |V016|C-04/C-06|原V011|recording/session/part/chunk、subtitle；依赖V009/010/014|预留，未编写|
@@ -228,3 +229,11 @@ root独立从actual1.3metadata a6c758d4…过滤验证oracle d051aaa9…；目�
 ## 2026-10-22 D01 provenance design proposal — no migration allocated
 
 B00-1.4-proposed adds source_context/source_context_material/parsed_document_profile and nullable minutes_element/evidence_link.source_context_id in the review-only complete-schema draft. [Detailed addendum](../superpowers/specs/2026-10-22-ama-material-provenance-addendum.md) and [actual isolated validation](../acceptance/b/database-material-provenance-addendum-review.md) require fresh independent SPEC/quality review before adoption. No new version is assigned; UNASSIGNED-D01 in the review draft is a design label, not a Flyway version. Root centrally allocates a compatible ordered forward correction after review. All formal001..013 including011.1 remain immutable. Existing reserved D01/V017 descriptions do not authorize editing/applying that version, out-of-order execution or runtime enablement.
+
+## 2026-10-23 中央阶段补丁登记 V013.1 — 尚未冻结或授权应用
+
+依据本轮用户明确要求继续完成 B 本地受控闭环，以及受控运行时技术设计 R1 和两次独立设计/SQL 复审，root 逐案登记 V013.1，拥有者为 remaining Task2，目标文件 V013_1__b_runtime_metadata.sql。范围只增 input_batch_fingerprint_profile（真实新批次算法显式判别、旧行无推断或回填）与 meeting_minutes_editor_guard（新建会议同事务0、正值永久抑制首版自动保存、历史缺行 UNKNOWN）两侧表。原12份SQL、V003/V004永久空号、V014..V027已预留任务及下一新增整数V028全部不变；不分配D01/v3材料迁移。
+
+root 已完整读取未分配 SQL 候选1563f2806fcd9e6a804870a54f803852b722cfa29716613d6767af3f0cb51810；独立 schema review SPEC PASS / SQL/design APPROVED、0 findings。此处允许准备最终具名候选，最终文件头与完整SHA须再次完整读取并在提交中冻结，随后另发精确SHA和fixture ACK；本登记本身不能放入正式location或执行SQL。没有运行时代码、业务资格或阶段B完成许可。
+
+实际Flyway12.4.0 jar SHA c3f93df1f3e0c9d14652adb5ade97401f2ede503859ac693c2af5c06e2797799 离线 MigrationVersion 与 ResourceNameParser 均验证013<013.1<014，文件名解析013.1且valid；探针无DB连接。新独有fixture ama-test-b01-ad9f1af29eff（完整ID eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502，loopback58062）初始0表和资源限定记录保留；登记前再次仅选定元数据核对ID/标签/端口，当前history001→002→005→006→007→008→009→010→011→011.1→012→013全success，原checksum一致，无更高版本。证据在artifacts/phase-b/b-remaining/runtime-metadata-allocation。仅此本轮新拥有fixture可继续准备，其他旧fixture/未知失败/高水位库不在路径内；ACK前仍须新鲜核对，禁止reset/repair/outOfOrder或修改冻结SQL。
