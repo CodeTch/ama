@@ -1,0 +1,1967 @@
+[
+  {
+    "path": "docs/acceptance/b/task-B-06-archives-review-ready.md",
+    "bytes": 3433,
+    "sha256": "6c48e9b47b3075325ef409bb72c24959f406373cf6726d071fa236be0d198421"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/coordination/runtime/.gitattributes",
+    "bytes": 20,
+    "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/coordination/runtime/combined-qualification.json",
+    "bytes": 3919,
+    "sha256": "c75a578255ed34208695dadd38fb5d55728d297a8f3960630b4450c6993a2d75"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/coordination/runtime/run-final-units.py",
+    "bytes": 2409,
+    "sha256": "b24192f422c03dbf9e2d7639ea3110c5d4abfee829fe6e2a492466bf07a8fa3f"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/coordination/runtime/task-4-integration.json",
+    "bytes": 144297,
+    "sha256": "ed1d88907e29522ab6a616f8582969ed45660863d10f2fb576ee19f5e6754672"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/coordination/runtime/task-4-integration.log",
+    "bytes": 73624,
+    "sha256": "3e5ccd7b5d925a382ce3a5cb3f25756d5f3ccb21ecc32bc4e7e6ee913e885c76"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/coordination/runtime/task-4-review.md",
+    "bytes": 13369,
+    "sha256": "a69077cec4287fd81851e25745f64fbec662986e9b0a71af426c8dd660741858"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/.gitattributes",
+    "bytes": 20,
+    "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/command.json",
+    "bytes": 303,
+    "sha256": "3e2d96c0e3ea887860d080e3cbf09f5eb0a1dc39b6645ee724e995d44c4f05e7"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/codec-green/source/backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+    "bytes": 36849,
+    "sha256": "a37aeb05d3ae8aa95434b34c324887891262b2e63515ca4a29771e8ed3ff2db9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/codec-green/source/backend/contracts/src/test/java/ama/contract/MinutesFactBudgetTest.java",
+    "bytes": 2265,
+    "sha256": "3ad2c0a8585f348a0a244492a2816f207d9733776a61554b5c90efce67c03827"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/codec-green/source/backend/core/src/main/java/ama/canonical/CanonicalValue.java",
+    "bytes": 1717,
+    "sha256": "a47522ecd5f6fb41890b6dd2b7e92e17633280248c72649c76afe9a048eb53ca"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/codec-green/source/backend/core/src/main/java/ama/canonical/CanonicalValueCodec.java",
+    "bytes": 6649,
+    "sha256": "3b8b080a5de3d66fbe67be204282d5b82bce02e386854047bfe5b5193e4b8d93"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/codec-green/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/codec-green/source/backend/core/src/test/java/ama/canonical/CanonicalValueCodecTest.java",
+    "bytes": 4736,
+    "sha256": "c6d1a93d0336855fdc8a3b77d80a4f273def5cfee02c6866e5d841204aa33188"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/codec-green/source/backend/core/src/test/java/ama/transcript/BatchFingerprintTest.java",
+    "bytes": 13520,
+    "sha256": "0a20664c0187e8841d60fb76003e5d7e99a76446a1ebfdc387e1136bf7861531"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/fact-budget-green/source/backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+    "bytes": 36849,
+    "sha256": "a37aeb05d3ae8aa95434b34c324887891262b2e63515ca4a29771e8ed3ff2db9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/fact-budget-green/source/backend/contracts/src/test/java/ama/contract/MinutesFactBudgetTest.java",
+    "bytes": 2265,
+    "sha256": "3ad2c0a8585f348a0a244492a2816f207d9733776a61554b5c90efce67c03827"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/fact-budget-green/source/backend/core/src/main/java/ama/canonical/CanonicalValue.java",
+    "bytes": 1717,
+    "sha256": "a47522ecd5f6fb41890b6dd2b7e92e17633280248c72649c76afe9a048eb53ca"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/fact-budget-green/source/backend/core/src/main/java/ama/canonical/CanonicalValueCodec.java",
+    "bytes": 6649,
+    "sha256": "3b8b080a5de3d66fbe67be204282d5b82bce02e386854047bfe5b5193e4b8d93"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/fact-budget-green/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/fact-budget-green/source/backend/core/src/test/java/ama/canonical/CanonicalValueCodecTest.java",
+    "bytes": 4736,
+    "sha256": "c6d1a93d0336855fdc8a3b77d80a4f273def5cfee02c6866e5d841204aa33188"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/fact-budget-green/source/backend/core/src/test/java/ama/transcript/BatchFingerprintTest.java",
+    "bytes": 13520,
+    "sha256": "0a20664c0187e8841d60fb76003e5d7e99a76446a1ebfdc387e1136bf7861531"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/green-1/source/backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+    "bytes": 36849,
+    "sha256": "a37aeb05d3ae8aa95434b34c324887891262b2e63515ca4a29771e8ed3ff2db9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/green-1/source/backend/core/src/main/java/ama/canonical/CanonicalValue.java",
+    "bytes": 1717,
+    "sha256": "a47522ecd5f6fb41890b6dd2b7e92e17633280248c72649c76afe9a048eb53ca"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/green-1/source/backend/core/src/main/java/ama/canonical/CanonicalValueCodec.java",
+    "bytes": 6649,
+    "sha256": "3b8b080a5de3d66fbe67be204282d5b82bce02e386854047bfe5b5193e4b8d93"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/green-1/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/green-1/source/backend/core/src/test/java/ama/canonical/CanonicalValueCodecTest.java",
+    "bytes": 4736,
+    "sha256": "c6d1a93d0336855fdc8a3b77d80a4f273def5cfee02c6866e5d841204aa33188"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/green-1/source/backend/core/src/test/java/ama/transcript/BatchFingerprintTest.java",
+    "bytes": 13520,
+    "sha256": "0a20664c0187e8841d60fb76003e5d7e99a76446a1ebfdc387e1136bf7861531"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/red-1/source/backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+    "bytes": 36849,
+    "sha256": "a37aeb05d3ae8aa95434b34c324887891262b2e63515ca4a29771e8ed3ff2db9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/red-1/source/backend/core/src/main/java/ama/canonical/CanonicalValue.java",
+    "bytes": 1717,
+    "sha256": "a47522ecd5f6fb41890b6dd2b7e92e17633280248c72649c76afe9a048eb53ca"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/red-1/source/backend/core/src/main/java/ama/canonical/CanonicalValueCodec.java",
+    "bytes": 6649,
+    "sha256": "3b8b080a5de3d66fbe67be204282d5b82bce02e386854047bfe5b5193e4b8d93"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/red-1/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 752,
+    "sha256": "6bbfd1fb781a7133b82c43d89278e8aa7c0176aa33e393739e643f5834d26d59"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/red-1/source/backend/core/src/test/java/ama/canonical/CanonicalValueCodecTest.java",
+    "bytes": 4736,
+    "sha256": "c6d1a93d0336855fdc8a3b77d80a4f273def5cfee02c6866e5d841204aa33188"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/batch/red-1/source/backend/core/src/test/java/ama/transcript/BatchFingerprintTest.java",
+    "bytes": 13520,
+    "sha256": "0a20664c0187e8841d60fb76003e5d7e99a76446a1ebfdc387e1136bf7861531"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/green-01-scoped/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15521,
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/green-01-scoped/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/green-01-scoped/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 8133,
+    "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/green-01-scoped/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 16024,
+    "sha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/green-02-final/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15521,
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/green-02-final/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/green-02-final/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 8133,
+    "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/green-02-final/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 16024,
+    "sha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/red-01/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15102,
+    "sha256": "7648daf8ce226b05e339d7d67bc4cf37feeaf05dfdd504a3a8973d25d9ef1533"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/red-01/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/red-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 8133,
+    "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/fix1/red-01/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 16024,
+    "sha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/green-01/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 14884,
+    "sha256": "1d973c101825ebb11a5301f7ecea96ff53d351d356d6c6102120efea951d5a56"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/green-01/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/green-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 8133,
+    "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/green-01/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 10568,
+    "sha256": "e75c93f3805a834a775069f3da229a58a18070d5990be8122a87d70e44f20fab"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/green-02-final/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15102,
+    "sha256": "7648daf8ce226b05e339d7d67bc4cf37feeaf05dfdd504a3a8973d25d9ef1533"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/green-02-final/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/green-02-final/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 8133,
+    "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/green-02-final/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 12321,
+    "sha256": "eefafe5faea6749325d1a9d4537daa265dd64c5a304e54e39f083c50cac66601"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-01/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 883,
+    "sha256": "4df61024777697a63dc9247aa44559a6b1c8682ab8ba85eac78656a1b30e851e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-01/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 7953,
+    "sha256": "c6f747998e6796200026e07d861926d8a1f743dd311ac0c12a758d3882231cb8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-01/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 3868,
+    "sha256": "51ba9140066b3e2fd6ba91f27b50874418f2ec31b9e2cc81aab4fc51398d5f10"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-02/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 883,
+    "sha256": "4df61024777697a63dc9247aa44559a6b1c8682ab8ba85eac78656a1b30e851e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-02/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-02/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 7984,
+    "sha256": "406050dddfa3b19415cf166ef0858a445913c72aeebf02d25f533783bd5a88d0"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-02/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 3868,
+    "sha256": "51ba9140066b3e2fd6ba91f27b50874418f2ec31b9e2cc81aab4fc51398d5f10"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-03/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 883,
+    "sha256": "4df61024777697a63dc9247aa44559a6b1c8682ab8ba85eac78656a1b30e851e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-03/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-03/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 7980,
+    "sha256": "4162f15d496ce2d81e2f1e14e79af1103ac5fa79297d7928729d750f7373c602"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-03/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 3868,
+    "sha256": "51ba9140066b3e2fd6ba91f27b50874418f2ec31b9e2cc81aab4fc51398d5f10"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-04/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 883,
+    "sha256": "4df61024777697a63dc9247aa44559a6b1c8682ab8ba85eac78656a1b30e851e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-04/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-04/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 7985,
+    "sha256": "631398e62ed69957a74bfadec4924cc089440dab8a0ce3662201c8622e390044"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-04/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 3868,
+    "sha256": "51ba9140066b3e2fd6ba91f27b50874418f2ec31b9e2cc81aab4fc51398d5f10"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-05/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 883,
+    "sha256": "4df61024777697a63dc9247aa44559a6b1c8682ab8ba85eac78656a1b30e851e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-05/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-05/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 8133,
+    "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-05/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 3868,
+    "sha256": "51ba9140066b3e2fd6ba91f27b50874418f2ec31b9e2cc81aab4fc51398d5f10"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-06-expanded/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 883,
+    "sha256": "4df61024777697a63dc9247aa44559a6b1c8682ab8ba85eac78656a1b30e851e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-06-expanded/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-06-expanded/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 8133,
+    "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-06-expanded/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 10514,
+    "sha256": "36bf651b6c4822491891766aa66bc5d4410539d68034ec89c23ac9d966e19aa2"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-07-commit-cancel/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 14884,
+    "sha256": "1d973c101825ebb11a5301f7ecea96ff53d351d356d6c6102120efea951d5a56"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-07-commit-cancel/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-07-commit-cancel/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 8133,
+    "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-07-commit-cancel/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 11402,
+    "sha256": "cf124b73367cb9deba1523adb3baf23e1c8a0a3cf6084669fc91f7f98343a6e4"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-08-long-max/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 14884,
+    "sha256": "1d973c101825ebb11a5301f7ecea96ff53d351d356d6c6102120efea951d5a56"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-08-long-max/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-08-long-max/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 8133,
+    "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/facts/red-08-long-max/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 12321,
+    "sha256": "eefafe5faea6749325d1a9d4537daa265dd64c5a304e54e39f083c50cac66601"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/final-24/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6847,
+    "sha256": "d2955e9f013017298c10d3ac9cafcf53d2c9d04c2df81d3e5c70d0287ac99518"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/final-24/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8233,
+    "sha256": "0993e0621a4a7881252f640707d04696b3d0c4dc92da5575eb9c9ee327c4fda4"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/final-24/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "9858154feb88c4b7b151855b578e30826c7a7cac37a6f130981491d41aa6c7d5"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/final-24/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/final-24/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 20262,
+    "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/final-24/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/final-24/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/final-24/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/final-current-28/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/final-current-28/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/final-current-28/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 7694,
+    "sha256": "8d608603899c8c2c8b675a5056c0b387f7010e36f0c4d6a9ac6b717edad842fd"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/final-current-28/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/final-current-28/source/backend/adapters/src/test/java/ama/config/file/ControlledArchiveFifoProbe.java",
+    "bytes": 701,
+    "sha256": "0bcff17e3680c72b4954cd38ff6c299dcad6052823f2d9f686aacf5956bac65f"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/final-current-28/source/backend/adapters/src/test/java/ama/config/file/ControlledArchiveFix1Test.java",
+    "bytes": 5136,
+    "sha256": "0600a490000ebe03f56e87ee91968758e644afe27bb5a2508fb5b3cde9601491"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/final-current-28/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 20262,
+    "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/final-current-28/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/final-current-28/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/final-current-28/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/green-f1-f3/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/green-f1-f3/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/green-f1-f3/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 7694,
+    "sha256": "8d608603899c8c2c8b675a5056c0b387f7010e36f0c4d6a9ac6b717edad842fd"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/green-f1-f3/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/green-f1-f3/source/backend/adapters/src/test/java/ama/config/file/ControlledArchiveFifoProbe.java",
+    "bytes": 701,
+    "sha256": "0bcff17e3680c72b4954cd38ff6c299dcad6052823f2d9f686aacf5956bac65f"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/green-f1-f3/source/backend/adapters/src/test/java/ama/config/file/ControlledArchiveFix1Test.java",
+    "bytes": 5136,
+    "sha256": "0600a490000ebe03f56e87ee91968758e644afe27bb5a2508fb5b3cde9601491"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/green-f1-f3/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 20262,
+    "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/green-f1-f3/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/green-f1-f3/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/green-f1-f3/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/red-f1-f3/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6847,
+    "sha256": "d2955e9f013017298c10d3ac9cafcf53d2c9d04c2df81d3e5c70d0287ac99518"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/red-f1-f3/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8233,
+    "sha256": "0993e0621a4a7881252f640707d04696b3d0c4dc92da5575eb9c9ee327c4fda4"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/red-f1-f3/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "9858154feb88c4b7b151855b578e30826c7a7cac37a6f130981491d41aa6c7d5"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/red-f1-f3/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/red-f1-f3/source/backend/adapters/src/test/java/ama/config/file/ControlledArchiveFifoProbe.java",
+    "bytes": 701,
+    "sha256": "0bcff17e3680c72b4954cd38ff6c299dcad6052823f2d9f686aacf5956bac65f"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/red-f1-f3/source/backend/adapters/src/test/java/ama/config/file/ControlledArchiveFix1Test.java",
+    "bytes": 5136,
+    "sha256": "0600a490000ebe03f56e87ee91968758e644afe27bb5a2508fb5b3cde9601491"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/red-f1-f3/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 20262,
+    "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/red-f1-f3/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/red-f1-f3/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/red-f1-f3/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/regression-original-24/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/regression-original-24/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/regression-original-24/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 7694,
+    "sha256": "8d608603899c8c2c8b675a5056c0b387f7010e36f0c4d6a9ac6b717edad842fd"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/regression-original-24/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/regression-original-24/source/backend/adapters/src/test/java/ama/config/file/ControlledArchiveFifoProbe.java",
+    "bytes": 701,
+    "sha256": "0bcff17e3680c72b4954cd38ff6c299dcad6052823f2d9f686aacf5956bac65f"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/regression-original-24/source/backend/adapters/src/test/java/ama/config/file/ControlledArchiveFix1Test.java",
+    "bytes": 5136,
+    "sha256": "0600a490000ebe03f56e87ee91968758e644afe27bb5a2508fb5b3cde9601491"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/regression-original-24/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 20262,
+    "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/regression-original-24/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/regression-original-24/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/fix1/regression-original-24/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-03/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6820,
+    "sha256": "878cbb6d15b1ee20330f0d286b579d0a5d56495bdb5f82edae069a12471347e6"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-03/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8151,
+    "sha256": "64f31541b0a22ed8c5c34cb2aea1d18fea2f0a3c87194de2d586594c5ca8e813"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-03/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "b1a6f878edb929b2f49fbe47e0c4e609015230f98bed5c9682074ca298fde268"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-03/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-03/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 17877,
+    "sha256": "1adaf183d513aa3757befbc48751f1cf8a975ac7d6de85fe2d37ccf5c8104ecc"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-03/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-03/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-03/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-04/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6847,
+    "sha256": "d2955e9f013017298c10d3ac9cafcf53d2c9d04c2df81d3e5c70d0287ac99518"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-04/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8233,
+    "sha256": "0993e0621a4a7881252f640707d04696b3d0c4dc92da5575eb9c9ee327c4fda4"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-04/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "9858154feb88c4b7b151855b578e30826c7a7cac37a6f130981491d41aa6c7d5"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-04/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-04/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 18854,
+    "sha256": "11f7bde89a930ab42db62b07e52b75cd1c7b1e5b9534c654b52593bf94a1b840"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-04/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-04/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-04/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-01/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6458,
+    "sha256": "3420df530be3f0e934f9373546b9ca17adaa7ae35129fe7d838398095defb2ca"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-01/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8151,
+    "sha256": "64f31541b0a22ed8c5c34cb2aea1d18fea2f0a3c87194de2d586594c5ca8e813"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-01/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "b1a6f878edb929b2f49fbe47e0c4e609015230f98bed5c9682074ca298fde268"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-01/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4630,
+    "sha256": "adf46465d07da16c18fe6ceba3882243f4bc0b47bb834be51c4c9ac5d5252e79"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-01/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 13319,
+    "sha256": "ab0a6d98de01d609b33fdeba7b7d2a8a14e429d8c5a376124889807ef88f9bdf"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-01/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-01/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-01/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-02/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6723,
+    "sha256": "70c067ec8ee7537c2784ed261bb8c8216fd8a9c85a191019892653a35c99f142"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-02/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8151,
+    "sha256": "64f31541b0a22ed8c5c34cb2aea1d18fea2f0a3c87194de2d586594c5ca8e813"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-02/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "b1a6f878edb929b2f49fbe47e0c4e609015230f98bed5c9682074ca298fde268"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-02/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-02/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 13319,
+    "sha256": "ab0a6d98de01d609b33fdeba7b7d2a8a14e429d8c5a376124889807ef88f9bdf"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-02/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-02/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/green-attempt-02/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-01/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 546,
+    "sha256": "dbe7ea25f25d0505cf6be952a1ec1481cae0f5da95d6ccc08b1efae25249d63e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-01/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 534,
+    "sha256": "aa32ae0a7aca055708031d332ddc4a420b5ee21817ad2583d9222c808d780538"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-01/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 402,
+    "sha256": "eb8582d90ebcd474a7eec086b9c44984c44f3828d7e052715701daec0cfc8d40"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-01/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 13295,
+    "sha256": "554022d4df62887ee57f6513d336b3bca747ce51c8c2215dd65be91068a640ff"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-01/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 760,
+    "sha256": "05265b90b57386caf089f17fc65b6c849cf15a32f7844ce5c2767086248c0e78"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-01/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-01/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 511,
+    "sha256": "a8a87bb27c9e0a2e5704b316ddc74935bf40163b9226cb89b3187050bc0a3f2c"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-02/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 546,
+    "sha256": "dbe7ea25f25d0505cf6be952a1ec1481cae0f5da95d6ccc08b1efae25249d63e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-02/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 534,
+    "sha256": "aa32ae0a7aca055708031d332ddc4a420b5ee21817ad2583d9222c808d780538"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-02/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 402,
+    "sha256": "eb8582d90ebcd474a7eec086b9c44984c44f3828d7e052715701daec0cfc8d40"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-02/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 13319,
+    "sha256": "ab0a6d98de01d609b33fdeba7b7d2a8a14e429d8c5a376124889807ef88f9bdf"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-02/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 760,
+    "sha256": "05265b90b57386caf089f17fc65b6c849cf15a32f7844ce5c2767086248c0e78"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-02/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-02/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 511,
+    "sha256": "a8a87bb27c9e0a2e5704b316ddc74935bf40163b9226cb89b3187050bc0a3f2c"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-03/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6723,
+    "sha256": "70c067ec8ee7537c2784ed261bb8c8216fd8a9c85a191019892653a35c99f142"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-03/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8151,
+    "sha256": "64f31541b0a22ed8c5c34cb2aea1d18fea2f0a3c87194de2d586594c5ca8e813"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-03/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "b1a6f878edb929b2f49fbe47e0c4e609015230f98bed5c9682074ca298fde268"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-03/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-03/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 17877,
+    "sha256": "1adaf183d513aa3757befbc48751f1cf8a975ac7d6de85fe2d37ccf5c8104ecc"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-03/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-03/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-03/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-04/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6820,
+    "sha256": "878cbb6d15b1ee20330f0d286b579d0a5d56495bdb5f82edae069a12471347e6"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-04/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8151,
+    "sha256": "64f31541b0a22ed8c5c34cb2aea1d18fea2f0a3c87194de2d586594c5ca8e813"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-04/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "b1a6f878edb929b2f49fbe47e0c4e609015230f98bed5c9682074ca298fde268"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-04/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-04/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 18854,
+    "sha256": "11f7bde89a930ab42db62b07e52b75cd1c7b1e5b9534c654b52593bf94a1b840"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-04/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-04/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/red-04/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-bindings/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6847,
+    "sha256": "d2955e9f013017298c10d3ac9cafcf53d2c9d04c2df81d3e5c70d0287ac99518"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-bindings/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8233,
+    "sha256": "0993e0621a4a7881252f640707d04696b3d0c4dc92da5575eb9c9ee327c4fda4"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-bindings/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "9858154feb88c4b7b151855b578e30826c7a7cac37a6f130981491d41aa6c7d5"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-bindings/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-bindings/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 18854,
+    "sha256": "11f7bde89a930ab42db62b07e52b75cd1c7b1e5b9534c654b52593bf94a1b840"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-bindings/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-bindings/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-bindings/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-budget/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6847,
+    "sha256": "d2955e9f013017298c10d3ac9cafcf53d2c9d04c2df81d3e5c70d0287ac99518"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-budget/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8233,
+    "sha256": "0993e0621a4a7881252f640707d04696b3d0c4dc92da5575eb9c9ee327c4fda4"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-budget/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "9858154feb88c4b7b151855b578e30826c7a7cac37a6f130981491d41aa6c7d5"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-budget/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-budget/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 20262,
+    "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-budget/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-budget/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-budget/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-wire/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 6847,
+    "sha256": "d2955e9f013017298c10d3ac9cafcf53d2c9d04c2df81d3e5c70d0287ac99518"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-wire/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 8233,
+    "sha256": "0993e0621a4a7881252f640707d04696b3d0c4dc92da5575eb9c9ee327c4fda4"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-wire/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 6363,
+    "sha256": "9858154feb88c4b7b151855b578e30826c7a7cac37a6f130981491d41aa6c7d5"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-wire/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-wire/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 18854,
+    "sha256": "11f7bde89a930ab42db62b07e52b75cd1c7b1e5b9534c654b52593bf94a1b840"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-wire/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-wire/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/index/regression-wire/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+    "bytes": 1322,
+    "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+    "bytes": 9234,
+    "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+    "bytes": 3151,
+    "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "bytes": 3050,
+    "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "bytes": 14494,
+    "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15521,
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+    "bytes": 21482,
+    "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+    "bytes": 14523,
+    "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+    "bytes": 6964,
+    "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+    "bytes": 7590,
+    "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+    "bytes": 1322,
+    "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+    "bytes": 9234,
+    "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+    "bytes": 3151,
+    "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "bytes": 3050,
+    "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "bytes": 14494,
+    "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15521,
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+    "bytes": 21482,
+    "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+    "bytes": 14492,
+    "sha256": "557635e1c8a7a9d570267b17ecf7772bf0cc99116eb4adf96af9a92dd8fb7850"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+    "bytes": 6857,
+    "sha256": "513d994580f8fcdd86fe56a74ed289f9ea38e729c926be1568fa8147e2e7ca9c"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+    "bytes": 7590,
+    "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+    "bytes": 1322,
+    "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+    "bytes": 9234,
+    "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+    "bytes": 3151,
+    "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "bytes": 3050,
+    "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "bytes": 14494,
+    "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15521,
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+    "bytes": 21482,
+    "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+    "bytes": 14492,
+    "sha256": "557635e1c8a7a9d570267b17ecf7772bf0cc99116eb4adf96af9a92dd8fb7850"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+    "bytes": 6899,
+    "sha256": "235361fe052dbc3cc4631618a8a0860cd3764be83c81499d46b53f81aea40be5"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+    "bytes": 7590,
+    "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+    "bytes": 1322,
+    "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+    "bytes": 9234,
+    "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+    "bytes": 3151,
+    "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "bytes": 3050,
+    "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "bytes": 14494,
+    "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15521,
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+    "bytes": 21482,
+    "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+    "bytes": 14523,
+    "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+    "bytes": 6899,
+    "sha256": "235361fe052dbc3cc4631618a8a0860cd3764be83c81499d46b53f81aea40be5"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+    "bytes": 7590,
+    "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+    "bytes": 1322,
+    "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+    "bytes": 9234,
+    "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+    "bytes": 3151,
+    "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "bytes": 3050,
+    "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "bytes": 14494,
+    "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15521,
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+    "bytes": 21482,
+    "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+    "bytes": 14523,
+    "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+    "bytes": 6964,
+    "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+    "bytes": 7590,
+    "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+    "bytes": 1322,
+    "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+    "bytes": 9234,
+    "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+    "bytes": 3151,
+    "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "bytes": 3050,
+    "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "bytes": 14494,
+    "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15521,
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+    "bytes": 21482,
+    "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+    "bytes": 14523,
+    "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+    "bytes": 6964,
+    "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+    "bytes": 7590,
+    "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+    "bytes": 1322,
+    "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+    "bytes": 9234,
+    "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+    "bytes": 3151,
+    "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "bytes": 3050,
+    "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "bytes": 14494,
+    "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15521,
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+    "bytes": 21482,
+    "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+    "bytes": 14523,
+    "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+    "bytes": 6964,
+    "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+    "bytes": 7590,
+    "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "bytes": 7759,
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "bytes": 9154,
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/adapters/src/main/java/ama/config/file/ProtectedArchiveFiles.java",
+    "bytes": 7694,
+    "sha256": "8d608603899c8c2c8b675a5056c0b387f7010e36f0c4d6a9ac6b717edad842fd"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/adapters/src/main/java/ama/config/json/StrictConfigIndexReader.java",
+    "bytes": 4678,
+    "sha256": "ac7c65f3db9db489f6748c740594785e8aefd4643445284b5bf4db2c4d073933"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "bytes": 15521,
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/adapters/src/test/java/ama/config/file/ControlledArchiveFifoProbe.java",
+    "bytes": 701,
+    "sha256": "0bcff17e3680c72b4954cd38ff6c299dcad6052823f2d9f686aacf5956bac65f"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/adapters/src/test/java/ama/config/file/ControlledArchiveFix1Test.java",
+    "bytes": 5136,
+    "sha256": "0600a490000ebe03f56e87ee91968758e644afe27bb5a2508fb5b3cde9601491"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+    "bytes": 20262,
+    "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "bytes": 1466,
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "bytes": 741,
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "bytes": 1735,
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "bytes": 5522,
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "bytes": 717,
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/core/src/test/java/ama/transcript/BatchFingerprintTest.java",
+    "bytes": 13520,
+    "sha256": "0a20664c0187e8841d60fb76003e5d7e99a76446a1ebfdc387e1136bf7861531"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "bytes": 8133,
+    "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+    "bytes": 14523,
+    "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+    "bytes": 6964,
+    "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+    "bytes": 7590,
+    "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source/backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "bytes": 16024,
+    "sha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source-inventory-classification.json",
+    "bytes": 84280,
+    "sha256": "f850aa0432c2dea05b11af77fbe4cb5bbc4e19fb98f24136661d852ad4ad220e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/source-sha256.json",
+    "bytes": 81070,
+    "sha256": "11a9a12c26e5825f1306e7e74b1a8c672aeac7469aad86fa975fe3913162ff29"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/summary.json",
+    "bytes": 2857,
+    "sha256": "664cde705561a26942ae65bd082c3ee357d4e578fcbc42afebc0b5dbd163d6f8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/unit.exit",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/unit.log",
+    "bytes": 21176,
+    "sha256": "adcc21f9016ca9363c8758af8c97fb2e1bb8dbf9d244cc164b61606bc125fdc6"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+    "bytes": 16084,
+    "sha256": "0926f0b22b2a557a41f8ec4faf2549c286095a7427f77417413c746a127123d6"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+    "bytes": 19003,
+    "sha256": "eb7779981411f9dffd8af4083a3b77b4dc5987cc2d2d1c49bdfa6a0f2fbf21fc"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.config.json.ArchiveBudgetTest.xml",
+    "bytes": 17318,
+    "sha256": "3dd1e57ed0a83855991c36d62e6c54b6ef508cef349dd27d12236960cf91190b"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.config.json.ConfigBindingsTest.xml",
+    "bytes": 16193,
+    "sha256": "bbf89af9d07b0607b333c26073397123efada9bdcf9edc7c4a5a2fc1de1678c6"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.config.json.ConfigWireReaderTest.xml",
+    "bytes": 16197,
+    "sha256": "ad7c4e46ad48954e7ff1d8e44b1e5a5291cc763e14420dd4eb7046fb74ddd90d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.config.json.RawHashChainTest.xml",
+    "bytes": 18910,
+    "sha256": "54893263dfdd59430977eb0f5807eb7792e8be6af2fa2dbbec78517dcdde8a83"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+    "bytes": 17571,
+    "sha256": "090e765ed352d2d02cee9f32fc980474f4ce28fcf13e023d674cd490ac6dee1d"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+    "bytes": 16390,
+    "sha256": "8ac928bf94c524738df98d4c1aa2fd8500b0ade7c6489c535d3f569d15f67786"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+    "bytes": 15875,
+    "sha256": "a9d0825a97316f639f1c767ab8eedd0322aab16aa74638b4ec395b4dd1ed03c1"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.storage.StorageRouterTest.xml",
+    "bytes": 16326,
+    "sha256": "91a9ed3fef569d6c1ed84d87f6e5bbade933943fc00e8bf518ff400d95733f48"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+    "bytes": 16020,
+    "sha256": "261fa0daeed107303fe431e0738c5304ccf099fa49662b747368caa2b4f7c258"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.storage.s3.S3ProtocolTest.xml",
+    "bytes": 15889,
+    "sha256": "174b2c5bf6291e1a9ac6636d81f1adde7fc63b581bd60a13a8f176dadfe2769a"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.task.TaskMetadataTest.xml",
+    "bytes": 15564,
+    "sha256": "22939c07be3057ebc1f89c2013bc83a850ac23bd003c9f3b2c0efb9799a671a6"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/adapters/target/surefire-reports/TEST-ama.transcript.TextTranscriptParserTest.xml",
+    "bytes": 17990,
+    "sha256": "df03de23f8b56ca23435befa6fbb625e9d91028dcf3aa7c10db83ee14ee08897"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/api/target/surefire-reports/TEST-ama.api.DeploymentConfigTest.xml",
+    "bytes": 32665,
+    "sha256": "4a7f2e69b2acd1291bc7ecf34fded5d1b44e28aade781a488785706a34ab7115"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/api/target/surefire-reports/TEST-ama.api.FileConfigurationTest.xml",
+    "bytes": 31738,
+    "sha256": "fa2ffdf62d49979157f409d74298df28cfc342368293fac3267605e0b59c8be8"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/api/target/surefire-reports/TEST-ama.api.IdentityContractsTest.xml",
+    "bytes": 31951,
+    "sha256": "4a96422b86f70944e89921379b7fea8651658712f309c33df37c5209bd3ace1e"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/api/target/surefire-reports/TEST-ama.api.IdentitySecurityTest.xml",
+    "bytes": 32348,
+    "sha256": "da4400b57c9e9f1200cb41097a216be3195e94eeee98371f3c9b5d90c0d184df"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/contracts/target/surefire-reports/TEST-ama.contract.MinutesFactBudgetTest.xml",
+    "bytes": 7348,
+    "sha256": "1f1940ed74c6c5e17013e37f032286642213df0210d4071c55defa6a304cac03"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/core/target/surefire-reports/TEST-ama.canonical.CanonicalValueCodecTest.xml",
+    "bytes": 7501,
+    "sha256": "e1c00bcb003876aba156375f02639a33c8025d84e2eb09d8dea037f9da3c85d7"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/core/target/surefire-reports/TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+    "bytes": 7306,
+    "sha256": "f3056f66076a6cecbe91670361921c2e7cadcae2960439e814d677b57c7b8d1b"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/core/target/surefire-reports/TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+    "bytes": 7442,
+    "sha256": "980b309b358c5830c482e3c1470feee2dcd5600beae2bab9fdf67be6dc7fda55"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/core/target/surefire-reports/TEST-ama.minutes.contract.HashProfilesTest.xml",
+    "bytes": 7702,
+    "sha256": "0154eb54830f03057a66b51ceca44d719aaf8c6f594c46378f98506a778073cf"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/core/target/surefire-reports/TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+    "bytes": 7846,
+    "sha256": "3a8aa9752600105abb0e8187c9115febe7202b854aa2569dfc44b12d56602f9b"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/core/target/surefire-reports/TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+    "bytes": 8035,
+    "sha256": "6b8a922a8c19acd2cdad37ed646b596f18a1e3dd6281d0ba20316a9ac06ade47"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/core/target/surefire-reports/TEST-ama.transcript.BatchFingerprintTest.xml",
+    "bytes": 7624,
+    "sha256": "e79d73670baba7c91ac7f912b5987e9de381762a003d772ca8fea21ca40024be"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/integration-tests/target/surefire-reports/TEST-ama.storage.ContractFixtureTest.xml",
+    "bytes": 31489,
+    "sha256": "c0b9183dadbd3d1cdfa0262b346f56d13c657fdbc5bd62ab0b4466fe9d0a69fe"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/integration-tests/target/surefire-reports/TEST-ama.support.ContractClientTest.xml",
+    "bytes": 31659,
+    "sha256": "0e37f34a3a8889e93a2674a35844cf928768117eb3b830b2d221b013013e9f5a"
+  },
+  {
+    "path": "artifacts/phase-b/b06-archives/final-units/xml/backend/worker/target/surefire-reports/TEST-ama.worker.WorkerLoopTest.xml",
+    "bytes": 7301,
+    "sha256": "0a4f86b30e1aaa0100609551c889f96bb04f196177fc22e84c4d466a706c0fb9"
+  }
+]

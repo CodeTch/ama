@@ -1,0 +1,3084 @@
+{
+  "authorBase": "5563f4cebd6f3f8d5c44d67c4e9b54f0a1d83d00",
+  "authorHead": "41a41e1d7d345fd3b6d46e0a7bc01757298abb3c",
+  "authorCommits": [
+    "41a41e1d7d345fd3b6d46e0a7bc01757298abb3c"
+  ],
+  "coordinationBefore": "0d26e4f73927b13068c5362500d26a6a498e0036",
+  "coordinationAfter": "821daaa05a4c4faffb924ae4c00b72cabdd62347",
+  "paths": [
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/.gitattributes",
+      "mode": "100644",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/SHA256SUMS",
+      "mode": "100644",
+      "bytes": 96876,
+      "sha256": "74b1479d25895e725a11140ad8e97f1b0edd75927ee90466e2c77809aa2b5938"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/current-source-dependencies.json",
+      "mode": "100644",
+      "bytes": 8053,
+      "sha256": "9c3b4a8976df40cf75e66b71798347d601cc9d917a67f46ac46f45b0ff087aed"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-before/audit.sql",
+      "mode": "100644",
+      "bytes": 692,
+      "sha256": "569e77a4a5f9a53c0ebc32abe936ae19840d81d723cd5d627d3cca3358ac34cc"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-before/command.json",
+      "mode": "100644",
+      "bytes": 935,
+      "sha256": "77c7d86f623a7c90498d3ef7e9a8896718ab9ec8eef6595daa3d6d0ddcbf2c3a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-before/custody.json",
+      "mode": "100644",
+      "bytes": 342,
+      "sha256": "18d8e6dd42e7972c67110b50996332983d78bd5471fcb48b28339b05e69eb697"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-before/fixture-selected-public.log",
+      "mode": "100644",
+      "bytes": 243,
+      "sha256": "78d80ccb0f83ac3106a55115f9949f9bc1656c610e8dacd03ea99f822043c549"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-before/lower-sql.json",
+      "mode": "100644",
+      "bytes": 2163,
+      "sha256": "6b3f95fb0c2747d601de9f487f8da2c63680997573657a706558d8dabe4baed1"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-before/stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-before/stdout.log",
+      "mode": "100644",
+      "bytes": 35995,
+      "sha256": "8a6461dad383d6eca463dc4e130314bbdd81a7464ae461cfafd01d5a9c50114a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-final/audit.sql",
+      "mode": "100644",
+      "bytes": 692,
+      "sha256": "569e77a4a5f9a53c0ebc32abe936ae19840d81d723cd5d627d3cca3358ac34cc"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-final/command.json",
+      "mode": "100644",
+      "bytes": 935,
+      "sha256": "77c7d86f623a7c90498d3ef7e9a8896718ab9ec8eef6595daa3d6d0ddcbf2c3a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-final/custody.json",
+      "mode": "100644",
+      "bytes": 342,
+      "sha256": "18d8e6dd42e7972c67110b50996332983d78bd5471fcb48b28339b05e69eb697"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-final/fixture-selected-public.log",
+      "mode": "100644",
+      "bytes": 243,
+      "sha256": "78d80ccb0f83ac3106a55115f9949f9bc1656c610e8dacd03ea99f822043c549"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-final/lower-sql.json",
+      "mode": "100644",
+      "bytes": 2163,
+      "sha256": "6b3f95fb0c2747d601de9f487f8da2c63680997573657a706558d8dabe4baed1"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-final/stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/custody-final/stdout.log",
+      "mode": "100644",
+      "bytes": 37465,
+      "sha256": "64867b0a49ce3b6d78b6eff8c0fd945a6ec1db6b69ec8229d79b8e41ad5b2bfd"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/command.json",
+      "mode": "100644",
+      "bytes": 156,
+      "sha256": "3b91ce731fce3320e09244e3fb86c8feebf0420a70c879b50b716af7f1ea6d30"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/counts.json",
+      "mode": "100644",
+      "bytes": 3907,
+      "sha256": "eaddaf8dd49a39023f90c2cf3eee399ae5cbff7d0cdcc7d40460d66082dfd22a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/A.argv.txt",
+      "mode": "100644",
+      "bytes": 14286,
+      "sha256": "2617a9065e25367515abd20ab6ccc8e1a33d135d405d5847206fce2cf2aa38c4"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/A.exit.txt",
+      "mode": "100644",
+      "bytes": 1,
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/A.parent-pid.txt",
+      "mode": "100644",
+      "bytes": 6,
+      "sha256": "7cbc018e0278db6c80fa550e6d7844c7c91455a895277b097f612f4b6f030b28"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/A.properties",
+      "mode": "100644",
+      "bytes": 913,
+      "sha256": "719b74c150874611bacca2fb7cce4d7b50b7a022fa0345f4ae95924402fbb2c6"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/A.stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/A.stdout.log",
+      "mode": "100644",
+      "bytes": 246,
+      "sha256": "0ca3a10304b4476dd5f2fb04a972f3e0290b73fd8e684587f4468fc4530f6fe6"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/B.argv.txt",
+      "mode": "100644",
+      "bytes": 14286,
+      "sha256": "15baa85841b5ea340b507e10e249b0b35c69fad9408d4c5fa42dba35a9a0d31d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/B.exit.txt",
+      "mode": "100644",
+      "bytes": 1,
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/B.parent-pid.txt",
+      "mode": "100644",
+      "bytes": 6,
+      "sha256": "5361b1cf99f03a420698a5829ebae5a5ca19b894587f9c31895042bc34317be7"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/B.properties",
+      "mode": "100644",
+      "bytes": 668,
+      "sha256": "74fcfe090c0ceb97a51ed210686698d46bc1cb99d5a50066c76435aa1c6a064a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/B.stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/B.stdout.log",
+      "mode": "100644",
+      "bytes": 241,
+      "sha256": "0f8b281cc439bd4dafbe0d5973bef181087ec8d7226de5e0a4bc3c476dd406fc"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/commit-handoff.properties",
+      "mode": "100644",
+      "bytes": 895,
+      "sha256": "29246fbf7ad88553047bd76216aa4fc7f48d728417ad65d03eb7ea19e3110435"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/db-after.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "014db2350e33aa9bd54089b7494d375d7e017c9b074fba821ed470b9deda2eba"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/db-before.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "014db2350e33aa9bd54089b7494d375d7e017c9b074fba821ed470b9deda2eba"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history.argv.txt",
+      "mode": "100644",
+      "bytes": 14307,
+      "sha256": "ec1be0252332c95f4ecaf980bc1461165d75e6f93c0288b938713c9c4d8839d1"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history.exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "535fa30d7e25dd8a49f1536779734ec8286108d115da5045d77f3b4185d8f790"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history.parent-pid.txt",
+      "mode": "100644",
+      "bytes": 6,
+      "sha256": "3d4602b0522f24c12cff1e787793522366a05f81488677725b2beaa274b43ba8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history.properties",
+      "mode": "100644",
+      "bytes": 134,
+      "sha256": "3b56ccd7255714ca89e2272eade7cfd49b357b00fd21ddbcba606dc3207c668f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history.stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history.stdout.log",
+      "mode": "100644",
+      "bytes": 77,
+      "sha256": "9090c088711efbebb598f7260b2b318127810ac484f84b46811c48c8dad964a1"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/.publish.lock",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/index.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/index.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/missing-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history.argv.txt",
+      "mode": "100644",
+      "bytes": 14307,
+      "sha256": "a44da20bed6d33cfe1c5e544307d5e812c67dc888bf8983de14741f89a29deaa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history.exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "535fa30d7e25dd8a49f1536779734ec8286108d115da5045d77f3b4185d8f790"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history.parent-pid.txt",
+      "mode": "100644",
+      "bytes": 6,
+      "sha256": "f7938f326d2a662a0bbb0c20bc210bfd1679d1b0d35d6c538b2ce2f9c0080185"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history.properties",
+      "mode": "100644",
+      "bytes": 134,
+      "sha256": "a95355f2c887c553c6e9af07a38c415f6d420175aab8b738f76a9a88f00e54bd"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history.stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history.stdout.log",
+      "mode": "100644",
+      "bytes": 77,
+      "sha256": "b66a84601aa8a7787f6bf3c421d8b117dc9c8005c4ade0d824d1a9a94efa4e72"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/.publish.lock",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/index.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/index.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "ec369b394e84d846efa22e285ada02d1adb2d5784aa31efecb69083144d4bbe6"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/mutated-history/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/parent-jvm-pid.txt",
+      "mode": "100644",
+      "bytes": 6,
+      "sha256": "6e23add4cd739cee5f83ab3aa37f39cd315fb255cb0b122b20cd6c678c60e7be"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/persisted-manifest.json",
+      "mode": "100644",
+      "bytes": 1793,
+      "sha256": "26759402b72105075210b3e588c35387f0a5b6cd622a35407ee5a8fce824cedc"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/.publish.lock",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/index.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/index.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin.argv.txt",
+      "mode": "100644",
+      "bytes": 14307,
+      "sha256": "b7d0e2179d74e50b772a3d8ef250520c5699595d6f9e7aa2c80aaeefa59983e6"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin.exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "535fa30d7e25dd8a49f1536779734ec8286108d115da5045d77f3b4185d8f790"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin.parent-pid.txt",
+      "mode": "100644",
+      "bytes": 6,
+      "sha256": "2ff19877206ff327803e77f7db4b491080142b6788a7beaaf358ab4cd6e98f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin.properties",
+      "mode": "100644",
+      "bytes": 134,
+      "sha256": "a73e13aee0bdc8ee28b6a27b9496396168ad6570ea48038645167f9e64c60870"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin.stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin.stdout.log",
+      "mode": "100644",
+      "bytes": 77,
+      "sha256": "5384cefb27397538692dc313bc10df59fc6ecb6ee9d549e1d14518a78c3bbeb7"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/.publish.lock",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/index.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/index.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/runtime-548b3cd2-901e-41b0-9086-2a46e0a8163d/wrong-index-pin/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source-sha256.json",
+      "mode": "100644",
+      "bytes": 5101,
+      "sha256": "9ba8fb5a620436474e40ab3dca1b38b784701303d45455c2779f9a12d558582b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "mode": "100644",
+      "bytes": 7759,
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 9154,
+      "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+      "mode": "100644",
+      "bytes": 1322,
+      "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "mode": "100644",
+      "bytes": 9234,
+      "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+      "mode": "100644",
+      "bytes": 3151,
+      "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "mode": "100644",
+      "bytes": 3050,
+      "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "mode": "100644",
+      "bytes": 14494,
+      "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 15521,
+      "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "mode": "100644",
+      "bytes": 1466,
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 741,
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "mode": "100644",
+      "bytes": 21482,
+      "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+      "mode": "100644",
+      "bytes": 1735,
+      "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+      "mode": "100644",
+      "bytes": 5522,
+      "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 717,
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+      "mode": "100644",
+      "bytes": 14523,
+      "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+      "mode": "100644",
+      "bytes": 6964,
+      "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "mode": "100644",
+      "bytes": 7590,
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/.gitattributes",
+      "mode": "100644",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/codec.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/confirmation.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "18790b2cb916288c6b467124f227bae0650874b4a03c8a0889e55e33280fac9f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "71523892244af21509107005607a98e0362ac39c1a3bb0d60f5ef076057e291d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/parser.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing1.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing2.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/tools/b06_archives_restart_run.py",
+      "mode": "100644",
+      "bytes": 3751,
+      "sha256": "9fb777d37d61e0b2dd9f534afaec18a4d6567159b3e194ce51aeee1fbc3de0ba"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/source/tools/checks/run.py",
+      "mode": "100644",
+      "bytes": 9743,
+      "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/stdout.log",
+      "mode": "100644",
+      "bytes": 19651,
+      "sha256": "acadfae0fad49c5050562844ab5ee21ded38b28f396240e81e063522047a13b6"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "mode": "100644",
+      "bytes": 15984,
+      "sha256": "e4b13897d571883e5672097df3077b089aac854668608a9710e8e86eaebb8cd3"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "mode": "100644",
+      "bytes": 18905,
+      "sha256": "c5b8d1883fa50217c10d2aa0ce4c65b05a2f0b6b5de48ca08ed8dfc11c6adb3d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "mode": "100644",
+      "bytes": 17219,
+      "sha256": "5c3f0b9d244dd0c20ab455e04d7f56b5d5046129b76b35c3cd377a252c9410c1"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.config.json.ConfigBindingsTest.xml",
+      "mode": "100644",
+      "bytes": 16093,
+      "sha256": "db3c0774c875953694bf6aae5f26f0b63448944d58bea3493e4d767dbd118bed"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "mode": "100644",
+      "bytes": 16097,
+      "sha256": "4f29d261b1c5254733003a28bd6232cf9a8e2e832749e1bb84a1204d8573cdca"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.config.json.RawHashChainTest.xml",
+      "mode": "100644",
+      "bytes": 18806,
+      "sha256": "95bdfe0763e87538e1caecefe64e0be1f122d9f3fcac5d983180fdbba8aae570"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "mode": "100644",
+      "bytes": 17469,
+      "sha256": "ce9173d5d624f6998c1f2907b435e929b442c4b8824cb40c1fbef7c6353b2a72"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "mode": "100644",
+      "bytes": 16289,
+      "sha256": "4293be4c0d4b4bb327149c043dae585d57f29f837243365204ff9dd1b8797b4f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "mode": "100644",
+      "bytes": 15775,
+      "sha256": "18fa309ccb2e454d905a65bc83b7da9580d47cf7e6f58c7f3fe2abc669908eac"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.storage.StorageRouterTest.xml",
+      "mode": "100644",
+      "bytes": 16227,
+      "sha256": "70fa43c6a9fba6d29dbb74f8927be4d5b81f6962bd5317944881d11ea0c4cc45"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "mode": "100644",
+      "bytes": 15920,
+      "sha256": "757bacc3094ee9b7b280eb7dca603cc38ab300c8d46d0b06c0cc9c5abb884982"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "mode": "100644",
+      "bytes": 15789,
+      "sha256": "e154e7ee51e779353b3312b4396b3719a90ec7985385e6854040288ae87ab287"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.task.TaskMetadataTest.xml",
+      "mode": "100644",
+      "bytes": 15465,
+      "sha256": "7e5e1cb43904f6bea2a83d24042b0962c6ffbc5b5544327b2e2574e901696a91"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/adapters/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "mode": "100644",
+      "bytes": 17890,
+      "sha256": "1ab4a80dd75d16f7a549a4c07fe28b75953c5183ef05b43647e96dc7e6e34493"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/api/TEST-ama.api.DeploymentConfigTest.xml",
+      "mode": "100644",
+      "bytes": 32674,
+      "sha256": "2cdb22dd309980988ee0500e1114979594ce5c7a2cfc25cc993db7fdfddd3b7b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/api/TEST-ama.api.FileConfigurationTest.xml",
+      "mode": "100644",
+      "bytes": 31749,
+      "sha256": "0a632749780156a677c2426710666171f41de07b905444af42e09bdba6094993"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/api/TEST-ama.api.IdentityContractsTest.xml",
+      "mode": "100644",
+      "bytes": 31962,
+      "sha256": "6604d8ab06dffd9f486dc40ba46784eb38efc512f3f01b3815910a6c2eb0d7ea"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/api/TEST-ama.api.IdentitySecurityTest.xml",
+      "mode": "100644",
+      "bytes": 32359,
+      "sha256": "f09c8d42c3c8907f4facdc0f64f8dc0785076593bd9cec352ee321f4274db969"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/contracts/TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "mode": "100644",
+      "bytes": 7035,
+      "sha256": "f49be94ca4a2999d42c62028ba6d8dbae48e993d1f403e030dafb6132df1ba75"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/core/TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "mode": "100644",
+      "bytes": 7299,
+      "sha256": "8d5ba48e49c7b2433131c60742441f04795bf64aac5ff2af41779d33e21be6bc"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/core/TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "mode": "100644",
+      "bytes": 7104,
+      "sha256": "4d937740033c2b2bee315dc2ec1441fa23cdecca9970b27d5bcab6e1b1107bf6"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/core/TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "mode": "100644",
+      "bytes": 7239,
+      "sha256": "709821ae2b1553fd208f894498cbfbace151d6d2f6c583af42e9965ee857e0fd"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/core/TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "mode": "100644",
+      "bytes": 7500,
+      "sha256": "1fc7171b75e59135766093f0c256e0ccd26f3910100eeb11a542a94b37a547b7"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/core/TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "mode": "100644",
+      "bytes": 7644,
+      "sha256": "640bbb26873f918ac285ff5c5a6bd0183501b4c996ed8852f27c745bbdf4ae9f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/core/TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "mode": "100644",
+      "bytes": 7833,
+      "sha256": "b109260c6551431835cc0aa3a0e471bbb9b07ac51757832f77d35ae7392c7afa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/core/TEST-ama.transcript.BatchFingerprintTest.xml",
+      "mode": "100644",
+      "bytes": 7421,
+      "sha256": "b7050b11858a50b68c255011e480abec3dc39bccb082310da2afa5649374f751"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/integration-tests/TEST-ama.storage.ContractFixtureTest.xml",
+      "mode": "100644",
+      "bytes": 31823,
+      "sha256": "0699c8bb79efa08677485a65e13a096fc56507933a69bf1fa936bd58a7b42d1d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/integration-tests/TEST-ama.support.ContractClientTest.xml",
+      "mode": "100644",
+      "bytes": 31993,
+      "sha256": "41b66cbb6d8337f04870dd948b0f2a71d5c4d50465e178d8682de358faad599b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/unit-xml/worker/TEST-ama.worker.WorkerLoopTest.xml",
+      "mode": "100644",
+      "bytes": 7201,
+      "sha256": "41359368463af8770308f1605c629332c29328e9dddcd936d3d15ef312b63e84"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/green-01/xml/integration-tests/TEST-ama.transcript.ConfigArchiveRestartIT.xml",
+      "mode": "100644",
+      "bytes": 31893,
+      "sha256": "6e6215a56ed034f2693e80c55308f81be5dbab87d56b14a68bd59a533499a1b9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/prior-manifests-preserved.json",
+      "mode": "100644",
+      "bytes": 7061,
+      "sha256": "cadd12a1b0728430753cd7cac4703236e226ff81aea1d764888ef6b6d255fd85"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/public-allowlist.txt",
+      "mode": "100644",
+      "bytes": 63200,
+      "sha256": "2d44a71434d918f56ee3440524861672ddff7e93c6b960d69d1afbe07da2f74a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/command.json",
+      "mode": "100644",
+      "bytes": 156,
+      "sha256": "3b91ce731fce3320e09244e3fb86c8feebf0420a70c879b50b716af7f1ea6d30"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/counts.json",
+      "mode": "100644",
+      "bytes": 3525,
+      "sha256": "a2a3ecb14217e913f387b6ef4004bcee23c0be2055b39f7bdac0bf91fa440e78"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source-sha256.json",
+      "mode": "100644",
+      "bytes": 5101,
+      "sha256": "13849e6955acf87d7ec34db51f6556be6fbbd893e631a03debab81eb756a92ba"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "mode": "100644",
+      "bytes": 7759,
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 9154,
+      "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+      "mode": "100644",
+      "bytes": 1322,
+      "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "mode": "100644",
+      "bytes": 9234,
+      "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+      "mode": "100644",
+      "bytes": 3151,
+      "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "mode": "100644",
+      "bytes": 3050,
+      "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "mode": "100644",
+      "bytes": 14494,
+      "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 15521,
+      "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "mode": "100644",
+      "bytes": 1466,
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 741,
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "mode": "100644",
+      "bytes": 21482,
+      "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+      "mode": "100644",
+      "bytes": 1735,
+      "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+      "mode": "100644",
+      "bytes": 5522,
+      "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 717,
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+      "mode": "100644",
+      "bytes": 14492,
+      "sha256": "557635e1c8a7a9d570267b17ecf7772bf0cc99116eb4adf96af9a92dd8fb7850"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+      "mode": "100644",
+      "bytes": 6857,
+      "sha256": "513d994580f8fcdd86fe56a74ed289f9ea38e729c926be1568fa8147e2e7ca9c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "mode": "100644",
+      "bytes": 7590,
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/.gitattributes",
+      "mode": "100644",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/codec.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/confirmation.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "18790b2cb916288c6b467124f227bae0650874b4a03c8a0889e55e33280fac9f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "71523892244af21509107005607a98e0362ac39c1a3bb0d60f5ef076057e291d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/parser.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing1.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing2.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/tools/b06_archives_restart_run.py",
+      "mode": "100644",
+      "bytes": 3751,
+      "sha256": "9fb777d37d61e0b2dd9f534afaec18a4d6567159b3e194ce51aeee1fbc3de0ba"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/source/tools/checks/run.py",
+      "mode": "100644",
+      "bytes": 9743,
+      "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/stderr.log",
+      "mode": "100644",
+      "bytes": 26,
+      "sha256": "ebceae493f7ef42b4edc2557b5bb5c2eff31cd023c6b4a7a18dae3ce0cecd741"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/stdout.log",
+      "mode": "100644",
+      "bytes": 20662,
+      "sha256": "a0ff5227eb572dc69be35c64594f0326bfbcbeb2fb8562c727afe96f884d7934"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "mode": "100644",
+      "bytes": 15984,
+      "sha256": "ec49fc123dba2a3a4535e3de22308efb4a3fe453e44f27156ef34e2caf07cf00"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "mode": "100644",
+      "bytes": 18902,
+      "sha256": "50390e8f386cf84cbb3a665ff1febc2114972dd955e815d3a5bf79713f5faf79"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "mode": "100644",
+      "bytes": 17219,
+      "sha256": "b02366c38b254becd349bd36ddedd2a2b1f12fe913f425ed6f1febb41a2d77b8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.config.json.ConfigBindingsTest.xml",
+      "mode": "100644",
+      "bytes": 16091,
+      "sha256": "fe3fd6434ebc173056bac849e5d4ea6afae4862adf87a29e4dc4719f1bdc276c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "mode": "100644",
+      "bytes": 16097,
+      "sha256": "d717a111f3b5d28749168c52dd03a0edc42023cbb4e945d576e2a3210c14d2d8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.config.json.RawHashChainTest.xml",
+      "mode": "100644",
+      "bytes": 18812,
+      "sha256": "f51d6aaa009e898caec37a9c361d952237f7936d69dde6ef04aa458649c24113"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "mode": "100644",
+      "bytes": 17471,
+      "sha256": "20603410b4c5538c10e5366169182530baf28ff0e8d55a5de7315a5bc15ba65c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "mode": "100644",
+      "bytes": 16289,
+      "sha256": "55cc9ec92268e67739249acb782f7afabf6ac539a1437621c6fd39ce370cc783"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "mode": "100644",
+      "bytes": 15775,
+      "sha256": "4e721bacc2002a9e0bb9badeb5599efe975d42575b2111e139998c722401408a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.storage.StorageRouterTest.xml",
+      "mode": "100644",
+      "bytes": 16227,
+      "sha256": "9343d571b588d57ac929326ae1c2b33e41567454e03a91c129c42dcda35c5ea2"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "mode": "100644",
+      "bytes": 15919,
+      "sha256": "9c5dbae58d3cb5409a5d1e9934585f9a9a3b7c02132a7ca45a46b9bb1976460b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "mode": "100644",
+      "bytes": 15789,
+      "sha256": "d4b468aec84caf23c5ba0766bd0302153b493af28408774fd4011678776e90b8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.task.TaskMetadataTest.xml",
+      "mode": "100644",
+      "bytes": 15465,
+      "sha256": "099cb19b0358c77c7d7c504a468936976922b802d57800e1c8f2edcfcd7205e5"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/adapters/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "mode": "100644",
+      "bytes": 17890,
+      "sha256": "97a1cca7b8707f70ce723a7bdb40c447333208e07eb07ab367f7f707b56caa75"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/api/TEST-ama.api.DeploymentConfigTest.xml",
+      "mode": "100644",
+      "bytes": 32676,
+      "sha256": "afad9b0d6b19647f92b6203c4ef0f116947fa170d5e9af95d32e563cfbcdf17f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/api/TEST-ama.api.FileConfigurationTest.xml",
+      "mode": "100644",
+      "bytes": 31749,
+      "sha256": "7c7b471417d994bdd3b72f4d5593f77c04e913279c6c3d9bf5b5037e5da57dba"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/api/TEST-ama.api.IdentityContractsTest.xml",
+      "mode": "100644",
+      "bytes": 31962,
+      "sha256": "cd858ff09568dae46d4e4ed455959e5dab3917a0460c487bf39a60fdeb84c853"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/api/TEST-ama.api.IdentitySecurityTest.xml",
+      "mode": "100644",
+      "bytes": 32358,
+      "sha256": "a60af7bd4ce8e0054324bc3794d4eeb796ee9f2cdec37670bc01d17d865ef72c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/contracts/TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "mode": "100644",
+      "bytes": 7034,
+      "sha256": "08a66b0e2590137c571aa9a8e5cbd8dc84d61ce7d6bce45776b279244508285b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/core/TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "mode": "100644",
+      "bytes": 7299,
+      "sha256": "f68c23402f224d42d121ecad9d1b2f61dd0bc3116411b11f7de84cfa5d778ae8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/core/TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "mode": "100644",
+      "bytes": 7104,
+      "sha256": "58fdedd46842374cfa3a06b29c0c317aaaa6cba1035016479f763c8a84f25e22"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/core/TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "mode": "100644",
+      "bytes": 7240,
+      "sha256": "1fabb82230b45399386e0897edf9cedf6686438d879a0c3dd36b21928795c1ee"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/core/TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "mode": "100644",
+      "bytes": 7500,
+      "sha256": "2c7ceb3e97f95acb432a05c3af4c8431cb9172b556040cf06b5a3118edad5550"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/core/TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "mode": "100644",
+      "bytes": 7644,
+      "sha256": "a6279acf5e0fd08caba851815c3fed5e0a62c06b57bfa0f4daae049592ae5cd6"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/core/TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "mode": "100644",
+      "bytes": 7833,
+      "sha256": "0dda56fb5a8caebd28b407cc56866eb78b5644aa301dd490323bc2678c6f32a5"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/core/TEST-ama.transcript.BatchFingerprintTest.xml",
+      "mode": "100644",
+      "bytes": 7422,
+      "sha256": "7430863592b29bfe59e3da657d4d0c190e45037b02aa935eecd804cbaf912d8c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-01/unit-xml/worker/TEST-ama.worker.WorkerLoopTest.xml",
+      "mode": "100644",
+      "bytes": 7201,
+      "sha256": "57a29d54f7aeb7cf81367df10afaa4c959e37ce67cb812f6855f9a11b2308ddf"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/command.json",
+      "mode": "100644",
+      "bytes": 156,
+      "sha256": "3b91ce731fce3320e09244e3fb86c8feebf0420a70c879b50b716af7f1ea6d30"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/counts.json",
+      "mode": "100644",
+      "bytes": 3525,
+      "sha256": "a2a3ecb14217e913f387b6ef4004bcee23c0be2055b39f7bdac0bf91fa440e78"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source-sha256.json",
+      "mode": "100644",
+      "bytes": 5101,
+      "sha256": "2484bb341b6f0339559c7b502b3c621610ff612424eac39c95d2433a01c4156e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "mode": "100644",
+      "bytes": 7759,
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 9154,
+      "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+      "mode": "100644",
+      "bytes": 1322,
+      "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "mode": "100644",
+      "bytes": 9234,
+      "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+      "mode": "100644",
+      "bytes": 3151,
+      "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "mode": "100644",
+      "bytes": 3050,
+      "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "mode": "100644",
+      "bytes": 14494,
+      "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 15521,
+      "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "mode": "100644",
+      "bytes": 1466,
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 741,
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "mode": "100644",
+      "bytes": 21482,
+      "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+      "mode": "100644",
+      "bytes": 1735,
+      "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+      "mode": "100644",
+      "bytes": 5522,
+      "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 717,
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+      "mode": "100644",
+      "bytes": 14492,
+      "sha256": "557635e1c8a7a9d570267b17ecf7772bf0cc99116eb4adf96af9a92dd8fb7850"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+      "mode": "100644",
+      "bytes": 6899,
+      "sha256": "235361fe052dbc3cc4631618a8a0860cd3764be83c81499d46b53f81aea40be5"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "mode": "100644",
+      "bytes": 7590,
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/resources/ama/transcript/restart/.gitattributes",
+      "mode": "100644",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/resources/ama/transcript/restart/codec.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/resources/ama/transcript/restart/confirmation.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "18790b2cb916288c6b467124f227bae0650874b4a03c8a0889e55e33280fac9f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "71523892244af21509107005607a98e0362ac39c1a3bb0d60f5ef076057e291d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/resources/ama/transcript/restart/parser.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing1.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing2.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/tools/b06_archives_restart_run.py",
+      "mode": "100644",
+      "bytes": 3751,
+      "sha256": "9fb777d37d61e0b2dd9f534afaec18a4d6567159b3e194ce51aeee1fbc3de0ba"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/source/tools/checks/run.py",
+      "mode": "100644",
+      "bytes": 9743,
+      "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/stderr.log",
+      "mode": "100644",
+      "bytes": 26,
+      "sha256": "ebceae493f7ef42b4edc2557b5bb5c2eff31cd023c6b4a7a18dae3ce0cecd741"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/stdout.log",
+      "mode": "100644",
+      "bytes": 19553,
+      "sha256": "ef562a3bacaa83243b577013cc3625349580cdcfbd9a22f48dab7f97de2b681f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "mode": "100644",
+      "bytes": 15984,
+      "sha256": "3b7bd0400b26c6a508b9fa018d51665af14bb501d3efe8f5b133db9ab2050822"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "mode": "100644",
+      "bytes": 18905,
+      "sha256": "6c840216467582dbf7144aaa19938eb0e52cb3b8cb074ff9866d9ba6923df9d2"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "mode": "100644",
+      "bytes": 17219,
+      "sha256": "d8b7158e86b359c210dcbd7bd07b95344fd0345d8f613b0dde0b3f5b0f3ade7c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.config.json.ConfigBindingsTest.xml",
+      "mode": "100644",
+      "bytes": 16093,
+      "sha256": "f78da411ce1c4bf5d7b9e47272ccf160140c92fffb458d1877cbf1dcb7ae192d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "mode": "100644",
+      "bytes": 16097,
+      "sha256": "181be5c2daaa09dad487e6d836385f267fa527595ff6eb77e2e234ff97be1071"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.config.json.RawHashChainTest.xml",
+      "mode": "100644",
+      "bytes": 18809,
+      "sha256": "7a6c2a7cd9663162e1457cb12bc178c0d5097a1146ee510fb558c8e3259ad9a9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "mode": "100644",
+      "bytes": 17471,
+      "sha256": "d8e7c069740ab753102f9507f4d9c6748d8dd92a56bbcfb1a0f6b6646ce1b26c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "mode": "100644",
+      "bytes": 16290,
+      "sha256": "28726da2d1aa3aab687c814f42fcbfb68d97f67e3f35687b025932406b9c63b7"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "mode": "100644",
+      "bytes": 15775,
+      "sha256": "11adb46e0289ff145b5953155e3f06374ae5e94dc937ed8d8ad7a1a712378ec8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.storage.StorageRouterTest.xml",
+      "mode": "100644",
+      "bytes": 16227,
+      "sha256": "a9a51e388e9f8004f842d82016f33f4aa89b9814b8af499b9dcf811e825038c9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "mode": "100644",
+      "bytes": 15920,
+      "sha256": "893c02acb4e0d4a6d6b2f3b0d5a009ad225b90666b355e0046c1e61a1ff1e9eb"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "mode": "100644",
+      "bytes": 15789,
+      "sha256": "01709f91d9dbc666a25fa32d42a38a6cf8e66b8a9bdb2974e4d97dd433b9829f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.task.TaskMetadataTest.xml",
+      "mode": "100644",
+      "bytes": 15465,
+      "sha256": "44af8aed3255f28b2ece4f89d80c0faf792aac06dc39690c0a8e6724646c2ca7"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/adapters/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "mode": "100644",
+      "bytes": 17890,
+      "sha256": "3b53f63b0ce75af0874af598f993636e89c12e2937e431dbb42830fcec46f7d8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/api/TEST-ama.api.DeploymentConfigTest.xml",
+      "mode": "100644",
+      "bytes": 32676,
+      "sha256": "d571e40da8ac98108c1b3a5bc6e5a8c87abb75eb62d84f20d2b8cc9b7b3bb385"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/api/TEST-ama.api.FileConfigurationTest.xml",
+      "mode": "100644",
+      "bytes": 31750,
+      "sha256": "b2669c46786abd0ba96c6068530c080d449ceed4d490a67d81ff0de96255512a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/api/TEST-ama.api.IdentityContractsTest.xml",
+      "mode": "100644",
+      "bytes": 31963,
+      "sha256": "43e54e011df18919cc10f04226aae256e64645e3c77ca409bed2201566486da4"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/api/TEST-ama.api.IdentitySecurityTest.xml",
+      "mode": "100644",
+      "bytes": 32359,
+      "sha256": "a31b15be1adbd0fcf8b2a74318dc3c06a074d9ff718cbb88107cc46957d4e54c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/contracts/TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "mode": "100644",
+      "bytes": 7034,
+      "sha256": "b04baeec444338c51541f51e7d8f51601be5719e98d65ccafb76e456ee307441"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/core/TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "mode": "100644",
+      "bytes": 7298,
+      "sha256": "1bed8ba66d915fa44938b6d53680e4de8ea7daec358aa7d041be43cfd4096387"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/core/TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "mode": "100644",
+      "bytes": 7104,
+      "sha256": "47df8d5f8010457501ba8d85f1089e1c7b199772db234cb3586468188e0ae72a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/core/TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "mode": "100644",
+      "bytes": 7239,
+      "sha256": "784534e084556b2a9ff10c2f52980a93bb8f21e4ace1595f5ea8237e67b68389"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/core/TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "mode": "100644",
+      "bytes": 7501,
+      "sha256": "0afab4f0427d6f68fb229e41aa5441c401210405dec1f3ab2f30b5ab2c372196"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/core/TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "mode": "100644",
+      "bytes": 7643,
+      "sha256": "61f78f5ca9b82bbf6cbd341e4629331d79676e8a8950756b1a5b9a251e574efb"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/core/TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "mode": "100644",
+      "bytes": 7831,
+      "sha256": "b49cb02fc9e9c71215f71c3cc79c29627b3ca053dbb3327f5c2fa98cf9adabee"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/core/TEST-ama.transcript.BatchFingerprintTest.xml",
+      "mode": "100644",
+      "bytes": 7423,
+      "sha256": "879cf483d7988b84c02fe5110e1e0e5b3bf0a3554ebee0f27924598d7ef6c6a3"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-02/unit-xml/worker/TEST-ama.worker.WorkerLoopTest.xml",
+      "mode": "100644",
+      "bytes": 7201,
+      "sha256": "4cc1c38365357e52b216ccec181e138316093a5490abb4d30ad7f1c4854c4a16"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/command.json",
+      "mode": "100644",
+      "bytes": 156,
+      "sha256": "3b91ce731fce3320e09244e3fb86c8feebf0420a70c879b50b716af7f1ea6d30"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/counts.json",
+      "mode": "100644",
+      "bytes": 3907,
+      "sha256": "98e1109a499657b47b09cc74beaf4dbe06de8ae5538df0080441408bd66a285c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/A.argv.txt",
+      "mode": "100644",
+      "bytes": 14280,
+      "sha256": "e4a68670a56f9196f6944895589fdfe51eac967b16f631bb8d10671fdbb65883"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/A.exit.txt",
+      "mode": "100644",
+      "bytes": 1,
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/A.parent-pid.txt",
+      "mode": "100644",
+      "bytes": 6,
+      "sha256": "7439c7132df96cf4d5b8ac40befd4b157cad31c021f3c372b30c505652b283f7"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/A.properties",
+      "mode": "100644",
+      "bytes": 913,
+      "sha256": "60fcda3bed4088de985baf78d887fa47ad778c2fa824a4c2cc9757227ecd5f02"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/A.stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/A.stdout.log",
+      "mode": "100644",
+      "bytes": 246,
+      "sha256": "3a68291e2ccf19ca354374c8329638bf50935ea6edaf3e0152c26149ffae338c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/B.argv.txt",
+      "mode": "100644",
+      "bytes": 14280,
+      "sha256": "a090ac9a2431072b0857f5cbd68a0435be070e4e172b28980520f95cbe7a9696"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/B.exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "535fa30d7e25dd8a49f1536779734ec8286108d115da5045d77f3b4185d8f790"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/B.parent-pid.txt",
+      "mode": "100644",
+      "bytes": 6,
+      "sha256": "33c8f1c18dcae8189c3762e8b20f72571e661d6a6570ee501d064d18a565c209"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/B.properties",
+      "mode": "100644",
+      "bytes": 134,
+      "sha256": "0faedbc208634990c9d807c13852af459751131714c84bdb2ba2df7bc658a400"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/B.stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/B.stdout.log",
+      "mode": "100644",
+      "bytes": 77,
+      "sha256": "855b1a584e416e9c22cb7a4e1cd95ba6e205bc9b905f71990fb1e5c81ea426f3"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/commit-handoff.properties",
+      "mode": "100644",
+      "bytes": 895,
+      "sha256": "ac4fbf9246058824eac0ba364636121c26986dc8587c900a1ec801ca144d6bde"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/db-before.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "f97dda6395bdbeac2edf3efb5dc708e28d2555e05f65fb5adefef149ce8e73f2"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/parent-jvm-pid.txt",
+      "mode": "100644",
+      "bytes": 6,
+      "sha256": "9764b9065ff23d4171f77674a2c8fd91a0dd58a963214230c0fcc696977dad06"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/persisted-manifest.json",
+      "mode": "100644",
+      "bytes": 1793,
+      "sha256": "35a15fdca24ed0c7509c231730d915b5a29c5bf0e072db83f5c638749e9c7b6e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/.publish.lock",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/index.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d/objects/7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/index.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/runtime-f95dcdec-0ab1-4f61-877e-81d0a132fafe/positive/releases/d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d/objects/7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source-sha256.json",
+      "mode": "100644",
+      "bytes": 5101,
+      "sha256": "27443ed79b39b41bc7c56c148e094aab0cf5054286cddfc64b84c9f623417e1d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "mode": "100644",
+      "bytes": 7759,
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 9154,
+      "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+      "mode": "100644",
+      "bytes": 1322,
+      "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "mode": "100644",
+      "bytes": 9234,
+      "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+      "mode": "100644",
+      "bytes": 3151,
+      "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "mode": "100644",
+      "bytes": 3050,
+      "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "mode": "100644",
+      "bytes": 14494,
+      "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 15521,
+      "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "mode": "100644",
+      "bytes": 1466,
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 741,
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "mode": "100644",
+      "bytes": 21482,
+      "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+      "mode": "100644",
+      "bytes": 1735,
+      "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+      "mode": "100644",
+      "bytes": 5522,
+      "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 717,
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+      "mode": "100644",
+      "bytes": 14523,
+      "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+      "mode": "100644",
+      "bytes": 6899,
+      "sha256": "235361fe052dbc3cc4631618a8a0860cd3764be83c81499d46b53f81aea40be5"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "mode": "100644",
+      "bytes": 7590,
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/resources/ama/transcript/restart/.gitattributes",
+      "mode": "100644",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/resources/ama/transcript/restart/codec.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/resources/ama/transcript/restart/confirmation.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "18790b2cb916288c6b467124f227bae0650874b4a03c8a0889e55e33280fac9f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "71523892244af21509107005607a98e0362ac39c1a3bb0d60f5ef076057e291d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/resources/ama/transcript/restart/parser.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing1.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing2.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/tools/b06_archives_restart_run.py",
+      "mode": "100644",
+      "bytes": 3751,
+      "sha256": "9fb777d37d61e0b2dd9f534afaec18a4d6567159b3e194ce51aeee1fbc3de0ba"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/source/tools/checks/run.py",
+      "mode": "100644",
+      "bytes": 9743,
+      "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/stderr.log",
+      "mode": "100644",
+      "bytes": 26,
+      "sha256": "ebceae493f7ef42b4edc2557b5bb5c2eff31cd023c6b4a7a18dae3ce0cecd741"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/stdout.log",
+      "mode": "100644",
+      "bytes": 21472,
+      "sha256": "21f1f4e40655e2d2dd66e16f14299618eaa35d12ad11616eabe0537b0f22e8d7"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "mode": "100644",
+      "bytes": 15984,
+      "sha256": "68c48381de989e77c9a9db313912c4f652ed76fb77e21b4b65e6a82b40611999"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "mode": "100644",
+      "bytes": 18904,
+      "sha256": "b31c5db636509f676012b8011ddc92242e3790fbad4ab4e6c0f3c4ca3f07e638"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "mode": "100644",
+      "bytes": 17218,
+      "sha256": "c87d67d6b73dd74024234903ae81cd88174202c5792bea8f5df30dbd3442d9f1"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.config.json.ConfigBindingsTest.xml",
+      "mode": "100644",
+      "bytes": 16094,
+      "sha256": "07aee85ceb986e17a8b953e37d35255514eeb3e28080c090ef12d7b01c26ed4e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "mode": "100644",
+      "bytes": 16097,
+      "sha256": "d133e876e5b34d80d8a25b2511c003268234f26c6d5936bf7fa07b417c118feb"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.config.json.RawHashChainTest.xml",
+      "mode": "100644",
+      "bytes": 18807,
+      "sha256": "eea784ab2e85d0b6562d12b79a2e1680a0b4e2d4310c98fd29b7af95f7e7043c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "mode": "100644",
+      "bytes": 17471,
+      "sha256": "e2ef3f6c791e77c37ad7de62136b31dfaafcf9b99c66c3319b23677745f66c1a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "mode": "100644",
+      "bytes": 16290,
+      "sha256": "fe12a31f622aee2db4b235020173b1966c04ccfaca8a5fd74944d9945df4f588"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "mode": "100644",
+      "bytes": 15775,
+      "sha256": "8fce7a36ef6bd206b2105e06c1ee3ee422c1d282ac199a3e7f299c5471d98c6f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.storage.StorageRouterTest.xml",
+      "mode": "100644",
+      "bytes": 16227,
+      "sha256": "a12525a80c7bbca42c5a212ef7f6533f48a1fd7f99aba4f5b7bdddcca2ce74f4"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "mode": "100644",
+      "bytes": 15920,
+      "sha256": "77887e76ad470e1b27438d6cfc65436955f601602536d7200a1331d39739acba"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "mode": "100644",
+      "bytes": 15789,
+      "sha256": "382523b8ab99692230d7807b039ef79a29e39a68ce25d264a9725779d0d921cc"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.task.TaskMetadataTest.xml",
+      "mode": "100644",
+      "bytes": 15464,
+      "sha256": "645e5f1a7c10e181ec2dc7d379b081b73be3e1ab1e9ad1d068bdb94a53ba76d8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/adapters/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "mode": "100644",
+      "bytes": 17888,
+      "sha256": "cdeed34931654a270fb736e702addc934b99fd0cc464119200c7a068b11de4fc"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/api/TEST-ama.api.DeploymentConfigTest.xml",
+      "mode": "100644",
+      "bytes": 32674,
+      "sha256": "ccca9aafc94c1b5157dbf3af1fba31b3d61256ababe47c849a5b97208f9ae4ac"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/api/TEST-ama.api.FileConfigurationTest.xml",
+      "mode": "100644",
+      "bytes": 31748,
+      "sha256": "8e21b55c402c5d6125091a9e09a478572f42b3767f74f614daa93fcefd20b9f5"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/api/TEST-ama.api.IdentityContractsTest.xml",
+      "mode": "100644",
+      "bytes": 31960,
+      "sha256": "ac84d5eca83dc875d1694811364cd3a92124ddb68dc3c01f3200137ad944525a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/api/TEST-ama.api.IdentitySecurityTest.xml",
+      "mode": "100644",
+      "bytes": 32358,
+      "sha256": "57d6c97f44dd8e5c1629da61db0b1a9f26ff86c6f923b97c121d2b8b4781b7fa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/contracts/TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "mode": "100644",
+      "bytes": 7035,
+      "sha256": "364de8c520decefffbbd4cc8b5fee7f9ba4f874d23bdef1dee97bb533db69bc5"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/core/TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "mode": "100644",
+      "bytes": 7299,
+      "sha256": "22c772597e44a45bf8d8c710ec8dc4e057dfc8b9747cca316f91da25b5fbbe23"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/core/TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "mode": "100644",
+      "bytes": 7104,
+      "sha256": "80a4eb603b60f30cbfc77b23cf02407eb691befa2131f73b7c3a8438b353edec"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/core/TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "mode": "100644",
+      "bytes": 7240,
+      "sha256": "52d1519a2dda80e07e30e5a2b119e65f66ba1ff93dfc9b7e53279c9b1779fe24"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/core/TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "mode": "100644",
+      "bytes": 7501,
+      "sha256": "34d9715a359171835e390679306a374a22981fc836b2dd8c2d38fc1783a9648e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/core/TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "mode": "100644",
+      "bytes": 7643,
+      "sha256": "6cb4eef42d2d74ea35489ffae1bb20b7f1b6bcd2dab339eef13220b34b37fed0"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/core/TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "mode": "100644",
+      "bytes": 7833,
+      "sha256": "c2d749f2206ea9e50897debf073b79a56444570d5d64b41f436a3a63931fecbb"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/core/TEST-ama.transcript.BatchFingerprintTest.xml",
+      "mode": "100644",
+      "bytes": 7422,
+      "sha256": "418e1fb29eaa3ec2e2e298b08947d5ca6d1452764d6cd2ca858855611183dc4b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/integration-tests/TEST-ama.storage.ContractFixtureTest.xml",
+      "mode": "100644",
+      "bytes": 31823,
+      "sha256": "ea36f328a0f143766a5576767237d63785fcf1a0fcf6ea585be2c3a34c59e9f3"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/integration-tests/TEST-ama.support.ContractClientTest.xml",
+      "mode": "100644",
+      "bytes": 31993,
+      "sha256": "8455b2db9c5d9a9eb1c0391936376754e6de417f7cf27b9228308089186f069c"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/unit-xml/worker/TEST-ama.worker.WorkerLoopTest.xml",
+      "mode": "100644",
+      "bytes": 7200,
+      "sha256": "12ef1834dada02347639d6be085884013d134f3b8e7e75132d646b69606d845e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-03/xml/integration-tests/TEST-ama.transcript.ConfigArchiveRestartIT.xml",
+      "mode": "100644",
+      "bytes": 32807,
+      "sha256": "0fa6799b91fc6dcd50c84cd565543acaa0573787c4090c876fb1d976e33c8fe3"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/red-to-green-probe.diff",
+      "mode": "100644",
+      "bytes": 1540,
+      "sha256": "ceab2880dac38f0940db8e984e9c5d7f30562efa7f460556a49eadc350c61752"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/runs.json",
+      "mode": "100644",
+      "bytes": 2828,
+      "sha256": "5fcdbdfeed22d43cda708a828ca34a18c183d5cfdc8833f50d674b78a5d2fefa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/setup-history.md",
+      "mode": "100644",
+      "bytes": 1382,
+      "sha256": "7fc9e07e297065d102160b25d9bcaf2a6f1c4b2cc9b74d3286842d5b8e006dcc"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/command.json",
+      "mode": "100644",
+      "bytes": 157,
+      "sha256": "56132e1fda6490549bd7044384187a9adc2ffde4388f8f3525b4fe9c7c259f35"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/counts.json",
+      "mode": "100644",
+      "bytes": 160,
+      "sha256": "08dca5271bea0d039fc0f9e99e1d2c483405165540ba2dbf939de122bc01dfb9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source-sha256.json",
+      "mode": "100644",
+      "bytes": 5101,
+      "sha256": "688f5aced8e7c40394919d8a54f5947033f183c47c44bd12e8b2fbf553368f51"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "mode": "100644",
+      "bytes": 7759,
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 9154,
+      "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+      "mode": "100644",
+      "bytes": 1322,
+      "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "mode": "100644",
+      "bytes": 9234,
+      "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+      "mode": "100644",
+      "bytes": 3151,
+      "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "mode": "100644",
+      "bytes": 3050,
+      "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "mode": "100644",
+      "bytes": 14494,
+      "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 15521,
+      "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "mode": "100644",
+      "bytes": 1466,
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 741,
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "mode": "100644",
+      "bytes": 21482,
+      "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+      "mode": "100644",
+      "bytes": 1735,
+      "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+      "mode": "100644",
+      "bytes": 5522,
+      "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 717,
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+      "mode": "100644",
+      "bytes": 14523,
+      "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+      "mode": "100644",
+      "bytes": 6964,
+      "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "mode": "100644",
+      "bytes": 7590,
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/resources/ama/transcript/restart/.gitattributes",
+      "mode": "100644",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/resources/ama/transcript/restart/codec.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/resources/ama/transcript/restart/confirmation.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "18790b2cb916288c6b467124f227bae0650874b4a03c8a0889e55e33280fac9f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "71523892244af21509107005607a98e0362ac39c1a3bb0d60f5ef076057e291d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/resources/ama/transcript/restart/parser.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing1.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing2.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/tools/b06_archives_restart_run.py",
+      "mode": "100644",
+      "bytes": 3860,
+      "sha256": "2fc02b985f459f8d73c342648b2c7ac9b60c934bff40c0d71a36b0e59a4f00d9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/source/tools/checks/run.py",
+      "mode": "100644",
+      "bytes": 9743,
+      "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/stdout.log",
+      "mode": "100644",
+      "bytes": 10853,
+      "sha256": "c0b691bea962997b06d327f1b58572a295dacffcf44cae97729af3346e5f28aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-batch/unit-xml/core/TEST-ama.transcript.BatchFingerprintTest.xml",
+      "mode": "100644",
+      "bytes": 7368,
+      "sha256": "f4172052d523b0f5b870706a5b61ad07bf1133ce57769646f6634724e47d5a43"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/command.json",
+      "mode": "100644",
+      "bytes": 162,
+      "sha256": "7ae4ca1965f83d04baf34d710f363f6a6ba1424140d602e8f4d4372281c08f5a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/counts.json",
+      "mode": "100644",
+      "bytes": 166,
+      "sha256": "d6c93dba9c28cde85e2cb09a254d7cfac7209628326d5138920578ad81a0e544"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source-sha256.json",
+      "mode": "100644",
+      "bytes": 5101,
+      "sha256": "688f5aced8e7c40394919d8a54f5947033f183c47c44bd12e8b2fbf553368f51"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "mode": "100644",
+      "bytes": 7759,
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 9154,
+      "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+      "mode": "100644",
+      "bytes": 1322,
+      "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "mode": "100644",
+      "bytes": 9234,
+      "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+      "mode": "100644",
+      "bytes": 3151,
+      "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "mode": "100644",
+      "bytes": 3050,
+      "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "mode": "100644",
+      "bytes": 14494,
+      "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 15521,
+      "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "mode": "100644",
+      "bytes": 1466,
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 741,
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "mode": "100644",
+      "bytes": 21482,
+      "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+      "mode": "100644",
+      "bytes": 1735,
+      "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+      "mode": "100644",
+      "bytes": 5522,
+      "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 717,
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+      "mode": "100644",
+      "bytes": 14523,
+      "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+      "mode": "100644",
+      "bytes": 6964,
+      "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "mode": "100644",
+      "bytes": 7590,
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/resources/ama/transcript/restart/.gitattributes",
+      "mode": "100644",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/resources/ama/transcript/restart/codec.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/resources/ama/transcript/restart/confirmation.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "18790b2cb916288c6b467124f227bae0650874b4a03c8a0889e55e33280fac9f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "71523892244af21509107005607a98e0362ac39c1a3bb0d60f5ef076057e291d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/resources/ama/transcript/restart/parser.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing1.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing2.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/tools/b06_archives_restart_run.py",
+      "mode": "100644",
+      "bytes": 3860,
+      "sha256": "2fc02b985f459f8d73c342648b2c7ac9b60c934bff40c0d71a36b0e59a4f00d9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/source/tools/checks/run.py",
+      "mode": "100644",
+      "bytes": 9743,
+      "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/stdout.log",
+      "mode": "100644",
+      "bytes": 10960,
+      "sha256": "7e5b4f427470552e7251c4d7f47cbace96f76f24316bf16c113e40946e507e05"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index-fix1/unit-xml/adapters/TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "mode": "100644",
+      "bytes": 15893,
+      "sha256": "8e1d81f05962606d5c7dc59ee88776d407e611231a184ddb192b1571d53e77e5"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/command.json",
+      "mode": "100644",
+      "bytes": 170,
+      "sha256": "0a0363dc7cf0a93ebdfeb6f8fa8d07da855285c95c865c46ee074ed24625cece"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/counts.json",
+      "mode": "100644",
+      "bytes": 175,
+      "sha256": "b83296123ca20d9a2bb394e135a461a6e099fa47ed089710621353569785274f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/exit.txt",
+      "mode": "100644",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source-sha256.json",
+      "mode": "100644",
+      "bytes": 5101,
+      "sha256": "688f5aced8e7c40394919d8a54f5947033f183c47c44bd12e8b2fbf553368f51"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "mode": "100644",
+      "bytes": 7759,
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 9154,
+      "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+      "mode": "100644",
+      "bytes": 1322,
+      "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "mode": "100644",
+      "bytes": 9234,
+      "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+      "mode": "100644",
+      "bytes": 3151,
+      "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "mode": "100644",
+      "bytes": 3050,
+      "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "mode": "100644",
+      "bytes": 14494,
+      "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 15521,
+      "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "mode": "100644",
+      "bytes": 1466,
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "mode": "100644",
+      "bytes": 741,
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "mode": "100644",
+      "bytes": 21482,
+      "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+      "mode": "100644",
+      "bytes": 1735,
+      "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+      "mode": "100644",
+      "bytes": 5522,
+      "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "mode": "100644",
+      "bytes": 717,
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+      "mode": "100644",
+      "bytes": 14523,
+      "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+      "mode": "100644",
+      "bytes": 6964,
+      "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "mode": "100644",
+      "bytes": 7590,
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/resources/ama/transcript/restart/.gitattributes",
+      "mode": "100644",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/resources/ama/transcript/restart/codec.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/resources/ama/transcript/restart/confirmation.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index1.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "18790b2cb916288c6b467124f227bae0650874b4a03c8a0889e55e33280fac9f"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/resources/ama/transcript/restart/index2.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "71523892244af21509107005607a98e0362ac39c1a3bb0d60f5ef076057e291d"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/resources/ama/transcript/restart/parser.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing1.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/backend/integration-tests/src/test/resources/ama/transcript/restart/processing2.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/tools/b06_archives_restart_run.py",
+      "mode": "100644",
+      "bytes": 3860,
+      "sha256": "2fc02b985f459f8d73c342648b2c7ac9b60c934bff40c0d71a36b0e59a4f00d9"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/source/tools/checks/run.py",
+      "mode": "100644",
+      "bytes": 9743,
+      "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/stderr.log",
+      "mode": "100644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/stdout.log",
+      "mode": "100644",
+      "bytes": 10902,
+      "sha256": "fa70758df0c478b639d1bbf49ab02920f2063c4904dd68b8f37379c7e8825017"
+    },
+    {
+      "path": "artifacts/phase-b/b06-archives/restart/unit-index/unit-xml/adapters/TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "mode": "100644",
+      "bytes": 18822,
+      "sha256": "114f59df1dae70dce00d278fec59a0e3c440fdf33a655b38f27fca24e2525899"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+      "mode": "100644",
+      "bytes": 14523,
+      "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+      "mode": "100644",
+      "bytes": 6964,
+      "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "mode": "100644",
+      "bytes": 7590,
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+    },
+    {
+      "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/.gitattributes",
+      "mode": "100644",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/codec.json",
+      "mode": "100644",
+      "bytes": 223,
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+    },
+    {
+      "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/confirmation.json",
+      "mode": "100644",
+      "bytes": 419,
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+    },
+    {
+      "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/index1.json",
+      "mode": "100644",
+      "bytes": 757,
+      "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+    },
+    {
+      "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/index1.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "18790b2cb916288c6b467124f227bae0650874b4a03c8a0889e55e33280fac9f"
+    },
+    {
+      "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/index2.json",
+      "mode": "100644",
+      "bytes": 989,
+      "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+    },
+    {
+      "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/index2.sha256",
+      "mode": "100644",
+      "bytes": 64,
+      "sha256": "71523892244af21509107005607a98e0362ac39c1a3bb0d60f5ef076057e291d"
+    },
+    {
+      "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/parser.json",
+      "mode": "100644",
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/processing1.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    },
+    {
+      "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/processing2.json",
+      "mode": "100644",
+      "bytes": 1016,
+      "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+    },
+    {
+      "path": "docs/acceptance/b/task-B-06-archives-integration.md",
+      "mode": "100644",
+      "bytes": 9353,
+      "sha256": "5f649c23313e26f599dbc31f0d9940aec6e4c29f4ff68c6116eb1a0058ed4378"
+    },
+    {
+      "path": "docs/acceptance/b/task-B-06-archives-report.md",
+      "mode": "100644",
+      "bytes": 12898,
+      "sha256": "33b9c90f92d0cc6b32077d369f3ecb722b6cc77d085ae123f15bdd114212f212"
+    },
+    {
+      "path": "tools/b06_archives_restart_audit.py",
+      "mode": "100644",
+      "bytes": 3049,
+      "sha256": "f77e5bae5ece892d96be4d528d163bdbe1d93c1cadcc8945d00ef17b56bbfc19"
+    },
+    {
+      "path": "tools/b06_archives_restart_finalize.py",
+      "mode": "100644",
+      "bytes": 6065,
+      "sha256": "db38287cdc0dee82aecf7946bf8894e14a8d91e07c39d59a4fe0221870de5d42"
+    },
+    {
+      "path": "tools/b06_archives_restart_run.py",
+      "mode": "100644",
+      "bytes": 3860,
+      "sha256": "2fc02b985f459f8d73c342648b2c7ac9b60c934bff40c0d71a36b0e59a4f00d9"
+    }
+  ],
+  "protectedBaselinePathsVerified": 2840
+}
