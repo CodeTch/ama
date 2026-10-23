@@ -82,3 +82,7 @@ Read docs/superpowers/specs/2026-10-23-ama-phase-b-reconciliation-fairness.md an
 ## Task4 adopted intake/API refinement
 
 Read docs/superpowers/specs/2026-10-23-ama-phase-b-processing-intake.md and exact Task4 R1/reviews. Mandatory accepted-result lookup precedes rejecting current intake prerequisites; one bounded fresh concurrent-winner recovery lookup after named ordinary preparation failure; preserve reauthorization/exact semantic match. Project B04 upload actions/terminal retries using actual operation/state/historical-route matrix. Java names align with Task3 final authority/preparer; no duplicate issuance. Task4 owns real legacy info/roster lossless-token extensions and server discovery/OpenAPI; Task12 actual browser. No implementation activation from this design adoption.
+
+## Task3 adopted pre-gate complete-read refinement
+
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-pre-gate-read.md and exact original/R1/R2/reviews. This closes the producer-hash-before-identities API gap and PRD-01 authorization-precedence residual. Fixed final selector TYPE permission floor is independent of optional provider resolution; entire dispatch failure is private until fresh READ/owner EDIT on same gate. Data-only preparation never grants source/byte authority; legacy-only behavior preserved. Actual implementation/tests independent gate remains pending.
