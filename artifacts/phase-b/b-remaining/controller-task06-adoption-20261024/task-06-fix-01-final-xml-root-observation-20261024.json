@@ -1,0 +1,809 @@
+{
+  "utc": "2026-10-23T22:13:55.444690+00:00",
+  "scope": "Fresh direct XML/receipt read only; finalsource/composeddistinct/custody still independentreviewpending",
+  "windows": [
+    {
+      "window": "final-units-01",
+      "xml": 41,
+      "counts": [
+        254,
+        0,
+        0,
+        0
+      ],
+      "receiptExit": 0,
+      "receiptSha256": "592b586d89170ae08fce1edc04d570a7f7d1cca7ee19fc66107b423135983af9",
+      "suites": [
+        {
+          "name": "ama.config.file.ControlledArchiveFix1Test",
+          "counts": [
+            4,
+            0,
+            0,
+            0
+          ],
+          "sha256": "aec1864ef97a451be2ff106b09fbdbc5a5debda699a54b03a2510c8b4dbb3ad6",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml"
+        },
+        {
+          "name": "ama.config.file.ControlledConfigArchiveSourceTest",
+          "counts": [
+            24,
+            0,
+            0,
+            0
+          ],
+          "sha256": "daed92f4d71af30625b121d9e468f990aa1fe5af917729410a1a702e10502ad6",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml"
+        },
+        {
+          "name": "ama.config.json.ArchiveBudgetTest",
+          "counts": [
+            15,
+            0,
+            0,
+            0
+          ],
+          "sha256": "6ae2a87701e622ffb73a9506bb4140994adfa96ca2a25228bd05b5eace156ea7",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml"
+        },
+        {
+          "name": "ama.config.json.ConfigBindingsTest",
+          "counts": [
+            7,
+            0,
+            0,
+            0
+          ],
+          "sha256": "694a8f9164392d8dd812d2b94b386c327e63115bedeb83b1b4da1dc5e798100b",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.config.json.ConfigBindingsTest.xml"
+        },
+        {
+          "name": "ama.config.json.ConfigWireReaderTest",
+          "counts": [
+            6,
+            0,
+            0,
+            0
+          ],
+          "sha256": "a5f9db655ff89b51bc2182f2e5ec2fa5443cd9702fb869e895320f29e22138dc",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml"
+        },
+        {
+          "name": "ama.config.json.DraftConfirmationHashTest",
+          "counts": [
+            3,
+            0,
+            0,
+            0
+          ],
+          "sha256": "18d7e1d58fe3a0fbbad7954ac5696d1836f331eb8962a2cd80998aaaa8a7c01a",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.config.json.DraftConfirmationHashTest.xml"
+        },
+        {
+          "name": "ama.config.json.RawHashChainTest",
+          "counts": [
+            25,
+            0,
+            0,
+            0
+          ],
+          "sha256": "642fcfb4a9cbb7defed7528bedb4c1b4f3b4ec07eb6ed3948a1bf21ce687e60f",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.config.json.RawHashChainTest.xml"
+        },
+        {
+          "name": "ama.config.json.SavedTranscriptAdmissionTest",
+          "counts": [
+            2,
+            0,
+            0,
+            0
+          ],
+          "sha256": "d71fe84e76442b56c3baf57869f4c851ed6f4d041919000e941d77adffe7232d",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.config.json.SavedTranscriptAdmissionTest.xml"
+        },
+        {
+          "name": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "counts": [
+            16,
+            0,
+            0,
+            0
+          ],
+          "sha256": "6ca811d0672d15362aaa761e9507159f85d6141775eaf14196d18e57ae49a789",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml"
+        },
+        {
+          "name": "ama.minutes.json.StrictMinutesJsonReaderTest",
+          "counts": [
+            7,
+            0,
+            0,
+            0
+          ],
+          "sha256": "3a82484b8d0377c6da3f14ba190ad2b02c640af1f9f9b11e7fccb7f588536d05",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml"
+        },
+        {
+          "name": "ama.storage.DeadlineInputStreamTest",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "4a04de032835ff79784152a04d744c4252a45bd8e7119f218d38b1a913d5be30",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.storage.DeadlineInputStreamTest.xml"
+        },
+        {
+          "name": "ama.storage.FileBackendDefinitionsTest",
+          "counts": [
+            2,
+            0,
+            0,
+            0
+          ],
+          "sha256": "8b59820ba44955fc3fa249f555ebdcfb1b057c669ca8b354caa85dbec9ce7df4",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.storage.FileBackendDefinitionsTest.xml"
+        },
+        {
+          "name": "ama.storage.ManagedBackendIdentityTest",
+          "counts": [
+            4,
+            0,
+            0,
+            0
+          ],
+          "sha256": "603e447aae8249e0e1df01aeb67b6a10ddd5e1f7e9316a783022ab6acd07a40a",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml"
+        },
+        {
+          "name": "ama.storage.SourceReadLifetimeTest",
+          "counts": [
+            7,
+            0,
+            0,
+            0
+          ],
+          "sha256": "aed11cd1684ea499de3724c67ec32e54b8997507604703b4e9c998c02bf80572",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml"
+        },
+        {
+          "name": "ama.storage.StorageRouterTest",
+          "counts": [
+            8,
+            0,
+            0,
+            0
+          ],
+          "sha256": "97f10a070f7d500be33803149492b2999d1e112e8b7fccdac874ab80b90c8be0",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.storage.StorageRouterTest.xml"
+        },
+        {
+          "name": "ama.storage.s3.S3LayoutV3Test",
+          "counts": [
+            5,
+            0,
+            0,
+            0
+          ],
+          "sha256": "9a20e7d86a7c8befa0589ed311e82975a9cfcf24b59da752c7a2ced87ed93525",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml"
+        },
+        {
+          "name": "ama.storage.s3.S3ProtocolTest",
+          "counts": [
+            4,
+            0,
+            0,
+            0
+          ],
+          "sha256": "ed9316fee576e21cc10e1ed74e396d354e7a7ec47b387211f3000fcf167b5bb5",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml"
+        },
+        {
+          "name": "ama.task.TaskMetadataTest",
+          "counts": [
+            2,
+            0,
+            0,
+            0
+          ],
+          "sha256": "d923a928f6b0cd70a429b81da1a78cb0c605dc369b3f315167479b6c775c5836",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.task.TaskMetadataTest.xml"
+        },
+        {
+          "name": "ama.transcript.MeasuredTextTranscriptParserTest",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "0f73ff73f5baa7fc5686ea31c455ac58b67d91f2d8d4e215f77258221f25af6c",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.transcript.MeasuredTextTranscriptParserTest.xml"
+        },
+        {
+          "name": "ama.transcript.TextTranscriptParserTest",
+          "counts": [
+            19,
+            0,
+            0,
+            0
+          ],
+          "sha256": "6e33d0d302e60118db164d27d7374ce8fee31413e9e2045825364ba810c5aa46",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml"
+        },
+        {
+          "name": "ama.api.DeploymentConfigTest",
+          "counts": [
+            9,
+            0,
+            0,
+            0
+          ],
+          "sha256": "0ee6da5ec3db794ab68a2fcfa5f062b5a890ebedcf02548a954c8879fe5d387a",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/api-TEST-ama.api.DeploymentConfigTest.xml"
+        },
+        {
+          "name": "ama.api.FileConfigurationTest",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "1eb4720a9faac227ef22131280b31f9bfc759d450402302b51dca7cb438ac640",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/api-TEST-ama.api.FileConfigurationTest.xml"
+        },
+        {
+          "name": "ama.api.HttpRevisionTokensTest",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "91e207b9d7d55b774b8d9f589544ba541d959251d8f358b56a9b4ae2e66f7f6e",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/api-TEST-ama.api.HttpRevisionTokensTest.xml"
+        },
+        {
+          "name": "ama.api.IdentityContractsTest",
+          "counts": [
+            3,
+            0,
+            0,
+            0
+          ],
+          "sha256": "0921f9c02251f8689cdaa7bab1e239b30a9cb1d404cdf41886e9430515f69e6c",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/api-TEST-ama.api.IdentityContractsTest.xml"
+        },
+        {
+          "name": "ama.api.IdentitySecurityTest",
+          "counts": [
+            6,
+            0,
+            0,
+            0
+          ],
+          "sha256": "d01ecc5cb67a63d73de0d193aa493a5ae24c4499d98915181b8374ff4aa5dbdf",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/api-TEST-ama.api.IdentitySecurityTest.xml"
+        },
+        {
+          "name": "ama.api.TranscriptWireTest",
+          "counts": [
+            4,
+            0,
+            0,
+            0
+          ],
+          "sha256": "d9d58ff5e4a50ef88a100f343d601640dcbf9b62f5b7e15fadd0e5de39133144",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/api-TEST-ama.api.TranscriptWireTest.xml"
+        },
+        {
+          "name": "ama.contract.MinutesFactBudgetTest",
+          "counts": [
+            4,
+            0,
+            0,
+            0
+          ],
+          "sha256": "23138d20c546139654efab49c02418d40d4237db9d660efeb90655f67e08d7e6",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml"
+        },
+        {
+          "name": "ama.canonical.CanonicalValueCodecTest",
+          "counts": [
+            5,
+            0,
+            0,
+            0
+          ],
+          "sha256": "ea2e1070b3afb0f70443272f6d454e9b89c0b692267ba4610706bdaf622982f9",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/core-TEST-ama.canonical.CanonicalValueCodecTest.xml"
+        },
+        {
+          "name": "ama.minutes.contract.FinalAndCoverageTest",
+          "counts": [
+            3,
+            0,
+            0,
+            0
+          ],
+          "sha256": "8dde952ca0d120b7019d97c1475425a04f696fb5ab1b782cf5dd379a08702fb2",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml"
+        },
+        {
+          "name": "ama.minutes.contract.GenerationFingerprintTest",
+          "counts": [
+            4,
+            0,
+            0,
+            0
+          ],
+          "sha256": "aeeeeb8bc24df63001e275a357edca3f801047117c9baa67d0722420b5b3246e",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml"
+        },
+        {
+          "name": "ama.minutes.contract.HashProfilesTest",
+          "counts": [
+            6,
+            0,
+            0,
+            0
+          ],
+          "sha256": "47a8e4eef711eeb7047aa2153f1ab6c976e9ab9ff2aab960334243691b06d5b2",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/core-TEST-ama.minutes.contract.HashProfilesTest.xml"
+        },
+        {
+          "name": "ama.minutes.contract.SourceAndSupportTest",
+          "counts": [
+            7,
+            0,
+            0,
+            0
+          ],
+          "sha256": "cb5ec084073670c1c9a04ef263f203ab500ef53d97fd49307972b26faa24a651",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml"
+        },
+        {
+          "name": "ama.minutes.contract.StoredSourceGraphTest",
+          "counts": [
+            8,
+            0,
+            0,
+            0
+          ],
+          "sha256": "1020325ad57cf311e6d3e78c36fa1abfe3ac7e969dc66764dcea4949fe2953f3",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml"
+        },
+        {
+          "name": "ama.transcript.BatchFingerprintTest",
+          "counts": [
+            6,
+            0,
+            0,
+            0
+          ],
+          "sha256": "1e1f1fe4d9c8ec4f08919ef770fd6c802ff1652d67d14efa941c504c141a64a7",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/core-TEST-ama.transcript.BatchFingerprintTest.xml"
+        },
+        {
+          "name": "ama.transcript.SavedTranscriptBudgetTest",
+          "counts": [
+            5,
+            0,
+            0,
+            0
+          ],
+          "sha256": "eda9a13facf531cddc82a9ebd32b85e6c97991fb0744950fe7a781b4720e7788",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml"
+        },
+        {
+          "name": "ama.transcript.TranscriptImportProducerTest",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "42366f66fd1f6157ee5e72d51d5807d0c64acea72ff725b6413ceb1d82237c21",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/core-TEST-ama.transcript.TranscriptImportProducerTest.xml"
+        },
+        {
+          "name": "ama.storage.ContractFixtureTest",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "b74aac93b3caca98744de87ec2085b8caa710318abebe3926e065e8cf6fca63a",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/integration-tests-TEST-ama.storage.ContractFixtureTest.xml"
+        },
+        {
+          "name": "ama.support.ContractClientTest",
+          "counts": [
+            2,
+            0,
+            0,
+            0
+          ],
+          "sha256": "5cf17c00027a23eeb78a47029df4bfdf502406be5d05eecb2b4487ddf157be2e",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/integration-tests-TEST-ama.support.ContractClientTest.xml"
+        },
+        {
+          "name": "ama.worker.PreparedWorkerLoopTest",
+          "counts": [
+            9,
+            0,
+            0,
+            0
+          ],
+          "sha256": "278e9cd91f3e7710b3caad5c72ede493390bf5473449c66fc9e8c19ea0afbec1",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml"
+        },
+        {
+          "name": "ama.worker.WorkerLoopTest",
+          "counts": [
+            3,
+            0,
+            0,
+            0
+          ],
+          "sha256": "25a775110441aa3d94f337886af59c49730daae75af68f07d922e161e3546a61",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/worker-TEST-ama.worker.WorkerLoopTest.xml"
+        },
+        {
+          "name": "ama.worker.WorkerShutdownTest",
+          "counts": [
+            4,
+            0,
+            0,
+            0
+          ],
+          "sha256": "68cdf061e5d3ccfc1296101045073508ab87745e2e1c5c960c21c58cb4b8d5a8",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-units-01/worker-TEST-ama.worker.WorkerShutdownTest.xml"
+        }
+      ]
+    },
+    {
+      "window": "final-integration-01",
+      "xml": 24,
+      "counts": [
+        121,
+        1,
+        0,
+        0
+      ],
+      "receiptExit": 1,
+      "receiptSha256": "2a062caaf6d1e10d3dbc70b67e098ab7b80db2fbc8d528e186f7ad52bf7dc19e",
+      "suites": [
+        {
+          "name": "ama.meeting.Task06InheritedMeetingConcurrencyIT",
+          "counts": [
+            5,
+            1,
+            0,
+            0
+          ],
+          "sha256": "7504617d6a33b792ebd8b4d6ef5804925690dafee9a2d2400348cc12f1f192bc",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.meeting.Task06InheritedMeetingConcurrencyIT.xml"
+        },
+        {
+          "name": "ama.meeting.Task06InheritedMeetingRevisionIT",
+          "counts": [
+            29,
+            0,
+            0,
+            0
+          ],
+          "sha256": "9a90c5a79612fe5c434355220d52a05e3fb40d8c71234d4ac874de2cb16905fc",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.meeting.Task06InheritedMeetingRevisionIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06AccessIT",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "f4db0e53566b9f5f38111a6b8126057ea92669bd9bb9eba5b193010c744aa985",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06AccessIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06AtomicityIT",
+          "counts": [
+            3,
+            0,
+            0,
+            0
+          ],
+          "sha256": "fe78233228e5e9a5f8338d1e2295e19d8f99cb79cfe56a430020f3eef2f0f147",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06AtomicityIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06CompositionIT",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "03196daafa59aca0359eca9f667f31c7bfe40bdbedb9619ef43fcadc0bb68f70",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06CompositionIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06ConcurrencyIT",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "d27e592b0f416371e02c8002c394726d6c5561ef25c74d1189ce1330f73e8af6",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06ConcurrencyIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06FixAtomicityIT",
+          "counts": [
+            4,
+            0,
+            0,
+            0
+          ],
+          "sha256": "4f653759b0b17285918b774b95cb5eaf6de93b16bfd2b9bce275b10bae833c5d",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixAtomicityIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06FixHandlesIT",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "530de580cec9c31f4fe64a1b65edc071a04de5b5d5ead1a93c8cc9026d5a9773",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixHandlesIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06FixHttpsIT",
+          "counts": [
+            2,
+            0,
+            0,
+            0
+          ],
+          "sha256": "2318c3c7d6e6c8ec3f8adcf9e228fd9e5550b643638f4623a93985c93cc5e072",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixHttpsIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06FixIntegrityIT",
+          "counts": [
+            2,
+            0,
+            0,
+            0
+          ],
+          "sha256": "6f84959564b323cf5f7474052ab72394e68cbccd8e2b2b4e8e2af11ca0c307d9",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixIntegrityIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06FixLocksIT",
+          "counts": [
+            2,
+            0,
+            0,
+            0
+          ],
+          "sha256": "49cfd3eca4e78f362aec61ce7afd4a1f6156580fe28bdbeca43417a3cabc74cd",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixLocksIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06FixProvenanceIT",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "8ef17801f2b2e9d697939c5d4ae4988ca3739b9137524e0e1fefa234336b14f5",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixProvenanceIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06GuardsIT",
+          "counts": [
+            3,
+            0,
+            0,
+            0
+          ],
+          "sha256": "81ac7e680113379ad8465b53748e8ef0e0934c646287f5e9b2c2f7c8d450094a",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06GuardsIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06HttpIT",
+          "counts": [
+            2,
+            0,
+            0,
+            0
+          ],
+          "sha256": "6fcb1ca787ecd3adafc093bc72063c4e8b102252c97dde791cf5a2e70454e768",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06HttpIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06IndexedTasksIT",
+          "counts": [
+            4,
+            0,
+            0,
+            0
+          ],
+          "sha256": "2e50f3bf260e083f10c67d21e06474964782336507538ff4ce72e5d3d439aba6",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06IndexedTasksIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06InheritedAuthorityIT",
+          "counts": [
+            22,
+            0,
+            0,
+            0
+          ],
+          "sha256": "672e4b355d5126ac0858d27a863565f7bd393dc3acf4d85788c9a704d3ca415f",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06InheritedAuthorityIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06RestartIT",
+          "counts": [
+            2,
+            0,
+            0,
+            0
+          ],
+          "sha256": "5e1300766f2738be5063c73eb91039af92bc91e3e58fda5181568fabb4a75431",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06RestartIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06SavedCommandsIT",
+          "counts": [
+            2,
+            0,
+            0,
+            0
+          ],
+          "sha256": "026897352ad23ca33bf6139502d1c92576a1dc8bf61a266bf332afab64d9ada4",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06SavedCommandsIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06SavedGraphIT",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "3ae70283c026352400cf82ccaf8adbae88f28c0448cf7afeac78966687057731",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06SavedGraphIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06TaskQueryPlanIT",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "e9947970bba1fb8bd4e4327fcc79c0d5b0636a1ea9a10f315ed36da827420582",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06TaskQueryPlanIT.xml"
+        },
+        {
+          "name": "ama.storage.Task06WireHttpIT",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "6310f1cb6957da6cf50724ab11c5a87e4b94e49d4ac99bc62b2502f73c3ac1c5",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06WireHttpIT.xml"
+        },
+        {
+          "name": "ama.task.Task06InheritedPreparedCompletionIT",
+          "counts": [
+            18,
+            0,
+            0,
+            0
+          ],
+          "sha256": "bf8fdad2df7a454e34c8cad7e52c2e003203012ef79abe8ce84e8c4f853b4c60",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.task.Task06InheritedPreparedCompletionIT.xml"
+        },
+        {
+          "name": "ama.transcript.Task06InheritedArchiveRestartIT",
+          "counts": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sha256": "ef24446d32537c79960cb4da0b6bf34930b7ebcbb090ae84949c354a20ef0662",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.transcript.Task06InheritedArchiveRestartIT.xml"
+        },
+        {
+          "name": "ama.transcript.Task06InheritedFactsReaderIT",
+          "counts": [
+            12,
+            0,
+            0,
+            0
+          ],
+          "sha256": "89cfbdaa0079370a2a920d83e557b9d666ed5b32e0bdf78777683b5b190eec36",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.transcript.Task06InheritedFactsReaderIT.xml"
+        }
+      ]
+    },
+    {
+      "window": "inherited-concurrency-green-01",
+      "xml": 1,
+      "counts": [
+        5,
+        0,
+        0,
+        0
+      ],
+      "receiptExit": 0,
+      "receiptSha256": "b4a1ed402cacc39f1bc48fc6631576adf8fd33e719d998daa1bea6c99c78321a",
+      "suites": [
+        {
+          "name": "ama.meeting.Task06InheritedMeetingConcurrencyIT",
+          "counts": [
+            5,
+            0,
+            0,
+            0
+          ],
+          "sha256": "94b32d8de99acd8a69275d61948c4ea9de3d07f6fcf39196681ae437c864964f",
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-concurrency-green-01/integration-tests-TEST-ama.meeting.Task06InheritedMeetingConcurrencyIT.xml"
+        }
+      ]
+    }
+  ],
+  "composedDistinct": {
+    "tests": 121,
+    "allPass": true,
+    "task6": 34,
+    "inherited": 87,
+    "originalFailureCase": [
+      [
+        "ama.meeting.Task06InheritedMeetingConcurrencyIT",
+        "actualServiceLocksSortedIdentitiesBeforeRootAndFlushesLast"
+      ]
+    ],
+    "replacedFiveCaseKeys": [
+      [
+        "ama.meeting.Task06InheritedMeetingConcurrencyIT",
+        "readWaitingForRevocationSeesCommittedRosterNotOldSnapshot"
+      ],
+      [
+        "ama.meeting.Task06InheritedMeetingConcurrencyIT",
+        "actualServiceLocksSortedIdentitiesBeforeRootAndFlushesLast"
+      ],
+      [
+        "ama.meeting.Task06InheritedMeetingConcurrencyIT",
+        "guessedFutureCasCannotBypassCompleteRemovedIdentityPrelock"
+      ],
+      [
+        "ama.meeting.Task06InheritedMeetingConcurrencyIT",
+        "concurrentConfirmationsHaveOneVersionAndOneEffect"
+      ],
+      [
+        "ama.meeting.Task06InheritedMeetingConcurrencyIT",
+        "identityDisabledWhileConfirmationWaitsCannotReceiveGrant"
+      ]
+    ],
+    "rule": "24XML121/1namespacefailure +onlyaffected5caseclassrerun; replace5, do notsum126; originalfailedwindow preserved; finalsource/productionseals separatecustody"
+  }
+}

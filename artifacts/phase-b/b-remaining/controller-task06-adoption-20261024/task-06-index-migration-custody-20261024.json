@@ -1,0 +1,482 @@
+{
+  "status": "PASS",
+  "scope": "Independent bounded mechanical migration evidence custody. No database/Java/test/rerun, source-quality review, private env or changes except this new report. Root previously read probe algorithm; this audit rehashes exact probe and compares every actual snapshot key.",
+  "capture": {
+    "startUtc": "2026-10-23T21:56:01.045819+00:00",
+    "endUtc": "2026-10-23T21:56:01.076378+00:00",
+    "uniqueFiles": 22
+  },
+  "fileIdentities": {
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/proof.json": {
+      "bytes": 5623,
+      "sha256": "1c36d5ee2328d0545b071c0350e1307fbf37490ce1e555694a049e22f1a9192d",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/PASS.json": {
+      "bytes": 203,
+      "sha256": "418b9ff1d69da77f0f08adde77a8d63389add87a9663f8874eb275eb6dff6dca",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/Task06IndexMigrationProbe.java": {
+      "bytes": 10873,
+      "sha256": "7a370a389e73ce914fd16a179935755542ac110306c799f400b50acadba7cc81",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/after-rerun.json": {
+      "bytes": 703581,
+      "sha256": "61a1c5cff199d39ad633865a136cbfb8276cf7b47e940bbe39cb34dd5fa8c00f",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/after.json": {
+      "bytes": 703581,
+      "sha256": "61a1c5cff199d39ad633865a136cbfb8276cf7b47e940bbe39cb34dd5fa8c00f",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/apply-receipt.json": {
+      "bytes": 14384,
+      "sha256": "2676609f4723e9c77d0501d196641d97a338cf19f2c57e4e4530052070d47ea3",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/apply.log": {
+      "bytes": 1376,
+      "sha256": "166fce5191663447470bd0c5c9f95e4e49ce58fb1088b5a017b08015b56237bb",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/before-receipt.json": {
+      "bytes": 14410,
+      "sha256": "3d7e59c98881832bc332759299dc57d45dcec38dbad3d2d246db1bd1a73d9d77",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/before.json": {
+      "bytes": 702069,
+      "sha256": "fe8530659e680b1cfae918483dcd6b81b6640bcdf827c9142324c02f2d514c2e",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/before.log": {
+      "bytes": 54,
+      "sha256": "9ece3621e394eebf2002ee491d3574942a6e88549c466b31550c43059c19b6f5",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/compile.log": {
+      "bytes": 186,
+      "sha256": "3d37131a6bd98074e675de5dfc5a1081f03fd20e98396516e55cb26f99938e26",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/first-apply.json": {
+      "bytes": 105,
+      "sha256": "2ecf014f26acae7959a9981697c0dcdd65023a5c8ab3d4f4985f26d4328c0ca8",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/missing-index.json": {
+      "bytes": 149,
+      "sha256": "cda7d8b5be13737b5e0b50b70ad6055d7dc36f9fc7bcf96ad4677db5eb691008",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/quiescence.json": {
+      "bytes": 152,
+      "sha256": "76e907176692c5b433427c867a8a690fe207166e754173a905159fde0ecde414",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/rerun.json": {
+      "bytes": 85,
+      "sha256": "11319edf8215531511c216c28b98dc1ef8d69c19944297edad9b2c7ef6537597",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/resources-receipt.json": {
+      "bytes": 174,
+      "sha256": "dfb666e011c525d651148ea5ee61ec564331d3e198a1c368e4d0b3c3c31bc73d",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/resources.log": {
+      "bytes": 881,
+      "sha256": "8159eb93ddea4cc78102687504ee07c21923b4ffa65522120bee2eb3783072a3",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-freeze-20261024.json": {
+      "bytes": 10799,
+      "sha256": "d40844b3e34c648040a290ce6380e76009bdb381ad0edbab1ff30cac62c4ee3d",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-root-application-ack-20261024.json": {
+      "bytes": 4013,
+      "sha256": "0b7096045651bbf3a2ac9420369f045d9d075c6cd7135ec5a53d3e01784847a2",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql": {
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-frozen-013_2-20261024.sql": {
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-proposal-20261024.sql": {
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "stableDuringRead": true
+    }
+  },
+  "proofExpectedSha256": "1c36d5ee2328d0545b071c0350e1307fbf37490ce1e555694a049e22f1a9192d",
+  "proofFileSealChecks": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/PASS.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/Task06IndexMigrationProbe.java",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/after-rerun.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/after.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/apply-receipt.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/apply.log",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/before-receipt.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/before.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/before.log",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/compile.log",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/first-apply.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/missing-index.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/quiescence.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/rerun.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/resources-receipt.json",
+      "matchesProofSeal": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/resources.log",
+      "matchesProofSeal": true
+    }
+  ],
+  "freezeAndSeparateAckChecks": {
+    "ackReferencesActualFreezeHash": true,
+    "ackReferencesActualFreezePath": true,
+    "resourcePathsMatch": true,
+    "versionsMatch": true,
+    "fullBytesMatch": true,
+    "fullHashesMatch": true,
+    "separateAckStatus": true,
+    "freezeBeforeAck": true
+  },
+  "sqlFilesExactFrozen75Bytes": {
+    "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql": true,
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-frozen-013_2-20261024.sql": true,
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-proposal-20261024.sql": true
+  },
+  "target": {
+    "ackAndActualApplyLogMatch": true,
+    "database": "ama_b01_fixture",
+    "loopbackPort": 46653,
+    "note": "Recorded target identity comparison only; no live connection or private-env read."
+  },
+  "snapshotComparisons": {
+    "actualTopLevelKeys": [
+      "checks",
+      "columns",
+      "constraints",
+      "data",
+      "engine",
+      "history",
+      "indexes",
+      "keys",
+      "references",
+      "showCreate",
+      "tables"
+    ],
+    "coverage": [
+      {
+        "snapshot": "before",
+        "tableCount": 65,
+        "columnCount": 491,
+        "allCoverageSetsEqual": true,
+        "tableNames": [
+          "action_item",
+          "action_suggestion",
+          "audit_event",
+          "background_note",
+          "background_note_source",
+          "department",
+          "durable_task",
+          "element_set",
+          "enterprise_identity",
+          "evidence_link",
+          "exclusion_revision",
+          "external_document_mapping",
+          "external_execution",
+          "external_operation",
+          "file_cleanup",
+          "file_object",
+          "file_reference",
+          "final_confirmation",
+          "final_result_review",
+          "flyway_schema_history",
+          "generation_candidate",
+          "generation_input",
+          "idempotency_record",
+          "identity_session",
+          "input_batch",
+          "input_batch_file",
+          "input_batch_fingerprint_profile",
+          "meeting",
+          "meeting_access_grant",
+          "meeting_acl",
+          "meeting_info_revision",
+          "meeting_minutes_editor_guard",
+          "meeting_person_search",
+          "meeting_search_projection",
+          "minutes_element",
+          "minutes_revision",
+          "minutes_template",
+          "model_capacity",
+          "model_reservation",
+          "outbox_consumer",
+          "publication",
+          "publication_attempt",
+          "result_review",
+          "result_review_evidence",
+          "role_assignment",
+          "roster_member",
+          "roster_revision",
+          "sensitive_detection",
+          "sensitive_detection_source",
+          "sensitive_exclusion",
+          "source_locator",
+          "speaker",
+          "storage_backend",
+          "task_attempt",
+          "task_outbox",
+          "task_outbox_sequence",
+          "task_subject",
+          "template_revision",
+          "transcript_confirmation",
+          "transcript_revision",
+          "transcript_segment",
+          "transcript_segment_mark",
+          "transcription_input",
+          "upload_part",
+          "upload_session"
+        ]
+      },
+      {
+        "snapshot": "after",
+        "tableCount": 65,
+        "columnCount": 491,
+        "allCoverageSetsEqual": true,
+        "tableNames": null
+      },
+      {
+        "snapshot": "rerun",
+        "tableCount": 65,
+        "columnCount": 491,
+        "allCoverageSetsEqual": true,
+        "tableNames": null
+      }
+    ],
+    "descriptors": [
+      {
+        "snapshot": "before",
+        "tablesChecked": 65,
+        "nonemptyActualPrimaryKeys": 65,
+        "descriptorMismatches": []
+      },
+      {
+        "snapshot": "after",
+        "tablesChecked": 65,
+        "nonemptyActualPrimaryKeys": 65,
+        "descriptorMismatches": []
+      },
+      {
+        "snapshot": "rerun",
+        "tablesChecked": 65,
+        "nonemptyActualPrimaryKeys": 65,
+        "descriptorMismatches": []
+      }
+    ],
+    "physicalSchemaKeysCompared": [
+      "engine",
+      "tables",
+      "columns",
+      "indexes",
+      "constraints",
+      "checks",
+      "keys",
+      "references",
+      "showCreate"
+    ],
+    "schemaDifferencePathsAfterRemovingOnlyExactIndex": {
+      "engine": [],
+      "tables": [],
+      "columns": [],
+      "indexes": [],
+      "constraints": [],
+      "checks": [],
+      "keys": [],
+      "references": [],
+      "showCreate": []
+    },
+    "newIndexKeyparts": [
+      {
+        "TABLE_NAME": "durable_task",
+        "INDEX_NAME": "task_input_lookup",
+        "NON_UNIQUE": "1",
+        "SEQ_IN_INDEX": "1",
+        "COLUMN_NAME": "input_kind",
+        "COLLATION": "A",
+        "SUB_PART": null,
+        "PACKED": null,
+        "NULLABLE": "",
+        "INDEX_TYPE": "BTREE",
+        "COMMENT": "",
+        "INDEX_COMMENT": "",
+        "IS_VISIBLE": "YES",
+        "EXPRESSION": null
+      },
+      {
+        "TABLE_NAME": "durable_task",
+        "INDEX_NAME": "task_input_lookup",
+        "NON_UNIQUE": "1",
+        "SEQ_IN_INDEX": "2",
+        "COLUMN_NAME": "input_id",
+        "COLLATION": "A",
+        "SUB_PART": null,
+        "PACKED": null,
+        "NULLABLE": "",
+        "INDEX_TYPE": "BTREE",
+        "COMMENT": "",
+        "INDEX_COMMENT": "",
+        "IS_VISIBLE": "YES",
+        "EXPRESSION": null
+      },
+      {
+        "TABLE_NAME": "durable_task",
+        "INDEX_NAME": "task_input_lookup",
+        "NON_UNIQUE": "1",
+        "SEQ_IN_INDEX": "3",
+        "COLUMN_NAME": "id",
+        "COLLATION": "A",
+        "SUB_PART": null,
+        "PACKED": null,
+        "NULLABLE": "",
+        "INDEX_TYPE": "BTREE",
+        "COMMENT": "",
+        "INDEX_COMMENT": "",
+        "IS_VISIBLE": "YES",
+        "EXPRESSION": null
+      }
+    ],
+    "showCreateExactLineRemoved": "  KEY `task_input_lookup` (`input_kind`,`input_id`,`id`),\n",
+    "indexKeypartCounts": [
+      309,
+      312,
+      312
+    ],
+    "businessAllocatorTables": 64,
+    "businessRowsDerivedBySummingAll64Tables": 30393,
+    "businessAllocatorDictionaryDifferencePaths": {},
+    "businessDictionaryComparison": "Every actual columns/primaryKey/rows/sha256 key and value compared for all64 tables; no sampled-data comparison.",
+    "history": {
+      "before": 13,
+      "after": 14,
+      "old13PrefixAllFieldsExact": true,
+      "beforeMatchesFrozenRoot13HistoryAllFields": true,
+      "newRow": {
+        "installed_rank": "14",
+        "version": "013.2",
+        "description": "task input lookup",
+        "type": "SQL",
+        "script": "V013_2__task_input_lookup.sql",
+        "checksum": "-1098175378",
+        "installed_by": "ama_test",
+        "installed_on": "2026-10-23 21:53:39",
+        "execution_time": "135",
+        "success": "1"
+      },
+      "checksumDerivedFromExactSqlLinesCRC32": -1098175378
+    },
+    "rerunFullSnapshotAllKeysEqual": true,
+    "rerunDifferencePaths": [],
+    "rerunRawBytesEqual": true
+  },
+  "executionReceipts": {
+    "runs": [
+      {
+        "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/before-receipt.json",
+        "exitZero": true,
+        "heap64MiB": true,
+        "processors2": true,
+        "actualProbeSourceHashMatches": true,
+        "probeClassAndMode": true
+      },
+      {
+        "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/apply-receipt.json",
+        "exitZero": true,
+        "heap64MiB": true,
+        "processors2": true,
+        "actualProbeSourceHashMatches": true,
+        "probeClassAndMode": true
+      }
+    ],
+    "firstApply": {
+      "lockWaitSeconds": 5,
+      "pid": 1192454,
+      "migrationsExecuted": 1,
+      "elapsedNanos": 1190927148
+    },
+    "rerun": {
+      "lockWaitSeconds": 5,
+      "elapsedNanos": 102751993,
+      "migrationsExecuted": 0
+    },
+    "missingIndex": {
+      "sqlState": "42000",
+      "claim": "Actual forced-index SQL fails closed before migration; not installed-service-path TDD",
+      "errorCode": 1176
+    },
+    "actualProbeSourceSha256": "7a370a389e73ce914fd16a179935755542ac110306c799f400b50acadba7cc81",
+    "applyLogSupportsFirst1Rerun0": true
+  },
+  "issues": [],
+  "limits": [
+    "Preservation comparison covers complete retained schema and full-table streaming-hash descriptors, not raw business cells or a newly executed database hash.",
+    "No live resource/database state verification, installed indexed-source qualification, Task6 completion, or independent source-quality verdict.",
+    "Exact frozen/ACK records bind body and recorded target; this report does not create a new authorization.",
+    "Snapshot physical metadata intentionally excludes volatile cardinality and derived COLUMN_KEY, as documented by the sealed probe/proof."
+  ]
+}

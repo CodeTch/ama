@@ -1,0 +1,7 @@
+# Task6 hash-entry preflight (proposal, not implementation)
+
+Root read TranscriptConfirmationHash in full. Current data/hashBound requires actual TRANSCRIPT_CONFIRMATION then saved revision and source-session validation using that row. Task6 needs a true draft entry binding meeting/revision and the actual complete saved graph without manufacturing a confirmation row or placeholder hash. Refactor projection/profile-chain validation to shared internal saved-revision helper so existing confirmed hash and draft hash are byte-identical for the same actual saved revision. Existing confirmation profile ama.transcript-confirmation.v1 and canonical field order/segment fields/all complete marks remain unchanged; archived processing input/profile chain and budgets must still be verified, not bypassed by calling data() alone.
+
+Actual MinutesContracts is backend/contracts/src/main/java/ama/contract/MinutesContracts.java; source graph/index/resolver are backend/core/src/main/java/ama/minutes/contract/{StoredSourceGraph,StoredFactsIndex,ArchivedProfileResolver}. Root has not read those three in this preflight; future author/designer must inspect their actual completeness/source-validation boundaries. A draft DTO does not grant write authority. Prove golden confirmed-vs-draft equality and actual first confirmation, no fake persisted row.
+
+No source/test/fixture changed or executed by this note.

@@ -1,0 +1,31 @@
+{
+  "status": "ADDITIVE_REFRESH_PINNED_FOR_CONTROLLED_LOCAL_S3_FUNCTIONAL_TESTS_ONLY",
+  "utc": "2026-10-23T20:56:16.538207+00:00",
+  "originalPin": "task-06-concrete-runtime-pin-20261024.json",
+  "originalPinSha256": "922ef12101c4f7111e89a1ca2ca86ca84c2c64b74999d104254a1917ccd940a2",
+  "affectedProof": "task-06-qualification-additive-rootproof-20261024.json",
+  "affectedProofSha256": "173fa5628d31b401355ea23533c6bb309ebb36df715041ae5c11878f3b94fe60",
+  "qualifiedCurrentSourceSeals": {
+    "backend/api/src/main/java/ama/api/TranscriptConfiguration.java": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java": "0684b4b4adf50446c0f7dcf09fc34600d03bfb2b53b9cd153ab2a0e2fae1847c",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java": "1ee6c5cb70c62237850b2739b46b0e9c548d3f1e594d2e91b53cdcc1b825a9a7",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+    "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076",
+    "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+    "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+    "backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java": "3b5db92905a817ba9336103cb3c65c2b0e25efe1b8e46e9394e8e3cdabe9d09d",
+    "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java": "7f9d75c0df4fc01fbf16df3cf63edab01fe6eb867c6556998fcfe58b5149caef",
+    "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java": "7a26747d9e6aa4f79f6d92a1eddee5cd59a9cf2069e4a93d6a61f0ea63c18763"
+  },
+  "sourceByteSnapshots": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-pin-refresh-01-source",
+  "scope": "Same original approved numeric effective tuple/declarations/inventories/private resource recipe. Three source updates and actual installed/fresh JVM observations accepted for continued functional tests; not source review or Task6 adoption.",
+  "historyLimit": "No separately retained b61a pinned bytes; no exact historical textual diff claimed. Actual author edit description + current full source + preserved historical hash seals + targeted fresh tests read. New twelve-source exact byte snapshot begins only now.",
+  "limits": [
+    "Task6 source SPEC/quality/adoption pending",
+    "Final extra HTTP boundaries/final units/preservation report pending",
+    "HA/capacity/native IO/company/fullB or installed futureTask10/11"
+  ],
+  "refreshRule": "Preserve original pin and this additive record. Further affected changes require delta classification and proportionate fresh proof; no wholepreflight or perboot approval/Git-dependent runtime."
+}

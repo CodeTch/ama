@@ -1,0 +1,189 @@
+{
+  "kind": "task12_transcript_request_type_readonly_followup",
+  "issue": "T6SR-03 Minor",
+  "product_base_commit": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+  "source_method": "git show BASE:path; no checkout or live product inspection",
+  "entries": [
+    {
+      "path": "contracts/openapi/transcripts.yaml",
+      "source_commit": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+      "git_blob_sha1": "0cb5ecafe793904d58970aa8427f3e6de9c22b26",
+      "size_bytes": 116651,
+      "sha256": "207cf5409fecfea7a594158fb952780af74a876e84b8e5bba85a553773be3dcc",
+      "line_count": 4041,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          841,
+          914
+        ],
+        [
+          915,
+          984
+        ],
+        [
+          985,
+          1019
+        ],
+        [
+          1020,
+          1054
+        ],
+        [
+          1394,
+          1394
+        ],
+        [
+          1585,
+          1595
+        ],
+        [
+          2203,
+          2203
+        ],
+        [
+          2394,
+          2404
+        ],
+        [
+          2809,
+          2809
+        ],
+        [
+          3000,
+          3010
+        ],
+        [
+          3221,
+          3221
+        ],
+        [
+          3412,
+          3422
+        ]
+      ]
+    },
+    {
+      "path": "web/src/shared/api/generated.ts",
+      "source_commit": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+      "git_blob_sha1": "07c30bd7be854809768c4b872ae5c6b6f81cca0d",
+      "size_bytes": 193702,
+      "sha256": "c3c509727b2a0ae527db4c58a3751a0c394e9c62ccbaf3a08fbb4b9c061ca234",
+      "line_count": 4572,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          1193,
+          1206
+        ],
+        [
+          1289,
+          1301
+        ],
+        [
+          1307,
+          1322
+        ],
+        [
+          3105,
+          3125
+        ],
+        [
+          3568,
+          3588
+        ],
+        [
+          3916,
+          3936
+        ],
+        [
+          4152,
+          4172
+        ]
+      ]
+    },
+    {
+      "path": "web/package.json",
+      "source_commit": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+      "git_blob_sha1": "2d746c212806e2c7dd1d26d1679e3a1245d8cb43",
+      "size_bytes": 975,
+      "sha256": "0c6e3334e70a699d95bbfc6c43ccb9b087341883588db994b3126cf9152c034d",
+      "line_count": 38,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          6,
+          18
+        ],
+        [
+          25,
+          34
+        ]
+      ]
+    },
+    {
+      "path": "web/package-lock.json",
+      "source_commit": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+      "git_blob_sha1": "0afcf32161b2bdba8632d70f4a05886eab30796c",
+      "size_bytes": 66457,
+      "sha256": "014719188e81bc9fa242f1c179a611cc6d000bee0fd1ef44762f0e3117d11935",
+      "line_count": 1971,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          15,
+          22
+        ],
+        [
+          1487,
+          1492
+        ]
+      ]
+    },
+    {
+      "path": "web/scripts/check-api.mjs",
+      "source_commit": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+      "git_blob_sha1": "8bf9a57af5a7635bee3dc320d595846206930b96",
+      "size_bytes": 873,
+      "sha256": "7da55705dee56f2b0a56d0eba811ae7529696c6c727b9db9b03c13088368f72e",
+      "line_count": 13,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          1,
+          13
+        ]
+      ]
+    }
+  ],
+  "review_authority": {
+    "supplied_label": "d1a2a7f4",
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-independent-review-20261024.md",
+    "source_kind": "separately hashed filesystem document; no BASE blob or commit claim",
+    "size_bytes": 17506,
+    "sha256": "d1a2a7f48b308d0f96862d58e32a3051f4e4dbeab8077282c517f9942504f407",
+    "evidence_ranges_1_based_inclusive": [
+      [
+        42,
+        48
+      ]
+    ]
+  },
+  "prior_map_preserved": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-deferred-boundary-map-20261024.md",
+    "sha256": "154de68991632899889ecb655dd63830e22f346b105019349eb4dd1f584c2ed8"
+  },
+  "limitations": [
+    "No implementation/schema redesign or issue closure",
+    "No tests/npm/generator/network/browser/DB/privateenv/resource execution",
+    "No installed generator version probe; declared and lockfile version only",
+    "No backend/parser/test source inspection or qualified runtime matrix claim",
+    "Static TS evidence cannot prove dynamic dual equality or full token/UUID/range semantics",
+    "No repeat of completed design/web preflight or old T4 map",
+    "Actual upstream API/source repin remains Task12 activation gate"
+  ],
+  "output": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-transcript-request-type-followup-20261024.md",
+    "size_bytes": 9803,
+    "sha256": "9548950310b12aaa492583d7e889f43f9cee539a2daacb786629fc206c762776"
+  },
+  "writes_only": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-transcript-request-type-followup-20261024.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-transcript-request-type-followup-20261024-manifest.json"
+  ]
+}
