@@ -1,0 +1,150 @@
+{
+  "timestampUtc": "2026-10-23T22:58:05.139526+00:00",
+  "scope": "Interim actual saved XML/receipt only; no suite rerun/source or runtime qualification/finalTask8acceptance. SchemaRED distinct from fairnessbehaviorRED; setupERROR preserved separately.",
+  "windows": [
+    {
+      "window": "schema-red",
+      "receiptSha256": "02792a7493a7254ac902af486ccfad697eea9099d7659b8539504a16a7eb3848",
+      "sourceManifestSha256": "616bb2bbd348fd203b363e7ff21a3aafbeb52d82dd88f6c13ca494fc1e57ea69",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xml": [
+        {
+          "path": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/schema-red/integration-tests-TEST-ama.task.Task08PreForwardIT.xml",
+          "sha256": "827d609cb3215da4a98d976a82523462f137178ac9f961d7bc8e162ce017346c",
+          "counts": {
+            "tests": 2,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "class": "ama.task.Task08PreForwardIT",
+              "name": "normalOld14MarkersCoverAllStates",
+              "outcome": "PASS"
+            },
+            {
+              "class": "ama.task.Task08PreForwardIT",
+              "name": "ordinalMustExistBeforeNewScannerActivation",
+              "outcome": "FAILURE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "window": "fairness-red",
+      "receiptSha256": "188a417961a2fc90b9fcf36eab424903b04a657a989e29c629296a0146e04ee0",
+      "sourceManifestSha256": "746d8306b9f733883b46958b00d8d97eabb29028266937d7f462b3e62441ee3c",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 2,
+        "skipped": 0
+      },
+      "xml": [
+        {
+          "path": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/fairness-red/integration-tests-TEST-ama.task.Task08FairnessIT.xml",
+          "sha256": "49f66f4cb7eff5edd59f9d35dab62b800c76d21e57df7b5783293d9d60e9325e",
+          "counts": {
+            "tests": 2,
+            "failures": 0,
+            "errors": 2,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "class": "ama.task.Task08FairnessIT",
+              "name": "moreThan64HeldIdentitiesProgressAcrossCalls",
+              "outcome": "ERROR"
+            },
+            {
+              "class": "ama.task.Task08FairnessIT",
+              "name": "moreThan64UnregisteredPoliciesDoNotStarveRegisteredTail",
+              "outcome": "ERROR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "window": "fairness-red-02",
+      "receiptSha256": "b0ad3d70534fa37e7f3335c4b3a17cf840bb5ad80cbfde57b018487cbc6e61b7",
+      "sourceManifestSha256": "f973ee76fac10689182542596febe9ca134750b0d1b7915af794afec4020d9a3",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xml": [
+        {
+          "path": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/fairness-red-02/integration-tests-TEST-ama.task.Task08FairnessIT.xml",
+          "sha256": "fdcae53232728772ccc71acea8ecbc6f60a546b3ec39d0ef99fb4c642e91b2fb",
+          "counts": {
+            "tests": 2,
+            "failures": 2,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "class": "ama.task.Task08FairnessIT",
+              "name": "moreThan64HeldIdentitiesProgressAcrossCalls",
+              "outcome": "FAILURE"
+            },
+            {
+              "class": "ama.task.Task08FairnessIT",
+              "name": "moreThan64UnregisteredPoliciesDoNotStarveRegisteredTail",
+              "outcome": "FAILURE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "window": "fairness-green",
+      "receiptSha256": "ba76666dab97a7a85d741f961aa49bd01df1c8f6190e8a5a1d314860fc60758d",
+      "sourceManifestSha256": "d515ea5491a0931761f13149a8fb5fca0948584dcdb51ace4b42611889e2cb4a",
+      "exit": 0,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xml": [
+        {
+          "path": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/fairness-green/integration-tests-TEST-ama.task.Task08FairnessIT.xml",
+          "sha256": "c1abfe14967b9c1be332c76081cd4c9df8ce7ba5a8c62588f2571cacc2fd1a61",
+          "counts": {
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "class": "ama.task.Task08FairnessIT",
+              "name": "moreThan64HeldIdentitiesProgressAcrossCalls",
+              "outcome": "PASS"
+            },
+            {
+              "class": "ama.task.Task08FairnessIT",
+              "name": "moreThan64UnregisteredPoliciesDoNotStarveRegisteredTail",
+              "outcome": "PASS"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

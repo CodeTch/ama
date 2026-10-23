@@ -1,0 +1,602 @@
+{
+  "sourceHead": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+  "scope": "Exact existing rootcoordination/review/source-recovery/readonlysnapshot/preparationrecords copiedwithoutrewriting originals. Task7/9maps arepreparationonly, notactivation. Mutable4centralrecords stageddirectly; no privateenv/classes copied.",
+  "files": [
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/Task08FlywayVersionOrderProbe.java",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/Task08FlywayVersionOrderProbe.java",
+      "bytes": 919,
+      "sha256": "c02a93f89ba84084dc055a1a950756c0c96631a328cd5b2b3a769e57cfd701f1"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/Task08Post6FlywayVersionOrderProbe.java",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/Task08Post6FlywayVersionOrderProbe.java",
+      "bytes": 924,
+      "sha256": "adcf84058a5d9d21534b8ca27fed401882dcb49a83d60a30ced5901b83f6bf92"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/Task08RootSharedSnapshot.java",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/Task08RootSharedSnapshot.java",
+      "bytes": 503,
+      "sha256": "6a3eaf15e2967b23d2c74b930c8a4196ddd3c099d39726f36dbd43c0973c38b7"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-task8-pointer-normalization-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/current-state-before-task8-pointer-normalization-20261024.json",
+      "bytes": 30756,
+      "sha256": "03ea0e8521a24ab81ab35f33318ada5e19238c598d6f124c2c3f5ea709a56ec2"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/primary-discovery-before-task8-pointer-20261024/DEVELOPMENT_HANDOFF.md.before.txt",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/primary-discovery-before-task8-pointer-20261024/DEVELOPMENT_HANDOFF.md.before.txt",
+      "bytes": 7966,
+      "sha256": "0aab9a436bbcb30143a1c0f4256a0c7a68899bb128d161e65f0b916f76ca492d"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/primary-discovery-before-task8-pointer-20261024/development-resume-b-remaining-2026-10-24.md.before.txt",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/primary-discovery-before-task8-pointer-20261024/development-resume-b-remaining-2026-10-24.md.before.txt",
+      "bytes": 7847,
+      "sha256": "b464e9df374c09987c9083ed1bf30ef9c4adc76dddcb841b09bdc6746517d78c"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/primary-discovery-task8-pointer-sync-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/primary-discovery-task8-pointer-sync-20261024.json",
+      "bytes": 1449,
+      "sha256": "9b6e8f4296a2b1374114eea74370a6a05471aacc707195742f4b30b2cecb8bd5"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-context-before-task8-pointer-normalization-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/resume-context-before-task8-pointer-normalization-20261024.md",
+      "bytes": 11407,
+      "sha256": "7cd464ed8f9e32aa7c1aca6af38564a4f912b8da21cfe84eb82347b829d44dc1"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-post6-delta-map-20261024-before-index-wording-correction.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-07-post6-delta-map-20261024-before-index-wording-correction.md",
+      "bytes": 10194,
+      "sha256": "fbd29ff5aaf9c3999ddbb3156c924433a4d7dc6c15d2cb6f801bc46f5585b47f"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-post6-delta-map-20261024-source-manifest.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-07-post6-delta-map-20261024-source-manifest.json",
+      "bytes": 25797,
+      "sha256": "9c54de008fa0518243ba6e3aac5655502a3a3353f28ba9fe5cc00838d282ca57"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-post6-delta-map-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-07-post6-delta-map-20261024.md",
+      "bytes": 10367,
+      "sha256": "75a76269b4fc46cbb3dd1b5e89baf1e312ff4f25d1b2da6e866c626975aca970"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-post6-delta-map-rootproof-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-07-post6-delta-map-rootproof-20261024.json",
+      "bytes": 1043,
+      "sha256": "34e6bf164ab2c3f0c2435b5bdb63bc830f407a0377ed4480896a971f16b509ad"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-post6-manifest-interim-rootproof-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-07-post6-manifest-interim-rootproof-20261024.json",
+      "bytes": 316,
+      "sha256": "71448f810fdcf74969de85a05d8d41c126a56d84e9b1e6a071556fe420641ef1"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-task8-candidate-seam-repin-20261024-source-manifest.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-07-task8-candidate-seam-repin-20261024-source-manifest.json",
+      "bytes": 8867,
+      "sha256": "2df0e3c18d785c94fad0e1acaca9e3b830cb9d8fe65746b5fe816ac84d1dfc55"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-task8-candidate-seam-repin-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-07-task8-candidate-seam-repin-20261024.md",
+      "bytes": 6423,
+      "sha256": "0f97c4bdca0ace5a21d59f5b81f5e965adc9474b959de397b839ac40770ec372"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-task8-candidate-seam-repin-rootproof-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-07-task8-candidate-seam-repin-rootproof-20261024.json",
+      "bytes": 646,
+      "sha256": "e5a7f71d48aac3ee3d9ead987b619a882c0f403825d51465f88e275febcc143a"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-activation-brief-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-activation-brief-20261024.md",
+      "bytes": 9000,
+      "sha256": "557e9eb9455062f147fa496aa9eb82ee440092337c4a88a2c73e0d15a1fd33ff"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-brief-prepared.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-brief-prepared.md",
+      "bytes": 3842,
+      "sha256": "ea64843ae75b2a80de2fad707438db4cc7af5264cbfeae942b30f92e6123cc82"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-current-model-custody-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-current-model-custody-20261024.json",
+      "bytes": 18373,
+      "sha256": "47a282a76a0de47f555f3766d204be5993985974a2d4fca23f23bd7c59a7e2b3"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-current-model-custody-rootproof-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-current-model-custody-rootproof-20261024.json",
+      "bytes": 589,
+      "sha256": "769f18284d79c9cbd09b01a11a4612c5cfd6db151312c5362253bb0cb5535253"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-fairness-design-r1-closure.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-fairness-design-r1-closure.md",
+      "bytes": 4329,
+      "sha256": "d5438fd0eb8b6fffc21997580a1ba4af723f17e479afa9968daae59f53a0a768"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-fairness-design-r1-review.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-fairness-design-r1-review.md",
+      "bytes": 5954,
+      "sha256": "3fcc74b1b3868860ea19d1f36ec3f609ccc083f7e6ae381f5e3b8143196b7f23"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-fairness-design-r1.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-fairness-design-r1.md",
+      "bytes": 33231,
+      "sha256": "4eefdd7da3abf58f13d0fe7e15fbe07c1740fa035f08bb5e60b0a708b9a08284"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-fairness-design-review.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-fairness-design-review.md",
+      "bytes": 18267,
+      "sha256": "7c78bf8608ff0019bf45c21174badb6e40d83a547ba1f5d16d223f2616a99120"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-fairness-design.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-fairness-design.md",
+      "bytes": 26862,
+      "sha256": "309f7513f6c2b64db67b4469ebac7ba028c38dcc54c2c070d765bd7e02248d74"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-final-delivery-custody-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-final-delivery-custody-20261024.json",
+      "bytes": 139480,
+      "sha256": "58e832ea535e3b87a4a5faea72a8e1de3aeb9bf9a8af1b729167cac64fb62b85"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-final-delivery-custody-root-input-proof-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-final-delivery-custody-root-input-proof-20261024.json",
+      "bytes": 546,
+      "sha256": "a7b5d49995e9b52cdd7c65b7e99aa7e56a23b81b713e9464d550df8cc8cb65f3"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-final-delivery-cv-supplement-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-final-delivery-cv-supplement-20261024.json",
+      "bytes": 30941,
+      "sha256": "6acea297fdb240b1c22728dfbd3771f2c557441f347babc0ffd8b9b5b5a40242"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-fixture-provision-helper-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-fixture-provision-helper-20261024.md",
+      "bytes": 4153,
+      "sha256": "3d2f843e4c2590b96bb06a3a876a96e7b855eb0f431721fc92e91997fba17d16"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-fixture-provision-helper-root-read-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-fixture-provision-helper-root-read-20261024.json",
+      "bytes": 1109,
+      "sha256": "6fe4dd83d0d29a8fa5dd79baafedc064ca84580359097fb0d68e7ba70356491c"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-flyway-version-order-probe-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-flyway-version-order-probe-20261024.json",
+      "bytes": 1554,
+      "sha256": "b3de9f803af9e04d1dfffcb6a5050c1aa94cda53a1420ed37c8e10bdad07b3f4"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-forward-ddl-preparation.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-forward-ddl-preparation.md",
+      "bytes": 30951,
+      "sha256": "ca66652163e281c298d80daa345e854a4cb1b85e2fa272473006ce0e42b67279"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-forward-ddl-proposal.sql",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-forward-ddl-proposal.sql",
+      "bytes": 164,
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-forward-ddl-review.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-forward-ddl-review.md",
+      "bytes": 11513,
+      "sha256": "d74af5405484d87d1789f9cc1943bc4f54e7d40d91755b5235642d832f31b29b"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-freeze-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-freeze-20261024.json",
+      "bytes": 6103,
+      "sha256": "2cc1216d7e44408d9ac3dbecc29512bedf42f9beac088fbb6d65486fb9ce7758"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-frozen-013_3-20261024.sql",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-frozen-013_3-20261024.sql",
+      "bytes": 164,
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-historical010-resource-guard-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-historical010-resource-guard-20261024.json",
+      "bytes": 2699,
+      "sha256": "5d55bd4e67bfd128e50845b18680b6b7bcac7815998014f10981a716d6b3c908"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-historical010-root-application-ack-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-historical010-root-application-ack-20261024.json",
+      "bytes": 4444,
+      "sha256": "be461cd4b3a304ef2d92d94d76546ad66f380f643245399f3078d376a33a18d4"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-historical010-root-live-observation-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-historical010-root-live-observation-20261024.json",
+      "bytes": 4603,
+      "sha256": "25282b223574bd039f57c231e94bf00618b68576097e8cef9d712ae21205d957"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-independent-review-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-independent-review-20261024.md",
+      "bytes": 19166,
+      "sha256": "f71871936118af372d68b8366f0e5bb9c5a749fa4505461df9608dbdcdf117a7"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-independent-review-brief-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-independent-review-brief-20261024.md",
+      "bytes": 7043,
+      "sha256": "b82113f24c822f3da1e5d67c19fe6a61b8cecc633db5ef75940eefa7f1b89765"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-independent-review-full-package-20261024.txt",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-independent-review-full-package-20261024.txt",
+      "bytes": 18301979,
+      "sha256": "16ad27dae49204b37640e338b1e564ccee0acad119816b1b871f2266deaa7317"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-independent-review-package-manifest-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-independent-review-package-manifest-20261024.json",
+      "bytes": 50300,
+      "sha256": "5917dee16b6f9d1a0f0c5b669d4b0595dedbe7378b4aaf837861bf1d6e1f55e8"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-independent-review-source-package-20261024.txt",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-independent-review-source-package-20261024.txt",
+      "bytes": 364123,
+      "sha256": "d9e7895600e3545ac080105bcb54399af9c289c1a181a23495346fe057caae88"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-input-index-model-region-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-input-index-model-region-20261024.md",
+      "bytes": 2898,
+      "sha256": "439fb9305a015341ed2d64f68538ef74409b10efd2c9416b9fa50b29fba90096"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-input-index-model-region-manifest-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-input-index-model-region-manifest-20261024.json",
+      "bytes": 1694,
+      "sha256": "290b00aa76d92aa98d2e80d529e8ddfa6e507aa87836b201af57a46c2ab7b79b"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-input-index-model-region-rootproof-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-input-index-model-region-rootproof-20261024.json",
+      "bytes": 2953,
+      "sha256": "0b211b9ce3ba4ff7091f99a99d5370ae82f4cadfd152817222c33c6d8423a1f6"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-interim-red-green-xml-root-observation-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-interim-red-green-xml-root-observation-20261024.json",
+      "bytes": 5115,
+      "sha256": "5b71f5a7bdfaee27dad356c1e79622c8fee04bd05d4f9432ea426693b54a7a9e"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-isolated-fixture-root-ruling-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-isolated-fixture-root-ruling-20261024.md",
+      "bytes": 3418,
+      "sha256": "3190f48a17e2a14420c244efe046bf7f038f7df713fd5add97b73d9a99e64c68"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-migration-custody-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-migration-custody-20261024.json",
+      "bytes": 59435,
+      "sha256": "0f5f6e89f349630cd7bb892fc74608ffa2d7deaa3db028ff57f0ff6dd37e0997"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-migration-custody-rootproof-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-migration-custody-rootproof-20261024.json",
+      "bytes": 503,
+      "sha256": "76cfff51341f04de2ca8dd87432718d6e6be81eb1f87fc141654022230fe83a4"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-model-output-input-index-amendment-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-model-output-input-index-amendment-20261024.md",
+      "bytes": 2678,
+      "sha256": "73b13bc553fd16cff728220e14ea409cdf71ae83bb9149b436b5b3d88fb4e73b"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-model-output-ownership-preflight-20261024-source-manifest.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-model-output-ownership-preflight-20261024-source-manifest.json",
+      "bytes": 11906,
+      "sha256": "37b69e281b7c199ccb494783c62283d60347a5d5407858491071d8542f27a834"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-model-output-ownership-preflight-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-model-output-ownership-preflight-20261024.md",
+      "bytes": 11761,
+      "sha256": "6814b7dc95dab31b1dd0dee873c4817c5e2740de873234bb1f78ad00142b2c49"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-model-output-ownership-rootproof-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-model-output-ownership-rootproof-20261024.json",
+      "bytes": 516,
+      "sha256": "dd96e7f05052fd43135dffadefd93b6a2ec1422354b652f5d14d2b2051f1e2ed"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-model-output-root-ruling-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-model-output-root-ruling-20261024.md",
+      "bytes": 3435,
+      "sha256": "2eba02d0519909558b0f6d092a2cc12b3ec427dab2c759cb003b6eecebb5f11b"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-owned-resource-ready-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-owned-resource-ready-20261024.json",
+      "bytes": 4502,
+      "sha256": "334d4f881e2b658eb9f5c21217bea7fa3d029dbcbf33f7e9a05e546a1235eec3"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-plan-extract.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-plan-extract.md",
+      "bytes": 411,
+      "sha256": "671a8dcff4dc649df112486b78697af9d9c46393101c8ebf65ab055506b34738"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-post6-candidate-version-order-probe-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-post6-candidate-version-order-probe-20261024.json",
+      "bytes": 1794,
+      "sha256": "22517b3b22b6ab6b338b5412c28bb67b8f73b5217ce5c9c3deaeb0e2f3f58861"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-preallocation-source-resource-facts-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-preallocation-source-resource-facts-20261024.json",
+      "bytes": 4514,
+      "sha256": "e4fe8503c53d86a5674c535af75b9fec3df5644fbdcb492e3701db9b0b3abb43"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-protected-adopted-inputs-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-protected-adopted-inputs-20261024.json",
+      "bytes": 2252671,
+      "sha256": "0c7aeb9bab8c4b1a0a212ce5a641670ef15031f3a69d549aacb8d0159fe8e6c4"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-r1-review-diff.txt",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-r1-review-diff.txt",
+      "bytes": 17693,
+      "sha256": "10e2d759dd92907c7c3f508499c51cff61efe11928eca5bf5ce9af854455294b"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-report.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-report.md",
+      "bytes": 16318,
+      "sha256": "d3331813e41f6bb394e42f8625e44dbc7b071c6e1113eb9891e35aae5d2662e2"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-resource-creation-guard-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-resource-creation-guard-20261024.json",
+      "bytes": 2055,
+      "sha256": "57dd3b76e4bb07930809c9a39f1536b0808660eacf3f047e43ea4a5d34546505"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-resource-creation-receipt-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-resource-creation-receipt-20261024.json",
+      "bytes": 1132,
+      "sha256": "a14f289304c4884c92aabe6f3085ef172318309e7c6eb4f89dd9b96db6de572a"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-adoption-decision-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-adoption-decision-20261024.json",
+      "bytes": 2344,
+      "sha256": "c84286972be29a6627441681d0f0ec05624ab5352393bd9eaefb280e2e5deee2"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-application-ack-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-application-ack-20261024.json",
+      "bytes": 5244,
+      "sha256": "868de9e33590a155fa045651d931f27580468ff53841bf3ea105cd3aa320447a"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-live-schema-observation-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-live-schema-observation-20261024.json",
+      "bytes": 43245,
+      "sha256": "16c60cfe91317005697c96f352f190ffdd03b79f20069d4fb537a2eea539fe80"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-official-doc-checks.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-official-doc-checks.md",
+      "bytes": 1195,
+      "sha256": "714cc5c2326e94a75de009aaab40a11634c58f5361127a1866de2be9737c8392"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-complete-snapshot-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-post-test-shared-complete-snapshot-20261024.json",
+      "bytes": 709824,
+      "sha256": "bf57ac12c970b0ad35ab5f147d5fbc0991562b3c83504ad0df9c1cf0d9ea05c4"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-complete-snapshot-compile.log",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-post-test-shared-complete-snapshot-compile.log",
+      "bytes": 64,
+      "sha256": "3736b6135e3166eb963eec12a66a035a6a3605fa01d339c241b2c05afaf96dfc"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-complete-snapshot-run.log",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-post-test-shared-complete-snapshot-run.log",
+      "bytes": 64,
+      "sha256": "3736b6135e3166eb963eec12a66a035a6a3605fa01d339c241b2c05afaf96dfc"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-preservation-proof-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-post-test-shared-preservation-proof-20261024.json",
+      "bytes": 1671,
+      "sha256": "0d73b9127677ca87408223dc5067a139ac811fe9820b3927d4ba93ef02ed0404"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-private-scan-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-private-scan-20261024.json",
+      "bytes": 812,
+      "sha256": "9bc0af881c837c020334ea93f950eb912b4ee5aff7dcc3e207495ea511228403"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-readonly-probe-class-equivalence-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-readonly-probe-class-equivalence-20261024.json",
+      "bytes": 757,
+      "sha256": "9a9e69074e67cf44385780518291306cf7e76dd19888657c65f10bb2774185f4"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-readonly-probe-class-equivalence-compile.log",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-readonly-probe-class-equivalence-compile.log",
+      "bytes": 269,
+      "sha256": "a0c0c9008c5f65be49137d059291e881b9e22a0e7f14c2f5a3b7f68eb30a0881"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-s3-selected-carry-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-s3-selected-carry-20261024.json",
+      "bytes": 630,
+      "sha256": "e6f440bde1b822ff6c0bc01647a4ed0403e5b0c701ac17b82a775c5c97e701bd"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-selected-resources-pids-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-root-selected-resources-pids-20261024.json",
+      "bytes": 4379,
+      "sha256": "2dd448560bef7387f1eea64d80a844153b9389e79fb6deb6ca5e506b4a0c6ac2"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-shared-preallocation-facts-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-shared-preallocation-facts-20261024.json",
+      "bytes": 10360,
+      "sha256": "01fe923c94a1599ca81ed1d4ae7492351339af8e9fa2529e9f98810c1811ecff"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/dependency-closure.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/dependency-closure.json",
+      "bytes": 5957,
+      "sha256": "97ae4ca0853343c3d3d9ab407b450c19199f122491676b302253a657474b0e1c"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/manifest.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/manifest.json",
+      "bytes": 20332,
+      "sha256": "455cae7279dc611f06722a219a95e5602efc2d6968f28614d8f6606f6f773621"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/cursor-passing-window-to-DA.diff",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/patches/cursor-passing-window-to-DA.diff",
+      "bytes": 1248,
+      "sha256": "080531ed447d62043dd9d34149097276fa8a09bd2615696ecdca5953eb927245"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/cursor-schema-window-to-DA.diff",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/patches/cursor-schema-window-to-DA.diff",
+      "bytes": 4150,
+      "sha256": "f48061c91a5c88a76671ade4df6b72e0d64a0bc548cd21c68fef62ee4570f349"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/fixture-committed-to-DA.diff",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/patches/fixture-committed-to-DA.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/fixture-fairness-green-to-DA.diff",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/patches/fixture-fairness-green-to-DA.diff",
+      "bytes": 1845,
+      "sha256": "abd262fd1417d34acd7b12458581cc7a581233bdb513752dc27cf782000e2381"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/overflow-restore-window-to-DA.diff",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/patches/overflow-restore-window-to-DA.diff",
+      "bytes": 5151,
+      "sha256": "86aeecbf5d83f153449c0d9e851414b7559a16e61df03eec5aa9a10362a510cb"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/probe-before-null-fix-to-DA.diff",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/patches/probe-before-null-fix-to-DA.diff",
+      "bytes": 1259,
+      "sha256": "862b1a5f44354563d68f94b24876568c96920af9cd7d73f0662cd1f386165f46"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/probe-committed-to-DA.diff",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/patches/probe-committed-to-DA.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/cursor-passing-window.java",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/sources/cursor-passing-window.java",
+      "bytes": 17029,
+      "sha256": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/cursor-schema-window.java",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/sources/cursor-schema-window.java",
+      "bytes": 16775,
+      "sha256": "726ddd7d2ccd81586def3fda0bee9d9336fd9268c893c46beda878f7a2765f69"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/fixture-committed.java",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/sources/fixture-committed.java",
+      "bytes": 9718,
+      "sha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/fixture-fairness-green.java",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/sources/fixture-fairness-green.java",
+      "bytes": 9327,
+      "sha256": "8b98d53cf0b0954154d1ee0dc176d719edc78372e15917ccd6b31c486b6588fa"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/overflow-restore-window.java",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/sources/overflow-restore-window.java",
+      "bytes": 6238,
+      "sha256": "9f092d0644cf756ebb3af4a9d24c1d21a0d4f75be15eaffbc1e21015574284a6"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/probe-before-null-fix.java",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/sources/probe-before-null-fix.java",
+      "bytes": 2797,
+      "sha256": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/probe-committed.java",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-custody-recovery-20261024/sources/probe-committed.java",
+      "bytes": 2829,
+      "sha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-recovery-report-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-08-test-helper-source-recovery-report-20261024.md",
+      "bytes": 2278,
+      "sha256": "8b61856a01f1e2040fa1c15d0998ddb7527f0d59a58b774f33cc934e72844d9d"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-post6-delta-map-20261024-source-manifest.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-09-post6-delta-map-20261024-source-manifest.json",
+      "bytes": 47663,
+      "sha256": "61434b49496030e9d56e75cffa28425862cfe6e69dcac93d14a7e5c4b99339bc"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-post6-delta-map-20261024.md",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-09-post6-delta-map-20261024.md",
+      "bytes": 11722,
+      "sha256": "1e14eaa8cd816ef0c1ef620a0aa1428c5b399ad63f56d2a73f4fe1c0b76ed110"
+    },
+    {
+      "original": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-post6-delta-map-rootproof-20261024.json",
+      "copy": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/records/task-09-post6-delta-map-rootproof-20261024.json",
+      "bytes": 705,
+      "sha256": "7e64bfe316d2377eb8c7c7ec5131a3b59b73c02d6c15a12d7a6eff9256ef50ce"
+    }
+  ],
+  "fileCount": 99,
+  "totalBytes": 22582189
+}

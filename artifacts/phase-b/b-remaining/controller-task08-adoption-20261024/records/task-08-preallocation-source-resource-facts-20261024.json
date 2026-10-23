@@ -1,0 +1,104 @@
+{
+  "utc": "2026-10-23T22:37:41.054485+00:00",
+  "base": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+  "old14Files": [
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "bytes": 709,
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "bytes": 1781,
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "bytes": 2461,
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "bytes": 1864,
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "bytes": 3795,
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "bytes": 11205,
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "bytes": 7239,
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "bytes": 35136,
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "bytes": 397,
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "bytes": 10941,
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "bytes": 21260,
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "bytes": 1817,
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "bytes": 7661,
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c"
+    }
+  ],
+  "resolvedJars": [
+    {
+      "artifact": "flyway-core",
+      "path": "/home/tanren/.m2/repository/org/flywaydb/flyway-core/12.4.0/flyway-core-12.4.0.jar",
+      "bytes": 767940,
+      "sha256": "c3f93df1f3e0c9d14652adb5ade97401f2ede503859ac693c2af5c06e2797799",
+      "resolvedVersion": "12.4.0"
+    },
+    {
+      "artifact": "flyway-mysql",
+      "path": "/home/tanren/.m2/repository/org/flywaydb/flyway-mysql/12.4.0/flyway-mysql-12.4.0.jar",
+      "bytes": 29694,
+      "sha256": "de0eac641b3d0104e4ebe3d6340fb25f49cbd154a636b4d2d13b98115f60b055",
+      "resolvedVersion": "12.4.0"
+    },
+    {
+      "artifact": "mysql-connector-j",
+      "path": "/home/tanren/.m2/repository/com/mysql/mysql-connector-j/9.7.0/mysql-connector-j-9.7.0.jar",
+      "bytes": 2607237,
+      "sha256": "0353648eaa1c91e0f4020c959abf756bc866ffd583df22ae6b6f6e0cbd43eb44",
+      "resolvedVersion": "9.7.0"
+    }
+  ],
+  "exactUnversioned164BodySha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+  "exactDDLReviewSha256": "d74af5405484d87d1789f9cc1943bc4f54e7d40d91755b5235642d832f31b29b",
+  "newReadyResourceSha256": "334d4f881e2b658eb9f5c21217bea7fa3d029dbcbf33f7e9a05e546a1235eec3",
+  "candidateOrder": "22517b3b actualsameFlywayjar013.2<013.3<014;013.3UNASSIGNEDpendingfreshsharedhistory/metadata checks",
+  "freshSchemas": "4ownedempty, normal14bootstrapbefore13.3resourcecopy; sharedactual14fromroot1e317a91, immediatefreshobservationsnext"
+}

@@ -1,0 +1,11 @@
+--- cursor-passing-window/Task08CursorIT.java
++++ da15415524f4727c2504cd3f5cba978f1a5adb76/backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java
+@@ -99,7 +99,7 @@
+    var low=pool.submit(()->{lowThread.set(Thread.currentThread());return new JdbcExternalOperations(lowQueue).beginExternal(lease,f.request(lowSpec)).orElseThrow();});
+    try{assertTrue(ready.await(10,TimeUnit.SECONDS));var high=f.marker(highSpec);f.due(high.operationId());var scan=scan(f,type,16,32);assertEquals(high.operationId(),next(scan).operationId());assertFalse(active(scan));release.countDown();var lower=low.get(10,TimeUnit.SECONDS);assertTrue(f.seq(lower.operationId())<f.seq(high.operationId()));f.due(lower.operationId());assertEquals(lower.operationId(),next(scan).operationId());}finally{release.countDown();}
+   }finally{f.source.after=s->{};}
+- } 
++ }
+  @Test void mixedHeldSubjectDomainSourceTaskOperationExecutionAllReleaseBeforeTail()throws Exception{
+   for(String phase:List.of("subject","meeting","input","task","operation","execution")){
+    var f=fixture();String type=type();var spec=f.spec(type);var blocked=f.marker(spec);var tail=f.marker(f.spec(type));f.due(blocked.operationId());f.due(tail.operationId());var scan=scan(f,type,16,32);

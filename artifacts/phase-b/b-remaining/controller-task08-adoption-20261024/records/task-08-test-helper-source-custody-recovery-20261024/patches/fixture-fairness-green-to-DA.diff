@@ -1,0 +1,11 @@
+--- fixture-fairness-green/Task08Fixture.java
++++ da15415524f4727c2504cd3f5cba978f1a5adb76/backend/integration-tests/src/test/java/ama/task/Task08Fixture.java
+@@ -65,7 +65,7 @@
+   return new TaskSpec(type,"T08_"+UUID.randomUUID(),subject,hash(UUID.randomUUID().toString()),new TypedRef("T08_INFO",input),hash(input),0,0,0,3);
+  }
+  ExternalRequest request(TaskSpec s){return new ExternalRequest("T08_CALL",s.producerKey(),hash("logical"+s.input().id()),hash("execution"+s.input().id()),"t08:"+s.input().id());}
+- OperationToken marker(TaskSpec s){var queue=queue(s.type());queue.enqueue(s);var lease=queue.claim(s.pool(),"T08_MARKER").orElseThrow();return new JdbcExternalOperations(queue).beginExternal(lease,request(s)).orElseThrow();}
++ OperationToken marker(TaskSpec s){var queue=queue(s.type());String id=queue.enqueue(s);var result=queue.claim(s.pool(),"T08_MARKER");assertTrue(result.isPresent(),()->"Marker setup ordinary lease absent: "+j.queryForMap("SELECT id,state,available_at,UTC_TIMESTAMP(6) AS dbNow FROM durable_task WHERE id=?",id));var lease=result.orElseThrow();var marker=new JdbcExternalOperations(queue).beginExternal(lease,request(s));assertTrue(marker.isPresent(),()->"Marker setup begin absent: "+j.queryForMap("SELECT id,state,expires_at,UTC_TIMESTAMP(6) AS dbNow FROM durable_task WHERE id=?",id));return marker.orElseThrow();}
+  void due(String id){j.update("UPDATE external_operation SET next_check_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND,reconcile_expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=?",id);}
+  String owner(String operation){return j.queryForObject("SELECT m.owner_id FROM meeting m JOIN external_operation o ON o.subject_id=m.id WHERE o.id=?",String.class,operation);}
+  long seq(String id){return j.queryForObject("SELECT reconcile_scan_seq FROM external_operation WHERE id=?",Long.class,id);}

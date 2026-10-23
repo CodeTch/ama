@@ -1,0 +1,634 @@
+{
+  "utc": "2026-10-23T23:04:56.036568+00:00",
+  "scope": "Read-only current-model custody against preserved BASE; no generator execution, metadata-only verifier, tests, builds, DB, Docker, private env, product review, or Git mutation.",
+  "result": "PASS",
+  "issues": [],
+  "checks": [
+    {
+      "name": "amendment_sha",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "manifest_base",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "preserved_base:tools/checks/database_design.py",
+      "pass": true,
+      "detail": {
+        "sha256": "91493cbb251c99c800bd2aec7861596d50ac76acbf9a159d14c59aaf5b71e6a0",
+        "bytes": 108070,
+        "gitShowAvailable": true
+      }
+    },
+    {
+      "name": "preserved_base:docs/database/ama-schema-draft.sql",
+      "pass": true,
+      "detail": {
+        "sha256": "d3094336b4d55d9389b2fd1d852d627b93e0ac0394b9b1801e258a154b0cb445",
+        "bytes": 116623,
+        "gitShowAvailable": true
+      }
+    },
+    {
+      "name": "preserved_base:docs/database/ama-data-dictionary.md",
+      "pass": true,
+      "detail": {
+        "sha256": "cd6a909abbcd4d20afaf00a3b98ce6329cc633b31e5e941166f16ddbd3177c74",
+        "bytes": 167091,
+        "gitShowAvailable": true
+      }
+    },
+    {
+      "name": "preserved_base:docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "pass": true,
+      "detail": {
+        "sha256": "05bfe0fdf1f2c05af67598ef8298c19a1ec138f51948026f44b9ee41c9793f04",
+        "bytes": 117367,
+        "gitShowAvailable": true
+      }
+    },
+    {
+      "name": "only_authorized_regions:tools/checks/database_design.py",
+      "pass": true,
+      "detail": [
+        {
+          "kind": "replace",
+          "baseStart": 14,
+          "baseEnd": 14,
+          "currentStart": 14,
+          "currentEnd": 14
+        },
+        {
+          "kind": "replace",
+          "baseStart": 88,
+          "baseEnd": 88,
+          "currentStart": 88,
+          "currentEnd": 88
+        },
+        {
+          "kind": "replace",
+          "baseStart": 294,
+          "baseEnd": 294,
+          "currentStart": 294,
+          "currentEnd": 294
+        },
+        {
+          "kind": "insert",
+          "baseStart": 299,
+          "baseEnd": 298,
+          "currentStart": 299,
+          "currentEnd": 299
+        },
+        {
+          "kind": "replace",
+          "baseStart": 301,
+          "baseEnd": 301,
+          "currentStart": 302,
+          "currentEnd": 302
+        },
+        {
+          "kind": "insert",
+          "baseStart": 448,
+          "baseEnd": 447,
+          "currentStart": 449,
+          "currentEnd": 451
+        },
+        {
+          "kind": "replace",
+          "baseStart": 457,
+          "baseEnd": 457,
+          "currentStart": 461,
+          "currentEnd": 461
+        },
+        {
+          "kind": "replace",
+          "baseStart": 627,
+          "baseEnd": 627,
+          "currentStart": 631,
+          "currentEnd": 631
+        }
+      ]
+    },
+    {
+      "name": "only_authorized_regions:docs/database/ama-schema-draft.sql",
+      "pass": true,
+      "detail": [
+        {
+          "kind": "replace",
+          "baseStart": 1,
+          "baseEnd": 1,
+          "currentStart": 1,
+          "currentEnd": 1
+        },
+        {
+          "kind": "insert",
+          "baseStart": 348,
+          "baseEnd": 347,
+          "currentStart": 348,
+          "currentEnd": 348
+        },
+        {
+          "kind": "insert",
+          "baseStart": 384,
+          "baseEnd": 383,
+          "currentStart": 385,
+          "currentEnd": 385
+        },
+        {
+          "kind": "insert",
+          "baseStart": 387,
+          "baseEnd": 386,
+          "currentStart": 389,
+          "currentEnd": 389
+        }
+      ]
+    },
+    {
+      "name": "only_authorized_regions:docs/database/ama-data-dictionary.md",
+      "pass": true,
+      "detail": [
+        {
+          "kind": "replace",
+          "baseStart": 1,
+          "baseEnd": 1,
+          "currentStart": 1,
+          "currentEnd": 1
+        },
+        {
+          "kind": "insert",
+          "baseStart": 576,
+          "baseEnd": 575,
+          "currentStart": 576,
+          "currentEnd": 576
+        },
+        {
+          "kind": "insert",
+          "baseStart": 623,
+          "baseEnd": 622,
+          "currentStart": 624,
+          "currentEnd": 624
+        },
+        {
+          "kind": "insert",
+          "baseStart": 627,
+          "baseEnd": 626,
+          "currentStart": 629,
+          "currentEnd": 629
+        },
+        {
+          "kind": "replace",
+          "baseStart": 631,
+          "baseEnd": 631,
+          "currentStart": 634,
+          "currentEnd": 634
+        }
+      ]
+    },
+    {
+      "name": "only_authorized_regions:docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "pass": true,
+      "detail": [
+        {
+          "kind": "insert",
+          "baseStart": 1,
+          "baseEnd": 0,
+          "currentStart": 1,
+          "currentEnd": 2
+        },
+        {
+          "kind": "insert",
+          "baseStart": 572,
+          "baseEnd": 571,
+          "currentStart": 574,
+          "currentEnd": 574
+        }
+      ]
+    },
+    {
+      "name": "source_version",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source_task6_index",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source_operation_delta",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "shared_auto_increment",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "sql_version",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "sql_task6_nonunique",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "sql_operation_signed_auto_unique",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "sql_audit_event_auto_retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "dictionary_version_lookup",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "dictionary_operation",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "old_human_prefix_exact_contiguous",
+      "pass": true,
+      "detail": {
+        "bytes": 76866,
+        "sha256": "6a7c1405b2453a410615656de834704ac74a47c1be79bb16b5a7c4f627da40c6"
+      }
+    },
+    {
+      "name": "design_status_prepend",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "design_ER_operation_only",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "static_full_model_counts",
+      "pass": true,
+      "detail": {
+        "tables": 98,
+        "columns": 732,
+        "primaryIndexes": 98,
+        "secondaryIndexes": 91,
+        "checks": 116,
+        "foreignKeys": 208,
+        "allExplicitIndexes": 189
+      }
+    },
+    {
+      "name": "distinct_deployed_incremental",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "inputs_stable_at_end",
+      "pass": true,
+      "detail": {
+        "count": 15
+      }
+    }
+  ],
+  "changedRegions": {
+    "tools/checks/database_design.py": [
+      {
+        "kind": "replace",
+        "baseStart": 14,
+        "baseEnd": 14,
+        "currentStart": 14,
+        "currentEnd": 14
+      },
+      {
+        "kind": "replace",
+        "baseStart": 88,
+        "baseEnd": 88,
+        "currentStart": 88,
+        "currentEnd": 88
+      },
+      {
+        "kind": "replace",
+        "baseStart": 294,
+        "baseEnd": 294,
+        "currentStart": 294,
+        "currentEnd": 294
+      },
+      {
+        "kind": "insert",
+        "baseStart": 299,
+        "baseEnd": 298,
+        "currentStart": 299,
+        "currentEnd": 299
+      },
+      {
+        "kind": "replace",
+        "baseStart": 301,
+        "baseEnd": 301,
+        "currentStart": 302,
+        "currentEnd": 302
+      },
+      {
+        "kind": "insert",
+        "baseStart": 448,
+        "baseEnd": 447,
+        "currentStart": 449,
+        "currentEnd": 451
+      },
+      {
+        "kind": "replace",
+        "baseStart": 457,
+        "baseEnd": 457,
+        "currentStart": 461,
+        "currentEnd": 461
+      },
+      {
+        "kind": "replace",
+        "baseStart": 627,
+        "baseEnd": 627,
+        "currentStart": 631,
+        "currentEnd": 631
+      }
+    ],
+    "docs/database/ama-schema-draft.sql": [
+      {
+        "kind": "replace",
+        "baseStart": 1,
+        "baseEnd": 1,
+        "currentStart": 1,
+        "currentEnd": 1
+      },
+      {
+        "kind": "insert",
+        "baseStart": 348,
+        "baseEnd": 347,
+        "currentStart": 348,
+        "currentEnd": 348
+      },
+      {
+        "kind": "insert",
+        "baseStart": 384,
+        "baseEnd": 383,
+        "currentStart": 385,
+        "currentEnd": 385
+      },
+      {
+        "kind": "insert",
+        "baseStart": 387,
+        "baseEnd": 386,
+        "currentStart": 389,
+        "currentEnd": 389
+      }
+    ],
+    "docs/database/ama-data-dictionary.md": [
+      {
+        "kind": "replace",
+        "baseStart": 1,
+        "baseEnd": 1,
+        "currentStart": 1,
+        "currentEnd": 1
+      },
+      {
+        "kind": "insert",
+        "baseStart": 576,
+        "baseEnd": 575,
+        "currentStart": 576,
+        "currentEnd": 576
+      },
+      {
+        "kind": "insert",
+        "baseStart": 623,
+        "baseEnd": 622,
+        "currentStart": 624,
+        "currentEnd": 624
+      },
+      {
+        "kind": "insert",
+        "baseStart": 627,
+        "baseEnd": 626,
+        "currentStart": 629,
+        "currentEnd": 629
+      },
+      {
+        "kind": "replace",
+        "baseStart": 631,
+        "baseEnd": 631,
+        "currentStart": 634,
+        "currentEnd": 634
+      }
+    ],
+    "docs/superpowers/specs/2026-10-21-ama-database-design.md": [
+      {
+        "kind": "insert",
+        "baseStart": 1,
+        "baseEnd": 0,
+        "currentStart": 1,
+        "currentEnd": 2
+      },
+      {
+        "kind": "insert",
+        "baseStart": 572,
+        "baseEnd": 571,
+        "currentStart": 574,
+        "currentEnd": 574
+      }
+    ]
+  },
+  "staticFullModelCounts": {
+    "tables": 98,
+    "columns": 732,
+    "primaryIndexes": 98,
+    "secondaryIndexes": 91,
+    "checks": 116,
+    "foreignKeys": 208,
+    "allExplicitIndexes": 189
+  },
+  "deployedIncrementalEvidence": "Prior sealed migration custody has 65 deployed tables, 491 old columns plus one migration column; distinct from full future review model 98/732.",
+  "baselineFiles": [
+    {
+      "path": "tools/checks/database_design.py",
+      "baselineSha256": "91493cbb251c99c800bd2aec7861596d50ac76acbf9a159d14c59aaf5b71e6a0",
+      "currentSha256": "e1139ccd51a54d151267fed9d33675c3ef40880f1fe8f4211006aa2331843b11"
+    },
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "baselineSha256": "d3094336b4d55d9389b2fd1d852d627b93e0ac0394b9b1801e258a154b0cb445",
+      "currentSha256": "0beb9eace26afd5c45ade81a2f990583c0d5a58ffda963c15d17836a1fa3af68"
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "baselineSha256": "cd6a909abbcd4d20afaf00a3b98ce6329cc633b31e5e941166f16ddbd3177c74",
+      "currentSha256": "536de7d001bae555744c44fa7cd7f5062cdcf782feda9004a1ceec987b1bfe87"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "baselineSha256": "05bfe0fdf1f2c05af67598ef8298c19a1ec138f51948026f44b9ee41c9793f04",
+      "currentSha256": "61a9d0cd8f0f2cdb1429b411a71383accc35000078e759dee7432f670cd0350e"
+    }
+  ],
+  "inputsAtStart": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-activation-brief-20261024.md",
+      "bytes": 9000,
+      "sha256": "557e9eb9455062f147fa496aa9eb82ee440092337c4a88a2c73e0d15a1fd33ff"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-input-index-model-region-20261024.md",
+      "bytes": 2898,
+      "sha256": "439fb9305a015341ed2d64f68538ef74409b10efd2c9416b9fa50b29fba90096"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-input-index-model-region-manifest-20261024.json",
+      "bytes": 1694,
+      "sha256": "290b00aa76d92aa98d2e80d529e8ddfa6e507aa87836b201af57a46c2ab7b79b"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-migration-custody-20261024.json",
+      "bytes": 59435,
+      "sha256": "0f5f6e89f349630cd7bb892fc74608ffa2d7deaa3db028ff57f0ff6dd37e0997"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-model-output-input-index-amendment-20261024.md",
+      "bytes": 2678,
+      "sha256": "73b13bc553fd16cff728220e14ea409cdf71ae83bb9149b436b5b3d88fb4e73b"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-model-output-root-ruling-20261024.md",
+      "bytes": 3435,
+      "sha256": "2eba02d0519909558b0f6d092a2cc12b3ec427dab2c759cb003b6eecebb5f11b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-12ca543/docs/database/ama-data-dictionary.md",
+      "bytes": 167091,
+      "sha256": "cd6a909abbcd4d20afaf00a3b98ce6329cc633b31e5e941166f16ddbd3177c74"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-12ca543/docs/database/ama-schema-draft.sql",
+      "bytes": 116623,
+      "sha256": "d3094336b4d55d9389b2fd1d852d627b93e0ac0394b9b1801e258a154b0cb445"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-12ca543/docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "bytes": 117367,
+      "sha256": "05bfe0fdf1f2c05af67598ef8298c19a1ec138f51948026f44b9ee41c9793f04"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-12ca543/manifest.json",
+      "bytes": 752,
+      "sha256": "15de553ad1fc217c3db9b97b55f9a874ce134d872d94988bd91e3692eddd2a29"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-12ca543/tools/checks/database_design.py",
+      "bytes": 108070,
+      "sha256": "91493cbb251c99c800bd2aec7861596d50ac76acbf9a159d14c59aaf5b71e6a0"
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "bytes": 167707,
+      "sha256": "536de7d001bae555744c44fa7cd7f5062cdcf782feda9004a1ceec987b1bfe87"
+    },
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "bytes": 116789,
+      "sha256": "0beb9eace26afd5c45ade81a2f990583c0d5a58ffda963c15d17836a1fa3af68"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "bytes": 117821,
+      "sha256": "61a9d0cd8f0f2cdb1429b411a71383accc35000078e759dee7432f670cd0350e"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "bytes": 108787,
+      "sha256": "e1139ccd51a54d151267fed9d33675c3ef40880f1fe8f4211006aa2331843b11"
+    }
+  ],
+  "inputsAtEnd": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-activation-brief-20261024.md",
+      "bytes": 9000,
+      "sha256": "557e9eb9455062f147fa496aa9eb82ee440092337c4a88a2c73e0d15a1fd33ff"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-input-index-model-region-20261024.md",
+      "bytes": 2898,
+      "sha256": "439fb9305a015341ed2d64f68538ef74409b10efd2c9416b9fa50b29fba90096"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-input-index-model-region-manifest-20261024.json",
+      "bytes": 1694,
+      "sha256": "290b00aa76d92aa98d2e80d529e8ddfa6e507aa87836b201af57a46c2ab7b79b"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-migration-custody-20261024.json",
+      "bytes": 59435,
+      "sha256": "0f5f6e89f349630cd7bb892fc74608ffa2d7deaa3db028ff57f0ff6dd37e0997"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-model-output-input-index-amendment-20261024.md",
+      "bytes": 2678,
+      "sha256": "73b13bc553fd16cff728220e14ea409cdf71ae83bb9149b436b5b3d88fb4e73b"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-model-output-root-ruling-20261024.md",
+      "bytes": 3435,
+      "sha256": "2eba02d0519909558b0f6d092a2cc12b3ec427dab2c759cb003b6eecebb5f11b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-12ca543/docs/database/ama-data-dictionary.md",
+      "bytes": 167091,
+      "sha256": "cd6a909abbcd4d20afaf00a3b98ce6329cc633b31e5e941166f16ddbd3177c74"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-12ca543/docs/database/ama-schema-draft.sql",
+      "bytes": 116623,
+      "sha256": "d3094336b4d55d9389b2fd1d852d627b93e0ac0394b9b1801e258a154b0cb445"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-12ca543/docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "bytes": 117367,
+      "sha256": "05bfe0fdf1f2c05af67598ef8298c19a1ec138f51948026f44b9ee41c9793f04"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-12ca543/manifest.json",
+      "bytes": 752,
+      "sha256": "15de553ad1fc217c3db9b97b55f9a874ce134d872d94988bd91e3692eddd2a29"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-12ca543/tools/checks/database_design.py",
+      "bytes": 108070,
+      "sha256": "91493cbb251c99c800bd2aec7861596d50ac76acbf9a159d14c59aaf5b71e6a0"
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "bytes": 167707,
+      "sha256": "536de7d001bae555744c44fa7cd7f5062cdcf782feda9004a1ceec987b1bfe87"
+    },
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "bytes": 116789,
+      "sha256": "0beb9eace26afd5c45ade81a2f990583c0d5a58ffda963c15d17836a1fa3af68"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "bytes": 117821,
+      "sha256": "61a9d0cd8f0f2cdb1429b411a71383accc35000078e759dee7432f670cd0350e"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "bytes": 108787,
+      "sha256": "e1139ccd51a54d151267fed9d33675c3ef40880f1fe8f4211006aa2331843b11"
+    }
+  ],
+  "limits": "Mechanical byte/diff/static declaration custody only. No live-model qualification, specification quality verdict, or final Task8 adoption. Source may change after end seal."
+}
