@@ -40,3 +40,7 @@ No old SQL/plans/artifacts/root .gitattributes/stash/main/worktree alteration. O
 |1..13 self consistency|Every task's output precedes its named consumer and tests inspect actual behavior|No fake placeholder completion; no source changes in final docs-only task unless routed to fix review|
 
 Detailed per-pair collisions and task status live in the plan ledger. Implementation authors run sequentially with exact owned source base; independent read-only design/reviews may run in parallel.
+
+## R1 design-review resolutions (normative)
+
+Read the spec's full Normative refinement R1 before each Task2..13 brief. It supersedes ambiguous epoch/retention/API shorthand above. DR-01: sticky real0-only guard; explicitadopt nooriginalepoch equality. DR-02: registered authentic stale-only immutable retention; STALE nonblocking/nonadoptable, current editor-only PENDING; finalrace serialized. DR-03: explicit task->operation heartbeat/complete ownershiphandoff. DR-04: supported v2 graph-copy/edit/conversion matrix, full remapping/no reviewcredit, deterministic required SOURCE_SUPPORT/ACTION_FIELDS reviewset. DR-05: allbrowsermutations exact token/legacy normalization before idempotencydigest. DR-06: producer-owned authoritative read/discovery table plus actualTLSdualstorageE2E. All six original findings preserved; bounded independent rereview required before dependent runtime activation.
