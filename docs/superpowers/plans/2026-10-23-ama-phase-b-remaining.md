@@ -74,3 +74,7 @@ Read the spec's full Normative refinement R1 before each Task2..13 brief. It sup
 ## Adopted authority/external refinement
 
 The normative additive design is `docs/superpowers/specs/2026-10-23-ama-phase-b-authority-external-protocols.md`, backed by exact independently reviewed artifacts and hashes. It supersedes compact Task 7 permit-atomic wording: observation output/task/attempt/operation/execution/audit/outbox is atomic; verified permit settlement follows commit in a separate bounded-recoverable transaction. Execute stable task IDs in order **1,2,3,4,5,6,8,7,9,10,11,12,13**, because fairness must close before external Worker activation. Task 3 implementation starts only after Task 2 implementation adoption. No runtime qualification follows from design adoption.
+
+## Task8 adopted finite-scan design
+
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-reconciliation-fairness.md and its exact approved R1/reviews. Root selects additive immutable ordinal; no migration number/freeze/apply yet. Include current model generator/dictionary/DDL/ER update for the exact reviewed column/index, preserving all other definitions. Bounded explicit SQL accounting includes two session SETs per candidate plus highwater result row; driver controls separate. Backlog-dependent sweep latency and rebuild cost are accepted only within local controlled qualification; no capacity/SLA inference. FUP stays OPEN until actual implementation and independent review.
