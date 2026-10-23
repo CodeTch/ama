@@ -1,0 +1,26 @@
+[
+  {
+    "path": "backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "sha256": "4df61024777697a63dc9247aa44559a6b1c8682ab8ba85eac78656a1b30e851e"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+    "sha256": "51ba9140066b3e2fd6ba91f27b50874418f2ec31b9e2cc81aab4fc51398d5f10"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+    "sha256": "631398e62ed69957a74bfadec4924cc089440dab8a0ce3662201c8622e390044"
+  },
+  {
+    "path": "tools/b06_archives_owned_fixture.py",
+    "sha256": "a4c75cf98632ded09cd08831c46cddf713991a8d77fc1172beb1f4f290140af2"
+  },
+  {
+    "path": "tools/b06_archives_facts_run.py",
+    "sha256": "34f420e939a6924dd926c14a02c949dcc18ce6ade68742b4ce33b1aa8b1c8c7a"
+  }
+]

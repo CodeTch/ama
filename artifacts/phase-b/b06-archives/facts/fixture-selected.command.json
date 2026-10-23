@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "docker",
+    "inspect",
+    "--format",
+    "{\"id\":{{json .Id}},\"name\":{{json .Name}},\"image_reference\":{{json .Config.Image}},\"image_id\":{{json .Image}},\"owner\":{{json (index .Config.Labels \"ama.b06.owner\")}},\"mounts\":{{json .Mounts}},\"ports\":{{json .HostConfig.PortBindings}},\"memory\":{{json .HostConfig.Memory}},\"memory_swap\":{{json .HostConfig.MemorySwap}},\"nano_cpus\":{{json .HostConfig.NanoCpus}},\"pids_limit\":{{json .HostConfig.PidsLimit}},\"cmd\":{{json .Config.Cmd}},\"state\":{\"status\":{{json .State.Status}},\"exit_code\":{{json .State.ExitCode}},\"oom\":{{json .State.OOMKilled}}}}",
+    "ama-test-b01-a5e7d68612a4"
+  ],
+  "exit_code": 0
+}
