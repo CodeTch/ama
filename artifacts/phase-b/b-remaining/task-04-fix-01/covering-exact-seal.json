@@ -1,0 +1,55 @@
+{
+  "base": "f176382618924d9a00fd5fbabf93bbc30c78dd71",
+  "branch": "codex/phase-b-completion-20261023",
+  "owned_sources": {
+    "backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java": "b5cf7dd3eb1941f2152ceaa8bd4c217369f3cdddf06250d98c87bfed3c15aa61",
+    "backend/adapters/src/main/java/ama/transcript/JdbcProcessingDiscovery.java": "a41a81c44bb843a9d9d61d5e13d46bb9c926075059fc9b991c37342e3466d4c5",
+    "backend/integration-tests/src/test/java/ama/storage/ProcessingIntakeHttpIT.java": "c5f6e3ba5399a53020fc5a0d8fcfdcf5287cbf2daa70d88a4a09c2dcf1fb3d07",
+    "contracts/openapi/processing.yaml": "34b5bb977997f6c94b895fc5ecb37ba3b51671e5c1532be30cd69d423beb86a1"
+  },
+  "covering_labels": [
+    "covering-final-3",
+    "covering-missing-2"
+  ],
+  "covering_full_run_total": {
+    "tests": 26,
+    "failures": 1,
+    "errors": 1,
+    "skipped": 0
+  },
+  "covering_recovery_run_total": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "distinct_passing_cases_on_final_source": 26,
+  "retained_full_run_nonpassing_cases": [
+    {
+      "label": "covering-final-3",
+      "case": "ama.storage.ProcessingIntakeHttpIT#ordinaryQueueSkipsLockedInputRootsWithoutWaitingOrLeasing"
+    },
+    {
+      "label": "covering-final-3",
+      "case": "ama.storage.ProcessingIntakeHttpIT#ownerMemberOutsiderAdminSessionAndCsrfGuardsAreFresh"
+    }
+  ],
+  "one_clean_24case_invocation_claimed": false,
+  "covering_all_source_seal_sha256": "d4a76aefe371d4e19d4c9d9e8cd1ea4159ccb351cd1f6f848dfd963c36c06dfc",
+  "all_original_task04_files_unchanged": 590,
+  "formal_sql_diff_empty": true,
+  "index_empty_before_scoped_staging": true,
+  "fresh_xml_counts_verified": true,
+  "generated_api_regenerated_byte_identical": true,
+  "observed_mysql_endpoint": 46653,
+  "owned_task_attempt_rows_terminal": 189,
+  "new_evidence_accepted_task_ids": 89,
+  "exact_password_hit_counts": {
+    "owned_database": 0,
+    "native_tls_fixture": 0
+  },
+  "password_values_printed": false,
+  "source_queries_on_historical_replay": 0,
+  "hashes_under_genuine_roots": 0,
+  "worker_business_qualification": "NOT_INSTALLED / businessReady=false"
+}

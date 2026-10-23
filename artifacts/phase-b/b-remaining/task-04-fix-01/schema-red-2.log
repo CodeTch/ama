@@ -1,0 +1,12 @@
+{"sample": {"state": "ELIGIBLE", "reason": null}, "errors": ["None is not one of ['SOURCE_STATE', 'SOURCE_EPOCH', 'SOURCE_PURPOSE', 'SOURCE_ROUTE', 'SOURCE_PROVENANCE', 'READ_ONLY']"]}
+{"sample": {"state": "INELIGIBLE", "reason": "SOURCE_STATE"}, "errors": []}
+{"sample": {"state": "INELIGIBLE", "reason": "SOURCE_EPOCH"}, "errors": []}
+{"sample": {"state": "INELIGIBLE", "reason": "SOURCE_PURPOSE"}, "errors": []}
+{"sample": {"state": "UNAVAILABLE", "reason": "SOURCE_ROUTE"}, "errors": []}
+{"sample": {"state": "INELIGIBLE", "reason": "SOURCE_PROVENANCE"}, "errors": []}
+{"sample": {"state": "INELIGIBLE", "reason": "READ_ONLY"}, "errors": []}
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-04-fix-01/eligibility-schema.py", line 11, in <module>
+    assert not errors,errors
+           ^^^^^^^^^^
+AssertionError: ["None is not one of ['SOURCE_STATE', 'SOURCE_EPOCH', 'SOURCE_PURPOSE', 'SOURCE_ROUTE', 'SOURCE_PROVENANCE', 'READ_ONLY']"]

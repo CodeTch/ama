@@ -56,8 +56,9 @@ public final class JdbcProcessingDiscovery {
         });
         boolean owner=(Boolean)result.remove("owner"),writable=(Boolean)result.remove("writable");
         boolean ready=owner&&available.getAsBoolean();
-        result.put("canSubmit",owner&&writable&&ready);
-        if(owner)result.put("readOnlyReason",!writable?"READ_ONLY":ready?null:"PROCESSING_UNAVAILABLE");
+        boolean exhausted=((Number)result.get("revision")).longValue()>=Long.MAX_VALUE-1;
+        result.put("canSubmit",owner&&writable&&ready&&!exhausted);
+        if(owner)result.put("readOnlyReason",!writable?"READ_ONLY":exhausted?"REVISION_EXHAUSTED":ready?null:"PROCESSING_UNAVAILABLE");
         result.put("intake",ready?"AVAILABLE":"UNAVAILABLE");
         result.put("execution","NOT_INSTALLED");
         result.put("businessReady",false);

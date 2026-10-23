@@ -1,0 +1,7 @@
+{
+  "status": "SETUP_FAILURE_NOT_PRODUCT_RED",
+  "attempt": "integrity-capability-red",
+  "reason": "Runner asserted guessed MySQL 1GiB/2CPU; exact selected-field inspection showed retained original is 768MiB/1CPU. Guard corrected to exact observed retained bounds; no resource mutation or tests occurred.",
+  "mysql_memory": 805306368,
+  "mysql_nano_cpus": 1000000000
+}

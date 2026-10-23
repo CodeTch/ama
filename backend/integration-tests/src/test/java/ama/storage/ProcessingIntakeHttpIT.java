@@ -44,7 +44,7 @@ class ProcessingIntakeHttpIT {
     Path archive;
     String pin;
     Ref processing;
-    @BeforeEach void start() throws Exception {
+    @BeforeEach void start(TestInfo test) throws Exception {
         source=new Task04ProbeSource(MysqlTestDatabase.dataSource());
         j=new JdbcTemplate(source);
         Path parent=Path.of("target/registry-fixtures").toAbsolutePath().normalize();
@@ -104,15 +104,20 @@ class ProcessingIntakeHttpIT {
             c.registerBean("task04Backends",FileBackendDefinitions.class,()->new FileBackendDefinitions(List.of(storage.backend(observed)),storage.binding.id()));
         }).run("--server.address=127.0.0.1","--server.port=0","--management.server.port=0","--logging.level.root=ERROR", "--identity.allowed-origin="+origin,"--processing.enabled=true","--processing.archive-root="+archive,"--processing.index-sha="+pin, "--processing.config-version="+processing.version(),"--processing.config-sha="+processing.sha256(),"--processing.max-total-source-bytes=1048576");
         owner="task04-"+UUID.randomUUID();
-        token=identity(owner);
+        token=identity(owner,Set.of("redirectedAcceptedResultCannotAcknowledgeAnotherRequest","changedAcceptedBatchSequenceOrFingerprintIsUnavailable","corruptFixedImportColumnsAreUnavailable","finalSerializedReplayRejectsCorruptAcceptedGraph").contains(test.getTestMethod().orElseThrow().getName()));
         var created=call("POST","/meetings","{}","create");
         assertEquals(201,created.statusCode(),created.body());
         meeting=body(created).get("id").asText();
     }
     String identity(String id) throws Exception {
+        return identity(id,false);
+    }
+    String identity(String id,boolean alreadyIssued) throws Exception {
         String value=Base64.getUrlEncoder().withoutPadding().encodeToString(java.security.SecureRandom.getSeed(32));
         j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",id,id);
-        j.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (?,?,0,?,UTC_TIMESTAMP(6),UTC_TIMESTAMP(6)+INTERVAL 1 HOUR)",hash(value),id,csrf);
+        // Only the new positive integrity fixtures use a recent already-issued session after the observed backward clock step.
+        String issued=alreadyIssued?"UTC_TIMESTAMP(6)-INTERVAL 1 MINUTE":"UTC_TIMESTAMP(6)";
+        j.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (?,?,0,?,"+issued+",UTC_TIMESTAMP(6)+INTERVAL 1 HOUR)",hash(value),id,csrf);
         return value;
     }
     static String hash(String value) throws Exception {
@@ -124,7 +129,15 @@ class ProcessingIntakeHttpIT {
     HttpResponse<String> call(String method,String path,String payload,String key) throws Exception {
         var request=HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+app.getEnvironment().getProperty("local.server.port")+"/api/v1"+path)).header("Cookie","__Host-AMA_SESSION="+token).header("Origin",origin).header("X-CSRF-Token",csrf).header("Content-Type","application/json");
         if(key!=null)request.header("Idempotency-Key",key);
-        return HttpClient.newHttpClient().send(request.method(method,HttpRequest.BodyPublishers.ofString(payload)).build(),HttpResponse.BodyHandlers.ofString());
+        var built=request.method(method,HttpRequest.BodyPublishers.ofString(payload)).build();
+        var response=HttpClient.newHttpClient().send(built,HttpResponse.BodyHandlers.ofString());
+        if(response.statusCode()==401)authDiagnostic(method+" "+path,built);
+        return response;
+    }
+    void authDiagnostic(String operation,HttpRequest request) throws Exception {
+        var session=j.queryForMap("SELECT i.status,i.session_generation identity_generation,s.session_generation session_generation,s.issued_at,s.expires_at,s.revoked_at,UTC_TIMESTAMP(6) database_now FROM identity_session s JOIN enterprise_identity i ON i.enterprise_id=s.enterprise_id WHERE s.token_hash=?",hash(token));
+        Path diagnostic=Path.of("target/task04-custody");Files.createDirectories(diagnostic);
+        Files.writeString(diagnostic.resolve(meeting+"-auth-diagnostic.txt"),"owner="+owner+" meeting="+meeting+" operation="+operation+" session="+session+" tokenCanonical="+token.matches("[A-Za-z0-9_-]{43}")+" cookieCount="+request.headers().allValues("Cookie").size()+" cookieExact="+request.headers().firstValue("Cookie").orElse("").equals("__Host-AMA_SESSION="+token)+" freshResolution="+app.getBean(ama.identity.SessionPort.class).resolve(token).isPresent()+"\n",StandardOpenOption.CREATE,StandardOpenOption.APPEND);
     }
     String open(String value) throws Exception {
         String checksum=hash(value);
@@ -137,7 +150,9 @@ class ProcessingIntakeHttpIT {
     }
     HttpResponse<String> part(String upload,String value) throws Exception {
         var req=HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+app.getEnvironment().getProperty("local.server.port")+"/api/v1/uploads/"+upload+"/parts/1")).header("Cookie","__Host-AMA_SESSION="+token).header("Origin",origin).header("X-CSRF-Token",csrf).header("Content-Type","application/octet-stream").header("X-Checksum-SHA256",hash(value)).PUT(HttpRequest.BodyPublishers.ofString(value)).build();
-        return HttpClient.newHttpClient().send(req,HttpResponse.BodyHandlers.ofString());
+        var response=HttpClient.newHttpClient().send(req,HttpResponse.BodyHandlers.ofString());
+        if(response.statusCode()==401)authDiagnostic("PART "+upload,req);
+        return response;
     }
     HttpResponse<String> complete(String upload,String value) throws Exception {
         return call("POST","/uploads/"+upload+"/completion",json.writeValueAsString(Map.of("parts",List.of(Map.of("part",1,"sha256",hash(value))),"sha256",hash(value))),null);
@@ -208,6 +223,11 @@ class ProcessingIntakeHttpIT {
             j.update("UPDATE meeting SET revision=? WHERE id=?",revision,meeting);
             j.update("UPDATE task_subject SET business_version=? WHERE subject_kind='MEETING' AND subject_id=?",revision,meeting);
             j.update("UPDATE meeting_search_projection SET meeting_revision=? WHERE meeting_id=?",revision,meeting);
+            if(route.equals("transcript-imports")&&revision>=9223372036854775805L) {
+                var cap=body(call("GET","/meetings/"+meeting+"/processing-capabilities","",null));
+                assertEquals(revision<9223372036854775806L,cap.get("canSubmit").asBoolean(),cap.toString());
+                if(revision==9223372036854775806L)assertEquals("REVISION_EXHAUSTED",cap.get("readOnlyReason").asText());
+            }
             var request=new LinkedHashMap<String,Object>();
             request.put("expectedRevisionToken",Long.toString(revision));
             if(route.equals("info"))request.put("rosterDraftIds",List.of());
@@ -220,7 +240,14 @@ class ProcessingIntakeHttpIT {
             }
             assertEquals(route.equals("transcript-imports")?202:200,first.statusCode(),route+" "+first.body());
             assertEquals(Long.toString(revision+1),body(first).get("revisionToken").asText());
-            if(route.equals("transcript-imports"))track(body(first).get("taskId").asText());
+            if(route.equals("transcript-imports")) {
+                track(body(first).get("taskId").asText());
+                if(revision==9223372036854775805L) {
+                    var cap=body(call("GET","/meetings/"+meeting+"/processing-capabilities","",null));
+                    assertFalse(cap.get("canSubmit").asBoolean(),cap.toString());
+                    assertEquals("REVISION_EXHAUSTED",cap.get("readOnlyReason").asText());
+                }
+            }
             assertEquals(body(first),body(call(method,path,payload,key)));
             request.remove("expectedRevisionToken");
             request.put("expectedRevision",revision);
@@ -376,6 +403,105 @@ class ProcessingIntakeHttpIT {
         finally {
             j.update("UPDATE durable_task SET producer_key=? WHERE id=?",original,task);
         }
+    }
+    @Test void redirectedAcceptedResultCannotAcknowledgeAnotherRequest() throws Exception {
+        String file=upload("redirect first\n");
+        String firstPayload=json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(file)));
+        var first=call("POST","/meetings/"+meeting+"/transcript-imports",firstPayload,"redirect-first");
+        assertEquals(202,first.statusCode(),first.body());
+        String firstTask=body(first).get("taskId").asText();track(firstTask);
+        String secondFile=upload("redirect second\n");
+        var second=call("POST","/meetings/"+meeting+"/transcript-imports",json.writeValueAsString(Map.of("expectedRevisionToken","1","orderedFileIds",List.of(secondFile))),"redirect-second");
+        assertEquals(202,second.statusCode(),second.body());
+        String secondTask=body(second).get("taskId").asText();track(secondTask);
+        String scope=j.queryForObject("SELECT scope_hash FROM idempotency_record WHERE operation='PROCESSING_IMPORT' AND result_id=?",String.class,firstTask);
+        var before=replayCounts();
+        try {
+            assertEquals(1,j.update("UPDATE idempotency_record SET result_id=? WHERE scope_hash=?",secondTask,scope));
+            assertUnavailableReplay(firstPayload,"redirect-first",before);
+        } finally {assertEquals(1,j.update("UPDATE idempotency_record SET result_id=? WHERE scope_hash=?",firstTask,scope));}
+        assertEquals(body(first),body(call("POST","/meetings/"+meeting+"/transcript-imports",firstPayload,"redirect-first")));
+    }
+    @Test void changedAcceptedBatchSequenceOrFingerprintIsUnavailable() throws Exception {
+        String first=upload("sequence first\n"),second=upload("sequence second\n"),other=upload("sequence other\n");
+        String payload=json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(first,second)));
+        var response=call("POST","/meetings/"+meeting+"/transcript-imports",payload,"sequence");
+        assertEquals(202,response.statusCode(),response.body());var accepted=body(response);track(accepted.get("taskId").asText());
+        String batch=accepted.get("batchId").asText();var before=replayCounts();
+        String originalHash=j.queryForObject("SELECT sha256 FROM input_batch_file WHERE batch_id=? AND ordinal=1",String.class,batch);
+        try {
+            j.update("UPDATE input_batch_file SET file_id=?,sha256=? WHERE batch_id=? AND ordinal=1",other,hash("sequence other\n"),batch);
+            assertUnavailableReplay(payload,"sequence",before);
+        } finally {j.update("UPDATE input_batch_file SET file_id=?,sha256=? WHERE batch_id=? AND ordinal=1",first,originalHash,batch);}
+        try {
+            j.update("UPDATE input_batch_file SET ordinal=3 WHERE batch_id=? AND ordinal=1",batch);
+            j.update("UPDATE input_batch_file SET ordinal=1 WHERE batch_id=? AND ordinal=2",batch);
+            j.update("UPDATE input_batch_file SET ordinal=2 WHERE batch_id=? AND ordinal=3",batch);
+            assertUnavailableReplay(payload,"sequence",before);
+        } finally {
+            // Two-step temporary ordinals avoid primary-key collisions and preserve each exact member.
+            j.update("UPDATE input_batch_file SET ordinal=ordinal+2 WHERE batch_id=?",batch);
+            j.update("UPDATE input_batch_file SET ordinal=5-ordinal WHERE batch_id=?",batch);
+        }
+        String profile=j.queryForObject("SELECT profile FROM input_batch_fingerprint_profile WHERE batch_id=?",String.class,batch);
+        try {
+            j.update("DELETE FROM input_batch_fingerprint_profile WHERE batch_id=?",batch);
+            assertUnavailableReplay(payload,"sequence",before);
+        } finally {j.update("INSERT INTO input_batch_fingerprint_profile(batch_id,profile) VALUES (?,?)",batch,profile);}
+        String fingerprint=j.queryForObject("SELECT input_fingerprint FROM input_batch WHERE id=?",String.class,batch);
+        try {j.update("UPDATE input_batch SET input_fingerprint=? WHERE id=?","e".repeat(64),batch);assertUnavailableReplay(payload,"sequence",before);}
+        finally {j.update("UPDATE input_batch SET input_fingerprint=? WHERE id=?",fingerprint,batch);}
+        assertEquals(accepted,body(call("POST","/meetings/"+meeting+"/transcript-imports",payload,"sequence")));
+    }
+    @Test void corruptFixedImportColumnsAreUnavailable() throws Exception {
+        String file=upload("shape\n"),payload=json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(file)));
+        var response=call("POST","/meetings/"+meeting+"/transcript-imports",payload,"shape");
+        assertEquals(202,response.statusCode(),response.body());var accepted=body(response);track(accepted.get("taskId").asText());
+        String input=accepted.get("inputId").asText();var before=replayCounts();
+        for(String column:List.of("model_config_version","prompt_version","manifest_schema_version","material_mode","parser_version","processing_config_version","config_manifest")) {
+            var original=j.queryForMap("SELECT "+column+",material_snapshot_id FROM transcription_input WHERE id=?",input);
+            try {
+                if(column.equals("material_mode"))j.update("UPDATE transcription_input SET material_mode='PINNED',material_snapshot_id=? WHERE id=?",UUID.randomUUID().toString(),input);
+                else j.update("UPDATE transcription_input SET "+column+"=? WHERE id=?",column.equals("manifest_schema_version")?2:"unexpected",input);
+                assertUnavailableReplay(payload,"shape",before);
+            } finally {j.update("UPDATE transcription_input SET "+column+"=?,material_snapshot_id=? WHERE id=?",original.get(column),original.get("material_snapshot_id"),input);}
+        }
+        assertEquals(accepted,body(call("POST","/meetings/"+meeting+"/transcript-imports",payload,"shape")));
+    }
+    @Test void finalSerializedReplayRejectsCorruptAcceptedGraph() throws Exception {
+        String file=upload("final replay\n"),payload=json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(file)));
+        var first=new java.util.concurrent.atomic.AtomicBoolean(true);
+        var winner=new java.util.concurrent.atomic.AtomicReference<JsonNode>();
+        var before=new java.util.concurrent.atomic.AtomicReference<Map<String,Object>>();
+        preparationDecorator=actual->(a,m,r)-> {
+            var prepared=actual.prepare(a,m,r);
+            if(first.getAndSet(false))try {
+                var accepted=call("POST","/meetings/"+meeting+"/transcript-imports",payload,"final-corrupt");
+                assertEquals(202,accepted.statusCode(),accepted.body());var result=body(accepted);winner.set(result);track(result.get("taskId").asText());
+                before.set(replayCounts());
+                j.update("UPDATE transcription_input SET model_config_version='unexpected' WHERE id=?",result.get("inputId").asText());
+            } catch(Exception failure) {throw new IllegalStateException(failure);}
+            return prepared;
+        };
+        try {
+            var response=call("POST","/meetings/"+meeting+"/transcript-imports",payload,"final-corrupt");
+            assertNotNull(winner.get());assertEquals(503,response.statusCode(),response.body());
+            assertEquals(before.get(),replayCounts());
+        }
+        finally {
+            if(winner.get()!=null)j.update("UPDATE transcription_input SET model_config_version=NULL WHERE id=?",winner.get().get("inputId").asText());
+            preparationDecorator=java.util.function.UnaryOperator.identity();
+        }
+        assertEquals(winner.get(),body(call("POST","/meetings/"+meeting+"/transcript-imports",payload,"final-corrupt")));
+    }
+    Map<String,Object> replayCounts() {
+        return j.queryForMap("SELECT (SELECT COUNT(*) FROM input_batch WHERE meeting_id=?) batches,(SELECT COUNT(*) FROM transcription_input WHERE meeting_id=?) inputs,(SELECT COUNT(*) FROM durable_task WHERE subject_id=?) tasks,(SELECT COUNT(*) FROM idempotency_record WHERE resource_id=?) idempotency,(SELECT COUNT(*) FROM audit_event WHERE resource_id=?) audits,(SELECT COUNT(*) FROM task_outbox WHERE subject_id=?) events",meeting,meeting,meeting,meeting,meeting,meeting);
+    }
+    void assertUnavailableReplay(String payload,String key,Map<String,Object> before) throws Exception {
+        var result=call("POST","/meetings/"+meeting+"/transcript-imports",payload,key);
+        assertEquals(503,result.statusCode(),result.body());
+        assertEquals("PROCESSING_UNAVAILABLE",body(result).get("error").get("code").asText());
+        assertEquals(before,replayCounts());
     }
     @Test void originalUploadBeginEmitsOpaquePartSizeToken() throws Exception {
         var begin=call("POST","/meetings/"+meeting+"/uploads",json.writeValueAsString(Map.of("purpose","TRANSCRIPT_INPUT","name","token.txt","size",1,"sha256",hash("x"))),UUID.randomUUID().toString());
@@ -664,6 +790,14 @@ class ProcessingIntakeHttpIT {
         for(var item:body(response).get("items"))byId.put(item.get("fileId").asText(),item);
         assertEquals("ELIGIBLE",byId.get(valid).get("intakeEligibility").get("state").asText());
         assertEquals("SOURCE_STATE",byId.get(invalid).get("intakeEligibility").get("reason").asText());
+        var receipts=new ArrayList<JsonNode>();
+        for(String file:List.of(valid,invalid)) {
+            var receipt=call("GET","/meetings/"+meeting+"/uploads/"+byId.get(file).get("uploadId").asText(),"",null);
+            assertEquals(200,receipt.statusCode(),receipt.body());receipts.add(body(receipt));
+        }
+        Path responseEvidence=Path.of("target/task04-custody");Files.createDirectories(responseEvidence);
+        Files.writeString(responseEvidence.resolve(meeting+"-schema-http.json"),json.writeValueAsString(Map.of("completedFiles",body(response),"receipts",receipts)));
+
         var accepted=call("POST","/meetings/"+meeting+"/transcript-imports",json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(valid))),"valid-neighbor");
         assertEquals(202,accepted.statusCode(),accepted.body());
         track(body(accepted).get("taskId").asText());

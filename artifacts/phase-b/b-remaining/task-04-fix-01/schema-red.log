@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-04-fix-01/eligibility-schema.py", line 5, in <module>
+    eligibility=schema['CompletedFile']['properties']['intakeEligibility']
+                ~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'CompletedFile'

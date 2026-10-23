@@ -1,0 +1,3 @@
+import subprocess,os
+q="SELECT t.id,t.state,t.subject_id,t.input_id,m.owner_id FROM durable_task t JOIN meeting m ON m.id=t.subject_id WHERE t.task_type='TRANSCRIPT_IMPORT_V1' AND t.pool='TRANSCRIPT_IMPORT' AND m.owner_id LIKE 'task04-%' AND t.state IN ('READY','RUNNING') ORDER BY t.id LIMIT 1001"
+r=subprocess.run(['docker','exec','-e','MYSQL_PWD','ama-test-b01-ad9f1af29eff','mysql','-u',os.environ['AMA_TEST_DATABASE_USERNAME'],'--database=ama_b01_fixture','--batch','--raw','-e',q],capture_output=True,text=True);assert r.returncode==0;print(r.stdout);assert not r.stdout.strip(),'Owned unfinished rows need exact custody reconciliation'

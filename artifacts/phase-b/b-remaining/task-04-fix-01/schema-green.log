@@ -1,0 +1,8 @@
+{"sample": {"state": "ELIGIBLE", "reason": null}, "errors": []}
+{"sample": {"state": "INELIGIBLE", "reason": "SOURCE_STATE"}, "errors": []}
+{"sample": {"state": "INELIGIBLE", "reason": "SOURCE_EPOCH"}, "errors": []}
+{"sample": {"state": "INELIGIBLE", "reason": "SOURCE_PURPOSE"}, "errors": []}
+{"sample": {"state": "UNAVAILABLE", "reason": "SOURCE_ROUTE"}, "errors": []}
+{"sample": {"state": "INELIGIBLE", "reason": "SOURCE_PROVENANCE"}, "errors": []}
+{"sample": {"state": "INELIGIBLE", "reason": "READ_ONLY"}, "errors": []}
+PASS: 7 representative eligibility responses; invalid reason number/unknown rejected

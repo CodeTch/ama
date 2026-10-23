@@ -1,0 +1,320 @@
+{
+  "observation_utc": "2026-10-23T11:51:14.495595+00:00",
+  "only_new_final3_pki_paths": true,
+  "private_key_contents_read": false,
+  "certificates": [
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-a0f086eb-522d-4b3b-8c1d-c1c9af53e6b8",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-a0f086eb-522d-4b3b-8c1d-c1c9af53e6b8/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:17 2026 GMT\nnotAfter=Oct 25 11:48:17 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-212c1cd3-ba0b-4258-9617-6eb5e1be8bdc",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-212c1cd3-ba0b-4258-9617-6eb5e1be8bdc/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:27 2026 GMT\nnotAfter=Oct 25 11:49:27 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-12091f63-da34-48ec-85eb-5fc7b16f4fc9",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-12091f63-da34-48ec-85eb-5fc7b16f4fc9/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:12 2026 GMT\nnotAfter=Oct 25 11:48:12 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-9ae11184-de03-4206-8bfa-6224fdce2312",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-9ae11184-de03-4206-8bfa-6224fdce2312/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:36 2026 GMT\nnotAfter=Oct 25 11:49:36 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-22a41e0d-f3d0-47f5-aa67-1aeba4d4eaae",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-22a41e0d-f3d0-47f5-aa67-1aeba4d4eaae/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:39 2026 GMT\nnotAfter=Oct 25 11:49:39 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-d7c8986d-3b81-4fc9-b207-ff1a4e2c36b1",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-d7c8986d-3b81-4fc9-b207-ff1a4e2c36b1/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:50 2026 GMT\nnotAfter=Oct 25 11:48:50 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-d21608df-5d42-4a3e-b836-2c46157658e4",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-d21608df-5d42-4a3e-b836-2c46157658e4/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:33 2026 GMT\nnotAfter=Oct 25 11:48:33 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-f809f44a-480b-41c6-b494-5601878a584b",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-f809f44a-480b-41c6-b494-5601878a584b/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:16 2026 GMT\nnotAfter=Oct 25 11:49:16 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-00940be8-ad78-48e2-a28f-ffb814a4cbdf",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-00940be8-ad78-48e2-a28f-ffb814a4cbdf/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:44 2026 GMT\nnotAfter=Oct 25 11:48:44 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-c1b9e0ac-51a7-4809-ab59-46b4523384d2",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-c1b9e0ac-51a7-4809-ab59-46b4523384d2/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:10 2026 GMT\nnotAfter=Oct 25 11:49:10 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-c3a32598-24e7-442a-9cc3-22b3aa2b9a71",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-c3a32598-24e7-442a-9cc3-22b3aa2b9a71/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:07 2026 GMT\nnotAfter=Oct 25 11:49:07 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-47a4a158-3ac8-42a7-b0b6-96afaf7ad6b9",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-47a4a158-3ac8-42a7-b0b6-96afaf7ad6b9/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:38 2026 GMT\nnotAfter=Oct 25 11:48:38 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-44d3f497-3a6c-4fa9-ae8b-8b89e7097a0b",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-44d3f497-3a6c-4fa9-ae8b-8b89e7097a0b/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:20 2026 GMT\nnotAfter=Oct 25 11:48:20 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-897ee7cb-4ba5-491d-bea8-6782d0252933",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-897ee7cb-4ba5-491d-bea8-6782d0252933/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:43 2026 GMT\nnotAfter=Oct 25 11:49:43 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-c8059405-d32a-44f2-973e-2af1a40080ec",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-c8059405-d32a-44f2-973e-2af1a40080ec/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:02 2026 GMT\nnotAfter=Oct 25 11:49:02 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-7ba7c42c-8876-4b23-aa24-fbcdf02ed770",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-7ba7c42c-8876-4b23-aa24-fbcdf02ed770/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:24 2026 GMT\nnotAfter=Oct 25 11:48:24 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-a61ecffc-30ed-4f3e-aa92-04a56fb775ca",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-a61ecffc-30ed-4f3e-aa92-04a56fb775ca/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:47 2026 GMT\nnotAfter=Oct 25 11:48:47 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-08292ccb-3e6f-4fde-a36c-6a1577c9198e",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-08292ccb-3e6f-4fde-a36c-6a1577c9198e/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:27 2026 GMT\nnotAfter=Oct 25 11:48:27 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-0766ca3e-faf8-4eca-ba5a-d2b6a2c68473",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-0766ca3e-faf8-4eca-ba5a-d2b6a2c68473/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:48:30 2026 GMT\nnotAfter=Oct 25 11:48:30 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-78b57e7b-f5a8-4dfd-8c76-1afbde98f87f",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-78b57e7b-f5a8-4dfd-8c76-1afbde98f87f/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:24 2026 GMT\nnotAfter=Oct 25 11:49:24 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-5456096b-3b5b-4917-b54a-62cac936c301",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-5456096b-3b5b-4917-b54a-62cac936c301/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:19 2026 GMT\nnotAfter=Oct 25 11:49:19 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-38e80935-aecc-45c6-8947-3fe5929e008b",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-38e80935-aecc-45c6-8947-3fe5929e008b/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:47:56 2026 GMT\nnotAfter=Oct 25 11:47:56 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-a2806b6d-6b51-44bc-aae0-e43e130cd1d4",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-a2806b6d-6b51-44bc-aae0-e43e130cd1d4/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:30 2026 GMT\nnotAfter=Oct 25 11:49:30 2026 GMT"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-231fb3b1-c3c7-41d6-aa98-de1fbf700118",
+      "command": [
+        "openssl",
+        "x509",
+        "-in",
+        "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/local-fixtures/task04-231fb3b1-c3c7-41d6-aa98-de1fbf700118/server.crt",
+        "-noout",
+        "-dates"
+      ],
+      "exit_code": 0,
+      "public_validity": "notBefore=Oct 23 11:49:33 2026 GMT\nnotAfter=Oct 25 11:49:33 2026 GMT"
+    }
+  ],
+  "qualification": "The original STORAGE_UNAVAILABLE startup failure is retained. These later public-certificate dates do not independently prove its TLS cause."
+}

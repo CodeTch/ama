@@ -1,0 +1,24 @@
+{
+  "Id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+  "State": {
+    "Running": true
+  },
+  "NetworkSettings": {
+    "Ports": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "46653"
+        }
+      ]
+    }
+  },
+  "Labels": {
+    "ama.remaining.owner": "remaining-20261023",
+    "ama.test-fixture": "b01",
+    "desktop.docker.io/wsl-distro": "Ubuntu-24.04"
+  },
+  "Image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "Memory": 805306368,
+  "NanoCpus": 1000000000
+}
