@@ -1,0 +1,21 @@
+{
+  "command": [
+    "openssl",
+    "x509",
+    "-req",
+    "-in",
+    "outsider.csr",
+    "-CA",
+    "ca.crt",
+    "-CAkey",
+    "ca.key",
+    "-CAcreateserial",
+    "-out",
+    "outsider.crt",
+    "-days",
+    "2",
+    "-extfile",
+    "outsider.ext"
+  ],
+  "exit": 0
+}

@@ -18,8 +18,12 @@ public final class LocalFileClient implements FileStoragePort {
     private static final ObjectMapper JSON = new ObjectMapper();
     private final URI base;
     private final HttpClient http;
+    private final Duration bodyLifetime;
 
-    public LocalFileClient(URI base, SSLContext tls) {
+    public LocalFileClient(URI base, SSLContext tls) {this(base,tls,Duration.ofMinutes(5));}
+    public LocalFileClient(URI base, SSLContext tls, Duration bodyLifetime) {
+        if(bodyLifetime==null||bodyLifetime.isNegative()||bodyLifetime.isZero()||bodyLifetime.compareTo(Duration.ofMinutes(5))>0)throw new IllegalArgumentException("Finite body lifetime required");
+        this.bodyLifetime=bodyLifetime;
         if (base == null
                 || !"https".equals(base.getScheme())
                 || base.getHost() == null
@@ -50,7 +54,7 @@ public final class LocalFileClient implements FileStoragePort {
                 null);
     }
 
-    private HttpResponse<InputStream> send(String operation, Request value, InputStream body) {
+    private InputStream send(String operation, Request value, InputStream body) {
         try {
             String metadata =
                     Base64.getUrlEncoder()
@@ -69,8 +73,9 @@ public final class LocalFileClient implements FileStoragePort {
                             ? HttpRequest.BodyPublishers.noBody()
                             : HttpRequest.BodyPublishers.ofInputStream(() -> body));
             var response = http.send(request.build(), HttpResponse.BodyHandlers.ofInputStream());
+            var lifetime=new DeadlineInputStream(response.body(),bodyLifetime,()->{try{response.body().close();}catch(IOException failure){throw new UncheckedIOException(failure);}});
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
-                try (var in = response.body()) {
+                try (var in = lifetime) {
                     byte[] bytes = in.readNBytes(4097);
                     if (bytes.length > 4096) throw unavailable();
                     Failure error = JSON.readValue(bytes, Failure.class);
@@ -83,7 +88,7 @@ public final class LocalFileClient implements FileStoragePort {
                     throw new StorageException(code);
                 }
             }
-            return response;
+            return lifetime;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw unavailable();
@@ -93,7 +98,7 @@ public final class LocalFileClient implements FileStoragePort {
     }
 
     private <T> T json(String operation, Request value, InputStream body, Class<T> type) {
-        try (var in = send(operation, value, body).body()) {
+        try (var in = send(operation, value, body)) {
             byte[] bytes = in.readNBytes(1048577);
             if (bytes.length > 1048576) throw unavailable();
             return JSON.readValue(bytes, type);
@@ -103,7 +108,7 @@ public final class LocalFileClient implements FileStoragePort {
     }
 
     private void empty(String operation, Request value) {
-        try (var in = send(operation, value, null).body()) {
+        try (var in = send(operation, value, null)) {
             if (in.read() != -1) throw unavailable();
         } catch (IOException e) {
             throw unavailable();
@@ -130,8 +135,7 @@ public final class LocalFileClient implements FileStoragePort {
                         new Request(
                                 key, null, null, null, null, null, null, null, null, null, null,
                                 null, offset, length),
-                        null)
-                .body();
+                        null);
     }
 
     @Override

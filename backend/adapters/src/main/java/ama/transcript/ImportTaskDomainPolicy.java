@@ -13,7 +13,11 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
     private final JdbcTranscriptAuthority authority;
     private final JdbcTaskPreparations issuer;
     private final org.springframework.jdbc.core.JdbcTemplate j;
-    private record Prepared(Actor owner,MeetingAccess.LockedIdentities identities,List<TranscriptReadGraph> graphs) {
+    private static final class Prepared {
+        final Actor owner;final MeetingAccess.LockedIdentities identities;final List<TranscriptReadGraph> graphs;
+        FileRegistry.LockedMeeting completionGate;
+        Prepared(Actor owner,MeetingAccess.LockedIdentities identities,List<TranscriptReadGraph> graphs){this.owner=owner;this.identities=identities;this.graphs=graphs;}
+        Actor owner(){return owner;}MeetingAccess.LockedIdentities identities(){return identities;}List<TranscriptReadGraph> graphs(){return graphs;}
     }
     private record Adopted(JdbcTranscriptAuthority.HeldProcessingFacts held,FileRegistry.LockedMeeting gate,TaskSpec spec) {
     }
@@ -129,7 +133,16 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
                 require(j.queryForObject("SELECT COUNT(*) FROM file_reference WHERE file_id=? AND owner_kind='INPUT_BATCH_FILE' AND owner_id=? AND purpose='TRANSCRIPT_INPUT'",Long.class,file,text(graph.batch,"id"))==1,PROVENANCE_UNAVAILABLE);
             }
         }
+        if(current.size()==p.graphs().size())p.completionGate=gate;
         return true;
+    }
+    void requireCompletion(List<TaskSpec> specs,PreparedDomain prepared){
+        issuer.require(specs,Acquisition.TASK_MUTATION,prepared);
+        if(!(issuer.value(prepared) instanceof Prepared p)||p.completionGate==null||!issuer.permitsEffects(prepared))throw new DomainPreparationUnavailableException();
+        // EDIT was established before this gate was retained, after the complete current graph.
+        // Registry access checks issuer/holder only; re-running requirePrepared would refresh roots late.
+        authority.fileRegistry().access(p.completionGate);
+        require(p.graphs().stream().map(g->g.expected).toList().equals(specs),PROVENANCE_UNAVAILABLE);
     }
     public void validateInput(TaskSpec spec) {
         shape(spec);

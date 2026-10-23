@@ -1,0 +1,21 @@
+{
+  "command": [
+    "openssl",
+    "x509",
+    "-req",
+    "-in",
+    "reader.csr",
+    "-CA",
+    "ca.crt",
+    "-CAkey",
+    "ca.key",
+    "-CAcreateserial",
+    "-out",
+    "reader.crt",
+    "-days",
+    "2",
+    "-extfile",
+    "reader.ext"
+  ],
+  "exit": 0
+}

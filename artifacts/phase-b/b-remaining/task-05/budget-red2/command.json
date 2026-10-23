@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "unit",
+    "ConfigBindingsTest#originalParseBudgetSurvivesCompleteClosure"
+  ],
+  "exit": 1,
+  "utc": "2026-10-23T12:06:18.374802+00:00",
+  "source_seal": "source.json",
+  "limits": "512MiB / 2 active processors"
+}

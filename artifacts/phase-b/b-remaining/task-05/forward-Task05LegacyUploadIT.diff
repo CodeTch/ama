@@ -1,0 +1,54 @@
+--- backend/integration-tests/src/test/java/ama/storage/FileRegistryUploadIT.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05LegacyUploadIT.java
+@@ -25,10 +25,10 @@
+  * Controlled policy only; every blob goes through the real native local or Java S3 HTTP adapter.
+  */
+ @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+-class FileRegistryUploadIT {
++class Task05LegacyUploadIT {
+     ConfigurableApplicationContext app;
+     JdbcTemplate j;
+-    ManagedRegistryFixture fixture;
++    Task05RegistryFixture fixture;
+     FileStoragePort storage;
+     RegistryObservedStorage observed;
+     RegistryProbeSource probe;
+@@ -41,11 +41,9 @@
+     @BeforeAll
+     void start() throws Exception {
+         var source = MysqlTestDatabase.dataSource();
+-        new SchemaMigrator(source).migrate();
++        assertEquals(13,new JdbcTemplate(source).queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=1",Integer.class));
+         j = new JdbcTemplate(source);
+-        Path directory = Path.of("target/registry-fixtures").toAbsolutePath();
+-        Files.createDirectories(directory);
+-        fixture = new ManagedRegistryFixture(Files.createTempDirectory(directory, "native-"));
++        fixture = new Task05RegistryFixture(Task05RegressionResources.nativePath());
+         observed = new RegistryObservedStorage(fixture.storage);
+         storage = observed;
+         probe = new RegistryProbeSource(source);
+@@ -1107,9 +1105,8 @@
+     void defaultSwitchPinsExistingUploadAndBusinessDownloadToOriginalBackend() throws Exception {
+         var originalComposition = composition;
+         try (var second =
+-                new ManagedRegistryFixture(
+-                        Files.createTempDirectory(
+-                                Path.of("target/registry-fixtures").toAbsolutePath(), "second-"))) {
++                new Task05RegistryFixture(
++                        Task05RegressionResources.nativePath())) {
+             String old = begin("abcdef");
+             app.close();
+             composition =
+@@ -1157,10 +1154,8 @@
+     void readOnlyBackendRecoversFrozenResultButRejectsNewPartWrites() throws Exception {
+         var originalComposition = composition;
+         try (var second =
+-                new ManagedRegistryFixture(
+-                        Files.createTempDirectory(
+-                                Path.of("target/registry-fixtures").toAbsolutePath(),
+-                                "readonly-"))) {
++                new Task05RegistryFixture(
++                        Task05RegressionResources.nativePath())) {
+             var watched = new RegistryObservedStorage(second.storage);
+             app.close();
+             composition =

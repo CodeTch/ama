@@ -1,0 +1,40 @@
+[
+  {
+    "run": "final-owned-integration",
+    "productionDifferencesFromFinal": [
+      "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java"
+    ]
+  },
+  {
+    "run": "final-inherited-upload",
+    "productionDifferencesFromFinal": [
+      "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java"
+    ]
+  },
+  {
+    "run": "final-pipeline-custody",
+    "productionDifferencesFromFinal": [
+      "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java"
+    ]
+  },
+  {
+    "run": "confined-runnable-green",
+    "productionDifferencesFromFinal": []
+  },
+  {
+    "run": "final-confined-production",
+    "productionDifferencesFromFinal": []
+  },
+  {
+    "run": "final-legacy-prepared",
+    "productionDifferencesFromFinal": []
+  },
+  {
+    "run": "final-task-lease",
+    "productionDifferencesFromFinal": []
+  },
+  {
+    "run": "final-all-units",
+    "productionDifferencesFromFinal": []
+  }
+]

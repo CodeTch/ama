@@ -1,0 +1,48 @@
+--- backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityFixture.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05AuthorityFixture.java
+@@ -16,7 +16,7 @@
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ /** Owns only new UUID DB rows and new native/TLS paths; actual B04 completion, no fabricated receipt. */
+-final class TranscriptAuthorityFixture implements AutoCloseable {
++final class Task05AuthorityFixture implements AutoCloseable {
+  final Task03TraceSource trace=new Task03TraceSource(MysqlTestDatabase.dataSource());
+  final RegistryProbeSource source=new RegistryProbeSource(trace);
+  final JdbcTemplate j=new JdbcTemplate(source);
+@@ -25,15 +25,14 @@
+  final JdbcMeetingAccess access=new JdbcMeetingAccess(source,tx,fences);
+  final String owner="authority-"+id(),meeting=id();
+  final Actor actor=new Actor(owner,Status.ACTIVE,Set.of(Role.USER));
+- final ManagedRegistryFixture storage;
++ final Task05RegistryFixture storage;
+  final FileBackendCatalog catalog;
+  final java.util.concurrent.atomic.AtomicInteger reads=new java.util.concurrent.atomic.AtomicInteger();
+  final FilePurposePolicy purposes=(a,m,p)->{if(!p.equals("TRANSCRIPT_INPUT"))throw new FilePurposePolicy.Unavailable();};
+  final JdbcFileUploads uploads;
+  final List<String> ownedTasks=new ArrayList<>();
+- TranscriptAuthorityFixture() throws Exception {
+-  Path parent=Path.of("target/registry-fixtures").toAbsolutePath();Files.createDirectories(parent);
+-  storage=new ManagedRegistryFixture(Files.createTempDirectory(parent,"task03-"));
++ Task05AuthorityFixture() throws Exception {
++  storage=new Task05RegistryFixture(Task05RegressionResources.nativePath());
+     FileStoragePort observed=(FileStoragePort)java.lang.reflect.Proxy.newProxyInstance(getClass().getClassLoader(),new Class[]{FileStoragePort.class},(p,m,a)->{
+    if(m.getName().equals("read")){if(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())throw new AssertionError("storage under transaction");reads.incrementAndGet();}
+    try{return m.invoke(storage.storage,a);}catch(java.lang.reflect.InvocationTargetException e){throw e.getCause();}
+@@ -62,7 +61,7 @@
+     String version=switch(name){case "codec"->"ama.canonical-value.v1";case "confirmation"->"ama.transcript-confirmation.v1";case "parser"->"ama.strict-utf8-lines.v1";default->"b06.controlled.import-txt.1";};
+     try(var in=getClass().getResourceAsStream("/ama/transcript/restart/"+name+".json")){raw.add(new ama.contract.ConfigArchiveContracts.RawArchive(type,version,in.readAllBytes()));}
+    }
+-   var root=java.nio.file.Files.createTempDirectory(java.nio.file.Path.of("target").toAbsolutePath(),"task03-archives-");
++   var root=Task05RegressionResources.archivePath();
+    var ib=new ama.config.ConfigArchiveIndex.IndexBudget(4194304,4096,67108864,128);
+    String pin=assertDoesNotThrow(()->new ama.config.file.ControlledArchiveReleaseWriter().publish(root,null,raw,ib,ama.transcript.ArchiveProcessingFixture.B,()->false),"archive publication");
+    var snapshot=assertDoesNotThrow(()->new ama.config.file.ControlledConfigArchiveSource().open(root,pin,ib,ama.transcript.ArchiveProcessingFixture.B,()->false),"archive open");
+@@ -111,7 +110,7 @@
+      return null;
+     });
+    }
+-   Path receipt=Path.of("target/task03-custody");Files.createDirectories(receipt);
++   Path receipt=Task05RegressionResources.evidencePath();Files.createDirectories(receipt);
+    var rows=new ArrayList<String>();rows.add("owner="+owner+" meeting="+meeting);
+    for(String task:ownedTasks)rows.add("synthetic-read-fixture task="+task+" state="+j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,task));
+    Files.write(receipt.resolve(meeting+".txt"),rows);

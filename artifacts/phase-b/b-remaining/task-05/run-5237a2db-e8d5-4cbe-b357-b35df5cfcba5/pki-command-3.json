@@ -1,0 +1,18 @@
+{
+  "command": [
+    "openssl",
+    "pkcs12",
+    "-export",
+    "-inkey",
+    "server.key",
+    "-in",
+    "server.crt",
+    "-certfile",
+    "ca.crt",
+    "-out",
+    "server.p12",
+    "-passout",
+    "file:keystore-password"
+  ],
+  "exit": 0
+}

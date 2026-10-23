@@ -1,0 +1,221 @@
+--- backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityIT.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05LegacyAuthorityIT.java
+@@ -11,7 +11,7 @@
+ import java.util.*;
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+-class TranscriptAuthorityIT {
++class Task05LegacyAuthorityIT {
+  @Test void initialAuthorizationNeverTransfersUnboundedIdentityNames() {
+   var probe=new RegistryProbeSource(MysqlTestDatabase.dataSource());var j=new JdbcTemplate(probe);
+   String owner="authority-"+UUID.randomUUID(),meeting=UUID.randomUUID().toString();
+@@ -27,7 +27,7 @@
+   assertFalse(probe.statements.stream().anyMatch(s->s.contains("display_name")));
+  }
+  @Test void authenticCompletedSourceReceiptIsBoundToGateHolderAndCompleteSet() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    var a=f.upload("first");var b=f.upload("second");var registry=f.registry(Map.of());
+    FileRegistry.LockedSources[] saved=new FileRegistry.LockedSources[1];
+    FileRegistry.LockedMeeting[] gateSaved=new FileRegistry.LockedMeeting[1];
+@@ -47,7 +47,7 @@
+   }
+  }
+  @Test void sameSourceReceiptSupportsOneBindingAndCaughtFailureDoomsTransaction() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    var a=f.upload("bind-a");var b=f.upload("bind-b");String owner=UUID.randomUUID().toString();
+    FileReferencePolicy policy=new FileReferencePolicy(){
+     public Object prelock(FileRegistry.LockedMeeting g,String m,FileRegistry.Reference r,String file){return r;}
+@@ -74,7 +74,7 @@
+   }
+  }
+  @Test void adoptionUsesExistingGenuineIdentityAndRootWithoutSecondAcquisition() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    var registry=f.registry(Map.of());
+    f.tx.required(()->{
+     var access=f.access.lock(f.actor,f.meeting);f.source.statements.clear();
+@@ -86,7 +86,7 @@
+   }
+  }
+  @Test void originalMetadataAndHistoricalRouteCannotBeSubstituted() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    var a=f.upload("original");var registry=f.registry(Map.of());
+    Runnable acquire=()->f.tx.required(()->{var gate=registry.lock(f.actor,f.meeting,MeetingAccess.Action.READ);registry.prelockSources(gate,List.of(a.file()),false).orElseThrow();return null;});
+    f.j.update("UPDATE upload_session SET expected_size=99 WHERE id=?",a.upload());assertThrows(RuntimeException.class,acquire::run);
+@@ -101,7 +101,7 @@
+   }
+  }
+  @Test void completeFinalizerRunsOnceForPlannedAndGenericReadsBeforeAnyOpen() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    var a=f.upload("readable");String owner=UUID.randomUUID().toString();
+    var ref=new FileRegistry.Reference("TASK03_COMPLETE",owner,"TRANSCRIPT_INPUT");
+    f.j.update("INSERT INTO file_reference(file_id,owner_kind,owner_id,purpose) VALUES (?,?,?,?)",a.file(),ref.kind(),owner,ref.purpose());
+@@ -131,7 +131,7 @@
+   }
+  }
+  @Test void firstBindSealsActualNewRowsWithoutTranscriptOrConfirmation() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    var a=f.upload("first real input");
+    var c=assertDoesNotThrow(()->ama.transcript.JdbcTranscriptAuthority.create(f.source,f.tx,f.access,f.purposes,f.catalog,Map.of(),ama.transcript.ArchiveProcessingFixture.B,new ama.contract.MinutesContracts.CanonicalBudget(16777216,32,1000000,2097152,250000)));
+    var draft=c.intake().readDraft(f.actor,f.meeting,List.of(a.file()),()->false);
+@@ -157,7 +157,7 @@
+   }
+  }
+  @Test void actualSuccessfulRawHistoryIsDistinctFromCurrentWorkingAndLiveWorker() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    var a=f.upload("original history");var c=f.components();var p=f.prepare(c,List.of(a));f.bind(c,p,List.of(a));
+    assertThrows(RuntimeException.class,()->c.registry().download(f.actor,a.file(),null),"pending input has no generic byte authority");
+    String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+@@ -173,7 +173,7 @@
+   }
+  }
+  @Test void workerUsesActualRenewedExpiryAndMatchingUnfinishedAttempt() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    var a=f.upload("worker source");var c=f.components();var p=f.prepare(c,List.of(a));f.bind(c,p,List.of(a));String task=f.task(p,"RUNNING");f.current(null,1);
+    var oldLease=new ama.contract.TaskContracts.TaskLease(task,1,"TASK03_WORKER",java.time.Instant.now().minusSeconds(60),p.spec());
+    try(var download=assertDoesNotThrow(()->c.sources().open(oldLease,p.inputId(),a.file()))){assertEquals(13,download.length());}
+@@ -185,7 +185,7 @@
+   }
+  }
+  @Test void lateReservationAndForeignSourceCannotMintHeldFacts() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    var a=f.upload("private receipt");var c=f.components();var p=f.prepare(c,List.of(a));
+    f.tx.required(()->{var gate=c.registry().lock(f.actor,f.meeting,MeetingAccess.Action.EDIT);c.registry().prelockSources(gate,List.of(a.file()),false).orElseThrow();assertThrows(IllegalStateException.class,()->c.authority().reserveIntake(gate,p));return null;});
+    assertThrows(org.springframework.transaction.UnexpectedRollbackException.class,()->f.tx.required(()->{
+@@ -197,7 +197,7 @@
+   }
+  }
+  @Test void failedLaterBindingAndCommitRollBackCompleteNewGraphAndReferences() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    var a=f.upload("rollback first");var b=f.upload("rollback second");var c=f.components();var p=f.prepare(c,List.of(a,b));
+    List<Map<String,Object>> before=f.j.queryForList("SELECT id,reference_epoch FROM file_object WHERE id IN (?,?) ORDER BY id",a.file(),b.file());
+    assertThrows(org.springframework.transaction.UnexpectedRollbackException.class,()->f.tx.required(()->{
+@@ -218,7 +218,7 @@
+   }
+  }
+  @Test void completeAssemblyRejectsLegacyTranscriptOverrideAndMissingBudget() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()) {
++  try(var f=new Task05AuthorityFixture()) {
+    FileReferencePolicy legacy=new FileReferencePolicy(){public Object prelock(FileRegistry.LockedMeeting g,String m,FileRegistry.Reference r,String id){return r;}public void validate(Object d,String m,FileRegistry.Reference r,FileRegistry.FileRecord file,String p){}};
+    var canonical=new ama.contract.MinutesContracts.CanonicalBudget(100000,16,10000,10000,1000);
+    assertThrows(IllegalArgumentException.class,()->ama.transcript.JdbcTranscriptAuthority.create(f.source,f.tx,f.access,f.purposes,f.catalog,Map.of("INPUT_BATCH_FILE",legacy),ama.transcript.ArchiveProcessingFixture.B,canonical));
+@@ -240,7 +240,7 @@
+  }
+  private static FileReferencePolicy legacy(){return new FileReferencePolicy(){public Object prelock(FileRegistry.LockedMeeting g,String m,FileRegistry.Reference r,String f){return r;}public void validate(Object d,String m,FileRegistry.Reference r,FileRegistry.FileRecord f,String p){assertEquals(d,r);}};}
+  @Test void recognizedMissingLegacyAndFailedProvidersAlwaysAuthorizeBeforeSafeFailure() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()){
++  try(var f=new Task05AuthorityFixture()){
+    var member=f.member();var outsider=f.outsider();String file=UUID.randomUUID().toString(),input=UUID.randomUUID().toString();
+    var spec=new ama.contract.TaskContracts.TaskSpec("TRANSCRIPT_IMPORT_V1","TRANSCRIPT_IMPORT",new ama.contract.TaskContracts.SubjectRef("MEETING",f.meeting),"a".repeat(64),new ama.contract.TaskContracts.TypedRef("TRANSCRIPTION_INPUT",input),"b".repeat(64),1,0,0,3);
+    var lease=new ama.contract.TaskContracts.TaskLease(UUID.randomUUID().toString(),1,"TASK03_WORKER",java.time.Instant.now(),spec);
+@@ -260,9 +260,9 @@
+    f.source.statements.clear();assertThrows(IllegalArgumentException.class,()->registries.getFirst().read(f.actor,f.meeting,()->"INPUT_BATCH_FILE",null));assertTrue(f.source.statements.isEmpty());
+   }
+  }
+- private static void assertNoCompleteLocks(TranscriptAuthorityFixture f){assertFalse(f.source.statements.stream().anyMatch(q->q.contains("FOR UPDATE")&&(q.contains("FROM transcript_revision")||q.contains("FROM transcription_input")||q.contains("FROM input_batch")||q.contains("FROM upload_session")||q.contains("FROM file_object")||q.contains("FROM durable_task")||q.contains("FROM task_attempt"))));}
++ private static void assertNoCompleteLocks(Task05AuthorityFixture f){assertFalse(f.source.statements.stream().anyMatch(q->q.contains("FOR UPDATE")&&(q.contains("FROM transcript_revision")||q.contains("FROM transcription_input")||q.contains("FROM input_batch")||q.contains("FROM upload_session")||q.contains("FROM file_object")||q.contains("FROM durable_task")||q.contains("FROM task_attempt"))));}
+  @Test void onlyGenuineCurrentIneligibilityCanUseIndependentLegacyAfterAuthorization() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()){
++  try(var f=new Task05AuthorityFixture()){
+    var uploaded=f.upload("legacy fallback");String owner=UUID.randomUUID().toString();
+    for(String kind:List.of("TASK03_COMPLETE","TASK03_LEGACY"))f.j.update("INSERT INTO file_reference VALUES (?,?,?,'TRANSCRIPT_INPUT')",uploaded.file(),kind,owner);
+    var complete=new RejectingComplete();complete.preparationFailure=new ama.contract.FileContracts.NotFound();
+@@ -281,7 +281,7 @@
+   }
+  }
+  @Test void danglingCurrentPointerIsFatalAfterAuthorizationEvenWithValidLegacyReference() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()){
++  try(var f=new Task05AuthorityFixture()){
+    var uploaded=f.upload("dangling");var canonical=new ama.contract.MinutesContracts.CanonicalBudget(16777216,32,1000000,2097152,250000);
+    var c=ama.transcript.JdbcTranscriptAuthority.create(f.source,f.tx,f.access,f.purposes,f.catalog,Map.of("TASK03_LEGACY",legacy()),ama.transcript.ArchiveProcessingFixture.B,canonical);
+    var p=f.prepare(c,List.of(uploaded));f.bind(c,p,List.of(uploaded));
+@@ -293,7 +293,7 @@
+   }
+  }
+  @Test void realCurrentMemberHistoryOwnerAndMalformedProducerProfilesRemainDistinct() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()){
++  try(var f=new Task05AuthorityFixture()){
+    var uploaded=f.upload("producer metadata");var c=f.components();var p=f.prepare(c,List.of(uploaded));f.bind(c,p,List.of(uploaded));String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+    f.j.update("UPDATE durable_task SET output_kind='TRANSCRIPT_REVISION',output_id=? WHERE id=?",raw,task);f.j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='SUCCEEDED' WHERE task_id=?",task);f.current(working,7);
+    var member=f.member();try(var d=c.registry().download(member,uploaded.file(),null)){assertEquals(17,d.length());}
+@@ -311,20 +311,20 @@
+   }
+  }
+  @Test void completeReadLocksAllParentsThenSessionsFilesAndTasksAndCommitBeforeOpen() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()){
+-   var uploaded=new ArrayList<TranscriptAuthorityFixture.Uploaded>();for(String text:List.of("first ordered","second ordered","third ordered"))uploaded.add(f.upload(text));
+-   uploaded.sort(Comparator.comparing(TranscriptAuthorityFixture.Uploaded::file).reversed());var c=f.components();var p=f.prepare(c,uploaded);f.bind(c,p,uploaded);String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
++  try(var f=new Task05AuthorityFixture()){
++   var uploaded=new ArrayList<Task05AuthorityFixture.Uploaded>();for(String text:List.of("first ordered","second ordered","third ordered"))uploaded.add(f.upload(text));
++   uploaded.sort(Comparator.comparing(Task05AuthorityFixture.Uploaded::file).reversed());var c=f.components();var p=f.prepare(c,uploaded);f.bind(c,p,uploaded);String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+    f.j.update("UPDATE durable_task SET output_kind='TRANSCRIPT_REVISION',output_id=? WHERE id=?",raw,task);f.j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='SUCCEEDED' WHERE task_id=?",task);f.current(working,9);f.trace.locks.clear();f.source.statements.clear();
+    try(var d=c.registry().download(f.actor,uploaded.getFirst().file(),null)){assertEquals(3,f.j.queryForObject("SELECT COUNT(*) FROM input_batch_file WHERE batch_id=?",Integer.class,p.batchId()));}
+    var events=List.copyOf(f.trace.locks);assertEquals(List.of(raw,working).stream().sorted().toList(),firstIds(events,"transcript_revision"));
+-   assertEquals(uploaded.stream().map(TranscriptAuthorityFixture.Uploaded::upload).sorted().toList(),firstIds(events,"upload_session"));
+-   assertEquals(uploaded.stream().map(TranscriptAuthorityFixture.Uploaded::file).sorted().toList(),firstIds(events,"file_object"));
++   assertEquals(uploaded.stream().map(Task05AuthorityFixture.Uploaded::upload).sorted().toList(),firstIds(events,"upload_session"));
++   assertEquals(uploaded.stream().map(Task05AuthorityFixture.Uploaded::file).sorted().toList(),firstIds(events,"file_object"));
+    assertEquals(List.of(task),firstIds(events,"durable_task"));
+    int parent=firstLock(events,"transcript_revision"),input=firstLock(events,"transcription_input"),batch=firstLock(events,"input_batch WHERE"),profile=firstLock(events,"input_batch_fingerprint_profile"),members=firstLock(events,"input_batch_file"),sessions=firstLock(events,"upload_session"),files=firstLock(events,"file_object"),tasks=firstLock(events,"durable_task");
+    assertTrue(parent<input&&input<batch&&batch<profile&&profile<members&&members<sessions&&sessions<files&&files<tasks);
+    assertFalse(events.stream().anyMatch(e->e.sql().contains("FROM task_attempt")));assertFalse(f.source.statements.stream().anyMatch(q->q.contains("config_manifest")||q.contains("transcript_segment")||q.contains("provider_upload_token")||q.contains("provider_version_id")));
+    assertEquals(1,f.source.statements.stream().filter(q->q.startsWith("SELECT enterprise_id,status")).count());
+-   java.nio.file.Path trace=java.nio.file.Path.of("target/task03-custody",f.meeting+"-lock-order.txt");java.nio.file.Files.write(trace,events.stream().map(e->e.sql()+" | "+e.parameters()).toList());
++   java.nio.file.Path trace=Task05RegressionResources.evidencePath().resolve(f.meeting+"-lock-order.txt");java.nio.file.Files.write(trace,events.stream().map(e->e.sql()+" | "+e.parameters()).toList());
+    int opened=f.reads.get();f.trace.refuseCommit.set(true);assertThrows(RuntimeException.class,()->c.registry().download(f.actor,uploaded.getFirst().file(),null));assertEquals(opened,f.reads.get());
+    f.trace.afterCommit.set(()->Thread.currentThread().interrupt());try{assertEquals(ama.contract.MinutesContracts.FailureCode.CANCELLED,assertThrows(ama.contract.MinutesContracts.Failure.class,()->c.registry().download(f.actor,uploaded.getFirst().file(),null)).code());assertEquals(opened,f.reads.get());}finally{Thread.interrupted();}
+   }
+@@ -332,7 +332,7 @@
+  private static List<String> firstIds(List<Task03TraceSource.Event> events,String table){var ids=new LinkedHashSet<String>();for(var event:events)if(!event.sql().startsWith("SELECT (")&&event.sql().contains("FROM "+table+" WHERE id=?")&&event.parameters().getFirst() instanceof String id)ids.add(id);return List.copyOf(ids);}
+  private static int firstLock(List<Task03TraceSource.Event> events,String table){for(int i=0;i<events.size();i++)if(events.get(i).sql().contains("FROM "+table))return i;return -1;}
+  @Test void preGateGraphAndTaskChangesNeverTriggerLateDiscoveryOrOpen() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()){
++  try(var f=new Task05AuthorityFixture()){
+    var uploaded=f.upload("race guarded");var c=f.components();var p=f.prepare(c,List.of(uploaded));f.bind(c,p,List.of(uploaded));String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+    f.j.update("UPDATE durable_task SET output_kind='TRANSCRIPT_REVISION',output_id=? WHERE id=?",raw,task);f.j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='SUCCEEDED' WHERE task_id=?",task);f.current(working,2);
+    var outside=new JdbcTemplate(f.trace.actual);f.trace.beforeIdentity.set(()->outside.update("UPDATE transcript_revision SET parent_id=? WHERE id=?",working,working));f.trace.locks.clear();
+@@ -343,7 +343,7 @@
+   }
+  }
+  @Test void actualPreparedReadCannotCrossIssuerSelectorGateOrHolder() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()){
++  try(var f=new Task05AuthorityFixture()){
+    var uploaded=f.upload("private preparation");var c=f.components();var p=f.prepare(c,List.of(uploaded));f.bind(c,p,List.of(uploaded));String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+    f.j.update("UPDATE durable_task SET output_kind='TRANSCRIPT_REVISION',output_id=? WHERE id=?",raw,task);f.j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='SUCCEEDED' WHERE task_id=?",task);f.current(working,2);
+    var field=JdbcFileRegistry.class.getDeclaredField("policies");field.setAccessible(true);var policy=(CompleteReadPolicy)((Map<?,?>)field.get(c.registry())).get("INPUT_BATCH_FILE");
+@@ -361,7 +361,7 @@
+   }
+  }
+  @Test void configuredGraphSourceAndDisplayBoundsAreEnforcedWithoutClipping() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()){
++  try(var f=new Task05AuthorityFixture()){
+    var a=f.upload("bounded first");var b=f.upload("bounded second");var c=f.components();var p=f.prepare(c,List.of(a,b));f.bind(c,p,List.of(a,b));String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+    f.j.update("UPDATE durable_task SET output_kind='TRANSCRIPT_REVISION',output_id=? WHERE id=?",raw,task);f.j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='SUCCEEDED' WHERE task_id=?",task);f.current(working,2);
+    var B=ama.transcript.ArchiveProcessingFixture.B;var canonical=new ama.contract.MinutesContracts.CanonicalBudget(16777216,32,1000000,2097152,250000);
+@@ -378,7 +378,7 @@
+  }
+  private static ama.contract.ConfigArchiveContracts.ArchiveReadBudget readBudget(int depth,long rows,long edges,int utf16,long scalars){var b=ama.transcript.ArchiveProcessingFixture.B;return new ama.contract.ConfigArchiveContracts.ArchiveReadBudget(b.maxArtifactBytes(),b.maxTotalBytes(),b.maxArtifacts(),b.maxDependencies(),depth,b.maxTokens(),b.maxJsonDepth(),b.maxNameUtf16(),utf16,b.maxStringUtf8Bytes(),scalars,b.maxManifestBytes(),b.maxBatchFiles(),rows,edges);}
+  @Test void duplicateOriginalPurposeRouteAndEpochCannotAuthorizeAnotherCompletedFile() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()){
++  try(var f=new Task05AuthorityFixture()){
+    var a=f.upload("original one");var b=f.upload("original two");var registry=f.registry(Map.of());
+    Runnable acquire=()->f.tx.required(()->{var gate=registry.lock(f.actor,f.meeting,MeetingAccess.Action.READ);registry.prelockSources(gate,List.of(a.file()),false).orElseThrow();return null;});
+    f.j.update("UPDATE upload_session SET completed_file_id=? WHERE id=?",a.file(),b.upload());assertThrows(ama.contract.FileContracts.NotFound.class,acquire::run);f.j.update("UPDATE upload_session SET completed_file_id=? WHERE id=?",b.file(),b.upload());
+@@ -395,7 +395,7 @@
+   }
+  }
+  @Test void identitySkipLockedStopsBeforeRootAndActualRosterSaveKeepsFullName() throws Exception {
+-  try(var f=new TranscriptAuthorityFixture()){
++  try(var f=new Task05AuthorityFixture()){
+    var acquired=new java.util.concurrent.CountDownLatch(1);var release=new java.util.concurrent.CountDownLatch(1);
+    try(var executor=java.util.concurrent.Executors.newSingleThreadExecutor()){
+     var blocker=executor.submit(()->new TransactionRunner(f.trace.actual).required(()->{new JdbcTemplate(f.trace.actual).queryForObject("SELECT enterprise_id FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE",String.class,f.owner);acquired.countDown();assertTrue(release.await(5,java.util.concurrent.TimeUnit.SECONDS));return null;}));

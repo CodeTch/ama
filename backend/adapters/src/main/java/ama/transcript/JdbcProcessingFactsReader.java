@@ -37,7 +37,7 @@ public final class JdbcProcessingFactsReader implements ProcessingFactsReader {
             + "input_kind,input_id,input_fingerprint,business_version,priority,cancel_epoch,max_attempts";
     private final JdbcTemplate jdbc;
     private final TransactionRunner transactions;
-    private final JdbcMeetingAccess access;
+    private final MeetingAccess access;
 
     public JdbcProcessingFactsReader(DataSource source) {
         Objects.requireNonNull(source);
@@ -47,16 +47,24 @@ public final class JdbcProcessingFactsReader implements ProcessingFactsReader {
         access = new JdbcMeetingAccess(source,transactions,new JdbcSubjectFences(source,Set.of("MEETING")));
     }
 
+    JdbcProcessingFactsReader(JdbcTranscriptAuthority authority) {
+        var source=authority.dataSource();jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(2);
+        transactions=authority.transactionRunner();access=authority.meetingAccess();
+    }
+
     @Override public StoredProvenanceFacts readBatch(Actor actor,String meetingId,String batchId,
                                                     ArchiveReadBudget budget,BooleanSupplier cancelled) {
-        return read(actor,meetingId,batchId,false,budget,cancelled);
+        return read(actor,meetingId,batchId,false,budget,cancelled,null);
     }
     @Override public StoredProvenanceFacts readStored(Actor actor,String meetingId,String inputId,
                                                      ArchiveReadBudget budget,BooleanSupplier cancelled) {
-        return read(actor,meetingId,inputId,true,budget,cancelled);
+        return read(actor,meetingId,inputId,true,budget,cancelled,null);
+    }
+    StoredProvenanceFacts readWorker(Actor actor,TaskLease lease,ArchiveReadBudget budget,BooleanSupplier cancelled){
+        return read(actor,lease.spec().subject().id(),lease.spec().input().id(),true,budget,cancelled,lease);
     }
     private StoredProvenanceFacts read(Actor actor,String meetingId,String id,boolean stored,
-                                       ArchiveReadBudget budget,BooleanSupplier cancelled) {
+                                       ArchiveReadBudget budget,BooleanSupplier cancelled,TaskLease lease) {
         if (TransactionSynchronizationManager.isActualTransactionActive())
             throw new IllegalStateException("Processing facts require a standalone transaction");
         require(actor!=null&&budget!=null&&cancelled!=null,INVALID_ARGUMENT);
@@ -101,6 +109,14 @@ public final class JdbcProcessingFactsReader implements ProcessingFactsReader {
                     if(producer!=null)producers.add(producer);
                 }
                 var tasks = stored ? tasks(id,producers,state) : List.<StoredTask>of();
+                if(lease!=null){
+                    require(tasks.size()==1&&tasks.getFirst().taskId().equals(lease.taskId())&&tasks.getFirst().spec().equals(lease.spec()),PROVENANCE_UNAVAILABLE);
+                    require(jdbc.queryForObject("SELECT (state='RUNNING' AND attempt=? AND lease_owner=? AND expires_at>UTC_TIMESTAMP(6)) FROM durable_task WHERE id=? FOR UPDATE",Long.class,lease.attempt(),lease.leaseOwner(),lease.taskId())==1,PROVENANCE_UNAVAILABLE);
+                    var attempts=jdbc.queryForList("SELECT owner,ended_at FROM task_attempt WHERE task_id=? AND attempt=? FOR UPDATE",lease.taskId(),lease.attempt());
+                    require(attempts.size()==1&&lease.leaseOwner().equals(attempts.getFirst().get("owner"))&&attempts.getFirst().get("ended_at")==null,PROVENANCE_UNAVAILABLE);
+                    require(jdbc.queryForObject("SELECT expires_at>UTC_TIMESTAMP(6) FROM durable_task WHERE id=?",Long.class,lease.taskId())==1,PROVENANCE_UNAVAILABLE);
+                    require(jdbc.queryForObject("SELECT (owner_id=? AND revision=? AND cancel_epoch=? AND ever_published=0 AND stage<>'PUBLISHED' AND lifecycle='ACTIVE') FROM meeting WHERE id=?",Long.class,actor.enterpriseId(),lease.spec().businessVersion(),lease.spec().cancelEpoch(),lease.spec().subject().id())==1,PROVENANCE_UNAVAILABLE);
+                }
                 state.check();
                 // count was reserved before every DTO, row-list growth and final owned copy.
                 var facts = new StoredProvenanceFacts(rows,files,List.of(),List.of(),List.of(),List.of(),tasks,budget.maxFactRows());

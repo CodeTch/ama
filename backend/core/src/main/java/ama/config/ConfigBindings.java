@@ -17,14 +17,15 @@ public final class ConfigBindings {
  public ConfigBindings(ConfigArchiveReader archives,ProcessingManifestReader manifests){require(archives!=null&&manifests!=null,INVALID_ARGUMENT);this.archives=archives;this.manifests=manifests;}
  public static final class ValidatedProcessingBinding {
   private final CanonicalValue.ObjectValue manifest;private final String fingerprint;private final Ref codec,confirmation,processing,parser;
-  private final CanonicalBudget canonicalBudget;private final ArchiveBytes rawManifest;private final ValidatedOperation operation;
-  private ValidatedProcessingBinding(CanonicalValue.ObjectValue manifest,String fingerprint,Ref codec,Ref confirmation,Ref processing,Ref parser,CanonicalBudget budget,ArchiveBytes rawManifest){this(manifest,fingerprint,codec,confirmation,processing,parser,budget,rawManifest,null);}
-  private ValidatedProcessingBinding(CanonicalValue.ObjectValue manifest,String fingerprint,Ref codec,Ref confirmation,Ref processing,Ref parser,CanonicalBudget budget,ArchiveBytes rawManifest,ValidatedOperation operation){
-   this.manifest=manifest;this.fingerprint=fingerprint;this.codec=codec;this.confirmation=confirmation;this.processing=processing;this.parser=parser;this.canonicalBudget=budget;this.rawManifest=rawManifest;this.operation=operation;
+  private final ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget;private final CanonicalBudget canonicalBudget;private final ArchiveBytes rawManifest;private final ValidatedOperation operation;
+  private ValidatedProcessingBinding(CanonicalValue.ObjectValue manifest,String fingerprint,Ref codec,Ref confirmation,Ref processing,Ref parser,CanonicalBudget budget,ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget,ArchiveBytes rawManifest){this(manifest,fingerprint,codec,confirmation,processing,parser,budget,parseBudget,rawManifest,null);}
+  private ValidatedProcessingBinding(CanonicalValue.ObjectValue manifest,String fingerprint,Ref codec,Ref confirmation,Ref processing,Ref parser,CanonicalBudget budget,ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget,ArchiveBytes rawManifest,ValidatedOperation operation){
+   this.manifest=manifest;this.fingerprint=fingerprint;this.codec=codec;this.confirmation=confirmation;this.processing=processing;this.parser=parser;this.canonicalBudget=budget;this.parseBudget=parseBudget;this.rawManifest=rawManifest;this.operation=operation;
   }
-  private ValidatedProcessingBinding complete(ValidatedOperation operation){return new ValidatedProcessingBinding(manifest,fingerprint,codec,confirmation,processing,parser,canonicalBudget,rawManifest,operation);}
+  private ValidatedProcessingBinding complete(ValidatedOperation operation){return new ValidatedProcessingBinding(manifest,fingerprint,codec,confirmation,processing,parser,canonicalBudget,parseBudget,rawManifest,operation);}
   public String fingerprint(){return fingerprint;}public CanonicalValue.ObjectValue manifest(){return manifest;}
   public Ref codec(){return codec;}public Ref confirmation(){return confirmation;}public Ref processing(){return processing;}public Ref parser(){return parser;}
+  public ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget(){return parseBudget;}
   public CanonicalBudget canonicalBudget(){return canonicalBudget;}
  }
  public static final class ValidatedOperation {
@@ -114,7 +115,7 @@ public final class ConfigBindings {
      }
     }
    }
-   active();return new ValidatedProcessingBinding(value,digest,codec,confirmation,processing,parser,canonical,raw);
+   active();return new ValidatedProcessingBinding(value,digest,codec,confirmation,processing,parser,canonical,parse,raw);
   }
   public Artifact artifact(Ref ref){
    refMatches(ref);return new Artifact(ref.version(),ref.sha256(),node(ref.identity()).bytes);

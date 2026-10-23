@@ -85,7 +85,7 @@ import static ama.contract.ProcessingContracts.*;
         });
     }
     @Bean JdbcTaskQueue processingQueue(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,Runtime runtime) {
-        return new JdbcTaskQueue(source,fences,outbox,runtime.components()==null?Map.of():Map.of("TRANSCRIPT_IMPORT_V1",runtime.components().authority().taskPolicy()));
+        return runtime.components()==null?new JdbcTaskQueue(source,fences,outbox,Map.of()):TranscriptImportRuntime.install(source,fences,outbox,runtime.components());
     }
     @Bean JdbcProcessingIntake.NewIntake newIntakeBranch(Runtime runtime) {
         return runtime.preparation();
@@ -94,7 +94,13 @@ import static ama.contract.ProcessingContracts.*;
         return new JdbcProcessingIntake(source,tx,access,runtime.components(),fences,queue,outbox,new JdbcAuditAdapter(source),preparation);
     }
     @Bean JdbcProcessingDiscovery processingDiscovery(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,FileBackendCatalog backends,FileRegistry registry,Runtime runtime,Environment env) {
-        return new JdbcProcessingDiscovery(source,tx,access,purposes,backends,runtime.components()==null?null:registry,runtime.budgets(),runtime.available(),env.getProperty("files.part-size",Long.class,8L*1024*1024));
+        return new JdbcProcessingDiscovery(source,tx,access,purposes,backends,runtime.components()==null?null:registry,runtime.budgets(),runtime.available(),env.getProperty("files.part-size",Long.class,8L*1024*1024),workerHealth(env));
+    }
+    private java.util.function.Supplier<String> workerHealth(Environment env){
+        if(env.getProperty("processing.worker.health-url")==null)return ()->"NOT_INSTALLED";
+        try{return new WorkerHealthProbe(java.net.URI.create(env.getRequiredProperty("processing.worker.health-url")),
+            ama.storage.internal.ServiceTls.context(Path.of(env.getRequiredProperty("processing.worker.key-store")),env.getRequiredProperty("processing.worker.key-store-password").toCharArray(),Path.of(env.getRequiredProperty("processing.worker.trust-store")),env.getRequiredProperty("processing.worker.trust-store-password").toCharArray()),env.getRequiredProperty("processing.worker.server-cert-sha256"),env.getRequiredProperty("processing.worker.max-age-ms",Long.class));}
+        catch(RuntimeException invalid){return ()->"UNAVAILABLE";}
     }
     private static long n(Environment env,String key) {
         long value=env.getRequiredProperty("processing.bounds."+key,Long.class);

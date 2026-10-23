@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/keytool",
+    "-importcert",
+    "-noprompt",
+    "-alias",
+    "ca",
+    "-file",
+    "ca.crt",
+    "-keystore",
+    "trust.p12",
+    "-storetype",
+    "PKCS12",
+    "-storepass:file",
+    "keystore-password"
+  ],
+  "exit": 0
+}

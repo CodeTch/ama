@@ -11,9 +11,12 @@ public final class TransactionRunner {
     private final TransactionTemplate transactions;
     private final JdbcTemplate jdbc;
 
-    public TransactionRunner(DataSource dataSource) {
+    public TransactionRunner(DataSource dataSource) {this(dataSource,-1);}
+    public TransactionRunner(DataSource dataSource,int transactionSeconds) {
+        if(transactionSeconds==0||transactionSeconds< -1)throw new IllegalArgumentException("Invalid transaction bounds");
         Objects.requireNonNull(dataSource, "dataSource");
         transactions = new TransactionTemplate(new DataSourceTransactionManager(dataSource));
+        if(transactionSeconds>0)transactions.setTimeout(transactionSeconds);
         jdbc = new JdbcTemplate(dataSource);
     }
 

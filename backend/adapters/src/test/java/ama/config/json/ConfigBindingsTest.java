@@ -27,6 +27,12 @@ class ConfigBindingsTest {
   var binding=service().verifyProcessing(input,facts,archives(),B,()->false);assertNotNull(binding);assertEquals(fp,binding.fingerprint());
   var bad=input(H,input.string("config_manifest"));assertEquals(FINGERPRINT_MISMATCH,assertThrows(Failure.class,()->service().verifyProcessing(bad,facts,archives(),B,()->false)).code());
  }
+ @Test void originalParseBudgetSurvivesCompleteClosure()throws Exception{
+  var binding=service().computeProcessing(fixture("manifest"),prerequisites(),archives(),B,()->false);
+  var method=Arrays.stream(binding.getClass().getMethods()).filter(m->m.getName().equals("parseBudget")).findFirst();
+  assertTrue(method.isPresent(),"Completed original binding must retain parser budget");
+  assertEquals(new ama.transcript.TranscriptDocumentParser.ParseBudget(1024,1024,16),method.orElseThrow().invoke(binding));
+ }
  @Test void invalidRawOrIncompleteArchiveClosureCannotMintBinding()throws Exception{
   var service=service();var archives=archives();var manifest=fixture("manifest");
   assertThrows(Failure.class,()->service.computeProcessing("{}".getBytes(StandardCharsets.UTF_8),prerequisites(),archives,B,()->false));

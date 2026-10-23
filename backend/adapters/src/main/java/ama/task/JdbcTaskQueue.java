@@ -9,6 +9,7 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,13 +18,19 @@ import static ama.contract.OutboxContracts.protocolCode;
 
 /** Short transactions: complete identities, then subject/root/task. Capabilities stay on the call stack. */
 public final class JdbcTaskQueue implements TaskQueue {
+ private boolean initialized;
  final DataSource source; final JdbcTemplate jdbc; final TransactionRunner tx;
  final JdbcSubjectFences fences; final JdbcOutbox outbox; final Map<String,TaskDomainPolicy> policies;
  record Row(String id,TaskSpec spec,String state,long attempt,String owner,Instant expiry,Instant available) {}
  public JdbcTaskQueue(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,Map<String,TaskDomainPolicy> policies){
-  this.source=source;this.jdbc=new JdbcTemplate(source);this.tx=new TransactionRunner(source);this.fences=fences;this.outbox=outbox;this.policies=Map.copyOf(policies);
+  this(source,fences,outbox,q->policies);
  }
- <T>T work(Callable<T> action){boolean outer=!TransactionSynchronizationManager.isActualTransactionActive();return tx.required(()->{TaskTransactionContext.current(source).requireBeforeFlush();T value=action.call();if(outer)outbox.flush();return value;});}
+ private JdbcTaskQueue(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,Function<JdbcTaskQueue,Map<String,TaskDomainPolicy>> factory){
+  this.source=Objects.requireNonNull(source);this.jdbc=new JdbcTemplate(source);this.jdbc.setQueryTimeout(2);this.tx=new TransactionRunner(source,10);this.fences=Objects.requireNonNull(fences);this.outbox=Objects.requireNonNull(outbox);
+  this.policies=Map.copyOf(factory.apply(this));initialized=true;
+ }
+ static JdbcTaskQueue installConfined(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,Function<JdbcTaskQueue,Map<String,TaskDomainPolicy>> factory){return new JdbcTaskQueue(source,fences,outbox,factory);}
+ <T>T work(Callable<T> action){if(!initialized)throw new IllegalStateException("Queue not initialized");boolean outer=!TransactionSynchronizationManager.isActualTransactionActive();return tx.required(()->{TaskTransactionContext.current(source).requireBeforeFlush();T value=action.call();if(outer)outbox.flush();return value;});}
  static void independent(){if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Independent transaction required");}
  TaskDomainPolicy policy(TaskSpec s){var p=policies.get(s.type());if(p==null)throw new IllegalArgumentException("Unregistered task type");return p;}
  Instant now(){return jdbc.queryForObject("SELECT UTC_TIMESTAMP(6)",(r,n)->instant(r,1));}
@@ -102,32 +109,80 @@ public final class JdbcTaskQueue implements TaskQueue {
   var locked=row(candidate.id(),true,true);if(locked.isEmpty())return Optional.empty();var r=locked.orElseThrow();Instant now=now();
   if(!r.spec().equals(candidate.spec()))return Optional.empty();
   if(!(r.state().equals("READY")&&!r.available().isAfter(now)||r.state().equals("RUNNING")&&!r.expiry().isAfter(now)))return Optional.empty();
+  if(r.state().equals("RUNNING")&&unfinishedAttempt(r).isEmpty())return Optional.empty();
   if(!current(domain.orElseThrow(),r.spec())){finish(r,domain.orElseThrow().deleted()||domain.orElseThrow().cancelEpoch()!=r.spec().cancelEpoch()?"CANCELLED":"STALE","SUBJECT_CHANGED",null);return Optional.empty();}
   policy(r.spec()).validateInput(r.spec());
   if(r.state().equals("RUNNING"))endAttempt(r,"EXPIRED","LEASE_EXPIRED");
-  if(r.attempt()>=r.spec().maxAttempts()){terminateUnmarkedExecution(r);finish(r,"FAILED","ATTEMPT_LIMIT",null);return Optional.empty();}
-  long attempt=r.attempt()+1;Instant expiry=now.plusSeconds(20);
+  if(r.attempt()>=r.spec().maxAttempts()){terminateUnmarkedExecution(r);finish(r,"FAILED","ATTEMPT_LIMIT",null,false);return Optional.empty();}
+  now=now();long attempt=r.attempt()+1;Instant expiry=now.plusSeconds(20);
   jdbc.update("UPDATE durable_task SET state='RUNNING',attempt=?,lease_owner=?,expires_at=? WHERE id=?",attempt,worker,sqlTime(expiry),r.id());
   jdbc.update("INSERT INTO task_attempt(task_id,attempt,owner,started_at) VALUES (?,?,?,?)",r.id(),attempt,worker,sqlTime(now));
   return Optional.of(new TaskLease(r.id(),attempt,worker,expiry,r.spec()));
  }
- Optional<Row> validLease(TaskLease lease){
-  var domain=lockDomain(lease.spec(),false);if(domain.isEmpty())return Optional.empty();
+ private record LockedAttempt(long attempt,String owner) {}
+ private record ValidatedLease(DomainScope domain,Row task,LockedAttempt attempt) {}
+ private Optional<LockedAttempt> unfinishedAttempt(Row task){
+  var rows=jdbc.query("SELECT attempt,owner,ended_at FROM task_attempt WHERE task_id=? AND attempt=? FOR UPDATE",(r,n)->r.getObject("ended_at")==null&&Objects.equals(task.owner(),r.getString("owner"))?new LockedAttempt(r.getLong("attempt"),r.getString("owner")):null,task.id(),task.attempt());
+  return rows.size()==1?Optional.ofNullable(rows.getFirst()):Optional.empty();
+ }
+ private Optional<ValidatedLease> validatedLease(TaskLease lease){
+  var prepared=prepareDomain(List.of(lease.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,null);
+  if(prepared.isEmpty())return Optional.empty();var scope=prepared.orElseThrow();
+  var domain=lockDomain(scope,lease.spec(),false);if(domain.isEmpty())return Optional.empty();
   var locked=row(lease.taskId(),true,false);if(locked.isEmpty())return Optional.empty();var r=locked.orElseThrow();
   if(!r.spec().equals(lease.spec())||!current(domain.orElseThrow(),r.spec())||!r.state().equals("RUNNING")||r.attempt()!=lease.attempt()||!Objects.equals(r.owner(),lease.leaseOwner())||r.expiry()==null||!r.expiry().isAfter(now()))return Optional.empty();
-  policy(r.spec()).validateInput(r.spec());return Optional.of(r);
+  var attempt=unfinishedAttempt(r);if(attempt.isEmpty()||!r.expiry().isAfter(now()))return Optional.empty();
+  policy(r.spec()).validateInput(r.spec());return Optional.of(new ValidatedLease(scope,r,attempt.orElseThrow()));
+ }
+ // Existing external-operation caller needs only the validated row, never completion authority.
+ Optional<Row> validLease(TaskLease lease){return validatedLease(lease).map(ValidatedLease::task);}
+ static final class AfterTask {
+  private final JdbcTaskQueue queue;private final Object holder;private final ValidatedLease valid;private final TaskLease lease;
+  private final ConfinedTaskCompletionPolicy policy;private final Supplier<TaskResult> carrier;private final PreparedCompletionEnvelope envelope;
+  private CompletionPhase phase=CompletionPhase.BINDING;private CompletionInvocation invocation;private TaskResult result;
+  private AfterTask(JdbcTaskQueue queue,ValidatedLease valid,TaskLease lease,ConfinedTaskCompletionPolicy policy,Supplier<TaskResult> carrier,PreparedCompletionEnvelope envelope){
+   this.queue=queue;this.valid=valid;this.lease=lease;this.policy=policy;this.carrier=carrier;this.envelope=envelope;holder=TransactionSynchronizationManager.getResource(queue.source);
+  }
+  private void require(JdbcTaskQueue expected,ConfinedTaskCompletionPolicy registered){
+   if(queue!=expected||policy!=registered||!queue.initialized||holder==null||!TransactionSynchronizationManager.isActualTransactionActive()||holder!=TransactionSynchronizationManager.getResource(queue.source)
+     ||queue.policy(lease.spec())!=policy||valid.domain.policy()!=policy||valid.domain.purpose()!=TaskDomainPolicy.Acquisition.TASK_MUTATION||!valid.domain.specs().equals(List.of(lease.spec()))
+     ||valid.domain.locked==null||!valid.task.spec().equals(lease.spec())||!valid.task.id().equals(lease.taskId())||valid.attempt.attempt()!=lease.attempt()||!valid.attempt.owner().equals(lease.leaseOwner())||phase==CompletionPhase.CLOSED)
+    throw new IllegalArgumentException("Foreign or expired after-task scope");
+   JdbcTaskPreparations.requireTransaction(queue.source,valid.domain.prepared());policy.requirePrepared(valid.domain.specs(),valid.domain.purpose(),valid.domain.prepared());
+  }
+  TaskDomainPolicy.PreparedDomain preparedFor(JdbcTaskQueue expected,ConfinedTaskCompletionPolicy registered,List<TaskSpec> specs){
+   require(expected,registered);if(phase!=CompletionPhase.BINDING||!valid.domain.specs().equals(specs))throw new IllegalStateException("After-task binding phase required");return valid.domain.prepared();
+  }
+  void requireInvocation(JdbcTaskQueue expected,ConfinedTaskCompletionPolicy registered,CompletionInvocation exact,Supplier<TaskResult> payload,TaskLease wanted,CompletionPhase expectedPhase){
+   require(expected,registered);if(invocation!=exact||carrier!=payload||!lease.equals(wanted)||phase!=expectedPhase)throw new IllegalStateException("After-task invocation mismatch");
+  }
+  void requireResult(TaskResult value){if(phase!=CompletionPhase.VALIDATING||result!=value)throw new IllegalStateException("After-task result mismatch");}
  }
  @Override public boolean renew(TaskLease lease){return work(()->{if(validLease(lease).isEmpty())return false;jdbc.update("UPDATE durable_task SET expires_at=UTC_TIMESTAMP(6)+INTERVAL 20 SECOND WHERE id=?",lease.taskId());return true;});}
  @Override public boolean complete(TaskLease lease,TaskResult result){return completeWithEffects(lease,result,()->{});}
  @Override public boolean completeWithEffects(TaskLease lease,TaskResult result,Runnable effects){return work(()->{
-  var valid=validLease(lease);if(valid.isEmpty())return false;var r=valid.orElseThrow();policy(r.spec()).validateOutput(r.spec(),result);
+  var valid=validLease(lease);if(valid.isEmpty())return false;var r=valid.orElseThrow();if(policy(r.spec()) instanceof ConfinedTaskCompletionPolicy)throw new IllegalStateException("Confined carrier required");policy(r.spec()).validateOutput(r.spec(),result);
   effects.run();
   completeValidated(r,result);return true;
  });}
  @Override public boolean completeWithEffects(TaskLease lease,Supplier<TaskResult> effects){
   Objects.requireNonNull(lease,"lease");Objects.requireNonNull(effects,"effects");
   return work(()->{
-   var valid=validLease(lease);if(valid.isEmpty())return false;var r=valid.orElseThrow();
+   var valid=validatedLease(lease);if(valid.isEmpty())return false;var validated=valid.orElseThrow();var r=validated.task();
+   if(policy(r.spec()) instanceof ConfinedTaskCompletionPolicy confined){
+    var envelope=effects instanceof PreparedCompletionEnvelope e?e:null;
+    var payload=envelope==null?effects:Objects.requireNonNull(envelope.payload(),"Completion payload");
+    if(payload instanceof PreparedCompletionEnvelope||payload==envelope)throw new IllegalArgumentException("Recursive completion envelope");
+    var scope=new AfterTask(this,validated,lease,confined,payload,envelope);
+    try {
+     scope.invocation=Objects.requireNonNull(confined.bindCompletion(scope,payload));scope.phase=CompletionPhase.BOUND;
+     if(envelope!=null)envelope.admit();
+     scope.phase=CompletionPhase.WRITING;scope.result=Objects.requireNonNull(scope.invocation.write(),"Prepared completion result");scope.phase=CompletionPhase.WRITTEN;
+     scope.phase=CompletionPhase.VALIDATING;scope.invocation.validateActual(scope.result);scope.phase=CompletionPhase.VALIDATED;
+     completeValidated(r,scope.result);scope.phase=CompletionPhase.SETTLED;return true;
+    } finally {scope.phase=CompletionPhase.CLOSED;}
+   }
+   if(effects instanceof PreparedCompletionEnvelope)throw new IllegalArgumentException("Confined completion not installed");
    var result=Objects.requireNonNull(effects.get(),"Prepared completion result");
    policy(r.spec()).validateOutput(r.spec(),result);
    completeValidated(r,result);return true;
@@ -139,8 +194,17 @@ public final class JdbcTaskQueue implements TaskQueue {
    jdbc.update("UPDATE durable_task SET state='READY',lease_owner=NULL,expires_at=NULL,available_at=?,last_error=? WHERE id=?",sqlTime(now().plusMillis(delay*1000+millis)),result.errorCode(),r.id());endAttempt(r,"RETRYABLE",result.errorCode());event("TASK_RETRY",r);
   }else finish(r,result.outcome()==Outcome.RETRYABLE?"FAILED":result.outcome().name(),result.errorCode(),result.output());
  }
- void endAttempt(Row r,String outcome,String code){if(r.attempt()>0)jdbc.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome=?,error_code=? WHERE task_id=? AND attempt=? AND ended_at IS NULL",outcome,code,r.id(),r.attempt());}
- void finish(Row r,String state,String code,TypedRef output){jdbc.update("UPDATE durable_task SET state=?,lease_owner=NULL,expires_at=NULL,last_error=?,output_kind=?,output_id=? WHERE id=?",state,code,output==null?null:output.kind(),output==null?null:output.id(),r.id());endAttempt(r,state,code);event("TASK_"+state,r);}
+ void endAttempt(Row r,String outcome,String code){
+  if(r.attempt()>0&&"RUNNING".equals(r.state())){
+   int changed=jdbc.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome=?,error_code=? WHERE task_id=? AND attempt=? AND owner=? AND ended_at IS NULL",outcome,code,r.id(),r.attempt(),r.owner());
+   if(changed!=1)throw new IllegalStateException("Current attempt transition must affect exactly one row");
+  }
+ }
+ void finish(Row r,String state,String code,TypedRef output){finish(r,state,code,output,true);}
+ private void finish(Row r,String state,String code,TypedRef output,boolean endCurrent){
+  jdbc.update("UPDATE durable_task SET state=?,lease_owner=NULL,expires_at=NULL,last_error=?,output_kind=?,output_id=? WHERE id=?",state,code,output==null?null:output.kind(),output==null?null:output.id(),r.id());
+  if(endCurrent)endAttempt(r,state,code);event("TASK_"+state,r);
+ }
  /** A PREPARED execution has never crossed the committed marker boundary. Task lock is already held. */
  private void terminateUnmarkedExecution(Row task){
   var candidates=jdbc.queryForList("SELECT operation_id,execution_no FROM external_execution WHERE task_id=? AND state='PREPARED'",task.id());

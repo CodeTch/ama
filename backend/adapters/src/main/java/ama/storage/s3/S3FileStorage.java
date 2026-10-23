@@ -4,8 +4,8 @@ import ama.contract.StorageContracts.*;
 import ama.storage.FileStoragePort;
 
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
-import software.amazon.awssdk.http.urlconnection.ProxyConfiguration;
-import software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient;
+import software.amazon.awssdk.http.apache5.ProxyConfiguration;
+import software.amazon.awssdk.http.apache5.Apache5HttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.retries.StandardRetryStrategy;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -27,20 +27,22 @@ public final class S3FileStorage implements FileStoragePort, AutoCloseable {
     private final SessionJournal sessions;
     private final RangeReader ranges;
 
-    public S3FileStorage(S3Config config) {
-        var client =
+    static S3Client client(S3Config config) {
+        return
                 S3Client.builder()
                         .endpointOverride(config.endpoint())
                         .region(Region.of(config.region()))
                         .credentialsProvider(config.credentials())
                         .httpClientBuilder(
-                                UrlConnectionHttpClient.builder()
+                                Apache5HttpClient.builder()
+                                        .maxConnections(config.admission())
+                                        .connectionAcquisitionTimeout(config.timeout())
                                         .connectionTimeout(config.timeout())
                                         .socketTimeout(config.timeout())
                                         .proxyConfiguration(
                                                 ProxyConfiguration.builder()
                                                         .useSystemPropertyValues(false)
-                                                        .useEnvironmentVariablesValues(false)
+                                                        .useEnvironmentVariableValues(false)
                                                         .build()))
                         .serviceConfiguration(
                                 S3Configuration.builder()
@@ -56,7 +58,10 @@ public final class S3FileStorage implements FileStoragePort, AutoCloseable {
                                                         .build())
                                         .build())
                         .build();
-        io = new S3Objects(client, config);
+    }
+
+    public S3FileStorage(S3Config config) {
+        io = new S3Objects(client(config), config);
         layout = new S3Layout(config);
         staging = new Staging(io);
         publisher = new NativePublisher(io, layout);

@@ -174,6 +174,10 @@ final class WireProxy implements AutoCloseable {
         f.reached.countDown();
         return;
       }
+      if (f != null && f.action.equals("stall-error")) {
+        text(clientOut,"HTTP/1.1 503 Service Unavailable\r\nContent-Type: application/xml\r\nContent-Length: 64\r\nConnection: close\r\n\r\n<");clientOut.flush();
+        f.reached.countDown();if(!f.release.await(10,TimeUnit.SECONDS))throw new IOException("barrier timeout");return;
+      }
       Map<String, String> outgoing = new LinkedHashMap<>(response);
       String sendStatus = statusLine;
       if (f != null && f.action.equals("ignore-range")) {
@@ -229,6 +233,9 @@ final class WireProxy implements AutoCloseable {
           text(clientOut, h.getKey() + ": " + h.getValue() + "\r\n");
       text(clientOut, "Connection: close\r\n\r\n");
       clientOut.flush();
+      if (f != null && f.action.equals("stall-body")) {
+        f.reached.countDown();if(!f.release.await(10,TimeUnit.SECONDS))throw new IOException("barrier timeout");
+      }
       byte[] b = new byte[8192];
       long bound = f != null && f.action.equals("truncate") ? body / 2 : body;
       while (received < bound) {

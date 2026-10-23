@@ -171,6 +171,19 @@ public final class JdbcTranscriptAuthority {
   r.phase=Phase.BOUND;
  }
  public StoredProvenanceFacts detached(HeldProcessingFacts token){return held(token).facts;}
+ DataSource dataSource(){return source;}TransactionRunner transactionRunner(){return tx;}
+ /** Deny-only verification of the exact retained complete graph; no acquisition or authority issuance. */
+ public void requireImportCompletion(List<TaskSpec> specs,ama.task.TaskDomainPolicy.PreparedDomain prepared){taskPolicy.requireCompletion(specs,prepared);}
+ public void requireImportSource(DataSource expected){if(source!=expected)throw new IllegalArgumentException("Foreign import source");}
+ public StoredProvenanceFacts readWorkerFacts(TaskLease lease,BooleanSupplier cancelled){
+  independent();Objects.requireNonNull(lease);check(cancelled);
+  var actual=j.queryForList("SELECT owner_id FROM meeting WHERE id=?",String.class,lease.spec().subject().id());
+  require(actual.size()==1,PROVENANCE_UNAVAILABLE);
+  var actor=new Actor(actual.getFirst(),ama.contract.IdentityContracts.Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
+  var facts=new JdbcProcessingFactsReader(this).readWorker(actor,lease,budget,cancelled);
+  require(facts.taskFacts().size()==1&&facts.taskFacts().getFirst().taskId().equals(lease.taskId())&&facts.taskFacts().getFirst().spec().equals(lease.spec()),PROVENANCE_UNAVAILABLE);
+  return facts;
+ }
  public ama.task.TaskDomainPolicy taskPolicy(){return taskPolicy;}
  public ama.task.TaskDomainPolicy.PreparedDomain adoptCreated(FileRegistry.LockedMeeting gate,HeldProcessingFacts held,TaskSpec spec){return taskPolicy.adopt(gate,held,spec);}
  public List<FileRegistry.CompletedSource> originals(PreparedIntake prepared){

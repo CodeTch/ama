@@ -61,7 +61,7 @@ final class RangeReader {
             InputStream result =
                     new InputStream() {
                         long left = length;
-                        boolean closed;
+                        final java.util.concurrent.atomic.AtomicBoolean closed=new java.util.concurrent.atomic.AtomicBoolean();
 
                         private IOException fail() {
                             close();
@@ -78,7 +78,7 @@ final class RangeReader {
                         public int read(byte[] b, int off, int len) throws IOException {
                             Objects.checkFromIndexSize(off, len, b.length);
                             if (len == 0) return 0;
-                            if (closed) {
+                            if (closed.get()) {
                                 if (left == 0) return -1;
                                 throw new IOException("STORAGE_UNAVAILABLE");
                             }
@@ -99,8 +99,7 @@ final class RangeReader {
 
                         @Override
                         public void close() {
-                            if (!closed) {
-                                closed = true;
+                            if (closed.compareAndSet(false,true)) {
                                 io.release(in);
                             }
                         }

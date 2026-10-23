@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task05PipelineIT#actualCarrierRejectsDirectForeignAndOrdinaryCompletionThenWritesOnce+aggregateCountsAllDecodedUnitsAcrossOrderedFilesWithoutPartialRaw"
+  ],
+  "exit": 0,
+  "utc": "2026-10-23T13:10:52.077920+00:00",
+  "source_seal": "source.json",
+  "limits": "512MiB / 2 active processors"
+}

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "openssl",
+    "req",
+    "-newkey",
+    "rsa:2048",
+    "-noenc",
+    "-keyout",
+    "reader.key",
+    "-out",
+    "reader.csr",
+    "-subj",
+    "/CN=reader"
+  ],
+  "exit": 0
+}
