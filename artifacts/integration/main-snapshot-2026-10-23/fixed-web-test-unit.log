@@ -1,0 +1,62 @@
+
+> ama-web@0.1.0 test:unit
+> tsx --test tests/unit/*.test.ts
+
+TAP version 13
+# Subtest: JSON response preserves caller headers while sending JSON accept and cookie credentials
+ok 1 - JSON response preserves caller headers while sending JSON accept and cookie credentials
+  ---
+  duration_ms: 18.634116
+  type: 'test'
+  ...
+# Subtest: empty successful response resolves without a JSON parse error
+ok 2 - empty successful response resolves without a JSON parse error
+  ---
+  duration_ms: 2.757244
+  type: 'test'
+  ...
+# Subtest: unauthorized response returns a safe typed error without private backend messages
+ok 3 - unauthorized response returns a safe typed error without private backend messages
+  ---
+  duration_ms: 2.33045
+  type: 'test'
+  ...
+# Subtest: non-JSON service error is normalized without leaking response body
+ok 4 - non-JSON service error is normalized without leaking response body
+  ---
+  duration_ms: 1.727972
+  type: 'test'
+  ...
+# Subtest: malformed successful JSON rejects with a response error
+ok 5 - malformed successful JSON rejects with a response error
+  ---
+  duration_ms: 2.024415
+  type: 'test'
+  ...
+# Subtest: network failure is normalized for consumers
+ok 6 - network failure is normalized for consumers
+  ---
+  duration_ms: 0.365302
+  type: 'test'
+  ...
+# Subtest: caller cancellation remains an AbortError
+ok 7 - caller cancellation remains an AbortError
+  ---
+  duration_ms: 0.3761
+  type: 'test'
+  ...
+# Subtest: cancellation while reading the response body remains an AbortError
+ok 8 - cancellation while reading the response body remains an AbortError
+  ---
+  duration_ms: 28.532463
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 273.653834

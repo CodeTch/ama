@@ -1,0 +1,64 @@
+{
+  "source_commit": "46aad17bca8466192249d59912885563d94d19de",
+  "base_main_commit": "0676a21311f2b2193f73a5e096f4a5605ee9b41f",
+  "scope": "Latest unfinished development snapshot including committed Task4 and pause records; user explicitly selected this scope.",
+  "canonical_all": {
+    "command": "python3 tools/checks/run.py all",
+    "exit": 0,
+    "python": {
+      "executed": 93,
+      "failed": 0,
+      "skipped": 0
+    },
+    "web": {
+      "executed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    "java": {
+      "suites": 32,
+      "executed": 223,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "openapi_checks": 2
+  },
+  "generated_types_repair": {
+    "cause": "Task4 changed OpenAPI but did not regenerate web/src/shared/api/generated.ts",
+    "before_check_api_exit": 1,
+    "command": "npm --prefix web run generate:api",
+    "file": "web/src/shared/api/generated.ts",
+    "sha256": "2adec56dc7b80074642499a6c520e5d35a6d2634f7e0ebe504d20cbff1625a37",
+    "after_checks": [
+      {
+        "task": "check:api",
+        "exit": 0
+      },
+      {
+        "task": "typecheck",
+        "exit": 0
+      },
+      {
+        "task": "build",
+        "exit": 0
+      },
+      {
+        "task": "test:unit",
+        "exit": 0
+      }
+    ]
+  },
+  "verification_boundary": {
+    "database_it_rerun": false,
+    "browser_e2e_rerun": false,
+    "phase_b_complete": false,
+    "task4_formal_review_complete": false
+  },
+  "whitespace": {
+    "product_and_docs_diff_check_exit": 0,
+    "historical_artifacts_preserved": true,
+    "raw_artifact_warnings": 12
+  },
+  "temporary_verification_checkout": "/tmp/ama-main-merge-20261023-yh4u5_2a/repo"
+}

@@ -1,0 +1,17 @@
+
+> ama-web@0.1.0 check:api
+> node scripts/check-api.mjs
+
+✨ openapi-typescript 7.13.0
+🚀 /tmp/ama-main-merge-20261023-yh4u5_2a/repo/contracts/openapi/api.yaml → /tmp/ama-openapi-vd8ZDx/generated.ts [86.7ms]
+file:///tmp/ama-main-merge-20261023-yh4u5_2a/repo/web/scripts/check-api.mjs:11
+ if(!readFileSync(output).equals(readFileSync('src/shared/api/generated.ts')))throw new Error('Generated API types differ; run npm run generate:api');
+                                                                                    ^
+
+Error: Generated API types differ; run npm run generate:api
+    at file:///tmp/ama-main-merge-20261023-yh4u5_2a/repo/web/scripts/check-api.mjs:11:85
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.23.4

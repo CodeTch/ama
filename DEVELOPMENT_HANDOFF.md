@@ -1,3 +1,9 @@
+## 当前 Git 集成入口（2026-10-23）
+
+用户已明确要求合并并推送最新开发快照，范围包含 completion 分支 Task4 与暂停记录。主目录现位于 `main`，已纳入快照 `46aad17bca8466192249d59912885563d94d19de`，并同步前端生成 API 类型。验证、整合审查和未完成边界见[本次 main 集成记录](docs/acceptance/main-branch-integration-2026-10-23.md)。
+
+本次仅保存开发进度：Task4 正式复审仍待完成，后续业务实现未启动，B 阶段未验收。原 completion 工作树和暂停证据保留。后续继续开发时先核对当前 main 与该工作树，再按[精准接续说明](docs/acceptance/development-pause-b-remaining-2026-10-23.md)从 Task4 复审接续；不要用旧分支覆盖本次类型同步。下方“main 不变／无 push/main merge”等文字均为暂停时历史状态，本节更新其 Git 集成位置。
+
 ## 当前暂停入口（2026-10-23 18:20）
 
 用户已要求暂停。下次“继续任务”请先读[精准接续说明](docs/acceptance/development-pause-b-remaining-2026-10-23.md)，切换 `.worktrees/phase-b-completion`，从 Task4 中断的独立审查继续；旧段落仅为历史。Task1–3 已采用；Task4 源码59c8b080已提交/测试374通过，但复审未完成；Task5后续源码未启动。主目录产品 HEAD34cb226a、main 不变。

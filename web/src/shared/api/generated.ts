@@ -220,7 +220,7 @@ export interface paths {
             };
             cookie?: never;
         };
-        get?: never;
+        get: operations["listMeetingUploads"];
         put?: never;
         /** Accept a pinned upload after durable storage begin and database commit */
         post: operations["beginFileUpload"];
@@ -313,6 +313,179 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/meetings/{id}/processing-capabilities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        /** @description READ-authorized safe availability. Execution remains NOT_INSTALLED until a real worker is installed; queue existence does not imply execution health. Only the current owner can submit. */
+        get: operations["getProcessingCapabilities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/transcript-imports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Mandatory fresh DB-only accepted-result lookup precedes current CAS/exhaustion/source/archive/readiness checks. Same normalized key/body returns the original committed task/input/batch/revision, including with new intake unavailable; different payload conflicts. Exactly one bounded fresh lookup after named ordinary preparation failure can discover a concurrent committed winner. Final claim serialization repeats authorized replay first. Actual acceptance is input+READY task, with no RAW output. Never automatically rekey or infer success from client memory. */
+        post: operations["acceptTranscriptImport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/uploads/{upload}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get: operations["getMeetingUpload"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/uploads/{upload}/parts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get: operations["listMeetingUploadParts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/completed-files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get: operations["listCompletedMeetingFiles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/processing-inputs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get: operations["listProcessingInputs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/processing-inputs/{input}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get: operations["getProcessingInput"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/processing-tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get: operations["listProcessingTasks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/processing-tasks/{task}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        get: operations["getProcessingTask"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -354,9 +527,12 @@ export interface components {
             items: components["schemas"]["Person"][];
             nextCursor: string | null;
         };
+        /** @description Opaque canonical decimal revision, 0..9223372036854775806. Preserve the string exactly. Dual representations must agree. */
+        ExpectedRevisionToken: string;
         Mutation: {
             /** Format: uuid */
             id: string;
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
             /** Format: int64 */
             revision: number;
         };
@@ -369,6 +545,7 @@ export interface components {
             memberKind: "ENTERPRISE" | "EXTERNAL";
         };
         Saved: components["schemas"]["Mutation"] & {
+            accessRevisionToken: components["schemas"]["ExpectedRevisionToken"];
             /** Format: int64 */
             accessRevision: number;
             /** @enum {string} */
@@ -388,7 +565,8 @@ export interface components {
         /** Format: int64 */
         ExpectedRevision: number;
         SaveInfo: {
-            expectedRevision: components["schemas"]["ExpectedRevision"];
+            expectedRevision?: components["schemas"]["ExpectedRevision"];
+            expectedRevisionToken?: components["schemas"]["ExpectedRevisionToken"];
             name?: string | null;
             category?: string | null;
             summary?: string | null;
@@ -396,6 +574,29 @@ export interface components {
             occurredOn?: string | null;
             rosterDraftIds: string[];
             externalRosterNames?: string[] | null;
+        } | unknown | unknown;
+        UploadSummary: {
+            /** Format: uuid */
+            uploadId: string;
+            purpose: string;
+            displayName: string;
+            /** @enum {string} */
+            state: "OPEN" | "FINALIZING" | "COMPLETED" | "ABORTED" | "FAILED";
+            /** Format: int64 */
+            expectedSize: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            expectedSizeToken: string;
+            expectedSha256: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            /** Format: uuid */
+            completedFileId: string | null;
+        };
+        UploadSummaryPage: {
+            items: components["schemas"]["UploadSummary"][];
+            nextCursor: string | null;
         };
         Hash: string;
         Begin: {
@@ -414,6 +615,8 @@ export interface components {
              * @description Technical suggestion only; restart never re-slices accepted receipts.
              */
             partSize: number;
+            /** @description Opaque canonical decimal representation of the unchanged positive partSize value, 1..9223372036854775807. Preserve this string exactly. */
+            partSizeToken: string;
         };
         Completion: {
             parts: {
@@ -425,6 +628,223 @@ export interface components {
         Completed: {
             /** Format: uuid */
             fileId: string;
+        };
+        Capabilities: {
+            /** Format: int64 */
+            revision: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            revisionToken: string;
+            /** Format: int64 */
+            accessRevision: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            accessRevisionToken: string;
+            canSubmit: boolean;
+            readOnlyReason: string | null;
+            /** @enum {string} */
+            intake: "AVAILABLE" | "UNAVAILABLE";
+            /** @enum {string} */
+            execution: "INSTALLED" | "NOT_INSTALLED" | "UNAVAILABLE";
+            businessReady: boolean;
+            formats: "TXT"[];
+            /** @enum {string} */
+            purpose: "TRANSCRIPT_INPUT";
+            /** @enum {string} */
+            materialMode: "EMPTY";
+            budgets: {
+                [key: string]: string | number;
+            };
+        };
+        /** @description At least one exact revision representation; dual values must agree before digest. Strict duplicate/unknown fields, Unicode, depth8, token4096 and 65536-byte transport envelope. Current effective intake limits apply only after accepted-result lookup. */
+        ImportRequest: {
+            expectedRevision?: components["schemas"]["ExpectedRevision"];
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            expectedRevisionToken?: string;
+            orderedFileIds: string[];
+        } | unknown | unknown;
+        ImportAccepted: {
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            batchId: string;
+            /** Format: uuid */
+            inputId: string;
+            /** Format: uuid */
+            taskId: string;
+            /** Format: int64 */
+            revision: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            revisionToken: string;
+            inputFingerprint: string;
+        };
+        CompletedFileSummary: {
+            /** Format: uuid */
+            fileId: string;
+            /** Format: uuid */
+            uploadId: string;
+            displayName: string;
+            /** Format: int64 */
+            sizeBytes: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            sizeBytesToken: string;
+            sha256: string;
+            /** @enum {string} */
+            fileState: "AVAILABLE" | "DELETE_PENDING" | "DELETED";
+            originalPurpose: string;
+            intakeEligibility: {
+                /** @enum {string} */
+                state: "ELIGIBLE" | "INELIGIBLE" | "UNAVAILABLE";
+                /** @enum {string|null} */
+                reason: "SOURCE_STATE" | "SOURCE_EPOCH" | "SOURCE_PURPOSE" | "SOURCE_ROUTE" | "SOURCE_PROVENANCE" | "READ_ONLY" | null;
+            };
+            /** @enum {string} */
+            businessReadEligibility: "NOT_EVALUATED";
+        };
+        /** @description partSize is the current configured suggestion, including on begin replay, not a persisted original chunk size. allowedActions are possible state changes under fresh owner/purpose/epoch/publication/historical route checks. OPEN on READ_ONLY permits ABORT only. FINALIZING permits COMPLETE recovery on valid READ_ONLY or WRITABLE routes, never parts or abort. Terminal states have no allowedActions. COMPLETED separately advertises COMPLETE acknowledgment with exact saved manifest and ABORT no-op, even after publication or route disable when early-return owner/purpose/epoch checks pass. ABORTED advertises ABORT cleanup only when the exact historical recovery route remains valid. FAILED has no retry. These observations grant no mutation, byte or first-binding authority. */
+        UploadReceipt: {
+            /** Format: uuid */
+            uploadId: string;
+            purpose: string;
+            displayName: string;
+            /** @enum {string} */
+            state: "OPEN" | "FINALIZING" | "COMPLETED" | "ABORTED" | "FAILED";
+            /** Format: int64 */
+            expectedSize: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            expectedSizeToken: string;
+            expectedSha256: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            /** Format: uuid */
+            completedFileId: string | null;
+            accepted: {
+                /** Format: uuid */
+                uploadId: string;
+                /** Format: int64 */
+                partSize: number;
+                /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+                partSizeToken: string;
+            };
+            allowedActions: ("UPLOAD_PARTS" | "COMPLETE" | "ABORT")[];
+            idempotentRetries: ("COMPLETE" | "ABORT")[];
+            blockedReason: string | null;
+            completed: components["schemas"]["CompletedFileSummary"] | null;
+        };
+        PartSummary: {
+            part: number;
+            /** Format: int64 */
+            sizeBytes: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            sizeBytesToken: string;
+            sha256: string;
+        };
+        PartSummaryPage: {
+            items: components["schemas"]["PartSummary"][];
+            nextCursor: string | null;
+        };
+        CompletedFileSummaryPage: {
+            items: components["schemas"]["CompletedFileSummary"][];
+            nextCursor: string | null;
+        };
+        InputSummary: {
+            /** Format: uuid */
+            inputId: string;
+            /** Format: uuid */
+            batchId: string;
+            /** @enum {string} */
+            kind: "IMPORT";
+            /** @enum {string} */
+            materialMode: "EMPTY";
+            /** Format: int64 */
+            baseRevision: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            revisionToken: string;
+            inputFingerprint: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        InputSummaryPage: {
+            items: components["schemas"]["InputSummary"][];
+            nextCursor: string | null;
+        };
+        InputDetail: {
+            /** Format: uuid */
+            inputId: string;
+            /** Format: uuid */
+            batchId: string;
+            /** @enum {string} */
+            kind: "IMPORT";
+            /** @enum {string} */
+            materialMode: "EMPTY";
+            /** Format: int64 */
+            baseRevision: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            revisionToken: string;
+            inputFingerprint: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** @enum {string} */
+            batchProfile: "ama.input-batch.v1";
+            batchFingerprint: string;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            cancelEpochToken: string;
+            files: {
+                ordinal: number;
+                /** Format: uuid */
+                fileId: string;
+                /** Format: uuid */
+                uploadId: string;
+                sha256: string;
+                /** Format: int64 */
+                sizeBytes: number;
+                /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+                sizeBytesToken: string;
+            }[];
+            /** Format: uuid */
+            taskId: string;
+        };
+        ImportTaskSummary: {
+            /** Format: uuid */
+            taskId: string;
+            /** @enum {string} */
+            type: "TRANSCRIPT_IMPORT_V1";
+            /** @enum {string} */
+            pool: "TRANSCRIPT_IMPORT";
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            inputId: string;
+            /** Format: uuid */
+            batchId: string;
+            /** @enum {string} */
+            state: "READY" | "RUNNING" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "STALE";
+            /** Format: int64 */
+            businessVersion: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            businessVersionToken: string;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            cancelEpochToken: string;
+            /** Format: int64 */
+            attempt: number;
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            attemptToken: string;
+            maxAttempts: number;
+            /** Format: date-time */
+            availableAt: string;
+            /** Format: date-time */
+            createdAt: string;
+            errorCode: string | null;
+            output: {
+                /** @enum {string} */
+                kind: "TRANSCRIPT_REVISION";
+                /** Format: uuid */
+                id: string;
+            } | null;
+        };
+        ImportTaskSummaryPage: {
+            items: components["schemas"]["ImportTaskSummary"][];
+            nextCursor: string | null;
         };
     };
     responses: {
@@ -480,7 +900,7 @@ export interface components {
                 "application/json": components["schemas"]["BusinessError"];
             };
         };
-        /** @description Same key with different payload, stale expectedRevision, no pending draft, inactive/unknown roster identity, or immutable published state. No partial effects; retain client input. */
+        /** @description REVISION_EXHAUSTED after authorized replay, same key with different payload, stale expectedRevision, no pending draft, inactive/unknown roster identity, or immutable published state. No partial effects; retain client input. */
         Conflict: {
             headers: {
                 [name: string]: unknown;
@@ -553,6 +973,15 @@ export interface components {
         Key: string;
         /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
         Id: string;
+        Limit: number;
+        /** @description Strict greater-than UUID keyset cursor. Refresh from first page after changes; this is not a snapshot. */
+        After: string;
+        uploadId: string;
+        PartLimit: number;
+        AfterPart: string;
+        inputId: string;
+        Scope: "active" | "all";
+        taskId: string;
     };
     requestBodies: never;
     headers: never;
@@ -853,8 +1282,9 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    expectedRevision: components["schemas"]["ExpectedRevision"];
-                };
+                    expectedRevision?: components["schemas"]["ExpectedRevision"];
+                    expectedRevisionToken?: components["schemas"]["ExpectedRevisionToken"];
+                } | unknown | unknown;
             };
         };
         responses: {
@@ -873,6 +1303,107 @@ export interface operations {
             409: components["responses"]["Conflict"];
             413: components["responses"]["TooLarge"];
             503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    listMeetingUploads: {
+        parameters: {
+            query?: {
+                limit?: components["parameters"]["Limit"];
+                /** @description Strict greater-than UUID keyset cursor. Refresh from first page after changes; this is not a snapshot. */
+                after?: components["parameters"]["After"];
+            };
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized persisted result; private, no-store. */
+            200: {
+                headers: {
+                    /** @description private, no-store */
+                    "Cache-Control"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadSummaryPage"];
+                };
+            };
+            /** @description INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description UNAUTHENTICATED: missing or revoked current session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_INPUT_INVALID: unsupported domain input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
         };
     };
     beginFileUpload: {
@@ -1073,6 +1604,912 @@ export interface operations {
             413: components["responses"]["TooLarge"];
             416: components["responses"]["Range"];
             503: components["responses"]["files_Unavailable"];
+        };
+    };
+    getProcessingCapabilities: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized persisted result; private, no-store. */
+            200: {
+                headers: {
+                    /** @description private, no-store */
+                    "Cache-Control"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Capabilities"];
+                };
+            };
+            /** @description INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description UNAUTHENTICATED: missing or revoked current session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_INPUT_INVALID: unsupported domain input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    acceptTranscriptImport: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportRequest"];
+            };
+        };
+        responses: {
+            /** @description Fresh authorized persisted result; private, no-store. */
+            202: {
+                headers: {
+                    /** @description private, no-store */
+                    "Cache-Control"?: string;
+                    /** @description Actual persisted processing-input detail route. */
+                    Location?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportAccepted"];
+                };
+            };
+            /** @description INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description UNAUTHENTICATED: missing or revoked current session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_INPUT_INVALID: unsupported domain input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    getMeetingUpload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+                upload: components["parameters"]["uploadId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized persisted result; private, no-store. */
+            200: {
+                headers: {
+                    /** @description private, no-store */
+                    "Cache-Control"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadReceipt"];
+                };
+            };
+            /** @description INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description UNAUTHENTICATED: missing or revoked current session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_INPUT_INVALID: unsupported domain input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    listMeetingUploadParts: {
+        parameters: {
+            query?: {
+                limit?: components["parameters"]["PartLimit"];
+                afterPart?: components["parameters"]["AfterPart"];
+            };
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+                upload: components["parameters"]["uploadId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized persisted result; private, no-store. */
+            200: {
+                headers: {
+                    /** @description private, no-store */
+                    "Cache-Control"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PartSummaryPage"];
+                };
+            };
+            /** @description INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description UNAUTHENTICATED: missing or revoked current session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_INPUT_INVALID: unsupported domain input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    listCompletedMeetingFiles: {
+        parameters: {
+            query?: {
+                limit?: components["parameters"]["Limit"];
+                /** @description Strict greater-than UUID keyset cursor. Refresh from first page after changes; this is not a snapshot. */
+                after?: components["parameters"]["After"];
+            };
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized persisted result; private, no-store. */
+            200: {
+                headers: {
+                    /** @description private, no-store */
+                    "Cache-Control"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompletedFileSummaryPage"];
+                };
+            };
+            /** @description INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description UNAUTHENTICATED: missing or revoked current session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_INPUT_INVALID: unsupported domain input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    listProcessingInputs: {
+        parameters: {
+            query?: {
+                limit?: components["parameters"]["Limit"];
+                /** @description Strict greater-than UUID keyset cursor. Refresh from first page after changes; this is not a snapshot. */
+                after?: components["parameters"]["After"];
+            };
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized persisted result; private, no-store. */
+            200: {
+                headers: {
+                    /** @description private, no-store */
+                    "Cache-Control"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InputSummaryPage"];
+                };
+            };
+            /** @description INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description UNAUTHENTICATED: missing or revoked current session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_INPUT_INVALID: unsupported domain input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    getProcessingInput: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+                input: components["parameters"]["inputId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized persisted result; private, no-store. */
+            200: {
+                headers: {
+                    /** @description private, no-store */
+                    "Cache-Control"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InputDetail"];
+                };
+            };
+            /** @description INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description UNAUTHENTICATED: missing or revoked current session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_INPUT_INVALID: unsupported domain input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    listProcessingTasks: {
+        parameters: {
+            query?: {
+                scope?: components["parameters"]["Scope"];
+                limit?: components["parameters"]["Limit"];
+                /** @description Strict greater-than UUID keyset cursor. Refresh from first page after changes; this is not a snapshot. */
+                after?: components["parameters"]["After"];
+            };
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized persisted result; private, no-store. */
+            200: {
+                headers: {
+                    /** @description private, no-store */
+                    "Cache-Control"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportTaskSummaryPage"];
+                };
+            };
+            /** @description INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description UNAUTHENTICATED: missing or revoked current session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_INPUT_INVALID: unsupported domain input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    getProcessingTask: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+                task: components["parameters"]["taskId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized persisted result; private, no-store. */
+            200: {
+                headers: {
+                    /** @description private, no-store */
+                    "Cache-Control"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportTaskSummary"];
+                };
+            };
+            /** @description INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description UNAUTHENTICATED: missing or revoked current session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_INPUT_INVALID: unsupported domain input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
         };
     };
 }
