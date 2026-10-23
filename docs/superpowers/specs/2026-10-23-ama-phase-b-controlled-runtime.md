@@ -75,3 +75,7 @@ Every read enforces fresh actor/meeting authorization, private/no-store response
 ### Refinement evidence gates
 
 Task10: intent before/during generation, two windows, unknown guard, replay/ACK loss, refresh/restored draft, abandoned edit, manual adoption after suppression, concurrent intent/completion and rollover. Task7: old/cross-holder execution tokens, stale/PENDING dispositions/final race, no forbidden pointer effects, revoked/deleted/published/cancel facts, heartbeat tick/handoff/appdeath/permit settlement, rollback. Tasks9..11: actual saved graph/remapped evidence+directories+suggestions, source/action acceptance/category conversion, omitted/partial/empty/stale review negatives, frozen review history and fresh-JVM final hash. Task12: lossless real HTTP/browser and complete server resume matrix. These are future implementation gates, not completed tests.
+
+## Normative authority and external refinement
+
+Read `docs/superpowers/specs/2026-10-23-ama-phase-b-authority-external-protocols.md` and its exact adopted design artifacts for Tasks 3 through 11. Its reviewed source-receipt/identity/read-finalization protocols and separate verified permit settlement refine this specification. Task IDs are stable; fairness Task 8 precedes external Task 7 activation. No generic fence, UNKNOWN or company-contract relaxation is granted.
