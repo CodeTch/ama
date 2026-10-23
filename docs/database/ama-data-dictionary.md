@@ -1,4 +1,4 @@
-# AMA 数据字典 — B00-1.4-proposed
+# AMA 数据字典 — B00-1.5-runtime-metadata
 
 生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。
 
@@ -108,6 +108,8 @@ R1上下文根：所有纳入minutes_element.source_context_id无论证据数量
 |source_context|D-01/B-07|UNASSIGNED-D01|不可变完整来源选择；生成与人工选择显式分型|
 |source_context_material|D-01/B-07|UNASSIGNED-D01|上下文内每个材料版本唯一明确选择解析文档|
 |parsed_document_profile|D-01|UNASSIGNED-D01|解析文档的明确格式及不可变解析配置归档引用|
+|input_batch_fingerprint_profile|B-06/runtime Task2|V013.1|明确不可变输入批次指纹算法；缺失为legacy/unknown|
+|meeting_minutes_editor_guard|B-03/B-07/runtime Task2|V013.1|持久单调编辑意图；仅新建会议原事务可写零|
 
 ## audit_event
 
@@ -2300,3 +2302,33 @@ R6 片段多选标记随转写版本冻结；不是纪要要素。所属 B-06/C-
 - FK `fk_parsed_document_profile_0`：`document_id` → `parsed_document(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
 更新/删除与完整性：与实际解析输出原子创建；服务验证parser_version等于归档version、格式和映射匹配；缺少sidecar为legacy unavailable，禁止推测/补造READY。配置归档保留由领域负责，非跨库FK。
+
+## input_batch_fingerprint_profile
+
+明确不可变输入批次指纹算法；缺失为legacy/unknown。所属 B-06/runtime Task2，计划 V013.1。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|batch_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|原子新建批次的唯一父；禁止历史推断或补填|
+|profile|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|服务器真实选择的固定算法 ama.input-batch.v1；不可归一化|
+
+主键：`batch_id`。
+- CHECK `ck_input_batch_fingerprint_profile_0`：`OCTET_LENGTH(profile) = 18 AND profile = 'ama.input-batch.v1'`。
+- FK `fk_input_batch_fingerprint_profile_0`：`batch_id` → `input_batch(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：与真实新批次及成员/输入/任务/审计原子创建；不可变，无默认与历史回填。缺行明确unsupported；无推断/懒填/自动TTL。授权永久父清理时先解除保留来源再删除子行；FK仅证存在，不证明算法或授权。
+
+## meeting_minutes_editor_guard
+
+持久单调编辑意图；仅新建会议原事务可写零。所属 B-03/B-07/runtime Task2，计划 V013.1。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|meeting_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|唯一会议父；历史缺行是UNKNOWN，重放/读/生成不得初始化|
+|intent_epoch|`bigint`|否|无|服务器单调非负epoch；0仅证明新会未编辑，正数永久阻止首次自动保存|
+
+主键：`meeting_id`。
+- CHECK `ck_meeting_minutes_editor_guard_0`：`intent_epoch BETWEEN 0 AND 9223372036854775806`。
+- FK `fk_meeting_minutes_editor_guard_0`：`meeting_id` → `meeting(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+
+更新/删除与完整性：新建会议原事务插入0；真正授权编辑意图在根锁下由未知写1或严格递增，无减少/重置/超时/删除。上限前条件增量且一行，否则关闭失败；无默认。创建重放和旧行读取不补零；缺TABLE为schema unavailable。逻辑删除保留，只有永久删除父时协调清理；epoch不授予权限。

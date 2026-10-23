@@ -1,0 +1,23 @@
+{
+  "all_metadata_equal": true,
+  "history_13_rows_exact": true,
+  "all_original_rows_retained_except_intentionally_advanced_shared_outbox_sequence": true,
+  "shared_outbox_sequence_before": [
+    "1\t217"
+  ],
+  "shared_outbox_sequence_after": [
+    "1\t300"
+  ],
+  "show_create_runtime_counter_changes": {
+    "audit_event": {
+      "before": "audit_event\tCREATE TABLE `audit_event` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `actor_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `action` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `resource_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `revision` bigint unsigned NOT NULL,\n  `result` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `trace_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `occurred_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `audit_resource_time` (`resource_id`,`occurred_at`,`id`),\n  KEY `audit_trace` (`trace_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+      "after": "audit_event\tCREATE TABLE `audit_event` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `actor_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `action` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `resource_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `revision` bigint unsigned NOT NULL,\n  `result` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `trace_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `occurred_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `audit_resource_time` (`resource_id`,`occurred_at`,`id`),\n  KEY `audit_trace` (`trace_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n"
+    }
+  },
+  "legacy_batch": "c815c8b9-a297-4bc4-b8d1-19fc0c97bd95",
+  "legacy_meeting": "814f7870-14c5-4b12-ba69-e5c27ea1e30f",
+  "legacy_matching_hash_preserved": true,
+  "legacy_profile_absent": true,
+  "legacy_guard_absent": true,
+  "scope": "Post-business checks; exact complete equality was already proved in migration/constraint/zero-rerun windows"
+}

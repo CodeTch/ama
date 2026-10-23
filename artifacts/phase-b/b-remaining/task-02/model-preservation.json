@@ -1,0 +1,97 @@
+{
+  "parent_version": "B00-1.4-proposed",
+  "version": "B00-1.5-runtime-metadata",
+  "prior_tables": 96,
+  "prior_columns": 727,
+  "tables": 98,
+  "columns": 731,
+  "all_prior_model_records_bidirectional_equal": true,
+  "old_model_sha256": "7027c77804e53479d1c1b7fe6953bd482b6c70ee7dbba1ddf7bffc5caaf6167f",
+  "preserved_model_sha256": "7027c77804e53479d1c1b7fe6953bd482b6c70ee7dbba1ddf7bffc5caaf6167f",
+  "new_tables": [
+    {
+      "name": "input_batch_fingerprint_profile",
+      "task": "B-06/runtime Task2",
+      "migration": "V013.1",
+      "purpose": "明确不可变输入批次指纹算法；缺失为legacy/unknown",
+      "cols": [
+        {
+          "name": "batch_id",
+          "type": "char(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "meaning": "原子新建批次的唯一父；禁止历史推断或补填",
+          "nullable": false,
+          "default": null
+        },
+        {
+          "name": "profile",
+          "type": "varchar(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "meaning": "服务器真实选择的固定算法 ama.input-batch.v1；不可归一化",
+          "nullable": false,
+          "default": null
+        }
+      ],
+      "pk": [
+        "batch_id"
+      ],
+      "indexes": [],
+      "fks": [
+        {
+          "cols": [
+            "batch_id"
+          ],
+          "target": "input_batch",
+          "remote": [
+            "id"
+          ],
+          "note": "同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用"
+        }
+      ],
+      "checks": [
+        "OCTET_LENGTH(profile) = 18 AND profile = 'ama.input-batch.v1'"
+      ],
+      "policy": "与真实新批次及成员/输入/任务/审计原子创建；不可变，无默认与历史回填。缺行明确unsupported；无推断/懒填/自动TTL。授权永久父清理时先解除保留来源再删除子行；FK仅证存在，不证明算法或授权"
+    },
+    {
+      "name": "meeting_minutes_editor_guard",
+      "task": "B-03/B-07/runtime Task2",
+      "migration": "V013.1",
+      "purpose": "持久单调编辑意图；仅新建会议原事务可写零",
+      "cols": [
+        {
+          "name": "meeting_id",
+          "type": "char(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "meaning": "唯一会议父；历史缺行是UNKNOWN，重放/读/生成不得初始化",
+          "nullable": false,
+          "default": null
+        },
+        {
+          "name": "intent_epoch",
+          "type": "bigint",
+          "meaning": "服务器单调非负epoch；0仅证明新会未编辑，正数永久阻止首次自动保存",
+          "nullable": false,
+          "default": null
+        }
+      ],
+      "pk": [
+        "meeting_id"
+      ],
+      "indexes": [],
+      "fks": [
+        {
+          "cols": [
+            "meeting_id"
+          ],
+          "target": "meeting",
+          "remote": [
+            "id"
+          ],
+          "note": "同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用"
+        }
+      ],
+      "checks": [
+        "intent_epoch BETWEEN 0 AND 9223372036854775806"
+      ],
+      "policy": "新建会议原事务插入0；真正授权编辑意图在根锁下由未知写1或严格递增，无减少/重置/超时/删除。上限前条件增量且一行，否则关闭失败；无默认。创建重放和旧行读取不补零；缺TABLE为schema unavailable。逻辑删除保留，只有永久删除父时协调清理；epoch不授予权限"
+    }
+  ]
+}

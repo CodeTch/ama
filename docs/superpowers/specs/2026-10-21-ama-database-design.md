@@ -1,6 +1,8 @@
 # AMA 数据库详细设计基线
 
-当前设计版本：**B00-1.4-proposed**，96表/727列；仅设计提案与独立审阅库验证，尚未采用。新增3个规范化来源/解析选择关系及2个可空历史兼容字段。详见[来源补充规格](2026-10-22-ama-material-provenance-addendum.md)及[验证记录](../../acceptance/b/database-material-provenance-addendum-review.md)。正式SQL001..013（含011.1）不可变；未分配正式迁移号，运行时不变。B00-1.3四份原始文件及SHA保存在[历史清单](../../database/design-history/B00-1.3/manifest.json)，原93表实际metadata及raw evidence保持原路径原字节。以下1.3说明保留为历史范围，不授予新方案采用状态。
+当前设计版本：**B00-1.5-runtime-metadata**，98表/731列；在完整 B00-1.4-proposed 模型上仅新增两个运行时 sidecar。V013.1 的实际验证仅覆盖这两表及原部署模型不变性；未重跑完整未来模型验证。原 D01 三表与两列仍为 UNASSIGNED-D01，不由此启用。详见[运行时补充与证据](../../acceptance/b/database-runtime-metadata-task-02.md)。
+
+父版本历史（保留）：当前设计版本：**B00-1.4-proposed**，96表/727列；仅设计提案与独立审阅库验证，尚未采用。新增3个规范化来源/解析选择关系及2个可空历史兼容字段。详见[来源补充规格](2026-10-22-ama-material-provenance-addendum.md)及[验证记录](../../acceptance/b/database-material-provenance-addendum-review.md)。正式SQL001..013（含011.1）不可变；未分配正式迁移号，运行时不变。B00-1.3四份原始文件及SHA保存在[历史清单](../../database/design-history/B00-1.3/manifest.json)，原93表实际metadata及raw evidence保持原路径原字节。以下1.3说明保留为历史范围，不授予新方案采用状态。
 
 历史版本说明：**B00-1.3-review**，2026-10-22；状态：**生成结果关系持久化方案已获根任务技术 ACK，详细设计及独立评审待完成；不得据此声称 B07/正式迁移/生产通过**。已采用的 B00-1.2（85表/674列，含1.1 R1—R6）保持历史效力；本版新增8表，仅改变原表 sensitive_exclusion 的多标签主键和 CHECK。基线 `0d2079cd64e5b61bc5787ca5adfaa782e5cd4a40`，工作树 `/home/tanren/ama/.worktrees/phase-b-generation-design`；[本次记录](../../acceptance/b/database-generation-addendum-review.md)。
 
@@ -1247,6 +1249,14 @@ erDiagram
         varchar_255_ parser_config_version
         char_64_ parser_config_sha256
     }
+    input_batch_fingerprint_profile {
+        char_36_ batch_id PK,FK
+        varchar_64_ profile
+    }
+    meeting_minutes_editor_guard {
+        char_36_ meeting_id PK,FK
+        bigint intent_epoch
+    }
     department o|--o{ department : fk_department_0
     department o|--o{ enterprise_identity : fk_enterprise_identity_0
     enterprise_identity ||--o{ role_assignment : fk_role_assignment_0
@@ -1453,4 +1463,6 @@ erDiagram
     material_revision ||--o{ source_context_material : fk_source_context_material_1
     parsed_document ||--o{ source_context_material : fk_source_context_material_2
     parsed_document ||--o| parsed_document_profile : fk_parsed_document_profile_0
+    input_batch ||--o| input_batch_fingerprint_profile : fk_input_batch_fingerprint_profile_0
+    meeting ||--o| meeting_minutes_editor_guard : fk_meeting_minutes_editor_guard_0
 ```

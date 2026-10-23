@@ -46,6 +46,9 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             String id=uuid(),info=uuid();var subject=new SubjectRef("MEETING",id);
             fences.create(subject,0,0);
             j.update("INSERT INTO meeting(id,owner_id,stage,created_at,updated_at) VALUES (?,?,'ENTRY',UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))",id,actor.enterpriseId());
+            // Only genuine creation proves untouched state; replay and legacy reads never initialize it.
+            // The required schema insert shares every creation write, audit and final outbox flush.
+            j.update("INSERT INTO meeting_minutes_editor_guard(meeting_id,intent_epoch) VALUES (?,0)",id);
             insertInfo(info,id,0,null,null,null,null,actor.enterpriseId());
             insertRoster(id,0,"DRAFT",List.of(),null);
             j.update("UPDATE meeting SET info_revision_id=? WHERE id=?",info,id);

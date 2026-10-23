@@ -1,4 +1,4 @@
--- B00-1.4-proposed: REVIEW ONLY; never place this file in Flyway locations.
+-- B00-1.5-runtime-metadata: REVIEW ONLY; never place this file in Flyway locations.
 
 -- All future tables exist ONLY in the disposable review database.
 
@@ -1512,6 +1512,24 @@ CREATE TABLE parsed_document_profile (
   CONSTRAINT ck_parsed_document_profile_1 CHECK (REGEXP_LIKE(parser_config_sha256, '^[0-9a-f]{64}$', 'c'))
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
+-- Owner B-06/runtime Task2; planned V013.1: 明确不可变输入批次指纹算法；缺失为legacy/unknown
+
+CREATE TABLE input_batch_fingerprint_profile (
+  `batch_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `profile` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  PRIMARY KEY (batch_id),
+  CONSTRAINT ck_input_batch_fingerprint_profile_0 CHECK (OCTET_LENGTH(profile) = 18 AND profile = 'ama.input-batch.v1')
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Owner B-03/B-07/runtime Task2; planned V013.1: 持久单调编辑意图；仅新建会议原事务可写零
+
+CREATE TABLE meeting_minutes_editor_guard (
+  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `intent_epoch` bigint NOT NULL,
+  PRIMARY KEY (meeting_id),
+  CONSTRAINT ck_meeting_minutes_editor_guard_0 CHECK (intent_epoch BETWEEN 0 AND 9223372036854775806)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
 ALTER TABLE department ADD CONSTRAINT fk_department_0 FOREIGN KEY (parent_id) REFERENCES department (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE enterprise_identity ADD CONSTRAINT fk_enterprise_identity_0 FOREIGN KEY (department_id) REFERENCES department (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
@@ -1923,5 +1941,9 @@ ALTER TABLE source_context_material ADD CONSTRAINT fk_source_context_material_1 
 ALTER TABLE source_context_material ADD CONSTRAINT fk_source_context_material_2 FOREIGN KEY (parsed_document_id) REFERENCES parsed_document (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 ALTER TABLE parsed_document_profile ADD CONSTRAINT fk_parsed_document_profile_0 FOREIGN KEY (document_id) REFERENCES parsed_document (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE input_batch_fingerprint_profile ADD CONSTRAINT fk_input_batch_fingerprint_profile_0 FOREIGN KEY (batch_id) REFERENCES input_batch (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE meeting_minutes_editor_guard ADD CONSTRAINT fk_meeting_minutes_editor_guard_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 INSERT INTO task_outbox_sequence(id,next_id) VALUES(1,1);

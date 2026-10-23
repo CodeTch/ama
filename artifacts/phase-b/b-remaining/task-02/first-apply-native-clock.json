@@ -1,0 +1,14 @@
+{
+  "query": "SET time_zone='+00:00'; SELECT JSON_OBJECT('version',version,'script',script,'checksum',checksum,'success',success,'installed_utc',installed_on,'installed_native_epoch',UNIX_TIMESTAMP(installed_on),'captured_utc',UTC_TIMESTAMP(6),'captured_native_epoch',UNIX_TIMESTAMP(UTC_TIMESTAMP(6)),'session_timezone',@@session.time_zone) FROM flyway_schema_history WHERE version='013.1';",
+  "actual": {
+    "script": "V013_1__b_runtime_metadata.sql",
+    "success": 1,
+    "version": "013.1",
+    "checksum": -1898004857,
+    "captured_utc": "2026-10-23 04:23:59.120501",
+    "installed_utc": "2026-10-23 04:10:47.000000",
+    "session_timezone": "+00:00",
+    "captured_native_epoch": 1792729439.120501,
+    "installed_native_epoch": 1792728647
+  }
+}

@@ -1,0 +1,116 @@
+package ama.meeting;
+
+import ama.audit.JdbcAuditAdapter;
+import ama.access.MeetingAccess.AccessDeniedException;
+import ama.contract.IdentityContracts.*;
+import ama.db.*;
+import ama.support.MysqlTestDatabase;
+import ama.task.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import javax.sql.DataSource;
+import org.junit.jupiter.api.*;
+import org.springframework.jdbc.core.JdbcTemplate;
+import static org.junit.jupiter.api.Assertions.*;
+
+/** Genuine creator transactions on this run's fixture. Never resets, migrates or deletes a guard. */
+class MeetingCreationGuardIT {
+    final DataSource source=MysqlTestDatabase.dataSource();
+    final JdbcTemplate j=new JdbcTemplate(source);
+    final String owner="guard-"+UUID.randomUUID();
+    final Actor actor=new Actor(owner,Status.ACTIVE,Set.of(Role.USER));
+    @BeforeEach void identity(){j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",owner,owner);}
+    @AfterEach void removeOnlyUnusedTestIdentity(){
+        if(j.queryForObject("SELECT COUNT(*) FROM meeting WHERE owner_id=?",Integer.class,owner)==0)
+            j.update("DELETE FROM enterprise_identity WHERE enterprise_id=?",owner);
+    }
+    @Test void creatorMustAttemptGuardInOriginalTransactionBeforeInfo(){
+        var seen=new AtomicBoolean();
+        var probe=new MeetingConcurrencyIT.ProbeSource(source,new MeetingConcurrencyIT.Probe(){
+            public void before(String sql,Map<Integer,Object> args){
+                if(sql.startsWith("INSERT INTO meeting_minutes_editor_guard"))seen.set(true);
+                if(sql.startsWith("INSERT INTO meeting_info_revision"))throw new IllegalStateException("CONTROLLED_BEFORE_INFO");
+            }
+        });
+        var before=snapshot();assertThrows(RuntimeException.class,()->runtime(probe).create(actor,"guard-order","guard-test"));
+        assertTrue(seen.get(),"new creator must insert its guard in the original transaction before info");
+        assertEquals(before,snapshot());
+    }
+    MeetingService runtime(DataSource source){
+        var tx=new TransactionRunner(source);var fences=new JdbcSubjectFences(source,Set.of("MEETING"));
+        var access=new JdbcMeetingAccess(source,tx,fences);
+        return new MeetingService(new JdbcMeetingRepository(source,tx,access,fences,
+                new JdbcOutbox(source,new MeetingEventReferences(source).validators()),new JdbcAuditAdapter(source),id->{}));
+    }
+    Map<String,List<Map<String,Object>>> snapshot(){
+        var result=new TreeMap<String,List<Map<String,Object>>>();
+        for(String table:List.of("meeting","task_subject","meeting_info_revision","roster_revision","roster_member","meeting_search_projection","meeting_person_search","idempotency_record","audit_event","task_outbox","task_outbox_sequence"))
+            result.put(table,j.queryForList("SELECT * FROM "+table+" ORDER BY 1"));
+        if(present())result.put("meeting_minutes_editor_guard",j.queryForList("SELECT * FROM meeting_minutes_editor_guard ORDER BY meeting_id"));
+        return result;
+    }
+    boolean present(){return j.queryForObject("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='meeting_minutes_editor_guard'",Integer.class)==1;}
+    @Test void newCreateHasExactlyOneZeroGuardAndReplayPreservesPositive(){
+        var service=runtime(source);var created=service.create(actor,"create","guard-test");
+        assertEquals(0L,j.queryForObject("SELECT intent_epoch FROM meeting_minutes_editor_guard WHERE meeting_id=?",Long.class,created.id()));
+        assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM meeting_minutes_editor_guard WHERE meeting_id=?",Integer.class,created.id()));
+        j.update("UPDATE meeting_minutes_editor_guard SET intent_epoch=1 WHERE meeting_id=?",created.id());
+        var before=snapshot();assertEquals(created,service.create(actor,"create","guard-test"));assertEquals(before,snapshot());
+    }
+    @Test void unavailableSchemaRollsBackWholeCreate(){
+        var before=snapshot();
+        // Pre-apply run uses actual missing TABLE. Post-apply run explicitly injects the same JDBC failure;
+        // it does not claim a missing live table and never drops shared schema.
+        boolean realMissing=!present();
+        var denied=new MeetingConcurrencyIT.ProbeSource(source,new MeetingConcurrencyIT.Probe(){
+            public void before(String sql,Map<Integer,Object> args){if(!realMissing&&sql.startsWith("INSERT INTO meeting_minutes_editor_guard"))
+                throw new org.springframework.jdbc.BadSqlGrammarException("injected missing table",sql,new java.sql.SQLSyntaxErrorException("Injected missing guard table","42S02",1146));}
+        });
+        var failure=assertThrows(org.springframework.dao.DataAccessException.class,()->runtime(denied).create(actor,"unavailable","guard-test"));
+        assertTrue(failure.getMessage().contains("meeting_minutes_editor_guard"));assertEquals(before,snapshot());
+        System.out.println("GUARD unavailable proof: "+(realMissing?"REAL missing table before migration":"EXPLICIT JDBC missing-table fault injection after migration"));
+    }
+    @Test void failureAfterGuardAtInfoAuditFlushAndCommitRollsBackEverything(){
+        assertTrue(present());
+        for(String boundary:List.of("info","audit","flush","commit")){
+            var sawGuard=new AtomicBoolean();var reached=new AtomicBoolean();
+            var probe=new MeetingConcurrencyIT.ProbeSource(source,new MeetingConcurrencyIT.Probe(){
+                public void before(String sql,Map<Integer,Object> args){
+                    if(sql.startsWith("INSERT INTO meeting_minutes_editor_guard")){
+                        sawGuard.set(true);
+                        if(boundary.equals("commit"))org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                            new org.springframework.transaction.support.TransactionSynchronization(){
+                                @Override public void beforeCommit(boolean readOnly){reached.set(true);throw new IllegalStateException("CONTROLLED_commit_callback");}
+                            });
+                    }
+                    if((boundary.equals("info")&&sql.startsWith("INSERT INTO meeting_info_revision"))||
+                       (boundary.equals("audit")&&sql.startsWith("INSERT INTO audit_event"))||
+                       (boundary.equals("flush")&&sql.startsWith("INSERT INTO task_outbox("))){reached.set(true);throw new IllegalStateException("CONTROLLED_"+boundary);}
+                }
+            });
+            var before=snapshot();assertThrows(IllegalStateException.class,()->runtime(probe).create(actor,boundary,"guard-test"));
+            assertTrue(sawGuard.get());assertTrue(reached.get());assertEquals(before,snapshot(),boundary);
+        }
+    }
+    @Test void realLegacyCreationReplayAndReadNeverInitializeMissingGuard(){
+        String id=UUID.randomUUID().toString(),info=UUID.randomUUID().toString(),key="legacy";
+        String scope=MeetingDigests.fields(owner,"meetings","CREATE",key);
+        new TransactionRunner(source).required(()->{
+            j.update("INSERT INTO task_subject VALUES ('MEETING',?,0,0,0)",id);
+            j.update("INSERT INTO meeting(id,owner_id,stage,created_at,updated_at) VALUES (?,?,'ENTRY',UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))",id,owner);
+            j.update("INSERT INTO meeting_info_revision(id,meeting_id,revision,created_by,created_at) VALUES (?,?,0,?,UTC_TIMESTAMP(6))",info,id,owner);
+            j.update("UPDATE meeting SET info_revision_id=? WHERE id=?",info,id);
+            j.update("INSERT INTO idempotency_record VALUES (?,?,?,'CREATE',?,?,'SUCCEEDED',?,201,UTC_TIMESTAMP(6))",scope,owner,"meetings",MeetingDigests.fields(key),MeetingDigests.fields("meeting-create-v1"),info);
+            return null;
+        });
+        var before=snapshot();var service=runtime(source);
+        assertEquals(id,service.create(actor,key,"guard-test").id());assertEquals(id,service.read(actor,id).id());
+        assertEquals(before,snapshot());assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM meeting_minutes_editor_guard WHERE meeting_id=?",Integer.class,id));
+    }
+    @Test void creationReplayReauthorizesWithoutGuardMutation(){
+        var service=runtime(source);var created=service.create(actor,"reauth","guard-test");
+        j.update("UPDATE enterprise_identity SET status='DISABLED' WHERE enterprise_id=?",owner);var before=snapshot();
+        assertThrows(AccessDeniedException.class,()->service.create(actor,"reauth","guard-test"));assertEquals(before,snapshot());
+        assertEquals(0L,j.queryForObject("SELECT intent_epoch FROM meeting_minutes_editor_guard WHERE meeting_id=?",Long.class,created.id()));
+    }
+}

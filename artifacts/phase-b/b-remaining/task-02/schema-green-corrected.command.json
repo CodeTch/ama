@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "schema-green-corrected",
+    "it",
+    "RuntimeMetadataSchemaIT#exactSidecarTablesAndMetadata+checkOraclePreservesSemanticsAndOnlyByteLengthAlias"
+  ],
+  "runner": "tools/checks/run.py java_tests",
+  "jdk": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+  "fixture": "ama-test-b01-ad9f1af29eff",
+  "private_env": ".tools/phase-b-remaining/env.sh",
+  "actual_command": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/mvnw",
+    "-B",
+    "-ntp",
+    "-pl",
+    "backend/integration-tests",
+    "-am",
+    "-Dtest=RuntimeMetadataNoUnitSelector",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dit.test=RuntimeMetadataSchemaIT#exactSidecarTablesAndMetadata+checkOraclePreservesSemanticsAndOnlyByteLengthAlias",
+    "-Dfailsafe.failIfNoSpecifiedTests=false",
+    "verify"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion"
+}

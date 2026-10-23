@@ -11,7 +11,7 @@ import re
 import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VERSION = 'B00-1.4-proposed'
+VERSION = 'B00-1.5-runtime-metadata'
 PROVENANCE_ROOT_RULE = 'R1上下文根：所有纳入minutes_element.source_context_id无论证据数量均为basis根，与域内精确usage上下文取并集。ROWSET v2/PINNED用已保存输入要素集全部basis及set证据/目录，排除body/applied exclusion；REVIEW_SOURCES仅选定复核要素basis及精确相交证据（正文复核无要素basis）；FINAL用全部冻结纳入要素basis及既有body/set证据、目录、applied exclusion。各根完整context/selection/profile按实际完整PK去重及unsigned UTF8排序，缺失/额外行拒绝；无usage的basis同样验证并保留依赖。basis不伪造EVIDENCE、不增加usage数、不授予支持信用；草稿仍无自身fingerprint/TaskSpec，祖先按图依赖判断。'
 TABLES = []
 ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
@@ -429,6 +429,20 @@ for name in ('minutes_element','evidence_link'):
         t['policy'] += '；所有纳入要素basis无论证据数量均为域内根，完整选择/profile须验证与保留；根精确作用域见R1上下文根，不伪造证据或支持信用'
 
 
+
+# B00-1.5: reviewed runtime sidecars only. B00-1.4-proposed D01 stays unassigned.
+table('input_batch_fingerprint_profile','B-06/runtime Task2','V013.1','明确不可变输入批次指纹算法；缺失为legacy/unknown',[
+    ref('batch_id','原子新建批次的唯一父；禁止历史推断或补填'),code('profile','服务器真实选择的固定算法 ama.input-batch.v1；不可归一化')],
+    pk='batch_id',fks=[fk('batch_id','input_batch')],
+    checks=["OCTET_LENGTH(profile) = 18 AND profile = 'ama.input-batch.v1'"],
+    policy='与真实新批次及成员/输入/任务/审计原子创建；不可变，无默认与历史回填。缺行明确unsupported；无推断/懒填/自动TTL。授权永久父清理时先解除保留来源再删除子行；FK仅证存在，不证明算法或授权')
+table('meeting_minutes_editor_guard','B-03/B-07/runtime Task2','V013.1','持久单调编辑意图；仅新建会议原事务可写零',[
+    ref('meeting_id','唯一会议父；历史缺行是UNKNOWN，重放/读/生成不得初始化'),col('intent_epoch','bigint','服务器单调非负epoch；0仅证明新会未编辑，正数永久阻止首次自动保存')],
+    pk='meeting_id',fks=[fk('meeting_id','meeting')],
+    checks=['intent_epoch BETWEEN 0 AND 9223372036854775806'],
+    policy='新建会议原事务插入0；真正授权编辑意图在根锁下由未知写1或严格递增，无减少/重置/超时/删除。上限前条件增量且一行，否则关闭失败；无默认。创建重放和旧行读取不补零；缺TABLE为schema unavailable。逻辑删除保留，只有永久删除父时协调清理；epoch不授予权限')
+
+
 def cname(t, n): return f"ck_{t['name']}_{n}"
 def fname(t, n): return f"fk_{t['name']}_{n}"
 def sql():
@@ -528,7 +542,8 @@ def check_ast(expression):
             take('('); value=disjunction(); take(')'); return value
         value=take()
         if peek()=='(':
-            assert value.lower()=='regexp_like', 'Unsupported CHECK function'
+            assert value.lower() in ('regexp_like','octet_length','length'), 'Unsupported CHECK function'
+            if value.lower() == 'length': value = 'octet_length'
             take('('); args=[disjunction()]
             while peek()==',': take(); args.append(disjunction())
             take(')'); return ('call',value.lower(),tuple(args))

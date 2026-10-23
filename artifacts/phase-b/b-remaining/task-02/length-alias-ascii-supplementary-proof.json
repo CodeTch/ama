@@ -1,0 +1,12 @@
+{
+  "query": "SET NAMES utf8mb4; SELECT JSON_OBJECT('ascii_length',LENGTH('a'),'ascii_octet_length',OCTET_LENGTH('a'),'ascii_char_length',CHAR_LENGTH('a'),'supplementary_length',LENGTH('😀'),'supplementary_octet_length',OCTET_LENGTH('😀'),'supplementary_char_length',CHAR_LENGTH('😀'));",
+  "actual": {
+    "ascii_length": 1,
+    "ascii_char_length": 1,
+    "ascii_octet_length": 1,
+    "supplementary_length": 4,
+    "supplementary_char_length": 1,
+    "supplementary_octet_length": 4
+  },
+  "exact_alias_only": true
+}

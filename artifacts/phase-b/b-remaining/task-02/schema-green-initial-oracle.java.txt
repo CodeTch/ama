@@ -1,0 +1,45 @@
+package ama.meeting;
+
+import ama.db.SchemaMigrator;
+import ama.support.MysqlTestDatabase;
+import org.flywaydb.core.Flyway;
+import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+/** Independent exact live sidecar oracle. No reset or schema fallback. */
+class RuntimeMetadataSchemaIT {
+    final javax.sql.DataSource source=MysqlTestDatabase.dataSource();
+    final JdbcTemplate j=new JdbcTemplate(source);
+    static final String FILTER="table_schema=DATABASE() AND table_name IN ('input_batch_fingerprint_profile','meeting_minutes_editor_guard')";
+    Set<String> rows(String sql){var values=j.queryForList(sql,String.class);assertEquals(values.size(),new HashSet<>(values).size());return new TreeSet<>(values);}
+    @Test void exactSidecarTablesAndMetadata(){
+        assertEquals(Set.of("input_batch_fingerprint_profile|InnoDB|utf8mb4_0900_ai_ci","meeting_minutes_editor_guard|InnoDB|utf8mb4_0900_ai_ci"),
+                rows("SELECT CONCAT_WS('|',table_name,engine,table_collation) FROM information_schema.tables WHERE "+FILTER),"both required sidecar tables must physically exist");
+        assertEquals(Set.of(
+            "input_batch_fingerprint_profile|batch_id|1|char(36)|NO|<NULL>|ascii_bin|",
+            "input_batch_fingerprint_profile|profile|2|varchar(64)|NO|<NULL>|ascii_bin|",
+            "meeting_minutes_editor_guard|meeting_id|1|char(36)|NO|<NULL>|ascii_bin|",
+            "meeting_minutes_editor_guard|intent_epoch|2|bigint|NO|<NULL>|<NULL>|"),
+            rows("SELECT CONCAT_WS('|',table_name,column_name,ordinal_position,column_type,is_nullable,COALESCE(column_default,'<NULL>'),COALESCE(collation_name,'<NULL>'),extra) FROM information_schema.columns WHERE "+FILTER));
+        assertEquals(Set.of("input_batch_fingerprint_profile|PRIMARY|0|1|batch_id|A|<NULL>|BTREE","meeting_minutes_editor_guard|PRIMARY|0|1|meeting_id|A|<NULL>|BTREE"),
+            rows("SELECT CONCAT_WS('|',table_name,index_name,non_unique,seq_in_index,column_name,collation,COALESCE(sub_part,'<NULL>'),index_type) FROM information_schema.statistics WHERE "+FILTER));
+        assertEquals(Set.of("input_batch_fingerprint_profile|fk_input_batch_fingerprint_profile_0|batch_id|1|input_batch|id|RESTRICT|RESTRICT","meeting_minutes_editor_guard|fk_meeting_minutes_editor_guard_0|meeting_id|1|meeting|id|RESTRICT|RESTRICT"),
+            rows("SELECT CONCAT_WS('|',k.table_name,k.constraint_name,k.column_name,k.ordinal_position,k.referenced_table_name,k.referenced_column_name,r.delete_rule,r.update_rule) FROM information_schema.key_column_usage k JOIN information_schema.referential_constraints r ON r.constraint_schema=k.constraint_schema AND r.constraint_name=k.constraint_name WHERE k.table_schema=DATABASE() AND k.table_name IN ('input_batch_fingerprint_profile','meeting_minutes_editor_guard') AND k.referenced_table_name IS NOT NULL"));
+        var checks=j.query("SELECT t.table_name,t.constraint_name,c.check_clause,t.enforced FROM information_schema.table_constraints t JOIN information_schema.check_constraints c ON c.constraint_schema=t.constraint_schema AND c.constraint_name=t.constraint_name WHERE t.table_schema=DATABASE() AND t.table_name IN ('input_batch_fingerprint_profile','meeting_minutes_editor_guard') AND t.constraint_type='CHECK'",(rs,n)->rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(3).replace("`","").replace("_ascii","").replace("\\'","'").replaceAll("[()\\s]","")+"|"+rs.getString(4));
+        assertEquals(2,checks.size());
+        assertEquals(Set.of("input_batch_fingerprint_profile|ck_input_batch_fingerprint_profile_0|octet_lengthprofile=18andprofile='ama.input-batch.v1'|YES","meeting_minutes_editor_guard|ck_meeting_minutes_editor_guard_0|intent_epochbetween0and9223372036854775806|YES"),new HashSet<>(checks));
+        System.out.println("Exact bidirectional live metadata PASS: 2 tables/4 columns/2 PK columns/2 enforced CHECKs/2 RESTRICT FK columns");
+    }
+    @Test void explicitFrozenMigration(){
+        assertEquals("ama-test-b01-ad9f1af29eff",System.getenv("AMA_TEST_CONTAINER"));
+        assertEquals("jdbc:mysql://127.0.0.1:58062/ama_b01_fixture",System.getenv("AMA_TEST_DATABASE_URL"));
+        int expected=Integer.parseInt(System.getenv().getOrDefault("AMA_TASK02_EXPECT_MIGRATIONS","0"));
+        assertEquals(expected,new SchemaMigrator(source).migrate());
+    }
+    @Test void privateTargetRerunAppliesZero(){
+        assertEquals(0,Flyway.configure().dataSource(source).locations("classpath:db/migration").target("013.1")
+                .initSql("SET NAMES utf8mb4; SET time_zone = '+00:00'").cleanDisabled(true).load().migrate().migrationsExecuted);
+    }
+}

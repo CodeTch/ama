@@ -1,0 +1,7 @@
+{
+  "query": "SET NAMES utf8mb4; SELECT JSON_OBJECT('octet_length',OCTET_LENGTH('中'),'length',LENGTH('中'),'char_length',CHAR_LENGTH('中')); SELECT CHECK_CLAUSE FROM information_schema.check_constraints WHERE constraint_schema=DATABASE() AND constraint_name='ck_input_batch_fingerprint_profile_0'; SHOW CREATE TABLE input_batch_fingerprint_profile;",
+  "stdout": "{\"length\": 3, \"char_length\": 1, \"octet_length\": 3}\n((length(`profile`) = 18) and (`profile` = _ascii\\'ama.input-batch.v1\\'))\ninput_batch_fingerprint_profile\tCREATE TABLE `input_batch_fingerprint_profile` (\n  `batch_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `profile` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  PRIMARY KEY (`batch_id`),\n  CONSTRAINT `fk_input_batch_fingerprint_profile_0` FOREIGN KEY (`batch_id`) REFERENCES `input_batch` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,\n  CONSTRAINT `ck_input_batch_fingerprint_profile_0` CHECK (((length(`profile`) = 18) and (`profile` = _ascii'ama.input-batch.v1')))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
+  "stderr": "",
+  "exit": 0,
+  "reason": "MySQL stores OCTET_LENGTH builtin as LENGTH; both count bytes, CHAR_LENGTH counts characters. Preserve exact comparison, literal case, and AND grouping."
+}

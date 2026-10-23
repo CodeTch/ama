@@ -1,0 +1,33 @@
+{
+  "command": [
+    "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/jshell",
+    "--class-path",
+    "/home/tanren/ama/.worktrees/phase-b-completion/backend/core/target/classes:/home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/target/classes",
+    "-"
+  ],
+  "source": "import ama.transcript.*; import ama.contract.MinutesContracts.*; import java.util.*;\nSystem.out.println(\"NEW_HASH:\"+new BatchFingerprint().compute(\"814f7870-14c5-4b12-ba69-e5c27ea1e30f\",\"c815c8b9-a297-4bc4-b8d1-19fc0c97bd95\",\"TRANSCRIPT\",9,List.of(new BatchFingerprint.Member(1,\"db26b817-6e13-4854-9b56-0557244024bf\",\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",0),new BatchFingerprint.Member(2,\"533f3433-5fe0-4790-940c-9c7a6b405892\",\"559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd\",1)),new CanonicalBudget(10000,16,1000,1000,100),()->false));\nSystem.out.println(\"GOLDEN_HASH:\"+new BatchFingerprint().compute(\"11111111-1111-4111-8111-111111111111\",\"33333333-3333-4333-8333-333333333333\",\"TRANSCRIPT\",9,List.of(new BatchFingerprint.Member(1,\"44444444-4444-4444-8444-444444444444\",\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",0),new BatchFingerprint.Member(2,\"55555555-5555-4555-8555-555555555555\",\"559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd\",1)),new CanonicalBudget(10000,16,1000,1000,100),()->false));\n",
+  "exit": 0,
+  "stdout": "NEW_HASH:5da1efc49379ce1b38d22ac17c708616999c27ba9496414d5672ac83e76b0f60\nGOLDEN_HASH:c4a558e4dc8aff8289b4ed60193efdfbc7f64f73ae642e2eec6398c473458053\n",
+  "stderr": "Oct 23, 2026 12:06:46 PM java.util.prefs.FileSystemPreferences$1 run\nINFO: Created user preferences directory.\n",
+  "literal_golden_sha256": "c4a558e4dc8aff8289b4ed60193efdfbc7f64f73ae642e2eec6398c473458053",
+  "exact_new_facts": {
+    "baseRevision": 9,
+    "batchId": "c815c8b9-a297-4bc4-b8d1-19fc0c97bd95",
+    "files": [
+      {
+        "fileId": "db26b817-6e13-4854-9b56-0557244024bf",
+        "ordinal": 1,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sizeBytes": 0
+      },
+      {
+        "fileId": "533f3433-5fe0-4790-940c-9c7a6b405892",
+        "ordinal": 2,
+        "sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+        "sizeBytes": 1
+      }
+    ],
+    "kind": "TRANSCRIPT",
+    "meetingId": "814f7870-14c5-4b12-ba69-e5c27ea1e30f"
+  }
+}

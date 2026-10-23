@@ -1,0 +1,55 @@
+{
+  "scope": "metadata-only schema fixture, not authentic intake/files",
+  "meeting": "814f7870-14c5-4b12-ba69-e5c27ea1e30f",
+  "batch": "c815c8b9-a297-4bc4-b8d1-19fc0c97bd95",
+  "owner": "runtime-legacy-15301fbb-b170-4c76-a90b-e88534f2c6ac",
+  "new_fingerprint": "5da1efc49379ce1b38d22ac17c708616999c27ba9496414d5672ac83e76b0f60",
+  "exact_new_facts": {
+    "baseRevision": 9,
+    "batchId": "c815c8b9-a297-4bc4-b8d1-19fc0c97bd95",
+    "files": [
+      {
+        "fileId": "db26b817-6e13-4854-9b56-0557244024bf",
+        "ordinal": 1,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sizeBytes": 0
+      },
+      {
+        "fileId": "533f3433-5fe0-4790-940c-9c7a6b405892",
+        "ordinal": 2,
+        "sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+        "sizeBytes": 1
+      }
+    ],
+    "kind": "TRANSCRIPT",
+    "meetingId": "814f7870-14c5-4b12-ba69-e5c27ea1e30f"
+  },
+  "canonical_vector_sha256": "c4a558e4dc8aff8289b4ed60193efdfbc7f64f73ae642e2eec6398c473458053",
+  "canonical_vector_bytes": 734,
+  "additions": {
+    "enterprise_identity": [
+      "runtime-legacy-15301fbb-b170-4c76-a90b-e88534f2c6ac\tlegacy metadata fixture\t\tACTIVE\t0\tNULL\t0\t2026-10-23 04:07:08.452121"
+    ],
+    "file_object": [
+      "533f3433-5fe0-4790-940c-9c7a6b405892\t814f7870-14c5-4b12-ba69-e5c27ea1e30f\truntime-legacy-758ebdab-4f37-4cbc-83b2-4e5909f10504\tlocal\ttask02\t533f3433-5fe0-4790-940c-9c7a6b405892\tNULL\tphysical metadata only\t1\t559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd\t0\tAVAILABLE\t0\t2026-10-23 04:07:08.453773",
+      "db26b817-6e13-4854-9b56-0557244024bf\t814f7870-14c5-4b12-ba69-e5c27ea1e30f\truntime-legacy-758ebdab-4f37-4cbc-83b2-4e5909f10504\tlocal\ttask02\tdb26b817-6e13-4854-9b56-0557244024bf\tNULL\tphysical metadata only\t0\te3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\t0\tAVAILABLE\t0\t2026-10-23 04:07:08.453132"
+    ],
+    "input_batch": [
+      "c815c8b9-a297-4bc4-b8d1-19fc0c97bd95\t814f7870-14c5-4b12-ba69-e5c27ea1e30f\tTRANSCRIPT\t5da1efc49379ce1b38d22ac17c708616999c27ba9496414d5672ac83e76b0f60\t9\t2026-10-23 04:07:08.452953"
+    ],
+    "input_batch_file": [
+      "c815c8b9-a297-4bc4-b8d1-19fc0c97bd95\t1\tdb26b817-6e13-4854-9b56-0557244024bf\te3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "c815c8b9-a297-4bc4-b8d1-19fc0c97bd95\t2\t533f3433-5fe0-4790-940c-9c7a6b405892\t559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd"
+    ],
+    "meeting": [
+      "814f7870-14c5-4b12-ba69-e5c27ea1e30f\truntime-legacy-15301fbb-b170-4c76-a90b-e88534f2c6ac\t9\t0\t0\tENTRY\tACTIVE\tACTIVE\t0\tNULL\tNULL\tNULL\tNULL\tNULL\tNULL\t2026-10-23 04:07:08.452556\t2026-10-23 04:07:08.452556\tNULL\tNULL\tNULL\tNULL\tNULL\tNULL\t0\t0"
+    ],
+    "storage_backend": [
+      "runtime-legacy-758ebdab-4f37-4cbc-83b2-4e5909f10504\tlocal\tREAD_ONLY\t1"
+    ],
+    "task_subject": [
+      "MEETING\t814f7870-14c5-4b12-ba69-e5c27ea1e30f\t9\t0\t0"
+    ]
+  },
+  "all_prior_rows_preserved": true
+}

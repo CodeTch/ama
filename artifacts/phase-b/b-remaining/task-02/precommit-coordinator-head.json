@@ -1,0 +1,15 @@
+{
+  "guard_stopped": true,
+  "reason": "Root central first-success/oracle-ruling commit advanced HEAD after ACK; no task source/test change. Initial expected-prefix check used preflight rather than actual root evidence directory; actual complete root paths verified below.",
+  "parent": "c2f7a648431e6046cf23201dd959f33efba3717b",
+  "root_paths": [
+    "artifacts/phase-b/b-remaining/runtime-metadata-first-observation/.gitattributes",
+    "artifacts/phase-b/b-remaining/runtime-metadata-first-observation/actual-history-native-utc.tsv",
+    "artifacts/phase-b/b-remaining/runtime-metadata-first-observation/apply-preservation.json",
+    "artifacts/phase-b/b-remaining/runtime-metadata-first-observation/length-alias-ascii-supplementary-proof.json",
+    "artifacts/phase-b/b-remaining/runtime-metadata-first-observation/manifest.json",
+    "artifacts/phase-b/b-remaining/runtime-metadata-first-observation/observation.json",
+    "docs/database/migration-register.md"
+  ],
+  "ack_is_ancestor": true
+}

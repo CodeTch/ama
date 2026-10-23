@@ -1,0 +1,276 @@
+{
+  "positives": 4,
+  "negatives": 26,
+  "probes": [
+    {
+      "label": "valid epoch 0",
+      "exit": 0,
+      "expected_mysql_errors": null,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "label": "valid epoch 1",
+      "exit": 0,
+      "expected_mysql_errors": null,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "label": "valid epoch 9223372036854775806",
+      "exit": 0,
+      "expected_mysql_errors": null,
+      "stdout": "9223372036854775806\n",
+      "stderr": ""
+    },
+    {
+      "label": "valid exact v1",
+      "exit": 0,
+      "expected_mysql_errors": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "reject epoch -1",
+      "exit": 1,
+      "expected_mysql_errors": [
+        3819
+      ],
+      "stdout": "",
+      "stderr": "ERROR 3819 (HY000) at line 1: Check constraint 'ck_meeting_minutes_editor_guard_0' is violated.\n"
+    },
+    {
+      "label": "reject epoch 9223372036854775807",
+      "exit": 1,
+      "expected_mysql_errors": [
+        3819
+      ],
+      "stdout": "",
+      "stderr": "ERROR 3819 (HY000) at line 1: Check constraint 'ck_meeting_minutes_editor_guard_0' is violated.\n"
+    },
+    {
+      "label": "reject bigint overflow",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1264
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1264 (22003) at line 1: Out of range value for column 'intent_epoch' at row 1\n"
+    },
+    {
+      "label": "reject profile ''",
+      "exit": 1,
+      "expected_mysql_errors": [
+        3819,
+        1366
+      ],
+      "stdout": "",
+      "stderr": "ERROR 3819 (HY000) at line 1: Check constraint 'ck_input_batch_fingerprint_profile_0' is violated.\n"
+    },
+    {
+      "label": "reject profile 'AMA.input-batch.v1'",
+      "exit": 1,
+      "expected_mysql_errors": [
+        3819,
+        1366
+      ],
+      "stdout": "",
+      "stderr": "ERROR 3819 (HY000) at line 1: Check constraint 'ck_input_batch_fingerprint_profile_0' is violated.\n"
+    },
+    {
+      "label": "reject profile 'ama.input-batch.v2'",
+      "exit": 1,
+      "expected_mysql_errors": [
+        3819,
+        1366
+      ],
+      "stdout": "",
+      "stderr": "ERROR 3819 (HY000) at line 1: Check constraint 'ck_input_batch_fingerprint_profile_0' is violated.\n"
+    },
+    {
+      "label": "reject profile ' ama.input-batch.v1'",
+      "exit": 1,
+      "expected_mysql_errors": [
+        3819,
+        1366
+      ],
+      "stdout": "",
+      "stderr": "ERROR 3819 (HY000) at line 1: Check constraint 'ck_input_batch_fingerprint_profile_0' is violated.\n"
+    },
+    {
+      "label": "reject profile 'ama.input-batch.v1 '",
+      "exit": 1,
+      "expected_mysql_errors": [
+        3819,
+        1366
+      ],
+      "stdout": "",
+      "stderr": "ERROR 3819 (HY000) at line 1: Check constraint 'ck_input_batch_fingerprint_profile_0' is violated.\n"
+    },
+    {
+      "label": "reject profile 'ama.input-batch.v1  '",
+      "exit": 1,
+      "expected_mysql_errors": [
+        3819,
+        1366
+      ],
+      "stdout": "",
+      "stderr": "ERROR 3819 (HY000) at line 1: Check constraint 'ck_input_batch_fingerprint_profile_0' is violated.\n"
+    },
+    {
+      "label": "reject profile 'ama.input-batch.v1é'",
+      "exit": 1,
+      "expected_mysql_errors": [
+        3819,
+        1366
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1366 (HY000) at line 1: Incorrect string value: '\\xC3\\xA9' for column 'profile' at row 1\n"
+    },
+    {
+      "label": "duplicate guard",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1062
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1062 (23000) at line 1: Duplicate entry 'e5b6a6fb-1aa9-4903-a230-a1fe3c7311cb' for key 'meeting_minutes_editor_guard.PRIMARY'\n"
+    },
+    {
+      "label": "duplicate profile",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1062
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1062 (23000) at line 1: Duplicate entry 'f50bd894-32d7-4a47-834b-d6cb79d9e366' for key 'input_batch_fingerprint_profile.PRIMARY'\n"
+    },
+    {
+      "label": "orphan guard",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1452
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1452 (23000) at line 1: Cannot add or update a child row: a foreign key constraint fails (`ama_b01_fixture`.`meeting_minutes_editor_guard`, CONSTRAINT `fk_meeting_minutes_editor_guard_0` FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT)\n"
+    },
+    {
+      "label": "orphan profile",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1452
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1452 (23000) at line 1: Cannot add or update a child row: a foreign key constraint fails (`ama_b01_fixture`.`input_batch_fingerprint_profile`, CONSTRAINT `fk_input_batch_fingerprint_profile_0` FOREIGN KEY (`batch_id`) REFERENCES `input_batch` (`id`) ON DELETE RESTRICT ON UPDATE R\n"
+    },
+    {
+      "label": "null meeting",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1048
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1048 (23000) at line 1: Column 'meeting_id' cannot be null\n"
+    },
+    {
+      "label": "null epoch",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1048
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1048 (23000) at line 1: Column 'intent_epoch' cannot be null\n"
+    },
+    {
+      "label": "null batch",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1048
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1048 (23000) at line 1: Column 'batch_id' cannot be null\n"
+    },
+    {
+      "label": "null profile",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1048
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1048 (23000) at line 1: Column 'profile' cannot be null\n"
+    },
+    {
+      "label": "missing epoch",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1364
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1364 (HY000) at line 1: Field 'intent_epoch' doesn't have a default value\n"
+    },
+    {
+      "label": "missing meeting",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1364
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1364 (HY000) at line 1: Field 'meeting_id' doesn't have a default value\n"
+    },
+    {
+      "label": "missing profile",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1364
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1364 (HY000) at line 1: Field 'profile' doesn't have a default value\n"
+    },
+    {
+      "label": "missing batch",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1364
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1364 (HY000) at line 1: Field 'batch_id' doesn't have a default value\n"
+    },
+    {
+      "label": "restrict delete meeting",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1451
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1451 (23000) at line 1: Cannot delete or update a parent row: a foreign key constraint fails (`ama_b01_fixture`.`meeting_minutes_editor_guard`, CONSTRAINT `fk_meeting_minutes_editor_guard_0` FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT)\n"
+    },
+    {
+      "label": "restrict update meeting",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1451
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1451 (23000) at line 1: Cannot delete or update a parent row: a foreign key constraint fails (`ama_b01_fixture`.`meeting_minutes_editor_guard`, CONSTRAINT `fk_meeting_minutes_editor_guard_0` FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT)\n"
+    },
+    {
+      "label": "restrict delete input_batch",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1451
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1451 (23000) at line 1: Cannot delete or update a parent row: a foreign key constraint fails (`ama_b01_fixture`.`input_batch_fingerprint_profile`, CONSTRAINT `fk_input_batch_fingerprint_profile_0` FOREIGN KEY (`batch_id`) REFERENCES `input_batch` (`id`) ON DELETE RESTRICT ON UPDATE R\n"
+    },
+    {
+      "label": "restrict update input_batch",
+      "exit": 1,
+      "expected_mysql_errors": [
+        1451
+      ],
+      "stdout": "",
+      "stderr": "ERROR 1451 (23000) at line 1: Cannot delete or update a parent row: a foreign key constraint fails (`ama_b01_fixture`.`input_batch_fingerprint_profile`, CONSTRAINT `fk_input_batch_fingerprint_profile_0` FOREIGN KEY (`batch_id`) REFERENCES `input_batch` (`id`) ON DELETE RESTRICT ON UPDATE R\n"
+    }
+  ],
+  "all_dml_rolled_back": true
+}

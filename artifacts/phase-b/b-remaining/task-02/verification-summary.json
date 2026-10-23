@@ -1,0 +1,67 @@
+{
+  "schema_red": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skips": 0,
+    "reason": "actual required two tables absent"
+  },
+  "creator_red": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skips": 0,
+    "reason": "original creator missing guard insertion"
+  },
+  "actual_preapply_schema_unavailable": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "first_apply": {
+    "migrations_executed": 1,
+    "checksum": -1898004857
+  },
+  "exact_physical": {
+    "tables": 2,
+    "columns": 4,
+    "primary_index_columns": 2,
+    "enforced_checks": 2,
+    "foreign_key_columns": 2
+  },
+  "constraints": {
+    "positive": 4,
+    "negative": 26
+  },
+  "private_target_rerun": 0,
+  "latest_rerun": 0,
+  "migration_old_rows_exact": 1103,
+  "original_task1_rows_retained": 1094,
+  "meeting_regression": {
+    "tests": 45,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "canonical_complete_units": {
+    "tests": 221,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "generated_model": {
+    "tables": 98,
+    "columns": 731,
+    "prior_tables_unchanged": 96,
+    "full_future_model_physical_run": false
+  },
+  "source_bindings_match_final_it_and_units": true,
+  "all_twelve_sql_hashes_unchanged": true,
+  "frozen_sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+  "staged_paths_owned_only": true,
+  "git_diff_check_exit": 0,
+  "credential_values_absent": true,
+  "independent_review": "root next",
+  "overall_phase_b_claim": false
+}
