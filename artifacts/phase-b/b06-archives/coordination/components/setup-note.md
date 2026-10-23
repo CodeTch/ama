@@ -1,0 +1,3 @@
+# Root documentation archive setup note
+
+The first staged diff-check rejected preserved independent-review report bytes because a few original lines contain CRLF/EOF whitespace. No test ran and no commit was created. The reports must stay byte-exact to their supplied SHA. The new raw archive directory now disables whitespace diagnostics through its own attributes; source/document checks outside it remain enabled. The uncommitted new archive seal was regenerated after this attribute/setup-note change. This is a root packaging setup correction, not assertion RED. No reviewer report or old seal was rewritten.
