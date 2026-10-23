@@ -127,17 +127,35 @@ public final class FileBackendCatalog {
 
     /** READ_ONLY permits recovery of an accepted frozen upload; DISABLED refuses all I/O. */
     public Backend require(String id, boolean newWrite) {
+        var backend = configured(id, newWrite);
+        ManagedBackendId.require(id, backend.definition());
+        return requireStoredMetadata(backend);
+    }
+
+    /**
+     * Locked historical-source check. Backend construction already derives and validates its ID
+     * from the sealed immutable definition. This path performs only the actual DB metadata check;
+     * it neither hashes nor contacts storage. Post-commit open still uses require(...).
+     */
+    Backend requireHistoricalMetadata(String id) {
+        return requireStoredMetadata(configured(id, false));
+    }
+
+    private Backend configured(String id, boolean newWrite) {
         if (id == null) throw new Unavailable();
         var b = backends.get(id);
         if (b == null
                 || b.status().equals("DISABLED")
                 || (newWrite && !b.status().equals("WRITABLE"))) throw new Unavailable();
-        ManagedBackendId.require(id, b.definition());
+        return b;
+    }
+
+    private Backend requireStoredMetadata(Backend b) {
         var row =
                 j.queryForList(
                         "SELECT storage_type,config_revision,status FROM storage_backend WHERE"
                                 + " id=?",
-                        id);
+                        b.id());
         if (row.size() != 1
                 || !b.type().equals(row.getFirst().get("storage_type"))
                 || b.revision() != ((Number) row.getFirst().get("config_revision")).longValue()

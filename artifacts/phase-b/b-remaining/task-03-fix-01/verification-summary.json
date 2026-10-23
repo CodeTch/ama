@@ -1,0 +1,210 @@
+{
+  "hash-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-q",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+        "-Dtest=NoSuchTest",
+        "-Dit.test=TranscriptAuthorityReviewIT",
+        "-DfailIfNoTests=false",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "verify"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityReviewIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityReviewIT",
+        "tests": 1,
+        "errors": 0,
+        "failures": 1,
+        "skipped": 0
+      }
+    ],
+    "totals": {
+      "tests": 1,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0
+    }
+  },
+  "hash-green": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-q",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+        "-Dtest=ManagedBackendIdentityTest",
+        "-Dit.test=TranscriptAuthorityReviewIT",
+        "-DfailIfNoTests=false",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "verify"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+        "suite": "ama.storage.ManagedBackendIdentityTest",
+        "tests": 4,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityReviewIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityReviewIT",
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      }
+    ],
+    "totals": {
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "multiscope-proof": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-q",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+        "-Dtest=NoSuchTest",
+        "-Dit.test=TranscriptAuthorityReviewIT",
+        "-DfailIfNoTests=false",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "verify"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityReviewIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityReviewIT",
+        "tests": 4,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      }
+    ],
+    "totals": {
+      "tests": 4,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "covering-final": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-q",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+        "-Dtest=ManagedBackendIdentityTest",
+        "-Dit.test=TranscriptAuthorityIT,TranscriptAuthorityReviewIT,FileBackendCatalogIT,FileRegistryUploadIT#defaultSwitchPinsExistingUploadAndBusinessDownloadToOriginalBackend+readOnlyBackendRecoversFrozenResultButRejectsNewPartWrites",
+        "-DfailIfNoTests=false",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "verify"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+        "suite": "ama.storage.ManagedBackendIdentityTest",
+        "tests": 4,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.FileBackendCatalogIT.xml",
+        "suite": "ama.storage.FileBackendCatalogIT",
+        "tests": 3,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.FileRegistryUploadIT.xml",
+        "suite": "ama.storage.FileRegistryUploadIT",
+        "tests": 2,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityIT",
+        "tests": 22,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityReviewIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityReviewIT",
+        "tests": 4,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      }
+    ],
+    "totals": {
+      "tests": 35,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    }
+  }
+}

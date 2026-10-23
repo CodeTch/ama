@@ -646,7 +646,7 @@ public final class JdbcFileRegistry implements FileRegistry {
             if(!measure("file_object",id,List.of("id","meeting_id","backend_id","storage_type","namespace","object_key","sha256","state"),skip,state,2))return Optional.empty();
             var rows=j.query("SELECT id,meeting_id,backend_id,namespace,object_key,size_bytes,sha256,state,location_revision,reference_epoch,storage_type FROM file_object WHERE id=? FOR UPDATE",
                 (r,n)->{
-                    var backend=backends.require(r.getString(3),false);
+                    var backend=backends.requireHistoricalMetadata(r.getString(3));
                     if(!backend.type().equals(r.getString(11)))throw new Unavailable();
                     return new FileRecord(r.getString(1),r.getString(2),new StorageKey(r.getString(3),r.getString(4),r.getString(5)),exact(r,"size_bytes"),r.getString(7),r.getString(8),exact(r,"location_revision"),exact(r,"reference_epoch"),null);
                 },id);

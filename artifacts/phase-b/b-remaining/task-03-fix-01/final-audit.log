@@ -1,0 +1,23 @@
+{
+  "fix_base": "aa0b5f08a19649091b0bcd60959bd741fb5c7850",
+  "precommit_head": "5560381927d51001bd484642269b9432481e8c70",
+  "review_sha256": "60f3e807d0d6e79fbdeafce015b063ce0acefbf910c0ec252dab25484952149c",
+  "owned_source_paths": [
+    "backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java",
+    "backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java",
+    "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java"
+  ],
+  "old_task03_files_verified_unchanged": 417,
+  "schema_and_creator_guard_unchanged": true,
+  "source_seal_matches_covering_final": true,
+  "index_empty": true,
+  "credential_hits": 0,
+  "new_exact_terminal_tasks": 16,
+  "new_exact_ended_attempts": 16,
+  "tests": {
+    "tests": 35,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  }
+}
