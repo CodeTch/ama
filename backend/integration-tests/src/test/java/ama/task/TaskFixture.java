@@ -16,6 +16,11 @@ class TaskFixture {
  final TransactionRunner tx=new TransactionRunner(source);
  final JdbcSubjectFences fences=new JdbcSubjectFences(source,Set.of("MEETING"));
  final TaskDomainPolicy policy=new TaskDomainPolicy(){
+  final JdbcTaskPreparations preparations=new JdbcTaskPreparations(source);
+  public java.util.Optional<PreparedDomain> prepare(java.util.List<TaskSpec> specs,Acquisition purpose,boolean skip){return java.util.Optional.of(preparations.issue(specs,purpose,null,true));}
+  public void requirePrepared(java.util.List<TaskSpec> specs,Acquisition purpose,PreparedDomain held){preparations.require(specs,purpose,held);}
+  public boolean permitsDomainEffects(PreparedDomain held){return preparations.permitsEffects(held);}
+
   public boolean lockRoot(TaskSpec s,boolean skip){
    return !j.queryForList("SELECT id FROM meeting WHERE id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),String.class,s.subject().id()).isEmpty();
   }

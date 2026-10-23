@@ -198,6 +198,11 @@ class ReviewConcurrencyIT {
     private static JdbcTaskQueue queue(TaskFixture fixture,DataSource source) {
         var jdbc = new JdbcTemplate(source);
         TaskDomainPolicy policy = new TaskDomainPolicy() {
+  final JdbcTaskPreparations preparations=new JdbcTaskPreparations(source);
+  public java.util.Optional<PreparedDomain> prepare(java.util.List<TaskSpec> specs,Acquisition purpose,boolean skip){return java.util.Optional.of(preparations.issue(specs,purpose,null,true));}
+  public void requirePrepared(java.util.List<TaskSpec> specs,Acquisition purpose,PreparedDomain held){preparations.require(specs,purpose,held);}
+  public boolean permitsDomainEffects(PreparedDomain held){return preparations.permitsEffects(held);}
+
             public boolean lockRoot(TaskSpec spec,boolean skip) {
                 return !jdbc.queryForList("SELECT id FROM meeting WHERE id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),String.class,spec.subject().id()).isEmpty();
             }

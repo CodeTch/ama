@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import static ama.contract.OutboxContracts.protocolCode;
 
-/** Short transactions; candidates are read without locks, then subject/root/task are locked in that order. */
+/** Short transactions: complete identities, then subject/root/task. Capabilities stay on the call stack. */
 public final class JdbcTaskQueue implements TaskQueue {
  final DataSource source; final JdbcTemplate jdbc; final TransactionRunner tx;
  final JdbcSubjectFences fences; final JdbcOutbox outbox; final Map<String,TaskDomainPolicy> policies;
@@ -35,12 +35,43 @@ public final class JdbcTaskQueue implements TaskQueue {
  }
  Optional<Row> row(String id,boolean lock,boolean skip){return jdbc.query("SELECT * FROM durable_task WHERE id=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcTaskQueue::read,id).stream().findFirst();}
  boolean current(SubjectFencePort.LockedSubject h,TaskSpec s){return !h.deleted()&&h.businessVersion()==s.businessVersion()&&h.cancelEpoch()==s.cancelEpoch();}
- Optional<SubjectFencePort.LockedSubject> lockDomain(TaskSpec s,boolean skip){var p=policy(s);var held=fences.lock(s.subject(),skip);if(held.isEmpty()||!p.lockRoot(s,skip))return Optional.empty();return held;}
+ static final class DomainScope {
+  private final TaskDomainPolicy policy;private final List<TaskSpec> specs;private final TaskDomainPolicy.Acquisition purpose;private final TaskDomainPolicy.PreparedDomain prepared;
+  private SubjectFencePort.LockedSubject locked;
+  DomainScope(TaskDomainPolicy policy,List<TaskSpec> specs,TaskDomainPolicy.Acquisition purpose,TaskDomainPolicy.PreparedDomain prepared){this.policy=policy;this.specs=specs;this.purpose=purpose;this.prepared=prepared;}
+  TaskDomainPolicy policy(){return policy;}List<TaskSpec> specs(){return specs;}TaskDomainPolicy.Acquisition purpose(){return purpose;}TaskDomainPolicy.PreparedDomain prepared(){return prepared;}
+ }
+ Optional<DomainScope> prepareDomain(List<TaskSpec> discovered,TaskDomainPolicy.Acquisition purpose,boolean skip,TaskDomainPolicy.PreparedDomain supplied){
+  var specs=new ArrayList<>(new LinkedHashSet<>(discovered));if(specs.isEmpty())throw new DomainPreparationUnavailableException();
+  specs.sort(Comparator.comparing((TaskSpec s)->s.input().kind()).thenComparing(s->s.input().id()).thenComparing(TaskSpec::type).thenComparing(TaskSpec::producerKey));
+  var p=policies.get(specs.getFirst().type());if(p==null)throw new DomainPreparationUnavailableException();var subject=specs.getFirst().subject();
+  // No root/identity phase is started when policy families cannot establish one common issuer.
+  if(specs.stream().anyMatch(s->policies.get(s.type())!=p||!s.subject().equals(subject)))throw new DomainPreparationUnavailableException();
+  var prepared=supplied==null?p.prepare(specs,purpose,skip):Optional.of(supplied);
+  if(prepared.isEmpty())return Optional.empty();JdbcTaskPreparations.requireTransaction(source,prepared.orElseThrow());p.requirePrepared(specs,purpose,prepared.orElseThrow());
+  if(purpose==TaskDomainPolicy.Acquisition.TASK_MUTATION&&!p.permitsDomainEffects(prepared.orElseThrow()))return Optional.empty();
+  return Optional.of(new DomainScope(p,List.copyOf(specs),purpose,prepared.orElseThrow()));
+ }
+ Optional<SubjectFencePort.LockedSubject> lockDomain(DomainScope scope,TaskSpec s,boolean skip){
+  if(!scope.specs().contains(s)||scope.policy()!=policy(s))throw new IllegalArgumentException("Task not covered by preparation");
+  JdbcTaskPreparations.requireTransaction(source,scope.prepared());
+  scope.policy().requirePrepared(scope.specs(),scope.purpose(),scope.prepared());
+  if(scope.locked!=null)return Optional.of(scope.locked);
+  var held=fences.lock(s.subject(),skip);
+  if(held.isEmpty()||!scope.policy().lockRoots(scope.specs(),skip,scope.prepared()))return Optional.empty();
+  scope.locked=held.orElseThrow();return held;
+ }
+ Optional<SubjectFencePort.LockedSubject> lockDomain(TaskSpec s,boolean skip){
+  var scope=prepareDomain(List.of(s),TaskDomainPolicy.Acquisition.TASK_MUTATION,skip,null);
+  return scope.isEmpty()?Optional.empty():lockDomain(scope.orElseThrow(),s,skip);
+ }
  void event(String type,Row row){outbox.append(new EventDraft(type,row.id(),row.spec().subject(),row.spec().businessVersion(),new Reference(row.spec().input().kind(),row.spec().input().id())));}
- @Override public String enqueue(TaskSpec s){return work(()->enqueueLocked(s,UUID.randomUUID().toString()));}
- String enqueueLocked(TaskSpec s,String id){
+ @Override public String enqueue(TaskSpec s){return enqueue(s,null);}
+ @Override public String enqueue(TaskSpec s,TaskDomainPolicy.PreparedDomain alreadyHeld){return work(()->enqueueLocked(s,UUID.randomUUID().toString(),alreadyHeld));}
+ String enqueueLocked(TaskSpec s,String id,TaskDomainPolicy.PreparedDomain alreadyHeld){
   if(s.priority() < -100 || s.priority()>100)throw new IllegalArgumentException("Task priority must be between -100 and 100");
-  var held=lockDomain(s,false).orElseThrow(()->new IllegalArgumentException("Missing subject/root"));
+  var scope=prepareDomain(List.of(s),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,alreadyHeld).orElseThrow(()->new IllegalArgumentException("Missing domain preparation"));
+  var held=lockDomain(scope,s,false).orElseThrow(()->new IllegalArgumentException("Missing subject/root"));
   policy(s).validateInput(s);
   var old=jdbc.query("SELECT * FROM durable_task WHERE producer_key=? FOR UPDATE",JdbcTaskQueue::read,s.producerKey());
   if(!old.isEmpty()){if(!old.getFirst().spec().equals(s))throw new IllegalArgumentException("Producer key conflicts with immutable spec");return old.getFirst().id();}
@@ -68,6 +99,7 @@ public final class JdbcTaskQueue implements TaskQueue {
   if(!policies.containsKey(candidate.spec().type()))return Optional.empty();
   var domain=lockDomain(candidate.spec(),true);if(domain.isEmpty())return Optional.empty();
   var locked=row(candidate.id(),true,true);if(locked.isEmpty())return Optional.empty();var r=locked.orElseThrow();Instant now=now();
+  if(!r.spec().equals(candidate.spec()))return Optional.empty();
   if(!(r.state().equals("READY")&&!r.available().isAfter(now)||r.state().equals("RUNNING")&&!r.expiry().isAfter(now)))return Optional.empty();
   if(!current(domain.orElseThrow(),r.spec())){finish(r,domain.orElseThrow().deleted()||domain.orElseThrow().cancelEpoch()!=r.spec().cancelEpoch()?"CANCELLED":"STALE","SUBJECT_CHANGED",null);return Optional.empty();}
   policy(r.spec()).validateInput(r.spec());
