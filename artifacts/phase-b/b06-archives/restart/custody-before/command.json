@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "docker",
+    "exec",
+    "ama-test-b01-a5e7d68612a4",
+    "sh",
+    "-c",
+    "MYSQL_PWD=\"$MYSQL_PASSWORD\" mysql --protocol=TCP -h127.0.0.1 --user=\"$MYSQL_USER\" \"$MYSQL_DATABASE\" --batch -e 'SELECT installed_rank,version,description,type,script,checksum,installed_on,execution_time,success FROM flyway_schema_history ORDER BY installed_rank;\nSELECT @@version,@@global.innodb_use_native_aio,DATABASE();\nSELECT id,meeting_id,SHA2(config_manifest,256) AS manifest_sha,input_fingerprint,base_revision,cancel_epoch FROM transcription_input ORDER BY id;\nSELECT id,task_type,pool,subject_kind,subject_id,producer_key,input_kind,input_id,input_fingerprint,business_version,cancel_epoch,priority,max_attempts,state FROM durable_task ORDER BY id;\nSELECT sequence_id,event_type,task_id,subject_kind,subject_id,subject_revision,reference_kind,reference_id FROM task_outbox ORDER BY sequence_id;\n'"
+  ],
+  "exit": 0
+}

@@ -1,0 +1,118 @@
+[
+  {
+    "path": "backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartFixture.java",
+    "sha256": "786f641c835a02d5ce6ddef2e9544385ba9b415b342146528b9ce59307cd3429"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java",
+    "sha256": "2d0cb7056e00ea7c9e4dc72067d6a40da173da26a1822812e5d4a5372444de09"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+    "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+  },
+  {
+    "path": "backend/core/src/main/java/ama/transcript/BatchFingerprint.java",
+    "sha256": "0559a2809dc03759241a8bc881c7ee4b7dd56af91ba49d2603e08675617db315"
+  },
+  {
+    "path": "backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+    "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+    "sha256": "9a0a4d3ccb2973c5ae28e726c4f1aea0e9793b7be1c844cd1e3abb3b8fc751ef"
+  },
+  {
+    "path": "backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+    "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+  },
+  {
+    "path": "backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+    "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+  },
+  {
+    "path": "backend/core/src/main/java/ama/config/ProcessingManifestRefs.java",
+    "sha256": "a538fe27ecc94c68d6d1c1a82b1185107a8ab68caae322db8ceeeb3141c0436e"
+  },
+  {
+    "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+    "sha256": "1dc1a32fdeccd6246335344621cfbf85c5371d7a6acddde210667015128764ec"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+    "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+    "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "sha256": "4f24df5ec6cb8b8c176f4cd48289efe71b5156d609181a9101d0639b8150bec9"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+    "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+    "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/db/TransactionRunner.java",
+    "sha256": "c68bab5254f79bf0927e8dcf537a97aa6afca4397791e892b1ac140bae4a14ce"
+  },
+  {
+    "path": "tools/checks/run.py",
+    "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217"
+  },
+  {
+    "path": "tools/b06_archives_restart_run.py",
+    "sha256": "2fc02b985f459f8d73c342648b2c7ac9b60c934bff40c0d71a36b0e59a4f00d9"
+  },
+  {
+    "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/parser.json",
+    "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+  },
+  {
+    "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/index2.sha256",
+    "sha256": "71523892244af21509107005607a98e0362ac39c1a3bb0d60f5ef076057e291d"
+  },
+  {
+    "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/processing1.json",
+    "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+  },
+  {
+    "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/processing2.json",
+    "sha256": "58522e9f666a121e61b2a05812640c8ef9ee481be9920ea3df5d385be80efced"
+  },
+  {
+    "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/confirmation.json",
+    "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+  },
+  {
+    "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/index1.sha256",
+    "sha256": "18790b2cb916288c6b467124f227bae0650874b4a03c8a0889e55e33280fac9f"
+  },
+  {
+    "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/.gitattributes",
+    "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+  },
+  {
+    "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/codec.json",
+    "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+  },
+  {
+    "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/index1.json",
+    "sha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d"
+  },
+  {
+    "path": "backend/integration-tests/src/test/resources/ama/transcript/restart/index2.json",
+    "sha256": "d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d"
+  }
+]
