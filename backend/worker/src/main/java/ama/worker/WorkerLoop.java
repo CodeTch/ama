@@ -5,6 +5,7 @@ import ama.task.TaskQueue;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,11 +14,14 @@ import static ama.contract.OutboxContracts.protocolCode;
 /** Separate module, explicitly started by a process owner. No API bean/autostart or built-in company handlers. */
 public final class WorkerLoop implements WorkerRuntime {
     @FunctionalInterface public interface Handler { TaskResult handle(TaskLease lease) throws Exception; }
+    /** Bounded preparation outside completion; the returned callback performs only prelocked DB writes. */
+    @FunctionalInterface public interface PreparedHandler { Supplier<TaskResult> prepare(TaskLease lease) throws Exception; }
     private static final System.Logger LOG = System.getLogger(WorkerLoop.class.getName());
     private static final long INTERVAL_SECONDS = 5;
     private final TaskQueue queue;
     private final String workerId;
     private final Map<String,Handler> handlers;
+    private final Map<String,PreparedHandler> preparedHandlers;
     private final Map<String,Pool> pools;
     private final ScheduledExecutorService heartbeats;
     private final AtomicBoolean started = new AtomicBoolean();
@@ -38,7 +42,19 @@ public final class WorkerLoop implements WorkerRuntime {
     }
 
     public WorkerLoop(TaskQueue queue, Map<String,Integer> capacities, Map<String,Handler> handlers, String workerId) {
+        this(queue, capacities, handlers, Map.of(), workerId);
+    }
+
+    /** Explicit queue-owned atomic completion mode; the handler itself never completes the task. */
+    public static WorkerLoop prepared(TaskQueue queue, Map<String,Integer> capacities,
+                                      Map<String,PreparedHandler> handlers, String workerId) {
+        return new WorkerLoop(queue, capacities, Map.of(), handlers, workerId);
+    }
+
+    private WorkerLoop(TaskQueue queue, Map<String,Integer> capacities, Map<String,Handler> handlers,
+                       Map<String,PreparedHandler> preparedHandlers, String workerId) {
         this.queue = Objects.requireNonNull(queue); this.handlers = Map.copyOf(handlers);
+        this.preparedHandlers = Map.copyOf(preparedHandlers);
         protocolCode(workerId); this.workerId = workerId;
         if (capacities.isEmpty()) throw new IllegalArgumentException("Explicit pool capacities required");
         int total = 0;
@@ -85,14 +101,34 @@ public final class WorkerLoop implements WorkerRuntime {
     private void execute(String name, Pool pool, TaskLease lease) {
         var lost = new AtomicBoolean();
         ScheduledFuture<?> heartbeat = null;
+        boolean completing = false;
         try {
             heartbeat = heartbeats.scheduleWithFixedDelay(() -> renew(lease, lost), INTERVAL_SECONDS, INTERVAL_SECONDS, TimeUnit.SECONDS);
-            var handler = handlers.get(lease.spec().type());
-            TaskResult result = handler == null
-                    ? new TaskResult(Outcome.FAILED, null, "UNREGISTERED_HANDLER") : handler.handle(lease);
-            if (!lost.get()) queue.complete(lease, result);
+            var prepared = preparedHandlers.get(lease.spec().type());
+            Supplier<TaskResult> effects = null;
+            TaskResult result = null;
+            if (prepared != null) {
+                effects = Objects.requireNonNull(prepared.prepare(lease), "Prepared completion callback");
+            } else {
+                var handler = handlers.get(lease.spec().type());
+                result = handler == null ? new TaskResult(Outcome.FAILED, null, "UNREGISTERED_HANDLER")
+                        : Objects.requireNonNull(handler.handle(lease), "Handler result");
+            }
+            if (!lost.get()) {
+                completing = true;
+                if (effects != null) {
+                    var preparedEffects = effects;
+                    queue.completeWithEffects(lease, () -> {
+                        // Completion may have waited for locks while the independent heartbeat failed.
+                        if (lost.get()) throw new IllegalStateException("Worker lease lost before prepared effects");
+                        return preparedEffects.get();
+                    });
+                } else queue.complete(lease, result);
+            }
         } catch (Exception failure) {
-            quarantine(lease, lost);
+            // Once completion starts its outcome may be unknown; never issue a second completion.
+            if (!completing) quarantine(lease, lost);
+            else LOG.log(System.Logger.Level.WARNING, "Worker completion unavailable: " + failure.getClass().getSimpleName());
         } finally {
             if (heartbeat != null) heartbeat.cancel(false);
             pool.slots.release();

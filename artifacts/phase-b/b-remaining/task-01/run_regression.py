@@ -1,0 +1,19 @@
+"""Task 1 bounded affected regressions, reusing canonical fresh-JUnit accounting. No schema reset."""
+import pathlib, sys, json, xml.etree.ElementTree as ET
+ROOT = pathlib.Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(ROOT / "tools/checks"))
+import run
+classes = ["PreparedCompletionIT", "TaskLeaseIT", "B06QueueSeamsIT", "ExternalExecutionIT", "ModelPermitIT", "OutboxConsumerIT", "OutboxFenceIT", "ReconciliationWorkerIT", "ReviewConcurrencyIT", "WorkerProcessIT"]
+reports = set(ROOT.glob("backend/*/target/surefire-reports/TEST-*.xml")) | set(ROOT.glob("backend/*/target/failsafe-reports/TEST-*.xml"))
+reports.update(ROOT / "backend/integration-tests/target/failsafe-reports" / ("TEST-ama.task." + name + ".xml") for name in classes)
+command = [str(ROOT/"mvnw"), "-B", "-ntp", "-pl", "backend/integration-tests", "-am", "-Dit.test="+",".join(classes), "-Dfailsafe.failIfNoSpecifiedTests=false", "verify"]
+status = run.execute(command, ROOT, sorted(reports))
+reports.update(ROOT.glob("backend/*/target/surefire-reports/TEST-*.xml"))
+reports.update(ROOT.glob("backend/*/target/failsafe-reports/TEST-*.xml"))
+counts = []
+for path in sorted(reports):
+    if path.exists():
+        suite = ET.parse(path).getroot()
+        counts.append({"report":str(path.relative_to(ROOT)), **{k:suite.get(k) for k in ["name","tests","failures","errors","skipped"]}})
+pathlib.Path(__file__).with_name("regression-counts.json").write_text(json.dumps(counts,indent=2)+"\n")
+sys.exit(status)

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -121,12 +122,23 @@ public final class JdbcTaskQueue implements TaskQueue {
  @Override public boolean completeWithEffects(TaskLease lease,TaskResult result,Runnable effects){return work(()->{
   var valid=validLease(lease);if(valid.isEmpty())return false;var r=valid.orElseThrow();policy(r.spec()).validateOutput(r.spec(),result);
   effects.run();
+  completeValidated(r,result);return true;
+ });}
+ @Override public boolean completeWithEffects(TaskLease lease,Supplier<TaskResult> effects){
+  Objects.requireNonNull(lease,"lease");Objects.requireNonNull(effects,"effects");
+  return work(()->{
+   var valid=validLease(lease);if(valid.isEmpty())return false;var r=valid.orElseThrow();
+   var result=Objects.requireNonNull(effects.get(),"Prepared completion result");
+   policy(r.spec()).validateOutput(r.spec(),result);
+   completeValidated(r,result);return true;
+  });
+ }
+ private void completeValidated(Row r,TaskResult result){
   if(result.outcome()==Outcome.RETRYABLE && r.attempt()<r.spec().maxAttempts()){
    long delay=Math.min(40,5L << Math.min(3,r.attempt()-1));long millis=ThreadLocalRandom.current().nextLong(1001);
    jdbc.update("UPDATE durable_task SET state='READY',lease_owner=NULL,expires_at=NULL,available_at=?,last_error=? WHERE id=?",sqlTime(now().plusMillis(delay*1000+millis)),result.errorCode(),r.id());endAttempt(r,"RETRYABLE",result.errorCode());event("TASK_RETRY",r);
   }else finish(r,result.outcome()==Outcome.RETRYABLE?"FAILED":result.outcome().name(),result.errorCode(),result.output());
-  return true;
- });}
+ }
  void endAttempt(Row r,String outcome,String code){if(r.attempt()>0)jdbc.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome=?,error_code=? WHERE task_id=? AND attempt=? AND ended_at IS NULL",outcome,code,r.id(),r.attempt());}
  void finish(Row r,String state,String code,TypedRef output){jdbc.update("UPDATE durable_task SET state=?,lease_owner=NULL,expires_at=NULL,last_error=?,output_kind=?,output_id=? WHERE id=?",state,code,output==null?null:output.kind(),output==null?null:output.id(),r.id());endAttempt(r,state,code);event("TASK_"+state,r);}
  /** A PREPARED execution has never crossed the committed marker boundary. Task lock is already held. */
