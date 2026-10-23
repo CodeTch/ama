@@ -78,3 +78,7 @@ The normative additive design is `docs/superpowers/specs/2026-10-23-ama-phase-b-
 ## Task8 adopted finite-scan design
 
 Read docs/superpowers/specs/2026-10-23-ama-phase-b-reconciliation-fairness.md and its exact approved R1/reviews. Root selects additive immutable ordinal; no migration number/freeze/apply yet. Include current model generator/dictionary/DDL/ER update for the exact reviewed column/index, preserving all other definitions. Bounded explicit SQL accounting includes two session SETs per candidate plus highwater result row; driver controls separate. Backlog-dependent sweep latency and rebuild cost are accepted only within local controlled qualification; no capacity/SLA inference. FUP stays OPEN until actual implementation and independent review.
+
+## Task4 adopted intake/API refinement
+
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-processing-intake.md and exact Task4 R1/reviews. Mandatory accepted-result lookup precedes rejecting current intake prerequisites; one bounded fresh concurrent-winner recovery lookup after named ordinary preparation failure; preserve reauthorization/exact semantic match. Project B04 upload actions/terminal retries using actual operation/state/historical-route matrix. Java names align with Task3 final authority/preparer; no duplicate issuance. Task4 owns real legacy info/roster lossless-token extensions and server discovery/OpenAPI; Task12 actual browser. No implementation activation from this design adoption.
