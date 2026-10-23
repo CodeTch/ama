@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/home/tanren/ama/.worktrees/phase-b-transcript-runtime/mvnw",
+    "-B",
+    "-ntp",
+    "-pl",
+    "backend/integration-tests",
+    "-am",
+    "-Dtest=NoUnitTestsForB06FocusedIntegrationSelection",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dit.test=TaskLeaseIT#twoWorkersCompeteForOneTask+expiredAttemptCannotCommit+pausedOldCompletionLosesToConcurrentCancellation+versionEpochAndTombstoneEachFenceOldCompletion+sameProducerComparesEntireImmutableSpec+missingSubjectAndUnknownOrCrossSubjectTypedInputFailClosed+heldRowDoesNotBlockOtherCandidate+queueDomainAndOutboxRollbackTogether+completionCallbackFailureRollsBackTaskAndOutbox,ExternalExecutionIT#markerActuallyCommitsBeforeAuthorityAndAmbientIsRejected+unknownExecutionNeverReentersOrdinaryQueue+oldTaskExpiryDoesNotDiscardAuthoritativeSuccess+reconcilerTakeoverFencesOldOwnerAndPreservesExternalFact+commitAcknowledgementUnknownReturnsNoAuthority+concurrentSameProducerRetryAcceptsOnlyOneExecution+zeroEffectRetryAppendsExecutionWithoutResettingEpoch,ReviewConcurrencyIT#lateSuccessSeesZeroEffectCommittedWhileWaitingForSubject+lateSuccessRediscoversRetryCommittedWhileWaitingForSubject+observationRejectsAmbientTransactionBeforeAnyEffects+exhaustedRediscoveryRequiresResubmittingFactWithoutAnotherExternalSend,OutboxFenceIT#domainLocksAndNewEventsAreRejectedAfterFinalFlush,WorkerProcessIT#independentOperationHeartbeatContinuesWhileHandlerBlocks,MeetingConcurrencyIT#identityDisabledWhileConfirmationWaitsCannotReceiveGrant+actualServiceLocksSortedIdentitiesBeforeRootAndFlushesLast+readWaitingForRevocationSeesCommittedRosterNotOldSnapshot,ModelPermitIT#copiedAndReconciliationTokensCannotAdmitAndDuplicateCannotResend",
+    "-Dfailsafe.failIfNoSpecifiedTests=false",
+    "verify"
+  ],
+  "exit_code": 0,
+  "unit_tests_intentionally_not_executed": true
+}
