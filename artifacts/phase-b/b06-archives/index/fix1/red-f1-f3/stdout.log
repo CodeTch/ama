@@ -1,0 +1,165 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ama-parent                                                         [pom]
+[INFO] ama-contracts                                                      [jar]
+[INFO] ama-core                                                           [jar]
+[INFO] ama-adapters                                                       [jar]
+[INFO] ama-api                                                            [jar]
+[INFO] ama-file-service                                                   [jar]
+[INFO] ama-worker                                                         [jar]
+[INFO] ama-integration-tests                                              [jar]
+[INFO] 
+[INFO] ---------------------------< ama:ama-parent >---------------------------
+[INFO] Building ama-parent 0.1.0-SNAPSHOT                                 [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] -------------------------< ama:ama-contracts >--------------------------
+[INFO] Building ama-contracts 0.1.0-SNAPSHOT                              [2/8]
+[INFO]   from backend/contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-archive-index/backend/contracts/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-archive-index/backend/contracts/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-archive-index/backend/contracts/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-contracts ---
+[INFO] 
+[INFO] ----------------------------< ama:ama-core >----------------------------
+[INFO] Building ama-core 0.1.0-SNAPSHOT                                   [3/8]
+[INFO]   from backend/core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-core ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-archive-index/backend/core/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-archive-index/backend/core/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-core ---
+[INFO] Copying 54 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-core ---
+[INFO] 
+[INFO] --------------------------< ama:ama-adapters >--------------------------
+[INFO] Building ama-adapters 0.1.0-SNAPSHOT                               [4/8]
+[INFO]   from backend/adapters/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-adapters ---
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] Copying 12 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-adapters ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-adapters ---
+[INFO] Copying 61 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-adapters ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 16 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-adapters ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.config.file.ControlledArchiveFix1Test
+FIFO child exitedBeforeDeadline=false; PUBLISH_START 
+[ERROR] Tests run: 4, Failures: 4, Errors: 0, Skipped: 0, Time elapsed: 6.116 s <<< FAILURE! -- in ama.config.file.ControlledArchiveFix1Test
+[ERROR] ama.config.file.ControlledArchiveFix1Test.startupReleaseCapacityRefusesBeforeAnyObjectAcquisition -- Time elapsed: 0.197 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: must refuse before reading codec ==> expected: <1970-01-01T00:00:01Z> but was: <2026-10-23T01:14:30.895673934Z>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1199)
+	at ama.config.file.ControlledArchiveFix1Test.startupReleaseCapacityRefusesBeforeAnyObjectAcquisition(ControlledArchiveFix1Test.java:38)
+
+[ERROR] ama.config.file.ControlledArchiveFix1Test.publicationReservesEntireIndexChainAndReopensAtExactBoundary -- Time elapsed: 0.127 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: publish incorrectly returned a final release that the same 4000-byte budget cannot reopen: d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:42)
+	at org.junit.jupiter.api.Assertions.fail(Assertions.java:143)
+	at ama.config.file.ControlledArchiveFix1Test.publicationReservesEntireIndexChainAndReopensAtExactBoundary(ControlledArchiveFix1Test.java:27)
+
+[ERROR] ama.config.file.ControlledArchiveFix1Test.publisherImpossibleReleaseBudgetPrecedesCallerPayloadInterpretation -- Time elapsed: 0.008 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <BUDGET_EXCEEDED> but was: <INVALID_JSON>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:179)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1188)
+	at ama.config.file.ControlledArchiveFix1Test.publisherImpossibleReleaseBudgetPrecedesCallerPayloadInterpretation(ControlledArchiveFix1Test.java:45)
+
+[ERROR] ama.config.file.ControlledArchiveFix1Test.namedPipePublishingLockFailsUnavailableInBoundedOwnedChild -- Time elapsed: 5.748 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: 
+preexisting FIFO blocked publisher WRITE open: PUBLISH_START
+ ==> expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:41)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:228)
+	at ama.config.file.ControlledArchiveFix1Test.namedPipePublishingLockFailsUnavailableInBoundedOwnedChild(ControlledArchiveFix1Test.java:56)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   ControlledArchiveFix1Test.namedPipePublishingLockFailsUnavailableInBoundedOwnedChild:56 preexisting FIFO blocked publisher WRITE open: PUBLISH_START
+ ==> expected: <true> but was: <false>
+[ERROR]   ControlledArchiveFix1Test.publicationReservesEntireIndexChainAndReopensAtExactBoundary:27 publish incorrectly returned a final release that the same 4000-byte budget cannot reopen: d2436e244f966e5841941e282b0f6ad0dc6c76c6369cb90203dab42ed876472d
+[ERROR]   ControlledArchiveFix1Test.publisherImpossibleReleaseBudgetPrecedesCallerPayloadInterpretation:45 expected: <BUDGET_EXCEEDED> but was: <INVALID_JSON>
+[ERROR]   ControlledArchiveFix1Test.startupReleaseCapacityRefusesBeforeAnyObjectAcquisition:38 must refuse before reading codec ==> expected: <1970-01-01T00:00:01Z> but was: <2026-10-23T01:14:30.895673934Z>
+[INFO] 
+[ERROR] Tests run: 4, Failures: 4, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ama-parent 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] ama-api ............................................ SKIPPED
+[INFO] ama-file-service ................................... SKIPPED
+[INFO] ama-worker ......................................... SKIPPED
+[INFO] ama-integration-tests .............................. SKIPPED
+[INFO] ama-parent ......................................... SUCCESS [  0.003 s]
+[INFO] ama-contracts ...................................... SUCCESS [  0.840 s]
+[INFO] ama-core ........................................... SUCCESS [  0.106 s]
+[ERROR] ama-adapters ....................................... FAILURE [ 10.612 s]
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  12.203 s
+[INFO] Finished at: 2026-10-23T09:14:36+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.6:test (default-test) on project ama-adapters: There are test failures.
+[ERROR] 
+[ERROR] See /home/tanren/ama/.worktrees/b06-archive-index/backend/adapters/target/surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-adapters

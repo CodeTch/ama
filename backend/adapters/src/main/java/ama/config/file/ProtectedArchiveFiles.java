@@ -51,6 +51,23 @@ final class ProtectedArchiveFiles implements AutoCloseable {
   Capacity(long remaining){require(remaining>=0,INVALID_ARGUMENT);this.remaining=remaining;}
   void reserve(long size){require(size>=0&&size<=remaining,BUDGET_EXCEEDED);remaining-=size;}
  }
+ /** Existing nonregular lock files must be rejected BEFORE a potentially blocking WRITE open. */
+ SeekableByteChannel publishingLock()throws IOException{
+  check(cancel);Path name=relative(".publish.lock");BasicFileAttributes before;
+  try{before=attributes(root,name);}
+  catch(NoSuchFileException absent){
+   try{
+    var created=root.newByteChannel(name,Set.of(StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE,LinkOption.NOFOLLOW_LINKS));
+    try{check(cancel);var after=attributes(root,name);require(after.isRegularFile()&&!after.isSymbolicLink()&&after.fileKey()!=null,PROFILE_UNAVAILABLE);return created;}
+    catch(Throwable failure){created.close();throw failure;}
+   }catch(FileAlreadyExistsException raced){before=attributes(root,name);}
+  }
+  require(before.isRegularFile()&&!before.isSymbolicLink()&&before.fileKey()!=null,PROFILE_UNAVAILABLE);check(cancel);
+  // Remaining path replacement races are inside the approved protected administrative root assumption.
+  var channel=root.newByteChannel(name,Set.of(StandardOpenOption.WRITE,LinkOption.NOFOLLOW_LINKS));
+  try{check(cancel);var after=attributes(root,name);require(after.isRegularFile()&&!after.isSymbolicLink()&&before.fileKey().equals(after.fileKey()),PROFILE_UNAVAILABLE);return channel;}
+  catch(Throwable failure){channel.close();throw failure;}
+ }
  byte[] read(SecureDirectoryStream<Path> dir,String name,long expected,long maximum,Capacity capacity)throws IOException{
   check(cancel);Path relative=relative(name);var before=attributes(dir,relative);
   require(before.isRegularFile()&&!before.isSymbolicLink()&&before.fileKey()!=null,PROFILE_UNAVAILABLE);
