@@ -30,7 +30,7 @@ public final class FileContracts {
         }
     }
 
-    public record Accepted(String uploadId, long partSize) {}
+    public record Accepted(String uploadId, long partSize) {public String getPartSizeToken(){return Long.toString(partSize);}}
 
     public record Completed(String fileId) {}
 

@@ -137,6 +137,15 @@ public final class FileBackendCatalog {
      * from the sealed immutable definition. This path performs only the actual DB metadata check;
      * it neither hashes nor contacts storage. Post-commit open still uses require(...).
      */
+    /** Safe route observation only; it grants no source, byte or new-write authority. */
+    public String historicalStatus(String id) { return requireHistoricalMetadata(id).status(); }
+    /** Metadata observation over explicitly installed historical routes, independent of a write default. */
+    public boolean hasHistoricalRoute() {
+        for(String id:backends.keySet())try{requireHistoricalMetadata(id);return true;}catch(Unavailable ignored){}
+        return false;
+    }
+
+
     Backend requireHistoricalMetadata(String id) {
         return requireStoredMetadata(configured(id, false));
     }

@@ -15,9 +15,10 @@ final class BoundedTranscriptMetadata {
  static final String MEMBER="batch_id ordinal# file_id sha256";
  static final String FILE="id meeting_id sha256 size_bytes#";
  static final String TASK="id task_type pool subject_kind subject_id producer_key input_kind input_id input_fingerprint business_version# priority# cancel_epoch# max_attempts#";
- private final JdbcTemplate j;private final ArchiveReadBudget budget;private final boolean locked;private long rows,edges,bytes,points;
+ private final JdbcTemplate j;private final ArchiveReadBudget budget;private final boolean locked,skipLocked;private long rows,edges,bytes,points;
  BoundedTranscriptMetadata(JdbcTemplate j,ArchiveReadBudget budget){this(j,budget,false);}
- BoundedTranscriptMetadata(JdbcTemplate j,ArchiveReadBudget budget,boolean locked){this.j=j;this.budget=budget;this.locked=locked;}
+ BoundedTranscriptMetadata(JdbcTemplate j,ArchiveReadBudget budget,boolean locked){this(j,budget,locked,false);}
+ BoundedTranscriptMetadata(JdbcTemplate j,ArchiveReadBudget budget,boolean locked,boolean skipLocked){this.j=j;this.budget=budget;this.locked=locked;this.skipLocked=skipLocked;}
  void check(){ama.contract.MinutesContracts.check(()->false);}
  Map<String,Object> one(String table,String shape,String id){var found=select(table,shape,"id=?","id",2,id);if(found.size()!=1)throw new ama.contract.FileContracts.NotFound();return found.getFirst();}
  List<Map<String,Object>> select(String table,String shape,String predicate,String order,int maximum,Object... args){
@@ -30,7 +31,7 @@ final class BoundedTranscriptMetadata {
   String cols=String.join(",",fields.stream().map(f->f.replace("#","")).toList());
   String admitted="__rows<="+Math.min(maximum,remainingRows)+" AND __rows<="+remainingEdges+" AND __total_bytes<="+remainingBytes+" AND __total_points<="+remainingPoints+" AND __max_bytes<="+budget.maxStringUtf8Bytes()+" AND __max_units<="+budget.maxStringUtf16();
   String projected=String.join(",",fields.stream().map(f->{String c=f.replace("#","");return "CASE WHEN "+admitted+" THEN "+c+" ELSE NULL END AS "+c;}).toList());
-  String sql="SELECT "+projected+",("+admitted+") AS __admitted,__row_bytes,__row_points FROM (SELECT a.*,COUNT(*) OVER() AS __rows,SUM(__row_bytes) OVER() AS __total_bytes,SUM(__row_points) OVER() AS __total_points,MAX(__single_bytes) OVER() AS __max_bytes,MAX(__single_units) OVER() AS __max_units FROM (SELECT "+cols+","+b+" AS __row_bytes,"+p+" AS __row_points,"+single+" AS __single_bytes,"+u+" AS __single_units FROM "+table+" WHERE "+predicate+" ORDER BY "+order+" LIMIT ?"+(locked?" FOR UPDATE":"")+") a) admitted ORDER BY "+order;
+  String sql="SELECT "+projected+",("+admitted+") AS __admitted,__row_bytes,__row_points FROM (SELECT a.*,COUNT(*) OVER() AS __rows,SUM(__row_bytes) OVER() AS __total_bytes,SUM(__row_points) OVER() AS __total_points,MAX(__single_bytes) OVER() AS __max_bytes,MAX(__single_units) OVER() AS __max_units FROM (SELECT "+cols+","+b+" AS __row_bytes,"+p+" AS __row_points,"+single+" AS __single_bytes,"+u+" AS __single_units FROM "+table+" WHERE "+predicate+" ORDER BY "+order+" LIMIT ?"+(locked?" FOR UPDATE"+(skipLocked?" SKIP LOCKED":""):"")+") a) admitted ORDER BY "+order;
   Object[] parameters=Arrays.copyOf(args,args.length+1);parameters[args.length]=limit;
   return j.query(sql,rs->{
    var result=new ArrayList<Map<String,Object>>();while(rs.next()){

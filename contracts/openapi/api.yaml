@@ -37,6 +37,24 @@ paths:
     $ref: './files.yaml#/abort'
   /api/v1/files/{id}/content:
     $ref: './files.yaml#/content'
+  /api/v1/meetings/{id}/processing-capabilities:
+    $ref: './processing.yaml#/capabilities'
+  /api/v1/meetings/{id}/transcript-imports:
+    $ref: './processing.yaml#/imports'
+  /api/v1/meetings/{id}/uploads/{upload}:
+    $ref: './processing.yaml#/upload'
+  /api/v1/meetings/{id}/uploads/{upload}/parts:
+    $ref: './processing.yaml#/parts'
+  /api/v1/meetings/{id}/completed-files:
+    $ref: './processing.yaml#/files'
+  /api/v1/meetings/{id}/processing-inputs:
+    $ref: './processing.yaml#/inputs'
+  /api/v1/meetings/{id}/processing-inputs/{input}:
+    $ref: './processing.yaml#/input'
+  /api/v1/meetings/{id}/processing-tasks:
+    $ref: './processing.yaml#/tasks'
+  /api/v1/meetings/{id}/processing-tasks/{task}:
+    $ref: './processing.yaml#/task'
 components:
   securitySchemes:
     enterpriseSession:

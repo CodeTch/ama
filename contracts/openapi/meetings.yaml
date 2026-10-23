@@ -133,10 +133,14 @@ confirmations:
           schema:
             type: object
             additionalProperties: false
-            required: [expectedRevision]
+            anyOf:
+              - required: [expectedRevision]
+              - required: [expectedRevisionToken]
             properties:
               expectedRevision:
                 $ref: '#/ExpectedRevision'
+              expectedRevisionToken:
+                $ref: '#/ExpectedRevisionToken'
     responses:
       '200':
         description: Original accepted meeting ID and revision, including on replay
@@ -177,13 +181,19 @@ ExpectedRevision:
   format: int64
   minimum: 0
   maximum: 9223372036854775806
+ExpectedRevisionToken:
+  type: string
+  pattern: '^(0|[1-9][0-9]{0,18})$'
+  description: Opaque canonical decimal revision, 0..9223372036854775806. Preserve the string exactly. Dual representations must agree.
 Mutation:
   type: object
-  required: [id, revision]
+  required: [id, revision, revisionToken]
   properties:
     id:
       type: string
       format: uuid
+    revisionToken:
+      $ref: '#/ExpectedRevisionToken'
     revision:
       type: integer
       format: int64
@@ -191,10 +201,15 @@ Mutation:
 SaveInfo:
   type: object
   additionalProperties: false
-  required: [expectedRevision, rosterDraftIds]
+  required: [rosterDraftIds]
+  anyOf:
+    - required: [expectedRevision]
+    - required: [expectedRevisionToken]
   properties:
     expectedRevision:
       $ref: '#/ExpectedRevision'
+    expectedRevisionToken:
+      $ref: '#/ExpectedRevisionToken'
     name:
       type: [string, 'null']
     category:
@@ -236,8 +251,10 @@ Saved:
   allOf:
     - $ref: '#/Mutation'
     - type: object
-      required: [accessRevision, stage, name, category, summary, occurredOn, confirmedRosterId, confirmedRoster, rosterDraftId, rosterDraft]
+      required: [accessRevision, accessRevisionToken, stage, name, category, summary, occurredOn, confirmedRosterId, confirmedRoster, rosterDraftId, rosterDraft]
       properties:
+        accessRevisionToken:
+          $ref: '#/ExpectedRevisionToken'
         accessRevision:
           type: integer
           format: int64
@@ -268,7 +285,7 @@ Saved:
           items:
             $ref: '#/Member'
 Conflict:
-  description: Same key with different payload, stale expectedRevision, no pending draft, inactive/unknown roster identity, or immutable published state. No partial effects; retain client input.
+  description: REVISION_EXHAUSTED after authorized replay, same key with different payload, stale expectedRevision, no pending draft, inactive/unknown roster identity, or immutable published state. No partial effects; retain client input.
   content:
     application/json:
       schema:

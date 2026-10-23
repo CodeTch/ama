@@ -1,0 +1,168 @@
+[
+  {
+    "pid": 1156,
+    "argv": [
+      "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java",
+      "-Xmx512m",
+      "-XX:ActiveProcessorCount=2",
+      "-classpath",
+      "/home/tanren/ama/.worktrees/phase-b-completion/.mvn/wrapper/maven-wrapper.jar",
+      "-Dmaven.multiModuleProjectDirectory=/home/tanren/ama/.worktrees/phase-b-completion",
+      "org.apache.maven.wrapper.MavenWrapperMain",
+      "-B",
+      "-ntp",
+      "-pl",
+      "backend/adapters,backend/api,backend/contracts,backend/core,backend/file-service,backend/integration-tests,backend/worker",
+      "-am",
+      "-Dtest=ArchiveBudgetTest,BatchFingerprintTest,CanonicalValueCodecTest,ConfigBindingsTest,ConfigWireReaderTest,ContractClientTest,ContractFixtureTest,ControlledArchiveFix1Test,ControlledConfigArchiveSourceTest,DeploymentConfigTest,FileConfigurationTest,FinalAndCoverageTest,GenerationFingerprintTest,HashProfilesTest,HttpRevisionTokensTest,IdentityContractsTest,IdentitySecurityTest,ManagedBackendIdentityTest,MinutesFactBudgetTest,OutputBudgetBoundaryTest,PreparedWorkerLoopTest,RawHashChainTest,S3LayoutV3Test,S3ProtocolTest,SourceAndSupportTest,StorageRouterTest,StoredSourceGraphTest,StrictMinutesJsonReaderTest,TaskMetadataTest,TextTranscriptParserTest,TranscriptImportProducerTest,WorkerLoopTest",
+      "-Dsurefire.failIfNoSpecifiedTests=false",
+      "test"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1208,
+    "argv": [
+      "/bin/sh",
+      "-c",
+      "cd '/home/tanren/ama/.worktrees/phase-b-completion/backend/contracts' && '/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java' '-jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/target/surefire/surefirebooter-20261023171845122_3.jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/target/surefire' '2026-10-23T17-18-45_044-jvmRun1' 'surefire-20261023171845122_1tmp' 'surefire_0-20261023171845122_2tmp'"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1209,
+    "argv": [
+      "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java",
+      "-jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/target/surefire/surefirebooter-20261023171845122_3.jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/target/surefire",
+      "2026-10-23T17-18-45_044-jvmRun1",
+      "surefire-20261023171845122_1tmp",
+      "surefire_0-20261023171845122_2tmp"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1239,
+    "argv": [
+      "/bin/sh",
+      "-c",
+      "cd '/home/tanren/ama/.worktrees/phase-b-completion/backend/core' && '/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java' '-jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/core/target/surefire/surefirebooter-20261023171845716_6.jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/core/target/surefire' '2026-10-23T17-18-45_044-jvmRun1' 'surefire-20261023171845716_4tmp' 'surefire_1-20261023171845716_5tmp'"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1242,
+    "argv": [
+      "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java",
+      "-jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/core/target/surefire/surefirebooter-20261023171845716_6.jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/core/target/surefire",
+      "2026-10-23T17-18-45_044-jvmRun1",
+      "surefire-20261023171845716_4tmp",
+      "surefire_1-20261023171845716_5tmp"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1270,
+    "argv": [
+      "/bin/sh",
+      "-c",
+      "cd '/home/tanren/ama/.worktrees/phase-b-completion/backend/adapters' && '/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java' '-jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/adapters/target/surefire/surefirebooter-20261023171846585_9.jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/adapters/target/surefire' '2026-10-23T17-18-45_044-jvmRun1' 'surefire-20261023171846585_7tmp' 'surefire_2-20261023171846585_8tmp'"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1271,
+    "argv": [
+      "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java",
+      "-jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/adapters/target/surefire/surefirebooter-20261023171846585_9.jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/adapters/target/surefire",
+      "2026-10-23T17-18-45_044-jvmRun1",
+      "surefire-20261023171846585_7tmp",
+      "surefire_2-20261023171846585_8tmp"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1323,
+    "argv": [
+      "/bin/sh",
+      "-c",
+      "cd '/home/tanren/ama/.worktrees/phase-b-completion/backend/api' && '/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java' '-jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/surefire/surefirebooter-20261023171849174_13.jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/surefire' '2026-10-23T17-18-45_044-jvmRun1' 'surefire-20261023171849174_11tmp' 'surefire_3-20261023171849174_12tmp'"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1325,
+    "argv": [
+      "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java",
+      "-jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/surefire/surefirebooter-20261023171849174_13.jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/surefire",
+      "2026-10-23T17-18-45_044-jvmRun1",
+      "surefire-20261023171849174_11tmp",
+      "surefire_3-20261023171849174_12tmp"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1612,
+    "argv": [
+      "/bin/sh",
+      "-c",
+      "cd '/home/tanren/ama/.worktrees/phase-b-completion/backend/worker' && '/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java' '-jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/worker/target/surefire/surefirebooter-20261023171859363_17.jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/worker/target/surefire' '2026-10-23T17-18-45_044-jvmRun1' 'surefire-20261023171859363_15tmp' 'surefire_4-20261023171859363_16tmp'"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1613,
+    "argv": [
+      "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java",
+      "-jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/worker/target/surefire/surefirebooter-20261023171859363_17.jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/worker/target/surefire",
+      "2026-10-23T17-18-45_044-jvmRun1",
+      "surefire-20261023171859363_15tmp",
+      "surefire_4-20261023171859363_16tmp"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1669,
+    "argv": [
+      "/bin/sh",
+      "-c",
+      "cd '/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests' && '/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java' '-jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/surefire/surefirebooter-20261023171915586_23.jar' '/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/surefire' '2026-10-23T17-18-45_044-jvmRun1' 'surefire-20261023171915586_21tmp' 'surefire_5-20261023171915586_22tmp'"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  },
+  {
+    "pid": 1671,
+    "argv": [
+      "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java",
+      "-jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/surefire/surefirebooter-20261023171915586_23.jar",
+      "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/surefire",
+      "2026-10-23T17-18-45_044-jvmRun1",
+      "surefire-20261023171915586_21tmp",
+      "surefire_5-20261023171915586_22tmp"
+    ],
+    "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+    "owner_uid": 1000
+  }
+]

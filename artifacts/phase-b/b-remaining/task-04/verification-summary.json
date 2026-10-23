@@ -1,0 +1,1505 @@
+{
+  "action-hash-focused": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=TranscriptImportProducerTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#historicalRouteActionsAndTerminalRetriesMatchActualB04Operations+actualCanonicalAndManagedHashesStayOutsideMeetingRoots",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "core-TEST-ama.transcript.TranscriptImportProducerTest.xml",
+        "suite": "ama.transcript.TranscriptImportProducerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "action-stale-admission-focused": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#historicalRouteActionsAndTerminalRetriesMatchActualB04Operations+unsafeRequestsFreshRevocationAndGovernanceAreNeverClientPermissions+staleQueueTaskCanTerminateWithoutAcquiringObsoleteSourcePermission+malformedRequestsAndOversizedNamesFailBeforeEffectsOrTextTransfer",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 4,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 4,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "adversarial-focused": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "all-unit-final-resumed": {
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "unit"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": null,
+      "fixture_id": null,
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+        "suite": "ama.config.file.ControlledArchiveFix1Test",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+        "suite": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+        "suite": "ama.config.json.ArchiveBudgetTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+        "suite": "ama.config.json.ConfigBindingsTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+        "suite": "ama.config.json.ConfigWireReaderTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.config.json.RawHashChainTest.xml",
+        "suite": "ama.config.json.RawHashChainTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+        "suite": "ama.minutes.json.OutputBudgetBoundaryTest",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+        "suite": "ama.minutes.json.StrictMinutesJsonReaderTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+        "suite": "ama.storage.ManagedBackendIdentityTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.storage.StorageRouterTest.xml",
+        "suite": "ama.storage.StorageRouterTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+        "suite": "ama.storage.s3.S3LayoutV3Test",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+        "suite": "ama.storage.s3.S3ProtocolTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.task.TaskMetadataTest.xml",
+        "suite": "ama.task.TaskMetadataTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+        "suite": "ama.transcript.TextTranscriptParserTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "api-TEST-ama.api.DeploymentConfigTest.xml",
+        "suite": "ama.api.DeploymentConfigTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "api-TEST-ama.api.FileConfigurationTest.xml",
+        "suite": "ama.api.FileConfigurationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "api-TEST-ama.api.HttpRevisionTokensTest.xml",
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "api-TEST-ama.api.IdentityContractsTest.xml",
+        "suite": "ama.api.IdentityContractsTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "api-TEST-ama.api.IdentitySecurityTest.xml",
+        "suite": "ama.api.IdentitySecurityTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "contracts-TEST-ama.contract.MinutesFactBudgetTest.xml",
+        "suite": "ama.contract.MinutesFactBudgetTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+        "suite": "ama.canonical.CanonicalValueCodecTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+        "suite": "ama.minutes.contract.FinalAndCoverageTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+        "suite": "ama.minutes.contract.GenerationFingerprintTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+        "suite": "ama.minutes.contract.HashProfilesTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+        "suite": "ama.minutes.contract.SourceAndSupportTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+        "suite": "ama.minutes.contract.StoredSourceGraphTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.transcript.BatchFingerprintTest.xml",
+        "suite": "ama.transcript.BatchFingerprintTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.transcript.TranscriptImportProducerTest.xml",
+        "suite": "ama.transcript.TranscriptImportProducerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.ContractFixtureTest.xml",
+        "suite": "ama.storage.ContractFixtureTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.support.ContractClientTest.xml",
+        "suite": "ama.support.ContractClientTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+        "suite": "ama.worker.PreparedWorkerLoopTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "worker-TEST-ama.worker.WorkerLoopTest.xml",
+        "suite": "ama.worker.WorkerLoopTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 223,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "boundaries-green": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "config-restart-final": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ConfigArchiveRestartIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx64m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": "/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/task04-config-restart-f526c62e-815a-4439-b0d0-7053d8016147"
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.transcript.ConfigArchiveRestartIT.xml",
+        "suite": "ama.transcript.ConfigArchiveRestartIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "discovery-green": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "discovery-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#discoveryRecoversActualReceiptsInputsAndTasksWithoutClientMemory",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "discovery-spec-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#acceptedResultWithCorruptFullProducerSpecIsUnavailable",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "exhaustion-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#httpRevisionBoundariesAndExhaustionPreserveReplayForEveryMutation",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "final-focused": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=HttpRevisionTokensTest,TranscriptImportProducerTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "api-TEST-ama.api.HttpRevisionTokensTest.xml",
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.transcript.TranscriptImportProducerTest.xml",
+        "suite": "ama.transcript.TranscriptImportProducerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "final-regressions": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT,TranscriptAuthorityIT,TranscriptAuthorityReviewIT,MeetingRevisionIT,MeetingConcurrencyIT,FileRegistryUploadIT,B06QueueSeamsIT,ProcessingFactsReaderIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.meeting.MeetingConcurrencyIT.xml",
+        "suite": "ama.meeting.MeetingConcurrencyIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.meeting.MeetingRevisionIT.xml",
+        "suite": "ama.meeting.MeetingRevisionIT",
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.FileRegistryUploadIT.xml",
+        "suite": "ama.storage.FileRegistryUploadIT",
+        "tests": 39,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityIT",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityReviewIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityReviewIT",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.task.B06QueueSeamsIT.xml",
+        "suite": "ama.task.B06QueueSeamsIT",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.transcript.ProcessingFactsReaderIT.xml",
+        "suite": "ama.transcript.ProcessingFactsReaderIT",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 150,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "focused-races-bounds": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 12,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 12,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "intake-green-2": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "intake-green": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "intake-red-2": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "intake-red-3": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "intake-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-DskipTests=false",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "lost-ack-custody-final": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#lostCommitAcknowledgmentRecoversTheActualCommittedAcceptance",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "mixed-source-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#ineligibleCompletedNeighborDoesNotMislabelAValidSource",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "openapi-final-bundle": {
+    "command": {
+      "argv": [
+        "/home/tanren/ama/.worktrees/phase-a/.tools/node-v22.23.4-linux-x64/bin/node",
+        "/home/tanren/ama/.worktrees/phase-a/node_modules/@redocly/cli/bin/cli.js",
+        "bundle",
+        "contracts/openapi/api.yaml",
+        "--config",
+        "redocly.yaml",
+        "--output",
+        "artifacts/phase-b/b-remaining/task-04/openapi-bundle.yaml"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": null,
+      "fixture_id": null,
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "openapi-final-lint": {
+    "command": {
+      "argv": [
+        "/home/tanren/ama/.worktrees/phase-a/.tools/node-v22.23.4-linux-x64/bin/node",
+        "/home/tanren/ama/.worktrees/phase-a/node_modules/@redocly/cli/bin/cli.js",
+        "lint",
+        "contracts/openapi/api.yaml",
+        "--config",
+        "redocly.yaml"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": null,
+      "fixture_id": null,
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "openapi-lint": {
+    "command": {
+      "argv": [
+        "/home/tanren/ama/.worktrees/phase-a/.tools/node-v22.23.4-linux-x64/bin/node",
+        "/home/tanren/ama/.worktrees/phase-a/node_modules/@redocly/cli/bin/cli.js",
+        "lint",
+        "contracts/openapi/api.yaml",
+        "--config",
+        "redocly.yaml"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "openapi-size-final-bundle": {
+    "command": {
+      "argv": [
+        "/home/tanren/ama/.worktrees/phase-a/.tools/node-v22.23.4-linux-x64/bin/node",
+        "/home/tanren/ama/.worktrees/phase-a/node_modules/@redocly/cli/bin/cli.js",
+        "bundle",
+        "contracts/openapi/api.yaml",
+        "--config",
+        "redocly.yaml",
+        "--output",
+        "artifacts/phase-b/b-remaining/task-04/openapi-final-bundle.yaml"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": null,
+      "fixture_id": null,
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "openapi-size-final-lint": {
+    "command": {
+      "argv": [
+        "/home/tanren/ama/.worktrees/phase-a/.tools/node-v22.23.4-linux-x64/bin/node",
+        "/home/tanren/ama/.worktrees/phase-a/node_modules/@redocly/cli/bin/cli.js",
+        "lint",
+        "contracts/openapi/api.yaml",
+        "--config",
+        "redocly.yaml"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": null,
+      "fixture_id": null,
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "operational-budget-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#operationalBudgetFailureStillDiscoversAnActualCommittedWinner",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "skip-root-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#ordinaryQueueSkipsLockedInputRootsWithoutWaitingOrLeasing",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "spec-token-green": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#acceptedResultWithCorruptFullProducerSpecIsUnavailable+originalUploadBeginEmitsOpaquePartSizeToken",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "spec-token-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#acceptedResultWithCorruptFullProducerSpecIsUnavailable+originalUploadBeginEmitsOpaquePartSizeToken",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 2,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "stale-queue-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=none",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#staleQueueTaskCanTerminateWithoutAcquiringObsoleteSourcePermission",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml",
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "tokens-green": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/api",
+        "-am",
+        "test",
+        "-Dtest=HttpRevisionTokensTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "api-TEST-ama.api.HttpRevisionTokensTest.xml",
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "tokens-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/api",
+        "-am",
+        "test",
+        "-Dtest=HttpRevisionTokensTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "api-TEST-ama.api.HttpRevisionTokensTest.xml",
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  }
+}

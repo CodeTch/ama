@@ -25,7 +25,8 @@ import javax.sql.DataSource;
 class FileConfiguration {
     @Bean
     @ConditionalOnMissingBean(FilePurposePolicy.class)
-    FilePurposePolicy filePurposes() {
+    FilePurposePolicy filePurposes(Environment env) {
+        if(env.getProperty("processing.enabled",Boolean.class,false))return new ama.transcript.TranscriptFilePurposePolicy();
         return (actor, meeting, purpose) -> {
             throw new FilePurposePolicy.Unavailable();
         };
@@ -159,7 +160,8 @@ class FileConfiguration {
             MeetingAccess access,
             FilePurposePolicy purposes,
             FileBackendCatalog backends,
-            Map<String, FileReferencePolicy> references) {
+            Map<String, FileReferencePolicy> references,ProcessingConfiguration.Runtime processing) {
+        if(processing.components()!=null)return processing.components().registry();
         return new JdbcFileRegistry(source, tx, access, purposes, backends, references);
     }
 }

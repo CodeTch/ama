@@ -99,6 +99,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             checkReplay(replay);
             if(replay.result()!=null)return restore(replay,"roster_revision");
             writable(held,request.expectedRevision());
+            if(held.root.accessRevision()==Long.MAX_VALUE-1)throw new RevisionExhausted();
             requireDiscoveredIdentities(held);
             var draft=latest(id);if(draft==null || !draft.state().equals("DRAFT"))throw new Conflict();
             var people=members(draft.id());
@@ -155,6 +156,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
     }
     private void writable(JdbcMeetingAccess.Held held,long expected){
         if(held.root.revision()!=expected || held.root.published() || held.root.stage().equals("PUBLISHED"))throw new Conflict();
+        if(expected==Long.MAX_VALUE-1)throw new RevisionExhausted();
     }
     private Set<String> affected(String id){
         var ids=new HashSet<>(j.queryForList("SELECT enterprise_id FROM meeting_access_grant WHERE meeting_id=?",String.class,id));

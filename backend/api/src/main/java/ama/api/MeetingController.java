@@ -33,15 +33,15 @@ class MeetingController {
     }
     @GetMapping("/api/v1/meetings/{id}") Saved read(@PathVariable String id,HttpServletRequest request){return meetings.read(actor(request),id);}
     @PutMapping("/api/v1/meetings/{id}/info") Mutation save(@PathVariable String id,@RequestBody byte[] bytes,HttpServletRequest request){
-        var body=parse(bytes,Set.of("expectedRevision","name","category","summary","occurredOn","rosterDraftIds","externalRosterNames"));
+        var body=parse(bytes,Set.of("expectedRevision","expectedRevisionToken","name","category","summary","occurredOn","rosterDraftIds","externalRosterNames"));
         String date=text(body,"occurredOn");LocalDate occurredOn;
         try{occurredOn=date==null?null:LocalDate.parse(date);}catch(java.time.format.DateTimeParseException e){throw new IllegalArgumentException("Invalid date");}
-        var command=new SaveInfo(revision(body),text(body,"name"),text(body,"category"),text(body,"summary"),occurredOn,strings(body,"rosterDraftIds",false),strings(body,"externalRosterNames",true));
+        var command=new SaveInfo(HttpRevisionTokens.expected(body),text(body,"name"),text(body,"category"),text(body,"summary"),occurredOn,strings(body,"rosterDraftIds",false),strings(body,"externalRosterNames",true));
         return meetings.save(actor(request),id,key(request),command,trace());
     }
     @PostMapping("/api/v1/meetings/{id}/roster-confirmations") Mutation confirm(@PathVariable String id,@RequestBody byte[] bytes,HttpServletRequest request){
-        var body=parse(bytes,Set.of("expectedRevision"));
-        return rosters.confirm(actor(request),id,key(request),new ConfirmRoster(revision(body)),trace());
+        var body=parse(bytes,Set.of("expectedRevision","expectedRevisionToken"));
+        return rosters.confirm(actor(request),id,key(request),new ConfirmRoster(HttpRevisionTokens.expected(body)),trace());
     }
     private JsonNode parse(byte[] bytes,Set<String> fields){
         if(bytes.length>requestBudget)throw new RequestTooLarge();

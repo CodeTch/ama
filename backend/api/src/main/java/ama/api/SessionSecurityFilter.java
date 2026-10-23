@@ -21,6 +21,12 @@ final class SessionSecurityFilter extends OncePerRequestFilter {
     private final Environment environment;
     SessionSecurityFilter(SessionPort sessions, Environment environment) { this.sessions = sessions; this.environment = environment; }
     @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        String uri=request.getRequestURI();
+        boolean processing=uri.matches("/api/v1/meetings/[^/]+/(processing-capabilities|transcript-imports|completed-files|processing-inputs|processing-tasks)(/.*)?")
+                ||request.getMethod().equals("GET")&&uri.matches("/api/v1/meetings/[^/]+/uploads(/.*)?");
+        if(processing)response=new HttpServletResponseWrapper(response){
+            @Override public void setHeader(String name,String value){super.setHeader(name,name.equalsIgnoreCase("Cache-Control")?"private, no-store":value);}
+        };
         int publicPort = environment.getProperty("local.server.port", Integer.class, -1);
         if (request.getLocalPort() != publicPort) { BusinessErrors.write(response, 403, "FORBIDDEN", "Access denied"); return; }
         String token = null;

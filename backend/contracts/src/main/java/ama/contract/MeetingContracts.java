@@ -22,15 +22,16 @@ public final class MeetingContracts {
         }
     }
     public record ConfirmRoster(Long expectedRevision) { public ConfirmRoster { revision(expectedRevision); } }
-    public record Mutation(String id, long revision) {}
-    public record Created(String id, long revision, String stage) {}
+    public record Mutation(String id, long revision) { public String getRevisionToken(){return Long.toString(revision);} }
+    public record Created(String id, long revision, String stage) { public String getRevisionToken(){return Long.toString(revision);} }
     public record Member(String memberId, String enterpriseId, String displayName, String memberKind) {}
     public record Saved(String id, long revision, long accessRevision, String stage, String name, String category,
                         String summary, LocalDate occurredOn, String confirmedRosterId, List<Member> confirmedRoster,
-                        String rosterDraftId, List<Member> rosterDraft) {}
+                        String rosterDraftId, List<Member> rosterDraft) { public String getRevisionToken(){return Long.toString(revision);} public String getAccessRevisionToken(){return Long.toString(accessRevision);} }
     public static void revision(Long value) {
         if (value == null || value < 0 || value == Long.MAX_VALUE) throw new IllegalArgumentException("Invalid expected revision");
     }
+    public static final class RevisionExhausted extends RuntimeException {}
     public static final class Conflict extends RuntimeException { public Conflict() { super("Meeting revision or request conflicts"); } }
     public static final class CategoryUnavailable extends RuntimeException { public CategoryUnavailable() { super("Category dictionary unavailable"); } }
 }

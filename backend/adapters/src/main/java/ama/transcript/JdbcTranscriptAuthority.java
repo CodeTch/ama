@@ -29,6 +29,8 @@ public final class JdbcTranscriptAuthority {
  private final DataSource source;private final JdbcTemplate j;private final TransactionRunner tx;
  private final MeetingAccess access;private final ArchiveReadBudget budget;private final CanonicalBudget canonical;
  private FileRegistry registry;
+ private FilePurposePolicy purposes;
+ private final ImportTaskDomainPolicy taskPolicy;
  private final InputBatchFileReferencePolicy policy;
  private static final DateTimeFormatter TIME=DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
  public interface ReservedIntake extends FileRegistry.ReferenceContext {}
@@ -56,12 +58,12 @@ public final class JdbcTranscriptAuthority {
  }
  public record Components(FileRegistry registry,JdbcTranscriptAuthority authority,ProcessingIntakeFacts intake,ProcessingSourceReader sources) {}
  private JdbcTranscriptAuthority(DataSource source,TransactionRunner tx,MeetingAccess access,ArchiveReadBudget budget,CanonicalBudget canonical){
-  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);
+  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);
  }
  public static Components create(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,
          FileBackendCatalog backends,Map<String,FileReferencePolicy> legacy,ArchiveReadBudget budget,CanonicalBudget canonical){
   if(legacy.containsKey(REFERENCE))throw new IllegalArgumentException("Production transcript authority owns its complete policy registration");
-  var authority=new JdbcTranscriptAuthority(source,tx,access,budget,canonical);var policies=new HashMap<>(legacy);policies.put(REFERENCE,authority.policy);
+  var authority=new JdbcTranscriptAuthority(source,tx,access,budget,canonical);authority.purposes=Objects.requireNonNull(purposes);var policies=new HashMap<>(legacy);policies.put(REFERENCE,authority.policy);
   var registry=new JdbcFileRegistry(source,tx,access,purposes,backends,policies,budget);authority.attach(registry);
   return new Components(registry,authority,new JdbcProcessingIntakeFacts(authority),new JdbcProcessingSourceReader(authority));
  }
@@ -112,7 +114,13 @@ public final class JdbcTranscriptAuthority {
   check(cancelled);return new PreparedIntake(this,draft,batch,input,manifest,batchHash,processing.version(),parser.version(),time,spec,facts(rows,files));
  }
  String producer(String meeting,String input,String fingerprint,long version,long epoch,BooleanSupplier cancel){
-  independent();return new CanonicalValueCodec().sha256(obj("profile","ama.transcript-import-producer.v1","kind","TASK_PRODUCER","data",obj("taskType","TRANSCRIPT_IMPORT_V1","meetingId",meeting,"inputId",input,"inputFingerprint",fingerprint,"businessVersion",version,"cancelEpoch",epoch)),canonical,cancel);
+  independent();return producerHash(meeting,input,fingerprint,version,epoch,cancel);
+ }
+ String producerBeforeRoots(String meeting,String input,String fingerprint,long version,long epoch){
+  return producerHash(meeting,input,fingerprint,version,epoch,()->false);
+ }
+ private String producerHash(String meeting,String input,String fingerprint,long version,long epoch,BooleanSupplier cancelled){
+  return TranscriptImportProducer.compute(meeting,input,fingerprint,version,epoch,canonical,cancelled);
  }
  public ReservedIntake reserveIntake(FileRegistry.LockedMeeting gate,PreparedIntake prepared){
   transaction();if(prepared==null||prepared.issuer!=this)throw new IllegalArgumentException("Foreign prepared intake");
@@ -163,6 +171,24 @@ public final class JdbcTranscriptAuthority {
   r.phase=Phase.BOUND;
  }
  public StoredProvenanceFacts detached(HeldProcessingFacts token){return held(token).facts;}
+ public ama.task.TaskDomainPolicy taskPolicy(){return taskPolicy;}
+ public ama.task.TaskDomainPolicy.PreparedDomain adoptCreated(FileRegistry.LockedMeeting gate,HeldProcessingFacts held,TaskSpec spec){return taskPolicy.adopt(gate,held,spec);}
+ public List<FileRegistry.CompletedSource> originals(PreparedIntake prepared){
+  if(prepared==null||prepared.issuer!=this)throw new IllegalArgumentException("Foreign preparation");return prepared.draft.orderedSources();
+ }
+ void requireCreatedTransition(FileRegistry.LockedMeeting gate,HeldProcessingFacts value,TaskSpec spec){
+  requireHeld(value,gate,spec);var h=held(value);var prepared=h.reserved.prepared;var draft=prepared.draft;
+  var root=root(draft.meetingId());writable(root);
+  access.requirePrepared(registry.access(gate),draft.actor(),draft.meetingId(),List.of(draft.actor().enterpriseId()),MeetingAccess.Action.EDIT);
+  require(number(root,"revision")==spec.businessVersion()&&number(root,"cancel_epoch")==spec.cancelEpoch()&&draft.revision()+1==spec.businessVersion()&&Objects.equals(root.get("owner_id"),draft.actor().enterpriseId()),FINGERPRINT_MISMATCH);
+  require(j.queryForObject("SELECT COUNT(*) FROM task_subject WHERE subject_kind='MEETING' AND subject_id=? AND business_version=? AND cancel_epoch=? AND deleted=0",Long.class,draft.meetingId(),spec.businessVersion(),spec.cancelEpoch())==1,FINGERPRINT_MISMATCH);
+ }
+ ArchiveReadBudget readBudget(){return budget;}
+ CanonicalBudget canonicalBudget(){return canonical;}
+ MeetingAccess meetingAccess(){return access;}
+ FileRegistry fileRegistry(){return registry;}
+ void requireTaskPurpose(Actor actor,String meeting){purposes.require(actor,meeting,PURPOSE);}
+
  Object prelock(FileRegistry.LockedMeeting gate,String meeting,FileRegistry.Reference reference,String file,FileRegistry.ReferenceContext context){
   if(context instanceof JdbcTranscriptAuthority.ReadScope)return prelockReadMember(gate,meeting,reference,file,context);
   if(!(context instanceof ReservedIntake reserved))throw new ama.contract.FileContracts.NotFound();

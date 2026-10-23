@@ -1,0 +1,21 @@
+{
+  "Id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+  "State": {
+    "Running": true
+  },
+  "NetworkSettings": {
+    "Ports": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "58062"
+        }
+      ]
+    }
+  },
+  "Labels": {
+    "ama.remaining.owner": "remaining-20261023",
+    "ama.test-fixture": "b01",
+    "desktop.docker.io/wsl-distro": "Ubuntu-24.04"
+  }
+}

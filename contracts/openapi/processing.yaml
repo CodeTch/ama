@@ -1,0 +1,2308 @@
+{
+  "ImportRequest": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "orderedFileIds"
+    ],
+    "properties": {
+      "expectedRevision": {
+        "$ref": "./meetings.yaml#/ExpectedRevision"
+      },
+      "expectedRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "orderedFileIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "minItems": 1,
+        "maxItems": 64,
+        "uniqueItems": true
+      }
+    },
+    "anyOf": [
+      {
+        "required": [
+          "expectedRevision"
+        ]
+      },
+      {
+        "required": [
+          "expectedRevisionToken"
+        ]
+      }
+    ],
+    "description": "At least one exact revision representation; dual values must agree before digest. Strict duplicate/unknown fields, Unicode, depth8, token4096 and 65536-byte transport envelope. Current effective intake limits apply only after accepted-result lookup."
+  },
+  "ImportAccepted": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "meetingId",
+      "batchId",
+      "inputId",
+      "taskId",
+      "revision",
+      "revisionToken",
+      "inputFingerprint"
+    ],
+    "properties": {
+      "meetingId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "batchId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "inputId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "taskId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "revision": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "inputFingerprint": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    }
+  },
+  "Capabilities": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "revision",
+      "revisionToken",
+      "accessRevision",
+      "accessRevisionToken",
+      "canSubmit",
+      "readOnlyReason",
+      "intake",
+      "execution",
+      "businessReady",
+      "formats",
+      "purpose",
+      "materialMode",
+      "budgets"
+    ],
+    "properties": {
+      "revision": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "accessRevision": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "accessRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "canSubmit": {
+        "type": "boolean"
+      },
+      "readOnlyReason": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "intake": {
+        "type": "string",
+        "enum": [
+          "AVAILABLE",
+          "UNAVAILABLE"
+        ]
+      },
+      "execution": {
+        "type": "string",
+        "enum": [
+          "INSTALLED",
+          "NOT_INSTALLED",
+          "UNAVAILABLE"
+        ]
+      },
+      "businessReady": {
+        "type": "boolean"
+      },
+      "formats": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "TXT"
+          ]
+        }
+      },
+      "purpose": {
+        "type": "string",
+        "enum": [
+          "TRANSCRIPT_INPUT"
+        ]
+      },
+      "materialMode": {
+        "type": "string",
+        "enum": [
+          "EMPTY"
+        ]
+      },
+      "budgets": {
+        "type": "object",
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          ]
+        }
+      }
+    }
+  },
+  "UploadSummary": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "uploadId",
+      "purpose",
+      "displayName",
+      "state",
+      "expectedSize",
+      "expectedSizeToken",
+      "expectedSha256",
+      "createdAt",
+      "updatedAt",
+      "completedFileId"
+    ],
+    "properties": {
+      "uploadId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "purpose": {
+        "type": "string"
+      },
+      "displayName": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "OPEN",
+          "FINALIZING",
+          "COMPLETED",
+          "ABORTED",
+          "FAILED"
+        ]
+      },
+      "expectedSize": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "expectedSizeToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "expectedSha256": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "completedFileId": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "uuid"
+      }
+    }
+  },
+  "PartSummary": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "part",
+      "sizeBytes",
+      "sizeBytesToken",
+      "sha256"
+    ],
+    "properties": {
+      "part": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "sizeBytes": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "sizeBytesToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "sha256": {
+        "type": "string"
+      }
+    }
+  },
+  "CompletedFileSummary": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "fileId",
+      "uploadId",
+      "displayName",
+      "sizeBytes",
+      "sizeBytesToken",
+      "sha256",
+      "fileState",
+      "originalPurpose",
+      "intakeEligibility",
+      "businessReadEligibility"
+    ],
+    "properties": {
+      "fileId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "uploadId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "displayName": {
+        "type": "string"
+      },
+      "sizeBytes": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "sizeBytesToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "sha256": {
+        "type": "string"
+      },
+      "fileState": {
+        "type": "string",
+        "enum": [
+          "AVAILABLE",
+          "DELETE_PENDING",
+          "DELETED"
+        ]
+      },
+      "originalPurpose": {
+        "type": "string"
+      },
+      "intakeEligibility": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "state",
+          "reason"
+        ],
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "ELIGIBLE",
+              "INELIGIBLE",
+              "UNAVAILABLE"
+            ]
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "SOURCE_STATE",
+              "SOURCE_EPOCH",
+              "SOURCE_PURPOSE",
+              "SOURCE_ROUTE",
+              "SOURCE_PROVENANCE",
+              "READ_ONLY"
+            ]
+          }
+        }
+      },
+      "businessReadEligibility": {
+        "type": "string",
+        "enum": [
+          "NOT_EVALUATED"
+        ]
+      }
+    }
+  },
+  "UploadReceipt": {
+    "description": "partSize is the current configured suggestion, including on begin replay, not a persisted original chunk size. allowedActions are possible state changes under fresh owner/purpose/epoch/publication/historical route checks. OPEN on READ_ONLY permits ABORT only. FINALIZING permits COMPLETE recovery on valid READ_ONLY or WRITABLE routes, never parts or abort. Terminal states have no allowedActions. COMPLETED separately advertises COMPLETE acknowledgment with exact saved manifest and ABORT no-op, even after publication or route disable when early-return owner/purpose/epoch checks pass. ABORTED advertises ABORT cleanup only when the exact historical recovery route remains valid. FAILED has no retry. These observations grant no mutation, byte or first-binding authority.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "uploadId",
+      "purpose",
+      "displayName",
+      "state",
+      "expectedSize",
+      "expectedSizeToken",
+      "expectedSha256",
+      "createdAt",
+      "updatedAt",
+      "completedFileId",
+      "accepted",
+      "allowedActions",
+      "idempotentRetries",
+      "blockedReason",
+      "completed"
+    ],
+    "properties": {
+      "uploadId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "purpose": {
+        "type": "string"
+      },
+      "displayName": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "OPEN",
+          "FINALIZING",
+          "COMPLETED",
+          "ABORTED",
+          "FAILED"
+        ]
+      },
+      "expectedSize": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "expectedSizeToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "expectedSha256": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "completedFileId": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "uuid"
+      },
+      "accepted": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "uploadId",
+          "partSize",
+          "partSizeToken"
+        ],
+        "properties": {
+          "uploadId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "partSize": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "partSizeToken": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$",
+            "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+          }
+        }
+      },
+      "allowedActions": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "UPLOAD_PARTS",
+            "COMPLETE",
+            "ABORT"
+          ]
+        }
+      },
+      "idempotentRetries": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "COMPLETE",
+            "ABORT"
+          ]
+        }
+      },
+      "blockedReason": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "completed": {
+        "oneOf": [
+          {
+            "$ref": "#/CompletedFileSummary"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "InputSummary": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "inputId",
+      "batchId",
+      "kind",
+      "materialMode",
+      "baseRevision",
+      "revisionToken",
+      "inputFingerprint",
+      "createdAt"
+    ],
+    "properties": {
+      "inputId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "batchId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "kind": {
+        "type": "string",
+        "enum": [
+          "IMPORT"
+        ]
+      },
+      "materialMode": {
+        "type": "string",
+        "enum": [
+          "EMPTY"
+        ]
+      },
+      "baseRevision": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "inputFingerprint": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "InputDetail": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "inputId",
+      "batchId",
+      "kind",
+      "materialMode",
+      "baseRevision",
+      "revisionToken",
+      "inputFingerprint",
+      "createdAt",
+      "batchProfile",
+      "batchFingerprint",
+      "cancelEpochToken",
+      "files",
+      "taskId"
+    ],
+    "properties": {
+      "inputId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "batchId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "kind": {
+        "type": "string",
+        "enum": [
+          "IMPORT"
+        ]
+      },
+      "materialMode": {
+        "type": "string",
+        "enum": [
+          "EMPTY"
+        ]
+      },
+      "baseRevision": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "inputFingerprint": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "batchProfile": {
+        "type": "string",
+        "enum": [
+          "ama.input-batch.v1"
+        ]
+      },
+      "batchFingerprint": {
+        "type": "string"
+      },
+      "cancelEpochToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "files": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ordinal",
+            "fileId",
+            "uploadId",
+            "sha256",
+            "sizeBytes",
+            "sizeBytesToken"
+          ],
+          "properties": {
+            "ordinal": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "fileId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "uploadId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "sizeBytes": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            },
+            "sizeBytesToken": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,18})$",
+              "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+            }
+          }
+        }
+      },
+      "taskId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "ImportTaskSummary": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "taskId",
+      "type",
+      "pool",
+      "meetingId",
+      "inputId",
+      "batchId",
+      "state",
+      "businessVersion",
+      "businessVersionToken",
+      "cancelEpochToken",
+      "attempt",
+      "attemptToken",
+      "maxAttempts",
+      "availableAt",
+      "createdAt",
+      "errorCode",
+      "output"
+    ],
+    "properties": {
+      "taskId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "TRANSCRIPT_IMPORT_V1"
+        ]
+      },
+      "pool": {
+        "type": "string",
+        "enum": [
+          "TRANSCRIPT_IMPORT"
+        ]
+      },
+      "meetingId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "inputId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "batchId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "RUNNING",
+          "SUCCEEDED",
+          "FAILED",
+          "CANCELLED",
+          "STALE"
+        ]
+      },
+      "businessVersion": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "businessVersionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "cancelEpochToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "attempt": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "attemptToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+      },
+      "maxAttempts": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "availableAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "errorCode": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "output": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "id"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "TRANSCRIPT_REVISION"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "UploadSummaryPage": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/UploadSummary"
+        }
+      },
+      "nextCursor": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  },
+  "PartSummaryPage": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/PartSummary"
+        }
+      },
+      "nextCursor": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  },
+  "CompletedFileSummaryPage": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/CompletedFileSummary"
+        }
+      },
+      "nextCursor": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  },
+  "InputSummaryPage": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/InputSummary"
+        }
+      },
+      "nextCursor": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  },
+  "ImportTaskSummaryPage": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/ImportTaskSummary"
+        }
+      },
+      "nextCursor": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  },
+  "Limit": {
+    "name": "limit",
+    "in": "query",
+    "schema": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "default": 20
+    }
+  },
+  "After": {
+    "name": "after",
+    "in": "query",
+    "schema": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "description": "Strict greater-than UUID keyset cursor. Refresh from first page after changes; this is not a snapshot."
+  },
+  "PartLimit": {
+    "name": "limit",
+    "in": "query",
+    "schema": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 500,
+      "default": 100
+    }
+  },
+  "AfterPart": {
+    "name": "afterPart",
+    "in": "query",
+    "schema": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,18})$",
+      "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+    }
+  },
+  "Scope": {
+    "name": "scope",
+    "in": "query",
+    "schema": {
+      "type": "string",
+      "enum": [
+        "active",
+        "all"
+      ],
+      "default": "active"
+    }
+  },
+  "uploadId": {
+    "name": "upload",
+    "in": "path",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "inputId": {
+    "name": "input",
+    "in": "path",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "taskId": {
+    "name": "task",
+    "in": "path",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "capabilities": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ],
+    "get": {
+      "operationId": "getProcessingCapabilities",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [],
+      "description": "READ-authorized safe availability. Execution remains NOT_INSTALLED until a real worker is installed; queue existence does not imply execution health. Only the current owner can submit.",
+      "responses": {
+        "400": {
+          "description": "INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "UNAUTHENTICATED: missing or revoked current session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "PROCESSING_INPUT_INVALID: unsupported domain input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized persisted result; private, no-store.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "private, no-store"
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Capabilities"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "imports": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ],
+    "post": {
+      "operationId": "acceptTranscriptImport",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        },
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "description": "Mandatory fresh DB-only accepted-result lookup precedes current CAS/exhaustion/source/archive/readiness checks. Same normalized key/body returns the original committed task/input/batch/revision, including with new intake unavailable; different payload conflicts. Exactly one bounded fresh lookup after named ordinary preparation failure can discover a concurrent committed winner. Final claim serialization repeats authorized replay first. Actual acceptance is input+READY task, with no RAW output. Never automatically rekey or infer success from client memory.",
+      "responses": {
+        "400": {
+          "description": "INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "UNAUTHENTICATED: missing or revoked current session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "PROCESSING_INPUT_INVALID: unsupported domain input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "202": {
+          "description": "Fresh authorized persisted result; private, no-store.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "private, no-store"
+            },
+            "Location": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "Actual persisted processing-input detail route."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/ImportAccepted"
+              }
+            }
+          }
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/ImportRequest"
+            }
+          }
+        }
+      }
+    }
+  },
+  "uploads": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ],
+    "get": {
+      "operationId": "listMeetingUploads",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/Limit"
+        },
+        {
+          "$ref": "#/After"
+        }
+      ],
+      "description": "",
+      "responses": {
+        "400": {
+          "description": "INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "UNAUTHENTICATED: missing or revoked current session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "PROCESSING_INPUT_INVALID: unsupported domain input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized persisted result; private, no-store.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "private, no-store"
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/UploadSummaryPage"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "upload": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ],
+    "get": {
+      "operationId": "getMeetingUpload",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/uploadId"
+        }
+      ],
+      "description": "",
+      "responses": {
+        "400": {
+          "description": "INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "UNAUTHENTICATED: missing or revoked current session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "PROCESSING_INPUT_INVALID: unsupported domain input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized persisted result; private, no-store.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "private, no-store"
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/UploadReceipt"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "parts": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ],
+    "get": {
+      "operationId": "listMeetingUploadParts",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/uploadId"
+        },
+        {
+          "$ref": "#/PartLimit"
+        },
+        {
+          "$ref": "#/AfterPart"
+        }
+      ],
+      "description": "",
+      "responses": {
+        "400": {
+          "description": "INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "UNAUTHENTICATED: missing or revoked current session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "PROCESSING_INPUT_INVALID: unsupported domain input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized persisted result; private, no-store.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "private, no-store"
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/PartSummaryPage"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "files": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ],
+    "get": {
+      "operationId": "listCompletedMeetingFiles",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/Limit"
+        },
+        {
+          "$ref": "#/After"
+        }
+      ],
+      "description": "",
+      "responses": {
+        "400": {
+          "description": "INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "UNAUTHENTICATED: missing or revoked current session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "PROCESSING_INPUT_INVALID: unsupported domain input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized persisted result; private, no-store.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "private, no-store"
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/CompletedFileSummaryPage"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "inputs": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ],
+    "get": {
+      "operationId": "listProcessingInputs",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/Limit"
+        },
+        {
+          "$ref": "#/After"
+        }
+      ],
+      "description": "",
+      "responses": {
+        "400": {
+          "description": "INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "UNAUTHENTICATED: missing or revoked current session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "PROCESSING_INPUT_INVALID: unsupported domain input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized persisted result; private, no-store.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "private, no-store"
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/InputSummaryPage"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "input": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ],
+    "get": {
+      "operationId": "getProcessingInput",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/inputId"
+        }
+      ],
+      "description": "",
+      "responses": {
+        "400": {
+          "description": "INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "UNAUTHENTICATED: missing or revoked current session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "PROCESSING_INPUT_INVALID: unsupported domain input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized persisted result; private, no-store.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "private, no-store"
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/InputDetail"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tasks": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ],
+    "get": {
+      "operationId": "listProcessingTasks",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/Scope"
+        },
+        {
+          "$ref": "#/Limit"
+        },
+        {
+          "$ref": "#/After"
+        }
+      ],
+      "description": "",
+      "responses": {
+        "400": {
+          "description": "INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "UNAUTHENTICATED: missing or revoked current session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "PROCESSING_INPUT_INVALID: unsupported domain input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized persisted result; private, no-store.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "private, no-store"
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/ImportTaskSummaryPage"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "task": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "./meetings.yaml#/Id"
+      }
+    ],
+    "get": {
+      "operationId": "getProcessingTask",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "#/taskId"
+        }
+      ],
+      "description": "",
+      "responses": {
+        "400": {
+          "description": "INVALID_ARGUMENT: invalid wire/query/cursor or unequal dual revision values.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "UNAUTHENTICATED: missing or revoked current session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "MEETING_FORBIDDEN: current owner required; capabilities permit current READ members with denied mutation capabilities.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "PROCESSING_NOT_FOUND: absent or wrong-meeting item after authorization.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "PROCESSING_CONFLICT or REVISION_EXHAUSTED; retain key and original body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "REQUEST_TOO_LARGE: finite protocol/operational admission bound exceeded.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "PROCESSING_INPUT_INVALID: unsupported domain input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "PROCESSING_UNAVAILABLE, PROFILE_UNAVAILABLE or PROCESSING_READ_BUDGET_EXCEEDED; no partial or speculative acceptance.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized persisted result; private, no-store.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string"
+              },
+              "description": "private, no-store"
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/ImportTaskSummary"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
