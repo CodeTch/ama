@@ -86,3 +86,7 @@ Read docs/superpowers/specs/2026-10-23-ama-phase-b-processing-intake.md and exac
 ## Task3 adopted pre-gate complete-read refinement
 
 Read docs/superpowers/specs/2026-10-23-ama-phase-b-pre-gate-read.md and exact original/R1/R2/reviews. This closes the producer-hash-before-identities API gap and PRD-01 authorization-precedence residual. Fixed final selector TYPE permission floor is independent of optional provider resolution; entire dispatch failure is private until fresh READ/owner EDIT on same gate. Data-only preparation never grants source/byte authority; legacy-only behavior preserved. Actual implementation/tests independent gate remains pending.
+
+## Task6 adopted saved-content refinement
+
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-saved-transcript.md and exact R1/reviews. Owner stored-history text/marks inspection is distinct from current original-byte eligibility; new-business/current-member/source predicates remain. Explicit snapshot/outside-archive/final phases and retained metadata/parent/child locks bound LONGTEXT before transfer, including final comparison and empty marks. Actual shared issuer/RAW allocation/qualified correction/budgets and later candidate/publication integration remain source activation gates; design approval is not implementation qualification.
