@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "docker",
+    "exec",
+    "ama-test-b01-a5e7d68612a4",
+    "sh",
+    "-c",
+    "MYSQL_PWD=\"$MYSQL_PASSWORD\" mysql --protocol=TCP -h127.0.0.1 --user=\"$MYSQL_USER\" \"$MYSQL_DATABASE\" --batch --raw -e 'SELECT id,SHA2(config_manifest,256) AS sha256 FROM transcription_input ORDER BY id;'"
+  ],
+  "exit_code": 0
+}

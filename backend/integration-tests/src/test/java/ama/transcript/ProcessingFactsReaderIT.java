@@ -107,6 +107,39 @@ class ProcessingFactsReaderIT {
   assertEquals(f.manifest,f.j.queryForObject("SELECT config_manifest FROM transcription_input WHERE id=?",String.class,f.input));
   assertEquals("READY",f.j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,f.task));
  }
+ @Test void supplementaryIdentityUtf16LimitPrecedesSharedAccessProjection() {
+  var f=new ArchiveProcessingFixture();var probe=new ProbeSource(f.source);var reader=new JdbcProcessingFactsReader(probe);
+  String emoji="\ud83d\ude00";
+  f.j.update("UPDATE enterprise_identity SET display_name=? WHERE enterprise_id=?",emoji.repeat(40),f.owner);
+  assertEquals(40,f.j.queryForObject("SELECT CHAR_LENGTH(display_name) FROM enterprise_identity WHERE enterprise_id=?",Long.class,f.owner));
+  assertEquals(80,f.j.queryForObject("SELECT OCTET_LENGTH(CONVERT(display_name USING utf16)) DIV 2 FROM enterprise_identity WHERE enterprise_id=?",Long.class,f.owner));
+  assertAll(
+   ()->assertEquals(BUDGET_EXCEEDED,assertThrows(Failure.class,()->reader.readBatch(f.actor,f.meeting,f.batch,utf16Budget(64,B.maxAggregateScalars()),()->false)).code()),
+   ()->assertFalse(probe.sql.stream().anyMatch(q->q.contains("display_name")&&!q.contains("OCTET_LENGTH(display_name)")),"over-budget identity must never reach shared LONGTEXT projection")
+  );
+  f.j.update("UPDATE enterprise_identity SET display_name=? WHERE enterprise_id=?",emoji.repeat(32),f.owner);probe.sql.clear();
+  assertEquals(2,reader.readBatch(f.actor,f.meeting,f.batch,utf16Budget(64,B.maxAggregateScalars()),()->false).rows().size(),"32 supplementary scalars are exactly64 legal UTF16 units");
+  probe.sql.clear();
+  assertEquals(BUDGET_EXCEEDED,assertThrows(Failure.class,()->reader.readBatch(f.actor,f.meeting,f.batch,utf16Budget(64,32),()->false)).code());
+  assertTrue(probe.sql.stream().anyMatch(q->q.contains("FROM input_batch")),"identity uses32 aggregate scalars, allowing domain acquisition before later row scalars exceed32");
+ }
+ @Test void supplementaryManifestUtf16LimitPrecedesLongtextProjection() {
+  var f=new ArchiveProcessingFixture();var probe=new ProbeSource(f.source);var reader=new JdbcProcessingFactsReader(probe);
+  String emoji="\ud83d\ude00";
+  f.j.update("UPDATE transcription_input SET config_manifest=? WHERE id=?",emoji.repeat(40),f.input);
+  assertEquals(160,f.j.queryForObject("SELECT OCTET_LENGTH(config_manifest) FROM transcription_input WHERE id=?",Long.class,f.input));
+  assertEquals(80,f.j.queryForObject("SELECT OCTET_LENGTH(CONVERT(config_manifest USING utf16)) DIV 2 FROM transcription_input WHERE id=?",Long.class,f.input));
+  assertAll(
+   ()->assertEquals(BUDGET_EXCEEDED,assertThrows(Failure.class,()->reader.readStored(f.actor,f.meeting,f.input,utf16Budget(64,B.maxAggregateScalars()),()->false)).code()),
+   ()->assertFalse(probe.sql.stream().anyMatch(q->q.contains("config_manifest")&&!q.contains("OCTET_LENGTH(config_manifest)")),"over-budget supplementary manifest must never be selected")
+  );
+  String boundary=emoji.repeat(32);f.j.update("UPDATE transcription_input SET config_manifest=? WHERE id=?",boundary,f.input);probe.sql.clear();
+  var facts=reader.readStored(f.actor,f.meeting,f.input,utf16Budget(64,B.maxAggregateScalars()),()->false);
+  assertEquals(boundary,input(facts).string("config_manifest"));assertEquals(64,input(facts).string("config_manifest").length());
+  assertTrue(probe.sql.stream().anyMatch(q->q.contains("config_manifest")&&!q.contains("OCTET_LENGTH(config_manifest)")),"exact legal UTF16 boundary transfers original bytes");
+  // This intentionally non-JSON value tests acquisition only, not a valid processing binding.
+ }
+ static ArchiveReadBudget utf16Budget(int utf16,long aggregate){return new ArchiveReadBudget(B.maxArtifactBytes(),B.maxTotalBytes(),B.maxArtifacts(),B.maxDependencies(),B.maxGraphDepth(),B.maxTokens(),B.maxJsonDepth(),B.maxNameUtf16(),utf16,B.maxStringUtf8Bytes(),aggregate,B.maxManifestBytes(),B.maxBatchFiles(),B.maxFactRows(),B.maxFactEdges());}
  static int index(List<String> values,String marker){for(int i=0;i<values.size();i++)if(values.get(i).contains(marker))return i;return -1;}
  /** Delegates every actual connection/result; observes SQL only, never substitutes a DB return. */
  static final class ProbeSource extends org.springframework.jdbc.datasource.AbstractDataSource {
