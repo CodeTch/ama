@@ -245,3 +245,11 @@ root 已完整读取未分配 SQL 候选1563f2806fcd9e6a804870a54f803852b722cfa2
 本轮同一独有fixture精确ID/标签/loopback58062已核对。作者preapply完整快照62旧用户表/1094行/SHOW CREATE/五组元数据/十二条history在缺表探测前后相等，root独立程序复核JSON相等和原12SQL SHA。缺表1146探测仅为存在性前置检查，不能替代实际assertion RED；root要求在ACK前提供缺二表断言失败及before/after保全证据。精确原件和root比较见artifacts/phase-b/b-remaining/runtime-metadata-freeze，原探测名schema-red.json保留而不把含义升级。
 
 本提交起最终候选字节永久冻结。单独精确SHA/fixture ACK尚未发出，仍不得放正式location或首次应用。未知/失败/更高版本目标不在许可范围。失败保留原件/实际schema/history，只能中央登记前向修正，禁止改旧SQL、repair/reset/outOfOrder。此冻结不是Task2或完整B验收。
+
+### V013.1 root 单独精确 ACK（仅本轮独有 fixture）
+
+在64908b1aef4c28f0806846128fcb44005f1b75e1完整字节冻结提交后，root再次独立核对最终SHA **9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520 / 1817B**、正式location尚无该文件、选定fixture完整ID/标签/loopback58062及最新原十二条success/script/checksum前缀。实际JUnit缺二表assertion RED为1/1/0/0；真实缺守护TABLE时create完整回滚为1/0/0/0。root程序比较原1094行全部精确保留，metadata/SHOWCREATE/history相同；作者另加9条明确新UUID的合成legacy metadata反例，即时preapply62旧表/1103行，已与seed后原件逐字节结构相等。负例批次用既有BatchFingerprint真实重算匹配，仍无profile/guard，不冒称合格业务上传。
+
+现单独ACK仅允许作者把精确冻结文件V013_1__b_runtime_metadata.sql放正式location，并在ama-test-b01-ad9f1af29eff（完整ID eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502，ama_b01_fixture，127.0.0.1:58062）首次Flyway应用及已审结构/约束/旧数据与前缀保全/private目标及latest零增量测试。精确UTC/epoch、冻结提交先后、独立fresh prefix和比较结果在artifacts/phase-b/b-remaining/runtime-metadata-ack。应用成功记录及Task2实现独立复审仍待交付；此处不宣称已应用或开启领域业务。
+
+失败必须保留实际schema/history和所有原件，中央登记前向路径；禁止修改冻结SQL、reset/repair/outOfOrder、旧fixture操作或其他目标应用。所有公司/HA/容量/I/O资格不变。

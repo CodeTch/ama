@@ -1,0 +1,32 @@
+{
+  "ack_utc": "2026-10-23T04:09:45.822351+00:00",
+  "ack_epoch": 1792728585.822351,
+  "freeze_commit": "64908b1aef4c28f0806846128fcb44005f1b75e1",
+  "freeze_commit_epoch": 1792727994,
+  "sql_sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+  "sql_bytes": 1817,
+  "authorized_fixture_name": "ama-test-b01-ad9f1af29eff",
+  "authorized_fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+  "loopback_port": 58062,
+  "database": "ama_b01_fixture",
+  "only_exact_frozen_file": "V013_1__b_runtime_metadata.sql",
+  "fresh_history_prefix_success": 12,
+  "old_rows_unchanged": 1094,
+  "added_explicit_synthetic_legacy_rows": 9,
+  "immediate_preapply_rows": 1103,
+  "metadata_showcreate_history_unchanged": true,
+  "schema_assertion_red": [
+    1,
+    1,
+    0,
+    0
+  ],
+  "actual_missing_guard_create_rollback_pass": [
+    1,
+    0,
+    0,
+    0
+  ],
+  "immediate_snapshot_sha256": "e0c0a8a0b99001268cfa140778cfe02707301d35650552b2bd2d7132df72bb6a",
+  "permission": "Place exact frozen bytes in formal location and first apply to ONLY this selected fixture; preserve any failure; no reset/repair/outOfOrder/SQL edits; no runtime business activation"
+}
