@@ -1,0 +1,82 @@
+    private enum PreparedState { PREPARED, INELIGIBLE, FATAL }
+    private record PreparedRead(CompleteReadPolicy policy,CompleteReadPolicy.ReadPreparation data,PreparedState state,RuntimeException failure) {}
+    private PreparedRead prepare(Actor actor,String meeting,ReadRequest request){
+        CompleteReadPolicy policy=null;
+        try {
+            if(sourceBudget==null||!(policies.get(request.referenceKind()) instanceof CompleteReadPolicy))throw new Unavailable();
+            policy=(CompleteReadPolicy)policies.get(request.referenceKind());
+            var data=policy.prepareRead(actor,meeting,request);if(data==null)throw new Unavailable();
+            return new PreparedRead(policy,data,PreparedState.PREPARED,null);
+        }catch(RuntimeException failure){
+            cancellation(failure);
+            return new PreparedRead(policy,null,failure instanceof NotFound&&request instanceof CurrentReadRequest?PreparedState.INELIGIBLE:PreparedState.FATAL,failure);
+        }
+    }
+    private static void cancellation(RuntimeException failure){
+        if(Thread.currentThread().isInterrupted())throw ama.contract.MinutesContracts.fail(ama.contract.MinutesContracts.FailureCode.CANCELLED);
+        if(failure instanceof ama.contract.MinutesContracts.Failure f&&f.code()==ama.contract.MinutesContracts.FailureCode.CANCELLED)throw f;
+    }
+    private static String validateSelector(ReadRequest request){
+        String file;
+        if(request instanceof CurrentReadRequest current){ama.contract.FileContracts.code(current.referenceKind());file=current.fileId();}
+        else if(request instanceof ama.transcript.ProcessingSourceReader.HistoryRequest history){uuid(history.revisionId());file=history.fileId();}
+        else if(request instanceof ama.transcript.ProcessingSourceReader.WorkerRequest worker){Objects.requireNonNull(worker.lease());uuid(worker.inputId());file=worker.fileId();}
+        else throw new IllegalArgumentException("Unknown complete-read selector");
+        uuid(file);return file;
+    }
+    private void authorizeOperation(Gate gate,ReadRequest request,CompleteReadPolicy policy){
+        // Fixed concrete final record types establish only a permission floor, never byte authority.
+        if(request instanceof ama.transcript.ProcessingSourceReader.HistoryRequest||request instanceof ama.transcript.ProcessingSourceReader.WorkerRequest)
+            access.require(gate.access,MeetingAccess.Action.EDIT);
+        if(policy!=null)policy.authorizeRead(gate,gate.meeting,request);
+    }
+    private static void requirePrepared(PreparedRead prepared){
+        if(prepared.state==PreparedState.FATAL)throw new Unavailable();
+        if(prepared.state==PreparedState.INELIGIBLE)throw new NotFound();
+    }
+    @Override public Download read(Actor actor,String meeting,ReadRequest request,String range){
+        if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Read owns its authorization transaction");
+        Objects.requireNonNull(actor);uuid(meeting);String requested=validateSelector(request);ama.contract.MinutesContracts.check(()->false);
+        var prepared=prepare(actor,meeting,request);
+        FileRecord pinned=tx.required(()->{
+            var gate=(Gate)lock(actor,meeting,MeetingAccess.Action.READ);authorizeOperation(gate,request,prepared.policy);requirePrepared(prepared);
+            var policy=prepared.policy;var plan=policy.prelockRead(gate,meeting,request,prepared.data);
+            if(plan==null||plan.context()==null||!requested.equals(plan.requestedFileId())||plan.completeMembers().isEmpty()||plan.completeMembers().size()>sourceBudget.maxBatchFiles())throw new Unavailable();
+            var proofs=new ArrayList<Proof>();var unique=new HashSet<CompleteReadPolicy.ReadMember>();
+            for(var member:plan.completeMembers()){
+                if(!member.reference().kind().equals(request.referenceKind())||!unique.add(member))throw new Unavailable();
+                var proof=(Proof)prelock(gate,member.reference(),member.fileId(),plan.context());
+                if(proof.policy!=policy||proof.domain!=plan.context())throw new Unavailable();proofs.add(proof);
+            }
+            return completeRead(gate,proofs,requested);
+        });
+        return open(pinned,range);
+    }
+    @Override public Download download(Actor actor,String id,String range){
+        if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Download owns its authorization transaction");
+        if(policies.values().stream().noneMatch(p->p instanceof CompleteReadPolicy))return legacyDownload(actor,id,range);
+        uuid(id);ama.contract.MinutesContracts.check(()->false);
+        var meetings=j.queryForList("SELECT meeting_id FROM file_object WHERE id=? AND state='AVAILABLE'",String.class,id);
+        if(meetings.size()!=1||meetings.getFirst()==null)throw new NotFound();String meeting=meetings.getFirst();
+        List<Reference> discovered=List.of();PreparedRead prepared=null;CurrentReadRequest request=null;
+        try {
+            discovered=BoundedFileReferences.read(j,sourceBudget,id);CompleteReadPolicy provider=null;
+            for(var reference:discovered)if(policies.get(reference.kind()) instanceof CompleteReadPolicy candidate){
+                if(provider!=null&&provider!=candidate)throw new Unavailable();provider=candidate;
+                if(request==null)request=new CurrentReadRequest(reference.kind(),id);
+            }
+            if(request!=null)prepared=prepare(actor,meeting,request);
+        }catch(RuntimeException failure){cancellation(failure);prepared=new PreparedRead(null,null,PreparedState.FATAL,failure);}
+        final var references=discovered;final var outcome=prepared;final var selector=request;
+        FileRecord pinned=tx.required(()->{
+            var gate=(Gate)lock(actor,meeting,MeetingAccess.Action.READ);
+            if(selector!=null)authorizeOperation(gate,selector,outcome==null?null:outcome.policy);
+            if(outcome!=null&&outcome.state==PreparedState.FATAL)throw new Unavailable();
+            if(!BoundedFileReferences.read(j,sourceBudget,id).equals(references))throw new Unavailable();
+            if(outcome==null||outcome.state==PreparedState.INELIGIBLE){
+                var legacy=references.stream().filter(r->!(policies.get(r.kind()) instanceof CompleteReadPolicy)).toList();
+                return legacyRead(gate,legacy,id);
+            }
+            return genericComplete(gate,references,id,outcome);
+        });return open(pinned,range);
+    }

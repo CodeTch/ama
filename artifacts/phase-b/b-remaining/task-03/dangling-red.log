@@ -1,0 +1,26 @@
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 4.968 s <<< FAILURE! -- in ama.storage.TranscriptAuthorityIT
+[ERROR] ama.storage.TranscriptAuthorityIT.danglingCurrentPointerIsFatalAfterAuthorizationEvenWithValidLegacyReference -- Time elapsed: 4.943 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Expected ama.contract.FileContracts.Unavailable to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:74)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3223)
+	at ama.storage.TranscriptAuthorityIT.danglingCurrentPointerIsFatalAfterAuthorizationEvenWithValidLegacyReference(TranscriptAuthorityIT.java:291)
+
+[ERROR] Failures: 
+[ERROR]   TranscriptAuthorityIT.danglingCurrentPointerIsFatalAfterAuthorizationEvenWithValidLegacyReference:291 Expected ama.contract.FileContracts.Unavailable to be thrown, but nothing was thrown.
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.5.6:verify (default) on project ama-integration-tests: There are test failures.
+[ERROR] 
+[ERROR] See /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-integration-tests

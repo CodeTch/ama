@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-03/audit-final.py", line 15, in <module>
+    assert 'meeting_minutes_guard' in (root/'backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java').read_text()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

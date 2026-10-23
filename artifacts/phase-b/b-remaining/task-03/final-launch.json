@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "./mvnw",
+    "-q",
+    "-pl",
+    "backend/integration-tests",
+    "-am",
+    "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+    "-Dit.test=TranscriptAuthorityIT,FileRegistryUploadIT,FileRegistryRestartIT#frozenManifestNamePurposeAndOpaqueTokenRecoverAfterActualJvmDeath,ProcessingFactsReaderIT,B06QueueSeamsIT,MeetingRevisionIT,MeetingConcurrencyIT,ConfigArchiveRestartIT",
+    "-DfailIfNoTests=false",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dfailsafe.failIfNoSpecifiedTests=false",
+    "verify"
+  ],
+  "fresh_restart_evidence": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-03/archive-restart-2ddfd7ae-fc6b-4559-b90e-03e7d7400313",
+  "maven_heap_mib": 512,
+  "test_fork_heap_mib": 512,
+  "archive_child_heap_mib": 64,
+  "native_service_heap_mib": 64,
+  "registry_api_child_heap_mib": 192,
+  "active_processors": 2
+}

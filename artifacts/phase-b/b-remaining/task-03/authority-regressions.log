@@ -1,0 +1,1311 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2
+Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2
+Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2
+FIFO child exitedBeforeDeadline=true; Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2 PUBLISH_START UNAVAILABLE PROFILE_UNAVAILABLE 
+Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2
+Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2
+Oct 23, 2026 1:56:37 PM ama.worker.WorkerLoop execute
+WARNING: Worker completion unavailable: IllegalStateException
+Oct 23, 2026 1:56:37 PM ama.worker.WorkerLoop execute
+WARNING: Worker completion unavailable: IllegalStateException
+Oct 23, 2026 1:56:42 PM ama.worker.WorkerLoop execute
+WARNING: Worker completion unavailable: IllegalStateException
+Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2
+Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2
+13:56:51.092 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:51.272 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.049s)
+13:56:51.291 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:51.296 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:52.067 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:52.137 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.027s)
+13:56:52.158 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:52.161 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:52.794 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:52.841 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.017s)
+13:56:52.861 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:52.863 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+B06 disable proof: stale Actor.status=ACTIVE; current shared identity=DISABLED; effects=0; task=RUNNING; actual locking SQL=[pool-2-thread-2 SELECT enterprise_id,status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE /*identity=b06-seam-3c9cf1e0-8807-4b1f-bdfa-6eb4d9163755*/]
+13:56:53.190 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:53.237 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.016s)
+13:56:53.254 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:53.256 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:53.404 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:53.451 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.016s)
+13:56:53.470 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:53.472 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:54.013 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:54.060 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.015s)
+13:56:54.078 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:54.080 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:54.185 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:54.240 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.015s)
+13:56:54.255 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:54.256 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+B06 standalone claim actual locking SQL=[main SELECT enterprise_id,status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE SKIP LOCKED /*identity=b06-seam-66cf5187-cf66-4e73-89f4-498be0c98e47*/, main SELECT business_version,cancel_epoch,deleted FROM task_subject WHERE subject_kind=? AND subject_id=? FOR UPDATE SKIP LOCKED, main SELECT business_version,cancel_epoch,deleted FROM task_subject WHERE subject_kind=? AND subject_id=? FOR UPDATE SKIP LOCKED, main SELECT * FROM meeting WHERE id=? FOR UPDATE SKIP LOCKED, main SELECT * FROM meeting WHERE id=? FOR UPDATE, main SELECT id FROM meeting_info_revision WHERE id=? FOR UPDATE SKIP LOCKED, main SELECT * FROM durable_task WHERE id=? FOR UPDATE SKIP LOCKED]
+13:56:54.491 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:54.536 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.018s)
+13:56:54.554 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:54.556 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:54.723 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:54.753 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.011s)
+13:56:54.766 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:54.768 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:54.870 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:54.912 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.013s)
+13:56:54.930 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:54.932 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+B06 existing three-argument output ordering control: validation rejected absent real output before effects; effects=0; output rows=0; task=RUNNING. This is existing API behavior, not a production defect.
+13:56:55.193 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:55.223 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.010s)
+13:56:55.235 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:55.236 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:55.679 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:55.726 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.013s)
+13:56:55.744 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:55.745 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:56.489 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:56.513 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.007s)
+13:56:56.525 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:56.526 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:56.763 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:56.797 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.017s)
+13:56:56.809 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:56.810 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:56.997 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:57.023 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.010s)
+13:56:57.033 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:57.034 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+B06 ambient actual=success; persisted tasks=1; persisted events=1; locking SQL=[main SELECT enterprise_id,status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE /*identity=b06-seam-ec308397-e048-4dc8-8785-7e174c163f37*/, main SELECT business_version,cancel_epoch,deleted FROM task_subject WHERE subject_kind=? AND subject_id=? FOR UPDATE, main SELECT * FROM meeting WHERE id=? FOR UPDATE, main SELECT * FROM meeting WHERE id=? FOR UPDATE, main SELECT * FROM meeting WHERE id=? FOR UPDATE, main SELECT business_version,cancel_epoch,deleted FROM task_subject WHERE subject_kind=? AND subject_id=? FOR UPDATE, main SELECT * FROM meeting WHERE id=? FOR UPDATE, main SELECT id FROM meeting_info_revision WHERE id=? FOR UPDATE, main SELECT * FROM durable_task WHERE producer_key=? FOR UPDATE, main SELECT * FROM durable_task WHERE id=? FOR UPDATE]
+13:56:57.175 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:57.199 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.007s)
+13:56:57.210 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:57.211 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:57.376 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:57.405 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.011s)
+13:56:57.416 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:57.417 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:58.091 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:58.119 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.009s)
+13:56:58.132 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:58.133 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:58.543 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:58.569 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.008s)
+13:56:58.581 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:58.582 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:58.919 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:58.942 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.008s)
+13:56:58.951 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:58.952 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:59.219 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:59.244 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.008s)
+13:56:59.255 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:59.256 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:59.538 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:59.571 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.008s)
+13:56:59.581 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:59.582 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:56:59.934 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:56:59.961 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.009s)
+13:56:59.972 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:56:59.973 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:00.393 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:00.434 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.013s)
+13:57:00.453 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:00.454 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:00.779 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:00.805 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.007s)
+13:57:00.815 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:00.816 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:01.159 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:01.195 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.011s)
+13:57:01.210 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:01.212 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:01.531 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:01.559 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.012s)
+13:57:01.568 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:01.569 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:01.885 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:01.909 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.009s)
+13:57:01.918 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:01.919 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:02.242 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:02.276 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.008s)
+13:57:02.286 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:02.287 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:02.598 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:02.627 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.008s)
+13:57:02.635 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:02.636 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:02.946 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:02.980 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.012s)
+13:57:02.996 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:02.997 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:03.456 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:03.497 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.014s)
+13:57:03.517 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:03.520 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:03.907 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:03.931 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.008s)
+13:57:03.943 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:03.944 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:04.256 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:04.287 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.010s)
+13:57:04.302 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:04.303 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:04.535 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:04.557 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.008s)
+13:57:04.568 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:04.568 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:12.192 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:12.235 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.016s)
+13:57:12.254 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:12.256 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:13.009 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:13.046 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.014s)
+13:57:13.060 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:13.061 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+B03 binary identity locking matched actual MySQL utf8mb4_0900_bin: ASCII then U+E000 then U+10000; final SQL=UPDATE task_outbox_sequence SET next_id=? WHERE id=1
+13:57:13.503 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:13.530 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.010s)
+13:57:13.544 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:13.546 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:14.025 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:14.054 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.010s)
+13:57:14.067 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:14.069 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:14.394 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:14.434 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.014s)
+13:57:14.451 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:14.453 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+13:57:14.840 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+13:57:14.881 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.014s)
+13:57:14.898 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+13:57:14.900 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+OpenAPI response contract: put /api/v1/meetings/{id}/info 503 {"error":{"code":"CATEGORY_DICTIONARY_UNAVAILABLE","message":"Approved meeting category dictionary unavailable","traceId":"1595dbec-b322-4f70-a1ce-a8e4a4b70e77"}}
+OpenAPI response contract: put /api/v1/meetings/{id}/info 403 {"error":{"code":"MEETING_FORBIDDEN","message":"Meeting access denied","traceId":"a4e0ad2d-ecb1-4b65-89b3-7e2d528fd484"}}
+OpenAPI response contract: put /api/v1/meetings/{id}/info 409 {"error":{"code":"MEETING_CONFLICT","message":"Meeting changed or request conflicts","traceId":"30f8c4bb-afd0-4c71-8fdd-a9d2d0eab084"}}
+OpenAPI response contract: put /api/v1/meetings/{id}/info 413 {"error":{"code":"REQUEST_TOO_LARGE","message":"Request exceeds configured transport budget","traceId":"5e769486-e1f1-4c35-aaef-b3ca7acdb6ab"}}
+OpenAPI response contract: post /api/v1/uploads/{id}/completion 503 {"error":{"code":"FILE_STORAGE_UNAVAILABLE","message":"File storage unavailable","traceId":"e2e4b1e3-76c8-4cd1-93d6-67bbf67ba568"}}
+2026-10-23T13:57:40.406+08:00 ERROR 1882061 --- [ama-api] [           main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'fileController' defined in URL [jar:file:/home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/ama-api-0.1.0-SNAPSHOT.jar!/ama/api/FileController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'fileUploads' defined in class path resource [ama/api/FileConfiguration.class]: Unsatisfied dependency expressed through method 'fileUploads' parameter 4: Error creating bean with name 'fileBackends' defined in class path resource [ama/api/FileConfiguration.class]: Failed to instantiate [ama.storage.FileBackendCatalog]: Factory method 'fileBackends' threw exception with message: Failed to obtain JDBC Connection
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1380) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1219) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:196) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1225) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1191) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1121) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:994) ~[spring-context-7.0.9.jar:7.0.9]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-7.0.9.jar:7.0.9]
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:143) ~[spring-boot-web-server-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:756) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:445) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:321) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:154) ~[spring-boot-4.1.1.jar:4.1.1]
+	at ama.storage.FileRegistryUploadIT.startApp(FileRegistryUploadIT.java:89) ~[test-classes/:na]
+	at ama.storage.FileRegistryUploadIT.fullNameAndOpaqueTokenSurviveApplicationRestart(FileRegistryUploadIT.java:398) ~[test-classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:701) ~[junit-platform-commons-6.0.3.jar:6.0.3]
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:502) ~[junit-platform-commons-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.support.MethodReflectionUtils.invoke(MethodReflectionUtils.java:45) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:61) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:124) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:163) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:148) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:123) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:105) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:99) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:66) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:47) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:39) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:104) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:98) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invokeVoid(InterceptingExecutableInvoker.java:71) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$0(TestMethodTestDescriptor.java:219) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:215) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:157) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:70) ~[junit-jupiter-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$2(NodeTestTask.java:176) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$1(NodeTestTask.java:166) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:138) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$0(NodeTestTask.java:164) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:163) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:116) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:42) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$2(NodeTestTask.java:180) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$1(NodeTestTask.java:166) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:138) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$0(NodeTestTask.java:164) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:163) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:116) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:42) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$2(NodeTestTask.java:180) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$1(NodeTestTask.java:166) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:138) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$0(NodeTestTask.java:164) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:163) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:116) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:36) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:52) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:58) ~[junit-platform-engine-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:246) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:218) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:179) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:108) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:66) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:157) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:65) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:125) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:58) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$2(InterceptingLauncher.java:57) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:56) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:58) ~[junit-platform-launcher-6.0.3.jar:6.0.3]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.apache.maven.surefire.api.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:125) ~[surefire-api-3.5.6.jar:3.5.6]
+	at org.apache.maven.surefire.junitplatform.LauncherAdapter.executeWithCancellationToken(LauncherAdapter.java:68) ~[surefire-junit-platform-3.5.6.jar:3.5.6]
+	at org.apache.maven.surefire.junitplatform.LauncherAdapter.execute(LauncherAdapter.java:54) ~[surefire-junit-platform-3.5.6.jar:3.5.6]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:203) ~[surefire-junit-platform-3.5.6.jar:3.5.6]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:168) ~[surefire-junit-platform-3.5.6.jar:3.5.6]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:136) ~[surefire-junit-platform-3.5.6.jar:3.5.6]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385) ~[surefire-booter-3.5.6.jar:3.5.6]
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162) ~[surefire-booter-3.5.6.jar:3.5.6]
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.5.6.jar:3.5.6]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.5.6.jar:3.5.6]
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'fileUploads' defined in class path resource [ama/api/FileConfiguration.class]: Unsatisfied dependency expressed through method 'fileUploads' parameter 4: Error creating bean with name 'fileBackends' defined in class path resource [ama/api/FileConfiguration.class]: Failed to instantiate [ama.storage.FileBackendCatalog]: Factory method 'fileBackends' threw exception with message: Failed to obtain JDBC Connection
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1360) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1192) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1769) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1658) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:912) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-7.0.9.jar:7.0.9]
+	... 102 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'fileBackends' defined in class path resource [ama/api/FileConfiguration.class]: Failed to instantiate [ama.storage.FileBackendCatalog]: Factory method 'fileBackends' threw exception with message: Failed to obtain JDBC Connection
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:657) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:645) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1360) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1192) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1769) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1658) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:912) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-7.0.9.jar:7.0.9]
+	... 116 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [ama.storage.FileBackendCatalog]: Factory method 'fileBackends' threw exception with message: Failed to obtain JDBC Connection
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:183) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:72) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:152) ~[spring-beans-7.0.9.jar:7.0.9]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653) ~[spring-beans-7.0.9.jar:7.0.9]
+	... 130 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:665) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:732) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:757) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:809) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at org.springframework.jdbc.core.JdbcTemplate.queryForList(JdbcTemplate.java:948) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at ama.storage.FileBackendCatalog.configure(FileBackendCatalog.java:53) ~[ama-adapters-0.1.0-SNAPSHOT.jar:na]
+	at ama.api.FileConfiguration.fileBackends(FileConfiguration.java:122) ~[ama-api-0.1.0-SNAPSHOT.jar:0.1.0-SNAPSHOT]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:155) ~[spring-beans-7.0.9.jar:7.0.9]
+	... 133 common frames omitted
+Caused by: com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createCommunicationsException(SQLError.java:165) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:55) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:840) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:416) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:683) ~[java.sql:na]
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:191) ~[java.sql:na]
+	at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriverManager(DriverManagerDataSource.java:155) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriver(DriverManagerDataSource.java:146) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnectionFromDriver(AbstractDriverBasedDataSource.java:193) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnection(AbstractDriverBasedDataSource.java:157) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at ama.storage.RegistryProbeSource.getConnection(RegistryProbeSource.java:24) ~[test-classes/:na]
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81) ~[spring-jdbc-7.0.9.jar:7.0.9]
+	... 143 common frames omitted
+Caused by: com.mysql.cj.exceptions.CJCommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createCommunicationsException(ExceptionFactory.java:156) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.protocol.a.NativeProtocol.afterHandshake(NativeProtocol.java:435) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.protocol.a.NativeProtocol.connect(NativeProtocol.java:1336) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.NativeSession.connect(NativeSession.java:155) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:964) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:828) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	... 156 common frames omitted
+Caused by: java.net.SocketException: Connection attempt exceeded defined timeout.
+	at com.mysql.cj.protocol.StandardSocketFactory.resetLoginTimeCountdown(StandardSocketFactory.java:205) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.protocol.StandardSocketFactory.afterHandshake(StandardSocketFactory.java:190) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	at com.mysql.cj.protocol.a.NativeProtocol.afterHandshake(NativeProtocol.java:433) ~[mysql-connector-j-9.7.0.jar:9.7.0]
+	... 160 common frames omitted
+
+[ERROR] Tests run: 39, Failures: 0, Errors: 29, Skipped: 0, Time elapsed: 14.09 s <<< FAILURE! -- in ama.storage.FileRegistryUploadIT
+[ERROR] ama.storage.FileRegistryUploadIT.fullNameAndOpaqueTokenSurviveApplicationRestart -- Time elapsed: 3.455 s <<< ERROR!
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'fileController' defined in URL [jar:file:/home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/ama-api-0.1.0-SNAPSHOT.jar!/ama/api/FileController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'fileUploads' defined in class path resource [ama/api/FileConfiguration.class]: Unsatisfied dependency expressed through method 'fileUploads' parameter 4: Error creating bean with name 'fileBackends' defined in class path resource [ama/api/FileConfiguration.class]: Failed to instantiate [ama.storage.FileBackendCatalog]: Factory method 'fileBackends' threw exception with message: Failed to obtain JDBC Connection
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1380)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1219)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:196)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1225)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1191)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1121)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:994)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621)
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:143)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:756)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:445)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:321)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:154)
+	at ama.storage.FileRegistryUploadIT.startApp(FileRegistryUploadIT.java:89)
+	at ama.storage.FileRegistryUploadIT.fullNameAndOpaqueTokenSurviveApplicationRestart(FileRegistryUploadIT.java:398)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'fileUploads' defined in class path resource [ama/api/FileConfiguration.class]: Unsatisfied dependency expressed through method 'fileUploads' parameter 4: Error creating bean with name 'fileBackends' defined in class path resource [ama/api/FileConfiguration.class]: Failed to instantiate [ama.storage.FileBackendCatalog]: Factory method 'fileBackends' threw exception with message: Failed to obtain JDBC Connection
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1360)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1192)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1769)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1658)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:912)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+	... 21 more
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'fileBackends' defined in class path resource [ama/api/FileConfiguration.class]: Failed to instantiate [ama.storage.FileBackendCatalog]: Factory method 'fileBackends' threw exception with message: Failed to obtain JDBC Connection
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:657)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:645)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1360)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1192)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1769)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1658)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:912)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+	... 35 more
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [ama.storage.FileBackendCatalog]: Factory method 'fileBackends' threw exception with message: Failed to obtain JDBC Connection
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:183)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:72)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:152)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	... 49 more
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:665)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:732)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:757)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:809)
+	at org.springframework.jdbc.core.JdbcTemplate.queryForList(JdbcTemplate.java:948)
+	at ama.storage.FileBackendCatalog.configure(FileBackendCatalog.java:53)
+	at ama.api.FileConfiguration.fileBackends(FileConfiguration.java:122)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:155)
+	... 52 more
+Caused by: com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createCommunicationsException(SQLError.java:165)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:55)
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:840)
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:416)
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237)
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:683)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:191)
+	at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriverManager(DriverManagerDataSource.java:155)
+	at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriver(DriverManagerDataSource.java:146)
+	at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnectionFromDriver(AbstractDriverBasedDataSource.java:193)
+	at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnection(AbstractDriverBasedDataSource.java:157)
+	at ama.storage.RegistryProbeSource.getConnection(RegistryProbeSource.java:24)
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160)
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118)
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81)
+	... 62 more
+Caused by: com.mysql.cj.exceptions.CJCommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140)
+	at com.mysql.cj.exceptions.ExceptionFactory.createCommunicationsException(ExceptionFactory.java:156)
+	at com.mysql.cj.protocol.a.NativeProtocol.afterHandshake(NativeProtocol.java:435)
+	at com.mysql.cj.protocol.a.NativeProtocol.connect(NativeProtocol.java:1336)
+	at com.mysql.cj.NativeSession.connect(NativeSession.java:155)
+	at com.mysql.cj.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:964)
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:828)
+	... 75 more
+Caused by: java.net.SocketException: Connection attempt exceeded defined timeout.
+	at com.mysql.cj.protocol.StandardSocketFactory.resetLoginTimeCountdown(StandardSocketFactory.java:205)
+	at com.mysql.cj.protocol.StandardSocketFactory.afterHandshake(StandardSocketFactory.java:190)
+	at com.mysql.cj.protocol.a.NativeProtocol.afterHandshake(NativeProtocol.java:433)
+	... 79 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.completionMustMatchAllCommittedReceipts -- Time elapsed: 0.062 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.publishedMeetingCannotAcceptNewBytes -- Time elapsed: 0.050 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.readOnlyBackendRecoversFrozenResultButRejectsNewPartWrites -- Time elapsed: 0.048 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.downloadFilenameLongUnicodeRangePreservesMetadata -- Time elapsed: 0.049 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.beginReauthorizesPurposeAfterStorageAcceptance -- Time elapsed: 0.050 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.registryRejectsForeignExpiredOrLatePrelockCapabilities -- Time elapsed: 0.050 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.fileStateAndLocationFenceRejectReferenceBinding -- Time elapsed: 0.053 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.downloadFilenameLongUnicodeFullPreservesMetadata -- Time elapsed: 0.072 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.multiFileBindingLocksAllSessionsBeforeFilesAndAtomicallyHandsOffProtection -- Time elapsed: 0.051 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.publishedCompletionReplayReturnsUnchangedResultButCannotBindNewReference -- Time elapsed: 0.045 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.crossMeetingOwnerCannotWriteUpload -- Time elapsed: 0.052 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.lostStorageAcknowledgmentRetainsFrozenDecision -- Time elapsed: 0.051 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.effectiveMembersReadOnlyWhileDraftsAndAdminsDoNotGrantContent -- Time elapsed: 0.052 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.uploadResultHasNoBusinessDownloadGrant -- Time elapsed: 0.048 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.downloadFilenameNormalUnicodeRemainsExact -- Time elapsed: 0.053 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.beginAndPartAcksFollowTheirDatabaseCommit -- Time elapsed: 0.049 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.initReplayMustRejectChangedCancellationEpoch -- Time elapsed: 0.050 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.concurrentInitReplayAcceptsOnlyOneBusinessSession -- Time elapsed: 0.046 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.completedReplayIsSameFileAndRejectsChangedManifest -- Time elapsed: 0.056 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.configuredActualAdapterMakesReadinessAvailable -- Time elapsed: 0.046 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.businessDownloadRangesAndDispositionAreExact -- Time elapsed: 0.045 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.defaultSwitchPinsExistingUploadAndBusinessDownloadToOriginalBackend -- Time elapsed: 0.052 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.samePartReplayRetainsReceiptAndDifferentContentConflicts -- Time elapsed: 0.041 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.purposeDisableBetweenStorageAndRegistrationPreservesFinalizing -- Time elapsed: 0.062 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.malformedOrForgedReceiptsNeverBecomeCommittedParts -- Time elapsed: 0.055 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.downloadFilenameScalarBoundaryIsSafe -- Time elapsed: 0.045 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.lostDatabaseAcknowledgmentReturnsSameCommittedFileOnRetry -- Time elapsed: 0.046 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] ama.storage.FileRegistryUploadIT.actualFileErrorsConformToDeclaredSharedResponseUnion -- Time elapsed: 0.055 s <<< ERROR!
+java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)
+	at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)
+	at ama.storage.FileRegistryUploadIT.call(FileRegistryUploadIT.java:179)
+	at ama.storage.FileRegistryUploadIT.identity(FileRegistryUploadIT.java:124)
+Caused by: java.net.ConnectException
+	at java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238)
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202)
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)
+	... 9 more
+
+[ERROR] Errors: 
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.fullNameAndOpaqueTokenSurviveApplicationRestart:398->startApp:89 » UnsatisfiedDependency Error creating bean with name 'fileController' defined in URL [jar:file:/home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/ama-api-0.1.0-SNAPSHOT.jar!/ama/api/FileController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'fileUploads' defined in class path resource [ama/api/FileConfiguration.class]: Unsatisfied dependency expressed through method 'fileUploads' parameter 4: Error creating bean with name 'fileBackends' defined in class path resource [ama/api/FileConfiguration.class]: Failed to instantiate [ama.storage.FileBackendCatalog]: Factory method 'fileBackends' threw exception with message: Failed to obtain JDBC Connection
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR]   FileRegistryUploadIT.identity:124->call:179 » Connect
+[ERROR] Tests run: 127, Failures: 0, Errors: 29, Skipped: 0
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.5.6:verify (default) on project ama-integration-tests: 
+[ERROR] 
+[ERROR] See /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-integration-tests
+Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2

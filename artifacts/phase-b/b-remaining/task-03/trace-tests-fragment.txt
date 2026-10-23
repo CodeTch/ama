@@ -1,0 +1,49 @@
+ @Test void completeReadLocksAllParentsThenSessionsFilesAndTasksAndCommitBeforeOpen() throws Exception {
+  try(var f=new TranscriptAuthorityFixture()){
+   var uploaded=new ArrayList<TranscriptAuthorityFixture.Uploaded>();for(String text:List.of("first ordered","second ordered","third ordered"))uploaded.add(f.upload(text));
+   uploaded.sort(Comparator.comparing(TranscriptAuthorityFixture.Uploaded::file).reversed());var c=f.components();var p=f.prepare(c,uploaded);f.bind(c,p,uploaded);String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+   f.j.update("UPDATE durable_task SET output_kind='TRANSCRIPT_REVISION',output_id=? WHERE id=?",raw,task);f.j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='SUCCEEDED' WHERE task_id=?",task);f.current(working,9);f.trace.locks.clear();f.source.statements.clear();
+   try(var d=c.registry().download(f.actor,uploaded.getFirst().file(),null)){assertEquals(3,f.j.queryForObject("SELECT COUNT(*) FROM input_batch_file WHERE batch_id=?",Integer.class,p.batchId()));}
+   var events=List.copyOf(f.trace.locks);assertEquals(List.of(raw,working).stream().sorted().toList(),firstIds(events,"transcript_revision"));
+   assertEquals(uploaded.stream().map(TranscriptAuthorityFixture.Uploaded::upload).sorted().toList(),firstIds(events,"upload_session"));
+   assertEquals(uploaded.stream().map(TranscriptAuthorityFixture.Uploaded::file).sorted().toList(),firstIds(events,"file_object"));
+   assertEquals(List.of(task),firstIds(events,"durable_task"));
+   int parent=firstLock(events,"transcript_revision"),input=firstLock(events,"transcription_input"),batch=firstLock(events,"input_batch WHERE"),profile=firstLock(events,"input_batch_fingerprint_profile"),members=firstLock(events,"input_batch_file"),sessions=firstLock(events,"upload_session"),files=firstLock(events,"file_object"),tasks=firstLock(events,"durable_task");
+   assertTrue(parent<input&&input<batch&&batch<profile&&profile<members&&members<sessions&&sessions<files&&files<tasks);
+   assertFalse(events.stream().anyMatch(e->e.sql().contains("FROM task_attempt")));assertFalse(f.source.statements.stream().anyMatch(q->q.contains("config_manifest")||q.contains("transcript_segment")||q.contains("provider_upload_token")||q.contains("provider_version_id")));
+   assertEquals(1,f.source.statements.stream().filter(q->q.startsWith("SELECT enterprise_id,status")).count());
+   java.nio.file.Path trace=java.nio.file.Path.of("target/task03-custody",f.meeting+"-lock-order.txt");java.nio.file.Files.write(trace,events.stream().map(e->e.sql()+" | "+e.parameters()).toList());
+   int opened=f.reads.get();f.trace.refuseCommit.set(true);assertThrows(RuntimeException.class,()->c.registry().download(f.actor,uploaded.getFirst().file(),null));assertEquals(opened,f.reads.get());
+  }
+ }
+ private static List<String> firstIds(List<Task03TraceSource.Event> events,String table){var ids=new LinkedHashSet<String>();for(var event:events)if(event.sql().contains("FROM "+table+" WHERE id=?")&&event.parameters().getFirst() instanceof String id)ids.add(id);return List.copyOf(ids);}
+ private static int firstLock(List<Task03TraceSource.Event> events,String table){for(int i=0;i<events.size();i++)if(events.get(i).sql().contains("FROM "+table))return i;return -1;}
+ @Test void preGateGraphAndTaskChangesNeverTriggerLateDiscoveryOrOpen() throws Exception {
+  try(var f=new TranscriptAuthorityFixture()){
+   var uploaded=f.upload("race guarded");var c=f.components();var p=f.prepare(c,List.of(uploaded));f.bind(c,p,List.of(uploaded));String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+   f.j.update("UPDATE durable_task SET output_kind='TRANSCRIPT_REVISION',output_id=? WHERE id=?",raw,task);f.j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='SUCCEEDED' WHERE task_id=?",task);f.current(working,2);
+   var outside=new JdbcTemplate(f.trace.actual);f.trace.beforeIdentity.set(()->outside.update("UPDATE transcript_revision SET parent_id=? WHERE id=?",working,working));f.trace.locks.clear();
+   assertThrows(RuntimeException.class,()->c.registry().download(f.actor,uploaded.file(),null));assertEquals(0,f.reads.get());assertEquals(List.of(raw,working).stream().sorted().toList(),firstIds(f.trace.locks,"transcript_revision"));assertEquals(-1,firstLock(f.trace.locks,"upload_session"));
+   outside.update("UPDATE transcript_revision SET parent_id=? WHERE id=?",raw,working);
+   f.trace.beforeIdentity.set(()->outside.update("UPDATE durable_task SET priority=1 WHERE id=?",task));f.trace.locks.clear();assertThrows(RuntimeException.class,()->c.registry().download(f.actor,uploaded.file(),null));assertEquals(0,f.reads.get());assertTrue(firstLock(f.trace.locks,"durable_task")>firstLock(f.trace.locks,"file_object"));
+   outside.update("UPDATE durable_task SET priority=0 WHERE id=?",task);try(var d=c.registry().download(f.actor,uploaded.file(),null)){assertEquals(12,d.length());}
+  }
+ }
+ @Test void actualPreparedReadCannotCrossIssuerSelectorGateOrHolder() throws Exception {
+  try(var f=new TranscriptAuthorityFixture()){
+   var uploaded=f.upload("private preparation");var c=f.components();var p=f.prepare(c,List.of(uploaded));f.bind(c,p,List.of(uploaded));String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+   f.j.update("UPDATE durable_task SET output_kind='TRANSCRIPT_REVISION',output_id=? WHERE id=?",raw,task);f.j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='SUCCEEDED' WHERE task_id=?",task);f.current(working,2);
+   var field=JdbcFileRegistry.class.getDeclaredField("policies");field.setAccessible(true);var policy=(CompleteReadPolicy)((Map<?,?>)field.get(c.registry())).get("INPUT_BATCH_FILE");
+   var request=new FileRegistry.CurrentReadRequest("INPUT_BATCH_FILE",uploaded.file());var prepared=policy.prepareRead(f.actor,f.meeting,request);Object[] scope=new Object[1];
+   f.tx.required(()->{
+    var gate=c.registry().lock(f.actor,f.meeting,MeetingAccess.Action.READ);
+    assertThrows(IllegalArgumentException.class,()->policy.prelockRead(gate,f.meeting,request,new CompleteReadPolicy.ReadPreparation(){}));
+    assertThrows(IllegalArgumentException.class,()->policy.prelockRead(gate,f.meeting,new ama.transcript.ProcessingSourceReader.HistoryRequest(raw,uploaded.file()),prepared));
+    scope[0]=policy.prelockRead(gate,f.meeting,request,prepared).context();assertThrows(RuntimeException.class,()->policy.prelockReadTasks(List.of(scope[0])));return null;
+   });
+   assertThrows(IllegalStateException.class,()->policy.readMembers(scope[0],new FileRegistry.Reference("INPUT_BATCH_FILE",p.batchId(),"TRANSCRIPT_INPUT"),uploaded.file()));
+   f.tx.required(()->{var gate=c.registry().lock(f.actor,f.meeting,MeetingAccess.Action.READ);assertThrows(RuntimeException.class,()->policy.prelockRead(gate,f.meeting,request,prepared));return null;});
+   var foreign=f.components();var second=(CompleteReadPolicy)((Map<?,?>)field.get(foreign.registry())).get("INPUT_BATCH_FILE");var fresh=policy.prepareRead(f.actor,f.meeting,request);
+   f.tx.required(()->{var gate=foreign.registry().lock(f.actor,f.meeting,MeetingAccess.Action.READ);assertThrows(IllegalArgumentException.class,()->second.prelockRead(gate,f.meeting,request,fresh));assertThrows(IllegalArgumentException.class,()->policy.prelockRead(gate,f.meeting,request,fresh));return null;});assertEquals(0,f.reads.get());
+  }
+ }

@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "./mvnw",
+    "-q",
+    "-pl",
+    "backend/integration-tests",
+    "-am",
+    "-Dtest=NoUnitSelection",
+    "-Dit.test=Task03SyntheticTeardownIT",
+    "-DfailIfNoTests=false",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dfailsafe.failIfNoSpecifiedTests=false",
+    "verify"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "exit_code": 0,
+  "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+  "private_env_path": ".tools/phase-b-remaining/env.sh",
+  "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502"
+}

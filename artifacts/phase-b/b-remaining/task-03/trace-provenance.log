@@ -1,0 +1,28 @@
+[ERROR] Tests run: 18, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 35.85 s <<< FAILURE! -- in ama.storage.TranscriptAuthorityIT
+[ERROR] ama.storage.TranscriptAuthorityIT.completeReadLocksAllParentsThenSessionsFilesAndTasksAndCommitBeforeOpen -- Time elapsed: 2.870 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <[ccb93c9e-07a1-4f8a-b82a-f73b2dfb2a0c]> but was: <[ccb93c9e-07a1-4f8a-b82a-f73b2dfb2a0c, b422952e-8e5e-4123-9fee-8c1b6f6d494d]>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:179)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1188)
+	at ama.storage.TranscriptAuthorityIT.completeReadLocksAllParentsThenSessionsFilesAndTasksAndCommitBeforeOpen(TranscriptAuthorityIT.java:310)
+
+[ERROR] Failures: 
+[ERROR]   TranscriptAuthorityIT.completeReadLocksAllParentsThenSessionsFilesAndTasksAndCommitBeforeOpen:310 expected: <[ccb93c9e-07a1-4f8a-b82a-f73b2dfb2a0c]> but was: <[ccb93c9e-07a1-4f8a-b82a-f73b2dfb2a0c, b422952e-8e5e-4123-9fee-8c1b6f6d494d]>
+[ERROR] Tests run: 18, Failures: 1, Errors: 0, Skipped: 0
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.5.6:verify (default) on project ama-integration-tests: There are test failures.
+[ERROR] 
+[ERROR] See /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-integration-tests

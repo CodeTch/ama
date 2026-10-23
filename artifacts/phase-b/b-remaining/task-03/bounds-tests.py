@@ -1,0 +1,3 @@
+from pathlib import Path
+p=Path('backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityIT.java');s=p.read_text();i=s.rfind('}');s=s[:i]+Path('artifacts/phase-b/b-remaining/task-03/bounds-tests-fragment.txt').read_text()+s[i:];s=s.replace('var a=f.upload("bounded first"),b=f.upload("bounded second");','var a=f.upload("bounded first");var b=f.upload("bounded second");');p.write_text(s)
+p=Path('backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java');s=p.read_text().replace('void check(){if(Thread.currentThread().isInterrupted())throw new Unavailable();}','void check(){ama.contract.MinutesContracts.check(()->false);}');p.write_text(s)

@@ -1,0 +1,11 @@
+{
+  "selected_task_id": "7d4db414-118c-432b-aaa6-32b654e96a69",
+  "input_id": "f055796d-492a-403e-8ba2-5c1c738dee50",
+  "meeting_id": "98a7c502-628d-421c-b761-f5589ff67021",
+  "owner": "authority-94c17521-3f7b-4763-8fca-bce254c56fc2",
+  "prior_snapshot_sha256": "221a5bfd3bc4fc9a505abe6a7ea4189661b1b2f391613860201c187cc0631853",
+  "candidate_receipt_sha256": "d047d7024585b2968639abe643b47d6650067507d3c5900e858912610a509577",
+  "all_selected_ids_absent_from_sealed_prior_snapshot": true,
+  "permitted": "exact selected synthetic task RUNNING->CANCELLED and exactunfinishedattempt closure; retain allrows, successful task45f07859-fb5a-471e-b7b4-1969422fa290 untouched",
+  "forbidden": "no prefix/global mutation, no prior namespaces, no delete/reset/SQLmigrationchange"
+}

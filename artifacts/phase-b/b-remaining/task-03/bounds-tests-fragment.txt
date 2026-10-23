@@ -1,0 +1,29 @@
+ @Test void configuredGraphSourceAndDisplayBoundsAreEnforcedWithoutClipping() throws Exception {
+  try(var f=new TranscriptAuthorityFixture()){
+   var a=f.upload("bounded first"),b=f.upload("bounded second");var c=f.components();var p=f.prepare(c,List.of(a,b));f.bind(c,p,List.of(a,b));String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+   f.j.update("UPDATE durable_task SET output_kind='TRANSCRIPT_REVISION',output_id=? WHERE id=?",raw,task);f.j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='SUCCEEDED' WHERE task_id=?",task);f.current(working,2);
+   var B=ama.transcript.ArchiveProcessingFixture.B;var canonical=new ama.contract.MinutesContracts.CanonicalBudget(16777216,32,1000000,2097152,250000);
+   for(var limited:List.of(readBudget(1,B.maxFactRows(),B.maxFactEdges(),B.maxStringUtf16(),B.maxAggregateScalars()),readBudget(B.maxGraphDepth(),2,B.maxFactEdges(),B.maxStringUtf16(),B.maxAggregateScalars()),readBudget(B.maxGraphDepth(),B.maxFactRows(),1,B.maxStringUtf16(),B.maxAggregateScalars()),readBudget(B.maxGraphDepth(),B.maxFactRows(),B.maxFactEdges(),32,B.maxAggregateScalars()),readBudget(B.maxGraphDepth(),B.maxFactRows(),B.maxFactEdges(),B.maxStringUtf16(),64))){
+    var limitedComponents=ama.transcript.JdbcTranscriptAuthority.create(f.source,f.tx,f.access,f.purposes,f.catalog,Map.of(),limited,canonical);f.source.statements.clear();
+    assertThrows(ama.contract.FileContracts.Unavailable.class,()->limitedComponents.registry().download(f.actor,a.file(),null));assertNoCompleteLocks(f);assertEquals(0,f.reads.get());
+   }
+   var sourceLimited=new JdbcFileRegistry(f.source,f.tx,f.access,f.purposes,f.catalog,Map.of(),readBudget(B.maxGraphDepth(),2,B.maxFactEdges(),B.maxStringUtf16(),B.maxAggregateScalars()));
+   assertThrows(RuntimeException.class,()->f.tx.required(()->{var gate=sourceLimited.lock(f.actor,f.meeting,MeetingAccess.Action.READ);sourceLimited.prelockSources(gate,List.of(a.file(),b.file()),false);return null;}));assertEquals(0,f.reads.get());
+   f.j.update("UPDATE file_object SET display_name=? WHERE id=?","😀".repeat(B.maxStringUtf16()/2+1),a.file());
+   f.tx.required(()->{var gate=c.registry().lock(f.actor,f.meeting,MeetingAccess.Action.READ);assertEquals(2,c.registry().sources(gate,c.registry().prelockSources(gate,List.of(a.file(),b.file()),false).orElseThrow(),List.of(a.file(),b.file())).size());return null;});
+   assertThrows(RuntimeException.class,()->c.registry().download(f.actor,a.file(),null));assertEquals(0,f.reads.get());
+  }
+ }
+ private static ama.contract.ConfigArchiveContracts.ArchiveReadBudget readBudget(int depth,long rows,long edges,int utf16,long scalars){var b=ama.transcript.ArchiveProcessingFixture.B;return new ama.contract.ConfigArchiveContracts.ArchiveReadBudget(b.maxArtifactBytes(),b.maxTotalBytes(),b.maxArtifacts(),b.maxDependencies(),depth,b.maxTokens(),b.maxJsonDepth(),b.maxNameUtf16(),utf16,b.maxStringUtf8Bytes(),scalars,b.maxManifestBytes(),b.maxBatchFiles(),rows,edges);}
+ @Test void duplicateOriginalPurposeRouteAndEpochCannotAuthorizeAnotherCompletedFile() throws Exception {
+  try(var f=new TranscriptAuthorityFixture()){
+   var a=f.upload("original one");var b=f.upload("original two");var registry=f.registry(Map.of());
+   Runnable acquire=()->f.tx.required(()->{var gate=registry.lock(f.actor,f.meeting,MeetingAccess.Action.READ);registry.prelockSources(gate,List.of(a.file()),false).orElseThrow();return null;});
+   f.j.update("UPDATE upload_session SET completed_file_id=? WHERE id=?",a.file(),b.upload());assertThrows(ama.contract.FileContracts.NotFound.class,acquire::run);f.j.update("UPDATE upload_session SET completed_file_id=? WHERE id=?",b.file(),b.upload());
+   String key=f.j.queryForObject("SELECT object_key FROM upload_session WHERE id=?",String.class,a.upload());f.j.update("UPDATE upload_session SET object_key='substituted' WHERE id=?",a.upload());assertThrows(RuntimeException.class,acquire::run);f.j.update("UPDATE upload_session SET object_key=? WHERE id=?",key,a.upload());
+   f.j.update("UPDATE file_object SET reference_epoch=18446744073709551615 WHERE id=?",a.file());assertThrows(RuntimeException.class,acquire::run);f.j.update("UPDATE file_object SET reference_epoch=0 WHERE id=?",a.file());
+   f.j.update("UPDATE storage_backend SET status='READ_ONLY' WHERE id=?",f.storage.binding.id());assertDoesNotThrow(acquire::run);
+   f.j.update("UPDATE storage_backend SET status='DISABLED' WHERE id=?",f.storage.binding.id());assertThrows(RuntimeException.class,acquire::run);f.j.update("UPDATE storage_backend SET status='ACTIVE' WHERE id=?",f.storage.binding.id());
+   f.j.update("UPDATE upload_session SET purpose='OTHER_INPUT' WHERE id=?",a.upload());var c=f.components();assertThrows(RuntimeException.class,()->c.intake().readDraft(f.actor,f.meeting,List.of(a.file()),()->false));assertEquals(0,f.reads.get());
+  }
+ }

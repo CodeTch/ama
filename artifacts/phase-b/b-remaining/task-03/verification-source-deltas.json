@@ -1,0 +1,145 @@
+{
+  "authority-regressions": {
+    "backend/adapters/src/main/java/ama/storage/BoundedFileReferences.java": {
+      "test_sha256": "b7091ca85874627d6b83a08fd02b36605754a17707eb5077c84836dc623b2cb7",
+      "final_sha256": "ca7863fe42b26c8665fc8ccf6a2c48c3e2f71fdf6e964473c388f91e739cc1dc"
+    },
+    "backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java": {
+      "test_sha256": "305f97c3c1b29676b5bb20267d21ac097dad801bacc49b9804fd9c3b1bbbb383",
+      "final_sha256": "731460cefae036c7cfec9f4282a5b883a4d542796f561ef9c910becf27bffe67"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntakeFacts.java": {
+      "test_sha256": "63e03635d4c3faca3f2cb5bab4b7ab4c632cd230b6ffc254a4822c60b45163b0",
+      "final_sha256": "b3411d925d2158bc628a5fa3baebad7522dfa8218534a802c2daa0d0d94323a3"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": {
+      "test_sha256": "b10f8b8e1fadce3c68fabd8e8471860808c05a7d69c961b315014075340b3bd4",
+      "final_sha256": "44ddac50a50b41015ec52bd772fb657589830d90689b9016056057502d02e582"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptRows.java": {
+      "test_sha256": "a41e0328294c6159504906aaec4378b26ad9d70522573bb50a9d5c4f744ffd48",
+      "final_sha256": "58115736a3794ce07f97ae0cac57e240c2dde335308a14d2bace725a13a430f6"
+    },
+    "backend/adapters/src/main/java/ama/transcript/TranscriptFilePurposePolicy.java": {
+      "test_sha256": "01aff72daf1394b8d803756c3c84ada780aecb480b805e134eb720bdd7ce591a",
+      "final_sha256": "527657122da91585998d6379e132ead08590edd985acb1438928f2464d502e3a"
+    },
+    "backend/adapters/src/main/java/ama/transcript/TranscriptReadGraph.java": {
+      "test_sha256": "a8364644925deaa3abfc02974fc12636a46922a0eb997c9e7961f4fe73eb1656",
+      "final_sha256": "1aad12427b0a296247e841c52d35ff0d8cffedbc4ea87b9efb277ffca33b1481"
+    },
+    "backend/core/src/main/java/ama/storage/FileRegistry.java": {
+      "test_sha256": "d577beabfd82541e34ccfdbe4f8ad832762998051a17a10a0c26e1482504100b",
+      "final_sha256": "af70e18d8b3cf4fecd3f8d9337c343e3d3310c6ee7a9202105c7dc327c96dc41"
+    },
+    "backend/core/src/main/java/ama/transcript/ProcessingIntakeFacts.java": {
+      "test_sha256": "d1a3a433461573ebeb43fa2e0c711cccc2b7bcc43e835b7c9f7e68f95434c6eb",
+      "final_sha256": "b22ea7c76d0250fa9b394eb264f41cf968619d583fcd94466fad57e14ad068aa"
+    },
+    "backend/core/src/main/java/ama/transcript/ProcessingSourceReader.java": {
+      "test_sha256": "9eebb0dd2a881d46997f4f5daf922f9cdfd330010ee86da14c55e0cabe9ceaed",
+      "final_sha256": "d5987a142a2818ac6f08009ce2020e11efa8f5fc1fb3c362323ab11770141f1b"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityFixture.java": {
+      "test_sha256": "847bfc91cacefa5109959b80821b98f67004e03316557f95c5a080b2915bca55",
+      "final_sha256": "9ab6351f78f7c3c48506365a71f57191a8d2521d68f8a3d06559200506f6abeb"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityIT.java": {
+      "test_sha256": "f7a603aa0083d2b16c4e3ca34547672d3f4766504f90894b4daf42f2d39778f0",
+      "final_sha256": "bbbc376582a263a8b2d818765847e8014139b143daa08f0b1aea99e9487ac35e"
+    }
+  },
+  "upload-regression-retry": {
+    "backend/adapters/src/main/java/ama/storage/BoundedFileReferences.java": {
+      "test_sha256": "b7091ca85874627d6b83a08fd02b36605754a17707eb5077c84836dc623b2cb7",
+      "final_sha256": "ca7863fe42b26c8665fc8ccf6a2c48c3e2f71fdf6e964473c388f91e739cc1dc"
+    },
+    "backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java": {
+      "test_sha256": "305f97c3c1b29676b5bb20267d21ac097dad801bacc49b9804fd9c3b1bbbb383",
+      "final_sha256": "731460cefae036c7cfec9f4282a5b883a4d542796f561ef9c910becf27bffe67"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntakeFacts.java": {
+      "test_sha256": "63e03635d4c3faca3f2cb5bab4b7ab4c632cd230b6ffc254a4822c60b45163b0",
+      "final_sha256": "b3411d925d2158bc628a5fa3baebad7522dfa8218534a802c2daa0d0d94323a3"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": {
+      "test_sha256": "85ae9a082c61a4feadb9e92bd74f6bdb16bf84e5c2bed4d6bea7b10e929281da",
+      "final_sha256": "44ddac50a50b41015ec52bd772fb657589830d90689b9016056057502d02e582"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptRows.java": {
+      "test_sha256": "a41e0328294c6159504906aaec4378b26ad9d70522573bb50a9d5c4f744ffd48",
+      "final_sha256": "58115736a3794ce07f97ae0cac57e240c2dde335308a14d2bace725a13a430f6"
+    },
+    "backend/adapters/src/main/java/ama/transcript/TranscriptFilePurposePolicy.java": {
+      "test_sha256": "01aff72daf1394b8d803756c3c84ada780aecb480b805e134eb720bdd7ce591a",
+      "final_sha256": "527657122da91585998d6379e132ead08590edd985acb1438928f2464d502e3a"
+    },
+    "backend/adapters/src/main/java/ama/transcript/TranscriptReadGraph.java": {
+      "test_sha256": "a8364644925deaa3abfc02974fc12636a46922a0eb997c9e7961f4fe73eb1656",
+      "final_sha256": "1aad12427b0a296247e841c52d35ff0d8cffedbc4ea87b9efb277ffca33b1481"
+    },
+    "backend/core/src/main/java/ama/storage/FileRegistry.java": {
+      "test_sha256": "d577beabfd82541e34ccfdbe4f8ad832762998051a17a10a0c26e1482504100b",
+      "final_sha256": "af70e18d8b3cf4fecd3f8d9337c343e3d3310c6ee7a9202105c7dc327c96dc41"
+    },
+    "backend/core/src/main/java/ama/transcript/ProcessingIntakeFacts.java": {
+      "test_sha256": "d1a3a433461573ebeb43fa2e0c711cccc2b7bcc43e835b7c9f7e68f95434c6eb",
+      "final_sha256": "b22ea7c76d0250fa9b394eb264f41cf968619d583fcd94466fad57e14ad068aa"
+    },
+    "backend/core/src/main/java/ama/transcript/ProcessingSourceReader.java": {
+      "test_sha256": "9eebb0dd2a881d46997f4f5daf922f9cdfd330010ee86da14c55e0cabe9ceaed",
+      "final_sha256": "d5987a142a2818ac6f08009ce2020e11efa8f5fc1fb3c362323ab11770141f1b"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityFixture.java": {
+      "test_sha256": "847bfc91cacefa5109959b80821b98f67004e03316557f95c5a080b2915bca55",
+      "final_sha256": "9ab6351f78f7c3c48506365a71f57191a8d2521d68f8a3d06559200506f6abeb"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityIT.java": {
+      "test_sha256": "5b146ede8356a4ecb1d3a14c3e19aee2a499c58747f7dd1f2fb2d9ae44148062",
+      "final_sha256": "bbbc376582a263a8b2d818765847e8014139b143daa08f0b1aea99e9487ac35e"
+    }
+  },
+  "authority-final": {
+    "backend/adapters/src/main/java/ama/storage/BoundedFileReferences.java": {
+      "test_sha256": "b7091ca85874627d6b83a08fd02b36605754a17707eb5077c84836dc623b2cb7",
+      "final_sha256": "ca7863fe42b26c8665fc8ccf6a2c48c3e2f71fdf6e964473c388f91e739cc1dc"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntakeFacts.java": {
+      "test_sha256": "63e03635d4c3faca3f2cb5bab4b7ab4c632cd230b6ffc254a4822c60b45163b0",
+      "final_sha256": "b3411d925d2158bc628a5fa3baebad7522dfa8218534a802c2daa0d0d94323a3"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": {
+      "test_sha256": "85ae9a082c61a4feadb9e92bd74f6bdb16bf84e5c2bed4d6bea7b10e929281da",
+      "final_sha256": "44ddac50a50b41015ec52bd772fb657589830d90689b9016056057502d02e582"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptRows.java": {
+      "test_sha256": "a41e0328294c6159504906aaec4378b26ad9d70522573bb50a9d5c4f744ffd48",
+      "final_sha256": "58115736a3794ce07f97ae0cac57e240c2dde335308a14d2bace725a13a430f6"
+    },
+    "backend/adapters/src/main/java/ama/transcript/TranscriptFilePurposePolicy.java": {
+      "test_sha256": "01aff72daf1394b8d803756c3c84ada780aecb480b805e134eb720bdd7ce591a",
+      "final_sha256": "527657122da91585998d6379e132ead08590edd985acb1438928f2464d502e3a"
+    },
+    "backend/adapters/src/main/java/ama/transcript/TranscriptReadGraph.java": {
+      "test_sha256": "a8364644925deaa3abfc02974fc12636a46922a0eb997c9e7961f4fe73eb1656",
+      "final_sha256": "1aad12427b0a296247e841c52d35ff0d8cffedbc4ea87b9efb277ffca33b1481"
+    },
+    "backend/core/src/main/java/ama/transcript/ProcessingIntakeFacts.java": {
+      "test_sha256": "d1a3a433461573ebeb43fa2e0c711cccc2b7bcc43e835b7c9f7e68f95434c6eb",
+      "final_sha256": "b22ea7c76d0250fa9b394eb264f41cf968619d583fcd94466fad57e14ad068aa"
+    },
+    "backend/core/src/main/java/ama/transcript/ProcessingSourceReader.java": {
+      "test_sha256": "9eebb0dd2a881d46997f4f5daf922f9cdfd330010ee86da14c55e0cabe9ceaed",
+      "final_sha256": "d5987a142a2818ac6f08009ce2020e11efa8f5fc1fb3c362323ab11770141f1b"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityFixture.java": {
+      "test_sha256": "847bfc91cacefa5109959b80821b98f67004e03316557f95c5a080b2915bca55",
+      "final_sha256": "9ab6351f78f7c3c48506365a71f57191a8d2521d68f8a3d06559200506f6abeb"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityIT.java": {
+      "test_sha256": "5b146ede8356a4ecb1d3a14c3e19aee2a499c58747f7dd1f2fb2d9ae44148062",
+      "final_sha256": "bbbc376582a263a8b2d818765847e8014139b143daa08f0b1aea99e9487ac35e"
+    }
+  },
+  "authority-final-normalized": {}
+}

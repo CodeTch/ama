@@ -1,0 +1,28 @@
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 4.827 s <<< FAILURE! -- in ama.storage.TranscriptAuthorityIT
+[ERROR] ama.storage.TranscriptAuthorityIT.firstBindSealsActualNewRowsWithoutTranscriptOrConfirmation -- Time elapsed: 4.806 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: archive publication ==> Unexpected exception thrown: ama.contract.MinutesContracts$Failure: PROFILE_UNAVAILABLE
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:80)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:65)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3377)
+	at ama.storage.TranscriptAuthorityIT.firstBindSealsActualNewRowsWithoutTranscriptOrConfirmation(TranscriptAuthorityIT.java:145)
+Caused by: ama.contract.MinutesContracts$Failure: PROFILE_UNAVAILABLE
+
+[ERROR] Failures: 
+[ERROR]   TranscriptAuthorityIT.firstBindSealsActualNewRowsWithoutTranscriptOrConfirmation:145 archive publication ==> Unexpected exception thrown: ama.contract.MinutesContracts$Failure: PROFILE_UNAVAILABLE
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.5.6:verify (default) on project ama-integration-tests: There are test failures.
+[ERROR] 
+[ERROR] See /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-integration-tests

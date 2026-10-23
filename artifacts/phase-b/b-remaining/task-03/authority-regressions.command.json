@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "./mvnw",
+    "-q",
+    "-pl",
+    "backend/integration-tests",
+    "-am",
+    "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+    "-Dit.test=TranscriptAuthorityIT,FileRegistryUploadIT,FileRegistryRestartIT#frozenManifestNamePurposeAndOpaqueTokenRecoverAfterActualJvmDeath,ProcessingFactsReaderIT,B06QueueSeamsIT,MeetingRevisionIT,MeetingConcurrencyIT,ConfigArchiveRestartIT",
+    "-DfailIfNoTests=false",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dfailsafe.failIfNoSpecifiedTests=false",
+    "verify"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "exit_code": 1,
+  "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+  "private_env_path": ".tools/phase-b-remaining/env.sh",
+  "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+  "AMA_STORAGE_CONTRACT": "local",
+  "JAVA_TOOL_OPTIONS": "-Xmx64m -XX:ActiveProcessorCount=2",
+  "AMA_B06_RESTART_EVIDENCE": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-03/archive-restart-2ddfd7ae-fc6b-4559-b90e-03e7d7400313"
+}

@@ -1,0 +1,129 @@
+ private enum ReadPhase { DOMAIN, SOURCES_VALIDATED, TASKS_HELD, FINALIZED }
+ private final class PreparedRead implements CompleteReadPolicy.ReadPreparation {
+  final Actor actor;final String meeting;final FileRegistry.ReadRequest request;final TranscriptReadGraph graph;
+  private ReadScope scope;
+  PreparedRead(Actor actor,String meeting,FileRegistry.ReadRequest request,TranscriptReadGraph graph){this.actor=actor;this.meeting=meeting;this.request=request;this.graph=graph;}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ private final class ReadScope implements FileRegistry.ReferenceContext {
+  final Object holder=transaction();final FileRegistry.LockedMeeting gate;final PreparedRead prepared;
+  final Set<String> validated=new HashSet<>();ReadPhase phase=ReadPhase.DOMAIN;TaskUnion union;
+  ReadScope(FileRegistry.LockedMeeting gate,PreparedRead prepared){this.gate=gate;this.prepared=prepared;}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ private final class TaskUnion {
+  final List<ReadScope> scopes;boolean attemptsHeld;
+  TaskUnion(List<ReadScope> scopes){this.scopes=scopes;}
+ }
+ CompleteReadPolicy.ReadPreparation prepareRead(Actor actor,String meeting,FileRegistry.ReadRequest request){
+  independent();check(()->false);uuid(meeting);String revision=null,input=null,task=null,file;
+  if(request instanceof FileRegistry.CurrentReadRequest current){
+   require(REFERENCE.equals(current.referenceKind()),INPUT_INVALID);file=current.fileId();
+   var reader=new BoundedTranscriptMetadata(j,budget);var root=reader.one("meeting",BoundedTranscriptMetadata.ROOT,meeting);
+   if(root.get("transcript_revision_id")==null)throw new ama.contract.FileContracts.NotFound();
+   revision=(String)root.get("transcript_revision_id");var row=reader.one("transcript_revision",BoundedTranscriptMetadata.REVISION,revision);
+   if(!"WORKING".equals(row.get("kind")))throw new ama.contract.FileContracts.NotFound();
+  }else if(request instanceof ProcessingSourceReader.HistoryRequest history){revision=history.revisionId();file=history.fileId();}
+  else if(request instanceof ProcessingSourceReader.WorkerRequest worker){input=worker.inputId();task=worker.lease().taskId();file=worker.fileId();}
+  else throw new IllegalArgumentException("Unknown transcript source selector");
+  uuid(file);
+  try {
+   var graph=TranscriptReadGraph.discover(j,budget,canonical,meeting,revision,input,task,file,
+    row->producer(meeting,TranscriptReadGraph.text(row,"id"),TranscriptReadGraph.text(row,"input_fingerprint"),number(row,"base_revision"),number(row,"cancel_epoch"),()->false));
+   if(request instanceof FileRegistry.CurrentReadRequest&&(!Objects.equals(revision,graph.root.get("transcript_revision_id"))))throw fail(PROVENANCE_UNAVAILABLE);
+   if(request instanceof ProcessingSourceReader.WorkerRequest worker)require(worker.lease().spec().equals(graph.expected),PROVENANCE_UNAVAILABLE);
+   return new PreparedRead(actor,meeting,request,graph);
+  }catch(ama.contract.FileContracts.NotFound absent){throw fail(PROVENANCE_UNAVAILABLE);}
+ }
+ void authorizeRead(FileRegistry.LockedMeeting gate,String meeting,FileRegistry.ReadRequest request){
+  var action=request instanceof ProcessingSourceReader.HistoryRequest||request instanceof ProcessingSourceReader.WorkerRequest?MeetingAccess.Action.EDIT:MeetingAccess.Action.READ;
+  access.require(registry.access(gate),action);
+ }
+ private PreparedRead preparation(CompleteReadPolicy.ReadPreparation value,String meeting,FileRegistry.ReadRequest request){
+  if(!(value instanceof JdbcTranscriptAuthority.PreparedRead p)||p.issuer()!=this||!p.meeting.equals(meeting)||!p.request.equals(request))throw new IllegalArgumentException("Foreign read preparation");return p;
+ }
+ private ReadScope lockRead(FileRegistry.LockedMeeting gate,PreparedRead p){
+  transaction();access.requirePrepared(registry.access(gate),p.actor,p.meeting,List.of(p.actor.enterpriseId()),p.request instanceof FileRegistry.CurrentReadRequest?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);
+  if(p.scope!=null){var s=readScope(p.scope);if(s.gate!=gate||s.phase!=ReadPhase.DOMAIN)throw new IllegalStateException("Consumed read preparation");return s;}
+  var graph=p.graph;var reader=new BoundedTranscriptMetadata(j,budget,true);
+  require(reader.one("meeting",BoundedTranscriptMetadata.ROOT,p.meeting).equals(graph.root),PROVENANCE_UNAVAILABLE);
+  if(p.request instanceof ProcessingSourceReader.WorkerRequest){writable(graph.root);require(number(graph.root,"revision")==graph.expected.businessVersion()&&number(graph.root,"cancel_epoch")==graph.expected.cancelEpoch(),PROVENANCE_UNAVAILABLE);}
+  // Acquire the complete parent closure by UUID before any input, even if parent order differs.
+  for(String id:graph.revisions.keySet())lockId("transcript_revision",id);
+  for(var entry:graph.revisions.entrySet())require(reader.one("transcript_revision",BoundedTranscriptMetadata.REVISION,entry.getKey()).equals(entry.getValue()),PROVENANCE_UNAVAILABLE);
+  lockId("transcription_input",TranscriptReadGraph.text(graph.input,"id"));
+  require(reader.one("transcription_input",BoundedTranscriptMetadata.INPUT,TranscriptReadGraph.text(graph.input,"id")).equals(graph.input),PROVENANCE_UNAVAILABLE);
+  String batch=TranscriptReadGraph.text(graph.batch,"id");lockId("input_batch",batch);
+  require(reader.one("input_batch",BoundedTranscriptMetadata.BATCH,batch).equals(graph.batch),PROVENANCE_UNAVAILABLE);
+  var profiles=reader.select("input_batch_fingerprint_profile","batch_id profile","batch_id=?","batch_id",2,batch);
+  require(profiles.equals(List.of(graph.profile)),PROFILE_UNAVAILABLE);
+  require(reader.select("input_batch_file",BoundedTranscriptMetadata.MEMBER,"batch_id=?","ordinal",budget.maxBatchFiles(),batch).equals(graph.members),PROVENANCE_UNAVAILABLE);
+  var scope=new ReadScope(gate,p);p.scope=scope;return scope;
+ }
+ Object prelockCurrent(FileRegistry.LockedMeeting gate,String meeting,FileRegistry.Reference ref,String file,CompleteReadPolicy.ReadPreparation prepared){
+  if(!(prepared instanceof JdbcTranscriptAuthority.PreparedRead p)||!(p.request instanceof FileRegistry.CurrentReadRequest current))throw new IllegalArgumentException("Current preparation required");
+  preparation(prepared,meeting,current);if(!file.equals(current.fileId()))throw new IllegalArgumentException("Changed current selector");
+  if(!ref.kind().equals(REFERENCE)||!ref.ownerId().equals(p.graph.batch.get("id"))||!ref.purpose().equals(PURPOSE))throw new ama.contract.FileContracts.NotFound();
+  return lockRead(gate,p);
+ }
+ CompleteReadPolicy.ReadPlan prelockRead(FileRegistry.LockedMeeting gate,String meeting,FileRegistry.ReadRequest request,CompleteReadPolicy.ReadPreparation prepared){
+  var p=preparation(prepared,meeting,request);var scope=lockRead(gate,p);
+  return new CompleteReadPolicy.ReadPlan(scope,readMembers(scope,new FileRegistry.Reference(REFERENCE,TranscriptReadGraph.text(p.graph.batch,"id"),PURPOSE),p.graph.requested),p.graph.requested);
+ }
+ List<CompleteReadPolicy.ReadMember> readMembers(Object domain,FileRegistry.Reference ref,String file){
+  var scope=readScope(domain);require(scope.phase==ReadPhase.DOMAIN&&scope.prepared.graph.files.containsKey(file)&&ref.equals(reference(scope)),PROVENANCE_UNAVAILABLE);
+  return scope.prepared.graph.members.stream().map(m->new CompleteReadPolicy.ReadMember(reference(scope),TranscriptReadGraph.text(m,"file_id"))).toList();
+ }
+ private Object prelockReadMember(FileRegistry.LockedMeeting gate,String meeting,FileRegistry.Reference reference,String file,Object context){
+  var scope=readScope(context);require(scope.gate==gate&&scope.phase==ReadPhase.DOMAIN&&scope.prepared.meeting.equals(meeting)&&reference.equals(reference(scope))&&scope.prepared.graph.files.containsKey(file),PROVENANCE_UNAVAILABLE);return scope;
+ }
+ private void validateRead(Object token,String meeting,FileRegistry.Reference ref,FileRegistry.FileRecord file,String purpose){
+  var scope=readScope(token);require((scope.phase==ReadPhase.DOMAIN||scope.phase==ReadPhase.SOURCES_VALIDATED)&&scope.prepared.meeting.equals(meeting)&&ref.equals(reference(scope))&&PURPOSE.equals(purpose),PROVENANCE_UNAVAILABLE);
+  var expected=scope.prepared.graph.files.get(file.fileId());require(expected!=null&&meeting.equals(file.meetingId())&&Objects.equals(expected.get("sha256"),file.sha256())&&number(expected,"size_bytes")==file.size(),PROVENANCE_UNAVAILABLE);
+  require(scope.validated.add(file.fileId()),PROVENANCE_UNAVAILABLE);
+  if(scope.validated.equals(scope.prepared.graph.files.keySet()))scope.phase=ReadPhase.SOURCES_VALIDATED;
+ }
+ void prelockReadTasks(List<Object> values){
+  require(values!=null&&!values.isEmpty()&&values.size()<=budget.maxFactRows(),BUDGET_EXCEEDED);var unique=Collections.newSetFromMap(new IdentityHashMap<ReadScope,Boolean>());var scopes=new ArrayList<ReadScope>();
+  var tasks=new TreeMap<String,Map<String,Object>>();FileRegistry.LockedMeeting gate=null;
+  for(var value:values){
+   var scope=readScope(value);require(unique.add(scope)&&scope.phase==ReadPhase.SOURCES_VALIDATED,PROVENANCE_UNAVAILABLE);if(gate==null)gate=scope.gate;require(scope.gate==gate,PROVENANCE_UNAVAILABLE);scopes.add(scope);
+   for(var entry:scope.prepared.graph.tasks.entrySet()){require(tasks.size()<budget.maxFactRows()||tasks.containsKey(entry.getKey()),BUDGET_EXCEEDED);var old=tasks.putIfAbsent(entry.getKey(),entry.getValue());require(old==null||old.equals(entry.getValue()),PROVENANCE_UNAVAILABLE);}
+  }
+  for(String task:tasks.keySet())lockId("durable_task",task);
+  var reader=new BoundedTranscriptMetadata(j,budget,true);for(var entry:tasks.entrySet())require(reader.one("durable_task",BoundedTranscriptMetadata.TASK,entry.getKey()).equals(entry.getValue()),PROVENANCE_UNAVAILABLE);
+  var union=new TaskUnion(List.copyOf(scopes));for(var scope:scopes){scope.union=union;scope.phase=ReadPhase.TASKS_HELD;}
+ }
+ void finishRead(Object domain,List<FileRegistry.CompletedSource> sources){
+  var scope=readScope(domain);require(scope.phase==ReadPhase.TASKS_HELD&&scope.union!=null,PROVENANCE_UNAVAILABLE);var graph=scope.prepared.graph;
+  require(sources.size()==graph.files.size(),PROVENANCE_UNAVAILABLE);var ids=new HashSet<String>();for(var source:sources){require(ids.add(source.file().fileId())&&graph.files.containsKey(source.file().fileId())&&PURPOSE.equals(source.originalPurpose()),PROVENANCE_UNAVAILABLE);}
+  if(!scope.union.attemptsHeld){
+   var attempts=new TreeMap<String,SortedSet<Long>>();for(var member:scope.union.scopes)if(member.prepared.request instanceof ProcessingSourceReader.WorkerRequest worker)attempts.computeIfAbsent(worker.lease().taskId(),k->new TreeSet<>()).add(worker.lease().attempt());
+   for(var entry:attempts.entrySet())for(long attempt:entry.getValue())require(j.queryForList("SELECT attempt FROM task_attempt WHERE task_id=? AND attempt=? FOR UPDATE",Long.class,entry.getKey(),attempt).equals(List.of(attempt)),PROVENANCE_UNAVAILABLE);
+   scope.union.attemptsHeld=true;
+  }
+  String task=graph.tasks.firstKey();
+  if(scope.prepared.request instanceof ProcessingSourceReader.WorkerRequest worker){
+   var lease=worker.lease();require(lease.spec().equals(graph.expected),PROVENANCE_UNAVAILABLE);
+   require(j.queryForObject("SELECT (state='RUNNING' AND attempt=? AND lease_owner=? AND expires_at>UTC_TIMESTAMP(6)) FROM durable_task WHERE id=? FOR UPDATE",Long.class,lease.attempt(),lease.leaseOwner(),task)==1,PROVENANCE_UNAVAILABLE);
+   require(j.queryForObject("SELECT (owner=? AND ended_at IS NULL) FROM task_attempt WHERE task_id=? AND attempt=? FOR UPDATE",Long.class,lease.leaseOwner(),task,lease.attempt())==1,PROVENANCE_UNAVAILABLE);
+  }else require(j.queryForObject("SELECT (state='SUCCEEDED' AND output_kind='TRANSCRIPT_REVISION' AND output_id=?) FROM durable_task WHERE id=? FOR UPDATE",Long.class,graph.raw,task)==1,PROVENANCE_UNAVAILABLE);
+  scope.phase=ReadPhase.FINALIZED;
+ }
+ private ReadScope readScope(Object value){
+  if(!(value instanceof JdbcTranscriptAuthority.ReadScope scope)||scope.issuer()!=this||scope.holder!=transaction())throw new IllegalArgumentException("Foreign or expired read scope");registry.access(scope.gate);return scope;
+ }
+ private FileRegistry.Reference reference(ReadScope scope){return new FileRegistry.Reference(REFERENCE,TranscriptReadGraph.text(scope.prepared.graph.batch,"id"),PURPOSE);}
+ private void lockId(String table,String id){check(()->false);require(j.queryForList("SELECT id FROM "+table+" WHERE id=? FOR UPDATE",String.class,id).equals(List.of(id)),PROVENANCE_UNAVAILABLE);}
+ FileRegistry.Download history(Actor actor,String meeting,String revision,String file,String range){independent();return registry.read(actor,meeting,new ProcessingSourceReader.HistoryRequest(revision,file),range);}
+ FileRegistry.Download worker(TaskLease lease,String input,String file){
+  independent();Objects.requireNonNull(lease);uuid(input);uuid(file);
+  // The actual task fixes the target meeting; actor is only a claim checked by the fresh B03 gate.
+  var reader=new BoundedTranscriptMetadata(j,budget);var task=reader.one("durable_task",BoundedTranscriptMetadata.TASK,lease.taskId());
+  require("MEETING".equals(task.get("subject_kind")),PROVENANCE_UNAVAILABLE);String meeting=TranscriptReadGraph.text(task,"subject_id");uuid(meeting);
+  var root=reader.one("meeting",BoundedTranscriptMetadata.ROOT,meeting);
+  var actor=new Actor(TranscriptReadGraph.text(root,"owner_id"),ama.contract.IdentityContracts.Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
+  return registry.read(actor,meeting,new ProcessingSourceReader.WorkerRequest(lease,input,file),null);
+ }
+
+

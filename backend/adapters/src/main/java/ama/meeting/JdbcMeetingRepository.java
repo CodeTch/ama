@@ -167,7 +167,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
         if(latest!=null)for(var person:members(latest.id()))if(person.enterpriseId()!=null)ids.add(person.enterpriseId());
         // Even a caller guessing a future CAS cannot make discovery omit a newly removed identity.
         // Refuse and roll back; never discover and lock a lower-order identity after the root.
-        if(!held.identities.people.keySet().containsAll(ids))throw new Conflict();
+        if(!held.identities.ids().containsAll(ids))throw new Conflict();
     }
     private Roster latest(String id){return j.query("SELECT id,revision,state FROM roster_revision WHERE meeting_id=? ORDER BY revision DESC LIMIT 1 FOR UPDATE",(r,n)->new Roster(r.getString(1),r.getLong(2),r.getString(3)),id).stream().findFirst().orElse(null);}
     private List<Member> members(String roster){return j.query("SELECT member_id,enterprise_id,display_name,member_kind FROM roster_member WHERE roster_id=? ORDER BY member_id FOR UPDATE",(r,n)->new Member(r.getString(1),r.getString(2),r.getString(3),r.getString(4)),roster);}

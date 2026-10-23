@@ -1,0 +1,17 @@
+14:03:32.936 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58062/ama_b01_fixture (MySQL 8.4)
+14:03:33.195 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 13 migrations (execution time 00:00.090s)
+14:03:33.243 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.1
+14:03:33.253 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+OpenAPI response contract: post /api/v1/uploads/{id}/completion 503 {"error":{"code":"FILE_STORAGE_UNAVAILABLE","message":"File storage unavailable","traceId":"8e02c9ee-eab5-46a7-a88a-247425fbe895"}}
+Filename transport: backend=local nameScalars=1000 range=bytes=1-3 status=206 dispositionBytes=1016 bodyBytes=3 backendClosed=true metadataPreserved=true
+Filename transport: backend=local nameScalars=1000 range=null status=200 dispositionBytes=1016 bodyBytes=6 backendClosed=true metadataPreserved=true
+Filename transport: backend=local nameScalars=14 range=null status=200 dispositionBytes=105 bodyBytes=6 backendClosed=true metadataPreserved=true
+OpenAPI response contract: get /api/v1/files/{id}/content 416 {"error":{"code":"FILE_INVALID_RANGE","message":"Requested range unavailable","traceId":"e6b54c11-6c3f-480b-b0d2-1e0119034108"}}
+Filename transport: backend=local nameScalars=974 range=null status=200 dispositionBytes=1024 bodyBytes=6 backendClosed=true metadataPreserved=true
+Filename transport: backend=local nameScalars=963 range=null status=200 dispositionBytes=1024 bodyBytes=6 backendClosed=true metadataPreserved=true
+Filename transport: backend=local nameScalars=964 range=null status=200 dispositionBytes=1016 bodyBytes=6 backendClosed=true metadataPreserved=true
+Filename transport: backend=local nameScalars=975 range=null status=200 dispositionBytes=1024 bodyBytes=6 backendClosed=true metadataPreserved=true
+Filename transport: backend=local nameScalars=109 range=null status=200 dispositionBytes=1016 bodyBytes=6 backendClosed=true metadataPreserved=true
+OpenAPI response contract: put /api/v1/uploads/{id}/parts/{part} 409 {"error":{"code":"FILE_CONFLICT","message":"File request conflicts","traceId":"e536ae8d-8106-458f-b3ce-809b03c41bdd"}}
+OpenAPI response contract: put /api/v1/uploads/{id}/parts/{part} 503 {"error":{"code":"FILE_PURPOSE_UNAVAILABLE","message":"File purpose unavailable","traceId":"491c731f-3995-4d04-b8ce-28d739b3bce6"}}
+OpenAPI response contract: get /api/v1/files/{id}/content 404 {"error":{"code":"FILE_NOT_FOUND","message":"File not found","traceId":"ffd51418-ff8c-406e-93ab-42b8d0d60534"}}

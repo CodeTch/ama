@@ -1,0 +1,545 @@
+{
+  "authority-regressions": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-q",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+        "-Dit.test=TranscriptAuthorityIT,FileRegistryUploadIT,FileRegistryRestartIT#frozenManifestNamePurposeAndOpaqueTokenRecoverAfterActualJvmDeath,ProcessingFactsReaderIT,B06QueueSeamsIT,MeetingRevisionIT,MeetingConcurrencyIT,ConfigArchiveRestartIT",
+        "-DfailIfNoTests=false",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "verify"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx64m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-03/archive-restart-2ddfd7ae-fc6b-4559-b90e-03e7d7400313"
+    },
+    "suites": [
+      {
+        "file": "adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+        "suite": "ama.config.file.ControlledArchiveFix1Test",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+        "suite": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+        "suite": "ama.config.json.ArchiveBudgetTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+        "suite": "ama.config.json.ConfigBindingsTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+        "suite": "ama.config.json.ConfigWireReaderTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.config.json.RawHashChainTest.xml",
+        "suite": "ama.config.json.RawHashChainTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+        "suite": "ama.minutes.json.OutputBudgetBoundaryTest",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+        "suite": "ama.minutes.json.StrictMinutesJsonReaderTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+        "suite": "ama.storage.ManagedBackendIdentityTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.storage.StorageRouterTest.xml",
+        "suite": "ama.storage.StorageRouterTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+        "suite": "ama.storage.s3.S3LayoutV3Test",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+        "suite": "ama.storage.s3.S3ProtocolTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.task.TaskMetadataTest.xml",
+        "suite": "ama.task.TaskMetadataTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+        "suite": "ama.transcript.TextTranscriptParserTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "api-TEST-ama.api.DeploymentConfigTest.xml",
+        "suite": "ama.api.DeploymentConfigTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "api-TEST-ama.api.FileConfigurationTest.xml",
+        "suite": "ama.api.FileConfigurationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "api-TEST-ama.api.IdentityContractsTest.xml",
+        "suite": "ama.api.IdentityContractsTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "api-TEST-ama.api.IdentitySecurityTest.xml",
+        "suite": "ama.api.IdentitySecurityTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "contracts-TEST-ama.contract.MinutesFactBudgetTest.xml",
+        "suite": "ama.contract.MinutesFactBudgetTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+        "suite": "ama.canonical.CanonicalValueCodecTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+        "suite": "ama.minutes.contract.FinalAndCoverageTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+        "suite": "ama.minutes.contract.GenerationFingerprintTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+        "suite": "ama.minutes.contract.HashProfilesTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+        "suite": "ama.minutes.contract.SourceAndSupportTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+        "suite": "ama.minutes.contract.StoredSourceGraphTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "core-TEST-ama.transcript.BatchFingerprintTest.xml",
+        "suite": "ama.transcript.BatchFingerprintTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.meeting.MeetingConcurrencyIT.xml",
+        "suite": "ama.meeting.MeetingConcurrencyIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.meeting.MeetingRevisionIT.xml",
+        "suite": "ama.meeting.MeetingRevisionIT",
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.ContractFixtureTest.xml",
+        "suite": "ama.storage.ContractFixtureTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.FileRegistryRestartIT.xml",
+        "suite": "ama.storage.FileRegistryRestartIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.FileRegistryUploadIT.xml",
+        "suite": "ama.storage.FileRegistryUploadIT",
+        "tests": 39,
+        "failures": 0,
+        "errors": 29,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityIT",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.support.ContractClientTest.xml",
+        "suite": "ama.support.ContractClientTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.task.B06QueueSeamsIT.xml",
+        "suite": "ama.task.B06QueueSeamsIT",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.transcript.ConfigArchiveRestartIT.xml",
+        "suite": "ama.transcript.ConfigArchiveRestartIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "integration-tests-TEST-ama.transcript.ProcessingFactsReaderIT.xml",
+        "suite": "ama.transcript.ProcessingFactsReaderIT",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+        "suite": "ama.worker.PreparedWorkerLoopTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "worker-TEST-ama.worker.WorkerLoopTest.xml",
+        "suite": "ama.worker.WorkerLoopTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 348,
+      "failures": 0,
+      "errors": 29,
+      "skipped": 0
+    }
+  },
+  "upload-regression-retry": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-q",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+        "-Dtest=NoSuchTest",
+        "-Dit.test=FileRegistryUploadIT",
+        "-DfailIfNoTests=false",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "verify"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.FileRegistryUploadIT.xml",
+        "suite": "ama.storage.FileRegistryUploadIT",
+        "tests": 39,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "authority-final": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-q",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+        "-Dtest=NoSuchTest",
+        "-Dit.test=TranscriptAuthorityIT",
+        "-DfailIfNoTests=false",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "verify"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityIT",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "authority-final-normalized": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-q",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+        "-Dtest=NoSuchTest",
+        "-Dit.test=TranscriptAuthorityIT",
+        "-DfailIfNoTests=false",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "verify"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityIT",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "dangling-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-q",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
+        "-Dtest=NoSuchTest",
+        "-Dit.test=TranscriptAuthorityIT#danglingCurrentPointerIsFatalAfterAuthorizationEvenWithValidLegacyReference",
+        "-DfailIfNoTests=false",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "verify"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": null,
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityIT.xml",
+        "suite": "ama.storage.TranscriptAuthorityIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "exact-authorized-teardown": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-q",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "-Dtest=NoUnitSelection",
+        "-Dit.test=Task03SyntheticTeardownIT",
+        "-DfailIfNoTests=false",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dfailsafe.failIfNoSpecifiedTests=false",
+        "verify"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502"
+    },
+    "suites": [
+      {
+        "file": "integration-tests-TEST-ama.storage.Task03SyntheticTeardownIT.xml",
+        "suite": "ama.storage.Task03SyntheticTeardownIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "total": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  }
+}

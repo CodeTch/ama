@@ -1,0 +1,20 @@
+ @Test void identitySkipLockedStopsBeforeRootAndActualRosterSaveKeepsFullName() throws Exception {
+  try(var f=new TranscriptAuthorityFixture()){
+   var acquired=new java.util.concurrent.CountDownLatch(1);var release=new java.util.concurrent.CountDownLatch(1);
+   try(var executor=java.util.concurrent.Executors.newSingleThreadExecutor()){
+    var blocker=executor.submit(()->new TransactionRunner(f.trace.actual).required(()->{new JdbcTemplate(f.trace.actual).queryForObject("SELECT enterprise_id FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE",String.class,f.owner);acquired.countDown();assertTrue(release.await(5,java.util.concurrent.TimeUnit.SECONDS));return null;}));
+    try{
+     assertTrue(acquired.await(5,java.util.concurrent.TimeUnit.SECONDS));f.source.statements.clear();
+     f.tx.required(()->{assertTrue(f.access.tryLockIdentities(f.actor,List.of(),true).isEmpty());return null;});
+     assertFalse(f.source.statements.stream().anyMatch(q->q.contains("FROM meeting")||q.contains("FROM task_subject")));assertTrue(f.source.statements.stream().anyMatch(q->q.contains("SKIP LOCKED")));
+    }finally{release.countDown();}blocker.get(5,java.util.concurrent.TimeUnit.SECONDS);
+   }
+   var member=f.member();String name="完整😀姓名".repeat(20000);f.j.update("UPDATE enterprise_identity SET display_name=? WHERE enterprise_id=?",name,member.enterpriseId());
+   var outbox=new ama.task.JdbcOutbox(f.source,new ama.meeting.MeetingEventReferences(f.source).validators());
+   var repository=new ama.meeting.JdbcMeetingRepository(f.source,f.tx,f.access,f.fences,outbox,new ama.audit.JdbcAuditAdapter(f.source),id->{throw new ama.contract.MeetingContracts.CategoryUnavailable();});
+   var created=repository.create(f.actor,"task03-create-"+UUID.randomUUID(),"task03-name");
+   repository.save(f.actor,created.id(),"task03-save-"+UUID.randomUUID(),new ama.contract.MeetingContracts.SaveInfo(0,"full name",null,null,null,List.of(member.enterpriseId()),List.of()),"task03-name");
+   assertEquals(name,f.j.queryForObject("SELECT rm.display_name FROM roster_member rm JOIN roster_revision rr ON rr.id=rm.roster_id WHERE rr.meeting_id=? AND rm.enterprise_id=?",String.class,created.id(),member.enterpriseId()));
+   assertEquals(1,f.j.queryForObject("SELECT COUNT(*) FROM meeting_minutes_editor_guard WHERE meeting_id=?",Integer.class,created.id()));
+  }
+ }

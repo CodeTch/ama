@@ -1,0 +1,73 @@
+ private static class RejectingComplete implements CompleteReadPolicy {
+  RuntimeException preparationFailure=new IllegalStateException("private graph detail");
+  public ReadPreparation prepareRead(Actor actor,String meeting,FileRegistry.ReadRequest request){throw preparationFailure;}
+  public void authorizeRead(FileRegistry.LockedMeeting g,String m,FileRegistry.ReadRequest r){}
+  public Object prelock(FileRegistry.LockedMeeting g,String m,FileRegistry.Reference r,String f){throw new AssertionError("failed preparation acquired domain");}
+  public Object prelock(FileRegistry.LockedMeeting g,String m,FileRegistry.Reference r,String f,FileRegistry.ReferenceContext c){throw new AssertionError("failed preparation acquired domain");}
+  public Object prelockCurrent(FileRegistry.LockedMeeting g,String m,FileRegistry.Reference r,String f,ReadPreparation p){throw new AssertionError("failed preparation acquired domain");}
+  public ReadPlan prelockRead(FileRegistry.LockedMeeting g,String m,FileRegistry.ReadRequest r,ReadPreparation p){throw new AssertionError("failed preparation acquired domain");}
+  public List<ReadMember> readMembers(Object d,FileRegistry.Reference r,String f){throw new AssertionError();}
+  public void validate(Object d,String m,FileRegistry.Reference r,FileRegistry.FileRecord f,String p){throw new AssertionError();}
+  public void prelockReadTasks(List<Object> scopes){throw new AssertionError();}
+  public void finishRead(Object d,List<FileRegistry.CompletedSource> sources){throw new AssertionError();}
+ }
+ private static FileReferencePolicy legacy(){return new FileReferencePolicy(){public Object prelock(FileRegistry.LockedMeeting g,String m,FileRegistry.Reference r,String f){return r;}public void validate(Object d,String m,FileRegistry.Reference r,FileRegistry.FileRecord f,String p){assertEquals(d,r);}};}
+ @Test void recognizedMissingLegacyAndFailedProvidersAlwaysAuthorizeBeforeSafeFailure() throws Exception {
+  try(var f=new TranscriptAuthorityFixture()){
+   var member=f.member();var outsider=f.outsider();String file=UUID.randomUUID().toString(),input=UUID.randomUUID().toString();
+   var spec=new ama.contract.TaskContracts.TaskSpec("TRANSCRIPT_IMPORT_V1","TRANSCRIPT_IMPORT",new ama.contract.TaskContracts.SubjectRef("MEETING",f.meeting),"a".repeat(64),new ama.contract.TaskContracts.TypedRef("TRANSCRIPTION_INPUT",input),"b".repeat(64),1,0,0,3);
+   var lease=new ama.contract.TaskContracts.TaskLease(UUID.randomUUID().toString(),1,"TASK03_WORKER",java.time.Instant.now(),spec);
+   var requests=List.<FileRegistry.ReadRequest>of(new FileRegistry.CurrentReadRequest("INPUT_BATCH_FILE",file),new ama.transcript.ProcessingSourceReader.HistoryRequest(UUID.randomUUID().toString(),file),new ama.transcript.ProcessingSourceReader.WorkerRequest(lease,input,file));
+   var registries=List.of(new JdbcFileRegistry(f.source,f.tx,f.access,f.purposes,f.catalog,Map.of()),new JdbcFileRegistry(f.source,f.tx,f.access,f.purposes,f.catalog,Map.of("INPUT_BATCH_FILE",legacy())),f.registry(Map.of("INPUT_BATCH_FILE",new RejectingComplete())));
+   for(var registry:registries)for(var request:requests){
+    for(var actor:List.of(outsider,member,f.actor)){
+     f.source.statements.clear();
+     if(actor==outsider||actor==member&&!(request instanceof FileRegistry.CurrentReadRequest))assertThrows(MeetingAccess.AccessDeniedException.class,()->registry.read(actor,f.meeting,request,null));
+     else assertThrows(ama.contract.FileContracts.Unavailable.class,()->registry.read(actor,f.meeting,request,null));
+     assertEquals(1,f.source.statements.stream().filter(q->q.startsWith("SELECT enterprise_id,status")).count());assertNoCompleteLocks(f);assertEquals(0,f.reads.get());
+    }
+    f.j.update("UPDATE enterprise_identity SET status='INACTIVE' WHERE enterprise_id=?",member.enterpriseId());f.source.statements.clear();
+    assertThrows(MeetingAccess.AccessDeniedException.class,()->registry.read(member,f.meeting,request,null));assertNoCompleteLocks(f);
+    f.j.update("UPDATE enterprise_identity SET status='ACTIVE' WHERE enterprise_id=?",member.enterpriseId());
+   }
+   f.source.statements.clear();assertThrows(IllegalArgumentException.class,()->registries.getFirst().read(f.actor,f.meeting,()->"INPUT_BATCH_FILE",null));assertTrue(f.source.statements.isEmpty());
+  }
+ }
+ private static void assertNoCompleteLocks(TranscriptAuthorityFixture f){assertFalse(f.source.statements.stream().anyMatch(q->q.contains("FOR UPDATE")&&(q.contains("FROM transcript_revision")||q.contains("FROM transcription_input")||q.contains("FROM input_batch")||q.contains("FROM upload_session")||q.contains("FROM file_object")||q.contains("FROM durable_task")||q.contains("FROM task_attempt"))));}
+ @Test void onlyGenuineCurrentIneligibilityCanUseIndependentLegacyAfterAuthorization() throws Exception {
+  try(var f=new TranscriptAuthorityFixture()){
+   var uploaded=f.upload("legacy fallback");String owner=UUID.randomUUID().toString();
+   for(String kind:List.of("TASK03_COMPLETE","TASK03_LEGACY"))f.j.update("INSERT INTO file_reference VALUES (?,?,?,'TRANSCRIPT_INPUT')",uploaded.file(),kind,owner);
+   var complete=new RejectingComplete();complete.preparationFailure=new ama.contract.FileContracts.NotFound();
+   var registry=f.registry(Map.of("TASK03_COMPLETE",complete,"TASK03_LEGACY",legacy()));
+   var outsider=f.outsider();assertThrows(MeetingAccess.AccessDeniedException.class,()->registry.download(outsider,uploaded.file(),null));assertEquals(0,f.reads.get());
+   try(var d=registry.download(f.actor,uploaded.file(),null)){assertEquals(15,d.length());}assertEquals(1,f.reads.get());
+   complete.preparationFailure=new IllegalStateException("private graph corruption");f.source.statements.clear();
+   assertThrows(ama.contract.FileContracts.Unavailable.class,()->registry.download(f.actor,uploaded.file(),null));assertNoCompleteLocks(f);assertEquals(1,f.reads.get());
+   f.j.update("INSERT INTO file_reference VALUES (?,'TASK03_OTHER',?,'TRANSCRIPT_INPUT')",uploaded.file(),owner);
+   var ambiguous=f.registry(Map.of("TASK03_COMPLETE",complete,"TASK03_OTHER",new RejectingComplete(),"TASK03_LEGACY",legacy()));
+   assertThrows(MeetingAccess.AccessDeniedException.class,()->ambiguous.download(outsider,uploaded.file(),null));
+   f.source.statements.clear();assertThrows(ama.contract.FileContracts.Unavailable.class,()->ambiguous.download(f.actor,uploaded.file(),null));assertNoCompleteLocks(f);assertEquals(1,f.reads.get());
+   var old=new JdbcFileRegistry(f.source,f.tx,f.access,f.purposes,f.catalog,Map.of("TASK03_LEGACY",legacy()));try(var d=old.download(f.actor,uploaded.file(),null)){assertEquals(15,d.length());}
+   complete.preparationFailure=ama.contract.MinutesContracts.fail(ama.contract.MinutesContracts.FailureCode.CANCELLED);f.source.statements.clear();
+   assertThrows(ama.contract.MinutesContracts.Failure.class,()->registry.download(f.actor,uploaded.file(),null));assertFalse(f.source.statements.stream().anyMatch(q->q.contains("enterprise_identity")));assertEquals(2,f.reads.get());
+  }
+ }
+ @Test void realCurrentMemberHistoryOwnerAndMalformedProducerProfilesRemainDistinct() throws Exception {
+  try(var f=new TranscriptAuthorityFixture()){
+   var uploaded=f.upload("producer metadata");var c=f.components();var p=f.prepare(c,List.of(uploaded));f.bind(c,p,List.of(uploaded));String task=f.task(p,"SUCCEEDED"),raw=f.revision(p,task,"RAW",null,1),working=f.revision(p,null,"WORKING",raw,2);
+   f.j.update("UPDATE durable_task SET output_kind='TRANSCRIPT_REVISION',output_id=? WHERE id=?",raw,task);f.j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='SUCCEEDED' WHERE task_id=?",task);f.current(working,7);
+   var member=f.member();try(var d=c.registry().download(member,uploaded.file(),null)){assertEquals(17,d.length());}
+   assertThrows(MeetingAccess.AccessDeniedException.class,()->c.sources().history(member,f.meeting,raw,uploaded.file(),null));
+   f.j.update("UPDATE input_batch_fingerprint_profile SET profile='UNKNOWN' WHERE batch_id=?",p.batchId());int reads=f.reads.get();
+   assertThrows(MeetingAccess.AccessDeniedException.class,()->c.sources().history(member,f.meeting,raw,uploaded.file(),null));assertThrows(ama.contract.FileContracts.Unavailable.class,()->c.registry().download(f.actor,uploaded.file(),null));assertEquals(reads,f.reads.get());
+   f.j.update("UPDATE input_batch_fingerprint_profile SET profile=? WHERE batch_id=?",ama.transcript.BatchFingerprint.PROFILE,p.batchId());
+   for(String column:List.of("producer_key","input_fingerprint")){
+    String original=f.j.queryForObject("SELECT "+column+" FROM durable_task WHERE id=?",String.class,task);f.j.update("UPDATE durable_task SET "+column+"=? WHERE id=?","0".repeat(64),task);
+    assertThrows(ama.contract.FileContracts.Unavailable.class,()->c.sources().history(f.actor,f.meeting,raw,uploaded.file(),null));assertEquals(reads,f.reads.get());f.j.update("UPDATE durable_task SET "+column+"=? WHERE id=?",original,task);
+   }
+   f.j.update("UPDATE transcript_revision SET parent_id=? WHERE id=?",working,working);assertThrows(ama.contract.FileContracts.Unavailable.class,()->c.registry().download(member,uploaded.file(),null));assertEquals(reads,f.reads.get());
+   f.j.update("UPDATE transcript_revision SET parent_id=? WHERE id=?",raw,working);f.j.update("UPDATE meeting SET ever_published=1,stage='PUBLISHED' WHERE id=?",f.meeting);
+   try(var d=c.sources().history(f.actor,f.meeting,raw,uploaded.file(),null)){assertEquals(17,d.length());}
+  }
+ }

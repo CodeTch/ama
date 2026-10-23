@@ -1,0 +1,34 @@
+package ama.storage;
+
+import ama.support.MysqlTestDatabase;
+import ama.db.TransactionRunner;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.junit.jupiter.api.Test;
+import java.nio.file.*;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static ama.canonical.CanonicalValue.*;
+
+/** One explicitly authorized retained synthetic fixture repair; select only by its exact test name. */
+class Task03SyntheticTeardownIT {
+ @Test void exactAuthorizedRetainedSyntheticAttemptIsTerminalized() throws Exception {
+  String task="7d4db414-118c-432b-aaa6-32b654e96a69",input="f055796d-492a-403e-8ba2-5c1c738dee50",meeting="98a7c502-628d-421c-b761-f5589ff67021",owner="authority-94c17521-3f7b-4763-8fca-bce254c56fc2";
+  var source=MysqlTestDatabase.dataSource();var j=new JdbcTemplate(source);var tx=new TransactionRunner(source);var receipt=new ArrayList<String>();
+  tx.required(()->{
+   var row=j.queryForMap("SELECT id,task_type,pool,subject_kind,subject_id,producer_key,input_kind,input_id,input_fingerprint,business_version,priority,cancel_epoch,max_attempts,state,attempt,lease_owner FROM durable_task WHERE id=? FOR UPDATE",task);
+   assertEquals("RUNNING",row.get("state"));assertEquals("TASK03_WORKER",row.get("lease_owner"));assertEquals(1,((Number)row.get("attempt")).longValue());
+   assertEquals("TRANSCRIPT_IMPORT_V1",row.get("task_type"));assertEquals("TRANSCRIPT_IMPORT",row.get("pool"));assertEquals("MEETING",row.get("subject_kind"));assertEquals(meeting,row.get("subject_id"));assertEquals("TRANSCRIPTION_INPUT",row.get("input_kind"));assertEquals(input,row.get("input_id"));assertEquals(0,((Number)row.get("priority")).intValue());assertEquals(3,((Number)row.get("max_attempts")).intValue());
+   var fixed=j.queryForMap("SELECT meeting_id,input_fingerprint,base_revision,cancel_epoch FROM transcription_input WHERE id=?",input);
+   assertEquals(meeting,fixed.get("meeting_id"));assertEquals(owner,j.queryForObject("SELECT owner_id FROM meeting WHERE id=?",String.class,meeting));assertEquals(fixed.get("input_fingerprint"),row.get("input_fingerprint"));assertEquals(fixed.get("base_revision"),row.get("business_version"));assertEquals(fixed.get("cancel_epoch"),row.get("cancel_epoch"));
+   var value=object(field("profile",string("ama.transcript-import-producer.v1")),field("kind",string("TASK_PRODUCER")),field("data",object(field("taskType",string("TRANSCRIPT_IMPORT_V1")),field("meetingId",string(meeting)),field("inputId",string(input)),field("inputFingerprint",string((String)row.get("input_fingerprint"))),field("businessVersion",number(((Number)row.get("business_version")).longValue())),field("cancelEpoch",number(((Number)row.get("cancel_epoch")).longValue())))));
+   assertEquals(new ama.canonical.CanonicalValueCodec().sha256(value,new ama.contract.MinutesContracts.CanonicalBudget(100000,16,10000,10000,1000),()->false),row.get("producer_key"));
+   var attempt=j.queryForMap("SELECT task_id,attempt,owner,ended_at FROM task_attempt WHERE task_id=? AND attempt=1 FOR UPDATE",task);assertEquals("TASK03_WORKER",attempt.get("owner"));assertNull(attempt.get("ended_at"));
+   receipt.add("before task="+task+" state=RUNNING attempt=1 unfinished=true input="+input+" meeting="+meeting+" owner="+owner+" fullspec=verified");
+   assertEquals(1,j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='CANCELLED',error_code='TASK03_FIXTURE_CLOSED' WHERE task_id=? AND attempt=1 AND owner='TASK03_WORKER' AND ended_at IS NULL",task));
+   assertEquals(1,j.update("UPDATE durable_task SET state='CANCELLED',lease_owner=NULL,expires_at=NULL WHERE id=? AND state='RUNNING' AND attempt=1 AND lease_owner='TASK03_WORKER' AND input_id=? AND subject_id=?",task,input,meeting));return null;
+  });
+  assertEquals("CANCELLED",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,task));assertNotNull(j.queryForObject("SELECT ended_at FROM task_attempt WHERE task_id=? AND attempt=1",java.sql.Timestamp.class,task));
+  receipt.add("after task="+task+" state=CANCELLED attempt=1 ended=true taskAffected=1 attemptAffected=1 retained=true");
+  Path dir=Path.of("target/task03-custody");Files.createDirectories(dir);Files.write(dir.resolve("exact-authorized-teardown.txt"),receipt);
+ }
+}

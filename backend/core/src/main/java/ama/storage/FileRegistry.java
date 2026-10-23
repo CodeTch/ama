@@ -13,6 +13,23 @@ public interface FileRegistry {
     interface LockedMeeting {}
 
     interface LockedReference {}
+    interface LockedSources {}
+    interface ReferenceContext {}
+    interface ReadRequest { String referenceKind(); }
+    record CurrentReadRequest(String referenceKind, String fileId) implements ReadRequest {}
+    record CompletedSource(FileRecord file, String uploadId, String originalPurpose, long uploadCancelEpoch) {}
+
+    /** Additive complete-source protocol; old registry implementations fail closed. */
+    default LockedMeeting adopt(Actor actor, String meetingId, MeetingAccess.Locked access,
+            MeetingAccess.Action action) { throw new ama.contract.FileContracts.Unavailable(); }
+    default LockedReference prelock(LockedMeeting gate, Reference reference, String fileId,
+            ReferenceContext context) { throw new ama.contract.FileContracts.Unavailable(); }
+    default java.util.Optional<LockedSources> prelockSources(LockedMeeting gate,
+            java.util.List<String> completeFileIds, boolean skipLocked) { throw new ama.contract.FileContracts.Unavailable(); }
+    default java.util.List<CompletedSource> sources(LockedMeeting expectedGate, LockedSources held,
+            java.util.List<String> exactFileIds) { throw new ama.contract.FileContracts.Unavailable(); }
+    default void bindAll(LockedSources sources, java.util.List<Binding> bindings) { throw new ama.contract.FileContracts.Unavailable(); }
+    default Download read(Actor actor, String meetingId, ReadRequest request, String range) { throw new ama.contract.FileContracts.Unavailable(); }
 
     record Reference(String kind, String ownerId, String purpose) {
         public Reference {

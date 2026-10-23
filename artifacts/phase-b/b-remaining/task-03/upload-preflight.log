@@ -1,0 +1,27 @@
+{
+  "utc_epoch": 1792735370.918727,
+  "Id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 21730,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-23T03:29:14.497381237Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "RestartCount": 0,
+  "Limits": {
+    "Memory": 805306368,
+    "NanoCpus": 1000000000,
+    "PidsLimit": 256
+  },
+  "Mysql_readonly_health": "observed_at\tconnection_ok\n2026-10-23 06:02:50.806188\t1\nVariable_name\tValue\nAborted_clients\t7\nAborted_connects\t0\nConnection_errors_max_connections\t0\nConnections\t11683\nMax_used_connections\t8\nThreads_connected\t1\nThreads_running\t2\nUptime\t9197\nVariable_name\tValue\nconnect_timeout\t10\nmax_connections\t151\n",
+  "loadavg": "2.27 1.49 1.28 4/1380 1939476\n",
+  "meminfo": "MemTotal:       24606880 kB\nMemFree:        12523280 kB\nMemAvailable:   18191072 kB",
+  "stats": "{\"BlockIO\":\"160MB / 1.19GB\",\"CPUPerc\":\"0.79%\",\"Container\":\"ama-test-b01-ad9f1af29eff\",\"ID\":\"eefdd9a984ee\",\"MemPerc\":\"72.77%\",\"MemUsage\":\"558.9MiB / 768MiB\",\"Name\":\"ama-test-b01-ad9f1af29eff\",\"NetIO\":\"67.8MB / 95.4MB\",\"PIDs\":\"52\"}\n"
+}

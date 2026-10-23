@@ -1,0 +1,47 @@
+[ERROR] Tests run: 9, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 15.95 s <<< FAILURE! -- in ama.storage.TranscriptAuthorityIT
+[ERROR] ama.storage.TranscriptAuthorityIT.workerUsesActualRenewedExpiryAndMatchingUnfinishedAttempt -- Time elapsed: 1.162 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception thrown: ama.contract.FileContracts$Unavailable: File storage unavailable
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:80)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:61)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3355)
+	at ama.storage.TranscriptAuthorityIT.workerUsesActualRenewedExpiryAndMatchingUnfinishedAttempt(TranscriptAuthorityIT.java:176)
+Caused by: ama.contract.FileContracts$Unavailable: File storage unavailable
+	at ama.transcript.JdbcProcessingSourceReader.open(JdbcProcessingSourceReader.java:8)
+	at ama.storage.TranscriptAuthorityIT.lambda$workerUsesActualRenewedExpiryAndMatchingUnfinishedAttempt$41(TranscriptAuthorityIT.java:176)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:76)
+	... 3 more
+
+[ERROR] ama.storage.TranscriptAuthorityIT.actualSuccessfulRawHistoryIsDistinctFromCurrentWorkingAndLiveWorker -- Time elapsed: 1.326 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception thrown: ama.contract.FileContracts$Unavailable: File storage unavailable
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:80)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:61)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3355)
+	at ama.storage.TranscriptAuthorityIT.actualSuccessfulRawHistoryIsDistinctFromCurrentWorkingAndLiveWorker(TranscriptAuthorityIT.java:164)
+Caused by: ama.contract.FileContracts$Unavailable: File storage unavailable
+	at ama.transcript.JdbcProcessingSourceReader.history(JdbcProcessingSourceReader.java:9)
+	at ama.storage.TranscriptAuthorityIT.lambda$actualSuccessfulRawHistoryIsDistinctFromCurrentWorkingAndLiveWorker$37(TranscriptAuthorityIT.java:164)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:76)
+	... 3 more
+
+[ERROR] Failures: 
+[ERROR]   TranscriptAuthorityIT.actualSuccessfulRawHistoryIsDistinctFromCurrentWorkingAndLiveWorker:164 Unexpected exception thrown: ama.contract.FileContracts$Unavailable: File storage unavailable
+[ERROR]   TranscriptAuthorityIT.workerUsesActualRenewedExpiryAndMatchingUnfinishedAttempt:176 Unexpected exception thrown: ama.contract.FileContracts$Unavailable: File storage unavailable
+[ERROR] Tests run: 9, Failures: 2, Errors: 0, Skipped: 0
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.5.6:verify (default) on project ama-integration-tests: There are test failures.
+[ERROR] 
+[ERROR] See /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-integration-tests
