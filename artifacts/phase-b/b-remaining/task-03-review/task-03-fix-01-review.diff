@@ -1,0 +1,1162 @@
+# Task3 boundedfixreview aa0b5f08a19649091b0bcd60959bd741fb5c7850..912945df2ad09d7ff265f6ba97e304a2b98a4b79
+# All3changedsource/test and executableevidence/report/manifests/commands. InterveningTask5rootdocsseparatelyreviewed, completeauditpreserved.
+
+## Commits
+912945d Keep transcript source route validation hash-free under locks
+5560381 docs: adopt confined import completion and renewal ordering
+
+## Fullstat
+ .../controller-import-worker-design/.gitattributes |   1 +
+ .../controller-import-worker-design/manifest.json  |   9 +
+ .../task-05-design-r1-review-diff.txt              | 270 +++++++++++++
+ .../task-05-import-worker-design-r1-closure.md     |  43 +++
+ .../task-05-import-worker-design-r1-review.md      |  71 ++++
+ .../task-05-import-worker-design-r1.md             | 220 +++++++++++
+ .../task-05-import-worker-design-review.md         |  96 +++++
+ .../task-05-import-worker-design.md                | 191 +++++++++
+ .../b-remaining/task-03-fix-01/.gitattributes      |   1 +
+ .../b-remaining/task-03-fix-01/add-multiscope.py   |   2 +
+ .../task-03-fix-01/add-postcommit-proof.py         |  14 +
+ .../phase-b/b-remaining/task-03-fix-01/audit.py    |  41 ++
+ .../2671fa53-3e5e-4332-89c1-9d4b445629a8.txt       |   1 +
+ .../2cdda02c-02e4-4255-b1fb-6eb2f6b5c2c9.txt       |   2 +
+ .../36835cdb-6ca5-41fb-957f-1e9cd087853a.txt       |   1 +
+ .../39af49b5-34c9-457c-a64f-3c48f90b58b1.txt       |   1 +
+ .../4cae887d-3037-4730-b5e3-cbdc1d7e21aa.txt       |   1 +
+ .../4d73218c-fda4-402c-b272-53af2614551c.txt       |   1 +
+ .../6f30e1ab-fbe1-4cc8-b89a-3677a930b477.txt       |   1 +
+ .../7735637e-132c-4a32-a1b4-1a638d5c49fd.txt       |   2 +
+ .../95ba326d-14b0-4afd-bf86-81d99fdf0515.txt       |   1 +
+ .../98c1d2a5-2b03-4eaf-83a2-cfea092e646f.txt       |   2 +
+ .../a036ed63-dc2b-4f09-99d8-022dde0c453e.txt       |   2 +
+ .../afeb000d-6215-454c-8c6c-aee10f5f24a9.txt       |   1 +
+ .../b08fcec1-9679-4a04-ac3f-94f455de690d.txt       |   1 +
+ ...22bc60580b6-conflicting-private-expectation.txt |  24 ++
+ ...f-43e6-afab-122bc60580b6-shared-task-scopes.txt |  31 ++
+ .../b553ae0a-b30f-43e6-afab-122bc60580b6.txt       |   2 +
+ .../c0673d34-37d3-4742-a0f6-16bcabb78115.txt       |   1 +
+ .../cc030b92-17e9-4087-b2dd-5a814fe4f20d.txt       |   1 +
+ .../d6f822ca-d8fb-4ad2-8181-e501f7bcd195.txt       |   2 +
+ .../da8dd737-34fc-4c04-bb30-127536e705a4.txt       |   1 +
+ .../dae42c1d-859b-48d7-b9d3-2f51f2b983d8.txt       |   1 +
+ .../e4a01827-5290-4dc4-95b1-b828b2092991.txt       |   2 +
+ ...1b23-85f6-4dde-87cb-bfd307980597-lock-order.txt |  33 ++
+ .../e5641b23-85f6-4dde-87cb-bfd307980597.txt       |   2 +
+ .../e7f47601-2cad-4571-9653-fd4de55b4852.txt       |   1 +
+ .../ecdb9ed9-8669-415b-a698-56fa80376699.txt       |   1 +
+ .../f8586e7e-4408-4625-9aa2-6f64ad31290d.txt       |   2 +
+ ...d7-49ea-aeac-443f42a3be86-two-worker-scopes.txt |  38 ++
+ .../f92bd709-9cd7-49ea-aeac-443f42a3be86.txt       |   3 +
+ ...TEST-ama.storage.ManagedBackendIdentityTest.xml |  67 ++++
+ ...tests-TEST-ama.storage.FileBackendCatalogIT.xml |  80 ++++
+ ...tests-TEST-ama.storage.FileRegistryUploadIT.xml |  85 ++++
+ ...ests-TEST-ama.storage.TranscriptAuthorityIT.xml |  99 +++++
+ ...EST-ama.storage.TranscriptAuthorityReviewIT.xml |  74 ++++
+ .../task-03-fix-01/covering-final.children.json    |   1 +
+ .../task-03-fix-01/covering-final.command.json     |  24 ++
+ .../covering-final.fixture-paths.json              | 317 +++++++++++++++
+ .../b-remaining/task-03-fix-01/covering-final.log  |   5 +
+ .../task-03-fix-01/covering-final.sources.json     | 429 +++++++++++++++++++++
+ .../task-03-fix-01/evidence-manifest.json          | 346 +++++++++++++++++
+ .../task-03-fix-01/final-audit.children.json       |   1 +
+ .../task-03-fix-01/final-audit.command.json        |  14 +
+ .../task-03-fix-01/final-audit.fixture-paths.json  |   1 +
+ .../b-remaining/task-03-fix-01/final-audit.log     |  23 ++
+ .../task-03-fix-01/final-audit.sources.json        | 429 +++++++++++++++++++++
+ .../task-03-fix-01/fix-hash-boundary.py            |  30 ++
+ .../e1e2f4df-8bf8-4acb-a8f6-9898d34f2ba7.txt       |   2 +
+ ...TEST-ama.storage.ManagedBackendIdentityTest.xml |  67 ++++
+ ...EST-ama.storage.TranscriptAuthorityReviewIT.xml |  68 ++++
+ .../task-03-fix-01/hash-green.children.json        |   1 +
+ .../task-03-fix-01/hash-green.command.json         |  24 ++
+ .../task-03-fix-01/hash-green.fixture-paths.json   |  17 +
+ .../b-remaining/task-03-fix-01/hash-green.log      |   0
+ .../task-03-fix-01/hash-green.sources.json         | 429 +++++++++++++++++++++
+ .../0ce5c4f9-10cb-48d2-8243-689aef618e6a.txt       |   1 +
+ ...EST-ama.storage.TranscriptAuthorityReviewIT.xml |  96 +++++
+ .../task-03-fix-01/hash-red.children.json          |   1 +
+ .../task-03-fix-01/hash-red.command.json           |  24 ++
+ .../task-03-fix-01/hash-red.fixture-paths.json     |  17 +
+ .../b-remaining/task-03-fix-01/hash-red.log        |  46 +++
+ .../task-03-fix-01/hash-red.sources.json           | 429 +++++++++++++++++++++
+ .../931e7f4d-b421-4819-9b7c-a59721ce1bc0.txt       |   2 +
+ .../b1d76996-54b0-4d1b-b759-942384267d17.txt       |   1 +
+ ...f5-4d62-a553-ebd5494ac9de-two-worker-scopes.txt |  38 ++
+ .../e7cf4044-96f5-4d62-a553-ebd5494ac9de.txt       |   3 +
+ ...1e1b4d48ab3-conflicting-private-expectation.txt |  24 ++
+ ...3-4850-8398-41e1b4d48ab3-shared-task-scopes.txt |  31 ++
+ .../e8361b81-a583-4850-8398-41e1b4d48ab3.txt       |   2 +
+ ...EST-ama.storage.TranscriptAuthorityReviewIT.xml |  71 ++++
+ .../task-03-fix-01/multiscope-proof.children.json  |   1 +
+ .../task-03-fix-01/multiscope-proof.command.json   |  24 ++
+ .../multiscope-proof.fixture-paths.json            |  47 +++
+ .../task-03-fix-01/multiscope-proof.log            |   0
+ .../task-03-fix-01/multiscope-proof.sources.json   | 429 +++++++++++++++++++++
+ .../task-03-fix-01/multiscope-tests.fragment       | 185 +++++++++
+ .../task-03-fix-01/new-exact-task-custody.tsv      |  17 +
+ .../task-03-fix-01/normalize-new-test.py           |   2 +
+ .../task-03-fix-01/owned-source-manifest.json      |   5 +
+ .../phase-b/b-remaining/task-03-fix-01/report.md   |  65 ++++
+ .../phase-b/b-remaining/task-03-fix-01/run.py      |  62 +++
+ .../b-remaining/task-03-fix-01/seal-commit.py      |  24 ++
+ .../task-03-fix-01/self-review-checks.json         |  23 ++
+ .../task-03-fix-01/verification-summary.json       | 210 ++++++++++
+ .../main/java/ama/storage/FileBackendCatalog.java  |  22 +-
+ .../main/java/ama/storage/JdbcFileRegistry.java    |   2 +-
+ .../ama/storage/TranscriptAuthorityReviewIT.java   | 280 ++++++++++++++
+ .../plans/2026-10-23-ama-phase-b-remaining.md      |   4 +
+ ...-23-ama-phase-b-authority-external-protocols.md |   4 +
+ .../specs/2026-10-23-ama-phase-b-import-worker.md  |  15 +
+ 101 files changed, 5958 insertions(+), 3 deletions(-)
+
+## Fixdiff
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/add-multiscope.py b/artifacts/phase-b/b-remaining/task-03-fix-01/add-multiscope.py
+new file mode 100644
+index 0000000..054385a
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/add-multiscope.py
+@@ -0,0 +1,2 @@
++from pathlib import Path
++p=Path('backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java');s=p.read_text();fragment=Path('artifacts/phase-b/b-remaining/task-03-fix-01/multiscope-tests.fragment').read_text(encoding='utf-8-sig');marker='    /** Test-only JCA observer';assert s.count(marker)==1;p.write_text(s.replace(marker,fragment+'\n'+marker))
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/add-postcommit-proof.py b/artifacts/phase-b/b-remaining/task-03-fix-01/add-postcommit-proof.py
+new file mode 100644
+index 0000000..4c1a3eb
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/add-postcommit-proof.py
+@@ -0,0 +1,14 @@
++from pathlib import Path
++p=Path('backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java');s=p.read_text();old='''                assertTrue(HashBoundaryDigest.outside > 0, "real managed identity digest remains outside roots");''';new='''                // Change the exact owned route only after the read transaction physically commits.
++                var outside = new org.springframework.jdbc.core.JdbcTemplate(f.trace.actual);
++                f.trace.afterCommit.set(() -> outside.update(
++                        "UPDATE storage_backend SET status='DISABLED' WHERE id=?", backendId));
++                assertThrows(ama.contract.FileContracts.Unavailable.class,
++                        () -> c.sources().open(lease, prepared.inputId(), uploaded.file()));
++                assertEquals(opened, f.reads.get(), "post-commit route recheck must precede storage open");
++                outside.update("UPDATE storage_backend SET status='WRITABLE' WHERE id=?", backendId);
++                assertTrue(HashBoundaryDigest.outside > 0, "real managed identity digest remains outside roots");''';assert s.count(old)==1;s=s.replace(old,new);s=s.replace('''                assertEquals(0, HashBoundaryDigest.locked);
++''','''                assertEquals(0, HashBoundaryDigest.locked);
++                System.out.println("Task3 IR01 managed SHA-256 outside=" + HashBoundaryDigest.outside
++                        + " locked=" + HashBoundaryDigest.locked + "; real draft/bind/worker read and post-commit denial checked");
++''');p.write_text(s.rstrip()+'\n')
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/audit.py b/artifacts/phase-b/b-remaining/task-03-fix-01/audit.py
+new file mode 100644
+index 0000000..db33036
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/audit.py
+@@ -0,0 +1,41 @@
++import pathlib,subprocess,hashlib,json,os,re,xml.etree.ElementTree as ET
++root=pathlib.Path.cwd();e=root/'artifacts/phase-b/b-remaining/task-03-fix-01';old=root/'artifacts/phase-b/b-remaining/task-03'
++def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
++def git(*a):return subprocess.check_output(['git',*a],text=True).strip()
++assert git('rev-parse','HEAD')=='5560381927d51001bd484642269b9432481e8c70'
++assert not git('diff','--cached','--name-only')
++base='aa0b5f08a19649091b0bcd60959bd741fb5c7850'
++assert all(not p.startswith('backend/') for p in git('diff','--name-only',base,'HEAD').splitlines())
++owned=['backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java','backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java','backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java']
++assert set(git('diff','--name-only').splitlines()+git('ls-files','--others','--exclude-standard').splitlines())==set(owned)
++subprocess.run(['git','diff','--check'],check=True)
++assert sha(old/'evidence-manifest.json')=='56767a16ef4ecd1266bcde2f383bc5747a06cc94803abe811ebe4169b4f4e4d6'
++old_manifest=json.loads((old/'evidence-manifest.json').read_text());assert len(old_manifest)==416
++assert {str(p.relative_to(old)) for p in old.rglob('*') if p.is_file()}==set(old_manifest)|{'evidence-manifest.json'}
++for name,item in old_manifest.items():assert sha(old/name)==item['sha256'] and (old/name).stat().st_size==item['bytes']
++assert git('diff',base,'--','backend/adapters/src/main/resources/db','backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java')==''
++assert sha(root/'.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-03-review.md')=='60f3e807d0d6e79fbdeafce015b063ce0acefbf910c0ec252dab25484952149c'
++sources={p:sha(root/p) for p in owned};run=json.loads((e/'covering-final.sources.json').read_text());assert all(run[p]==h for p,h in sources.items())
++(e/'owned-source-manifest.json').write_text(json.dumps(sources,indent=2)+'\n')
++summary={}
++for label in ['hash-red','hash-green','multiscope-proof','covering-final']:
++ suites=[]
++ for p in sorted((e/(label+'-xml')).glob('*.xml')):
++  x=ET.parse(p).getroot();suites.append({'file':p.name,'suite':x.get('name'),**{k:int(x.get(k,'0')) for k in ['tests','errors','failures','skipped']}})
++ summary[label]={'command':json.loads((e/(label+'.command.json')).read_text()),'suites':suites,'totals':{k:sum(x[k] for x in suites) for k in ['tests','errors','failures','skipped']}}
++assert summary['covering-final']['totals']=={'tests':35,'errors':0,'failures':0,'skipped':0}
++(e/'verification-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
++# Only exact UUIDs enumerated in fresh fix-run receipts are selected. No prefix mutation or cleanup.
++ids=set()
++for p in e.glob('*-custody/*.txt'):
++ for match in re.finditer(r'synthetic-read-fixture task=([0-9a-f-]{36}) state=(\w+)',p.read_text()):
++  assert match[2] in ['FAILED','SUCCEEDED'];ids.add(match[1])
++assert ids
++q="SELECT t.id,t.state,t.subject_id,t.input_id,m.owner_id,a.attempt,a.ended_at,a.outcome FROM durable_task t JOIN meeting m ON m.id=t.subject_id JOIN task_attempt a ON a.task_id=t.id WHERE t.id IN ("+','.join("'"+i+"'" for i in sorted(ids))+") ORDER BY t.id,a.attempt"
++env=os.environ.copy();env['MYSQL_PWD']=env['AMA_TEST_DATABASE_PASSWORD'];r=subprocess.run(['docker','exec','-e','MYSQL_PWD','ama-test-b01-ad9f1af29eff','mysql','-u',env['AMA_TEST_DATABASE_USERNAME'],'--database=ama_b01_fixture','--batch','--raw','-e',q],env=env,capture_output=True,text=True);assert r.returncode==0
++rows=r.stdout.splitlines()[1:];assert len(rows)==len(ids)
++assert all(line.split('\t')[1] in ['FAILED','SUCCEEDED'] and line.split('\t')[6]!='NULL' for line in rows)
++(e/'new-exact-task-custody.tsv').write_text(r.stdout)
++secret=env['AMA_TEST_DATABASE_PASSWORD'].encode();hits=[str(p.relative_to(e)) for p in e.rglob('*') if p.is_file() and secret in p.read_bytes()];assert not hits
++receipt={'fix_base':base,'precommit_head':git('rev-parse','HEAD'),'review_sha256':'60f3e807d0d6e79fbdeafce015b063ce0acefbf910c0ec252dab25484952149c','owned_source_paths':owned,'old_task03_files_verified_unchanged':417,'schema_and_creator_guard_unchanged':True,'source_seal_matches_covering_final':True,'index_empty':True,'credential_hits':len(hits),'new_exact_terminal_tasks':len(ids),'new_exact_ended_attempts':len(rows),'tests':summary['covering-final']['totals']}
++(e/'self-review-checks.json').write_text(json.dumps(receipt,indent=2)+'\n');print(json.dumps(receipt,indent=2))
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/covering-final.command.json b/artifacts/phase-b/b-remaining/task-03-fix-01/covering-final.command.json
+new file mode 100644
+index 0000000..893024e
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/covering-final.command.json
+@@ -0,0 +1,24 @@
++{
++  "argv": [
++    "./mvnw",
++    "-q",
++    "-pl",
++    "backend/integration-tests",
++    "-am",
++    "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
++    "-Dtest=ManagedBackendIdentityTest",
++    "-Dit.test=TranscriptAuthorityIT,TranscriptAuthorityReviewIT,FileBackendCatalogIT,FileRegistryUploadIT#defaultSwitchPinsExistingUploadAndBusinessDownloadToOriginalBackend+readOnlyBackendRecoversFrozenResultButRejectsNewPartWrites",
++    "-DfailIfNoTests=false",
++    "-Dsurefire.failIfNoSpecifiedTests=false",
++    "-Dfailsafe.failIfNoSpecifiedTests=false",
++    "verify"
++  ],
++  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
++  "exit_code": 0,
++  "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
++  "private_env_path": ".tools/phase-b-remaining/env.sh",
++  "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
++  "AMA_STORAGE_CONTRACT": "local",
++  "JAVA_TOOL_OPTIONS": null,
++  "AMA_B06_RESTART_EVIDENCE": null
++}
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/final-audit.command.json b/artifacts/phase-b/b-remaining/task-03-fix-01/final-audit.command.json
+new file mode 100644
+index 0000000..2d9a860
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/final-audit.command.json
+@@ -0,0 +1,14 @@
++{
++  "argv": [
++    "python3",
++    "artifacts/phase-b/b-remaining/task-03-fix-01/audit.py"
++  ],
++  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
++  "exit_code": 0,
++  "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
++  "private_env_path": ".tools/phase-b-remaining/env.sh",
++  "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
++  "AMA_STORAGE_CONTRACT": "local",
++  "JAVA_TOOL_OPTIONS": null,
++  "AMA_B06_RESTART_EVIDENCE": null
++}
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/fix-hash-boundary.py b/artifacts/phase-b/b-remaining/task-03-fix-01/fix-hash-boundary.py
+new file mode 100644
+index 0000000..33d8acc
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/fix-hash-boundary.py
+@@ -0,0 +1,30 @@
++from pathlib import Path
++p=Path('backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java');s=p.read_text();old='''    public Backend require(String id, boolean newWrite) {
++        if (id == null) throw new Unavailable();''';new='''    public Backend require(String id, boolean newWrite) {
++        var backend = configured(id, newWrite);
++        ManagedBackendId.require(id, backend.definition());
++        return requireStoredMetadata(backend);
++    }
++
++    /**
++     * Locked historical-source check. Backend construction already derives and validates its ID
++     * from the sealed immutable definition. This path performs only the actual DB metadata check;
++     * it neither hashes nor contacts storage. Post-commit open still uses require(...).
++     */
++    Backend requireHistoricalMetadata(String id) {
++        return requireStoredMetadata(configured(id, false));
++    }
++
++    private Backend configured(String id, boolean newWrite) {
++        if (id == null) throw new Unavailable();'''
++assert s.count(old)==1;s=s.replace(old,new)
++old='''        ManagedBackendId.require(id, b.definition());
++        var row =''';new='''        return b;
++    }
++
++    private Backend requireStoredMetadata(Backend b) {
++        var row ='''
++assert s.count(old)==1;s=s.replace(old,new);s=s.replace('''                        id);
++        if (row.size()''','''                        b.id());
++        if (row.size()''');p.write_text(s)
++p=Path('backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java');s=p.read_text();old='var backend=backends.require(r.getString(3),false);';assert s.count(old)==1;p.write_text(s.replace(old,'var backend=backends.requireHistoricalMetadata(r.getString(3));'))
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/hash-green.command.json b/artifacts/phase-b/b-remaining/task-03-fix-01/hash-green.command.json
+new file mode 100644
+index 0000000..5a11c7f
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/hash-green.command.json
+@@ -0,0 +1,24 @@
++{
++  "argv": [
++    "./mvnw",
++    "-q",
++    "-pl",
++    "backend/integration-tests",
++    "-am",
++    "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
++    "-Dtest=ManagedBackendIdentityTest",
++    "-Dit.test=TranscriptAuthorityReviewIT",
++    "-DfailIfNoTests=false",
++    "-Dsurefire.failIfNoSpecifiedTests=false",
++    "-Dfailsafe.failIfNoSpecifiedTests=false",
++    "verify"
++  ],
++  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
++  "exit_code": 0,
++  "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
++  "private_env_path": ".tools/phase-b-remaining/env.sh",
++  "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
++  "AMA_STORAGE_CONTRACT": "local",
++  "JAVA_TOOL_OPTIONS": null,
++  "AMA_B06_RESTART_EVIDENCE": null
++}
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/hash-red.command.json b/artifacts/phase-b/b-remaining/task-03-fix-01/hash-red.command.json
+new file mode 100644
+index 0000000..13101cb
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/hash-red.command.json
+@@ -0,0 +1,24 @@
++{
++  "argv": [
++    "./mvnw",
++    "-q",
++    "-pl",
++    "backend/integration-tests",
++    "-am",
++    "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
++    "-Dtest=NoSuchTest",
++    "-Dit.test=TranscriptAuthorityReviewIT",
++    "-DfailIfNoTests=false",
++    "-Dsurefire.failIfNoSpecifiedTests=false",
++    "-Dfailsafe.failIfNoSpecifiedTests=false",
++    "verify"
++  ],
++  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
++  "exit_code": 1,
++  "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
++  "private_env_path": ".tools/phase-b-remaining/env.sh",
++  "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
++  "AMA_STORAGE_CONTRACT": "local",
++  "JAVA_TOOL_OPTIONS": null,
++  "AMA_B06_RESTART_EVIDENCE": null
++}
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/multiscope-proof.command.json b/artifacts/phase-b/b-remaining/task-03-fix-01/multiscope-proof.command.json
+new file mode 100644
+index 0000000..9213aec
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/multiscope-proof.command.json
+@@ -0,0 +1,24 @@
++{
++  "argv": [
++    "./mvnw",
++    "-q",
++    "-pl",
++    "backend/integration-tests",
++    "-am",
++    "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
++    "-Dtest=NoSuchTest",
++    "-Dit.test=TranscriptAuthorityReviewIT",
++    "-DfailIfNoTests=false",
++    "-Dsurefire.failIfNoSpecifiedTests=false",
++    "-Dfailsafe.failIfNoSpecifiedTests=false",
++    "verify"
++  ],
++  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
++  "exit_code": 0,
++  "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
++  "private_env_path": ".tools/phase-b-remaining/env.sh",
++  "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
++  "AMA_STORAGE_CONTRACT": "local",
++  "JAVA_TOOL_OPTIONS": null,
++  "AMA_B06_RESTART_EVIDENCE": null
++}
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/normalize-new-test.py b/artifacts/phase-b/b-remaining/task-03-fix-01/normalize-new-test.py
+new file mode 100644
+index 0000000..011abef
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/normalize-new-test.py
+@@ -0,0 +1,2 @@
++from pathlib import Path
++p=Path('backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java');p.write_text(p.read_text(encoding='utf-8-sig'))
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/owned-source-manifest.json b/artifacts/phase-b/b-remaining/task-03-fix-01/owned-source-manifest.json
+new file mode 100644
+index 0000000..d083d5b
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/owned-source-manifest.json
+@@ -0,0 +1,5 @@
++{
++  "backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java": "30785923498507ab20a040fc38e6de7a87e92d4debe138b644bd7ea278014108",
++  "backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java": "4131cb9f8b65228788f9eabf5237b0faf61fa917f3d80c697ee3618ed512dd0f",
++  "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java": "295311c5c76cc8822589d712e924c5387278790d9959a6b798833ee4e59400aa"
++}
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/report.md b/artifacts/phase-b/b-remaining/task-03-fix-01/report.md
+new file mode 100644
+index 0000000..2c7ce89
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/report.md
+@@ -0,0 +1,65 @@
++# Task3 fix round 1 — independent review closure
++
++Ready for scoped independent rereview of T03-IR-01 and T03-IR-02. This report does not grant the implementation gate or claim Phase B completion.
++
++- FIX_BASE: `aa0b5f08a19649091b0bcd60959bd741fb5c7850`.
++- Precommit HEAD: `5560381927d51001bd484642269b9432481e8c70` (root-only Task5 design adoption after FIX_BASE).
++- Reviewed report: `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-03-review.md`, exact SHA256 `60f3e807d0d6e79fbdeafce015b063ce0acefbf910c0ec252dab25484952149c`.
++- Scope: `FileBackendCatalog.java`, one call in `JdbcFileRegistry.java`, and new `TranscriptAuthorityReviewIT.java`. Exact paths/hashes are in `owned-source-manifest.json`.
++- No Task4, Worker/parser, queue, schema, creator or public capability changes. No helpers or reviewer agents were spawned.
++
++## T03-IR-01: locked source metadata must not derive backend hashes
++
++**Addressed.** The reported call chain was reproduced by a real failing integration test. The prior implementation and adopted original design incorrectly treated `FileBackendCatalog.require` as metadata-only. The prior public Task3 report's no-hashing-under-gate statement was too broad; it is corrected by this appended finding closure, while the original evidence remains immutable.
++
++Root explicitly authorized the minimum FileBackendCatalog extension and resolved the conflicting original helper choice in favor of the higher-level no-hash-under-roots rule. Backend construction already calls `ManagedBackendId.require`; `Backend` is an immutable record whose definition is a sealed Local/S3 record of immutable fields, and the catalog freezes its map. This construction proof remains intact.
++
++The new **package-private** `requireHistoricalMetadata(id)` selects the actual configured backend and performs the same actual DB type/status/configuration-revision check. It does not derive an ID, invoke storage, accept a caller-attested flag or callback, or expose a public authority. `JdbcFileRegistry.prelockSources` calls this method after source roots are held. Shared private helpers avoid a second metadata policy. The existing public `require(id,newWrite)` still validates managed identity, then runs the same metadata check, preserving legacy B04 behavior. Post-commit open still uses that original `require` before the actual storage read.
++
++The regression uses a temporary test-only JCA SHA-256 provider, always removed in `finally`. It delegates byte-for-byte digest computation to the JDK SUN implementation and observes the actual ManagedBackendId call stack plus Spring's actual transaction state; it does not stub production validation or assert source strings. The red trace shows `ManagedBackendId.derive → FileBackendCatalog.require → JdbcFileRegistry.prelockSources → JdbcTranscriptAuthority.readDraft` under an actual transaction. The final green run exercises genuine draft acquisition, receipt-aware first bind, worker source read, constructor identity rejection, and actual route corruption. It records **managed SHA-256 outside=5, locked=0**.
++
++Real new fixture route rows are independently changed to mismatched revision, DISABLED status, and wrong type; each fails without opening storage. A separate exact-route disable occurs only after physical read-transaction commit, proving the retained post-commit check denies before open. Only the test's exact new backend ID is altered and restored. Existing READ_ONLY recovery and original-backend pinning are covered by the two inherited selected upload tests.
++
++## T03-IR-02: whole task union precedes every attempt
++
++**Addressed by added acceptance evidence; no production union logic change was needed.** The earlier singleton tests could not establish the required cross-scope property. New tests retrieve the actual registered private production policy through the established test-only reflection pattern and obtain genuine issuer-minted preparations/scopes from actual saved rows, on one genuine EDIT gate and actual transaction holder.
++
++1. Two real distinct input batches/tasks use different completed B04 source files. Both tasks are actually RUNNING with unfinished attempts. Request/scope order is explicitly sorted in descending task UUID order, while expected lock order is ascending. After genuine source receipt acquisition and actual policy validation, the production `prelockReadTasks` must lock both distinct task UUIDs exactly once in ascending order. No attempt lock is present at that boundary. Production finalization then locks the whole attempt union. The trace asserts the last distinct durable-task acquisition precedes the first attempt acquisition. Each genuine scope finalizes once; a second attempt to finalize it fails by its private phase guard.
++2. Two independently prepared/minted scopes for the same actual task prove shared task and attempt deduplication: each primary acquisition occurs exactly once, while both scopes independently finalize exactly once.
++3. Normal immutable graphs cannot naturally carry contradictory snapshots through the final observation rechecks. To test the union's defensive conflict branch, a clearly labeled **test-only fault injection** replaces one private task-expectation map only after two genuine scopes and sources have been obtained. Conflicting priority expectations fail before any task/attempt acquisition or storage open. This is not a normal business-reachable graph, public API, fabricated public capability, or runtime-success proof.
++4. A separate configured-provider orchestration test gives the real registry two distinct scopes over the same file. It proves one whole-scope prelock call, exactly one finalization for each scope, and zero storage opens until both have finalized. This is deliberately labeled protocol orchestration evidence, not production authority proof.
++
++The public product still accepts its existing single operation selector. These tests exercise private production union behavior without adding a multi-request API. The direct production-policy tests use its real holder checks and DB reads; they do not independently claim a public multi-scope end-to-end workflow. Trace receipts distinguish first primary task/attempt acquisition from later locking predicate rechecks.
++
++IR01 has a real RED→GREEN implementation sequence. IR02 was a missing test requirement against code already appearing structurally correct; its new tests passed without an artificial production defect or unrelated refactor. The existing singleton evidence was not rerun merely to reproduce its insufficiency.
++
++## Exact verification window
++
++All fresh commands, full output, source hashes and fresh JUnit XML are retained in this new directory. `verification-summary.json` lists every command and suite. `covering-final.sources.json` exactly matches all final modified/new source bytes in `owned-source-manifest.json`.
++
++| Run | Tests | Failures | Errors | Skips | Meaning |
++|---|---:|---:|---:|---:|---|
++| hash-red | 1 | 1 | 0 | 0 | Actual locked ManagedBackendId SHA-256 call, before fix |
++| hash-green | 5 | 0 | 0 | 0 | ManagedBackendIdentity4 plus genuine boundary1 |
++| multiscope-proof | 4 | 0 | 0 | 0 | All new review tests before added post-commit denial assertion |
++| covering-final | 35 | 0 | 0 | 0 | Exact final source window |
++
++The final 35 are **4 ManagedBackendIdentity unit tests + 22 existing TranscriptAuthority + 4 new TranscriptAuthorityReview + 3 FileBackendCatalog + 2 selected FileRegistryUpload integration tests**. The upload selectors are `defaultSwitchPinsExistingUploadAndBusinessDownloadToOriginalBackend` and `readOnlyBackendRecoversFrozenResultButRejectsNewPartWrites`. No full reactor unit/IT collection, old restart suite, or S3 runtime was rerun. The previous 349 composed-evidence total remains confined to its originally documented source windows; it is not relabeled as run on this fix.
++
++The previous upload handshake timeout remains unresolved. Its failed run and later healthy retry remain byte-for-byte preserved. This fix neither diagnoses that earlier timeout nor changes connection timeouts or adds a runtime workaround.
++
++## Fixture and evidence custody
++
++The runner guards the exact approved MySQL ID `eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502`, container name `ama-test-b01-ad9f1af29eff`, running state and loopback port58062 before loading only `.tools/phase-b-remaining/env.sh`. Same public JDK21 and Maven/test JVM512MiB/ActiveProcessorCount2 limits apply. Selected helpers were source-inspected: they create fresh target UUID storage/PKI paths; no old private assets, mounts, new containers, reset/repair/DDL or S3 fixture is used. Flyway's existing validation reports 13 current migrations and no migration necessary.
++
++Only exact new IDs tracked by the existing approved fixture teardown are terminalized. The final read-only custody query selects only the **16 exact task UUIDs extracted from this fix's fresh receipts**, not a mutable prefix namespace. All16 tasks are terminal and all16 attempts ended; rows remain retained. `new-exact-task-custody.tsv` and the command/output seal record them. Existing successful historical fixtures and old task rows are untouched.
++
++All **417 files** in the original `task-03/` evidence directory were rechecked against its original manifest/hash and remain unchanged. New evidence lives only in `task-03-fix-01/`. The formal SQL and Task2 creator guard are unchanged. Credential scanning reports zero hits. No generated keys/password bytes are included in evidence. Fresh nonsecret path/owner receipts and lock traces are retained.
++
++## Self-review and handoff
++
++Production change is narrowly limited to20 additional catalog lines/two extracted private checks and one registry call substitution. Constructors retain genuine immutable managed identity validation; metadata type/status/revision comparison is shared, not weakened. Existing public `require`, defaultWrite, readiness, and post-commit open retain their behavior. No authority issuer/holder/receipt/phase or task-union production code changed.
++
++The new security-sensitive methods and tests use normal formatting. Minor M01 broader formatting is not expanded into unrelated churn. M02 remains explicitly unresolved as above. Final audit verifies empty index before owned-path staging, root-only intervening docs, three owned source/test paths, exact final run/source binding, unchanged417 prior evidence files, no schema/creator changes, no credentials, and closed exact new task custody.
++
++Independent rereview should focus on the metadata-only locked path, construction proof, actual post-commit route denial, two-scope ordering/dedup/conflict trace assertions, and absence of new public bypasses. Root provides that review; no gate or overall Phase B approval is claimed here.
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/run.py b/artifacts/phase-b/b-remaining/task-03-fix-01/run.py
+new file mode 100644
+index 0000000..412914a
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/run.py
+@@ -0,0 +1,62 @@
++import os,pathlib,subprocess,json,shlex,hashlib,sys,shutil,time,stat
++root=pathlib.Path(__file__).resolve().parents[4]
++e=root/'artifacts/phase-b/b-remaining/task-03-fix-01'
++name=sys.argv[1]; args=sys.argv[2:]
++expected='eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502'
++info=json.loads(subprocess.check_output(['docker','inspect','ama-test-b01-ad9f1af29eff']))[0]
++assert info['Id']==expected and info['State']['Running'] and info['NetworkSettings']['Ports']['3306/tcp']==[{'HostIp':'127.0.0.1','HostPort':'58062'}]
++env=os.environ.copy()
++for line in (root/'.tools/phase-b-remaining/env.sh').read_text().splitlines():
++ key,value=line.removeprefix('export ').split('=',1);env[key]=shlex.split(value)[0]
++assert env['AMA_TEST_DATABASE_URL']=='jdbc:mysql://127.0.0.1:58062/ama_b01_fixture'
++jdk='/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64'
++env['AMA_STORAGE_CONTRACT']='local'
++env['JAVA_HOME']=jdk;env['PATH']=jdk+'/bin:'+env['PATH'];env['MAVEN_OPTS']='-Xmx512m -XX:ActiveProcessorCount=2'
++files=sorted(p for p in (root/'backend').rglob('*') if p.is_file() and '/src/' in str(p))
++(e/(name+'.sources.json')).write_text(json.dumps({str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files},indent=2)+'\n')
++parents=[root/'backend/integration-tests/target'/n for n in ['local-fixtures','registry-fixtures','registry-restart','registry-catalog-race']]
++before={p:{str(x) for x in p.iterdir()} if p.exists() else set() for p in parents}
++children={}
++proc=subprocess.Popen(args,cwd=root,env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
++while True:
++ try:
++  stdout,stderr=proc.communicate(timeout=0.5);break
++ except subprocess.TimeoutExpired:
++  ppids={}
++  for entry in pathlib.Path('/proc').iterdir():
++   if not entry.name.isdigit():continue
++   try:
++    status=(entry/'status').read_text();ppid=int(next(line.split()[1] for line in status.splitlines() if line.startswith('PPid:')));ppids[int(entry.name)]=ppid
++   except (OSError,StopIteration,ValueError):pass
++  descendants={proc.pid}
++  while True:
++   extra={pid for pid,parent in ppids.items() if parent in descendants};old=len(descendants);descendants|=extra
++   if len(descendants)==old:break
++  for pid in descendants:
++   if pid in children:continue
++   try:
++    argv=(pathlib.Path('/proc')/str(pid)/'cmdline').read_bytes().decode().strip('\0').split('\0')
++    if any('ArchiveRestartProbe' in a or 'RegistryApiProcess' in a or 'ama-file-service-0.1.0-SNAPSHOT-exec.jar' in a for a in argv):children[pid]={'pid':pid,'argv':argv,'JAVA_TOOL_OPTIONS':env.get('JAVA_TOOL_OPTIONS'),'owner_uid':(pathlib.Path('/proc')/str(pid)).stat().st_uid}
++   except (OSError,UnicodeError):pass
++r=subprocess.CompletedProcess(args,proc.returncode,stdout,stderr)
++log=r.stdout+r.stderr
++(e/(name+'.children.json')).write_text(json.dumps(list(children.values()),indent=2)+'\n')
++created=[]
++for parent in parents:
++ if parent.exists():
++  for child in parent.iterdir():
++   if str(child) not in before[parent]:created.append({'path':str(child),'uid':child.stat().st_uid,'mode':oct(stat.S_IMODE(child.stat().st_mode))})
++(e/(name+'.fixture-paths.json')).write_text(json.dumps(created,indent=2)+'\n')
++custody=root/'backend/integration-tests/target/task03-custody'
++if custody.exists():
++ out=e/(name+'-custody');out.mkdir(exist_ok=True)
++ for path in custody.iterdir():
++  if path.is_file() and path.stat().st_mtime >= (e/(name+'.sources.json')).stat().st_mtime:shutil.copyfile(path,out/path.name)
++for k in ['AMA_TEST_DATABASE_PASSWORD']:log=log.replace(env[k],'[REDACTED]')
++(e/(name+'.log')).write_text(log)
++(e/(name+'.command.json')).write_text(json.dumps({'argv':args,'cwd':str(root),'exit_code':r.returncode,'JAVA_HOME':jdk,'private_env_path':'.tools/phase-b-remaining/env.sh','fixture_id':expected,'AMA_STORAGE_CONTRACT':env['AMA_STORAGE_CONTRACT'],'JAVA_TOOL_OPTIONS':env.get('JAVA_TOOL_OPTIONS'),'AMA_B06_RESTART_EVIDENCE':env.get('AMA_B06_RESTART_EVIDENCE')},indent=2)+'\n')
++dest=e/(name+'-xml');dest.mkdir(exist_ok=True)
++for p in (root/'backend').glob('*/target/*-reports/TEST-*.xml'):
++ if p.stat().st_mtime >= (e/(name+'.sources.json')).stat().st_mtime:shutil.copyfile(p,dest/(p.parents[2].name+'-'+p.name))
++print(log[-7000:]);sys.exit(r.returncode)
++
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/seal-commit.py b/artifacts/phase-b/b-remaining/task-03-fix-01/seal-commit.py
+new file mode 100644
+index 0000000..c105378
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/seal-commit.py
+@@ -0,0 +1,24 @@
++import pathlib,subprocess,json,hashlib
++root=pathlib.Path.cwd();e=root/'artifacts/phase-b/b-remaining/task-03-fix-01'
++def git(*a):return subprocess.check_output(['git',*a],text=True).strip()
++assert git('rev-parse','HEAD')=='5560381927d51001bd484642269b9432481e8c70'
++assert not git('diff','--cached','--name-only')
++sources=json.loads((e/'owned-source-manifest.json').read_text());assert len(sources)==3
++for p,h in sources.items():assert hashlib.sha256((root/p).read_bytes()).hexdigest()==h
++checks=json.loads((e/'self-review-checks.json').read_text());assert checks['old_task03_files_verified_unchanged']==417 and checks['source_seal_matches_covering_final'] and checks['new_exact_terminal_tasks']==16
++assert checks['tests']=={'tests':35,'errors':0,'failures':0,'skipped':0}
++manifest={str(p.relative_to(e)):{'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(e.rglob('*')) if p.is_file() and p.name!='evidence-manifest.json'}
++(e/'evidence-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
++subprocess.run(['git','add','--',*sources],check=True)
++subprocess.run(['git','add','-f','--',str(e.relative_to(root))],check=True)
++expected=set(sources)|{str(p.relative_to(root)) for p in e.rglob('*') if p.is_file()}
++assert set(git('diff','--cached','--name-only').splitlines())==expected
++subprocess.run(['git','diff','--cached','--check'],check=True)
++result=subprocess.run(['git','commit','-m','Keep transcript source route validation hash-free under locks'],check=True,capture_output=True,text=True);print(result.stdout.splitlines()[0])
++commit=git('rev-parse','HEAD');assert not git('status','--porcelain')
++for p,h in sources.items():assert hashlib.sha256(subprocess.check_output(['git','show',commit+':'+p])).hexdigest()==h
++manifest_hash=hashlib.sha256((e/'evidence-manifest.json').read_bytes()).hexdigest()
++report=root/'.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-03-report.md'
++with report.open('a') as out:
++ out.write('\n\n---\n\n# Task3 fix round1 committed handoff\n\nExact fix commit: `'+commit+'`. FIX_BASE: `aa0b5f08a19649091b0bcd60959bd741fb5c7850`.\n\nNew evidence manifest SHA256: `'+manifest_hash+'`. Clean worktree; committed source blobs match exact covering-final source hashes. 35 covering tests passed (4 unit +31 integration). 16 new exact synthetic tasks/attempts terminal/ended. Original417 Task3 evidence files unchanged.\n\n'+(e/'report.md').read_text(encoding='utf-8-sig'))
++print(json.dumps({'commit':commit,'fix_base':'aa0b5f08a19649091b0bcd60959bd741fb5c7850','source_paths':len(sources),'evidence_files':len(manifest)+1,'evidence_manifest_sha256':manifest_hash,'worktree_clean':True,'report_path':str(report),'tests':35},indent=2))
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/self-review-checks.json b/artifacts/phase-b/b-remaining/task-03-fix-01/self-review-checks.json
+new file mode 100644
+index 0000000..6e6cd3d
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/self-review-checks.json
+@@ -0,0 +1,23 @@
++{
++  "fix_base": "aa0b5f08a19649091b0bcd60959bd741fb5c7850",
++  "precommit_head": "5560381927d51001bd484642269b9432481e8c70",
++  "review_sha256": "60f3e807d0d6e79fbdeafce015b063ce0acefbf910c0ec252dab25484952149c",
++  "owned_source_paths": [
++    "backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java",
++    "backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java",
++    "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java"
++  ],
++  "old_task03_files_verified_unchanged": 417,
++  "schema_and_creator_guard_unchanged": true,
++  "source_seal_matches_covering_final": true,
++  "index_empty": true,
++  "credential_hits": 0,
++  "new_exact_terminal_tasks": 16,
++  "new_exact_ended_attempts": 16,
++  "tests": {
++    "tests": 35,
++    "errors": 0,
++    "failures": 0,
++    "skipped": 0
++  }
++}
+diff --git a/artifacts/phase-b/b-remaining/task-03-fix-01/verification-summary.json b/artifacts/phase-b/b-remaining/task-03-fix-01/verification-summary.json
+new file mode 100644
+index 0000000..db3d5fd
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-03-fix-01/verification-summary.json
+@@ -0,0 +1,210 @@
++{
++  "hash-red": {
++    "command": {
++      "argv": [
++        "./mvnw",
++        "-q",
++        "-pl",
++        "backend/integration-tests",
++        "-am",
++        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
++        "-Dtest=NoSuchTest",
++        "-Dit.test=TranscriptAuthorityReviewIT",
++        "-DfailIfNoTests=false",
++        "-Dsurefire.failIfNoSpecifiedTests=false",
++        "-Dfailsafe.failIfNoSpecifiedTests=false",
++        "verify"
++      ],
++      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
++      "exit_code": 1,
++      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
++      "private_env_path": ".tools/phase-b-remaining/env.sh",
++      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
++      "AMA_STORAGE_CONTRACT": "local",
++      "JAVA_TOOL_OPTIONS": null,
++      "AMA_B06_RESTART_EVIDENCE": null
++    },
++    "suites": [
++      {
++        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityReviewIT.xml",
++        "suite": "ama.storage.TranscriptAuthorityReviewIT",
++        "tests": 1,
++        "errors": 0,
++        "failures": 1,
++        "skipped": 0
++      }
++    ],
++    "totals": {
++      "tests": 1,
++      "errors": 0,
++      "failures": 1,
++      "skipped": 0
++    }
++  },
++  "hash-green": {
++    "command": {
++      "argv": [
++        "./mvnw",
++        "-q",
++        "-pl",
++        "backend/integration-tests",
++        "-am",
++        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
++        "-Dtest=ManagedBackendIdentityTest",
++        "-Dit.test=TranscriptAuthorityReviewIT",
++        "-DfailIfNoTests=false",
++        "-Dsurefire.failIfNoSpecifiedTests=false",
++        "-Dfailsafe.failIfNoSpecifiedTests=false",
++        "verify"
++      ],
++      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
++      "exit_code": 0,
++      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
++      "private_env_path": ".tools/phase-b-remaining/env.sh",
++      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
++      "AMA_STORAGE_CONTRACT": "local",
++      "JAVA_TOOL_OPTIONS": null,
++      "AMA_B06_RESTART_EVIDENCE": null
++    },
++    "suites": [
++      {
++        "file": "adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
++        "suite": "ama.storage.ManagedBackendIdentityTest",
++        "tests": 4,
++        "errors": 0,
++        "failures": 0,
++        "skipped": 0
++      },
++      {
++        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityReviewIT.xml",
++        "suite": "ama.storage.TranscriptAuthorityReviewIT",
++        "tests": 1,
++        "errors": 0,
++        "failures": 0,
++        "skipped": 0
++      }
++    ],
++    "totals": {
++      "tests": 5,
++      "errors": 0,
++      "failures": 0,
++      "skipped": 0
++    }
++  },
++  "multiscope-proof": {
++    "command": {
++      "argv": [
++        "./mvnw",
++        "-q",
++        "-pl",
++        "backend/integration-tests",
++        "-am",
++        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
++        "-Dtest=NoSuchTest",
++        "-Dit.test=TranscriptAuthorityReviewIT",
++        "-DfailIfNoTests=false",
++        "-Dsurefire.failIfNoSpecifiedTests=false",
++        "-Dfailsafe.failIfNoSpecifiedTests=false",
++        "verify"
++      ],
++      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
++      "exit_code": 0,
++      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
++      "private_env_path": ".tools/phase-b-remaining/env.sh",
++      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
++      "AMA_STORAGE_CONTRACT": "local",
++      "JAVA_TOOL_OPTIONS": null,
++      "AMA_B06_RESTART_EVIDENCE": null
++    },
++    "suites": [
++      {
++        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityReviewIT.xml",
++        "suite": "ama.storage.TranscriptAuthorityReviewIT",
++        "tests": 4,
++        "errors": 0,
++        "failures": 0,
++        "skipped": 0
++      }
++    ],
++    "totals": {
++      "tests": 4,
++      "errors": 0,
++      "failures": 0,
++      "skipped": 0
++    }
++  },
++  "covering-final": {
++    "command": {
++      "argv": [
++        "./mvnw",
++        "-q",
++        "-pl",
++        "backend/integration-tests",
++        "-am",
++        "-DargLine=-Xmx512m -XX:ActiveProcessorCount=2",
++        "-Dtest=ManagedBackendIdentityTest",
++        "-Dit.test=TranscriptAuthorityIT,TranscriptAuthorityReviewIT,FileBackendCatalogIT,FileRegistryUploadIT#defaultSwitchPinsExistingUploadAndBusinessDownloadToOriginalBackend+readOnlyBackendRecoversFrozenResultButRejectsNewPartWrites",
++        "-DfailIfNoTests=false",
++        "-Dsurefire.failIfNoSpecifiedTests=false",
++        "-Dfailsafe.failIfNoSpecifiedTests=false",
++        "verify"
++      ],
++      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
++      "exit_code": 0,
++      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
++      "private_env_path": ".tools/phase-b-remaining/env.sh",
++      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
++      "AMA_STORAGE_CONTRACT": "local",
++      "JAVA_TOOL_OPTIONS": null,
++      "AMA_B06_RESTART_EVIDENCE": null
++    },
++    "suites": [
++      {
++        "file": "adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
++        "suite": "ama.storage.ManagedBackendIdentityTest",
++        "tests": 4,
++        "errors": 0,
++        "failures": 0,
++        "skipped": 0
++      },
++      {
++        "file": "integration-tests-TEST-ama.storage.FileBackendCatalogIT.xml",
++        "suite": "ama.storage.FileBackendCatalogIT",
++        "tests": 3,
++        "errors": 0,
++        "failures": 0,
++        "skipped": 0
++      },
++      {
++        "file": "integration-tests-TEST-ama.storage.FileRegistryUploadIT.xml",
++        "suite": "ama.storage.FileRegistryUploadIT",
++        "tests": 2,
++        "errors": 0,
++        "failures": 0,
++        "skipped": 0
++      },
++      {
++        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityIT.xml",
++        "suite": "ama.storage.TranscriptAuthorityIT",
++        "tests": 22,
++        "errors": 0,
++        "failures": 0,
++        "skipped": 0
++      },
++      {
++        "file": "integration-tests-TEST-ama.storage.TranscriptAuthorityReviewIT.xml",
++        "suite": "ama.storage.TranscriptAuthorityReviewIT",
++        "tests": 4,
++        "errors": 0,
++        "failures": 0,
++        "skipped": 0
++      }
++    ],
++    "totals": {
++      "tests": 35,
++      "errors": 0,
++      "failures": 0,
++      "skipped": 0
++    }
++  }
++}
+diff --git a/backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java b/backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java
+index 9c89fb9..69a9313 100644
+--- a/backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java
++++ b/backend/adapters/src/main/java/ama/storage/FileBackendCatalog.java
+@@ -120,28 +120,46 @@ public final class FileBackendCatalog {
+             var backend = defaultWrite();
+             backend.storage().list(backend.id(), "files", "", null, 1);
+             return true;
+         } catch (RuntimeException unavailable) {
+             return false;
+         }
+     }
+ 
+     /** READ_ONLY permits recovery of an accepted frozen upload; DISABLED refuses all I/O. */
+     public Backend require(String id, boolean newWrite) {
++        var backend = configured(id, newWrite);
++        ManagedBackendId.require(id, backend.definition());
++        return requireStoredMetadata(backend);
++    }
++
++    /**
++     * Locked historical-source check. Backend construction already derives and validates its ID
++     * from the sealed immutable definition. This path performs only the actual DB metadata check;
++     * it neither hashes nor contacts storage. Post-commit open still uses require(...).
++     */
++    Backend requireHistoricalMetadata(String id) {
++        return requireStoredMetadata(configured(id, false));
++    }
++
++    private Backend configured(String id, boolean newWrite) {
+         if (id == null) throw new Unavailable();
+         var b = backends.get(id);
+         if (b == null
+                 || b.status().equals("DISABLED")
+                 || (newWrite && !b.status().equals("WRITABLE"))) throw new Unavailable();
+-        ManagedBackendId.require(id, b.definition());
++        return b;
++    }
++
++    private Backend requireStoredMetadata(Backend b) {
+         var row =
+                 j.queryForList(
+                         "SELECT storage_type,config_revision,status FROM storage_backend WHERE"
+                                 + " id=?",
+-                        id);
++                        b.id());
+         if (row.size() != 1
+                 || !b.type().equals(row.getFirst().get("storage_type"))
+                 || b.revision() != ((Number) row.getFirst().get("config_revision")).longValue()
+                 || !b.status().equals(row.getFirst().get("status"))) throw new Unavailable();
+         return b;
+     }
+ }
+diff --git a/backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java b/backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java
+index c7f01ef..934a13f 100644
+--- a/backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java
++++ b/backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java
+@@ -639,21 +639,21 @@ public final class JdbcFileRegistry implements FileRegistry {
+             if(!"COMPLETED".equals(row[1])||!upload.equals(associations.get(file))||!gate.meeting.equals(original.meeting())||original.hash()==null)throw new NotFound();
+             originals.put(file,original);
+         }
+         // Recheck complete associations after all original primary-key locks, never LIMIT 1.
+         for(String id:complete)if(!originalIds(id).equals(List.of(associations.get(id))))throw new Conflict();
+         var files=new TreeMap<String,FileRecord>();
+         for(String id:complete){
+             if(!measure("file_object",id,List.of("id","meeting_id","backend_id","storage_type","namespace","object_key","sha256","state"),skip,state,2))return Optional.empty();
+             var rows=j.query("SELECT id,meeting_id,backend_id,namespace,object_key,size_bytes,sha256,state,location_revision,reference_epoch,storage_type FROM file_object WHERE id=? FOR UPDATE",
+                 (r,n)->{
+-                    var backend=backends.require(r.getString(3),false);
++                    var backend=backends.requireHistoricalMetadata(r.getString(3));
+                     if(!backend.type().equals(r.getString(11)))throw new Unavailable();
+                     return new FileRecord(r.getString(1),r.getString(2),new StorageKey(r.getString(3),r.getString(4),r.getString(5)),exact(r,"size_bytes"),r.getString(7),r.getString(8),exact(r,"location_revision"),exact(r,"reference_epoch"),null);
+                 },id);
+             if(rows.size()!=1)throw new NotFound();var file=rows.getFirst();checkOriginal(gate,originals.get(id),file);
+             if(file.referenceEpoch()>=Long.MAX_VALUE-1||file.locationRevision()>=Long.MAX_VALUE-1)throw new Conflict();files.put(id,file);
+         }
+         return Optional.of(new Sources(gate,originals,files));
+     }
+     private List<String> originalIds(String file){
+         return j.queryForList("SELECT id FROM upload_session WHERE completed_file_id=? AND state='COMPLETED' ORDER BY id LIMIT 2",String.class,file);
+diff --git a/backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java b/backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java
+new file mode 100644
+index 0000000..ccf7c25
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java
+@@ -0,0 +1,280 @@
++package ama.storage;
++
++import static org.junit.jupiter.api.Assertions.*;
++import ama.contract.TaskContracts.TaskLease;
++import java.security.*;
++import java.time.Instant;
++import java.util.*;
++import org.junit.jupiter.api.Test;
++import org.springframework.transaction.support.TransactionSynchronizationManager;
++
++/** Real issuer/DB boundary regression tests for Task3 independent review findings. */
++class TranscriptAuthorityReviewIT {
++    @Test
++    void managedIdentityHashingNeverRunsUnderSourceRootsAndRoutesRemainExact() throws Exception {
++        try (var f = new TranscriptAuthorityFixture()) {
++            var uploaded = f.upload("hash boundary");
++            var c = f.components();
++            String backendId = f.storage.binding.id();
++            var probe = new HashBoundaryProvider();
++            assertEquals(1, Security.insertProviderAt(probe, 1));
++            HashBoundaryDigest.outside = 0;
++            HashBoundaryDigest.locked = 0;
++            try {
++                // Construction still validates the actual immutable managed definition.
++                assertNotNull(f.storage.backend(f.storage.storage));
++                assertThrows(IllegalArgumentException.class, () -> new FileBackendCatalog.Backend(
++                        "0".repeat(64), f.storage.binding.type(), 1, "WRITABLE",
++                        f.storage.storage, f.storage.binding));
++                var prepared = f.prepare(c, List.of(uploaded));
++                f.bind(c, prepared, List.of(uploaded));
++                String task = f.task(prepared, "RUNNING");
++                f.current(null, 1);
++                var lease = new TaskLease(task, 1, "TASK03_WORKER", Instant.now(), prepared.spec());
++                try (var download = c.sources().open(lease, prepared.inputId(), uploaded.file())) {
++                    assertEquals(13, download.length());
++                }
++                int opened = f.reads.get();
++                for (String assignment : List.of("config_revision=2", "status='DISABLED'", "storage_type='s3'")) {
++                    f.j.update("UPDATE storage_backend SET " + assignment + " WHERE id=?", backendId);
++                    assertThrows(ama.contract.FileContracts.Unavailable.class,
++                            () -> c.sources().open(lease, prepared.inputId(), uploaded.file()));
++                    assertEquals(opened, f.reads.get());
++                    f.j.update("UPDATE storage_backend SET config_revision=1,status='WRITABLE',storage_type='local' WHERE id=?", backendId);
++                }
++                // Change the exact owned route only after the read transaction physically commits.
++                var outside = new org.springframework.jdbc.core.JdbcTemplate(f.trace.actual);
++                f.trace.afterCommit.set(() -> outside.update(
++                        "UPDATE storage_backend SET status='DISABLED' WHERE id=?", backendId));
++                assertThrows(ama.contract.FileContracts.Unavailable.class,
++                        () -> c.sources().open(lease, prepared.inputId(), uploaded.file()));
++                assertEquals(opened, f.reads.get(), "post-commit route recheck must precede storage open");
++                outside.update("UPDATE storage_backend SET status='WRITABLE' WHERE id=?", backendId);
++                assertTrue(HashBoundaryDigest.outside > 0, "real managed identity digest remains outside roots");
++                assertEquals(0, HashBoundaryDigest.locked);
++                System.out.println("Task3 IR01 managed SHA-256 outside=" + HashBoundaryDigest.outside
++                        + " locked=" + HashBoundaryDigest.locked + "; real draft/bind/worker read and post-commit denial checked");
++            } finally {
++                Security.removeProvider(probe.getName());
++            }
++        }
++    }
++
++    @Test
++    void genuineWorkerScopesLockReverseOrderedTaskUnionBeforeAnyAttempt() throws Exception {
++        try (var f = new TranscriptAuthorityFixture()) {
++            var c = f.components();
++            var firstFile = f.upload("first union source");
++            var secondFile = f.upload("second union source");
++            var first = f.prepare(c, List.of(firstFile));
++            f.bind(c, first, List.of(firstFile));
++            var second = f.prepare(c, List.of(secondFile));
++            f.bind(c, second, List.of(secondFile));
++            String firstTask = f.task(first, "RUNNING"), secondTask = f.task(second, "RUNNING");
++            f.current(null, 1);
++            var policy = actualPolicy(c.registry());
++            var requests = new ArrayList<>(List.of(request(firstTask, first, firstFile.file()),
++                    request(secondTask, second, secondFile.file())));
++            requests.sort(Comparator.comparing((ama.transcript.ProcessingSourceReader.WorkerRequest r) -> r.lease().taskId()).reversed());
++            var prepared = requests.stream().map(r -> policy.prepareRead(f.actor, f.meeting, r)).toList();
++            var sortedTasks = List.of(firstTask, secondTask).stream().sorted().toList();
++            assertNotEquals(sortedTasks, requests.stream().map(r -> r.lease().taskId()).toList());
++            f.trace.locks.clear();
++            f.tx.required(() -> {
++                var gate = c.registry().lock(f.actor, f.meeting, ama.access.MeetingAccess.Action.EDIT);
++                var plans = new ArrayList<CompleteReadPolicy.ReadPlan>();
++                for (int i = 0; i < requests.size(); i++)
++                    plans.add(policy.prelockRead(gate, f.meeting, requests.get(i), prepared.get(i)));
++                var sources = acquireAndValidate(f, c.registry(), policy, gate, plans);
++                policy.prelockReadTasks(plans.stream().map(p -> (Object) p.context()).toList());
++                assertEquals(sortedTasks, exactTaskLocks(f));
++                assertEquals(0, exactAttemptLocks(f).size());
++                for (var plan : plans) {
++                    var scoped = sources.stream().filter(s -> s.file().fileId().equals(plan.requestedFileId())).toList();
++                    policy.finishRead(plan.context(), scoped);
++                    assertThrows(ama.contract.MinutesContracts.Failure.class,
++                            () -> policy.finishRead(plan.context(), scoped));
++                }
++                assertEquals(sortedTasks, exactAttemptLocks(f));
++                int lastTask = -1, firstAttempt = Integer.MAX_VALUE;
++                for (int i = 0; i < f.trace.locks.size(); i++) {
++                    String sql = f.trace.locks.get(i).sql();
++                    if (sql.equals("SELECT id FROM durable_task WHERE id=? FOR UPDATE")) lastTask = i;
++                    if (sql.startsWith("SELECT attempt FROM task_attempt")) firstAttempt = Math.min(firstAttempt, i);
++                }
++                assertTrue(lastTask >= 0 && lastTask < firstAttempt);
++                assertEquals(2, f.j.queryForObject("SELECT COUNT(*) FROM task_attempt WHERE task_id IN (?,?) AND ended_at IS NULL", Integer.class, firstTask, secondTask));
++                assertEquals(0, f.reads.get());
++                return null;
++            });
++            saveTrace(f, "two-worker-scopes");
++        }
++    }
++
++    @Test
++    void genuineSharedTaskScopesDeduplicateAndConflictingPrivateExpectationsFailClosed() throws Exception {
++        try (var f = new TranscriptAuthorityFixture()) {
++            var c = f.components();
++            var file = f.upload("shared union source");
++            var intake = f.prepare(c, List.of(file));
++            f.bind(c, intake, List.of(file));
++            String task = f.task(intake, "RUNNING");
++            f.current(null, 1);
++            var policy = actualPolicy(c.registry());
++            var request = request(task, intake, file.file());
++            for (boolean injectConflict : List.of(false, true)) {
++                var prepared = List.of(policy.prepareRead(f.actor, f.meeting, request),
++                        policy.prepareRead(f.actor, f.meeting, request));
++                f.trace.locks.clear();
++                f.tx.required(() -> {
++                    var gate = c.registry().lock(f.actor, f.meeting, ama.access.MeetingAccess.Action.EDIT);
++                    var plans = prepared.stream().map(p -> policy.prelockRead(gate, f.meeting, request, p)).toList();
++                    assertNotSame(plans.get(0).context(), plans.get(1).context());
++                    var sources = acquireAndValidate(f, c.registry(), policy, gate, plans);
++                    if (injectConflict) {
++                        // Test-only fault injection AFTER two genuine issuer/holder-bound scopes exist.
++                        // Immutable normal production graphs cannot be changed through the public API.
++                        Object graph = privateField(prepared.get(1), "graph");
++                        var old = (SortedMap<String, Map<String, Object>>) privateField(graph, "tasks");
++                        var changedRow = new HashMap<>(old.get(task));
++                        changedRow.put("priority", 1L);
++                        var changed = new TreeMap<String, Map<String, Object>>(old);
++                        changed.put(task, Collections.unmodifiableMap(changedRow));
++                        setPrivateField(graph, "tasks", Collections.unmodifiableSortedMap(changed));
++                        assertThrows(ama.contract.MinutesContracts.Failure.class,
++                                () -> policy.prelockReadTasks(plans.stream().map(p -> (Object) p.context()).toList()));
++                        assertTrue(exactTaskLocks(f).isEmpty());
++                        assertTrue(exactAttemptLocks(f).isEmpty());
++                    } else {
++                        policy.prelockReadTasks(plans.stream().map(p -> (Object) p.context()).toList());
++                        assertEquals(List.of(task), exactTaskLocks(f));
++                        assertTrue(exactAttemptLocks(f).isEmpty());
++                        for (var plan : plans) {
++                            policy.finishRead(plan.context(), sources);
++                            assertThrows(ama.contract.MinutesContracts.Failure.class,
++                                    () -> policy.finishRead(plan.context(), sources));
++                        }
++                        assertEquals(List.of(task), exactAttemptLocks(f));
++                    }
++                    assertEquals(0, f.reads.get());
++                    return null;
++                });
++                saveTrace(f, injectConflict ? "conflicting-private-expectation" : "shared-task-scopes");
++            }
++        }
++    }
++
++    @Test
++    void configuredProviderRegistryOrchestrationFinalizesEveryDistinctScopeOnce() throws Exception {
++        try (var f = new TranscriptAuthorityFixture()) {
++            var file = f.upload("two configured scopes");
++            var refs = List.of(new FileRegistry.Reference("TASK03_FIX_COMPLETE", UUID.randomUUID().toString(), "TRANSCRIPT_INPUT"),
++                    new FileRegistry.Reference("TASK03_FIX_COMPLETE", UUID.randomUUID().toString(), "TRANSCRIPT_INPUT"));
++            for (var ref : refs) f.j.update("INSERT INTO file_reference VALUES (?,?,?,?)", file.file(), ref.kind(), ref.ownerId(), ref.purpose());
++            class Scope implements FileRegistry.ReferenceContext {
++                final FileRegistry.Reference reference;
++                boolean tasks; int finishes;
++                Scope(FileRegistry.Reference reference) { this.reference = reference; }
++            }
++            var scopes = new ArrayList<Scope>();
++            var unions = new java.util.concurrent.atomic.AtomicInteger();
++            CompleteReadPolicy policy = new CompleteReadPolicy() {
++                public Object prelock(FileRegistry.LockedMeeting g, String m, FileRegistry.Reference r, String id) { throw new AssertionError("legacy path"); }
++                public Object prelock(FileRegistry.LockedMeeting g, String m, FileRegistry.Reference r, String id, FileRegistry.ReferenceContext context) { return context; }
++                public ReadPreparation prepareRead(ama.contract.IdentityContracts.Actor a, String m, FileRegistry.ReadRequest r) { return new ReadPreparation() {}; }
++                public void authorizeRead(FileRegistry.LockedMeeting g, String m, FileRegistry.ReadRequest r) {}
++                public Object prelockCurrent(FileRegistry.LockedMeeting g, String m, FileRegistry.Reference r, String id, ReadPreparation p) {
++                    var scope = new Scope(r); scopes.add(scope); return scope;
++                }
++                public ReadPlan prelockRead(FileRegistry.LockedMeeting g, String m, FileRegistry.ReadRequest r, ReadPreparation p) { throw new AssertionError("only generic orchestration"); }
++                public List<ReadMember> readMembers(Object domain, FileRegistry.Reference r, String id) { return List.of(new ReadMember(((Scope) domain).reference, file.file())); }
++                public void validate(Object domain, String m, FileRegistry.Reference r, FileRegistry.FileRecord actual, String purpose) { assertEquals(((Scope) domain).reference, r); }
++                public void prelockReadTasks(List<Object> actualScopes) {
++                    assertEquals(2, actualScopes.size()); assertEquals(0, unions.getAndIncrement());
++                    for (Object domain : actualScopes) ((Scope) domain).tasks = true;
++                }
++                public void finishRead(Object domain, List<FileRegistry.CompletedSource> sources) {
++                    var scope = (Scope) domain; assertTrue(scope.tasks); assertEquals(0, scope.finishes++);
++                    assertEquals(1, sources.size()); assertEquals(0, f.reads.get());
++                }
++            };
++            var registry = f.registry(Map.of(refs.getFirst().kind(), policy));
++            try (var download = registry.download(f.actor, file.file(), null)) { assertEquals(21, download.length()); }
++            assertEquals(2, scopes.size()); assertEquals(1, unions.get());
++            assertTrue(scopes.stream().allMatch(scope -> scope.finishes == 1)); assertEquals(1, f.reads.get());
++        }
++    }
++
++    private static ama.transcript.ProcessingSourceReader.WorkerRequest request(String task,
++            ama.transcript.JdbcTranscriptAuthority.PreparedIntake intake, String file) {
++        return new ama.transcript.ProcessingSourceReader.WorkerRequest(
++                new TaskLease(task, 1, "TASK03_WORKER", Instant.now(), intake.spec()), intake.inputId(), file);
++    }
++    private static CompleteReadPolicy actualPolicy(FileRegistry registry) {
++        return (CompleteReadPolicy) ((Map<?, ?>) privateField(registry, "policies")).get("INPUT_BATCH_FILE");
++    }
++    private static Object privateField(Object value, String name) {
++        try { var field = value.getClass().getDeclaredField(name); field.setAccessible(true); return field.get(value); }
++        catch (ReflectiveOperationException failure) { throw new AssertionError(failure); }
++    }
++    private static void setPrivateField(Object value, String name, Object replacement) {
++        try { var field = value.getClass().getDeclaredField(name); field.setAccessible(true); field.set(value, replacement); }
++        catch (ReflectiveOperationException failure) { throw new AssertionError(failure); }
++    }
++    private static List<FileRegistry.CompletedSource> acquireAndValidate(TranscriptAuthorityFixture f,
++            FileRegistry registry, CompleteReadPolicy policy, FileRegistry.LockedMeeting gate,
++            List<CompleteReadPolicy.ReadPlan> plans) {
++        var ids = plans.stream().flatMap(p -> p.completeMembers().stream()).map(CompleteReadPolicy.ReadMember::fileId).distinct().sorted().toList();
++        var receipt = registry.prelockSources(gate, ids, false).orElseThrow();
++        var sources = registry.sources(gate, receipt, ids);
++        for (var plan : plans) for (var member : plan.completeMembers()) {
++            var actual = sources.stream().filter(s -> s.file().fileId().equals(member.fileId())).findFirst().orElseThrow();
++            policy.validate(plan.context(), f.meeting, member.reference(), actual.file(), actual.originalPurpose());
++        }
++        return sources;
++    }
++    private static List<String> exactTaskLocks(TranscriptAuthorityFixture f) {
++        return f.trace.locks.stream().filter(e -> e.sql().equals("SELECT id FROM durable_task WHERE id=? FOR UPDATE"))
++                .map(e -> (String) e.parameters().getFirst()).toList();
++    }
++    private static List<String> exactAttemptLocks(TranscriptAuthorityFixture f) {
++        return f.trace.locks.stream().filter(e -> e.sql().equals("SELECT attempt FROM task_attempt WHERE task_id=? AND attempt=? FOR UPDATE"))
++                .map(e -> (String) e.parameters().getFirst()).toList();
++    }
++    private static void saveTrace(TranscriptAuthorityFixture f, String suffix) throws Exception {
++        java.nio.file.Files.write(java.nio.file.Path.of("target/task03-custody", f.meeting + "-" + suffix + ".txt"),
++                f.trace.locks.stream().map(e -> e.sql() + " | " + e.parameters()).toList());
++    }
++
++    /** Test-only JCA observer delegates the actual SHA-256 implementation without replacing bytes. */
++    public static final class HashBoundaryDigest extends MessageDigestSpi {
++        static int outside, locked;
++        private final MessageDigest actual;
++        public HashBoundaryDigest() {
++            try { actual = MessageDigest.getInstance("SHA-256", "SUN"); }
++            catch (GeneralSecurityException failure) { throw new AssertionError(failure); }
++        }
++        protected void engineUpdate(byte value) { actual.update(value); }
++        protected void engineUpdate(byte[] value, int offset, int length) { actual.update(value, offset, length); }
++        protected byte[] engineDigest() {
++            boolean managed = StackWalker.getInstance().walk(frames -> frames.anyMatch(
++                    frame -> frame.getClassName().equals(ManagedBackendId.class.getName())));
++            if (managed) {
++                if (TransactionSynchronizationManager.isActualTransactionActive()) {
++                    locked++;
++                    throw new AssertionError("Managed backend SHA-256 executed while actual transaction roots are held");
++                }
++                outside++;
++            }
++            return actual.digest();
++        }
++        protected void engineReset() { actual.reset(); }
++        protected int engineGetDigestLength() { return 32; }
++    }
++    private static final class HashBoundaryProvider extends Provider {
++        HashBoundaryProvider() {
++            super("Task03HashBoundary", "1.0", "Test-only real managed digest boundary observer");
++            put("MessageDigest.SHA-256", HashBoundaryDigest.class.getName());
++        }
++    }
++}

@@ -1,0 +1,26 @@
+{
+  "base": "3e393dbc9485b187b89bfc03abd88821a0aabddb",
+  "head": "aa0b5f08a19649091b0bcd60959bd741fb5c7850",
+  "source_paths_verified": 19,
+  "evidence_manifest_entries_verified": 416,
+  "committed_blobs_exact": true,
+  "fresh_archived_XML_parsed": true,
+  "composed_unit_count": 221,
+  "composed_IT_count": 128,
+  "composed_failures_errors_skips": [
+    0,
+    0,
+    0
+  ],
+  "initial_upload_errors_retained": 29,
+  "final_source_targeted_count": 22,
+  "own_DB_secret_values_scanned": 2,
+  "own_DB_secret_hits": 0,
+  "audit_bytes": 6289323,
+  "audit_sha256": "79c659ecb215f1f85dd376949434b00861be52ba856809b6eb3547c4162ad698",
+  "review_bytes": 382836,
+  "review_sha256": "ddfd6828dff31f5710115a164e5da7a2d71dddea219657af854f916b5bdd1103",
+  "view_paths": 90,
+  "classification_correction": "Initial controller assertion classified integration-tests module units as IT. Actual ContractFixtureTest1+ContractClientTest2 are unit tests; suite naming fixes218/131 to221/128; no product defect.",
+  "limits": "Composed source-window qualified evidence; initialrun failed29errors. Exactfinal22 after narrowdanglingfix+formatnormalization, no fullgatefinalbytesrerun implied; handshakecauseunresolved."
+}
