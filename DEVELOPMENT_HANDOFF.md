@@ -1,3 +1,7 @@
+## 当前暂停入口（2026-10-23 18:20）
+
+用户已要求暂停。下次“继续任务”请先读[精准接续说明](docs/acceptance/development-pause-b-remaining-2026-10-23.md)，切换 `.worktrees/phase-b-completion`，从 Task4 中断的独立审查继续；旧段落仅为历史。Task1–3 已采用；Task4 源码59c8b080已提交/测试374通过，但复审未完成；Task5后续源码未启动。主目录产品 HEAD34cb226a、main 不变。
+
 # 会议助手开发接续入口
 
 2026-10-23，用户明确要求“使用子代理，按接续说明继续开发”，功能开发已恢复。当前协调分支为 `codex/phase-b-resume-20261023`，从 main `0676a21311f2b2193f73a5e096f4a5605ee9b41f` 接续；阶段 B 尚未验收，不提前合入 main。
