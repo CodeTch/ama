@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/check-current-model.py", line 5, in <module>
+    assert len(tables)==98 and sum(len(t['cols']) for t in tables)==732,'Current model must include reconcile ordinal'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Current model must include reconcile ordinal

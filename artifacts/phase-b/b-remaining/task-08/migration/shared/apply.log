@@ -1,0 +1,6 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+06:47:58.566 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:46653/ama_b01_fixture (MySQL 8.4)
+06:47:58.743 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 15 migrations (execution time 00:00.051s)
+06:47:58.766 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013.2
+06:47:58.781 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_b01_fixture` to version "013.3 - external reconcile scan"
+06:47:59.066 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 1 migration to schema `ama_b01_fixture`, now at version v013.3 (execution time 00:00.242s)

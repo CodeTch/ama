@@ -1,0 +1,7 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+Exception in thread "main" java.sql.SQLSyntaxErrorException: Unknown column 'state' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1318)
+	at Task08MigrationProbe.query(Task08MigrationProbe.java:21)
+	at Task08FinalStateProbe.main(Task08FinalStateProbe.java:10)

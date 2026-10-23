@@ -1,0 +1,252 @@
+{
+  "before" : [ {
+    "count" : "0"
+  } ],
+  "initialMigrations" : 8,
+  "initialMillis" : 12420,
+  "historyBeforeRerun" : [ {
+    "installed_rank" : "1",
+    "version" : "001",
+    "description" : "foundation",
+    "type" : "SQL",
+    "script" : "V001__foundation.sql",
+    "checksum" : "1201435595",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:23",
+    "execution_time" : "103",
+    "success" : "1"
+  }, {
+    "installed_rank" : "2",
+    "version" : "002",
+    "description" : "identity acl",
+    "type" : "SQL",
+    "script" : "V002__identity_acl.sql",
+    "checksum" : "1757300424",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:23",
+    "execution_time" : "235",
+    "success" : "1"
+  }, {
+    "installed_rank" : "3",
+    "version" : "005",
+    "description" : "tasks outbox",
+    "type" : "SQL",
+    "script" : "V005__tasks_outbox.sql",
+    "checksum" : "-1999355348",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:24",
+    "execution_time" : "471",
+    "success" : "1"
+  }, {
+    "installed_rank" : "4",
+    "version" : "006",
+    "description" : "audit metadata",
+    "type" : "SQL",
+    "script" : "V006__audit_metadata.sql",
+    "checksum" : "-1744360556",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:24",
+    "execution_time" : "189",
+    "success" : "1"
+  }, {
+    "installed_rank" : "5",
+    "version" : "007",
+    "description" : "identity sessions",
+    "type" : "SQL",
+    "script" : "V007__identity_sessions.sql",
+    "checksum" : "157746768",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:25",
+    "execution_time" : "756",
+    "success" : "1"
+  }, {
+    "installed_rank" : "6",
+    "version" : "008",
+    "description" : "meeting schema",
+    "type" : "SQL",
+    "script" : "V008__meeting_schema.sql",
+    "checksum" : "-1747387036",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:28",
+    "execution_time" : "3374",
+    "success" : "1"
+  }, {
+    "installed_rank" : "7",
+    "version" : "009",
+    "description" : "file schema",
+    "type" : "SQL",
+    "script" : "V009__file_schema.sql",
+    "checksum" : "-287948759",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:31",
+    "execution_time" : "3090",
+    "success" : "1"
+  }, {
+    "installed_rank" : "8",
+    "version" : "010",
+    "description" : "reliable execution",
+    "type" : "SQL",
+    "script" : "V010__reliable_execution.sql",
+    "checksum" : "-1187397378",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:35",
+    "execution_time" : "3383",
+    "success" : "1"
+  } ],
+  "engine" : [ {
+    "version" : "8.4.6",
+    "metadataWaitSeconds" : "5",
+    "sqlMode" : "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+  } ],
+  "rerunMigrations" : 0,
+  "historyAfterRerun" : [ {
+    "installed_rank" : "1",
+    "version" : "001",
+    "description" : "foundation",
+    "type" : "SQL",
+    "script" : "V001__foundation.sql",
+    "checksum" : "1201435595",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:23",
+    "execution_time" : "103",
+    "success" : "1"
+  }, {
+    "installed_rank" : "2",
+    "version" : "002",
+    "description" : "identity acl",
+    "type" : "SQL",
+    "script" : "V002__identity_acl.sql",
+    "checksum" : "1757300424",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:23",
+    "execution_time" : "235",
+    "success" : "1"
+  }, {
+    "installed_rank" : "3",
+    "version" : "005",
+    "description" : "tasks outbox",
+    "type" : "SQL",
+    "script" : "V005__tasks_outbox.sql",
+    "checksum" : "-1999355348",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:24",
+    "execution_time" : "471",
+    "success" : "1"
+  }, {
+    "installed_rank" : "4",
+    "version" : "006",
+    "description" : "audit metadata",
+    "type" : "SQL",
+    "script" : "V006__audit_metadata.sql",
+    "checksum" : "-1744360556",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:24",
+    "execution_time" : "189",
+    "success" : "1"
+  }, {
+    "installed_rank" : "5",
+    "version" : "007",
+    "description" : "identity sessions",
+    "type" : "SQL",
+    "script" : "V007__identity_sessions.sql",
+    "checksum" : "157746768",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:25",
+    "execution_time" : "756",
+    "success" : "1"
+  }, {
+    "installed_rank" : "6",
+    "version" : "008",
+    "description" : "meeting schema",
+    "type" : "SQL",
+    "script" : "V008__meeting_schema.sql",
+    "checksum" : "-1747387036",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:28",
+    "execution_time" : "3374",
+    "success" : "1"
+  }, {
+    "installed_rank" : "7",
+    "version" : "009",
+    "description" : "file schema",
+    "type" : "SQL",
+    "script" : "V009__file_schema.sql",
+    "checksum" : "-287948759",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:31",
+    "execution_time" : "3090",
+    "success" : "1"
+  }, {
+    "installed_rank" : "8",
+    "version" : "010",
+    "description" : "reliable execution",
+    "type" : "SQL",
+    "script" : "V010__reliable_execution.sql",
+    "checksum" : "-1187397378",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 23:15:35",
+    "execution_time" : "3383",
+    "success" : "1"
+  } ],
+  "operationColumns" : [ {
+    "COLUMN_NAME" : "id",
+    "ORDINAL_POSITION" : "1",
+    "COLUMN_TYPE" : "char(36)"
+  }, {
+    "COLUMN_NAME" : "operation_kind",
+    "ORDINAL_POSITION" : "2",
+    "COLUMN_TYPE" : "varchar(64)"
+  }, {
+    "COLUMN_NAME" : "business_key",
+    "ORDINAL_POSITION" : "3",
+    "COLUMN_TYPE" : "varchar(255)"
+  }, {
+    "COLUMN_NAME" : "request_hash",
+    "ORDINAL_POSITION" : "4",
+    "COLUMN_TYPE" : "char(64)"
+  }, {
+    "COLUMN_NAME" : "state",
+    "ORDINAL_POSITION" : "5",
+    "COLUMN_TYPE" : "varchar(64)"
+  }, {
+    "COLUMN_NAME" : "marked_at",
+    "ORDINAL_POSITION" : "6",
+    "COLUMN_TYPE" : "datetime(6)"
+  }, {
+    "COLUMN_NAME" : "next_check_at",
+    "ORDINAL_POSITION" : "7",
+    "COLUMN_TYPE" : "datetime(6)"
+  }, {
+    "COLUMN_NAME" : "reconcile_epoch",
+    "ORDINAL_POSITION" : "8",
+    "COLUMN_TYPE" : "bigint unsigned"
+  }, {
+    "COLUMN_NAME" : "reconcile_owner",
+    "ORDINAL_POSITION" : "9",
+    "COLUMN_TYPE" : "varchar(64)"
+  }, {
+    "COLUMN_NAME" : "reconcile_expires_at",
+    "ORDINAL_POSITION" : "10",
+    "COLUMN_TYPE" : "datetime(6)"
+  }, {
+    "COLUMN_NAME" : "external_result_id",
+    "ORDINAL_POSITION" : "11",
+    "COLUMN_TYPE" : "longtext"
+  }, {
+    "COLUMN_NAME" : "last_error",
+    "ORDINAL_POSITION" : "12",
+    "COLUMN_TYPE" : "varchar(64)"
+  }, {
+    "COLUMN_NAME" : "subject_kind",
+    "ORDINAL_POSITION" : "13",
+    "COLUMN_TYPE" : "varchar(64)"
+  }, {
+    "COLUMN_NAME" : "subject_id",
+    "ORDINAL_POSITION" : "14",
+    "COLUMN_TYPE" : "varchar(255)"
+  }, {
+    "COLUMN_NAME" : "current_execution_no",
+    "ORDINAL_POSITION" : "15",
+    "COLUMN_TYPE" : "bigint unsigned"
+  } ]
+}

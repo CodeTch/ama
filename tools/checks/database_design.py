@@ -11,7 +11,7 @@ import re
 import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VERSION = 'B00-1.5-runtime-metadata'
+VERSION = 'B00-1.6-reconcile-scan'
 PROVENANCE_ROOT_RULE = 'R1上下文根：所有纳入minutes_element.source_context_id无论证据数量均为basis根，与域内精确usage上下文取并集。ROWSET v2/PINNED用已保存输入要素集全部basis及set证据/目录，排除body/applied exclusion；REVIEW_SOURCES仅选定复核要素basis及精确相交证据（正文复核无要素basis）；FINAL用全部冻结纳入要素basis及既有body/set证据、目录、applied exclusion。各根完整context/selection/profile按实际完整PK去重及unsigned UTF8排序，缺失/额外行拒绝；无usage的basis同样验证并保留依赖。basis不伪造EVIDENCE、不增加usage数、不授予支持信用；草稿仍无自身fingerprint/TaskSpec，祖先按图依赖判断。'
 TABLES = []
 ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
@@ -85,7 +85,7 @@ table('file_cleanup','B-04/D-07','V009','可重试删除/孤儿清理登记',[
 table('task_subject','B-05','V010','每领域聚合的版本/取消 fence（会议仅一个共享根）',[
     code('subject_kind','MEETING/治理根等白名单类型'),col('subject_id',KEY,'聚合稳定ID'),num('business_version','与根 revision 同事务前进'),num('cancel_epoch','取消/删除代际'),col('deleted','tinyint unsigned','不可复活 tombstone',False,'0')],pk='subject_kind,subject_id',checks=['deleted IN (0,1)'],policy='领域创建根时创建 fence；enqueue 不得懒建或降低栅栏；typed root 应用完整性；所有写路径先锁此行再锁根')
 table('durable_task','B-05','V010','持久任务；外部未知结果从普通领取隔离',[
-    ident(),code('task_type','处理类型'),code('pool','隔离限并发池'),code('subject_kind','聚合类型'),col('subject_id',KEY,'聚合ID'),col('producer_key',HASH,'稳定 enqueue 业务键摘要'),code('input_kind','输入快照类型'),ident('input_id','不可变输入快照ID'),fingerprint(),num('business_version','入队版本'),num('cancel_epoch','入队取消代际'),col('priority','int','有界队列优先级'),code('state','任务状态',default="'READY'"),num('attempt','每次领取递增',0),num('max_attempts','显式策略上限；含崩溃回收'),col('lease_owner',CODE,'当前领取者',True),ts('expires_at','DB租约截止',True),ts('available_at','下次允许领取'),ts('created_at','入队时间'),code('output_kind','输出类型',True),ident('output_id','输出ID',True),code('last_error','安全失败码',True)],indexes=[idx('task_producer','producer_key','同一业务入队重放唯一',True),idx('task_ready','pool,state,available_at,id','分开扫描 READY'),idx('task_expired','pool,state,expires_at,id','分开扫描过期 RUNNING'),idx('task_subject_history','subject_kind,subject_id,created_at,id','聚合任务历史')],fks=[fk('subject_kind,subject_id','task_subject','subject_kind,subject_id')],checks=[enum('state','READY,RUNNING,RECONCILING,SUCCEEDED,FAILED,CANCELLED,STALE'),'max_attempts > 0',"state <> 'RUNNING' OR (lease_owner IS NOT NULL AND expires_at IS NOT NULL)"],policy='input/output typed refs 由任务注册器校验具体领域存在且相同 subject/版本；producer_key 冲突需比较完整输入，否则冲突；失败/旧结果保留最小诊断不覆盖有效稿')
+    ident(),code('task_type','处理类型'),code('pool','隔离限并发池'),code('subject_kind','聚合类型'),col('subject_id',KEY,'聚合ID'),col('producer_key',HASH,'稳定 enqueue 业务键摘要'),code('input_kind','输入快照类型'),ident('input_id','不可变输入快照ID'),fingerprint(),num('business_version','入队版本'),num('cancel_epoch','入队取消代际'),col('priority','int','有界队列优先级'),code('state','任务状态',default="'READY'"),num('attempt','每次领取递增',0),num('max_attempts','显式策略上限；含崩溃回收'),col('lease_owner',CODE,'当前领取者',True),ts('expires_at','DB租约截止',True),ts('available_at','下次允许领取'),ts('created_at','入队时间'),code('output_kind','输出类型',True),ident('output_id','输出ID',True),code('last_error','安全失败码',True)],indexes=[idx('task_producer','producer_key','同一业务入队重放唯一',True),idx('task_ready','pool,state,available_at,id','分开扫描 READY'),idx('task_expired','pool,state,expires_at,id','分开扫描过期 RUNNING'),idx('task_subject_history','subject_kind,subject_id,created_at,id','聚合任务历史'),idx('task_input_lookup','input_kind,input_id,id','固定 typed 输入的完整任务并集有界枚举')],fks=[fk('subject_kind,subject_id','task_subject','subject_kind,subject_id')],checks=[enum('state','READY,RUNNING,RECONCILING,SUCCEEDED,FAILED,CANCELLED,STALE'),'max_attempts > 0',"state <> 'RUNNING' OR (lease_owner IS NOT NULL AND expires_at IS NOT NULL)"],policy='input/output typed refs 由任务注册器校验具体领域存在且相同 subject/版本；producer_key 冲突需比较完整输入，否则冲突；失败/旧结果保留最小诊断不覆盖有效稿')
 table('task_attempt','B-05','V010','每次 Worker 领取诊断历史',[
     ref('task_id','任务'),num('attempt','领取代际'),code('owner','Worker身份'),ts('started_at','开始'),ts('ended_at','结束',True),code('outcome','结束结果',True),code('error_code','安全错误码',True)],pk='task_id,attempt',fks=[fk('task_id','durable_task')])
 table('external_operation','B-05','V010','任何可能产生外部效果的调用前 durable marker 及独立对账所有权',[
@@ -291,14 +291,15 @@ template['policy']='不可变历史；owner_id必须与minutes_template一致，
 # append-only execution row, not a replacement logical business key.
 operation=next(t for t in TABLES if t['name']=='external_operation')
 operation['cols']=[c for c in operation['cols'] if c['name'] not in ('task_id','origin_attempt')]
-operation['cols'].extend([code('subject_kind','聚合类型'),col('subject_id',KEY,'聚合ID'),num('current_execution_no','当前执行代际；初次1')])
+operation['cols'].extend([code('subject_kind','聚合类型'),col('subject_id',KEY,'聚合ID'),num('current_execution_no','当前执行代际；初次1'),col('reconcile_scan_seq','bigint','服务器 AUTO_INCREMENT 分配的正 Java long 扫描序号；持久化后应用不可改写；无显式默认是服务器分配例外，写入省略本列')])
 for c in operation['cols']:
     if c['name']=='request_hash': c['meaning']='逻辑内容摘要：固定confirmation/body及业务操作；不替代每次完整请求摘要'
     if c['name']=='marked_at': c['meaning']='首次before-external marker实际提交时间'
 operation['indexes']=[i for i in operation['indexes'] if i['name']!='external_task']
+operation['indexes'].append(idx('external_reconcile_scan','reconcile_scan_seq','不可变序号原始 keyset 扫描与固定高水位',True))
 operation['fks']=[fk('subject_kind,subject_id','task_subject','subject_kind,subject_id')]
 operation['checks']=[enum('state','MARKED,UNKNOWN,RETRY_QUEUED,SUCCEEDED,FAILED,MANUAL_REQUIRED'),'current_execution_no > 0']
-operation['policy']='operation_kind/business_key全历史唯一；不归单个task。current_execution_no由同聚合锁下CAS；独立reconcile_epoch跨执行永久递增、不清零。当前执行由(operation_id,no)应用校验。仅FAILED且当前execution有确定零效果证据可追加执行；UNKNOWN禁止重发'
+operation['policy']='operation_kind/business_key全历史唯一；不归单个task。current_execution_no由同聚合锁下CAS；独立reconcile_epoch跨执行永久递增、不清零。当前执行由(operation_id,no)应用校验。仅FAILED且当前execution有确定零效果证据可追加执行；UNKNOWN禁止重发；reconcile_scan_seq仅作有界枚举元数据，不授予任务/发送权限；服务器分配正long，应用持久化后不改写；受控恢复保留映射并完整校验正值/唯一性'
 table('external_execution','B-05/B-08','V010','R4 稳定逻辑操作下的追加执行尝试；支持同确认零效果失败重试',[
     ident(),ref('operation_id','稳定逻辑操作'),num('execution_no','同操作单调1起代际'),ref('task_id','本次新任务唯一拥有者'),num('task_attempt','before-call时实际领取attempt；排队时NULL',nullable=True),
     code('state','执行状态'),fingerprint('request_hash','本次完整请求含目标位置的不可变SHA256'),text('request_manifest','版本化安全请求清单：确认/目标ID/配置/固定输入引用；不含密钥'),
@@ -445,6 +446,9 @@ table('meeting_minutes_editor_guard','B-03/B-07/runtime Task2','V013.1','持久�
 
 def cname(t, n): return f"ck_{t['name']}_{n}"
 def fname(t, n): return f"fk_{t['name']}_{n}"
+def auto_increment(t, c):
+    return (t['name'], c['name']) in {('audit_event', 'id'), ('external_operation', 'reconcile_scan_seq')}
+
 def sql():
     result = [f'-- {VERSION}: REVIEW ONLY; never place this file in Flyway locations.',
               '-- All future tables exist ONLY in the disposable review database.',
@@ -454,7 +458,7 @@ def sql():
         for c in t['cols']:
             s=f"  `{c['name']}` {c['type']} {'NULL' if c['nullable'] else 'NOT NULL'}"
             if c['default'] is not None: s+=' DEFAULT '+str(c['default'])
-            if t['name']=='audit_event' and c['name']=='id': s+=' AUTO_INCREMENT'
+            if auto_increment(t, c): s+=' AUTO_INCREMENT'
             lines.append(s)
         lines.append('  PRIMARY KEY ('+','.join(t['pk'])+')')
         for i in t['indexes']:
@@ -624,7 +628,7 @@ def verify(container, metadata_only=False):
             typ=c['type'].split(' CHARACTER')[0].split(' COLLATE')[0]
             coll=None
             if re.match(r'(char|varchar|longtext)',typ): coll=(c['type'].split(' COLLATE ')[1] if ' COLLATE ' in c['type'] else 'utf8mb4_0900_ai_ci')
-            expected_cols.append(dict(table=t['name'],column=c['name'],ordinal=n,type=typ,nullable='YES' if c['nullable'] else 'NO',default=None if c['default'] is None else str(c['default']).strip("'"),collation=coll,extra='auto_increment' if t['name']=='audit_event' and c['name']=='id' else ''))
+            expected_cols.append(dict(table=t['name'],column=c['name'],ordinal=n,type=typ,nullable='YES' if c['nullable'] else 'NO',default=None if c['default'] is None else str(c['default']).strip("'"),collation=coll,extra='auto_increment' if auto_increment(t, c) else ''))
     assert sorted(expected_cols,key=lambda x:(x['table'],x['ordinal']))==actual['columns'], 'Column metadata mismatch'
     known_indexes=[]
     for t in TABLES:

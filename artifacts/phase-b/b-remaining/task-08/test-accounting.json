@@ -1,0 +1,661 @@
+{
+  "base": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+  "distinctIntegrationCases": 104,
+  "finalUnitCases": 254,
+  "distinctQualifiedTotal": 358,
+  "windows": [
+    {
+      "directory": "fairness-green",
+      "overallExit": 0,
+      "selectedPassingCases": [
+        {
+          "case": "ama.task.Task08FairnessIT#moreThan64HeldIdentitiesProgressAcrossCalls",
+          "xml": "artifacts/phase-b/b-remaining/task-08/fairness-green/integration-tests-TEST-ama.task.Task08FairnessIT.xml",
+          "xmlSha256": "c1abfe14967b9c1be332c76081cd4c9df8ce7ba5a8c62588f2571cacc2fd1a61"
+        },
+        {
+          "case": "ama.task.Task08FairnessIT#moreThan64UnregisteredPoliciesDoNotStarveRegisteredTail",
+          "xml": "artifacts/phase-b/b-remaining/task-08/fairness-green/integration-tests-TEST-ama.task.Task08FairnessIT.xml",
+          "xmlSha256": "c1abfe14967b9c1be332c76081cd4c9df8ce7ba5a8c62588f2571cacc2fd1a61"
+        }
+      ],
+      "selectedCount": 2,
+      "productionSourceMatchesFinal": true,
+      "sourceManifestSha256": "d515ea5491a0931761f13149a8fb5fca0948584dcdb51ace4b42611889e2cb4a"
+    },
+    {
+      "directory": "inherited-forward-final",
+      "overallExit": 0,
+      "selectedPassingCases": [
+        {
+          "case": "ama.task.Task08InheritedModelPermitIT#copiedAndReconciliationTokensCannotAdmitAndDuplicateCannotResend",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedModelPermitIT.xml",
+          "xmlSha256": "aa924e6fdb831037f816b85dfe111754d32541876cdc4c9629832c4e12473d16"
+        },
+        {
+          "case": "ama.task.Task08InheritedModelPermitIT#unknownDisabledAndUnprovenDeadlineFailClosed",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedModelPermitIT.xml",
+          "xmlSha256": "aa924e6fdb831037f816b85dfe111754d32541876cdc4c9629832c4e12473d16"
+        },
+        {
+          "case": "ama.task.Task08InheritedModelPermitIT#concurrentConfigurationUsesStableModelOrder",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedModelPermitIT.xml",
+          "xmlSha256": "aa924e6fdb831037f816b85dfe111754d32541876cdc4c9629832c4e12473d16"
+        },
+        {
+          "case": "ama.task.Task08InheritedModelPermitIT#concurrentAdmissionRetainsNullDeadlineAfterTimeout",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedModelPermitIT.xml",
+          "xmlSha256": "aa924e6fdb831037f816b85dfe111754d32541876cdc4c9629832c4e12473d16"
+        },
+        {
+          "case": "ama.task.Task08InheritedModelPermitIT#verifiedCutoffReleasesOnlyAfterActualDbDeadline",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedModelPermitIT.xml",
+          "xmlSha256": "aa924e6fdb831037f816b85dfe111754d32541876cdc4c9629832c4e12473d16"
+        },
+        {
+          "case": "ama.task.Task08InheritedModelPermitIT#provenDeadlineTruncatesMicrosAndNeverReleasesEarly",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedModelPermitIT.xml",
+          "xmlSha256": "aa924e6fdb831037f816b85dfe111754d32541876cdc4c9629832c4e12473d16"
+        },
+        {
+          "case": "ama.task.Task08InheritedModelPermitIT#shrinkCannotUndercutInflightAndExactTerminalExecutionSettles",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedModelPermitIT.xml",
+          "xmlSha256": "aa924e6fdb831037f816b85dfe111754d32541876cdc4c9629832c4e12473d16"
+        },
+        {
+          "case": "ama.task.Task08InheritedExternalExecutionIT#reconcilerTakeoverFencesOldOwnerAndPreservesExternalFact",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+          "xmlSha256": "9d12114458dbd6f9011331370774b8f53c7ed4ec1de724d70c1a6fc63659acf4"
+        },
+        {
+          "case": "ama.task.Task08InheritedExternalExecutionIT#safeRetryReplayReturnsSameAcceptedTask",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+          "xmlSha256": "9d12114458dbd6f9011331370774b8f53c7ed4ec1de724d70c1a6fc63659acf4"
+        },
+        {
+          "case": "ama.task.Task08InheritedExternalExecutionIT#concurrentSameProducerRetryAcceptsOnlyOneExecution",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+          "xmlSha256": "9d12114458dbd6f9011331370774b8f53c7ed4ec1de724d70c1a6fc63659acf4"
+        },
+        {
+          "case": "ama.task.Task08InheritedExternalExecutionIT#commitAcknowledgementUnknownReturnsNoAuthority",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+          "xmlSha256": "9d12114458dbd6f9011331370774b8f53c7ed4ec1de724d70c1a6fc63659acf4"
+        },
+        {
+          "case": "ama.task.Task08InheritedExternalExecutionIT#markerActuallyCommitsBeforeAuthorityAndAmbientIsRejected",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+          "xmlSha256": "9d12114458dbd6f9011331370774b8f53c7ed4ec1de724d70c1a6fc63659acf4"
+        },
+        {
+          "case": "ama.task.Task08InheritedExternalExecutionIT#preparedCrashCapPreservesExecutionHistory",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+          "xmlSha256": "9d12114458dbd6f9011331370774b8f53c7ed4ec1de724d70c1a6fc63659acf4"
+        },
+        {
+          "case": "ama.task.Task08InheritedExternalExecutionIT#processKilledAfterCommittedMarkerNeverMakesTaskResendable",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+          "xmlSha256": "9d12114458dbd6f9011331370774b8f53c7ed4ec1de724d70c1a6fc63659acf4"
+        },
+        {
+          "case": "ama.task.Task08InheritedExternalExecutionIT#oldTaskExpiryDoesNotDiscardAuthoritativeSuccess",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+          "xmlSha256": "9d12114458dbd6f9011331370774b8f53c7ed4ec1de724d70c1a6fc63659acf4"
+        },
+        {
+          "case": "ama.task.Task08InheritedExternalExecutionIT#unknownExecutionNeverReentersOrdinaryQueue",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+          "xmlSha256": "9d12114458dbd6f9011331370774b8f53c7ed4ec1de724d70c1a6fc63659acf4"
+        },
+        {
+          "case": "ama.task.Task08InheritedExternalExecutionIT#zeroEffectRetryAppendsExecutionWithoutResettingEpoch",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+          "xmlSha256": "9d12114458dbd6f9011331370774b8f53c7ed4ec1de724d70c1a6fc63659acf4"
+        },
+        {
+          "case": "ama.task.Task08InheritedReconciliationWorkerIT#independentReconcilerOwnsHeartbeatAndRecordsResultAfterTaskExpiry",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedReconciliationWorkerIT.xml",
+          "xmlSha256": "cff77ae8baa760cd84d39bbdbde451bea959a3d0eabafb4387083351ec79e1b3"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#pausedOldCompletionLosesToConcurrentCancellation",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#crashClaimsHaveFiniteAttemptCap",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#completionCallbackFailureRollsBackTaskAndOutbox",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#versionEpochAndTombstoneEachFenceOldCompletion",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#heldRowDoesNotBlockOtherCandidate(String)[1]",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#heldRowDoesNotBlockOtherCandidate(String)[2]",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#heldRowDoesNotBlockOtherCandidate(String)[3]",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#missingSubjectAndUnknownOrCrossSubjectTypedInputFailClosed",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#twoWorkersCompeteForOneTask",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#queueDomainAndOutboxRollbackTogether",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#agedLowPriorityWorkAndSafeRetryBackoffProgress",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#sameProducerComparesEntireImmutableSpec",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedTaskLeaseIT#expiredAttemptCannotCommit",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+          "xmlSha256": "35c357e87de0f3d5c9305d97bfe05e06664183f6c081ad1ab97eb7421832fe7e"
+        },
+        {
+          "case": "ama.task.Task08InheritedOutboxConsumerIT#prefixAndEffectsCommitTogetherAndDuplicateCannotSkip",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxConsumerIT.xml",
+          "xmlSha256": "c7556378b65715622f4e9c0314ec7bc8a00581af459da4bc200da17a5a7b4657"
+        },
+        {
+          "case": "ama.task.Task08InheritedOutboxConsumerIT#rollbackDoesNotAdvanceAndExpiredEpochCannotAcknowledge",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxConsumerIT.xml",
+          "xmlSha256": "c7556378b65715622f4e9c0314ec7bc8a00581af459da4bc200da17a5a7b4657"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#auditFailureRollsBackOutputTaskAttemptAndOutbox",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#expiredLeaseSuppressesCallback",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#nullResultRollsBackItsRowAndTaskAttemptAndOutbox",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#ambientTransactionOwnsFinalFlushAndRollback",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#callbackThrowRollsBackItsRowAndTaskAttemptAndOutbox",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#actualWorkerPreparesOutsideTransactionAndCommitsExactlyOnce",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#nullCallbackIsRejectedWithoutAnyMutation",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#invalidActualInputSuppressesCallback",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#callbackMayAdvanceItsPrelockedDomainBeforeTerminalMutation",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#staleVersionSuppressesCallback",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#forgedOwnerAndAttemptSuppressCallback",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#revokedOwnerSuppressesCallback",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#invalidOutputRollsBackItsRowAndTaskAttemptAndOutbox",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#oldRunnableContractStillValidatesBeforeWriting",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#newOutputIsWrittenBeforeValidationAndCommitsWithTaskAndAttempt",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#eventValidationFailureRollsBackOutputAuditTaskAndAttempt",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#cancelledEpochSuppressesCallback",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedPreparedCompletionIT#flushFailureRollsBackOutputTaskAttemptAndOutbox",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+          "xmlSha256": "257ed1a8330fc0c038e3db32258545996de9e88941178df189f64c5d66e41a36"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#disabledExternalSuccessIsRetainedWithoutEffectsOrRenewalOrResend",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#factOnlyReceiptSeparatesExpiredOwnerEpochFromActiveAuthorityAndUnknown",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#disabledIdentityActuallyBlocksCompletionAndPreventsEffects",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#queueIndependentlyRejectsPreparedTokenFromAnotherBoundDataSource",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#zeroEffectRetryReusesOnePreparationAndCompleteRootBatch",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#crossSubjectPreparationRejectsBeforeIdentityOrRootLocks",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#standaloneClaimMustLockIdentityBeforeSubject",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#meetingCapabilitiesCheckCoverageIssuerIdentityAndNoHiddenSynchronization",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#registeredIdentityFreeDomainMustExplicitlyOptIn",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#currentThreeArgumentCompletionValidatesOutputBeforeEffects",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#disabledExpiredCurrentExternalFactMustStillBeRetained",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#unregisteredReconciliationDomainIsSkippedWithoutGrantingAuthority",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#disabledCandidateIsSkippedWithoutSubjectOrTaskLocks",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#completeIdentityUnionUsesBinaryOrderBeforeAnySubject",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#ambientEnqueueMustReuseAuthenticMeetingCapability",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#preparationsRejectForgeryIssuerSpecPurposeAndExpiredTransactions",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#crossPolicyObservationIsNonAcknowledgmentAndSameFactCanBeResubmitted",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedB06QueueSeamsIT#heldIdentitySkipsBeforeSubjectAndReleasesPartialUnion",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+          "xmlSha256": "7155b1c5edbdbc705da3bd349c1f4c4d106e1c48865149ab9d1f6c3b163fc8f3"
+        },
+        {
+          "case": "ama.task.Task08InheritedOutboxFenceIT#missingFlushAndForeignCommitCallbacksAreRejectedWithoutEffects",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxFenceIT.xml",
+          "xmlSha256": "5b1e0e2e5078e32409a18ddf4df28a9c6e25061a292722490a1e6d1b7e2942bb"
+        },
+        {
+          "case": "ama.task.Task08InheritedOutboxFenceIT#rollbackReturnsSequenceAndLeavesNoEventOrDomainEffect",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxFenceIT.xml",
+          "xmlSha256": "5b1e0e2e5078e32409a18ddf4df28a9c6e25061a292722490a1e6d1b7e2942bb"
+        },
+        {
+          "case": "ama.task.Task08InheritedOutboxFenceIT#concurrentGlobalProducersCommitOneContinuousPrefix",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxFenceIT.xml",
+          "xmlSha256": "5b1e0e2e5078e32409a18ddf4df28a9c6e25061a292722490a1e6d1b7e2942bb"
+        },
+        {
+          "case": "ama.task.Task08InheritedOutboxFenceIT#tombstoneCannotBeReinitializedOrRevived",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxFenceIT.xml",
+          "xmlSha256": "5b1e0e2e5078e32409a18ddf4df28a9c6e25061a292722490a1e6d1b7e2942bb"
+        },
+        {
+          "case": "ama.task.Task08InheritedOutboxFenceIT#missingSubjectAndUnregisteredReferencesNeverCreateRows",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxFenceIT.xml",
+          "xmlSha256": "5b1e0e2e5078e32409a18ddf4df28a9c6e25061a292722490a1e6d1b7e2942bb"
+        },
+        {
+          "case": "ama.task.Task08InheritedOutboxFenceIT#delayedLowerCommitCannotBeSkippedByCursorReader",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxFenceIT.xml",
+          "xmlSha256": "5b1e0e2e5078e32409a18ddf4df28a9c6e25061a292722490a1e6d1b7e2942bb"
+        },
+        {
+          "case": "ama.task.Task08InheritedOutboxFenceIT#domainLocksAndNewEventsAreRejectedAfterFinalFlush",
+          "xml": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxFenceIT.xml",
+          "xmlSha256": "5b1e0e2e5078e32409a18ddf4df28a9c6e25061a292722490a1e6d1b7e2942bb"
+        }
+      ],
+      "selectedCount": 76,
+      "productionSourceMatchesFinal": true,
+      "sourceManifestSha256": "0f809a5a8bbb8ee4b027deff34c28f18f8cc4c9676fb46a9b69ee456cd735693"
+    },
+    {
+      "directory": "cursor-schema-budget-restart-final",
+      "overallExit": 1,
+      "selectedPassingCases": [
+        {
+          "case": "ama.task.Task08BudgetIT#openingSuccessCountsBothSessionSetsHighwaterAndRealPolicyClosure",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/integration-tests-TEST-ama.task.Task08BudgetIT.xml",
+          "xmlSha256": "c7ca632d8abed602c2e635e6be07093bdf0aa278da32452b165177716db9d2af"
+        },
+        {
+          "case": "ama.task.Task08BudgetIT#pageAndRowBudgetIncludesEveryRawCandidateWithNoDueFilter",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/integration-tests-TEST-ama.task.Task08BudgetIT.xml",
+          "xmlSha256": "c7ca632d8abed602c2e635e6be07093bdf0aa278da32452b165177716db9d2af"
+        },
+        {
+          "case": "ama.task.Task08BudgetIT#actualPlansUseOrdinalIndexAndNoFilesort",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/integration-tests-TEST-ama.task.Task08BudgetIT.xml",
+          "xmlSha256": "c7ca632d8abed602c2e635e6be07093bdf0aa278da32452b165177716db9d2af"
+        },
+        {
+          "case": "ama.task.Task08BudgetIT#fourUnregisteredRowsCountExactly23Sql17RowsAndDriverControls",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/integration-tests-TEST-ama.task.Task08BudgetIT.xml",
+          "xmlSha256": "c7ca632d8abed602c2e635e6be07093bdf0aa278da32452b165177716db9d2af"
+        },
+        {
+          "case": "ama.task.Task08SchemaIT#oldConstraintsAndNewOrdinalUniqueFailAtomicallyWithActualCodes",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/integration-tests-TEST-ama.task.Task08SchemaIT.xml",
+          "xmlSha256": "d153790652c72d0610f2165663ad0235ab2d4e20125baef758e4e25edbc60ac2"
+        },
+        {
+          "case": "ama.task.Task08SchemaIT#allocationDedupRetryClaimRenewObserveNeverRewriteOrdinal",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/integration-tests-TEST-ama.task.Task08SchemaIT.xml",
+          "xmlSha256": "d153790652c72d0610f2165663ad0235ab2d4e20125baef758e4e25edbc60ac2"
+        },
+        {
+          "case": "ama.task.Task08SchemaIT#exactForwardMetadataAndAllOldStatesHavePositiveUniqueOrdinals",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/integration-tests-TEST-ama.task.Task08SchemaIT.xml",
+          "xmlSha256": "d153790652c72d0610f2165663ad0235ab2d4e20125baef758e4e25edbc60ac2"
+        },
+        {
+          "case": "ama.task.Task08SchemaIT#rolledBackAllocationGapAndDeletedDiscoveredOperationDoNotPinCursor",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/integration-tests-TEST-ama.task.Task08SchemaIT.xml",
+          "xmlSha256": "d153790652c72d0610f2165663ad0235ab2d4e20125baef758e4e25edbc60ac2"
+        }
+      ],
+      "selectedCount": 8,
+      "productionSourceMatchesFinal": true,
+      "sourceManifestSha256": "adb5f658ee2258102c86ee2a7d326c2229bcaa01dca07138f711b491bfc58de8"
+    },
+    {
+      "directory": "cursor-mixed-restart-final",
+      "overallExit": 0,
+      "selectedPassingCases": [
+        {
+          "case": "ama.task.Task08CursorIT#mixedHeldSubjectDomainSourceTaskOperationExecutionAllReleaseBeforeTail",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08CursorIT#discoveryFailureDoesNotAdvanceAndCandidateFailureReachesTail",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08CursorIT#concurrentInstancesFenceOneLiveClaimAndUnknownRemainsLookupOnly",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08CursorIT#lostCommitAckReturnsNoTokenButProgressAndLeaseRemain",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08CursorIT#constantArrivalsCannotExtendFixedPass",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08CursorIT#preparationExceptionConsumesPositionAndFinalEmptyDoesNotWrap",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08CursorIT#sameInstanceTryLockDoesNotBlockIndependentRenewAndObserve",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08CursorIT#successConsumesOnlyReturnedRowAndRefetchesPrefetchedTail",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08CursorIT#changedCurrentExecutionIsRejectedWithoutLockingItsNewTaskUnderOldOperation",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08CursorIT#lateReservedCommitBehindCursorIsRevisitedAndRolledBackGapIsSafe",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08CursorIT#freshLockedDueAndFullSpecAreRechecked",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+          "xmlSha256": "f1743866f4ba49035ec2037ab9c8a3ce52cafd144f55483a69daaeafe7b8f161"
+        },
+        {
+          "case": "ama.task.Task08MixedBlockersIT#seventyMixedIdentitySubjectRootInputTaskOperationExecutionLocksStillReachTail",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08MixedBlockersIT.xml",
+          "xmlSha256": "a24f8346724718738da5fc075b6d894d38e850adcc1a78699fa100aeb585db7a"
+        },
+        {
+          "case": "ama.task.Task08RestartIT#newInstanceAndFreshJvmRecoverPersistedUnknownWithoutResend",
+          "xml": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/integration-tests-TEST-ama.task.Task08RestartIT.xml",
+          "xmlSha256": "65bb00119aa0e7eca7abc49fe8e72a6d88ac7bcef444c16749c4fa0aee680634"
+        }
+      ],
+      "selectedCount": 13,
+      "productionSourceMatchesFinal": true,
+      "sourceManifestSha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0"
+    },
+    {
+      "directory": "historical010-oracle-final",
+      "overallExit": 0,
+      "selectedPassingCases": [
+        {
+          "case": "ama.task.Task08Historical010IT#tenTablesAndExecutionFenceExist",
+          "xml": "artifacts/phase-b/b-remaining/task-08/historical010-oracle-final/integration-tests-TEST-ama.task.Task08Historical010IT.xml",
+          "xmlSha256": "0aa3120bf6685f2adc70c65d2a5d28337ad8dcf7a2f2788e98d521d69a7ed593"
+        },
+        {
+          "case": "ama.task.Task08Historical010IT#allMetadataMatchesIndependentAdoptedMysqlEvidence",
+          "xml": "artifacts/phase-b/b-remaining/task-08/historical010-oracle-final/integration-tests-TEST-ama.task.Task08Historical010IT.xml",
+          "xmlSha256": "0aa3120bf6685f2adc70c65d2a5d28337ad8dcf7a2f2788e98d521d69a7ed593"
+        },
+        {
+          "case": "ama.task.Task08Historical010IT#orderedHistoryAndFrozenChecksumRerunZero",
+          "xml": "artifacts/phase-b/b-remaining/task-08/historical010-oracle-final/integration-tests-TEST-ama.task.Task08Historical010IT.xml",
+          "xmlSha256": "0aa3120bf6685f2adc70c65d2a5d28337ad8dcf7a2f2788e98d521d69a7ed593"
+        }
+      ],
+      "selectedCount": 3,
+      "productionSourceMatchesFinal": true,
+      "sourceManifestSha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0"
+    },
+    {
+      "directory": "overflow-resume-final",
+      "overallExit": 1,
+      "selectedPassingCases": [
+        {
+          "case": "ama.task.Task08ZOverflowIT#controlledRestorePreservesExactMappingAndDetectsHiddenNonpositiveMetadata",
+          "xml": "artifacts/phase-b/b-remaining/task-08/overflow-resume-final/integration-tests-TEST-ama.task.Task08ZOverflowIT.xml",
+          "xmlSha256": "f7fccf0423692cebcb4beeea393f1281ae662d76571e3f718518afad920ef8de"
+        }
+      ],
+      "selectedCount": 1,
+      "productionSourceMatchesFinal": true,
+      "sourceManifestSha256": "7388ba2393cf88d0060f4cedcbbb9274986b9d2049d3815f5d64f735f9c68dfd"
+    },
+    {
+      "directory": "overflow-max-complete-atomicity-final",
+      "overallExit": 0,
+      "selectedPassingCases": [
+        {
+          "case": "ama.task.Task08ZOverflowIT#signedLongMaximumDoesNotWrapAndAllocationExhaustionReturnsNoToken",
+          "xml": "artifacts/phase-b/b-remaining/task-08/overflow-max-complete-atomicity-final/integration-tests-TEST-ama.task.Task08ZOverflowIT.xml",
+          "xmlSha256": "f29ae08c860042a286eaa9ca1f1452053e8de4f5f61f16d86cd5ddad490ef746"
+        }
+      ],
+      "selectedCount": 1,
+      "productionSourceMatchesFinal": true,
+      "sourceManifestSha256": "cdea0e82283818be5d6e76fca4999d9b8fdcac6fb52f524ab573a9d8b0e8b33b"
+    }
+  ],
+  "units": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "*"
+    ],
+    "exit": 0,
+    "reports": [
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.config.json.DraftConfirmationHashTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.storage.FileBackendDefinitionsTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.transcript.MeasuredTextTranscriptParserTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.storage.DeadlineInputStreamTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.task.TaskMetadataTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.config.json.SavedTranscriptAdmissionTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/core-TEST-ama.transcript.TranscriptImportProducerTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/api-TEST-ama.api.IdentityContractsTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/api-TEST-ama.api.HttpRevisionTokensTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/api-TEST-ama.api.TranscriptWireTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/api-TEST-ama.api.FileConfigurationTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/api-TEST-ama.api.IdentitySecurityTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/worker-TEST-ama.worker.WorkerShutdownTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/worker-TEST-ama.worker.WorkerLoopTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/integration-tests-TEST-ama.storage.ContractFixtureTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/integration-tests-TEST-ama.support.ContractClientTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/units-final/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml"
+    ],
+    "elapsedSeconds": 39.466909885406494,
+    "counts": {
+      "tests": 254,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "mavenConfig": null
+  },
+  "sourceCarryQualifications": [
+    "All selected windows have exact identical final production Java/SQL hashes.",
+    "Final 8 schema/budget cases are complete passing XML from the interrupted combined run; that whole run is NOT PASS.",
+    "Inherited76 and historical3 were each run once, with exact separate copy lineage; originals were not invoked.",
+    "Probe parameter snapshot changed from null-rejecting Map.copyOf to immutable null-tolerant TreeMap after earlier suites. All earlier measured SQL/control/result behavior remains unchanged for their non-null parameter maps; overflow exercises actual null inputs.",
+    "Task08Fixture marker helper added diagnostic assertions after an unexplained intermediate Optional failure; no claimed root cause or production fix. DataSource/policy behavior unchanged.",
+    "Cursor helper/boundaries are final passing recovery-window source; one trailing whitespace character was removed after execution, without executable changes.",
+    "Restore case passed in overflow-resume-final; subsequent edits were confined to MAX case continuation/actual1062/full-graph assertions. Only final MAX passing case is counted.",
+    "No overlapping diagnostic/repeated execution is added to unique count. Initial empty-table1SQL/0rows passed before null-trace failure, retained only as partial assertion evidence, not an additional test PASS."
+  ]
+}

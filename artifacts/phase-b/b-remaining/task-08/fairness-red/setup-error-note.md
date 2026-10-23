@@ -1,0 +1,1 @@
+Setup errors, not behavioral RED: both tests reached snapshot before scanner but used default id ordering for task_outbox. Actual captured metadata shows primary key sequence_id. Fix only explicit snapshot order; retain same 130 genuine markers per target and all failed evidence.

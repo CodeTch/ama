@@ -1,0 +1,17 @@
+--- backend/integration-tests/src/test/java/ama/task/ModelPermitIT.java
++++ backend/integration-tests/src/test/java/ama/task/Task08InheritedModelPermitIT.java
+@@ -2,10 +2,10 @@
+ import ama.contract.TaskContracts.*;import ama.contract.ExternalContracts.*;
+ import org.junit.jupiter.api.*;import java.util.*;import java.time.*;import java.util.concurrent.*;
+ import static org.junit.jupiter.api.Assertions.*;
+-class ModelPermitIT {
+- TaskFixture f;JdbcTaskQueue q;JdbcExternalOperations e;String model;
+- @BeforeEach void setup(){f=new TaskFixture();q=f.queue();e=new JdbcExternalOperations(q);model="TEST_"+UUID.randomUUID();}
+- OperationToken token(){var s=f.spec();var l=f.claimed(q,s);return e.beginExternal(l,new ExternalRequest("TEST_CALL",s.producerKey(),TaskFixture.hash(s.producerKey()),TaskFixture.hash(s.input().id()),"test-v1:"+s.input().id())).orElseThrow();}
++class Task08InheritedModelPermitIT {
++ Task08InheritedFixture f;JdbcTaskQueue q;JdbcExternalOperations e;String model;
++ @BeforeEach void setup(){f=new Task08InheritedFixture();q=f.queue();e=new JdbcExternalOperations(q,new ReconciliationScanBudget(16,512));model="TEST_"+UUID.randomUUID();}
++ OperationToken token(){var s=f.spec();var l=f.claimed(q,s);return e.beginExternal(l,new ExternalRequest("TEST_CALL",s.producerKey(),Task08InheritedFixture.hash(s.producerKey()),Task08InheritedFixture.hash(s.input().id()),"test-v1:"+s.input().id())).orElseThrow();}
+  JdbcModelPermitPool pool(int capacity,long revision,boolean enabled,ModelConfiguration.CutoffPolicy cutoff){return new JdbcModelPermitPool(e,Map.of(model,new ModelConfiguration(model,capacity,revision,enabled,cutoff)),(t,m,d)->{if(!m.startsWith("TEST_"))throw new IllegalArgumentException();});}
+  @Test void concurrentAdmissionRetainsNullDeadlineAfterTimeout()throws Exception{var p=pool(1,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT);p.configure();var a=token();var b=token();var go=new CountDownLatch(1);try(var threads=Executors.newFixedThreadPool(2)){var x=threads.submit(()->{go.await();return p.acquire(a,model,null);});var y=threads.submit(()->{go.await();return p.acquire(b,model,null);});go.countDown();var one=x.get(5,TimeUnit.SECONDS);var two=y.get(5,TimeUnit.SECONDS);assertEquals(1,(one.isPresent()?1:0)+(two.isPresent()?1:0));var permit=one.orElseGet(two::orElseThrow);f.j.update("UPDATE external_operation SET reconcile_expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=?",one.isPresent()?a.operationId():b.operationId());assertFalse(p.settled(permit));assertEquals(1,f.j.queryForObject("SELECT COUNT(*) FROM model_reservation WHERE model=? AND safe_deadline IS NULL AND settled_at IS NULL",Integer.class,model));}}
+  @Test void unknownDisabledAndUnprovenDeadlineFailClosed(){var p=pool(1,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT);p.configure();var t=token();assertTrue(new JdbcModelPermitPool(e,Map.of(),(a,b,c)->{}).acquire(t,model,null).isEmpty());assertThrows(IllegalArgumentException.class,()->p.acquire(t,model,Instant.now().plusSeconds(60)));var disabled=pool(1,2,false,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT);disabled.configure();assertTrue(p.acquire(t,model,null).isEmpty());assertTrue(disabled.acquire(t,model,null).isEmpty());}

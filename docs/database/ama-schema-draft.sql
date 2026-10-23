@@ -1,4 +1,4 @@
--- B00-1.5-runtime-metadata: REVIEW ONLY; never place this file in Flyway locations.
+-- B00-1.6-reconcile-scan: REVIEW ONLY; never place this file in Flyway locations.
 
 -- All future tables exist ONLY in the disposable review database.
 
@@ -345,6 +345,7 @@ CREATE TABLE durable_task (
   INDEX task_ready (pool,state,available_at,id),
   INDEX task_expired (pool,state,expires_at,id),
   INDEX task_subject_history (subject_kind,subject_id,created_at,id),
+  INDEX task_input_lookup (input_kind,input_id,id),
   CONSTRAINT ck_durable_task_0 CHECK (state IN ('READY','RUNNING','RECONCILING','SUCCEEDED','FAILED','CANCELLED','STALE')),
   CONSTRAINT ck_durable_task_1 CHECK (max_attempts > 0),
   CONSTRAINT ck_durable_task_2 CHECK (state <> 'RUNNING' OR (lease_owner IS NOT NULL AND expires_at IS NOT NULL))
@@ -381,9 +382,11 @@ CREATE TABLE external_operation (
   `subject_kind` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `subject_id` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
   `current_execution_no` bigint unsigned NOT NULL,
+  `reconcile_scan_seq` bigint NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (id),
   UNIQUE INDEX external_key (operation_kind,business_key),
   INDEX external_due (state,next_check_at,id),
+  UNIQUE INDEX external_reconcile_scan (reconcile_scan_seq),
   CONSTRAINT ck_external_operation_0 CHECK (state IN ('MARKED','UNKNOWN','RETRY_QUEUED','SUCCEEDED','FAILED','MANUAL_REQUIRED')),
   CONSTRAINT ck_external_operation_1 CHECK (current_execution_no > 0)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;

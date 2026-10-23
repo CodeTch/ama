@@ -1,0 +1,260 @@
+{
+  "target" : "behavior",
+  "scope" : "Read-only retained control fixture state; no company pipeline/HA/capacity claim",
+  "history" : [ {
+    "installed_rank" : "1",
+    "version" : "001",
+    "description" : "foundation",
+    "type" : "SQL",
+    "script" : "V001__foundation.sql",
+    "checksum" : "1201435595",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:43:55",
+    "execution_time" : "93",
+    "success" : "1"
+  }, {
+    "installed_rank" : "2",
+    "version" : "002",
+    "description" : "identity acl",
+    "type" : "SQL",
+    "script" : "V002__identity_acl.sql",
+    "checksum" : "1757300424",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:43:55",
+    "execution_time" : "211",
+    "success" : "1"
+  }, {
+    "installed_rank" : "3",
+    "version" : "005",
+    "description" : "tasks outbox",
+    "type" : "SQL",
+    "script" : "V005__tasks_outbox.sql",
+    "checksum" : "-1999355348",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:43:56",
+    "execution_time" : "447",
+    "success" : "1"
+  }, {
+    "installed_rank" : "4",
+    "version" : "006",
+    "description" : "audit metadata",
+    "type" : "SQL",
+    "script" : "V006__audit_metadata.sql",
+    "checksum" : "-1744360556",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:43:56",
+    "execution_time" : "181",
+    "success" : "1"
+  }, {
+    "installed_rank" : "5",
+    "version" : "007",
+    "description" : "identity sessions",
+    "type" : "SQL",
+    "script" : "V007__identity_sessions.sql",
+    "checksum" : "157746768",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:43:57",
+    "execution_time" : "669",
+    "success" : "1"
+  }, {
+    "installed_rank" : "6",
+    "version" : "008",
+    "description" : "meeting schema",
+    "type" : "SQL",
+    "script" : "V008__meeting_schema.sql",
+    "checksum" : "-1747387036",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:00",
+    "execution_time" : "3061",
+    "success" : "1"
+  }, {
+    "installed_rank" : "7",
+    "version" : "009",
+    "description" : "file schema",
+    "type" : "SQL",
+    "script" : "V009__file_schema.sql",
+    "checksum" : "-287948759",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:02",
+    "execution_time" : "2148",
+    "success" : "1"
+  }, {
+    "installed_rank" : "8",
+    "version" : "010",
+    "description" : "reliable execution",
+    "type" : "SQL",
+    "script" : "V010__reliable_execution.sql",
+    "checksum" : "-1187397378",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:05",
+    "execution_time" : "2857",
+    "success" : "1"
+  }, {
+    "installed_rank" : "9",
+    "version" : "011",
+    "description" : "transcript schema",
+    "type" : "SQL",
+    "script" : "V011__transcript_schema.sql",
+    "checksum" : "-286330771",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:10",
+    "execution_time" : "4846",
+    "success" : "1"
+  }, {
+    "installed_rank" : "10",
+    "version" : "011.1",
+    "description" : "transcript material index",
+    "type" : "SQL",
+    "script" : "V011_1__transcript_material_index.sql",
+    "checksum" : "-570494170",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:10",
+    "execution_time" : "49",
+    "success" : "1"
+  }, {
+    "installed_rank" : "11",
+    "version" : "012",
+    "description" : "minutes evidence",
+    "type" : "SQL",
+    "script" : "V012__minutes_evidence.sql",
+    "checksum" : "2101765957",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:19",
+    "execution_time" : "9311",
+    "success" : "1"
+  }, {
+    "installed_rank" : "12",
+    "version" : "013",
+    "description" : "publications",
+    "type" : "SQL",
+    "script" : "V013__publications.sql",
+    "checksum" : "-847352333",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:23",
+    "execution_time" : "4189",
+    "success" : "1"
+  }, {
+    "installed_rank" : "13",
+    "version" : "013.1",
+    "description" : "b runtime metadata",
+    "type" : "SQL",
+    "script" : "V013_1__b_runtime_metadata.sql",
+    "checksum" : "-1898004857",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:24",
+    "execution_time" : "394",
+    "success" : "1"
+  }, {
+    "installed_rank" : "14",
+    "version" : "013.2",
+    "description" : "task input lookup",
+    "type" : "SQL",
+    "script" : "V013_2__task_input_lookup.sql",
+    "checksum" : "-1098175378",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:24",
+    "execution_time" : "52",
+    "success" : "1"
+  }, {
+    "installed_rank" : "15",
+    "version" : "013.3",
+    "description" : "external reconcile scan",
+    "type" : "SQL",
+    "script" : "V013_3__external_reconcile_scan.sql",
+    "checksum" : "-385117638",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:47:50",
+    "execution_time" : "218",
+    "success" : "1"
+  } ],
+  "engine" : [ {
+    "version" : "8.4.6",
+    "metadataWaitSeconds" : "5",
+    "sqlMode" : "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+  } ],
+  "external_operation" : [ {
+    "state" : "FAILED",
+    "count" : "2"
+  }, {
+    "state" : "MANUAL_REQUIRED",
+    "count" : "3"
+  }, {
+    "state" : "MARKED",
+    "count" : "314"
+  }, {
+    "state" : "RETRY_QUEUED",
+    "count" : "5"
+  }, {
+    "state" : "SUCCEEDED",
+    "count" : "10"
+  }, {
+    "state" : "UNKNOWN",
+    "count" : "10"
+  } ],
+  "external_execution" : [ {
+    "state" : "FAILED",
+    "count" : "12"
+  }, {
+    "state" : "MARKED",
+    "count" : "316"
+  }, {
+    "state" : "PREPARED",
+    "count" : "5"
+  }, {
+    "state" : "SUCCEEDED",
+    "count" : "10"
+  }, {
+    "state" : "UNKNOWN",
+    "count" : "11"
+  } ],
+  "durable_task" : [ {
+    "state" : "FAILED",
+    "count" : "13"
+  }, {
+    "state" : "READY",
+    "count" : "20"
+  }, {
+    "state" : "RECONCILING",
+    "count" : "327"
+  }, {
+    "state" : "RUNNING",
+    "count" : "30"
+  }, {
+    "state" : "STALE",
+    "count" : "4"
+  }, {
+    "state" : "SUCCEEDED",
+    "count" : "10"
+  } ],
+  "task_attempt" : [ {
+    "outcome" : null,
+    "count" : "378"
+  }, {
+    "outcome" : "EXPIRED",
+    "count" : "5"
+  }, {
+    "outcome" : "RETRYABLE",
+    "count" : "1"
+  }, {
+    "outcome" : "SUCCEEDED",
+    "count" : "4"
+  } ],
+  "outbox_consumer" : [ {
+    "count" : "2"
+  } ],
+  "model_reservation" : [ {
+    "count" : "7"
+  } ],
+  "ordinal" : [ {
+    "rowsTotal" : "344",
+    "distinctOrdinals" : "344",
+    "minimum" : "1",
+    "maximum" : "348",
+    "invalid" : "0"
+  } ],
+  "controlCounts" : [ {
+    "outboxRows" : "819",
+    "meetings" : "435",
+    "identities" : "438"
+  } ]
+}

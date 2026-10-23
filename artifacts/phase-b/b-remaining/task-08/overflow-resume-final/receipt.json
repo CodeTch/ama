@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task08ZOverflowIT"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/overflow-resume-final/integration-tests-TEST-ama.task.Task08ZOverflowIT.xml"
+  ],
+  "elapsedSeconds": 14.639314413070679,
+  "counts": {
+    "tests": 2,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task08OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

@@ -1,0 +1,27 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task08Inherited*IT"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedB06QueueSeamsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedModelPermitIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedExternalExecutionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxFenceIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedReconciliationWorkerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedPreparedCompletionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedTaskLeaseIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/inherited-forward-final/integration-tests-TEST-ama.task.Task08InheritedOutboxConsumerIT.xml"
+  ],
+  "elapsedSeconds": 59.76568794250488,
+  "counts": {
+    "tests": 76,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task08OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

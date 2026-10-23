@@ -1,4 +1,4 @@
-# AMA 数据字典 — B00-1.5-runtime-metadata
+# AMA 数据字典 — B00-1.6-reconcile-scan
 
 生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。
 
@@ -573,6 +573,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - 索引 `task_ready(pool,state,available_at,id)`：分开扫描 READY。
 - 索引 `task_expired(pool,state,expires_at,id)`：分开扫描过期 RUNNING。
 - 索引 `task_subject_history(subject_kind,subject_id,created_at,id)`：聚合任务历史。
+- 索引 `task_input_lookup(input_kind,input_id,id)`：固定 typed 输入的完整任务并集有界枚举。
 - CHECK `ck_durable_task_0`：`state IN ('READY','RUNNING','RECONCILING','SUCCEEDED','FAILED','CANCELLED','STALE')`。
 - CHECK `ck_durable_task_1`：`max_attempts > 0`。
 - CHECK `ck_durable_task_2`：`state <> 'RUNNING' OR (lease_owner IS NOT NULL AND expires_at IS NOT NULL)`。
@@ -620,15 +621,17 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |subject_kind|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|聚合类型|
 |subject_id|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|聚合ID|
 |current_execution_no|`bigint unsigned`|否|无|当前执行代际；初次1|
+|reconcile_scan_seq|`bigint`|否|无|服务器 AUTO_INCREMENT 分配的正 Java long 扫描序号；持久化后应用不可改写；无显式默认是服务器分配例外，写入省略本列|
 
 主键：`id`。
 - 唯一约束 `external_key(operation_kind,business_key)`：同类型业务键唯一。
 - 索引 `external_due(state,next_check_at,id)`：到期对账。
+- 唯一约束 `external_reconcile_scan(reconcile_scan_seq)`：不可变序号原始 keyset 扫描与固定高水位。
 - CHECK `ck_external_operation_0`：`state IN ('MARKED','UNKNOWN','RETRY_QUEUED','SUCCEEDED','FAILED','MANUAL_REQUIRED')`。
 - CHECK `ck_external_operation_1`：`current_execution_no > 0`。
 - FK `fk_external_operation_0`：`subject_kind,subject_id` → `task_subject(subject_kind,subject_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：operation_kind/business_key全历史唯一；不归单个task。current_execution_no由同聚合锁下CAS；独立reconcile_epoch跨执行永久递增、不清零。当前执行由(operation_id,no)应用校验。仅FAILED且当前execution有确定零效果证据可追加执行；UNKNOWN禁止重发。
+更新/删除与完整性：operation_kind/business_key全历史唯一；不归单个task。current_execution_no由同聚合锁下CAS；独立reconcile_epoch跨执行永久递增、不清零。当前执行由(operation_id,no)应用校验。仅FAILED且当前execution有确定零效果证据可追加执行；UNKNOWN禁止重发；reconcile_scan_seq仅作有界枚举元数据，不授予任务/发送权限；服务器分配正long，应用持久化后不改写；受控恢复保留映射并完整校验正值/唯一性。
 
 ## task_outbox_sequence
 

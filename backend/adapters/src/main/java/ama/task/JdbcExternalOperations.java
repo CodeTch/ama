@@ -6,6 +6,7 @@ import java.sql.*;
 import java.lang.ref.WeakReference;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 import org.springframework.jdbc.core.JdbcTemplate;
 import static ama.task.JdbcTaskQueue.*;
 
@@ -20,7 +21,15 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
  private synchronized void revokeCallAuthority(OperationToken token){callAuthorities.removeIf(ref->ref.get()==null||ref.get()==token);}
  record Operation(String id,String kind,String key,String hash,String state,SubjectRef subject,long execution,long epoch,String owner,Instant expiry){}
  record Execution(String id,String operation,long number,String task,String state,String hash,String manifest,String basis,String evidence,Instant verified){}
- public JdbcExternalOperations(JdbcTaskQueue queue){q=queue;j=queue.jdbc;}
+ private final ReconciliationScanBudget scanBudget;
+ private final ReentrantLock scanLock=new ReentrantLock();
+ // Enumeration only: no durable claim, cached policy, or task/send capability lives here.
+ private final ScanCursor scanCursor=new ScanCursor();
+ private static final class ScanCursor {boolean active;long after;long upper;}
+ private record ScanCandidate(long sequence,String operationId) {}
+ private record ScanOperation(Operation operation,long sequence,Instant nextCheck,boolean due) {}
+ public JdbcExternalOperations(JdbcTaskQueue queue){this(queue,new ReconciliationScanBudget(64,64));}
+ public JdbcExternalOperations(JdbcTaskQueue queue,ReconciliationScanBudget budget){q=Objects.requireNonNull(queue);j=queue.jdbc;scanBudget=Objects.requireNonNull(budget);}
  private static Operation op(ResultSet r,int n)throws SQLException{return new Operation(r.getString("id"),r.getString("operation_kind"),r.getString("business_key"),r.getString("request_hash"),r.getString("state"),new SubjectRef(r.getString("subject_kind"),r.getString("subject_id")),r.getLong("current_execution_no"),r.getLong("reconcile_epoch"),r.getString("reconcile_owner"),instant(r,"reconcile_expires_at"));}
  private static Execution ex(ResultSet r,int n)throws SQLException{return new Execution(r.getString("id"),r.getString("operation_id"),r.getLong("execution_no"),r.getString("task_id"),r.getString("state"),r.getString("request_hash"),r.getString("request_manifest"),r.getString("no_effect_basis"),r.getString("no_effect_evidence"),instant(r,"no_effect_verified_at"));}
  Optional<Operation> operation(String id,boolean lock,boolean skip){return j.query("SELECT * FROM external_operation WHERE id=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::op,id).stream().findFirst();}
@@ -63,17 +72,66 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   var ex=execution(seen.id(),seen.execution(),true,skip);if(ex.isEmpty()||!ex.orElseThrow().task().equals(heldTask.orElseThrow().id()))return Optional.empty();
   return Optional.of(new Locked(op.orElseThrow(),ex.orElseThrow(),heldTask.orElseThrow(),domain.orElseThrow()));
  }
+ /** Empty can mean the finite scan budget was consumed; retain this instance across polls. */
  @Override public Optional<OperationToken> claimReconciliation(String owner){
   independent();ama.contract.OutboxContracts.protocolCode(owner);
-  var candidates=j.query("SELECT * FROM external_operation WHERE state IN ('MARKED','UNKNOWN') AND next_check_at<=UTC_TIMESTAMP(6) AND reconcile_expires_at<=UTC_TIMESTAMP(6) ORDER BY next_check_at,id LIMIT 64",JdbcExternalOperations::op);
-  for(var seen:candidates){var answer=q.work(()->{
-   var rows=lock(seen,true);if(rows.isEmpty())return Optional.<OperationToken>empty();var l=rows.orElseThrow();var o=l.op();
-   if(!(o.state().equals("MARKED")||o.state().equals("UNKNOWN"))||o.expiry()==null||o.expiry().isAfter(q.now()))return Optional.<OperationToken>empty();
-   Instant expiry=q.now().plusSeconds(20);j.update("UPDATE external_operation SET reconcile_epoch=reconcile_epoch+1,reconcile_owner=?,reconcile_expires_at=?,next_check_at=? WHERE id=?",owner,sqlTime(expiry),sqlTime(expiry),o.id());
-   return Optional.of(new OperationToken(o.id(),l.execution().id(),o.execution(),o.epoch()+1,owner,expiry,o.subject()));
-  });if(answer.isPresent())return answer;}
-  return Optional.empty();
+  if(!scanLock.tryLock())return Optional.empty();
+  try {
+   if(!scanCursor.active){
+    var maximum=j.query("SELECT reconcile_scan_seq FROM external_operation FORCE INDEX (external_reconcile_scan) ORDER BY reconcile_scan_seq DESC LIMIT 1",(r,n)->r.getLong(1));
+    if(maximum.isEmpty())return Optional.empty();
+    long upper=maximum.getFirst();if(upper<=0)throw new IllegalStateException("Invalid reconciliation scan ordinal");
+    scanCursor.after=0;scanCursor.upper=upper;scanCursor.active=true;
+   }
+   int consumed=0;
+   while(consumed<scanBudget.maxRowsPerCall()){
+    int limit=Math.min(scanBudget.pageSize(),scanBudget.maxRowsPerCall()-consumed);
+    var page=j.query("SELECT reconcile_scan_seq,id FROM external_operation FORCE INDEX (external_reconcile_scan) WHERE reconcile_scan_seq > ? AND reconcile_scan_seq <= ? ORDER BY reconcile_scan_seq LIMIT ?",
+      (r,n)->new ScanCandidate(r.getLong(1),r.getString(2)),scanCursor.after,scanCursor.upper,limit);
+    if(page.isEmpty()){scanCursor.active=false;return Optional.empty();}
+    for(int position=0;position<page.size();position++){
+     var candidate=page.get(position);
+     if(candidate.sequence()<=scanCursor.after||candidate.sequence()>scanCursor.upper)throw new IllegalStateException("Invalid reconciliation scan order");
+     // Consume before the independent transaction: held/unknown/error rows cannot pin the head.
+     // A failed commit returns no authority, and this position is revisited on the next pass.
+     scanCursor.after=candidate.sequence();consumed++;
+     var answer=claimCandidate(candidate,owner);
+     boolean finished=scanCursor.after==scanCursor.upper||(page.size()<limit&&position==page.size()-1);
+     if(finished)scanCursor.active=false;
+     if(answer.isPresent()||finished)return answer;
+     // Unconsumed prefetched rows are discarded on success and refetched next call.
+    }
+   }
+   return Optional.empty();
+  } finally {scanLock.unlock();}
  }
+ private Optional<ScanOperation> scanOperation(String id,boolean lock){
+  return j.query("SELECT *, (next_check_at<=UTC_TIMESTAMP(6) AND reconcile_expires_at<=UTC_TIMESTAMP(6)) AS scan_due FROM external_operation WHERE id=?"+(lock?" FOR UPDATE SKIP LOCKED":""),
+    (r,n)->new ScanOperation(op(r,n),r.getLong("reconcile_scan_seq"),instant(r,"next_check_at"),r.getBoolean("scan_due")),id).stream().findFirst();
+ }
+ private static boolean observable(String state){return state.equals("MARKED")||state.equals("UNKNOWN");}
+ private Optional<OperationToken> claimCandidate(ScanCandidate candidate,String owner){return q.work(()->{
+  var initial=scanOperation(candidate.operationId(),false);if(initial.isEmpty())return Optional.empty();var discovered=initial.orElseThrow();var seen=discovered.operation();
+  if(discovered.sequence()!=candidate.sequence())throw new IllegalStateException("Reconciliation scan ordinal changed");
+  if(!observable(seen.state())||!discovered.due())return Optional.empty();
+  var current=execution(seen.id(),seen.execution(),false,false);if(current.isEmpty())return Optional.empty();var seenExecution=current.orElseThrow();
+  var task=q.row(seenExecution.task(),false,false);if(task.isEmpty())return Optional.empty();var seenTask=task.orElseThrow();
+  if(!q.policies.containsKey(seenTask.spec().type()))return Optional.empty();
+  var scope=q.prepareDomain(List.of(seenTask.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,true,null);if(scope.isEmpty())return Optional.empty();
+  if(q.lockDomain(scope.orElseThrow(),seenTask.spec(),true).isEmpty())return Optional.empty();
+  var heldTask=q.row(seenTask.id(),true,true);if(heldTask.isEmpty()||!heldTask.orElseThrow().spec().equals(seenTask.spec()))return Optional.empty();
+  q.policy(heldTask.orElseThrow().spec()).validateInput(heldTask.orElseThrow().spec());
+  var locked=scanOperation(seen.id(),true);if(locked.isEmpty())return Optional.empty();var latest=locked.orElseThrow();var operation=latest.operation();
+  if(latest.sequence()!=candidate.sequence())throw new IllegalStateException("Reconciliation scan ordinal changed");
+  if(operation.execution()!=seen.execution()||!operation.subject().equals(seen.subject())||!operation.subject().equals(heldTask.orElseThrow().spec().subject()))return Optional.empty();
+  var heldExecution=execution(operation.id(),operation.execution(),true,true);if(heldExecution.isEmpty())return Optional.empty();var execution=heldExecution.orElseThrow();
+  if(!execution.id().equals(seenExecution.id())||!execution.operation().equals(operation.id())||execution.number()!=operation.execution()||!execution.task().equals(heldTask.orElseThrow().id()))return Optional.empty();
+  Instant now=q.now();
+  if(!observable(operation.state())||!observable(execution.state())||operation.expiry()==null||latest.nextCheck()==null||operation.expiry().isAfter(now)||latest.nextCheck().isAfter(now))return Optional.empty();
+  Instant expiry=now.plusSeconds(20);
+  j.update("UPDATE external_operation SET reconcile_epoch=reconcile_epoch+1,reconcile_owner=?,reconcile_expires_at=?,next_check_at=? WHERE id=?",owner,sqlTime(expiry),sqlTime(expiry),operation.id());
+  return Optional.of(new OperationToken(operation.id(),execution.id(),operation.execution(),operation.epoch()+1,owner,expiry,operation.subject()));
+ });}
  @Override public boolean renew(OperationToken token){independent();return q.work(()->{
   var seen=operation(token.operationId(),false,false);if(seen.isEmpty())return false;var rows=lock(seen.orElseThrow(),false);if(rows.isEmpty())return false;var l=rows.orElseThrow();if(!valid(l.op(),l.execution(),token))return false;
   j.update("UPDATE external_operation SET reconcile_expires_at=UTC_TIMESTAMP(6)+INTERVAL 20 SECOND,next_check_at=UTC_TIMESTAMP(6)+INTERVAL 20 SECOND WHERE id=?",token.operationId());return true;
