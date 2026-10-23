@@ -1,0 +1,11 @@
+# CURRENT ACTIVE OVERRIDE — Task5 adopted, Task6 next (2026-10-24)
+
+This file/current-state.json/latest progress override every oldpause/active-fix notice. User requests allremaining localcontrolledPhaseB continuously withsubagents/autonomousrecordedrulings. Uniqueproducttree /home/tanren/ama/.worktrees/phase-b-completion, branchcodex/phase-b-completion-20261023. Task1–5 complete/adopted. Task5source c943d15f4a2b9f294e4b7791fb51eb67d3acce5d; scopedreview3a3b3855 SPECPASS/qualityApproved, T5SR01/02/CV1 closed. Original/fix01/fix02rawandallhistoricalquals retained. Rootdocs-onlyadoptionthenfreshsoleTask6author; exactBASEdispatchprovided. Rootneverproductfixes.
+
+Task6 brief task-06-brief.md + prepared/extract/common + adoptedR1 remainbinding. FinalTask5seamrepin c207bc7a/manifestb2b219a8/root99sealsverified, donotredopreflights. Source-first isolatednoninstalledqualification permitted; installedruntimeactivation waits actualpositiveeffectivebudgets/originalminima/correctioninventory+trustedselecteddisableddeclaration/bootcomponentreceipt androotpin. No fabricatedqualification or emptyreader/pending0. NoDDL.
+
+Remaining6→8→7→9→10→11→12→13. Task6/8/7/13prepscomplete;9/10/11sourcepreflightscomplete/rootverified, notimplementation. Task8rootactualengine/history/order/modelownership/independentDDL/freeze/separateACK needed; Task11submissionlogicaluntilpost8exactDDLreview. Task12mustfixT4SR04/05; allopenminors/limits in task-13-pending-issue-register-20261024.md. FinalwholeBASE34cb226a.
+
+RetainonlyownedMySQLCIDeefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502 loopback46653 andRustFSCIDa91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51 loopback45501, currentprivateenv/PKI. Noreset/recreate/repair/outOfOrder/fullinspect/Config.Env/newcontainerscredentialsPKI. Test/Worker512MiB2CPU, native/probe64MiB2CPU. NextauthorfreshUUIDdescendantsunderexistingapprovedP/native/data+runtime/newbuckets allowed withselectedresourceguards, nooldraw/testhelperwrites. SQL13through013.1/frozen9280baea;4727historicalunchanged/currentmodeld309oneexception.
+
+Rootownscentralrecords; stageexactownpaths. MainHEADc71a44a unchanged; precise discoverydocs only, nopush/merge. B01IMMpermanentPARTIAL/B04Q401UNKNOWN/companyservicesabsent/HA/nativeIO/capacityunqualified; noproductionpublish/mail. Continuefullplan, nostopaftermilestone.

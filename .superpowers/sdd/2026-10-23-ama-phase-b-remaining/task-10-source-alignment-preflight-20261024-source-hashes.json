@@ -1,0 +1,1151 @@
+{
+  "kind": "Task10 read-only source alignment preparation; not adoption/runtime qualification",
+  "date": "2026-10-24",
+  "baselineCommit": "857102b917bbef77c38fae3211e3a65207a98c6c",
+  "baselineAdoptedByThisReport": false,
+  "rawHashAlgorithm": "SHA256 over git show committed blob bytes; no newline normalization",
+  "lineCountRule": "len(raw.splitlines())",
+  "report": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-source-alignment-preflight-20261024.md",
+    "sha256": "3724471da16fb362760cb8cf106d853b415c7518b79446c5e93d643307655606",
+    "bytes": 22443,
+    "lineCount": 117
+  },
+  "committedInputs": [
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-editor.md",
+      "sha256": "2acdfa520af07d8cbee0a2536a2ee8df44157cc13009d96e6793da49ff92cbb1",
+      "bytes": 4687,
+      "lineCount": 15,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-controlled-runtime.md",
+      "sha256": "8bec16ce2935cef50aee5771c4be3ea899db11fed28e4255b2feeb2f7a016b54",
+      "bytes": 20733,
+      "lineCount": 81,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-authority-external-protocols.md",
+      "sha256": "8a5781937fd75f88b77154728933481f5009ac772ffcb3297d9eba55cf82130d",
+      "bytes": 4904,
+      "lineCount": 31,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-generation.md",
+      "sha256": "99746a067ed0386f15817d06c09762feb87d2071387fc50d50d47b6195b109db",
+      "bytes": 4449,
+      "lineCount": 17,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-saved-transcript.md",
+      "sha256": "8cd56e23dcab78cebd9553a93b9ccab1d8d72f4fad72d9c7e800dbb3fe3a7ede",
+      "bytes": 3796,
+      "lineCount": 13,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-import-worker.md",
+      "sha256": "391be2a974eede3f80ae472a1a48c7b0169fc5d66577c5308eee3b484db98890",
+      "bytes": 4064,
+      "lineCount": 15,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-reconciliation-fairness.md",
+      "sha256": "8535567be287f8baed0a1bde8f47dbc1f4993f4581dbb4f88ea48bcbcbde0907",
+      "bytes": 3365,
+      "lineCount": 13,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-22-ama-minutes-ux-decisions.md",
+      "sha256": "41341d06506c1eb352d1654b93100995a4bfbc6bbebcb3fe5774d38a3ed18413",
+      "bytes": 3382,
+      "lineCount": 27,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-editor-design/manifest.json",
+      "sha256": "18b31c8079b60c68edb50ce8f3259595ec3b0561ad32e081b9f02f1613121e91",
+      "bytes": 534,
+      "lineCount": 7,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-editor-design/task-10-minutes-editor-review-design.md",
+      "sha256": "fb0ea71f985ed280156ad88ea981c6f70ca5678e79043fef32c4f263e3b3e96f",
+      "bytes": 51628,
+      "lineCount": 276,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        },
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-editor-design/task-10-minutes-editor-review-design-review.md",
+      "sha256": "e9c32d58283d454b1e650163c3c110e395acb2b2400e4206c82bd089ebbd3b3e",
+      "bytes": 12727,
+      "lineCount": 57,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        },
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-editor-design/task-09-10-shared-rank-ruling.md",
+      "sha256": "3b10ab12f46f7b4a2f70a91871f20d4f4052662b1cfee2b08700b02188b6bc75",
+      "bytes": 3478,
+      "lineCount": 13,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        },
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/manifest.json",
+      "sha256": "d2d637d96a69df2ff205e7467ef9e3bdf3a8cb872ea4cb5abe3abeeead4666ff",
+      "bytes": 989,
+      "lineCount": 11,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design.md",
+      "sha256": "cf174e2a54827da3c2e2152dbddf7cfc292680882e676f0291fd1c014835c56b",
+      "bytes": 70518,
+      "lineCount": 309,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        },
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-r1.md",
+      "sha256": "b1b3343a1216b9df621c3db560412fdde908499890823c9e75820e620969add2",
+      "bytes": 70871,
+      "lineCount": 309,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        },
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-r1-closure.md",
+      "sha256": "8192adacd6a1e333524502cf21e6283a35b0f34dd7b0d96038296da3844c4fe5",
+      "bytes": 4557,
+      "lineCount": 28,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        },
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-review.md",
+      "sha256": "3a2458bc60723256906103b260bdc20afab9e9cd2f83ad9d22da276b794d7e1a",
+      "bytes": 12975,
+      "lineCount": 49,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        },
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-r1-review.md",
+      "sha256": "2c563fb7485c3af5905f1f23d78d5af2edbd40ba570154431815aa14364e3103",
+      "bytes": 4564,
+      "lineCount": 44,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        },
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-design-r1-review-diff.txt",
+      "sha256": "46dbb776c11d45d7d66236c520ecedf27b3a72ee706db53804449f6d59ca2700",
+      "bytes": 17316,
+      "lineCount": 80,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        },
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-runtime-design/task-07-root-review-rulings.md",
+      "sha256": "5ee7b6e9ec9e11cc5d669daac67e8b9f649b8cb6874a4a181b17454d25d81b0c",
+      "bytes": 4491,
+      "lineCount": 15,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-runtime-design/task-07-attempt-receipt-clarification.md",
+      "sha256": "2a5ea32975ef486375f8c23656ec2c5bf49f0f58b27f987793307329d4f7626a",
+      "bytes": 1812,
+      "lineCount": 7,
+      "inspections": [
+        {
+          "mode": "complete authority content read (large original/R1 aligned with complete byte comparison)"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "bytes": 21260,
+      "lineCount": 335,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "bytes": 1817,
+      "lineCount": 34,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+      "bytes": 7661,
+      "lineCount": 113,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              140
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "sha256": "a37aeb05d3ae8aa95434b34c324887891262b2e63515ca4a29771e8ed3ff2db9",
+      "bytes": 36849,
+      "lineCount": 350,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              110
+            ],
+            [
+              160,
+              270
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+      "sha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8",
+      "bytes": 16170,
+      "lineCount": 158,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              100
+            ],
+            [
+              141,
+              158
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ReviewCoverageEvaluator.java",
+      "sha256": "990f5ad5fd5adee6fc7f9ed221994baafc71538228798fb5dc304243ebb665fe",
+      "bytes": 2457,
+      "lineCount": 32,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+      "sha256": "32f04f856dc98080e73fa8346c46e757df3db7b60c7b809c43be6174e7ba7812",
+      "bytes": 18056,
+      "lineCount": 179,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/CreationSupport.java",
+      "sha256": "003b2d0081938c011caaee11748a4b6de46d9388e47f5f9bd6d759b3c4148186",
+      "bytes": 1505,
+      "lineCount": 23,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OutputValidation.java",
+      "sha256": "98df9ea7b45ee5266327b1336adde5f01e82a701fae6f6e73c21b6f0f06e6c06",
+      "bytes": 3752,
+      "lineCount": 57,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              80
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java",
+      "sha256": "0b158c87197700310499935b8b6ff7e60d8b4ba971818d02c6caa4f812ab3166",
+      "bytes": 15682,
+      "lineCount": 194,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              170
+            ],
+            [
+              300,
+              375
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "sha256": "1d7b50ffe57a4116ad267f76f7b8c2e213d5b83622652a1d8cb14fa8a728765d",
+      "bytes": 38321,
+      "lineCount": 370,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              100
+            ],
+            [
+              250,
+              345
+            ]
+          ]
+        },
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              50,
+              70
+            ],
+            [
+              344,
+              370
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/storage/CompleteReadPolicy.java",
+      "sha256": "7368ebeb3e63cf55d30feb13cb2732164bf8bfb0b9c106401f38b0f1193e5d56",
+      "bytes": 1541,
+      "lineCount": 22,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "sha256": "75917561fcd0e91cdf097997189a3c28d7998bbaf28db62c16a8162f6bdb64ec",
+      "bytes": 10622,
+      "lineCount": 135,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              20,
+              175
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MeetingController.java",
+      "sha256": "0329f1afa1f2a2484a0f1c904de593bf298a2f31525f9664f4a7bac63e6c06ea",
+      "bytes": 5095,
+      "lineCount": 64,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              25,
+              100
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "sha256": "05d9965f0d448d37295680288aeb46c79d3908fc943edb6955c10d0fec94bc64",
+      "bytes": 21398,
+      "lineCount": 218,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              90,
+              191
+            ]
+          ]
+        },
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "sha256": "4056e73593bbc7769ea947083cfd82bb1c8581f109a605cc13330e7683094a4e",
+      "bytes": 14304,
+      "lineCount": 148,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              24,
+              55
+            ],
+            [
+              102,
+              148
+            ]
+          ]
+        },
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/ConfinedTaskCompletionPolicy.java",
+      "sha256": "80676bf76d4bc895a529b0d197fd5887eadf32594f3e34080ab581c68e66bc9e",
+      "bytes": 456,
+      "lineCount": 11,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        },
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+      "sha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620",
+      "bytes": 2647,
+      "lineCount": 43,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/HttpRevisionTokens.java",
+      "sha256": "f81b6e91ccc5e69bda2e97c1198b944cceab66bec401ebba0fd9c55eec8edf06",
+      "bytes": 1778,
+      "lineCount": 32,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/pom.xml",
+      "sha256": "420963360d124c233cad3f73488bcc842d461e860f64b4830ba90ab900338519",
+      "bytes": 1565,
+      "lineCount": 9,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/support/MysqlTestDatabase.java",
+      "sha256": "a734c9bc0c30e0e176d28fe1505c4d7d0a2a7dc188a09f31d4c38f79a96c878a",
+      "bytes": 1465,
+      "lineCount": 31,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "pom.xml",
+      "sha256": "5b3cb723fab6d1763f7862662c0d5bc5e47f29baafd7633f24636a409a767aa3",
+      "bytes": 1179,
+      "lineCount": 9,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/FileConfiguration.java",
+      "sha256": "d2042b9a6fad67c0933d2fc9eb6b269fc924da8e65a44e25be6cd398fb7e6c69",
+      "bytes": 2998,
+      "lineCount": 89,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              20,
+              100
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/RuntimeConfiguration.java",
+      "sha256": "07e6e76995604de607a521cdc10404d53e7a0d9ae8e3acdc746d2039d4e24701",
+      "bytes": 3121,
+      "lineCount": 53,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+      "sha256": "6230e84a6294c5252d149db66d8ba1ef2eca50bb2e26eff5b4a25851eecdee08",
+      "bytes": 1613,
+      "lineCount": 25,
+      "inspections": [
+        {
+          "mode": "complete source content"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/TaskFixture.java",
+      "sha256": "032d7842bfaf1f0ff71fecc5a4674bed4dcd5057b555a9f9000e87d60f7dd22d",
+      "bytes": 5518,
+      "lineCount": 65,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              75
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityFixture.java",
+      "sha256": "9ab6351f78f7c3c48506365a71f57191a8d2521d68f8a3d06559200506f6abeb",
+      "bytes": 10729,
+      "lineCount": 120,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              75
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/meeting/MeetingCreationGuardIT.java",
+      "sha256": "1360be72fafbfc54a919758347a322445e26db1305c355c7e9e1f60bf1bdaffd",
+      "bytes": 9667,
+      "lineCount": 129,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              18,
+              28
+            ],
+            [
+              50,
+              73
+            ],
+            [
+              105,
+              129
+            ]
+          ]
+        },
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "sha256": "410331e9d9957440c459a1b3ac6558bbad510c82416fa6b57be75c08393e183a",
+      "bytes": 17372,
+      "lineCount": 245,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              130
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/BoundedTranscriptMetadata.java",
+      "sha256": "508c12c3a358d58560f9bf5d2216cbadb63c93bbcb42d23307d3d996130e663e",
+      "bytes": 5147,
+      "lineCount": 46,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              110
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/RowsetProjection.java",
+      "sha256": "c550bc224504152c6eee559a7a5ee99f2709ac4ea2ccb2cd8da1d16baf16f4ec",
+      "bytes": 4246,
+      "lineCount": 47,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              1,
+              70
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java",
+      "sha256": "b5cf7dd3eb1941f2152ceaa8bd4c217369f3cdddf06250d98c87bfed3c15aa61",
+      "bytes": 20136,
+      "lineCount": 275,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              80,
+              130
+            ]
+          ]
+        },
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "sha256": "79adef52e2fc6886b0a279d7272ab5e855ee5d6586b66e0dcd629b81035a3c0a",
+      "bytes": 21843,
+      "lineCount": 185,
+      "inspections": [
+        {
+          "mode": "focused source content",
+          "ranges": [
+            [
+              172,
+              185
+            ]
+          ]
+        },
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ImportTaskDomainPolicy.java",
+      "sha256": "f1f75c031c0129ee0f3b9d9e5d737d4dca5c7cf0d72e359befa409ab20bab342",
+      "bytes": 14273,
+      "lineCount": 174,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "sha256": "63e84274395c74c8d5e5375fcfc898c5cc39f19447318a2093eebaff1496ad19",
+      "bytes": 19114,
+      "lineCount": 176,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "sha256": "8a06a569ba19b109d3ecbb0217bcacb7c6c1c04c6136bb610441e2a23d19431e",
+      "bytes": 13176,
+      "lineCount": 221,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "web/src/App.vue",
+      "sha256": "5733fd9e053df499062f136a281ca2d4b32796e52fac408ac59a596ccc384070",
+      "bytes": 3399,
+      "lineCount": 34,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "web/src/shared/api/client.ts",
+      "sha256": "cf52d1293d4e7eba0befcea34b4e2934984cf56fdffd707af42375eeaf68f4e0",
+      "bytes": 1350,
+      "lineCount": 21,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/ProcessingConfiguration.java",
+      "sha256": "ed895ba2e6e514e28bb687dc62497fa166f86c5961516afa1a9ec892754d9001",
+      "bytes": 8384,
+      "lineCount": 113,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "sha256": "5f1c9a5a9b5a3268dcb99a93f24cede2c1686e653a8db67e4220423896d6f677",
+      "bytes": 3303,
+      "lineCount": 42,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+      "bytes": 11205,
+      "lineCount": 162,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "bytes": 35136,
+      "lineCount": 225,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "sha256": "0855b5d4a130a77aa88a341c1ab203a5843300d04f388d9a4bb1a5eb6ce38ad8",
+      "bytes": 2390,
+      "lineCount": 64,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "contracts/openapi/meetings.yaml",
+      "sha256": "87335ee4a182dcaf47b8fc86f53a782c82ab349e44eb879830840ea88681d74b",
+      "bytes": 10136,
+      "lineCount": 304,
+      "inspections": [
+        {
+          "mode": "fixed-commit focused symbol/line scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/HashProfilesTest.java",
+      "sha256": "d3084a6dda0e1f910dc3adacc4b71b841a585145797d444ebf0341dfdcd56574",
+      "bytes": 7541,
+      "lineCount": 88,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/StoredSourceGraphTest.java",
+      "sha256": "2da3c1eed8202db20afc2d736bd41f1d220556ff600f66b65729b14b363ce9c1",
+      "bytes": 10743,
+      "lineCount": 117,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/FinalAndCoverageTest.java",
+      "sha256": "a63d4dbbdf62209d132c59cffb2b42bc7c17cd65a84283d3fa1be9de719b48bf",
+      "bytes": 3468,
+      "lineCount": 45,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/SourceAndSupportTest.java",
+      "sha256": "2e0cc389fb909d033bed176175b2097e30ead12bce3706b6e11430b6960f4bc0",
+      "bytes": 5950,
+      "lineCount": 69,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/ConfigBindingsTest.java",
+      "sha256": "a7742d7571a060e101592bd0ee316273f1050dc5406e2999828b545afdf123cd",
+      "bytes": 8480,
+      "lineCount": 75,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/minutes/json/StrictMinutesJsonReaderTest.java",
+      "sha256": "fb5e79d53f56b5c55f692a8fedeb6feb0015168c27ef15e20ef773a536b206f6",
+      "bytes": 8390,
+      "lineCount": 94,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/meeting/MeetingConcurrencyIT.java",
+      "sha256": "ec3a1d20605be74131350fd02848fd8bd64ece9e26a6862f215cfe2651ccb3d3",
+      "bytes": 13198,
+      "lineCount": 151,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/TranscriptAuthorityReviewIT.java",
+      "sha256": "295311c5c76cc8822589d712e924c5387278790d9959a6b798833ee4e59400aa",
+      "bytes": 18604,
+      "lineCount": 280,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task05AfterTaskIT.java",
+      "sha256": "dd1919ea092faa5eeaf7be61b74588442a8035e87b22a04cc4daabc69b986109",
+      "bytes": 4795,
+      "lineCount": 51,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/ExternalExecutionIT.java",
+      "sha256": "1699ba7e6627ce9eb811aa8b816fa83464c0af26332b90279f8a9c4b5c37dd29",
+      "bytes": 11485,
+      "lineCount": 45,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/ModelPermitIT.java",
+      "sha256": "415b930e8e76a02826eb8be5f29d415f95827d2a71f681f6d1f1fe54efbf0fc8",
+      "bytes": 6598,
+      "lineCount": 25,
+      "inspections": [
+        {
+          "mode": "fixed-commit test methods / fixture-reset / environment / output hazard scan"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-editor-design/.gitattributes",
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "bytes": 8,
+      "lineCount": 1,
+      "inspections": [
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-editor-design/task-10-design-review-diff.txt",
+      "sha256": "6691d4b98a19bbe0ec742f505ae0b082c8fabec08006854544a08387ab29b73f",
+      "bytes": 52025,
+      "lineCount": 279,
+      "inspections": [
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/.gitattributes",
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "bytes": 8,
+      "lineCount": 1,
+      "inspections": [
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-10-shared-rank-ruling.md",
+      "sha256": "3b10ab12f46f7b4a2f70a91871f20d4f4052662b1cfee2b08700b02188b6bc75",
+      "bytes": 3478,
+      "lineCount": 13,
+      "inspections": [
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-design-review-diff.txt",
+      "sha256": "f465893367dc35406ed1db9f30712b7a01209e8e4c05d1a523de111afc96d862",
+      "bytes": 70900,
+      "lineCount": 312,
+      "inspections": [
+        {
+          "mode": "raw manifest member hash verification"
+        }
+      ]
+    }
+  ],
+  "coordinatorWorkingInputs": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-preflight-pause-handoff-20261023.md",
+      "sha256": "71ed93a14eeaf0ebbdfc42238e94b8f7c9a1b51f8ccd1765c23557a3b23d0e27",
+      "bytes": 2847,
+      "lineCount": 24,
+      "mode": "complete coordinator authority read; not product baseline"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-source-preflight-dispatch.md",
+      "sha256": "3f4794d37c39188f5b4ace4eabfecb50243a94815233ed2144076614af6016fd",
+      "bytes": 2386,
+      "lineCount": 10,
+      "mode": "complete coordinator authority read; not product baseline"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-10-shared-rank-ruling.md",
+      "sha256": "3b10ab12f46f7b4a2f70a91871f20d4f4052662b1cfee2b08700b02188b6bc75",
+      "bytes": 3478,
+      "lineCount": 13,
+      "mode": "complete coordinator authority read; not product baseline"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-design-brief-prepared.md",
+      "sha256": "fe8da75fbdeab26668aa6ec4b89ac69e122d7d2d98667aabe28811e146ad7065",
+      "bytes": 4740,
+      "lineCount": 17,
+      "mode": "complete coordinator authority read; not product baseline"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-plan-extract.md",
+      "sha256": "9fb0ca5478acdc31f74c88e76698381d47fb6491cf3a7d6762f45d24055a89a7",
+      "bytes": 499,
+      "lineCount": 3,
+      "mode": "complete coordinator authority read; not product baseline"
+    }
+  ],
+  "nonexistentAttemptedPaths": [
+    "backend/pom.xml",
+    "backend/api/src/main/java/ama/api/FileRegistryConfiguration.java"
+  ],
+  "qualifiedRuntimeOrTests": false,
+  "productsTestsPomsOldReportsHeadIndexMutated": false,
+  "sourceReadModeNote": "Focused ranges and symbol scans are not a full-source read. Authority raw hashes verified independently; Task9 original and R1 complete texts byte-compared under exact four changes. No Task10 R1 or closure exists in adopted manifest."
+}
