@@ -90,3 +90,7 @@ Read docs/superpowers/specs/2026-10-23-ama-phase-b-pre-gate-read.md and exact or
 ## Task6 adopted saved-content refinement
 
 Read docs/superpowers/specs/2026-10-23-ama-phase-b-saved-transcript.md and exact R1/reviews. Owner stored-history text/marks inspection is distinct from current original-byte eligibility; new-business/current-member/source predicates remain. Explicit snapshot/outside-archive/final phases and retained metadata/parent/child locks bound LONGTEXT before transfer, including final comparison and empty marks. Actual shared issuer/RAW allocation/qualified correction/budgets and later candidate/publication integration remain source activation gates; design approval is not implementation qualification.
+
+## Task5 adopted confined completion/renew-drain refinement
+
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-import-worker.md and exact original+R1/reviews. New production success uses queue-private genuine after-task scope/inert carrier/same-call writer+validator; old unrelated callbacks remain. Drain selected ordinary renewal without DB locks before completion/Task7 MARKING, JDBC outside monitor; state-aware exactly-once attempt transitions. Mandatory real local/S3 transport abort, genuinepipeline/restart and deterministic authority/concurrency proofs precede runtime qualification.

@@ -25,3 +25,7 @@ For publication, task_attempt means only the queue table. A fact-only fenced obs
 ## Execution order
 
 Stable task IDs remain unchanged. Execute 1, 2, 3, 4, 5, 6, **8, 7**, 9, 10, 11, 12, 13: Task 8 closes reconciliation fairness before any external Worker activation. The plan ledger records actual completion and exact reviewed bases.
+
+## Adopted Task5 ordinary-renew ordering refinement
+
+Read 2026-10-23-ama-phase-b-import-worker.md and exact approved R1/re-review. Its ordinary tick JDBC-outside-monitor plus drain-before-completion/marker protocol supersedes Task7 section9 monitor-over-ordinary-renew shorthand. It preserves selected renewal completion before MARKING, no queued tick after handoff, single owner/no second ordinary completion, independent marker commit/operation tracking and verified permit settlement. Actual Task7 implementation/tests must consume the same barrier, not restore the inversion.
