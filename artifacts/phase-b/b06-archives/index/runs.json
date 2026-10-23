@@ -1,0 +1,222 @@
+[
+  {
+    "run": "final-24",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest"
+    ],
+    "exit": 0,
+    "suites": [
+      {
+        "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "green-03",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest"
+    ],
+    "exit": 0,
+    "suites": [
+      {
+        "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "green-04",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest"
+    ],
+    "exit": 0,
+    "suites": [
+      {
+        "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "green-attempt-01",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest"
+    ],
+    "exit": 1,
+    "suites": []
+  },
+  {
+    "run": "green-attempt-02",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest"
+    ],
+    "exit": 0,
+    "suites": [
+      {
+        "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-01",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest"
+    ],
+    "exit": 1,
+    "suites": [
+      {
+        "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 16,
+        "failures": 0,
+        "errors": 9,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-02",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest#pinnedHistoryLoadsExactOldClosureWithFreshTransportArrays"
+    ],
+    "exit": 1,
+    "suites": [
+      {
+        "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-03",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest#initialPublicationCannotResetAnExistingReleaseHistory"
+    ],
+    "exit": 1,
+    "suites": [
+      {
+        "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-04",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest#cancellationAtDirectoryAcquisitionBoundariesClosesEveryHandle"
+    ],
+    "exit": 1,
+    "suites": [
+      {
+        "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "regression-bindings",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ConfigBindingsTest"
+    ],
+    "exit": 0,
+    "suites": [
+      {
+        "class": "ama.config.json.ConfigBindingsTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "regression-budget",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ArchiveBudgetTest"
+    ],
+    "exit": 0,
+    "suites": [
+      {
+        "class": "ama.config.json.ArchiveBudgetTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "regression-wire",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ConfigWireReaderTest"
+    ],
+    "exit": 0,
+    "suites": [
+      {
+        "class": "ama.config.json.ConfigWireReaderTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  }
+]
