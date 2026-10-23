@@ -1,0 +1,1 @@
+The initial read used absent /home/tanren/ama/task-3-review.md and returned ENOENT. The actual ignored briefing-directory review path was supplied by root, fully read and SHA verified. This was read-only setup; no test ran and no RED claim attaches.

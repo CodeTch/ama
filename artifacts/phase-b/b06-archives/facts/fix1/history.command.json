@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "docker",
+    "exec",
+    "ama-test-b01-a5e7d68612a4",
+    "sh",
+    "-c",
+    "MYSQL_PWD=\"$MYSQL_PASSWORD\" mysql --protocol=TCP -h127.0.0.1 --user=\"$MYSQL_USER\" \"$MYSQL_DATABASE\" --batch --raw -e 'SELECT installed_rank,version,description,type,script,checksum,installed_on,execution_time,success FROM flyway_schema_history ORDER BY installed_rank;'"
+  ],
+  "exit_code": 0
+}

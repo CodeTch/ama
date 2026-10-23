@@ -1,0 +1,89 @@
+[
+  {
+    "run": "green-01-scoped",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT#supplementaryIdentityUtf16LimitPrecedesSharedAccessProjection+supplementaryManifestUtf16LimitPrecedesLongtextProjection"
+      ],
+      "exit_code": 0,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 179,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "green-02-final",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT"
+      ],
+      "exit_code": 0,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 179,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-01",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT#supplementaryIdentityUtf16LimitPrecedesSharedAccessProjection+supplementaryManifestUtf16LimitPrecedesLongtextProjection"
+      ],
+      "exit_code": 1,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 179,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  }
+]

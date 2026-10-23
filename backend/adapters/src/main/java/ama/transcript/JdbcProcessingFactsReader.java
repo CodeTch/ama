@@ -66,8 +66,8 @@ public final class JdbcProcessingFactsReader implements ProcessingFactsReader {
             var result = transactions.required(() -> {
                 // The existing access adapter reads display_name LONGTEXT. Bound that exact,
                 // already-held identity first, without changing shared access behavior.
-                jdbc.query("SELECT OCTET_LENGTH(display_name),CHAR_LENGTH(display_name) FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE",
-                        rs -> {state.check();if(rs.next())state.textSize(rs.getLong(1),rs.getLong(2));return null;},actor.enterpriseId());
+                jdbc.query("SELECT OCTET_LENGTH(display_name),CHAR_LENGTH(display_name),OCTET_LENGTH(CONVERT(display_name USING utf16)) DIV 2 FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE",
+                        rs -> {state.check();if(rs.next())state.textSize(rs.getLong(1),rs.getLong(2),rs.getLong(3));return null;},actor.enterpriseId());
                 var held = access.lock(actor,meetingId);
                 access.require(held,MeetingAccess.Action.EDIT);
                 state.check();
@@ -112,13 +112,13 @@ public final class JdbcProcessingFactsReader implements ProcessingFactsReader {
         }
     }
 
-    private record ManifestSize(long bytes,long characters) {}
+    private record ManifestSize(long bytes,long characters,long utf16Units) {}
     private ManifestSize manifestSize(String id,String meeting,Acquisition state) {
-        return jdbc.query("SELECT OCTET_LENGTH(config_manifest),CHAR_LENGTH(config_manifest) FROM transcription_input WHERE id=? AND meeting_id=? LIMIT 1 FOR UPDATE",rs -> {
+        return jdbc.query("SELECT OCTET_LENGTH(config_manifest),CHAR_LENGTH(config_manifest),OCTET_LENGTH(CONVERT(config_manifest USING utf16)) DIV 2 FROM transcription_input WHERE id=? AND meeting_id=? LIMIT 1 FOR UPDATE",rs -> {
             state.check();require(rs.next(),PROVENANCE_UNAVAILABLE);
-            long bytes=rs.getLong(1),characters=rs.getLong(2);
-            state.manifestSize(bytes,characters);
-            return new ManifestSize(bytes,characters);
+            long bytes=rs.getLong(1),characters=rs.getLong(2),utf16Units=rs.getLong(3);
+            state.manifestSize(bytes,characters,utf16Units);
+            return new ManifestSize(bytes,characters,utf16Units);
         },id,meeting);
     }
     private List<FullRow> rows(Table table,String predicate,String order,Acquisition state,
@@ -158,14 +158,14 @@ public final class JdbcProcessingFactsReader implements ProcessingFactsReader {
         // any LONGTEXT. Never getString(config_manifest), even after that bounded gate.
         try(var reader=rs.getCharacterStream("config_manifest")) {
             require(reader!=null,READ_FAILED);
-            var text=new StringBuilder((int)Math.min(expected.characters(),1024));
+            var text=new StringBuilder((int)Math.min(expected.utf16Units(),1024));
             char[] chunk=new char[(int)Math.min(state.budget.maxStringUtf16(),1024)];
             for(int count;(count=reader.read(chunk))!=-1;) {
                 state.check();require(count<=state.budget.maxStringUtf16()-text.length(),BUDGET_EXCEEDED);
                 text.append(chunk,0,count);
             }
             state.check();String result=text.toString();scalars(result);
-            require(result.codePointCount(0,result.length())==expected.characters()&&utf8Length(result)==expected.bytes(),READ_FAILED);
+            require(result.length()==expected.utf16Units()&&result.codePointCount(0,result.length())==expected.characters()&&utf8Length(result)==expected.bytes(),READ_FAILED);
             return result;
         } catch(IOException failure) {state.check();throw fail(READ_FAILED);}
     }
@@ -220,8 +220,10 @@ public final class JdbcProcessingFactsReader implements ProcessingFactsReader {
         void check(){ama.contract.MinutesContracts.check(cancelled);}
         long remaining(){check();return budget.maxFactRows()-count;}
         void reserve(long edgeCount){check();require(count<budget.maxFactRows()&&count<Integer.MAX_VALUE-8L&&edgeCount<=budget.maxFactEdges()-edges,BUDGET_EXCEEDED);count++;edges+=edgeCount;}
-        void textSize(long bytes,long characters){check();require(bytes>=0&&characters>=0&&bytes<=budget.maxStringUtf8Bytes()&&characters<=budget.maxStringUtf16()&&characters<=budget.maxAggregateScalars()-scalars,BUDGET_EXCEEDED);scalars+=characters;}
-        void manifestSize(long bytes,long characters){require(bytes<=budget.maxManifestBytes()&&bytes<=budget.maxTotalBytes(),BUDGET_EXCEEDED);textSize(bytes,characters);}
-        String text(String value){require(value!=null,INPUT_INVALID);scalars(value);require(value.length()<=budget.maxStringUtf16(),BUDGET_EXCEEDED);textSize(utf8Length(value),value.codePointCount(0,value.length()));return value;}
+        // MySQL CHAR_LENGTH is a scalar count. A supplementary scalar occupies two UTF16
+        // units, measured exactly by locked OCTET_LENGTH(CONVERT(value USING utf16)) DIV 2.
+        void textSize(long bytes,long characters,long utf16Units){check();require(bytes>=0&&characters>=0&&utf16Units>=0&&bytes<=budget.maxStringUtf8Bytes()&&utf16Units<=budget.maxStringUtf16()&&characters<=budget.maxAggregateScalars()-scalars,BUDGET_EXCEEDED);scalars+=characters;}
+        void manifestSize(long bytes,long characters,long utf16Units){require(bytes<=budget.maxManifestBytes()&&bytes<=budget.maxTotalBytes(),BUDGET_EXCEEDED);textSize(bytes,characters,utf16Units);}
+        String text(String value){require(value!=null,INPUT_INVALID);scalars(value);textSize(utf8Length(value),value.codePointCount(0,value.length()),value.length());return value;}
     }
 }
