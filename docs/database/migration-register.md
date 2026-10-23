@@ -237,3 +237,11 @@ B00-1.4-proposed adds source_context/source_context_material/parsed_document_pro
 root 已完整读取未分配 SQL 候选1563f2806fcd9e6a804870a54f803852b722cfa29716613d6767af3f0cb51810；独立 schema review SPEC PASS / SQL/design APPROVED、0 findings。此处允许准备最终具名候选，最终文件头与完整SHA须再次完整读取并在提交中冻结，随后另发精确SHA和fixture ACK；本登记本身不能放入正式location或执行SQL。没有运行时代码、业务资格或阶段B完成许可。
 
 实际Flyway12.4.0 jar SHA c3f93df1f3e0c9d14652adb5ade97401f2ede503859ac693c2af5c06e2797799 离线 MigrationVersion 与 ResourceNameParser 均验证013<013.1<014，文件名解析013.1且valid；探针无DB连接。新独有fixture ama-test-b01-ad9f1af29eff（完整ID eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502，loopback58062）初始0表和资源限定记录保留；登记前再次仅选定元数据核对ID/标签/端口，当前history001→002→005→006→007→008→009→010→011→011.1→012→013全success，原checksum一致，无更高版本。证据在artifacts/phase-b/b-remaining/runtime-metadata-allocation。仅此本轮新拥有fixture可继续准备，其他旧fixture/未知失败/高水位库不在路径内；ACK前仍须新鲜核对，禁止reset/repair/outOfOrder或修改冻结SQL。
+
+### V013.1 最终候选字节冻结 — ACK 另发
+
+正式目标 V013_1__b_runtime_metadata.sql，1817 bytes，SHA256 **9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520**。root 已完整阅读最终候选，与独立已审未分配 SQL1563f280…逐条去注释比较，四条DDL完全相同，仅更新最终拥有者/版本/基线说明。两张表/四列/两PK索引列/两CHECK/两FK列，字节精确算法标识与有界signed epoch，无旧表ALTER/回填/default/seed。采用已独立批准的两表字典/生命周期设计；作者当前完整生成器/字典/ER增量仍须Task2实现独立复审，本冻结不提前采用其全部新输出，更不应用D01未来表。
+
+本轮同一独有fixture精确ID/标签/loopback58062已核对。作者preapply完整快照62旧用户表/1094行/SHOW CREATE/五组元数据/十二条history在缺表探测前后相等，root独立程序复核JSON相等和原12SQL SHA。缺表1146探测仅为存在性前置检查，不能替代实际assertion RED；root要求在ACK前提供缺二表断言失败及before/after保全证据。精确原件和root比较见artifacts/phase-b/b-remaining/runtime-metadata-freeze，原探测名schema-red.json保留而不把含义升级。
+
+本提交起最终候选字节永久冻结。单独精确SHA/fixture ACK尚未发出，仍不得放正式location或首次应用。未知/失败/更高版本目标不在许可范围。失败保留原件/实际schema/history，只能中央登记前向修正，禁止改旧SQL、repair/reset/outOfOrder。此冻结不是Task2或完整B验收。
