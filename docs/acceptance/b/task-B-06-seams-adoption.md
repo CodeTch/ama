@@ -22,6 +22,8 @@
 
 普通任务变更与外部事实观察分开。停用身份不能获得领域回调、续租或再次发送权限；精确绑定当前执行、通过原权威校验的终局事实仍可用既有 RECORDED_FENCED 保留。仅此无领域效果的事实路径可忽略旧 owner/epoch/expiry；ACTIVE 授权、过期 UNKNOWN/MANUAL、错误执行、未验证事实及矛盾隔离规则保留。全局 reconciliation claim 可跳过未注册域，实际 observe 对不支持组合仍显式非 ACK。
 
+上述 skip 只针对原 LIMIT 64 查询已选中的窗口，不代表全局公平性。连续前 64 个不可获取候选可能使后续候选不可见的既有限制，已单独登记为 [FUP-B05-CANDIDATE-01](task-B-05-reconciliation-candidate-followup.md)；原查询未改，本轮没有相应运行时复现或生产资格结论。
+
 接入细节以[消费者契约](task-B-06-seams-integration.md)、[作者完整报告](task-B-06-seams-report.md)及公开 ACK 为准。未注册域没有宽松默认；旧 identity-free 测试策略均显式接入。原三参数 completeWithEffects 的“先校验已存在输出，再运行 effects”语义保留。
 
 ## 验证与采用凭据

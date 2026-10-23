@@ -10,6 +10,8 @@
 - B06.1 共享身份准备协议已完成：先保留真实 MySQL RED，经技术 ACK 修正全部队列/外部事实路径，独立 SPEC/quality 双 PASS、零问题，已精确采用。见[采用记录](docs/acceptance/b/task-B-06-seams-adoption.md)及[消费者契约](docs/acceptance/b/task-B-06-seams-integration.md)。
 - 最终验证：18 项 B06 seam、26 个精选回归方法/28 次调用、26 套 179 项 Java units 全通过；179 包含既有 S1，不累加重复执行。
 - 完整 B06 仍未完成。下一交付为不可变配置档案索引/恢复、正式 batch 指纹和有界真实事实读取；随后再做首次真实文件引用、导入/Worker 原子输出、保存/编辑/marks/确认。原隔离树 `.worktrees/phase-b-transcript-runtime` 保留；下一任务须从已采用精确基线另行准备，不改写本轮封存。
+- [B06.2 准备书](docs/acceptance/b/task-B-06-archives-prepared-brief.md)已完成只读检查，状态 PREPARED / 未激活；建议接口和 FS/JDBC 行为尚待实现验证，须指定精确 BASE、独有写树及新夹具后再启动。
+- 既有外部对账 LIMIT 64 候选公平性缺口已登记 [FUP-B05-CANDIDATE-01](docs/acceptance/b/task-B-05-reconciliation-candidate-followup.md)，当前只读识别、未修复，不将 B06.1 的窗口内 skip 当全局公平性资格。
 
 原作者工作树、原始失败/成功证据、所有已应用 SQL、历史设计和两份用户计划均保留。B01-IMM-01 永久 PARTIAL、B04-Q401、企业接口、HA/fencing、真实容量等边界继续有效。
 

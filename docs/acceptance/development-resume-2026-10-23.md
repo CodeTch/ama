@@ -35,6 +35,10 @@ B04/S1 门禁通过后，子代理 `b06_queue_seams` 在新隔离树 `/home/tanr
 
 下一交付按[原静态切分](../../artifacts/phase-b/resume-2026-10-23/task-B-06-preflight.md)和[已 ACK 技术提案](b/task-B-06-seams-proposal.md)落实：不可变配置档案索引/恢复、准确 batch 指纹及独立 literal 向量、有界完整事实读取与跨 JVM 恢复。其后才是首次真实 INPUT_BATCH_FILE 引用、导入/Worker 原子输出、保存/编辑/marks/确认和完整 API。任何结构缺口先做中央增量设计登记，不猜版本，不把提案向量当正式实现。
 
+[B06.2 准备书](b/task-B-06-archives-prepared-brief.md)由原实现子代理只读编写，协调者全文核对并修正规范入口名称后公开，状态 PREPARED / 未激活。没有执行测试、访问夹具或实现代码；建议签名、SecureDirectoryStream/目录 fsync/原子发布及有界 JDBC 行为均待实际验证。input_batch 缺 profile/version、原上传绑定及完整 B07 facts 等边界明确留待后续设计，不能用该计划授予业务引用或生产运行资格。下一次须从当前已采用基线另建独有写树，明确新夹具后激活。
+
+只读集成复核另登记 [FUP-B05-CANDIDATE-01](b/task-B-05-reconciliation-candidate-followup.md)：外部对账原 LIMIT 64 单页查询在连续不可获取候选下存在后续候选不可见的公平性缺口。B06.1 没有改动该查询，当前只承诺窗口内 unknown-domain skip，不声称全局公平性。该既有问题无本轮运行时复现，留作独立精准反例/修正及后续外部 worker 激活资格；不改写过去 B05 报告或本轮封存。
+
 ## 接续处理决定与代价
 
 - 原会话作者/审查者无法恢复，采用明确标记的接续角色；作者沿用原工作树与精确 BASE，新独立审查保持原问题编号和范围。若上下文存在遗漏，代价是额外复审/返工，旧历史与证据仍完整。
@@ -43,5 +47,6 @@ B04/S1 门禁通过后，子代理 `b06_queue_seams` 在新隔离树 `/home/tanr
 - 原生 worktree 工具对 WSL UNC 路径报 dubious ownership，未改变 global safe.directory；确认 `.worktrees` 已忽略且目标不存在后，用 WSL Git 建立 B06 新树。代价是使用手工 Git 工作树生命周期，应用没有该新树的 managed attachment。
 - 将 EXTERNAL_FACT_OBSERVATION 与普通任务变更分开：停用身份无领域权限，但保留经过验证的可信事实；不支持的策略组合显式非 ACK，claim-only 扫描可跳过未注册域。代价是无法自动处理的组合仍需配置修正/人工结算，不能以再发送请求解决。
 - 对停用身份的当前终局事实给予窄范围 owner/epoch/expiry 例外，仍须精确执行绑定及原权威校验；过期 UNKNOWN/MANUAL、ACTIVE 业务授权和旧代矛盾规则不放宽。代价是增加事实与业务权限的协议边界和回归维护；既有 fenced 状态与证据可供人工结算，不新增发送或生产权限。
+- 未改的 LIMIT 64 候选公平性缺口独立登记，不扩成本轮未授权的全局调度承诺。代价是后续须额外队列修正/复审；修复前极端候选分布仍可能延迟或饿死后续对账，因此相应运行资格保持未通过。
 
 B04-Q401 继续 UNKNOWN；B01-IMM-01 永久 PARTIAL。企业 SSO/目录/分类、模型配额/协议、知识库/邮件、真实运维隔离/fencing、断电及容量资格仍为前置条件。本次没有真实公司联调、外部发布/邮件、生产或 push。
