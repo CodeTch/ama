@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------
+Test set: ama.task.B06QueueSeamsIT
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.689 s <<< FAILURE! -- in ama.task.B06QueueSeamsIT
+ama.task.B06QueueSeamsIT.disabledExpiredCurrentExternalFactMustStillBeRetained -- Time elapsed: 1.555 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <RECORDED_FENCED> but was: <STALE_TOKEN>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:179)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1188)
+	at ama.task.B06QueueSeamsIT.disabledExpiredCurrentExternalFactMustStillBeRetained(B06QueueSeamsIT.java:401)
+

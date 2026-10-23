@@ -1,0 +1,50 @@
+[
+  {
+    "path": "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "sha256": "1bc90efb5e12226c161ba19010c3a028b6c319533918a67e2a415d330251d032"
+  },
+  {
+    "path": "backend/core/src/main/java/ama/task/DomainPreparationUnavailableException.java",
+    "sha256": "27caa3f287c25a011bc1a1b91ebd76988c6fbcea3b9b862b6d1063eabf5d1cd3"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+    "sha256": "b4c6f3e0ab48849b936073169297acee7159b333f7bd61bd2ad8ed714dd6a30b"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+    "sha256": "c8c186c42394fd524508a818946ab54dd148d6ed2ba64521a2b1d56d2e9b1882"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "sha256": "6fcf67e76185d02139d5a5fabcf2bef41269e716e57db6675e7b0375a90b6fcb"
+  },
+  {
+    "path": "backend/core/src/main/java/ama/access/MeetingAccess.java",
+    "sha256": "d8582bfa91000dffbf76a1986b63429741145abc43e43d223b754af48a2d6029"
+  },
+  {
+    "path": "backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+    "sha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620"
+  },
+  {
+    "path": "backend/core/src/main/java/ama/task/TaskQueue.java",
+    "sha256": "eafdb772a80b1dec7b6335befc66fa1f4bdf0b8a963c353ddafef71bf108bf96"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/task/B06QueueSeamsIT.java",
+    "sha256": "73b01a1686c0848f45c073218a77b631fc600509f588aa7708f16da02c866b0d"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/task/ExternalExecutionIT.java",
+    "sha256": "1699ba7e6627ce9eb811aa8b816fa83464c0af26332b90279f8a9c4b5c37dd29"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/task/ReviewConcurrencyIT.java",
+    "sha256": "28c95367173e005c45128b303b8fd9bfedc600a9d3be6dd79fd11da723e80be5"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/task/TaskFixture.java",
+    "sha256": "032d7842bfaf1f0ff71fecc5a4674bed4dcd5057b555a9f9000e87d60f7dd22d"
+  }
+]

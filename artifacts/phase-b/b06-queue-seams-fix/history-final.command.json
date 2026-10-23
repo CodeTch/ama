@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "docker",
+    "exec",
+    "ama-test-b01-ff63b53162a3",
+    "sh",
+    "-c",
+    "MYSQL_PWD=\"$MYSQL_PASSWORD\" mysql --protocol=TCP -h127.0.0.1 --user=\"$MYSQL_USER\" \"$MYSQL_DATABASE\" --batch -e 'SELECT installed_rank,version,script,checksum,success FROM flyway_schema_history ORDER BY installed_rank; SELECT @@version,@@global.innodb_use_native_aio,@@global.time_zone,UTC_TIMESTAMP(6),UNIX_TIMESTAMP(UTC_TIMESTAMP(6));'"
+  ],
+  "exit_code": 0
+}

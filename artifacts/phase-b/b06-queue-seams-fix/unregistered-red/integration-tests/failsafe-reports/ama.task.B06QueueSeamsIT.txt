@@ -1,0 +1,28 @@
+-------------------------------------------------------------------------------
+Test set: ama.task.B06QueueSeamsIT
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.770 s <<< FAILURE! -- in ama.task.B06QueueSeamsIT
+ama.task.B06QueueSeamsIT.unregisteredReconciliationDomainIsSkippedWithoutGrantingAuthority -- Time elapsed: 1.613 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.IllegalArgumentException: Unregistered task type
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:80)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:61)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3355)
+	at ama.task.B06QueueSeamsIT.unregisteredReconciliationDomainIsSkippedWithoutGrantingAuthority(B06QueueSeamsIT.java:424)
+Caused by: java.lang.IllegalArgumentException: Unregistered task type
+	at ama.task.JdbcTaskQueue.policy(JdbcTaskQueue.java:27)
+	at ama.task.JdbcTaskQueue.prepareDomain(JdbcTaskQueue.java:47)
+	at ama.task.JdbcTaskQueue.lockDomain(JdbcTaskQueue.java:64)
+	at ama.task.JdbcExternalOperations.lock(JdbcExternalOperations.java:59)
+	at ama.task.JdbcExternalOperations.lambda$claimReconciliation$5(JdbcExternalOperations.java:69)
+	at ama.task.JdbcTaskQueue.lambda$work$0(JdbcTaskQueue.java:25)
+	at ama.db.TransactionRunner.lambda$required$0(TransactionRunner.java:27)
+	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:137)
+	at ama.db.TransactionRunner.required(TransactionRunner.java:23)
+	at ama.task.JdbcTaskQueue.work(JdbcTaskQueue.java:25)
+	at ama.task.JdbcExternalOperations.claimReconciliation(JdbcExternalOperations.java:68)
+	at ama.task.B06QueueSeamsIT.lambda$unregisteredReconciliationDomainIsSkippedWithoutGrantingAuthority$52(B06QueueSeamsIT.java:424)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:76)
+	... 3 more
+

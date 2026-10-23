@@ -1,0 +1,30 @@
+-------------------------------------------------------------------------------
+Test set: ama.task.B06QueueSeamsIT
+-------------------------------------------------------------------------------
+Tests run: 12, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 7.765 s <<< FAILURE! -- in ama.task.B06QueueSeamsIT
+ama.task.B06QueueSeamsIT.disabledCandidateIsSkippedWithoutSubjectOrTaskLocks -- Time elapsed: 0.284 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Unexpected exception thrown: ama.access.MeetingAccess$AccessDeniedException: Meeting access denied
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:80)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:61)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3355)
+	at ama.task.B06QueueSeamsIT.disabledCandidateIsSkippedWithoutSubjectOrTaskLocks(B06QueueSeamsIT.java:275)
+Caused by: ama.access.MeetingAccess$AccessDeniedException: Meeting access denied
+	at ama.meeting.JdbcMeetingAccess.captureIdentities(JdbcMeetingAccess.java:61)
+	at ama.meeting.JdbcMeetingAccess.tryLockIdentities(JdbcMeetingAccess.java:46)
+	at ama.task.B06QueueSeamsIT$SeamPolicy.prepare(B06QueueSeamsIT.java:63)
+	at ama.task.JdbcTaskQueue.prepareDomain(JdbcTaskQueue.java:50)
+	at ama.task.JdbcTaskQueue.lockDomain(JdbcTaskQueue.java:64)
+	at ama.task.JdbcTaskQueue.claimOne(JdbcTaskQueue.java:99)
+	at ama.task.JdbcTaskQueue.lambda$claim$9(JdbcTaskQueue.java:93)
+	at ama.task.JdbcTaskQueue.lambda$work$0(JdbcTaskQueue.java:25)
+	at ama.db.TransactionRunner.lambda$required$0(TransactionRunner.java:27)
+	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:137)
+	at ama.db.TransactionRunner.required(TransactionRunner.java:23)
+	at ama.task.JdbcTaskQueue.work(JdbcTaskQueue.java:25)
+	at ama.task.JdbcTaskQueue.claim(JdbcTaskQueue.java:93)
+	at ama.task.B06QueueSeamsIT.lambda$disabledCandidateIsSkippedWithoutSubjectOrTaskLocks$16(B06QueueSeamsIT.java:275)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:76)
+	... 3 more
+

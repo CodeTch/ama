@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: ama.task.B06QueueSeamsIT
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 4.089 s <<< FAILURE! -- in ama.task.B06QueueSeamsIT
+ama.task.B06QueueSeamsIT.queueIndependentlyRejectsPreparedTokenFromAnotherBoundDataSource -- Time elapsed: 3.792 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:74)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3223)
+	at ama.task.B06QueueSeamsIT.queueIndependentlyRejectsPreparedTokenFromAnotherBoundDataSource(B06QueueSeamsIT.java:462)
+

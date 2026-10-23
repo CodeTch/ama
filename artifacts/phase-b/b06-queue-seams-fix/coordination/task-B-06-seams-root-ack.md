@@ -1,0 +1,33 @@
+# B06.1 root technical ACK — 2026-10-23
+
+Root read the complete141-line proposal and50-line proof report, plus previously adopted queue/access/registry seams. ACK is technical coordination within the approved handoff, not user approval, production activation or full B06 acceptance.
+
+## Authorized next correction
+
+Proceed in the SAME owned tree, BASE6b48b2f, preserving all staged initial proposal/RED/control sources/logs/manifests. Implement only the shared identity preparation / authentic ambient-capability protocol from proposal section3, with necessary affected callsites/tests/handbook. Keep the original179-unit source baseline and12 formal SQL untouched outside the necessary shared correction. No new SQL, production B06 policy/provider/fingerprint/archive implementation or import API yet.
+
+The opaque per-call PreparedDomain + complete-spec discovery + local DomainScope direction is ACKed. Exact signatures may be narrowed to the smallest sound protocol. No unrestricted default preparation: every registered legacy identity-free test domain must opt in explicitly; unknown policy remains unavailable. Token issuer/actual same-DataSource transaction holder/full-spec coverage/purpose must be checked. Ambient enqueue receives an explicitly adopted authentic MeetingAccess capability; no inference from stale Actor.status or root-after identity acquisition, no unmanaged ThreadLocal/global transaction cache/new synchronization. Existing MeetingAccess.lock/require behavior stays compatible.
+
+Prepare the complete identity union before ANY subject/root/task/operation lock. All affected normal queue and external paths must share this order, including repeated retry lockDomain and old/current observation discoveries. SKIP LOCKED must apply to identity and root as well as subject/task; partial identity acquisition ends only at the owned candidate transaction boundary. Different policy/spec families without an explicit common issuer fail closed with an actionable non-acknowledgment; do not silently record STALE_TOKEN or discard the authoritative fact.
+
+EXTERNAL_FACT_OBSERVATION is distinct from domain mutation. A disabled identity cannot gain a MeetingAccess mutation capability. Still retain a valid authoritative external fact while suppressing every domain callback; use the existing fenced/quarantine/manual path or an equally explicit existing-state protocol, with no new schema/state invented. Do not blanket throw merely for disabled identity and make the authoritative fact permanently unrecordable. Add an actual bounded regression proving fact retention, no domain effect and no unauthorized resend/renewal. Preserve B05 fix1 independent observe/4 full-rollback rediscover/same-fact resubmission semantics.
+
+## Required validation before independent review
+
+- Turn the actual lock-order and ambient-reuse REDs GREEN, while retaining original RED source/XML and recording necessary API adaptation honestly.
+- Test genuine capability forgery/wrong issuer/expired or cross-transaction/cross-DataSource/missing-spec/purpose mismatch rejection; complete binary-ordered identity union, held identity skip, no identity lock after root, and no hidden synchronization.
+- Retain the real disable control and add affected actual concurrency/skip/repeated-domain/external fact cases. Use exact selectors on the SAME newly owned initial-zero/V013 fixture. Inspect historical B05 helpers first; run only compatible affected concurrency suites, never reset/refusal/recovery or unrelated heavy cohorts. Report exact overlapping counts and all setup failures.
+- Run final current Java unit suite once for the amended code, preserve fresh raw/XML/source hashes, full source/delivery allowlist and original artifact preservation. Root will arrange independent scoped SPEC/quality review, then exact adoption.
+
+## Design directions for later B06 deliveries
+
+The typed734-byte ama.input-batch.v1 literal/order/domain separation, protected read-only content-addressed archive/index retention/restart design, complete raw IMPORT/TXT/EMPTY facts, finite controlled technical budgets, first real INPUT_BATCH_FILE reference and full TaskSpec/producer design are accepted as the next implementation basis. They remain unimplemented and unqualified. Budget values are controlled-test configuration, never implicit product caps or enabled production defaults. Any unsupported schema/closure/version issue returns to root before implementation; do not reinterpret existing15 profile kinds.
+
+Section8 supplier atomic-completion is a candidate later separate delivery. Preserve existing3-argument behavior now; do not add Supplier or WorkerLoop handlers in this identity correction. Before later activation compare the smallest safe existing ambient transaction composition with the proposed new overload, and retain concrete output-before-effects/rollback/fence evidence. No early independent result commit, double-complete or callback I/O is permitted.
+
+This ACK is not independent adoption. Finish with a clean local correction commit containing the full BASE..HEAD source/proof history and a new final report; no merge/push/main or external platform actions. Keep the new fixture and all old fixtures untouched.
+## Narrow factual-expiry addendum
+
+Real regression found that a DISABLED identity cannot renew, so an expired operation lease previously made an independently authoritative current-execution result permanently unrecordable. ACK permits terminal SUCCEEDED/FAILED_ZERO_EFFECT facts only under EXTERNAL_FACT_OBSERVATION, effectsAllowed=false, exact current execution/subject and MARKED/UNKNOWN state binding, plus the unchanged independent authoritative verifier before updates. Record only through existing RECORDED_FENCED; never renew, grant send authority or invoke domain effects. If owner/epoch as well as expiry are ignored for this facts-only path, document the fields and cover that boundary explicitly. Wrong/non-current execution, forged/unverified facts and old contradiction/quarantine handling remain fenced; ordinary ACTIVE valid() checks remain unchanged. Expired UNKNOWN/MANUAL_REQUIRED control observations do not gain this terminal-fact exception. Preserve the original exact assertion RED and bounded negative controls.
+
+Global reconciliation claim may skip an unknown/unregistered task domain without granting authority, so retained foreign history does not block this queue's registered domains. Actual fact observation for unsupported policy families stays explicit non-ACK; do not catch unrelated database or protocol failures. Preserve the actual RED and final claim/observe boundaries.
