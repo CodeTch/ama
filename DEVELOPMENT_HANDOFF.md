@@ -1,3 +1,7 @@
+## 当前恢复入口（2026-10-23，继续任务）
+
+用户已恢复 B 阶段剩余任务。先读[本次精准恢复记录](docs/acceptance/development-resume-b-remaining-2026-10-23.md)和完成树 W/current-state.json、progress.md。Task1–4 已实现并独立复审采用；Task4 fix01为1ce4a2e，保留组合测试及环境限制。Task11/12设计已采用，源码未实现。下一项是 Task5真实TXT Worker，完整B阶段仍未验收。工作树仍为 `.worktrees/phase-b-completion`，main快照c71a44a保持；下方暂停/待审描述属于历史。后续按已授权完整计划持续推进。
+
 ## 当前 Git 集成入口（2026-10-23）
 
 用户已明确要求合并并推送最新开发快照，范围包含 completion 分支 Task4 与暂停记录。主目录现位于 `main`，已纳入快照 `46aad17bca8466192249d59912885563d94d19de`，并同步前端生成 API 类型。验证、整合审查和未完成边界见[本次 main 集成记录](docs/acceptance/main-branch-integration-2026-10-23.md)。
