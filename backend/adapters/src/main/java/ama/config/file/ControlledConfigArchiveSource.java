@@ -13,7 +13,12 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 
 public final class ControlledConfigArchiveSource implements ConfigArchiveSource {
  record Node(ConfigArchiveIndex.Entry entry,Map<String,Ref> dependencies){Node{dependencies=Map.copyOf(dependencies);}}
+ record VerifiedSnapshot(Snapshot snapshot,long indexChainBytes){}
  public Snapshot open(Path root,String sha,IndexBudget ib,ArchiveReadBudget b,BooleanSupplier c){
+  return verify(root,sha,ib,b,c).snapshot();
+ }
+ /** Internal publication metadata comes from the same verified chain, without rereading or retaining its raw arrays. */
+ VerifiedSnapshot verify(Path root,String sha,IndexBudget ib,ArchiveReadBudget b,BooleanSupplier c){
   require(ib!=null&&b!=null&&c!=null,INVALID_ARGUMENT);var cancel=ProtectedArchiveFiles.deadline(c);check(cancel);hash(sha);
   try(var files=ProtectedArchiveFiles.open(root,cancel)){
    var capacity=new ProtectedArchiveFiles.Capacity(ib.maxReleaseBytes());var selected=readIndex(files,sha,ib,capacity);var newer=selected;String previous=selected.previousIndexSha256();int generations=1;
@@ -25,16 +30,22 @@ public final class ControlledConfigArchiveSource implements ConfigArchiveSource 
     newer=older;previous=older.previousIndexSha256();
    }
    require(selected.entries().size()<=b.maxArtifacts(),BUDGET_EXCEEDED);
-   var acquisition=new ProtectedArchiveFiles.Capacity(Math.min(1048576,b.maxTotalBytes()));var state=new ArchiveReadState(b,cancel);var nodes=new LinkedHashMap<Identity,Node>();
+   long chainBytes=ib.maxReleaseBytes()-capacity.remaining;
+   // Admit the complete declared object set against BOTH remaining release capacity and acquisition capacity.
+   // No transport allocation or owned capture may happen before this preflight succeeds.
+   long objectLimit=Math.min(capacity.remaining,Math.min(1048576,b.maxTotalBytes()));
+   var admission=new ProtectedArchiveFiles.Capacity(objectLimit);
+   for(var entry:selected.entries()){check(cancel);require(entry.sizeBytes()<=Math.min(65536,b.maxArtifactBytes()),BUDGET_EXCEEDED);admission.reserve(entry.sizeBytes());}
+   var acquisition=new ProtectedArchiveFiles.Capacity(objectLimit-admission.remaining);var state=new ArchiveReadState(b,cancel);var nodes=new LinkedHashMap<Identity,Node>();
    try(var release=files.directory("releases",sha);var objects=files.directory("releases",sha,"objects")){
     files.exactNames(release,Set.of("index.json","objects"),2);var names=new HashSet<String>();for(var entry:selected.entries())names.add(entry.ref().sha256()+".json");files.exactNames(objects,names,ib.maxEntries());
     for(var entry:selected.entries()){
-     byte[] raw=files.read(objects,entry.ref().sha256()+".json",entry.sizeBytes(),Math.min(65536,b.maxArtifactBytes()),acquisition);capacity.reserve(raw.length);
+     byte[] raw=files.read(objects,entry.ref().sha256()+".json",entry.sizeBytes(),Math.min(65536,b.maxArtifactBytes()),acquisition);
      var owned=state.capture(raw,false);nodes.put(entry.ref().identity(),validate(entry,owned,state));
     }
    }
    verifyGraph(nodes,nodes.keySet(),b,state,cancel);check(cancel);
-   return new ImmutableSnapshot(root,sha,selected,nodes);
+   return new VerifiedSnapshot(new ImmutableSnapshot(root,sha,selected,nodes),chainBytes);
   }catch(Failure safe){throw safe;}catch(IOException|java.nio.file.DirectoryIteratorException|UnsupportedOperationException|SecurityException e){check(cancel);throw fail(PROFILE_UNAVAILABLE);}
  }
  private static ConfigArchiveIndex readIndex(ProtectedArchiveFiles files,String sha,IndexBudget ib,ProtectedArchiveFiles.Capacity capacity)throws IOException{

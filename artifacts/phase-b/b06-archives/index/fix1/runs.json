@@ -1,0 +1,85 @@
+[
+  {
+    "run": "final-current-28",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "Controlled*Test"
+    ],
+    "exit": 0,
+    "suites": [
+      {
+        "name": "ama.config.file.ControlledArchiveFix1Test",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "green-f1-f3",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledArchiveFix1Test"
+    ],
+    "exit": 0,
+    "suites": [
+      {
+        "name": "ama.config.file.ControlledArchiveFix1Test",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-f1-f3",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledArchiveFix1Test"
+    ],
+    "exit": 1,
+    "suites": [
+      {
+        "name": "ama.config.file.ControlledArchiveFix1Test",
+        "tests": 4,
+        "failures": 4,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "regression-original-24",
+    "command": [
+      "/usr/bin/python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest"
+    ],
+    "exit": 0,
+    "suites": [
+      {
+        "name": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  }
+]

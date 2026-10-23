@@ -1,0 +1,10 @@
+Non-test setup command failure before the new run helper existed. Exit 1. No Java or Python tests ran; no source file was created by this command.
+
+Attempted operation: use a WSL python3 -c command from PowerShell to copy tools/b06_archives_index_run.py into a versioned fix1 helper and insert the fix1 source list.
+Raw Python diagnostic:
+  File "<string>", line 1
+    from pathlib import Path; r=Path('/home/tanren/ama/.worktrees/b06-archive-index'); old=(r/'tools/b06_archives_index_run.py').read_text(); new=old.replace('/ label','/ \'fix1\' / label').replace('source_hashes = []','sources += [\
+                                                                                                                                                                                                                           ^
+SyntaxError: unterminated string literal (detected at line 1)
+
+Resolution: create the separate new fix1 run helper through apply_patch. Original helper remained byte-exact. This setup failure is not assertion RED or a test execution.
