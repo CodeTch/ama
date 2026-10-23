@@ -1,0 +1,10 @@
+{
+  "claim": "Read-only actual EXPLAIN of current confirmation union against an existing task06-owned identity; not query execution or contention proof",
+  "query": "EXPLAIN SELECT id FROM transcript_confirmation WHERE id='060d739f-605c-4492-81e0-785ca3c865a5' OR (meeting_id='22da55a0-57bc-4d3b-8701-17b6293910b7' AND revision_id='dacdfe82-a440-42be-ab02-65569c86b1ab') ORDER BY id LIMIT 3 FOR UPDATE",
+  "ids": {
+    "confirmation": "060d739f-605c-4492-81e0-785ca3c865a5",
+    "meeting": "22da55a0-57bc-4d3b-8701-17b6293910b7",
+    "revision": "dacdfe82-a440-42be-ab02-65569c86b1ab"
+  },
+  "explainTsv": "id\tselect_type\ttable\tpartitions\ttype\tpossible_keys\tkey\tkey_len\tref\trows\tfiltered\tExtra\n1\tSIMPLE\ttranscript_confirmation\tNULL\tindex_merge\tPRIMARY,transcript_confirm_once,fk_transcript_confirmation_1\tPRIMARY,transcript_confirm_once\t36,72\tNULL\t2\t100.00\tUsing union(PRIMARY,transcript_confirm_once); Using where; Using filesort\n"
+}

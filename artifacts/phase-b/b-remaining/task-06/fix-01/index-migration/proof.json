@@ -1,0 +1,134 @@
+{
+  "scope": "Controlled local normal Flyway migration only; no installed Task6 indexed-source qualification or final coverage claim",
+  "migration": {
+    "version": "013.2",
+    "resource": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+    "bytes": 75,
+    "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f"
+  },
+  "serialization": "Read every actual column of every BASE TABLE using forward-only JDBC streaming (fetchSize MIN_VALUE), rows ordered by complete actual PRIMARY KEY. UTC session. Hash row delimiter byte2 then each cell: byte0 for SQL NULL, otherwise byte1 + 8-byte big-endian byte length + actual JDBC getBytes value. Schema/column types and full ordered column/PK names retained separately; NULL, empty bytes and delimiters cannot collide. Duplicate rows preserve repeated frames. Full table PK presence asserted. No raw business cells retained publicly. Information_schema physical metadata excludes volatile statistics CARDINALITY and derived COLUMN_KEY; full index keyparts and SHOW CREATE preserve index semantics.",
+  "tables": 65,
+  "columns": 491,
+  "businessTables": 64,
+  "businessRows": 30393,
+  "firstApply": {
+    "lockWaitSeconds": 5,
+    "pid": 1192454,
+    "migrationsExecuted": 1,
+    "elapsedNanos": 1190927148
+  },
+  "rerun": {
+    "lockWaitSeconds": 5,
+    "elapsedNanos": 102751993,
+    "migrationsExecuted": 0
+  },
+  "historyBefore": 13,
+  "historyAfter": 14,
+  "oldHistoryExactPrefix": true,
+  "finalNewHistory": {
+    "installed_rank": "14",
+    "version": "013.2",
+    "description": "task input lookup",
+    "type": "SQL",
+    "script": "V013_2__task_input_lookup.sql",
+    "checksum": "-1098175378",
+    "installed_by": "ama_test",
+    "installed_on": "2026-10-23 21:53:39",
+    "execution_time": "135",
+    "success": "1"
+  },
+  "allOldPhysicalMetadataAndCompleteBusinessAllocatorDataPreserved": true,
+  "fullRerunHistorySchemaDataPreserved": true,
+  "missingIndex": {
+    "sqlState": "42000",
+    "claim": "Actual forced-index SQL fails closed before migration; not installed-service-path TDD",
+    "errorCode": 1176
+  },
+  "limits": {
+    "javaHeapMiB": 64,
+    "activeProcessors": 2,
+    "sessionLockWaitSeconds": 5
+  },
+  "fileSeals": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/PASS.json",
+      "bytes": 203,
+      "sha256": "418b9ff1d69da77f0f08adde77a8d63389add87a9663f8874eb275eb6dff6dca"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/Task06IndexMigrationProbe.java",
+      "bytes": 10873,
+      "sha256": "7a370a389e73ce914fd16a179935755542ac110306c799f400b50acadba7cc81"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/after-rerun.json",
+      "bytes": 703581,
+      "sha256": "61a1c5cff199d39ad633865a136cbfb8276cf7b47e940bbe39cb34dd5fa8c00f"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/after.json",
+      "bytes": 703581,
+      "sha256": "61a1c5cff199d39ad633865a136cbfb8276cf7b47e940bbe39cb34dd5fa8c00f"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/apply-receipt.json",
+      "bytes": 14384,
+      "sha256": "2676609f4723e9c77d0501d196641d97a338cf19f2c57e4e4530052070d47ea3"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/apply.log",
+      "bytes": 1376,
+      "sha256": "166fce5191663447470bd0c5c9f95e4e49ce58fb1088b5a017b08015b56237bb"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/before-receipt.json",
+      "bytes": 14410,
+      "sha256": "3d7e59c98881832bc332759299dc57d45dcec38dbad3d2d246db1bd1a73d9d77"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/before.json",
+      "bytes": 702069,
+      "sha256": "fe8530659e680b1cfae918483dcd6b81b6640bcdf827c9142324c02f2d514c2e"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/before.log",
+      "bytes": 54,
+      "sha256": "9ece3621e394eebf2002ee491d3574942a6e88549c466b31550c43059c19b6f5"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/compile.log",
+      "bytes": 186,
+      "sha256": "3d37131a6bd98074e675de5dfc5a1081f03fd20e98396516e55cb26f99938e26"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/first-apply.json",
+      "bytes": 105,
+      "sha256": "2ecf014f26acae7959a9981697c0dcdd65023a5c8ab3d4f4985f26d4328c0ca8"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/missing-index.json",
+      "bytes": 149,
+      "sha256": "cda7d8b5be13737b5e0b50b70ad6055d7dc36f9fc7bcf96ad4677db5eb691008"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/quiescence.json",
+      "bytes": 152,
+      "sha256": "76e907176692c5b433427c867a8a690fe207166e754173a905159fde0ecde414"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/rerun.json",
+      "bytes": 85,
+      "sha256": "11319edf8215531511c216c28b98dc1ef8d69c19944297edad9b2c7ef6537597"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/resources-receipt.json",
+      "bytes": 174,
+      "sha256": "dfb666e011c525d651148ea5ee61ec564331d3e198a1c368e4d0b3c3c31bc73d"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/resources.log",
+      "bytes": 881,
+      "sha256": "8159eb93ddea4cc78102687504ee07c21923b4ffa65522120bee2eb3783072a3"
+    }
+  ]
+}

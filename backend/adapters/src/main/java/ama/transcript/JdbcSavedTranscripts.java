@@ -98,6 +98,11 @@ public final class JdbcSavedTranscripts {
   if((op==ama.contract.TranscriptContracts.Operation.CONFIRM||op==ama.contract.TranscriptContracts.Operation.MARKS)&&!working)throw new ama.contract.TranscriptContracts.Failure(422,"WORKING_REQUIRED");
   if(op!=ama.contract.TranscriptContracts.Operation.RESTORE&&working&&!graph.selected().equals(root.get("transcript_revision_id")))throw new ama.contract.TranscriptContracts.Failure(409,"CURRENT_REVISION_REQUIRED");
   if(op==ama.contract.TranscriptContracts.Operation.CONFIRM)correction.requireReady();
+  else require(canAppend(graph),BUDGET_EXCEEDED);
+ }
+ private boolean canAppend(SavedTranscriptGraph graph){
+  // The source is the entire retained chain. Its new child must remain readable under both bounds.
+  return graph.selected()!=null&&graph.rows().stream().filter(r->r.table()==Table.TRANSCRIPT_REVISION).count()<Math.min(limits.revisionDepth(),limits.revisionNodes());
  }
  private Write plan(Actor actor,Prepared prepared,ama.contract.TranscriptContracts.Command command,TranscriptAcquisitionBudget.Ledger budget){
   var graph=prepared.graph();var created=new ArrayList<FullRow>();String id=UUID.randomUUID().toString();String time=java.time.format.DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSS'Z'").format(java.time.LocalDateTime.now(java.time.ZoneOffset.UTC).truncatedTo(java.time.temporal.ChronoUnit.MICROS));
@@ -214,7 +219,7 @@ public final class JdbcSavedTranscripts {
   boolean transitionsReady;try{transitions.requireAbsent();transitionsReady=true;}catch(Failure unavailable){transitionsReady=false;}
   boolean writable=transitionsReady&&owner&&SavedTranscriptGraph.num(g.root(),"ever_published")==0&&"ACTIVE".equals(g.root().get("lifecycle"))&&"ACTIVE".equals(g.root().get("governance_state"))&&!"PUBLISHED".equals(g.root().get("stage"))&&SavedTranscriptGraph.num(g.root(),"revision")<Long.MAX_VALUE-1;
   boolean bytes=g.selected()!=null&&g.sourceBytes().stream().allMatch(s->"ELIGIBLE".equals(s.get("eligibility")));boolean current=g.selected()!=null&&g.selected().equals(g.root().get("transcript_revision_id"));
-  out.put("capabilities",Map.of("canReadHistory",owner,"canSave",writable&&bytes&&(current||g.selectedRow().string("kind").equals("RAW")),"canRestore",writable&&bytes,"canReadSources",bytes,"canConfirm",writable&&bytes&&current&&g.selectedRow().string("kind").equals("WORKING")&&"NOT_APPLICABLE".equals(correction.projection().readiness())));
+  out.put("capabilities",Map.of("canReadHistory",owner,"canSave",writable&&bytes&&canAppend(g)&&(current||g.selectedRow().string("kind").equals("RAW")),"canRestore",writable&&bytes&&canAppend(g),"canReadSources",bytes,"canConfirm",writable&&bytes&&current&&g.selectedRow().string("kind").equals("WORKING")&&"NOT_APPLICABLE".equals(correction.projection().readiness())));
   out.put("needsGeneration",SavedTranscriptGraph.num(g.root(),"needs_generation")!=0);
   Map<String,Object> confirmation=null;for(var c:g.rows())if(c.table()==Table.TRANSCRIPT_CONFIRMATION){confirmation=Map.of("id",c.string("id"),"revisionId",c.string("revision_id"),"contentHash",c.string("content_hash"),"confirmedBy",c.string("confirmed_by"),"confirmedAt",c.string("confirmed_at"),"profile",p.profile().version(),"isCurrent",c.string("id").equals(g.root().get("transcript_confirmation_id")));}
   out.put("confirmation",confirmation!=null&&Boolean.TRUE.equals(confirmation.get("isCurrent"))?confirmation:null);if(owner)out.put("selectedConfirmation",confirmation);

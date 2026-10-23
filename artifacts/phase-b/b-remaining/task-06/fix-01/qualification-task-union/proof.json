@@ -1,0 +1,34 @@
+{
+  "changedSource": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+  "currentSha256": "3edd7124d86f0d41a12ce556e596ad2de26ef984c8ff036515d331527090e3ef",
+  "previousSnapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-refresh/source/backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+  "previousSha256": "8f224298d87acb5d771e7f65d112e9bd53de9c7b4209cbd959b9e25f0adaca7b",
+  "tupleChanged": false,
+  "why": "CV02 actual additional same-input task negative failed at provenance-04; retain complete bounded relevant task set, PK order metadata+transfer; original maxTasks64 unchanged.",
+  "raw": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/provenance-04/integration-tests-TEST-ama.storage.Task06FixProvenanceIT.xml",
+      "sha256": "d69cc2a451296f7eb9988bfb7f0625b74517bb1a1dc6533be918bc67d1980446"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/provenance-04/receipt.json",
+      "sha256": "3166a9dd887ece9c86845713dbc7d640cbb52eea5291d9e57cb0ff1306bf0ca2"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/provenance-04/source.json",
+      "sha256": "080f46a2aacf8fbe257a093b9968fb1a6aad732e1d54f588a71bbf68090633f8"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/provenance-05/integration-tests-TEST-ama.storage.Task06FixProvenanceIT.xml",
+      "sha256": "f53050638eb035c6a5598fb0388d6d9163be30a3e4f299ab6df55cfd00e85f1a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/provenance-05/receipt.json",
+      "sha256": "4d641c879cb02e078fd6aa42d6dd246b5ede746bf2e1404d597cd2a19b02ed17"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/provenance-05/source.json",
+      "sha256": "ac7894d728213a3a647348086a459c842601aa197dc62dc6766a86c02a898999"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 /** Real JDBC boundary faults: every statement/commit still reaches the actual owned MySQL. */
 final class Task06ProbeSource extends AbstractDataSource {
     final DataSource actual;
+    volatile Integer isolation;
     final AtomicReference<String> rollbackOn = new AtomicReference<>(), lostAckOn = new AtomicReference<>();
     final AtomicReference<String> failStatement=new AtomicReference<>();
     volatile java.util.function.Consumer<String> before=sql-> {
@@ -29,7 +30,8 @@ final class Task06ProbeSource extends AbstractDataSource {
     public Connection getConnection(String user, String password) throws SQLException {
         return wrap(actual.getConnection(user, password));
     }
-    Connection wrap(Connection connection) {
+    Connection wrap(Connection connection) throws SQLException {
+        if(isolation!=null)connection.setTransactionIsolation(isolation);
         long connectionId=connections.incrementAndGet();
         var changed = new StringBuilder();
         return (Connection) Proxy.newProxyInstance( getClass().getClassLoader(), new Class[] {

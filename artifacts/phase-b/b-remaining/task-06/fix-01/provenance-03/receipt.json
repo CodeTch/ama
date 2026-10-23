@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06FixProvenanceIT"
+  ],
+  "exit": 1,
+  "reports": [],
+  "elapsedSeconds": 3.8920047283172607,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

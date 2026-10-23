@@ -27,6 +27,17 @@ final class SavedTranscriptRows {
  Map<String,Object> one(Shape shape,String id){var found=read(shape,"id=?","id",1,false,id);require(found.size()==1,PROVENANCE_UNAVAILABLE);return found.getFirst();}
  private record Measured(List<Object> key,List<long[]> sizes) {}
  List<Map<String,Object>> read(Shape shape,String where,String order,int maximum,boolean projected,Object...args){return transfer(shape,admit(shape,where,order,maximum,projected,args));}
+ /** ID-only membership proof after the genuine gate; it grants no task authority. */
+ List<String> inputTaskIds(String input,int maximum){
+  budget.check();require(maximum>0,BUDGET_EXCEEDED);long sentinel=(long)maximum+1;
+  // The driver may buffer the complete bounded result. Reserve even its sentinel before execution,
+  // including detached list, sorted union and comparison copies, not merely before getString().
+  for(long i=0;i<sentinel;i++){budget.row(1);budget.capture(36,36,36,4);}
+  return j.query("SELECT id FROM durable_task FORCE INDEX(task_input_lookup) WHERE input_kind='TRANSCRIPTION_INPUT' AND input_id=? ORDER BY id LIMIT ?",rs->{
+   var ids=new ArrayList<String>();while(rs.next()){budget.check();require(ids.size()<maximum,BUDGET_EXCEEDED);String id=rs.getString(1);uuid(id);ids.add(id);}return List.copyOf(ids);
+  },input,sentinel);
+ }
+ void reserveTaskId(){budget.row(1);budget.capture(36,36,36,4);}
  private List<Measured> admit(Shape shape,String where,String order,int maximum,boolean projected,Object...args){
   budget.check();require(maximum>0,BUDGET_EXCEEDED);
   var texts=shape.columns.stream().filter(c->!shape.numbers.contains(c)&&!shape.timestamps.contains(c)).toList();

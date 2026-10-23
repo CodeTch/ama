@@ -1,0 +1,41 @@
+{
+  "base": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+  "paths": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-report.md",
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06ProbeSource.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06Resources.java",
+    "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+    "backend/integration-tests/src/test/java/ama/meeting/Task06InheritedMeetingConcurrencyIT.java",
+    "backend/integration-tests/src/test/java/ama/meeting/Task06InheritedMeetingRevisionIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06FixAtomicityIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06FixFixture.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06FixHandlesIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06FixHttpsIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06FixIntegrityIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06FixLocksIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06FixProvenanceIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06IndexedTasksIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06InheritedAuthorityFixture.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06InheritedAuthorityIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06InheritedRegistryFixture.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06InheritedResources.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06TaskQueryPlanIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task06InheritedPreparedCompletionIT.java",
+    "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedArchiveRestartIT.java",
+    "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedFactsReaderIT.java",
+    "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedProcessingFixture.java",
+    "backend/integration-tests/src/test/java/ama/transcript/Task06SavedHandleProbe.java"
+  ],
+  "publicEvidenceDirectory": "artifacts/phase-b/b-remaining/task-06/fix-01",
+  "excludedRootTrackedPaths": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md"
+  ],
+  "excludedRootUntrackedFiles": "All root-owned W pins/reports/snapshots other than the appended task-06-report.md"
+}

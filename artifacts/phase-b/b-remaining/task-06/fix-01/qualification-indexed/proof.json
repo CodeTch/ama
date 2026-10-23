@@ -1,0 +1,355 @@
+{
+  "base": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+  "previousPin": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-concrete-runtime-pin-refresh-02-20261024.json",
+  "previousPinSha256": "e70e5726e30293ce5d72fec5f0fb515ce0d3b2648b0b92fe2d0ea93c97dd7cc3",
+  "status": "REQUEST_ADDITIVE_PIN_BEFORE_FINAL_COVERING",
+  "source": [
+    {
+      "path": "backend/api/src/main/java/ama/api/TranscriptConfiguration.java",
+      "previousSha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+      "sha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+      "bytes": 6803,
+      "changed": false,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/api/src/main/java/ama/api/TranscriptConfiguration.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "previousSha256": "720a77843bf23829d5ff3da8aae9fbe2ee52855b9eb61fc962475d1024e8f994",
+      "sha256": "720a77843bf23829d5ff3da8aae9fbe2ee52855b9eb61fc962475d1024e8f994",
+      "bytes": 32920,
+      "changed": false,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java",
+      "previousSha256": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877",
+      "sha256": "994ea23103299bb4d6c83d3fb313ddc872a5e027278593a30dbb022153d1d968",
+      "bytes": 7115,
+      "changed": true,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+      "previousSha256": "8f224298d87acb5d771e7f65d112e9bd53de9c7b4209cbd959b9e25f0adaca7b",
+      "sha256": "bc393ba23f5c1b618bf00cef44c59e45c937feb598a5a20cc161f415d347147f",
+      "bytes": 13380,
+      "changed": true,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java",
+      "previousSha256": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+      "sha256": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+      "bytes": 3770,
+      "changed": false,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java",
+      "previousSha256": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076",
+      "sha256": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076",
+      "bytes": 3762,
+      "changed": false,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java",
+      "previousSha256": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+      "sha256": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+      "bytes": 1675,
+      "changed": false,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/core/src/main/java/ama/transcript/CorrectionInstallation.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java",
+      "previousSha256": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+      "sha256": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+      "bytes": 1283,
+      "changed": false,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "previousSha256": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+      "sha256": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+      "bytes": 40777,
+      "changed": false,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java",
+      "previousSha256": "3b5db92905a817ba9336103cb3c65c2b0e25efe1b8e46e9394e8e3cdabe9d09d",
+      "sha256": "3b5db92905a817ba9336103cb3c65c2b0e25efe1b8e46e9394e8e3cdabe9d09d",
+      "bytes": 2803,
+      "changed": false,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java",
+      "previousSha256": "7f9d75c0df4fc01fbf16df3cf63edab01fe6eb867c6556998fcfe58b5149caef",
+      "sha256": "7f9d75c0df4fc01fbf16df3cf63edab01fe6eb867c6556998fcfe58b5149caef",
+      "bytes": 1161,
+      "changed": false,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java",
+      "previousSha256": "42b00923d6ce71410acf21a83fa25cbd21b206bef830616c5932ff0d4acfd8d4",
+      "sha256": "f53c6ce798e4232a947bcf94662dbf78f630e7959475ba112bafa10a8a2889d9",
+      "bytes": 17446,
+      "changed": true,
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java"
+    }
+  ],
+  "additionalSource": [
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "bytes": 75
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06IndexedTasksIT.java",
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06IndexedTasksIT.java",
+      "sha256": "e71c48726948e1f90952f65e482fb6d8bbb7a326fec8cad5cb9625dad4306ef4",
+      "bytes": 10496
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixProvenanceIT.java",
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06FixProvenanceIT.java",
+      "sha256": "6df8ef0db5def28886d5e36443611b8a51a3eb33265bc70c72d8b722a256c90a",
+      "bytes": 10553
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixFixture.java",
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06FixFixture.java",
+      "sha256": "b21410866e33fde3bc4d030e4c78dce2bf41c5c56da5c2cb4e2f9ce90989b6ef",
+      "bytes": 3119
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06ProbeSource.java",
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06ProbeSource.java",
+      "sha256": "650bd7be8d9833841e8a1fcfb2f46f5dde632aa47e15c77ba6134d5c5d280047",
+      "bytes": 5947
+    }
+  ],
+  "changedSeams": "SavedTranscriptRows pre-reserved forced typed-input ID discovery; SavedTranscriptGraph sorted complete union/exact producer PK/input-subject predicates/same-held-root recheck; fixture schema guard13\u219214. Production configuration/budget/admission/correction/transitions/authority unchanged.",
+  "recipe": "Original numeric/effective UTF8/scalars1Mi and configured16Mi, archive refs/minima and selected trusted disabled declarations/inventory carried by unchanged qualification sources plus exact fixture delta only13\u219214. Directed service composed under default transcript.enabled=false test fixture. No new per-boot numeric/composition observation or installed whole-runtime qualification claimed.",
+  "schema": "Reviewed/frozen/ACKed literal013.2 index applied1/rerun0 with complete old data/schema preservation; see sealed migrationproof.",
+  "freshness": "S/readF gate precedes first consistent lookup; mutationF prior receipt read is FOR UPDATE. Same held owner gate serializes current registered import writers. Both default REPEATABLE-READ and READ_COMMITTED actual registered-writer blocking and complete recheck; unsupported direct cross-subject maintenance races are outside the writer contract, quiescent corruption is detected.",
+  "evidence": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-reader-red-01/integration-tests-TEST-ama.storage.Task06IndexedTasksIT.xml",
+      "sha256": "c4e29b59bee5381a58b7857addd412b5937abd53f22fbd7e64358db638af7f8c",
+      "bytes": 34284
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-reader-red-01/receipt.json",
+      "sha256": "ecee670226f0c9e6ad5ca514d726bcbcc2db36bf4644249934808b6c8ca165e1",
+      "bytes": 446
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-reader-red-01/run.log",
+      "sha256": "e3ccf6052c4e2bea2707c70391f324804d24d0af8005eea6d245fc96d282c63c",
+      "bytes": 15846
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-reader-red-01/source.json",
+      "sha256": "e24ee8619ccea2d6d6d5fbe686853406b9b6e77b48da1b5f1014c56efbfb395d",
+      "bytes": 57542
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-reader-green-03/integration-tests-TEST-ama.storage.Task06IndexedTasksIT.xml",
+      "sha256": "f7d8d187f34b19c4a74dda753b6ab90d01268b24552c33cb77f92ed14749cc31",
+      "bytes": 33791
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-reader-green-03/receipt.json",
+      "sha256": "88ff02d84856af762e9dc110391b0ab7e4889118e3811a6f8fef0abd22f6bd3f",
+      "bytes": 447
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-reader-green-03/run.log",
+      "sha256": "ca10c87d95775369f2db7150d8d42f967ee8150fb650dd4f713549216547d02f",
+      "bytes": 13322
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-reader-green-03/source.json",
+      "sha256": "58c3077f7532756fa13b6846ce4a6462b1d8f9ea49ea021538c70451b1d1bc18",
+      "bytes": 57542
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-provenance-green-01/integration-tests-TEST-ama.storage.Task06FixProvenanceIT.xml",
+      "sha256": "8cc7e73335f2b6a1a54f978a3167c5d771b3c602ca76f78b48db0f4d19a048f4",
+      "bytes": 33340
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-provenance-green-01/receipt.json",
+      "sha256": "1e6de498d4c5e593da747f2c57d71a61c6281c66bc275139df00f97e6bb3ea5c",
+      "bytes": 453
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-provenance-green-01/run.log",
+      "sha256": "13650e9477f480ed256847a5eac5f7621e5b690aac328f70aa1c2e3f345b662d",
+      "bytes": 12495
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-provenance-green-01/source.json",
+      "sha256": "788a888828ce4146863c90484cf0a8f16ba886f92382f15cb1558a5965c55718",
+      "bytes": 57542
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/indexed-query-plans.json",
+      "sha256": "6310dc81112cb82bd02c0df315c80aea08051b43accd7f652178c4e415f2bb7d",
+      "bytes": 1348
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/index-migration/proof.json",
+      "sha256": "1c36d5ee2328d0545b071c0350e1307fbf37490ce1e555694a049e22f1a9192d",
+      "bytes": 5623
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/qualified-delta.patch",
+      "sha256": "d69e9c712c8f87341078ec9ec715f911a8404d56b123bdf8d6ea866d500d28d6",
+      "bytes": 5233
+    }
+  ],
+  "windows": [
+    {
+      "label": "indexed-reader-green-03",
+      "exit": 0,
+      "xml": [
+        {
+          "name": "ama.storage.Task06IndexedTasksIT",
+          "tests": "4",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        }
+      ],
+      "all12QualifiedSourcesCurrent": true
+    },
+    {
+      "label": "indexed-provenance-green-01",
+      "exit": 0,
+      "xml": [
+        {
+          "name": "ama.storage.Task06FixProvenanceIT",
+          "tests": "1",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        }
+      ],
+      "all12QualifiedSourcesCurrent": true
+    }
+  ],
+  "observations": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-c6d91262-7bee-48a1-820a-0b575fb8e52d/structural-relevant-276f28b6-c913-41ed-9ccd-67d25e5dd275.json",
+      "sha256": "02a009f07da02b7afb364290ce71d080de29081c49a7a7389c1c44b449e4275c",
+      "bytes": 2782
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-c6d91262-7bee-48a1-820a-0b575fb8e52d/restored-276f28b6-c913-41ed-9ccd-67d25e5dd275.json",
+      "sha256": "5c16c13cb1d13e8425375604043ca18baf3573a8fe4daaffa76846198eec650a",
+      "bytes": 2568
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-c6d91262-7bee-48a1-820a-0b575fb8e52d/structural-unrelated-b5126805-7e1c-40f2-a14b-a08712f5b9c9.json",
+      "sha256": "1fb5f800d9f756d8fe25dae45dc735d87688c0b94dead27164c3b0995b575bf9",
+      "bytes": 2822
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-c6d91262-7bee-48a1-820a-0b575fb8e52d/restored-92a34f53-516d-42e6-ae51-3f16ce0f2555.json",
+      "sha256": "77ce5dcd9bb36fe3cc136e0c648d48dd76902b39164e3a1b9d697ad415179607",
+      "bytes": 2607
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-c6d91262-7bee-48a1-820a-0b575fb8e52d/restored-b5126805-7e1c-40f2-a14b-a08712f5b9c9.json",
+      "sha256": "9cac88c556f7b508198a28814fdf652f79d88b11adcc4ad4114efe247afa4966",
+      "bytes": 2607
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-c6d91262-7bee-48a1-820a-0b575fb8e52d/structural-unrelated-92a34f53-516d-42e6-ae51-3f16ce0f2555.json",
+      "sha256": "c7f60f8afe4af38c8cd673c921e72a331af894121139432aee32a10643cb3327",
+      "bytes": 2822
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-c6d91262-7bee-48a1-820a-0b575fb8e52d/membership-budget-boundaries.json",
+      "sha256": "7ff9540d9e79bc47cbcef761c6e19a38b3e3f5a9e128d8925026b0c9db0ae6a7",
+      "bytes": 479
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-c6d91262-7bee-48a1-820a-0b575fb8e52d/restored-5fdfc023-6c11-4140-92f8-07fdd2c3f82d.json",
+      "sha256": "cad436a964767b5c3f4772c3ca6ec4976b98239739657192d96f74663e8600b4",
+      "bytes": 2568
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-c6d91262-7bee-48a1-820a-0b575fb8e52d/structural-relevant-5fdfc023-6c11-4140-92f8-07fdd2c3f82d.json",
+      "sha256": "680bf26a8ee5abc618ed72b9f4aebf2cf230a840136716de61eb0fa41742aed5",
+      "bytes": 2782
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-845c1a87-2b33-431b-8426-4f91e859e96d/registered-writer-membership-serialization.json",
+      "sha256": "e6ff91fa49f80bba35e49980a61882a9418c6ef82268a45b9494144a03ad1977",
+      "bytes": 264
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-59570f29-90a2-4aa7-b40e-556e81f51996/between-phases-membership.json",
+      "sha256": "8e30d6c08031890480e252931348c126cd417d880204d28a7f286c667dd00529",
+      "bytes": 256
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-59570f29-90a2-4aa7-b40e-556e81f51996/restored-d36e93f2-e56c-4549-824f-0c70efb61253.json",
+      "sha256": "d2dade5736bed743412e1ccdfb016d9f3bc37e4ea139b7f6460798366a5a570f",
+      "bytes": 110
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-59570f29-90a2-4aa7-b40e-556e81f51996/structural-relevant-3521fe86-f03c-4077-9469-d8e81314220f.json",
+      "sha256": "a4502478b22db8d638eee0769ea5ca7ddbb176bf3cec35e59fce18400d2b4863",
+      "bytes": 325
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-59570f29-90a2-4aa7-b40e-556e81f51996/structural-relevant-d36e93f2-e56c-4549-824f-0c70efb61253.json",
+      "sha256": "5b33cc12f48fd9ccf123f28d11548c3c40939f9bf9eb0f63f24a66ce30b704f7",
+      "bytes": 325
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-59570f29-90a2-4aa7-b40e-556e81f51996/restored-3521fe86-f03c-4077-9469-d8e81314220f.json",
+      "sha256": "c53c8bac97d309530872228cbd39d81263411eaf6a3687372ea9b953c57fa5f3",
+      "bytes": 110
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-3cb09e64-ce09-45f4-94b1-5d49cd235485/indexed-membership-phases.json",
+      "sha256": "bb7afc36a92c141a9cce73e7d1e98cd029cc099475916cf49e665307d47a6672",
+      "bytes": 8970
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-6826f0ea-338f-4714-931a-2e416913fb10/provenance-negative-matrix.json",
+      "sha256": "d0ba5affe673ad4f3ae27945a3382411934eedf0b29ad5219d72a1430b647f3c",
+      "bytes": 1076
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-6826f0ea-338f-4714-931a-2e416913fb10/extra-task-cross-subject-probe.json",
+      "sha256": "20079776bd7fc82b56c27d7d6b42378fde127fbcc6bfb5458d27f9b33c8f68f8",
+      "bytes": 395
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-6826f0ea-338f-4714-931a-2e416913fb10/extra-task-cross-subject-restored.json",
+      "sha256": "eca16ca12b941c49de1605064c416a5a1a4e74e015192b4d491ed27aad947343",
+      "bytes": 106
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-6826f0ea-338f-4714-931a-2e416913fb10/extra-task-same-subject-restored.json",
+      "sha256": "b6b632a1a32d66e0235dd50c05f029b35dff5fa453342afd9ab2d26e73996f9a",
+      "bytes": 106
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-6826f0ea-338f-4714-931a-2e416913fb10/extra-task-same-subject-probe.json",
+      "sha256": "5c8a1394456a0d29f4ca0315722d4070710208dfffdc0a705d52e664844153ad",
+      "bytes": 395
+    }
+  ],
+  "claims": "Latest directed4+1 distinct tests PASS on exact qualified source; earlier RED/GREEN windows retained, no summing overlap. Exact65 relevant sentinel0body/tasklocks,65unrelated lockedrows stillreadable, S\u2192F newmembership atomicrefusal, same/cross-subject surplus and wrongproducerinput/subject failures; all prospective structural rows exact restore with0references."
+}

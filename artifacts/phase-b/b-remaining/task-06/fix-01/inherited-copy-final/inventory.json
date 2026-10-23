@@ -1,0 +1,87 @@
+{
+  "claim": "Final exact ten forward copies; original classes not claimed as executed in full; concurrency prefix overlay has its separate five-case GREEN window.",
+  "copies": [
+    {
+      "source": "backend/integration-tests/src/test/java/ama/meeting/MeetingRevisionIT.java",
+      "sourceSha256": "fcff90df12115e390c3a87ce8f3664f3da57971e2a0f819036bf2a74a900b901",
+      "copy": "backend/integration-tests/src/test/java/ama/meeting/Task06InheritedMeetingRevisionIT.java",
+      "copySha256": "c7ae5ca277cda2769cb390b2d4aaf0bbf2594bf5eaeb049a31fa6aa06cb60b27",
+      "patch": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-copy-final/Task06InheritedMeetingRevisionIT.patch",
+      "patchSha256": "4c63cf81bb74e50b041ae92fd8068e3667b07343ecfd803f0cd0297c2e4ee5b5"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/meeting/MeetingConcurrencyIT.java",
+      "sourceSha256": "ec3a1d20605be74131350fd02848fd8bd64ece9e26a6862f215cfe2651ccb3d3",
+      "copy": "backend/integration-tests/src/test/java/ama/meeting/Task06InheritedMeetingConcurrencyIT.java",
+      "copySha256": "8afd7a5a643fec567bb7e1de01b6cfe7bdaec7d16d0f0da2817ef59ae5de8661",
+      "patch": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-copy-final/Task06InheritedMeetingConcurrencyIT.patch",
+      "patchSha256": "58b402f792177bffa871fe8f22b535097ca38f2ac31816c01a60c0706917ded8"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/storage/Task05RegressionResources.java",
+      "sourceSha256": "5c2b4809731e10b8ed7b9e17012138e8f3f5ae290034554425b12f4e909d8fb8",
+      "copy": "backend/integration-tests/src/test/java/ama/storage/Task06InheritedResources.java",
+      "copySha256": "e9271e38b0cb11a81529dab206edf9bec280b471280e2d702d18c56762fdd088",
+      "patch": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-copy-final/Task06InheritedResources.patch",
+      "patchSha256": "4e734377c8bf74db1ec9d7c3f93a5d5ac43c2ae8502e5340d1e572dde4e40f2c"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/storage/Task05RegistryFixture.java",
+      "sourceSha256": "4ff6f0313681f50d37493d8747bad927fd58661de349104125f4fa418743c655",
+      "copy": "backend/integration-tests/src/test/java/ama/storage/Task06InheritedRegistryFixture.java",
+      "copySha256": "0de1a0aaf583164868c77f01e3aebd72a56dba6a2e704372f693ec93d08493c3",
+      "patch": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-copy-final/Task06InheritedRegistryFixture.patch",
+      "patchSha256": "dba087c45c07a24b470a54b7d2ab7ba9de104d0a18f6aa5e107ff456514aaede"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/storage/Task05AuthorityFixture.java",
+      "sourceSha256": "603e49f60466dc5d58170f80c2e538b6c5029f2b6d343a5b6fc5c446d227ae45",
+      "copy": "backend/integration-tests/src/test/java/ama/storage/Task06InheritedAuthorityFixture.java",
+      "copySha256": "7561f86c88c8fb4c75d45f6ac5a3f7a10bce54b65c2b8623fdf8bcf1e3ee3936",
+      "patch": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-copy-final/Task06InheritedAuthorityFixture.patch",
+      "patchSha256": "f8c6b29306e61e246a90182011697862a4ce9b8ed07030e98a52d63532084c03"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/storage/Task05LegacyAuthorityIT.java",
+      "sourceSha256": "0ece458b2feadde0bc2b2b15ef9014baaa03d4c71cbe3a933cf721923e54dfa0",
+      "copy": "backend/integration-tests/src/test/java/ama/storage/Task06InheritedAuthorityIT.java",
+      "copySha256": "f4a91b00521a7ef818aa9df7312498e4fa6f5ba146ecdf2e7ddc30846d86e539",
+      "patch": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-copy-final/Task06InheritedAuthorityIT.patch",
+      "patchSha256": "e844f5da2d81c3434308f243e2d6c82e9aa6600cc907c15602d9f66145c73581"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+      "sourceSha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3",
+      "copy": "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedProcessingFixture.java",
+      "copySha256": "c376ddf50b0576dea0739a054ab244193485dab7fd5d638518af26e44c261459",
+      "patch": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-copy-final/Task06InheritedProcessingFixture.patch",
+      "patchSha256": "fe3e40132824ce846d99edddb88a67b7a3ebb9db325960f8a2cff963ef7895d3"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+      "sourceSha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2",
+      "copy": "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedFactsReaderIT.java",
+      "copySha256": "4cba9f6fc9705e5b2652c146d04cf122db45d47c456031f16783d358d60569c2",
+      "patch": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-copy-final/Task06InheritedFactsReaderIT.patch",
+      "patchSha256": "357600653d6dd22d575d6e67634bff60230676913999c793821420ae22c35959"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/task/Task05LegacyPreparedCompletionIT.java",
+      "sourceSha256": "c29dde8d718a4690fde6806e250c845c393c4d6c0bb949d78c86f46ac939a1df",
+      "copy": "backend/integration-tests/src/test/java/ama/task/Task06InheritedPreparedCompletionIT.java",
+      "copySha256": "ae57fdac77552a51c64522fd8c97ad42d470b392657e5067f89f5e86587a6650",
+      "patch": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-copy-final/Task06InheritedPreparedCompletionIT.patch",
+      "patchSha256": "e03f5dfa8eda9868682ec78fdbf9ea6594797086173af265721327f3b84f09b0"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "sourceSha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9",
+      "copy": "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedArchiveRestartIT.java",
+      "copySha256": "f014fa47c0ef01d128c1fcc0fa08adc148d274adb169aa53c031b2a8850f848e",
+      "patch": "artifacts/phase-b/b-remaining/task-06/fix-01/inherited-copy-final/Task06InheritedArchiveRestartIT.patch",
+      "patchSha256": "95043d215290dae656986490097fa2def03b93145681ad823f0f11856fb93181"
+    }
+  ],
+  "excluded": "Original MeetingRevision global task_outbox_sequence overflow mutation not annotated Test; actual20-fault matrix includes flush rollback equivalence",
+  "scope": "Six copied integration classes plus four copied fixtures/resources. Controlled metadata/queue/archive fixtures are not actual business-pipeline qualification."
+}

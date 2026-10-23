@@ -1,0 +1,13 @@
+--- refresh02/backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java
++++ current/backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java
+@@ -89,7 +89,9 @@
+    for(var source:sources)require("TRANSCRIPT_INPUT".equals(source.originalPurpose()),PROVENANCE_UNAVAILABLE);
+   }
+   var raw=revisions.values().stream().filter(r->r.string("kind").equals("RAW")).toList();require(raw.size()==1&&limits.tasks()>=1,PROVENANCE_UNAVAILABLE);
+-  var task=read.one(TASK,raw.getFirst().string("producer_task_id"));require("SUCCEEDED".equals(task.get("state"))&&"TRANSCRIPT_REVISION".equals(task.get("output_kind"))&&raw.getFirst().string("id").equals(task.get("output_id")),PROVENANCE_UNAVAILABLE);
++  var declaredTasks=read.read(TASK,"(input_kind='TRANSCRIPTION_INPUT' AND input_id=?) OR id=?","id",limits.tasks(),false,inputId,raw.getFirst().string("producer_task_id"));
++  require(declaredTasks.size()==1&&raw.getFirst().string("producer_task_id").equals(declaredTasks.getFirst().get("id")),PROVENANCE_UNAVAILABLE);
++  var task=declaredTasks.getFirst();require("SUCCEEDED".equals(task.get("state"))&&"TRANSCRIPT_REVISION".equals(task.get("output_kind"))&&raw.getFirst().string("id").equals(task.get("output_id")),PROVENANCE_UNAVAILABLE);
+   budget.row(1);var maximum=j.queryForList("SELECT revision FROM transcript_revision WHERE meeting_id=? ORDER BY revision DESC LIMIT 1",Long.class,meeting);require(maximum.size()==1,PROVENANCE_UNAVAILABLE);
+   require(maximum.getFirst()<=num(root,"revision"),PROVENANCE_UNAVAILABLE);
+   // Every content-bearing set is now measured, reserved and retained under its actual parent/row locks.

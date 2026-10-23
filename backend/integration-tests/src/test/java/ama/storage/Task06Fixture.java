@@ -23,14 +23,14 @@ import static ama.transcript.ArchiveProcessingFixture.B;
 class Task06Fixture {
  ama.worker.WorkerHealthServer health;final java.util.concurrent.atomic.AtomicReference<ama.worker.WorkerLoop> healthLoop=new java.util.concurrent.atomic.AtomicReference<>();
  Task06ProbeSource probe;ConfigurableApplicationContext app;JdbcTemplate j;javax.sql.DataSource source;
- final ObjectMapper json=new ObjectMapper();String owner,token,meeting;final String csrf="T".repeat(43),origin="https://task05.example.invalid";
+ final ObjectMapper json=new ObjectMapper();String owner,token,meeting;final String csrf="T".repeat(43);String origin="https://task05.example.invalid";
  FileStoragePort actualStoragePort;final java.util.Set<Thread> actualReadThreads=java.util.concurrent.ConcurrentHashMap.newKeySet();ama.storage.s3.Task05Fix02Proxy s3Proxy;ama.storage.s3.S3Fixture s3Fixture;boolean s3Mode;Path receipt;Task06NativeFixture nativeFixture;FileBackendDefinitions definitions;Path archive;String pin;Ref processing;Map<String,Object> bounds;
  static final Path ROOT=Path.of(System.getenv("AMA_TASK05_ROOT"));
  @BeforeEach void start(TestInfo info)throws Exception {
   probe=new Task06ProbeSource(MysqlTestDatabase.dataSource());source=probe;j=new JdbcTemplate(source);
-  assertEquals(13,j.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=1",Integer.class));
-  Path publicRoot=Path.of("artifacts/phase-b/b-remaining/task-06").toAbsolutePath();
-  while(!Files.exists(publicRoot.getParent()))publicRoot=Path.of("../../artifacts/phase-b/b-remaining/task-06").toAbsolutePath().normalize();
+  assertEquals(14,j.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=1",Integer.class));
+  Path publicRoot=Path.of("artifacts/phase-b/b-remaining/task-06/fix-01").toAbsolutePath();
+  while(!Files.exists(publicRoot.getParent()))publicRoot=Path.of("../../artifacts/phase-b/b-remaining/task-06/fix-01").toAbsolutePath().normalize();
   receipt=Files.createDirectory(publicRoot.resolve("pipeline-"+UUID.randomUUID()));
   Path durable=ROOT.resolve("native/data");if(!Files.exists(durable))Files.createDirectory(durable);
   nativeFixture=new Task06NativeFixture(durable.resolve("case-"+UUID.randomUUID()));
@@ -71,7 +71,8 @@ class Task06Fixture {
    String password=Files.readString(ROOT.resolve("pki/keystore-password"));java.security.cert.Certificate cert;try(var in=Files.newInputStream(ROOT.resolve("pki/server.crt"))){cert=java.security.cert.CertificateFactory.getInstance("X.509").generateCertificate(in);}
    bounds.put("processing.worker.health-url","https://localhost:"+health.port());bounds.put("processing.worker.key-store",ROOT.resolve("pki/writer.p12").toString());bounds.put("processing.worker.trust-store",ROOT.resolve("pki/trust.p12").toString());bounds.put("processing.worker.key-store-password",password);bounds.put("processing.worker.trust-store-password",password);bounds.put("processing.worker.server-cert-sha256",HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(cert.getEncoded())));bounds.put("processing.worker.max-age-ms",10000);
   }
-  app=new SpringApplicationBuilder(ApiApplication.class).properties(bounds).initializers(context->{var c=(GenericApplicationContext)context;c.registerBean("task06Source",javax.sql.DataSource.class,()->source);c.registerBean("task06Backends",FileBackendDefinitions.class,()->definitions);}).run("--server.address=127.0.0.1","--server.port=0","--management.server.port=0","--logging.level.root=ERROR","--identity.allowed-origin="+origin,"--processing.enabled=true","--processing.archive-root="+archive,"--processing.index-sha="+pin,"--processing.config-version="+processing.version(),"--processing.config-sha="+processing.sha256());
+  beforeApplication();
+  app=new SpringApplicationBuilder(ApiApplication.class).properties(bounds).initializers(context->{var c=(GenericApplicationContext)context;c.registerBean("task06Source",javax.sql.DataSource.class,()->source);c.registerBean("task06Backends",FileBackendDefinitions.class,()->definitions);}).run("--server.address=127.0.0.1","--server.port="+serverPort(),"--management.server.port=0","--logging.level.root=ERROR","--identity.allowed-origin="+origin,"--processing.enabled=true","--processing.archive-root="+archive,"--processing.index-sha="+pin,"--processing.config-version="+processing.version(),"--processing.config-sha="+processing.sha256());
   owner="task06-"+UUID.randomUUID();token=identity(owner);var created=call("POST","/meetings","{}","create");assertEquals(201,created.statusCode(),created.body());meeting=body(created).get("id").asText();
   Files.writeString(receipt.resolve("resource.json"),json.writeValueAsString(Map.of("nativePid",nativeFixture.process.pid(),"nativePort",nativeFixture.port,"managedId",definitions.backends().getFirst().id(),"nativePath",nativeFixture.base.root.toString(),"archive",archive.toString(),"pin",pin,"databaseNow",j.queryForObject("SELECT UTC_TIMESTAMP(6)",String.class),"jvmNow",java.time.Instant.now().toString(),"maxMemory",Runtime.getRuntime().maxMemory(),"owner",owner)));
  }
@@ -100,10 +101,10 @@ class Task06Fixture {
         return json.readTree(response.body());
     }
     HttpResponse<String> call(String method,String path,String payload,String key) throws Exception {
-        var request=HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+app.getEnvironment().getProperty("local.server.port")+"/api/v1"+path)).header("Cookie","__Host-AMA_SESSION="+token).header("Origin",origin).header("X-CSRF-Token",csrf).header("Content-Type","application/json");
+        var request=authenticated(HttpRequest.newBuilder(URI.create(apiUrl()+path))).header("Origin",origin).header("X-CSRF-Token",csrf).header("Content-Type","application/json");
         if(key!=null)request.header("Idempotency-Key",key);
         var built=request.method(method,HttpRequest.BodyPublishers.ofString(payload)).build();
-        var response=HttpClient.newHttpClient().send(built,HttpResponse.BodyHandlers.ofString());
+        var response=client().send(built,HttpResponse.BodyHandlers.ofString());
         if(response.statusCode()==401)authDiagnostic(method+" "+path,built);
         return response;
     }
@@ -120,8 +121,8 @@ class Task06Fixture {
         return upload;
     }
     HttpResponse<String> part(String upload,String value) throws Exception {
-        var req=HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+app.getEnvironment().getProperty("local.server.port")+"/api/v1/uploads/"+upload+"/parts/1")).header("Cookie","__Host-AMA_SESSION="+token).header("Origin",origin).header("X-CSRF-Token",csrf).header("Content-Type","application/octet-stream").header("X-Checksum-SHA256",hash(value)).PUT(HttpRequest.BodyPublishers.ofString(value)).build();
-        var response=HttpClient.newHttpClient().send(req,HttpResponse.BodyHandlers.ofString());
+        var req=authenticated(HttpRequest.newBuilder(URI.create(apiUrl()+"/uploads/"+upload+"/parts/1"))).header("Origin",origin).header("X-CSRF-Token",csrf).header("Content-Type","application/octet-stream").header("X-Checksum-SHA256",hash(value)).PUT(HttpRequest.BodyPublishers.ofString(value)).build();
+        var response=client().send(req,HttpResponse.BodyHandlers.ofString());
         if(response.statusCode()==401)authDiagnostic("PART "+upload,req);
         return response;
     }
@@ -142,6 +143,11 @@ class Task06Fixture {
   assertEquals("SUCCEEDED",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,task));
   return j.queryForObject("SELECT output_id FROM durable_task WHERE id=?",String.class,task);
  }
+ void beforeApplication()throws Exception {}
+ int serverPort(){return 0;}
+ String apiUrl(){return "http://127.0.0.1:"+app.getEnvironment().getProperty("local.server.port")+"/api/v1";}
+ HttpClient client()throws Exception{return HttpClient.newHttpClient();}
+ HttpRequest.Builder authenticated(HttpRequest.Builder request)throws Exception{return request.header("Cookie","__Host-AMA_SESSION="+token);}
  boolean installedTranscript(){return false;}
  JdbcSavedTranscripts isolated(){return ama.api.Task06RuntimeProbe.compose(app).service();}
  Actor actor(){return new Actor(owner,Status.ACTIVE,Set.of(Role.USER));}

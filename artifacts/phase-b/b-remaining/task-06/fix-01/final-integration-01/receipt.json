@@ -1,0 +1,37 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06*IT"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.task.Task06InheritedPreparedCompletionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06TaskQueryPlanIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixHandlesIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixHttpsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixAtomicityIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06IndexedTasksIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06ConcurrencyIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06AtomicityIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06HttpIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06SavedGraphIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06InheritedAuthorityIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06CompositionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06WireHttpIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixIntegrityIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06RestartIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.transcript.Task06InheritedFactsReaderIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06AccessIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.transcript.Task06InheritedArchiveRestartIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.meeting.Task06InheritedMeetingConcurrencyIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06GuardsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixLocksIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06FixProvenanceIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.meeting.Task06InheritedMeetingRevisionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06SavedCommandsIT.xml"
+  ],
+  "elapsedSeconds": 280.9063193798065,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

@@ -1,0 +1,19 @@
+--- backend/integration-tests/src/test/java/ama/meeting/MeetingConcurrencyIT.java
++++ backend/integration-tests/src/test/java/ama/meeting/Task06InheritedMeetingConcurrencyIT.java
+@@ -19,13 +19,13 @@
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ /** Real MySQL transactions gated at actual JDBC boundaries; no timing guesses or SQL substitutes. */
+-class MeetingConcurrencyIT {
++class Task06InheritedMeetingConcurrencyIT {
+     final DataSource actual=MysqlTestDatabase.dataSource();
+     final JdbcTemplate j=new JdbcTemplate(actual);
+-    final String owner="owner-"+UUID.randomUUID(),member="member-"+UUID.randomUUID();
++    final String owner="task06-fix-concurrency-owner-"+UUID.randomUUID(),member="task06-fix-concurrency-member-"+UUID.randomUUID();
+     final Actor actor=new Actor(owner,Status.ACTIVE,Set.of(Role.USER));
+     @BeforeEach void identities(){
+-        new SchemaMigrator(actual).migrate();
++        assertEquals(13,j.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=1",Integer.class));
+         for(String id:List.of(owner,member))j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",id,id);
+     }
+     record Runtime(MeetingService meetings,RosterService rosters,JdbcMeetingAccess access,TransactionRunner tx){}

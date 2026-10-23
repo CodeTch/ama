@@ -1,0 +1,39 @@
+--- backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java
++++ backend/integration-tests/src/test/java/ama/transcript/Task06InheritedProcessingFixture.java
+@@ -17,17 +17,19 @@
+ import static ama.contract.MinutesContracts.*;
+ 
+ /** Controlled metadata only: no upload qualification, worker, or production producer claim. */
+-public final class ArchiveProcessingFixture {
++public final class Task06InheritedProcessingFixture {
+  public static final ArchiveReadBudget B=new ArchiveReadBudget(65536,1048576,16,32,8,200000,32,255,65536,262144,1048576,65536,32,250000,500000);
+  public static final String VERSION="b06.controlled.import-txt.1",SHA=hash("A"),TIME="2026-10-23T01:02:03.123456Z";
++ static final List<Task06InheritedProcessingFixture> OWNED=new java.util.concurrent.CopyOnWriteArrayList<>();
++ public final List<String> ownedTasks=new ArrayList<>();
+  public final DataSource source; public final JdbcTemplate j;
+- public final String owner="b06-facts-"+UUID.randomUUID(),meeting=id(),batch=id(),input=id(),file=id(),task=id(),backend="B06_FACTS_"+id();
++ public final String owner="task06-fix-metadata-"+UUID.randomUUID(),meeting=id(),batch=id(),input=id(),file=id(),task=id(),backend="B06_FACTS_"+id();
+  public final Actor actor=new Actor(owner,Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
+  public final List<RawArchive> archives=archives();
+  public final String manifest,fingerprint;
+- public ArchiveProcessingFixture(){this(MysqlTestDatabase.dataSource());}
+- public ArchiveProcessingFixture(DataSource source){
+-  this.source=source;j=new JdbcTemplate(source);new SchemaMigrator(source).migrate();
++ public Task06InheritedProcessingFixture(){this(MysqlTestDatabase.dataSource());}
++ public Task06InheritedProcessingFixture(DataSource source){
++  this.source=source;j=new JdbcTemplate(source);org.junit.jupiter.api.Assertions.assertEquals(13,j.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=1",Integer.class));
+   j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",owner,owner);
+   j.update("INSERT INTO task_subject(subject_kind,subject_id,business_version,cancel_epoch,deleted) VALUES ('MEETING',?,20,5,0)",meeting);
+   j.update("INSERT INTO meeting(id,owner_id,revision,cancel_epoch,stage,created_at,updated_at) VALUES (?,?,20,5,'TRANSCRIPT_PENDING',UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))",meeting,owner);
+@@ -39,9 +41,9 @@
+   var facts=new StoredProvenanceFacts(List.of(row(Table.INPUT_BATCH,batch,meeting,"TRANSCRIPT",hash(batch),7L,TIME),row(Table.INPUT_BATCH_FILE,batch,1L,file,SHA)),List.of(new ContentFile(file,SHA,1,meeting)),List.of(),List.of(),B.maxFactRows());
+   fingerprint=service().computeProcessing(manifest.getBytes(StandardCharsets.UTF_8),facts,archives,B,()->false).fingerprint();
+   j.update("INSERT INTO transcription_input(id,meeting_id,batch_id,kind,material_mode,processing_config_version,parser_version,manifest_schema_version,config_manifest,input_fingerprint,base_revision,cancel_epoch,created_at) VALUES (?,?,?,'IMPORT','EMPTY',?,'ama.strict-utf8-lines.v1',1,?,?,7,2,'2026-10-23 01:02:03.123456')",input,meeting,batch,VERSION,manifest,fingerprint);
+-  addTask(task,input,fingerprint,9,2);
++  addTask(task,input,fingerprint,9,2);OWNED.add(this);
+  }
+- public void addTask(String id,String inputId,String fingerprint,long version,long epoch){j.update("INSERT INTO durable_task(id,task_type,pool,subject_kind,subject_id,producer_key,input_kind,input_id,input_fingerprint,business_version,cancel_epoch,priority,state,attempt,max_attempts,available_at,created_at) VALUES (?,'B06_CONTROLLED_METADATA','B06_FACTS','MEETING',?,?,'TRANSCRIPTION_INPUT',?,?,?,?,-3,'READY',0,3,UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))",id,meeting,hash(id),inputId,fingerprint,version,epoch);}
++ public void addTask(String id,String inputId,String fingerprint,long version,long epoch){ownedTasks.add(id);j.update("INSERT INTO durable_task(id,task_type,pool,subject_kind,subject_id,producer_key,input_kind,input_id,input_fingerprint,business_version,cancel_epoch,priority,state,attempt,max_attempts,available_at,created_at) VALUES (?,'B06_CONTROLLED_METADATA','B06_FACTS','MEETING',?,?,'TRANSCRIPTION_INPUT',?,?,?,?,-3,'READY',0,3,UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))",id,meeting,hash(id),inputId,fingerprint,version,epoch);}
+  public String revision(String producer){String revision=id();j.update("INSERT INTO transcript_revision(id,meeting_id,revision,kind,batch_id,input_fingerprint,created_by,created_at,processing_input_id,producer_task_id) VALUES (?,?,8,'RAW',?,?,?,'2026-10-23 01:02:03.123456',?,?)",revision,meeting,batch,fingerprint,owner,input,producer);return revision;}
+  public static ConfigBindings service(){return new ConfigBindings(new StrictConfigArchiveReader(),new StrictProcessingManifestReader());}
+  public static String id(){return UUID.randomUUID().toString();}

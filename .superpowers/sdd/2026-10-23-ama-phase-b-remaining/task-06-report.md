@@ -46,3 +46,18 @@ Read-only database receipt retains all13 successful migration history records. T
 Task12 governance is not installed; the transfer test performs a controlled exact-owned same-root B03/fence transition and verifies actual current authorization/epoch consequences, not a fabricated transfer HTTP endpoint. Future Task10 dispositions/Task11 publication freeze and correction runtime are absent and fail closed if enabled without complete implementations. No production, enterprise, HA, capacity, complete Phase B, B01IMM or B04Q401 qualification is asserted. Independent review may request corrections before adoption.
 
 Public evidence index: `artifacts/phase-b/b-remaining/task-06/evidence-manifest.json`; exact source list: `verification-final/delivery-source-manifest.json`; final checks: `verification-final/`; raw test source seals, logs and fresh XML remain in each named run directory.
+
+
+## Task6 fix01 author completion — 2026-10-24
+
+FIX_BASE aa490afc2690e9517a691cc8d1ae9487a025806d. T6SR01/T6SR02 and mandatory CV01–04 are implemented and validated for scoped independent review. Root-approved013.2 typed-input index applied normally (1 then0 migrations), all old13 history/data/metadata preserved except the approved index. PIN03 remains exact across12 qualified seams; model files unchanged, Task8 alignment pending. T6SR03 Minor remains deferred to Task12.
+
+Public report: `artifacts/phase-b/b-remaining/task-06/fix-01/report.md`. Public manifest: `artifacts/phase-b/b-remaining/task-06/fix-01/manifest.json`. Exact source, SQL/DDL, actual HTTPS, provenance, atomicity, cancellation/authority, two-isolation contention, archive restarts, source-copy adaptations and all intermediate windows are linked there.
+
+Final composed integration121distinct=34Task6+87inherited: first24XML121 contained one copied Unicode-sort namespace failure; only affected5-case class reran GREEN after scoped test-only correction. This is not126 or a pristine green batch. Final all-units41XML254PASS, no errors/skips. IT actual MAVEN_CONFIG=-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false; unit flag absent.
+
+SELECT-only custody:105 actual processing chains=104 independent accepted JSON+1 explicitly derived directHTTP case, complete linkage/unended0; inherited controlled receipts45 tasks=9SUCCEEDED/36FAILED, unended0, separately scoped. Global READY72+RUNNING110=182 persists; RECONCILING23 is separate (wider active205). No cleanup/cancellation to force zero. Same2 selected resources/ports/limits/owners/mounts;100 referenced PIDs absent and own-worktree Java0. Original7935 adopted files+443 Task6 files+this original report prefix preserved. Final four-distinct-private-value/PEM scan and manifests are retained.
+
+Author submission does not assert independent acceptance, production/capacity/fullB/browser/company-login qualification or future10/11 completion. Root-owned central paths and new root custody/pin files are excluded from the author commit.
+
+Final public report SHA256 `6ffac0811ddba318b203fb424f8d0c0d821981be9311ac8c68f6ee381caacfc9`; public manifest SHA256 `f613e4572db784322110e61b976e6ec84b08cab1baed4da7ba8b5b42eef095cd`. Manifest seals906 public evidence files (8,633,931 bytes); final scan covers933 public/author files plus exact author diff, four distinct private needles and PEM checks with zero hits.

@@ -1,0 +1,20 @@
+{
+  "scope": "Read-only actual EXPLAIN; estimates are not measured lock/scan bounds",
+  "acceptedEvidence": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-88e7be2a-47b1-47d9-9211-14d87eec5509/accepted-764958fb-8ade-4d7f-a68d-dee066746bdc.json",
+  "task": "764958fb-8ade-4d7f-a68d-dee066746bdc",
+  "input": "ec6f7be3-7872-4a3f-87a1-792353693a4e",
+  "plans": {
+    "typedInput": {
+      "sql": "EXPLAIN SELECT id FROM durable_task FORCE INDEX(task_input_lookup) WHERE input_kind='TRANSCRIPTION_INPUT' AND input_id='ec6f7be3-7872-4a3f-87a1-792353693a4e' ORDER BY id LIMIT 65",
+      "actualTsv": "id\tselect_type\ttable\tpartitions\ttype\tpossible_keys\tkey\tkey_len\tref\trows\tfiltered\tExtra\n1\tSIMPLE\tdurable_task\tNULL\tref\ttask_input_lookup\ttask_input_lookup\t102\tconst,const\t1\t100.00\tUsing index\n"
+    },
+    "exactProducerPk": {
+      "sql": "EXPLAIN SELECT id FROM durable_task WHERE id='764958fb-8ade-4d7f-a68d-dee066746bdc' ORDER BY id LIMIT 2 FOR UPDATE",
+      "actualTsv": "id\tselect_type\ttable\tpartitions\ttype\tpossible_keys\tkey\tkey_len\tref\trows\tfiltered\tExtra\n1\tSIMPLE\tdurable_task\tNULL\tconst\tPRIMARY\tPRIMARY\t36\tconst\t1\t100.00\tUsing index\n"
+    },
+    "actualIsolation": {
+      "sql": "SELECT @@transaction_isolation AS isolation",
+      "actualTsv": "isolation\nREPEATABLE-READ\n"
+    }
+  }
+}

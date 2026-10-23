@@ -1,0 +1,16 @@
+{
+  "scope": "All current fix01 public files except manifest and this receipt, all28 explicit author sources/report, and exact author diff against FIX_BASE",
+  "filesScanned": 933,
+  "distinctPrivateNeedles": 4,
+  "inMemoryControlDetected": 4,
+  "valueHits": 0,
+  "pemHits": 0,
+  "diffHits": 0,
+  "privateSources": [
+    "current DB env password",
+    "current S3 client access",
+    "current S3 client secret",
+    "existing pki/keystore-password"
+  ],
+  "noPrivateValuesOrDigestsPublished": true
+}

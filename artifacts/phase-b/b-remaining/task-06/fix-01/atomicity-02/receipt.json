@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06FixAtomicityIT#freshAuthorizationLifecycleEpochAndCancellationWinAfterSnapshot"
+  ],
+  "exit": 1,
+  "reports": [],
+  "elapsedSeconds": 10.139275312423706,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

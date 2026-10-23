@@ -34,7 +34,13 @@ record SavedTranscriptGraph(String meeting,String selected,Map<String,Object> ro
  static SavedTranscriptGraph acquire(JdbcTranscriptAuthority authority,JdbcTemplate j,FileRegistry.LockedMeeting gate,Object scope,Actor actor,String meeting,JdbcTranscriptAuthority.SavedPurpose purpose,Discovery discovered,TranscriptAcquisitionBudget limits,TranscriptAcquisitionBudget.Ledger budget){
   authority.requireSavedScope(scope,gate,actor,meeting,purpose);var read=new SavedTranscriptRows(j,budget,authority.readBudget().maxManifestBytes());var root=read.one(ROOT,meeting);
   if(purpose==JdbcTranscriptAuthority.SavedPurpose.CURRENT)require(Objects.equals(root.get("transcript_revision_id"),discovered.selected),PROVENANCE_UNAVAILABLE);
-  if(discovered.selected==null)return new SavedTranscriptGraph(meeting,null,root,List.of(),List.of(),List.of(),Map.of(),null,List.of(),0);
+  if(discovered.selected==null){
+   if(purpose==JdbcTranscriptAuthority.SavedPurpose.CURRENT&&root.get("transcript_confirmation_id")!=null){
+    read.rows(Table.TRANSCRIPT_CONFIRMATION,"id=?","id",1,true,root.get("transcript_confirmation_id"));
+    throw fail(PROVENANCE_UNAVAILABLE);
+   }
+   return new SavedTranscriptGraph(meeting,null,root,List.of(),List.of(),List.of(),Map.of(),null,List.of(),0);
+  }
   var rows=new ArrayList<FullRow>();var revisions=new TreeMap<String,FullRow>();
   for(var entry:discovered.ancestry.entrySet()){
    var actual=read.rows(Table.TRANSCRIPT_REVISION,"id=?","id",1,false,entry.getKey());require(actual.size()==1,PROVENANCE_UNAVAILABLE);var r=actual.getFirst();
@@ -46,8 +52,16 @@ record SavedTranscriptGraph(String meeting,String selected,Map<String,Object> ro
   var transfers=new ArrayList<java.util.function.Supplier<List<FullRow>>>();
   for(String id:revisions.keySet())transfers.add(read.deferRows(Table.TRANSCRIPT_SEGMENT,"revision_id=?","segment_id",maxRows,id.equals(discovered.selected),id));
   for(String id:revisions.keySet())transfers.add(read.deferRows(Table.TRANSCRIPT_SEGMENT_MARK,"revision_id=?","segment_id,mark",maxRows,id.equals(discovered.selected),id));
-  rows.addAll(read.rows(Table.TRANSCRIPT_CONFIRMATION,"meeting_id=? AND revision_id=?","id",1,true,meeting,discovered.selected));
-  var chosen=revisions.get(discovered.selected);String inputId=chosen.string("processing_input_id"),batchId=chosen.string("batch_id");
+  var chosen=revisions.get(discovered.selected);
+  if(purpose==JdbcTranscriptAuthority.SavedPurpose.CURRENT&&root.get("transcript_confirmation_id")!=null){
+   // PK plus the unique (meeting,revision) key define at most two declared rows. Acquire their
+   // complete set in PK order, including a corrupt pointed row, before rejecting any mismatch.
+   var confirmations=read.rows(Table.TRANSCRIPT_CONFIRMATION,"id=? OR (meeting_id=? AND revision_id=?)","id",2,true,root.get("transcript_confirmation_id"),meeting,discovered.selected);
+   require("WORKING".equals(chosen.string("kind"))&&confirmations.size()==1,PROVENANCE_UNAVAILABLE);
+   var current=confirmations.getFirst();require(current.string("id").equals(root.get("transcript_confirmation_id"))&&current.string("meeting_id").equals(meeting)&&current.string("revision_id").equals(discovered.selected),PROVENANCE_UNAVAILABLE);
+   rows.addAll(confirmations);
+  }else rows.addAll(read.rows(Table.TRANSCRIPT_CONFIRMATION,"meeting_id=? AND revision_id=?","id",1,true,meeting,discovered.selected));
+  String inputId=chosen.string("processing_input_id"),batchId=chosen.string("batch_id");
   var inputTransfer=read.deferRows(Table.TRANSCRIPTION_INPUT,"id=?","id",1,false,inputId);
   var batchRows=read.rows(Table.INPUT_BATCH,"id=?","id",1,false,batchId);require(batchRows.size()==1,PROVENANCE_UNAVAILABLE);rows.addAll(batchRows);
   var profileRows=read.read(metadata("input_batch_fingerprint_profile","batch_id","batch_id profile"),"batch_id=?","batch_id",1,false,batchId);require(profileRows.size()==1&&BatchFingerprint.PROFILE.equals(profileRows.getFirst().get("profile")),PROFILE_UNAVAILABLE);
@@ -75,7 +89,17 @@ record SavedTranscriptGraph(String meeting,String selected,Map<String,Object> ro
    for(var source:sources)require("TRANSCRIPT_INPUT".equals(source.originalPurpose()),PROVENANCE_UNAVAILABLE);
   }
   var raw=revisions.values().stream().filter(r->r.string("kind").equals("RAW")).toList();require(raw.size()==1&&limits.tasks()>=1,PROVENANCE_UNAVAILABLE);
-  var task=read.one(TASK,raw.getFirst().string("producer_task_id"));require("SUCCEEDED".equals(task.get("state"))&&"TRANSCRIPT_REVISION".equals(task.get("output_kind"))&&raw.getFirst().string("id").equals(task.get("output_id")),PROVENANCE_UNAVAILABLE);
+  var inputTasks=read.inputTaskIds(inputId,limits.tasks());String producer=raw.getFirst().string("producer_task_id");
+  if(!inputTasks.contains(producer))read.reserveTaskId();
+  var declaredTasks=new TreeSet<>(inputTasks);declaredTasks.add(producer);require(declaredTasks.size()<=limits.tasks(),BUDGET_EXCEEDED);
+  // Reject surplus including foreign-subject membership before taking unnecessary foreign task locks.
+  require(declaredTasks.size()==1,PROVENANCE_UNAVAILABLE);var tasks=new ArrayList<Map<String,Object>>();
+  for(String id:declaredTasks)tasks.add(read.one(TASK,id));
+  var task=tasks.getFirst();require(producer.equals(task.get("id"))&&"MEETING".equals(task.get("subject_kind"))&&meeting.equals(task.get("subject_id"))&&"TRANSCRIPTION_INPUT".equals(task.get("input_kind"))&&inputId.equals(task.get("input_id")),PROVENANCE_UNAVAILABLE);
+  require("SUCCEEDED".equals(task.get("state"))&&"TRANSCRIPT_REVISION".equals(task.get("output_kind"))&&raw.getFirst().string("id").equals(task.get("output_id")),PROVENANCE_UNAVAILABLE);
+  // Compliant writers require this held owner root/input. The initial consistent view is first
+  // established after that gate, and both isolation levels recheck the same complete membership.
+  require(read.inputTaskIds(inputId,limits.tasks()).equals(inputTasks),PROVENANCE_UNAVAILABLE);
   budget.row(1);var maximum=j.queryForList("SELECT revision FROM transcript_revision WHERE meeting_id=? ORDER BY revision DESC LIMIT 1",Long.class,meeting);require(maximum.size()==1,PROVENANCE_UNAVAILABLE);
   require(maximum.getFirst()<=num(root,"revision"),PROVENANCE_UNAVAILABLE);
   // Every content-bearing set is now measured, reserved and retained under its actual parent/row locks.

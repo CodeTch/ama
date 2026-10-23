@@ -1,0 +1,296 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ama-parent                                                         [pom]
+[INFO] ama-contracts                                                      [jar]
+[INFO] ama-core                                                           [jar]
+[INFO] ama-adapters                                                       [jar]
+[INFO] ama-api                                                            [jar]
+[INFO] ama-file-service                                                   [jar]
+[INFO] ama-worker                                                         [jar]
+[INFO] ama-integration-tests                                              [jar]
+[INFO] 
+[INFO] ---------------------------< ama:ama-parent >---------------------------
+[INFO] Building ama-parent 0.1.0-SNAPSHOT                                 [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] -------------------------< ama:ama-contracts >--------------------------
+[INFO] Building ama-contracts 0.1.0-SNAPSHOT                              [2/8]
+[INFO]   from backend/contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-contracts ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-contracts ---
+[INFO] 
+[INFO] ----------------------------< ama:ama-core >----------------------------
+[INFO] Building ama-core 0.1.0-SNAPSHOT                                   [3/8]
+[INFO]   from backend/core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-core ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/core/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/core/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-core ---
+[INFO] Copying 59 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-core ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-core ---
+[INFO] 
+[INFO] --------------------------< ama:ama-adapters >--------------------------
+[INFO] Building ama-adapters 0.1.0-SNAPSHOT                               [4/8]
+[INFO]   from backend/adapters/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-adapters ---
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] Copying 14 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-adapters ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-adapters ---
+[INFO] Copying 61 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-adapters ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-adapters ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-adapters ---
+[INFO] 
+[INFO] ----------------------------< ama:ama-api >-----------------------------
+[INFO] Building ama-api 0.1.0-SNAPSHOT                                    [5/8]
+[INFO]   from backend/api/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-api ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-api ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-api ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/api/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-api ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-api ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-api ---
+[INFO] Building jar: /home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/ama-api-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ama-api ---
+[INFO] Attaching repackaged archive /home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/ama-api-0.1.0-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ------------------------< ama:ama-file-service >------------------------
+[INFO] Building ama-file-service 0.1.0-SNAPSHOT                           [6/8]
+[INFO]   from backend/file-service/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-file-service ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-file-service ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-file-service ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-file-service ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-file-service ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-file-service ---
+[INFO] Building jar: /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ama-file-service ---
+[INFO] Attaching repackaged archive /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ---------------------------< ama:ama-worker >---------------------------
+[INFO] Building ama-worker 0.1.0-SNAPSHOT                                 [7/8]
+[INFO]   from backend/worker/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-worker ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-worker ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-worker ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-worker ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-worker ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-worker ---
+[INFO] Building jar: /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/target/ama-worker-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------------< ama:ama-integration-tests >----------------------
+[INFO] Building ama-integration-tests 0.1.0-SNAPSHOT                      [8/8]
+[INFO]   from backend/integration-tests/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-integration-tests ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-integration-tests ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-integration-tests ---
+[INFO] Copying 17 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-integration-tests ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-integration-tests ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-integration-tests ---
+[INFO] Skipping packaging of the jar
+[INFO] 
+[INFO] --- failsafe:3.5.6:integration-test (default) @ ama-integration-tests ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+[INFO] Running ama.task.Task06InheritedPreparedCompletionIT
+PREPARED completion pre-test immutable history: [{installed_rank=1, version=001, script=V001__foundation.sql, checksum=1201435595, success=true}, {installed_rank=2, version=002, script=V002__identity_acl.sql, checksum=1757300424, success=true}, {installed_rank=3, version=005, script=V005__tasks_outbox.sql, checksum=-1999355348, success=true}, {installed_rank=4, version=006, script=V006__audit_metadata.sql, checksum=-1744360556, success=true}, {installed_rank=5, version=007, script=V007__identity_sessions.sql, checksum=157746768, success=true}, {installed_rank=6, version=008, script=V008__meeting_schema.sql, checksum=-1747387036, success=true}, {installed_rank=7, version=009, script=V009__file_schema.sql, checksum=-287948759, success=true}, {installed_rank=8, version=010, script=V010__reliable_execution.sql, checksum=-1187397378, success=true}, {installed_rank=9, version=011, script=V011__transcript_schema.sql, checksum=-286330771, success=true}, {installed_rank=10, version=011.1, script=V011_1__transcript_material_index.sql, checksum=-570494170, success=true}, {installed_rank=11, version=012, script=V012__minutes_evidence.sql, checksum=2101765957, success=true}, {installed_rank=12, version=013, script=V013__publications.sql, checksum=-847352333, success=true}, {installed_rank=13, version=013.1, script=V013_1__b_runtime_metadata.sql, checksum=-1898004857, success=true}, {installed_rank=14, version=013.2, script=V013_2__task_input_lookup.sql, checksum=-1098175378, success=true}]
+[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.816 s -- in ama.task.Task06InheritedPreparedCompletionIT
+[INFO] Running ama.transcript.Task06InheritedFactsReaderIT
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.695 s -- in ama.transcript.Task06InheritedFactsReaderIT
+[INFO] Running ama.transcript.Task06InheritedArchiveRestartIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.537 s -- in ama.transcript.Task06InheritedArchiveRestartIT
+[INFO] Running ama.meeting.Task06InheritedMeetingConcurrencyIT
+[ERROR] Tests run: 5, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.721 s <<< FAILURE! -- in ama.meeting.Task06InheritedMeetingConcurrencyIT
+[ERROR] ama.meeting.Task06InheritedMeetingConcurrencyIT.actualServiceLocksSortedIdentitiesBeforeRootAndFlushesLast -- Time elapsed: 0.229 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <[task06-fix-concurrency-member-2ec07fc5-5777-4215-a604-60cf118dd7f7, task06-fix-concurrency-owner-1dc12735-fe06-4565-a5d8-cb47b2b11204, sort-6e8a493b-5afd-43eb-b472-9fbc4a5e73bc-, sort-6e8a493b-5afd-43eb-b472-9fbc4a5e73bc-𐀀]> but was: <[sort-6e8a493b-5afd-43eb-b472-9fbc4a5e73bc-, sort-6e8a493b-5afd-43eb-b472-9fbc4a5e73bc-𐀀, task06-fix-concurrency-member-2ec07fc5-5777-4215-a604-60cf118dd7f7, task06-fix-concurrency-owner-1dc12735-fe06-4565-a5d8-cb47b2b11204]>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:184)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:179)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1188)
+	at ama.meeting.Task06InheritedMeetingConcurrencyIT.actualServiceLocksSortedIdentitiesBeforeRootAndFlushesLast(Task06InheritedMeetingConcurrencyIT.java:95)
+
+[INFO] Running ama.meeting.Task06InheritedMeetingRevisionIT
+OpenAPI response contract: put /api/v1/meetings/{id}/info 503 {"error":{"code":"CATEGORY_DICTIONARY_UNAVAILABLE","message":"Approved meeting category dictionary unavailable","traceId":"382638d5-63c0-4c42-ad4d-f55313565a36"}}
+OpenAPI response contract: put /api/v1/meetings/{id}/info 403 {"error":{"code":"MEETING_FORBIDDEN","message":"Meeting access denied","traceId":"97034b74-e86f-4098-a883-df3002e7a5c3"}}
+OpenAPI response contract: put /api/v1/meetings/{id}/info 409 {"error":{"code":"MEETING_CONFLICT","message":"Meeting changed or request conflicts","traceId":"eaa35eb8-3597-4afb-9d68-e251993992b6"}}
+OpenAPI response contract: put /api/v1/meetings/{id}/info 413 {"error":{"code":"REQUEST_TOO_LARGE","message":"Request exceeds configured transport budget","traceId":"85d39154-10ca-4d10-aede-4f405a5d80b0"}}
+[INFO] Tests run: 29, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.96 s -- in ama.meeting.Task06InheritedMeetingRevisionIT
+[INFO] Running ama.storage.Task06CompositionIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.342 s -- in ama.storage.Task06CompositionIT
+[INFO] Running ama.storage.Task06SavedGraphIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.152 s -- in ama.storage.Task06SavedGraphIT
+[INFO] Running ama.storage.Task06WireHttpIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.405 s -- in ama.storage.Task06WireHttpIT
+[INFO] Running ama.storage.Task06AccessIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.987 s -- in ama.storage.Task06AccessIT
+[INFO] Running ama.storage.Task06FixLocksIT
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.43 s -- in ama.storage.Task06FixLocksIT
+[INFO] Running ama.storage.Task06InheritedAuthorityIT
+[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 26.57 s -- in ama.storage.Task06InheritedAuthorityIT
+[INFO] Running ama.storage.Task06GuardsIT
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.526 s -- in ama.storage.Task06GuardsIT
+[INFO] Running ama.storage.Task06AtomicityIT
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 14.91 s -- in ama.storage.Task06AtomicityIT
+[INFO] Running ama.storage.Task06FixHttpsIT
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.02 s -- in ama.storage.Task06FixHttpsIT
+[INFO] Running ama.storage.Task06HttpIT
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.38 s -- in ama.storage.Task06HttpIT
+[INFO] Running ama.storage.Task06RestartIT
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 17.50 s -- in ama.storage.Task06RestartIT
+[INFO] Running ama.storage.Task06SavedCommandsIT
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.510 s -- in ama.storage.Task06SavedCommandsIT
+[INFO] Running ama.storage.Task06TaskQueryPlanIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.014 s -- in ama.storage.Task06TaskQueryPlanIT
+[INFO] Running ama.storage.Task06FixHandlesIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.186 s -- in ama.storage.Task06FixHandlesIT
+[INFO] Running ama.storage.Task06IndexedTasksIT
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.45 s -- in ama.storage.Task06IndexedTasksIT
+[INFO] Running ama.storage.Task06FixAtomicityIT
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 34.26 s -- in ama.storage.Task06FixAtomicityIT
+[INFO] Running ama.storage.Task06FixIntegrityIT
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 22.77 s -- in ama.storage.Task06FixIntegrityIT
+[INFO] Running ama.storage.Task06ConcurrencyIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.040 s -- in ama.storage.Task06ConcurrencyIT
+[INFO] Running ama.storage.Task06FixProvenanceIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.97 s -- in ama.storage.Task06FixProvenanceIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   Task06InheritedMeetingConcurrencyIT.actualServiceLocksSortedIdentitiesBeforeRootAndFlushesLast:95 expected: <[task06-fix-concurrency-member-2ec07fc5-5777-4215-a604-60cf118dd7f7, task06-fix-concurrency-owner-1dc12735-fe06-4565-a5d8-cb47b2b11204, sort-6e8a493b-5afd-43eb-b472-9fbc4a5e73bc-, sort-6e8a493b-5afd-43eb-b472-9fbc4a5e73bc-𐀀]> but was: <[sort-6e8a493b-5afd-43eb-b472-9fbc4a5e73bc-, sort-6e8a493b-5afd-43eb-b472-9fbc4a5e73bc-𐀀, task06-fix-concurrency-member-2ec07fc5-5777-4215-a604-60cf118dd7f7, task06-fix-concurrency-owner-1dc12735-fe06-4565-a5d8-cb47b2b11204]>
+[INFO] 
+[ERROR] Tests run: 121, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.5.6:verify (default) @ ama-integration-tests ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ama-parent 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] ama-parent ......................................... SUCCESS [  0.002 s]
+[INFO] ama-contracts ...................................... SUCCESS [  0.785 s]
+[INFO] ama-core ........................................... SUCCESS [  0.096 s]
+[INFO] ama-adapters ....................................... SUCCESS [  0.124 s]
+[INFO] ama-api ............................................ SUCCESS [  0.506 s]
+[INFO] ama-file-service ................................... SUCCESS [  0.103 s]
+[INFO] ama-worker ......................................... SUCCESS [  0.054 s]
+[ERROR] ama-integration-tests .............................. FAILURE [04:37 min]
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  04:39 min
+[INFO] Finished at: 2026-10-24T06:11:38+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.5.6:verify (default) on project ama-integration-tests: There are test failures.
+[ERROR] 
+[ERROR] See /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-integration-tests
+FAIL: subprocess exited 1
