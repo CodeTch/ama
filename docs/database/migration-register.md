@@ -33,7 +33,7 @@
 |V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|9efc688e…冻结；ACK后rank10首次success/checksum-570494170；实际11suite全通过/五组元数据一致，独立PASS采用；仅纠正索引|
 |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|10742ca2…冻结/ACK后首次success checksum2101765957；实际19/123/92/21/45、11IT通过，fresh独立PASS0findings采用；完整B07仍OPEN|
 |V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|1de37066…冻结/ACK后rank12首次success checksum-847352333；实际5/42/30/4/18、10IT通过，独立PASS0findings采用ee0bcd2/9bb6fe2；完整B08仍OPEN|
-|V013.1|B-06/B-07 本地受控运行时 / remaining Task2|2026-10-23 中央阶段补丁|仅 input_batch_fingerprint_profile 与 meeting_minutes_editor_guard 两侧表；依赖原 V013；保留 V014..027/下一整数 V028|最终SHA9280baea…/1817B冻结64908b1，单独ACK15a124c；本轮独有fixture已首成功checksum-1898004857，原62表/1103行/旧前缀保全；Task2实现/生成设计最终独立复审仍待|
+|V013.1|B-06/B-07 本地受控运行时 / remaining Task2|2026-10-23 中央阶段补丁|仅 input_batch_fingerprint_profile 与 meeting_minutes_editor_guard 两侧表；依赖原 V013；保留 V014..027/下一整数 V028|最终SHA9280baea…/1817B冻结64908b1，单独ACK15a124c；本轮独有fixture已首成功checksum-1898004857，原62表/1103行/旧前缀保全；Task2已独立SPEC PASS/QUALITY APPROVED采用；45IT+221units通过，原SQL永久冻结|
 |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
 |V015|C-03|原V010|correction/edit_operation；speaker基础已在V011，任何必要扩展另在本号|预留，未编写|
 |V016|C-04/C-06|原V011|recording/session/part/chunk、subtitle；依赖V009/010/014|预留，未编写|
@@ -261,3 +261,7 @@ root 独立以原生MySQL文本/UTC和epoch读取实际history：installed_rank1
 首轮完整结构oracle出现1个assertion failure：MySQL将冻结OCTET_LENGTH(profile)规范展示为length(profile)。失败原件schema-green.log与schema-green-initial-failure.xml保留，SQL/liveDDL/history均不改。root允许仅在CHECK函数token/AST层归一LENGTH与OCTET_LENGTH字节长度同义词，不归一CHAR_LENGTH、不放松数值/字面量大小写/AND-OR分组或其他条件。真实MySQL ASCII为1/1/1，补充字符为4/4/1，证明字节/字符区别；修正后全部两表/四列/两PK索引列/两CHECK/两FK列和oracle区分测试通过。此为oracle表述修正，不是假称数据库DDL缺陷已修复或前滚迁移。
 
 作者后报四个正例/二十六约束反例、private013.1/latest重跑各0并保全窗口。最终创建业务回归、完整源/证据审阅与独立Task2 SPEC/quality门仍待，不能据此提前采用整个运行时或验收B。永久冻结本SQL及所有低版本；以后缺陷仅登记有序前向版本。
+
+### V013.1 Task 2 实现采用
+
+作者66e70fdeef286a38592395ce94bdfbb1a93bce4a，fresh独立SPEC PASS / QUALITY APPROVED，0阻断发现；root已完整阅读及核验10源码/134证据SHA、45IT+221units零失败。当前生成模型98表731列保留原96表和D01未分配状态；实际新两表物理资格与旧部署保全分开表述。新会议guard0同事务创建已实测，历史缺行不推断。冻结SQL9280baea…/1817B/checksum-1898004857不变；原12SQL、V003/V004空号与V014..027预留/下一整数V028不变。见[任务2采用记录](../acceptance/b/remaining-task-02-runtime-metadata.md)。无整体B或公司运行时完成推断。
