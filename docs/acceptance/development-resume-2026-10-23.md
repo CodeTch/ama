@@ -31,6 +31,8 @@ B04/S1 门禁通过后，子代理 `b06_queue_seams` 在新隔离树 `/home/tanr
 
 最终验证为 18 个 seam 方法、26 个既有精选方法/28 次调用，共 44 个不同 IT 方法/46 次调用，另有 26 套 179 项 Java units 全通过。三轮最终源码哈希一致；之前 RED/GREEN 和 unit 重复执行不累加。[作者报告](b/task-B-06-seams-report.md)、[独立审查](b/task-B-06-seams-independent-review.md)、[机械审计](b/task-B-06-seams-evidence-audit.md)及[采用凭据](../../artifacts/phase-b/b06-seams-adoption-2026-10-23/SHA256SUMS)公开保留。采用后 1104 路径/模式匹配，1103 个非属性载荷精确一致，完整作者封存再次通过；没有重复执行相同 runtime cohort。
 
+[最终增量集成复核](development-resume-b06-independent-review-2026-10-23.md)覆盖 `8bd5e59931cd92f7fef8fcca86324addb2635e38..7df598503363668ff629801f0b50e7f7e4a90184` 的 1116 个唯一路径，包括三提交精确采用、与先前 B04/B07/D01 的组合、B06.2 准备书及候选公平性边界说明。SPEC/quality 双 PASS，新增 P0–P3 全零，无 deferred/parked finding；FUP-B05-CANDIDATE-01 仍 OPEN，不包含全局公平性通过。报告 SHA256 `0d37e02eed125ae9df07c565303b622c3aa9e9d29d15fc557eeb84ac41f44e49`。该审查后仅追加报告原件与本段链接，不改源码或封存载荷。
+
 只创建并保留一个独有、有限资源、loopback、initial-zero MySQL 夹具，实际按原历史应用 12 个 SQL through V013。精选 B03 helper 确实调用最新 migrator 并执行零迁移。旧库/容器/S3/PKI 均未操作，无 reset/repair/outOfOrder 或私密 env/Config.Env 导出。原 SQL、计划、1740 个旧 artifact 文件与最初 RED 证据保持不变。
 
 下一交付按[原静态切分](../../artifacts/phase-b/resume-2026-10-23/task-B-06-preflight.md)和[已 ACK 技术提案](b/task-B-06-seams-proposal.md)落实：不可变配置档案索引/恢复、准确 batch 指纹及独立 literal 向量、有界完整事实读取与跨 JVM 恢复。其后才是首次真实 INPUT_BATCH_FILE 引用、导入/Worker 原子输出、保存/编辑/marks/确认和完整 API。任何结构缺口先做中央增量设计登记，不猜版本，不把提案向量当正式实现。
