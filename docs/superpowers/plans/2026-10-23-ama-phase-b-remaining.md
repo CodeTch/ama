@@ -106,3 +106,7 @@ Read docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-editor.md and exact i
 ## Task11 adopted final/publication refinement
 
 Read docs/superpowers/specs/2026-10-23-ama-phase-b-final-publication.md and exact independently reviewed original/R1/closure/reviews. Both design findings are closed. Publication submission remains logical proposal only: actual post-Task8 exact DDL review/allocation/freeze/separate ACK/application and model synchronization still required. Genuine Task7 private queue-hook/source composition, all-mutator freeze, immutable acceptance/old acknowledgment/local-never-marked marker barriers, authenticated caller/delegation and dual-ACL official document relay remain source/runtime evidence gates. No source, schema or runtime qualification follows from this design adoption.
+
+## Task12 adopted web-loop refinement
+
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-web-loop.md and exact original/R1/closure/reviews. T12DR01 pretransfer protection is closed at design level. Actual Task12/B03 protected projection ownership, same-holder producer/rank/full-set integration, cumulative metadata/content/copy/response budgets and new-path MySQL no-transfer/race instrumentation remain source gates. Freeze actual upstream endpoints/OpenAPI before UI; actual HTTPS LOCAL+S3/four-identity/full/recovery/fresh-process/browser and prototype/output custody evidence plus independent source review remain required. Design adoption supplies no runtime qualification.
