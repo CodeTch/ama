@@ -94,3 +94,7 @@ Read docs/superpowers/specs/2026-10-23-ama-phase-b-saved-transcript.md and exact
 ## Task5 adopted confined completion/renew-drain refinement
 
 Read docs/superpowers/specs/2026-10-23-ama-phase-b-import-worker.md and exact original+R1/reviews. New production success uses queue-private genuine after-task scope/inert carrier/same-call writer+validator; old unrelated callbacks remain. Drain selected ordinary renewal without DB locks before completion/Task7 MARKING, JDBC outside monitor; state-aware exactly-once attempt transitions. Mandatory real local/S3 transport abort, genuinepipeline/restart and deterministic authority/concurrency proofs precede runtime qualification.
+
+## Task9 adopted minutes-generation refinement
+
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-generation.md and exact original/R1/reviews/shared-rank ruling. Enqueue freezes current r/e without content advance or debt clearing; final/publication complete outstanding-generation closure is mandatory. Task9 owns real first-settings/template origin, Task10 later settings and shared PENDING disposal. Actual independent history allocation and original fifteen-profile graphs, private external authority/durable provider/invalid-output/permit-UNKNOWN contracts remain. Product API version/root OpenAPI is corrected; shared minutes rank follows established Task3/6 before sources/tasks. Design adoption supplies no runtime qualification.
