@@ -1,0 +1,13 @@
+--- /home/tanren/ama/.worktrees/b06-archive-restart/artifacts/phase-b/b06-archives/restart/red-03/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java	2026-10-23 09:43:18.335204728 +0800
++++ /home/tanren/ama/.worktrees/b06-archive-restart/artifacts/phase-b/b06-archives/restart/green-01/source/backend/integration-tests/src/test/java/ama/transcript/ArchiveRestartProbe.java	2026-10-23 09:46:08.216448554 +0800
+@@ -49,8 +49,8 @@
+         byte[] original=input(facts).string("config_manifest").getBytes(StandardCharsets.UTF_8);
+         boolean sameManifest=Arrays.equals(original,Files.readAllBytes(handoff.resolveSibling("persisted-manifest.json")));
+         if(!sha(original).equals(p.getProperty("manifestSha256"))||!sameManifest)throw new AssertionError("old manifest changed");
+-        // RED: the incomplete consumer incorrectly selects the newly configured default closure.
+-        var roots=List.of(ref(raw("processing2")));
++        // Historical acquisition follows the unchanged persisted manifest, independently of defaults.
++        var roots=new ProcessingManifestRefs(new StrictProcessingManifestReader()).roots(original,B,()->false);
+         var archives=snapshot.loadClosure(roots,B,original.length,()->false);
+         var verified=bindings().verifyProcessing(input(facts),facts,archives,B,()->false);
+         if(!verified.fingerprint().equals(p.getProperty("digest"))||!verified.processing().equals(ref(raw("processing1"))))throw new AssertionError("old digest/root not recovered");

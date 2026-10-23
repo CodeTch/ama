@@ -1,0 +1,170 @@
+[
+  {
+    "run": "green-01",
+    "exit": 0,
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "ConfigArchiveRestartIT"
+    ],
+    "counts": {
+      "it": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "unit": {
+        "tests": 213,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  {
+    "run": "red-01",
+    "exit": 1,
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "ConfigArchiveRestartIT"
+    ],
+    "counts": {
+      "it": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "unit": {
+        "tests": 210,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  {
+    "run": "red-02",
+    "exit": 1,
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "ConfigArchiveRestartIT"
+    ],
+    "counts": {
+      "it": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "unit": {
+        "tests": 210,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  {
+    "run": "red-03",
+    "exit": 1,
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "ConfigArchiveRestartIT"
+    ],
+    "counts": {
+      "it": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "unit": {
+        "tests": 213,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  {
+    "run": "unit-batch",
+    "exit": 0,
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "BatchFingerprintTest"
+    ],
+    "counts": {
+      "it": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "unit": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  {
+    "run": "unit-index",
+    "exit": 0,
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledConfigArchiveSourceTest"
+    ],
+    "counts": {
+      "it": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "unit": {
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  {
+    "run": "unit-index-fix1",
+    "exit": 0,
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "ControlledArchiveFix1Test"
+    ],
+    "counts": {
+      "it": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "unit": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  }
+]
