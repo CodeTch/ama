@@ -55,6 +55,28 @@ paths:
     $ref: './processing.yaml#/tasks'
   /api/v1/meetings/{id}/processing-tasks/{task}:
     $ref: './processing.yaml#/task'
+  /api/v1/meetings/{meetingId}/transcript:
+    $ref: './transcripts.yaml#/current'
+  /api/v1/meetings/{meetingId}/transcript/history:
+    $ref: './transcripts.yaml#/history'
+  /api/v1/meetings/{meetingId}/transcript/revisions/{revisionId}:
+    $ref: './transcripts.yaml#/revision'
+  /api/v1/meetings/{meetingId}/transcript/marks:
+    $ref: './transcripts.yaml#/marks'
+  /api/v1/meetings/{meetingId}/transcript/revisions/{revisionId}/marks:
+    $ref: './transcripts.yaml#/revisionMarks'
+  /api/v1/meetings/{meetingId}/transcript/confirmation:
+    $ref: './transcripts.yaml#/confirmation'
+  /api/v1/meetings/{meetingId}/transcript/confirmations:
+    $ref: './transcripts.yaml#/confirmations'
+  /api/v1/meetings/{meetingId}/transcript/confirmations/{confirmationId}:
+    $ref: './transcripts.yaml#/confirmationItem'
+  /api/v1/meetings/{meetingId}/transcript/restorations:
+    $ref: './transcripts.yaml#/restorations'
+  /api/v1/meetings/{meetingId}/transcript/sources/{fileId}:
+    $ref: './transcripts.yaml#/source'
+  /api/v1/meetings/{meetingId}/transcript/revisions/{revisionId}/sources/{fileId}:
+    $ref: './transcripts.yaml#/revisionSource'
 components:
   securitySchemes:
     enterpriseSession:

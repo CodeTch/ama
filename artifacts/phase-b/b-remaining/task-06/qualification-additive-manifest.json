@@ -1,0 +1,49 @@
+{
+  "pinnedSourceByteSnapshotAvailable": false,
+  "historicalEvidence": "composition-probe-03/source.json records hashes only; no reconstructed historical bytes are represented as a snapshot",
+  "changes": [
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "pinnedSha256": "b61a0c099a4d2d43355983057a2183c06dd9c1e2ae94fc9a13ade0ec93b7a7d9",
+      "currentSha256": "0684b4b4adf50446c0f7dcf09fc34600d03bfb2b53b9cd153ab2a0e2fae1847c"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java",
+      "pinnedSha256": "b02a3d45dbe36495be5bc270a472f41d37cce095fd16d0517e7957901aeb9440",
+      "currentSha256": "7f9d75c0df4fc01fbf16df3cf63edab01fe6eb867c6556998fcfe58b5149caef"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java",
+      "pinnedSha256": "1e4a65109e6dbe47ab353ae911f3c35f69c237d107233a85597f0f21a30aafee",
+      "currentSha256": "7a26747d9e6aa4f79f6d92a1eddee5cd59a9cf2069e4a93d6a61f0ea63c18763"
+    }
+  ],
+  "actualEdits": [
+    "JdbcSavedTranscripts.mutate: named ordinary S acquisition failures perform exactly one fresh receipts.lookup; interrupted/cancelled/auth/corrupt failures excluded. A failed nonordinary preparation is rethrown after fresh F gate before winner restoration.",
+    "JdbcSavedTranscripts.history: reserve bounded page sentinel UUID/row storage before selection and lock revision parents in sorted UUID order.",
+    "JdbcSavedTranscripts.prepare: verify WORKING parent history revision strictly precedes child.",
+    "JdbcSavedTranscripts.projection: require actual future-domain absence qualification before advertising save/restore/confirm.",
+    "Task06Fixture: default false installedTranscript hook populates transcript.enabled; installed suites override true.",
+    "Task06RuntimeProbe: actual(app) exposes the real registered component/qualification for installed receipts; compose remains isolated."
+  ],
+  "unchanged": [
+    "configured/effective numeric tuples and units",
+    "original four archive bytes and componentwise minima",
+    "production TranscriptConfiguration",
+    "correction component/declaration/inventory/identity protocol",
+    "SavedTranscriptAdmission, SavedTranscriptRows, SavedTranscriptGraph, authority, budget ledger, transitions implementation"
+  ],
+  "proof": {
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06ConcurrencyIT.xml": "6562fe9b8dcc91e0c915d05b196c526c4e0321777d5a8fc2e17ac5fd620fe97d",
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06AtomicityIT.xml": "06c7c71177089b7f8585bd22434c07f9a7dc8063a4759db7367c3c9ba4e1f64a",
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06HttpIT.xml": "1619801d210606da66027a18dd338d0b2b859e66e0a33d7e70689065f095bfb7",
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06AccessIT.xml": "cc9e5539b569b630b01cb360fc5a6fbfb631aa8c94b7a3aab3b9ff8103e0e8dd",
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/receipt.json": "d8a44bff375063a3e8ad139800eef7aefcbb6aa43b614b1c327c2762c64ff244",
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/source.json": "e8eaa7e4e033e847b96d5312984e0eb9c75f27b1f020627e7ae6e9ddc199ba6f",
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06SavedGraphIT.xml": "bf290d374df17aaa19dd97d0ebc0c12a36143fc615b2d165743600408fcd76c9",
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06SavedCommandsIT.xml": "3e89669cef1e67ccfff6b667d45e412807583d3f6a44ab3669a3f6e7584590a4",
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06GuardsIT.xml": "171454b588b76a9cc3b327098a647f02a0711dd381070842f3120d9ff169d28b",
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06CompositionIT.xml": "c1dc82b1fac4662b697928243bd4f0fc64df7f23c2b3878ea64702f8d5643f49",
+    "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06RestartIT.xml": "58081e91a9c50467e648831f86ff26c3c26988b83ee93e89bc907df999fc6cff"
+  }
+}

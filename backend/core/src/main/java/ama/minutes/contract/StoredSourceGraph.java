@@ -127,23 +127,31 @@ public final class StoredSourceGraph {
    }else require(config.parserSelections().isEmpty(),SOURCE_MEMBERSHIP_MISMATCH);
    var catalog=new SourceCatalog().build(new CatalogFacts(facts,index.budget.canonical().maxContainerEntries()),index.budget.canonical(),cancelled);catalogs.put(id,catalog);return catalog;
   }
-  CatalogFact transcript(FullRow confirmation,String segmentId,String meeting){
-   index.meeting(confirmation,meeting);String revisionId=confirmation.string("revision_id");var revision=index.one(Table.TRANSCRIPT_REVISION,revisionId,PROVENANCE_UNAVAILABLE);index.meeting(revision,meeting);
+  record SavedTranscript(FullRow revision,FullRow batch,List<FullRow> segments,List<FullRow> files) {}
+  SavedTranscript validatedTranscriptRevision(String meeting,String revisionId){
+   var revision=index.one(Table.TRANSCRIPT_REVISION,revisionId,PROVENANCE_UNAVAILABLE);index.meeting(revision,meeting);
    var processing=index.one(Table.TRANSCRIPTION_INPUT,revision.string("processing_input_id"),PROVENANCE_UNAVAILABLE);index.meeting(processing,meeting);require(processing.string("batch_id").equals(revision.string("batch_id")),SOURCE_MEMBERSHIP_MISMATCH);
    var batch=index.one(Table.INPUT_BATCH,revision.string("batch_id"),PROVENANCE_UNAVAILABLE);index.meeting(batch,meeting);
-   var segments=index.matching(Table.TRANSCRIPT_SEGMENT,"revision_id",revisionId);var orders=new HashSet<Long>();FullRow selected=null;boolean content=false;
-   for(var row:segments){check(cancelled);positive(row.number("ordinal"));require(orders.add(row.number("ordinal")),SOURCE_MEMBERSHIP_MISMATCH);content|=!row.string("body").isBlank();
-    if(row.string("segment_id").equals(segmentId))selected=row;
+   var segments=index.matching(Table.TRANSCRIPT_SEGMENT,"revision_id",revisionId);var orders=new HashSet<Long>();boolean content=false;
+   var segmentIds=new HashSet<String>();
+   for(var row:segments){check(cancelled);positive(row.number("ordinal"));require(orders.add(row.number("ordinal")),SOURCE_MEMBERSHIP_MISMATCH);content|=!row.string("body").isBlank();segmentIds.add(row.string("segment_id"));
     var times=row.nullableNumber("start_ms");var end=row.nullableNumber("end_ms");require((times==null)==(end==null)&&(times==null||end>=times),INPUT_INVALID);
     if(row.nullableNumber("source_paragraph")!=null)positive(row.number("source_paragraph"));}
-   require(selected!=null&&content,PROVENANCE_UNAVAILABLE);
-   var segmentIds=new HashSet<String>();for(var row:segments)segmentIds.add(row.string("segment_id"));
+   require(content,PROVENANCE_UNAVAILABLE);
    for(var mark:index.matching(Table.TRANSCRIPT_SEGMENT_MARK,"revision_id",revisionId)){check(cancelled);require(segmentIds.contains(mark.string("segment_id")),SOURCE_MEMBERSHIP_MISMATCH);}
-   var files=index.matching(Table.INPUT_BATCH_FILE,"batch_id",batch.string("id"));var fileOrders=new HashSet<Long>();var fileIds=new HashSet<String>();FullRow file=null;
+   var files=index.matching(Table.INPUT_BATCH_FILE,"batch_id",batch.string("id"));var fileOrders=new HashSet<Long>();var fileIds=new HashSet<String>();
    for(var row:files){check(cancelled);positive(row.number("ordinal"));require(fileOrders.add(row.number("ordinal"))&&fileIds.add(row.string("file_id")),SOURCE_MEMBERSHIP_MISMATCH);
-    require(index.file(row.string("file_id")).sha256().equals(row.string("sha256")),SOURCE_MEMBERSHIP_MISMATCH);if(row.string("file_id").equals(selected.string("source_file_id")))file=row;}
-   require(file!=null,PROVENANCE_UNAVAILABLE);
-   return new CatalogFact(new TranscriptLocator(revisionId,segmentId),Role.MEETING,new TranscriptVersion(confirmation.string("id"),revisionId,batch.string("id"),file.string("file_id"),file.string("sha256")),confirmation.string("content_hash"),selected.number("ordinal"),new TranscriptBounds(revisionId,segmentId,file.string("file_id"),selected.nullableNumber("source_paragraph")));
+    require(index.file(row.string("file_id")).sha256().equals(row.string("sha256")),SOURCE_MEMBERSHIP_MISMATCH);}
+   return new SavedTranscript(revision,batch,segments,files);
+  }
+  FullRow savedMember(SavedTranscript saved,FullRow segment){
+   return index.single(saved.files().stream().filter(f->f.string("file_id").equals(segment.string("source_file_id"))).toList(),PROVENANCE_UNAVAILABLE);
+  }
+  CatalogFact transcript(FullRow confirmation,String segmentId,String meeting){
+   index.meeting(confirmation,meeting);String revisionId=confirmation.string("revision_id");var saved=validatedTranscriptRevision(meeting,revisionId);
+   var selected=index.single(saved.segments().stream().filter(s->s.string("segment_id").equals(segmentId)).toList(),PROVENANCE_UNAVAILABLE);
+   var file=savedMember(saved,selected);
+   return new CatalogFact(new TranscriptLocator(revisionId,segmentId),Role.MEETING,new TranscriptVersion(confirmation.string("id"),revisionId,saved.batch().string("id"),file.string("file_id"),file.string("sha256")),confirmation.string("content_hash"),selected.number("ordinal"),new TranscriptBounds(revisionId,segmentId,file.string("file_id"),selected.nullableNumber("source_paragraph")));
   }
   private static final class Walk {
    final String id;final Iterator<String> dependencies;int height=1;

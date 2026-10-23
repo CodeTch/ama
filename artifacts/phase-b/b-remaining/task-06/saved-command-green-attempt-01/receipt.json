@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06SavedCommandsIT"
+  ],
+  "exit": 1,
+  "reports": [],
+  "elapsedSeconds": 9.448115110397339,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

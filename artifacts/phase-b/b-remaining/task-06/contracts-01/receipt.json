@@ -1,0 +1,14 @@
+[
+  {
+    "command": [
+      "node",
+      "node_modules/@redocly/cli/bin/cli.js",
+      "lint",
+      "contracts/openapi/api.yaml",
+      "--config",
+      "redocly.yaml"
+    ],
+    "cwd": ".",
+    "exit": 1
+  }
+]

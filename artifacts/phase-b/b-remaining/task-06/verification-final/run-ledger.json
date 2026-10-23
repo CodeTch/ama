@@ -1,0 +1,706 @@
+[
+  {
+    "run": "admission-behavior-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptAdmissionTest"
+    ],
+    "exit": 1,
+    "tests": 2,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": [
+      "ama.config.json.SavedTranscriptAdmissionTest"
+    ]
+  },
+  {
+    "run": "admission-green",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptAdmissionTest"
+    ],
+    "exit": 0,
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": [
+      "ama.config.json.SavedTranscriptAdmissionTest"
+    ]
+  },
+  {
+    "run": "admission-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptAdmissionTest"
+    ],
+    "exit": 1,
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": []
+  },
+  {
+    "run": "atomicity-recovery-green-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06AtomicityIT"
+    ],
+    "exit": 0,
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06AtomicityIT"
+    ]
+  },
+  {
+    "run": "atomicity-recovery-red-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06AtomicityIT"
+    ],
+    "exit": 1,
+    "tests": 3,
+    "failures": 0,
+    "errors": 2,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06AtomicityIT"
+    ]
+  },
+  {
+    "run": "budget-correction-behavior-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptBudgetTest"
+    ],
+    "exit": 1,
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "NOT_RECORDED_IN_HISTORICAL_RECEIPT",
+    "classes": []
+  },
+  {
+    "run": "budget-correction-behavior-red-02",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptBudgetTest"
+    ],
+    "exit": 1,
+    "tests": 3,
+    "failures": 3,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "NOT_RECORDED_IN_HISTORICAL_RECEIPT",
+    "classes": [
+      "ama.transcript.SavedTranscriptBudgetTest"
+    ]
+  },
+  {
+    "run": "budget-correction-green",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptBudgetTest"
+    ],
+    "exit": 0,
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "NOT_RECORDED_IN_HISTORICAL_RECEIPT",
+    "classes": [
+      "ama.transcript.SavedTranscriptBudgetTest"
+    ]
+  },
+  {
+    "run": "budget-correction-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptBudgetTest"
+    ],
+    "exit": 1,
+    "tests": 2,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "NOT_RECORDED_IN_HISTORICAL_RECEIPT",
+    "classes": [
+      "ama.transcript.SavedTranscriptBudgetTest"
+    ]
+  },
+  {
+    "run": "canonical-admission-green",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptBudgetTest,SavedTranscriptAdmissionTest,TranscriptWireTest"
+    ],
+    "exit": 1,
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": []
+  },
+  {
+    "run": "canonical-admission-green-02",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptBudgetTest"
+    ],
+    "exit": 0,
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": [
+      "ama.transcript.SavedTranscriptBudgetTest"
+    ]
+  },
+  {
+    "run": "canonical-admission-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptBudgetTest"
+    ],
+    "exit": 1,
+    "tests": 4,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": [
+      "ama.transcript.SavedTranscriptBudgetTest"
+    ]
+  },
+  {
+    "run": "composition-probe-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06CompositionIT"
+    ],
+    "exit": 1,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06CompositionIT"
+    ]
+  },
+  {
+    "run": "composition-probe-02",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06CompositionIT"
+    ],
+    "exit": 0,
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06CompositionIT"
+    ]
+  },
+  {
+    "run": "composition-probe-03",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06CompositionIT"
+    ],
+    "exit": 0,
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06CompositionIT"
+    ]
+  },
+  {
+    "run": "final-allunits-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "*"
+    ],
+    "exit": 0,
+    "tests": 254,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": [
+      "ama.config.json.SavedTranscriptAdmissionTest",
+      "ama.transcript.MeasuredTextTranscriptParserTest",
+      "ama.minutes.contract.GenerationFingerprintTest",
+      "ama.storage.s3.S3LayoutV3Test",
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "ama.transcript.SavedTranscriptBudgetTest",
+      "ama.storage.ManagedBackendIdentityTest",
+      "ama.config.json.ConfigWireReaderTest",
+      "ama.canonical.CanonicalValueCodecTest",
+      "ama.minutes.contract.HashProfilesTest",
+      "ama.storage.StorageRouterTest",
+      "ama.api.FileConfigurationTest",
+      "ama.api.HttpRevisionTokensTest",
+      "ama.minutes.contract.FinalAndCoverageTest",
+      "ama.worker.WorkerLoopTest",
+      "ama.transcript.BatchFingerprintTest",
+      "ama.api.TranscriptWireTest",
+      "ama.storage.ContractFixtureTest",
+      "ama.transcript.TextTranscriptParserTest",
+      "ama.config.json.ArchiveBudgetTest",
+      "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "ama.config.json.RawHashChainTest",
+      "ama.minutes.contract.SourceAndSupportTest",
+      "ama.config.json.ConfigBindingsTest",
+      "ama.storage.DeadlineInputStreamTest",
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "ama.storage.SourceReadLifetimeTest",
+      "ama.config.file.ControlledArchiveFix1Test",
+      "ama.storage.s3.S3ProtocolTest",
+      "ama.api.IdentitySecurityTest",
+      "ama.api.DeploymentConfigTest",
+      "ama.support.ContractClientTest",
+      "ama.storage.FileBackendDefinitionsTest",
+      "ama.config.json.DraftConfirmationHashTest",
+      "ama.worker.PreparedWorkerLoopTest",
+      "ama.contract.MinutesFactBudgetTest",
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "ama.api.IdentityContractsTest",
+      "ama.worker.WorkerShutdownTest",
+      "ama.task.TaskMetadataTest",
+      "ama.transcript.TranscriptImportProducerTest"
+    ]
+  },
+  {
+    "run": "fresh-jvm-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06RestartIT"
+    ],
+    "exit": 1,
+    "tests": 2,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06RestartIT"
+    ]
+  },
+  {
+    "run": "future-capabilities-red-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06GuardsIT"
+    ],
+    "exit": 1,
+    "tests": 2,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06GuardsIT"
+    ]
+  },
+  {
+    "run": "future-installation-green",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptBudgetTest"
+    ],
+    "exit": 0,
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": [
+      "ama.transcript.SavedTranscriptBudgetTest"
+    ]
+  },
+  {
+    "run": "future-installation-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "SavedTranscriptBudgetTest"
+    ],
+    "exit": 1,
+    "tests": 5,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": [
+      "ama.transcript.SavedTranscriptBudgetTest"
+    ]
+  },
+  {
+    "run": "hash-green",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "DraftConfirmationHashTest"
+    ],
+    "exit": 0,
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "NOT_RECORDED_IN_HISTORICAL_RECEIPT",
+    "classes": [
+      "ama.config.json.DraftConfirmationHashTest"
+    ]
+  },
+  {
+    "run": "hash-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "DraftConfirmationHashTest"
+    ],
+    "exit": 1,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "NOT_RECORDED_IN_HISTORICAL_RECEIPT",
+    "classes": [
+      "ama.config.json.DraftConfirmationHashTest"
+    ]
+  },
+  {
+    "run": "http-boundaries-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06WireHttpIT"
+    ],
+    "exit": 1,
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": []
+  },
+  {
+    "run": "http-boundaries-02",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06WireHttpIT"
+    ],
+    "exit": 0,
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06WireHttpIT"
+    ]
+  },
+  {
+    "run": "installed-access-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06AccessIT"
+    ],
+    "exit": 0,
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06AccessIT"
+    ]
+  },
+  {
+    "run": "installed-http-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06HttpIT"
+    ],
+    "exit": 0,
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06HttpIT"
+    ]
+  },
+  {
+    "run": "retained-lock-concurrency-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06ConcurrencyIT"
+    ],
+    "exit": 0,
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06ConcurrencyIT"
+    ]
+  },
+  {
+    "run": "saved-command-green-attempt-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06SavedCommandsIT"
+    ],
+    "exit": 1,
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": []
+  },
+  {
+    "run": "saved-command-green-attempt-02",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06SavedCommandsIT"
+    ],
+    "exit": 0,
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06SavedCommandsIT"
+    ]
+  },
+  {
+    "run": "saved-command-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06SavedCommandsIT"
+    ],
+    "exit": 1,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "NOT_RECORDED_IN_HISTORICAL_RECEIPT",
+    "classes": [
+      "ama.storage.Task06SavedCommandsIT"
+    ]
+  },
+  {
+    "run": "saved-final-it-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06*IT"
+    ],
+    "exit": 0,
+    "tests": 16,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "classes": [
+      "ama.storage.Task06ConcurrencyIT",
+      "ama.storage.Task06AtomicityIT",
+      "ama.storage.Task06HttpIT",
+      "ama.storage.Task06AccessIT",
+      "ama.storage.Task06SavedGraphIT",
+      "ama.storage.Task06SavedCommandsIT",
+      "ama.storage.Task06GuardsIT",
+      "ama.storage.Task06CompositionIT",
+      "ama.storage.Task06RestartIT"
+    ]
+  },
+  {
+    "run": "saved-graph-behavior-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06SavedGraphIT"
+    ],
+    "exit": 1,
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "NOT_RECORDED_IN_HISTORICAL_RECEIPT",
+    "classes": [
+      "ama.storage.Task06SavedGraphIT"
+    ]
+  },
+  {
+    "run": "saved-graph-green-01",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06SavedGraphIT"
+    ],
+    "exit": 0,
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": "NOT_RECORDED_IN_HISTORICAL_RECEIPT",
+    "classes": [
+      "ama.storage.Task06SavedGraphIT"
+    ]
+  },
+  {
+    "run": "saved-graph-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06SavedGraphIT"
+    ],
+    "exit": 1,
+    "tests": 1,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0,
+    "mavenConfigCaptured": "NOT_RECORDED_IN_HISTORICAL_RECEIPT",
+    "classes": [
+      "ama.storage.Task06SavedGraphIT"
+    ]
+  },
+  {
+    "run": "wire-green",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "TranscriptWireTest"
+    ],
+    "exit": 0,
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": [
+      "ama.api.TranscriptWireTest"
+    ]
+  },
+  {
+    "run": "wire-red",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "TranscriptWireTest"
+    ],
+    "exit": 1,
+    "tests": 3,
+    "failures": 1,
+    "errors": 1,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": [
+      "ama.api.TranscriptWireTest"
+    ]
+  },
+  {
+    "run": "wire-response-green",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "TranscriptWireTest"
+    ],
+    "exit": 0,
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mavenConfigCaptured": null,
+    "classes": [
+      "ama.api.TranscriptWireTest"
+    ]
+  }
+]

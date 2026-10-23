@@ -29,6 +29,7 @@ public final class JdbcTranscriptAuthority {
  private final DataSource source;private final JdbcTemplate j;private final TransactionRunner tx;
  private final MeetingAccess access;private final ArchiveReadBudget budget;private final CanonicalBudget canonical;
  private FileRegistry registry;
+ private FileBackendCatalog savedBackends;
  private FilePurposePolicy purposes;
  private final ImportTaskDomainPolicy taskPolicy;
  private final InputBatchFileReferencePolicy policy;
@@ -60,10 +61,11 @@ public final class JdbcTranscriptAuthority {
  private JdbcTranscriptAuthority(DataSource source,TransactionRunner tx,MeetingAccess access,ArchiveReadBudget budget,CanonicalBudget canonical){
   this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);
  }
+ MeetingAccess savedAccess(){return access;}
  public static Components create(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,
          FileBackendCatalog backends,Map<String,FileReferencePolicy> legacy,ArchiveReadBudget budget,CanonicalBudget canonical){
   if(legacy.containsKey(REFERENCE))throw new IllegalArgumentException("Production transcript authority owns its complete policy registration");
-  var authority=new JdbcTranscriptAuthority(source,tx,access,budget,canonical);authority.purposes=Objects.requireNonNull(purposes);var policies=new HashMap<>(legacy);policies.put(REFERENCE,authority.policy);
+  var authority=new JdbcTranscriptAuthority(source,tx,access,budget,canonical);authority.purposes=Objects.requireNonNull(purposes);authority.savedBackends=Objects.requireNonNull(backends);var policies=new HashMap<>(legacy);policies.put(REFERENCE,authority.policy);
   var registry=new JdbcFileRegistry(source,tx,access,purposes,backends,policies,budget);authority.attach(registry);
   return new Components(registry,authority,new JdbcProcessingIntakeFacts(authority),new JdbcProcessingSourceReader(authority));
  }
@@ -196,6 +198,30 @@ public final class JdbcTranscriptAuthority {
   require(number(root,"revision")==spec.businessVersion()&&number(root,"cancel_epoch")==spec.cancelEpoch()&&draft.revision()+1==spec.businessVersion()&&Objects.equals(root.get("owner_id"),draft.actor().enterpriseId()),FINGERPRINT_MISMATCH);
   require(j.queryForObject("SELECT COUNT(*) FROM task_subject WHERE subject_kind='MEETING' AND subject_id=? AND business_version=? AND cancel_epoch=? AND deleted=0",Long.class,draft.meetingId(),spec.businessVersion(),spec.cancelEpoch())==1,FINGERPRINT_MISMATCH);
  }
+ enum SavedPurpose { OWNER_INSPECTION, CURRENT, MUTATION }
+ public interface HeldSavedTranscript {}
+ private final class SavedScope implements HeldSavedTranscript {
+  SavedTranscriptGraph complete;
+  final Object holder=transaction();final FileRegistry.LockedMeeting gate;final Actor actor;final String meeting;final SavedPurpose purpose;
+  SavedScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting,SavedPurpose purpose){this.gate=gate;this.actor=actor;this.meeting=meeting;this.purpose=purpose;}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ Object savedScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting,SavedPurpose purpose){
+  access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),purpose==SavedPurpose.CURRENT?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);
+  return new SavedScope(gate,actor,meeting,purpose);
+ }
+ void requireSavedScope(Object value,FileRegistry.LockedMeeting gate,Actor actor,String meeting,SavedPurpose purpose){
+  if(!(value instanceof JdbcTranscriptAuthority.SavedScope s)||s.issuer()!=this||s.holder!=transaction()||s.gate!=gate||!s.actor.equals(actor)||!s.meeting.equals(meeting)||s.purpose!=purpose)throw new IllegalArgumentException("Foreign or expired saved transcript scope");
+  access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),purpose==SavedPurpose.CURRENT?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);
+ }
+ HeldSavedTranscript sealSavedGraph(Object value,FileRegistry.LockedMeeting gate,Actor actor,String meeting,SavedTranscriptGraph graph){
+  requireSavedScope(value,gate,actor,meeting,SavedPurpose.MUTATION);var scope=(SavedScope)value;require(scope.complete==null&&graph.meeting().equals(meeting)&&graph.selected()!=null,PROVENANCE_UNAVAILABLE);scope.complete=graph;return scope;
+ }
+ /** Future disposition/freeze integration must consume this exact retained root/graph handle. */
+ public void requireSavedHeld(HeldSavedTranscript value,FileRegistry.LockedMeeting gate,Actor actor,String meeting){
+  requireSavedScope(value,gate,actor,meeting,SavedPurpose.MUTATION);require(((SavedScope)value).complete!=null,PROVENANCE_UNAVAILABLE);
+ }
+ String savedRouteStatus(String backend){return savedBackends.historicalStatus(backend);}
  ArchiveReadBudget readBudget(){return budget;}
  CanonicalBudget canonicalBudget(){return canonical;}
  MeetingAccess meetingAccess(){return access;}

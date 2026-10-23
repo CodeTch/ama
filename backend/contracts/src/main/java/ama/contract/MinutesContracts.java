@@ -326,6 +326,10 @@ public final class MinutesContracts {
     }
     public record Fence(long meetingRevision,long subjectBusinessVersion,long cancelEpoch) {public Fence {uint(meetingRevision);uint(subjectBusinessVersion);uint(cancelEpoch);}}
     public record GenerationFacts(String inputId,StoredProvenanceFacts stored) {public GenerationFacts {uuid(inputId);require(stored!=null,FailureCode.INVALID_ARGUMENT);}}
+    /** Actual saved revision facts; does not assert confirmation or write permission. */
+    public record ConfirmationDraft(String meetingId,String revisionId,StoredProvenanceFacts stored) {
+        public ConfirmationDraft {uuid(meetingId);uuid(revisionId);require(stored!=null,FailureCode.INVALID_ARGUMENT);}
+    }
     public record ConfirmationFacts(String confirmationId,StoredProvenanceFacts stored) {public ConfirmationFacts {uuid(confirmationId);require(stored!=null,FailureCode.INVALID_ARGUMENT);}}
     public enum ReviewKind { SOURCE_SUPPORT,ACTION_FIELDS }
     public record ReviewFacts(String meetingId,ReviewKind kind,String elementId,String minutesRevisionId,Anchor anchor,List<String> selectedEvidenceIds,StoredProvenanceFacts stored) {

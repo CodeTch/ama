@@ -1,0 +1,174 @@
+{
+  "base": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+  "branch": "codex/phase-b-completion-20261023",
+  "paths": {
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": {
+      "bytes": 40777,
+      "sha256": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941"
+    },
+    "backend/adapters/src/main/java/ama/transcript/TranscriptEventReferences.java": {
+      "bytes": 3156,
+      "sha256": "a69c87b14f9154e5d6e47d19e6d2fdf42cea34c6b294653c4ecb50509f99eadf"
+    },
+    "backend/api/src/main/java/ama/api/SessionSecurityFilter.java": {
+      "bytes": 4054,
+      "sha256": "bd92c8e7b18134a2b58f0b1f5203f22800fd79a0d54c54acd857081ff38c0882"
+    },
+    "backend/contracts/src/main/java/ama/contract/MinutesContracts.java": {
+      "bytes": 37168,
+      "sha256": "2a772b4587298ca39fd92ab5031d5178657828689cc70c4ce9e195ad1d904382"
+    },
+    "backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java": {
+      "bytes": 18512,
+      "sha256": "7a92026a2553e1209544db14d4f3bd6f8879c17bdba6e909a7fca75e39b074a2"
+    },
+    "backend/core/src/main/java/ama/minutes/contract/TranscriptConfirmationHash.java": {
+      "bytes": 6240,
+      "sha256": "82e6093254f1a9c76d3e119bfeaef295de35418c1b466d06958b7891022037bc"
+    },
+    "contracts/openapi/api.yaml": {
+      "bytes": 3533,
+      "sha256": "085fd6c00d84f7d469c327d2316f8aed434bc1e6729a713c5b5573cf57b2af19"
+    },
+    "web/src/shared/api/generated.ts": {
+      "bytes": 193702,
+      "sha256": "c3c509727b2a0ae527db4c58a3751a0c394e9c62ccbaf3a08fbb4b9c061ca234"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscriptReceipts.java": {
+      "bytes": 7110,
+      "sha256": "64d03eccbe8c1394a1726473facd649ba9127bd05f767e7e3b0f3a0519514dba"
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java": {
+      "bytes": 32515,
+      "sha256": "0684b4b4adf50446c0f7dcf09fc34600d03bfb2b53b9cd153ab2a0e2fae1847c"
+    },
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java": {
+      "bytes": 3770,
+      "sha256": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650"
+    },
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java": {
+      "bytes": 11169,
+      "sha256": "1ee6c5cb70c62237850b2739b46b0e9c548d3f1e594d2e91b53cdcc1b825a9a7"
+    },
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java": {
+      "bytes": 6190,
+      "sha256": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877"
+    },
+    "backend/adapters/src/test/java/ama/config/json/DraftConfirmationHashTest.java": {
+      "bytes": 3242,
+      "sha256": "81aeabe673a745a941af0127b943b178bee5f6b10f40511ebf281961ff6d1a6c"
+    },
+    "backend/adapters/src/test/java/ama/config/json/SavedTranscriptAdmissionTest.java": {
+      "bytes": 1922,
+      "sha256": "38af2ce91763949d251e8fbeddac68631566a84baca59a73e9bc2ccb884ebb68"
+    },
+    "backend/api/src/main/java/ama/api/TranscriptConfiguration.java": {
+      "bytes": 6803,
+      "sha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4"
+    },
+    "backend/api/src/main/java/ama/api/TranscriptController.java": {
+      "bytes": 7667,
+      "sha256": "3e39bf1d96022e5f6859cc5d50d80924b3c5e4b2c5ab24f6314677250d52757b"
+    },
+    "backend/api/src/main/java/ama/api/TranscriptErrors.java": {
+      "bytes": 2223,
+      "sha256": "9986f78488bfb32a4abbc26c2c8c92e83e3a5ae6430643652b21ce02eb951a18"
+    },
+    "backend/api/src/main/java/ama/api/TranscriptWire.java": {
+      "bytes": 4946,
+      "sha256": "8c7ade740716f3cd672ebeac07eb847a5fd21bea17e35c673173f9d95f2261db"
+    },
+    "backend/api/src/test/java/ama/api/TranscriptWireTest.java": {
+      "bytes": 2463,
+      "sha256": "4238929f38569f741991e274c53b1afc8c5572fb7fac62fcfb82cd0646897c77"
+    },
+    "backend/contracts/src/main/java/ama/contract/TranscriptContracts.java": {
+      "bytes": 1724,
+      "sha256": "0e8aa4395ee1b4a7354565a374c86da171cf166067c5b9594866df8474c29081"
+    },
+    "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java": {
+      "bytes": 1675,
+      "sha256": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e"
+    },
+    "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java": {
+      "bytes": 1283,
+      "sha256": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49"
+    },
+    "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java": {
+      "bytes": 3762,
+      "sha256": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076"
+    },
+    "backend/core/src/test/java/ama/transcript/SavedTranscriptBudgetTest.java": {
+      "bytes": 3400,
+      "sha256": "8766747818e0fbad32227efcebce4d35cf6bbf4e93de3717b42b545db44c9e16"
+    },
+    "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java": {
+      "bytes": 1161,
+      "sha256": "7f9d75c0df4fc01fbf16df3cf63edab01fe6eb867c6556998fcfe58b5149caef"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06AccessIT.java": {
+      "bytes": 4507,
+      "sha256": "fe48201ce2ffdc9ab1dcf984483e700675dbbe436716d0fe8892958585f1a6a9"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06AtomicityIT.java": {
+      "bytes": 4444,
+      "sha256": "b6fa6a0a7ee6cdba27c7a8949b54f39c21a7cba4cbc79bc2c78f3b17651397fb"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java": {
+      "bytes": 2803,
+      "sha256": "3b5db92905a817ba9336103cb3c65c2b0e25efe1b8e46e9394e8e3cdabe9d09d"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06ConcurrencyIT.java": {
+      "bytes": 4168,
+      "sha256": "d8fe75b326ff95aa21b7dcd5c26fac0751136308f27920e60e44b5dd631576fb"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java": {
+      "bytes": 17234,
+      "sha256": "7a26747d9e6aa4f79f6d92a1eddee5cd59a9cf2069e4a93d6a61f0ea63c18763"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06GuardsIT.java": {
+      "bytes": 4505,
+      "sha256": "1c57a25e7eddc83c6ce79bdf7c1e1979aa191e890e0cfbdeadc687543838097a"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06HttpIT.java": {
+      "bytes": 3723,
+      "sha256": "9874bd29e91b28890867cdbbd8bbda5ced795045dc65638324b6bd87635aedd4"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06NativeFixture.java": {
+      "bytes": 9271,
+      "sha256": "3e131af52b7a4c77b0831cb580804e3c561c8480cb4ebc30bbd4cdee822296b1"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06ProbeSource.java": {
+      "bytes": 5821,
+      "sha256": "a4e3cc224aa32722c14cf18a690485011a8bafa8a77e64a1ebc135f6bcc70eef"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06Process.java": {
+      "bytes": 3051,
+      "sha256": "147d15e6237e635ef4eaedd13d304255088b5d7ec1f924bceebb9ab00f4fafb1"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06Resources.java": {
+      "bytes": 348,
+      "sha256": "6fe60483e028b4f605b7ef8edfbdd0a99457bbd16b07041c93b84468cbfee052"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06RestartIT.java": {
+      "bytes": 5303,
+      "sha256": "91e9dff54581e38917dce4125d127e01c072f94f2ecf52dc86939ce639a58768"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06SavedCommandsIT.java": {
+      "bytes": 5716,
+      "sha256": "10911b1882b1c335430e574ada43743958d7f81fbf1986fa9c357e14be26e6ac"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06SavedGraphIT.java": {
+      "bytes": 1115,
+      "sha256": "76803c06622792e7cbf304dbdbd49ed2d5bc85ddbf5f67b4b2cb1e4071987ebc"
+    },
+    "backend/integration-tests/src/test/java/ama/storage/Task06WireHttpIT.java": {
+      "bytes": 3274,
+      "sha256": "b61faa22fe78e8ebb2c3b7fe099f5eaab669c2f827914a78f8ec337a803c476c"
+    },
+    "contracts/openapi/transcripts.yaml": {
+      "bytes": 116651,
+      "sha256": "207cf5409fecfea7a594158fb952780af74a876e84b8e5bba85a553773be3dcc"
+    }
+  }
+}
