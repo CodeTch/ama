@@ -34,7 +34,7 @@ public final class S3FileStorage implements FileStoragePort, AutoCloseable {
                         .region(Region.of(config.region()))
                         .credentialsProvider(config.credentials())
                         .httpClientBuilder(
-                                Apache5HttpClient.builder()
+                                new ScopedS3HttpClient.Builder(Apache5HttpClient.builder()
                                         .maxConnections(config.admission())
                                         .connectionAcquisitionTimeout(config.timeout())
                                         .connectionTimeout(config.timeout())
@@ -43,7 +43,7 @@ public final class S3FileStorage implements FileStoragePort, AutoCloseable {
                                                 ProxyConfiguration.builder()
                                                         .useSystemPropertyValues(false)
                                                         .useEnvironmentVariableValues(false)
-                                                        .build()))
+                                                        .build())))
                         .serviceConfiguration(
                                 S3Configuration.builder()
                                         .pathStyleAccessEnabled(config.pathStyle())

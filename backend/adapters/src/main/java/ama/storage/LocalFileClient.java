@@ -55,6 +55,8 @@ public final class LocalFileClient implements FileStoragePort {
     }
 
     private InputStream send(String operation, Request value, InputStream body) {
+        var owned=new RequestLifetime();
+        SourceReadLifetime.Registration scoped=null;boolean returned=false;
         try {
             String metadata =
                     Base64.getUrlEncoder()
@@ -72,8 +74,13 @@ public final class LocalFileClient implements FileStoragePort {
                     body == null
                             ? HttpRequest.BodyPublishers.noBody()
                             : HttpRequest.BodyPublishers.ofInputStream(() -> body));
-            var response = http.send(request.build(), HttpResponse.BodyHandlers.ofInputStream());
-            var lifetime=new DeadlineInputStream(response.body(),bodyLifetime,()->{try{response.body().close();}catch(IOException failure){throw new UncheckedIOException(failure);}});
+            scoped=SourceReadLifetime.track(owned::abort);
+            var future=http.sendAsync(request.build(),HttpResponse.BodyHandlers.ofInputStream());
+            owned.future(future);
+            var response=future.get();
+            owned.body(response.body());
+            var registration=scoped;
+            var lifetime=new DeadlineInputStream(response.body(),bodyLifetime,()->{try{owned.abort();}finally{registration.close();}});
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
                 try (var in = lifetime) {
                     byte[] bytes = in.readNBytes(4097);
@@ -88,13 +95,26 @@ public final class LocalFileClient implements FileStoragePort {
                     throw new StorageException(code);
                 }
             }
-            return lifetime;
+            returned=true;return lifetime;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw unavailable();
-        } catch (IOException | IllegalArgumentException e) {
+        } catch (java.util.concurrent.ExecutionException | java.util.concurrent.CancellationException | IOException | IllegalArgumentException e) {
             throw unavailable();
+        } finally {
+            if(!returned)try{owned.abort();}finally{if(scoped!=null)scoped.close();}
         }
+    }
+
+    /** Assignment races with deadline/loss are closed without a dedicated body-reader thread. */
+    private static final class RequestLifetime {
+        private final java.util.concurrent.atomic.AtomicBoolean aborted=new java.util.concurrent.atomic.AtomicBoolean();
+        private final java.util.concurrent.atomic.AtomicReference<java.util.concurrent.CompletableFuture<?>> future=new java.util.concurrent.atomic.AtomicReference<>();
+        private final java.util.concurrent.atomic.AtomicReference<InputStream> body=new java.util.concurrent.atomic.AtomicReference<>();
+        void future(java.util.concurrent.CompletableFuture<?> value){future.set(value);if(aborted.get())value.cancel(true);}
+        void body(InputStream value){body.set(value);if(aborted.get())release();}
+        void abort(){aborted.set(true);var pending=future.get();if(pending!=null)pending.cancel(true);release();}
+        private void release(){var value=body.getAndSet(null);if(value!=null)try{value.close();}catch(IOException failure){throw new UncheckedIOException(failure);}}
     }
 
     private <T> T json(String operation, Request value, InputStream body, Class<T> type) {

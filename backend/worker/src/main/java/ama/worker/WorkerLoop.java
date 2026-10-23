@@ -203,15 +203,36 @@ public final class WorkerLoop implements WorkerRuntime {
 
     @Override public void close() {
         if (!closed.compareAndSet(false, true)) return;
-        pools.values().forEach(pool -> pool.scanner.shutdownNow());
-        executions.forEach(Execution::cancel);
-        heartbeats.shutdownNow();
-        pools.values().forEach(pool -> pool.workers.shutdownNow());
         long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(2);
-        for (var pool : pools.values()) {
-            try { pool.workers.awaitTermination(Math.max(0,deadline-System.nanoTime()), TimeUnit.NANOSECONDS); }
-            catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); return; }
+        Throwable failure=null;
+        var owned=new java.util.ArrayList<ExecutorService>();
+        for(var pool:pools.values()) {
+            owned.add(pool.scanner);
+            try{pool.scanner.shutdownNow();}catch(RuntimeException|Error error){failure=cleanupFailure(failure,error);}
         }
+        // cancel detaches each callback under its monitor, then invokes it outside that monitor.
+        for(var execution:executions)try{execution.cancel();}catch(RuntimeException|Error error){failure=cleanupFailure(failure,error);}
+        owned.add(heartbeats);
+        for(var pool:pools.values())owned.add(pool.workers);
+        for(var executor:owned)try{executor.shutdownNow();}catch(RuntimeException|Error error){failure=cleanupFailure(failure,error);}
+        boolean interrupted=Thread.interrupted();
+        try {
+            for(var executor:owned) {
+                boolean done=false;
+                while(!done)try {
+                    done=executor.awaitTermination(Math.max(0,deadline-System.nanoTime()),TimeUnit.NANOSECONDS);
+                    if(!done){failure=cleanupFailure(failure,new IllegalStateException("Worker shutdown deadline exceeded"));break;}
+                }catch(InterruptedException error){interrupted=true;}
+            }
+        } finally {if(interrupted)Thread.currentThread().interrupt();}
+        if(failure instanceof RuntimeException error)throw error;
+        if(failure instanceof Error error)throw error;
+    }
+
+    private static Throwable cleanupFailure(Throwable first,Throwable next) {
+        if(first==null)return next;
+        if(first!=next&&first.getSuppressed().length<8)first.addSuppressed(next);
+        return first;
     }
 
     private static ThreadFactory threads(String prefix) {

@@ -1,0 +1,55 @@
+--- backend/integration-tests/src/test/java/ama/storage/s3/WireProxy.java
++++ backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java
+@@ -10,7 +10,7 @@
+ import java.util.function.Supplier;
+ 
+ /** Test-only streaming HTTP proxy. Preserves signed Host, counts bytes read from real upstream. */
+-final class WireProxy implements AutoCloseable {
++public final class Task05FixProxy implements AutoCloseable {
+   record Event(
+       String method,
+       String path,
+@@ -21,10 +21,10 @@
+       long downstreamBytes,
+       boolean fault) {}
+ 
+-  static final class Fault {
++  public static final class Fault {
+     final Predicate<String> selector;
+     final String action;
+-    final CountDownLatch reached = new CountDownLatch(1), release = new CountDownLatch(1);
++    public final CountDownLatch reached = new CountDownLatch(1), release = new CountDownLatch(1);
+ 
+     Fault(Predicate<String> selector, String action) {
+       this.selector = selector;
+@@ -41,7 +41,7 @@
+   final AtomicInteger upstreamActive = new AtomicInteger(), peakUpstream = new AtomicInteger();
+   volatile boolean closed;
+ 
+-  WireProxy() throws IOException {
++  public Task05FixProxy() throws IOException {
+     upstream = URI.create(S3Fixture.required("AMA_S3_ENDPOINT"));
+     listener = new ServerSocket(0, 64, InetAddress.getLoopbackAddress());
+     pool.submit(
+@@ -59,11 +59,11 @@
+         });
+   }
+ 
+-  URI endpoint() {
++  public URI endpoint() {
+     return URI.create("http://127.0.0.1:" + listener.getLocalPort());
+   }
+ 
+-  Fault arm(String action, Predicate<String> selector) {
++  public Fault arm(String action, Predicate<String> selector) {
+     Fault f = new Fault(selector, action);
+     if (!fault.compareAndSet(null, f)) throw new IllegalStateException();
+     return f;
+@@ -322,6 +322,6 @@
+     closed = true;
+     listener.close();
+     pool.shutdownNow();
+-    pool.awaitTermination(5, TimeUnit.SECONDS);
++    if(!pool.awaitTermination(5, TimeUnit.SECONDS))throw new AssertionError("Owned fix proxy threads did not terminate");
+   }
+ }

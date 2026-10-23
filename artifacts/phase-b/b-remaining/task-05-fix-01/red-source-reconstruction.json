@@ -1,0 +1,250 @@
+{
+  "qualification": "Additive post-run reconstruction, verified against hashes actually captured before each RED. These are not backdated standalone source snapshots.",
+  "entries": [
+    {
+      "run": "red-shutdown",
+      "path": "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "sha256": "3b9bebf391f138bf2642a7c6b51d865a045bb31bd804006af1c935004f6c4f4d",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-shutdown",
+      "path": "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "sha256": "ae165322770d55a048571454085171c63a50aacb821b16ba581f7c8249a9ddc4",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-shutdown",
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "sha256": "4056e73593bbc7769ea947083cfd82bb1c8581f109a605cc13330e7683094a4e",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-shutdown",
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "sha256": "8a06a569ba19b109d3ecbb0217bcacb7c6c1c04c6136bb610441e2a23d19431e",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-shutdown",
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "sha256": "5f1c9a5a9b5a3268dcb99a93f24cede2c1686e653a8db67e4220423896d6f677",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-shutdown",
+      "path": "backend/worker/src/test/java/ama/worker/WorkerShutdownTest.java",
+      "sha256": "bc14a6fe01f958944f2649ec80fd8a8d5d6590b7081e4fc38eb6aabca0b4f903",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-batch-clean-fixture",
+      "path": "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "sha256": "3b9bebf391f138bf2642a7c6b51d865a045bb31bd804006af1c935004f6c4f4d",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-batch-clean-fixture",
+      "path": "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "sha256": "ae165322770d55a048571454085171c63a50aacb821b16ba581f7c8249a9ddc4",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-batch-clean-fixture",
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "sha256": "4056e73593bbc7769ea947083cfd82bb1c8581f109a605cc13330e7683094a4e",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-batch-clean-fixture",
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "sha256": "2bf351bc9625a0ba4491bdaf752da7c1499193cd9f96cabe0747e9d8b88529cf",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-batch-clean-fixture",
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "sha256": "c9d331c12432222ec0bc93732317cc6f1a87fcde5a65dcd22c87c2a983d99f48",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-batch-clean-fixture",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "sha256": "084ed9fc03264e663b22cac44c3c0d493b5a20caf76e60defae1922ae1a0fd87",
+      "derivation": "explicit reverse of recorded author edits",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-batch-clean-fixture",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "sha256": "b952ef37751bd5d2c2d3a8f29e56768ffe576be718a62929c739827c336cccb4",
+      "derivation": "explicit reverse of recorded author edits",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-batch-clean-fixture",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+      "sha256": "9342e389cd7a96c156cfc670c5ae7c1e300fd60029bd05122cb6ecebc6383587",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-batch-clean-fixture",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "sha256": "02744722c44567c234508144b8dd1921a88fbb3cf6e1798bec5ad9b4d0936474",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-renewal-clean-fixture",
+      "path": "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "sha256": "3b9bebf391f138bf2642a7c6b51d865a045bb31bd804006af1c935004f6c4f4d",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-renewal-clean-fixture",
+      "path": "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "sha256": "ae165322770d55a048571454085171c63a50aacb821b16ba581f7c8249a9ddc4",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-renewal-clean-fixture",
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "sha256": "4056e73593bbc7769ea947083cfd82bb1c8581f109a605cc13330e7683094a4e",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-renewal-clean-fixture",
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "sha256": "2bf351bc9625a0ba4491bdaf752da7c1499193cd9f96cabe0747e9d8b88529cf",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-renewal-clean-fixture",
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "sha256": "c9d331c12432222ec0bc93732317cc6f1a87fcde5a65dcd22c87c2a983d99f48",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-renewal-clean-fixture",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "sha256": "084ed9fc03264e663b22cac44c3c0d493b5a20caf76e60defae1922ae1a0fd87",
+      "derivation": "explicit reverse of recorded author edits",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-renewal-clean-fixture",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "sha256": "b952ef37751bd5d2c2d3a8f29e56768ffe576be718a62929c739827c336cccb4",
+      "derivation": "explicit reverse of recorded author edits",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-renewal-clean-fixture",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+      "sha256": "9342e389cd7a96c156cfc670c5ae7c1e300fd60029bd05122cb6ecebc6383587",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-local-renewal-clean-fixture",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "sha256": "02744722c44567c234508144b8dd1921a88fbb3cf6e1798bec5ad9b4d0936474",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "sha256": "0b3a791e3aa93cc63ef04e117b5f65e3b186c75f4b6a7f6b6f9b8aaab1d2a214",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "sha256": "485d06532408502828926683bd819bf9960376304d3ec103416e13db253e39ba",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "sha256": "ae165322770d55a048571454085171c63a50aacb821b16ba581f7c8249a9ddc4",
+      "derivation": "exact FIX_BASE git blob",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "sha256": "5b9ffc7b767c01cdd51c1434318b8eb375fbf2e37a81b96107e8569eb714d39b",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "sha256": "2bf351bc9625a0ba4491bdaf752da7c1499193cd9f96cabe0747e9d8b88529cf",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "sha256": "c9d331c12432222ec0bc93732317cc6f1a87fcde5a65dcd22c87c2a983d99f48",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "sha256": "6cc3f6da20005f56bb4d75e763776c91ab361aac05b9612bcfc8d994ec5af25b",
+      "derivation": "explicit reverse of recorded author edits",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "sha256": "25b6019d73425a93718383c95a2c3b69dee3e34288e11848a41d8f858f483710",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+      "sha256": "9342e389cd7a96c156cfc670c5ae7c1e300fd60029bd05122cb6ecebc6383587",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "sha256": "02744722c44567c234508144b8dd1921a88fbb3cf6e1798bec5ad9b4d0936474",
+      "derivation": "final file",
+      "capturedStandaloneAtExecution": false
+    },
+    {
+      "run": "red-s3-control-open",
+      "path": "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "sha256": "c9501a07db3386e53deaa2d3d4cf56aeeaadd425fc3bcc708eae2d0c21bf09f3",
+      "derivation": "explicit reverse of recorded author edits",
+      "capturedStandaloneAtExecution": false
+    }
+  ]
+}

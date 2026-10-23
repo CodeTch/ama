@@ -37,6 +37,14 @@ public final class TranscriptWorkerRuntimeProvider implements WorkerRuntimeProvi
   private Runtime(WorkerLoop loop,FileBackendDefinitions definitions){this.loop=loop;this.definitions=definitions;}
   public void start(){loop.start();}
   public WorkerLoop.Observation observation(){return loop.observation();}
-  public synchronized void close(){if(closed)return;closed=true;loop.close();try{definitions.close();}catch(Exception failure){throw new IllegalStateException("Worker backend close failed");}}
+  public synchronized void close(){
+   if(closed)return;closed=true;
+   Throwable failure=null;
+   try{loop.close();}catch(RuntimeException|Error error){failure=error;}
+   try{definitions.close();}catch(Exception|Error error){if(failure==null)failure=error;else if(failure!=error)failure.addSuppressed(error);}
+   if(failure instanceof RuntimeException error)throw error;
+   if(failure instanceof Error error)throw error;
+   if(failure!=null)throw new IllegalStateException("Worker backend close failed",failure);
+  }
  }
 }

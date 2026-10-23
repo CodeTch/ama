@@ -1,0 +1,40 @@
+--- backend/integration-tests/src/test/java/ama/storage/Task05NativeFixture.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java
+@@ -13,7 +13,7 @@
+  * Owns new managed-ID roots; reuses reviewed PKI/mount setup without changing infrastructure
+  * helpers.
+  */
+-final class Task05NativeFixture implements AutoCloseable {
++final class Task05FixNativeFixture implements AutoCloseable {
+     final OwnedRoot base;
+     final ManagedBackendId.Local binding;
+     final URI uri;
+@@ -23,7 +23,7 @@
+     Process process;
+     Path configuration;
+ 
+-    Task05NativeFixture(Path root) throws Exception {
++    Task05FixNativeFixture(Path root) throws Exception {
+         if(Files.exists(root)||Files.isSymbolicLink(root)||!root.toAbsolutePath().normalize().startsWith(Path.of(System.getenv("AMA_TASK05_ROOT"),"native","data")))throw new IllegalStateException("Native case custody");
+         if(Files.isSymbolicLink(root.getParent())||!root.getParent().toRealPath().startsWith(Path.of(System.getenv("AMA_TASK05_ROOT")).toRealPath()))throw new IllegalStateException("Native parent custody");
+         LocalFixture.pki=Path.of(System.getenv("AMA_TASK05_ROOT"),"pki");
+@@ -122,11 +122,17 @@
+     }
+ 
+     void receipt(String state)throws Exception {
+-        Path output=Task05RegressionResources.evidencePath().resolve(base.root.getFileName()+"-native-"+state+".json");
++        Path output=evidencePath().resolve(base.root.getFileName()+"-native-"+state+".json");
+         var data=new LinkedHashMap<String,Object>();data.put("state",state);data.put("observedAt",Instant.now().toString());data.put("root",base.root.toString());data.put("role",base.role.toString());data.put("managedId",binding.id());data.put("origin",uri.toString());data.put("port",port);data.put("parentPid",ProcessHandle.current().pid());data.put("mode",process==null?"in-process":"child");
+-        if(process!=null){data.put("pid",process.pid());data.put("alive",process.isAlive());data.put("startInstant",process.info().startInstant().map(Object::toString).orElse("unavailable-after-exit"));if(!process.isAlive())data.put("exit",process.exitValue());data.put("command",List.of(Path.of(System.getProperty("java.home"),"bin/java").toString(),"-Xmx64m","-XX:ActiveProcessorCount=2","-jar",Task05RegressionResources.ROOT.getParent().getParent().resolve("backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar").toString(),configuration.toString()));}
++        if(process!=null){data.put("pid",process.pid());data.put("alive",process.isAlive());data.put("startInstant",process.info().startInstant().map(Object::toString).orElse("unavailable-after-exit"));if(!process.isAlive())data.put("exit",process.exitValue());data.put("command",List.of(Path.of(System.getProperty("java.home"),"bin/java").toString(),"-Xmx64m","-XX:ActiveProcessorCount=2","-jar",repoRoot().resolve("backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar").toString(),configuration.toString()));}
+         Files.writeString(output,new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(data),StandardOpenOption.CREATE_NEW);
+     }
++    static Path repoRoot() {
++        Path root=Path.of("").toAbsolutePath();
++        while(!Files.exists(root.resolve("tools/checks/run.py")))root=root.getParent();
++        return root;
++    }
++    static Path evidencePath(){return repoRoot().resolve("artifacts/phase-b/b-remaining/task-05-fix-01");}
+     static final class OwnedRoot {
+         final Path root,role;final MountedVolumeGuard.Config config;
+         OwnedRoot(Path selectedRoot)throws Exception {

@@ -1,0 +1,11 @@
+--- backend/integration-tests/src/test/java/ama/storage/Task05TransportIT.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java
+@@ -8,7 +8,7 @@
+ import java.util.concurrent.*;
+ import org.junit.jupiter.api.Test;
+ import static org.junit.jupiter.api.Assertions.*;
+-class Task05TransportIT {
++class Task05FixTransportRegressionIT {
+  static javax.net.ssl.SSLContext tls(String identity)throws Exception{
+   Path p=Path.of(System.getenv("AMA_TASK05_ROOT"),"pki");char[] password=Files.readString(p.resolve("keystore-password")).toCharArray();
+   return ServiceTls.context(p.resolve(identity+".p12"),password,p.resolve("trust.p12"),password);

@@ -1,0 +1,37 @@
+[
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/Task05TransportIT.java",
+    "originalSha256": "c390836928c5834079b6825c77788b1ec8497af1d42d7da0a483ab6c1724805e",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+    "copySha256": "f7a525d6e52d2237070aade2e75ed122da5b49a0b2a6fa481a88c7a871963d86",
+    "diff": "forward-Task05FixTransportRegressionIT.diff"
+  },
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/s3/Task05S3DeadlineIT.java",
+    "originalSha256": "6926b4136f1a329f9d1776bb00412daca15dd65bf5ef2d920c19b3839385843c",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+    "copySha256": "dea86b25229e38eca7176cbffeb238264b465acabbd1ff5d5d3e42b0ee9f5a6a",
+    "diff": "forward-Task05FixS3DeadlineRegressionIT.diff"
+  },
+  {
+    "original": "backend/integration-tests/src/test/java/ama/task/Task05CancellationIT.java",
+    "originalSha256": "7e66376d9e8de9386444fafe8bbfb7bbde7bbe4d8980a44a36d6baa1cf8d9012",
+    "copy": "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java",
+    "copySha256": "213ff043ce322650ff996d811b3fb99ec3e2e758452b198e1ea39152faea1895",
+    "diff": "forward-Task05FixCancellationRegressionIT.diff"
+  },
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/Task05NativeFixture.java",
+    "originalSha256": "cd3fb88b42526f7768cae50e28e80bd513e421033a29d18a271d0aa9e05fb5f6",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+    "copySha256": "9342e389cd7a96c156cfc670c5ae7c1e300fd60029bd05122cb6ecebc6383587",
+    "diff": "forward-Task05FixNativeFixture.diff"
+  },
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/s3/WireProxy.java",
+    "originalSha256": "aabfd4954bb67eb4a2e60102595ad1d9076ef2d264222e734f6585a3446da88d",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+    "copySha256": "4fe1ab05715fa41ac5c23fa47b6e89ad6988fc906e1dc6b954d5822a307a6742",
+    "diff": "forward-Task05FixProxy.diff"
+  }
+]

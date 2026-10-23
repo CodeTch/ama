@@ -63,7 +63,7 @@ public final class TranscriptImportRuntime {
   Supplier<TaskResult> prepareRaw(TaskLease lease,Settings settings,PreparationCancellation cancellation) throws Exception {
    long deadline=System.nanoTime()+settings.batchDeadline().toNanos();
    BooleanSupplier cancelled=()->cancellation.cancelled()||System.nanoTime()-deadline>=0;
-   try {
+   try(var sourceLifetime=new ama.storage.SourceReadLifetime(cancellation,deadline)) {
     check(cancelled);
     var facts=components.authority().readWorkerFacts(lease,cancelled);
     var input=facts.rows().stream().filter(row->row.table()==Table.TRANSCRIPTION_INPUT&&row.string("id").equals(lease.spec().input().id())).findFirst().orElseThrow();
@@ -87,11 +87,9 @@ public final class TranscriptImportRuntime {
      require(remainingBytes>0&&remainingUnits>0&&remainingSegments>0&&file.sizeBytes()<=remainingBytes,BUDGET_EXCEEDED);
      var budget=new TranscriptDocumentParser.ParseBudget(Math.min(binding.parseBudget().maxSourceBytes(),remainingBytes),Math.min(binding.parseBudget().maxUtf16CodeUnits(),remainingUnits),Math.min(binding.parseBudget().maxSegments(),remainingSegments));
      MeasuredTranscriptDocumentParser.MeasuredResult measured;
-     try(var download=components.sources().open(lease,lease.spec().input().id(),file.id());
-         var registered=cancellation.register(()->{try{download.close();}catch(java.io.IOException ignored){}});
-         var lifetime=new ama.storage.DeadlineInputStream(download.body(),Duration.ofNanos(Math.max(1,deadline-System.nanoTime())),()->{try{download.close();}catch(java.io.IOException ignored){}})) {
+     try(var download=components.sources().open(lease,lease.spec().input().id(),file.id())) {
       require(download.file().fileId().equals(file.id())&&download.file().meetingId().equals(file.meetingId())&&download.file().sha256().equals(file.sha256())&&download.file().size()==file.sizeBytes()&&download.offset()==0&&download.length()==file.sizeBytes(),PROVENANCE_UNAVAILABLE);
-      measured=parser.parseMeasured(lifetime,UUID.fromString(file.id()),file.sha256(),budget,cancelled);
+      measured=parser.parseMeasured(download.body(),UUID.fromString(file.id()),file.sha256(),budget,cancelled);
      }
      check(cancelled);require(measured.usage().sourceBytes()==file.sizeBytes()&&measured.usage().segments()==measured.result().segments().size(),PROVENANCE_UNAVAILABLE);
      bytes=Math.addExact(bytes,measured.usage().sourceBytes());units=Math.addExact(units,measured.usage().decodedUtf16CodeUnits());segments.addAll(measured.result().segments());
