@@ -98,3 +98,7 @@ Read docs/superpowers/specs/2026-10-23-ama-phase-b-import-worker.md and exact or
 ## Task9 adopted minutes-generation refinement
 
 Read docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-generation.md and exact original/R1/reviews/shared-rank ruling. Enqueue freezes current r/e without content advance or debt clearing; final/publication complete outstanding-generation closure is mandatory. Task9 owns real first-settings/template origin, Task10 later settings and shared PENDING disposal. Actual independent history allocation and original fifteen-profile graphs, private external authority/durable provider/invalid-output/permit-UNKNOWN contracts remain. Product API version/root OpenAPI is corrected; shared minutes rank follows established Task3/6 before sources/tasks. Design adoption supplies no runtime qualification.
+
+## Task10 adopted saved-minutes/editor/review refinement
+
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-editor.md and exact independently reviewed original/shared-rank ruling. Actual tab editor-intent ACK precedes edits; first-save/PENDING/STALE differ by real fences, explicit adoption preserves provenance with full graph remapping and no review credit. Shared complete PENDING contribution applies every version writer using declaration then one globally ordered union; exact whole-source/action reviews and independent history pairing remain. Upstream confined writer/facade reconciliation and Task11 publication/outstanding-work integration are mandatory source/activation gates, not qualified by this design pass.
