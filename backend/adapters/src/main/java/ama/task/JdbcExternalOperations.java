@@ -56,6 +56,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
  private Optional<Locked> lock(Operation seen,boolean skip){
   var current=execution(seen.id(),seen.execution(),false,false);if(current.isEmpty())return Optional.empty();
   var task=q.row(current.orElseThrow().task(),false,false);if(task.isEmpty())return Optional.empty();
+  if(!q.policies.containsKey(task.orElseThrow().spec().type()))return Optional.empty();
   var domain=q.lockDomain(task.orElseThrow().spec(),skip);if(domain.isEmpty())return Optional.empty();
   var heldTask=q.row(task.orElseThrow().id(),true,skip);if(heldTask.isEmpty())return Optional.empty();
   var op=operation(seen.id(),true,skip);if(op.isEmpty()||op.orElseThrow().execution()!=seen.execution())return Optional.empty();
@@ -97,10 +98,14 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   if(old.isEmpty()||!old.orElseThrow().id().equals(token.executionId())||!current.subject().equals(token.subject()))return ObservationResult.STALE_TOKEN;
   var currentEx=execution(current.id(),current.execution(),false,false).orElseThrow();
   var currentTask=q.row(currentEx.task(),false,false).orElseThrow();var oldTask=q.row(old.orElseThrow().task(),false,false).orElseThrow();
-  var domain=q.lockDomain(currentTask.spec(),false).orElseThrow();
+  var scope=q.prepareDomain(List.of(currentTask.spec(),oldTask.spec()),TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION,false,null)
+    .orElseThrow(DomainPreparationUnavailableException::new);
+  var domain=q.lockDomain(scope,currentTask.spec(),false).orElseThrow(DomainPreparationUnavailableException::new);
   var heldTasks=new HashMap<String,JdbcTaskQueue.Row>();
   for(String id:new TreeSet<>(List.of(currentTask.id(),oldTask.id())))heldTasks.put(id,q.row(id,true,false).orElseThrow());
-  currentTask=heldTasks.get(currentTask.id());oldTask=heldTasks.get(oldTask.id());
+  var lockedCurrent=heldTasks.get(currentTask.id());var lockedOld=heldTasks.get(oldTask.id());
+  if(!lockedCurrent.spec().equals(currentTask.spec())||!lockedOld.spec().equals(oldTask.spec()))throw new RediscoverObservation();
+  currentTask=lockedCurrent;oldTask=lockedOld;
   var o=operation(current.id(),true,false).orElseThrow();
   if(o.execution()!=current.execution())throw new RediscoverObservation();
   var heldExecutions=new HashMap<Long,Execution>();
@@ -109,7 +114,14 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   var e=heldExecutions.get(o.execution());var tokenExecution=heldExecutions.get(token.executionNo());
   if(!e.task().equals(currentTask.id())||!tokenExecution.task().equals(oldTask.id()))throw new RediscoverObservation();
   if(!tokenExecution.id().equals(token.executionId())||!o.subject().equals(token.subject()))return ObservationResult.STALE_TOKEN;
-  if(!valid(o,e,token)){
+  boolean effectsAllowed=scope.policy().permitsDomainEffects(scope.prepared());
+  // A current authoritative fact can outlive business authority. Identity fencing cannot make
+  // that fact permanently unrecordable merely because the disabled principal cannot renew.
+  // Exact current execution and live observation states are still required; no lease is extended.
+  boolean terminalFact=observation.outcome()==ExternalOutcome.SUCCEEDED||observation.outcome()==ExternalOutcome.FAILED_ZERO_EFFECT;
+  boolean factOnlyCurrent=terminalFact&&!effectsAllowed&&o.execution()==token.executionNo()&&e.id().equals(token.executionId())
+    &&(o.state().equals("MARKED")||o.state().equals("UNKNOWN"))&&(e.state().equals("MARKED")||e.state().equals("UNKNOWN"));
+  if(!valid(o,e,token)&&!factOnlyCurrent){
    if(observation.outcome()==ExternalOutcome.SUCCEEDED&&tokenExecution.state().equals("FAILED")
       &&tokenExecution.basis()!=null&&tokenExecution.evidence()!=null&&tokenExecution.verified()!=null){
     q.policy(oldTask.spec()).validateExternalObservation(oldTask.spec(),observation);
@@ -123,7 +135,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
    j.update("UPDATE external_operation SET state=?,last_error=?,next_check_at=reconcile_expires_at WHERE id=?",observation.outcome()==ExternalOutcome.UNKNOWN?"UNKNOWN":"MANUAL_REQUIRED",observation.errorCode(),o.id());
    j.update("UPDATE external_execution SET state='UNKNOWN' WHERE id=?",e.id());q.event("EXTERNAL_UNKNOWN",currentTask);return ObservationResult.APPLIED;
   }
-  boolean canApply=q.current(domain,currentTask.spec());
+  boolean canApply=effectsAllowed&&valid(o,e,token)&&q.current(domain,currentTask.spec());
   if(canApply){q.policy(currentTask.spec()).validateOutput(currentTask.spec(),new TaskResult(observation.outcome()==ExternalOutcome.SUCCEEDED?Outcome.SUCCEEDED:Outcome.FAILED,observation.output(),observation.errorCode()));effects.run();}
   String state=observation.outcome()==ExternalOutcome.SUCCEEDED?"SUCCEEDED":"FAILED";
   var proof=observation.noEffectProof();
@@ -133,20 +145,25 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   return canApply?ObservationResult.APPLIED:ObservationResult.RECORDED_FENCED;
  }
  @Override public String retryAfterZeroEffect(String id,long expected,TaskSpec next,ExternalRequest request){return q.work(()->{
-  // Serialize the subject before creating a consistent-read snapshot or looking up the producer.
-  q.lockDomain(next,false).orElseThrow();q.policy(next).validateInput(next);q.policy(next).validateExternalRequest(next,request);
-  var replay=j.query("SELECT * FROM durable_task WHERE producer_key=?",JdbcTaskQueue::read,next.producerKey());
+  // Discover the COMPLETE immutable old/new spec set before identities, subject, roots or tasks.
+  var seen=operation(id,false,false).orElseThrow();
+  var ex=execution(id,expected,false,false).orElseThrow();var old=q.row(ex.task(),false,false).orElseThrow();
+  var scope=q.prepareDomain(List.of(next,old.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,null)
+    .orElseThrow(DomainPreparationUnavailableException::new);
+  q.lockDomain(scope,next,false).orElseThrow();q.policy(next).validateInput(next);q.policy(next).validateExternalRequest(next,request);
+  // A locking read is current even when the preliminary discovery established an RR snapshot.
+  var replay=j.query("SELECT * FROM durable_task WHERE producer_key=? FOR UPDATE",JdbcTaskQueue::read,next.producerKey());
   if(!replay.isEmpty()){
    var task=replay.getFirst();if(!task.spec().equals(next))throw new IllegalArgumentException("Retry producer conflicts with immutable spec");
-   q.lockDomain(next,false).orElseThrow();q.policy(next).validateInput(next);q.policy(next).validateExternalRequest(next,request);
+   q.lockDomain(scope,next,false).orElseThrow();q.policy(next).validateInput(next);q.policy(next).validateExternalRequest(next,request);
    q.row(task.id(),true,false).orElseThrow();var o=operation(id,true,false).orElseThrow();
    var e=execution(id,expected+1,true,false).orElseThrow(()->new IllegalArgumentException("Retry producer belongs to another execution"));
    if(!e.task().equals(task.id())||!e.hash().equals(request.executionRequestHash())||!e.manifest().equals(request.requestManifest())||!o.subject().equals(next.subject())||!o.kind().equals(request.operationKind())||!o.key().equals(request.businessKey())||!o.hash().equals(request.logicalRequestHash()))throw new IllegalArgumentException("Retry replay conflicts with original acceptance");
    return task.id();
   }
-  var seen=operation(id,false,false).orElseThrow();if(!seen.state().equals("FAILED"))throw new IllegalStateException("Only definitive zero-effect failure permits retry");var ex=execution(id,expected,false,false).orElseThrow();var old=q.row(ex.task(),false,false).orElseThrow();
+  if(!seen.state().equals("FAILED"))throw new IllegalStateException("Only definitive zero-effect failure permits retry");
   if(!old.spec().subject().equals(next.subject())||old.spec().businessVersion()!=next.businessVersion()||old.spec().cancelEpoch()!=next.cancelEpoch()||!old.spec().input().equals(next.input())||!old.spec().inputFingerprint().equals(next.inputFingerprint()))throw new IllegalArgumentException("Retry requires same fixed input");
-  var subject=q.lockDomain(next,false).orElseThrow();if(!q.current(subject,next))throw new IllegalStateException("Retry is fenced");q.policy(next).validateInput(next);q.policy(next).validateExternalRequest(next,request);
+  var subject=q.lockDomain(scope,next,false).orElseThrow();if(!q.current(subject,next))throw new IllegalStateException("Retry is fenced");q.policy(next).validateInput(next);q.policy(next).validateExternalRequest(next,request);
   if(!request.operationKind().equals(seen.kind())||!request.businessKey().equals(seen.key())||!request.logicalRequestHash().equals(seen.hash()))throw new IllegalArgumentException("Logical effect cannot change");
   String task=UUID.randomUUID().toString();
   if(task.compareTo(old.id())<0){q.insertNew(next,task);q.row(old.id(),true,false).orElseThrow();}else{q.row(old.id(),true,false).orElseThrow();q.insertNew(next,task);}

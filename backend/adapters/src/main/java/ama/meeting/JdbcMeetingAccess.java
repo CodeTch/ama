@@ -23,7 +23,7 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     record Person(String id,String name,String status) {}
     record Root(String id,String owner,long revision,long accessRevision,long cancelEpoch,String stage,
                 String lifecycle,String governance,boolean published,String infoId,String rosterId) {}
-    final class Identities {
+    final class Identities implements LockedIdentities {
         final Object transaction; final String actor; final Map<String,Person> people;
         Identities(String actor,Map<String,Person> people){this.transaction=transaction();this.actor=actor;this.people=Map.copyOf(people);}
         JdbcMeetingAccess issuer(){return JdbcMeetingAccess.this;}
@@ -40,28 +40,54 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     }
     @Override public Locked lock(Actor actor,String id){return lockMeeting(lockIdentities(actor,List.of()),id);}
     Identities lockIdentities(Actor actor,Collection<String> affected){
+        return (Identities)captureIdentities(actor,affected,false,false).orElseThrow(AccessDeniedException::new);
+    }
+    @Override public Optional<LockedIdentities> tryLockIdentities(Actor actor,Collection<String> affected,boolean skip){
+        return captureIdentities(actor,affected,skip,true);
+    }
+    private Optional<LockedIdentities> captureIdentities(Actor actor,Collection<String> affected,boolean skip,boolean allActive){
         Object currentTransaction=transaction();
         if(rootsStarted.containsKey(currentTransaction))throw new IllegalStateException("Identity prelock cannot follow a meeting root lock");
-        Objects.requireNonNull(actor);
+        Objects.requireNonNull(actor);Objects.requireNonNull(affected);
         var ids=new TreeSet<String>((a,b)->Arrays.compareUnsigned(a.getBytes(StandardCharsets.UTF_8),b.getBytes(StandardCharsets.UTF_8)));
         ids.addAll(affected);ids.add(actor.enterpriseId());var people=new HashMap<String,Person>();
         for(String id:ids){
-            var found=j.query("SELECT enterprise_id,display_name,status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE",
+            var found=j.query("SELECT enterprise_id,display_name,status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),
                     (r,n)->new Person(r.getString(1),r.getString(2),r.getString(3)),id);
-            if(!found.isEmpty())people.put(id,found.getFirst());
+            if(found.isEmpty()){if(skip)return Optional.empty();continue;}
+            people.put(id,found.getFirst());
         }
         var current=people.get(actor.enterpriseId());
-        if(current==null || !current.status().equals("ACTIVE"))throw new AccessDeniedException();
-        return new Identities(actor.enterpriseId(),people);
+        if(current==null||!current.status().equals("ACTIVE")
+                ||allActive&&(people.size()!=ids.size()||people.values().stream().anyMatch(p->!p.status().equals("ACTIVE")))){
+            if(skip)return Optional.empty();
+            throw new AccessDeniedException();
+        }
+        return Optional.of(new Identities(actor.enterpriseId(),people));
     }
     Held lockMeeting(Identities identities,String id){
+        return (Held)lockPrepared(identities,id,false).orElseThrow(AccessDeniedException::new);
+    }
+    @Override public Optional<Locked> lockPrepared(LockedIdentities prepared,String id,boolean skip){
+        if(!(prepared instanceof JdbcMeetingAccess.Identities identities)||identities.issuer()!=this)
+            throw new IllegalArgumentException("Foreign identity capability");
         check(identities);
         rootsStarted.put(transaction(),true);
-        var subject=fences.lock(new SubjectRef("MEETING",id),false).orElseThrow(AccessDeniedException::new);
-        Root root=root(id);
-        if(subject.deleted())throw new AccessDeniedException();
-        if(root.revision()!=subject.businessVersion()||root.cancelEpoch()!=subject.cancelEpoch())throw new IllegalStateException("Meeting fence mismatch");
-        return new Held(identities,subject,root);
+        var subject=fences.lock(new SubjectRef("MEETING",id),skip);
+        if(subject.isEmpty()){if(skip)return Optional.empty();throw new AccessDeniedException();}
+        var roots=roots(id,skip);
+        if(roots.isEmpty()){if(skip)return Optional.empty();throw new AccessDeniedException();}
+        Root root=roots.orElseThrow();var fence=subject.orElseThrow();
+        if(fence.deleted())throw new AccessDeniedException();
+        if(root.revision()!=fence.businessVersion()||root.cancelEpoch()!=fence.cancelEpoch())throw new IllegalStateException("Meeting fence mismatch");
+        return Optional.of(new Held(identities,fence,root));
+    }
+    @Override public void requirePrepared(Locked locked,Actor actor,String meetingId,Collection<String> affected,Action action){
+        if(!(locked instanceof JdbcMeetingAccess.Held held)||held.issuer()!=this)throw new IllegalArgumentException("Foreign meeting capability");
+        check(held.identities);
+        if(!held.root.id().equals(meetingId)||!held.identities.actor.equals(actor.enterpriseId())
+                ||!held.identities.people.keySet().containsAll(affected))throw new IllegalArgumentException("Meeting capability coverage mismatch");
+        require(held,action);
     }
     @Override public void require(Locked locked,Action action){
         if(!(locked instanceof JdbcMeetingAccess.Held held)||held.issuer()!=this)throw new IllegalArgumentException("Foreign meeting capability");
@@ -82,7 +108,10 @@ public final class JdbcMeetingAccess implements MeetingAccess {
         if(members.size()!=1)throw new AccessDeniedException();
     }
     private Root root(String id){
-        return j.query("SELECT * FROM meeting WHERE id=? FOR UPDATE",(r,n)->new Root(r.getString("id"),r.getString("owner_id"),r.getLong("revision"),r.getLong("access_revision"),r.getLong("cancel_epoch"),r.getString("stage"),r.getString("lifecycle"),r.getString("governance_state"),r.getBoolean("ever_published"),r.getString("info_revision_id"),r.getString("roster_revision_id")),id).stream().findFirst().orElseThrow(AccessDeniedException::new);
+        return roots(id,false).orElseThrow(AccessDeniedException::new);
+    }
+    private Optional<Root> roots(String id,boolean skip){
+        return j.query("SELECT * FROM meeting WHERE id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),(r,n)->new Root(r.getString("id"),r.getString("owner_id"),r.getLong("revision"),r.getLong("access_revision"),r.getLong("cancel_epoch"),r.getString("stage"),r.getString("lifecycle"),r.getString("governance_state"),r.getBoolean("ever_published"),r.getString("info_revision_id"),r.getString("roster_revision_id")),id).stream().findFirst();
     }
     private void check(Identities identities){if(identities.issuer()!=this||identities.transaction!=transaction())throw new IllegalArgumentException("Expired or foreign identity capability");}
     private Object transaction(){
