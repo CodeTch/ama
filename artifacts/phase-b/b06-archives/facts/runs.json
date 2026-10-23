@@ -1,0 +1,291 @@
+[
+  {
+    "run": "green-01",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT"
+      ],
+      "exit_code": 0,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 179,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "green-02-final",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT"
+      ],
+      "exit_code": 0,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 179,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-01",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT"
+      ],
+      "exit_code": 1
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-02",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT"
+      ],
+      "exit_code": 1,
+      "MAVEN_ARGS": "-Dtest=ProcessingFactsReaderIT -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 3,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-03",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT"
+      ],
+      "exit_code": 1,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 3,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-04",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT"
+      ],
+      "exit_code": 1,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 3,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-05",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT"
+      ],
+      "exit_code": 1,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 3,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-06-expanded",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT"
+      ],
+      "exit_code": 1,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 8,
+        "failures": 7,
+        "errors": 1,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-07-commit-cancel",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT#cancellationAtRealReadCommitCannotReturnSuccess"
+      ],
+      "exit_code": 1,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 179,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  {
+    "run": "red-08-long-max",
+    "command": {
+      "argv": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "ProcessingFactsReaderIT#legalLongMaxFactBudgetsReadSmallDataWithoutOverflow"
+      ],
+      "exit_code": 1,
+      "MAVEN_ARGS": null
+    },
+    "junit": [
+      {
+        "group": "xml",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "group": "unit-xml",
+        "tests": 179,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  }
+]

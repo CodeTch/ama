@@ -1,0 +1,5 @@
+# Static audit correction before attempt 5
+
+The prior ledger missed the V009 backend FK while claiming all FK targets were covered. Actual attempt4 failed at file_object.fk_file_object_1; zero assertion failures, three setup errors. Preserved without reset. Author re-read whole V009 rather than CREATE-only excerpt.
+
+Added per-fixture unique storage_backend identity B06_FACTS_<UUID> and INSERT(id,storage_type,status,config_revision) before file_object. All four required columns supplied; local / READ_ONLY are valid V009 enums, config1 UINT; no FK parent. file_object uses exactly that backend identity; no physical storage I/O or activated configuration. The remaining constructor INSERT and FK targets were checked in whole V007/V008/V009/V010/V011 SQL: identity→subject→meeting→storage_backend→file→batch→member→input→task→optional revision. All nonnull targets exist earlier; nullable cyclic source_revision/parent pointers remain null. durable_task only FK is subject_kind+subject_id; its input UUID is real immutable metadata despite no direct FK. revision references real task/input/batch/creator. No migration or existing data repair.

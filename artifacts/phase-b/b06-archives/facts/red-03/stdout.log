@@ -1,0 +1,424 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ama-parent                                                         [pom]
+[INFO] ama-contracts                                                      [jar]
+[INFO] ama-core                                                           [jar]
+[INFO] ama-adapters                                                       [jar]
+[INFO] ama-api                                                            [jar]
+[INFO] ama-file-service                                                   [jar]
+[INFO] ama-worker                                                         [jar]
+[INFO] ama-integration-tests                                              [jar]
+[INFO] 
+[INFO] ---------------------------< ama:ama-parent >---------------------------
+[INFO] Building ama-parent 0.1.0-SNAPSHOT                                 [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] -------------------------< ama:ama-contracts >--------------------------
+[INFO] Building ama-contracts 0.1.0-SNAPSHOT                              [2/8]
+[INFO]   from backend/contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/contracts/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/contracts/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/contracts/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-contracts ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.contract.MinutesFactBudgetTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.116 s -- in ama.contract.MinutesFactBudgetTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-contracts ---
+[INFO] 
+[INFO] ----------------------------< ama:ama-core >----------------------------
+[INFO] Building ama-core 0.1.0-SNAPSHOT                                   [3/8]
+[INFO]   from backend/core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-core ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/core/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/core/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-core ---
+[INFO] Copying 54 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-core ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.minutes.contract.GenerationFingerprintTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.289 s -- in ama.minutes.contract.GenerationFingerprintTest
+[INFO] Running ama.minutes.contract.StoredSourceGraphTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.171 s -- in ama.minutes.contract.StoredSourceGraphTest
+[INFO] Running ama.minutes.contract.FinalAndCoverageTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.044 s -- in ama.minutes.contract.FinalAndCoverageTest
+[INFO] Running ama.minutes.contract.HashProfilesTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.067 s -- in ama.minutes.contract.HashProfilesTest
+[INFO] Running ama.minutes.contract.SourceAndSupportTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.044 s -- in ama.minutes.contract.SourceAndSupportTest
+[INFO] Running ama.canonical.CanonicalValueCodecTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.021 s -- in ama.canonical.CanonicalValueCodecTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-core ---
+[INFO] 
+[INFO] --------------------------< ama:ama-adapters >--------------------------
+[INFO] Building ama-adapters 0.1.0-SNAPSHOT                               [4/8]
+[INFO]   from backend/adapters/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-adapters ---
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] Copying 12 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-adapters ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-adapters ---
+[INFO] Copying 49 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-adapters ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-adapters ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.task.TaskMetadataTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.089 s -- in ama.task.TaskMetadataTest
+[INFO] Running ama.transcript.TextTranscriptParserTest
+[INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.141 s -- in ama.transcript.TextTranscriptParserTest
+[INFO] Running ama.minutes.json.StrictMinutesJsonReaderTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.163 s -- in ama.minutes.json.StrictMinutesJsonReaderTest
+[INFO] Running ama.minutes.json.OutputBudgetBoundaryTest
+[INFO] Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.071 s -- in ama.minutes.json.OutputBudgetBoundaryTest
+[INFO] Running ama.config.json.ArchiveBudgetTest
+[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.127 s -- in ama.config.json.ArchiveBudgetTest
+[INFO] Running ama.config.json.ConfigBindingsTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.123 s -- in ama.config.json.ConfigBindingsTest
+[INFO] Running ama.config.json.RawHashChainTest
+[INFO] Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.200 s -- in ama.config.json.RawHashChainTest
+[INFO] Running ama.config.json.ConfigWireReaderTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 s -- in ama.config.json.ConfigWireReaderTest
+[INFO] Running ama.storage.ManagedBackendIdentityTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.024 s -- in ama.storage.ManagedBackendIdentityTest
+[INFO] Running ama.storage.StorageRouterTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.030 s -- in ama.storage.StorageRouterTest
+[INFO] Running ama.storage.s3.S3LayoutV3Test
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.336 s -- in ama.storage.s3.S3LayoutV3Test
+[INFO] Running ama.storage.s3.S3ProtocolTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 s -- in ama.storage.s3.S3ProtocolTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 117, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-adapters ---
+[INFO] 
+[INFO] ----------------------------< ama:ama-api >-----------------------------
+[INFO] Building ama-api 0.1.0-SNAPSHOT                                    [5/8]
+[INFO]   from backend/api/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-api ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-api ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-api ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/api/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-api ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-api ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.api.DeploymentConfigTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.037 s -- in ama.api.DeploymentConfigTest
+[INFO] Running ama.api.IdentityContractsTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s -- in ama.api.IdentityContractsTest
+[INFO] Running ama.api.IdentitySecurityTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.003 s -- in ama.api.IdentitySecurityTest
+[INFO] Running ama.api.FileConfigurationTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s -- in ama.api.FileConfigurationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-api ---
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ama-api ---
+[INFO] Attaching repackaged archive /home/tanren/ama/.worktrees/b06-processing-facts/backend/api/target/ama-api-0.1.0-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ------------------------< ama:ama-file-service >------------------------
+[INFO] Building ama-file-service 0.1.0-SNAPSHOT                           [6/8]
+[INFO]   from backend/file-service/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-file-service ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/file-service/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/file-service/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-file-service ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-file-service ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/file-service/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-file-service ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-file-service ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-file-service ---
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ama-file-service ---
+[INFO] Attaching repackaged archive /home/tanren/ama/.worktrees/b06-processing-facts/backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ---------------------------< ama:ama-worker >---------------------------
+[INFO] Building ama-worker 0.1.0-SNAPSHOT                                 [7/8]
+[INFO]   from backend/worker/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-worker ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/worker/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/worker/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-worker ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-worker ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/worker/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-worker ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-worker ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.worker.WorkerLoopTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.262 s -- in ama.worker.WorkerLoopTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-worker ---
+[INFO] 
+[INFO] ---------------------< ama:ama-integration-tests >----------------------
+[INFO] Building ama-integration-tests 0.1.0-SNAPSHOT                      [8/8]
+[INFO]   from backend/integration-tests/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-integration-tests ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/integration-tests/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/b06-processing-facts/backend/integration-tests/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-integration-tests ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-integration-tests ---
+[INFO] Copying 7 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-integration-tests ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 69 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] /home/tanren/ama/.worktrees/b06-processing-facts/backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java: Some input files use or override a deprecated API.
+[INFO] /home/tanren/ama/.worktrees/b06-processing-facts/backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-integration-tests ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.storage.ContractFixtureTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.185 s -- in ama.storage.ContractFixtureTest
+[INFO] Running ama.support.ContractClientTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.321 s -- in ama.support.ContractClientTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-integration-tests ---
+[INFO] Skipping packaging of the jar
+[INFO] 
+[INFO] --- failsafe:3.5.6:integration-test (default) @ ama-integration-tests ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running ama.transcript.ProcessingFactsReaderIT
+08:48:28.204 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58628/ama_b01_fixture (MySQL 8.4)
+08:48:28.437 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 12 migrations (execution time 00:00.073s)
+08:48:28.475 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013
+08:48:28.485 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+08:48:28.712 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58628/ama_b01_fixture (MySQL 8.4)
+08:48:28.804 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 12 migrations (execution time 00:00.038s)
+08:48:28.828 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013
+08:48:28.833 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+08:48:28.965 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:58628/ama_b01_fixture (MySQL 8.4)
+08:48:29.041 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 12 migrations (execution time 00:00.034s)
+08:48:29.072 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_b01_fixture`: 013
+08:48:29.076 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_b01_fixture` is up to date. No migration necessary.
+[ERROR] Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 2.286 s <<< FAILURE! -- in ama.transcript.ProcessingFactsReaderIT
+[ERROR] ama.transcript.ProcessingFactsReaderIT.extraTaskAndWrongProducerCannotDisappear -- Time elapsed: 1.742 s <<< ERROR!
+org.springframework.jdbc.UncategorizedSQLException: PreparedStatementCallback; uncategorized SQLException for SQL [INSERT INTO enterprise_identity(enterprise_id,display_name,department,status) VALUES (?,?,'CONTROLLED','ACTIVE')]; SQL state [HY000]; error code [1364]; Field 'verified_at' doesn't have a default value
+	at org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:689)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:966)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:1010)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:1020)
+	at ama.transcript.ArchiveProcessingFixture.<init>(ArchiveProcessingFixture.java:31)
+	at ama.transcript.ArchiveProcessingFixture.<init>(ArchiveProcessingFixture.java:28)
+	at ama.transcript.ProcessingFactsReaderIT.extraTaskAndWrongProducerCannotDisappear(ProcessingFactsReaderIT.java:29)
+Caused by: java.sql.SQLException: Field 'verified_at' doesn't have a default value
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at org.springframework.jdbc.core.JdbcTemplate.lambda$update$0(JdbcTemplate.java:971)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:670)
+	... 6 more
+
+[ERROR] ama.transcript.ProcessingFactsReaderIT.readsCompleteStoredProcessingFromActualRows -- Time elapsed: 0.269 s <<< ERROR!
+org.springframework.jdbc.UncategorizedSQLException: PreparedStatementCallback; uncategorized SQLException for SQL [INSERT INTO enterprise_identity(enterprise_id,display_name,department,status) VALUES (?,?,'CONTROLLED','ACTIVE')]; SQL state [HY000]; error code [1364]; Field 'verified_at' doesn't have a default value
+	at org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:689)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:966)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:1010)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:1020)
+	at ama.transcript.ArchiveProcessingFixture.<init>(ArchiveProcessingFixture.java:31)
+	at ama.transcript.ArchiveProcessingFixture.<init>(ArchiveProcessingFixture.java:28)
+	at ama.transcript.ProcessingFactsReaderIT.readsCompleteStoredProcessingFromActualRows(ProcessingFactsReaderIT.java:15)
+Caused by: java.sql.SQLException: Field 'verified_at' doesn't have a default value
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at org.springframework.jdbc.core.JdbcTemplate.lambda$update$0(JdbcTemplate.java:971)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:670)
+	... 6 more
+
+[ERROR] ama.transcript.ProcessingFactsReaderIT.boundedMetadataBeforeMaterialization -- Time elapsed: 0.243 s <<< ERROR!
+org.springframework.jdbc.UncategorizedSQLException: PreparedStatementCallback; uncategorized SQLException for SQL [INSERT INTO enterprise_identity(enterprise_id,display_name,department,status) VALUES (?,?,'CONTROLLED','ACTIVE')]; SQL state [HY000]; error code [1364]; Field 'verified_at' doesn't have a default value
+	at org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:689)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:966)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:1010)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:1020)
+	at ama.transcript.ArchiveProcessingFixture.<init>(ArchiveProcessingFixture.java:31)
+	at ama.transcript.ArchiveProcessingFixture.<init>(ArchiveProcessingFixture.java:28)
+	at ama.transcript.ProcessingFactsReaderIT.boundedMetadataBeforeMaterialization(ProcessingFactsReaderIT.java:38)
+Caused by: java.sql.SQLException: Field 'verified_at' doesn't have a default value
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at org.springframework.jdbc.core.JdbcTemplate.lambda$update$0(JdbcTemplate.java:971)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:670)
+	... 6 more
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Errors: 
+[ERROR]   ProcessingFactsReaderIT.boundedMetadataBeforeMaterialization:38 » UncategorizedSQL PreparedStatementCallback; uncategorized SQLException for SQL [INSERT INTO enterprise_identity(enterprise_id,display_name,department,status) VALUES (?,?,'CONTROLLED','ACTIVE')]; SQL state [HY000]; error code [1364]; Field 'verified_at' doesn't have a default value
+[ERROR]   ProcessingFactsReaderIT.extraTaskAndWrongProducerCannotDisappear:29 » UncategorizedSQL PreparedStatementCallback; uncategorized SQLException for SQL [INSERT INTO enterprise_identity(enterprise_id,display_name,department,status) VALUES (?,?,'CONTROLLED','ACTIVE')]; SQL state [HY000]; error code [1364]; Field 'verified_at' doesn't have a default value
+[ERROR]   ProcessingFactsReaderIT.readsCompleteStoredProcessingFromActualRows:15 » UncategorizedSQL PreparedStatementCallback; uncategorized SQLException for SQL [INSERT INTO enterprise_identity(enterprise_id,display_name,department,status) VALUES (?,?,'CONTROLLED','ACTIVE')]; SQL state [HY000]; error code [1364]; Field 'verified_at' doesn't have a default value
+[INFO] 
+[ERROR] Tests run: 3, Failures: 0, Errors: 3, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.5.6:verify (default) @ ama-integration-tests ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ama-parent 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] ama-parent ......................................... SUCCESS [  0.006 s]
+[INFO] ama-contracts ...................................... SUCCESS [  2.208 s]
+[INFO] ama-core ........................................... SUCCESS [  1.626 s]
+[INFO] ama-adapters ....................................... SUCCESS [  6.319 s]
+[INFO] ama-api ............................................ SUCCESS [ 13.815 s]
+[INFO] ama-file-service ................................... SUCCESS [  0.107 s]
+[INFO] ama-worker ......................................... SUCCESS [  5.986 s]
+[ERROR] ama-integration-tests .............................. FAILURE [ 14.777 s]
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  45.487 s
+[INFO] Finished at: 2026-10-23T08:48:29+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.5.6:verify (default) on project ama-integration-tests: 
+[ERROR] 
+[ERROR] See /home/tanren/ama/.worktrees/b06-processing-facts/backend/integration-tests/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :ama-integration-tests
