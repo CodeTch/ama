@@ -102,3 +102,7 @@ Read docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-generation.md and exa
 ## Task10 adopted saved-minutes/editor/review refinement
 
 Read docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-editor.md and exact independently reviewed original/shared-rank ruling. Actual tab editor-intent ACK precedes edits; first-save/PENDING/STALE differ by real fences, explicit adoption preserves provenance with full graph remapping and no review credit. Shared complete PENDING contribution applies every version writer using declaration then one globally ordered union; exact whole-source/action reviews and independent history pairing remain. Upstream confined writer/facade reconciliation and Task11 publication/outstanding-work integration are mandatory source/activation gates, not qualified by this design pass.
+
+## Task11 adopted final/publication refinement
+
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-final-publication.md and exact independently reviewed original/R1/closure/reviews. Both design findings are closed. Publication submission remains logical proposal only: actual post-Task8 exact DDL review/allocation/freeze/separate ACK/application and model synchronization still required. Genuine Task7 private queue-hook/source composition, all-mutator freeze, immutable acceptance/old acknowledgment/local-never-marked marker barriers, authenticated caller/delegation and dual-ACL official document relay remain source/runtime evidence gates. No source, schema or runtime qualification follows from this design adoption.
