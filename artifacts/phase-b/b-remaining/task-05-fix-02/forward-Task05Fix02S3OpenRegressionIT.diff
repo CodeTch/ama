@@ -1,0 +1,27 @@
+--- backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05Fix02S3OpenRegressionIT.java
+@@ -10,11 +10,8 @@
+ import org.junit.jupiter.api.Test;
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+-class Task05FixS3OpenIT extends Task05FixFixture {
++class Task05Fix02S3OpenRegressionIT extends Task05Fix02Fixture {
+     @Test void genuineS3ControlOpenExitsAtBatchDeadlineBeforeProxyRelease() throws Exception {open(false,false);}
+-    @Test void genuineS3ControlOpenExitsOnRealRenewalLossBeforeProxyRelease() throws Exception {open(true,false);}
+-    @Test void genuineS3ErrorOpenExitsAtBatchDeadlineBeforeProxyRelease() throws Exception {open(false,true);}
+-    @Test void genuineS3HeadersOpenExitsAtBatchDeadlineBeforeProxyRelease() throws Exception {open(false,false,true);}
+     void open(boolean lost,boolean error) throws Exception {open(lost,error,false);}
+     void open(boolean lost,boolean error,boolean headers) throws Exception {
+         String task=accept(List.of(upload("Original S3 source\nSecond")));
+@@ -46,7 +43,10 @@
+                 fault.release.countDown();assertTrue(exited.await(3,TimeUnit.SECONDS));
+                 long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(3);while(loop.observation().active()!=0&&System.nanoTime()<end)Thread.sleep(10);
+                 assertEquals(0,loop.observation().active());
+-                Task05FixMaintenance.apply(source,task,receipt.resolve("accepted-"+task+".json"),receipt);
++                String maintenanceBefore=java.time.Instant.now().toString();
++                Task05Fix02Maintenance.apply(source,task,receipt.resolve("accepted-"+task+".json"),receipt);
++                String maintenanceAfter=java.time.Instant.now().toString();s3Proxy.close();s3Proxy=null;
++                Files.writeString(receipt.resolve("lifecycle-order.json"),json.writeValueAsString(Map.of("workerJoinedBeforeMaintenance",loop.observation().active()==0,"maintenanceBefore",maintenanceBefore,"maintenanceAfter",maintenanceAfter,"routeClosedAfterMaintenance",java.time.Instant.now().toString())));
+             }catch(Exception|AssertionError cleanup){if(primary!=null)primary.addSuppressed(cleanup);else throw cleanup;}
+         }
+     }

@@ -1,0 +1,16 @@
+--- backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05Fix02Maintenance.java
+@@ -10,11 +10,11 @@
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ /** Finite prelinked owned-case fixture maintenance; never business cancellation/success evidence. */
+-final class Task05FixMaintenance {
++final class Task05Fix02Maintenance {
+     static Object safe(Object value){
+         if(value instanceof java.time.temporal.TemporalAccessor)return value.toString();
+         if(value instanceof Map<?,?> map){var converted=new LinkedHashMap<String,Object>();map.forEach((k,v)->converted.put(k.toString(),safe(v)));return converted;}
+-        if(value instanceof Collection<?> list)return list.stream().map(Task05FixMaintenance::safe).toList();
++        if(value instanceof Collection<?> list)return list.stream().map(Task05Fix02Maintenance::safe).toList();
+         return value;
+     }
+     static void apply(DataSource source,String task,Path accepted,Path output) throws Exception {

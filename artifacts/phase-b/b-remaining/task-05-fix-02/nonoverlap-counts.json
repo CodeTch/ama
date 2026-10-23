@@ -1,0 +1,19 @@
+{
+  "selectedIntegrationRuns": [
+    "green-s3-admission",
+    "final-affected-s3-regressions"
+  ],
+  "distinctPassingIntegrationCases": 6,
+  "caseIdentities": [
+    "ama.storage.Task05Fix02AdmissionIT#genuineS3AdmissionDeadlineExitsBeforeEitherPermitHolderRelease",
+    "ama.storage.Task05Fix02AdmissionIT#genuineS3AdmissionRealRenewalLossExitsBeforeEitherPermitHolderRelease",
+    "ama.storage.Task05Fix02S3OpenRegressionIT#genuineS3ControlOpenExitsAtBatchDeadlineBeforeProxyRelease",
+    "ama.storage.Task05Fix02SuccessRegressionIT#actualS3HttpIntakeWorkerAndRawRegression",
+    "ama.storage.s3.Task05Fix02S3DeadlineRegressionIT#actualS3SuccessAndControlBodiesExitBeforeProxyReleaseAndReturnAdmission",
+    "ama.storage.s3.Task05Fix02S3DeadlineRegressionIT#sdkErrorBodyDeadlineActuallyTerminatesReader"
+  ],
+  "finalAllUnits": 240,
+  "focusedShutdownAlreadyIncludedInUnits": 4,
+  "fixtureMaintenanceSeparate": 0,
+  "qualification": "6 distinct integration cases on final product; tests span source-windows.json, no overlapping rerun sum"
+}

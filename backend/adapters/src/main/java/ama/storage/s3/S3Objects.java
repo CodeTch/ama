@@ -32,7 +32,7 @@ final class S3Objects {
 
     private void acquire(Semaphore permits) {
         try {
-            if (!permits.tryAcquire(config.timeout().toMillis(), TimeUnit.MILLISECONDS))
+            if (!ama.storage.SourceReadLifetime.tryAcquire(permits,config.timeout().toMillis(),TimeUnit.MILLISECONDS))
                 throw ControlCodec.unavailable();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

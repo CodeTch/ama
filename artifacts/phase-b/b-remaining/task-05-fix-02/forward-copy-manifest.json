@@ -1,0 +1,51 @@
+[
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+    "originalSha256": "25b6019d73425a93718383c95a2c3b69dee3e34288e11848a41d8f858f483710",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/Task05Fix02Fixture.java",
+    "copySha256": "87520a10060240f8b9774e3eb9c7c595734981bc5df1422ec513fdd7876cce73",
+    "diff": "forward-Task05Fix02Fixture.diff"
+  },
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+    "originalSha256": "9342e389cd7a96c156cfc670c5ae7c1e300fd60029bd05122cb6ecebc6383587",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/Task05Fix02NativeFixture.java",
+    "copySha256": "84720d39c34279b7df28531943d6a52c00a77dac2d05d1d54c59c65925755339",
+    "diff": "forward-Task05Fix02NativeFixture.diff"
+  },
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+    "originalSha256": "02744722c44567c234508144b8dd1921a88fbb3cf6e1798bec5ad9b4d0936474",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/Task05Fix02Maintenance.java",
+    "copySha256": "103a88b36c40dd80ed519eb3a106853e5fb0d89ce108409176178e9beeb70c14",
+    "diff": "forward-Task05Fix02Maintenance.diff"
+  },
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+    "originalSha256": "883da84ef288fb4425d02970dad8044d150017b4dc1357b5251d2f05285e9f01",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/Task05Fix02S3OpenRegressionIT.java",
+    "copySha256": "3154f578e9a023b8794e4649d1baa0e5fe2726763a2c5b4c0f314f1076636211",
+    "diff": "forward-Task05Fix02S3OpenRegressionIT.diff"
+  },
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+    "originalSha256": "152e5dbb0e64ed36b32cfcbafe844941eb64a1ea6d8a4bc7f4cf9e0fd8690529",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/Task05Fix02SuccessRegressionIT.java",
+    "copySha256": "64b81de2d1e8184664adb7eb4435be1477497869734eb9ae74d42a2c14cdab89",
+    "diff": "forward-Task05Fix02SuccessRegressionIT.diff"
+  },
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+    "originalSha256": "4fe1ab05715fa41ac5c23fa47b6e89ad6988fc906e1dc6b954d5822a307a6742",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02Proxy.java",
+    "copySha256": "39971c54500a72853132a9215ac960242f95033a87950029dec86774027b55b1",
+    "diff": "forward-Task05Fix02Proxy.diff"
+  },
+  {
+    "original": "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+    "originalSha256": "dea86b25229e38eca7176cbffeb238264b465acabbd1ff5d5d3e42b0ee9f5a6a",
+    "copy": "backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02S3DeadlineRegressionIT.java",
+    "copySha256": "261207694dc6e81a70e350ad13a4b00607186912d16c1446c91f1420412486ee",
+    "diff": "forward-Task05Fix02S3DeadlineRegressionIT.diff"
+  }
+]

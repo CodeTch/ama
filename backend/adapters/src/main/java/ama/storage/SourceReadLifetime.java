@@ -17,11 +17,13 @@ public final class SourceReadLifetime implements AutoCloseable {
     private final Set<Registration> requests=new HashSet<>();
     private final AutoCloseable cancellation;
     private final ScheduledFuture<?> timer;
+    private final long deadline;
     private final AtomicBoolean closed=new AtomicBoolean();
     private boolean aborted;
 
     public SourceReadLifetime(PreparationCancellation signal,long deadline) throws Exception {
         Objects.requireNonNull(signal);
+        this.deadline=deadline;
         if(CURRENT.get()!=null)throw new IllegalStateException("Nested source lifetime");
         if(!CAPACITY.tryAcquire())throw new IllegalStateException("Source lifetime capacity exhausted");
         AutoCloseable registered=null;
@@ -42,6 +44,25 @@ public final class SourceReadLifetime implements AutoCloseable {
         if(rejected){registration.abort();throw new IllegalStateException("Source lifetime cancelled");}
         return registration;
     }
+
+    /** Admission is part of the same deny-only lifetime, before an SDK request exists. */
+    public static boolean tryAcquire(Semaphore permits,long timeout,TimeUnit unit) throws InterruptedException {
+        var current=CURRENT.get();
+        if(current==null)return permits.tryAcquire(timeout,unit);
+        long started=System.nanoTime(),budget=unit.toNanos(timeout);
+        while(true) {
+            long now=System.nanoTime();
+            long remaining=Math.min(budget-(now-started),current.deadline-now);
+            if(remaining<=0||current.stopped())return false;
+            // Bounded polling wakes known loss without interrupting a reusable Worker thread or spawning a waiter.
+            if(permits.tryAcquire(Math.min(remaining,TimeUnit.MILLISECONDS.toNanos(50)),TimeUnit.NANOSECONDS)) {
+                if(current.stopped()||current.deadline-System.nanoTime()<=0){permits.release();return false;}
+                return true;
+            }
+        }
+    }
+
+    private synchronized boolean stopped(){return aborted||closed.get();}
 
     private void abort() {
         List<Registration> active;

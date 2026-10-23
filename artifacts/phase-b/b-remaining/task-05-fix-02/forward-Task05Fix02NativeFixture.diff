@@ -1,0 +1,29 @@
+--- backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05Fix02NativeFixture.java
+@@ -13,7 +13,7 @@
+  * Owns new managed-ID roots; reuses reviewed PKI/mount setup without changing infrastructure
+  * helpers.
+  */
+-final class Task05FixNativeFixture implements AutoCloseable {
++final class Task05Fix02NativeFixture implements AutoCloseable {
+     final OwnedRoot base;
+     final ManagedBackendId.Local binding;
+     final URI uri;
+@@ -23,7 +23,7 @@
+     Process process;
+     Path configuration;
+ 
+-    Task05FixNativeFixture(Path root) throws Exception {
++    Task05Fix02NativeFixture(Path root) throws Exception {
+         if(Files.exists(root)||Files.isSymbolicLink(root)||!root.toAbsolutePath().normalize().startsWith(Path.of(System.getenv("AMA_TASK05_ROOT"),"native","data")))throw new IllegalStateException("Native case custody");
+         if(Files.isSymbolicLink(root.getParent())||!root.getParent().toRealPath().startsWith(Path.of(System.getenv("AMA_TASK05_ROOT")).toRealPath()))throw new IllegalStateException("Native parent custody");
+         LocalFixture.pki=Path.of(System.getenv("AMA_TASK05_ROOT"),"pki");
+@@ -132,7 +132,7 @@
+         while(!Files.exists(root.resolve("tools/checks/run.py")))root=root.getParent();
+         return root;
+     }
+-    static Path evidencePath(){return repoRoot().resolve("artifacts/phase-b/b-remaining/task-05-fix-01");}
++    static Path evidencePath(){return repoRoot().resolve("artifacts/phase-b/b-remaining/task-05-fix-02");}
+     static final class OwnedRoot {
+         final Path root,role;final MountedVolumeGuard.Config config;
+         OwnedRoot(Path selectedRoot)throws Exception {
