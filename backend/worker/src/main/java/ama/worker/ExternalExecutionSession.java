@@ -16,7 +16,7 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
  private final Object monitor;private final TaskLease lease;private final ExternalOperationPort operations;private final ModelPermitPool permits;
  private final ExternalOperationHeartbeat heartbeats;private final String model;private final BooleanSupplier open;private final Admission admission;
  private Phase phase=Phase.ORDINARY;private OperationToken token;private Permit permit;private ExternalOperationHeartbeat.Tracked tracker;
- private boolean receiptOnly,renewing,sent;private PreparedObservation pending;
+ private boolean receiptOnly,renewing,sent,recoverReceipt;private PreparedObservation pending;
  ExternalExecutionSession(Object monitor,TaskLease lease,ExternalOperationPort operations,ModelPermitPool permits,ExternalOperationHeartbeat heartbeats,String model,BooleanSupplier open,Admission admission){
   this.monitor=monitor;this.lease=lease;this.operations=operations;this.permits=permits;this.heartbeats=heartbeats;this.model=model;this.open=open;this.admission=admission;
  }
@@ -67,9 +67,9 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
    factsOnly=receiptOnly||!open.getAsBoolean();
   }
   try{
-   var result=factsOnly?operations.observePreparedFact(token,observation):operations.observePrepared(token,observation);
+   var result=recoverReceipt?operations.recoverPreparedFact(token,observation):factsOnly?operations.observePreparedFact(token,observation):operations.observePrepared(token,observation);
    boolean acknowledged=result!=ObservationResult.STALE_TOKEN;
-   synchronized(monitor){if(acknowledged){pending=null;phase=Phase.FINISHED;}else{receiptOnly=true;phase=Phase.OPERATION;}}
+   synchronized(monitor){if(acknowledged){pending=null;phase=Phase.FINISHED;}else{receiptOnly=true;recoverReceipt=true;phase=Phase.OPERATION;}}
    if(acknowledged){if(tracker!=null)tracker.close();if(permit!=null)try{permits.settled(permit);}catch(RuntimeException unavailable){/* Durable terminal debt is recovered independently. */}}
    return result;
   }catch(RuntimeException unavailable){synchronized(monitor){phase=Phase.OPERATION;}throw unavailable;}

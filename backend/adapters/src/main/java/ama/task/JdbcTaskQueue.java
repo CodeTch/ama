@@ -46,6 +46,8 @@ public final class JdbcTaskQueue implements TaskQueue {
  static final class DomainScope {
   private final TaskDomainPolicy policy;private final List<TaskSpec> specs;private final TaskDomainPolicy.Acquisition purpose;private final TaskDomainPolicy.PreparedDomain prepared;
   private SubjectFencePort.LockedSubject locked;
+  private JdbcGenerationRetention.PublicationFacts publicationFacts;
+  JdbcGenerationRetention.PublicationFacts publicationFacts(){return publicationFacts;}
   DomainScope(TaskDomainPolicy policy,List<TaskSpec> specs,TaskDomainPolicy.Acquisition purpose,TaskDomainPolicy.PreparedDomain prepared){this.policy=policy;this.specs=specs;this.purpose=purpose;this.prepared=prepared;}
   TaskDomainPolicy policy(){return policy;}List<TaskSpec> specs(){return specs;}TaskDomainPolicy.Acquisition purpose(){return purpose;}TaskDomainPolicy.PreparedDomain prepared(){return prepared;}
  }
@@ -67,6 +69,9 @@ public final class JdbcTaskQueue implements TaskQueue {
   if(scope.locked!=null)return Optional.of(scope.locked);
   var held=fences.lock(s.subject(),skip);
   if(held.isEmpty()||!scope.policy().lockRoots(scope.specs(),skip,scope.prepared()))return Optional.empty();
+  if(scope.purpose()==TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION&&scope.policy() instanceof GenerationRetentionPolicy
+    &&s.type().equals("MINUTES_GENERATE_V1")&&s.input().kind().equals("GENERATION_INPUT"))
+   scope.publicationFacts=JdbcGenerationRetention.capturePublication(source,scope.prepared(),s.subject().id());
   scope.locked=held.orElseThrow();return held;
  }
  Optional<SubjectFencePort.LockedSubject> lockDomain(TaskSpec s,boolean skip){

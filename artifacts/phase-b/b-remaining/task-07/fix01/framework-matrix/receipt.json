@@ -1,0 +1,22 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07ReceiptRecoveryIT#*,Task07AdmissionWindowsIT#*,Task07PreparedMatrixIT#*"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/integration-tests-TEST-ama.task.Task07PreparedMatrixIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/integration-tests-TEST-ama.task.Task07AdmissionWindowsIT.xml"
+  ],
+  "elapsedSeconds": 41.78147625923157,
+  "counts": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

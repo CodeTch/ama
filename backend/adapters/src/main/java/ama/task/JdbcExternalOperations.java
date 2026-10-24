@@ -59,6 +59,11 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   requireContext(source,held,execution);var c=(JdbcExternalOperations.Context)execution;
   if(!c.retaining||c.scope.purpose()!=TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION||!c.scope.policy().permitsDomainEffects(held))throw new IllegalArgumentException("Dedicated retention phase required");
  }
+ static boolean publicationFrozen(javax.sql.DataSource source,TaskDomainPolicy.PreparedDomain held,ExecutionContext execution,String meeting){
+  requireRetentionContext(source,held,execution);var c=(JdbcExternalOperations.Context)execution;
+  var facts=c.scope.publicationFacts();if(facts==null)throw new IllegalArgumentException("Publication facts not prepared");
+  return facts.frozen(source,held,meeting);
+ }
  private PreparedExternalPolicy preparedPolicy(TaskSpec spec){
   if(!(q.policy(spec) instanceof PreparedExternalPolicy p))throw new IllegalArgumentException("Prepared external policy not installed");return p;
  }
@@ -183,15 +188,16 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   }
   throw new ObservationRetryRequiredException();
  }
- @Override public ObservationResult observePrepared(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,false);}
- @Override public ObservationResult observePreparedFact(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,true);}
- private ObservationResult observePrepared(OperationToken token,PreparedObservation prepared,boolean factOnly){
+ @Override public ObservationResult observePrepared(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,false,false);}
+ @Override public ObservationResult observePreparedFact(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,true,false);}
+ @Override public ObservationResult recoverPreparedFact(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,true,true);}
+ private ObservationResult observePrepared(OperationToken token,PreparedObservation prepared,boolean factOnly,boolean recovery){
   independent();Objects.requireNonNull(prepared);revokeCallAuthority(token);
-  for(int attempt=0;attempt<OBSERVATION_DISCOVERY_ATTEMPTS;attempt++)try{return q.work(()->observeCurrent(token,null,null,prepared,factOnly));}catch(RediscoverObservation changed){}
+  for(int attempt=0;attempt<OBSERVATION_DISCOVERY_ATTEMPTS;attempt++)try{return q.work(()->observeCurrent(token,null,null,prepared,factOnly,recovery));}catch(RediscoverObservation changed){}
   throw new ObservationRetryRequiredException();
  }
- private ObservationResult observeCurrent(OperationToken token,ExternalObservation observation,Runnable effects){return observeCurrent(token,observation,effects,null,false);}
- private ObservationResult observeCurrent(OperationToken token,ExternalObservation observation,Runnable effects,PreparedObservation prepared,boolean factOnly){
+ private ObservationResult observeCurrent(OperationToken token,ExternalObservation observation,Runnable effects){return observeCurrent(token,observation,effects,null,false,false);}
+ private ObservationResult observeCurrent(OperationToken token,ExternalObservation observation,Runnable effects,PreparedObservation prepared,boolean factOnly,boolean recovery){
   var seen=operation(token.operationId(),false,false);if(seen.isEmpty())return ObservationResult.STALE_TOKEN;
   // Lock ALL involved tasks before operation when handling an old-generation contradiction.
   var current=seen.orElseThrow();var old=execution(current.id(),token.executionNo(),false,false);
@@ -225,7 +231,14 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   boolean terminalFact=observation.outcome()==ExternalOutcome.SUCCEEDED||observation.outcome()==ExternalOutcome.FAILED_ZERO_EFFECT;
   boolean factOnlyCurrent=terminalFact&&!effectsAllowed&&o.execution()==token.executionNo()&&e.id().equals(token.executionId())
     &&(o.state().equals("MARKED")||o.state().equals("UNKNOWN"))&&(e.state().equals("MARKED")||e.state().equals("UNKNOWN"));
-  if(prepared!=null&&terminalFact&&o.execution()==token.executionNo()&&o.epoch()==token.reconcileEpoch()&&Objects.equals(o.owner(),token.owner())
+  // Verified proof contradiction precedes replay/conflict rejection for both current and older executions.
+  if(observation.outcome()==ExternalOutcome.SUCCEEDED&&tokenExecution.state().equals("FAILED")
+    &&tokenExecution.basis()!=null&&tokenExecution.evidence()!=null&&tokenExecution.verified()!=null){
+   if(prepared==null)q.policy(oldTask.spec()).validateExternalObservation(oldTask.spec(),observation);
+   j.update("UPDATE external_operation SET state='MANUAL_REQUIRED',last_error='CONTRADICTORY_SUCCESS',external_result_id=?,reconcile_epoch=reconcile_epoch+1 WHERE id=?",observation.externalResultId(),o.id());
+   q.event("EXTERNAL_CONTRADICTION",oldTask);return ObservationResult.QUARANTINED;
+  }
+  if(prepared!=null&&terminalFact&&o.execution()==token.executionNo()&&(recovery||o.epoch()==token.reconcileEpoch()&&Objects.equals(o.owner(),token.owner()))
     &&e.id().equals(token.executionId())&&(o.state().equals("SUCCEEDED")||o.state().equals("FAILED"))&&o.state().equals(e.state())){
    var proof=observation.noEffectProof();
    boolean same=observation.outcome()==ExternalOutcome.SUCCEEDED?o.state().equals("SUCCEEDED")&&Objects.equals(observation.externalResultId(),j.queryForObject("SELECT external_result_id FROM external_operation WHERE id=?",String.class,o.id())):
@@ -236,15 +249,17 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
    if(!preparedPolicy(currentTask.spec()).verifyReplay(scope.prepared(),context,prepared,result))return ObservationResult.STALE_TOKEN;
    context.require();return result.state().equals("STALE")?ObservationResult.RECORDED_FENCED:ObservationResult.APPLIED;
   }
-  if(!valid(o,e,token)&&!factOnlyCurrent){
-   if(observation.outcome()==ExternalOutcome.SUCCEEDED&&tokenExecution.state().equals("FAILED")
-      &&tokenExecution.basis()!=null&&tokenExecution.evidence()!=null&&tokenExecution.verified()!=null){
-    if(prepared==null)q.policy(oldTask.spec()).validateExternalObservation(oldTask.spec(),observation);
-    j.update("UPDATE external_operation SET state='MANUAL_REQUIRED',last_error='CONTRADICTORY_SUCCESS',external_result_id=?,reconcile_epoch=reconcile_epoch+1 WHERE id=?",observation.externalResultId(),o.id());
-    q.event("EXTERNAL_CONTRADICTION",oldTask);return ObservationResult.QUARANTINED;
-   }
-   return ObservationResult.STALE_TOKEN;
+  if(recovery){
+   // An old context never regains business authority. Only the same verified terminal receipt
+   // can take over an expired exact execution; a live newer owner is left untouched.
+   if(!terminalFact||o.execution()!=token.executionNo()||!e.id().equals(token.executionId())
+     ||!(o.state().equals("MARKED")||o.state().equals("UNKNOWN"))||!(e.state().equals("MARKED")||e.state().equals("UNKNOWN"))
+     ||o.expiry()==null||o.expiry().isAfter(q.now()))return ObservationResult.STALE_TOKEN;
+   var now=q.now();
+   j.update("UPDATE external_operation SET reconcile_epoch=reconcile_epoch+1,reconcile_owner=?,reconcile_expires_at=? WHERE id=?","RECEIPT_"+UUID.randomUUID(),sqlTime(now.plusSeconds(20)),o.id());
+   o=operation(o.id(),true,false).orElseThrow();token=token(o,e);
   }
+  if(!valid(o,e,token)&&!factOnlyCurrent)return ObservationResult.STALE_TOKEN;
   if(prepared==null)q.policy(currentTask.spec()).validateExternalObservation(currentTask.spec(),observation);
   if(observation.outcome()==ExternalOutcome.UNKNOWN||observation.outcome()==ExternalOutcome.MANUAL_REQUIRED){
    j.update("UPDATE external_operation SET state=?,last_error=?,next_check_at=reconcile_expires_at WHERE id=?",observation.outcome()==ExternalOutcome.UNKNOWN?"UNKNOWN":"MANUAL_REQUIRED",observation.errorCode(),o.id());

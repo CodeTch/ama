@@ -1,0 +1,22 @@
+Command: ['rg', '-n', 'PreparedExternalPolicy|GenerationRetentionPolicy|ReconciliationLoop.prepared|WorkerLoop.external|recoverPreparedFact', 'backend/adapters/src/main', 'backend/api/src/main', 'backend/contracts/src/main', 'backend/core/src/main', 'backend/file-service/src/main', 'backend/worker/src/main']
+Exit: 0
+backend/core/src/main/java/ama/task/ExternalOperationPort.java:24:    default ObservationResult recoverPreparedFact(OperationToken token, PreparedObservation observation) {
+backend/core/src/main/java/ama/task/PreparedExternalPolicy.java:8:public interface PreparedExternalPolicy extends TaskDomainPolicy {
+backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java:6:public interface GenerationRetentionPolicy extends PreparedExternalPolicy {
+backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java:31: private final class Held implements GenerationRetentionPolicy.Retention {
+backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java:37: public Optional<GenerationRetentionPolicy.Retention> prepare(PreparedDomain held,ExecutionContext context,MeetingAccess.Locked root,Actor originalOwner){
+backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java:54: public JdbcTaskPreparations.ExternalFacts require(GenerationRetentionPolicy.Retention retention){
+backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java:58: static void consume(DataSource source,PreparedDomain domain,ExecutionContext context,GenerationRetentionPolicy.Retention retention){
+backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java:61: private static Held require(DataSource source,PreparedDomain domain,ExecutionContext context,GenerationRetentionPolicy.Retention retention){
+backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java:65: static void validate(DataSource source,PreparedDomain domain,ExecutionContext context,GenerationRetentionPolicy.Retention retention,TypedRef candidate){
+backend/worker/src/main/java/ama/worker/WorkerLoop.java:19:    public static WorkerLoop external(TaskQueue queue,ama.task.ExternalOperationPort operations,ama.task.ModelPermitPool permits,
+backend/worker/src/main/java/ama/worker/ReconciliationLoop.java:13:    public static ReconciliationLoop prepared(ExternalOperationPort operations,ama.task.ModelPermitPool permits,int capacity,PreparedHandler handler,String owner){
+backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java:67: private PreparedExternalPolicy preparedPolicy(TaskSpec spec){
+backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java:68:  if(!(q.policy(spec) instanceof PreparedExternalPolicy p))throw new IllegalArgumentException("Prepared external policy not installed");return p;
+backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java:77:   if(prepared==null&&q.policy(task.spec()) instanceof PreparedExternalPolicy)throw new IllegalArgumentException("Prepared request required");
+backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java:193: @Override public ObservationResult recoverPreparedFact(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,true,true);}
+backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java:223:  if(prepared==null&&scope.policy() instanceof PreparedExternalPolicy)throw new IllegalArgumentException("Prepared observation required");
+backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java:248:   var kind=(String)stored.get("output_kind");var result=new PreparedExternalPolicy.StoredResult((String)stored.get("state"),(String)stored.get("last_error"),kind==null?null:new TypedRef(kind,(String)stored.get("output_id")));
+backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java:281:    &&scope.policy() instanceof GenerationRetentionPolicy retention&&currentTask.spec().type().equals("MINUTES_GENERATE_V1")&&currentTask.spec().input().kind().equals("GENERATION_INPUT")){
+backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java:72:  if(scope.purpose()==TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION&&scope.policy() instanceof GenerationRetentionPolicy
+backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java:70:   var result=recoverReceipt?operations.recoverPreparedFact(token,observation):factsOnly?operations.observePreparedFact(token,observation):operations.observePrepared(token,observation);

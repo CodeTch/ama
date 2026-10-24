@@ -14,6 +14,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public final class JdbcGenerationRetention {
  private final DataSource source;private final JdbcTaskPreparations preparations;private final JdbcMeetingAccess access;private final JdbcTemplate j;
  public JdbcGenerationRetention(DataSource source,JdbcTaskPreparations preparations,JdbcMeetingAccess access){this.source=Objects.requireNonNull(source);this.preparations=Objects.requireNonNull(preparations);this.access=Objects.requireNonNull(access);j=new JdbcTemplate(source);j.setQueryTimeout(2);}
+ /** Issued only during the domain-lock phase, before any task or external row lock. */
+ static final class PublicationFacts {
+  private final DataSource source;private final Object holder;private final PreparedDomain domain;private final String meeting;private final boolean frozen;
+  private PublicationFacts(DataSource source,PreparedDomain domain,String meeting,boolean frozen){this.source=source;this.domain=domain;this.meeting=meeting;this.frozen=frozen;holder=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(source);}
+  boolean frozen(DataSource source,PreparedDomain domain,String meeting){
+   if(this.source!=source||this.domain!=domain||!this.meeting.equals(meeting)||holder==null||holder!=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(source))throw new IllegalArgumentException("Foreign publication facts");
+   JdbcTaskPreparations.requireTransaction(source,domain);return frozen;
+  }
+ }
+ static PublicationFacts capturePublication(DataSource source,PreparedDomain domain,String meeting){
+  JdbcTaskPreparations.requireTransaction(source,domain);var jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(2);
+  var states=jdbc.queryForList("SELECT state FROM publication WHERE meeting_id=? FOR UPDATE",String.class,meeting);
+  return new PublicationFacts(source,domain,meeting,states.stream().anyMatch(Set.of("READY","RUNNING","RECONCILING")::contains));
+ }
  private final class Held implements GenerationRetentionPolicy.Retention {
   final PreparedDomain domain;final ExecutionContext context;final JdbcTaskPreparations.ExternalFacts facts;
   final Map<String,Object> root,subject;boolean used;
@@ -31,7 +45,7 @@ public final class JdbcGenerationRetention {
   if(!originalOwner.enterpriseId().equals(meeting.get("owner_id"))||!"ACTIVE".equals(meeting.get("lifecycle"))||!"ACTIVE".equals(meeting.get("governance_state"))
     ||((Number)meeting.get("ever_published")).intValue()!=0||"PUBLISHED".equals(meeting.get("stage"))
     ||revision<=spec.businessVersion()||epoch!=spec.cancelEpoch()||((Number)subject.get("business_version")).longValue()!=revision||((Number)subject.get("cancel_epoch")).longValue()!=epoch||((Number)subject.get("deleted")).intValue()!=0)return Optional.empty();
-  if(!j.queryForList("SELECT id FROM publication WHERE meeting_id=? AND state IN ('READY','RUNNING','RECONCILING') LIMIT 1",spec.subject().id()).isEmpty())return Optional.empty();
+  if(JdbcExternalOperations.publicationFrozen(source,held,context,spec.subject().id()))return Optional.empty();
   var inputs=j.queryForList("SELECT meeting_id,base_revision,input_fingerprint FROM generation_input WHERE id=?",spec.input().id());
   if(inputs.size()!=1||!spec.subject().id().equals(inputs.getFirst().get("meeting_id"))||((Number)inputs.getFirst().get("base_revision")).longValue()!=spec.businessVersion()||!spec.inputFingerprint().equals(inputs.getFirst().get("input_fingerprint")))throw new IllegalArgumentException("Original generation input mismatch");
   return Optional.of(new Held(held,context,facts,meeting,subject));

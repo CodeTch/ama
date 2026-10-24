@@ -20,6 +20,10 @@ public interface ExternalOperationPort {
     default ObservationResult observePreparedFact(OperationToken token, PreparedObservation observation) {
         throw new IllegalStateException("Prepared external policy not installed");
     }
+    /** Bounded receipt-only transfer or exact durable-result lookup; never grants send or business authority. */
+    default ObservationResult recoverPreparedFact(OperationToken token, PreparedObservation observation) {
+        throw new IllegalStateException("Prepared receipt recovery not installed");
+    }
     /** Independent due-operation takeover; never sends or creates another execution for UNKNOWN. */
     Optional<OperationToken> claimReconciliation(String owner);
     boolean renew(OperationToken token);

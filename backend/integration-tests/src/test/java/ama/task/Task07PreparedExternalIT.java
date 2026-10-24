@@ -37,10 +37,16 @@ class Task07PreparedExternalIT {
     final TaskSpec spec = new TaskSpec("T07_PREPARED_"+UUID.randomUUID(), "PREPARED_" + UUID.randomUUID(),
             new SubjectRef("MEETING", meeting), Task08InheritedFixture.hash(input + "producer"),
             new TypedRef("TEST_INFO", input), Task08InheritedFixture.hash(input), 0, 0, 0, 3);
+    final Set<TaskSpec> coveredSpecs=new HashSet<>(Set.of(spec));
     final PreparedRequest preparedRequest=new PreparedRequest(){};
     final PreparedObservation preparedObservation=new PreparedObservation(){};
+    final Map<PreparedObservation,ExternalObservation> receipts=Collections.synchronizedMap(new IdentityHashMap<>());
+    PreparedObservation receipt(ExternalObservation value){var receipt=new PreparedObservation(){};receipts.put(receipt,value);return receipt;}
+    ExternalObservation remote(PreparedObservation observation){if(observation==preparedObservation)return fact;var value=receipts.get(observation);if(value==null)throw new IllegalArgumentException("Foreign observation");return value;}
+    final AtomicBoolean preparationUnavailable=new AtomicBoolean(),deniedFacts=new AtomicBoolean();
+    private record DeniedIdentity(String status) {}
     final ExternalRequest wire=new ExternalRequest("T07_CALL",spec.producerKey(),Task08InheritedFixture.hash("logical"+input),Task08InheritedFixture.hash("execution"+input),"task07:"+input);
-    final ExternalObservation fact=new ExternalObservation(ExternalOutcome.SUCCEEDED,"T07_RESULT:"+input,null,null,null);
+    ExternalObservation fact=new ExternalObservation(ExternalOutcome.SUCCEEDED,"T07_RESULT:"+input,null,null,null);
     final AtomicInteger markers=new AtomicInteger();
     final AtomicBoolean invalid=new AtomicBoolean(),badOutput=new AtomicBoolean();
     final JdbcTaskPreparations preparations=new JdbcTaskPreparations(source);
@@ -49,6 +55,11 @@ class Task07PreparedExternalIT {
     final PreparedExternalPolicy policy = new PreparedExternalPolicy() {
 
         public Optional<PreparedDomain> prepare(List<TaskSpec> specs, Acquisition purpose, boolean skip) {
+            if(preparationUnavailable.get())return Optional.empty();
+            if(deniedFacts.get()&&purpose==Acquisition.EXTERNAL_FACT_OBSERVATION){
+                var status=jdbc.queryForObject("SELECT status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE",String.class,owner);
+                return Optional.of(preparations.issue(specs,purpose,new DeniedIdentity(status),false));
+            }
             return access.tryLockIdentities(actor, List.of(), skip)
                     .map(held -> preparations.issue(specs, purpose, held, true));
         }
@@ -56,6 +67,11 @@ class Task07PreparedExternalIT {
         public boolean permitsDomainEffects(PreparedDomain held) { return preparations.permitsEffects(held); }
         public boolean lockRoot(TaskSpec s, boolean skip) { throw new IllegalStateException("Authentic preparation required"); }
         public boolean lockRoot(TaskSpec s, boolean skip, PreparedDomain prepared) {
+            if(preparations.value(prepared) instanceof DeniedIdentity denied){
+                var root=jdbc.queryForMap("SELECT lifecycle,governance_state FROM meeting WHERE id=? FOR UPDATE",meeting);
+                if(denied.status().equals("ACTIVE")&&root.get("lifecycle").equals("ACTIVE")&&root.get("governance_state").equals("ACTIVE"))throw new IllegalArgumentException("Actual denied facts required");
+                return !jdbc.queryForList("SELECT id FROM meeting_info_revision WHERE id=? FOR UPDATE",input).isEmpty();
+            }
             var identities = (MeetingAccess.LockedIdentities) preparations.value(prepared);
             var held = access.lockPrepared(identities, meeting, skip);
             if (held.isEmpty()) return false;
@@ -63,11 +79,12 @@ class Task07PreparedExternalIT {
             return !jdbc.queryForList("SELECT id FROM meeting_info_revision WHERE id=? FOR UPDATE" + (skip ? " SKIP LOCKED" : ""), String.class, input).isEmpty();
         }
         public void validateInput(TaskSpec s) {
-            if (!s.equals(spec) || jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=? AND meeting_id=? AND revision=0 AND name='input'", Integer.class, input, meeting) != 1)
+            if (!coveredSpecs.contains(s) || jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=? AND meeting_id=? AND revision=0 AND name='input'", Integer.class, input, meeting) != 1)
                 throw new IllegalArgumentException("Invalid saved input");
         }
         public void validateOutput(TaskSpec s, TaskResult result) {
             validations.incrementAndGet();
+            if(result.outcome()==Outcome.FAILED&&result.output()==null&&!"INVALID_MODEL_OUTPUT".equals(result.errorCode()))return;
             if(invalid.get()){if(result.outcome()!=Outcome.FAILED||result.output()!=null||!"INVALID_MODEL_OUTPUT".equals(result.errorCode()))throw new IllegalArgumentException();return;}
             if (result.output() == null || !result.output().equals(new TypedRef("TEST_INFO", output))
                     || jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=? AND meeting_id=? AND revision=1 AND name='output'", Integer.class, output, meeting) != 1)
@@ -75,12 +92,12 @@ class Task07PreparedExternalIT {
             assertEquals("RECONCILING", state(), "terminal mutation must follow actual output validation");
         }
         public void validateExternalRequest(TaskSpec s, ExternalRequest request) { if(!request.requestManifest().equals("task07:"+input))throw new IllegalArgumentException("Request mismatch"); }
-        public ExternalRequest requireRequest(TaskSpec s, PreparedRequest request){if(request!=preparedRequest||!s.equals(spec))throw new IllegalArgumentException("Foreign request");return wire;}
+        public ExternalRequest requireRequest(TaskSpec s, PreparedRequest request){if(request!=preparedRequest||!coveredSpecs.contains(s))throw new IllegalArgumentException("Foreign request");return wire;}
         public void writeMarked(PreparedDomain held,ExecutionContext context,PreparedRequest request){preparations.requireExternal(held,context);capturedDomain=held;capturedContext=context;markers.incrementAndGet();}
-        public ExternalObservation verifyRemoteFact(TaskSpec s,ExecutionContext context,PreparedObservation observation){if(observation!=preparedObservation||!s.equals(spec))throw new IllegalArgumentException("Foreign observation");return fact;}
-        public TaskResult writeCurrent(PreparedDomain held,ExecutionContext context,PreparedObservation observation){preparations.requireExternal(held,context);if(invalid.get())return new TaskResult(Outcome.FAILED,null,"INVALID_MODEL_OUTPUT");var result=writeOutput();return badOutput.get()?new TaskResult(Outcome.SUCCEEDED,new TypedRef("WRONG",output),null):result;}
-        public void validateStoredResult(PreparedDomain held,ExecutionContext context,PreparedObservation observation,TaskResult result){preparations.requireExternal(held,context);if(!invalid.get())assertEquals(output,result.output().id());}
-        public boolean verifyReplay(PreparedDomain held,ExecutionContext context,PreparedObservation observation,StoredResult stored){preparations.requireExternal(held,context);if(invalid.get())return observation==preparedObservation&&stored.state().equals("FAILED")&&"INVALID_MODEL_OUTPUT".equals(stored.errorCode())&&stored.output()==null&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?",Integer.class,output)==0;return observation==preparedObservation&&stored.state().equals("SUCCEEDED")&&stored.output()!=null&&stored.output().id().equals(output)&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=? AND meeting_id=? AND name='output'",Integer.class,output,meeting)==1;}
+        public ExternalObservation verifyRemoteFact(TaskSpec s,ExecutionContext context,PreparedObservation observation){if(!coveredSpecs.contains(s))throw new IllegalArgumentException("Foreign spec");return remote(observation);}
+        public TaskResult writeCurrent(PreparedDomain held,ExecutionContext context,PreparedObservation observation){preparations.requireExternal(held,context);if(remote(observation).outcome()==ExternalOutcome.FAILED_ZERO_EFFECT)return new TaskResult(Outcome.FAILED,null,remote(observation).errorCode());if(invalid.get())return new TaskResult(Outcome.FAILED,null,"INVALID_MODEL_OUTPUT");var result=writeOutput();return badOutput.get()?new TaskResult(Outcome.SUCCEEDED,new TypedRef("WRONG",output),null):result;}
+        public void validateStoredResult(PreparedDomain held,ExecutionContext context,PreparedObservation observation,TaskResult result){preparations.requireExternal(held,context);if(!invalid.get()&&remote(observation).outcome()==ExternalOutcome.SUCCEEDED)assertEquals(output,result.output().id());}
+        public boolean verifyReplay(PreparedDomain held,ExecutionContext context,PreparedObservation observation,StoredResult stored){preparations.requireExternal(held,context);if(stored.state().equals("STALE"))return remote(observation).outcome()==ExternalOutcome.SUCCEEDED&&stored.output()==null&&"BUSINESS_FENCED".equals(stored.errorCode())&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?",Integer.class,output)==0;if(invalid.get())return observation==preparedObservation&&stored.state().equals("FAILED")&&"INVALID_MODEL_OUTPUT".equals(stored.errorCode())&&stored.output()==null&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?",Integer.class,output)==0;return observation==preparedObservation&&stored.state().equals("SUCCEEDED")&&stored.output()!=null&&stored.output().id().equals(output)&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=? AND meeting_id=? AND name='output'",Integer.class,output,meeting)==1;}
 
     };
     final JdbcOutbox outbox = new JdbcOutbox(source, Map.of("TEST_INFO", event -> {

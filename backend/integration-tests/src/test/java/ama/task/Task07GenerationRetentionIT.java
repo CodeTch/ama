@@ -105,15 +105,24 @@ class Task07GenerationRetentionIT {
  }
 
  @Test void cancellationDoesNotBecomeRetentionAuthority(){advance();tx.required(()->{var h=fences.lock(spec.subject(),false).orElseThrow();j.update("UPDATE meeting SET cancel_epoch=1 WHERE id=?",meeting);fences.advance(h,1,1,false);return null;});assertEquals(ObservationResult.RECORDED_FENCED,operations.observePrepared(token,observation));assertEquals(0,writes);}
- @Test void publicationFreezeDeniesRetention(){
-  advance();String info=id(),roster=id(),finalId=id(),publishedBody=id(),publishedSet=id();
+ void publication(String state){String info=id(),roster=id(),finalId=id(),publishedBody=id(),publishedSet=id();
   j.update("INSERT INTO meeting_info_revision(id,meeting_id,revision,created_by,created_at) VALUES (?,?,1,?,UTC_TIMESTAMP(6))",info,meeting,owner);
   j.update("INSERT INTO roster_revision VALUES (?,?,1,'CONFIRMED',UTC_TIMESTAMP(6),?)",roster,meeting,owner);
   j.update("INSERT INTO element_set VALUES (?,?,1,UTC_TIMESTAMP(6))",publishedSet,meeting);
   j.update("INSERT INTO minutes_revision VALUES (?,?,1,NULL,'Final','HUMAN','final',NULL,?,UTC_TIMESTAMP(6))",publishedBody,meeting,owner);
   j.update("INSERT INTO final_confirmation VALUES (?,?,1,?,?,?,?,NULL,?,?,?,?,?,?,UTC_TIMESTAMP(6))",finalId,meeting,info,roster,confirmation,publishedBody,publishedSet,templateRevision,exclusion,hash("manifest"),spec.inputFingerprint(),owner);
-  j.update("INSERT INTO publication VALUES (?,?,?,?,?,?,'RUNNING',1,UTC_TIMESTAMP(6),NULL)",id(),meeting,finalId,"t07-publication:"+meeting,"t07-library","t07-folder");
-  assertEquals(ObservationResult.RECORDED_FENCED,operations.observePrepared(token,observation));assertEquals(0,writes);
+  j.update("INSERT INTO publication VALUES (?,?,?,?,?,?,?,1,UTC_TIMESTAMP(6),NULL)",id(),meeting,finalId,"t07-publication:"+meeting,"t07-library","t07-folder",state);
+ }
+ @Test void publicationFreezeDeniesRetention(){advance();publication("RUNNING");assertEquals(ObservationResult.RECORDED_FENCED,operations.observePrepared(token,observation));assertEquals(0,writes);}
+ @org.junit.jupiter.params.ParameterizedTest @org.junit.jupiter.params.provider.ValueSource(strings={"READY","RUNNING","RECONCILING"})
+ void publicationCommittedAfterObservationSnapshotStillDeniesRetention(String state)throws Exception{
+  assertEquals("REPEATABLE-READ",j.queryForObject("SELECT @@transaction_isolation",String.class));
+  var rootHeld=new java.util.concurrent.CountDownLatch(1);var discovered=new java.util.concurrent.CountDownLatch(1);var threads=java.util.concurrent.Executors.newFixedThreadPool(2);
+  source.after=sql->{if(sql.text().startsWith("SELECT * FROM durable_task WHERE id=?")&&!sql.text().contains("FOR UPDATE"))discovered.countDown();};
+  try{var publisher=threads.submit(()->tx.required(()->{access.lock(actor,meeting);advance();rootHeld.countDown();Task07ExternalWorkerIT.await(discovered);publication(state);return null;}));Task07ExternalWorkerIT.await(rootHeld);
+   var receipt=threads.submit(()->operations.observePrepared(token,observation));publisher.get(10,java.util.concurrent.TimeUnit.SECONDS);assertEquals(ObservationResult.RECORDED_FENCED,receipt.get(10,java.util.concurrent.TimeUnit.SECONDS));assertEquals(0,writes,"Fresh publication freeze must suppress retention despite old RR snapshot");
+   assertEquals("SUCCEEDED",j.queryForObject("SELECT state FROM external_execution WHERE id=?",String.class,token.executionId()));
+  }finally{discovered.countDown();threads.shutdownNow();}
  }
  @Test void everPublishedDeniesRetention(){advance();j.update("UPDATE meeting SET ever_published=1 WHERE id=?",meeting);assertEquals(ObservationResult.RECORDED_FENCED,operations.observePrepared(token,observation));assertEquals(0,writes);}
  @Test void revokedOwnerNeverWritesCandidate(){advance();j.update("UPDATE enterprise_identity SET status='DISABLED' WHERE enterprise_id=?",owner);assertThrows(MeetingAccess.AccessDeniedException.class,()->operations.observePrepared(token,observation));assertEquals(0,writes);}
