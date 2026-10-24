@@ -1,3 +1,11 @@
+# 当前状态：已按用户要求暂停（2026-10-24 09:30）
+
+准确接续入口：[B阶段暂停与接续文档](/home/tanren/ama/.worktrees/phase-b-completion/docs/acceptance/development-pause-b-remaining-2026-10-24-0930.md)。唯一产品树 `/home/tanren/ama/.worktrees/phase-b-completion`，源码HEAD `6cce4794dba473825d83fb9bccafc043cd611b5c`。Task1–6、8已采用；Task7 fix01虽395测试通过，复审仍有一个Important IR01，下一步是原作者fix round2/5，尚未派发。Task9–13实现尚待继续，不得跳过7采用门禁；Task11精确R1隔离SQL证据已通过，完整Task11未完成。现在不自动开发。未来“继续任务”先读该入口及W/current-state.json、context、ledger、pendingregister，不重做已完成工作；完成所有B之后再次停下，不进入C/D/E/F。
+
+以下完整保留较早记录，状态冲突以上述最新入口为准。
+
+---
+
 > 当前进度更新：Task1–5 已采用。Task5 最终源码 `c943d15`，第二轮限定复审 SPEC PASS / quality Approved，T5SR01、T5SR02、CV1 已闭环。Task6 即将从文档采用提交的 clean HEAD 启动；预算/纠错域实际资格须在安装运行时前钉定。下表和早期阶段文字保留为恢复时历史，最新状态以本段及完成树 W 为准。Task9/10/11 只读预检现已完成，业务实现仍按 6→8→7→9→10→11→12→13。
 
 # B 阶段精准恢复记录（2026-10-24）
@@ -54,3 +62,13 @@ B01-IMM-01 永久 PARTIAL、B04-Q401 UNKNOWN、旧测试/执行资格限制及�
 只读数据库核对14条本轮真实HTTP接纳链：13个负面夹具维护取消、1个真实成功RAW（2个上传文件），归属/会议/input/upload一致，无未结束attempt或外部副作用。13项迁移历史完全一致。两个原容器身份、挂载、端口、上限与运行状态不变。核验脚本对成功receipt缺files字段和文件数最初推断错误，已据实际源码两文件修正派生核验，未修改数据库或原始证据。
 
 Task6最终接口repin c207bc7a 已完整阅读，99个源码封印及18范围核对无差异。原RAW/reader/hash/授权装配接缝未变，变化仅在9个预打开/准入取消和清理路径；不重做已完成预检。Task6实施/真实预算资格/运行证据/独立复审仍待完成。
+
+
+## 最新恢复状态 — 2026-10-24（本节优先于旧暂停文字）
+
+用户已撤销暂停，授权受控多代理继续完成全部 B 阶段，之后停止，不进入 C/D/E/F。唯一产品工作树 `/home/tanren/ama/.worktrees/phase-b-completion`，分支 `codex/phase-b-completion-20261023`。当前从源码 `6cce4794dba473825d83fb9bccafc043cd611b5c` 接续 Task7 fix round2/5，唯一未关闭 Important 为 T7IR-01；未采用 Task7，未启动 Task9。原作者已实际恢复失败（live agent path not found），接续作者 `/root/b_controlled_coordinator/b07_fix02_continuation`（Astra high）承担同一轮。协调/常规 DDL ACK 角色已委托 `/root/b_controlled_coordinator`，根代理仅监控。最新事实以 W/current-state.json、progress.md、task-13-pending-issue-register-20261024.md 为准。
+
+W=`.superpowers/sdd/2026-10-23-ama-phase-b-remaining`。已封存13份可变前像至 W/resume-fix02-before-records-20261024/manifest.json，全部18836公开原始artifact追加保护清单已建立，三个精确容器资源核验通过。既有395PASS仅属于6cce旧源码；新源码必须重新取得相关验证/独立审查。Task11精确R1隔离探针已关闭机制门禁，未启动正式迁移/产品实现，不重跑未变探针。剩余顺序7→9→10→11→12→13，最终全分支审查下界固定34cb226aefe99c67d3681af68d748b0aeea4e073。保留W/所有原始失败、来源窗口与接续记录；无merge/push/生产发布/邮件。主main仅精确发现文档更新。
+
+
+最新采用记录（2026-10-24）：Task7源码bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc已获独立限定SPEC COMPLIANT/quality APPROVED（22818db8，0新问题）及增量机械PASS（2d41fbf0）。采用文档docs/acceptance/b/task-B-remaining-07-prepared-external-adoption-20261024.md与精确镜像已形成。407为153组合IT+254units；原完整批次1FAIL/1ERROR根因UNKNOWN，保留终审跟踪。Task7框架完成，T7CV04真实消费者仍待9/10/11。下一项Task9实际源码/前缀窄重定位及新独占夹具单独ACK，尚未安装Task9。全部B后停止，不进入C/D/E/F；最新机器状态与adoption commit以W/current-state.json为准。
