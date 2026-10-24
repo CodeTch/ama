@@ -19,4 +19,7 @@ Preflight compared actual private credential encodings and GitHub-token patterns
 
 Read this record → latest `development-pause-b-remaining-2026-10-25.md` → W/current-state.json. Resume only on explicit“继续任务”: diagnose generic regression at its exact old/current source windows, completeTask11 fix01 isolated marker/contradiction/fullbudget/currentSources, independent scoped review before replacement SEND, then completeTask11→Task12→Task13. Main merge does not close any review finding or alter business authority. If subsequent work needs isolation, use the existing completion checkout from its synchronized actual HEAD; preserve original local fixtures and evidence.
 
-Integration status at source snapshot preparation: PREPARED; final source/merge/ref verification will be recorded after actual merge. UTC 2026-10-24T23:20:53.460481+00:00.
+Integration completed: source snapshot `0df61e2e20f8083b3e2ba04de151ee5121b2bbb8`, main merge `095b678bf09cfcf95194ab84f928c91506d5aa42`. Actual remote main `095b678bf09cfcf95194ab84f928c91506d5aa42` verified at 2026-10-24T23:31:32.235085+00:00. This final metadata commit follows the already published code merge; its final remote ref is checked after push. UTC 2026-10-24T23:20:53.460481+00:00.
+
+
+Exact-byte custody: scoped `.gitattributes` rules preserve original W/Task11 evidence bytes. All5265 staged payloads were compared to disk with0byte mismatch before the verification record was added. Primary ignored-file collision check found0collisions across168927incoming added paths. Code paths after merge equal source snapshot. Private `.tools` roots are not tracked. Large local-only packages remain in the original completion tree.

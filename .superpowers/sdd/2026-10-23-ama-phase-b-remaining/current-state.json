@@ -1,10 +1,10 @@
 {
   "schema_version": 2,
-  "updated_utc": "2026-10-24T23:20:53.460481+00:00",
+  "updated_utc": "2026-10-24T23:31:32.235085+00:00",
   "objective": "Complete all remaining local controlled Phase B tasks with subagents/tests/independent review/records, then deliver. Do not stop after a slice.",
   "latest_user_instruction": "将代码合并main、提交并推送GitHub；仅Git整合，功能开发仍暂停。",
   "pause_request_active": true,
-  "status_precedence": "Explicit user Git merge/push authorization supersedes old no-main/no-push wording; feature work remains PAUSED. See integration record and live Git HEAD; old pause_head fields describe pre-integration snapshot.",
+  "status_precedence": "User-authorized Git integration completed; featurework remains PAUSED, Task11 WIP not adopted andSENDDENY. Read integration record/live Git refs; oldpause ba48HEAD and no-main/no-push statements are historical.",
   "historical_state_archive": {
     "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-normalization-20261024.json",
     "sha256": "599708de6497fe18816d9e1b34d636858e883b127e7c869dfa3c1dbc7a9c159b",
@@ -15,9 +15,9 @@
   "canonical_plan": "docs/superpowers/plans/2026-10-23-ama-phase-b-remaining.md",
   "ledger": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
   "active_context": "resume-20261024-active-context.md (latest user-pause header; canonical entry is pause_handoff)",
-  "last_root_commit": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+  "last_root_commit": "095b678bf09cfcf95194ab84f928c91506d5aa42",
   "task6_base": "80c878f52c7b748efdcdb64e707d50cf410843b4",
-  "primary_main_last_observed_head": "c71a44adb679a78d4c28dde7a4223aad1a23b40f",
+  "primary_main_last_observed_head": "095b678bf09cfcf95194ab84f928c91506d5aa42",
   "primary_scope": "Only exact discovery handoff/resume docs uncommitted; product/mainmerge/push not authorized in this continuation; verify actual main before later precise doc update.",
   "execution_status": "PAUSED_USER_REQUEST_TASK11_REPLACEMENT_FIX01",
   "active_implementation": {
@@ -495,7 +495,7 @@
   "phase_b_exit_contract": "Afterall13tasks/finalreview/recordsclose: stopexecution, preserveexactcommits/evidence/handoffs andcompleted/open/pendingboundary index; next继续任务 mustreadcanonicalhandoff beforework and startONLY firstunfinishedpostBnode, notredoB.",
   "pause_handoff": "docs/acceptance/development-pause-b-remaining-2026-10-25.md",
   "pause_source_head": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
-  "pause_records_commit": "NONE; pause/audit documents uncommitted, index empty; Task1-10 adopted, Task11 uncommitted/incomplete.",
+  "pause_records_commit": "0df61e2e20f8083b3e2ba04de151ee5121b2bbb8 (paused Task11 WIP snapshot plus handoff; not Task11 adoption)",
   "pause_before_record_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261025-063507/before",
   "pause_record_index": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261025-063507-record-index.json",
   "delegated_coordinator": "/root/b_continuation_coordinator",
@@ -611,7 +611,7 @@
     "recordDirectory": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261025-063507",
     "head": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
     "branch": "codex/phase-b-completion-20261023",
-    "productChangesCommitted": false,
+    "productChangesCommitted": true,
     "activeAgentsObserved": [
       "/root"
     ],
@@ -622,14 +622,15 @@
       "status": "DOCUMENT_CORRECTIONS_ONLY_DEVELOPMENT_REMAINS_PAUSED",
       "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-document-audit-20261025",
       "utc": "2026-10-24T23:03:09.774822+00:00"
-    }
+    },
+    "uncommittedAtOriginalPause": true
   },
   "pending_issue_summary": "Task11 I1-I5 and generic regression OPEN; T10-M1Task11, T4SR04/05/06 andT6SR03Task12, F5/replay-integrity/T8SRM1/oldqualificationsTask13, three originalUNKNOWN OPEN. See latest pause explicit carry-forward table.",
   "historical_pause_fields_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-document-audit-20261025/legacy-pause-fields-before-normalization.json",
   "delegated_coordinator_status": "NOT_LIVE at user pause; previous coordinator usage-limit failure. Role identity historical; future author/reviewer continuation needs actual available handle, not a running-agent assumption.",
   "skill_runtime_current_note": "Original Superpowers7.0.1 workflow is historical authority; original SKILL.md is absent at audit and not in current available catalog. No replacement installed. Future continuation recheck available workflow; preserve single writer/serial tests/private authority/source-review gates and explicit role settings. Do not silently bypass gates or substitute reviewer model because an old handle/plugin is unavailable.",
   "integration": {
-    "status": "PREPARED_USER_AUTHORIZED_MAIN_MERGE_PUSH",
+    "status": "MERGED_TO_MAIN_AND_CODE_SNAPSHOT_PUSH_VERIFIED",
     "record": "docs/acceptance/integration-main-snapshot-2026-10-25.md",
     "remote": "https://github.com/CodeTch/ama.git",
     "sourceBranch": "codex/phase-b-completion-20261023",
@@ -641,6 +642,15 @@
     "developmentPaused": true,
     "lastCompileManifestFilesRehashed": 901,
     "mismatches": 0,
-    "qualification": "No new test run; lastisolatedbootstrap1PASS; generic regression no currentGREEN. Historicalpause HEAD is not a postmerge currentHEAD constraint."
-  }
+    "qualification": "No new test run; lastisolatedbootstrap1PASS; generic regression no currentGREEN. Historicalpause HEAD is not a postmerge currentHEAD constraint.",
+    "sourceSnapshotCommit": "0df61e2e20f8083b3e2ba04de151ee5121b2bbb8",
+    "mainMergeCommit": "095b678bf09cfcf95194ab84f928c91506d5aa42",
+    "lastVerifiedRemoteMain": "095b678bf09cfcf95194ab84f928c91506d5aa42",
+    "remoteVerifiedUtc": "2026-10-24T23:31:32.235085+00:00",
+    "metadataCommitFollowsThisRecord": true,
+    "codeQualificationUnchanged": true,
+    "transport": "One stalled attempt interrupted, unauthenticated WSL attempt failed; successful push used per-command HTTP1.1 and existing Windows credential manager. No credential value exported or persistent auth/config change.",
+    "completionCheckout": "Existing completion branch will fast-forward to final main metadata commit; no reset or fixture change."
+  },
+  "last_adopted_task_commit": "ba48f35e7ef97c1e162a2d373453bd1e9689529c"
 }

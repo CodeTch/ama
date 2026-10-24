@@ -1,6 +1,6 @@
-# 最新 Git 操作：按用户要求准备合并 main 并推送（2026-10-25）
+# 最新 Git 集成已完成（2026-10-25）
 
-本轮只做已授权Git快照整合，开发修复仍暂停。先读 `docs/acceptance/integration-main-snapshot-2026-10-25.md`。Task11为未验收WIP、5Important未复审、SEND DENY；原no2不得claim/send，UNKNOWN不关闭。下方旧no-main/no-push限制由本轮明确Git授权覆盖；下方HEADba48f35e只是集成前的历史快照，不代表集成后的实际HEAD。
+按用户明确指令，当前代码快照已合并main并推送GitHub。代码快照 `0df61e2e20f8`，main合并 `095b678bf09c`，已实际核对远端；详见 `docs/acceptance/integration-main-snapshot-2026-10-25.md`。本次为未验收WIP保存：Task11仍暂停于fix round1、5Important未复审，SEND DENY；原no2禁止claim/send，UNKNOWN不关闭。后续“继续任务”按最新暂停文档的具体未完节点推进11→12→13；旧HEADba48及不合并/不推送措辞为历史，实际HEAD以Git为准。
 
 ---
 
