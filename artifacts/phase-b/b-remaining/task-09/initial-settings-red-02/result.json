@@ -1,0 +1,25 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 2,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.storage.Task09InitialSettingsIT",
+      "name": "firstSettingsPersistRealTemplateEmptyExclusionAndAdvanceExactlyOnce",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09InitialSettingsIT",
+      "name": "committedReplayPrecedesNowUnavailableArchivesAndCurrentCas",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

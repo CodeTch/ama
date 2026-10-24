@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09GraphDiscoveryIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "245c5d93a19a9acd7ff8c16e65fadef78fb4d0c4be35b1723dc202178ee72d39",
+  "startedUtc": "2026-10-24T03:31:13.348946+00:00"
+}

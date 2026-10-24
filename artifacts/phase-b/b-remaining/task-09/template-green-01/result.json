@@ -1,0 +1,32 @@
+{
+  "exit": 0,
+  "counts": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.minutes.Task09TemplateIT",
+      "name": "explicitInstallCreatesActualParentRevisionAndExactSevenThemes",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.minutes.Task09TemplateIT",
+      "name": "unselectedModeCannotConstructAnAdministrativeInstaller",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.minutes.Task09TemplateIT",
+      "name": "conflictingAssignedIdentityCannotOverwriteOrLeavePartialRevision",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

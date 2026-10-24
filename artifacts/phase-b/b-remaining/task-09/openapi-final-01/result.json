@@ -1,0 +1,27 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "contract",
+    "OpenApi"
+  ],
+  "exit": 0,
+  "checks": 2,
+  "observedUtc": "2026-10-24T10:41:52.981677+00:00",
+  "files": [
+    {
+      "path": "contracts/openapi/api.yaml",
+      "sha256": "8bae5c0c8e24690f029ab721bc68f0d14e8933808615bb5214d2cd90b602e0c5"
+    },
+    {
+      "path": "contracts/openapi/minutes.yaml",
+      "sha256": "e1d6a9cb50d0cb577231a7c3b7279a0a75bf508ea93e9d0c0925a933acc321bc"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/openapi-final-01/api.yaml",
+      "sha256": "32c5837ce2a604386f7d8266a5230444888ac7601aa060bbd25ad43d89f65d22"
+    }
+  ],
+  "qualification": "Canonical tool invocation exit observed; raw terminal output retained in agent tool transcript, no reconstructed log",
+  "warnings": "Existing named-schema bundle collisions Conflict/Unavailable/Capabilities are renamed by bundler; lint valid"
+}

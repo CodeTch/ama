@@ -6,6 +6,7 @@ import ama.task.ExternalOperationPort.*;
 
 /** Constructor-registered DB-only policy; prepared payloads are data, never caller-selected writers. */
 public interface PreparedExternalPolicy extends TaskDomainPolicy {
+    default java.util.Optional<PreparedDomain> prepareObservation(java.util.List<ama.contract.TaskContracts.TaskSpec> specs, PreparedObservation observation, boolean skip) { return prepare(specs, Acquisition.EXTERNAL_FACT_OBSERVATION, skip); }
     record StoredResult(String state, String errorCode, TypedRef output) {}
     ExternalRequest requireRequest(TaskSpec actual, PreparedRequest request);
     void writeMarked(PreparedDomain held, ExecutionContext execution, PreparedRequest request);

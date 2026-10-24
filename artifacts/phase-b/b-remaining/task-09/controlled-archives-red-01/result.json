@@ -1,0 +1,25 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 2,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.config.json.Task09ControlledArchivesTest",
+      "name": "completeFifteenProfilesAndBothRootsUseStrictCanonicalOriginalBytes",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledArchivesTest",
+      "name": "actualTemplateIdentityChangesBothRootBindingsWithoutChangingSharedCodec",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

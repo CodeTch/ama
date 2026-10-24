@@ -19,6 +19,12 @@ public record TranscriptAcquisitionBudget(long utf8,long scalars,long utf16,long
    reserve(b,p,u,ownedCopies,projected);encoded+=b+9;
   }
   public void capture(long b,long p,long u,int ownedCopies){check();require(b>=0&&p>=0&&u>=0&&ownedCopies>0,INVALID_ARGUMENT);reserve(b,p,u,ownedCopies,false);}
+  /** Transient JDBC result admission before execution; actual retained captures are charged separately. */
+  public void admitCapture(long b,long p,long u,int ownedCopies){
+   check();require(b>=0&&p>=0&&u>=0&&ownedCopies>0,INVALID_ARGUMENT);
+   require(b<=Math.min(limits.utf8,archive.maxTotalBytes())-bytes&&p<=Math.min(limits.scalars,archive.maxAggregateScalars())-points&&u<=limits.utf16-units,BUDGET_EXCEEDED);
+   require(b<=(limits.copyBytes-copies)/ownedCopies&&u<=(limits.copyUtf16-copyUnits)/ownedCopies,BUDGET_EXCEEDED);
+  }
   private void reserve(long b,long p,long u,int ownedCopies,boolean projected){
    require(b<=Math.min(limits.utf8,archive.maxTotalBytes())-bytes&&p<=Math.min(limits.scalars,archive.maxAggregateScalars())-points&&u<=limits.utf16-units,BUDGET_EXCEEDED);
    require(b<=(limits.copyBytes-copies)/ownedCopies&&u<=(limits.copyUtf16-copyUnits)/ownedCopies,BUDGET_EXCEEDED);

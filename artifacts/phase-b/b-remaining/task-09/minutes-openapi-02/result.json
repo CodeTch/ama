@@ -1,0 +1,26 @@
+[
+  {
+    "argv": [
+      "node",
+      "node_modules/@redocly/cli/bin/cli.js",
+      "lint",
+      "contracts/openapi/api.yaml",
+      "--config",
+      "redocly.yaml"
+    ],
+    "exit": 0
+  },
+  {
+    "argv": [
+      "node",
+      "node_modules/@redocly/cli/bin/cli.js",
+      "bundle",
+      "contracts/openapi/api.yaml",
+      "--config",
+      "redocly.yaml",
+      "--output",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-09/minutes-openapi-02/api.yaml"
+    ],
+    "exit": 0
+  }
+]

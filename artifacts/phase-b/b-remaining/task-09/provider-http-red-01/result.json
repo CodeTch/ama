@@ -1,0 +1,46 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 5,
+    "failures": 5,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.config.json.Task09ControlledHttpTest",
+      "name": "actualHttpDuplicateRetainsOneDurableResult",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledHttpTest",
+      "name": "unauthenticatedRequestCannotReserve",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledHttpTest",
+      "name": "rawRepeatedCaseDuplicateCombinedAndFoldedEnvelopeRejectedBeforeReservation",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledHttpTest",
+      "name": "freshProviderProcessPreservesExactEnvelopeAndResultIdentity",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledHttpTest",
+      "name": "aggregateAndPerFieldLimitsRejectBeforeUnboundedParse",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

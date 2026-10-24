@@ -1,0 +1,32 @@
+{
+  "exit": 0,
+  "counts": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.model.Task09TransportAbortTest",
+      "name": "cancellationClosesActualSocketDuringBodyReadAndCloseIsIdempotent",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.model.Task09TransportAbortTest",
+      "name": "cancellationClosesActualSocketWhileWaitingForHeaders",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.model.Task09TransportAbortTest",
+      "name": "readIdleDeadlineFiresWithoutAnyReceivedByte",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

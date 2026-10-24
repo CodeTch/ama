@@ -17,6 +17,25 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
  private final ExternalOperationHeartbeat heartbeats;private final String model;private final BooleanSupplier open;private final Admission admission;
  private Phase phase=Phase.ORDINARY;private OperationToken token;private Permit permit;private ExternalOperationHeartbeat.Tracked tracker;
  private boolean receiptOnly,renewing,sent,recoverReceipt;private PreparedObservation pending;
+ private AbortRegistration abortRegistration;
+ private final class AbortRegistration implements AutoCloseable {
+  final Runnable action;boolean registered=true;
+  AbortRegistration(Runnable action){this.action=action;}
+  public void close(){synchronized(monitor){if(registered){registered=false;if(abortRegistration==this)abortRegistration=null;}}}
+ }
+ private final ama.task.PreparationCancellation cancellation=new ama.task.PreparationCancellation(){
+  public boolean cancelled(){synchronized(monitor){return receiptOnly||phase==Phase.FINISHED||!open.getAsBoolean();}}
+  public AutoCloseable register(Runnable action){
+   Objects.requireNonNull(action);AbortRegistration registration;boolean rejected;
+   synchronized(monitor){rejected=receiptOnly||phase==Phase.FINISHED||!open.getAsBoolean();if(!rejected&&abortRegistration!=null)throw new IllegalStateException("Only one active external exchange");registration=new AbortRegistration(action);if(rejected)registration.registered=false;else abortRegistration=registration;}
+   if(rejected)abort(registration);return registration;
+  }
+ };
+ public ama.task.PreparationCancellation cancellation(){return cancellation;}
+ /** Caller holds monitor; actual close/abort always runs after releasing it. */
+ private AbortRegistration detachAbort(){var registration=abortRegistration;abortRegistration=null;if(registration!=null)registration.registered=false;return registration;}
+ private static void abort(AbortRegistration registration){if(registration!=null)try{registration.action.run();}catch(RuntimeException ignored){/* Cancellation remains sticky even if a transport close fails. */}}
+
  ExternalExecutionSession(Object monitor,TaskLease lease,ExternalOperationPort operations,ModelPermitPool permits,ExternalOperationHeartbeat heartbeats,String model,BooleanSupplier open,Admission admission){
   this.monitor=monitor;this.lease=lease;this.operations=operations;this.permits=permits;this.heartbeats=heartbeats;this.model=model;this.open=open;this.admission=admission;
  }
@@ -25,6 +44,8 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
   synchronized(session.monitor){session.token=token;session.phase=Phase.OPERATION;session.sent=true;}
   session.tracker=heartbeats.track(session::renew);return session;
  }
+ void requireBinding(ExternalOperationPort expected,ModelPermitPool expectedPermits,String expectedModel){if(operations!=expected||permits!=expectedPermits||!Objects.equals(model,expectedModel)||lease==null)throw new IllegalArgumentException("Foreign production external session");}
+ void requireReconciliationBinding(ExternalOperationPort expected,ModelPermitPool expectedPermits){if(operations!=expected||permits!=expectedPermits||lease!=null||model!=null)throw new IllegalArgumentException("Foreign production reconciliation session");}
  public TaskLease lease(){if(lease==null)throw new IllegalStateException("Reconciliation has no ordinary lease");return lease;}
  public OperationToken token(){synchronized(monitor){if(token==null)throw new IllegalStateException("No acknowledged marker");return token;}}
  public boolean begin(PreparedRequest request)throws InterruptedException{
@@ -42,7 +63,7 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
   OperationToken current;
   synchronized(monitor){if(phase!=Phase.OPERATION||renewing||receiptOnly||!open.getAsBoolean())return;renewing=true;current=token;}
   boolean ok=false;try{ok=operations.renew(current);}catch(RuntimeException unavailable){/* sticky receipt-only */}
-  finally{synchronized(monitor){renewing=false;if(!ok)receiptOnly=true;monitor.notifyAll();}}
+  finally{AbortRegistration aborted=null;synchronized(monitor){renewing=false;if(!ok){receiptOnly=true;aborted=detachAbort();}monitor.notifyAll();}if(!ok&&current!=null)operations.releaseRecordedLookup(current);abort(aborted);}
  }
  public boolean send(Callable<PreparedObservation> transport)throws Exception{
   Objects.requireNonNull(transport);
@@ -76,5 +97,5 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
  }
  boolean pending(){synchronized(monitor){return pending!=null;}}
  void retry(){PreparedObservation observation;synchronized(monitor){observation=pending;}if(observation==null)return;try{observe(observation);}catch(InterruptedException e){Thread.currentThread().interrupt();}catch(RuntimeException unavailable){/* one bounded retry on the existing poll cadence */}}
- public void close(){ExternalOperationHeartbeat.Tracked current;synchronized(monitor){receiptOnly=true;current=tracker;monitor.notifyAll();}if(current!=null)current.close();}
+ public void close(){ExternalOperationHeartbeat.Tracked current;AbortRegistration aborted;OperationToken released;synchronized(monitor){receiptOnly=true;current=tracker;released=token;aborted=detachAbort();monitor.notifyAll();}try{if(released!=null)operations.releaseRecordedLookup(released);abort(aborted);}finally{if(current!=null)current.close();}}
 }

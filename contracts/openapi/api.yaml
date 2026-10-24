@@ -77,6 +77,24 @@ paths:
     $ref: './transcripts.yaml#/source'
   /api/v1/meetings/{meetingId}/transcript/revisions/{revisionId}/sources/{fileId}:
     $ref: './transcripts.yaml#/revisionSource'
+  /api/v1/meetings/{meetingId}/minutes/templates:
+    $ref: './minutes.yaml#/templates'
+  /api/v1/meetings/{meetingId}/minutes/initial-settings:
+    $ref: './minutes.yaml#/initial'
+  /api/v1/meetings/{meetingId}/minutes/generations:
+    $ref: './minutes.yaml#/generate'
+  /api/v1/meetings/{meetingId}/minutes/generation-inputs/current:
+    $ref: './minutes.yaml#/current'
+  /api/v1/meetings/{meetingId}/minutes/generation-inputs/{inputId}:
+    $ref: './minutes.yaml#/input'
+  /api/v1/meetings/{meetingId}/minutes/generation-tasks:
+    $ref: './minutes.yaml#/tasks'
+  /api/v1/meetings/{meetingId}/minutes/generation-tasks/{taskId}:
+    $ref: './minutes.yaml#/task'
+  /api/v1/meetings/{meetingId}/minutes/candidates:
+    $ref: './minutes.yaml#/candidates'
+  /api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}:
+    $ref: './minutes.yaml#/candidate'
 components:
   securitySchemes:
     enterpriseSession:

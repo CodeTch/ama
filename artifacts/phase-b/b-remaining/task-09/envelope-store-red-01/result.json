@@ -1,0 +1,39 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 4,
+    "failures": 4,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.config.json.Task09ControlledEnvelopeStoreTest",
+      "name": "corruptEnvelopeCannotBeRepairedByDuplicatePost",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledEnvelopeStoreTest",
+      "name": "changedEnvelopeWithOldHashesNeverChangesExistingMapping",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledEnvelopeStoreTest",
+      "name": "lookupLeavesReservedExecutionUnknownAcrossReopen",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledEnvelopeStoreTest",
+      "name": "exactCanonicalEnvelopeAndPayloadAreValidatedAfterReopen",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

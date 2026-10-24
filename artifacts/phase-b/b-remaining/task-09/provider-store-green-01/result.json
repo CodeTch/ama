@@ -1,0 +1,67 @@
+{
+  "exit": 0,
+  "counts": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.model.Task09ControlledStoreTest",
+      "name": "incompleteUnacknowledgedJournalTailPreservesCompletePrefix",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.model.Task09ControlledStoreTest",
+      "name": "reserveAndSuccessSurviveRestartAndDuplicateReturnsExactIdentity",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.model.Task09ControlledStoreTest",
+      "name": "corruptAcknowledgedResultFailsClosedOnReopen",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.model.Task09ControlledStoreTest",
+      "name": "rejectedModeAndOversizeNeverReserve",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.model.Task09ControlledStoreTest",
+      "name": "exclusiveStoreLockRejectsSecondProcessOwner",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.model.Task09ControlledStoreTest",
+      "name": "reservedComputationSurvivesRestartAndLookupDoesNotCompute",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.model.Task09ControlledStoreTest",
+      "name": "immutableLogicalAndExecutionTuplesRejectChangedBytes",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.model.Task09ControlledStoreTest",
+      "name": "definitiveRejectionIsDurableAndPermanentlyProhibitsComputation",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

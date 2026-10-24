@@ -1,0 +1,32 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.config.json.Task09ControlledClientTest",
+      "name": "postRejectionWithoutPersistedLookupProofCannotIssueZeroEffectReceipt",
+      "failure": false,
+      "error": true,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledClientTest",
+      "name": "realAuthenticatedSuccessBindsMetadataAndExactOutputToPrivateRequest",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledClientTest",
+      "name": "lookupOfNeverSentExecutionIsUnknownAndDoesNotCreateProviderReservation",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

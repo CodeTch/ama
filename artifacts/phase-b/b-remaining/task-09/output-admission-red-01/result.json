@@ -1,0 +1,39 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 4,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.config.json.Task09OutputAdmissionTest",
+      "name": "postRejectionWithoutPersistedLookupProofCannotIssueZeroEffectReceipt",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09OutputAdmissionTest",
+      "name": "realAuthenticatedSuccessBindsMetadataAndExactOutputToPrivateRequest",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09OutputAdmissionTest",
+      "name": "lookupOfNeverSentExecutionIsUnknownAndDoesNotCreateProviderReservation",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09OutputAdmissionTest",
+      "name": "originalWireBudgetRejectsDurableSuccessBeforeResultGet",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

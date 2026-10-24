@@ -69,9 +69,9 @@ public final class JdbcTaskQueue implements TaskQueue {
   if(scope.locked!=null)return Optional.of(scope.locked);
   var held=fences.lock(s.subject(),skip);
   if(held.isEmpty()||!scope.policy().lockRoots(scope.specs(),skip,scope.prepared()))return Optional.empty();
-  if(scope.purpose()==TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION&&scope.policy() instanceof GenerationRetentionPolicy
+  if(scope.purpose()==TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION&&scope.policy() instanceof GenerationRetentionPolicy retention
     &&s.type().equals("MINUTES_GENERATE_V1")&&s.input().kind().equals("GENERATION_INPUT"))
-   scope.publicationFacts=JdbcGenerationRetention.capturePublication(source,scope.prepared(),s.subject().id());
+  {var preparedPublication=retention.prelockedPublication(scope.prepared());scope.publicationFacts=preparedPublication.isPresent()?JdbcGenerationRetention.revisitPublication(source,scope.prepared(),s.subject().id(),preparedPublication.orElseThrow()):JdbcGenerationRetention.capturePublication(source,scope.prepared(),s.subject().id());}
   scope.locked=held.orElseThrow();return held;
  }
  Optional<SubjectFencePort.LockedSubject> lockDomain(TaskSpec s,boolean skip){

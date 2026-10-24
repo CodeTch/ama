@@ -1,0 +1,280 @@
+package ama.storage;
+
+import static org.junit.jupiter.api.Assertions.*;
+import ama.contract.TaskContracts.TaskLease;
+import java.security.*;
+import java.time.Instant;
+import java.util.*;
+import org.junit.jupiter.api.Test;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+/** Real issuer/DB boundary regression tests for Task3 independent review findings. */
+class TranscriptAuthorityReviewIT {
+    @Test
+    void managedIdentityHashingNeverRunsUnderSourceRootsAndRoutesRemainExact() throws Exception {
+        try (var f = new TranscriptAuthorityFixture()) {
+            var uploaded = f.upload("hash boundary");
+            var c = f.components();
+            String backendId = f.storage.binding.id();
+            var probe = new HashBoundaryProvider();
+            assertEquals(1, Security.insertProviderAt(probe, 1));
+            HashBoundaryDigest.outside = 0;
+            HashBoundaryDigest.locked = 0;
+            try {
+                // Construction still validates the actual immutable managed definition.
+                assertNotNull(f.storage.backend(f.storage.storage));
+                assertThrows(IllegalArgumentException.class, () -> new FileBackendCatalog.Backend(
+                        "0".repeat(64), f.storage.binding.type(), 1, "WRITABLE",
+                        f.storage.storage, f.storage.binding));
+                var prepared = f.prepare(c, List.of(uploaded));
+                f.bind(c, prepared, List.of(uploaded));
+                String task = f.task(prepared, "RUNNING");
+                f.current(null, 1);
+                var lease = new TaskLease(task, 1, "TASK03_WORKER", Instant.now(), prepared.spec());
+                try (var download = c.sources().open(lease, prepared.inputId(), uploaded.file())) {
+                    assertEquals(13, download.length());
+                }
+                int opened = f.reads.get();
+                for (String assignment : List.of("config_revision=2", "status='DISABLED'", "storage_type='s3'")) {
+                    f.j.update("UPDATE storage_backend SET " + assignment + " WHERE id=?", backendId);
+                    assertThrows(ama.contract.FileContracts.Unavailable.class,
+                            () -> c.sources().open(lease, prepared.inputId(), uploaded.file()));
+                    assertEquals(opened, f.reads.get());
+                    f.j.update("UPDATE storage_backend SET config_revision=1,status='WRITABLE',storage_type='local' WHERE id=?", backendId);
+                }
+                // Change the exact owned route only after the read transaction physically commits.
+                var outside = new org.springframework.jdbc.core.JdbcTemplate(f.trace.actual);
+                f.trace.afterCommit.set(() -> outside.update(
+                        "UPDATE storage_backend SET status='DISABLED' WHERE id=?", backendId));
+                assertThrows(ama.contract.FileContracts.Unavailable.class,
+                        () -> c.sources().open(lease, prepared.inputId(), uploaded.file()));
+                assertEquals(opened, f.reads.get(), "post-commit route recheck must precede storage open");
+                outside.update("UPDATE storage_backend SET status='WRITABLE' WHERE id=?", backendId);
+                assertTrue(HashBoundaryDigest.outside > 0, "real managed identity digest remains outside roots");
+                assertEquals(0, HashBoundaryDigest.locked);
+                System.out.println("Task3 IR01 managed SHA-256 outside=" + HashBoundaryDigest.outside
+                        + " locked=" + HashBoundaryDigest.locked + "; real draft/bind/worker read and post-commit denial checked");
+            } finally {
+                Security.removeProvider(probe.getName());
+            }
+        }
+    }
+
+    @Test
+    void genuineWorkerScopesLockReverseOrderedTaskUnionBeforeAnyAttempt() throws Exception {
+        try (var f = new TranscriptAuthorityFixture()) {
+            var c = f.components();
+            var firstFile = f.upload("first union source");
+            var secondFile = f.upload("second union source");
+            var first = f.prepare(c, List.of(firstFile));
+            f.bind(c, first, List.of(firstFile));
+            var second = f.prepare(c, List.of(secondFile));
+            f.bind(c, second, List.of(secondFile));
+            String firstTask = f.task(first, "RUNNING"), secondTask = f.task(second, "RUNNING");
+            f.current(null, 1);
+            var policy = actualPolicy(c.registry());
+            var requests = new ArrayList<>(List.of(request(firstTask, first, firstFile.file()),
+                    request(secondTask, second, secondFile.file())));
+            requests.sort(Comparator.comparing((ama.transcript.ProcessingSourceReader.WorkerRequest r) -> r.lease().taskId()).reversed());
+            var prepared = requests.stream().map(r -> policy.prepareRead(f.actor, f.meeting, r)).toList();
+            var sortedTasks = List.of(firstTask, secondTask).stream().sorted().toList();
+            assertNotEquals(sortedTasks, requests.stream().map(r -> r.lease().taskId()).toList());
+            f.trace.locks.clear();
+            f.tx.required(() -> {
+                var gate = c.registry().lock(f.actor, f.meeting, ama.access.MeetingAccess.Action.EDIT);
+                var plans = new ArrayList<CompleteReadPolicy.ReadPlan>();
+                for (int i = 0; i < requests.size(); i++)
+                    plans.add(policy.prelockRead(gate, f.meeting, requests.get(i), prepared.get(i)));
+                var sources = acquireAndValidate(f, c.registry(), policy, gate, plans);
+                policy.prelockReadTasks(plans.stream().map(p -> (Object) p.context()).toList());
+                assertEquals(sortedTasks, exactTaskLocks(f));
+                assertEquals(0, exactAttemptLocks(f).size());
+                for (var plan : plans) {
+                    var scoped = sources.stream().filter(s -> s.file().fileId().equals(plan.requestedFileId())).toList();
+                    policy.finishRead(plan.context(), scoped);
+                    assertThrows(ama.contract.MinutesContracts.Failure.class,
+                            () -> policy.finishRead(plan.context(), scoped));
+                }
+                assertEquals(sortedTasks, exactAttemptLocks(f));
+                int lastTask = -1, firstAttempt = Integer.MAX_VALUE;
+                for (int i = 0; i < f.trace.locks.size(); i++) {
+                    String sql = f.trace.locks.get(i).sql();
+                    if (sql.equals("SELECT id FROM durable_task WHERE id=? FOR UPDATE")) lastTask = i;
+                    if (sql.startsWith("SELECT attempt FROM task_attempt")) firstAttempt = Math.min(firstAttempt, i);
+                }
+                assertTrue(lastTask >= 0 && lastTask < firstAttempt);
+                assertEquals(2, f.j.queryForObject("SELECT COUNT(*) FROM task_attempt WHERE task_id IN (?,?) AND ended_at IS NULL", Integer.class, firstTask, secondTask));
+                assertEquals(0, f.reads.get());
+                return null;
+            });
+            saveTrace(f, "two-worker-scopes");
+        }
+    }
+
+    @Test
+    void genuineSharedTaskScopesDeduplicateAndConflictingPrivateExpectationsFailClosed() throws Exception {
+        try (var f = new TranscriptAuthorityFixture()) {
+            var c = f.components();
+            var file = f.upload("shared union source");
+            var intake = f.prepare(c, List.of(file));
+            f.bind(c, intake, List.of(file));
+            String task = f.task(intake, "RUNNING");
+            f.current(null, 1);
+            var policy = actualPolicy(c.registry());
+            var request = request(task, intake, file.file());
+            for (boolean injectConflict : List.of(false, true)) {
+                var prepared = List.of(policy.prepareRead(f.actor, f.meeting, request),
+                        policy.prepareRead(f.actor, f.meeting, request));
+                f.trace.locks.clear();
+                f.tx.required(() -> {
+                    var gate = c.registry().lock(f.actor, f.meeting, ama.access.MeetingAccess.Action.EDIT);
+                    var plans = prepared.stream().map(p -> policy.prelockRead(gate, f.meeting, request, p)).toList();
+                    assertNotSame(plans.get(0).context(), plans.get(1).context());
+                    var sources = acquireAndValidate(f, c.registry(), policy, gate, plans);
+                    if (injectConflict) {
+                        // Test-only fault injection AFTER two genuine issuer/holder-bound scopes exist.
+                        // Immutable normal production graphs cannot be changed through the public API.
+                        Object graph = privateField(prepared.get(1), "graph");
+                        var old = (SortedMap<String, Map<String, Object>>) privateField(graph, "tasks");
+                        var changedRow = new HashMap<>(old.get(task));
+                        changedRow.put("priority", 1L);
+                        var changed = new TreeMap<String, Map<String, Object>>(old);
+                        changed.put(task, Collections.unmodifiableMap(changedRow));
+                        setPrivateField(graph, "tasks", Collections.unmodifiableSortedMap(changed));
+                        assertThrows(ama.contract.MinutesContracts.Failure.class,
+                                () -> policy.prelockReadTasks(plans.stream().map(p -> (Object) p.context()).toList()));
+                        assertTrue(exactTaskLocks(f).isEmpty());
+                        assertTrue(exactAttemptLocks(f).isEmpty());
+                    } else {
+                        policy.prelockReadTasks(plans.stream().map(p -> (Object) p.context()).toList());
+                        assertEquals(List.of(task), exactTaskLocks(f));
+                        assertTrue(exactAttemptLocks(f).isEmpty());
+                        for (var plan : plans) {
+                            policy.finishRead(plan.context(), sources);
+                            assertThrows(ama.contract.MinutesContracts.Failure.class,
+                                    () -> policy.finishRead(plan.context(), sources));
+                        }
+                        assertEquals(List.of(task), exactAttemptLocks(f));
+                    }
+                    assertEquals(0, f.reads.get());
+                    return null;
+                });
+                saveTrace(f, injectConflict ? "conflicting-private-expectation" : "shared-task-scopes");
+            }
+        }
+    }
+
+    @Test
+    void configuredProviderRegistryOrchestrationFinalizesEveryDistinctScopeOnce() throws Exception {
+        try (var f = new TranscriptAuthorityFixture()) {
+            var file = f.upload("two configured scopes");
+            var refs = List.of(new FileRegistry.Reference("TASK03_FIX_COMPLETE", UUID.randomUUID().toString(), "TRANSCRIPT_INPUT"),
+                    new FileRegistry.Reference("TASK03_FIX_COMPLETE", UUID.randomUUID().toString(), "TRANSCRIPT_INPUT"));
+            for (var ref : refs) f.j.update("INSERT INTO file_reference VALUES (?,?,?,?)", file.file(), ref.kind(), ref.ownerId(), ref.purpose());
+            class Scope implements FileRegistry.ReferenceContext {
+                final FileRegistry.Reference reference;
+                boolean tasks; int finishes;
+                Scope(FileRegistry.Reference reference) { this.reference = reference; }
+            }
+            var scopes = new ArrayList<Scope>();
+            var unions = new java.util.concurrent.atomic.AtomicInteger();
+            CompleteReadPolicy policy = new CompleteReadPolicy() {
+                public Object prelock(FileRegistry.LockedMeeting g, String m, FileRegistry.Reference r, String id) { throw new AssertionError("legacy path"); }
+                public Object prelock(FileRegistry.LockedMeeting g, String m, FileRegistry.Reference r, String id, FileRegistry.ReferenceContext context) { return context; }
+                public ReadPreparation prepareRead(ama.contract.IdentityContracts.Actor a, String m, FileRegistry.ReadRequest r) { return new ReadPreparation() {}; }
+                public void authorizeRead(FileRegistry.LockedMeeting g, String m, FileRegistry.ReadRequest r) {}
+                public Object prelockCurrent(FileRegistry.LockedMeeting g, String m, FileRegistry.Reference r, String id, ReadPreparation p) {
+                    var scope = new Scope(r); scopes.add(scope); return scope;
+                }
+                public ReadPlan prelockRead(FileRegistry.LockedMeeting g, String m, FileRegistry.ReadRequest r, ReadPreparation p) { throw new AssertionError("only generic orchestration"); }
+                public List<ReadMember> readMembers(Object domain, FileRegistry.Reference r, String id) { return List.of(new ReadMember(((Scope) domain).reference, file.file())); }
+                public void validate(Object domain, String m, FileRegistry.Reference r, FileRegistry.FileRecord actual, String purpose) { assertEquals(((Scope) domain).reference, r); }
+                public void prelockReadTasks(List<Object> actualScopes) {
+                    assertEquals(2, actualScopes.size()); assertEquals(0, unions.getAndIncrement());
+                    for (Object domain : actualScopes) ((Scope) domain).tasks = true;
+                }
+                public void finishRead(Object domain, List<FileRegistry.CompletedSource> sources) {
+                    var scope = (Scope) domain; assertTrue(scope.tasks); assertEquals(0, scope.finishes++);
+                    assertEquals(1, sources.size()); assertEquals(0, f.reads.get());
+                }
+            };
+            var registry = f.registry(Map.of(refs.getFirst().kind(), policy));
+            try (var download = registry.download(f.actor, file.file(), null)) { assertEquals(21, download.length()); }
+            assertEquals(2, scopes.size()); assertEquals(1, unions.get());
+            assertTrue(scopes.stream().allMatch(scope -> scope.finishes == 1)); assertEquals(1, f.reads.get());
+        }
+    }
+
+    private static ama.transcript.ProcessingSourceReader.WorkerRequest request(String task,
+            ama.transcript.JdbcTranscriptAuthority.PreparedIntake intake, String file) {
+        return new ama.transcript.ProcessingSourceReader.WorkerRequest(
+                new TaskLease(task, 1, "TASK03_WORKER", Instant.now(), intake.spec()), intake.inputId(), file);
+    }
+    private static CompleteReadPolicy actualPolicy(FileRegistry registry) {
+        return (CompleteReadPolicy) ((Map<?, ?>) privateField(registry, "policies")).get("INPUT_BATCH_FILE");
+    }
+    private static Object privateField(Object value, String name) {
+        try { var field = value.getClass().getDeclaredField(name); field.setAccessible(true); return field.get(value); }
+        catch (ReflectiveOperationException failure) { throw new AssertionError(failure); }
+    }
+    private static void setPrivateField(Object value, String name, Object replacement) {
+        try { var field = value.getClass().getDeclaredField(name); field.setAccessible(true); field.set(value, replacement); }
+        catch (ReflectiveOperationException failure) { throw new AssertionError(failure); }
+    }
+    private static List<FileRegistry.CompletedSource> acquireAndValidate(TranscriptAuthorityFixture f,
+            FileRegistry registry, CompleteReadPolicy policy, FileRegistry.LockedMeeting gate,
+            List<CompleteReadPolicy.ReadPlan> plans) {
+        var ids = plans.stream().flatMap(p -> p.completeMembers().stream()).map(CompleteReadPolicy.ReadMember::fileId).distinct().sorted().toList();
+        var receipt = registry.prelockSources(gate, ids, false).orElseThrow();
+        var sources = registry.sources(gate, receipt, ids);
+        for (var plan : plans) for (var member : plan.completeMembers()) {
+            var actual = sources.stream().filter(s -> s.file().fileId().equals(member.fileId())).findFirst().orElseThrow();
+            policy.validate(plan.context(), f.meeting, member.reference(), actual.file(), actual.originalPurpose());
+        }
+        return sources;
+    }
+    private static List<String> exactTaskLocks(TranscriptAuthorityFixture f) {
+        return f.trace.locks.stream().filter(e -> e.sql().equals("SELECT id FROM durable_task WHERE id=? FOR UPDATE"))
+                .map(e -> (String) e.parameters().getFirst()).toList();
+    }
+    private static List<String> exactAttemptLocks(TranscriptAuthorityFixture f) {
+        return f.trace.locks.stream().filter(e -> e.sql().equals("SELECT attempt FROM task_attempt WHERE task_id=? AND attempt=? FOR UPDATE"))
+                .map(e -> (String) e.parameters().getFirst()).toList();
+    }
+    private static void saveTrace(TranscriptAuthorityFixture f, String suffix) throws Exception {
+        java.nio.file.Files.write(java.nio.file.Path.of("target/task03-custody", f.meeting + "-" + suffix + ".txt"),
+                f.trace.locks.stream().map(e -> e.sql() + " | " + e.parameters()).toList());
+    }
+
+    /** Test-only JCA observer delegates the actual SHA-256 implementation without replacing bytes. */
+    public static final class HashBoundaryDigest extends MessageDigestSpi {
+        static int outside, locked;
+        private final MessageDigest actual;
+        public HashBoundaryDigest() {
+            try { actual = MessageDigest.getInstance("SHA-256", "SUN"); }
+            catch (GeneralSecurityException failure) { throw new AssertionError(failure); }
+        }
+        protected void engineUpdate(byte value) { actual.update(value); }
+        protected void engineUpdate(byte[] value, int offset, int length) { actual.update(value, offset, length); }
+        protected byte[] engineDigest() {
+            boolean managed = StackWalker.getInstance().walk(frames -> frames.anyMatch(
+                    frame -> frame.getClassName().equals(ManagedBackendId.class.getName())));
+            if (managed) {
+                if (TransactionSynchronizationManager.isActualTransactionActive()) {
+                    locked++;
+                    throw new AssertionError("Managed backend SHA-256 executed while actual transaction roots are held");
+                }
+                outside++;
+            }
+            return actual.digest();
+        }
+        protected void engineReset() { actual.reset(); }
+        protected int engineGetDigestLength() { return 32; }
+    }
+    private static final class HashBoundaryProvider extends Provider {
+        HashBoundaryProvider() {
+            super("Task03HashBoundary", "1.0", "Test-only real managed digest boundary observer");
+            put("MessageDigest.SHA-256", HashBoundaryDigest.class.getName());
+        }
+    }
+}

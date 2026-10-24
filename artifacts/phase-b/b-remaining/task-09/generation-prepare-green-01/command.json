@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09GenerationPreparationIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "feb188e5a2c33cafa28b05a4c726a710a9b51eb7a7b55de4431b38605fcd0c2d",
+  "startedUtc": "2026-10-24T04:43:00.161996+00:00"
+}

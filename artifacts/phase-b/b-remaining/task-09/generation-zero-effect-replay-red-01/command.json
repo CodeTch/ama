@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09GenerationZeroEffectReplayIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "d0eab5515e6daf8cdd913c2236ad2500d85d58984d914ced9a40dec2b80a18da",
+  "startedUtc": "2026-10-24T07:01:20.642311+00:00"
+}

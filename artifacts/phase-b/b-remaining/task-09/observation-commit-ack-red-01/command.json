@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09ObservationCommitAckIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "58869f0eae3d1ed1fcbfafab2b901d6c5a21980706058368bb74306da88d8e30",
+  "startedUtc": "2026-10-24T08:03:17.522833+00:00"
+}

@@ -1,0 +1,95 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 12,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.minutes.Task09FinalMigrationIT",
+      "name": "normalRerunZeroPreservesAllFifteenCompleteOriginalHistoryRows",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09FinalInheritedSavedGraphIT",
+      "name": "noninstalledCompleteRawInspectionPreservesActualBodyAndExplicitEmptyMarks",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.task.Task09FinalInheritedExternalExecutionIT",
+      "name": "reconcilerTakeoverFencesOldOwnerAndPreservesExternalFact",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.task.Task09FinalInheritedExternalExecutionIT",
+      "name": "safeRetryReplayReturnsSameAcceptedTask",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.task.Task09FinalInheritedExternalExecutionIT",
+      "name": "concurrentSameProducerRetryAcceptsOnlyOneExecution",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.task.Task09FinalInheritedExternalExecutionIT",
+      "name": "commitAcknowledgementUnknownReturnsNoAuthority",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.task.Task09FinalInheritedExternalExecutionIT",
+      "name": "markerActuallyCommitsBeforeAuthorityAndAmbientIsRejected",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.task.Task09FinalInheritedExternalExecutionIT",
+      "name": "preparedCrashCapPreservesExecutionHistory",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.task.Task09FinalInheritedExternalExecutionIT",
+      "name": "processKilledAfterCommittedMarkerNeverMakesTaskResendable",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.task.Task09FinalInheritedExternalExecutionIT",
+      "name": "oldTaskExpiryDoesNotDiscardAuthoritativeSuccess",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.task.Task09FinalInheritedExternalExecutionIT",
+      "name": "unknownExecutionNeverReentersOrdinaryQueue",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.task.Task09FinalInheritedExternalExecutionIT",
+      "name": "zeroEffectRetryAppendsExecutionWithoutResettingEpoch",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

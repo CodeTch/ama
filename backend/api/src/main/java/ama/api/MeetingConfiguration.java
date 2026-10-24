@@ -11,11 +11,12 @@ import org.springframework.context.annotation.*;
 
 @Configuration(proxyBeanMethods=false)
 class MeetingConfiguration {
-    @Bean TransactionRunner meetingTransactions(DataSource source){return new TransactionRunner(source);}
+    @Bean TransactionRunner meetingTransactions(DataSource source,org.springframework.core.env.Environment env){return new TransactionRunner(source,env.getProperty("minutes.enabled",Boolean.class,false)?30:-1);}
     @Bean JdbcSubjectFences meetingSubjectFences(DataSource source){return new JdbcSubjectFences(source,Set.of("MEETING"));}
     @Bean JdbcOutbox meetingOutbox(DataSource source){
         var validators=new java.util.HashMap<String,OutboxReferenceValidator>(new MeetingEventReferences(source).validators());
         new ama.transcript.TranscriptEventReferences(source).validators().forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
+        new ama.transcript.MinutesEventReferences(source).validators().forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
         return new JdbcOutbox(source,validators);
     }
     @Bean JdbcMeetingAccess meetingAccess(DataSource source,TransactionRunner tx,JdbcSubjectFences fences){return new JdbcMeetingAccess(source,tx,fences);}

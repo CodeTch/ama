@@ -31,5 +31,7 @@ final class ArchivedProfileResolver {
 
  CanonicalBudget generationBudget(GenerationDraft draft,BooleanSupplier cancelled){available(cancelled);return context.generationBudget(draft);}
 
+ ama.canonical.CanonicalValue.ObjectValue promptDefinition(GenerationConfiguration config,BooleanSupplier cancelled){available(cancelled);return context.generationDefinition(ArtifactType.PROMPT_CONFIG,config.prompt().version());}
+ ama.canonical.CanonicalValue.ObjectValue modelDefinition(GenerationConfiguration config,BooleanSupplier cancelled){available(cancelled);return context.generationDefinition(ArtifactType.MODEL_CONFIG,config.model().version());}
  ValidationBudget outputBudget(GenerationConfiguration config,BooleanSupplier cancelled){available(cancelled);return context.outputBudget(config);}
 }

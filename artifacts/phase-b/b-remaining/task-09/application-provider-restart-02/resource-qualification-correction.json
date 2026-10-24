@@ -1,0 +1,8 @@
+{
+  "window": "application-provider-restart-02",
+  "actualTests": 1,
+  "actualPass": 1,
+  "qualified": false,
+  "reason": "Application child incorrectly used 512 MiB rather than authorized child 64 MiB. Child exited and closed receipt retained. No retroactive command change.",
+  "replacementWindow": "application-provider-restart-03"
+}

@@ -124,6 +124,12 @@ public final class ConfigBindings {
   public CanonicalBudget generationBudget(FullRow input){var config=generation(input);var profile=node(new Identity(ArtifactType.VALIDATION_BUDGET,config.profiles().definition(ProfileKind.VALIDATION_BUDGET).version()));return ConfigSchema.canonicalBudget(fields(fields(profile.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition"),"output","canonical").get("canonical"));}
   public CanonicalBudget generationBudget(GenerationDraft draft){var config=generation(draft);var profile=node(new Identity(ArtifactType.VALIDATION_BUDGET,config.profiles().definition(ProfileKind.VALIDATION_BUDGET).version()));return ConfigSchema.canonicalBudget(fields(fields(profile.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition"),"output","canonical").get("canonical"));}
   public ValidationBudget outputBudget(GenerationConfiguration config){var profile=node(new Identity(ArtifactType.VALIDATION_BUDGET,config.profiles().definition(ProfileKind.VALIDATION_BUDGET).version()));return ConfigSchema.validationBudget(fields(fields(profile.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition"),"output","canonical").get("output"));}
+  /** Strict parsed original definition; provisional data, never database authority. */
+  public CanonicalValue.ObjectValue generationDefinition(ArtifactType kind,String version){
+   require(kind==ArtifactType.PROMPT_CONFIG||kind==ArtifactType.MODEL_CONFIG,INVALID_ARGUMENT);
+   var value=node(new Identity(kind,version));
+   return (CanonicalValue.ObjectValue)fields(value.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition");
+  }
   public Artifact confirmation(FullRow processing){var binding=processingStored(processing);return artifact(binding.confirmation());}
   public GenerationConfiguration generation(FullRow input){
    active();require(input.table()==Table.GENERATION_INPUT,INPUT_INVALID);require(input.nullableString("material_snapshot_id")==null,CAPABILITY_UNAVAILABLE);
@@ -171,9 +177,10 @@ public final class ConfigBindings {
 
  public static final class ValidatedGenerationBinding {
   private final ama.minutes.contract.GenerationFingerprint.Projection projection;
-  private ValidatedGenerationBinding(ama.minutes.contract.GenerationFingerprint.Projection projection){require(projection.operation()!=null&&projection.profiles()!=null&&projection.outputBudget()!=null&&projection.canonicalBudget()!=null,PROFILE_UNAVAILABLE);this.projection=projection;}
+  private ValidatedGenerationBinding(ama.minutes.contract.GenerationFingerprint.Projection projection){require(projection.operation()!=null&&projection.profiles()!=null&&projection.outputBudget()!=null&&projection.canonicalBudget()!=null&&projection.catalog()!=null&&projection.promptDefinition()!=null&&projection.modelDefinition()!=null,PROFILE_UNAVAILABLE);this.projection=projection;}
   public String fingerprint(){return projection.fingerprint();}public CanonicalValue manifest(){return projection.manifest();}
   public Profiles profiles(){return projection.profiles();}public ValidationBudget outputBudget(){return projection.outputBudget();}public CanonicalBudget canonicalBudget(){return projection.canonicalBudget();}
+  public Catalog catalog(){return projection.catalog();}public CanonicalValue.ObjectValue promptDefinition(){return projection.promptDefinition();}public CanonicalValue.ObjectValue modelDefinition(){return projection.modelDefinition();}
  }
  public ValidatedGenerationBinding computeGeneration(GenerationDraft draft,StoredProvenanceFacts prerequisites,Fence fence,List<RawArchive> raw,GraphBudget graphBudget,ArchiveReadBudget readBudget,BooleanSupplier cancelled){
   var projection=new ama.minutes.contract.GenerationFingerprint(this,raw,readBudget).compute(draft,prerequisites,fence,graphBudget,cancelled);return new ValidatedGenerationBinding(projection);

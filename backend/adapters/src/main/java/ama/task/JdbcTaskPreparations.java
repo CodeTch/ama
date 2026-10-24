@@ -32,6 +32,10 @@ public final class JdbcTaskPreparations {
         held(prepared);
         return JdbcExternalOperations.requireContext(source, prepared, execution);
     }
+    /** Actual context resolves its own held preparation; issuer validation still applies. */
+    public ExternalFacts requireExternal(ama.task.ExternalOperationPort.ExecutionContext execution) {
+        var prepared=JdbcExternalOperations.contextPreparation(source,execution);held(prepared);return requireExternal(prepared,execution);
+    }
     /** JDBC queue consumption independently enforces its own source/actual-holder boundary. */
     static void requireTransaction(DataSource expected, PreparedDomain prepared) {
         if(!(prepared instanceof Held held)||held.source()!=expected

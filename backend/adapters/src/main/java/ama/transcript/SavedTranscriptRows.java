@@ -26,7 +26,8 @@ final class SavedTranscriptRows {
  }
  Map<String,Object> one(Shape shape,String id){var found=read(shape,"id=?","id",1,false,id);require(found.size()==1,PROVENANCE_UNAVAILABLE);return found.getFirst();}
  private record Measured(List<Object> key,List<long[]> sizes) {}
- List<Map<String,Object>> read(Shape shape,String where,String order,int maximum,boolean projected,Object...args){return transfer(shape,admit(shape,where,order,maximum,projected,args));}
+ List<Map<String,Object>> read(Shape shape,String where,String order,int maximum,boolean projected,Object...args){return deferRead(shape,where,order,maximum,projected,args).get();}
+ java.util.function.Supplier<List<Map<String,Object>>> deferRead(Shape shape,String where,String order,int maximum,boolean projected,Object...args){var admitted=admit(shape,where,order,maximum,projected,args);return ()->transfer(shape,admitted);}
  /** ID-only membership proof after the genuine gate; it grants no task authority. */
  List<String> inputTaskIds(String input,int maximum){
   budget.check();require(maximum>0,BUDGET_EXCEEDED);long sentinel=(long)maximum+1;
@@ -51,7 +52,7 @@ final class SavedTranscriptRows {
     // Reserve before any content-bearing query or growing owned row/cell/string captures.
     for(int i=0;i<texts.size();i++){
      long b=rs.getLong(offset+3*i+1),p=rs.getLong(offset+3*i+2),u=rs.getLong(offset+3*i+3);
-     if(texts.get(i).equals("config_manifest"))require(b<=manifest,BUDGET_EXCEEDED);
+     if(Set.of("config_manifest","request_manifest","no_effect_evidence","external_result_id").contains(texts.get(i)))require(b<=manifest,BUDGET_EXCEEDED);
      budget.text(b,p,u,8,projected);sizes.add(new long[]{b,p,u});
     }
     for(var ignored:shape.timestamps)budget.text(27,27,27,8,projected);
@@ -66,7 +67,7 @@ final class SavedTranscriptRows {
   var result=new ArrayList<Map<String,Object>>();
   String exactWhere=String.join(" AND ",shape.keys.stream().map(k->k+"=?").toList());
   for(var row:admitted){
-   budget.check();var found=j.query("SELECT "+String.join(",",shape.columns)+" FROM "+shape.table+" WHERE "+exactWhere,rs->{
+   budget.check();var found=j.query("SELECT "+String.join(",",shape.columns)+" FROM "+shape.table+" WHERE "+exactWhere+" FOR UPDATE",rs->{
     require(rs.next(),READ_FAILED);var value=new LinkedHashMap<String,Object>();int i=0;
     for(String col:shape.columns){
      if(shape.numbers.contains(col))value.put(col,exact(rs,col));

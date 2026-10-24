@@ -54,6 +54,38 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     @Override public Optional<LockedIdentities> tryLockIdentities(Actor actor,Collection<String> affected,boolean skip){
         return captureIdentities(actor,affected,skip,true,false);
     }
+    /** Status-only complete historical identity union; only the current actor must remain ACTIVE. */
+    public Optional<LockedIdentities> tryLockHistoricalIdentities(Actor actor,Collection<String> historical,boolean skip){
+        var captured=captureIdentities(actor,historical,skip,false,false);
+        if(captured.isPresent()&&!((IdentityCapture)captured.orElseThrow()).ids().containsAll(historical))throw new IllegalArgumentException("Historical identity no longer exists");
+        return captured;
+    }
+    /** Internal operation facts only. These opaque classes implement neither Locked nor LockedIdentities. */
+    public final class FactIdentities {
+        private final Object holder;private final String actor;private final Map<String,IdentityStatus> statuses;
+        private FactIdentities(String actor,Map<String,IdentityStatus> statuses){holder=transaction();this.actor=actor;this.statuses=Map.copyOf(statuses);}
+        private JdbcMeetingAccess issuer(){return JdbcMeetingAccess.this;}
+    }
+    public final class FactRoot {
+        private final FactIdentities identities;private final SubjectFencePort.LockedSubject subject;private final Root root;
+        private FactRoot(FactIdentities identities,SubjectFencePort.LockedSubject subject,Root root){this.identities=identities;this.subject=subject;this.root=root;}
+        private JdbcMeetingAccess issuer(){return JdbcMeetingAccess.this;}
+    }
+    public Optional<FactIdentities> tryLockFactIdentities(Actor actor,Collection<String> historical,boolean skip){
+        Object holder=transaction();if(rootsStarted.containsKey(holder))throw new IllegalStateException("Fact identities cannot follow a root");Objects.requireNonNull(actor);Objects.requireNonNull(historical);
+        var ids=new TreeSet<String>((a,b)->Arrays.compareUnsigned(a.getBytes(StandardCharsets.UTF_8),b.getBytes(StandardCharsets.UTF_8)));ids.add(actor.enterpriseId());ids.addAll(historical);var statuses=new HashMap<String,IdentityStatus>();
+        for(String id:ids){var rows=j.query("SELECT enterprise_id,status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),(row,n)->new IdentityStatus(row.getString(1),row.getString(2)),id);if(rows.isEmpty()){if(skip)return Optional.empty();throw new AccessDeniedException();}statuses.put(id,rows.getFirst());}
+        return Optional.of(new FactIdentities(actor.enterpriseId(),statuses));
+    }
+    public boolean factActorActive(FactIdentities identities){checkFact(identities);return identities.statuses.get(identities.actor).status().equals("ACTIVE");}
+    public Optional<FactRoot> lockFactRoot(FactIdentities identities,String meeting,boolean skip){
+        checkFact(identities);rootsStarted.put(transaction(),true);var subject=fences.lock(new SubjectRef("MEETING",meeting),skip);if(subject.isEmpty())return Optional.empty();var row=roots(meeting,skip);if(row.isEmpty())return Optional.empty();var root=row.orElseThrow();var fence=subject.orElseThrow();if(root.revision()!=fence.businessVersion()||root.cancelEpoch()!=fence.cancelEpoch())throw new IllegalStateException("Meeting fact fence mismatch");return Optional.of(new FactRoot(identities,fence,root));
+    }
+    public boolean factAllowsBusiness(FactRoot value,long expectedEpoch,long originalVersion){checkFact(value);var root=value.root;return factActorActive(value.identities)&&root.owner().equals(value.identities.actor)&&root.lifecycle().equals("ACTIVE")&&root.governance().equals("ACTIVE")&&!root.published()&&!value.subject.deleted()&&root.cancelEpoch()==expectedEpoch&&root.revision()>=originalVersion;}
+    /** Converts only an actually authorized current root; the denied fact capability is never a source grant. */
+    public Locked authorizeFactRoot(FactRoot value,long expectedEpoch,long originalVersion){checkFact(value);if(!factAllowsBusiness(value,expectedEpoch,originalVersion))throw new AccessDeniedException();var ids=new AuthorizationIdentities(value.identities.actor,value.identities.statuses);var held=new Held(ids,value.subject,value.root);require(held,Action.EDIT);return held;}
+    private void checkFact(FactIdentities value){if(value==null||value.issuer()!=this||value.holder!=transaction())throw new IllegalArgumentException("Foreign or expired fact identities");}
+    private void checkFact(FactRoot value){if(value==null||value.issuer()!=this)throw new IllegalArgumentException("Foreign fact root");checkFact(value.identities);}
     private Optional<LockedIdentities> captureIdentities(Actor actor,Collection<String> affected,boolean skip,boolean allActive,boolean names){
         Object currentTransaction=transaction();
         if(rootsStarted.containsKey(currentTransaction))throw new IllegalStateException("Identity prelock cannot follow a meeting root lock");

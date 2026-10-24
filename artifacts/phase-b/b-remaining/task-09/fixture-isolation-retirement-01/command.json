@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09FixtureIsolationIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "df05af4cf7d1eb91c65ac2b35e78250af6e886d0921e3bc3bd2851f3369b28d2",
+  "startedUtc": "2026-10-24T04:12:05.124921+00:00"
+}

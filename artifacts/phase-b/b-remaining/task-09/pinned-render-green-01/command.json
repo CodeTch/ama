@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09PinnedRenderIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "79b5d05eae9e93ee53a657695880d0c2d45f047ccb813e26ae552c4d31f6aff4",
+  "startedUtc": "2026-10-24T07:51:01.210741+00:00"
+}

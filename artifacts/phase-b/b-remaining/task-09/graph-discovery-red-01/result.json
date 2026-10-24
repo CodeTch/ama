@@ -1,0 +1,39 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 4,
+    "failures": 4,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.minutes.Task09GraphDiscoveryIT",
+      "name": "followsEveryBodyParentAndRetainsExplicitEmptyEvidenceSetsWithoutTextTransfer",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.minutes.Task09GraphDiscoveryIT",
+      "name": "overflowRejectsWholeGraphAndForeignMeetingIsNeverAdopted",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.minutes.Task09GraphDiscoveryIT",
+      "name": "currentSettingsCaptureExactZeroExclusionMembers",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.minutes.Task09GraphDiscoveryIT",
+      "name": "setEnumeratesEveryCategoryActionAndEmptyDirectoryMembership",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

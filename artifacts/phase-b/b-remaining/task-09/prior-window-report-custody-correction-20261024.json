@@ -1,0 +1,1135 @@
+{
+  "observedUtc": "2026-10-24T04:00:15.385837+00:00",
+  "rule": "Original windows retained byte-for-byte; own canonical command log suite identity/count must agree with XML. No suite execution, including selector/compile failure, cannot inherit reports. Future collector additionally records before identity and closed nanosecond interval.",
+  "windows": [
+    {
+      "window": "anchors-green-01",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.minutes.json.Task09StoredAnchorTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "anchors-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.minutes.json.Task09StoredAnchorTest": {
+          "tests": 3,
+          "failures": 3,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "bindings-green-01",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.config.json.Task09GenerationBindingTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "bindings-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.config.json.Task09GenerationBindingTest": {
+          "tests": 2,
+          "failures": 2,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "bootstrap-01",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.contract.MinutesFactBudgetTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.SavedTranscriptBudgetTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.TranscriptImportProducerTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.BatchFingerprintTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.GenerationFingerprintTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.StoredSourceGraphTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.FinalAndCoverageTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.HashProfilesTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.SourceAndSupportTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.canonical.CanonicalValueCodecTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.task.TaskMetadataTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.MeasuredTextTranscriptParserTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.TextTranscriptParserTest": {
+          "tests": 19,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.json.StrictMinutesJsonReaderTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.json.OutputBudgetBoundaryTest": {
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.file.ControlledArchiveFix1Test": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.file.ControlledConfigArchiveSourceTest": {
+          "tests": 24,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.ArchiveBudgetTest": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.DraftConfirmationHashTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.ConfigBindingsTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.SavedTranscriptAdmissionTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.RawHashChainTest": {
+          "tests": 25,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.ConfigWireReaderTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.DeadlineInputStreamTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.FileBackendDefinitionsTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.SourceReadLifetimeTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.ManagedBackendIdentityTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.StorageRouterTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.s3.S3LayoutV3Test": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.s3.S3ProtocolTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.DeploymentConfigTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.IdentityContractsTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.TranscriptWireTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.HttpRevisionTokensTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.IdentitySecurityTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.FileConfigurationTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.worker.PreparedWorkerLoopTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.worker.WorkerShutdownTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.worker.WorkerLoopTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.ContractFixtureTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.support.ContractClientTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.Task09BootstrapIT": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "envelope-store-green-01",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.config.json.Task09ControlledEnvelopeStoreTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "envelope-store-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.config.json.Task09ControlledEnvelopeStoreTest": {
+          "tests": 4,
+          "failures": 4,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "graph-capture-green-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.minutes.Task09GraphCaptureIT": {
+          "tests": 4,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "graph-capture-green-02",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.minutes.Task09GraphCaptureIT": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "graph-capture-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {},
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "graph-capture-red-02",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.minutes.Task09GraphCaptureIT": {
+          "tests": 4,
+          "failures": 4,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "graph-controls-green-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {},
+      "unqualifiedCopiedReports": [
+        "integration-tests-TEST-ama.minutes.Task09GraphDiscoveryIT.xml"
+      ],
+      "excludeAllCopiedCaseCounts": true
+    },
+    {
+      "window": "graph-controls-green-02",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.minutes.Task09GraphCaptureIT": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.Task09GraphDiscoveryIT": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "graph-controls-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.minutes.Task09GraphDiscoveryIT": {
+          "tests": 6,
+          "failures": 2,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "graph-discovery-green-01",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.minutes.Task09GraphDiscoveryIT": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "graph-discovery-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.minutes.Task09GraphDiscoveryIT": {
+          "tests": 4,
+          "failures": 4,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "protocol-green-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {},
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "protocol-green-02",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.config.json.Task09ControlledProtocolTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "protocol-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.config.json.Task09ControlledProtocolTest": {
+          "tests": 4,
+          "failures": 4,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "provider-http-boundaries-01",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.config.json.Task09ControlledHttpTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "provider-http-green-01",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.config.json.Task09ControlledHttpTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "provider-http-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.config.json.Task09ControlledHttpTest": {
+          "tests": 5,
+          "failures": 5,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "provider-store-green-01",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.model.Task09ControlledStoreTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "provider-store-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.model.Task09ControlledStoreTest": {
+          "tests": 8,
+          "failures": 8,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "template-green-01",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.contract.MinutesFactBudgetTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.SavedTranscriptBudgetTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.TranscriptImportProducerTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.BatchFingerprintTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.GenerationFingerprintTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.StoredSourceGraphTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.FinalAndCoverageTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.HashProfilesTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.SourceAndSupportTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.canonical.CanonicalValueCodecTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.task.TaskMetadataTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.MeasuredTextTranscriptParserTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.TextTranscriptParserTest": {
+          "tests": 19,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.json.StrictMinutesJsonReaderTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.json.OutputBudgetBoundaryTest": {
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.file.ControlledArchiveFix1Test": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.file.ControlledConfigArchiveSourceTest": {
+          "tests": 24,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.ArchiveBudgetTest": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.DraftConfirmationHashTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.ConfigBindingsTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.Task09GenerationBindingTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.SavedTranscriptAdmissionTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.RawHashChainTest": {
+          "tests": 25,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.ConfigWireReaderTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.DeadlineInputStreamTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.FileBackendDefinitionsTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.SourceReadLifetimeTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.ManagedBackendIdentityTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.StorageRouterTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.s3.S3LayoutV3Test": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.s3.S3ProtocolTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.DeploymentConfigTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.IdentityContractsTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.TranscriptWireTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.HttpRevisionTokensTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.IdentitySecurityTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.FileConfigurationTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.worker.PreparedWorkerLoopTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.worker.WorkerShutdownTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.worker.WorkerLoopTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.ContractFixtureTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.support.ContractClientTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.Task09TemplateIT": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "template-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.contract.MinutesFactBudgetTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.SavedTranscriptBudgetTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.TranscriptImportProducerTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.BatchFingerprintTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.GenerationFingerprintTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.StoredSourceGraphTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.FinalAndCoverageTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.HashProfilesTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.contract.SourceAndSupportTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.canonical.CanonicalValueCodecTest": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.task.TaskMetadataTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.MeasuredTextTranscriptParserTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.transcript.TextTranscriptParserTest": {
+          "tests": 19,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.json.StrictMinutesJsonReaderTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.json.OutputBudgetBoundaryTest": {
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.file.ControlledArchiveFix1Test": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.file.ControlledConfigArchiveSourceTest": {
+          "tests": 24,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.ArchiveBudgetTest": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.DraftConfirmationHashTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.ConfigBindingsTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.Task09GenerationBindingTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.SavedTranscriptAdmissionTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.RawHashChainTest": {
+          "tests": 25,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.config.json.ConfigWireReaderTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.DeadlineInputStreamTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.FileBackendDefinitionsTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.SourceReadLifetimeTest": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.ManagedBackendIdentityTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.StorageRouterTest": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.s3.S3LayoutV3Test": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.s3.S3ProtocolTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.DeploymentConfigTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.IdentityContractsTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.TranscriptWireTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.HttpRevisionTokensTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.IdentitySecurityTest": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.api.FileConfigurationTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.worker.PreparedWorkerLoopTest": {
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.worker.WorkerShutdownTest": {
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.worker.WorkerLoopTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.storage.ContractFixtureTest": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.support.ContractClientTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "ama.minutes.Task09TemplateIT": {
+          "tests": 3,
+          "failures": 3,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "transport-abort-green-01",
+      "exit": 0,
+      "executedSuitesInOwnLog": {
+        "ama.model.Task09TransportAbortTest": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    },
+    {
+      "window": "transport-abort-red-01",
+      "exit": 1,
+      "executedSuitesInOwnLog": {
+        "ama.model.Task09TransportAbortTest": {
+          "tests": 3,
+          "failures": 3,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "unqualifiedCopiedReports": [],
+      "excludeAllCopiedCaseCounts": false
+    }
+  ]
+}

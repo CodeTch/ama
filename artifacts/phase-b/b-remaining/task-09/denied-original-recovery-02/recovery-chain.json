@@ -1,0 +1,12 @@
+{
+  "originalWindow": "denied-lookup-green-02",
+  "getObserverWindow": "denied-original-recovery-01",
+  "settlementWindow": "denied-original-recovery-02",
+  "originalCause": "post-commit grant insertion missing from actual return path",
+  "recovery01Failure": "test expected APPLIED instead of actual committed RECORDED_FENCED; settlement not reached",
+  "providerFilesIdentical": true,
+  "providerFileCount": 6,
+  "postCountAfterOriginal": 0,
+  "task": "f85adc4c-d90d-43cc-86e7-6d069e5fd444",
+  "execution": "ce929e14-f580-4cd3-b4bf-86c7c9178115"
+}

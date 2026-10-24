@@ -31,7 +31,7 @@ public final class JdbcTranscriptAuthority {
  private FileRegistry registry;
  private FileBackendCatalog savedBackends;
  private FilePurposePolicy purposes;
- private final ImportTaskDomainPolicy taskPolicy;
+ private final ImportTaskDomainPolicy taskPolicy;private final MinutesTaskDomainPolicy minutesTaskPolicy;
  private final InputBatchFileReferencePolicy policy;
  private static final DateTimeFormatter TIME=DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
  public interface ReservedIntake extends FileRegistry.ReferenceContext {}
@@ -59,7 +59,7 @@ public final class JdbcTranscriptAuthority {
  }
  public record Components(FileRegistry registry,JdbcTranscriptAuthority authority,ProcessingIntakeFacts intake,ProcessingSourceReader sources) {}
  private JdbcTranscriptAuthority(DataSource source,TransactionRunner tx,MeetingAccess access,ArchiveReadBudget budget,CanonicalBudget canonical){
-  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);
+  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);minutesTaskPolicy=new MinutesTaskDomainPolicy(this,source);
  }
  MeetingAccess savedAccess(){return access;}
  public static Components create(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,
@@ -187,6 +187,8 @@ public final class JdbcTranscriptAuthority {
   return facts;
  }
  public ama.task.TaskDomainPolicy taskPolicy(){return taskPolicy;}
+ public ama.task.TaskDomainPolicy minutesTaskPolicy(){return minutesTaskPolicy;}
+ MinutesTaskDomainPolicy minutesDomain(){return minutesTaskPolicy;}
  public ama.task.TaskDomainPolicy.PreparedDomain adoptCreated(FileRegistry.LockedMeeting gate,HeldProcessingFacts held,TaskSpec spec){return taskPolicy.adopt(gate,held,spec);}
  public List<FileRegistry.CompletedSource> originals(PreparedIntake prepared){
   if(prepared==null||prepared.issuer!=this)throw new IllegalArgumentException("Foreign preparation");return prepared.draft.orderedSources();
@@ -197,6 +199,32 @@ public final class JdbcTranscriptAuthority {
   access.requirePrepared(registry.access(gate),draft.actor(),draft.meetingId(),List.of(draft.actor().enterpriseId()),MeetingAccess.Action.EDIT);
   require(number(root,"revision")==spec.businessVersion()&&number(root,"cancel_epoch")==spec.cancelEpoch()&&draft.revision()+1==spec.businessVersion()&&Objects.equals(root.get("owner_id"),draft.actor().enterpriseId()),FINGERPRINT_MISMATCH);
   require(j.queryForObject("SELECT COUNT(*) FROM task_subject WHERE subject_kind='MEETING' AND subject_id=? AND business_version=? AND cancel_epoch=? AND deleted=0",Long.class,draft.meetingId(),spec.businessVersion(),spec.cancelEpoch())==1,FINGERPRINT_MISMATCH);
+ }
+
+ /** Minutes capture shares this exact issuer, DataSource holder and genuine B03/B04 gate. */
+ private final class MinutesScope {
+  final Object holder=transaction();final FileRegistry.LockedMeeting gate;final Actor actor;final String meeting;
+  MinutesGraphCapture.Graph graph;boolean writing;
+  MinutesScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting){this.gate=gate;this.actor=actor;this.meeting=meeting;}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ Object minutesScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting){
+  access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);
+  require(actor.enterpriseId().equals(j.queryForObject("SELECT owner_id FROM meeting WHERE id=?",String.class,meeting)),PROVENANCE_UNAVAILABLE);
+  return new MinutesScope(gate,actor,meeting);
+ }
+ void requireMinutesScope(Object value,FileRegistry.LockedMeeting gate,Actor actor,String meeting){
+  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||!scope.meeting.equals(meeting)||scope.graph!=null)throw new IllegalArgumentException("Foreign, expired or consumed minutes capture scope");
+  registry.access(gate); // Identity/root authorization was established before domain locks.
+ }
+ void sealMinutesCapture(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph){
+  requireMinutesScope(value,gate,actor,graph.discovery().meeting());((MinutesScope)value).graph=graph;
+ }
+ void claimMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph){
+  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||!scope.meeting.equals(graph.discovery().meeting())||scope.graph!=graph||scope.writing)throw new IllegalArgumentException("Foreign, expired or reused minutes write invocation");registry.access(gate);scope.writing=true;
+ }
+ void requireMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph){
+  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||scope.graph!=graph||!scope.writing)throw new IllegalArgumentException("Foreign or inactive minutes write scope");registry.access(gate);
  }
  enum SavedPurpose { OWNER_INSPECTION, CURRENT, MUTATION }
  public interface HeldSavedTranscript {}

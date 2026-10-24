@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09PipelineGraphIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "ea94c95c6f92290a3b9a1207838eb15a5af11e0f7b1e968a86c19d675cb85bbe",
+  "startedUtc": "2026-10-24T04:15:01.723655+00:00"
+}

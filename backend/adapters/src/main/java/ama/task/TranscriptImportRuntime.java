@@ -32,7 +32,7 @@ public final class TranscriptImportRuntime {
  }
  public static JdbcTaskQueue install(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,JdbcTranscriptAuthority.Components components) {
   components.authority().requireImportSource(source);
-  return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components)));
+  return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components),"MINUTES_GENERATE_V1",components.authority().minutesTaskPolicy()));
  }
  public static Supplier<TaskResult> prepare(JdbcTaskQueue queue,TaskLease lease,Settings settings,PreparationCancellation cancellation) throws Exception {
   if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Import preparation requires independent reads");

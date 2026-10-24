@@ -19,6 +19,18 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
  private synchronized void grantCallAuthority(OperationToken token){callAuthorities.removeIf(ref->ref.get()==null);callAuthorities.add(new WeakReference<>(token));}
  boolean hasCallAuthority(OperationToken token){synchronized(this){callAuthorities.removeIf(ref->ref.get()==null);return callAuthorities.stream().anyMatch(ref->ref.get()==token);}}
  private synchronized void revokeCallAuthority(OperationToken token){callAuthorities.removeIf(ref->ref.get()==null||ref.get()==token);}
+ private final List<WeakReference<OperationToken>> lookupAuthorities=new ArrayList<>();
+ private synchronized void grantLookup(OperationToken token){lookupAuthorities.removeIf(r->r.get()==null);lookupAuthorities.add(new WeakReference<>(token));}
+ /** Private-constructor identity capability. It carries no send or domain-effect authority. */
+ public static final class RecordedLookup {
+  private final JdbcExternalOperations issuer;private final OperationToken token;
+  private RecordedLookup(JdbcExternalOperations issuer,OperationToken token){this.issuer=issuer;this.token=token;}
+  public void require(javax.sql.DataSource source,OperationToken actual){if(issuer.q.source!=source||token!=actual)throw new IllegalArgumentException("Foreign recorded lookup");issuer.requireLiveLookup(token);}
+ }
+ private synchronized void requireLookup(OperationToken token){lookupAuthorities.removeIf(r->r.get()==null);if(lookupAuthorities.stream().noneMatch(r->r.get()==token))throw new IllegalArgumentException("Genuine committed reconciliation claim required");}
+ private void requireLiveLookup(OperationToken token){independent();requireLookup(token);var o=operation(token.operationId(),false,false).orElseThrow();var e=execution(o.id(),token.executionNo(),false,false).orElseThrow();if(!valid(o,e,token))throw new IllegalArgumentException("Stale recorded lookup claim");}
+ public RecordedLookup recordedLookup(OperationToken token){requireLiveLookup(token);return new RecordedLookup(this,token);}
+ @Override public synchronized void releaseRecordedLookup(OperationToken token){lookupAuthorities.removeIf(r->r.get()==null||r.get()==token);}
  record Operation(String id,String kind,String key,String hash,String state,SubjectRef subject,long execution,long epoch,String owner,Instant expiry){}
  record Execution(String id,String operation,long number,String task,String state,String hash,String manifest,String basis,String evidence,Instant verified){}
  private final ReconciliationScanBudget scanBudget;
@@ -33,7 +45,17 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
  private static Operation op(ResultSet r,int n)throws SQLException{return new Operation(r.getString("id"),r.getString("operation_kind"),r.getString("business_key"),r.getString("request_hash"),r.getString("state"),new SubjectRef(r.getString("subject_kind"),r.getString("subject_id")),r.getLong("current_execution_no"),r.getLong("reconcile_epoch"),r.getString("reconcile_owner"),instant(r,"reconcile_expires_at"));}
  private static Execution ex(ResultSet r,int n)throws SQLException{return new Execution(r.getString("id"),r.getString("operation_id"),r.getLong("execution_no"),r.getString("task_id"),r.getString("state"),r.getString("request_hash"),r.getString("request_manifest"),r.getString("no_effect_basis"),r.getString("no_effect_evidence"),instant(r,"no_effect_verified_at"));}
  Optional<Operation> operation(String id,boolean lock,boolean skip){return j.query("SELECT * FROM external_operation WHERE id=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::op,id).stream().findFirst();}
- Optional<Execution> execution(String operation,long n,boolean lock,boolean skip){return j.query("SELECT * FROM external_execution WHERE operation_id=? AND execution_no=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::ex,operation,n).stream().findFirst();}
+ Optional<Execution> execution(String operation,long n,boolean lock,boolean skip){
+  // Metadata only before any Task9 manifest transfer, including pre-domain discovery.
+  var sizes=j.queryForList("SELECT e.id,e.task_id,t.task_type,OCTET_LENGTH(e.request_manifest) AS manifest_bytes FROM external_execution e JOIN durable_task t ON t.id=e.task_id WHERE e.operation_id=? AND e.execution_no=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),operation,n);
+  if(sizes.isEmpty())return Optional.empty();if(sizes.size()!=1)throw new DomainPreparationUnavailableException();var size=sizes.getFirst();
+  if("MINUTES_GENERATE_V1".equals(size.get("task_type"))){
+   if(!(size.get("manifest_bytes") instanceof Number bytes)||bytes.longValue()<1||bytes.longValue()>65536)throw new DomainPreparationUnavailableException();
+   // Repeat the size and identity predicate in the actual content query to close growth/rebinding races.
+   return j.query("SELECT * FROM external_execution WHERE operation_id=? AND execution_no=? AND id=? AND task_id=? AND OCTET_LENGTH(request_manifest) BETWEEN 1 AND 65536"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::ex,operation,n,size.get("id"),size.get("task_id")).stream().findFirst();
+  }
+  return j.query("SELECT * FROM external_execution WHERE operation_id=? AND execution_no=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::ex,operation,n).stream().findFirst();
+ }
  boolean valid(Operation o,Execution e,OperationToken t){return o.subject().equals(t.subject())&&o.id().equals(t.operationId())&&o.execution()==t.executionNo()&&e.id().equals(t.executionId())&&e.number()==t.executionNo()&&o.epoch()==t.reconcileEpoch()&&Objects.equals(o.owner(),t.owner())&&o.expiry()!=null&&o.expiry().isAfter(q.now())&&(o.state().equals("MARKED")||o.state().equals("UNKNOWN"))&&(e.state().equals("MARKED")||e.state().equals("UNKNOWN"));}
  OperationToken token(Operation o,Execution e){return new OperationToken(o.id(),e.id(),o.execution(),o.epoch(),o.owner(),o.expiry(),o.subject());}
  private final class Context implements ExecutionContext {
@@ -50,6 +72,9 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
      ||!execution.operation().equals(operation.id())||!operation.subject().equals(task.spec().subject()))throw new IllegalArgumentException("Foreign or expired external context");
    JdbcTaskPreparations.requireTransaction(q.source,scope.prepared());scope.policy().requirePrepared(scope.specs(),scope.purpose(),scope.prepared());
   }
+ }
+ static TaskDomainPolicy.PreparedDomain contextPreparation(javax.sql.DataSource source,ExecutionContext execution){
+  if(!(execution instanceof JdbcExternalOperations.Context c)||c.issuer().q.source!=source)throw new IllegalArgumentException("Foreign external context");c.require();return c.scope.prepared();
  }
  static JdbcTaskPreparations.ExternalFacts requireContext(javax.sql.DataSource source,TaskDomainPolicy.PreparedDomain held,ExecutionContext execution){
   if(!(execution instanceof JdbcExternalOperations.Context c)||c.issuer().q.source!=source||c.scope.prepared()!=held)throw new IllegalArgumentException("Foreign external context");
@@ -137,6 +162,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
      var answer=claimCandidate(candidate,owner);
      boolean finished=scanCursor.after==scanCursor.upper||(page.size()<limit&&position==page.size()-1);
      if(finished)scanCursor.active=false;
+     if(answer.isPresent())grantLookup(answer.orElseThrow());
      if(answer.isPresent()||finished)return answer;
      // Unconsumed prefetched rows are discarded on success and refetched next call.
     }
@@ -156,7 +182,8 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   var current=execution(seen.id(),seen.execution(),false,false);if(current.isEmpty())return Optional.empty();var seenExecution=current.orElseThrow();
   var task=q.row(seenExecution.task(),false,false);if(task.isEmpty())return Optional.empty();var seenTask=task.orElseThrow();
   if(!q.policies.containsKey(seenTask.spec().type()))return Optional.empty();
-  var scope=q.prepareDomain(List.of(seenTask.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,true,null);if(scope.isEmpty())return Optional.empty();
+  var claimPurpose=q.policy(seenTask.spec()) instanceof RecordedFactRecoveryPolicy?TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION:TaskDomainPolicy.Acquisition.TASK_MUTATION;
+   var scope=q.prepareDomain(List.of(seenTask.spec()),claimPurpose,true,null);if(scope.isEmpty())return Optional.empty();
   if(q.lockDomain(scope.orElseThrow(),seenTask.spec(),true).isEmpty())return Optional.empty();
   var heldTask=q.row(seenTask.id(),true,true);if(heldTask.isEmpty()||!heldTask.orElseThrow().spec().equals(seenTask.spec()))return Optional.empty();
   q.policy(heldTask.orElseThrow().spec()).validateInput(heldTask.orElseThrow().spec());
@@ -192,7 +219,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
  @Override public ObservationResult observePreparedFact(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,true,false);}
  @Override public ObservationResult recoverPreparedFact(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,true,true);}
  private ObservationResult observePrepared(OperationToken token,PreparedObservation prepared,boolean factOnly,boolean recovery){
-  independent();Objects.requireNonNull(prepared);revokeCallAuthority(token);
+  independent();Objects.requireNonNull(prepared);revokeCallAuthority(token);releaseRecordedLookup(token);
   for(int attempt=0;attempt<OBSERVATION_DISCOVERY_ATTEMPTS;attempt++)try{return q.work(()->observeCurrent(token,null,null,prepared,factOnly,recovery));}catch(RediscoverObservation changed){}
   throw new ObservationRetryRequiredException();
  }
