@@ -1,0 +1,47 @@
+{
+  "fixBase": "6cce4794dba473825d83fb9bccafc043cd611b5c",
+  "unchanged": {
+    "task-07-protected-adopted-inputs-20261024.json": 9777,
+    "task-07-pre-fix02-public-protected-20261024.json": 18836,
+    "resume-fix02-before-records-20261024/manifest.json": 13
+  },
+  "fix01ReportImmutable": true,
+  "privateScan": {
+    "distinctKnownValues": 6,
+    "matches": 0,
+    "pemMatches": 0,
+    "preimageDiffMatches": 0,
+    "valuesOrDigestsEmitted": false
+  },
+  "selectedAll3ResourcesExact": true,
+  "ownedChildPids": [
+    {
+      "pid": 1277931,
+      "gone": true
+    },
+    {
+      "pid": 1296943,
+      "gone": true
+    },
+    {
+      "pid": 1299071,
+      "gone": true
+    },
+    {
+      "pid": 1300741,
+      "gone": true
+    },
+    {
+      "pid": 1320122,
+      "gone": true
+    },
+    {
+      "pid": 1324519,
+      "gone": true
+    }
+  ],
+  "normalRerun": 0,
+  "all15FullHistoryFieldsUnchanged": true,
+  "rootFilesExcluded": true,
+  "scope": "Exact owned Task7 fixture only. No bootstrap/reset/schema/model/provider changes, no global process emptiness claim."
+}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07SupersededReceiptIT"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/old-zero-green/integration-tests-TEST-ama.task.Task07SupersededReceiptIT.xml"
+  ],
+  "elapsedSeconds": 58.00166130065918,
+  "counts": {
+    "tests": 12,
+    "failures": 1,
+    "errors": 2,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

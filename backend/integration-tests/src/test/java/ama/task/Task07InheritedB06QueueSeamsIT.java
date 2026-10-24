@@ -394,7 +394,9 @@ class Task07InheritedB06QueueSeamsIT {
     }
 
     @Test void disabledExpiredCurrentExternalFactMustStillBeRetained(){
-        queue.enqueue(spec);var lease=queue.claim(spec.pool(),"EXPIRED_FACT").orElseThrow();
+        queue.enqueue(spec);var claimed=queue.claim(spec.pool(),"EXPIRED_FACT");
+        if(claimed.isEmpty())System.out.println("T07_INITIAL_CLAIM_EMPTY trace="+trace+" task="+j.queryForList("SELECT id,state,available_at,expires_at,UTC_TIMESTAMP(6) AS db_now FROM durable_task WHERE producer_key=?",spec.producerKey()));
+        var lease=claimed.orElseThrow();
         var external=new JdbcExternalOperations(queue,new ReconciliationScanBudget(16,512));var token=external.beginExternal(lease,request(spec)).orElseThrow();
         j.update("UPDATE enterprise_identity SET status='DISABLED' WHERE enterprise_id=?",owner);
         j.update("UPDATE external_operation SET reconcile_expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=?",token.operationId());

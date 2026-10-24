@@ -1,49 +1,95 @@
 {
-  "initialDelivery": {
-    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-before-fix01-20261024/delivery-custody.json",
-    "sha256": "a7735e65fdb9115775daae1e652f5e87a5052ef19d434dbd03996ff1a28a6388",
+  "previousFix01": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-fix02-before-records-20261024/artifacts/phase-b/b-remaining/task-07/delivery-custody.json",
+    "sha256": "993d8a45af93b99c66ce12f03ff72fdba90a97cff9d7d1f90723ca5b613696c0",
     "result": {
-      "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
-      "protected": {
-        "entries": 9777,
-        "unchanged": 9777,
-        "exceptions": []
-      },
-      "ownedSourceAndEvidenceFiles": 8705,
-      "privateScan": {
-        "distinctKnownValues": 6,
-        "matches": 0,
-        "pemMatches": 0,
-        "trackedDiffMatches": 0,
-        "valuesOrDigestsEmitted": false
-      },
-      "selectedResourceGuardUnchanged": true,
-      "recordedOwnedChildPids": [
-        {
-          "pid": 1277931,
-          "gone": true
+      "initialDelivery": {
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-before-fix01-20261024/delivery-custody.json",
+        "sha256": "a7735e65fdb9115775daae1e652f5e87a5052ef19d434dbd03996ff1a28a6388",
+        "result": {
+          "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+          "protected": {
+            "entries": 9777,
+            "unchanged": 9777,
+            "exceptions": []
+          },
+          "ownedSourceAndEvidenceFiles": 8705,
+          "privateScan": {
+            "distinctKnownValues": 6,
+            "matches": 0,
+            "pemMatches": 0,
+            "trackedDiffMatches": 0,
+            "valuesOrDigestsEmitted": false
+          },
+          "selectedResourceGuardUnchanged": true,
+          "recordedOwnedChildPids": [
+            {
+              "pid": 1277931,
+              "gone": true
+            }
+          ],
+          "all15HistoryFieldsUnchanged": true,
+          "normalBootstrap": 15,
+          "normalReruns": [
+            0,
+            0,
+            0
+          ],
+          "rootTrackedPathsExcluded": [
+            ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
+            ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
+            ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md",
+            ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md"
+          ],
+          "scope": "Only exact Task7 schema, recorded child processes and actual selected parent MySQL resource. No global active0, old fixture rewrite, S3/PKI activity, company or HA claim."
         }
-      ],
-      "all15HistoryFieldsUnchanged": true,
-      "normalBootstrap": 15,
-      "normalReruns": [
-        0,
-        0,
-        0
-      ],
-      "rootTrackedPathsExcluded": [
-        ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
-        ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
-        ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md",
-        ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md"
-      ],
-      "scope": "Only exact Task7 schema, recorded child processes and actual selected parent MySQL resource. No global active0, old fixture rewrite, S3/PKI activity, company or HA claim."
+      },
+      "fix01": {
+        "fixBase": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
+        "protectedAdoptedUnchanged": 9777,
+        "initialDeliveryImmutableUnchanged": 8669,
+        "privateScan": {
+          "distinctKnownValues": 6,
+          "matches": 0,
+          "pemMatches": 0,
+          "preimageDiffMatches": 0,
+          "valuesOrDigestsEmitted": false
+        },
+        "selectedResourceGuardUnchanged": true,
+        "ownedChildPids": [
+          {
+            "pid": 1277931,
+            "gone": true
+          },
+          {
+            "pid": 1296943,
+            "gone": true
+          },
+          {
+            "pid": 1299071,
+            "gone": true
+          },
+          {
+            "pid": 1300741,
+            "gone": true
+          }
+        ],
+        "normalRerun": 0,
+        "all15FullHistoryFieldsUnchanged": true,
+        "rootFilesExcluded": true,
+        "scope": "Exact owned Task7 fixture only; no initial migration/reset/schema/model/provider changes; no global emptiness/company qualification claim."
+      },
+      "fix01Evidence": "artifacts/phase-b/b-remaining/task-07/fix01/custody-initial-seal.json"
     }
   },
-  "fix01": {
-    "fixBase": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
-    "protectedAdoptedUnchanged": 9777,
-    "initialDeliveryImmutableUnchanged": 8669,
+  "fix02": {
+    "fixBase": "6cce4794dba473825d83fb9bccafc043cd611b5c",
+    "unchanged": {
+      "task-07-protected-adopted-inputs-20261024.json": 9777,
+      "task-07-pre-fix02-public-protected-20261024.json": 18836,
+      "resume-fix02-before-records-20261024/manifest.json": 13
+    },
+    "fix01ReportImmutable": true,
     "privateScan": {
       "distinctKnownValues": 6,
       "matches": 0,
@@ -51,7 +97,7 @@
       "preimageDiffMatches": 0,
       "valuesOrDigestsEmitted": false
     },
-    "selectedResourceGuardUnchanged": true,
+    "selectedAll3ResourcesExact": true,
     "ownedChildPids": [
       {
         "pid": 1277931,
@@ -68,12 +114,20 @@
       {
         "pid": 1300741,
         "gone": true
+      },
+      {
+        "pid": 1320122,
+        "gone": true
+      },
+      {
+        "pid": 1324519,
+        "gone": true
       }
     ],
     "normalRerun": 0,
     "all15FullHistoryFieldsUnchanged": true,
     "rootFilesExcluded": true,
-    "scope": "Exact owned Task7 fixture only; no initial migration/reset/schema/model/provider changes; no global emptiness/company qualification claim."
+    "scope": "Exact owned Task7 fixture only. No bootstrap/reset/schema/model/provider changes, no global process emptiness claim."
   },
-  "fix01Evidence": "artifacts/phase-b/b-remaining/task-07/fix01/custody-initial-seal.json"
+  "fix02Evidence": "artifacts/phase-b/b-remaining/task-07/fix02/custody-preseal.json"
 }

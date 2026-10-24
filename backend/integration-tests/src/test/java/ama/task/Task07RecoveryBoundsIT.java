@@ -38,14 +38,20 @@ class Task07RecoveryBoundsIT {
   int bound=2*f.j.queryForObject("SELECT COUNT(*) FROM model_reservation",Integer.class)+2;for(int i=0;i<bound&&!f.j.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,oldPermit.id());i++)p.recoverSettlements(1);
   assertTrue(f.j.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,oldPermit.id()));assertNull(f.j.queryForObject("SELECT settled_at FROM model_reservation WHERE id=?",java.sql.Timestamp.class,currentPermit.id()));assertEquals("MARKED",f.j.queryForObject("SELECT state FROM external_operation WHERE id=?",String.class,current.operationId()));
  }
- @Test void transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass(){
+ @Test void transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass()throws Exception{
   var f=new Task07PreparedExternalIT();f.setup();var e=new JdbcExternalOperations(f.queue);var t=e.beginPrepared(f.lease,f.preparedRequest).orElseThrow();String model="T07_BOUND_"+UUID.randomUUID();var p=new JdbcModelPermitPool(e,Map.of(model,new ModelConfiguration(model,1,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT)),(a,b,c)->{});p.configure();var permit=p.acquire(t,model,null).orElseThrow();e.observePrepared(t,f.preparedObservation);
   var failed=new java.util.concurrent.atomic.AtomicBoolean();f.source.before=sql->{if(sql.text().startsWith("SELECT * FROM external_operation WHERE id=? FOR UPDATE")&&t.operationId().equals(sql.parameters().get(1))&&failed.compareAndSet(false,true))throw new org.springframework.dao.TransientDataAccessResourceException("T07_RETRYABLE_SETTLEMENT_FAULT");};
   int bound=2*f.jdbc.queryForObject("SELECT COUNT(*) FROM model_reservation",Integer.class)+2;boolean consumed=false;String previous=null;
+  var afterField=JdbcModelPermitPool.class.getDeclaredField("recoveryAfter");afterField.setAccessible(true);
+  var upperField=JdbcModelPermitPool.class.getDeclaredField("recoveryUpper");upperField.setAccessible(true);
+  var scans=new ArrayList<Map<String,Object>>();
   for(int i=0;i<bound&&!f.jdbc.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,permit.id());i++){
-   f.source.clear();p.recoverSettlements(1);assertTrue(f.source.sql.size()<=14);assertTrue(f.source.rows<=12);
+   var beforeAfter=afterField.get(p);var beforeUpper=upperField.get(p);
+   f.source.clear();int recovered=p.recoverSettlements(1);assertTrue(f.source.sql.size()<=14);assertTrue(f.source.rows<=12);
+   var diagnostic=new LinkedHashMap<String,Object>();diagnostic.put("slice",i);diagnostic.put("target",permit.id());diagnostic.put("beforeAfter",beforeAfter);diagnostic.put("beforeUpper",beforeUpper);diagnostic.put("after",afterField.get(p));diagnostic.put("upper",upperField.get(p));diagnostic.put("failed",failed.get());diagnostic.put("recovered",recovered);diagnostic.put("queries",f.source.sql.stream().map(sql->Map.of("sql",sql.text(),"parameters",sql.parameters())).toList());scans.add(diagnostic);
    for(var sql:f.source.sql)if(sql.text().startsWith("SELECT id,model,execution_id")){String after=sql.parameters().get(1).toString();if(failed.get()&&permit.id().equals(after))consumed=true;previous=after;}
   }
+  String evidence=System.getenv("TASK07_EVIDENCE_WINDOW");if(evidence!=null)new com.fasterxml.jackson.databind.ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(java.nio.file.Path.of(evidence,"settlement-cursor-diagnostic.json").toFile(),scans);
   assertTrue(failed.get());assertTrue(consumed,"Failed candidate must be consumed before the next call");assertTrue(f.jdbc.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,permit.id()));
  }
 

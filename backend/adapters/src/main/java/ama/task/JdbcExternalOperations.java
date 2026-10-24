@@ -238,6 +238,11 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
    j.update("UPDATE external_operation SET state='MANUAL_REQUIRED',last_error='CONTRADICTORY_SUCCESS',external_result_id=?,reconcile_epoch=reconcile_epoch+1 WHERE id=?",observation.externalResultId(),o.id());
    q.event("EXTERNAL_CONTRADICTION",oldTask);return ObservationResult.QUARANTINED;
   }
+  // An explicit retry may advance the mutable operation summary before an old commit ACK arrives.
+  // Recovery can acknowledge that immutable failure, but cannot borrow any successor authority.
+  if(recovery&&prepared!=null&&observation.outcome()==ExternalOutcome.FAILED_ZERO_EFFECT
+    &&o.execution()>token.executionNo()&&tokenExecution.state().equals("FAILED"))
+   return acknowledgeOldFailure(scope,context,oldTask,tokenExecution,prepared,observation);
   if(prepared!=null&&terminalFact&&o.execution()==token.executionNo()&&(recovery||o.epoch()==token.reconcileEpoch()&&Objects.equals(o.owner(),token.owner()))
     &&e.id().equals(token.executionId())&&(o.state().equals("SUCCEEDED")||o.state().equals("FAILED"))&&o.state().equals(e.state())){
    var proof=observation.noEffectProof();
@@ -298,6 +303,28 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   q.finish(currentTask,localState,localError,localOutput);
   return canApply?ObservationResult.APPLIED:ObservationResult.RECORDED_FENCED;
   } finally {if(context!=null)context.open=false;}
+ }
+ /** Fact-only lookup: both task/execution rows are already locked in the complete observation scope. */
+ private ObservationResult acknowledgeOldFailure(JdbcTaskQueue.DomainScope scope,Context context,Row oldTask,
+     Execution oldExecution,PreparedObservation prepared,ExternalObservation observation){
+  var proof=observation.noEffectProof();
+  if(proof==null||oldExecution.basis()==null||oldExecution.evidence()==null||oldExecution.verified()==null
+    ||!oldExecution.basis().equals(proof.basis().name())||!oldExecution.evidence().equals(proof.safeEvidenceReference())
+    ||!oldExecution.verified().equals(proof.verifiedAt()))return ObservationResult.STALE_TOKEN;
+  // Locking reads remain current under RR and select the OLD task, never the successor's result.
+  var stored=j.queryForMap("SELECT state,last_error,output_kind,output_id FROM durable_task WHERE id=? FOR UPDATE",oldTask.id());
+  var kind=(String)stored.get("output_kind");
+  var result=new PreparedExternalPolicy.StoredResult((String)stored.get("state"),(String)stored.get("last_error"),kind==null?null:new TypedRef(kind,(String)stored.get("output_id")));
+  if(!result.state().equals("FAILED")&&!result.state().equals("STALE"))return ObservationResult.STALE_TOKEN;
+  // The execution's exact marked attempt must be the old terminal task's attempt and already
+  // ended with that same local result. Nothing here ends an attempt or rewrites a durable fact.
+  var attempts=j.query("SELECT a.owner,a.ended_at,a.outcome,a.error_code,e.finished_at FROM external_execution e JOIN task_attempt a ON a.task_id=e.task_id AND a.attempt=e.task_attempt WHERE e.id=? AND a.task_id=? AND a.attempt=? FOR UPDATE",
+      (r,n)->r.getString("owner")!=null&&r.getObject("ended_at")!=null&&r.getObject("finished_at")!=null
+        &&result.state().equals(r.getString("outcome"))&&Objects.equals(result.errorCode(),r.getString("error_code")),
+      oldExecution.id(),oldTask.id(),oldTask.attempt());
+  if(attempts.size()!=1||!attempts.getFirst())return ObservationResult.STALE_TOKEN;
+  if(!preparedPolicy(oldTask.spec()).verifyReplay(scope.prepared(),context,prepared,result))return ObservationResult.STALE_TOKEN;
+  context.require();return result.state().equals("STALE")?ObservationResult.RECORDED_FENCED:ObservationResult.APPLIED;
  }
  @Override public String retryAfterZeroEffect(String id,long expected,TaskSpec next,ExternalRequest request){return q.work(()->{
   // Discover the COMPLETE immutable old/new spec set before identities, subject, roots or tasks.
