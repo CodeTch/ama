@@ -90,7 +90,7 @@ public final class JdbcSavedTranscripts {
   });
  }
  private static boolean ordinaryPreparationFailure(RuntimeException error){
-  if(error instanceof Failure f)return Set.of(PROFILE_UNAVAILABLE,CAPABILITY_UNAVAILABLE,BUDGET_EXCEEDED,READ_FAILED).contains(f.code());
+  if(error instanceof Failure f)return Set.of(ARCHIVE_IO_UNAVAILABLE,PROFILE_UNAVAILABLE,CAPABILITY_UNAVAILABLE,BUDGET_EXCEEDED,READ_FAILED).contains(f.code());
   if(error instanceof ama.contract.FileContracts.Unavailable||error instanceof ama.contract.FileContracts.Conflict||error instanceof ama.contract.FileContracts.NotFound)return true;
   return error instanceof ama.contract.TranscriptContracts.Failure f&&Set.of("REVISION_CONFLICT","CURRENT_REVISION_REQUIRED","MEETING_NOT_WRITABLE","REVISION_EXHAUSTED").contains(f.code());
  }

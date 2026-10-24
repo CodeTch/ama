@@ -1,0 +1,83 @@
+{
+  "exit": 0,
+  "counts": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task10Fix01CapacityIT",
+      "reportSha256": "782cb9913bf1afc56f56d876003e636c65fa6b461f128608e5239b95ea3de501",
+      "reportMtimeNs": 1792857611415939819,
+      "startedNs": 1792857511161798122,
+      "endedNs": 1792857626160153671,
+      "class": "ama.storage.Task10Fix01CapacityIT",
+      "name": "reservesRemainingAttemptsAndMergedSourceBeforeAdmission",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10Fix01DecisionIT",
+      "reportSha256": "968a304f3f846af4bec5d00ecbcbb4cd34cf0717873430859e6ab77fb23e4620",
+      "reportMtimeNs": 1792857546402907104,
+      "startedNs": 1792857511161798122,
+      "endedNs": 1792857626160153671,
+      "class": "ama.storage.Task10Fix01DecisionIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10Fix01IntakeIT",
+      "reportSha256": "93bbb1eaa86efb1fcfa9e46977a34dc5d1bf5eeb0ebf759a67b5245fbd71144b",
+      "reportMtimeNs": 1792857625726358489,
+      "startedNs": 1792857511161798122,
+      "endedNs": 1792857626160153671,
+      "class": "ama.storage.Task10Fix01IntakeIT",
+      "name": "actualIntakeReservesSharedCapacityBeforeAnyWritesAndKeepsReceiptReplay",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10Fix01RegressionB03IT",
+      "reportSha256": "a8d5d4dd75581a9fbdbdacc24c24fe5e9c71d393f7189b92faf07321be55a1d0",
+      "reportMtimeNs": 1792857619043328666,
+      "startedNs": 1792857511161798122,
+      "endedNs": 1792857626160153671,
+      "class": "ama.storage.Task10Fix01RegressionB03IT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10Fix01RegressionSourceIT",
+      "reportSha256": "4818158783818156599ae2cd0de5393a6919ecdc14b50409ce67e53620c30c6c",
+      "reportMtimeNs": 1792857554725365049,
+      "startedNs": 1792857511161798122,
+      "endedNs": 1792857626160153671,
+      "class": "ama.storage.Task10Fix01RegressionSourceIT",
+      "name": "actualMetadataAndFkLocksProtectGrowthChildrenAndEmptyMarksInBothPhases",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10Fix01ReplayIT",
+      "reportSha256": "a644776a20d25801b62ec4071ce7488673ca27a460f049fdcb4f7dfcd0e6726a",
+      "reportMtimeNs": 1792857603659742841,
+      "startedNs": 1792857511161798122,
+      "endedNs": 1792857626160153671,
+      "class": "ama.storage.Task10Fix01ReplayIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

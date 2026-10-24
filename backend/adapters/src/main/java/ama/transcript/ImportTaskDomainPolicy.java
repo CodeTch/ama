@@ -14,9 +14,9 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
     private final JdbcTaskPreparations issuer;
     private final org.springframework.jdbc.core.JdbcTemplate j;
     private static final class Prepared {
-        final Actor owner;final MeetingAccess.LockedIdentities identities;final List<TranscriptReadGraph> graphs;
+        final Actor owner;final MeetingAccess.LockedIdentities identities;final List<TranscriptReadGraph> graphs;final MinutesPendingDiscovery.Plan pending;
         FileRegistry.LockedMeeting completionGate;
-        Prepared(Actor owner,MeetingAccess.LockedIdentities identities,List<TranscriptReadGraph> graphs){this.owner=owner;this.identities=identities;this.graphs=graphs;}
+        Prepared(Actor owner,MeetingAccess.LockedIdentities identities,List<TranscriptReadGraph> graphs,MinutesPendingDiscovery.Plan pending){this.owner=owner;this.identities=identities;this.graphs=graphs;this.pending=pending;}
         Actor owner(){return owner;}MeetingAccess.LockedIdentities identities(){return identities;}List<TranscriptReadGraph> graphs(){return graphs;}
     }
     private record Adopted(JdbcTranscriptAuthority.HeldProcessingFacts held,FileRegistry.LockedMeeting gate,TaskSpec spec) {
@@ -51,10 +51,11 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
             require(owner.equals(actual),PROVENANCE_UNAVAILABLE);
             graphs.add(graph);
         }
+        var pending=MinutesPendingDiscovery.discover(authority.dataSource(),first.subject().id());
         var actor=new Actor(owner,Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
         var identities=authority.meetingAccess().tryLockIdentities(actor,List.of(owner),skip);
         if(identities.isEmpty())return Optional.empty();
-        return Optional.of(issuer.issue(specs,purpose,new Prepared(actor,identities.orElseThrow(),List.copyOf(graphs)),true));
+        return Optional.of(issuer.issue(specs,purpose,new Prepared(actor,identities.orElseThrow(),List.copyOf(graphs),pending),true));
     }
     public void requirePrepared(List<TaskSpec> specs,Acquisition purpose,PreparedDomain prepared) {
         issuer.require(specs,purpose,prepared);
@@ -107,10 +108,11 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
             var tasks=new BoundedTranscriptMetadata(j,authority.readBudget()).select("durable_task",BoundedTranscriptMetadata.TASK,"input_kind='TRANSCRIPTION_INPUT' AND input_id=?","id",2,text(graph.input,"id"));
             require(tasks.equals(List.copyOf(graph.tasks.values())),PROVENANCE_UNAVAILABLE);
         }
+        MinutesPendingDiscovery.lock(authority.dataSource(),p.pending,MinutesPendingDiscovery.DOMAIN);
         // A stale queue acquisition can retire its task without reviving obsolete byte/source permission.
         // The queue still locks/rechecks the actual task and decides CANCELLED/STALE before validateInput.
         var current=p.graphs().stream().filter(graph->number(graph.root,"revision")==graph.expected.businessVersion()&&number(graph.root,"cancel_epoch")==graph.expected.cancelEpoch()).toList();
-        if(current.isEmpty())return true;
+        if(current.isEmpty()){capacity(p);return true;}
         for(var graph:current)require(number(graph.root,"ever_published")==0&&!"PUBLISHED".equals(graph.root.get("stage")),PROVENANCE_UNAVAILABLE);
         var files=new TreeSet<String>();
         for(var graph:current)files.addAll(graph.files.keySet());
@@ -133,9 +135,11 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
                 require(j.queryForObject("SELECT COUNT(*) FROM file_reference WHERE file_id=? AND owner_kind='INPUT_BATCH_FILE' AND owner_id=? AND purpose='TRANSCRIPT_INPUT'",Long.class,file,text(graph.batch,"id"))==1,PROVENANCE_UNAVAILABLE);
             }
         }
+        capacity(p);
         if(current.size()==p.graphs().size())p.completionGate=gate;
         return true;
     }
+    private void capacity(Prepared p){MinutesPendingDiscovery.lock(authority.dataSource(),p.pending,MinutesPendingDiscovery.TASKS);MinutesDomainCapacity.reserve(p.pending.rows(),authority.minutesDomain().taskLimit(),256,null);}
     void requireCompletion(List<TaskSpec> specs,PreparedDomain prepared){
         issuer.require(specs,Acquisition.TASK_MUTATION,prepared);
         if(!(issuer.value(prepared) instanceof Prepared p)||p.completionGate==null||!issuer.permitsEffects(prepared))throw new DomainPreparationUnavailableException();

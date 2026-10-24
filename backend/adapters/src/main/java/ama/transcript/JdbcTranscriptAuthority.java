@@ -204,7 +204,7 @@ public final class JdbcTranscriptAuthority {
  public interface PreparedMinutesTransition {}
  public interface HeldMinutesTransition {}
  private final class TransitionPlan implements PreparedMinutesTransition {
-  final Actor actor;final String meeting;final MinutesPendingDiscovery.Plan pending;
+  final Actor actor;final String meeting;final MinutesPendingDiscovery.Plan pending;TaskSpec prospective;
   TransitionPlan(Actor actor,String meeting,Collection<String> tasks){this.actor=actor;this.meeting=meeting;pending=MinutesPendingDiscovery.discover(source,meeting,tasks);}
   TransitionPlan(Actor actor,String meeting,MinutesPendingDiscovery.Plan pending){this.actor=actor;this.meeting=meeting;this.pending=pending;}
   JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
@@ -215,6 +215,7 @@ public final class JdbcTranscriptAuthority {
   TransitionScope(TransitionPlan plan,FileRegistry.LockedMeeting gate,long before){this.plan=plan;this.gate=gate;this.before=before;}
   JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
  }
+ PreparedMinutesTransition prepareMinutesIntake(Actor actor,String meeting,TaskSpec prospective){var plan=(TransitionPlan)prepareMinutesTransition(actor,meeting);plan.prospective=Objects.requireNonNull(prospective);return plan;}
  public PreparedMinutesTransition prepareMinutesTransition(Actor actor,String meeting){return prepareMinutesTransition(actor,meeting,List.of());}
  PreparedMinutesTransition prepareMinutesTransition(Actor actor,String meeting,Collection<String> tasks){independent();uuid(meeting);return new TransitionPlan(actor,meeting,tasks);}
  /** Existing B03 root is adopted, never independently reacquired. All prior controls must already be held. */
@@ -235,7 +236,7 @@ public final class JdbcTranscriptAuthority {
   if(!(value instanceof JdbcTranscriptAuthority.TransitionScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||scope.phase!=phase)throw new IllegalArgumentException("Foreign, expired or out-of-phase minutes transition");registry.access(gate);return scope;
  }
  void lockMinutesTransitionDomain(HeldMinutesTransition value,FileRegistry.LockedMeeting gate){var scope=transition(value,gate,TransitionPhase.CONTROL);MinutesPendingDiscovery.lock(source,scope.plan.pending,MinutesPendingDiscovery.DOMAIN);scope.phase=TransitionPhase.DOMAIN;}
- void lockMinutesTransitionTasks(HeldMinutesTransition value,FileRegistry.LockedMeeting gate){var scope=transition(value,gate,TransitionPhase.DOMAIN);MinutesPendingDiscovery.lock(source,scope.plan.pending,MinutesPendingDiscovery.TASKS);MinutesPendingDiscovery.validate(scope.plan.pending,scope.before);scope.phase=TransitionPhase.TASKS;}
+ void lockMinutesTransitionTasks(HeldMinutesTransition value,FileRegistry.LockedMeeting gate){var scope=transition(value,gate,TransitionPhase.DOMAIN);MinutesPendingDiscovery.lock(source,scope.plan.pending,MinutesPendingDiscovery.TASKS);MinutesPendingDiscovery.validate(scope.plan.pending,scope.before);MinutesDomainCapacity.reserve(scope.plan.pending.rows(),minutesTaskPolicy.taskLimit(),256,scope.plan.prospective);scope.phase=TransitionPhase.TASKS;}
  public void finishMinutesTransition(HeldMinutesTransition value,long revision){finishMinutesTransition(value,revision,null);}
  private void finishMinutesTransition(HeldMinutesTransition value,long revision,String selected){
   if(!(value instanceof JdbcTranscriptAuthority.TransitionScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.phase!=TransitionPhase.TASKS||revision!=scope.before+1)throw new IllegalArgumentException("Foreign, expired or consumed minutes transition");registry.access(scope.gate);

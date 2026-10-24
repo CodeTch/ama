@@ -14,7 +14,7 @@ final class MinutesPendingDiscovery {
  static Plan discover(DataSource source,String meeting,Collection<String> additionalTasks,String decisionCandidate){var extra=new TreeSet<>(additionalTasks);if(extra.size()>256)throw unavailable();var j=new JdbcTemplate(source);j.setQueryTimeout(2);var queries=new ArrayList<Query>();var rows=new LinkedHashMap<String,List<Map<String,Object>>>();
   var candidates=query("generation_candidate",MinutesGraphCapture.CANDIDATE.columns(),List.of("id"),decisionCandidate==null?"meeting_id=? AND state='PENDING'":"meeting_id=? AND (state='PENDING' OR id=?)",decisionCandidate==null?List.of(meeting):List.of(meeting,decisionCandidate));
   var taskArgs=new ArrayList<Object>();taskArgs.add(meeting);taskArgs.addAll(extra);
-  var tasks=query("durable_task",columns("durable_task"),List.of("id"),"subject_kind='MEETING' AND subject_id=? AND (task_type='MINUTES_GENERATE_V1' OR input_kind='GENERATION_INPUT' OR "+in("id",extra.size())+")",taskArgs);
+  var tasks=query("durable_task",columns("durable_task"),List.of("id"),"subject_kind='MEETING' AND subject_id=? AND (task_type IN ('MINUTES_GENERATE_V1','TRANSCRIPT_IMPORT_V1') OR input_kind='GENERATION_INPUT' OR "+in("id",extra.size())+")",taskArgs);
   var c=read(j,candidates,false);var t=read(j,tasks,false);var inputs=new TreeSet<String>();for(var row:c)inputs.add((String)row.get("input_id"));for(var row:t){if("MINUTES_GENERATE_V1".equals(row.get("task_type"))||"GENERATION_INPUT".equals(row.get("input_kind"))){if(!"MINUTES_GENERATE_V1".equals(row.get("task_type"))||!"GENERATION_INPUT".equals(row.get("input_kind")))throw unavailable();inputs.add((String)row.get("input_id"));}}
   if(!t.stream().map(row->(String)row.get("id")).toList().containsAll(extra))throw unavailable();
   var input=query("generation_input",MinutesGraphDiscovery.metadataColumns("generation_input"),List.of("id"),in("id",inputs.size()),new ArrayList<>(inputs));
@@ -29,6 +29,7 @@ final class MinutesPendingDiscovery {
  }
  static void lock(DataSource source,Plan plan,List<String> tables){var j=new JdbcTemplate(source);j.setQueryTimeout(2);for(String table:tables){var q=plan.queries().stream().filter(x->x.table().equals(table)).findFirst().orElseThrow();if(!read(j,q,true).equals(plan.rows().get(table)))throw unavailable();}}
  static void validate(Plan plan,long revision){
+  MinutesDomainCapacity.reserve(plan.rows(),256,256,null);
   var inputs=index(plan.rows().get("generation_input"));var tasks=index(plan.rows().get("durable_task"));
   for(var input:inputs.values())if(!plan.meeting().equals(input.get("meeting_id")))throw unavailable();
   for(var task:tasks.values()){if(!"GENERATION_INPUT".equals(task.get("input_kind")))continue;var input=inputs.get(task.get("input_id"));if(input==null||!same(task,"input_fingerprint",input,"input_fingerprint")||number(task,"business_version")!=number(input,"base_revision"))throw unavailable();}

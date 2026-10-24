@@ -61,6 +61,6 @@ public final class JdbcMinutesInitialSettings {
  }
  private static long number(Map<String,Object> row,String name){return ((Number)row.get(name)).longValue();}
  private static ama.contract.TranscriptContracts.Failure conflict(String code){return new ama.contract.TranscriptContracts.Failure(409,code);}
- private static boolean ordinary(RuntimeException failure){return failure instanceof Failure f&&Set.of(PROFILE_UNAVAILABLE,CAPABILITY_UNAVAILABLE,BUDGET_EXCEEDED,READ_FAILED).contains(f.code())||failure instanceof ama.contract.TranscriptContracts.Failure||failure instanceof ama.contract.FileContracts.Unavailable;}
+ private static boolean ordinary(RuntimeException failure){return failure instanceof Failure f&&Set.of(ARCHIVE_IO_UNAVAILABLE,PROFILE_UNAVAILABLE,CAPABILITY_UNAVAILABLE,BUDGET_EXCEEDED,READ_FAILED).contains(f.code())||failure instanceof ama.contract.TranscriptContracts.Failure||failure instanceof ama.contract.FileContracts.Unavailable;}
  private static void cancellation(RuntimeException failure){if(failure instanceof Failure f&&f.code()==CANCELLED)throw failure;}
 }

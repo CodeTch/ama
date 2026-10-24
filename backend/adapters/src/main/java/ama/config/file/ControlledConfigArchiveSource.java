@@ -12,6 +12,10 @@ import static ama.contract.MinutesContracts.*;
 import static ama.contract.MinutesContracts.FailureCode.*;
 
 public final class ControlledConfigArchiveSource implements ConfigArchiveSource {
+ @FunctionalInterface private interface FileAcquisition<T>{T get()throws IOException;}
+ // Only filesystem acquisition is ordinary. Parsing, SHA, schema, dependency and size validation
+ // stay outside this catch (and use their original integrity codes). No cause/path is exposed.
+ private static <T>T acquire(FileAcquisition<T> read,BooleanSupplier cancel){try{return read.get();}catch(java.io.InterruptedIOException|java.nio.channels.ClosedByInterruptException interrupted){throw fail(CANCELLED);}catch(IOException unavailable){check(cancel);throw fail(ARCHIVE_IO_UNAVAILABLE);}}
  record Node(ConfigArchiveIndex.Entry entry,Map<String,Ref> dependencies){Node{dependencies=Map.copyOf(dependencies);}}
  record VerifiedSnapshot(Snapshot snapshot,long indexChainBytes){}
  public Snapshot open(Path root,String sha,IndexBudget ib,ArchiveReadBudget b,BooleanSupplier c){
@@ -20,7 +24,7 @@ public final class ControlledConfigArchiveSource implements ConfigArchiveSource 
  /** Internal publication metadata comes from the same verified chain, without rereading or retaining its raw arrays. */
  VerifiedSnapshot verify(Path root,String sha,IndexBudget ib,ArchiveReadBudget b,BooleanSupplier c){
   require(ib!=null&&b!=null&&c!=null,INVALID_ARGUMENT);var cancel=ProtectedArchiveFiles.deadline(c);check(cancel);hash(sha);
-  try(var files=ProtectedArchiveFiles.open(root,cancel)){
+  try(var files=acquire(()->ProtectedArchiveFiles.open(root,cancel),cancel)){
    var capacity=new ProtectedArchiveFiles.Capacity(ib.maxReleaseBytes());var selected=readIndex(files,sha,ib,capacity);var newer=selected;String previous=selected.previousIndexSha256();int generations=1;
    while(previous!=null){
     check(cancel);require(generations<ib.maxGenerations(),BUDGET_EXCEEDED);generations++;
@@ -37,10 +41,10 @@ public final class ControlledConfigArchiveSource implements ConfigArchiveSource 
    var admission=new ProtectedArchiveFiles.Capacity(objectLimit);
    for(var entry:selected.entries()){check(cancel);require(entry.sizeBytes()<=Math.min(65536,b.maxArtifactBytes()),BUDGET_EXCEEDED);admission.reserve(entry.sizeBytes());}
    var acquisition=new ProtectedArchiveFiles.Capacity(objectLimit-admission.remaining);var state=new ArchiveReadState(b,cancel);var nodes=new LinkedHashMap<Identity,Node>();
-   try(var release=files.directory("releases",sha);var objects=files.directory("releases",sha,"objects")){
-    files.exactNames(release,Set.of("index.json","objects"),2);var names=new HashSet<String>();for(var entry:selected.entries())names.add(entry.ref().sha256()+".json");files.exactNames(objects,names,ib.maxEntries());
+   try(var release=acquire(()->files.directory("releases",sha),files.cancel);var objects=acquire(()->files.directory("releases",sha,"objects"),cancel)){
+    acquire(()->{files.exactNames(release,Set.of("index.json","objects"),2);return null;},cancel);var names=new HashSet<String>();for(var entry:selected.entries())names.add(entry.ref().sha256()+".json");acquire(()->{files.exactNames(objects,names,ib.maxEntries());return null;},cancel);
     for(var entry:selected.entries()){
-     byte[] raw=files.read(objects,entry.ref().sha256()+".json",entry.sizeBytes(),Math.min(65536,b.maxArtifactBytes()),acquisition);
+     byte[] raw=acquire(()->files.read(objects,entry.ref().sha256()+".json",entry.sizeBytes(),Math.min(65536,b.maxArtifactBytes()),acquisition),cancel);
      var owned=state.capture(raw,false);nodes.put(entry.ref().identity(),validate(entry,owned,state));
     }
    }
@@ -49,8 +53,8 @@ public final class ControlledConfigArchiveSource implements ConfigArchiveSource 
   }catch(Failure safe){throw safe;}catch(IOException|java.nio.file.DirectoryIteratorException|UnsupportedOperationException|SecurityException e){check(cancel);throw fail(PROFILE_UNAVAILABLE);}
  }
  private static ConfigArchiveIndex readIndex(ProtectedArchiveFiles files,String sha,IndexBudget ib,ProtectedArchiveFiles.Capacity capacity)throws IOException{
-  try(var release=files.directory("releases",sha)){
-   byte[] raw=files.read(release,"index.json",-1,ib.maxIndexBytes(),capacity);
+  try(var release=acquire(()->files.directory("releases",sha),files.cancel)){
+   byte[] raw=acquire(()->files.read(release,"index.json",-1,ib.maxIndexBytes(),capacity),files.cancel);
    var owned=ArchiveBytes.capture(raw,ib.maxIndexBytes(),ib.maxIndexBytes(),files.cancel);require(owned.sha256(files.cancel).equals(sha),PROFILE_UNAVAILABLE);
    return new StrictConfigIndexReader().read(raw,ib,files.cancel);
   }
@@ -82,8 +86,8 @@ public final class ControlledConfigArchiveSource implements ConfigArchiveSource 
    for(var identity:closure){check(cancel);long size=nodes.get(identity).entry.sizeBytes();require(size<=Math.min(65536,b.maxArtifactBytes())&&size<=remaining-required,BUDGET_EXCEEDED);required+=size;}
    // Reserve the complete closure before the first transport byte array. S1 later owns exactly one capture.
    var capacity=new ProtectedArchiveFiles.Capacity(required);var result=new ArrayList<RawArchive>();
-   try(var files=ProtectedArchiveFiles.open(root,cancel);var objects=files.directory("releases",sha,"objects")){
-    for(var identity:closure){check(cancel);var entry=nodes.get(identity).entry;byte[] raw=files.read(objects,entry.ref().sha256()+".json",entry.sizeBytes(),Math.min(65536,b.maxArtifactBytes()),capacity);
+   try(var files=acquire(()->ProtectedArchiveFiles.open(root,cancel),cancel);var objects=acquire(()->files.directory("releases",sha,"objects"),cancel)){
+    for(var identity:closure){check(cancel);var entry=nodes.get(identity).entry;byte[] raw=acquire(()->files.read(objects,entry.ref().sha256()+".json",entry.sizeBytes(),Math.min(65536,b.maxArtifactBytes()),capacity),cancel);
      // SHA over transport directly; never ArchiveBytes -> array. Original startup metadata stays immutable.
      require(digest(raw,cancel).equals(entry.ref().sha256()),PROFILE_UNAVAILABLE);result.add(new RawArchive(identity.artifactType(),identity.version(),raw));
     }

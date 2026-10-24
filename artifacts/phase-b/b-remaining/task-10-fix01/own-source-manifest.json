@@ -1,0 +1,150 @@
+{
+  "base": "5657d24a4a58916dfca14a29e352ad361dda3319",
+  "files": [
+    {
+      "path": "backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+      "bytes": 10004,
+      "sha256": "c4a55f31826284ba24252bc2e8661e37badfa6543112e4204d99dc2f43d1122c"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ImportTaskDomainPolicy.java",
+      "bytes": 14847,
+      "sha256": "7a3f48522fd4f719ebb728cbf3294ae96e314b7bc68e04031be0b8972edd6052"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesDecisions.java",
+      "bytes": 3175,
+      "sha256": "d05c5a41bb68cecd8a419b3171a9401bda80f9891950ff02c79b47683b50e976"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationCommands.java",
+      "bytes": 3518,
+      "sha256": "ed3ccbe13445d3bc986d58e1e5c0d7c338e1c3dec85eb5f846fa68192f0864b7"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationPreparation.java",
+      "bytes": 20147,
+      "sha256": "8f5982c7cb6cdf2215d3ce467e736f3e310e43f0ae5643c505fc73610bea3b34"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesInitialSettings.java",
+      "bytes": 11927,
+      "sha256": "4d8a4851a4a8395f1ae0d49998e312ed48a3ed879949ad92edca34d4463cb74b"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesReviews.java",
+      "bytes": 13197,
+      "sha256": "8721febab4f17a280c2aed4cbfaa1f4f43a5e22f6e04ea80134ca8e1e0e93385"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesSavedCommands.java",
+      "bytes": 28429,
+      "sha256": "ebeb87e1c0a5421a9dd8779659d92fbd6432400320027ba59a70718294d30b9a"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesSettingsCommands.java",
+      "bytes": 12275,
+      "sha256": "745023e4a555c3aeb5b7f49f220dd434a4930d587805aad3ca408c381b6d5a1b"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java",
+      "bytes": 20872,
+      "sha256": "7d097d13cde51e7aee3a18d57a4cfe0cbf09d76e70740615caea62c164d1d3a5"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "bytes": 33735,
+      "sha256": "9b27a08cf59ca67d65e95c994966fcf865df2ae77742536992d8daa915b05701"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "bytes": 62567,
+      "sha256": "2ccd114a338a6ffcdb5016b1b699b3973c4fbecd2b19091d517f4236b639e827"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesDeferredPreparation.java",
+      "bytes": 1206,
+      "sha256": "7b6b76e5b7c7f1ab5f563a63653939df7683d507f2497b4bfb8e16b133dc7ff6"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesDomainCapacity.java",
+      "bytes": 4863,
+      "sha256": "cbaf99a889e1809e7d331d888e97704e4f1e0033d9670b9962766526f752510b"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesEditorRuntime.java",
+      "bytes": 1990,
+      "sha256": "b43ee916bd6c8ab8d6668465f7b5424486e6542d3040d3df2438b2109c71dce0"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java",
+      "bytes": 24216,
+      "sha256": "40e880738c50134eb557ddc3092bcfada424c66f1e73561aa26365603f4f5327"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesPendingDiscovery.java",
+      "bytes": 10527,
+      "sha256": "0b7c5e73826aadf7bc8bf0ee186e5667ee9153f8d7a759c5c25620c332feb5a4"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesTaskDomainPolicy.java",
+      "bytes": 19147,
+      "sha256": "47a0ee6cf6b1b5721fc13ad5c04dfa3717bca87b9d7b907159a76880e224795d"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/file/Task10Fix01ArchiveTest.java",
+      "bytes": 99,
+      "sha256": "ea3bb8fd92b651673b8c16143de4bdae469fd52a4d3c699a5804a41421bd1504"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/transcript/Task10Fix01DeferredTest.java",
+      "bytes": 1983,
+      "sha256": "30cb626590e1dfd9e07a67de3debac6e75c0b01411be667874faa4cbbc51e375"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/transcript/Task10Fix01DomainCapacityTest.java",
+      "bytes": 3737,
+      "sha256": "8e8e0eb5ad4f8fd4bf7be56a83b117d9d347a51973c2e9b02c4e6c2f5904df3d"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "bytes": 37192,
+      "sha256": "948efab3513238e4479bc5e4de494b934ffd9f56e2c5ee34448c4455dd449415"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01CapacityIT.java",
+      "bytes": 4239,
+      "sha256": "32c63507fa03134c60e1e17b2deacdd616863f80466887f37edaab5a1b55a48c"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01DecisionIT.java",
+      "bytes": 727,
+      "sha256": "23cc3aff27a9c7cc3c5422d3cb43d08240bddf7336ac04a84132b35307b4bed2"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01IntakeIT.java",
+      "bytes": 3464,
+      "sha256": "09bb4a30db7a275e16b1e3dacb951a30c0004d86af2344b30f1a9442a1b6d31d"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01LegacyIoIT.java",
+      "bytes": 6642,
+      "sha256": "c9aaac9123828c6e8a537efbbf3bcbffbccbfcef3c44797ead5ffeb7dd4d7e66"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01RegressionB03IT.java",
+      "bytes": 87,
+      "sha256": "c13ed57c5a4eec2e1f271062381536cc77274b273e624fd25c5269d7241c406e"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01RegressionSourceIT.java",
+      "bytes": 93,
+      "sha256": "e4666fb303d107a8e73c8381a7dc9defadc94afbf773225890cc969ea81dc44c"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01ReplayIT.java",
+      "bytes": 5091,
+      "sha256": "5b6934c00ae503bd592c45e03d3f33e3d7258dae04ae0372b36e26ebc11b551c"
+    }
+  ]
+}
