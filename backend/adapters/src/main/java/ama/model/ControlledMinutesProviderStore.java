@@ -9,15 +9,21 @@ import java.util.*;
 public final class ControlledMinutesProviderStore implements AutoCloseable {
  private final ControlledMinutesStore journal;
  private final Path requests,envelopes;
- public ControlledMinutesProviderStore(Path root,String explicitMode)throws IOException {
-  journal=new ControlledMinutesStore(root,explicitMode);requests=root.toAbsolutePath().normalize().resolve("requests");envelopes=root.toAbsolutePath().normalize().resolve("envelopes");
-  try{ControlledMinutesStore.directory(requests);ControlledMinutesStore.directory(envelopes);for(var receipt:journal.entries())validated(receipt);}
+ private final int executionLimit;
+ public ControlledMinutesProviderStore(Path root,String explicitMode)throws IOException {this(root,explicitMode,4096);}
+ ControlledMinutesProviderStore(Path root,String explicitMode,int executionLimit)throws IOException {
+  this.executionLimit=executionLimit;journal=new ControlledMinutesStore(root,explicitMode,executionLimit);requests=root.toAbsolutePath().normalize().resolve("requests");envelopes=root.toAbsolutePath().normalize().resolve("envelopes");
+  try{ControlledMinutesStore.directory(requests);ControlledMinutesStore.directory(envelopes);ControlledMinutesStore.directoryBudget(requests,executionLimit);ControlledMinutesStore.directoryBudget(envelopes,executionLimit);for(var receipt:journal.entries())validated(receipt);}
   catch(IOException|RuntimeException e){journal.close();throw e;}
  }
  public synchronized ControlledMinutesStore.Receipt reserve(byte[] body,String header)throws IOException {
   if(body==null||body.length>ControlledMinutesProtocol.MAX_REQUEST)throw new IllegalArgumentException("Controlled request budget exceeded");
   byte[] exact=body.clone();var request=ControlledMinutesProtocol.verify(exact,header);var old=journal.lookup(request.executionId());
   if(old!=null)validated(old); // Accepted records must never be repaired from a duplicate request.
+  // The provider monitor and the journal's exclusive process ownership span admission through commit.
+  // Accepted duplicates are already independently validated; no orphan or missing accepted file is repaired.
+  journal.admit(request.executionId(),request.logicalBusinessKey(),request.logicalRequestHash(),request.logicalRequestHash(),request.payloadSha256(),request.payload());
+  ControlledMinutesStore.requireFileSlot(requests,request.executionId()+".json",executionLimit);ControlledMinutesStore.requireFileSlot(envelopes,request.executionId()+".json",executionLimit);
   ControlledMinutesStore.immutable(requests.resolve(request.executionId()+".json"),exact);
   ControlledMinutesStore.immutable(envelopes.resolve(request.executionId()+".json"),request.envelope());
   var receipt=journal.reserve(request.executionId(),request.logicalBusinessKey(),request.logicalRequestHash(),request.logicalRequestHash(),request.payloadSha256(),request.payload());

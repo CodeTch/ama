@@ -185,7 +185,9 @@
   "MinutesGenerationCommand": {
     "type": "object",
     "additionalProperties": false,
-    "required": [],
+    "required": [
+      "scope"
+    ],
     "properties": {
       "expectedRevisionToken": {
         "type": "string",
@@ -197,6 +199,13 @@
         "minimum": 0,
         "maximum": 9223372036854775806,
         "description": "Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically."
+      },
+      "scope": {
+        "type": "string",
+        "enum": [
+          "FULL"
+        ],
+        "description": "Required exact FULL scope. Omitting scope is invalid."
       }
     },
     "anyOf": [

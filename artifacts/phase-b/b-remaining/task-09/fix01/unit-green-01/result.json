@@ -1,0 +1,88 @@
+{
+  "exit": 0,
+  "counts": {
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "corruptEnvelopeCannotBeRepairedByDuplicatePost",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "changedEnvelopeWithOldHashesNeverChangesExistingMapping",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "lookupLeavesReservedExecutionUnknownAcrossReopen",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "exactCanonicalEnvelopeAndPayloadAreValidatedAfterReopen",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "unjournaledCrashTemporaryConsumesFiniteAdmissionWithoutCleanup",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "conflictingFreshExecutionsNeverWriteAnyDurableFile",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "capacityRejectsBeforeFilesAndAcceptedMappingsSurviveRestart",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.api.Task09Fix01WireTest",
+      "name": "initialSettingsRemainsSeparate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.api.Task09Fix01WireTest",
+      "name": "fullStillRejectsDuplicateAndUnknownFields",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.api.Task09Fix01WireTest",
+      "name": "missingOrWrongScopeIsNeverImplicitFull",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.api.Task09Fix01WireTest",
+      "name": "fullScopeAcceptsTokenLegacyAndEqualDualForms",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

@@ -36,6 +36,16 @@ public final class MinutesCandidateGraphPlan {
   }
   budget.check();return new MinutesCandidateGraphPlan(candidate,body,set,time,spec,owner,rows,reused,budget);
  }
+ /** The same inert graph reconstruction is used for first receipt and existing terminal replay. */
+ static MinutesCandidateGraphPlan prepareReceipt(TaskSpec spec,String owner,ValidatedOutput output,Catalog catalog,MinutesGraphCapture.Graph graph,TranscriptAcquisitionBudget.Ledger budget,String taskId){
+  String parent=(String)graph.discovery().root().get("minutes_revision_id");var candidates=graph.auxiliary().getOrDefault("generation_candidate",List.of()).stream().filter(c->taskId.equals(c.get("task_id"))).toList();
+  if(!candidates.isEmpty()){
+   require(candidates.size()==1,PROVENANCE_UNAVAILABLE);var candidate=candidates.getFirst();require(spec.subject().id().equals(candidate.get("meeting_id"))&&spec.input().id().equals(candidate.get("input_id"))&&spec.inputFingerprint().equals(candidate.get("input_fingerprint"))&&((Number)candidate.get("base_revision")).longValue()==spec.businessVersion(),PROVENANCE_UNAVAILABLE);
+   var original=JdbcMinutesFactsReader.one(graph,Table.MINUTES_REVISION,(String)candidate.get("minutes_revision_id"));require(spec.subject().id().equals(original.string("meeting_id"))&&spec.input().id().equals(original.nullableString("generation_input_id"))&&owner.equals(original.string("created_by"))&&"AI".equals(original.string("title_origin")),PROVENANCE_UNAVAILABLE);parent=original.nullableString("parent_id");
+   if(parent!=null){var prior=JdbcMinutesFactsReader.one(graph,Table.MINUTES_REVISION,parent);require(spec.subject().id().equals(prior.string("meeting_id"))&&prior.number("revision")<original.number("revision"),PROVENANCE_UNAVAILABLE);}
+  }
+  return prepare(spec,owner,parent,output,catalog,graph.rows(),budget).restore(graph,taskId);
+ }
  /** Restore only an already persisted graph after strict output/source validation; this never writes. */
  MinutesCandidateGraphPlan restore(MinutesGraphCapture.Graph graph,String taskId){
   var candidates=graph.auxiliary().getOrDefault("generation_candidate",List.of()).stream().filter(c->taskId.equals(c.get("task_id"))).toList();if(candidates.isEmpty())return this;require(candidates.size()==1,PROVENANCE_UNAVAILABLE);var candidate=candidates.getFirst();require(spec.input().id().equals(candidate.get("input_id"))&&spec.inputFingerprint().equals(candidate.get("input_fingerprint")),PROVENANCE_UNAVAILABLE);String oldBody=(String)candidate.get("minutes_revision_id"),oldSet=(String)candidate.get("element_set_id"),oldId=(String)candidate.get("id"),oldTime=(String)candidate.get("created_at");var actualBody=JdbcMinutesFactsReader.one(graph,Table.MINUTES_REVISION,oldBody);var actualSet=JdbcMinutesFactsReader.one(graph,Table.ELEMENT_SET,oldSet);require(oldTime.equals(actualBody.string("created_at"))&&oldTime.equals(actualSet.string("created_at")),PROVENANCE_UNAVAILABLE);var ids=new HashMap<String,String>();ids.put(body,oldBody);ids.put(set,oldSet);

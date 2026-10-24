@@ -20,12 +20,15 @@ public final class ControlledMinutesStore implements AutoCloseable {
    String executionRequestHash,String payloadSha256,long payloadBytes,String resultId,String outputSha256,
    long outputBytes,String receiptId,String code) {}
  private final Path root,payloads,results;
+ private final int executionLimit;
  private FileChannel lockChannel,journal;
  private FileLock lock;
  private final Map<String,Receipt> executions=new HashMap<>();
  private final Map<String,String> keys=new HashMap<>(),resultOwners=new HashMap<>();
  private boolean closed,poisoned;
- public ControlledMinutesStore(Path directory,String mode)throws IOException {
+ public ControlledMinutesStore(Path directory,String mode)throws IOException {this(directory,mode,MAX_EXECUTIONS);}
+ ControlledMinutesStore(Path directory,String mode,int executionLimit)throws IOException {
+  if(executionLimit<1||executionLimit>MAX_EXECUTIONS)throw new IllegalArgumentException("Controlled execution limit");this.executionLimit=executionLimit;
   if(!"CONTROLLED_INSTALLATION".equals(mode))throw new IllegalArgumentException("Explicit controlled installation required");
   root=directory.toAbsolutePath().normalize();payloads=root.resolve("payloads");results=root.resolve("results");
   try {
@@ -34,10 +37,10 @@ public final class ControlledMinutesStore implements AutoCloseable {
    lock=lockChannel.tryLock();if(lock==null)throw new IOException("Controlled store already owned");
    rejectLink(root.resolve("journal.bin"));journal=FileChannel.open(root.resolve("journal.bin"),CREATE,READ,WRITE,LinkOption.NOFOLLOW_LINKS);
    if(journal.size()>MAX_JOURNAL)throw new IOException("Controlled journal budget exceeded");
-   replay();syncDirectory(root);
+   replay();directoryBudget(payloads,executionLimit);syncDirectory(root);
   }catch(IOException|RuntimeException e){try{close();}catch(IOException suppressed){e.addSuppressed(suppressed);}throw e;}
  }
- public synchronized Receipt reserve(String executionId,String logicalBusinessKey,String logicalRequestHash,
+ synchronized Receipt admit(String executionId,String logicalBusinessKey,String logicalRequestHash,
     String executionRequestHash,String payloadSha256,byte[] payload)throws IOException {
   live();uuid(executionId);key(logicalBusinessKey);hash(logicalRequestHash);hash(executionRequestHash);hash(payloadSha256);
   if(!logicalRequestHash.equals(executionRequestHash)||payload==null||payload.length>MAX_PAYLOAD)throw new IllegalArgumentException("Invalid initial request");
@@ -45,8 +48,13 @@ public final class ControlledMinutesStore implements AutoCloseable {
   Receipt next=new Receipt("UNKNOWN",executionId,logicalBusinessKey,logicalRequestHash,executionRequestHash,payloadSha256,owned.length,null,null,0,null,null);
   Receipt old=executions.get(executionId);
   if(old!=null){if(!sameRequest(old,next))throw conflict();verifyPayload(old);return old;}
-  if(keys.containsKey(logicalBusinessKey))throw conflict();if(executions.size()>=MAX_EXECUTIONS)throw new IOException("Controlled execution budget exceeded");
-  immutable(payloads.resolve(executionId+".json"),owned);append(next);return next;
+  if(keys.containsKey(logicalBusinessKey))throw conflict();if(executions.size()>=executionLimit)throw new IOException("Controlled execution budget exceeded");
+  byte[] encoded=encode(next);if(encoded.length>MAX_RECORD||encoded.length+36>MAX_JOURNAL-journal.size())throw new IOException("Controlled journal budget exceeded");
+  requireFileSlot(payloads,executionId+".json",executionLimit);return next;
+ }
+ public synchronized Receipt reserve(String executionId,String logicalBusinessKey,String logicalRequestHash,String executionRequestHash,String payloadSha256,byte[] payload)throws IOException {
+  Receipt next=admit(executionId,logicalBusinessKey,logicalRequestHash,executionRequestHash,payloadSha256,payload);if(executions.containsKey(executionId))return next;
+  immutable(payloads.resolve(executionId+".json"),payload.clone());append(next);return next;
  }
  public synchronized Receipt lookup(String executionId)throws IOException {
   live();uuid(executionId);Receipt value=executions.get(executionId);if(value!=null){verifyPayload(value);verifyOutput(value);}return value;
@@ -109,7 +117,7 @@ public final class ControlledMinutesStore implements AutoCloseable {
  }
  private void apply(Receipt next) {
   Receipt old=executions.get(next.executionId());
-  if(old==null){if(!next.state().equals("UNKNOWN")||keys.containsKey(next.logicalBusinessKey())||executions.size()>=MAX_EXECUTIONS)throw conflict();keys.put(next.logicalBusinessKey(),next.executionId());}
+  if(old==null){if(!next.state().equals("UNKNOWN")||keys.containsKey(next.logicalBusinessKey())||executions.size()>=executionLimit)throw conflict();keys.put(next.logicalBusinessKey(),next.executionId());}
   else if(!sameRequest(old,next)||!old.state().equals("UNKNOWN")||next.state().equals("UNKNOWN"))throw conflict();
   if(next.resultId()!=null){if(resultOwners.putIfAbsent(next.resultId(),next.executionId())!=null)throw conflict();}
   executions.put(next.executionId(),next);
@@ -122,6 +130,9 @@ public final class ControlledMinutesStore implements AutoCloseable {
    byte[] bytes=in.readNBytes(Math.toIntExact(length));if(bytes.length!=length||in.read()!=-1||!sha(bytes).equals(expected))throw new IOException("Controlled immutable file checksum mismatch");return bytes;
   }
  }
+ /** Counts every existing member, including unjournaled crash/temporary files; never repairs or deletes. */
+ static int directoryBudget(Path directory,int limit)throws IOException {int count=0;try(var entries=Files.newDirectoryStream(directory)){for(var ignored:entries)if(++count>limit)throw new IOException("Controlled durable file budget exceeded");}return count;}
+ static void requireFileSlot(Path directory,String name,int limit)throws IOException {int count=directoryBudget(directory,limit);if(count>=limit&&!Files.exists(directory.resolve(name),LinkOption.NOFOLLOW_LINKS))throw new IOException("Controlled durable file budget exceeded");}
  static void immutable(Path target,byte[] content)throws IOException {
   rejectLink(target);
   if(Files.exists(target,LinkOption.NOFOLLOW_LINKS)){checked(target,content.length,sha(content),content.length);return;}
