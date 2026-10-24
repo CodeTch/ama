@@ -51,3 +51,45 @@ AUTHORITATIVE RESUME 2026-10-24: user revoked pause, complete ALL B then STOP be
 Task7fix02 new preserved qualification: final153IT batch151PASS/1assertFAIL Task07RecoveryBoundsIT transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass/1setupERROR Task07InheritedB06QueueSeamsIT disabledExpiredCurrentExternalFactMustStillBeRetained initialqueue.claim Optionalempty beforebusinesscase. Later exact2diagnosticcasesPASS with sameproduction/unchangedassertions and capturedcursor evidence; originalbothcausesUNKNOWN, no inferredhighwatercause. Independentfix02review andTask13finaltriage mustreceivethis limitation; replacementsourceclosure stillpending. These are notsilentlydiscarded ordeclaredfixedrootcauses.
 
 AUTHORITATIVE Task7fix02 closure: T7IR01ADDRESSED/IR02IR03CV01–03remainclosed, independent22818db8 SPEC COMPLIANT/APPROVED0new. Q-01/Q-02 twooriginalinheritedfailuresUNKNOWN nonblockingforthisfix perreview; FINALREVIEWmusttriage. CV04 stillOPEN exactreal9/10/11consumers, nofixturepasssubstitution.
+
+Task9 collector custody issue: graph-controls-green-01 command exit1 rejected comma selector BEFORE tests, but old collector copied prior Task09GraphDiscoveryIT XML6cases. Preserve originalcommand/result/XML; ALLsixcopiedcasecounts EXCLUDED, neitherREDnorPASS. Author appendonly correction artifacts/phase-b/b-remaining/task-09/prior-window-report-custody-correction-20261024.json SHA41a828e1afed65eeeee6e5552942d73bb2fdf2e8030283e2815dabc247d99a3b audits28completedwindows (includingallpreviousPASS) against owncanonical log suite/class/count; authorreports onlyoneunqualifiedwindow. Coordinatorreadall28compactauditentries, notindependentlyalllogs; root /root has exactreadonlyindependentauditassignment. Correct graph-controls-green-02 actually10PASS(capture4+discovery6), overlappingnotadditive. Collector firstmtimefixsealedthere; currentfullbeforemtime+SHA/closednsinterval/report-custody tobe sealednextactualwindow. FinalTask9review/custodyMUSTreceive error mechanism/scope/exclusion/rootaudit/anyunprovablesourcewindow; onlygenuinelyunqualifieditemsneedadditionaltest, nogeneralrerun. Historicaloldwrongreceiptsnotrewritten.
+
+Task9collectorrootindependentaudit COMPLETE28windows/69XML:68ownlogmatch, onlygraph-controls-green-01old6excluded. Actualcanonicalvalidselectorpredeletesoldreportkind; commaearlyreturnexplainsdefect. Retrospectivesuite-levelcustodyacceptedwitholdnoXMLtimestamp/noeachsuccesscase/log/no before+closednsinterval limitation; notcontemporaneouspercasefileidentityproof. task-09-prior-collector-root-independent-audit-20261024.json storesrootfacts/ruling. No broadrerun; newcollectoractualwindowverification/finalsourceclosurepending.
+
+T9FIRSTEXT-OBS currentqualification: generation-external-green-02 originalobserver failure stack NOT retained (fixtureloggingERROR/defaultWorkerfixedsafeexceptionrecording), originalcauseUNKNOWN. DB MARKED/RECONCILING/unsettledpermit andsameproviderdurableSUCCEEDEDretained. NewprepareLookup/recoveryusesexactoldinput/request/store/result GETonly/genuineobserver, safetype/code/frames andsourcewindowdifferences; a laterrecoverysuccessalonecannotestablishoriginalcause. FinalTask9review/custody/Task13mustreceivethis unlessactualcausalevidenceclosesit. No manualterminal/permitrelease/resend/newexecution.
+
+
+### Task9 original external fact recovered — 2026-10-24T05:41:12.103691+00:00
+Controller checked recovery05 XML1PASS/report custody/entire lookup-only test source, exact same task/execution/operation/reservation/attempt before-after, six provider file hashes unchanged. Genuine claimReconciliation + observePrepared wrote candidate 94707e50-beb5-4fef-b192-7f6d961c8037; actual recoverSettlements(64) settled old permit. Proof: `task-09-original-external-recovery-controller-check-20261024.json`. Recovery04 UTC serialization/readback defect is independently diagnosed; original first-send failure remains UNKNOWN because original stack was not retained. Fresh full Worker send case green03 reported by author; full Task9 remains active, no Task10 activation.
+
+
+### Task9 application child heap exception — 2026-10-24T06:05:48.773025+00:00
+Author reports application-provider-restart-02 business1PASS but actual newapplication child mistakenlyused-Xmx512m/2CPU, violating child64MiB brief. Childexited; originalcommand/XML/source retained. Thiswindow is resourceUNQUALIFIED and excluded from qualifiedrestart count; no retroactivechange. Author corrects onlychildheap64MiB and reruns affectedscenario. If actual64MiBfailure occurs, diagnose before anynewresourceRuling. No acceptanceclaim from02.
+
+
+## User STOP — 2026-10-24 16:13 Shanghai
+
+Allimplementation/test/SQL/resourcework stopped; authorinterruptedthenpause-onlyhandoff. Latestactualresponse-budget-red01 1assertFAIL/0ERROR, nofix. Unknown-consumer01 actual1PASS/originalpermitsettled. Task7adoptedcff; Task9uncommitted/incomplete/unadopted;10helperpreparedunused/10–13incomplete. Exactpause `docs/acceptance/development-pause-b-remaining-2026-10-24-1613.md`; preimages+134publicsourcecopies+trackeddiff `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records`. NoTask9adoption/commit/reset/cleanup/newSQL. Futureexplicitresume only, beginresponsebudgetRED; prioractiveinstructions historical.
+
+## 本次交接收尾澄清
+
+用户最新指令是继续完成状态记录和接续文档，本轮没有恢复产品开发。暂停节点仍为 Task9 `minutes-response-budget-red-01`（1 assertion FAIL / 0 ERROR；预算1仍HTTP200，预期503），没有后续产品修复或GREEN。Tasks1–8已采用；Task9未提交、未独立任务审查、未采用；10→11→12→13及全分支验收未完成。
+
+当前 live-agent 清单只显示根协调者。原协调/作者句柄仅作历史接续线索，不能据此声称仍在运行；下次恢复先尝试原作者，确实不可用才以 Astra high 接续同一任务并读取作者handoff，不重做已完成部分。
+
+最新记录索引为 `W/pause-20261024-1613-record-index.json`；09:30索引只保留为历史。索引覆盖本次交接文档及状态记录，源码完整性另以134文件快照核对；这些均不是Task9验收证据。没有新测试、SQL、资源启停、提交、合并或推送。
+
+记录时间：2026-10-24T16:31:19.837251+08:00。
+
+
+## Authoritative ACTIVE continuation 2026-10-24T09:58:54.738795+00:00
+
+Latest explicit user continuation revokes previous pause. Sole author /root/b_continuation_coordinator/b09_continuation_author resumes SAME Task9 at response-budget RED, BASE cff858e; 134/134 source identical and index empty. Root verified prior handle unavailable. No completion/adoption implied. Coordinator /root/b_continuation_coordinator owns records/ACK. Remaining9→10→11→12→13/final review mandatory; stop afterB. Latest author handoff supersedes historical pending inventories. Preimages resume-20261024T095746Z-before-records/manifest.json; integrity proof resume-20261024T095746Z-integrity-check.json.
+
+## Task9 independent review / fix1 activation — 2026-10-24T11:16:50.434853+00:00
+Task 9: independent SPEC FAIL / quality FAIL; Critical0 Important4 Minor1. Fixed range cff858e..0e22b81, exact report task-09-independent-review-20261024.md. F1 FULL required contract; F2 multi-version original root union; F3 immutable candidate parent; F4 pre-admission durable file leakage. Same-author fix1/5; only affected RED→GREEN/regressions, no full-matrix repetition.
+Task 9: Ruling: F1 adopted R1 requires explicit FULL; missing scope is rejected, legacy revision field does not imply missing-scope compatibility. Initial-settings schema remains separate.
+Task 9: minor (deferred): F5 throwaway preparation F before serialized command F is a real extra capture/design deviation. Deferred under fix-loop Minor rule to Task13 whole-branch review; not silently compliant, not in Important loop. Review must triage before any integration.
+Task9 mechanical final completed with no custody blockers; does not override semantic FAIL. Task10 helper remains prepared unused; read-only current interface prelocation must be repinned after fix source.
+
+Task 9: fix round 1/5 (4 addressed, 0 open Important — F1 FULL schema; F2 original root identity union; F3 immutable original candidate parent; F4 pre-admission durable files; commits 0e22b81..591545a). Same reviewer scoped SPEC/quality PASS,0new; F5Minor OPEN forTask13. Finaldelta mechanical no blockers,22own/274main/6342commitpaths verified withindeclaredscope. Coordinator limited adoption recording; source591545a4, document task-B-remaining-09-minutes-generation-adoption-20261024.md. No wholeTask9 unconditionalcompliance orfullpipelineclaim.

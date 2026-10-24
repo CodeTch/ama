@@ -1,0 +1,99 @@
+{
+  "checkedUtc": "2026-10-24T05:41:12.103691+00:00",
+  "scope": "Original exact external fact recovery, controller read-only evidence/source check; no test or DB command executed",
+  "window": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05",
+  "files": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/command.json",
+      "bytes": 441,
+      "sha256": "d419dc790c029cd4f1cc55dd188428224c056f4a9b055817da482a8924eca81b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/source-manifest.json",
+      "bytes": 104584,
+      "sha256": "e72dcf4ec94fdf42ba1aec7fb9c7acf0f4156a8ce65fa5e673523bf4d460b07e"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/report-custody.json",
+      "bytes": 505,
+      "sha256": "3bafe61ce98d72146d1671319a246eb7d176d7839ec380fdc8c86e082b47aaa2"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/result.json",
+      "bytes": 328,
+      "sha256": "afb4eab0f51f8a6d458cc6b95fc5cbc4b6d8c0b2e44a2f8c04e4dfa7e973b9b0"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/db-before.json",
+      "bytes": 409,
+      "sha256": "72b8ccb56928828be0105e5236b3873fb0329e8a880388c58e2ca667a354ae42"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/db-after.json",
+      "bytes": 527,
+      "sha256": "b7013e150c7370d6808a5b138e6da2e136040fea81cfbf7dbc0a768a3a471074"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/provider-before.json",
+      "bytes": 646,
+      "sha256": "3bd997faae1b8236d9295954549dd47c1d8d74bc1233d8fcacbba1cf00f188db"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/provider-after.json",
+      "bytes": 646,
+      "sha256": "3bd997faae1b8236d9295954549dd47c1d8d74bc1233d8fcacbba1cf00f188db"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/integration-tests-TEST-ama.storage.Task09OriginalExternalRecoveryIT.xml",
+      "bytes": 32811,
+      "sha256": "04b0df06e16ae4478b4dcb8ac53caeff28e514855f3e5a61175dcbbac8d7b851"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/source/backend/integration-tests/src/test/java/ama/storage/Task09OriginalExternalRecoveryIT.java",
+      "bytes": 7632,
+      "sha256": "784d67a2d62ea7ccae056c550da7c9660185505a520f527ce8b1117fc5941217"
+    }
+  ],
+  "qualifiedXml": "1 PASS; report hash matches sealed XML; changed from previous; mtime inside closed run interval",
+  "sameIdentityFields": [
+    "task_id",
+    "execution_id",
+    "operation_id",
+    "reservation_id",
+    "attempt"
+  ],
+  "before": {
+    "attempt": "1",
+    "execution_id": "6521f9b2-bfd3-476a-93ec-6e9fcbe8a4f1",
+    "execution_state": "MARKED",
+    "external_result_id": null,
+    "last_error": null,
+    "operation_id": "ec8991bb-778e-4eeb-9526-c31ed9b74366",
+    "operation_state": "MARKED",
+    "output_id": null,
+    "output_kind": null,
+    "reservation_id": "736364f2-5f6d-42f3-902f-de1a5ecfeff1",
+    "settled_at": null,
+    "task_id": "1106f41b-077f-4d54-8329-1341eceebcd7",
+    "task_state": "RECONCILING"
+  },
+  "after": {
+    "attempt": "1",
+    "execution_id": "6521f9b2-bfd3-476a-93ec-6e9fcbe8a4f1",
+    "execution_state": "SUCCEEDED",
+    "external_result_id": "cmr-3adb5d09-9aa1-4ee7-9da6-2de296808942",
+    "last_error": null,
+    "operation_id": "ec8991bb-778e-4eeb-9526-c31ed9b74366",
+    "operation_state": "SUCCEEDED",
+    "output_id": "94707e50-beb5-4fef-b192-7f6d961c8037",
+    "output_kind": "GENERATION_CANDIDATE",
+    "reservation_id": "736364f2-5f6d-42f3-902f-de1a5ecfeff1",
+    "settled_at": "2026-10-24T05:35:47.280966",
+    "task_id": "1106f41b-077f-4d54-8329-1341eceebcd7",
+    "task_state": "SUCCEEDED"
+  },
+  "providerFileMapEqual": true,
+  "providerFiles": 6,
+  "sourceMechanism": "GET lookup for original stored request and same provider store/result; genuine claimReconciliation + observePrepared; actual recoverSettlements(64) returned1; no resend/manual SQL terminal or settlement",
+  "limitation": "Recovery04 proves a UTC timestamp serialization/readback defect, recovery05 succeeds after its fix. Original first-send failure had no retained stack: original cause remains UNKNOWN; do not retroactively identify it."
+}

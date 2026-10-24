@@ -630,3 +630,223 @@ Ruling: Task9 adopted R1 section6.2 explicitly authorizes a dedicated per-run be
 Task 7: fix round 2/5 (1 addressed, 0 open — T7IR-01 old committed zero-effect receipt after authorized successor now retires boundedly; commits 6cce479..bdf9762). Independent22818db8 SPEC COMPLIANT/qualityAPPROVED0new; mechanical2d41fbf0PASS, controllera9552f78 actual8seals/3resources/6PIDs/known6scan0.
 Ruling: review Q-01/Q-02 cannot verify two inherited full-batch failure causes; retainUNKNOWN and carryTask13, notconfirmednewfix02defects because failingpaths do notselectnewold-FAILEDbranch and actualIR01final12PASS. Accept scopedcomposed407 sourceclosure; costifwrong laterfinalreview/repeatabilityrepair, neverclaimsinglegreenbatch orrootcauseclosure. CV04 remainsfutureconsumerqualification.
 Task 7: complete (commits de1611a..bdf9762, review clean forframeworkscope; Q01/Q02 evidencequalifications retained, CV04 actual9–11 open). Rootadoptiondocumentandmirrorsprepared, adoptioncommitnext.
+
+Task7 ROOTADOPTION cff858e163ca7dea774dcf05c707ef7551956156 parentbdf exact49docs/evidencepaths/no backendchanges. Actualsource+adoptiondocGitverified; fixedpublicconsumerACK issuedbydelegatedcoordinator. Task9 focusedsource/prefixrepin andnewownemptyfixture/separateapplicationACK next; productNOTactivated.
+
+Task9 samefreshAstrahighauthor /root/b_controlled_coordinator/b09_minutes_generation dispatched StageAreadonlyfinalupstreamrepin onactualcff858e; brieffd76a018. OnlynewWreport/manifest permitted; no product/DB/runtime. Reusefulladopteddesign/preflights; afteractualrepin coordinatorreviewedhelper/separatefixtureACK→StageB. ProtectedactualBASE list 20557entries sealed; noTask9modelexceptions.
+
+CoordinatornormalizedactivecontextatTask9 toremovecontradictoryhistoricalactive/pauseprose; exactpriorbytesarchived active-context-before-task9-normalization-20261024.md SHAa1a3a152540049dc683519fcec69d98c0d77db41218fa56358e2760398e68068. No product/gatechange.
+
+Task9StageAREADONLYCOMPLETE report07089205 FULLREAD18506B/manifestf1666322; controller actual{'changed_production': 16, 'focused_hooks_and_test_source': 12, 'unchanged_post6_carry': 79, 'authorities': 21, 'complete_sql_prefix': 15} +36rangeseals/full15SQL/Flywayjar verified. FirstreadonlycheckerKeyError absentoptionalbytes ononeauthorityentry correctedwithmandatorySHAall/noearlierPASS. Ruling acceptconcreteTask9sharedregistryextension/sameissuer/control-rankpublicationprelock+exactrevisit/boundedexecutionmanifestpretransferread asrequiredR1implementation, notnewdesign/nofenceloosen. IndependentTask9source reviewlater. NowexistingreviewedhelperonefreshTask9schema thenSEPARATEapplicationACK→sameauthorStageB.
+
+Task9helperactualinitialinvocationexit1preSQL/env_clone expectedCID butactualTask7envexactguardedname; allothercompatibilitychecksPASS. readonlyactualschemaCOUNT0/ownerabsent captured, originalintent/receipt/6inputsarchived. No schema/grant/envcreation. Originalhelperauthorfollowupactualnotfound; freshAstrahighhelperround2/5 narrowname↔pinnedCID compatibility withnewhelperfile, oldbytesimmutable. Ruling sameUUIDcontinuationafterindependentreview authorized because actualzeroDDL/owner proven; keepallinvocationsdistinct, neveralternateUUID/reset/drop or claimoneinvocation. Costifwrong controllednewemptyfixturepartialstate remainsforinspection; no olddatawrites. Task9productStageBnotyetactivated.
+
+Task9helper runtimefixround2/5 (H09R2-01ADDRESSED,0open; W-onlya868→14c669/noProductcommit), independentaf2eef5d SPEC PASS/Approved0new FULLREAD. ActualSAMEUUIDinvocation2exit0, firstpreSQLfailurepreserved; ONEactualCREATE/GRANT, newTask9schemaama_t09_2d0e28ea7755_behavior ready0tables/existingtestprincipalactualreadonlyverified, env0700owner/0600file/canonicalCID/privateequalboolonly. SeparateTask9applicationACK 6f926c62b9710dab9c889eee104543b3250bfd5e33fc23d67fb655677e4c7e5d issuedfornormal15bootstrap/rerun0. SameauthorStageBACTIVATE now, no furtherapprovalgate.
+
+Ruling: preparefutureTask10freshownschemahelperinparallelreadonlywithTask9productauthor, becauseTask9globalterminalmaintenancewouldotherwisealterpriorownedcasehistory. Reuseboundedexistingparent/no newcontainer/credential; actualexecutionONLYafterTask9adoption/actualprefixrepin/separateTask10applicationACK. Costifwrong unusedW-onlyhelper; no newresource. This isnewfixtureprep, notrepeatdesign/preflight. NarrowadaptreviewedTask9fixedhelper14c669; Task10productnotactivated.
+
+Task9actualbootstrap-01exit0/1PASSXMLc61fbd35; initially0tables/normal15/rerun0/sourcecaptured. Controllerparsedfull15after-history; initialtestdidNOTcapturetwofullbefore/afterstates, finalnormal0comparisonagainstthisbaselinepending(no bootstraprepeat). InitialDriverManagerDataSource/FlywayinitSqlUTCutf8butouter/diagnosticconnectionmetadatawait5unproven, futureguardedDSrequired; authornotified, no retrospectiveclaim/newgate. Actualproof task-09-bootstrap-controller-xml-read-20261024.json. Task9businessTDD underway.
+
+Task10 futurehelper PREPARED_UNUSED c6248074: coordinator fullread9056Bnote/minimaldiff/manifest and actual4deliverablesealsverified. Independent narrowAstrahigh /root/b_controlled_coordinator/b10_future_fixture_helper_review dispatched; noTask10product/DBactivation/execution, futureTask9adoptionACKmissingbydesign. Task9 soleproductwriter continues.
+
+Task10futurehelper preparation accepted ONLY: independent8423cc2e FULLREAD SPEC PASS/Approved0issues; helperc6248074 PREPARED_UNUSED. Ruling futureCannotVerify boundaries remain explicitactual9adoption/prefix/resource/schema/separateACK obligations, notprematureTask10completion; acceptance file task-10-fixture-helper-preparation-acceptance-20261024.md. No helperexecution/productactivation.
+
+Task9interim actualreceipt/XML controllerread: bindings2REDassert→2GREEN, template3REDassert→3GREEN, provider-store8REDassert→8GREEN; zeroerrors/skips inselectedcases, exactsixwindowproof task-09-bindings-template-provider-store-controller-xml-read-20261024.json. Inheritedimplicitunits preservedbutnotcountedasnewunique. No finalsource/HTTP/runtime/CV04closure inferred. Authorcontinuingwire/transport/completefacts.
+
+Task9author identified concreteR1wiregap: completegeneration/processing/reviewroots boundlogicalhash absentexactPOSTpayload, providercannotrecompute. Ruling PROPOSED narrowcontent-freecanonical-envelopeheader preservesbody/hashsemantics; parentendorsedboundedencoding/duplicate/cumulativeactualserverclientlimits/fullbinding/restartscope. Supplement150f2a12 andcompleteadditiondiff; independentAstrahigh /root/b_controlled_coordinator/b09_envelope_supplement_review active. Authorcontinuesothergraphwork, wirechangeawaitssupplementreview; no newuserapproval/broaddesignrepeat. Costifwronglocalcontrolledwire/journalrework, nocompanyprotocolclaim.
+
+Task9narrowwire supplement150f2a12 adopted through new2026-10-24controlled-envelope wrapper+exactpublicmirror; independent2269ba7e FULLREAD SPEC PASS/Approved0issues. Ruling4CannotVerify items areactualTask9implementation/runtimeobligations, notclaimeddesignproof; authorwireimplementationnowauthorized, noextrausergate. ProtectedoldR1/wrapper unchanged. Newcoordinatordocs/artifacts excludedfromauthorcommit.
+
+Coordinator normalizedactivecontext afterwireadoption; priorbytes archived active-context-before-task9-wire-adoption-20261024.md SHA1794b0c1455f53358e3311f0a461ca13c545d40ea6b7fe6e1e0e613681493d2c. No product/gatechange.
+
+Task9interimcontrolleractual11windowXML/receipts: anchors3,graphdiscovery4,protocol4,envelopestore4,providerHTTP5 eachRED→GREEN; protocol-green-01exit1/0testsambiguousRefcompilefailure retained, actualprotocolGREEN02. Proof task-09-graph-protocol-http-interim-controller-xml-read-20261024.json. Authorreportsreal64Mi2CPUchildrestartsameid/rawheadernegatives; semantics/finalsourceclosurepending, exactsupportedmax/clientabortpending. GraphsameissuerS/A/F/fullproducerclosure/candidatewriter/queue/productroutesstillunderimplementation, CV04OPEN.
+
+RulingTask9actualInitialSendAdmission mapsadoptedgenuineExternalExecutionSession.send marker+permit+oneshotcallback, no newissuer/DTO/publicflag. MinimalreadonlyPreparationCancellation view/registration allowed, abortoutsideallmonitors/roots, stickyclose/renewloss, late/double/race tests, UNKNOWNneverreleases. Actual4sourceinputsread/sealed; task-09-external-admission-cancellation-ruling-20261024.md bindsimplementation/finalindependentreview. No newDDL/adminaction.
+
+Coordinatorcurrent-statenormalization: exactoldarchive current-state-before-task9-active-normalization-20261024.json SHA6f513a9c85c2a454c9dc167aec15a1dde55efd8392f52f73c7ec0ea519a79572. RemovedhistoricalTask7interimclaimsfromcurrentobject, fixedstalenext_steps/design7toactualadoptedTask7/activeTask9. Fullchronologyretainedinarchive/ledger; no productchange.
+
+Coordinator added phase-b-cross-task-closure-map-20261024.md ascurrentexplicitcross-taskindex; eachopenobligationrequiresactualsource/evidence/reviewclosurepointer, futureownershipaloneisnotclosure. No taskactivation/testclaim.
+
+Task9 collector custody issue: graph-controls-green-01 command exit1 rejected comma selector BEFORE tests, but old collector copied prior Task09GraphDiscoveryIT XML6cases. Preserve originalcommand/result/XML; ALLsixcopiedcasecounts EXCLUDED, neitherREDnorPASS. Author appendonly correction artifacts/phase-b/b-remaining/task-09/prior-window-report-custody-correction-20261024.json SHA41a828e1afed65eeeee6e5552942d73bb2fdf2e8030283e2815dabc247d99a3b audits28completedwindows (includingallpreviousPASS) against owncanonical log suite/class/count; authorreports onlyoneunqualifiedwindow. Coordinatorreadall28compactauditentries, notindependentlyalllogs; root /root has exactreadonlyindependentauditassignment. Correct graph-controls-green-02 actually10PASS(capture4+discovery6), overlappingnotadditive. Collector firstmtimefixsealedthere; currentfullbeforemtime+SHA/closednsinterval/report-custody tobe sealednextactualwindow. FinalTask9review/custodyMUSTreceive error mechanism/scope/exclusion/rootaudit/anyunprovablesourcewindow; onlygenuinelyunqualifieditemsneedadditionaltest, nogeneralrerun. Historicaloldwrongreceiptsnotrewritten.
+
+Task9collectorrootindependentaudit COMPLETE28windows/69XML:68ownlogmatch, onlygraph-controls-green-01old6excluded. Actualcanonicalvalidselectorpredeletesoldreportkind; commaearlyreturnexplainsdefect. Retrospectivesuite-levelcustodyacceptedwitholdnoXMLtimestamp/noeachsuccesscase/log/no before+closednsinterval limitation; notcontemporaneouspercasefileidentityproof. task-09-prior-collector-root-independent-audit-20261024.json storesrootfacts/ruling. No broadrerun; newcollectoractualwindowverification/finalsourceclosurepending.
+
+RulingTask9testisolation: syntheticTask09SourceGraphIT READYmetadataheadsusedrealTRANSCRIPT_IMPORTpool/type andblockedactualnativeHTTPupload/importpipeline; pipeline-source-red-01 1FAIL nonbusinessRED retained. Delegatedroot oneboundedownschema exact-ID/fullpredicate CAS READY→CANCELLED authorized withfullpreimages/noactiveattempt-marker-permit/stoppedcaseprocesses/afterrowcounts; no otherfield/rows/spec/productionlogicchanges. ACK task-09-owned-fixture-retirement-root-ack-20261024.json. Futurefreshsyntheticpool TASK09_METADATA. Actualreceiptpending; noDDL/reset/delete.
+
+Task9ownfixturemaintenanceactualcompleted11rows(10strictsynthetic+1failedrealpipeline), onlystateREADY→CANCELLED; fullbefore/after/source/receiptindependentlyreadandcompared in task-09-owned-fixture-retirement-controller-check-20261024.json. Two syntheticexternalPREPARED/nullmarker/noattempt rowsretainedunchanged. Firstretirement01serialization1ERRORbeforetransaction preserved; retirement02 1PASS notbusinessqualification. Newcollectoractual02SHA/closednsmtime/previous01SHAchecked. Freshnativepipelinecontinuing.
+
+Task9firstreal sourcepipeline actualRED02missingreaderassert→GREEN01 1PASS, red01READYfixturefailurepreserved. ControllerXML/receipt/actualtestsource/newcollectorintervalSHAchecked in task-09-first-real-source-pipeline-controller-read-20261024.json. RealRAW→WORKING→confirmation/sourcepreparation only; generation/body/set/review/finalclosurestillfailclosed, candidatewriter/queuepending, CV04OPEN.
+
+RulingTask9source-first test-onlynoninstalledcompositionperalreadyacceptedstagedscope: actualproductioncommands/policy/genuineissuer-gate-sessionallowedforisolatedqualification, nofakefuturecontribution/alwaysPENDING/defaultbypass. Formalnewcommand/handlerfailcloseduntilactual10/11; history/replayseparate; negativeproofrequired. task-09-isolated-composition-boundary-ruling-20261024.md. Authorcontinuescandidatewriter/queue; no newgate.
+
+Task9initialsettingsactualRED02twoassertions→GREEN01twoPASS andsessionabort3RED→3GREEN controllerXML/receipt/newcollectorchecked task-09-settings-session-interim-controller-read-20261024.json; initialsettingsRED01zeroexecutedtests retained. Actualfirstsettings/replaycommand isolatedscope, sessionphysicalabortcomponent, no formal10/11/genuineDBsend/candidatewriter/queueclosure.
+
+Task9generation-prepare-red-01 actual1assertRED→green-01 1PASS receipt/XMLread; realproducerchain→genuineS/A/F→computeGeneration→completeenvelope/protocolconsistency, inertpreparationonly(noinput/task/rootwrites), no queue/sendqualification. initial-settings-boundaries-01actual6PASS includesprior2plus4new(auditrollback/partial-historydeny/newkey-historydeny/samekeyconcurrency), NEVER2+6unique. Candidatewriter/DBexternal/queueunfinished.
+
+Task9generation-queue-red-01→green-01actual1assertRED/1PASS XML+actualtestsourcecontrollerread: JdbcMinutesGenerationCommands/authority-ownedminutesTaskPolicy/genuinePreparedDomain atomicallyinsertinput+READYtask+receipt/audit/outbox, meetingunchanged, replaybeforeunavailablearchives. NotWorkertransport/candidatecompletion. AuthorfoundnewTask9RRsnapshotfreshnessgap, twoactualconcurrentREDsunderway; rulingexactheldPKcurrent-readrevisitallowed, completedomainmembershipchangeabortbeforehigherlockphase, nonewlatechild/parentlockaftertask/external. No newdesigngate; finalreviewcovers.
+
+Task9RRfreshnessauthor reports graph-current-read-red-01 6cases/2FAIL→green-01 6PASS; currentnewmemberdetectionatdomainrank/exactheldPKlater. Realgeneration-queue-claim-01claim/renew/controlledFAILED terminalpassed; stored-binding-green-01 originalroots/config/producer/fingerprint1PASS, candidatewriter/realexternalcompletionstillpending. RulingrequestManifestkeepsR1exactrootfieldset; ama.minutes-model-execution.v1isfixedcodec/schemaidentity, noextraunlisted schemaVersion member; task-09-request-manifest-schema-ruling-20261024.md.
+
+RulingTask9implementationorderifreader/writerinterdependence: firstrealminimalcompleteS1verticalslice existinginput/task→actualprovider→strictparse→genuineTask7observer→fullcandidateinsert/readback, thencompleteallcategory/directory/nullable/history-review-final/negative-rollback-STALEmatrix. No scope reduction/no fullfuturebranchprerequisite/newdesigngate. Costifwrongboundedorderrework; finalTask9fullrequirements/reviewunchanged. Authornotified.
+
+Task9actualreceipts: generation-worker-prepare-red-01 1ERRORmissingentry→green01 1PASS; controlled-client2RED→green02 2PASS(firstgreen01compile0testsfailurepreserved). generation-external-red-01actual1assertFAIL missingMinutesExternalPreparation; fixedpreparation/observer+MinutesCandidateWriter+genuinesessionhandlerunderimplementation. No candidateDB/sendadmissionclosureyet/noexternalblock.
+
+Task9firstrealexternal marker+permit+HTTPsend executed, generation-external-green-02actual1FAIL; task1106f41b-077f-4d54-8329-1341eceebcd7 RECONCILING/execution6521f9b2-bfd3-476a-93ec-6e9fcbe8a4f1 MARKED/permit736364f2-5f6d-42f3-902f-de1a5ecfeff1unsettled; providerownedstoredurableSUCCEEDED/result. external-diagnostic-01readonlypreserved. Authoractuallookup/observerdiagnosisandgenuineTask7samefactreceipt-onlyrecovery nextbeforenewtests. NOsend/retryAfterZeroEffect/newexecution/manualterminal/permitrelease/fixturecleanup; pendingoriginalIDs MUSTresume exactly ifinterrupted. NotPASS/noexternalblock.
+
+T9FIRSTEXT-OBS currentqualification: generation-external-green-02 originalobserver failure stack NOT retained (fixtureloggingERROR/defaultWorkerfixedsafeexceptionrecording), originalcauseUNKNOWN. DB MARKED/RECONCILING/unsettledpermit andsameproviderdurableSUCCEEDEDretained. NewprepareLookup/recoveryusesexactoldinput/request/store/result GETonly/genuineobserver, safetype/code/frames andsourcewindowdifferences; a laterrecoverysuccessalonecannotestablishoriginalcause. FinalTask9review/custody/Task13mustreceivethis unlessactualcausalevidenceclosesit. No manualterminal/permitrelease/resend/newexecution.
+
+
+### Task9 original external fact recovered — 2026-10-24T05:41:12.103691+00:00
+Controller checked recovery05 XML1PASS/report custody/entire lookup-only test source, exact same task/execution/operation/reservation/attempt before-after, six provider file hashes unchanged. Genuine claimReconciliation + observePrepared wrote candidate 94707e50-beb5-4fef-b192-7f6d961c8037; actual recoverSettlements(64) settled old permit. Proof: `task-09-original-external-recovery-controller-check-20261024.json`. Recovery04 UTC serialization/readback defect is independently diagnosed; original first-send failure remains UNKNOWN because original stack was not retained. Fresh full Worker send case green03 reported by author; full Task9 remains active, no Task10 activation.
+
+
+### Task9 rich candidate milestone — 2026-10-24T05:47:40.198986+00:00
+Author reports actual rich DB/HTTP seven-category8element/9evidence graph with sensitive directories/background joins, nullable action fields, locator reuse and no human reviews. Coordinator checked generation-rich-green-02 result1PASS, sealed XML hash and run interval; candidate-reader-green-01 also1PASS (overlapping scenario, not unique-count sum). Full owner graph/binding reader present. Replay/fresh-process/rollback/STALE/API/finalqualification still active; noTask9adoption/CV04closure/Task10activation.
+
+
+### Task9 terminal replay and provider-only restart — 2026-10-24T05:55:52.230421+00:00
+Actual terminal-replay-green-01 and generation-provider-restart-01 each1PASS; controller matched sealed XML/hash/closedinterval. Read complete provider restart source and actualchildclosed receipt: new64Mi/2CPU JVM sameport/store, originalresultGETonly, sixfileshashmap unchanged, childclosed. App/preparation/client/operations remainparentJVM: this is provider-only restart, notdualend freshprocess. Author asked to distinguish and close requiredapplication reconstruction in existingmatrix. businessSTALE/rollback/API/formalruntimeadmin remainactive; noTask9adoption/CV04closure.
+
+Task9 business-stale-green-01: actual1PASS result/XMLhash/closedinterval controllerverified; authorreports realTask6SAVE r4→r5 followed by genuine retention ofrichSTALEcandidate/rootpreservation. Originalred01 missingcandidate1ERROR retained. Fullsource/finalmatrixreviewpending. Applicationfreshprocess/rollback/API/formaladminremain.
+
+
+### Task9 application child heap exception — 2026-10-24T06:05:48.773025+00:00
+Author reports application-provider-restart-02 business1PASS but actual newapplication child mistakenlyused-Xmx512m/2CPU, violating child64MiB brief. Childexited; originalcommand/XML/source retained. Thiswindow is resourceUNQUALIFIED and excluded from qualifiedrestart count; no retroactivechange. Author corrects onlychildheap64MiB and reruns affectedscenario. If actual64MiBfailure occurs, diagnose before anynewresourceRuling. No acceptanceclaim from02.
+
+Task9 application-provider-restart-03: actual1PASS result/XMLhash/closedinterval verified; controller selectedcommandflags show BOTHchildren-Xmx64m/2CPU; appchildexit0/alivefalse/parentApplicationClosedtrue, providerchildexit143/alivefalse. Source-first productionprimitive reconstruction only, not formalcombinedHTTP10/11 startup. Original02resourceUNQUALIFIED retained/excluded.
+
+Task9 STALE terminal replay + insert/readback/audit/outbox rollback:5windows each1PASS result/XMLhash/interval checked, see task-09-stale-rollback-interim-controller-xml-check-20261024.json. Author reports genuine originalfact claim/GET recovery and settledpermit/noresend. Review reader structuralfixture1PASS is readercapability only, notTask10humanworkflow; final/frozen/identityunion/API/adminremain.
+
+FullcurrentTask9remainingcategories are recorded in `task-09-remaining-inventory-20261024.md`; Task9 remains substantialactiveimplementation, not merelyreportfinishing. Thisinventory distinguishes scopedexistingPASS from allremainingcapabilities/gates.
+
+Ruling: Task9 implementation order after rich/readers/realWorker/replay core is current narrowverticalcase→realAPI/projections/OAS and single registry/composite/recoveryruntime/admin executableartifact→concentrated remaining negative/ACK/budget/union matrix→finalregression/custody. Why: complete remaining inventory shows majorHTTP/runtime modules not yetstarted; endlessreader-only refinement delays an assessable completeTask9. Costifwrong: some focusedinterface/test rework, not scope loss. Every knowncriticalnegative/category remainsmandatory and scopedexisting evidence is reused. Coordinator retains exactadministrativeACK role; no waitforroot/user. Author notified.
+
+Ruling: formalnewinitial-settings requires realTask11 publicationfreeze as R1§5.1 explicitly mandates; missing→503, authenticacceptedreplay/catalog independent. Exactreason/cost/stagedHTTPsuccess closure in `task-09-initial-settings-installation-boundary-ruling-20261024.md`. Author continuesAPI; nofakehooks/TODOnewbranch.
+
+Task9 generation-invalid-terminal-replay-01 andminutes-http-green-01 each1PASS; controllerresult/XMLhash/closedinterval verified. AuthorAPI scope realcatalog/6queries/acceptedinitial200-enqueue202/session/409-400-403/new503 missingdependencies; highwater/keyset/multiflow pagination stillpending. Single registry/composite lookup/runtime/adminnext; fullremaininginventory mandatory.
+
+Task9 composite-recovery-green-01 result1PASS/XMLhash/closedinterval verified. Authorreports actualproductionTranscriptWorkerRuntimeProvider freshassembly afterobserverrollback, samegenuineGETfact recovery/richcandidate/permitsettlement; noformalnewsend/configureconstructor/no10-11fakehooks. Adminartifact/OAS next. Coordinator will readminimumconcreteadminbundle for delegatedexecutionACK, notduplicateallTask9review.
+
+Task9 admininvocation1 actualexit1 athelperline18 exactenvkeyassertion: helperexpectedAMA_TEST_DATABASE_CONTAINER, actualapprovedeightkeyusesAMA_TEST_CONTAINER. Coordinatorreadsourcebutmissedactualkeynamecomparisonbeforeinvoke. Actualowneronlyinstall.properties andexecutiondirabsent confirmpreJava stop; noSQL/secret/archive/configure. Failure task-09-admin-invocation01-prejava-failure-20261024.json. Originalbundleunchanged; onlynewhelperkeynamecorrection/sameowner explicitinvocation2ACK; noenvedit/rebuild/retest/reset.
+
+Task9 actualcontrolledadmin installed via sameownerinvocation2/newhelper07ac9f72: exit0, exactly1Javaadmincall; invocation1preJava-keyfailure preserved. Newtemplate/revision/19archive/modelcapacity1rev1/privateprovidersecret+configs; noDDL/envchange/providerstart/newbranchactivation. `task-09-controlled-admin-application-ack-20261024.json` carriesexactactualreceipt andscope. Authorreleasedtoserialmatrix; runtime startup remainsseparateexactwindow.
+
+Ruling: authority-denied same-fact GET-only reconstruction is permitted/required under existingR1+Task7; no sourcegrant/domainpermission/mutable requester. Exactbinding/bounds/negativegates in `task-09-authority-denied-fact-lookup-ruling-20261024.md`; actualreadsource hashes preserved.
+
+Task9 deleted-consumer negative fixture authorized onlyfreshownedcase/twoexactroot-heldCASfields; productiondeleteAPIabsent, notbusinessdeletionproof. Scope/unchangeddataassertions in `task-09-deleted-negative-fixture-ruling-20261024.md`.
+
+Task9 revoked/deleted/productionphysicalcancel eachactual1PASS XMLhash+closedinterval verified: task-09-revoked-deleted-cancel-interim-controller-xml-check-20261024.json. Author reports genuine terminalfact/noeffects underrevoked/deleted/API403; productionWorkerclose socketEOF after1durablePOST, beforefactpermitunsettled, laterexpiry sameGET/observer settlement. Freshprocess deniedGET/manifestbudget/foreign-tamper remainOPEN; fullsource qualification finalreview.
+
+Task9 denied-lookup-green-02 actual1FAIL: Genuine committed reconciliation claim required; originaltaskf85adc4c/executionce929e14 MARKED/unsettled/providerdurablesuccess retained. Authorreports missingactualpostcommitgrant insertion; systematicnarrowfix thenoriginalsamefactGET-onlygenuineclaim/observer recovery, no newexternalcase/resend/manualstate/grant. State records exactIDs/window.
+
+Originaldeniedlookup factrecovered: green02 grantmissing1FAIL→recovery01 GET/observeractuallycommitsRECORDED_FENCED buttestwrongAPPLIEDexpectation1FAIL→recovery02settlementonly1PASS/0providerCalls/0candidate. Sixprovidermap01before=02after; exactproof task-09-denied-original-recovery-controller-check-20261024.json. Nevercallrecovery01allPASS or02standaloneGETproof; compositionandfailuresretained. One-timehelperisolated.
+
+Freshdeniedapp green03 actualobservercommit thenfinalsingle-scannerexpectationFAIL; settlementonly denied-child-settlement-01 actual1PASS/0providerCalls, no businessfactrewrite. Readreceipt/XMLcustody in task-09-denied-child-settlement-controller-read-20261024.json. Preservecomposedqualification; boundedcontinuationtestadaptation leavesproductionfairscannerunchanged.
+
+Ruling: Task9 PINNED/exclusion fullcapability now usingactualrichgraph/ref structural/source-firstselection; nofakecurrentpointers/Task10success. ActualTask10-currentPINNED+activeexclusion→newgeneration/Worker mandatorylaterintegration, explicitOPEN inclosuremap. See task-09-pinned-exclusion-stage-boundary-ruling-20261024.md.
+
+FreshdeniedGET/deletedGET/lookupvalidity green04/green01/green01 eachactual1PASS result/XMLhash/interval verified; task-09-denied-lookup-authority-interim-controller-xml-check-20261024.json. Actualclaim expiry/replacedepoch/close revokesnewlookup whilepriorverifiedreceipt canrecord. Tamper tests are clearlyJDBCread-faultinjection, notpersistedDBcorruption. Finalsource/privateauthority review remainsmandatory.
+
+Task9 latestcapability milestones (authorreported, fullindependentreviewpending): pinned-render-green-04 actual1PASS complete11reuse rows/physicalunion/doublelabels/no currentpointerchanges/strict excludedbody-element rejection-directoryallow. PriorINVALID_SCHEMA wasemptytestbody; productrules unchanged. archive-append-green-01 actual1PASS afterrealnewtemplate+17versionappend/defaultswitch andboth64Mi newprocesses; originalrequestHash/result/candidateunchanged. ActualRED02 oldindexreopenmissing fixedwithnewTask9 trustedroot ControlledMinutesArchiveAccess, notTask3Snapshot change. RED01testselectedoldref/notrealswitch excludedfromtargetRED. Next actualobservationcommitACKloss→sameprivatereceiptrecovery matrix.
+
+
+## User STOP — 2026-10-24 16:13 Shanghai
+
+Allimplementation/test/SQL/resourcework stopped; authorinterruptedthenpause-onlyhandoff. Latestactualresponse-budget-red01 1assertFAIL/0ERROR, nofix. Unknown-consumer01 actual1PASS/originalpermitsettled. Task7adoptedcff; Task9uncommitted/incomplete/unadopted;10helperpreparedunused/10–13incomplete. Exactpause `docs/acceptance/development-pause-b-remaining-2026-10-24-1613.md`; preimages+134publicsourcecopies+trackeddiff `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records`. NoTask9adoption/commit/reset/cleanup/newSQL. Futureexplicitresume only, beginresponsebudgetRED; prioractiveinstructions historical.
+
+## 本次交接收尾澄清
+
+用户最新指令是继续完成状态记录和接续文档，本轮没有恢复产品开发。暂停节点仍为 Task9 `minutes-response-budget-red-01`（1 assertion FAIL / 0 ERROR；预算1仍HTTP200，预期503），没有后续产品修复或GREEN。Tasks1–8已采用；Task9未提交、未独立任务审查、未采用；10→11→12→13及全分支验收未完成。
+
+当前 live-agent 清单只显示根协调者。原协调/作者句柄仅作历史接续线索，不能据此声称仍在运行；下次恢复先尝试原作者，确实不可用才以 Astra high 接续同一任务并读取作者handoff，不重做已完成部分。
+
+最新记录索引为 `W/pause-20261024-1613-record-index.json`；09:30索引只保留为历史。索引覆盖本次交接文档及状态记录，源码完整性另以134文件快照核对；这些均不是Task9验收证据。没有新测试、SQL、资源启停、提交、合并或推送。
+
+记录时间：2026-10-24T16:31:19.837251+08:00。
+
+
+## Authoritative ACTIVE continuation 2026-10-24T09:58:54.738795+00:00
+
+Latest explicit user continuation revokes previous pause. Sole author /root/b_continuation_coordinator/b09_continuation_author resumes SAME Task9 at response-budget RED, BASE cff858e; 134/134 source identical and index empty. Root verified prior handle unavailable. No completion/adoption implied. Coordinator /root/b_continuation_coordinator owns records/ACK. Remaining9→10→11→12→13/final review mandatory; stop afterB. Latest author handoff supersedes historical pending inventories. Preimages resume-20261024T095746Z-before-records/manifest.json; integrity proof resume-20261024T095746Z-integrity-check.json.
+
+
+# Task9 response budget HTTP mapping ruling — 2026-10-24T10:02:40.609691+00:00
+
+Ruling: adopted task-09-minutes-generation-design-r1.md line254 explicitly maps budget failures to HTTP413 and capability/provenance to503. Preserve shared TranscriptAcquisitionBudget pre-transfer budget rejection and legacy Task6 semantics; Task9 response-budget admission should use413 REQUEST_TOO_LARGE. At Task9 encoded-response boundary, narrowly translate existing TranscriptWire RESPONSE_BUDGET_EXCEEDED503 into Task9 budget413 while preserving other errors. Do not broaden a global shared error remap to satisfy the earlier test expectation. Why: exact adopted Task9 normative mapping outranks unfinished test expectation. Cost if wrong: bounded Task9 mapping/test rework; no evidence rewrite or relaxed budget.
+
+Original minutes-response-budget-red-01 remains1FAIL/0ERROR: deployment1 ignored/HTTP200. Author reports new green-01 also1FAIL/0ERROR: deployed budget now enforced before DTO/text growth via shared S/A/F ledger, actual413 versus original test expected503. This new failure is retained as test-contract mismatch, not claimed PASS; fresh corrected test/window remains required. Existing TranscriptWire line53 emits503 for encode overflow; only Task9 precise boundary is adjusted. Coordinator read normative line254 and actual TranscriptWire/TranscriptAcquisitionBudget source; no product edits or tests by coordinator.
+
+
+Task9 response-budget green03: controller verified actual1PASS/0FAIL/0ERROR, XML SHA and closed interval; sharedLedger byte-identical originalRED. Test separately checks pre-transfer catalog and accepted-replay encoding413/no-store/no input leak. Proof task-09-response-budget-controller-check-20261024.json. OriginalRED ignored budget and latergreen01 test-contract mismatch retained; green02 503 semanticattempt excluded. Task9 remains active/unadopted; next prospective identity union.
+
+
+# Task9 four-state candidate structural fixture ruling — 2026-10-24T10:08:52.029763+00:00
+
+Ruling: permit isolated fresh-case candidate disposition fixtures for Task9 reader/list/terminal-replay capability. Each candidate must first be created by the real production generation chain and have terminal settled execution. Under genuine meeting root and candidate PK lock, perform exact CAS from PENDING/decided_at NULL to one selected ADOPTED/REJECTED/STALE plus decided_at. Retain independent fresh case per state, do not restore, and alter no other candidate field/input/task/graph/current pointer/root revision. Preserve exact before/after and unchanged-field/root assertions. No old case or schema mutation.
+
+Why: adopted R1 line265 requires four-state metadata/detail reading; line250 expressly separates isolated candidate capability from actual Task10 installation. Task10 production adoption/disposition does not yet exist. Cost if wrong is bounded fixture replacement/requalification; it cannot close Task10 workflow or cross-task integration. Evidence must be labeled structural fixture, not business adoption/first-save or actualcurrentPINNED. Later Task10/11/12 genuine saved/adopted/settings/generation chain remains OPEN.
+
+Coordinator inspected V012 generation_candidate shape/enum and R1 four-state routes/stage boundary. No product/SQL/test mutation by coordinator. Author proceeds combined remaining matrix while preserving failed windows and exact source qualifications.
+
+
+## Continuation review focus: disposition-aware terminal replay
+
+Task9 continuation changes candidate detail/read and terminal replay to recognize later ADOPTED/REJECTED/STALE disposition of a previously committed candidate while retaining complete original graph/provenance equivalence. Independent review must inspect exact allowed states, task/subject/current binding, immutable input/output equivalence, and guarantee that replay does not rewrite/recreate the graph or grant adoption authority. Author final report must map existing three-state structural cases and original graph-negative evidence; no broad additional matrix is mandated by this note. Task10 genuine business transition/current PINNED integration remains separately OPEN. See task-09-candidate-disposition-structural-fixture-ruling-20261024.md.
+
+Interim windows (author-reported, final review pending): first disposition RED compile failure missing import (no tests); next5ERROR caused initial-settings empty-set SQL using nonexistentid instead of full locator_id/category PK; nextactual5case=2PASS(taskbudget+initialreplay)+3FAIL(candidatePROVENANCE). GREEN source fixes targeted reader/replay acceptance only; original windows retained, no pristine single-pass claim.
+
+
+Task9 remaining-disposition-green-01 actual5PASS/0FAIL/0ERROR: coordinator XML SHA/closed interval check task-09-disposition-controller-xml-check-20261024.json. Three disposition states are exactstructuralfixtures, notTask10businessadoption. Author reports identityunion1PASS/outputadmission4PASS; output/discovery/connection mixedwindow next. Source review and overallTask9acceptance pending.
+
+
+Task9 final preparation: authorreported limitsGREEN3PASS; final inherited+full15normalmigration singlewindow running onfrozen source. Formalruntime notstarted; exactimportpool isolated but reconcileglobal, so authorprepares readonlyemptyeligibleimport/reconcile/settlement guard. Sole mechanicalSolxhigh /root/b_continuation_coordinator/b09_mechanical_custody begins fixedsealedwindowindex andprotected20557check, no test/SPEC/DB/privatevalues, finalsameagentincremental later.
+
+
+## Task9 final inherited regression / history qualification
+
+Author reports final inherited/migration window12tests=10PASS/2FAIL/0ERROR. New execution-manifest metadata pre-read used ordinary RR snapshot even when caller requested lock=true; retry after competing new execution commit did not see that execution and rejected Retry producer belongs to another execution. Fix must use current locking metadata read when genuine locked path requests it, with unchanged task→operation→execution rank and pre-transfer size bound. This is a shared Task7-seam regression introduced by Task9 and must receive focused independent source review plus actual affected regression evidence; old failure stays intact.
+
+Second failure: final normal migration returned0 and actual full15before=after, but JDBC Timestamp installed_on display offset differed from original bootstrap UTC representation. Author will verify actual SQL UTC DATE_FORMAT strings against original baseline. This is not yet a claimed complete baseline PASS; retain original failure and later exact source/query qualification.
+
+
+# CURRENT execution pointer — 2026-10-24T10:40:21.871919+00:00
+
+ACTIVE Task9 final pagination/runtime/units/custody. Author `/root/b_continuation_coordinator/b09_continuation_author` remains sole product writer; same BASE cff858e, no authorcommit/review/adoption yet. Responsebudget413 green03, identityunion, disposition5PASS and limits3PASS are scopedclosed; do not restart them. Author reports inherited-migration-final02 12PASS after current-lock metadata fix and exact SQL UTC full15history. Candidate-pages-final02 currently running after test-only boundedpoll correction; runtime launcher/probe prepared but NOTSTARTED, exact frozenbundle+coordinatorACK next. Canonical finalunits NOTYETRUN. Then finalsource dependency closure, mechanical incremental/private scan, authorreport/commit, independentSPEC+quality/adoption, continue10→11→12→13/finalreview.
+
+Mechanical `/root/b_continuation_coordinator/b09_mechanical_custody` initial fixed165window/20557protected scan completed:0mechanicalissues; historical127keys all havequalifiedPASS, notfinalsourcequalification. Reuse W/task-09-mechanical-custody-initial-20261024.*; finaldelta pending. Runtime must not consume oldREADY/UNKNOWN: originalimportpool only, globalreconcile requires exactemptyeligibleguard includingfuture-due nonNULLtimes; oldNULL UNKNOWN preserved. Oldpause/milestone text below is history.
+
+---
+
+
+
+Task9 formalruntime-start01 executed once bycoordinator exactACKc34a898f/manifest97b0894f. Actualexit0, ordinaryRUNNING, provider/nativeclosed, noforcedPGIDcleanup, guardsandretainedrowsunchanged. Controllerproof task-09-formal-runtime-controller-check-20261024.json. This isimport/reconcileassembly/lifecycle, minutesnewdispatchfalse andactual10/11businesschainOPEN. Finalcanonicalunits/report/custodynext.
+
+
+## Final unit qualification ruling
+
+Author reports canonical-units-final-01 actual293tests=289PASS/0FAIL/4ERROR. Four existing WorkerShutdownTest cases use reflection for the old private Runtime(WorkerLoop,FileBackendDefinitions) constructor, now four arguments after real reconciliation/client composition; NoSuchMethod occurs before business assertions. Ruling: adapt only those test constructor arguments (null reconciliation/client for existing shutdown fixtures), retain original cleanup assertions, rerun the exactfour cases; reuse unchanged289 against identical production source and document dependency closure. Why: test-only compatibility correction requires its affected verification, not duplicate fullcanonicalrun. Cost ifwrong: independentreview can require focusedmissingclosure; original failure cannot be erased. Final293distinct iffourPASS is composed qualification, never one cleanallgreen run or historicalunitsonlyonce. Product/runtimebundle immutable during this adaptation.
+
+
+Task9 finalsourceFROZEN; authorreports finalcanonicalcomposed293(289original+4focused),HTTP4,terminal5,disposition3,inheritedmigration12,candidatepages1qualifiedPASS, preservedfailures. Exactreport/stage/private scan/owncommit underway. Same mechanicalSol finalincrement beginsONLYlaterwindows+finalsourceclosure/stagereceipt, initial165/20557notrepeated. NoTask9adoptionyet.
+
+
+Task9 authorDONE commit0e22b812000f2efa00c2ef8ed66e06d8254beab5 BASEcff;96298ownpaths/indexempty; finalsecret8values/PEM0. UniqueindependentAstrahigh /root/b_continuation_coordinator/b09_independent_review dispatched package7d40ebbb (full154currentsource+6helpers+report). Ruling: historicalrawsourcecopies/log/XML/binaries keptcompletecommit+fullpathindex, mechanicalcustodyreview separately; avoid duplicatecurrentimplementation review of96000snapshotpaths, no currentcodehunkexcluded. SameSol finalincrementalparallel. Awaitbothverdicts, noTask9adoption/Task10yet.
+
+
+Task9 finalmechanicalcompleted sameSol: finalreport sealed, no mechanicalblocker. New10resultwindows+formalruntime verified;274main/154ownunchanged;15x10history rawbaseline=before=after/migrate0;commit96298scopeexact/scanreceiptconsistent. Reuseold165/20557;allrawonlypath+size notfullSHArehash;nonewsecretscan. IndependentSPECquality stillrunning; noadoption.
+
+## Task9 independent review / fix1 activation — 2026-10-24T11:16:50.434853+00:00
+Task 9: independent SPEC FAIL / quality FAIL; Critical0 Important4 Minor1. Fixed range cff858e..0e22b81, exact report task-09-independent-review-20261024.md. F1 FULL required contract; F2 multi-version original root union; F3 immutable candidate parent; F4 pre-admission durable file leakage. Same-author fix1/5; only affected RED→GREEN/regressions, no full-matrix repetition.
+Task 9: Ruling: F1 adopted R1 requires explicit FULL; missing scope is rejected, legacy revision field does not imply missing-scope compatibility. Initial-settings schema remains separate.
+Task 9: minor (deferred): F5 throwaway preparation F before serialized command F is a real extra capture/design deviation. Deferred under fix-loop Minor rule to Task13 whole-branch review; not silently compliant, not in Important loop. Review must triage before any integration.
+Task9 mechanical final completed with no custody blockers; does not override semantic FAIL. Task10 helper remains prepared unused; read-only current interface prelocation must be repinned after fix source.
+
+Task9 F2 fix1 validation Ruling: see `task-09-fix01-f2-source-first-validation-ruling-20261024.md`. Genuine source-first double-version manifest parser proof + genuine active/denied single-version installed-path proof are composed; no fabricated current pointer/read projection. Actual Task10 double-version persisted manifest recovery remains OPEN and mandatory.
+
+Task9 fix1 actual RED: F4 unit-red-01 7 tests/3 FAIL/0 ERROR (conflict/cap durable files, crash temp accounting); F1 wire-red-01 4 tests/2 FAIL/0 ERROR (FULL rejected/missing accepted). Initial adapter failure prevented F1 execution in first window, not counted there. F2/F3 provenance-red-01 compile0XML/test accessor mismatch retained, corrected provenance-red-02 in progress. Author confirms no four defect fixes yet.
+
+Task9 fix1: units11PASS; first IT6=5PASS1FAIL0ERROR, failure exact original denied permit settled_atNULL after STALE/SUCCEEDED facts and candidate0. Original same permit120e2368-6b9b-46eb-9e5f-f53df037580c now product JdbcModelPermitPool.settled once true/unsettled0, noGET/POST; original failure retained. Loop-close/tryLock competition is unproven cause because per-call returns were absent. Test-only bounded observed waiting is separate fresh denied proof, not product fix or historical PASS.
+
+Task9 fix1 authorDONE commit591545a4a1a4ce27edea54baa94e9d11666807b7, BASE0e22b81;6342exactpaths/indexempty. Tests11unit+8storePASS, IT5PASS plus freshdenied1PASS composition retaining originalFAIL, OAS2checks0. Same reviewer scoped F1–F4 active, package212143B SHA5c1be4983227616011738c5d22a51ba8560068de2cce43990eb43e5ff1ef6027; full skill package48785266B retained. SameSol finaldelta active, no old custody repetition. F5 open forTask13. Not adopted.
+
+Task 9: fix round 1/5 (4 addressed, 0 open Important — F1 FULL schema; F2 original root identity union; F3 immutable original candidate parent; F4 pre-admission durable files; commits 0e22b81..591545a). Same reviewer scoped SPEC/quality PASS,0new; F5Minor OPEN forTask13. Finaldelta mechanical no blockers,22own/274main/6342commitpaths verified withindeclaredscope. Coordinator limited adoption recording; source591545a4, document task-B-remaining-09-minutes-generation-adoption-20261024.md. No wholeTask9 unconditionalcompliance orfullpipelineclaim.

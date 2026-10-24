@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-24T10:43:03.521053+00:00",
+  "status": "AUTHORIZED_EXACT_ONE_BOUNDED_RUNTIME_START",
+  "issuer": "/root/b_continuation_coordinator under explicit root delegated authority",
+  "manifestSha256": "97b0894f19063570f62f13d6bb41cad910ef3e8d8a781ebc7f42f2b4c3d0b420",
+  "frozenEntriesVerified": 150,
+  "launcher": "artifacts/phase-b/b-remaining/task-09/runtime-bundle-01/run-formal-runtime-v2.py",
+  "scope": "Existing installed provider45989+newownednative+realimport/reconciliationcomposite; no businessenqueue/reinstall/DDL/credentialreset; all3JVM64Mi2CPU; guardedoldeligiblezero andexactretainedbeforeafter; newminutesdispatchunavailable pending10/11",
+  "parentGroupTimeout": "90s then exactnewPGID TERM5s/KILL; forcedcleanup excludes successful normalclose",
+  "selectedResources": [
+    {
+      "cid": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "running": true
+    },
+    {
+      "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+      "running": true
+    },
+    {
+      "cid": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+      "running": true
+    }
+  ],
+  "privateEnv8KeysPresent": true,
+  "providerReadyAbsent": true,
+  "portNotListening": true,
+  "noSecretValuesOrDigests": true,
+  "sourceReview": "Read complete launcher v1/v2, scope, standaloneprobe, NativeFixture; exact actual claimCandidate null/time/policy guard checked. WholeTask9SPEC review remains pending."
+}
