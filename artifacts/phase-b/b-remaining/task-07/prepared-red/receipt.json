@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07PreparedExternalIT"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/prepared-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+  ],
+  "elapsedSeconds": 20.60711693763733,
+  "counts": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07GenerationRetentionIT"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-red/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+  ],
+  "elapsedSeconds": 18.866226196289062,
+  "counts": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

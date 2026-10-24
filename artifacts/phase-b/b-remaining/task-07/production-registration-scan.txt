@@ -1,0 +1,8 @@
+Command: rg -n matching runtime factories and implementing policies under backend production Java; excludes target/test
+backend/worker/src/main/java/ama/worker/ReconciliationLoop.java:13:    public static ReconciliationLoop prepared(ExternalOperationPort operations,ama.task.ModelPermitPool permits,int capacity,PreparedHandler handler,String owner){
+backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java:17: private final class Held implements GenerationRetentionPolicy.Retention {
+backend/worker/src/main/java/ama/worker/WorkerLoop.java:19:    public static WorkerLoop external(TaskQueue queue,ama.task.ExternalOperationPort operations,ama.task.ModelPermitPool permits,
+backend/worker/src/main/java/ama/worker/WorkerLoop.java:23:    public static WorkerLoop mixed(TaskQueue queue,ama.task.ExternalOperationPort operations,ama.task.ModelPermitPool permits,
+
+Exit 0
+Only declarations are present; no production consumer registration.

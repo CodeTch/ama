@@ -8,6 +8,18 @@ import java.util.Optional;
 public interface ExternalOperationPort {
     /** Reject ambient transactions. The marker must ACTUALLY commit before this token can authorize any call. */
     Optional<OperationToken> beginExternal(TaskLease lease, ExternalRequest request);
+    interface PreparedRequest {}
+    interface PreparedObservation {}
+    interface ExecutionContext {}
+    default Optional<OperationToken> beginPrepared(TaskLease lease, PreparedRequest request) {
+        throw new IllegalStateException("Prepared external policy not installed");
+    }
+    default ObservationResult observePrepared(OperationToken token, PreparedObservation observation) {
+        throw new IllegalStateException("Prepared external policy not installed");
+    }
+    default ObservationResult observePreparedFact(OperationToken token, PreparedObservation observation) {
+        throw new IllegalStateException("Prepared external policy not installed");
+    }
     /** Independent due-operation takeover; never sends or creates another execution for UNKNOWN. */
     Optional<OperationToken> claimReconciliation(String owner);
     boolean renew(OperationToken token);

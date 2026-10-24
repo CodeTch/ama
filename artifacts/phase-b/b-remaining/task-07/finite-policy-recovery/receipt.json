@@ -1,0 +1,18 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07RecoveryBoundsIT,Task07GenerationRetentionIT#controlledGenerationPolicyHasItsOwnFiniteQueryAndRowBudget"
+  ],
+  "exit": 1,
+  "reports": [],
+  "elapsedSeconds": 0.042272090911865234,
+  "counts": {
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

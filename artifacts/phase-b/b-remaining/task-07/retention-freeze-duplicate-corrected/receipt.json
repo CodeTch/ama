@@ -1,0 +1,21 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07GenerationRetentionIT#publicationFreezeDeniesRetention,Task07ExternalWorkerIT#duplicateCompletedObservationDoesNotRetainALocalSlot"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-freeze-duplicate-corrected/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-freeze-duplicate-corrected/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+  ],
+  "elapsedSeconds": 15.841022491455078,
+  "counts": {
+    "tests": 2,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

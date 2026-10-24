@@ -15,6 +15,16 @@ import static ama.contract.OutboxContracts.protocolCode;
 
 /** Separate module, explicitly started by a process owner. No API bean/autostart or built-in company handlers. */
 public final class WorkerLoop implements WorkerRuntime {
+    @FunctionalInterface public interface ExternalHandler { void handle(ExternalTaskExecution execution) throws Exception; }
+    public static WorkerLoop external(TaskQueue queue,ama.task.ExternalOperationPort operations,ama.task.ModelPermitPool permits,
+            Map<String,Integer> capacities,Map<String,ExternalHandler> handlers,Map<String,String> models,String workerId){
+        return mixed(queue,operations,permits,capacities,Map.of(),Map.of(),Map.of(),handlers,models,workerId);
+    }
+    public static WorkerLoop mixed(TaskQueue queue,ama.task.ExternalOperationPort operations,ama.task.ModelPermitPool permits,
+            Map<String,Integer> capacities,Map<String,Handler> ordinary,Map<String,PreparedHandler> prepared,
+            Map<String,ContextualPreparedHandler> contextual,Map<String,ExternalHandler> external,Map<String,String> models,String workerId){
+        return new WorkerLoop(queue,capacities,ordinary,prepared,contextual,external,models,operations,permits,workerId);
+    }
     @FunctionalInterface public interface Handler { TaskResult handle(TaskLease lease) throws Exception; }
     /** Bounded preparation outside completion; the returned callback performs only prelocked DB writes. */
     @FunctionalInterface public interface PreparedHandler { Supplier<TaskResult> prepare(TaskLease lease) throws Exception; }
@@ -33,6 +43,10 @@ public final class WorkerLoop implements WorkerRuntime {
     private final Map<String,PreparedHandler> preparedHandlers;
     private final Map<String,Pool> pools;
     private final Map<String,ContextualPreparedHandler> contextualHandlers;
+    private final Map<String,ExternalHandler> externalHandlers;private final Map<String,String> externalModels;
+    private final ama.task.ExternalOperationPort operations;private final ama.task.ModelPermitPool permits;private final ExternalOperationHeartbeat operationHeartbeats;
+    private final Map<Execution,Pending> pending=new ConcurrentHashMap<>();
+    private record Pending(String poolName,Pool pool,ExternalExecutionSession session) {}
     private final java.util.Set<Execution> executions=ConcurrentHashMap.newKeySet();
     private final ScheduledExecutorService heartbeats;
     private volatile long lastProgressNanos;
@@ -67,6 +81,16 @@ public final class WorkerLoop implements WorkerRuntime {
 
     private WorkerLoop(TaskQueue queue, Map<String,Integer> capacities, Map<String,Handler> handlers,
                        Map<String,PreparedHandler> preparedHandlers, Map<String,ContextualPreparedHandler> contextualHandlers, String workerId) {
+        this(queue,capacities,handlers,preparedHandlers,contextualHandlers,Map.of(),Map.of(),null,null,workerId);
+    }
+    private WorkerLoop(TaskQueue queue,Map<String,Integer> capacities,Map<String,Handler> handlers,
+            Map<String,PreparedHandler> preparedHandlers,Map<String,ContextualPreparedHandler> contextualHandlers,
+            Map<String,ExternalHandler> externalHandlers,Map<String,String> models,ama.task.ExternalOperationPort operations,ama.task.ModelPermitPool permits,String workerId){
+        this.externalHandlers=Map.copyOf(externalHandlers);this.externalModels=Map.copyOf(models);this.operations=operations;this.permits=permits;
+        var types=new java.util.HashSet<String>();
+        for(var map:java.util.List.of(handlers,preparedHandlers,contextualHandlers,externalHandlers))for(String type:map.keySet())if(!types.add(type))throw new IllegalArgumentException("Duplicate completion owner");
+        if(!externalHandlers.keySet().containsAll(models.keySet())||!externalHandlers.isEmpty()&&operations==null||!models.isEmpty()&&permits==null)throw new IllegalArgumentException("External registration is incomplete");
+        models.values().forEach(ama.contract.OutboxContracts::protocolCode);
         this.queue = Objects.requireNonNull(queue); this.handlers = Map.copyOf(handlers);
         this.preparedHandlers = Map.copyOf(preparedHandlers);
         this.contextualHandlers=Map.copyOf(contextualHandlers);
@@ -83,6 +107,7 @@ public final class WorkerLoop implements WorkerRuntime {
                 configured.put(entry.getKey(), new Pool(entry.getKey(), entry.getValue())));
         pools = Map.copyOf(configured);
         heartbeats = Executors.newScheduledThreadPool(total, threads("ama-heartbeat"));
+        operationHeartbeats=operations==null?null:new ExternalOperationHeartbeat(operations,total,heartbeats);
     }
 
     public void start() {
@@ -97,6 +122,10 @@ public final class WorkerLoop implements WorkerRuntime {
         if (pool == null) throw new IllegalArgumentException("Unconfigured worker pool");
         if (closed.get() || !pool.scanning.compareAndSet(false, true)) return;
         try {
+            for(var entry:pending.entrySet())if(entry.getValue().pool()==pool){
+                entry.getValue().session().retry();
+                if(!entry.getValue().session().pending()&&pending.remove(entry.getKey(),entry.getValue())){entry.getValue().session().close();entry.getKey().finish();executions.remove(entry.getKey());pool.slots.release();}
+            }
             while (!closed.get() && pool.slots.tryAcquire()) {
                 boolean submitted = false;
                 try {
@@ -119,7 +148,7 @@ public final class WorkerLoop implements WorkerRuntime {
         Phase phase=Phase.ORDINARY;
         boolean inFlight,lost,cancelled,admitted;
         long generation;
-        Runnable abort;
+        Runnable abort;ExternalExecutionSession external;
         Execution(TaskLease lease){this.lease=lease;}
         public synchronized boolean cancelled(){return cancelled||lost||closed.get()||Thread.currentThread().isInterrupted();}
         public AutoCloseable register(Runnable action){
@@ -129,7 +158,7 @@ public final class WorkerLoop implements WorkerRuntime {
             var released=new AtomicBoolean();
             return ()->{if(released.compareAndSet(false,true))synchronized(this){if(abort==action)abort=null;}};
         }
-        void cancel(){Runnable action;synchronized(this){cancelled=true;action=abort;abort=null;notifyAll();}if(action!=null)action.run();}
+        void cancel(){Runnable action;ExternalExecutionSession session;synchronized(this){cancelled=true;action=abort;abort=null;session=external;notifyAll();}if(session!=null)session.close();if(action!=null)action.run();}
         void renew(){
             long tick;
             synchronized(this){if(phase!=Phase.ORDINARY||cancelled()||inFlight)return;inFlight=true;tick=++generation;}
@@ -174,6 +203,12 @@ public final class WorkerLoop implements WorkerRuntime {
         try {
             if(closed.get()){execution.cancel();return;}
             heartbeat=heartbeats.scheduleWithFixedDelay(execution::renew,INTERVAL_SECONDS,INTERVAL_SECONDS,TimeUnit.SECONDS);
+            var externalHandler=externalHandlers.get(lease.spec().type());
+            if(externalHandler!=null){
+                var session=new ExternalExecutionSession(execution,lease,operations,permits,operationHeartbeats,externalModels.get(lease.spec().type()),()->!closed.get(),execution::dispatch);
+                synchronized(execution){execution.external=session;}
+                externalHandler.handle(session);return;
+            }
             var contextual=contextualHandlers.get(lease.spec().type());
             var prepared=preparedHandlers.get(lease.spec().type());
             Supplier<TaskResult> effects=null;TaskResult result=null;
@@ -191,12 +226,14 @@ public final class WorkerLoop implements WorkerRuntime {
             }
         } catch(Exception failure) {
             // Selecting dispatch makes commit acknowledgement potentially unknown: never complete twice.
-            if(!execution.dispatched()&&!execution.cancelled()&&!contextualHandlers.containsKey(lease.spec().type())) {
+            if(!execution.dispatched()&&!execution.cancelled()&&!contextualHandlers.containsKey(lease.spec().type())&&!externalHandlers.containsKey(lease.spec().type())) {
                 try {if(execution.dispatch())queue.complete(lease,new TaskResult(Outcome.RECONCILING,null,"UNKNOWN_HANDLER_FAILURE"));}
                 catch(Exception unavailable){LOG.log(System.Logger.Level.WARNING,"Worker quarantine unavailable: "+unavailable.getClass().getSimpleName());}
             } else LOG.log(System.Logger.Level.WARNING,"Worker completion unavailable: "+failure.getClass().getSimpleName());
         } finally {
-            execution.finish();if(heartbeat!=null)heartbeat.cancel(false);executions.remove(execution);pool.slots.release();
+            if(heartbeat!=null)heartbeat.cancel(false);
+            if(execution.external!=null&&execution.external.pending()&&!closed.get())pending.put(execution,new Pending(name,pool,execution.external));
+            else{if(execution.external!=null)execution.external.close();execution.finish();executions.remove(execution);pool.slots.release();}
             if(!closed.get())try{pool.scanner.execute(()->pollOnce(name));}catch(RejectedExecutionException shuttingDown){/* close won */}
         }
     }

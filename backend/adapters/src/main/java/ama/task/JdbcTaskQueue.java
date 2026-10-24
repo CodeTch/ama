@@ -119,13 +119,13 @@ public final class JdbcTaskQueue implements TaskQueue {
   jdbc.update("INSERT INTO task_attempt(task_id,attempt,owner,started_at) VALUES (?,?,?,?)",r.id(),attempt,worker,sqlTime(now));
   return Optional.of(new TaskLease(r.id(),attempt,worker,expiry,r.spec()));
  }
- private record LockedAttempt(long attempt,String owner) {}
- private record ValidatedLease(DomainScope domain,Row task,LockedAttempt attempt) {}
+ record LockedAttempt(long attempt,String owner) {}
+ record ValidatedLease(DomainScope domain,Row task,LockedAttempt attempt) {}
  private Optional<LockedAttempt> unfinishedAttempt(Row task){
   var rows=jdbc.query("SELECT attempt,owner,ended_at FROM task_attempt WHERE task_id=? AND attempt=? FOR UPDATE",(r,n)->r.getObject("ended_at")==null&&Objects.equals(task.owner(),r.getString("owner"))?new LockedAttempt(r.getLong("attempt"),r.getString("owner")):null,task.id(),task.attempt());
   return rows.size()==1?Optional.ofNullable(rows.getFirst()):Optional.empty();
  }
- private Optional<ValidatedLease> validatedLease(TaskLease lease){
+ Optional<ValidatedLease> validatedLease(TaskLease lease){
   var prepared=prepareDomain(List.of(lease.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,null);
   if(prepared.isEmpty())return Optional.empty();var scope=prepared.orElseThrow();
   var domain=lockDomain(scope,lease.spec(),false);if(domain.isEmpty())return Optional.empty();

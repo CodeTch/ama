@@ -1,0 +1,4055 @@
+{
+  "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+  "selected": [
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "disabledExternalSuccessIsRetainedWithoutEffectsOrRenewalOrResend",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "factOnlyReceiptSeparatesExpiredOwnerEpochFromActiveAuthorityAndUnknown",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "disabledIdentityActuallyBlocksCompletionAndPreventsEffects",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "queueIndependentlyRejectsPreparedTokenFromAnotherBoundDataSource",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "zeroEffectRetryReusesOnePreparationAndCompleteRootBatch",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "crossSubjectPreparationRejectsBeforeIdentityOrRootLocks",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "standaloneClaimMustLockIdentityBeforeSubject",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "meetingCapabilitiesCheckCoverageIssuerIdentityAndNoHiddenSynchronization",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "registeredIdentityFreeDomainMustExplicitlyOptIn",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "currentThreeArgumentCompletionValidatesOutputBeforeEffects",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "disabledExpiredCurrentExternalFactMustStillBeRetained",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "unregisteredReconciliationDomainIsSkippedWithoutGrantingAuthority",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "disabledCandidateIsSkippedWithoutSubjectOrTaskLocks",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "completeIdentityUnionUsesBinaryOrderBeforeAnySubject",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "ambientEnqueueMustReuseAuthenticMeetingCapability",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "preparationsRejectForgeryIssuerSpecPurposeAndExpiredTransactions",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "crossPolicyObservationIsNonAcknowledgmentAndSameFactCanBeResubmitted",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "heldIdentitySkipsBeforeSubjectAndReleasesPartialUnion",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "reconcilerTakeoverFencesOldOwnerAndPreservesExternalFact",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "safeRetryReplayReturnsSameAcceptedTask",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "concurrentSameProducerRetryAcceptsOnlyOneExecution",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "commitAcknowledgementUnknownReturnsNoAuthority",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "markerActuallyCommitsBeforeAuthorityAndAmbientIsRejected",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "preparedCrashCapPreservesExecutionHistory",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "processKilledAfterCommittedMarkerNeverMakesTaskResendable",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "oldTaskExpiryDoesNotDiscardAuthoritativeSuccess",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "unknownExecutionNeverReentersOrdinaryQueue",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "zeroEffectRetryAppendsExecutionWithoutResettingEpoch",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "copiedAndReconciliationTokensCannotAdmitAndDuplicateCannotResend",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "unknownDisabledAndUnprovenDeadlineFailClosed",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "concurrentConfigurationUsesStableModelOrder",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "concurrentAdmissionRetainsNullDeadlineAfterTimeout",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "verifiedCutoffReleasesOnlyAfterActualDbDeadline",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "provenDeadlineTruncatesMicrosAndNeverReleasesEarly",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "shrinkCannotUndercutInflightAndExactTerminalExecutionSettles",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedOutboxConsumerIT",
+      "case": "prefixAndEffectsCommitTogetherAndDuplicateCannotSkip",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxConsumerIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedOutboxConsumerIT",
+      "case": "rollbackDoesNotAdvanceAndExpiredEpochCannotAcknowledge",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxConsumerIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "missingFlushAndForeignCommitCallbacksAreRejectedWithoutEffects",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "rollbackReturnsSequenceAndLeavesNoEventOrDomainEffect",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "concurrentGlobalProducersCommitOneContinuousPrefix",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "tombstoneCannotBeReinitializedOrRevived",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "missingSubjectAndUnregisteredReferencesNeverCreateRows",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "delayedLowerCommitCannotBeSkippedByCursorReader",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "domainLocksAndNewEventsAreRejectedAfterFinalFlush",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "auditFailureRollsBackOutputTaskAttemptAndOutbox",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "expiredLeaseSuppressesCallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "nullResultRollsBackItsRowAndTaskAttemptAndOutbox",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "ambientTransactionOwnsFinalFlushAndRollback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "callbackThrowRollsBackItsRowAndTaskAttemptAndOutbox",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "actualWorkerPreparesOutsideTransactionAndCommitsExactlyOnce",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "nullCallbackIsRejectedWithoutAnyMutation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "invalidActualInputSuppressesCallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "callbackMayAdvanceItsPrelockedDomainBeforeTerminalMutation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "staleVersionSuppressesCallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "forgedOwnerAndAttemptSuppressCallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "revokedOwnerSuppressesCallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "invalidOutputRollsBackItsRowAndTaskAttemptAndOutbox",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "oldRunnableContractStillValidatesBeforeWriting",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "newOutputIsWrittenBeforeValidationAndCommitsWithTaskAndAttempt",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "eventValidationFailureRollsBackOutputAuditTaskAndAttempt",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "cancelledEpochSuppressesCallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "flushFailureRollsBackOutputTaskAttemptAndOutbox",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedReconciliationWorkerIT",
+      "case": "independentReconcilerOwnsHeartbeatAndRecordsResultAfterTaskExpiry",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedReconciliationWorkerIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "pausedOldCompletionLosesToConcurrentCancellation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "crashClaimsHaveFiniteAttemptCap",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "completionCallbackFailureRollsBackTaskAndOutbox",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "versionEpochAndTombstoneEachFenceOldCompletion",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "heldRowDoesNotBlockOtherCandidate(String)[1]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "heldRowDoesNotBlockOtherCandidate(String)[2]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "heldRowDoesNotBlockOtherCandidate(String)[3]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "missingSubjectAndUnknownOrCrossSubjectTypedInputFailClosed",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "twoWorkersCompeteForOneTask",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "queueDomainAndOutboxRollbackTogether",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "agedLowPriorityWorkAndSafeRetryBackoffProgress",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "sameProducerComparesEntireImmutableSpec",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "expiredAttemptCannotCommit",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+      "window": "final-owned-integration"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "closeDuringTransportRetainsLateReceiptWithoutBusinessEffects",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "duplicateCompletedObservationDoesNotRetainALocalSlot",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "ordinaryRenewDrainsBeforeMarkerAndQueuedTickCannotCrossHandoff",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "markerAcknowledgementLossSendsNothingAndNeverOrdinaryCompletes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "schedulerRejectionAfterCommittedMarkerNeverSends",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "settlementWaitsForSelectedOperationRenewalAndLossWins",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "operationHeartbeatLossBeforeResponseIsStickyReceiptOnly",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "terminalAcknowledgementLossRetriesSameFactAndSettlesWithoutSecondSend",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "controlledGenerationPolicyHasItsOwnFiniteQueryAndRowBudget",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "receiptOnlyCannotRetainEvenBusinessOnlyStale",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "publicationFreezeDeniesRetention",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "revokedOwnerNeverWritesCandidate",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "retainedTerminalReceiptReplaysWithoutDuplicatingImmutableGraph",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "everPublishedDeniesRetention",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "rootRaceBeforeObservationProducesOnlyStaleImmutableGraph",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "realScannerUsesControlledPolicyWithinItsDeclaredEnvelope",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "cancellationDoesNotBecomeRetentionAuthority",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "businessOnlyStaleRetainsCompletePrivateGraphWithoutChangingRoot",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "fabricatedRetentionCannotInvokeTheRegisteredWriterDirectly",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "currentCompleteCandidateIsPendingAndTaskSuccessIsNotAdoption",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "changedOwnerNeverReattributesTheOriginalGeneration",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "receiptOnlyRunsNoDomainWriterEvenWithCurrentAuthority",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "expiredAndCopiedLeaseCannotMark",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "activeOldEpochRemainsStaleAndCannotWrite",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "preparedOutputIsCreatedBeforeValidationAndAttemptEndsAtomically",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "invalidLocalOutputPreservesRemoteSuccessAndReleasesOnlyVerifiedTerminalPermit",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "markerCommitAcknowledgementLossNeverReturnsCallAuthority",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "foreignPreparedRequestAndObservationCannotInvokeWriters",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "terminalCommitAcknowledgementLossReplaysWithoutSecondWriter",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "outputValidationRollbackPreservesMarkerThenSameReceiptWritesOnceDurably",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "privateExecutionContextExpiresAndCannotBeReconstructedOrCrossSource",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "auditRollbackPreservesOutputTaskAttemptAndRemoteState",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "invalidTerminalReceiptReplaysWithoutCandidateOrSecondWriter",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "actualWorkerOwnsMarkerTransportAndCompletionExactlyOnce",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "flushRollbackPreservesOutputTaskAttemptAndRemoteState",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "terminalDebtRecoversWithoutCallerPermitWhileUnknownCapacityRemainsHeld",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07RecoveryBoundsIT",
+      "case": "recoverySettlesOnlyOldVerifiedExecutionWhenNewGenerationIsUnknown",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07RecoveryBoundsIT",
+      "case": "concurrentMaintenanceUsesOneCursorAndDoesNoSqlOnContendedInstance",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07RecoveryBoundsIT",
+      "case": "keysetRecoveryHasFiniteQueriesRowsAndAdvancesPastUnknownDebt",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07RecoveryBoundsIT",
+      "case": "transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+      "window": "final-custom-replay-closure"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "saturatedReconcilerStillMaintainsTerminalReservations",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-maintenance-history-corrected/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+      "window": "final-maintenance-history-corrected"
+    },
+    {
+      "kind": "integration",
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "reconciliationMaintenanceSettlesTerminalDebtWithNoClaimableTasks",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-maintenance-history-corrected/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "window": "final-maintenance-history-corrected"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledArchiveFix1Test",
+      "case": "startupReleaseCapacityRefusesBeforeAnyObjectAcquisition",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledArchiveFix1Test",
+      "case": "publicationReservesEntireIndexChainAndReopensAtExactBoundary",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledArchiveFix1Test",
+      "case": "publisherImpossibleReleaseBudgetPrecedesCallerPayloadInterpretation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledArchiveFix1Test",
+      "case": "namedPipePublishingLockFailsUnavailableInBoundedOwnedChild",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "startupValidatesAllObjectsIncludingUnselectedHistory",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "everyLoadRechecksLengthEofHashAndMissingObjects",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "nonregularFilesAndUnsupportedSecureFilesystemFailUnavailable",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "cancellationAndInterruptFailClosedWithoutPayloadDiagnostics",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "publisherRejectsRemapDuplicateMissingClosureAndCancellationWithoutChangingOldRelease",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "closureBudgetsReserveManifestBeforeAnyTransportAllocation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "publisherCreatesLiteralReleasesAndPreservesPriorBytes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "indexEntryOrderUniquenessAndSizeAreStrict",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "releaseObjectsCannotContainUnindexedFiles",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "heldPublishingLockAndLockSymlinkRejectSecondPublisher",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "controlledLiteralClosureRemainsAcceptableToUnchangedS1",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "versionsUseUnsignedUtf8OrderingRatherThanUtf16Ordering",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "noLatestOrMissingHistoryFallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "boundedStartupSharesTokenScalarAndByteBudgets",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "publisherWritesSameIsolatedBytesEvenWhenCallerMutatesTransportAfterValidation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "historyRemapDropAndGenerationGapFailClosed",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "missingDependencyCycleAndWrongHeaderAreNeverPublishable",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "manifestDiscoveryReturnsHistoricalRefsAndNeverRepairsMalformedBytes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "cancellationAtDirectoryAcquisitionBoundariesClosesEveryHandle",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "cancellationAfterPartialStagingLeavesPreviousReleaseIntact",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "pinnedHistoryLoadsExactOldClosureWithFreshTransportArrays",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "strictIndexRejectsUnknownDuplicateNoncanonicalAndInvalidUtf8",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "initialPublicationCannotResetAnExistingReleaseHistory",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.file.ControlledConfigArchiveSourceTest",
+      "case": "symlinkRootAncestorObjectDirectoryAndReplacementAreRejected",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "independentExactCumulativeBudgetAcceptsAllFiveRawDocuments",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[1]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[2]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[3]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[4]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[5]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[6]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[7]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[8]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[9]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[10]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[11]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[12]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[13]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ArchiveBudgetTest",
+      "case": "eachCumulativeBoundRejectsOneMoreThanItsLimit()[14]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigBindingsTest",
+      "case": "storedVerifyRequiresActualDigestTaskAndProducerChain",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigBindingsTest",
+      "case": "injectedParsedDtoCannotAttestRawArchiveAndCancellationNeverMintsSuccess",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigBindingsTest",
+      "case": "fileMeetingSizeHashAndSavedTaskFencesAreRequiredFacts",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigBindingsTest",
+      "case": "invalidRawOrIncompleteArchiveClosureCannotMintBinding",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigBindingsTest",
+      "case": "draftComputeNeedsNoOwnStoredFingerprintTaskOrOutputRevision",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigBindingsTest",
+      "case": "originalParseBudgetSurvivesCompleteClosure",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigBindingsTest",
+      "case": "matchingArchiveIdentityCannotSubstituteDifferentRawDefinitionOrExtraNodes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigWireReaderTest",
+      "case": "transportRejectsDuplicateUnknownNoncanonicalAndBadUnicode",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigWireReaderTest",
+      "case": "rawArraysAreIsolatedAfterBoundCheckAndCumulativeBytesCannotReset",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigWireReaderTest",
+      "case": "canonicalControlEscapesAndSupplementaryConfigTextArePreserved",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigWireReaderTest",
+      "case": "unknownProcessingKindIsNotARecognizedFutureCapability",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigWireReaderTest",
+      "case": "recognizedFutureProcessingAndPinnedMaterialsNeverFallBackToImport",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.ConfigWireReaderTest",
+      "case": "adoptedRawVectorsReadTheirExactIdentitiesAndHashes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.DraftConfirmationHashTest",
+      "case": "completeMarksAndPermutationMatchIndependentManualGolden",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.DraftConfirmationHashTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.DraftConfirmationHashTest",
+      "case": "missingOrCorruptOriginalAndCancellationNeverProduceDraftHash",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.DraftConfirmationHashTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.DraftConfirmationHashTest",
+      "case": "persistedWorkingWithoutConfirmationUsesOriginalArchiveGolden",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.DraftConfirmationHashTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1RawBackedCycleAndCancellationCannotReturnBusinessDigest",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "storedTaskIdentityFactsCanSupplyCompleteHistoricalGenerationFence",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1ValidNestedIntrinsicChainSucceedsAcrossAllBusinessEntryPoints",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1SharedLeafDepthUsesEveryPathInEitherOriginOrdering",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "pinnedCanonicalBudgetAlsoProtectsTemplateRowsetBeforeItsDigestIsHidden",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "presentContradictorySuggestionNeverFallsBackToIntrinsicTranscript",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "pinnedSetResolvesAllActualHistoricalOriginsAndMatchesIndependentBytes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1ReviewRejectsCorruptedNestedIntrinsicConfirmation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "newExclusionRevisionComputesIndependentlyAndAppliedOriginRequiresExactBodyInput",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1FinalRejectsCorruptedNestedIntrinsicConfirmation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1OriginNodeBudgetIsUniqueAndCumulativeAcrossSharedBranches",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "exactReviewArchiveClosureAndIntrinsicConfirmationProduceIndependentHashes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "rawFullGenerationComputesBeforeOwnRowTaskAndOutputExist",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "actualBodyActionDetectionBackgroundAndIntrinsicMatrixMatchesFullIndependentFinal",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "unrelatedCurrentConfigFactsAndQueryOrderCannotChangeHistoricalFinalHash",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "completeStoredGenerationAndFinalReloadHashesUseRawOriginalArchives",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1ContextArtifactsReuseTheSameIsolatedBoundedOriginal",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "confirmationRawChainReloadRetainsOriginalProfileAndActualContent",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "selectedReviewUsesSavedScopeAndExactFrozenMemberships",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1OuterDraftRejectsCorruptedNestedIntrinsicConfirmation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "savedManualChildUsesExactBodyMarksAndInheritedOriginalProcessingProfile",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1SharedHistoricalArchiveAcquisitionUsesOneCumulativeByteBudget",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1DirectStoredVerifyRejectsCorruptedNestedIntrinsicConfirmation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1ReusedNonleafDiamondDepthUsesCachedSubtreeHeight",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.RawHashChainTest",
+      "case": "fix1DeepRawBackedOriginsMeetExactDepthAndRejectOneMore",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.SavedTranscriptAdmissionTest",
+      "case": "originalCanonicalMinimaConstrainLedgerBeforeTransfer",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.SavedTranscriptAdmissionTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.config.json.SavedTranscriptAdmissionTest",
+      "case": "smallerRuntimeStillRestrictsOriginal",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.SavedTranscriptAdmissionTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "exactEveryScalarTokenNameDepthAndWireBoundaryAccepts",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "exactAllDirectoryAndMembershipCountsAccept",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[1]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[2]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[3]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[4]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[5]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachContainerLimitIsCumulativeAndFailsAtOneOver()[6]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachBoundaryPlusOneFailsWithoutPartialResult()[1]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachBoundaryPlusOneFailsWithoutPartialResult()[2]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachBoundaryPlusOneFailsWithoutPartialResult()[3]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachBoundaryPlusOneFailsWithoutPartialResult()[4]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachBoundaryPlusOneFailsWithoutPartialResult()[5]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachBoundaryPlusOneFailsWithoutPartialResult()[6]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachBoundaryPlusOneFailsWithoutPartialResult()[7]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.OutputBudgetBoundaryTest",
+      "case": "eachBoundaryPlusOneFailsWithoutPartialResult()[8]",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "case": "perFactoryTokenNameStringDepthAndMembershipLimits",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "case": "exactWireBoundaryPlusOneSentinelAndNoCloseOnEveryOutcome",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "case": "cancellationReadFailuresAndInterruptedIoAreRedactedAndPreserveOwnership",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "case": "strictSchemaUnknownEscapedDuplicateMissingAndEof",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "case": "allSevenKindsEmptyDirectoriesTitleAndNonBmpBody",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "case": "rawActionSuggestionsStrictNumbersDatesAndScalarOffsets",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "case": "utf8DecoderRejectsMalformedSuffixBomOtherEncodingsAndEscapedSurrogates",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.DeadlineInputStreamTest",
+      "case": "normalEofCloseAndWatchdogReleaseExactlyOnce",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.DeadlineInputStreamTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.FileBackendDefinitionsTest",
+      "case": "allBackendsAreAttemptedWithBoundedSuppressionAndInterruptedFailurePreserved",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.FileBackendDefinitionsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.FileBackendDefinitionsTest",
+      "case": "errorFromFirstBackendCannotSkipSecondBackend",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.FileBackendDefinitionsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.ManagedBackendIdentityTest",
+      "case": "ambiguousOriginsAndMalformedUnicodeFailClosed",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.ManagedBackendIdentityTest",
+      "case": "physicalChangesCannotReuseManagedIdentity",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.ManagedBackendIdentityTest",
+      "case": "credentialAndTimeoutRotationDoNotChangePhysicalId",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.ManagedBackendIdentityTest",
+      "case": "fieldCountAndUtf8LengthsMatchIndependentPythonBytes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.SourceReadLifetimeTest",
+      "case": "alreadyLostScopeImmediatelyAbortsRacingNewRequestExactlyOnce",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.SourceReadLifetimeTest",
+      "case": "knownLossWakesActualAdmissionWithoutInterruptingReusableThread",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.SourceReadLifetimeTest",
+      "case": "cancellationWinningImmediatelyAfterActualAcquireReturnsExactlyThatPermit",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.SourceReadLifetimeTest",
+      "case": "deadlineAbortsRealRegisteredWorkWithoutCancellingTheOriginalSignal",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.SourceReadLifetimeTest",
+      "case": "saturatedAdmissionDeadlineCannotReleaseAnUnownedPermit",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.SourceReadLifetimeTest",
+      "case": "failedAbortStillReleasesOtherOwnedRequestsAndRepeatedCloseIsSafe",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.SourceReadLifetimeTest",
+      "case": "completedTransportDetachesAndClosingScopeDoesNotCancelOriginalCarrierSignal",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.StorageRouterTest",
+      "case": "callerCannotReplaceBackendDefinitionAfterConstruction",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.StorageRouterTest",
+      "case": "defaultChangePreservesHistoricalKeysAndActiveUploads",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.StorageRouterTest",
+      "case": "uploadAndMetadataCannotCarryMissingIdentityOrReceipt",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.StorageRouterTest",
+      "case": "everyOperationUsesExplicitBackendAndPreservesArguments",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.StorageRouterTest",
+      "case": "unsafeLogicalKeysAreRejectedBeforeRouting",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.StorageRouterTest",
+      "case": "metadataRejectsFalseHashesAndNegativeSizes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.StorageRouterTest",
+      "case": "blobPageCannotBeChangedByCaller",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.StorageRouterTest",
+      "case": "missingHistoricalBackendFailsClosedWithoutFallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.s3.S3LayoutV3Test",
+      "case": "escapesAndShallowSegmentationPreserveExactOrderAndPrefix",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.s3.S3LayoutV3Test",
+      "case": "everyControlTemplateIsShallowAndInvalidPhysicalNamesFailBeforeTransport",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.s3.S3LayoutV3Test",
+      "case": "canonicalDecodingRejectsAlternateChunkingsAndEscapeSpellings",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.s3.S3LayoutV3Test",
+      "case": "ordinary512AndExactBudgetHaveBoundedPhysicalSegments",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.s3.S3LayoutV3Test",
+      "case": "credentialAndTimeoutRotationRetainsFullPhysicalScopeIdentity",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.s3.S3ProtocolTest",
+      "case": "keyEncodingPreservesCodeUnitsPrefixesAndOrderWithoutNormalizing",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.s3.S3ProtocolTest",
+      "case": "nativePlannerUsesOverflowSafeCeilingAndNeverLogicalPartNumbers",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.s3.S3ProtocolTest",
+      "case": "admissionOneIsRejectedBeforeClientConstruction",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.s3.S3ProtocolTest",
+      "case": "canonicalRecordsRejectTrailingTruncatedUnknownSchemaAndNoncanonicalNumbers",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.task.TaskMetadataTest",
+      "case": "unsafeProtocolCodesAreRejectedBeforePersistence",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.task.TaskMetadataTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.task.TaskMetadataTest",
+      "case": "vendorIdentifiersKeepTheirBinaryIdentity",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.task.TaskMetadataTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.MeasuredTextTranscriptParserTest",
+      "case": "reportsAllDecodedUnitsAndBytesWithoutChangingLegacyResult",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.MeasuredTextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "nulFailsExplicitlyWithoutDroppingIt",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "rejectsWrongHashIncludingChangedBomOrLineSeparators",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "cancellationBeforeReadingDoesNotTouchCallerStream",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "interruptedReadRestoresInterruptFlagWithoutExposingSourceDetails",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "readFailuresAreTypedSafeAndDoNotCloseCallerStream",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "streamRemainsCallerOwnedAfterSuccessAndHashFailure",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "byteBudgetReadsAtMostOneOverflowSentinel",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "cancellationAfterReadStopsBeforeAnotherReadAndNeverReturnsPartial",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "threadInterruptionIsPreservedAndPreventsRead",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "stableIdsRepeatButChangeWithFileOrExactSourceBytes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "invalidArgumentsFailBeforeAnyIo",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "rejectsMalformedTruncatedAndLegacyUtf8WithoutPartialSuccess",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "delimitersAcrossBufferBoundariesDoNotRenumberBlankLines",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "matchingBytesWithoutConfirmedEofStillFailOnReadError",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "explicitBudgetsAcceptExactBoundaryAndFailOneOverWithoutTruncation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "linesBeyondOneReadBufferRetainExactUnicodeWithoutSourceBuffering",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "preservesUnicodeSpacesAndPhysicalLinesWithoutInferringPeopleOrTimes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "emptyAndJavaWhitespaceOnlyAreNoText",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TextTranscriptParserTest",
+      "case": "splitMultibyteCharactersAndMixedDelimitersWorkWithSingleByteReads",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.DeploymentConfigTest",
+      "case": "allFourDatabaseStorageCombinationsAreIndependent",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.DeploymentConfigTest",
+      "case": "localStartsWithoutS3Credentials",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.DeploymentConfigTest",
+      "case": "invalidConfigurationRejectedWithoutEchoingSecrets",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.DeploymentConfigTest",
+      "case": "readinessFailsWhenDatabaseUnavailable",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.DeploymentConfigTest",
+      "case": "untrustedNetworkCannotReadHealthAndForwardedHeadersAreIgnored",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.DeploymentConfigTest",
+      "case": "readinessRecoversFromRealDatabaseOutage",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.DeploymentConfigTest",
+      "case": "s3RejectsEachMissingRequiredFieldAndMalformedEndpoint",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.DeploymentConfigTest",
+      "case": "healthIsNotExposedOnPublicListener",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.DeploymentConfigTest",
+      "case": "s3MissingEndpointRejected",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.FileConfigurationTest",
+      "case": "productionAssemblyRejectsHttpEvenWithValidManagedIdentity",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.FileConfigurationTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.HttpRevisionTokensTest",
+      "case": "tokenOnlyRosterCommandPreservesEveryLongBit",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.HttpRevisionTokensTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.IdentityContractsTest",
+      "case": "invalidActorCannotEnterAuthorizationBoundary",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentityContractsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.IdentityContractsTest",
+      "case": "sessionTimestampsTruncateInsteadOfRound",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentityContractsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.IdentityContractsTest",
+      "case": "actorCannotCarryMutablePrivileges",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentityContractsTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.IdentitySecurityTest",
+      "case": "cookieUsesHostBoundaryAndNeverExposesCsrf",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.IdentitySecurityTest",
+      "case": "productionIssuerCannotIssueEvenWithValidLocalIdentity",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.IdentitySecurityTest",
+      "case": "sessionDiagnosticsRedactSecretsAndTruncateIssuedExpiry",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.IdentitySecurityTest",
+      "case": "opaqueOrNonOriginConfigurationIsRejected",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.IdentitySecurityTest",
+      "case": "databaseFailureProducesSafeUnavailableBusinessError",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.IdentitySecurityTest",
+      "case": "testModeConfigurationCannotStartProductionAssembly",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.TranscriptWireTest",
+      "case": "escapedResponseAcceptsExactBytesAndRejectsOneLess",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.TranscriptWireTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.TranscriptWireTest",
+      "case": "exactUnicodeAndLongTokenWithNormalizedMarks",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.TranscriptWireTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.TranscriptWireTest",
+      "case": "duplicateUnknownTrailingScalarAndInvalidTokenRejected",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.TranscriptWireTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.api.TranscriptWireTest",
+      "case": "unknownLengthStopsAtSingleOverflowSentinelAndDeclaredExcessDoesNotRead",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.TranscriptWireTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.contract.MinutesFactBudgetTest",
+      "case": "artifactCaptureRefusesSmallMaximumAndRemainingBeforeOwnedBytesExist",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.contract.MinutesFactBudgetTest",
+      "case": "catalogSnapshotAlsoChecksItsBoundBeforeDefensiveCopy",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.contract.MinutesFactBudgetTest",
+      "case": "factBagChecksCallerLimitBeforeAnyLargeDefensiveCopy",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.contract.MinutesFactBudgetTest",
+      "case": "artifactReusesBoundedIsolatedCaptureWithoutExposingMutableArray",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.canonical.CanonicalValueCodecTest",
+      "case": "literalPrimitiveVectors",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.canonical.CanonicalValueCodecTest",
+      "case": "cancellationDuringScanSortAndHashNeverReturnsSuccess",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.canonical.CanonicalValueCodecTest",
+      "case": "unsignedUtf8SortPreservesListOrderAndExactControls",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.canonical.CanonicalValueCodecTest",
+      "case": "everyCanonicalBudgetBoundaryAndPlusOne",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.canonical.CanonicalValueCodecTest",
+      "case": "frozenEntriesRejectDuplicateBeforeConversionAndRejectLoneSurrogates",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.FinalAndCoverageTest",
+      "case": "newTargetOrHashInvalidatesReviewAndMissingFinalInputFails",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.FinalAndCoverageTest",
+      "case": "latestContraryExactScopeWinsAndPartialReviewsNeverGiveWholeCredit",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.FinalAndCoverageTest",
+      "case": "independentFullFinalProjectionAndFrozenMembershipIgnoresLaterReview",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.GenerationFingerprintTest",
+      "case": "fixedFenceChangesDigestAndRowBaseMustMatch",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.GenerationFingerprintTest",
+      "case": "completeIndependentEmptyGenerationVector",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.GenerationFingerprintTest",
+      "case": "taskVerificationRejectsCrossInputAndMissingOrConflictingHistoricalFences",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.GenerationFingerprintTest",
+      "case": "computeCannotPretendUninterpretedArchiveFactsAreValidated",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.HashProfilesTest",
+      "case": "completeIndependentConfirmationVectorAndFourMarkSetOrder",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.HashProfilesTest",
+      "case": "confirmationCannotClaimRawProfileChainWithoutConfiguredArchiveReader",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.HashProfilesTest",
+      "case": "eachSavedMarkAdditionAndRemovalChangesWholeConfirmationDomain",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.HashProfilesTest",
+      "case": "reviewSourcesRejectsSupportiveSubsetAndFullContentChangesTargetHash",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.HashProfilesTest",
+      "case": "materialReviewCannotBypassOwningRawArchiveChain",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.HashProfilesTest",
+      "case": "completeIndependentReviewTargetAndSourcesVectors",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.SourceAndSupportTest",
+      "case": "aliasesAndFullTargetsValidatedWithoutInferringTruth",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.SourceAndSupportTest",
+      "case": "deterministicAliasesTranscriptFirstAndExactDedup",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.SourceAndSupportTest",
+      "case": "scalarAnchorHashesWholeTextAndFormatsCanonicalAscii",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.SourceAndSupportTest",
+      "case": "backgroundOnlyActionsStayUnsupportedAndSuggestionsNeverAcceptIdentity",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.SourceAndSupportTest",
+      "case": "unitMembershipUsesSavedPhysicalParagraphGapsAndVersion",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.SourceAndSupportTest",
+      "case": "syntheticAudioVersionHasNullMaterialAndParserFields",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.SourceAndSupportTest",
+      "case": "danglingDuplicateRangeAndPartialScopeNeverSucceed",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.StoredSourceGraphTest",
+      "case": "completeIndependentOccurrenceGraphPreservesBothLabelsAndEitherParserHash",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.StoredSourceGraphTest",
+      "case": "cycleBudgetAndCancellationApplyAcrossAllOrigins",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.StoredSourceGraphTest",
+      "case": "suppliedMembershipMustBeExactBijection",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.StoredSourceGraphTest",
+      "case": "artifactFactBudgetCountsUniqueAcquisitionAndRefusesWholeSnapshotExcess",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.StoredSourceGraphTest",
+      "case": "onePhysicalLocatorKeepsBothActualNoteInputsAndParserContexts",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.StoredSourceGraphTest",
+      "case": "orphanStoredMembershipCannotBeIgnoredAsAnUnrelatedUsage",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.StoredSourceGraphTest",
+      "case": "ordinaryCopiedLocalElementNeverAcceptsAttractiveHistoricalInput",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.minutes.contract.StoredSourceGraphTest",
+      "case": "ambiguousPinnedParserSelectionRejectsInsteadOfChoosingOrder",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.BatchFingerprintTest",
+      "case": "verifyComparesActualBatchFingerprintAndReturnsComputedValue",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.BatchFingerprintTest",
+      "case": "literalVectorMatchesIndependentBytes",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.BatchFingerprintTest",
+      "case": "orderAndEveryIdentityFieldAffectDigest",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.BatchFingerprintTest",
+      "case": "canonicalBudgetsAndCancellationNeverReturnSuccess",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.BatchFingerprintTest",
+      "case": "verifyRejectsMissingExtraDuplicateForeignAndContradictoryMetadata",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.BatchFingerprintTest",
+      "case": "invalidOrIncompleteMembersFailClosed",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.SavedTranscriptBudgetTest",
+      "case": "explicitDisabledDeclarationIsNotAnInstalledZeroPendingReader",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.SavedTranscriptBudgetTest",
+      "case": "canonicalEncodedNodesAndContainersRejectBeforeRowOrTextAllocation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.SavedTranscriptBudgetTest",
+      "case": "supplementaryUtf16AccumulatesAcrossAcquisitionsBeforeTransfer",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.SavedTranscriptBudgetTest",
+      "case": "futureDomainsCannotBecomeInstalledThroughAnEmptyNoOp",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.SavedTranscriptBudgetTest",
+      "case": "copyAndEscapedResponseReservationsPrecedeAllocation",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.transcript.TranscriptImportProducerTest",
+      "case": "independentProducerGoldenPreservesLongBitsAndEverySemanticField",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.TranscriptImportProducerTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.storage.ContractFixtureTest",
+      "case": "unknownBackendSelectorCannotSilentlyRunLocalInstead",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/integration-tests-TEST-ama.storage.ContractFixtureTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.support.ContractClientTest",
+      "case": "preservesStatusAndJsonBodyAcrossRealHttp",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/integration-tests-TEST-ama.support.ContractClientTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.support.ContractClientTest",
+      "case": "rejectsCrossOriginRequestsBeforeSendingHeaders",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/integration-tests-TEST-ama.support.ContractClientTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.PreparedWorkerLoopTest",
+      "case": "selectedRenewalDrainsBeforeCompletionEntry",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.PreparedWorkerLoopTest",
+      "case": "ordinaryCompletionFailureNeverStartsSecondCompletion",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.PreparedWorkerLoopTest",
+      "case": "closeWhileCompletionWaitsSuppressesCallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.PreparedWorkerLoopTest",
+      "case": "preparationFinishesBeforeSingleQueueOwnedCallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.PreparedWorkerLoopTest",
+      "case": "nullPreparedCallbackHasOneQuarantineCompletion",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.PreparedWorkerLoopTest",
+      "case": "preparationFailureHasOneQuarantineCompletion",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.PreparedWorkerLoopTest",
+      "case": "lostHeartbeatSuppressesPreparedCallback",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.PreparedWorkerLoopTest",
+      "case": "otherQueueImplementationsRejectAtomicEffectsWithoutRunningThem",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.PreparedWorkerLoopTest",
+      "case": "preparedCompletionFailureNeverStartsSecondCompletion",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.WorkerLoopTest",
+      "case": "independentHeartbeatRunsDuringBlockedHandler",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.WorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.WorkerLoopTest",
+      "case": "boundedPoolStartsSecondHandlerOnlyAfterFirstReturns",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.WorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.WorkerLoopTest",
+      "case": "blockedCpuHandlerDoesNotConsumeIoCapacity",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.WorkerLoopTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.WorkerShutdownTest",
+      "case": "firstBackendFailureStillClosesSecondBackendOnce",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.WorkerShutdownTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.WorkerShutdownTest",
+      "case": "interruptedFirstBackendFailureStillClosesSecondBackendOnce",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.WorkerShutdownTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.WorkerShutdownTest",
+      "case": "failedAbortStillCancelsAllExecutionsAndClosesBackendOnce",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.WorkerShutdownTest.xml",
+      "window": "final-unit"
+    },
+    {
+      "kind": "unit",
+      "class": "ama.worker.WorkerShutdownTest",
+      "case": "interruptedCloseStillCleansUpAndPreservesInterruption",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.WorkerShutdownTest.xml",
+      "window": "final-unit"
+    }
+  ],
+  "original116": [
+    {
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "closeDuringTransportRetainsLateReceiptWithoutBusinessEffects",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "duplicateCompletedObservationDoesNotRetainALocalSlot",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "ordinaryRenewDrainsBeforeMarkerAndQueuedTickCannotCrossHandoff",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "markerAcknowledgementLossSendsNothingAndNeverOrdinaryCompletes",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "schedulerRejectionAfterCommittedMarkerNeverSends",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "settlementWaitsForSelectedOperationRenewalAndLossWins",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "saturatedReconcilerStillMaintainsTerminalReservations",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "operationHeartbeatLossBeforeResponseIsStickyReceiptOnly",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07ExternalWorkerIT",
+      "case": "terminalAcknowledgementLossRetriesSameFactAndSettlesWithoutSecondSend",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "controlledGenerationPolicyHasItsOwnFiniteQueryAndRowBudget",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "receiptOnlyCannotRetainEvenBusinessOnlyStale",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "publicationFreezeDeniesRetention",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "revokedOwnerNeverWritesCandidate",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "everPublishedDeniesRetention",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "rootRaceBeforeObservationProducesOnlyStaleImmutableGraph",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "realScannerUsesControlledPolicyWithinItsDeclaredEnvelope",
+      "verdict": "error",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "cancellationDoesNotBecomeRetentionAuthority",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "businessOnlyStaleRetainsCompletePrivateGraphWithoutChangingRoot",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "fabricatedRetentionCannotInvokeTheRegisteredWriterDirectly",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "currentCompleteCandidateIsPendingAndTaskSuccessIsNotAdoption",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07GenerationRetentionIT",
+      "case": "changedOwnerNeverReattributesTheOriginalGeneration",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "disabledExternalSuccessIsRetainedWithoutEffectsOrRenewalOrResend",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "factOnlyReceiptSeparatesExpiredOwnerEpochFromActiveAuthorityAndUnknown",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "disabledIdentityActuallyBlocksCompletionAndPreventsEffects",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "queueIndependentlyRejectsPreparedTokenFromAnotherBoundDataSource",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "zeroEffectRetryReusesOnePreparationAndCompleteRootBatch",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "crossSubjectPreparationRejectsBeforeIdentityOrRootLocks",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "standaloneClaimMustLockIdentityBeforeSubject",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "meetingCapabilitiesCheckCoverageIssuerIdentityAndNoHiddenSynchronization",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "registeredIdentityFreeDomainMustExplicitlyOptIn",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "currentThreeArgumentCompletionValidatesOutputBeforeEffects",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "disabledExpiredCurrentExternalFactMustStillBeRetained",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "unregisteredReconciliationDomainIsSkippedWithoutGrantingAuthority",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "disabledCandidateIsSkippedWithoutSubjectOrTaskLocks",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "completeIdentityUnionUsesBinaryOrderBeforeAnySubject",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "ambientEnqueueMustReuseAuthenticMeetingCapability",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "preparationsRejectForgeryIssuerSpecPurposeAndExpiredTransactions",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "crossPolicyObservationIsNonAcknowledgmentAndSameFactCanBeResubmitted",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+      "case": "heldIdentitySkipsBeforeSubjectAndReleasesPartialUnion",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "reconcilerTakeoverFencesOldOwnerAndPreservesExternalFact",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "safeRetryReplayReturnsSameAcceptedTask",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "concurrentSameProducerRetryAcceptsOnlyOneExecution",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "commitAcknowledgementUnknownReturnsNoAuthority",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "markerActuallyCommitsBeforeAuthorityAndAmbientIsRejected",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "preparedCrashCapPreservesExecutionHistory",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "processKilledAfterCommittedMarkerNeverMakesTaskResendable",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "oldTaskExpiryDoesNotDiscardAuthoritativeSuccess",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "unknownExecutionNeverReentersOrdinaryQueue",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedExternalExecutionIT",
+      "case": "zeroEffectRetryAppendsExecutionWithoutResettingEpoch",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "copiedAndReconciliationTokensCannotAdmitAndDuplicateCannotResend",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "unknownDisabledAndUnprovenDeadlineFailClosed",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "concurrentConfigurationUsesStableModelOrder",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "concurrentAdmissionRetainsNullDeadlineAfterTimeout",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "verifiedCutoffReleasesOnlyAfterActualDbDeadline",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "provenDeadlineTruncatesMicrosAndNeverReleasesEarly",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedModelPermitIT",
+      "case": "shrinkCannotUndercutInflightAndExactTerminalExecutionSettles",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedOutboxConsumerIT",
+      "case": "prefixAndEffectsCommitTogetherAndDuplicateCannotSkip",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxConsumerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedOutboxConsumerIT",
+      "case": "rollbackDoesNotAdvanceAndExpiredEpochCannotAcknowledge",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxConsumerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "missingFlushAndForeignCommitCallbacksAreRejectedWithoutEffects",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "rollbackReturnsSequenceAndLeavesNoEventOrDomainEffect",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "concurrentGlobalProducersCommitOneContinuousPrefix",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "tombstoneCannotBeReinitializedOrRevived",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "missingSubjectAndUnregisteredReferencesNeverCreateRows",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "delayedLowerCommitCannotBeSkippedByCursorReader",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedOutboxFenceIT",
+      "case": "domainLocksAndNewEventsAreRejectedAfterFinalFlush",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "auditFailureRollsBackOutputTaskAttemptAndOutbox",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "expiredLeaseSuppressesCallback",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "nullResultRollsBackItsRowAndTaskAttemptAndOutbox",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "ambientTransactionOwnsFinalFlushAndRollback",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "callbackThrowRollsBackItsRowAndTaskAttemptAndOutbox",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "actualWorkerPreparesOutsideTransactionAndCommitsExactlyOnce",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "nullCallbackIsRejectedWithoutAnyMutation",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "invalidActualInputSuppressesCallback",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "callbackMayAdvanceItsPrelockedDomainBeforeTerminalMutation",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "staleVersionSuppressesCallback",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "forgedOwnerAndAttemptSuppressCallback",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "revokedOwnerSuppressesCallback",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "invalidOutputRollsBackItsRowAndTaskAttemptAndOutbox",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "oldRunnableContractStillValidatesBeforeWriting",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "newOutputIsWrittenBeforeValidationAndCommitsWithTaskAndAttempt",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "eventValidationFailureRollsBackOutputAuditTaskAndAttempt",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "cancelledEpochSuppressesCallback",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedPreparedCompletionIT",
+      "case": "flushFailureRollsBackOutputTaskAttemptAndOutbox",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedReconciliationWorkerIT",
+      "case": "independentReconcilerOwnsHeartbeatAndRecordsResultAfterTaskExpiry",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedReconciliationWorkerIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "pausedOldCompletionLosesToConcurrentCancellation",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "crashClaimsHaveFiniteAttemptCap",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "completionCallbackFailureRollsBackTaskAndOutbox",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "versionEpochAndTombstoneEachFenceOldCompletion",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "heldRowDoesNotBlockOtherCandidate(String)[1]",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "heldRowDoesNotBlockOtherCandidate(String)[2]",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "heldRowDoesNotBlockOtherCandidate(String)[3]",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "missingSubjectAndUnknownOrCrossSubjectTypedInputFailClosed",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "twoWorkersCompeteForOneTask",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "queueDomainAndOutboxRollbackTogether",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "agedLowPriorityWorkAndSafeRetryBackoffProgress",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "sameProducerComparesEntireImmutableSpec",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07InheritedTaskLeaseIT",
+      "case": "expiredAttemptCannotCommit",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "receiptOnlyRunsNoDomainWriterEvenWithCurrentAuthority",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "expiredAndCopiedLeaseCannotMark",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "activeOldEpochRemainsStaleAndCannotWrite",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "preparedOutputIsCreatedBeforeValidationAndAttemptEndsAtomically",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "invalidLocalOutputPreservesRemoteSuccessAndReleasesOnlyVerifiedTerminalPermit",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "markerCommitAcknowledgementLossNeverReturnsCallAuthority",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "foreignPreparedRequestAndObservationCannotInvokeWriters",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "terminalCommitAcknowledgementLossReplaysWithoutSecondWriter",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "reconciliationMaintenanceSettlesTerminalDebtWithNoClaimableTasks",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "outputValidationRollbackPreservesMarkerThenSameReceiptWritesOnceDurably",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "privateExecutionContextExpiresAndCannotBeReconstructedOrCrossSource",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "auditRollbackPreservesOutputTaskAttemptAndRemoteState",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "actualWorkerOwnsMarkerTransportAndCompletionExactlyOnce",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "flushRollbackPreservesOutputTaskAttemptAndRemoteState",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07PreparedExternalIT",
+      "case": "terminalDebtRecoversWithoutCallerPermitWhileUnknownCapacityRemainsHeld",
+      "verdict": "failure",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+    },
+    {
+      "class": "ama.task.Task07RecoveryBoundsIT",
+      "case": "concurrentMaintenanceUsesOneCursorAndDoesNoSqlOnContendedInstance",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml"
+    },
+    {
+      "class": "ama.task.Task07RecoveryBoundsIT",
+      "case": "keysetRecoveryHasFiniteQueriesRowsAndAdvancesPastUnknownDebt",
+      "verdict": "pass",
+      "xml": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml"
+    }
+  ],
+  "windows": [
+    {
+      "window": "final-affected-fixtures-corrected",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#*,Task07GenerationRetentionIT#*,Task07ExternalWorkerIT#*"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-affected-fixtures-corrected/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-affected-fixtures-corrected/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-affected-fixtures-corrected/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 54.450557470321655,
+      "counts": {
+        "tests": 38,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "final-custom-replay-closure",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#*,Task07GenerationRetentionIT#*,Task07ExternalWorkerIT#*,Task07RecoveryBoundsIT#*"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 67.33105611801147,
+      "counts": {
+        "tests": 44,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "final-maintenance-history-corrected",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#reconciliationMaintenanceSettlesTerminalDebtWithNoClaimableTasks,Task07ExternalWorkerIT#saturatedReconcilerStillMaintainsTerminalReservations"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-maintenance-history-corrected/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-maintenance-history-corrected/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 32.115259647369385,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "final-owned-integration",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07*IT"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedReconciliationWorkerIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxConsumerIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 85.9315538406372,
+      "counts": {
+        "tests": 116,
+        "failures": 1,
+        "errors": 1,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "final-recovery-boundaries",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07RecoveryBoundsIT"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-recovery-boundaries/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml"
+      ],
+      "elapsedSeconds": 23.342899560928345,
+      "counts": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "final-unit",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "*"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.DraftConfirmationHashTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.FileBackendDefinitionsTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.MeasuredTextTranscriptParserTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.DeadlineInputStreamTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.task.TaskMetadataTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.json.SavedTranscriptAdmissionTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.transcript.TranscriptImportProducerTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentityContractsTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.HttpRevisionTokensTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.TranscriptWireTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.FileConfigurationTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.WorkerShutdownTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/worker-TEST-ama.worker.WorkerLoopTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/integration-tests-TEST-ama.storage.ContractFixtureTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/integration-tests-TEST-ama.support.ContractClientTest.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-unit/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml"
+      ],
+      "elapsedSeconds": 42.859761238098145,
+      "counts": {
+        "tests": 254,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": null
+    },
+    {
+      "window": "finished-duplicate-red",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07ExternalWorkerIT#duplicateCompletedObservationDoesNotRetainALocalSlot"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/finished-duplicate-red/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+      ],
+      "elapsedSeconds": 23.294262409210205,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "finite-policy-recovery",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07RecoveryBoundsIT,Task07GenerationRetentionIT#controlledGenerationPolicyHasItsOwnFiniteQueryAndRowBudget"
+      ],
+      "exit": 1,
+      "reports": [],
+      "elapsedSeconds": 0.042272090911865234,
+      "counts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "finite-policy-recovery-corrected-selector",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07RecoveryBoundsIT#*,Task07GenerationRetentionIT#controlledGenerationPolicyHasItsOwnFiniteQueryAndRowBudget"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/finite-policy-recovery-corrected-selector/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/finite-policy-recovery-corrected-selector/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 15.657795429229736,
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "maintenance-green",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#reconciliationMaintenanceSettlesTerminalDebtWithNoClaimableTasks"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/maintenance-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 13.093385696411133,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "maintenance-red",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#reconciliationMaintenanceSettlesTerminalDebtWithNoClaimableTasks"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/maintenance-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 14.1244797706604,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "prepared-adversarial",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/prepared-adversarial/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 20.44057869911194,
+      "counts": {
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "prepared-green",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/prepared-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 17.371492385864258,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "prepared-red",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/prepared-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 20.60711693763733,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "recovery-green",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#terminalDebtRecoversWithoutCallerPermitWhileUnknownCapacityRemainsHeld"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/recovery-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 15.6681649684906,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "recovery-red",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#terminalDebtRecoversWithoutCallerPermitWhileUnknownCapacityRemainsHeld"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/recovery-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 18.12218165397644,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "replay-green",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter+registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest"
+      ],
+      "exit": 1,
+      "reports": [],
+      "elapsedSeconds": 6.678891897201538,
+      "counts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "replay-green-corrected",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter+registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/replay-green-corrected/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 17.529656887054443,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "replay-red",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter+registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/replay-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 14.14488172531128,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "retention-adversarial-green",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07GenerationRetentionIT"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-adversarial-green/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 20.410942554473877,
+      "counts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 1,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "retention-forgery-red",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07GenerationRetentionIT#fabricatedRetentionCannotInvokeTheRegisteredWriterDirectly"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-forgery-red/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 13.747888088226318,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "retention-freeze-corrected-schema",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07GenerationRetentionIT#publicationFreezeDeniesRetention"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-freeze-corrected-schema/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 12.352871656417847,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "retention-freeze-duplicate-corrected",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07GenerationRetentionIT#publicationFreezeDeniesRetention,Task07ExternalWorkerIT#duplicateCompletedObservationDoesNotRetainALocalSlot"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-freeze-duplicate-corrected/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-freeze-duplicate-corrected/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 15.841022491455078,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 1,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "retention-green",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07GenerationRetentionIT"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-green/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 15.873700618743896,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "retention-red",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07GenerationRetentionIT"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-red/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 18.866226196289062,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 1,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "retention-red-corrected",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07GenerationRetentionIT"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-red-corrected/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 12.370566368103027,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "terminal-special-replay-red",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#invalidTerminalReceiptReplaysWithoutCandidateOrSecondWriter,Task07GenerationRetentionIT#retainedTerminalReceiptReplaysWithoutDuplicatingImmutableGraph"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/terminal-special-replay-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/terminal-special-replay-red/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+      ],
+      "elapsedSeconds": 14.769098997116089,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "worker-green",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#actualWorkerOwnsMarkerTransportAndCompletionExactlyOnce"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/worker-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 15.829693794250488,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "worker-races",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07ExternalWorkerIT"
+      ],
+      "exit": 0,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/worker-races/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml"
+      ],
+      "elapsedSeconds": 22.285861492156982,
+      "counts": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "worker-red",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#actualWorkerOwnsMarkerTransportAndCompletionExactlyOnce"
+      ],
+      "exit": 1,
+      "reports": [
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/worker-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+      ],
+      "elapsedSeconds": 13.977881908416748,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    }
+  ],
+  "productionFiles": [
+    "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+    "backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java",
+    "backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java",
+    "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+    "backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java",
+    "backend/core/src/main/java/ama/task/ModelPermitPool.java",
+    "backend/core/src/main/java/ama/task/PreparedExternalPolicy.java",
+    "backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java",
+    "backend/worker/src/main/java/ama/worker/ExternalOperationHeartbeat.java",
+    "backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java",
+    "backend/worker/src/main/java/ama/worker/ReconciliationLoop.java",
+    "backend/worker/src/main/java/ama/worker/WorkerLoop.java"
+  ],
+  "dependencyProof": {
+    "final-owned-integration": {
+      "productionFiles": 14,
+      "allProductionShaMatchFinal": true
+    },
+    "final-custom-replay-closure": {
+      "productionFiles": 14,
+      "allProductionShaMatchFinal": true
+    },
+    "final-maintenance-history-corrected": {
+      "productionFiles": 14,
+      "allProductionShaMatchFinal": true
+    },
+    "final-unit": {
+      "productionFiles": 14,
+      "allProductionShaMatchFinal": true
+    }
+  },
+  "inheritedCopiesAllExactFinal": true,
+  "unitDoesNotDependOnITFixtures": true,
+  "unchangedBaseHelpers": [
+    "backend/integration-tests/src/test/java/ama/task/WorkerProcessIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task08InheritedFixture.java"
+  ],
+  "replacementRule": "76 unchanged inherited cases carry from original116. All original custom40 replaced by final custom44; 42 passing final-custom-replay-closure cases carry, its two maintenance failures replaced by final-maintenance-history-corrected. Unit254 carries: production exact, no IT fixture dependency. No summing reruns.",
+  "postTestWhitespaceOnly": {
+    "path": "backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java",
+    "change": "one spaces-only blank line removed; no Java tokens changed",
+    "sourceWindow": "final-maintenance-history-corrected"
+  }
+}

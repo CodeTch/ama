@@ -25,6 +25,13 @@ public final class JdbcTaskPreparations {
     }
     public Object value(PreparedDomain prepared) { return held(prepared).value(); }
     public boolean permitsEffects(PreparedDomain prepared) { return held(prepared).effectsAllowed(); }
+    /** Validated immutable execution facts; this view is data, not a transferable capability. */
+    public record ExternalFacts(String taskId, TaskSpec spec, String operationId, String executionId,
+            long executionNo, String requestHash, String requestManifest) {}
+    public ExternalFacts requireExternal(PreparedDomain prepared, ama.task.ExternalOperationPort.ExecutionContext execution) {
+        held(prepared);
+        return JdbcExternalOperations.requireContext(source, prepared, execution);
+    }
     /** JDBC queue consumption independently enforces its own source/actual-holder boundary. */
     static void requireTransaction(DataSource expected, PreparedDomain prepared) {
         if(!(prepared instanceof Held held)||held.source()!=expected

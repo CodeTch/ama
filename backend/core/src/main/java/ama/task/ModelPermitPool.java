@@ -14,4 +14,6 @@ public interface ModelPermitPool {
     Optional<Permit> acquire(OperationToken token, String model, Instant safeDeadline);
     /** Verify this exact execution is terminal in the committed DB; never trust a caller's timeout declaration. */
     boolean settled(Permit permit);
+    /** Bounded durable maintenance; discovery does not itself authorize release. */
+    default int recoverSettlements(int scanLimit) { return 0; }
 }

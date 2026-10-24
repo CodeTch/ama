@@ -1,0 +1,22 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07PreparedExternalIT#*,Task07GenerationRetentionIT#*,Task07ExternalWorkerIT#*"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-affected-fixtures-corrected/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-affected-fixtures-corrected/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-affected-fixtures-corrected/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+  ],
+  "elapsedSeconds": 54.450557470321655,
+  "counts": {
+    "tests": 38,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}
