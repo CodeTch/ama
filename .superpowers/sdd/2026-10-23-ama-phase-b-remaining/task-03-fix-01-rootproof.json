@@ -1,0 +1,59 @@
+{
+  "fix_base": "aa0b5f08a19649091b0bcd60959bd741fb5c7850",
+  "head": "912945df2ad09d7ff265f6ba97e304a2b98a4b79",
+  "source_paths": 3,
+  "evidence_entries": 86,
+  "committed_blobs_exact": true,
+  "final_source_seal_exact": true,
+  "old_task03_files_unchanged": 417,
+  "fresh_XML": [
+    {
+      "suite": "ama.storage.ManagedBackendIdentityTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ama.storage.FileBackendCatalogIT",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ama.storage.FileRegistryUploadIT",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ama.storage.TranscriptAuthorityIT",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ama.storage.TranscriptAuthorityReviewIT",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "tests": 35,
+  "failures_errors_skips": [
+    0,
+    0,
+    0
+  ],
+  "own_DB_secret_values_scanned": 2,
+  "own_DB_secret_hits": 0,
+  "audit_bytes": 1164118,
+  "audit_sha256": "66e7fdda063e0cc5213016ee18db64a8a4fc14d6acdbd46d164ab1daa6bc4420",
+  "review_bytes": 73810,
+  "review_sha256": "d508b82379b4f7399434c34320953d5f1b52210bb3f44943384c4486138ecf7c",
+  "limits": "Old349 composed-sourcewindows remainhistorical; thisfixexact35 coveringonly; unresolvedinitialhandshake retained."
+}

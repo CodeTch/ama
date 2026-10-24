@@ -1,0 +1,37 @@
+{
+  "Id": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+  "Name": "/ama-test-task08-848e93aace8b4f0fa34fc548267f3dc5",
+  "Image": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "Running": true,
+  "Owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+  "Memory": 805306368,
+  "MemorySwap": 805306368,
+  "NanoCpus": 1000000000,
+  "PidsLimit": 256,
+  "Ports": {
+    "3306/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "44727"
+      }
+    ]
+  },
+  "Mounts": [
+    {
+      "Destination": "/var/lib/mysql",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/data",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/run/ama-task08",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/secrets",
+      "Type": "bind"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+--- cursor-schema-window/Task08CursorIT.java
++++ da15415524f4727c2504cd3f5cba978f1a5adb76/backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java
+@@ -14,7 +14,7 @@
+  Task08Fixture fixture(){return new Task08Fixture("behavior","T08_CURSOR");}
+  String type(){return "T08_"+UUID.randomUUID().toString().replace("-","");}
+  JdbcExternalOperations scan(Task08Fixture f,String type,int p,int b){return new JdbcExternalOperations(f.queue(type),new ReconciliationScanBudget(p,b));}
+- OperationToken next(JdbcExternalOperations scan){for(int i=0;i<1000;i++){var t=scan.claimReconciliation("T08_SCAN");if(t.isPresent())return t.orElseThrow();}throw new AssertionError("Bounded test population must be reached");}
++ OperationToken next(JdbcExternalOperations scan){int completed=0;for(int i=0;i<1000;i++){var t=scan.claimReconciliation("T08_SCAN");if(t.isPresent())return t.orElseThrow();try{if(!active(scan)&&++completed==2)break;}catch(ReflectiveOperationException error){throw new IllegalStateException(error);}catch(Exception error){throw new IllegalStateException(error);}}throw new AssertionError("Eligible test target must be reached within two finite passes");}
+  static Object cursor(JdbcExternalOperations scanner)throws Exception{var f=JdbcExternalOperations.class.getDeclaredField("scanCursor");f.setAccessible(true);return f.get(scanner);}
+  static long position(JdbcExternalOperations scanner,String field)throws Exception{Object c=cursor(scanner);var f=c.getClass().getDeclaredField(field);f.setAccessible(true);return f.getLong(c);}
+  static boolean active(JdbcExternalOperations scanner)throws Exception{Object c=cursor(scanner);var f=c.getClass().getDeclaredField("active");f.setAccessible(true);return f.getBoolean(c);}
+@@ -99,11 +99,11 @@
+    var low=pool.submit(()->{lowThread.set(Thread.currentThread());return new JdbcExternalOperations(lowQueue).beginExternal(lease,f.request(lowSpec)).orElseThrow();});
+    try{assertTrue(ready.await(10,TimeUnit.SECONDS));var high=f.marker(highSpec);f.due(high.operationId());var scan=scan(f,type,16,32);assertEquals(high.operationId(),next(scan).operationId());assertFalse(active(scan));release.countDown();var lower=low.get(10,TimeUnit.SECONDS);assertTrue(f.seq(lower.operationId())<f.seq(high.operationId()));f.due(lower.operationId());assertEquals(lower.operationId(),next(scan).operationId());}finally{release.countDown();}
+   }finally{f.source.after=s->{};}
+- } 
++ }
+  @Test void mixedHeldSubjectDomainSourceTaskOperationExecutionAllReleaseBeforeTail()throws Exception{
+   for(String phase:List.of("subject","meeting","input","task","operation","execution")){
+    var f=fixture();String type=type();var spec=f.spec(type);var blocked=f.marker(spec);var tail=f.marker(f.spec(type));f.due(blocked.operationId());f.due(tail.operationId());var scan=scan(f,type,16,32);
+-   String sql=switch(phase){case "subject"->"SELECT subject_id FROM task_subject WHERE subject_id=? FOR UPDATE";case "meeting"->"SELECT id FROM meeting WHERE id=? FOR UPDATE";case "input"->"SELECT id FROM meeting_info_revision WHERE id=? FOR UPDATE";case "task"->"SELECT task_id FROM external_execution WHERE id=?";case "operation"->"SELECT id FROM external_operation WHERE id=? FOR UPDATE";default->"SELECT id FROM external_execution WHERE id=? FOR UPDATE";};
++   String sql=switch(phase){case "subject"->"SELECT subject_id FROM task_subject WHERE subject_kind='MEETING' AND subject_id=? FOR UPDATE";case "meeting"->"SELECT id FROM meeting WHERE id=? FOR UPDATE";case "input"->"SELECT id FROM meeting_info_revision WHERE id=? FOR UPDATE";case "task"->"SELECT task_id FROM external_execution WHERE id=?";case "operation"->"SELECT id FROM external_operation WHERE id=? FOR UPDATE";default->"SELECT id FROM external_execution WHERE id=? FOR UPDATE";};
+    Object id=switch(phase){case "subject","meeting"->spec.subject().id();case "input"->spec.input().id();case "operation"->blocked.operationId();default->blocked.executionId();};
+    if(phase.equals("task")){id=f.j.queryForObject(sql,String.class,id);sql="SELECT id FROM durable_task WHERE id=? FOR UPDATE";}
+    String before=f.skippedSnapshot(tail.operationId());

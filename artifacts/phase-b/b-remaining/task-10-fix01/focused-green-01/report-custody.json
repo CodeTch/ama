@@ -1,0 +1,36 @@
+{
+  "startedNs": 1792857228489335319,
+  "endedNs": 1792857322921049092,
+  "reports": [
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01CapacityIT.xml",
+      "mtimeNs": 1792857322495837552,
+      "sha256": "807c5715ae2557472a8d2a3d301c875f6555caf183b75caea8f83d66f66c1072",
+      "previous": [
+        1792856922166757993,
+        "a862972abb0c41ab3fc09f16d4050b04877f0c2b7278092c3370e39e19a9128b"
+      ],
+      "qualified": true,
+      "suite": "ama.storage.Task10Fix01CapacityIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01DecisionIT.xml",
+      "mtimeNs": 1792857265328802775,
+      "sha256": "f85657122b7e174ff8a88ed795d45a68bc7311534b7c96ab678fc36028e3f8bb",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10Fix01DecisionIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01ReplayIT.xml",
+      "mtimeNs": 1792857314819095979,
+      "sha256": "b488825368487439df293945fe8611f89f1b007d32631ad060920fdf13d5d0e3",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10Fix01ReplayIT",
+      "canonicalLogAssociation": true
+    }
+  ]
+}

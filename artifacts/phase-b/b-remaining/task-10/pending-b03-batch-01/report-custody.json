@@ -1,0 +1,36 @@
+{
+  "startedNs": 1792844894919804976,
+  "endedNs": 1792844949540438879,
+  "reports": [
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10PendingAbsentIT.xml",
+      "mtimeNs": 1792844938158367881,
+      "sha256": "c2ea1b895deb16071c8edc2f9ab7bec00dab3f0c5eafc7a229791d22d14bfbb2",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10PendingAbsentIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10PendingInfoIT.xml",
+      "mtimeNs": 1792844949084826736,
+      "sha256": "5e2fdfe3c9817ff24cfa5dbc0ce9f2746886d215732bd01d756a786f8ddb5795",
+      "previous": [
+        1792844837495326996,
+        "b38a35fe38ead7ab24ea017c9ca7c85bcbc636fe8c4b2e63f4ba216aaac01d26"
+      ],
+      "qualified": true,
+      "suite": "ama.storage.Task10PendingInfoIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10PendingRosterIT.xml",
+      "mtimeNs": 1792844934534156939,
+      "sha256": "ab1ace8a832471c96a797d0ee1a788e5405159c3d792789d1fbdf38a4377d094",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10PendingRosterIT",
+      "canonicalLogAssociation": true
+    }
+  ]
+}

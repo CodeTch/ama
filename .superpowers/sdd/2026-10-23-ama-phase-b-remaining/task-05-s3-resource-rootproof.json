@@ -1,0 +1,55 @@
+{
+  "selected": {
+    "id": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+    "name": "/ama-task05-s3-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+    "image": "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+    "owner": "ama-task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+    "memory": 2147483648,
+    "swap": 2147483648,
+    "cpu": 2000000000,
+    "pids": 256,
+    "ports": {
+      "9000/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "45501"
+        }
+      ]
+    },
+    "mounts": [
+      {
+        "Destination": "/data",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": true,
+        "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/data",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/logs",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": true,
+        "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/logs",
+        "Type": "bind"
+      }
+    ],
+    "status": "running",
+    "oom": false
+  },
+  "ownership": [
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/data",
+      "uid": 10001,
+      "gid": 10001,
+      "mode": "0o750"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/logs",
+      "uid": 10001,
+      "gid": 10001,
+      "mode": "0o750"
+    }
+  ],
+  "scope": "read-only exactcreatedresource verification; no credentials read/output"
+}

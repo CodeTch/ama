@@ -1,0 +1,483 @@
+{
+  "selectedOnly": [
+    {
+      "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "name": "/ama-test-b01-ad9f1af29eff",
+      "status": "running",
+      "running": true,
+      "oom": false,
+      "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+      "memory": 805306368,
+      "swap": 805306368,
+      "nano_cpus": 1000000000,
+      "pids": 256,
+      "ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "46653"
+          }
+        ]
+      },
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b",
+          "Source": "/var/lib/docker/volumes/d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b/_data",
+          "Destination": "/var/lib/mysql",
+          "Driver": "local",
+          "Mode": "",
+          "RW": true,
+          "Propagation": ""
+        }
+      ],
+      "owner": "remaining-20261023"
+    },
+    {
+      "id": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+      "name": "/ama-task05-s3-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+      "status": "running",
+      "running": true,
+      "oom": false,
+      "image": "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+      "memory": 2147483648,
+      "swap": 2147483648,
+      "nano_cpus": 2000000000,
+      "pids": 256,
+      "ports": {
+        "9000/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "45501"
+          }
+        ]
+      },
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/data",
+          "Destination": "/data",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/logs",
+          "Destination": "/logs",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "owner": "ama-task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5"
+    }
+  ],
+  "exactAckSelectedFieldsUnchanged": true,
+  "portsSource": "NetworkSettings.Ports actual published endpoints; HostConfig dynamic port requests are not selected actual ports",
+  "ownWorktreeActiveJava": [],
+  "referencedPidObservations": [
+    {
+      "pid": 1183812,
+      "exists": false
+    },
+    {
+      "pid": 1183837,
+      "exists": false
+    },
+    {
+      "pid": 1184045,
+      "exists": false
+    },
+    {
+      "pid": 1184372,
+      "exists": false
+    },
+    {
+      "pid": 1184397,
+      "exists": false
+    },
+    {
+      "pid": 1184636,
+      "exists": false
+    },
+    {
+      "pid": 1185457,
+      "exists": false
+    },
+    {
+      "pid": 1185482,
+      "exists": false
+    },
+    {
+      "pid": 1185560,
+      "exists": false
+    },
+    {
+      "pid": 1185728,
+      "exists": false
+    },
+    {
+      "pid": 1185753,
+      "exists": false
+    },
+    {
+      "pid": 1185874,
+      "exists": false
+    },
+    {
+      "pid": 1186061,
+      "exists": false
+    },
+    {
+      "pid": 1186086,
+      "exists": false
+    },
+    {
+      "pid": 1186269,
+      "exists": false
+    },
+    {
+      "pid": 1186542,
+      "exists": false
+    },
+    {
+      "pid": 1186574,
+      "exists": false
+    },
+    {
+      "pid": 1186806,
+      "exists": false
+    },
+    {
+      "pid": 1186831,
+      "exists": false
+    },
+    {
+      "pid": 1187301,
+      "exists": false
+    },
+    {
+      "pid": 1187333,
+      "exists": false
+    },
+    {
+      "pid": 1187502,
+      "exists": false
+    },
+    {
+      "pid": 1187684,
+      "exists": false
+    },
+    {
+      "pid": 1188283,
+      "exists": false
+    },
+    {
+      "pid": 1188308,
+      "exists": false
+    },
+    {
+      "pid": 1188681,
+      "exists": false
+    },
+    {
+      "pid": 1188706,
+      "exists": false
+    },
+    {
+      "pid": 1189274,
+      "exists": false
+    },
+    {
+      "pid": 1189302,
+      "exists": false
+    },
+    {
+      "pid": 1189726,
+      "exists": false
+    },
+    {
+      "pid": 1189754,
+      "exists": false
+    },
+    {
+      "pid": 1189942,
+      "exists": false
+    },
+    {
+      "pid": 1189967,
+      "exists": false
+    },
+    {
+      "pid": 1190147,
+      "exists": false
+    },
+    {
+      "pid": 1190448,
+      "exists": false
+    },
+    {
+      "pid": 1190473,
+      "exists": false
+    },
+    {
+      "pid": 1191098,
+      "exists": false
+    },
+    {
+      "pid": 1191123,
+      "exists": false
+    },
+    {
+      "pid": 1191445,
+      "exists": false
+    },
+    {
+      "pid": 1191473,
+      "exists": false
+    },
+    {
+      "pid": 1192454,
+      "exists": false
+    },
+    {
+      "pid": 1192668,
+      "exists": false
+    },
+    {
+      "pid": 1192693,
+      "exists": false
+    },
+    {
+      "pid": 1192973,
+      "exists": false
+    },
+    {
+      "pid": 1192998,
+      "exists": false
+    },
+    {
+      "pid": 1193141,
+      "exists": false
+    },
+    {
+      "pid": 1193268,
+      "exists": false
+    },
+    {
+      "pid": 1193509,
+      "exists": false
+    },
+    {
+      "pid": 1193534,
+      "exists": false
+    },
+    {
+      "pid": 1193677,
+      "exists": false
+    },
+    {
+      "pid": 1193862,
+      "exists": false
+    },
+    {
+      "pid": 1194064,
+      "exists": false
+    },
+    {
+      "pid": 1194089,
+      "exists": false
+    },
+    {
+      "pid": 1194569,
+      "exists": false
+    },
+    {
+      "pid": 1194594,
+      "exists": false
+    },
+    {
+      "pid": 1194741,
+      "exists": false
+    },
+    {
+      "pid": 1194869,
+      "exists": false
+    },
+    {
+      "pid": 1195027,
+      "exists": false
+    },
+    {
+      "pid": 1195398,
+      "exists": false
+    },
+    {
+      "pid": 1195725,
+      "exists": false
+    },
+    {
+      "pid": 1195750,
+      "exists": false
+    },
+    {
+      "pid": 1195772,
+      "exists": false
+    },
+    {
+      "pid": 1195791,
+      "exists": false
+    },
+    {
+      "pid": 1195810,
+      "exists": false
+    },
+    {
+      "pid": 1196228,
+      "exists": false
+    },
+    {
+      "pid": 1196374,
+      "exists": false
+    },
+    {
+      "pid": 1196490,
+      "exists": false
+    },
+    {
+      "pid": 1196688,
+      "exists": false
+    },
+    {
+      "pid": 1196903,
+      "exists": false
+    },
+    {
+      "pid": 1197053,
+      "exists": false
+    },
+    {
+      "pid": 1197991,
+      "exists": false
+    },
+    {
+      "pid": 1198110,
+      "exists": false
+    },
+    {
+      "pid": 1198230,
+      "exists": false
+    },
+    {
+      "pid": 1198356,
+      "exists": false
+    },
+    {
+      "pid": 1198477,
+      "exists": false
+    },
+    {
+      "pid": 1198605,
+      "exists": false
+    },
+    {
+      "pid": 1198732,
+      "exists": false
+    },
+    {
+      "pid": 1198923,
+      "exists": false
+    },
+    {
+      "pid": 1199106,
+      "exists": false
+    },
+    {
+      "pid": 1199351,
+      "exists": false
+    },
+    {
+      "pid": 1199589,
+      "exists": false
+    },
+    {
+      "pid": 1199710,
+      "exists": false
+    },
+    {
+      "pid": 1199783,
+      "exists": false
+    },
+    {
+      "pid": 1199899,
+      "exists": false
+    },
+    {
+      "pid": 1199976,
+      "exists": false
+    },
+    {
+      "pid": 1200146,
+      "exists": false
+    },
+    {
+      "pid": 1200286,
+      "exists": false
+    },
+    {
+      "pid": 1200399,
+      "exists": false
+    },
+    {
+      "pid": 1200515,
+      "exists": false
+    },
+    {
+      "pid": 1200653,
+      "exists": false
+    },
+    {
+      "pid": 1200777,
+      "exists": false
+    },
+    {
+      "pid": 1200905,
+      "exists": false
+    },
+    {
+      "pid": 1201036,
+      "exists": false
+    },
+    {
+      "pid": 1201161,
+      "exists": false
+    },
+    {
+      "pid": 1201505,
+      "exists": false
+    },
+    {
+      "pid": 1201905,
+      "exists": false
+    },
+    {
+      "pid": 1202041,
+      "exists": false
+    },
+    {
+      "pid": 1202273,
+      "exists": false
+    },
+    {
+      "pid": 1202770,
+      "exists": false
+    },
+    {
+      "pid": 1202896,
+      "exists": false
+    }
+  ],
+  "limits": "Test/Worker512MiB2CPU; native64MiB2CPU; migrationprobe64MiB2CPU. Actual child receipts retained.",
+  "scope": "Read-only selected resource/PID observation; no task cleanup or cancellation"
+}

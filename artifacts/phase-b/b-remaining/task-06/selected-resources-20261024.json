@@ -1,0 +1,58 @@
+{
+  "observedAt": "2026-10-23T20:15:13.302121+00:00",
+  "selectedOnly": [
+    {
+      "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "name": "/ama-test-b01-ad9f1af29eff",
+      "running": true,
+      "oomKilled": false,
+      "memory": 805306368,
+      "nanoCpus": 1000000000,
+      "ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "46653"
+          }
+        ]
+      },
+      "labels": {
+        "ama.remaining.owner": "remaining-20261023",
+        "ama.test-fixture": "b01",
+        "desktop.docker.io/wsl-distro": "Ubuntu-24.04"
+      }
+    },
+    {
+      "id": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+      "name": "/ama-task05-s3-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+      "running": true,
+      "oomKilled": false,
+      "memory": 2147483648,
+      "nanoCpus": 2000000000,
+      "ports": {
+        "9000/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "45501"
+          }
+        ]
+      },
+      "labels": {
+        "ama.owner": "ama-task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+        "build-date": "",
+        "description": "RustFS is a distributed object storage system written in Rust, supporting erasure coding, multi-tenant management, and observability.",
+        "desktop.docker.io/wsl-distro": "Ubuntu-24.04",
+        "license": "Apache-2.0",
+        "maintainer": "RustFS Team <dev@rustfs.com>",
+        "name": "RustFS",
+        "org.opencontainers.image.title": "RustFS,org.opencontainers.image.description=RustFS distributed object storage system,org.opencontainers.image.version=1.0.3,org.opencontainers.image.revision=331fb896285a7686f927baf8d9d4dc2d3d3a10a9,org.opencontainers.image.source=https://github.com/rustfs/rustfs,org.opencontainers.image.created=2026-10-17T15:51:03Z,org.opencontainers.image.build-type=release",
+        "release": "1.0.3",
+        "summary": "High-performance distributed object storage system compatible with S3 API",
+        "url": "https://rustfs.com",
+        "vcs-ref": "",
+        "vendor": "RustFS Team",
+        "version": "v1.0.3"
+      }
+    }
+  ]
+}

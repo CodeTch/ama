@@ -11,7 +11,7 @@ import re
 import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VERSION = 'B00-1.5-runtime-metadata'
+VERSION = 'B00-1.7-publication-submission'
 PROVENANCE_ROOT_RULE = 'R1上下文根：所有纳入minutes_element.source_context_id无论证据数量均为basis根，与域内精确usage上下文取并集。ROWSET v2/PINNED用已保存输入要素集全部basis及set证据/目录，排除body/applied exclusion；REVIEW_SOURCES仅选定复核要素basis及精确相交证据（正文复核无要素basis）；FINAL用全部冻结纳入要素basis及既有body/set证据、目录、applied exclusion。各根完整context/selection/profile按实际完整PK去重及unsigned UTF8排序，缺失/额外行拒绝；无usage的basis同样验证并保留依赖。basis不伪造EVIDENCE、不增加usage数、不授予支持信用；草稿仍无自身fingerprint/TaskSpec，祖先按图依赖判断。'
 TABLES = []
 ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
@@ -85,7 +85,7 @@ table('file_cleanup','B-04/D-07','V009','可重试删除/孤儿清理登记',[
 table('task_subject','B-05','V010','每领域聚合的版本/取消 fence（会议仅一个共享根）',[
     code('subject_kind','MEETING/治理根等白名单类型'),col('subject_id',KEY,'聚合稳定ID'),num('business_version','与根 revision 同事务前进'),num('cancel_epoch','取消/删除代际'),col('deleted','tinyint unsigned','不可复活 tombstone',False,'0')],pk='subject_kind,subject_id',checks=['deleted IN (0,1)'],policy='领域创建根时创建 fence；enqueue 不得懒建或降低栅栏；typed root 应用完整性；所有写路径先锁此行再锁根')
 table('durable_task','B-05','V010','持久任务；外部未知结果从普通领取隔离',[
-    ident(),code('task_type','处理类型'),code('pool','隔离限并发池'),code('subject_kind','聚合类型'),col('subject_id',KEY,'聚合ID'),col('producer_key',HASH,'稳定 enqueue 业务键摘要'),code('input_kind','输入快照类型'),ident('input_id','不可变输入快照ID'),fingerprint(),num('business_version','入队版本'),num('cancel_epoch','入队取消代际'),col('priority','int','有界队列优先级'),code('state','任务状态',default="'READY'"),num('attempt','每次领取递增',0),num('max_attempts','显式策略上限；含崩溃回收'),col('lease_owner',CODE,'当前领取者',True),ts('expires_at','DB租约截止',True),ts('available_at','下次允许领取'),ts('created_at','入队时间'),code('output_kind','输出类型',True),ident('output_id','输出ID',True),code('last_error','安全失败码',True)],indexes=[idx('task_producer','producer_key','同一业务入队重放唯一',True),idx('task_ready','pool,state,available_at,id','分开扫描 READY'),idx('task_expired','pool,state,expires_at,id','分开扫描过期 RUNNING'),idx('task_subject_history','subject_kind,subject_id,created_at,id','聚合任务历史')],fks=[fk('subject_kind,subject_id','task_subject','subject_kind,subject_id')],checks=[enum('state','READY,RUNNING,RECONCILING,SUCCEEDED,FAILED,CANCELLED,STALE'),'max_attempts > 0',"state <> 'RUNNING' OR (lease_owner IS NOT NULL AND expires_at IS NOT NULL)"],policy='input/output typed refs 由任务注册器校验具体领域存在且相同 subject/版本；producer_key 冲突需比较完整输入，否则冲突；失败/旧结果保留最小诊断不覆盖有效稿')
+    ident(),code('task_type','处理类型'),code('pool','隔离限并发池'),code('subject_kind','聚合类型'),col('subject_id',KEY,'聚合ID'),col('producer_key',HASH,'稳定 enqueue 业务键摘要'),code('input_kind','输入快照类型'),ident('input_id','不可变输入快照ID'),fingerprint(),num('business_version','入队版本'),num('cancel_epoch','入队取消代际'),col('priority','int','有界队列优先级'),code('state','任务状态',default="'READY'"),num('attempt','每次领取递增',0),num('max_attempts','显式策略上限；含崩溃回收'),col('lease_owner',CODE,'当前领取者',True),ts('expires_at','DB租约截止',True),ts('available_at','下次允许领取'),ts('created_at','入队时间'),code('output_kind','输出类型',True),ident('output_id','输出ID',True),code('last_error','安全失败码',True)],indexes=[idx('task_producer','producer_key','同一业务入队重放唯一',True),idx('task_ready','pool,state,available_at,id','分开扫描 READY'),idx('task_expired','pool,state,expires_at,id','分开扫描过期 RUNNING'),idx('task_subject_history','subject_kind,subject_id,created_at,id','聚合任务历史'),idx('task_input_lookup','input_kind,input_id,id','固定 typed 输入的完整任务并集有界枚举')],fks=[fk('subject_kind,subject_id','task_subject','subject_kind,subject_id')],checks=[enum('state','READY,RUNNING,RECONCILING,SUCCEEDED,FAILED,CANCELLED,STALE'),'max_attempts > 0',"state <> 'RUNNING' OR (lease_owner IS NOT NULL AND expires_at IS NOT NULL)"],policy='input/output typed refs 由任务注册器校验具体领域存在且相同 subject/版本；producer_key 冲突需比较完整输入，否则冲突；失败/旧结果保留最小诊断不覆盖有效稿')
 table('task_attempt','B-05','V010','每次 Worker 领取诊断历史',[
     ref('task_id','任务'),num('attempt','领取代际'),code('owner','Worker身份'),ts('started_at','开始'),ts('ended_at','结束',True),code('outcome','结束结果',True),code('error_code','安全错误码',True)],pk='task_id,attempt',fks=[fk('task_id','durable_task')])
 table('external_operation','B-05','V010','任何可能产生外部效果的调用前 durable marker 及独立对账所有权',[
@@ -291,14 +291,15 @@ template['policy']='不可变历史；owner_id必须与minutes_template一致，
 # append-only execution row, not a replacement logical business key.
 operation=next(t for t in TABLES if t['name']=='external_operation')
 operation['cols']=[c for c in operation['cols'] if c['name'] not in ('task_id','origin_attempt')]
-operation['cols'].extend([code('subject_kind','聚合类型'),col('subject_id',KEY,'聚合ID'),num('current_execution_no','当前执行代际；初次1')])
+operation['cols'].extend([code('subject_kind','聚合类型'),col('subject_id',KEY,'聚合ID'),num('current_execution_no','当前执行代际；初次1'),col('reconcile_scan_seq','bigint','服务器 AUTO_INCREMENT 分配的正 Java long 扫描序号；持久化后应用不可改写；无显式默认是服务器分配例外，写入省略本列')])
 for c in operation['cols']:
     if c['name']=='request_hash': c['meaning']='逻辑内容摘要：固定confirmation/body及业务操作；不替代每次完整请求摘要'
     if c['name']=='marked_at': c['meaning']='首次before-external marker实际提交时间'
 operation['indexes']=[i for i in operation['indexes'] if i['name']!='external_task']
+operation['indexes'].append(idx('external_reconcile_scan','reconcile_scan_seq','不可变序号原始 keyset 扫描与固定高水位',True))
 operation['fks']=[fk('subject_kind,subject_id','task_subject','subject_kind,subject_id')]
 operation['checks']=[enum('state','MARKED,UNKNOWN,RETRY_QUEUED,SUCCEEDED,FAILED,MANUAL_REQUIRED'),'current_execution_no > 0']
-operation['policy']='operation_kind/business_key全历史唯一；不归单个task。current_execution_no由同聚合锁下CAS；独立reconcile_epoch跨执行永久递增、不清零。当前执行由(operation_id,no)应用校验。仅FAILED且当前execution有确定零效果证据可追加执行；UNKNOWN禁止重发'
+operation['policy']='operation_kind/business_key全历史唯一；不归单个task。current_execution_no由同聚合锁下CAS；独立reconcile_epoch跨执行永久递增、不清零。当前执行由(operation_id,no)应用校验。仅FAILED且当前execution有确定零效果证据可追加执行；UNKNOWN禁止重发；reconcile_scan_seq仅作有界枚举元数据，不授予任务/发送权限；服务器分配正long，应用持久化后不改写；受控恢复保留映射并完整校验正值/唯一性'
 table('external_execution','B-05/B-08','V010','R4 稳定逻辑操作下的追加执行尝试；支持同确认零效果失败重试',[
     ident(),ref('operation_id','稳定逻辑操作'),num('execution_no','同操作单调1起代际'),ref('task_id','本次新任务唯一拥有者'),num('task_attempt','before-call时实际领取attempt；排队时NULL',nullable=True),
     code('state','执行状态'),fingerprint('request_hash','本次完整请求含目标位置的不可变SHA256'),text('request_manifest','版本化安全请求清单：确认/目标ID/配置/固定输入引用；不含密钥'),
@@ -443,8 +444,23 @@ table('meeting_minutes_editor_guard','B-03/B-07/runtime Task2','V013.1','持久�
     policy='新建会议原事务插入0；真正授权编辑意图在根锁下由未知写1或严格递增，无减少/重置/超时/删除。上限前条件增量且一行，否则关闭失败；无默认。创建重放和旧行读取不补零；缺TABLE为schema unavailable。逻辑删除保留，只有永久删除父时协调清理；epoch不授予权限')
 
 
+# Task11 formally frozen V013.4; immutable acceptance plus one-way local decision.
+table('publication_submission','B-08/runtime Task11','V013.4','真实受理任务的不可变发布绑定与未标记本地终结',[
+    ref('task_id','真实受理任务；无执行时也存在'),ref('publication_id','唯一发布根'),num('submission_no','每发布根正数序号；上限9223372036854775806'),ref('confirmation_id','本次固定最终确认'),code('provider_id','显式配置提供方'),col('business_key',KEY,'publicationId:confirmationId'),col('library_id',KEY,'真实库ID'),col('folder_id',KEY,'真实目录ID'),col('requester_id',KEY,'原真实负责人'),fingerprint('logical_request_hash','固定逻辑请求SHA256'),fingerprint('execution_request_hash','固定执行请求SHA256'),text('request_manifest','无正文/秘密的严格绑定清单；最多65536 UTF8 bytes及65536 UTF16 units'),ts('created_at','真实受理UTC时间'),col('local_state','varchar(32) CHARACTER SET ascii COLLATE ascii_bin','UNDECIDED或NEVER_MARKED'),ts('local_decided_at','本地原子终结UTC时间',True),code('local_reason','精确白名单本地原因',True),col('local_decided_by',KEY,'真实fresh授权负责人；不是虚构人工点击',True),num('local_attempt_no','真实队列attempt；未领取允许0',nullable=True),ref('local_execution_id','真实未标记执行；无执行时NULL',True)],
+    pk='task_id',indexes=[idx('publication_submission_number','publication_id,submission_no','完整历史及单调序号',True),idx('publication_submission_undecided','local_state,created_at,task_id','有界恢复扫描'),idx('publication_submission_confirmation','confirmation_id','固定最终确认'),idx('publication_submission_requester','requester_id','原受理人'),idx('publication_submission_decider','local_decided_by','本地授权人'),idx('publication_submission_execution','local_execution_id','真实未标记执行')],
+    fks=[fk('task_id','durable_task'),fk('publication_id','publication'),fk('confirmation_id','final_confirmation'),fk('requester_id','enterprise_identity','enterprise_id'),fk('local_decided_by','enterprise_identity','enterprise_id','MySQL CHECK引用列省略显式action；InnoDB立即NO ACTION等同RESTRICT'),fk('local_execution_id','external_execution',note='MySQL CHECK引用列省略显式action；InnoDB立即NO ACTION等同RESTRICT')],
+    checks=['submission_no BETWEEN 1 AND 9223372036854775806',"(local_state = 'UNDECIDED' AND OCTET_LENGTH(local_state) = 9) OR (local_state = 'NEVER_MARKED' AND OCTET_LENGTH(local_state) = 12)",'OCTET_LENGTH(request_manifest) <= 65536',"(local_state = 'UNDECIDED' AND local_decided_at IS NULL AND local_reason IS NULL AND local_decided_by IS NULL AND local_attempt_no IS NULL AND local_execution_id IS NULL) OR (local_state = 'NEVER_MARKED' AND local_decided_at IS NOT NULL AND local_reason IS NOT NULL AND ((local_reason = 'PREPARATION_EXHAUSTED' AND OCTET_LENGTH(local_reason) = 21) OR (local_reason = 'TERMINAL_UNMARKED_FAILURE' AND OCTET_LENGTH(local_reason) = 25) OR (local_reason = 'EXPIRED_UNMARKED_ABANDONED' AND OCTET_LENGTH(local_reason) = 26)) AND local_decided_by IS NOT NULL AND local_attempt_no IS NOT NULL)"],
+    policy='固定绑定永不更新；只允许真实完整锁定证明下UNDECIDED一次CAS到NEVER_MARKED，重放原time/reason/actor/attempt，禁止回退/补造历史。FK不证明同会议/spec/marker；领域原子校验完整历史。无执行不造operation/attempt或provider proof；所有旧未决轮仍冻结。manifest内容与UTF16由运行时先界定；无自动清理')
+submission=next(t for t in TABLES if t['name']=='publication_submission')
+for f,name in zip(submission['fks'],('task','publication','confirmation','requester','decider','execution')):
+    f['constraint_name']='fk_publication_submission_'+name
+    if name in ('decider','execution'): f['implicit_restrict']=True
+
 def cname(t, n): return f"ck_{t['name']}_{n}"
-def fname(t, n): return f"fk_{t['name']}_{n}"
+def fname(t, n): return t['fks'][n].get('constraint_name', f"fk_{t['name']}_{n}")
+def auto_increment(t, c):
+    return (t['name'], c['name']) in {('audit_event', 'id'), ('external_operation', 'reconcile_scan_seq')}
+
 def sql():
     result = [f'-- {VERSION}: REVIEW ONLY; never place this file in Flyway locations.',
               '-- All future tables exist ONLY in the disposable review database.',
@@ -454,7 +470,7 @@ def sql():
         for c in t['cols']:
             s=f"  `{c['name']}` {c['type']} {'NULL' if c['nullable'] else 'NOT NULL'}"
             if c['default'] is not None: s+=' DEFAULT '+str(c['default'])
-            if t['name']=='audit_event' and c['name']=='id': s+=' AUTO_INCREMENT'
+            if auto_increment(t, c): s+=' AUTO_INCREMENT'
             lines.append(s)
         lines.append('  PRIMARY KEY ('+','.join(t['pk'])+')')
         for i in t['indexes']:
@@ -464,14 +480,14 @@ def sql():
         result.append('CREATE TABLE '+t['name']+' (\n'+',\n'.join(lines)+'\n) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;')
     for t in TABLES:
         for n,f in enumerate(t['fks']):
-            result.append(f"ALTER TABLE {t['name']} ADD CONSTRAINT {fname(t,n)} FOREIGN KEY ({','.join(f['cols'])}) REFERENCES {f['target']} ({','.join(f['remote'])}) ON UPDATE RESTRICT ON DELETE RESTRICT;")
+            result.append(f"ALTER TABLE {t['name']} ADD CONSTRAINT {fname(t,n)} FOREIGN KEY ({','.join(f['cols'])}) REFERENCES {f['target']} ({','.join(f['remote'])}){'' if f.get('implicit_restrict') else ' ON UPDATE RESTRICT ON DELETE RESTRICT'};")
     result.append('INSERT INTO task_outbox_sequence(id,next_id) VALUES(1,1);')
     return '\n\n'.join(result)+'\n'
 
 def dictionary():
     out=[f'# AMA 数据字典 — {VERSION}', '', '生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。', '',
          '全表 InnoDB / utf8mb4_0900_ai_ci；稳定标识使用 utf8mb4_0900_bin（NO PAD），UUID/协议码/哈希用 ascii_bin。每字段的类型中明确覆盖排序规则。DATETIME(6) 一律 UTC；DATE 为 Asia/Shanghai 业务日。默认值 `无` 意味必须由应用明确赋值（可空字段默认 NULL）。主键唯一性的业务依据为稳定实体标识或明确复合业务键；UUID 不承载顺序。LONGTEXT 的物理容量不是产品字数限制。', '',
-         '全部 FK 均 ON UPDATE RESTRICT / ON DELETE RESTRICT，根与历史不级联；拥有任务负责在同事务验证同会议/同所有者、状态及快照成员关系。字典中无 FK 的 typed ID 和循环当前指针见设计文档“逻辑关系与删除”，不可按裸 ID 绕过鉴权。', '',
+         '全部 FK 立即限制父更新/删除；CHECK引用的publication_submission两个可空FK使用InnoDB默认NO ACTION（等同RESTRICT），其余显式RESTRICT；根与历史不级联；拥有任务负责在同事务验证同会议/同所有者、状态及快照成员关系。字典中无 FK 的 typed ID 和循环当前指针见设计文档“逻辑关系与删除”，不可按裸 ID 绕过鉴权。', '',
          PROVENANCE_ROOT_RULE, '', '## 表清单与分期', '', '|表|任务|计划迁移|用途|','|---|---|---|---|']
     for t in TABLES: out.append(f"|{t['name']}|{t['task']}|{t['migration']}|{t['purpose']}|")
     for t in TABLES:
@@ -624,7 +640,7 @@ def verify(container, metadata_only=False):
             typ=c['type'].split(' CHARACTER')[0].split(' COLLATE')[0]
             coll=None
             if re.match(r'(char|varchar|longtext)',typ): coll=(c['type'].split(' COLLATE ')[1] if ' COLLATE ' in c['type'] else 'utf8mb4_0900_ai_ci')
-            expected_cols.append(dict(table=t['name'],column=c['name'],ordinal=n,type=typ,nullable='YES' if c['nullable'] else 'NO',default=None if c['default'] is None else str(c['default']).strip("'"),collation=coll,extra='auto_increment' if t['name']=='audit_event' and c['name']=='id' else ''))
+            expected_cols.append(dict(table=t['name'],column=c['name'],ordinal=n,type=typ,nullable='YES' if c['nullable'] else 'NO',default=None if c['default'] is None else str(c['default']).strip("'"),collation=coll,extra='auto_increment' if auto_increment(t, c) else ''))
     assert sorted(expected_cols,key=lambda x:(x['table'],x['ordinal']))==actual['columns'], 'Column metadata mismatch'
     known_indexes=[]
     for t in TABLES:

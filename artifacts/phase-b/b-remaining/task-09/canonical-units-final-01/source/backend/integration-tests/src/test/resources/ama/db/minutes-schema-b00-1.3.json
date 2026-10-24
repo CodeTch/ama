@@ -1,0 +1,2927 @@
+{
+  "status": "INDEPENDENT_ACTUAL_METADATA_ORACLE_NOT_SCHEMA_ACCEPTANCE",
+  "design_version": "B00-1.3-review",
+  "source_path": "docs/acceptance/b/database-generation-addendum-metadata-evidence.json",
+  "source_sha256": "a6c758d488c490c97bb373f404bc25c5b50db001e7c0dcb82dfcf9a6668f7aa5",
+  "source_ddl_sha256": "ebf1eae51b303d00b2ed35c4fbd5ba4c166813564032875a6ba0fb35ba743c93",
+  "source_mysql_version": "8.4.6",
+  "tables": [
+    "action_item",
+    "action_suggestion",
+    "background_note",
+    "background_note_source",
+    "element_set",
+    "evidence_link",
+    "exclusion_revision",
+    "generation_candidate",
+    "generation_input",
+    "minutes_element",
+    "minutes_revision",
+    "minutes_template",
+    "result_review",
+    "result_review_evidence",
+    "sensitive_detection",
+    "sensitive_detection_source",
+    "sensitive_exclusion",
+    "source_locator",
+    "template_revision"
+  ],
+  "deployed_lower_parents": [
+    "audit_event",
+    "department",
+    "durable_task",
+    "enterprise_identity",
+    "external_execution",
+    "external_operation",
+    "file_cleanup",
+    "file_object",
+    "file_reference",
+    "idempotency_record",
+    "identity_session",
+    "input_batch",
+    "input_batch_file",
+    "meeting",
+    "meeting_access_grant",
+    "meeting_acl",
+    "meeting_info_revision",
+    "meeting_person_search",
+    "meeting_search_projection",
+    "model_capacity",
+    "model_reservation",
+    "outbox_consumer",
+    "role_assignment",
+    "roster_member",
+    "roster_revision",
+    "speaker",
+    "storage_backend",
+    "task_attempt",
+    "task_outbox",
+    "task_outbox_sequence",
+    "task_subject",
+    "transcript_confirmation",
+    "transcript_revision",
+    "transcript_segment",
+    "transcript_segment_mark",
+    "transcription_input",
+    "upload_part",
+    "upload_session"
+  ],
+  "excluded_foreign_keys": [
+    {
+      "table": "generation_input",
+      "name": "fk_generation_input_5",
+      "column": "material_snapshot_id",
+      "target": "material_snapshot",
+      "remote": "id",
+      "reserved_version": "V017"
+    },
+    {
+      "table": "source_locator",
+      "name": "fk_source_locator_3",
+      "column": "material_revision_id",
+      "target": "material_revision",
+      "remote": "id",
+      "reserved_version": "V017"
+    }
+  ],
+  "counts": {
+    "tables": 19,
+    "columns": 123,
+    "indexes": 92,
+    "checks": 21,
+    "foreign_keys": 45
+  },
+  "metadata": {
+    "tables": [
+      {
+        "table": "action_item",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "action_suggestion",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "background_note",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "background_note_source",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "element_set",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "evidence_link",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "exclusion_revision",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "generation_candidate",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "generation_input",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "minutes_element",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "minutes_revision",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "minutes_template",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "result_review",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "result_review_evidence",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "sensitive_detection",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "sensitive_detection_source",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "sensitive_exclusion",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "source_locator",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "template_revision",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      }
+    ],
+    "columns": [
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "action_item",
+        "column": "element_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "action_item",
+        "column": "owner_enterprise_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "action_item",
+        "column": "owner_display",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "date",
+        "extra": "",
+        "table": "action_item",
+        "column": "due_on",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "action_suggestion",
+        "column": "element_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "action_suggestion",
+        "column": "input_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "action_suggestion",
+        "column": "owner_mention",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "date",
+        "extra": "",
+        "table": "action_suggestion",
+        "column": "due_on",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "background_note",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "background_note",
+        "column": "set_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "background_note",
+        "column": "input_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "background_note",
+        "column": "ordinal",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "background_note",
+        "column": "body",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "background_note_source",
+        "column": "note_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "background_note_source",
+        "column": "locator_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "element_set",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "element_set",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "element_set",
+        "column": "revision",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "element_set",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "evidence_link",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "evidence_link",
+        "column": "locator_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "evidence_link",
+        "column": "element_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "evidence_link",
+        "column": "minutes_revision_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "evidence_link",
+        "column": "support_state",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "evidence_link",
+        "column": "target_anchor",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "exclusion_revision",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "exclusion_revision",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "exclusion_revision",
+        "column": "revision",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "exclusion_revision",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "input_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "task_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "minutes_revision_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "element_set_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "base_revision",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "input_fingerprint",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "state",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "generation_candidate",
+        "column": "decided_at",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "transcript_confirmation_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "material_snapshot_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "template_revision_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "exclusion_revision_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "element_set_id",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "prompt_version",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "model_config_version",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "generation_input",
+        "column": "base_revision",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "input_fingerprint",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "scope",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "generation_input",
+        "column": "target_element_id",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "minutes_element",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "minutes_element",
+        "column": "set_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "minutes_element",
+        "column": "category",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "minutes_element",
+        "column": "ordinal",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "minutes_element",
+        "column": "body",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "minutes_element",
+        "column": "support_state",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "minutes_revision",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "minutes_revision",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "minutes_revision",
+        "column": "revision",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "minutes_revision",
+        "column": "parent_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "minutes_revision",
+        "column": "title",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "minutes_revision",
+        "column": "title_origin",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "minutes_revision",
+        "column": "body",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "minutes_revision",
+        "column": "generation_input_id",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "minutes_revision",
+        "column": "created_by",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "minutes_revision",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "owner_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "name",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "name_normalized",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "name_hash",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "current_revision_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "revision",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "minutes_template",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "result_review",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "result_review",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "result_review",
+        "column": "review_no",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "result_review",
+        "column": "review_kind",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "result_review",
+        "column": "element_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "result_review",
+        "column": "minutes_revision_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "result_review",
+        "column": "target_anchor",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "result_review",
+        "column": "target_hash",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "result_review",
+        "column": "source_set_hash",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "result_review",
+        "column": "hash_profile",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "result_review",
+        "column": "outcome",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "result_review",
+        "column": "reviewed_by",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "result_review",
+        "column": "reviewed_at",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "result_review_evidence",
+        "column": "review_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "result_review_evidence",
+        "column": "evidence_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "sensitive_detection",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "sensitive_detection",
+        "column": "set_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "sensitive_detection",
+        "column": "input_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "sensitive_detection",
+        "column": "category",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "sensitive_detection",
+        "column": "ordinal",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "sensitive_detection_source",
+        "column": "detection_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "sensitive_detection_source",
+        "column": "locator_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "sensitive_exclusion",
+        "column": "revision_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "sensitive_exclusion",
+        "column": "locator_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "sensitive_exclusion",
+        "column": "category",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "sensitive_exclusion",
+        "column": "reason",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "source_locator",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "source_locator",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "source_locator",
+        "column": "kind",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "source_locator",
+        "column": "transcript_revision_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "source_locator",
+        "column": "segment_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "source_locator",
+        "column": "file_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "source_locator",
+        "column": "material_revision_id",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "source_locator",
+        "column": "page_no",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "source_locator",
+        "column": "paragraph_no",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "source_locator",
+        "column": "section_path",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "source_locator",
+        "column": "start_ms",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "source_locator",
+        "column": "end_ms",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "template_revision",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "template_revision",
+        "column": "template_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "template_revision",
+        "column": "revision",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "template_revision",
+        "column": "owner_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "template_revision",
+        "column": "name",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "template_revision",
+        "column": "themes",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "template_revision",
+        "column": "theme_count",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "template_revision",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": null
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 1,
+        "name": "fk_action_item_1",
+        "type": "BTREE",
+        "table": "action_item",
+        "column": "owner_enterprise_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "action_item",
+        "column": "element_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_action_suggestion_1",
+        "type": "BTREE",
+        "table": "action_suggestion",
+        "column": "input_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "action_suggestion",
+        "column": "element_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "background_order",
+        "type": "BTREE",
+        "table": "background_note",
+        "column": "set_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "background_order",
+        "type": "BTREE",
+        "table": "background_note",
+        "column": "ordinal",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_background_note_1",
+        "type": "BTREE",
+        "table": "background_note",
+        "column": "input_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "background_note",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "background_source_reverse",
+        "type": "BTREE",
+        "table": "background_note_source",
+        "column": "locator_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "background_source_reverse",
+        "type": "BTREE",
+        "table": "background_note_source",
+        "column": "note_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "background_note_source",
+        "column": "note_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "background_note_source",
+        "column": "locator_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "element_set_revision",
+        "type": "BTREE",
+        "table": "element_set",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "element_set_revision",
+        "type": "BTREE",
+        "table": "element_set",
+        "column": "revision",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "element_set",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "evidence_element",
+        "type": "BTREE",
+        "table": "evidence_link",
+        "column": "element_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "evidence_element",
+        "type": "BTREE",
+        "table": "evidence_link",
+        "column": "locator_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "evidence_minutes",
+        "type": "BTREE",
+        "table": "evidence_link",
+        "column": "minutes_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "evidence_minutes",
+        "type": "BTREE",
+        "table": "evidence_link",
+        "column": "locator_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_evidence_link_0",
+        "type": "BTREE",
+        "table": "evidence_link",
+        "column": "locator_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "evidence_link",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "exclusion_version",
+        "type": "BTREE",
+        "table": "exclusion_revision",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "exclusion_version",
+        "type": "BTREE",
+        "table": "exclusion_revision",
+        "column": "revision",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "exclusion_revision",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "candidate_pending",
+        "type": "BTREE",
+        "table": "generation_candidate",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "candidate_pending",
+        "type": "BTREE",
+        "table": "generation_candidate",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "candidate_pending",
+        "type": "BTREE",
+        "table": "generation_candidate",
+        "column": "created_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "candidate_pending",
+        "type": "BTREE",
+        "table": "generation_candidate",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "candidate_task",
+        "type": "BTREE",
+        "table": "generation_candidate",
+        "column": "task_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_generation_candidate_1",
+        "type": "BTREE",
+        "table": "generation_candidate",
+        "column": "input_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_generation_candidate_3",
+        "type": "BTREE",
+        "table": "generation_candidate",
+        "column": "minutes_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_generation_candidate_4",
+        "type": "BTREE",
+        "table": "generation_candidate",
+        "column": "element_set_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "generation_candidate",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_generation_input_0",
+        "type": "BTREE",
+        "table": "generation_input",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_generation_input_1",
+        "type": "BTREE",
+        "table": "generation_input",
+        "column": "transcript_confirmation_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_generation_input_2",
+        "type": "BTREE",
+        "table": "generation_input",
+        "column": "template_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_generation_input_3",
+        "type": "BTREE",
+        "table": "generation_input",
+        "column": "exclusion_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_generation_input_4",
+        "type": "BTREE",
+        "table": "generation_input",
+        "column": "element_set_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_generation_input_5",
+        "type": "BTREE",
+        "table": "generation_input",
+        "column": "material_snapshot_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "generation_input",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "element_order",
+        "type": "BTREE",
+        "table": "minutes_element",
+        "column": "set_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "element_order",
+        "type": "BTREE",
+        "table": "minutes_element",
+        "column": "category",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "element_order",
+        "type": "BTREE",
+        "table": "minutes_element",
+        "column": "ordinal",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "minutes_element",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_minutes_revision_1",
+        "type": "BTREE",
+        "table": "minutes_revision",
+        "column": "parent_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_minutes_revision_2",
+        "type": "BTREE",
+        "table": "minutes_revision",
+        "column": "generation_input_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "minutes_history",
+        "type": "BTREE",
+        "table": "minutes_revision",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "minutes_history",
+        "type": "BTREE",
+        "table": "minutes_revision",
+        "column": "revision",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "minutes_revision",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "minutes_template",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "template_name_bucket",
+        "type": "BTREE",
+        "table": "minutes_template",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "template_name_bucket",
+        "type": "BTREE",
+        "table": "minutes_template",
+        "column": "name_hash",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "template_name_bucket",
+        "type": "BTREE",
+        "table": "minutes_template",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "result_review",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "review_element",
+        "type": "BTREE",
+        "table": "result_review",
+        "column": "element_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "review_element",
+        "type": "BTREE",
+        "table": "result_review",
+        "column": "review_kind",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "review_element",
+        "type": "BTREE",
+        "table": "result_review",
+        "column": "review_no",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "review_minutes",
+        "type": "BTREE",
+        "table": "result_review",
+        "column": "minutes_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "review_minutes",
+        "type": "BTREE",
+        "table": "result_review",
+        "column": "review_kind",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "review_minutes",
+        "type": "BTREE",
+        "table": "result_review",
+        "column": "review_no",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "review_sequence",
+        "type": "BTREE",
+        "table": "result_review",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "review_sequence",
+        "type": "BTREE",
+        "table": "result_review",
+        "column": "review_no",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "result_review_evidence",
+        "column": "review_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "result_review_evidence",
+        "column": "evidence_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "review_evidence_reverse",
+        "type": "BTREE",
+        "table": "result_review_evidence",
+        "column": "evidence_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "review_evidence_reverse",
+        "type": "BTREE",
+        "table": "result_review_evidence",
+        "column": "review_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "detection_order",
+        "type": "BTREE",
+        "table": "sensitive_detection",
+        "column": "set_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "detection_order",
+        "type": "BTREE",
+        "table": "sensitive_detection",
+        "column": "category",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "detection_order",
+        "type": "BTREE",
+        "table": "sensitive_detection",
+        "column": "ordinal",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_sensitive_detection_1",
+        "type": "BTREE",
+        "table": "sensitive_detection",
+        "column": "input_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "sensitive_detection",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "detection_source_reverse",
+        "type": "BTREE",
+        "table": "sensitive_detection_source",
+        "column": "locator_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "detection_source_reverse",
+        "type": "BTREE",
+        "table": "sensitive_detection_source",
+        "column": "detection_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "sensitive_detection_source",
+        "column": "detection_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "sensitive_detection_source",
+        "column": "locator_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_sensitive_exclusion_1",
+        "type": "BTREE",
+        "table": "sensitive_exclusion",
+        "column": "locator_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "sensitive_exclusion",
+        "column": "revision_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "sensitive_exclusion",
+        "column": "locator_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "sensitive_exclusion",
+        "column": "category",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_source_locator_1",
+        "type": "BTREE",
+        "table": "source_locator",
+        "column": "transcript_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "fk_source_locator_1",
+        "type": "BTREE",
+        "table": "source_locator",
+        "column": "segment_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_source_locator_2",
+        "type": "BTREE",
+        "table": "source_locator",
+        "column": "file_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_source_locator_3",
+        "type": "BTREE",
+        "table": "source_locator",
+        "column": "material_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "locator_meeting",
+        "type": "BTREE",
+        "table": "source_locator",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "locator_meeting",
+        "type": "BTREE",
+        "table": "source_locator",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "source_locator",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "template_revision",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "template_owner",
+        "type": "BTREE",
+        "table": "template_revision",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "template_owner",
+        "type": "BTREE",
+        "table": "template_revision",
+        "column": "template_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "template_owner",
+        "type": "BTREE",
+        "table": "template_revision",
+        "column": "revision",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "template_version",
+        "type": "BTREE",
+        "table": "template_revision",
+        "column": "template_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "template_version",
+        "type": "BTREE",
+        "table": "template_revision",
+        "column": "revision",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      }
+    ],
+    "checks": [
+      {
+        "name": "ck_background_note_0",
+        "table": "background_note",
+        "clause": "(`ordinal` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_evidence_link_0",
+        "table": "evidence_link",
+        "clause": "((`element_id` is null) <> (`minutes_revision_id` is null))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_evidence_link_1",
+        "table": "evidence_link",
+        "clause": "(`support_state` in (_ascii\\'SUPPORTED\\',_ascii\\'PARTIAL\\',_ascii\\'UNSUPPORTED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_generation_candidate_0",
+        "table": "generation_candidate",
+        "clause": "(`state` in (_ascii\\'PENDING\\',_ascii\\'ADOPTED\\',_ascii\\'REJECTED\\',_ascii\\'STALE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_generation_input_0",
+        "table": "generation_input",
+        "clause": "(`scope` in (_ascii\\'FULL\\',_ascii\\'ELEMENT\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_generation_input_1",
+        "table": "generation_input",
+        "clause": "(((`scope` = _ascii\\'FULL\\') and (`target_element_id` is null)) or ((`scope` = _ascii\\'ELEMENT\\') and (`target_element_id` is not null)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_minutes_element_0",
+        "table": "minutes_element",
+        "clause": "(`category` in (_ascii\\'OVERVIEW\\',_ascii\\'DISCUSSION\\',_ascii\\'CONCLUSION\\',_ascii\\'ACTION\\',_ascii\\'RISK\\',_ascii\\'OPEN_QUESTION\\',_ascii\\'DISAGREEMENT\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_minutes_element_1",
+        "table": "minutes_element",
+        "clause": "(`support_state` in (_ascii\\'SUPPORTED\\',_ascii\\'PARTIAL\\',_ascii\\'UNSUPPORTED\\',_ascii\\'NOT_EXTRACTED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_minutes_revision_0",
+        "table": "minutes_revision",
+        "clause": "(`title_origin` in (_ascii\\'HUMAN\\',_ascii\\'LINKED\\',_ascii\\'AI\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_result_review_0",
+        "table": "result_review",
+        "clause": "(`review_no` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_result_review_1",
+        "table": "result_review",
+        "clause": "((`element_id` is null) <> (`minutes_revision_id` is null))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_result_review_2",
+        "table": "result_review",
+        "clause": "(`review_kind` in (_ascii\\'SOURCE_SUPPORT\\',_ascii\\'ACTION_FIELDS\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_result_review_3",
+        "table": "result_review",
+        "clause": "(((`review_kind` = _ascii\\'SOURCE_SUPPORT\\') and (`target_anchor` is not null) and (`outcome` in (_ascii\\'SUPPORTED\\',_ascii\\'PARTIAL\\',_ascii\\'UNSUPPORTED\\'))) or ((`review_kind` = _ascii\\'ACTION_FIELDS\\') and (`element_id` is not null) and (`target_anchor` is null) and (`outcome` = _ascii\\'CONFIRMED\\')))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_result_review_4",
+        "table": "result_review",
+        "clause": "regexp_like(`target_hash`,_ascii\\'^[0-9a-f]{64}$\\',_utf8mb4\\'c\\')",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_result_review_5",
+        "table": "result_review",
+        "clause": "regexp_like(`source_set_hash`,_ascii\\'^[0-9a-f]{64}$\\',_utf8mb4\\'c\\')",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_sensitive_detection_0",
+        "table": "sensitive_detection",
+        "clause": "(`ordinal` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_sensitive_detection_1",
+        "table": "sensitive_detection",
+        "clause": "(`category` in (_ascii\\'INTERNAL_BUSINESS_DATA\\',_ascii\\'POLITICAL_SENSITIVE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_sensitive_exclusion_0",
+        "table": "sensitive_exclusion",
+        "clause": "(`category` in (_ascii\\'INTERNAL_BUSINESS_DATA\\',_ascii\\'POLITICAL_SENSITIVE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_source_locator_0",
+        "table": "source_locator",
+        "clause": "(`kind` in (_ascii\\'TRANSCRIPT\\',_ascii\\'AUDIO\\',_ascii\\'PDF_PAGE\\',_ascii\\'PPT_PAGE\\',_ascii\\'WORD_PARAGRAPH\\',_ascii\\'TEXT_PARAGRAPH\\',_ascii\\'KNOWLEDGE_VERSION\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_source_locator_1",
+        "table": "source_locator",
+        "clause": "(((`kind` = _ascii\\'TRANSCRIPT\\') and (`transcript_revision_id` is not null) and (`segment_id` is not null)) or ((`kind` = _ascii\\'AUDIO\\') and (`file_id` is not null) and (`start_ms` is not null) and (`end_ms` is not null) and (`end_ms` >= `start_ms`)) or ((`kind` in (_ascii\\'PDF_PAGE\\',_ascii\\'PPT_PAGE\\')) and (`file_id` is not null) and (`page_no` is not null) and (`page_no` > 0)) or ((`kind` in (_ascii\\'WORD_PARAGRAPH\\',_ascii\\'TEXT_PARAGRAPH\\')) and (`file_id` is not null) and (`paragraph_no` is not null) and (`paragraph_no` > 0)) or ((`kind` = _ascii\\'KNOWLEDGE_VERSION\\') and (`material_revision_id` is not null)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_template_revision_0",
+        "table": "template_revision",
+        "clause": "(`theme_count` between 1 and 8)",
+        "enforced": "YES"
+      }
+    ],
+    "foreign_keys": [
+      {
+        "name": "fk_action_item_0",
+        "table": "action_item",
+        "column": "element_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_element",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_action_item_1",
+        "table": "action_item",
+        "column": "owner_enterprise_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_action_suggestion_0",
+        "table": "action_suggestion",
+        "column": "element_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_element",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_action_suggestion_1",
+        "table": "action_suggestion",
+        "column": "input_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "generation_input",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_background_note_0",
+        "table": "background_note",
+        "column": "set_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "element_set",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_background_note_1",
+        "table": "background_note",
+        "column": "input_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "generation_input",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_background_note_source_0",
+        "table": "background_note_source",
+        "column": "note_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "background_note",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_background_note_source_1",
+        "table": "background_note_source",
+        "column": "locator_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "source_locator",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_element_set_0",
+        "table": "element_set",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_evidence_link_0",
+        "table": "evidence_link",
+        "column": "locator_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "source_locator",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_evidence_link_1",
+        "table": "evidence_link",
+        "column": "element_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_element",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_evidence_link_2",
+        "table": "evidence_link",
+        "column": "minutes_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_exclusion_revision_0",
+        "table": "exclusion_revision",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_generation_candidate_0",
+        "table": "generation_candidate",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_generation_candidate_1",
+        "table": "generation_candidate",
+        "column": "input_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "generation_input",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_generation_candidate_2",
+        "table": "generation_candidate",
+        "column": "task_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "durable_task",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_generation_candidate_3",
+        "table": "generation_candidate",
+        "column": "minutes_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_generation_candidate_4",
+        "table": "generation_candidate",
+        "column": "element_set_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "element_set",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_generation_input_0",
+        "table": "generation_input",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_generation_input_1",
+        "table": "generation_input",
+        "column": "transcript_confirmation_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "transcript_confirmation",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_generation_input_2",
+        "table": "generation_input",
+        "column": "template_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "template_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_generation_input_3",
+        "table": "generation_input",
+        "column": "exclusion_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "exclusion_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_generation_input_4",
+        "table": "generation_input",
+        "column": "element_set_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "element_set",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_minutes_element_0",
+        "table": "minutes_element",
+        "column": "set_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "element_set",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_minutes_revision_0",
+        "table": "minutes_revision",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_minutes_revision_1",
+        "table": "minutes_revision",
+        "column": "parent_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_minutes_revision_2",
+        "table": "minutes_revision",
+        "column": "generation_input_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "generation_input",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_minutes_template_0",
+        "table": "minutes_template",
+        "column": "owner_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_result_review_0",
+        "table": "result_review",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_result_review_1",
+        "table": "result_review",
+        "column": "element_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_element",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_result_review_2",
+        "table": "result_review",
+        "column": "minutes_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_result_review_evidence_0",
+        "table": "result_review_evidence",
+        "column": "review_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "result_review",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_result_review_evidence_1",
+        "table": "result_review_evidence",
+        "column": "evidence_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "evidence_link",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_sensitive_detection_0",
+        "table": "sensitive_detection",
+        "column": "set_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "element_set",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_sensitive_detection_1",
+        "table": "sensitive_detection",
+        "column": "input_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "generation_input",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_sensitive_detection_source_0",
+        "table": "sensitive_detection_source",
+        "column": "detection_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "sensitive_detection",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_sensitive_detection_source_1",
+        "table": "sensitive_detection_source",
+        "column": "locator_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "source_locator",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_sensitive_exclusion_0",
+        "table": "sensitive_exclusion",
+        "column": "revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "exclusion_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_sensitive_exclusion_1",
+        "table": "sensitive_exclusion",
+        "column": "locator_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "source_locator",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_source_locator_0",
+        "table": "source_locator",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_source_locator_1",
+        "table": "source_locator",
+        "column": "transcript_revision_id",
+        "delete": "RESTRICT",
+        "remote": "revision_id",
+        "target": "transcript_segment",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_source_locator_1",
+        "table": "source_locator",
+        "column": "segment_id",
+        "delete": "RESTRICT",
+        "remote": "segment_id",
+        "target": "transcript_segment",
+        "update": "RESTRICT",
+        "ordinal": 2
+      },
+      {
+        "name": "fk_source_locator_2",
+        "table": "source_locator",
+        "column": "file_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "file_object",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_template_revision_0",
+        "table": "template_revision",
+        "column": "owner_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_template_revision_1",
+        "table": "template_revision",
+        "column": "template_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_template",
+        "update": "RESTRICT",
+        "ordinal": 1
+      }
+    ]
+  }
+}

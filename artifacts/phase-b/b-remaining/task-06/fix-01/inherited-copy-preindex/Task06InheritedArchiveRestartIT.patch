@@ -1,0 +1,40 @@
+--- backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java
++++ backend/integration-tests/src/test/java/ama/transcript/Task06InheritedArchiveRestartIT.java
+@@ -10,11 +10,12 @@
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ /** Retains every unique run's positive releases, copied negatives and real process receipts. */
+-class ConfigArchiveRestartIT {
++class Task06InheritedArchiveRestartIT {
++    final List<Properties> owned=new ArrayList<>();
+     record Run(Process process,int exit,Properties receipt) {}
+     Run launch(Path run,String label,String mode,Path root,String pin,Path handoff)throws Exception {
+         Path receipt=run.resolve(label+".properties"),out=run.resolve(label+".stdout.log"),err=run.resolve(label+".stderr.log");
+-        var argv=List.of(Path.of(System.getProperty("java.home"),"bin","java").toString(),"-cp",System.getProperty("java.class.path"),ArchiveRestartProbe.class.getName(),mode,root.toString(),pin,handoff.toString(),receipt.toString());
++        var argv=List.of(Path.of(System.getProperty("java.home"),"bin","java").toString(),"-Xmx512m","-XX:ActiveProcessorCount=2","-cp",System.getProperty("java.class.path"),ArchiveRestartProbe.class.getName(),mode,root.toString(),pin,handoff.toString(),receipt.toString());
+         Files.write(run.resolve(label+".argv.txt"),argv,StandardCharsets.UTF_8,StandardOpenOption.CREATE_NEW);
+         var process=new ProcessBuilder(argv).redirectOutput(out.toFile()).redirectError(err.toFile()).start();
+         Files.writeString(run.resolve(label+".parent-pid.txt"),Long.toString(process.pid()),StandardOpenOption.CREATE_NEW);
+@@ -26,14 +27,14 @@
+         return new Run(process,process.exitValue(),p);
+     }
+     @Test void freshJvmRecoversAcceptedOldInputAndRejectsDamagedCopies()throws Exception {
+-        String evidence=Objects.requireNonNull(System.getenv("AMA_B06_RESTART_EVIDENCE"),"explicit new retained evidence root required");
++        String evidence=Path.of(System.getenv("AMA_TASK05_ROOT")).getParent().getParent().resolve("artifacts/phase-b/b-remaining/task-06/fix-01/inherited-archive").toString();Files.createDirectories(Path.of(evidence));
+         Path run=Path.of(evidence).resolve("runtime-"+UUID.randomUUID());Files.createDirectory(run);Path root=run.resolve("positive");Files.createDirectory(root);
+         Files.writeString(run.resolve("parent-jvm-pid.txt"),Long.toString(ProcessHandle.current().pid()),StandardOpenOption.CREATE_NEW);
+         var publisher=new ControlledArchiveReleaseWriter();String one=publisher.publish(root,null,bundle(),I,B,()->false);
+         assertEquals(new String(literal("index1.sha256"),StandardCharsets.UTF_8),one);
+         Path handoff=run.resolve("commit-handoff.properties");Run a=launch(run,"A","A",root,one,handoff);
+         assertEquals(0,a.exit(),"A must commit genuine accepted queue task");assertEquals("COMMIT_ACK",a.receipt().getProperty("status"));
+-        var p=read(handoff);assertEquals(Long.toString(a.process().pid()),p.getProperty("pidA"));
++        var p=read(handoff);owned.add(p);assertEquals(Long.toString(a.process().pid()),p.getProperty("pidA"));
+         var f=new ArchiveRestartFixture();var actual=new JdbcProcessingFactsReader(f.source).readStored(actor(p.getProperty("owner")),p.getProperty("meeting"),p.getProperty("input"),B,()->false);
+         assertEquals(1,actual.taskFacts().size());assertEquals(p.getProperty("task"),actual.taskFacts().getFirst().taskId());assertEquals(spec(p,p.getProperty("digest")),actual.taskFacts().getFirst().spec());
+         String before=snapshot(f,p);Files.writeString(run.resolve("db-before.sha256"),before,StandardOpenOption.CREATE_NEW);
+@@ -71,4 +72,5 @@
+         text.append(f.j.queryForList("SELECT * FROM task_subject WHERE subject_kind='MEETING' AND subject_id=?",p.getProperty("meeting")));
+         return sha(text.toString().getBytes(StandardCharsets.UTF_8));
+     }
++ @org.junit.jupiter.api.AfterEach void closeOwnMetadataAcceptance()throws Exception {var f=new ArchiveRestartFixture();for(var p:owned){f.tx.required(()->{f.j.queryForObject("SELECT id FROM durable_task WHERE id=? AND subject_id=? FOR UPDATE",String.class,p.getProperty("task"),p.getProperty("meeting"));assertEquals(0,f.j.queryForObject("SELECT COUNT(*) FROM task_attempt WHERE task_id=?",Integer.class,p.getProperty("task")));f.j.update("UPDATE durable_task SET state='FAILED',lease_owner=NULL,expires_at=NULL WHERE id=? AND state='READY'",p.getProperty("task"));return null;});var root=Path.of(System.getenv("AMA_TASK05_ROOT")).getParent().getParent().resolve("artifacts/phase-b/b-remaining/task-06/fix-01/inherited-archive");Files.writeString(root.resolve(p.getProperty("task")+"-fixture-closed.json"),new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(Map.of("task",p.getProperty("task"),"meeting",p.getProperty("meeting"),"owner",p.getProperty("owner"),"scope","controlled metadata acceptance; after all immutable-recovery assertions, precise own READY fixture terminal maintenance", "state",f.j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,p.getProperty("task")))));}}
+ }

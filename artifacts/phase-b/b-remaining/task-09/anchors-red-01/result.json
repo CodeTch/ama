@@ -1,0 +1,32 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 3,
+    "failures": 3,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.minutes.json.Task09StoredAnchorTest",
+      "name": "rejectsReorderedWhitespaceDuplicateUnknownAndTrailingStoredForms",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.minutes.json.Task09StoredAnchorTest",
+      "name": "retainsExactScalarAnchorAndCanonicalStoredText",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.minutes.json.Task09StoredAnchorTest",
+      "name": "rejectsOversizeAndCancellation",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

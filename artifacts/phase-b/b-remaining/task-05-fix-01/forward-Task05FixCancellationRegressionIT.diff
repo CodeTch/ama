@@ -1,0 +1,11 @@
+--- backend/integration-tests/src/test/java/ama/task/Task05CancellationIT.java
++++ backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java
+@@ -8,7 +8,7 @@
+ import org.junit.jupiter.api.Test;
+ import static org.junit.jupiter.api.Assertions.*;
+ /** Actual queue/Worker cancellation and actual mTLS body. Synthetic TEST_INFO task is only a scheduler boundary fixture. */
+-class Task05CancellationIT {
++class Task05FixCancellationRegressionIT {
+  @Test void closeAndActualRenewalLossAbortReaderBeforeFixtureRelease()throws Exception {
+   for(boolean renewalLoss:List.of(false,true)){
+    var f=new TaskFixture();var q=f.queue();var spec=f.spec();String task=q.enqueue(spec);

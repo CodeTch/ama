@@ -1,0 +1,92 @@
+{
+  "TaskFixture": {
+    "originalSource": "backend/integration-tests/src/test/java/ama/task/TaskFixture.java",
+    "originalSha256": "032d7842bfaf1f0ff71fecc5a4674bed4dcd5057b555a9f9000e87d60f7dd22d",
+    "forwardCopy": "backend/integration-tests/src/test/java/ama/task/Task08InheritedFixture.java",
+    "forwardSha256": "d176243f4596bb661d94b6e7b8c6daa688d77140e8e21639f979e09494aff9af",
+    "originalTestAnnotations": 0,
+    "forwardTestAnnotations": 0,
+    "methodsRemoved": []
+  },
+  "ExternalExecutionIT": {
+    "originalSource": "backend/integration-tests/src/test/java/ama/task/ExternalExecutionIT.java",
+    "originalSha256": "1699ba7e6627ce9eb811aa8b816fa83464c0af26332b90279f8a9c4b5c37dd29",
+    "forwardCopy": "backend/integration-tests/src/test/java/ama/task/Task08InheritedExternalExecutionIT.java",
+    "forwardSha256": "8a0235e5aeb29a4fa7f0c9ca1ee337e1a6f662ca117a7636e46546d865863c2e",
+    "originalTestAnnotations": 10,
+    "forwardTestAnnotations": 10,
+    "methodsRemoved": []
+  },
+  "ReconciliationWorkerIT": {
+    "originalSource": "backend/integration-tests/src/test/java/ama/task/ReconciliationWorkerIT.java",
+    "originalSha256": "5c8c6a15792155e86e8239974d545a208537f9210edf3989e59995760bb8bdd9",
+    "forwardCopy": "backend/integration-tests/src/test/java/ama/task/Task08InheritedReconciliationWorkerIT.java",
+    "forwardSha256": "08705754dc049752eca0ae714ebf3e04d76d0d4aa5567a684e0ad65506ccf53f",
+    "originalTestAnnotations": 1,
+    "forwardTestAnnotations": 1,
+    "methodsRemoved": []
+  },
+  "ModelPermitIT": {
+    "originalSource": "backend/integration-tests/src/test/java/ama/task/ModelPermitIT.java",
+    "originalSha256": "415b930e8e76a02826eb8be5f29d415f95827d2a71f681f6d1f1fe54efbf0fc8",
+    "forwardCopy": "backend/integration-tests/src/test/java/ama/task/Task08InheritedModelPermitIT.java",
+    "forwardSha256": "d5b3989e6ca449bb20aaeaf1835cf65bc6a1e1048b368c548c6f2b7a03dfc19a",
+    "originalTestAnnotations": 7,
+    "forwardTestAnnotations": 7,
+    "methodsRemoved": []
+  },
+  "TaskLeaseIT": {
+    "originalSource": "backend/integration-tests/src/test/java/ama/task/TaskLeaseIT.java",
+    "originalSha256": "14ea074807329c5546414bba9e2d0ba2acca41c67f1d06971e5919520c4e85bf",
+    "forwardCopy": "backend/integration-tests/src/test/java/ama/task/Task08InheritedTaskLeaseIT.java",
+    "forwardSha256": "87a6eaf48b85c1bb7bc2dbe245d3583e706bfe6e8457167f682b2e0a65d8754c",
+    "originalTestAnnotations": 10,
+    "forwardTestAnnotations": 10,
+    "methodsRemoved": []
+  },
+  "OutboxFenceIT": {
+    "originalSource": "backend/integration-tests/src/test/java/ama/task/OutboxFenceIT.java",
+    "originalSha256": "6e198f342b5926300ed1249e1a2894e0a54c8aa6393e66367c06252a3456fff7",
+    "forwardCopy": "backend/integration-tests/src/test/java/ama/task/Task08InheritedOutboxFenceIT.java",
+    "forwardSha256": "c46b24a0313f105d3ce40b291af2d8591eb5c4858c5967bd7893984314a85f6a",
+    "originalTestAnnotations": 7,
+    "forwardTestAnnotations": 7,
+    "methodsRemoved": []
+  },
+  "OutboxConsumerIT": {
+    "originalSource": "backend/integration-tests/src/test/java/ama/task/OutboxConsumerIT.java",
+    "originalSha256": "b1e5f7cdc2780d55a23f5ede681913c806ce8f91796858ae089288e569cedaf6",
+    "forwardCopy": "backend/integration-tests/src/test/java/ama/task/Task08InheritedOutboxConsumerIT.java",
+    "forwardSha256": "9e9b3176afd432a59f73634ac34aedc820fd0d20f714cd6c9b8c61c1afa3efba",
+    "originalTestAnnotations": 2,
+    "forwardTestAnnotations": 2,
+    "methodsRemoved": []
+  },
+  "B06QueueSeamsIT": {
+    "originalSource": "backend/integration-tests/src/test/java/ama/task/B06QueueSeamsIT.java",
+    "originalSha256": "f2fdf2f64ca33d112a8cb618748249b8454e631cc24a8090927f2963b5312a74",
+    "forwardCopy": "backend/integration-tests/src/test/java/ama/task/Task08InheritedB06QueueSeamsIT.java",
+    "forwardSha256": "aace02c64fa54d9ee352536d1d90a7440a29157984b33509adb096b6c642a6b7",
+    "originalTestAnnotations": 18,
+    "forwardTestAnnotations": 18,
+    "methodsRemoved": []
+  },
+  "PreparedCompletionIT": {
+    "originalSource": "backend/integration-tests/src/test/java/ama/task/PreparedCompletionIT.java",
+    "originalSha256": "d3296fd1bcbfbec7d97acfe77044a146535c0ea6384dc1531a42423d66f03c5b",
+    "forwardCopy": "backend/integration-tests/src/test/java/ama/task/Task08InheritedPreparedCompletionIT.java",
+    "forwardSha256": "d398fac4e8c0c6fdc02871e353bfb2dfbf68cb08b14ea1de62b17f24d5c44d58",
+    "originalTestAnnotations": 18,
+    "forwardTestAnnotations": 18,
+    "methodsRemoved": []
+  },
+  "MarkerCrashProbe": {
+    "originalSource": "backend/integration-tests/src/test/java/ama/task/MarkerCrashProbe.java",
+    "originalSha256": "e9add4c7e57f013bd5e77d951776b08074cd86095d3f75cb01bb279c7ddaf37d",
+    "forwardCopy": "backend/integration-tests/src/test/java/ama/task/Task08InheritedMarkerCrashProbe.java",
+    "forwardSha256": "ae3397cfd3f5ca4676d004cefa788d6bc2f3999738be31314eccd7af2c1e48be",
+    "originalTestAnnotations": 0,
+    "forwardTestAnnotations": 0,
+    "methodsRemoved": []
+  }
+}

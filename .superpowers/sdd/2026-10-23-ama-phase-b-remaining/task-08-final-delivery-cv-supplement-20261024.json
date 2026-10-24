@@ -1,0 +1,713 @@
+{
+  "utc": "2026-10-23T23:43:10.046418+00:00",
+  "result": "PASS",
+  "issues": [],
+  "scope": "Read-only narrow CV1/CV2 custody supplement; prior final delivery report unchanged. No tests, DB, Docker, private environment, product edit, or Git mutation.",
+  "checks": [
+    {
+      "name": "cv1_exact_input_seals",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cv1_full_shared_nonvolatile_exact",
+      "pass": true,
+      "detail": {
+        "comparedFields": [
+          "engine",
+          "tables",
+          "columns",
+          "indexes",
+          "constraints",
+          "checks",
+          "keys",
+          "references",
+          "showCreate",
+          "data",
+          "ordinalMap",
+          "history"
+        ],
+        "differ": [],
+        "volatileConnectionOnly": true
+      }
+    },
+    {
+      "name": "cv1_counts_and_mapping",
+      "pass": true,
+      "detail": {
+        "tables": 65,
+        "columns": 492,
+        "businessRows": 34791,
+        "history": 15,
+        "ordinals": 45
+      }
+    },
+    {
+      "name": "cv1_readonly_capture_provenance",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cv1_proof_field_claims",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cv2_manifest_report_seals",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cv2_seven_exact_recovered_versions_patches_windows",
+      "pass": true,
+      "detail": {
+        "records": [
+          {
+            "label": "fixture-fairness-green",
+            "matchingWindowCount": 1,
+            "recoveredSha256": "8b98d53cf0b0954154d1ee0dc176d719edc78372e15917ccd6b31c486b6588fa",
+            "committedSha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+            "patchSha256": "abd262fd1417d34acd7b12458581cc7a581233bdb513752dc27cf782000e2381",
+            "pass": true,
+            "retrospective": true
+          },
+          {
+            "label": "fixture-committed",
+            "matchingWindowCount": 6,
+            "recoveredSha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+            "committedSha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+            "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "pass": true,
+            "retrospective": false
+          },
+          {
+            "label": "probe-before-null-fix",
+            "matchingWindowCount": 5,
+            "recoveredSha256": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037",
+            "committedSha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+            "patchSha256": "862b1a5f44354563d68f94b24876568c96920af9cd7d73f0662cd1f386165f46",
+            "pass": true,
+            "retrospective": true
+          },
+          {
+            "label": "probe-committed",
+            "matchingWindowCount": 2,
+            "recoveredSha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+            "committedSha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+            "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "pass": true,
+            "retrospective": false
+          },
+          {
+            "label": "cursor-schema-window",
+            "matchingWindowCount": 1,
+            "recoveredSha256": "726ddd7d2ccd81586def3fda0bee9d9336fd9268c893c46beda878f7a2765f69",
+            "committedSha256": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07",
+            "patchSha256": "f48061c91a5c88a76671ade4df6b72e0d64a0bc548cd21c68fef62ee4570f349",
+            "pass": true,
+            "retrospective": true
+          },
+          {
+            "label": "cursor-passing-window",
+            "matchingWindowCount": 4,
+            "recoveredSha256": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5",
+            "committedSha256": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07",
+            "patchSha256": "080531ed447d62043dd9d34149097276fa8a09bd2615696ecdca5953eb927245",
+            "pass": true,
+            "retrospective": true
+          },
+          {
+            "label": "overflow-restore-window",
+            "matchingWindowCount": 1,
+            "recoveredSha256": "9f092d0644cf756ebb3af4a9d24c1d21a0d4f75be15eaffbc1e21015574284a6",
+            "committedSha256": "3c4f631bd17775e542ebdc6531cf643da9f158d72c56f6be5dd8c43dfed9fd63",
+            "patchSha256": "86aeecbf5d83f153449c0d9e851414b7559a16e61df03eec5aa9a10362a510cb",
+            "pass": true,
+            "retrospective": true
+          }
+        ],
+        "bad": [],
+        "windows": [
+          "cursor-mixed-restart-final",
+          "cursor-schema-budget-restart-final",
+          "fairness-green",
+          "historical010-oracle-final",
+          "inherited-forward-final",
+          "overflow-max-complete-atomicity-final",
+          "overflow-resume-final"
+        ]
+      }
+    },
+    {
+      "name": "cv2_cursor_static_helpers_byte_identical",
+      "pass": true,
+      "detail": {
+        "helpers": 3,
+        "bad": []
+      }
+    },
+    {
+      "name": "cv2_restore_selected_method_exact_da",
+      "pass": true,
+      "detail": {
+        "bytes": 3439,
+        "sha256": "322b03312136243ac731174854a350b73e5adfabc7891436248982ce5790957b"
+      }
+    },
+    {
+      "name": "cv2_fixture_datasource_exact",
+      "pass": true,
+      "detail": {
+        "bytes": 963,
+        "sha256": "6469ee7ac3edfd3253172d142e3eeebb638cafad12501642c81df92d25d28424"
+      }
+    },
+    {
+      "name": "cv2_selected_dependency_static_edges",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cv2_unit_no_task08_refs",
+      "pass": true,
+      "detail": {
+        "references": []
+      }
+    },
+    {
+      "name": "prior_report_unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all_inputs_stable_at_end",
+      "pass": true,
+      "detail": {
+        "count": 44
+      }
+    }
+  ],
+  "cv1": {
+    "status": "SCOPED_CLOSED",
+    "sharedRetainedRows": 34791,
+    "qualification": "Complete retained shared post-test capture equals the prior postmigration rerun in every nonvolatile field. This proves retained old shared data and metadata are unchanged. Five fresh schemas are Task8-controlled fixtures; no universal per-case rowlineage claim."
+  },
+  "cv2": {
+    "status": "RECOVERED_RETROSPECTIVE",
+    "recoveredVersions": [
+      {
+        "label": "fixture-fairness-green",
+        "matchingWindowCount": 1,
+        "recoveredSha256": "8b98d53cf0b0954154d1ee0dc176d719edc78372e15917ccd6b31c486b6588fa",
+        "committedSha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+        "patchSha256": "abd262fd1417d34acd7b12458581cc7a581233bdb513752dc27cf782000e2381",
+        "pass": true,
+        "retrospective": true
+      },
+      {
+        "label": "fixture-committed",
+        "matchingWindowCount": 6,
+        "recoveredSha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+        "committedSha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "pass": true,
+        "retrospective": false
+      },
+      {
+        "label": "probe-before-null-fix",
+        "matchingWindowCount": 5,
+        "recoveredSha256": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037",
+        "committedSha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+        "patchSha256": "862b1a5f44354563d68f94b24876568c96920af9cd7d73f0662cd1f386165f46",
+        "pass": true,
+        "retrospective": true
+      },
+      {
+        "label": "probe-committed",
+        "matchingWindowCount": 2,
+        "recoveredSha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+        "committedSha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "pass": true,
+        "retrospective": false
+      },
+      {
+        "label": "cursor-schema-window",
+        "matchingWindowCount": 1,
+        "recoveredSha256": "726ddd7d2ccd81586def3fda0bee9d9336fd9268c893c46beda878f7a2765f69",
+        "committedSha256": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07",
+        "patchSha256": "f48061c91a5c88a76671ade4df6b72e0d64a0bc548cd21c68fef62ee4570f349",
+        "pass": true,
+        "retrospective": true
+      },
+      {
+        "label": "cursor-passing-window",
+        "matchingWindowCount": 4,
+        "recoveredSha256": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5",
+        "committedSha256": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07",
+        "patchSha256": "080531ed447d62043dd9d34149097276fa8a09bd2615696ecdca5953eb927245",
+        "pass": true,
+        "retrospective": true
+      },
+      {
+        "label": "overflow-restore-window",
+        "matchingWindowCount": 1,
+        "recoveredSha256": "9f092d0644cf756ebb3af4a9d24c1d21a0d4f75be15eaffbc1e21015574284a6",
+        "committedSha256": "3c4f631bd17775e542ebdc6531cf643da9f158d72c56f6be5dd8c43dfed9fd63",
+        "patchSha256": "86aeecbf5d83f153449c0d9e851414b7559a16e61df03eec5aa9a10362a510cb",
+        "pass": true,
+        "retrospective": true
+      }
+    ],
+    "qualification": "Recovered historical source files were generated retrospectively and match sealed original source.json SHA-256 values; they are not original captured raw bytes. Static dependency closure is not a new runtime trace."
+  },
+  "inputSealsAtStart": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/Task08RootSharedSnapshot.java",
+      "bytes": 503,
+      "sha256": "6a3eaf15e2967b23d2c74b930c8a4196ddd3c099d39726f36dbd43c0973c38b7"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-final-delivery-custody-20261024.json",
+      "bytes": 139480,
+      "sha256": "58e832ea535e3b87a4a5faea72a8e1de3aeb9bf9a8af1b729167cac64fb62b85"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-complete-snapshot-20261024.json",
+      "bytes": 709824,
+      "sha256": "bf57ac12c970b0ad35ab5f147d5fbc0991562b3c83504ad0df9c1cf0d9ea05c4"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-complete-snapshot-compile.log",
+      "bytes": 64,
+      "sha256": "3736b6135e3166eb963eec12a66a035a6a3605fa01d339c241b2c05afaf96dfc"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-complete-snapshot-run.log",
+      "bytes": 64,
+      "sha256": "3736b6135e3166eb963eec12a66a035a6a3605fa01d339c241b2c05afaf96dfc"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-preservation-proof-20261024.json",
+      "bytes": 1671,
+      "sha256": "0d73b9127677ca87408223dc5067a139ac811fe9820b3927d4ba93ef02ed0404"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-readonly-probe-class-equivalence-20261024.json",
+      "bytes": 757,
+      "sha256": "9a9e69074e67cf44385780518291306cf7e76dd19888657c65f10bb2774185f4"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/dependency-closure.json",
+      "bytes": 5957,
+      "sha256": "97ae4ca0853343c3d3d9ab407b450c19199f122491676b302253a657474b0e1c"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/manifest.json",
+      "bytes": 20332,
+      "sha256": "455cae7279dc611f06722a219a95e5602efc2d6968f28614d8f6606f6f773621"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/cursor-passing-window-to-DA.diff",
+      "bytes": 1248,
+      "sha256": "080531ed447d62043dd9d34149097276fa8a09bd2615696ecdca5953eb927245"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/cursor-schema-window-to-DA.diff",
+      "bytes": 4150,
+      "sha256": "f48061c91a5c88a76671ade4df6b72e0d64a0bc548cd21c68fef62ee4570f349"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/fixture-committed-to-DA.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/fixture-fairness-green-to-DA.diff",
+      "bytes": 1845,
+      "sha256": "abd262fd1417d34acd7b12458581cc7a581233bdb513752dc27cf782000e2381"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/overflow-restore-window-to-DA.diff",
+      "bytes": 5151,
+      "sha256": "86aeecbf5d83f153449c0d9e851414b7559a16e61df03eec5aa9a10362a510cb"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/probe-before-null-fix-to-DA.diff",
+      "bytes": 1259,
+      "sha256": "862b1a5f44354563d68f94b24876568c96920af9cd7d73f0662cd1f386165f46"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/probe-committed-to-DA.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/cursor-passing-window.java",
+      "bytes": 17029,
+      "sha256": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/cursor-schema-window.java",
+      "bytes": 16775,
+      "sha256": "726ddd7d2ccd81586def3fda0bee9d9336fd9268c893c46beda878f7a2765f69"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/fixture-committed.java",
+      "bytes": 9718,
+      "sha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/fixture-fairness-green.java",
+      "bytes": 9327,
+      "sha256": "8b98d53cf0b0954154d1ee0dc176d719edc78372e15917ccd6b31c486b6588fa"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/overflow-restore-window.java",
+      "bytes": 6238,
+      "sha256": "9f092d0644cf756ebb3af4a9d24c1d21a0d4f75be15eaffbc1e21015574284a6"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/probe-before-null-fix.java",
+      "bytes": 2797,
+      "sha256": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/probe-committed.java",
+      "bytes": 2829,
+      "sha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-recovery-report-20261024.md",
+      "bytes": 2278,
+      "sha256": "8b61856a01f1e2040fa1c15d0998ddb7527f0d59a58b774f33cc934e72844d9d"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/Task08MigrationProbe.java",
+      "bytes": 8209,
+      "sha256": "4249bef206b6a106ea7e54f5e3abb816621b976457381173a6b0c6a5179d9036"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/source.json",
+      "bytes": 63399,
+      "sha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/source.json",
+      "bytes": 62948,
+      "sha256": "adb5f658ee2258102c86ee2a7d326c2229bcaa01dca07138f711b491bfc58de8"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/fairness-green/source.json",
+      "bytes": 60354,
+      "sha256": "d515ea5491a0931761f13149a8fb5fca0948584dcdb51ace4b42611889e2cb4a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/historical010-oracle-final/source.json",
+      "bytes": 63399,
+      "sha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/source.json",
+      "bytes": 62948,
+      "sha256": "0f809a5a8bbb8ee4b027deff34c28f18f8cc4c9676fb46a9b69ee456cd735693"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/manifest.json",
+      "bytes": 59576,
+      "sha256": "4532bc29de3e81c6cfee85b184be3d4a0aeaf1a37329af4a847ff7ec40d15f03"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/migration/shared/rerun.json",
+      "bytes": 709824,
+      "sha256": "5bddc4e49d7802c8de0762e450b08b1ee089045409b9b8d948a09ba5fe496b56"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/overflow-max-complete-atomicity-final/source.json",
+      "bytes": 63399,
+      "sha256": "cdea0e82283818be5d6e76fca4999d9b8fdcac6fb52f524ab573a9d8b0e8b33b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/overflow-resume-final/source.json",
+      "bytes": 63399,
+      "sha256": "7388ba2393cf88d0060f4cedcbbb9274986b9d2049d3815f5d64f735f9c68dfd"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08BudgetIT.java",
+      "bytes": 3594,
+      "sha256": "051132227d01e0926e4c7c55f7bf2d11c112c1c57dca95ebd7925d7bee11c7b0"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+      "bytes": 17028,
+      "sha256": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08FairnessIT.java",
+      "bytes": 4555,
+      "sha256": "173f45df252804b4554cc682a714d467680c2cbe2b23d0c84cd04f47a4c9ca0f"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+      "bytes": 9718,
+      "sha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08Historical010IT.java",
+      "bytes": 4455,
+      "sha256": "596173d9084725efa85d546e1e74ace2096048a22f7f140beea0cbe78ef91893"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08Historical010Source.java",
+      "bytes": 830,
+      "sha256": "a14a0e30a3a9e026f6e45b02c1dc6d837f90b63e5fc5a9a974f80ff8e7a11d47"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08InheritedResources.java",
+      "bytes": 831,
+      "sha256": "efc0ae1c46d58d2275328d980631c96d8fa27a861614836f005d00edbbae2be2"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+      "bytes": 2829,
+      "sha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08SchemaIT.java",
+      "bytes": 8269,
+      "sha256": "b57dcf6ccf26d9f3921134eabae7221f6c445d61b22ed91307a578df59aaaec0"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08ZOverflowIT.java",
+      "bytes": 7234,
+      "sha256": "3c4f631bd17775e542ebdc6531cf643da9f158d72c56f6be5dd8c43dfed9fd63"
+    }
+  ],
+  "inputSealsAtEnd": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/Task08RootSharedSnapshot.java",
+      "bytes": 503,
+      "sha256": "6a3eaf15e2967b23d2c74b930c8a4196ddd3c099d39726f36dbd43c0973c38b7"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-final-delivery-custody-20261024.json",
+      "bytes": 139480,
+      "sha256": "58e832ea535e3b87a4a5faea72a8e1de3aeb9bf9a8af1b729167cac64fb62b85"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-complete-snapshot-20261024.json",
+      "bytes": 709824,
+      "sha256": "bf57ac12c970b0ad35ab5f147d5fbc0991562b3c83504ad0df9c1cf0d9ea05c4"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-complete-snapshot-compile.log",
+      "bytes": 64,
+      "sha256": "3736b6135e3166eb963eec12a66a035a6a3605fa01d339c241b2c05afaf96dfc"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-complete-snapshot-run.log",
+      "bytes": 64,
+      "sha256": "3736b6135e3166eb963eec12a66a035a6a3605fa01d339c241b2c05afaf96dfc"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-post-test-shared-preservation-proof-20261024.json",
+      "bytes": 1671,
+      "sha256": "0d73b9127677ca87408223dc5067a139ac811fe9820b3927d4ba93ef02ed0404"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-readonly-probe-class-equivalence-20261024.json",
+      "bytes": 757,
+      "sha256": "9a9e69074e67cf44385780518291306cf7e76dd19888657c65f10bb2774185f4"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/dependency-closure.json",
+      "bytes": 5957,
+      "sha256": "97ae4ca0853343c3d3d9ab407b450c19199f122491676b302253a657474b0e1c"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/manifest.json",
+      "bytes": 20332,
+      "sha256": "455cae7279dc611f06722a219a95e5602efc2d6968f28614d8f6606f6f773621"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/cursor-passing-window-to-DA.diff",
+      "bytes": 1248,
+      "sha256": "080531ed447d62043dd9d34149097276fa8a09bd2615696ecdca5953eb927245"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/cursor-schema-window-to-DA.diff",
+      "bytes": 4150,
+      "sha256": "f48061c91a5c88a76671ade4df6b72e0d64a0bc548cd21c68fef62ee4570f349"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/fixture-committed-to-DA.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/fixture-fairness-green-to-DA.diff",
+      "bytes": 1845,
+      "sha256": "abd262fd1417d34acd7b12458581cc7a581233bdb513752dc27cf782000e2381"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/overflow-restore-window-to-DA.diff",
+      "bytes": 5151,
+      "sha256": "86aeecbf5d83f153449c0d9e851414b7559a16e61df03eec5aa9a10362a510cb"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/probe-before-null-fix-to-DA.diff",
+      "bytes": 1259,
+      "sha256": "862b1a5f44354563d68f94b24876568c96920af9cd7d73f0662cd1f386165f46"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/probe-committed-to-DA.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/cursor-passing-window.java",
+      "bytes": 17029,
+      "sha256": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/cursor-schema-window.java",
+      "bytes": 16775,
+      "sha256": "726ddd7d2ccd81586def3fda0bee9d9336fd9268c893c46beda878f7a2765f69"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/fixture-committed.java",
+      "bytes": 9718,
+      "sha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/fixture-fairness-green.java",
+      "bytes": 9327,
+      "sha256": "8b98d53cf0b0954154d1ee0dc176d719edc78372e15917ccd6b31c486b6588fa"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/overflow-restore-window.java",
+      "bytes": 6238,
+      "sha256": "9f092d0644cf756ebb3af4a9d24c1d21a0d4f75be15eaffbc1e21015574284a6"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/probe-before-null-fix.java",
+      "bytes": 2797,
+      "sha256": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/probe-committed.java",
+      "bytes": 2829,
+      "sha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-recovery-report-20261024.md",
+      "bytes": 2278,
+      "sha256": "8b61856a01f1e2040fa1c15d0998ddb7527f0d59a58b774f33cc934e72844d9d"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/Task08MigrationProbe.java",
+      "bytes": 8209,
+      "sha256": "4249bef206b6a106ea7e54f5e3abb816621b976457381173a6b0c6a5179d9036"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/source.json",
+      "bytes": 63399,
+      "sha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/source.json",
+      "bytes": 62948,
+      "sha256": "adb5f658ee2258102c86ee2a7d326c2229bcaa01dca07138f711b491bfc58de8"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/fairness-green/source.json",
+      "bytes": 60354,
+      "sha256": "d515ea5491a0931761f13149a8fb5fca0948584dcdb51ace4b42611889e2cb4a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/historical010-oracle-final/source.json",
+      "bytes": 63399,
+      "sha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/source.json",
+      "bytes": 62948,
+      "sha256": "0f809a5a8bbb8ee4b027deff34c28f18f8cc4c9676fb46a9b69ee456cd735693"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/manifest.json",
+      "bytes": 59576,
+      "sha256": "4532bc29de3e81c6cfee85b184be3d4a0aeaf1a37329af4a847ff7ec40d15f03"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/migration/shared/rerun.json",
+      "bytes": 709824,
+      "sha256": "5bddc4e49d7802c8de0762e450b08b1ee089045409b9b8d948a09ba5fe496b56"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/overflow-max-complete-atomicity-final/source.json",
+      "bytes": 63399,
+      "sha256": "cdea0e82283818be5d6e76fca4999d9b8fdcac6fb52f524ab573a9d8b0e8b33b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-08/overflow-resume-final/source.json",
+      "bytes": 63399,
+      "sha256": "7388ba2393cf88d0060f4cedcbbb9274986b9d2049d3815f5d64f735f9c68dfd"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08BudgetIT.java",
+      "bytes": 3594,
+      "sha256": "051132227d01e0926e4c7c55f7bf2d11c112c1c57dca95ebd7925d7bee11c7b0"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+      "bytes": 17028,
+      "sha256": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08FairnessIT.java",
+      "bytes": 4555,
+      "sha256": "173f45df252804b4554cc682a714d467680c2cbe2b23d0c84cd04f47a4c9ca0f"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+      "bytes": 9718,
+      "sha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08Historical010IT.java",
+      "bytes": 4455,
+      "sha256": "596173d9084725efa85d546e1e74ace2096048a22f7f140beea0cbe78ef91893"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08Historical010Source.java",
+      "bytes": 830,
+      "sha256": "a14a0e30a3a9e026f6e45b02c1dc6d837f90b63e5fc5a9a974f80ff8e7a11d47"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08InheritedResources.java",
+      "bytes": 831,
+      "sha256": "efc0ae1c46d58d2275328d980631c96d8fa27a861614836f005d00edbbae2be2"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+      "bytes": 2829,
+      "sha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08SchemaIT.java",
+      "bytes": 8269,
+      "sha256": "b57dcf6ccf26d9f3921134eabae7221f6c445d61b22ed91307a578df59aaaec0"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08ZOverflowIT.java",
+      "bytes": 7234,
+      "sha256": "3c4f631bd17775e542ebdc6531cf643da9f158d72c56f6be5dd8c43dfed9fd63"
+    }
+  ],
+  "limits": [
+    "CV1 does not reconstruct case-by-case business row lineage in the five fresh Task8-owned schemas.",
+    "CV2 cannot turn retrospectively reconstructed files into contemporaneous raw captures; exact SHA-256 identity to sealed windows and regenerated patches supports source custody.",
+    "No product or specification quality verdict."
+  ]
+}

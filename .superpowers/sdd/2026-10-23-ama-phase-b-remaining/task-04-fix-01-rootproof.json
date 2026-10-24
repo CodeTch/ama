@@ -1,0 +1,37 @@
+{
+  "author_head": "1ce4a2e6405fe380a5a7f7a18873d903c71528b7",
+  "verified_source_paths": 4,
+  "verified_evidence_manifest_entries": 494,
+  "verified_git_blob_paths": 499,
+  "original_raw_unchanged": 590,
+  "original_report_prefix_preserved": true,
+  "all_source_snapshot_paths": 451,
+  "covering_counts": {
+    "covering-final-3": {
+      "tests": 26,
+      "failures": 1,
+      "errors": 1,
+      "skipped": 0
+    },
+    "covering-missing-2": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "distinct_passing": 26,
+  "retained_nonpassing": [
+    {
+      "label": "covering-final-3",
+      "case": "ama.storage.ProcessingIntakeHttpIT#ordinaryQueueSkipsLockedInputRootsWithoutWaitingOrLeasing"
+    },
+    {
+      "label": "covering-final-3",
+      "case": "ama.storage.ProcessingIntakeHttpIT#ownerMemberOutsiderAdminSessionAndCsrfGuardsAreFresh"
+    }
+  ],
+  "protected_unchanged": 4727,
+  "known_database_secret_hits": 0,
+  "one_clean_full_run_claimed": false
+}

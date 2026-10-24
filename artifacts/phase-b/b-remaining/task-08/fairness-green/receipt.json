@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task08FairnessIT"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/fairness-green/integration-tests-TEST-ama.task.Task08FairnessIT.xml"
+  ],
+  "elapsedSeconds": 29.292351484298706,
+  "counts": {
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task08OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

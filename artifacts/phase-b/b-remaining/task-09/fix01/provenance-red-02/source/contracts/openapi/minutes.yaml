@@ -1,0 +1,3552 @@
+{
+  "MinutesObservation": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "revision",
+      "revisionToken",
+      "accessRevision",
+      "accessRevisionToken",
+      "currentConfirmationId",
+      "currentMinutesRevisionId"
+    ],
+    "properties": {
+      "revision": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "accessRevision": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0
+      },
+      "accessRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "currentConfirmationId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "currentMinutesRevisionId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "MinutesTemplate": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "templateId",
+      "revisionId",
+      "name",
+      "themes",
+      "themeCount",
+      "selectable",
+      "default"
+    ],
+    "properties": {
+      "templateId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "revisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "name": {
+        "type": "string"
+      },
+      "themes": {
+        "type": "array",
+        "maxItems": 7,
+        "items": {
+          "type": "string",
+          "enum": [
+            "OVERVIEW",
+            "DISCUSSION",
+            "CONCLUSION",
+            "ACTION",
+            "RISK",
+            "OPEN_QUESTION",
+            "DISAGREEMENT"
+          ]
+        }
+      },
+      "themeCount": {
+        "type": "integer",
+        "const": 7
+      },
+      "selectable": {
+        "type": "boolean"
+      },
+      "default": {
+        "type": "boolean"
+      }
+    }
+  },
+  "MinutesTemplates": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "nextCursor",
+      "observation"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "maxItems": 50,
+        "items": {
+          "$ref": "#/MinutesTemplate"
+        }
+      },
+      "nextCursor": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "observation": {
+        "$ref": "#/MinutesObservation"
+      }
+    }
+  },
+  "MinutesInitialCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "templateRevisionId"
+    ],
+    "properties": {
+      "expectedRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "expectedRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806,
+        "description": "Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically."
+      },
+      "templateRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      }
+    },
+    "anyOf": [
+      {
+        "required": [
+          "expectedRevisionToken"
+        ]
+      },
+      {
+        "required": [
+          "expectedRevision"
+        ]
+      }
+    ],
+    "description": "Exact object. Duplicate/unknown fields, trailing data, fractions and unequal dual revision representations are rejected. Body transport limit is 1 MiB."
+  },
+  "MinutesGenerationCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [],
+    "properties": {
+      "expectedRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "expectedRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806,
+        "description": "Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically."
+      }
+    },
+    "anyOf": [
+      {
+        "required": [
+          "expectedRevisionToken"
+        ]
+      },
+      {
+        "required": [
+          "expectedRevision"
+        ]
+      }
+    ],
+    "description": "Exact object. Duplicate/unknown fields, trailing data, fractions and unequal dual revision representations are rejected. Body transport limit is 1 MiB."
+  },
+  "MinutesInitialReceipt": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "result",
+      "replayed",
+      "observation"
+    ],
+    "properties": {
+      "result": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "meetingId",
+          "templateRevisionId",
+          "exclusionRevisionId"
+        ],
+        "properties": {
+          "kind": {
+            "const": "INITIAL_MINUTES_SETTINGS"
+          },
+          "meetingId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "templateRevisionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "exclusionRevisionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          }
+        }
+      },
+      "replayed": {
+        "type": "boolean"
+      },
+      "observation": {
+        "$ref": "#/MinutesObservation"
+      }
+    }
+  },
+  "MinutesGenerationReceipt": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "result",
+      "replayed",
+      "observation"
+    ],
+    "properties": {
+      "result": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "meetingId",
+          "inputId",
+          "taskId",
+          "inputFingerprint"
+        ],
+        "properties": {
+          "kind": {
+            "const": "GENERATION_TASK"
+          },
+          "meetingId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "inputId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "taskId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "inputFingerprint": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      },
+      "replayed": {
+        "type": "boolean"
+      },
+      "observation": {
+        "$ref": "#/MinutesObservation"
+      }
+    }
+  },
+  "MinutesReadiness": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "eligible",
+      "reasons"
+    ],
+    "properties": {
+      "eligible": {
+        "type": "boolean"
+      },
+      "reasons": {
+        "type": "array",
+        "maxItems": 16,
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "MinutesCurrent": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "saved",
+      "scope",
+      "materials",
+      "activeTaskIds",
+      "eligible",
+      "reasons",
+      "observation"
+    ],
+    "properties": {
+      "saved": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "transcriptConfirmationId",
+          "templateRevisionId",
+          "exclusionRevisionId",
+          "elementSetId"
+        ],
+        "properties": {
+          "transcriptConfirmationId": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "templateRevisionId": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "exclusionRevisionId": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "elementSetId": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "scope": {
+        "const": "FULL"
+      },
+      "materials": {
+        "const": "EMPTY"
+      },
+      "activeTaskIds": {
+        "type": "array",
+        "maxItems": 256,
+        "items": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        }
+      },
+      "eligible": {
+        "type": "boolean"
+      },
+      "reasons": {
+        "type": "array",
+        "maxItems": 16,
+        "items": {
+          "type": "string"
+        }
+      },
+      "observation": {
+        "$ref": "#/MinutesObservation"
+      }
+    }
+  },
+  "MinutesProfile": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "artifactType",
+      "version",
+      "sha256"
+    ],
+    "properties": {
+      "artifactType": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "sha256": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    }
+  },
+  "MinutesGeneration_input": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "meeting_id",
+      "transcript_confirmation_id",
+      "material_snapshot_id",
+      "template_revision_id",
+      "exclusion_revision_id",
+      "element_set_id",
+      "prompt_version",
+      "model_config_version",
+      "base_revisionToken",
+      "input_fingerprint",
+      "scope",
+      "target_element_id"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "meeting_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "transcript_confirmation_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "material_snapshot_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "template_revision_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "exclusion_revision_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "element_set_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "prompt_version": {
+        "type": "string"
+      },
+      "model_config_version": {
+        "type": "string"
+      },
+      "base_revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "input_fingerprint": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "scope": {
+        "type": "string",
+        "enum": [
+          "FULL",
+          "ELEMENT"
+        ]
+      },
+      "target_element_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "MinutesMinutes_revision": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "meeting_id",
+      "revisionToken",
+      "parent_id",
+      "title",
+      "title_origin",
+      "body",
+      "generation_input_id",
+      "created_by",
+      "created_at"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "meeting_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "parent_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "title": {
+        "type": "string"
+      },
+      "title_origin": {
+        "type": "string",
+        "enum": [
+          "HUMAN",
+          "LINKED",
+          "AI"
+        ]
+      },
+      "body": {
+        "type": "string"
+      },
+      "generation_input_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "created_by": {
+        "type": "string"
+      },
+      "created_at": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "MinutesElement_set": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "meeting_id",
+      "revisionToken",
+      "created_at"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "meeting_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "created_at": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "MinutesMinutes_element": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "set_id",
+      "category",
+      "ordinalToken",
+      "body",
+      "support_state"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "set_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "category": {
+        "type": "string",
+        "enum": [
+          "OVERVIEW",
+          "DISCUSSION",
+          "CONCLUSION",
+          "ACTION",
+          "RISK",
+          "OPEN_QUESTION",
+          "DISAGREEMENT"
+        ]
+      },
+      "ordinalToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "body": {
+        "type": "string"
+      },
+      "support_state": {
+        "type": "string",
+        "enum": [
+          "SUPPORTED",
+          "PARTIAL",
+          "UNSUPPORTED",
+          "NOT_EXTRACTED"
+        ]
+      }
+    }
+  },
+  "MinutesAction_item": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "element_id",
+      "owner_enterprise_id",
+      "owner_display",
+      "due_on"
+    ],
+    "properties": {
+      "element_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "owner_enterprise_id": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "owner_display": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "due_on": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "MinutesSource_locator": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "meeting_id",
+      "kind",
+      "transcript_revision_id",
+      "segment_id",
+      "file_id",
+      "material_revision_id",
+      "page_noToken",
+      "paragraph_noToken",
+      "section_path",
+      "start_msToken",
+      "end_msToken"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "meeting_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "kind": {
+        "type": "string",
+        "enum": [
+          "TRANSCRIPT",
+          "AUDIO",
+          "PDF_PAGE",
+          "PPT_PAGE",
+          "WORD_PARAGRAPH",
+          "TEXT_PARAGRAPH",
+          "KNOWLEDGE_VERSION"
+        ]
+      },
+      "transcript_revision_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "segment_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "file_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "material_revision_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "page_noToken": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$",
+            "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "paragraph_noToken": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$",
+            "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "section_path": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "start_msToken": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$",
+            "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "end_msToken": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$",
+            "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "MinutesEvidence_link": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "locator_id",
+      "element_id",
+      "minutes_revision_id",
+      "support_state",
+      "target_anchor"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "locator_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "element_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "minutes_revision_id": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "support_state": {
+        "type": "string",
+        "enum": [
+          "SUPPORTED",
+          "PARTIAL",
+          "UNSUPPORTED"
+        ]
+      },
+      "target_anchor": {
+        "type": "string"
+      }
+    }
+  },
+  "MinutesSensitive_detection": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "set_id",
+      "input_id",
+      "category",
+      "ordinalToken"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "set_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "input_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "category": {
+        "type": "string",
+        "enum": [
+          "INTERNAL_BUSINESS_DATA",
+          "POLITICAL_SENSITIVE"
+        ]
+      },
+      "ordinalToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      }
+    }
+  },
+  "MinutesSensitive_detection_source": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "detection_id",
+      "locator_id"
+    ],
+    "properties": {
+      "detection_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "locator_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      }
+    }
+  },
+  "MinutesBackground_note": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "set_id",
+      "input_id",
+      "ordinalToken",
+      "body"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "set_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "input_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "ordinalToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "body": {
+        "type": "string"
+      }
+    }
+  },
+  "MinutesBackground_note_source": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "note_id",
+      "locator_id"
+    ],
+    "properties": {
+      "note_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "locator_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      }
+    }
+  },
+  "MinutesAction_suggestion": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "element_id",
+      "input_id",
+      "owner_mention",
+      "due_on"
+    ],
+    "properties": {
+      "element_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "input_id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "owner_mention": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "due_on": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "MinutesInput": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "input",
+      "manifestJson",
+      "profiles",
+      "provenanceVerified",
+      "currentReadiness",
+      "observation"
+    ],
+    "properties": {
+      "input": {
+        "$ref": "#/MinutesGeneration_input"
+      },
+      "manifestJson": {
+        "type": "string",
+        "description": "Normalized original generation manifest; includes complete original profile identities, never credentials."
+      },
+      "profiles": {
+        "type": "array",
+        "maxItems": 64,
+        "items": {
+          "$ref": "#/MinutesProfile"
+        }
+      },
+      "provenanceVerified": {
+        "const": true
+      },
+      "currentReadiness": {
+        "$ref": "#/MinutesReadiness"
+      },
+      "observation": {
+        "$ref": "#/MinutesObservation"
+      }
+    }
+  },
+  "MinutesTaskMetadata": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "taskId",
+      "inputId",
+      "inputFingerprint",
+      "businessVersionToken",
+      "cancelEpochToken",
+      "state",
+      "errorCode",
+      "outputKind",
+      "outputId",
+      "attemptToken"
+    ],
+    "properties": {
+      "taskId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "inputId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "inputFingerprint": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "businessVersionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "cancelEpochToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "RUNNING",
+          "RECONCILING",
+          "SUCCEEDED",
+          "FAILED",
+          "STALE",
+          "CANCELLED"
+        ]
+      },
+      "errorCode": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "outputKind": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "outputId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "attemptToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      }
+    }
+  },
+  "MinutesTask": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "task",
+      "attempts",
+      "remoteOutcome",
+      "localOutcome",
+      "candidateId",
+      "allowedActions",
+      "observation"
+    ],
+    "properties": {
+      "task": {
+        "$ref": "#/MinutesTaskMetadata"
+      },
+      "attempts": {
+        "type": "array",
+        "maxItems": 256,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "attemptToken",
+            "outcome",
+            "errorCode",
+            "startedAt",
+            "endedAt"
+          ],
+          "properties": {
+            "attemptToken": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,18})$",
+              "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+            },
+            "outcome": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "errorCode": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "startedAt": {
+              "type": "string"
+            },
+            "endedAt": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "remoteOutcome": {
+        "type": "string"
+      },
+      "localOutcome": {
+        "type": "string"
+      },
+      "candidateId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "allowedActions": {
+        "type": "array",
+        "maxItems": 1,
+        "items": {
+          "const": "INSPECT"
+        }
+      },
+      "observation": {
+        "$ref": "#/MinutesObservation"
+      }
+    }
+  },
+  "MinutesCandidateMetadata": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "candidateId",
+      "inputId",
+      "taskId",
+      "minutesRevisionId",
+      "elementSetId",
+      "baseRevisionToken",
+      "inputFingerprint",
+      "state",
+      "createdAt",
+      "decidedAt"
+    ],
+    "properties": {
+      "candidateId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "inputId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "taskId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "minutesRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "elementSetId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "baseRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "inputFingerprint": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "ADOPTED",
+          "REJECTED",
+          "STALE"
+        ]
+      },
+      "createdAt": {
+        "type": "string"
+      },
+      "decidedAt": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "MinutesTasks": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "nextCursor",
+      "metadataOnly"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "maxItems": 50,
+        "items": {
+          "$ref": "#/MinutesTaskListMetadata"
+        }
+      },
+      "nextCursor": {
+        "oneOf": [
+          {
+            "type": "string",
+            "maxLength": 1024
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "metadataOnly": {
+        "const": true
+      }
+    },
+    "description": "Bounded metadata inspection. A listed row does not assert a complete archived graph or current generation/adoption readiness."
+  },
+  "MinutesCandidates": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "nextCursor",
+      "metadataOnly"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "maxItems": 50,
+        "items": {
+          "$ref": "#/MinutesCandidateListMetadata"
+        }
+      },
+      "nextCursor": {
+        "oneOf": [
+          {
+            "type": "string",
+            "maxLength": 1024
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "metadataOnly": {
+        "const": true
+      }
+    },
+    "description": "Bounded metadata inspection. A listed row does not assert a complete archived graph or current generation/adoption readiness."
+  },
+  "MinutesCandidate": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "candidate",
+      "graph",
+      "provenanceVerified",
+      "eligibility",
+      "observation"
+    ],
+    "properties": {
+      "candidate": {
+        "$ref": "#/MinutesCandidateMetadata"
+      },
+      "graph": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "minutes_revision",
+          "element_set",
+          "minutes_element",
+          "action_item",
+          "action_suggestion",
+          "sensitive_detection",
+          "background_note",
+          "source_locator",
+          "sensitive_detection_source",
+          "background_note_source",
+          "evidence_link"
+        ],
+        "properties": {
+          "minutes_revision": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesMinutes_revision"
+            }
+          },
+          "element_set": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesElement_set"
+            }
+          },
+          "minutes_element": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesMinutes_element"
+            }
+          },
+          "action_item": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesAction_item"
+            }
+          },
+          "action_suggestion": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesAction_suggestion"
+            }
+          },
+          "sensitive_detection": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesSensitive_detection"
+            }
+          },
+          "background_note": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesBackground_note"
+            }
+          },
+          "source_locator": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesSource_locator"
+            }
+          },
+          "sensitive_detection_source": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesSensitive_detection_source"
+            }
+          },
+          "background_note_source": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesBackground_note_source"
+            }
+          },
+          "evidence_link": {
+            "type": "array",
+            "maxItems": 250000,
+            "items": {
+              "$ref": "#/MinutesEvidence_link"
+            }
+          }
+        }
+      },
+      "provenanceVerified": {
+        "const": true
+      },
+      "eligibility": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "canAdopt",
+          "reasons"
+        ],
+        "properties": {
+          "canAdopt": {
+            "type": "boolean"
+          },
+          "reasons": {
+            "type": "array",
+            "maxItems": 16,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "observation": {
+        "$ref": "#/MinutesObservation"
+      }
+    }
+  },
+  "MinutesMeetingId": {
+    "name": "meetingId",
+    "in": "path",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    }
+  },
+  "MinutesInputId": {
+    "name": "inputId",
+    "in": "path",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    }
+  },
+  "MinutesTaskId": {
+    "name": "taskId",
+    "in": "path",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    }
+  },
+  "MinutesCandidateId": {
+    "name": "candidateId",
+    "in": "path",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    }
+  },
+  "MinutesLimit": {
+    "name": "limit",
+    "in": "query",
+    "schema": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "default": 20
+    }
+  },
+  "MinutesCursor": {
+    "name": "cursor",
+    "in": "query",
+    "schema": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "description": "Opaque pagination cursor; return unchanged for the same meeting/filter. No offset parameter."
+  },
+  "MinutesTemplateCursor": {
+    "name": "cursor",
+    "in": "query",
+    "schema": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "description": "Last installed template primary key."
+  },
+  "templates": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "$ref": "#/MinutesLimit"
+      },
+      {
+        "$ref": "#/MinutesTemplateCursor"
+      }
+    ],
+    "get": {
+      "operationId": "getMinutesTemplates",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Complete bounded owner-private response.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MinutesTemplates"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "initial": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "description": "Nonblank key, at most 256 UTF-8 bytes."
+      },
+      {
+        "name": "X-CSRF-Token",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Origin",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "postMinutesInitialReceipt",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Replay-first: authenticate, authorize and match the immutable key/body before consulting current preparation or installed contributions. An accepted receipt remains available when current archives/providers are unavailable. New first-settings initialization requires actual Task11 publication freeze; until installed it returns 503. A successful underlying repository initialization advances revision once, creates a real empty exclusion revision and sets the selected real template.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Accepted immutable receipt with a fresh observation.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MinutesInitialReceipt"
+              }
+            }
+          }
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/MinutesInitialCommand"
+            }
+          }
+        }
+      }
+    }
+  },
+  "generate": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "description": "Nonblank key, at most 256 UTF-8 bytes."
+      },
+      {
+        "name": "X-CSRF-Token",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Origin",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "postMinutesGenerationReceipt",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Replay-first: authenticate, authorize and match the immutable key/body before consulting current preparation or installed contributions. An accepted receipt remains available when current archives/providers are unavailable. New generation requires actual Task10 saved-copy/disposition and Task11 publication predicates; until installed it returns 503. Enqueue freezes current revision/cancel epoch without advancing business content or clearing generation debt.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "202": {
+          "description": "Accepted immutable receipt with a fresh observation.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MinutesGenerationReceipt"
+              }
+            }
+          }
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/MinutesGenerationCommand"
+            }
+          }
+        }
+      }
+    }
+  },
+  "current": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      }
+    ],
+    "get": {
+      "operationId": "getMinutesCurrent",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Complete bounded owner-private response.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MinutesCurrent"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "input": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "$ref": "#/MinutesInputId"
+      }
+    ],
+    "get": {
+      "operationId": "getMinutesInput",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Complete bounded owner-private response.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MinutesInput"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tasks": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "$ref": "#/MinutesLimit"
+      },
+      {
+        "$ref": "#/MinutesCursor"
+      }
+    ],
+    "get": {
+      "operationId": "getMinutesTasks",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Complete bounded owner-private response.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MinutesTasks"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "task": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "$ref": "#/MinutesTaskId"
+      }
+    ],
+    "get": {
+      "operationId": "getMinutesTask",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Complete bounded owner-private response.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MinutesTask"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "candidates": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "$ref": "#/MinutesLimit"
+      },
+      {
+        "$ref": "#/MinutesCursor"
+      },
+      {
+        "name": "state",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "ADOPTED",
+            "REJECTED",
+            "STALE",
+            "ALL"
+          ],
+          "default": "PENDING"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "getMinutesCandidates",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Complete bounded owner-private response.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MinutesCandidates"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "candidate": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "$ref": "#/MinutesCandidateId"
+      }
+    ],
+    "get": {
+      "operationId": "getMinutesCandidate",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Complete bounded owner-private response.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MinutesCandidate"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "MinutesTaskListMetadata": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "taskId",
+      "inputId",
+      "inputFingerprint",
+      "businessVersionToken",
+      "cancelEpochToken",
+      "state",
+      "errorCode",
+      "outputKind",
+      "outputId",
+      "attemptToken",
+      "candidateId",
+      "candidateState"
+    ],
+    "properties": {
+      "taskId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "inputId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "inputFingerprint": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "businessVersionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "cancelEpochToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "RUNNING",
+          "RECONCILING",
+          "SUCCEEDED",
+          "FAILED",
+          "STALE",
+          "CANCELLED"
+        ]
+      },
+      "errorCode": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "outputKind": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "outputId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "attemptToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "candidateId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "candidateState": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ADOPTED",
+              "REJECTED",
+              "STALE"
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "MinutesCandidateListMetadata": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "candidateId",
+      "inputId",
+      "taskId",
+      "minutesRevisionId",
+      "elementSetId",
+      "baseRevisionToken",
+      "inputFingerprint",
+      "state",
+      "createdAt",
+      "decidedAt",
+      "eligibility"
+    ],
+    "properties": {
+      "candidateId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "inputId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "taskId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "minutesRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "elementSetId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "baseRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+      },
+      "inputFingerprint": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "ADOPTED",
+          "REJECTED",
+          "STALE"
+        ]
+      },
+      "createdAt": {
+        "type": "string"
+      },
+      "decidedAt": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "eligibility": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "canAdopt",
+          "reasons"
+        ],
+        "properties": {
+          "canAdopt": {
+            "type": "boolean"
+          },
+          "reasons": {
+            "type": "array",
+            "maxItems": 16,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

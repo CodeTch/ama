@@ -1,0 +1,1464 @@
+{
+  "tables": [
+    {
+      "table": "idempotency_record",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_0900_ai_ci"
+    },
+    {
+      "table": "meeting",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_0900_ai_ci"
+    },
+    {
+      "table": "meeting_access_grant",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_0900_ai_ci"
+    },
+    {
+      "table": "meeting_info_revision",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_0900_ai_ci"
+    },
+    {
+      "table": "meeting_person_search",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_0900_ai_ci"
+    },
+    {
+      "table": "meeting_search_projection",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_0900_ai_ci"
+    },
+    {
+      "table": "roster_member",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_0900_ai_ci"
+    },
+    {
+      "table": "roster_revision",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_0900_ai_ci"
+    }
+  ],
+  "columns": [
+    {
+      "type": "char(64)",
+      "extra": "",
+      "table": "idempotency_record",
+      "column": "scope_hash",
+      "default": null,
+      "ordinal": 1,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "varchar(255)",
+      "extra": "",
+      "table": "idempotency_record",
+      "column": "actor_id",
+      "default": null,
+      "ordinal": 2,
+      "nullable": "NO",
+      "collation": "utf8mb4_0900_bin"
+    },
+    {
+      "type": "varchar(255)",
+      "extra": "",
+      "table": "idempotency_record",
+      "column": "resource_id",
+      "default": null,
+      "ordinal": 3,
+      "nullable": "NO",
+      "collation": "utf8mb4_0900_bin"
+    },
+    {
+      "type": "varchar(64)",
+      "extra": "",
+      "table": "idempotency_record",
+      "column": "operation",
+      "default": null,
+      "ordinal": 4,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(64)",
+      "extra": "",
+      "table": "idempotency_record",
+      "column": "key_hash",
+      "default": null,
+      "ordinal": 5,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(64)",
+      "extra": "",
+      "table": "idempotency_record",
+      "column": "request_hash",
+      "default": null,
+      "ordinal": 6,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "varchar(64)",
+      "extra": "",
+      "table": "idempotency_record",
+      "column": "state",
+      "default": null,
+      "ordinal": 7,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "idempotency_record",
+      "column": "result_id",
+      "default": null,
+      "ordinal": 8,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "smallint unsigned",
+      "extra": "",
+      "table": "idempotency_record",
+      "column": "http_status",
+      "default": null,
+      "ordinal": 9,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "datetime(6)",
+      "extra": "",
+      "table": "idempotency_record",
+      "column": "created_at",
+      "default": null,
+      "ordinal": 10,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "id",
+      "default": null,
+      "ordinal": 1,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "varchar(255)",
+      "extra": "",
+      "table": "meeting",
+      "column": "owner_id",
+      "default": null,
+      "ordinal": 2,
+      "nullable": "NO",
+      "collation": "utf8mb4_0900_bin"
+    },
+    {
+      "type": "bigint unsigned",
+      "extra": "",
+      "table": "meeting",
+      "column": "revision",
+      "default": "0",
+      "ordinal": 3,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "bigint unsigned",
+      "extra": "",
+      "table": "meeting",
+      "column": "cancel_epoch",
+      "default": "0",
+      "ordinal": 4,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "bigint unsigned",
+      "extra": "",
+      "table": "meeting",
+      "column": "access_revision",
+      "default": "0",
+      "ordinal": 5,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "extra": "",
+      "table": "meeting",
+      "column": "stage",
+      "default": null,
+      "ordinal": 6,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "varchar(64)",
+      "extra": "",
+      "table": "meeting",
+      "column": "lifecycle",
+      "default": "ACTIVE",
+      "ordinal": 7,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "varchar(64)",
+      "extra": "",
+      "table": "meeting",
+      "column": "governance_state",
+      "default": "ACTIVE",
+      "ordinal": 8,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "tinyint unsigned",
+      "extra": "",
+      "table": "meeting",
+      "column": "ever_published",
+      "default": "0",
+      "ordinal": 9,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "info_revision_id",
+      "default": null,
+      "ordinal": 10,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "roster_revision_id",
+      "default": null,
+      "ordinal": 11,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "transcript_confirmation_id",
+      "default": null,
+      "ordinal": 12,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "minutes_revision_id",
+      "default": null,
+      "ordinal": 13,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "final_confirmation_id",
+      "default": null,
+      "ordinal": 14,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "date",
+      "extra": "",
+      "table": "meeting",
+      "column": "actual_meeting_date",
+      "default": null,
+      "ordinal": 15,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "datetime(6)",
+      "extra": "",
+      "table": "meeting",
+      "column": "created_at",
+      "default": null,
+      "ordinal": 16,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "datetime(6)",
+      "extra": "",
+      "table": "meeting",
+      "column": "updated_at",
+      "default": null,
+      "ordinal": 17,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "transcript_revision_id",
+      "default": null,
+      "ordinal": 18,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "material_snapshot_id",
+      "default": null,
+      "ordinal": 19,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "template_revision_id",
+      "default": null,
+      "ordinal": 20,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "element_set_id",
+      "default": null,
+      "ordinal": 21,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting",
+      "column": "exclusion_revision_id",
+      "default": null,
+      "ordinal": 22,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(64)",
+      "extra": "",
+      "table": "meeting",
+      "column": "generation_fingerprint",
+      "default": null,
+      "ordinal": 23,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "tinyint unsigned",
+      "extra": "",
+      "table": "meeting",
+      "column": "needs_generation",
+      "default": "0",
+      "ordinal": 24,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "tinyint unsigned",
+      "extra": "",
+      "table": "meeting",
+      "column": "materials_pending",
+      "default": "0",
+      "ordinal": 25,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting_access_grant",
+      "column": "meeting_id",
+      "default": null,
+      "ordinal": 1,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "varchar(255)",
+      "extra": "",
+      "table": "meeting_access_grant",
+      "column": "enterprise_id",
+      "default": null,
+      "ordinal": 2,
+      "nullable": "NO",
+      "collation": "utf8mb4_0900_bin"
+    },
+    {
+      "type": "varchar(64)",
+      "extra": "",
+      "table": "meeting_access_grant",
+      "column": "action",
+      "default": null,
+      "ordinal": 3,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting_access_grant",
+      "column": "roster_id",
+      "default": null,
+      "ordinal": 4,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "datetime(6)",
+      "extra": "",
+      "table": "meeting_access_grant",
+      "column": "confirmed_at",
+      "default": null,
+      "ordinal": 5,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting_info_revision",
+      "column": "id",
+      "default": null,
+      "ordinal": 1,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting_info_revision",
+      "column": "meeting_id",
+      "default": null,
+      "ordinal": 2,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "bigint unsigned",
+      "extra": "",
+      "table": "meeting_info_revision",
+      "column": "revision",
+      "default": null,
+      "ordinal": 3,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "longtext",
+      "extra": "",
+      "table": "meeting_info_revision",
+      "column": "name",
+      "default": null,
+      "ordinal": 4,
+      "nullable": "YES",
+      "collation": "utf8mb4_0900_ai_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "extra": "",
+      "table": "meeting_info_revision",
+      "column": "category_id",
+      "default": null,
+      "ordinal": 5,
+      "nullable": "YES",
+      "collation": "utf8mb4_0900_bin"
+    },
+    {
+      "type": "longtext",
+      "extra": "",
+      "table": "meeting_info_revision",
+      "column": "summary",
+      "default": null,
+      "ordinal": 6,
+      "nullable": "YES",
+      "collation": "utf8mb4_0900_ai_ci"
+    },
+    {
+      "type": "date",
+      "extra": "",
+      "table": "meeting_info_revision",
+      "column": "actual_meeting_date",
+      "default": null,
+      "ordinal": 7,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "extra": "",
+      "table": "meeting_info_revision",
+      "column": "created_by",
+      "default": null,
+      "ordinal": 8,
+      "nullable": "NO",
+      "collation": "utf8mb4_0900_bin"
+    },
+    {
+      "type": "datetime(6)",
+      "extra": "",
+      "table": "meeting_info_revision",
+      "column": "created_at",
+      "default": null,
+      "ordinal": 9,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting_person_search",
+      "column": "meeting_id",
+      "default": null,
+      "ordinal": 1,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting_person_search",
+      "column": "roster_id",
+      "default": null,
+      "ordinal": 2,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting_person_search",
+      "column": "member_id",
+      "default": null,
+      "ordinal": 3,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "longtext",
+      "extra": "",
+      "table": "meeting_person_search",
+      "column": "name_search",
+      "default": null,
+      "ordinal": 4,
+      "nullable": "NO",
+      "collation": "utf8mb4_0900_as_ci"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting_search_projection",
+      "column": "meeting_id",
+      "default": null,
+      "ordinal": 1,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting_search_projection",
+      "column": "info_revision_id",
+      "default": null,
+      "ordinal": 2,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "meeting_search_projection",
+      "column": "roster_revision_id",
+      "default": null,
+      "ordinal": 3,
+      "nullable": "YES",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "longtext",
+      "extra": "",
+      "table": "meeting_search_projection",
+      "column": "name_search",
+      "default": null,
+      "ordinal": 4,
+      "nullable": "YES",
+      "collation": "utf8mb4_0900_as_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "extra": "",
+      "table": "meeting_search_projection",
+      "column": "number_search",
+      "default": null,
+      "ordinal": 5,
+      "nullable": "NO",
+      "collation": "utf8mb4_0900_as_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "extra": "",
+      "table": "meeting_search_projection",
+      "column": "category_id",
+      "default": null,
+      "ordinal": 6,
+      "nullable": "YES",
+      "collation": "utf8mb4_0900_bin"
+    },
+    {
+      "type": "bigint unsigned",
+      "extra": "",
+      "table": "meeting_search_projection",
+      "column": "meeting_revision",
+      "default": null,
+      "ordinal": 7,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "roster_member",
+      "column": "roster_id",
+      "default": null,
+      "ordinal": 1,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "roster_member",
+      "column": "member_id",
+      "default": null,
+      "ordinal": 2,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "varchar(255)",
+      "extra": "",
+      "table": "roster_member",
+      "column": "enterprise_id",
+      "default": null,
+      "ordinal": 3,
+      "nullable": "YES",
+      "collation": "utf8mb4_0900_bin"
+    },
+    {
+      "type": "longtext",
+      "extra": "",
+      "table": "roster_member",
+      "column": "display_name",
+      "default": null,
+      "ordinal": 4,
+      "nullable": "NO",
+      "collation": "utf8mb4_0900_ai_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "extra": "",
+      "table": "roster_member",
+      "column": "member_kind",
+      "default": null,
+      "ordinal": 5,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "roster_revision",
+      "column": "id",
+      "default": null,
+      "ordinal": 1,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "char(36)",
+      "extra": "",
+      "table": "roster_revision",
+      "column": "meeting_id",
+      "default": null,
+      "ordinal": 2,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "bigint unsigned",
+      "extra": "",
+      "table": "roster_revision",
+      "column": "revision",
+      "default": null,
+      "ordinal": 3,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "extra": "",
+      "table": "roster_revision",
+      "column": "state",
+      "default": null,
+      "ordinal": 4,
+      "nullable": "NO",
+      "collation": "ascii_bin"
+    },
+    {
+      "type": "datetime(6)",
+      "extra": "",
+      "table": "roster_revision",
+      "column": "confirmed_at",
+      "default": null,
+      "ordinal": 5,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "extra": "",
+      "table": "roster_revision",
+      "column": "confirmed_by",
+      "default": null,
+      "ordinal": 6,
+      "nullable": "YES",
+      "collation": "utf8mb4_0900_bin"
+    }
+  ],
+  "indexes": [
+    {
+      "seq": 1,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "idempotency_record",
+      "column": "scope_hash",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "meeting_owner_date",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "owner_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "meeting_owner_date",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "lifecycle",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 3,
+      "name": "meeting_owner_date",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "actual_meeting_date",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 4,
+      "name": "meeting_owner_date",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "meeting_owner_updated",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "owner_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "meeting_owner_updated",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "lifecycle",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 3,
+      "name": "meeting_owner_updated",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "updated_at",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 4,
+      "name": "meeting_owner_updated",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "meeting_stage_date",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "lifecycle",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "meeting_stage_date",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "stage",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 3,
+      "name": "meeting_stage_date",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "actual_meeting_date",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 4,
+      "name": "meeting_stage_date",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "meeting_stage_updated",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "lifecycle",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "meeting_stage_updated",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "stage",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 3,
+      "name": "meeting_stage_updated",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "updated_at",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 4,
+      "name": "meeting_stage_updated",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "meeting",
+      "column": "id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "access_person_meeting",
+      "type": "BTREE",
+      "table": "meeting_access_grant",
+      "column": "enterprise_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "access_person_meeting",
+      "type": "BTREE",
+      "table": "meeting_access_grant",
+      "column": "action",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 3,
+      "name": "access_person_meeting",
+      "type": "BTREE",
+      "table": "meeting_access_grant",
+      "column": "meeting_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "fk_meeting_access_grant_2",
+      "type": "BTREE",
+      "table": "meeting_access_grant",
+      "column": "roster_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "meeting_access_grant",
+      "column": "meeting_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "meeting_access_grant",
+      "column": "enterprise_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 3,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "meeting_access_grant",
+      "column": "action",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "fk_meeting_info_revision_1",
+      "type": "BTREE",
+      "table": "meeting_info_revision",
+      "column": "created_by",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "info_revision",
+      "type": "BTREE",
+      "table": "meeting_info_revision",
+      "column": "meeting_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "info_revision",
+      "type": "BTREE",
+      "table": "meeting_info_revision",
+      "column": "revision",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "meeting_info_revision",
+      "column": "id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "fk_meeting_person_search_1",
+      "type": "BTREE",
+      "table": "meeting_person_search",
+      "column": "roster_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "fk_meeting_person_search_1",
+      "type": "BTREE",
+      "table": "meeting_person_search",
+      "column": "member_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "meeting_person_search",
+      "column": "meeting_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "meeting_person_search",
+      "column": "member_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "fk_meeting_search_projection_1",
+      "type": "BTREE",
+      "table": "meeting_search_projection",
+      "column": "info_revision_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "fk_meeting_search_projection_2",
+      "type": "BTREE",
+      "table": "meeting_search_projection",
+      "column": "roster_revision_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "meeting_search_projection",
+      "column": "meeting_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "search_category",
+      "type": "BTREE",
+      "table": "meeting_search_projection",
+      "column": "category_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "search_category",
+      "type": "BTREE",
+      "table": "meeting_search_projection",
+      "column": "meeting_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "fk_roster_member_1",
+      "type": "BTREE",
+      "table": "roster_member",
+      "column": "enterprise_id",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "roster_member",
+      "column": "roster_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "roster_member",
+      "column": "member_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "roster_person",
+      "type": "BTREE",
+      "table": "roster_member",
+      "column": "roster_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "roster_person",
+      "type": "BTREE",
+      "table": "roster_member",
+      "column": "enterprise_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "fk_roster_revision_1",
+      "type": "BTREE",
+      "table": "roster_revision",
+      "column": "confirmed_by",
+      "prefix": null,
+      "unique": 0,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "PRIMARY",
+      "type": "BTREE",
+      "table": "roster_revision",
+      "column": "id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 1,
+      "name": "roster_revision",
+      "type": "BTREE",
+      "table": "roster_revision",
+      "column": "meeting_id",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    },
+    {
+      "seq": 2,
+      "name": "roster_revision",
+      "type": "BTREE",
+      "table": "roster_revision",
+      "column": "revision",
+      "prefix": null,
+      "unique": 1,
+      "direction": "A"
+    }
+  ],
+  "checks": [
+    {
+      "name": "ck_idempotency_record_0",
+      "table": "idempotency_record",
+      "clause": "(`state` in (_utf8mb4\\'SUCCEEDED\\',_utf8mb4\\'REJECTED\\'))",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_meeting_0",
+      "table": "meeting",
+      "clause": "(`stage` in (_ascii\\'ENTRY\\',_ascii\\'TRANSCRIPT_PENDING\\',_ascii\\'TRANSCRIPT_FAILED\\',_ascii\\'MINUTES_PENDING\\',_ascii\\'MINUTES_FAILED\\',_ascii\\'READY_TO_PUBLISH\\',_ascii\\'PUBLISH_FAILED\\',_ascii\\'PUBLISHED\\'))",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_meeting_1",
+      "table": "meeting",
+      "clause": "(`lifecycle` in (_ascii\\'ACTIVE\\',_ascii\\'DELETING\\',_ascii\\'DELETED\\'))",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_meeting_2",
+      "table": "meeting",
+      "clause": "(`governance_state` in (_ascii\\'ACTIVE\\',_ascii\\'WITHDRAW_PENDING\\',_ascii\\'WITHDRAWN\\',_ascii\\'OBSOLETE_PENDING\\',_ascii\\'OBSOLETE\\'))",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_meeting_3",
+      "table": "meeting",
+      "clause": "(`ever_published` in (0,1))",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_meeting_4",
+      "table": "meeting",
+      "clause": "(`needs_generation` in (0,1))",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_meeting_5",
+      "table": "meeting",
+      "clause": "(`materials_pending` in (0,1))",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_meeting_access_grant_0",
+      "table": "meeting_access_grant",
+      "clause": "(`action` = _ascii\\'READ\\')",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_roster_member_0",
+      "table": "roster_member",
+      "clause": "(`member_kind` in (_ascii\\'ENTERPRISE\\',_ascii\\'EXTERNAL\\'))",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_roster_member_1",
+      "table": "roster_member",
+      "clause": "(((`member_kind` = _ascii\\'ENTERPRISE\\') and (`enterprise_id` is not null)) or ((`member_kind` = _ascii\\'EXTERNAL\\') and (`enterprise_id` is null)))",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_roster_revision_0",
+      "table": "roster_revision",
+      "clause": "(`state` in (_ascii\\'DRAFT\\',_ascii\\'CONFIRMED\\'))",
+      "enforced": "YES"
+    },
+    {
+      "name": "ck_roster_revision_1",
+      "table": "roster_revision",
+      "clause": "(((`state` = _ascii\\'DRAFT\\') and (`confirmed_at` is null) and (`confirmed_by` is null)) or ((`state` = _ascii\\'CONFIRMED\\') and (`confirmed_at` is not null) and (`confirmed_by` is not null)))",
+      "enforced": "YES"
+    }
+  ],
+  "foreign_keys": [
+    {
+      "name": "fk_meeting_0",
+      "table": "meeting",
+      "column": "owner_id",
+      "delete": "RESTRICT",
+      "remote": "enterprise_id",
+      "target": "enterprise_identity",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_meeting_access_grant_0",
+      "table": "meeting_access_grant",
+      "column": "meeting_id",
+      "delete": "RESTRICT",
+      "remote": "id",
+      "target": "meeting",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_meeting_access_grant_1",
+      "table": "meeting_access_grant",
+      "column": "enterprise_id",
+      "delete": "RESTRICT",
+      "remote": "enterprise_id",
+      "target": "enterprise_identity",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_meeting_access_grant_2",
+      "table": "meeting_access_grant",
+      "column": "roster_id",
+      "delete": "RESTRICT",
+      "remote": "id",
+      "target": "roster_revision",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_meeting_info_revision_0",
+      "table": "meeting_info_revision",
+      "column": "meeting_id",
+      "delete": "RESTRICT",
+      "remote": "id",
+      "target": "meeting",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_meeting_info_revision_1",
+      "table": "meeting_info_revision",
+      "column": "created_by",
+      "delete": "RESTRICT",
+      "remote": "enterprise_id",
+      "target": "enterprise_identity",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_meeting_person_search_0",
+      "table": "meeting_person_search",
+      "column": "meeting_id",
+      "delete": "RESTRICT",
+      "remote": "id",
+      "target": "meeting",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_meeting_person_search_1",
+      "table": "meeting_person_search",
+      "column": "roster_id",
+      "delete": "RESTRICT",
+      "remote": "roster_id",
+      "target": "roster_member",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_meeting_person_search_1",
+      "table": "meeting_person_search",
+      "column": "member_id",
+      "delete": "RESTRICT",
+      "remote": "member_id",
+      "target": "roster_member",
+      "update": "RESTRICT",
+      "ordinal": 2
+    },
+    {
+      "name": "fk_meeting_search_projection_0",
+      "table": "meeting_search_projection",
+      "column": "meeting_id",
+      "delete": "RESTRICT",
+      "remote": "id",
+      "target": "meeting",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_meeting_search_projection_1",
+      "table": "meeting_search_projection",
+      "column": "info_revision_id",
+      "delete": "RESTRICT",
+      "remote": "id",
+      "target": "meeting_info_revision",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_meeting_search_projection_2",
+      "table": "meeting_search_projection",
+      "column": "roster_revision_id",
+      "delete": "RESTRICT",
+      "remote": "id",
+      "target": "roster_revision",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_roster_member_0",
+      "table": "roster_member",
+      "column": "roster_id",
+      "delete": "RESTRICT",
+      "remote": "id",
+      "target": "roster_revision",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_roster_member_1",
+      "table": "roster_member",
+      "column": "enterprise_id",
+      "delete": "RESTRICT",
+      "remote": "enterprise_id",
+      "target": "enterprise_identity",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_roster_revision_0",
+      "table": "roster_revision",
+      "column": "meeting_id",
+      "delete": "RESTRICT",
+      "remote": "id",
+      "target": "meeting",
+      "update": "RESTRICT",
+      "ordinal": 1
+    },
+    {
+      "name": "fk_roster_revision_1",
+      "table": "roster_revision",
+      "column": "confirmed_by",
+      "delete": "RESTRICT",
+      "remote": "enterprise_id",
+      "target": "enterprise_identity",
+      "update": "RESTRICT",
+      "ordinal": 1
+    }
+  ]
+}

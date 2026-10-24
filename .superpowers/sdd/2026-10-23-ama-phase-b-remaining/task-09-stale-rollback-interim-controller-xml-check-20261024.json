@@ -1,0 +1,61 @@
+{
+  "checkedUtc": "2026-10-24T06:17:35.386377+00:00",
+  "scope": "Actual result and XML/hash/mtime interval; not independent product source review or final unique-count aggregation",
+  "windows": [
+    {
+      "window": "generation-stale-replay-green-01",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 0,
+      "xmlCustodyChecked": true
+    },
+    {
+      "window": "generation-insert-rollback-01",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 0,
+      "xmlCustodyChecked": true
+    },
+    {
+      "window": "generation-readback-rollback-01",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 0,
+      "xmlCustodyChecked": true
+    },
+    {
+      "window": "generation-audit-rollback-01",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 0,
+      "xmlCustodyChecked": true
+    },
+    {
+      "window": "generation-outbox-rollback-01",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 0,
+      "xmlCustodyChecked": true
+    }
+  ]
+}

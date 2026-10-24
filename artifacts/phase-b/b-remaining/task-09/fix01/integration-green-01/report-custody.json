@@ -1,0 +1,54 @@
+{
+  "startedNs": 1792841569407259253,
+  "endedNs": 1792841735936113083,
+  "reports": [
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01ActiveLookupIT.xml",
+      "mtimeNs": 1792841664671516078,
+      "sha256": "2b54cb48ec0ed1597647e7b54d1d765c881b42f26b19e6ad1a2118c0b36df818",
+      "previous": null,
+      "qualified": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01DeniedLookupIT.xml",
+      "mtimeNs": 1792841735506192591,
+      "sha256": "4abaa12fb3257f754902ac85416bc060d2e349e88eec52a7d25472d0790e3996",
+      "previous": null,
+      "qualified": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01HttpIT.xml",
+      "mtimeNs": 1792841702231987006,
+      "sha256": "c08191264c666fd2f3ad00d0a7ad73e1c88b8c3c6bb85d1e3d12a9f004a5b518",
+      "previous": null,
+      "qualified": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01ParentReplayIT.xml",
+      "mtimeNs": 1792841613580646945,
+      "sha256": "f784eb84aecd42627d46ceb842f02106723ba1fbb1b379e726c198a143110823",
+      "previous": [
+        1792841250400994741,
+        "1166700903f42e84e9236b315d16a7e22be82d94bda8133f11980ae88eef015d"
+      ],
+      "qualified": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01ResponseBudgetIT.xml",
+      "mtimeNs": 1792841628296326244,
+      "sha256": "c3087132c4e4fa06c89c5fc66a94d4fd243f1fab54e0a50252b37812f846b754",
+      "previous": null,
+      "qualified": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01RootsIT.xml",
+      "mtimeNs": 1792841677864599807,
+      "sha256": "86731677ce5a334591cf3b3bbbde445259d7e9bea1122ff87608f136323c7206",
+      "previous": [
+        1792841261738616214,
+        "02af38bbfddc3ccbe2e772830a34344a4d52d0a782631429bcea0787d9bdfc99"
+      ],
+      "qualified": true
+    }
+  ]
+}

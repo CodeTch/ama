@@ -1,0 +1,5 @@
+package ama.minutes;
+import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;
+class Task09LimitsConnectionIT {
+ @Test void deployedFactoryEnforcesUtcUtf8AndFiniteSessionWaits()throws Exception{var factory=assertDoesNotThrow(()->ControlledMinutesDataSource.class.getMethod("create",String.class,String.class,String.class));var source=(javax.sql.DataSource)factory.invoke(null,System.getenv("AMA_TEST_DATABASE_URL"),System.getenv("AMA_TEST_DATABASE_USERNAME"),System.getenv("AMA_TEST_DATABASE_PASSWORD"));var j=new org.springframework.jdbc.core.JdbcTemplate(source);j.setQueryTimeout(5);var row=j.queryForMap("SELECT @@session.time_zone zone,@@session.character_set_connection encoding,@@session.lock_wait_timeout metadata_wait,@@session.innodb_lock_wait_timeout row_wait");assertEquals("+00:00",row.get("zone"));assertEquals("utf8mb4",row.get("encoding"));assertEquals(5,((Number)row.get("metadata_wait")).intValue());assertEquals(5,((Number)row.get("row_wait")).intValue());}
+}

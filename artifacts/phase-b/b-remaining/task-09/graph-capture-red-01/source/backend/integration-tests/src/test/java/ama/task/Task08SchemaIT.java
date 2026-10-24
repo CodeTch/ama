@@ -1,0 +1,41 @@
+package ama.task;
+import ama.contract.TaskContracts.*;
+import ama.contract.ExternalContracts.*;
+import java.sql.*;
+import java.time.Instant;
+import java.util.*;
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+class Task08SchemaIT {
+ @Test void exactForwardMetadataAndAllOldStatesHavePositiveUniqueOrdinals(){
+  var f=new Task08Fixture("behavior","T08_SCHEMA");
+  var column=f.j.queryForMap("SELECT ORDINAL_POSITION,COLUMN_TYPE,IS_NULLABLE,COLUMN_DEFAULT,EXTRA,CHARACTER_SET_NAME,COLLATION_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='external_operation' AND COLUMN_NAME='reconcile_scan_seq'");
+  assertEquals(16,((Number)column.get("ORDINAL_POSITION")).intValue());assertEquals("bigint",column.get("COLUMN_TYPE"));assertEquals("NO",column.get("IS_NULLABLE"));assertNull(column.get("COLUMN_DEFAULT"));assertEquals("auto_increment",column.get("EXTRA"));assertNull(column.get("COLLATION_NAME"));assertNull(column.get("CHARACTER_SET_NAME"));
+  var index=f.j.queryForMap("SELECT NON_UNIQUE,SEQ_IN_INDEX,COLUMN_NAME,INDEX_TYPE,IS_VISIBLE FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='external_operation' AND INDEX_NAME='external_reconcile_scan'");assertEquals(0,((Number)index.get("NON_UNIQUE")).intValue());assertEquals(1,((Number)index.get("SEQ_IN_INDEX")).intValue());assertEquals("reconcile_scan_seq",index.get("COLUMN_NAME"));assertEquals("BTREE",index.get("INDEX_TYPE"));assertEquals("YES",index.get("IS_VISIBLE"));
+  assertEquals(0,f.j.queryForObject("SELECT COUNT(*) FROM external_operation WHERE reconcile_scan_seq<=0 OR reconcile_scan_seq IS NULL",Integer.class));assertEquals(f.j.queryForObject("SELECT COUNT(*) FROM external_operation",Long.class),f.j.queryForObject("SELECT COUNT(DISTINCT reconcile_scan_seq) FROM external_operation",Long.class));
+  assertEquals(3,f.j.queryForObject("SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='durable_task' AND INDEX_NAME='task_input_lookup'",Integer.class));
+  System.out.println("TASK08 actual engine "+f.j.queryForMap("SELECT VERSION() AS version,@@sql_mode AS sqlMode,@@auto_increment_increment AS allocationIncrement,@@auto_increment_offset AS allocationOffset,@@session.lock_wait_timeout AS metadataWaitSeconds"));
+ }
+ @Test void allocationDedupRetryClaimRenewObserveNeverRewriteOrdinal(){
+  var f=new Task08Fixture("behavior","T08_MAPPING");String type="T08_MAP_"+UUID.randomUUID().toString().replace("-","");var s=f.spec(type);var q=f.queue(type);q.enqueue(s);var lease=q.claim(s.pool(),"T08_FIRST").orElseThrow();var ext=new JdbcExternalOperations(q,new ReconciliationScanBudget(16,32));long previous=f.j.queryForObject("SELECT COALESCE(MAX(reconcile_scan_seq),0) FROM external_operation",Long.class);var marker=ext.beginExternal(lease,f.request(s)).orElseThrow();long sequence=f.seq(marker.operationId());assertTrue(sequence>previous);assertTrue(ext.beginExternal(lease,f.request(s)).isEmpty());assertTrue(ext.renew(marker));
+  assertEquals(ObservationResult.APPLIED,ext.observe(marker,new ExternalObservation(ExternalOutcome.UNKNOWN,null,null,"T08_UNKNOWN",null),()->fail("UNKNOWN effect")));f.due(marker.operationId());OperationToken claim=null;for(int i=0;i<100&&claim==null;i++)claim=ext.claimReconciliation("T08_LOOKUP").orElse(null);assertNotNull(claim);assertFalse(ext.hasCallAuthority(claim));assertTrue(ext.renew(claim));assertEquals(sequence,f.seq(marker.operationId()));
+  var proof=new NoEffectProof(NoEffectBasis.DEFINITIVE_REJECTION,"T08_ZERO",Instant.now());assertEquals(ObservationResult.APPLIED,ext.observe(claim,new ExternalObservation(ExternalOutcome.FAILED_ZERO_EFFECT,null,null,"T08_REJECT",proof),()->{}));
+  var next=new TaskSpec(s.type(),s.pool(),s.subject(),Task08Fixture.hash(UUID.randomUUID().toString()),s.input(),s.inputFingerprint(),0,0,0,3);String retry=ext.retryAfterZeroEffect(marker.operationId(),1,next,f.request(s));assertEquals(retry,ext.retryAfterZeroEffect(marker.operationId(),1,next,f.request(s)));var again=q.claim(s.pool(),"T08_RETRY").orElseThrow();var token=ext.beginExternal(again,f.request(s)).orElseThrow();assertEquals(marker.operationId(),token.operationId());assertEquals(2,token.executionNo());assertEquals(sequence,f.seq(token.operationId()));assertEquals(ObservationResult.APPLIED,ext.observe(token,new ExternalObservation(ExternalOutcome.SUCCEEDED,"T08_RESULT:"+s.input().id(),s.input(),null,null),()->{}));assertEquals(sequence,f.seq(token.operationId()));
+ }
+ @Test void oldConstraintsAndNewOrdinalUniqueFailAtomicallyWithActualCodes(){
+  var f=new Task08Fixture("behavior","T08_CONSTRAINT");String type="T08_CONSTRAINT";var a=f.marker(f.spec(type));var b=f.marker(f.spec(type));var before=f.j.queryForMap("SELECT * FROM external_operation WHERE id=?",a.operationId());
+  for(String sql:List.of("UPDATE external_operation SET reconcile_scan_seq="+f.seq(b.operationId())+" WHERE id=?","UPDATE external_operation SET state='BAD' WHERE id=?","UPDATE external_operation SET current_execution_no=0 WHERE id=?","UPDATE external_operation SET business_key=(SELECT value FROM (SELECT business_key AS value FROM external_operation WHERE id='"+b.operationId()+"') x) WHERE id=?","UPDATE external_operation SET subject_id='00000000-0000-0000-0000-000000000000' WHERE id=?")){
+   var error=assertThrows(org.springframework.dao.DataAccessException.class,()->f.j.update(sql,a.operationId()));Throwable cause=error;while(cause.getCause()!=null)cause=cause.getCause();assertInstanceOf(SQLException.class,cause);var actual=(SQLException)cause;assertTrue(Set.of(1062,3819,1452).contains(actual.getErrorCode()));System.out.println("TASK08 constraint SQLState="+actual.getSQLState()+" code="+actual.getErrorCode()+" statement="+sql);assertEquals(before,f.j.queryForMap("SELECT * FROM external_operation WHERE id=?",a.operationId()));
+  }
+ }
+ @Test void rolledBackAllocationGapAndDeletedDiscoveredOperationDoNotPinCursor()throws Exception{
+  var f=new Task08Fixture("behavior","T08_GAP");String type="T08_GAP_"+UUID.randomUUID().toString().replace("-","");var gapSpec=f.spec(type);var q=f.queue(type);q.enqueue(gapSpec);var lease=q.claim(gapSpec.pool(),"T08_GAP").orElseThrow();long before=f.j.queryForObject("SELECT MAX(reconcile_scan_seq) FROM external_operation",Long.class);
+  f.source.after=s->{if(s.text().startsWith("INSERT INTO external_operation"))throw new IllegalStateException("T08_ROLLBACK_GAP");};assertThrows(IllegalStateException.class,()->new JdbcExternalOperations(q).beginExternal(lease,f.request(gapSpec)));f.source.after=s->{};
+  var tail=f.marker(f.spec(type));assertTrue(f.seq(tail.operationId())>before+1);f.due(tail.operationId());var scan=new JdbcExternalOperations(q,new ReconciliationScanBudget(8,16));OperationToken got=null;for(int i=0;i<100&&got==null;i++)got=scan.claimReconciliation("T08_GAP").orElse(null);assertNotNull(got);assertEquals(tail.operationId(),got.operationId());
+  // Deletion is exercised only on a newly imported, execution-free enumeration row.
+  String id=UUID.randomUUID().toString();f.j.update("INSERT INTO external_operation(id,operation_kind,business_key,request_hash,state,marked_at,next_check_at,reconcile_epoch,subject_kind,subject_id,current_execution_no) SELECT ?,operation_kind,?,request_hash,'SUCCEEDED',marked_at,next_check_at,0,subject_kind,subject_id,1 FROM external_operation WHERE id=?",id,Task08Fixture.hash(id),tail.operationId());
+  var empty=new JdbcExternalOperations(f.queue(),new ReconciliationScanBudget(8,16));var once=new java.util.concurrent.atomic.AtomicBoolean();f.source.after=s->{if(s.text().startsWith("SELECT reconcile_scan_seq,id")&&once.compareAndSet(false,true)){try(var c=Task08Fixture.dataSource("behavior").getConnection();var st=c.prepareStatement("DELETE FROM external_operation WHERE id=?")){st.setString(1,id);assertEquals(1,st.executeUpdate());}catch(SQLException e){throw new IllegalStateException(e);}}};
+  for(int i=0;i<100;i++){assertTrue(empty.claimReconciliation("T08_DELETE").isEmpty());if(once.get()&&!Task08CursorIT.active(empty))break;}
+  f.source.after=s->{};assertFalse(Task08CursorIT.active(empty));assertEquals(0,f.j.queryForObject("SELECT COUNT(*) FROM external_operation WHERE id=?",Integer.class,id));
+ }
+}

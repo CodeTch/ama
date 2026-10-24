@@ -1,0 +1,6 @@
+package ama.storage;
+import java.util.*;import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;
+class Task09RemainingInitialReplayIT extends Task09MinutesFixture {
+ @Override javax.sql.DataSource createSource(){return new Task09TraceSource(ama.minutes.Task09Source.open());}
+ @Test void replayLocksActualParentBeforeRevisionAndProvesEmptyExclusion()throws Exception{install();var service=service();var first=initialize(service,"replay-parent",0);var trace=(Task09TraceSource)source;trace.events.clear();archiveUnavailable.set(true);assertEquals(first.get("result"),initialize(service,"replay-parent",0).get("result"));var sql=trace.events.stream().map(e->(String)e.get("sql")).filter(Objects::nonNull).toList();int parent=-1,revision=-1;for(int n=0;n<sql.size();n++){String q=sql.get(n);if(q.contains("FROM minutes_template")&&q.contains("FOR UPDATE"))parent=n;if(q.contains("FROM template_revision")&&q.contains("FOR UPDATE"))revision=n;}assertTrue(parent>=0&&parent<revision,"template parent must be locked before immutable child");assertTrue(sql.stream().anyMatch(q->q.contains("FROM sensitive_exclusion")&&q.contains("LIMIT")&&q.contains("FOR UPDATE")),"Replay must prove exact empty initial exclusion under parent");}
+}

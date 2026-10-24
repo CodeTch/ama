@@ -1,0 +1,290 @@
+{
+  "kind": "task-08-current-model-output-ownership-read-only-preflight",
+  "date": "2026-10-24",
+  "base": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+  "product_sources": "exact committed blobs only; no Task6 working source read as baseline",
+  "sources": [
+    {
+      "path": "tools/checks/database_design.py",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:tools/checks/database_design.py",
+      "bytes": 108070,
+      "lines": 676,
+      "sha256": "91493cbb251c99c800bd2aec7861596d50ac76acbf9a159d14c59aaf5b71e6a0"
+    },
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/database/ama-schema-draft.sql",
+      "bytes": 116623,
+      "lines": 1949,
+      "sha256": "d3094336b4d55d9389b2fd1d852d627b93e0ac0394b9b1801e258a154b0cb445"
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/database/ama-data-dictionary.md",
+      "bytes": 167091,
+      "lines": 2334,
+      "sha256": "cd6a909abbcd4d20afaf00a3b98ce6329cc633b31e5e941166f16ddbd3177c74"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "bytes": 117367,
+      "lines": 1468,
+      "sha256": "05bfe0fdf1f2c05af67598ef8298c19a1ec138f51948026f44b9ee41c9793f04"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-forward-ddl-preparation.md",
+      "authority": "assigned W evidence; read-only working artifact",
+      "bytes": 30951,
+      "lines": 205,
+      "sha256": "ca66652163e281c298d80daa345e854a4cb1b85e2fa272473006ce0e42b67279"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-brief-prepared.md",
+      "authority": "assigned W evidence; read-only working artifact",
+      "bytes": 3842,
+      "lines": 15,
+      "sha256": "ea64843ae75b2a80de2fad707438db4cc7af5264cbfeae942b30f92e6123cc82"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/protected-baseline.json",
+      "authority": "assigned W evidence; read-only working artifact",
+      "bytes": 1305788,
+      "lines": 23642,
+      "sha256": "d68b1f279ac10251f30f83f7f78a11e12b1a0b8365b9bbd55679ffc7745189eb"
+    }
+  ],
+  "reference_sources": [
+    {
+      "path": "docs/database/design-history/B00-1.2/2026-10-21-ama-database-design.md",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/database/design-history/B00-1.2/2026-10-21-ama-database-design.md; reference relationship only",
+      "bytes": 93202,
+      "lines": 1283,
+      "sha256": "d7a0fc3988fe0b41fbd84bb7c69b96d344f6ed8fca07be312d10fc31630541bd"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.2/ama-data-dictionary.md",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/database/design-history/B00-1.2/ama-data-dictionary.md; reference relationship only",
+      "bytes": 142392,
+      "lines": 2057,
+      "sha256": "9e2f80080fc1757295b66e920d54152018f35fbe733458af8a6032a4b2ccc7d9"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.2/database_design.py",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/database/design-history/B00-1.2/database_design.py; reference relationship only",
+      "bytes": 90226,
+      "lines": 555,
+      "sha256": "41793c7f9b46dd0a88f8a24e037bd7b14348ccb1b7562c3e90ddf27dd6ec78c6"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.2/manifest.json",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/database/design-history/B00-1.2/manifest.json; reference relationship only",
+      "bytes": 2792,
+      "lines": 40,
+      "sha256": "1f46047b25f1a9b490e776b031bc5765bbfa82c3c1984b37f5098026c98e19b7"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.3/2026-10-21-ama-database-design.md",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/database/design-history/B00-1.3/2026-10-21-ama-database-design.md; reference relationship only",
+      "bytes": 113660,
+      "lines": 1418,
+      "sha256": "c4ae00740c7d72e2945d0f67a926631bba198c7ecde2a46cd66523293b21e8d4"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.3/ama-data-dictionary.md",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/database/design-history/B00-1.3/ama-data-dictionary.md; reference relationship only",
+      "bytes": 156475,
+      "lines": 2224,
+      "sha256": "7d34063a86573c6812924a27fff6dc5f2b98cc849dabafb16b9487074fac1d8b"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.3/database_design.py",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/database/design-history/B00-1.3/database_design.py; reference relationship only",
+      "bytes": 100351,
+      "lines": 618,
+      "sha256": "8a7db792bb23b13d0d79ed3142f8dcebe0762cc4f6aefe6e2b1656fa34f95ebc"
+    },
+    {
+      "path": "docs/database/design-history/B00-1.3/manifest.json",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/database/design-history/B00-1.3/manifest.json; reference relationship only",
+      "bytes": 1164,
+      "lines": 30,
+      "sha256": "86cbeaa90878bb84ab28e83ff7a943feed59ddd1173884f6219b3490d1cd0cfa"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-21-ama-delivery-plan.md",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/superpowers/plans/2026-10-21-ama-delivery-plan.md; reference relationship only",
+      "bytes": 16296,
+      "lines": 144,
+      "sha256": "a532dec6e94c53f0e81ae92f14b4f84b6a56cf9d68c37bd6e27d7903f911ffa9"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-21-ama-phase-b.md",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/superpowers/plans/2026-10-21-ama-phase-b.md; reference relationship only",
+      "bytes": 26560,
+      "lines": 180,
+      "sha256": "bfa789f77b5ca90725b2c0f32977993c260ac79ab22c2fff76cd775cc104c862"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-22-ama-material-provenance-addendum.md",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/superpowers/specs/2026-10-22-ama-material-provenance-addendum.md; reference relationship only",
+      "bytes": 49927,
+      "lines": 221,
+      "sha256": "e0aee6ac0526738920758604fa0b2eee201f7b848cdd168f249280ac6cb5f00f"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-reconciliation-fairness.md",
+      "authority": "git show 80c878f52c7b748efdcdb64e707d50cf410843b4:docs/superpowers/specs/2026-10-23-ama-phase-b-reconciliation-fairness.md; reference relationship only",
+      "bytes": 3365,
+      "lines": 13,
+      "sha256": "8535567be287f8baed0a1bde8f47dbc1f4993f4581dbb4f88ea48bcbcbde0907"
+    }
+  ],
+  "reference_search": {
+    "command": [
+      "git",
+      "grep",
+      "-n",
+      "-I",
+      "-e",
+      "database_design.py",
+      "-e",
+      "ama-data-dictionary.md",
+      "-e",
+      "ama-schema-draft.sql",
+      "80c878f52c7b748efdcdb64e707d50cf410843b4",
+      "--",
+      "tools",
+      "docs/database",
+      "docs/superpowers",
+      "README.md",
+      ".github"
+    ],
+    "matching_lines": 34
+  },
+  "regions": [
+    {
+      "path": "tools/checks/database_design.py",
+      "line_start": 292,
+      "line_end": 301,
+      "bytes": 1213,
+      "sha256": "4db61a5cd32a7b0efd49112aa2c3378e8bb6768ceb16fad15d0abfb9b142b730",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "line_start": 448,
+      "line_end": 469,
+      "bytes": 1515,
+      "sha256": "476004aff126856c3da0c8792a421d94abe956091dce3716057300b6ce591540",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "line_start": 471,
+      "line_end": 485,
+      "bytes": 2195,
+      "sha256": "644f69eda3794f8d453f6ac201c28addadf8c48bdc65939d580604f03d46f333",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "line_start": 487,
+      "line_end": 507,
+      "bytes": 1464,
+      "sha256": "5f48a5ba3f3f97bffa1b2ed0f9f84b345e5593bfaec2be8980600ea69b2e84ec",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "line_start": 584,
+      "line_end": 605,
+      "bytes": 1811,
+      "sha256": "e37c6142e913631624cd81fcdf6acfb82a83946080394174f6d2a6c3d3ac53c1",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "line_start": 621,
+      "line_end": 637,
+      "bytes": 1507,
+      "sha256": "71895a2dd32e18fd17900b9cff406829ef32303b4cf9448ed024cc7011e97c69",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "line_start": 662,
+      "line_end": 676,
+      "bytes": 920,
+      "sha256": "68bc763400fb8a907e64dd96e3d016105e60abfdd623ddb1df32dca3c2c285ee",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "line_start": 368,
+      "line_end": 389,
+      "bytes": 1337,
+      "sha256": "d4bf0207649c6c49ca021da087c309ef387d1cc3352376df69dd2344bed45c05",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "line_start": 602,
+      "line_end": 632,
+      "bytes": 2417,
+      "sha256": "5aa31d36fdc0b97bc7db801ee881d63ace1b68ed8e875372cdcbbed17f3b06af",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "line_start": 1,
+      "line_end": 324,
+      "bytes": 76866,
+      "sha256": "6a7c1405b2453a410615656de834704ac74a47c1be79bb16b5a7c4f627da40c6",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "line_start": 325,
+      "line_end": 1468,
+      "bytes": 40501,
+      "sha256": "312691b56039fecbeed3720f0a825f9abaa2fca6ca71a9edac8c814afe4de98d",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "line_start": 556,
+      "line_end": 572,
+      "bytes": 525,
+      "sha256": "a6b21430839db2748537329775dad81ef1ccfd42d41772f9c2bc7fa0640e345f",
+      "newline_scope": "exact raw line bytes including existing line endings"
+    }
+  ],
+  "protected_baseline": {
+    "entries": 4728,
+    "target_membership": {
+      "tools/checks/database_design.py": null,
+      "docs/database/ama-schema-draft.sql": {
+        "path": "docs/database/ama-schema-draft.sql",
+        "tree": "100644 blob 20ecb55e9f7d0f853ee5105234177cfd93f50896",
+        "sha256": "4c6bd89301ca6316f4469e99db333bc5440fa8dd330a907cfc685d79ff656a33"
+      },
+      "docs/database/ama-data-dictionary.md": null,
+      "docs/superpowers/specs/2026-10-21-ama-database-design.md": null
+    }
+  },
+  "execution": {
+    "generator": false,
+    "verifier": false,
+    "tests": false,
+    "build": false,
+    "network": false,
+    "database": false,
+    "docker": false,
+    "private_env": false,
+    "pki": false,
+    "git_mutation": false,
+    "subagents": false
+  },
+  "disposition": "Advisory ownership preflight only; no formal DDL allocation, freeze, ACK, application or activation"
+}

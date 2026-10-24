@@ -1,0 +1,21 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07PreparedExternalIT#reconciliationMaintenanceSettlesTerminalDebtWithNoClaimableTasks,Task07ExternalWorkerIT#saturatedReconcilerStillMaintainsTerminalReservations"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-maintenance-history-corrected/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-maintenance-history-corrected/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+  ],
+  "elapsedSeconds": 32.115259647369385,
+  "counts": {
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

@@ -1,0 +1,9 @@
+# Remaining Task5 genuine transcript Worker adoption
+
+Source `35b2325a..857102b9`, retained pause checkpoint f989805, fixes11eb5408/c943d15f, adopted after original source review7da80430 and scopedfixreviewse0b2b1cc/3a3b3855. Final scoped verdict SPEC PASS/qualityApproved, noopenfindings; T5SR01/02/CV1 closed. Full exact reports/proofs remainunder `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/` and raw under `artifacts/phase-b/b-remaining/task-05/`, `task-05-fix-01/`, `task-05-fix-02/`.
+
+Actual genuineHTTPintake/registeredWorker/privatecarrier/RAW atomicprovenance pipeline, pre-open LOCAL/S3 lifetime+cancellableS3admission and all-execution/all-backendcleanup are adopted. Rootverified270newmanifest/505source/290commitpaths;4727historical/552old/341fix01unchanged; priorreportprefix preserved. Final240units/37suites and6distinctIT0fail/error/skip; earlieroriginal/fix01windows remaincomposed evidence, notretrospectivefinalwhole suite. Fourprivatevalues+PEMscan0. Freshselectedretainedresources unchanged;14actualnewacceptancechains/13migrationhistoryverified, activeimports0. Negativefixturemaintenance13 remainsseparatefromrealRAWsuccess1. Rootread-onlyverifier initialreceiptshape/cardinalitymistakes correctedagainstactualtwo-uploadsource/retainedDBrows, noDBmutation.
+
+Historicalfull-inspect/javapbounds/setupfailures/reconstruction/route-order/clock/upload andotherexecutionqualifications remainpreserved. B01IMMpermanentPARTIAL/B04Q401UNKNOWN/companySSO-directory-model-KBabsent/HA-capacity-nativeIOunqualified remain. No productionpublishing/mail/mainmerge/push.
+
+NextTask6implements bounded complete savedfacts/WORKINGmarksrestore/hashconfirmation/API. FinalTask5seamrepin c207bc7a/root99sourceproofverified; no completedpreflightredo. Task6sourcefirstqualification mustproduce actualpositiveeffectivebounds/originalminima/disabledinstallationcomposition receiptsbeforeinstalledruntimeactivation. Continue6→8→7→9→10→11→12→13.

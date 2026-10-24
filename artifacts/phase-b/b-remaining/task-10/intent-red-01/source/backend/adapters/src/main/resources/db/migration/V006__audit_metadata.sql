@@ -1,0 +1,38 @@
+-- B-01 / B00-1.1-review DIFF-01. V001/V002/V005 remain immutable.
+-- Run with business writers stopped and deploy the compatible audit adapter before resuming.
+SET NAMES utf8mb4;
+SET time_zone = '+00:00';
+
+-- Refuse incompatible legacy codes before narrowing or charset conversion, even in
+-- non-strict SQL mode. UTF-8 uses one byte per character exactly for ASCII values.
+-- No source rows are changed. The temporary guard disappears with this connection
+-- on failure; Flyway's failed nontransactional history requires operator assessment.
+CREATE TEMPORARY TABLE b01_v006_audit_preflight (
+    compatible TINYINT NOT NULL,
+    CONSTRAINT chk_audit_v006_metadata_compatible CHECK (compatible = 1)
+);
+INSERT INTO b01_v006_audit_preflight (compatible)
+SELECT NOT EXISTS (
+    SELECT 1 FROM audit_event
+    WHERE CHAR_LENGTH(action) > 64
+       OR OCTET_LENGTH(action) <> CHAR_LENGTH(action)
+       OR CHAR_LENGTH(result) > 64
+       OR OCTET_LENGTH(result) <> CHAR_LENGTH(result)
+       OR revision < 0
+);
+DROP TEMPORARY TABLE b01_v006_audit_preflight;
+
+-- One atomic ALTER preserves existing IDs/rows and installs only the audit delta.
+-- The migration as a whole is NOT a multi-statement transactional rollback unit.
+ALTER TABLE audit_event
+    DROP CHECK chk_audit_revision,
+    MODIFY actor_id VARCHAR(255) COLLATE utf8mb4_0900_bin NOT NULL,
+    MODIFY action VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    MODIFY resource_id VARCHAR(255) COLLATE utf8mb4_0900_bin NOT NULL,
+    MODIFY revision BIGINT UNSIGNED NOT NULL,
+    MODIFY result VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    MODIFY trace_id VARCHAR(255) COLLATE utf8mb4_0900_bin NOT NULL,
+    DROP INDEX idx_audit_resource_time,
+    DROP INDEX idx_audit_trace,
+    ADD INDEX audit_resource_time (resource_id, occurred_at, id),
+    ADD INDEX audit_trace (trace_id);

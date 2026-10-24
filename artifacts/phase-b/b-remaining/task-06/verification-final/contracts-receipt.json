@@ -1,0 +1,34 @@
+[
+  {
+    "name": "lint",
+    "command": [
+      "node_modules/.bin/redocly",
+      "lint",
+      "contracts/openapi/api.yaml",
+      "--config",
+      "redocly.yaml"
+    ],
+    "cwd": ".",
+    "exit": 0
+  },
+  {
+    "name": "generated",
+    "command": [
+      "npm",
+      "run",
+      "check:api"
+    ],
+    "cwd": "web",
+    "exit": 0
+  },
+  {
+    "name": "typecheck",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "cwd": "web",
+    "exit": 0
+  }
+]

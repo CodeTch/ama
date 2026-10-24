@@ -1,0 +1,70 @@
+{
+  "base": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
+  "head": "6cce4794dba473825d83fb9bccafc043cd611b5c",
+  "changedPaths": 450,
+  "backendFocus": [
+    "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+    "backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java",
+    "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07AdmissionWindowsIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07GenerationRetentionIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07PreparedContradictionIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07PreparedMatrixIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07ReceiptRecoveryIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07SettlementWindowsIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07TerminalCrashProbe.java",
+    "backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java"
+  ],
+  "packages": [
+    {
+      "kind": "source",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-source-review-package-20261024.diff",
+      "bytes": 143011,
+      "sha256": "b13ea387e1cddd3a57b7fea66af4059ac24e4b2ee7da268acabe826df49792b4"
+    },
+    {
+      "kind": "full",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-full-review-package-20261024.diff",
+      "bytes": 7923118,
+      "sha256": "057c18be12df22d045ade69cf195ffabb5c09b30cd8074b8f73617e4203cc36a"
+    }
+  ],
+  "inputs": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-report-20261024.md",
+      "bytes": 12707,
+      "sha256": "4878d25960159c7415a39fcfc9ce2cd2ded878c2b2bc094d3f8f3a66ee912759"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-report.md",
+      "bytes": 3538,
+      "sha256": "04b66878e320e543bf71b96f665cbd9f957d36ec59b7b551d0ea276fa2212362"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/report.md",
+      "bytes": 13960,
+      "sha256": "bc510879456b817880d990fbe811465ce32bf616423a73565e397401d2aa86fe"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/manifest.json",
+      "bytes": 2484884,
+      "sha256": "964c66616b9966b44c12708a61d385640b51bbffbdaaaef3a4cb030654997ca2"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/qualification-ledger.json",
+      "bytes": 549054,
+      "sha256": "3037e92594cd3b95c46b0c2ef2673d9bb297d6ea26d7f6e4adea8f25f28f0b9b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/delivery-custody.json",
+      "bytes": 2527,
+      "sha256": "993d8a45af93b99c66ce12f03ff72fdba90a97cff9d7d1f90723ca5b613696c0"
+    }
+  ],
+  "brief": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-independent-review-brief-20261024.md",
+    "sha256": "6fb04f0e1b2bbee56673bc84ad4b1fbd035a4743d40da7f1d21a82c772fc3032"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "command": [
+    "python3",
+    "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/install.py",
+    "--execute"
+  ],
+  "toolExit": 1,
+  "failedLine": 18,
+  "failure": "AssertionError exact env key set mismatch",
+  "actualKeyNames": [
+    "AMA_TEST_DATABASE_URL",
+    "AMA_TEST_DATABASE_USERNAME",
+    "AMA_TEST_DATABASE_PASSWORD",
+    "AMA_TEST_CONTAINER",
+    "AMA_TASK09_OWNER",
+    "AMA_TASK09_RUN_ROOT",
+    "AMA_TASK09_S3_ENV",
+    "AMA_TASK09_PKI_ROOT"
+  ],
+  "executedJava": false,
+  "executionDirectoryExists": false,
+  "ownerObservedFiles": [
+    "install.properties"
+  ],
+  "scope": "helper stopped at exact keys assertion before env update/command/execution dir/subprocess; no admin SQL/providersecret/archive/configure invoked",
+  "next": "retain original bundle/manifest/helper; narrow helper correction to actual approved8keys, source env unchanged, explicit sameowner continuation ACK required",
+  "secretValuesPrintedOrPersisted": false
+}

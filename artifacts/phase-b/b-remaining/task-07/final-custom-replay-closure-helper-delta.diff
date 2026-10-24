@@ -1,0 +1,41 @@
+--- final-custom-replay-closure/backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java
++++ final/backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java
+@@ -81,7 +81,7 @@
+         public TaskResult writeCurrent(PreparedDomain held,ExecutionContext context,PreparedObservation observation){preparations.requireExternal(held,context);if(invalid.get())return new TaskResult(Outcome.FAILED,null,"INVALID_MODEL_OUTPUT");var result=writeOutput();return badOutput.get()?new TaskResult(Outcome.SUCCEEDED,new TypedRef("WRONG",output),null):result;}
+         public void validateStoredResult(PreparedDomain held,ExecutionContext context,PreparedObservation observation,TaskResult result){preparations.requireExternal(held,context);if(!invalid.get())assertEquals(output,result.output().id());}
+         public boolean verifyReplay(PreparedDomain held,ExecutionContext context,PreparedObservation observation,StoredResult stored){preparations.requireExternal(held,context);if(invalid.get())return observation==preparedObservation&&stored.state().equals("FAILED")&&"INVALID_MODEL_OUTPUT".equals(stored.errorCode())&&stored.output()==null&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?",Integer.class,output)==0;return observation==preparedObservation&&stored.state().equals("SUCCEEDED")&&stored.output()!=null&&stored.output().id().equals(output)&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=? AND meeting_id=? AND name='output'",Integer.class,output,meeting)==1;}
+-    
++
+     };
+     final JdbcOutbox outbox = new JdbcOutbox(source, Map.of("TEST_INFO", event -> {
+         if (failEvent.get()) throw new IllegalArgumentException("CONTROLLED_EVENT_FAILURE");
+@@ -190,8 +190,9 @@
+         var permits=new JdbcModelPermitPool(operations,Map.of(model,new ModelConfiguration(model,1,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT)),(t,m,d)->{throw new IllegalStateException();});permits.configure();var permit=permits.acquire(token,model,null).orElseThrow();
+         operations.observePrepared(token,preparedObservation);
+         try(var loop=assertDoesNotThrow(()->ama.worker.ReconciliationLoop.prepared(operations,permits,1,s->{throw new AssertionError("No claimable Task7 execution");},"T07_MAINTENANCE"))){
+-         loop.start();long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(10);boolean settled=false;
+-         while(System.nanoTime()<deadline&&!settled){settled=jdbc.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,permit.id());if(!settled)Thread.sleep(20);}
++         int pollBound=2*((jdbc.queryForObject("SELECT COUNT(*) FROM model_reservation",Integer.class)+7)/8)+2;boolean settled=false;
++         // Exercise the real existing cadence entry once per finite slice, without assuming historical rows fit in two wall-clock ticks.
++         for(int i=0;i<pollBound&&!settled;i++){Task07ExternalWorkerIT.invoke(loop,"poll");settled=jdbc.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,permit.id());}
+          assertTrue(settled,"Maintenance must run even when no execution is claimable");
+         }
+     }
+--- final-custom-replay-closure/backend/integration-tests/src/test/java/ama/task/Task07ExternalWorkerIT.java
++++ final/backend/integration-tests/src/test/java/ama/task/Task07ExternalWorkerIT.java
+@@ -88,10 +88,13 @@
+   f.jdbc.update("UPDATE external_operation SET reconcile_expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND,next_check_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=?",token.operationId());
+   var entered=new CountDownLatch(1);var release=new CountDownLatch(1);
+   try(var loop=ReconciliationLoop.prepared(actual,permits,1,s->{entered.countDown();await(release);},"T07_SATURATED")){
+-   loop.start();await(entered);
++   int scanCalls=(f.jdbc.queryForObject("SELECT COUNT(*) FROM external_operation",Integer.class)+63)/64+2;
++   for(int i=0;i<scanCalls&&entered.getCount()!=0;i++)invoke(loop,"poll");await(entered);
++
+    var debt=new Task07PreparedExternalIT();debt.setup();var external=new JdbcExternalOperations(debt.queue);var other=external.beginPrepared(debt.lease,debt.preparedRequest).orElseThrow();String m="T07_"+UUID.randomUUID().toString().replace("-","");var p=new JdbcModelPermitPool(external,Map.of(m,new ModelConfiguration(m,1,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT)),(t,x,d)->{throw new IllegalStateException();});p.configure();var permit=p.acquire(other,m,null).orElseThrow();external.observePrepared(other,debt.preparedObservation);
+    // Invoke the existing cadence entry while its worker slot is saturated; no second scheduler.
+-   for(int i=0;i<32&&!debt.jdbc.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,permit.id());i++)invoke(loop,"poll");
++   int maintenanceCalls=2*((debt.jdbc.queryForObject("SELECT COUNT(*) FROM model_reservation",Integer.class)+7)/8)+2;
++   for(int i=0;i<maintenanceCalls&&!debt.jdbc.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,permit.id());i++)invoke(loop,"poll");
+    assertTrue(debt.jdbc.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,permit.id()));release.countDown();
+   }finally{release.countDown();}
+  }

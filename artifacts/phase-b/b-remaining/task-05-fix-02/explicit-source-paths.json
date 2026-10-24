@@ -1,0 +1,36 @@
+{
+  "product": [
+    "backend/adapters/src/main/java/ama/storage/FileBackendDefinitions.java",
+    "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+    "backend/adapters/src/main/java/ama/storage/s3/S3Objects.java"
+  ],
+  "test": [
+    "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+    "backend/adapters/src/test/java/ama/storage/FileBackendDefinitionsTest.java",
+    "backend/worker/src/test/java/ama/worker/WorkerShutdownTest.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02AdmissionIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02Fixture.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02Maintenance.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02NativeFixture.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02S3OpenRegressionIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02SuccessRegressionIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02Proxy.java",
+    "backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02S3DeadlineRegressionIT.java"
+  ],
+  "all": [
+    "backend/adapters/src/main/java/ama/storage/FileBackendDefinitions.java",
+    "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+    "backend/adapters/src/main/java/ama/storage/s3/S3Objects.java",
+    "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+    "backend/adapters/src/test/java/ama/storage/FileBackendDefinitionsTest.java",
+    "backend/worker/src/test/java/ama/worker/WorkerShutdownTest.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02AdmissionIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02Fixture.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02Maintenance.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02NativeFixture.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02S3OpenRegressionIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task05Fix02SuccessRegressionIT.java",
+    "backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02Proxy.java",
+    "backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02S3DeadlineRegressionIT.java"
+  ]
+}

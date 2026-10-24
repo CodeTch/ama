@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-24T16:47:29.582105+00:00",
+  "resultSha256": "7683edfa037684ee672cf4ad788fe8b8b8b8db669c9b7fced556e1ce01f147b4",
+  "historySha256": "abe63a5bf739b44404ee1d8d75331444a9be60a098273d727552ad49fa2fc8e2",
+  "alignmentSha256": "b27630eceed8d2adf68947ec0b6e69616bf70fa8c51295958edd3792d926c06f",
+  "full16TenFieldsBeforeAfterExactlyEqual": true,
+  "original15SqlShaExactlyFrozen": true,
+  "newMigrationExactFrozen": true,
+  "qualification": "Controller read actual result/alignment, independently compared all16history records and frozenSQL hashes; structural metadata only, no DB/probe rerun, no temporal/proof/business qualification."
+}

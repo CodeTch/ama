@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-23T20:48:06.583416+00:00",
+  "kind": "pure resolved Flyway version parser/order probe; NO database/Flywaymigrationprocess/SQLallocation/freeze/ACK/application",
+  "source": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/Task08FlywayVersionOrderProbe.java",
+  "sourceSha256": "c02a93f89ba84084dc055a1a950756c0c96631a328cd5b2b3a769e57cfd701f1",
+  "resolvedJar": "flyway-core-12.4.0.jar",
+  "jarSha256": "c3f93df1f3e0c9d14652adb5ade97401f2ede503859ac693c2af5c06e2797799",
+  "originClasspathReceipt": "artifacts/phase-b/b-remaining/task-06/composition-probe-03/integration-tests-TEST-ama.storage.Task06CompositionIT.xml",
+  "command": [
+    "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java",
+    "-Xmx64m",
+    "-XX:ActiveProcessorCount=2",
+    "-cp",
+    "/home/tanren/.m2/repository/org/flywaydb/flyway-core/12.4.0/flyway-core-12.4.0.jar",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/Task08FlywayVersionOrderProbe.java",
+    "013.1",
+    "013.2",
+    "014",
+    "028"
+  ],
+  "exit": 0,
+  "stdout": "version|013.1|013.1\nversion|013.2|013.2\nversion|014|014\nversion|028|028\nequalLeadingZero|true\ncandidateAfterCurrent|1\ncandidateBeforeReserved014|-1\nnextIntegerAfterReserved027|1\nmaxHeap|67108864\nprocessors|2\n",
+  "stderr": "",
+  "qualification": "Candidate013.2 only syntax/order, UNASSIGNED; actualpostTask6fullhistory/engine/driver/schema/DDLreview/freeze/separateACK stillrequired. AtactivationverifyresolvedJarSHAunchanged beforecarryingthisdeterministicproof."
+}

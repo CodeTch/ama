@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-23T21:25:35.103612+00:00",
+  "scope": "Interim HTTPS actual XML; source/scope review pending; no browser/company claim",
+  "rows": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/https-04/integration-tests-TEST-ama.storage.Task06FixHttpsIT.xml",
+      "sha256": "7826ee3319456c092d1991f3f0c169f0202518600cb358d93c4af53d9db6f0dd",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "actualHttpsLOCALRolesAndFullRevisionTokens",
+        "actualHttpsS3RolesAndFullRevisionTokens"
+      ]
+    }
+  ]
+}

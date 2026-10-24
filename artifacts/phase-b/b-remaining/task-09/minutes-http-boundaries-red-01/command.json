@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09MinutesHttpBoundaryIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "09a0b6500f904b475614b433fa4510180e1d281b0f9d7684e871e21365a3a196",
+  "startedUtc": "2026-10-24T06:57:53.088240+00:00"
+}

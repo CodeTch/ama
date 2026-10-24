@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task10PendingTranscriptIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task10NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "5007d77f0bfd82da25bf0aa685da4b94626cc66e82c83de746ee70e4dd6edeb4",
+  "startedUtc": "2026-10-24T12:29:52.978191+00:00"
+}

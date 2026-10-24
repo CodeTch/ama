@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09CandidatePaginationIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "c23e761721d2b5efb48d2615b23e71a9a10c281d7feefd543c85aa94e697b466",
+  "startedUtc": "2026-10-24T10:34:40.832683+00:00"
+}

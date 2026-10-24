@@ -1,0 +1,131 @@
+{
+  "utc": "2026-10-23T22:37:41.005035+00:00",
+  "status": "FRESH_OWNED_MYSQL_READY_EMPTY4SCHEMAS",
+  "creationGuard": "57dd3b76e4bb07930809c9a39f1536b0808660eacf3f047e43ea4a5d34546505",
+  "creationReceipt": "a14f289304c4884c92aabe6f3085ef172318309e7c6eb4f89dd9b96db6de572a",
+  "selectedInitial": {
+    "id": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+    "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "image_id": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "memory": 805306368,
+    "memory_swap": 805306368,
+    "mounts": [
+      {
+        "Destination": "/var/lib/mysql",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": true,
+        "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/data",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/run/ama-task08",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/secrets",
+        "Type": "bind"
+      }
+    ],
+    "name": "/ama-test-task08-848e93aace8b4f0fa34fc548267f3dc5",
+    "nano_cpus": 1000000000,
+    "oom_killed": false,
+    "owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+    "pids": 256,
+    "ports": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "44727"
+        }
+      ]
+    },
+    "running": true,
+    "state": "running"
+  },
+  "selectedReady": {
+    "id": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+    "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "image_id": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "memory": 805306368,
+    "memory_swap": 805306368,
+    "mounts": [
+      {
+        "Destination": "/var/lib/mysql",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": true,
+        "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/data",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/run/ama-task08",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/secrets",
+        "Type": "bind"
+      }
+    ],
+    "name": "/ama-test-task08-848e93aace8b4f0fa34fc548267f3dc5",
+    "nano_cpus": 1000000000,
+    "oom_killed": false,
+    "owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+    "pids": 256,
+    "ports": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "44727"
+        }
+      ]
+    },
+    "running": true,
+    "state": "running"
+  },
+  "privateEnvPath": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/env.sh",
+  "fourSchemaTargets": {
+    "behavior": {
+      "database": "ama_t08_848e93aace8b_behavior",
+      "url": "jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_behavior"
+    },
+    "fairheld": {
+      "database": "ama_t08_848e93aace8b_fairheld",
+      "url": "jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_fairheld"
+    },
+    "fairunregistered": {
+      "database": "ama_t08_848e93aace8b_fairunregistered",
+      "url": "jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_fairunregistered"
+    },
+    "overflow": {
+      "database": "ama_t08_848e93aace8b_overflow",
+      "url": "jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_overflow"
+    }
+  },
+  "engineAndEmptyTables": [
+    {
+      "aio": 0,
+      "offset": 1,
+      "sqlMode": "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION",
+      "version": "8.4.6",
+      "increment": 1
+    },
+    {
+      "schema": "ama_t08_848e93aace8b_behavior",
+      "tables": 0
+    },
+    {
+      "schema": "ama_t08_848e93aace8b_fairheld",
+      "tables": 0
+    },
+    {
+      "schema": "ama_t08_848e93aace8b_fairunregistered",
+      "tables": 0
+    },
+    {
+      "schema": "ama_t08_848e93aace8b_overflow",
+      "tables": 0
+    }
+  ],
+  "scope": "One rootguarded NEWinstance/4emptyownedtargets; noFlyway/business/newTask8DDL applied, sharedMySQL/S3/privateenv unchanged. Onlynewtestuser authorizedfortheseownedschemas; root.cnf reservedrootprovisioning/observation. Privateenvsecretvaluesnotpublished."
+}

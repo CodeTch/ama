@@ -1,0 +1,6 @@
+SELECT t.id,t.subject_id,t.state,t.attempt,t.last_error,e.id execution_id,e.operation_id,e.state execution_state,o.state operation_state,o.external_result_id FROM durable_task t JOIN meeting m ON m.id=t.subject_id LEFT JOIN external_execution e ON e.task_id=t.id LEFT JOIN external_operation o ON o.id=e.operation_id WHERE m.owner_id='task09-e1e9a4fc-c220-4342-a2ce-22541599f300' ORDER BY t.id LIMIT 10
+id=06925c6f-c059-4ffb-bc63-3c67ff96c6f7 subject_id=3f9fb726-bb1a-4ecc-b05d-c81c47367d97 state=SUCCEEDED attempt=1 last_error=null execution_id=null operation_id=null execution_state=null operation_state=null external_result_id=null 
+id=1106f41b-077f-4d54-8329-1341eceebcd7 subject_id=3f9fb726-bb1a-4ecc-b05d-c81c47367d97 state=RECONCILING attempt=1 last_error=null execution_id=6521f9b2-bfd3-476a-93ec-6e9fcbe8a4f1 operation_id=ec8991bb-778e-4eeb-9526-c31ed9b74366 execution_state=MARKED operation_state=MARKED external_result_id=null 
+SELECT r.id,r.execution_id,r.model,r.settled_at FROM model_reservation r WHERE r.model='CONTROLLED_MINUTES_V1' LIMIT 10
+id=736364f2-5f6d-42f3-902f-de1a5ecfeff1 execution_id=6521f9b2-bfd3-476a-93ec-6e9fcbe8a4f1 model=CONTROLLED_MINUTES_V1 settled_at=null 
+Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2

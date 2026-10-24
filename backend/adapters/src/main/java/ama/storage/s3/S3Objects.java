@@ -32,7 +32,7 @@ final class S3Objects {
 
     private void acquire(Semaphore permits) {
         try {
-            if (!permits.tryAcquire(config.timeout().toMillis(), TimeUnit.MILLISECONDS))
+            if (!ama.storage.SourceReadLifetime.tryAcquire(permits,config.timeout().toMillis(),TimeUnit.MILLISECONDS))
                 throw ControlCodec.unavailable();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -73,14 +73,12 @@ final class S3Objects {
                         : ErrorCode.STORAGE_UNAVAILABLE);
     }
 
-    ResponseInputStream<GetObjectResponse> raw(GetObjectRequest request) {
+    OwnedResponse raw(GetObjectRequest request) {
         S3Layout.physical(request.key(), config.keyBudget());
         acquire();
+        ResponseInputStream<GetObjectResponse> response;
         try {
-            var response = client.getObject(request);
-            // ResponseInputStream cannot be wrapped without losing abort; callers release
-            // explicitly.
-            return response;
+            response = client.getObject(request);
         } catch (S3Exception e) {
             requests.release();
             throw mapped(e);
@@ -88,14 +86,23 @@ final class S3Objects {
             requests.release();
             throw ControlCodec.unavailable();
         }
+        return new OwnedResponse(response);
     }
 
-    void release(ResponseInputStream<?> in) {
-        try {
-            in.abort();
-        } finally {
-            requests.release();
+    final class OwnedResponse extends InputStream {
+        private final GetObjectResponse response;
+        private final ama.storage.DeadlineInputStream body;
+        OwnedResponse(ResponseInputStream<GetObjectResponse> raw){
+            response=raw.response();
+            body=new ama.storage.DeadlineInputStream(raw,config.timeout(),()->{try{raw.abort();}finally{requests.release();}});
         }
+        GetObjectResponse response(){return response;}
+        @Override public int read()throws IOException{return body.read();}
+        @Override public int read(byte[] b,int off,int len)throws IOException{return body.read(b,off,len);}
+        @Override public void close()throws IOException{body.close();}
+    }
+    void release(OwnedResponse in) {
+        try {in.close();}catch(IOException failure){throw ControlCodec.unavailable();}
     }
 
     static long contentLength(Long value) {

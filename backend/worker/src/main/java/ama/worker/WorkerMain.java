@@ -7,7 +7,10 @@ public final class WorkerMain {
  public static void main(String[] args)throws Exception{
   var providers=ServiceLoader.load(WorkerRuntimeProvider.class).stream().toList();
   if(providers.size()!=1)throw new IllegalStateException("Exactly one reviewed worker runtime provider is required");
-  try(var loop=providers.getFirst().get().create()){
+  run(providers.getFirst().get().create());
+ }
+ public static void run(WorkerRuntime runtime)throws Exception{
+  try(var loop=runtime){
    Runtime.getRuntime().addShutdownHook(new Thread(loop::close,"ama-worker-shutdown"));
    loop.start();new CountDownLatch(1).await();
   }

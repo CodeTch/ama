@@ -1,0 +1,180 @@
+--- task-11-forward-ddl-proposal-20261024.sql
++++ task-11-forward-ddl-proposal-r1-20261024.sql
+@@ -1,4 +1,4 @@
+--- Task 11 publication_submission: UNVERSIONED PROSPECTIVE DDL ONLY.
++-- Task 11 publication_submission R1: UNVERSIONED PROSPECTIVE DDL ONLY.
+ -- Do not install as a Flyway resource or apply this file. Formal allocation,
+ -- exact-byte freeze, independent review, and separate application ACK remain future root work.
+ -- Source baseline: de1611a67ba483afe21f3b29bb69c2d32028efef.
+@@ -33,7 +33,8 @@
+   CONSTRAINT ck_publication_submission_0
+     CHECK (submission_no BETWEEN 1 AND 9223372036854775806),
+   CONSTRAINT ck_publication_submission_1
+-    CHECK (local_state IN ('UNDECIDED', 'NEVER_MARKED')),
++    CHECK ((local_state = 'UNDECIDED' AND OCTET_LENGTH(local_state) = 9)
++        OR (local_state = 'NEVER_MARKED' AND OCTET_LENGTH(local_state) = 12)),
+   CONSTRAINT ck_publication_submission_2
+     CHECK (OCTET_LENGTH(request_manifest) <= 65536),
+   CONSTRAINT ck_publication_submission_3
+@@ -48,10 +49,12 @@
+       (local_state = 'NEVER_MARKED'
+        AND local_decided_at IS NOT NULL
+        AND local_reason IS NOT NULL
+-       AND local_reason IN (
+-         'PREPARATION_EXHAUSTED',
+-         'TERMINAL_UNMARKED_FAILURE',
+-         'EXPIRED_UNMARKED_ABANDONED')
++       AND ((local_reason = 'PREPARATION_EXHAUSTED'
++             AND OCTET_LENGTH(local_reason) = 21)
++            OR (local_reason = 'TERMINAL_UNMARKED_FAILURE'
++                AND OCTET_LENGTH(local_reason) = 25)
++            OR (local_reason = 'EXPIRED_UNMARKED_ABANDONED'
++                AND OCTET_LENGTH(local_reason) = 26))
+        AND local_decided_by IS NOT NULL
+        AND local_attempt_no IS NOT NULL)
+     ),
+@@ -67,10 +70,10 @@
+   CONSTRAINT fk_publication_submission_requester
+     FOREIGN KEY (requester_id) REFERENCES enterprise_identity (enterprise_id)
+     ON UPDATE RESTRICT ON DELETE RESTRICT,
++  -- MySQL 8.4 disallows explicit FK referential actions on CHECK-used columns.
++  -- InnoDB's omitted actions are immediate NO ACTION, equivalent to RESTRICT.
+   CONSTRAINT fk_publication_submission_decider
+-    FOREIGN KEY (local_decided_by) REFERENCES enterprise_identity (enterprise_id)
+-    ON UPDATE RESTRICT ON DELETE RESTRICT,
++    FOREIGN KEY (local_decided_by) REFERENCES enterprise_identity (enterprise_id),
+   CONSTRAINT fk_publication_submission_execution
+     FOREIGN KEY (local_execution_id) REFERENCES external_execution (id)
+-    ON UPDATE RESTRICT ON DELETE RESTRICT
+ ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+--- task-11-forward-ddl-proposal-20261024.md
++++ task-11-forward-ddl-proposal-r1-20261024.md
+@@ -1,6 +1,13 @@
+-# Task 11 publication_submission forward DDL proposal — 2026-10-24
++# Task 11 publication_submission forward DDL proposal R1 — 2026-10-24
+ 
+-**Status: unversioned prospective SQL for root review.** The companion SQL is a proposed single-table addition to the committed Task 8 schema at `de1611a67ba483afe21f3b29bb69c2d32028efef`. It has not been allocated a formal migration name/version, copied into resources, frozen, independently reviewed, ACKed, applied, or synchronized to the current model. No source, test, database, Git, or product change is part of this preparation. The earlier 235-file source-alignment preflight is reused as context, not rerun; its older source baseline is not substituted for this commit.
++**Status: unversioned prospective SQL for root review.** The companion SQL is a proposed single-table addition to the committed Task 8 schema at `de1611a67ba483afe21f3b29bb69c2d32028efef`. It has not been allocated a formal migration name/version, copied into resources, frozen, independently approved as a fix, ACKed, applied, or synchronized to the current model. No source, test, database, Git, or product change is part of this preparation. The earlier 235-file source-alignment preflight is reused as context, not rerun; its older source baseline is not substituted for this commit.
++
++## Scoped fix round 1: I1 and I2
++
++The [independent static review](task-11-forward-ddl-static-review-20261024.md) retained **two Important** findings on the original exact SQL. This R1 is the same author's proposed repair for later independent adjudication; it is not a static-review PASS or a MySQL execution result. The original SQL/report/manifest SHA pins are preserved in the R1 manifest.
++
++* **I1 — exact stored vocabulary.** MySQL's `ascii_bin` is a PAD SPACE collation for VARCHAR comparisons, so equality alone can admit trailing spaces. R1 pairs each allowed `local_state` literal with its exact UTF-8 octet length (9 or 12) and each `local_reason` literal with its own exact length (21, 25, or 26). The declared column types and complete UNDECIDED/NEVER_MARKED null tuple stay intact. This excludes a stored trailing-space variant of any accepted literal while retaining the same ASCII binary collation; an isolated negative-row probe remains required. [MySQL 8.4 CHAR/VARCHAR comparison rules](https://dev.mysql.com/doc/refman/8.4/en/char.html).
++* **I2 — CHECK-used FK columns.** The [MySQL 8.4 CHECK restrictions](https://dev.mysql.com/doc/refman/8.4/en/create-table-check-constraints.html) prohibit FK referential-action clauses on columns appearing in a CHECK. The two nullable decision FKs now omit explicit `ON UPDATE` and `ON DELETE`; all four other FKs still spell `RESTRICT`. The [MySQL 8.4 FK manual](https://dev.mysql.com/doc/refman/8.4/en/create-table-foreign-keys.html) says an omitted action defaults to `NO ACTION`, and InnoDB applies `NO ACTION` immediately with the same restriction as `RESTRICT`. This is a documented semantic choice, not evidence that MySQL 8.4.6 accepted this exact combined CREATE. The later isolated CREATE/negative-row/FK preservation probe is mandatory before freeze/application. The full SQL decision tuple and all six FKs remain present.
+ 
+ ## Exact logical-to-physical mapping
+ 
+@@ -30,11 +37,11 @@
+ 
+ The table uses InnoDB and the existing `utf8mb4_0900_ai_ci` table default. Each UUID and ASCII enum/hash column declares `ascii_bin`; destination, business-key, and enterprise-ID columns declare `utf8mb4_0900_bin`. V007 converted the enterprise identity PK to that collation before V013. `request_manifest` follows the existing `external_execution.request_manifest` LONGTEXT storage; exact bytes and schema are application-verified, never compared with collation-sensitive SQL equality.
+ 
+-Primary key `task_id` and unique `(publication_id,submission_no)` enforce one binding per real task and one number per publication. The latter is also the publication FK backing index. The bounded undecided scan uses `(local_state,created_at,task_id)`; separate explicit indexes back confirmation, requester, nullable decider, and nullable execution FKs. Six FKs use `ON UPDATE RESTRICT ON DELETE RESTRICT`. SQL CHECKs enforce the supported submission number, local-state vocabulary, 65536-byte manifest ceiling, and full nullable decision tuple including the exact three reasons. UTF-8 byte length bounds UTF-16 code units for valid UTF-8; the writer still checks the R1 byte/unit limits and strict content-free manifest schema.
++Primary key `task_id` and unique `(publication_id,submission_no)` enforce one binding per real task and one number per publication. The latter is also the publication FK backing index. The bounded undecided scan uses `(local_state,created_at,task_id)`; separate explicit indexes back confirmation, requester, nullable decider, and nullable execution FKs. All six FKs retain InnoDB immediate RESTRICT semantics. Four spell out `ON UPDATE RESTRICT ON DELETE RESTRICT`; the two CHECK-used nullable columns (`local_decided_by`, `local_execution_id`) omit both action clauses so MySQL selects implicit `NO ACTION`, which its 8.4 manual says is immediately equivalent to RESTRICT in InnoDB. SQL CHECKs enforce the supported submission number, byte-exact local-state and reason vocabularies, 65536-byte manifest ceiling, and full nullable decision tuple. UTF-8 byte length bounds UTF-16 code units for valid UTF-8; the writer still checks the R1 byte/unit limits and strict content-free manifest schema.
+ 
+ ## Deliberate limits and root decisions
+ 
+-* **Temporal immutability is not a CHECK property.** The later private writer must insert the entire binding once, never update `task_id` through `created_at`, and use one affected-row-count-1 `UNDECIDED → NEVER_MARKED` update filling all five decision fields. Exact sealed replay reads the original row without changing it. The SQL permits no decided row with incomplete fields, but by itself cannot prevent mutation, reversal, a different actor/reason/time, or a second decision. Root should decide whether to add DB triggers or rely on the reviewed confined writer and operation privileges; no trigger is invented here.
++* **Temporal immutability is not a CHECK property.** The later private writer must insert the entire binding once, never update `task_id` through `created_at`, and use one affected-row-count-1 `UNDECIDED → NEVER_MARKED` update filling all five decision fields. Exact sealed replay reads the original row without changing it. The SQL permits no decided row with incomplete fields, but by itself cannot prevent mutation, reversal, a different actor/reason/time, or a second decision. R1 keeps the design's confined-writer and operation-privilege enforcement gate; it proposes no trigger or new protocol.
+ * **Cross-row truth needs the full locked protocol.** FKs cannot prove that task, publication, final, requester, execution, producer, r/e, original manifest, and meeting all belong to the same accepted submission. Nor can they prove no marker/send/UNKNOWN/other live round, genuine no-execution case A, genuine PREPARED B or local FAILED C, or prior-round safety. The R1 private issuer/holder, complete inventory, root/task marker barrier, actual attempt accounting, and atomic publication/audit/outbox transition remain mandatory.
+ * **The manifest is bounded metadata.** `OCTET_LENGTH` protects a persisted upper limit but does not enforce JSON shape, absence of content/secrets, canonical hashes, UUID syntax, or original acceptance equivalence. These are later producer/writer/replay checks. Existing rows without authentic binding are UNKNOWN/unavailable; no inferred backfill.
+ * **No old-row or history rewrite.** V013 mutable publication fields and operation-required publication_attempt remain as committed. The new table records the old accepted header even after current destination/final changes. Initial acceptance without a marker creates this row and task only; nullable `local_execution_id` is never populated with a fake execution. The old generic fixed-spec retry path stays intact.
+@@ -43,7 +50,7 @@
+ ## Forward-compatibility and migration-preservation checklist
+ 
+ 1. Pin the actual post-Task7/9/10 tree and all migration bytes; compare current physical parents/collations and any intervening migrations with this proposal. Do not assume a `013.4` slot.
+-2. Check every FK parent/index and MySQL CHECK/LOB behavior in an isolated schema after independently approved version allocation; assess partial DDL failure without repair, reset, out-of-order replay, or history rewrite.
++2. On an isolated pinned MySQL 8.4.6 server, probe exact CREATE parsing, all six FK parent-update/delete restrictions, trailing-space state/reason negative rows, complete nullable decision tuple, and CHECK/LOB behavior before application ACK. Assess partial DDL failure without repair, reset, out-of-order replay, or history rewrite.
+ 3. Reconcile the shared lock rank: existing submission rows after final and before mapping/attempt; new row only after its real task and FK parents are held. Verify complete no-row/membership guards and S/A/F max+1/overflow checks.
+ 4. Review the confined writer's immutable binding, single atomic local decision, exact replay, actor/session authority, and old task/attempt/execution association. Preserve accepted old bindings and decision rows across edits, reconfiguration, resubmissions, and restart.
+ 5. Synchronize `tools/checks/database_design.py` and its current generated schema/dictionary plus ER appendix against the *then* actual schema; preserve historical generated exports and migration files.
+--- task-11-forward-ddl-proposal-20261024-manifest.json
++++ task-11-forward-ddl-proposal-r1-20261024-manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "status": "UNVERSIONED_PROSPECTIVE_DDL_NOT_FROZEN_OR_APPLIED",
++  "status": "UNVERSIONED_PROSPECTIVE_DDL_R1_STATIC_FIX_NOT_FROZEN_OR_APPLIED",
+   "baseline_commit": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+   "migration_script_count": 15,
+   "migration_sources": [
+@@ -228,24 +228,68 @@
+   ],
+   "outputs": [
+     {
+-      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024.sql",
+-      "bytes": 3927,
+-      "sha256": "e9026197dba789e7cbdbf6acee56065d0f8fa98665595d204bece1afc8eedd43",
+-      "lines": 76
+-    },
+-    {
+-      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024.md",
+-      "bytes": 8903,
+-      "sha256": "930eddac25fe68adf832b007c2ffc2a74581bdebd9e6535df01ac19c4933ef1d",
+-      "lines": 54
++      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-r1-20261024.sql",
++      "bytes": 4287,
++      "sha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2",
++      "lines": 79
++    },
++    {
++      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-r1-20261024.md",
++      "bytes": 11168,
++      "sha256": "243146dffb571181103d8ed052ac5feb5ecc79c9057f77c950c6e203edcba46e",
++      "lines": 61
+     }
+   ],
+   "manifest_self_hash": "omitted_to_avoid_recursive_digest",
+-  "scope": "Task11 publication_submission only; no formal migration version, resources copy, model edit, DB/test/Git action",
++  "scope": "Task11 publication_submission R1 proposed I1/I2 fixes only; original proposal preserved; no version, resource copy, model/source/test/DB/Git action",
+   "repin_required": [
+     "actual Task7 adopted source and marker/terminal hook",
+     "actual Task9 generated-input closure",
+     "actual Task10 PENDING/read-budget/current model",
+     "actual migration prefix and independent DDL review/version/freeze/application ACK"
+-  ]
++  ],
++  "original_artifacts": [
++    {
++      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024.sql",
++      "bytes": 3927,
++      "sha256": "e9026197dba789e7cbdbf6acee56065d0f8fa98665595d204bece1afc8eedd43"
++    },
++    {
++      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024.md",
++      "bytes": 8903,
++      "sha256": "930eddac25fe68adf832b007c2ffc2a74581bdebd9e6535df01ac19c4933ef1d"
++    },
++    {
++      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024-manifest.json",
++      "bytes": 8989,
++      "sha256": "ca422802295e79892b014357a1b7d682ff70eb17fd306b89aeefe81f63724bf6"
++    }
++  ],
++  "fix_inputs": [
++    {
++      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-fix-01-brief-20261024.md",
++      "bytes": 2289,
++      "sha256": "a404f7826b39bb5183cefc82c3a22360a88bea808846758db3293436af08e3f6"
++    },
++    {
++      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-static-review-20261024.md",
++      "bytes": 6499,
++      "sha256": "3c0ee2c8b4b1768ffc3832149bf83197a8a537548fa5ca1de0eea01f5353cfdc"
++    }
++  ],
++  "official_mysql_8_4_sources": [
++    {
++      "url": "https://dev.mysql.com/doc/refman/8.4/en/char.html",
++      "used_for": "PAD SPACE treatment of trailing spaces in VARCHAR comparisons"
++    },
++    {
++      "url": "https://dev.mysql.com/doc/refman/8.4/en/create-table-check-constraints.html",
++      "used_for": "CHECK/FK referential action clause restriction"
++    },
++    {
++      "url": "https://dev.mysql.com/doc/refman/8.4/en/create-table-foreign-keys.html",
++      "used_for": "implicit NO ACTION and InnoDB immediate RESTRICT equivalence"
++    }
++  ],
++  "mysql_8_4_6_probe": "not executed; exact CREATE, negative rows, and six FK restrictions required in isolated later gate"
+ }

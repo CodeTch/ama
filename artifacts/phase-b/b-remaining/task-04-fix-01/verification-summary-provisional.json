@@ -1,0 +1,617 @@
+{
+  "auth-timeline": {
+    "command": {
+      "argv": [
+        "python3",
+        "artifacts/phase-b/b-remaining/task-04-fix-01/auth-timeline.py"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "covering-final-2": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=HttpRevisionTokensTest,TranscriptImportProducerTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 143,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [
+      {
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "covering-final-2-xml/api-TEST-ama.api.HttpRevisionTokensTest.xml"
+      },
+      {
+        "suite": "ama.transcript.TranscriptImportProducerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "covering-final-2-xml/core-TEST-ama.transcript.TranscriptImportProducerTest.xml"
+      }
+    ],
+    "total": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "covering-final": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=HttpRevisionTokensTest,TranscriptImportProducerTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [
+      {
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "covering-final-xml/api-TEST-ama.api.HttpRevisionTokensTest.xml"
+      },
+      {
+        "suite": "ama.transcript.TranscriptImportProducerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "covering-final-xml/core-TEST-ama.transcript.TranscriptImportProducerTest.xml"
+      },
+      {
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 24,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0,
+        "file": "covering-final-xml/integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml"
+      }
+    ],
+    "total": {
+      "tests": 26,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "final-claim-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=HttpRevisionTokensTest,TranscriptImportProducerTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#finalSerializedReplayRejectsCorruptAcceptedGraph",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [
+      {
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "final-claim-red-xml/api-TEST-ama.api.HttpRevisionTokensTest.xml"
+      },
+      {
+        "suite": "ama.transcript.TranscriptImportProducerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "final-claim-red-xml/core-TEST-ama.transcript.TranscriptImportProducerTest.xml"
+      },
+      {
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "file": "final-claim-red-xml/integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml"
+      }
+    ],
+    "total": {
+      "tests": 3,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "generate-api": {
+    "command": {
+      "argv": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "generate:api"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "generated-api-check": {
+    "command": {
+      "argv": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "check:api"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "integrity-capability-green": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=HttpRevisionTokensTest,TranscriptImportProducerTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#redirectedAcceptedResultCannotAcknowledgeAnotherRequest+changedAcceptedBatchSequenceOrFingerprintIsUnavailable+corruptFixedImportColumnsAreUnavailable+finalSerializedReplayRejectsCorruptAcceptedGraph+httpRevisionBoundariesAndExhaustionPreserveReplayForEveryMutation",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [
+      {
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "integrity-capability-green-xml/api-TEST-ama.api.HttpRevisionTokensTest.xml"
+      },
+      {
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "integrity-capability-green-xml/integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml"
+      }
+    ],
+    "total": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "integrity-capability-red": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=HttpRevisionTokensTest,TranscriptImportProducerTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#redirectedAcceptedResultCannotAcknowledgeAnotherRequest+changedAcceptedBatchSequenceOrFingerprintIsUnavailable+corruptFixedImportColumnsAreUnavailable+httpRevisionBoundariesAndExhaustionPreserveReplayForEveryMutation",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [
+      {
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "integrity-capability-red-xml/api-TEST-ama.api.HttpRevisionTokensTest.xml"
+      },
+      {
+        "suite": "ama.transcript.TranscriptImportProducerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "integrity-capability-red-xml/core-TEST-ama.transcript.TranscriptImportProducerTest.xml"
+      },
+      {
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 4,
+        "failures": 4,
+        "errors": 0,
+        "skipped": 0,
+        "file": "integrity-capability-red-xml/integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml"
+      }
+    ],
+    "total": {
+      "tests": 6,
+      "failures": 4,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "interrupted-custody-2": {
+    "command": {
+      "argv": [
+        "python3",
+        "artifacts/phase-b/b-remaining/task-04-fix-01/interrupted-custody.py"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "interrupted-custody": {
+    "command": {
+      "argv": [
+        "python3",
+        "artifacts/phase-b/b-remaining/task-04-fix-01/interrupted-custody.py"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "openapi-bundle": {
+    "command": {
+      "argv": [
+        "/home/tanren/ama/.worktrees/phase-a/.tools/node-v22.23.4-linux-x64/bin/node",
+        "/home/tanren/ama/.worktrees/phase-a/node_modules/@redocly/cli/bin/cli.js",
+        "bundle",
+        "contracts/openapi/api.yaml",
+        "--config",
+        "redocly.yaml",
+        "--output",
+        "artifacts/phase-b/b-remaining/task-04-fix-01/openapi-bundle.yaml"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "openapi-lint": {
+    "command": {
+      "argv": [
+        "/home/tanren/ama/.worktrees/phase-a/.tools/node-v22.23.4-linux-x64/bin/node",
+        "/home/tanren/ama/.worktrees/phase-a/node_modules/@redocly/cli/bin/cli.js",
+        "lint",
+        "contracts/openapi/api.yaml",
+        "--config",
+        "redocly.yaml"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "replay-auth-diagnostic": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=HttpRevisionTokensTest,TranscriptImportProducerTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#changedAcceptedBatchSequenceOrFingerprintIsUnavailable+corruptFixedImportColumnsAreUnavailable",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [
+      {
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "replay-auth-diagnostic-xml/api-TEST-ama.api.HttpRevisionTokensTest.xml"
+      },
+      {
+        "suite": "ama.transcript.TranscriptImportProducerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "replay-auth-diagnostic-xml/core-TEST-ama.transcript.TranscriptImportProducerTest.xml"
+      },
+      {
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 2,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "file": "replay-auth-diagnostic-xml/integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml"
+      }
+    ],
+    "total": {
+      "tests": 4,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "replay-independence-green": {
+    "command": {
+      "argv": [
+        "./mvnw",
+        "-pl",
+        "backend/integration-tests",
+        "-am",
+        "verify",
+        "-Dtest=HttpRevisionTokensTest,TranscriptImportProducerTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "-Dit.test=ProcessingIntakeHttpIT#acceptedReplayPrecedesArchiveSourcePublicationAndUnavailableBranch+changedAcceptedBatchSequenceOrFingerprintIsUnavailable+corruptFixedImportColumnsAreUnavailable+actualCanonicalAndManagedHashesStayOutsideMeetingRoots+finalSerializedReplayRejectsCorruptAcceptedGraph",
+        "-Dfailsafe.failIfNoSpecifiedTests=false"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [
+      {
+        "suite": "ama.api.HttpRevisionTokensTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "replay-independence-green-xml/api-TEST-ama.api.HttpRevisionTokensTest.xml"
+      },
+      {
+        "suite": "ama.transcript.TranscriptImportProducerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "file": "replay-independence-green-xml/core-TEST-ama.transcript.TranscriptImportProducerTest.xml"
+      },
+      {
+        "suite": "ama.storage.ProcessingIntakeHttpIT",
+        "tests": 5,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "file": "replay-independence-green-xml/integration-tests-TEST-ama.storage.ProcessingIntakeHttpIT.xml"
+      }
+    ],
+    "total": {
+      "tests": 7,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "schema-green": {
+    "command": {
+      "argv": [
+        "python3",
+        "artifacts/phase-b/b-remaining/task-04-fix-01/eligibility-schema.py"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 0,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "schema-red-2": {
+    "command": {
+      "argv": [
+        "python3",
+        "artifacts/phase-b/b-remaining/task-04-fix-01/eligibility-schema.py"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "schema-red": {
+    "command": {
+      "argv": [
+        "python3",
+        "artifacts/phase-b/b-remaining/task-04-fix-01/eligibility-schema.py"
+      ],
+      "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "exit_code": 1,
+      "JAVA_HOME": "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64",
+      "private_env_path": ".tools/phase-b-remaining/env.sh",
+      "fixture_id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "AMA_STORAGE_CONTRACT": "local",
+      "JAVA_TOOL_OPTIONS": "-Xmx512m -XX:ActiveProcessorCount=2",
+      "AMA_B06_RESTART_EVIDENCE": null
+    },
+    "junit": [],
+    "total": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  }
+}

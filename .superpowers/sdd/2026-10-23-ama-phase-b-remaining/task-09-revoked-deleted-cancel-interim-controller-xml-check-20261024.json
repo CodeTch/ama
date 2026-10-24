@@ -1,0 +1,87 @@
+{
+  "checkedUtc": "2026-10-24T07:22:05.206144+00:00",
+  "scope": "actualresult/sealedXML/hash/runinterval only; final independent source review still required",
+  "windows": [
+    {
+      "window": "generation-revoked-consumer-01",
+      "result": {
+        "exit": 0,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "cases": [
+          {
+            "class": "ama.storage.Task09GenerationRevokedIT",
+            "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+            "failure": false,
+            "error": false,
+            "skipped": false
+          }
+        ]
+      },
+      "xmlSeals": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/generation-revoked-consumer-01/integration-tests-TEST-ama.storage.Task09GenerationRevokedIT.xml",
+          "sha256": "27489089c47e2a4e2d443b64290a5ff03aa0d7ebe9bcc245337b1bdc6cce496b"
+        }
+      ]
+    },
+    {
+      "window": "generation-deleted-consumer-01",
+      "result": {
+        "exit": 0,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "cases": [
+          {
+            "class": "ama.storage.Task09GenerationDeletedIT",
+            "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+            "failure": false,
+            "error": false,
+            "skipped": false
+          }
+        ]
+      },
+      "xmlSeals": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/generation-deleted-consumer-01/integration-tests-TEST-ama.storage.Task09GenerationDeletedIT.xml",
+          "sha256": "ef3017231a01b352cb80f2eedbb5af1bf4a931b2b00c97f7feb3abac9252ca00"
+        }
+      ]
+    },
+    {
+      "window": "generation-physical-cancel-01",
+      "result": {
+        "exit": 0,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "cases": [
+          {
+            "class": "ama.storage.Task09GenerationPhysicalCancelIT",
+            "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+            "failure": false,
+            "error": false,
+            "skipped": false
+          }
+        ]
+      },
+      "xmlSeals": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/generation-physical-cancel-01/integration-tests-TEST-ama.storage.Task09GenerationPhysicalCancelIT.xml",
+          "sha256": "5549f143b2698ec5b08401690fc91a241b8e862f2d9b2f2095cdea99922cb321"
+        }
+      ]
+    }
+  ]
+}

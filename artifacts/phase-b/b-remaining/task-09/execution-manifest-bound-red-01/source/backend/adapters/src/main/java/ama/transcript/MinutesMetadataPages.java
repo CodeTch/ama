@@ -1,0 +1,57 @@
+package ama.transcript;
+import ama.access.MeetingAccess;import ama.contract.IdentityContracts.Actor;import ama.contract.MinutesContracts.*;import ama.contract.TaskContracts.TaskSpec;import org.springframework.jdbc.core.JdbcTemplate;import java.util.*;import java.time.*;import java.time.format.DateTimeFormatter;import java.nio.charset.StandardCharsets;
+import static ama.contract.MinutesContracts.*;import static ama.contract.MinutesContracts.FailureCode.*;
+/** Bounded keyset metadata preparation followed by one fresh owner gate and exact immutable recheck. */
+final class MinutesMetadataPages {
+ private final JdbcTranscriptAuthority authority;private final JdbcTemplate j;
+ private static final String TASK_COLUMNS="id,task_type,pool,subject_kind,subject_id,producer_key,input_kind,input_id,input_fingerprint,business_version,cancel_epoch,priority,max_attempts,state,last_error,output_kind,output_id,attempt,created_at";
+ private static final DateTimeFormatter TIME=DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSS");
+ private record Key(LocalDateTime time,String id) implements Comparable<Key>{public int compareTo(Key other){int n=time.compareTo(other.time);return n==0?id.compareTo(other.id):n;}}
+ private record Position(String meeting,String filter,Key high,Key after){}
+ private record Proof(TaskSpec spec,Map<String,Object> input){}
+ private record Capture(Position position,List<Map<String,Object>> rows,Map<String,Proof> proofs){}
+ MinutesMetadataPages(JdbcTranscriptAuthority authority){this.authority=authority;j=new JdbcTemplate(authority.dataSource());j.setQueryTimeout(2);}
+ Map<String,Object> page(Actor actor,String meeting,int limit,String filter,String cursor){
+  uuid(meeting);require(limit>=1&&limit<=50,INVALID_ARGUMENT);Position position=decode(meeting,filter,cursor);Capture prepared=null;RuntimeException failure=null;
+  try{prepared=capture(position,limit,true);}catch(RuntimeException unavailable){failure=unavailable;}
+  final Capture before=prepared;final RuntimeException problem=failure;
+  return authority.transactionRunner().required(()->{
+   authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);if(problem!=null)throw problem;
+   if(cursor==null)require(Objects.equals(before.position.high,highwater(meeting,filter)),PROVENANCE_UNAVAILABLE);
+   var actual=capture(before.position,limit,false);require(ids(before.rows).equals(ids(actual.rows)),PROVENANCE_UNAVAILABLE);
+   for(var entry:before.proofs.entrySet()){var proof=actual.proofs.get(entry.getKey());require(proof!=null&&proof.equals(entry.getValue()),PROVENANCE_UNAVAILABLE);}
+   int count=Math.min(limit,actual.rows.size());var items=new ArrayList<Map<String,Object>>();
+   for(var row:actual.rows.subList(0,count)){
+    if(filter.equals("TASKS")){var item=new LinkedHashMap<>(JdbcMinutesQueries.taskProjection(row));var candidates=j.queryForList("SELECT id,input_id,input_fingerprint,base_revision,state FROM generation_candidate WHERE task_id=? LIMIT 2",row.get("id"));require(candidates.size()<=1,PROVENANCE_UNAVAILABLE);if(!candidates.isEmpty()){var c=candidates.getFirst();require(Objects.equals(row.get("input_id"),c.get("input_id"))&&Objects.equals(row.get("input_fingerprint"),c.get("input_fingerprint"))&&((Number)row.get("business_version")).longValue()==((Number)c.get("base_revision")).longValue(),PROVENANCE_UNAVAILABLE);}item.put("candidateId",candidates.isEmpty()?null:candidates.getFirst().get("id"));item.put("candidateState",candidates.isEmpty()?null:candidates.getFirst().get("state"));items.add(Collections.unmodifiableMap(item));}
+    else{var item=new LinkedHashMap<>(JdbcMinutesQueries.candidateProjection(row));item.put("eligibility",Map.of("canAdopt",false,"reasons",List.of("TASK10_NOT_INSTALLED","TASK11_NOT_INSTALLED")));items.add(Collections.unmodifiableMap(item));}
+   }
+   String next=actual.rows.size()>limit?encode(new Position(meeting,filter,before.position.high,key(actual.rows.get(count-1)))):null;
+   var result=new LinkedHashMap<String,Object>();result.put("items",List.copyOf(items));result.put("nextCursor",next);result.put("metadataOnly",true);return Collections.unmodifiableMap(result);
+  });
+ }
+ private Capture capture(Position requested,int limit,boolean compute){
+  long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(30);Position p=requested.high==null?new Position(requested.meeting,requested.filter,highwater(requested.meeting,requested.filter),requested.after):requested;
+  var rows=new ArrayList<Map<String,Object>>();var proofs=new HashMap<String,Proof>();if(p.high==null)return new Capture(p,List.of(),Map.of());
+  if(p.filter.equals("TASKS")){
+   var params=new ArrayList<Object>(List.of(p.meeting));String range=range(p,params);var scanned=j.queryForList("SELECT "+TASK_COLUMNS+" FROM durable_task FORCE INDEX (task_subject_history) WHERE subject_kind='MEETING' AND subject_id=?"+range+" ORDER BY created_at,id LIMIT 257",params.toArray());
+   for(var row:scanned){if("MINUTES_GENERATE_V1".equals(row.get("task_type")))rows.add(row);if(rows.size()>limit)break;}require(scanned.size()<=256||rows.size()>limit,BUDGET_EXCEEDED);
+  }else{
+   for(String state:states(p.filter)){var params=new ArrayList<Object>(List.of(p.meeting,state));String range=range(p,params);params.add(limit+1);rows.addAll(j.queryForList("SELECT id,input_id,task_id,minutes_revision_id,element_set_id,base_revision,input_fingerprint,state,created_at,decided_at FROM generation_candidate FORCE INDEX (candidate_pending) WHERE meeting_id=? AND state=?"+range+" ORDER BY created_at,id LIMIT ?",params.toArray()));}
+   rows.sort(Comparator.comparing(MinutesMetadataPages::key));if(rows.size()>limit+1)rows.subList(limit+1,rows.size()).clear();
+  }
+  for(var row:rows){require(System.nanoTime()-deadline<0,BUDGET_EXCEEDED);String task=(String)row.get(p.filter.equals("TASKS")?"id":"task_id");Map<String,Object> t=p.filter.equals("TASKS")?row:one(j.queryForList("SELECT "+TASK_COLUMNS+" FROM durable_task WHERE id=?",task));var spec=TranscriptReadGraph.spec(t);MinutesTaskDomainPolicy.shape(spec);require(p.meeting.equals(spec.subject().id()),PROVENANCE_UNAVAILABLE);
+   if(compute){String producer=ama.minutes.MinutesGenerateProducer.compute(p.meeting,spec.input().id(),spec.inputFingerprint(),spec.businessVersion(),spec.cancelEpoch(),authority.canonicalBudget(),()->false);require(producer.equals(spec.producerKey()),PROVENANCE_UNAVAILABLE);}
+   var input=one(j.queryForList("SELECT * FROM generation_input WHERE id=?",spec.input().id()));require(p.meeting.equals(input.get("meeting_id"))&&((Number)input.get("base_revision")).longValue()==spec.businessVersion()&&spec.inputFingerprint().equals(input.get("input_fingerprint"))&&"FULL".equals(input.get("scope"))&&input.get("target_element_id")==null&&input.get("material_snapshot_id")==null,PROVENANCE_UNAVAILABLE);
+   if(!p.filter.equals("TASKS"))require(Objects.equals(row.get("input_id"),spec.input().id())&&Objects.equals(row.get("input_fingerprint"),spec.inputFingerprint())&&((Number)row.get("base_revision")).longValue()==spec.businessVersion(),PROVENANCE_UNAVAILABLE);
+   require(proofs.put(task,new Proof(spec,Collections.unmodifiableMap(new LinkedHashMap<>(input))))==null,PROVENANCE_UNAVAILABLE);
+  }
+  return new Capture(p,List.copyOf(rows),Map.copyOf(proofs));
+ }
+ private Key highwater(String meeting,String filter){var keys=new ArrayList<Key>();if(filter.equals("TASKS")){var rows=j.queryForList("SELECT created_at,id FROM durable_task FORCE INDEX (task_subject_history) WHERE subject_kind='MEETING' AND subject_id=? ORDER BY created_at DESC,id DESC LIMIT 1",meeting);rows.forEach(r->keys.add(key(r)));}else for(String state:states(filter)){var rows=j.queryForList("SELECT created_at,id FROM generation_candidate FORCE INDEX (candidate_pending) WHERE meeting_id=? AND state=? ORDER BY created_at DESC,id DESC LIMIT 1",meeting,state);rows.forEach(r->keys.add(key(r)));}return keys.stream().max(Key::compareTo).orElse(null);}
+ private static List<String> states(String filter){require(filter.startsWith("CANDIDATES:"),INVALID_ARGUMENT);String state=filter.substring(11);require(Set.of("PENDING","ADOPTED","REJECTED","STALE","ALL").contains(state),INVALID_ARGUMENT);return state.equals("ALL")?List.of("PENDING","ADOPTED","REJECTED","STALE"):List.of(state);}
+ private static String range(Position p,List<Object> parameters){var sql=new StringBuilder();if(p.after!=null){sql.append(" AND (created_at>? OR (created_at=? AND id>?))");parameters.addAll(List.of(p.after.time,p.after.time,p.after.id));}sql.append(" AND (created_at<? OR (created_at=? AND id<=?))");parameters.addAll(List.of(p.high.time,p.high.time,p.high.id));return sql.toString();}
+ private static Position decode(String meeting,String filter,String cursor){if(cursor==null)return new Position(meeting,filter,null,null);try{require(cursor.length()<=1024&&cursor.matches("[A-Za-z0-9_-]+"),INVALID_ARGUMENT);byte[] bytes=Base64.getUrlDecoder().decode(cursor);require(Base64.getUrlEncoder().withoutPadding().encodeToString(bytes).equals(cursor),INVALID_ARGUMENT);String[] fields=new String(bytes,StandardCharsets.US_ASCII).split("\n",-1);require(fields.length==8&&fields[0].equals("ama.minutes-page.v1")&&fields[1].equals(meeting)&&fields[2].equals(filter)&&fields[3].equals("ASC_CREATED_ID"),INVALID_ARGUMENT);uuid(fields[5]);uuid(fields[7]);Key high=new Key(LocalDateTime.parse(fields[4],TIME),fields[5]),after=new Key(LocalDateTime.parse(fields[6],TIME),fields[7]);require(TIME.format(high.time).equals(fields[4])&&TIME.format(after.time).equals(fields[6])&&after.compareTo(high)<=0,INVALID_ARGUMENT);return new Position(meeting,filter,high,after);}catch(IllegalArgumentException|java.time.DateTimeException malformed){throw fail(INVALID_ARGUMENT);}}
+ private static String encode(Position p){return Base64.getUrlEncoder().withoutPadding().encodeToString(String.join("\n","ama.minutes-page.v1",p.meeting,p.filter,"ASC_CREATED_ID",TIME.format(p.high.time),p.high.id,TIME.format(p.after.time),p.after.id).getBytes(StandardCharsets.US_ASCII));}
+ private static Key key(Map<String,Object> row){Object value=row.get("created_at");LocalDateTime time=value instanceof java.sql.Timestamp t?t.toLocalDateTime():value instanceof LocalDateTime t?t:LocalDateTime.parse(value.toString().replace(' ','T'));return new Key(time,(String)row.get("id"));}
+ private static Map<String,Object> one(List<Map<String,Object>> rows){require(rows.size()==1,PROVENANCE_UNAVAILABLE);return rows.getFirst();}private static List<Object> ids(List<Map<String,Object>> rows){return rows.stream().map(r->r.get("id")).toList();}
+}

@@ -1,0 +1,27 @@
+--- backend/integration-tests/src/test/java/ama/storage/FileBackendCatalogIT.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05LegacyCatalogIT.java
+@@ -19,20 +19,18 @@
+ /**
+  * Real first-registration and revision races; gates delay actual query results, never replace them.
+  */
+-class FileBackendCatalogIT {
++class Task05LegacyCatalogIT {
+     DataSource source;
+-    ManagedLocalFixture fixture;
++    Task05NativeFixture fixture;
+     FileStoragePort storage;
+     JdbcTemplate j;
+ 
+     @BeforeEach
+     void start() throws Exception {
+         source = MysqlTestDatabase.dataSource();
+-        new SchemaMigrator(source).migrate();
++        assertEquals(13,new JdbcTemplate(source).queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=1",Integer.class));
+         j = new JdbcTemplate(source);
+-        Path root = Path.of("target/registry-catalog-race").toAbsolutePath();
+-        Files.createDirectories(root);
+-        fixture = new ManagedLocalFixture(Files.createTempDirectory(root, "owned-"));
++        fixture = new Task05NativeFixture(Task05RegressionResources.nativePath());
+         storage = fixture.startServer();
+     }
+ 

@@ -1,0 +1,112 @@
+[
+  {
+    "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesProviderStore.java",
+    "bytes": 5930,
+    "sha256": "0342b254b31cac074d95704e5aa0c170bc4d992038f4c6d7862917048733c00d"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesStore.java",
+    "bytes": 16978,
+    "sha256": "c6adb193109018e8ea08c58299a3fbac1fd48056dd54d7947ba69a3d8de9cf40"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/transcript/MinutesCandidateGraphPlan.java",
+    "bytes": 14736,
+    "sha256": "672901ce009de0e1175c170442a78d13d9d094289c80d9d524ae365ef805e222"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/transcript/MinutesExternalPreparation.java",
+    "bytes": 13873,
+    "sha256": "e17e03da2901a2c3dc3d3ed7600f5cb1ad842296cdd2985179fccae3bc951c83"
+  },
+  {
+    "path": "backend/adapters/src/main/java/ama/transcript/MinutesRecordedLookup.java",
+    "bytes": 9330,
+    "sha256": "ff2d0ce291a4d3247e171963c714855060d4c4ab88f3b3432c600aff29329a4f"
+  },
+  {
+    "path": "backend/adapters/src/test/java/ama/config/json/Task09Fix01ProviderAdmissionTest.java",
+    "bytes": 3773,
+    "sha256": "a4af18973f2969903386d5f7e58f10804e01b892a3216a7d7c2208a119a465cf"
+  },
+  {
+    "path": "backend/api/src/main/java/ama/api/MinutesWire.java",
+    "bytes": 2123,
+    "sha256": "6fdba038653c081dd30d75d41f787d4afc5bb66e74923bd4272d62d074aa8269"
+  },
+  {
+    "path": "backend/api/src/test/java/ama/api/Task09Fix01WireTest.java",
+    "bytes": 1602,
+    "sha256": "cd361d1955b5636b00b7566558d3134dfef1766735858be33ea9cb355d13f53b"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupProcess.java",
+    "bytes": 12335,
+    "sha256": "48f90c4aff802eff95bf53788c2a1c04a519a7921abc39d387aa609f7ae42aef"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01ActiveLookupIT.java",
+    "bytes": 171,
+    "sha256": "80bab99016f2665019be5a08abb22eb502635ad9cf3ced2268072e1b9a6600a4"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01DeniedLookupIT.java",
+    "bytes": 167,
+    "sha256": "d8f7984125996988372fd2c1f6168a6f5906348c99f14027f863ed7d29bc0c09"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01HttpIT.java",
+    "bytes": 158,
+    "sha256": "9aef53e8746e21d6c5a0c23d730375f42c755dd0a29b72c6324f3d678780188c"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01ParentReplayIT.java",
+    "bytes": 1680,
+    "sha256": "324ece332b88345dbea4e16a5be7ca48d9d6511c4a78e5cd7b7f39f1076725a8"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01ResponseBudgetIT.java",
+    "bytes": 170,
+    "sha256": "270f25d0d3f39abb63b454c2e1cd929858bef3513fdbb797c776aafdc09586f3"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01RootsIT.java",
+    "bytes": 2853,
+    "sha256": "307d240f0593001b2cfcb4bb6f499a677876e1914605dab0e047bb2fe8d8c3be"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationPhysicalCancelIT.java",
+    "bytes": 4732,
+    "sha256": "0a5bd57bf1e2c34903fa5f87e6a0e9990290f4d3eaa8d42e75349cc3038609b5"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesHttpBoundaryIT.java",
+    "bytes": 3496,
+    "sha256": "fc285433ed916795229aa1287c7446f2a44641ed21b0c822e83bd5eae03675c7"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesHttpIT.java",
+    "bytes": 5704,
+    "sha256": "646fc0fe8552e218135c27e63f0107ba9acb6fbf6a1c6310aa2ae609df21f7e7"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesResponseBudgetIT.java",
+    "bytes": 1232,
+    "sha256": "6ab740ccb623dbdf27f5662d67a8f31d011e5c4c6fbe31ff7ea558a0a39d2f5f"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/transcript/Task09Fix01GraphProbe.java",
+    "bytes": 2368,
+    "sha256": "228281f979c32c85f0d1d385e0d9b3af311c2443d09549e9dad8187fdf6d5a1f"
+  },
+  {
+    "path": "backend/integration-tests/src/test/java/ama/transcript/Task09Fix01LookupProbe.java",
+    "bytes": 5135,
+    "sha256": "92fa3449ddd3d4ba87ee03f28f55f294db2f56ed07840dd5f55a587e87961dc3"
+  },
+  {
+    "path": "contracts/openapi/minutes.yaml",
+    "bytes": 91585,
+    "sha256": "57c31dfa9dd8d7e6b29556164d02b0c1bc712e20d3ba9aaae6a85bcbf8b07bf8"
+  }
+]

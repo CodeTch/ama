@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09OriginalExternalRecoveryIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "0eb0ae2e755bbef1b3cc7f7e4dea0aff023cfe1f41cd11ae5e930d858d1f175a",
+  "startedUtc": "2026-10-24T05:31:56.590652+00:00"
+}

@@ -1,0 +1,50 @@
+{
+  "scope": "Intermediate actualRR RED3; productionfix underway/notfinalsource; no rootrerun",
+  "receipt": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task07GenerationRetentionIT#publicationCommittedAfterObservationSnapshotStillDeniesRetention"
+    ],
+    "exit": 1,
+    "reports": [
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/ir02-rr-red/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+    ],
+    "elapsedSeconds": 14.377661943435669,
+    "counts": {
+      "tests": 3,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0
+    },
+    "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+  },
+  "xml": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir02-rr-red/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "bytes": 35947,
+      "sha256": "1a506cc3b1a551e4bb4cf6edc71454753eef7f75084bca14091379a3e91c2c1f",
+      "cases": [
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "publicationCommittedAfterObservationSnapshotStillDeniesRetention(String)[1]",
+          "result": "FAIL",
+          "message": "Fresh publication freeze must suppress retention despite old RR snapshot ==> expected: <0> but was: <1>"
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "publicationCommittedAfterObservationSnapshotStillDeniesRetention(String)[2]",
+          "result": "FAIL",
+          "message": "Fresh publication freeze must suppress retention despite old RR snapshot ==> expected: <0> but was: <1>"
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "publicationCommittedAfterObservationSnapshotStillDeniesRetention(String)[3]",
+          "result": "FAIL",
+          "message": "Fresh publication freeze must suppress retention despite old RR snapshot ==> expected: <0> but was: <1>"
+        }
+      ]
+    }
+  ]
+}

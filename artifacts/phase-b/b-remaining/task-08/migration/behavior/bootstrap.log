@@ -1,0 +1,21 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+06:43:55.093 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_behavior (MySQL 8.4)
+06:43:55.243 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Schema history table `ama_t08_848e93aace8b_behavior`.`flyway_schema_history` does not exist yet
+06:43:55.249 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 14 migrations (execution time 00:00.042s)
+06:43:55.277 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Creating Schema History table `ama_t08_848e93aace8b_behavior`.`flyway_schema_history` ...
+06:43:55.427 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_t08_848e93aace8b_behavior`: << Empty Schema >>
+06:43:55.440 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "001 - foundation"
+06:43:55.583 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "002 - identity acl"
+06:43:55.837 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "005 - tasks outbox"
+06:43:56.320 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "006 - audit metadata"
+06:43:56.545 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "007 - identity sessions"
+06:43:57.252 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "008 - meeting schema"
+06:44:00.348 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "009 - file schema"
+06:44:02.503 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "010 - reliable execution"
+06:44:05.395 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "011 - transcript schema"
+06:44:10.274 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "011.1 - transcript material index"
+06:44:10.358 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "012 - minutes evidence"
+06:44:19.706 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "013 - publications"
+06:44:23.930 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "013.1 - b runtime metadata"
+06:44:24.355 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_behavior` to version "013.2 - task input lookup"
+06:44:24.439 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 14 migrations to schema `ama_t08_848e93aace8b_behavior`, now at version v013.2 (execution time 00:28.508s)

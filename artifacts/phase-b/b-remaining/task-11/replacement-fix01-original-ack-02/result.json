@@ -1,0 +1,36 @@
+{
+  "exitCode": 0,
+  "processExitCode": 0,
+  "startedNs": 1792872866954518675,
+  "finishedNs": 1792872892332455731,
+  "suites": [
+    {
+      "path": "junit/backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task11ReplacementOriginalAckIT.xml",
+      "suite": "ama.storage.Task11ReplacementOriginalAckIT",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task11ReplacementOriginalAckIT",
+      "reportSha256": "c04405ebcd5ba9d698fc1536dd7e192dcf21541ccf2ab289a0de3f6a4423b305",
+      "reportMtimeNs": 1792872891775908476,
+      "startedNs": 1792872866954518675,
+      "endedNs": 1792872892332455731,
+      "class": "ama.storage.Task11ReplacementOriginalAckIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

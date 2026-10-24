@@ -1,0 +1,113 @@
+{
+  "utc": "2026-10-23T22:40:45.647415+00:00",
+  "status": "ROOT_SEPARATE_EXACT_TARGET_APPLICATION_ACK",
+  "freezePath": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-freeze-20261024.json",
+  "freezeSha256": "2cc1216d7e44408d9ac3dbecc29512bedf42f9beac088fbb6d65486fb9ce7758",
+  "version": "013.3",
+  "formalResourcePath": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+  "fullBytes": 164,
+  "fullSha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+  "sharedTarget": {
+    "selectedOnly": {
+      "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "name": "/ama-test-b01-ad9f1af29eff",
+      "status": "running",
+      "running": true,
+      "oom": false,
+      "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+      "memory": 805306368,
+      "swap": 805306368,
+      "nano_cpus": 1000000000,
+      "pids": 256,
+      "ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "46653"
+          }
+        ]
+      },
+      "mounts": [
+        {
+          "Destination": "/var/lib/mysql",
+          "Driver": "local",
+          "Mode": "",
+          "Name": "d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b/_data",
+          "Type": "volume"
+        }
+      ],
+      "owner": "remaining-20261023"
+    },
+    "database": "ama_b01_fixture",
+    "privateEnvPath": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/phase-b-remaining/env.sh",
+    "actualPrehistory": 14
+  },
+  "freshTargets": {
+    "selectedOnly": {
+      "id": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+      "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+      "image_id": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+      "memory": 805306368,
+      "memory_swap": 805306368,
+      "mounts": [
+        {
+          "Destination": "/var/lib/mysql",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/data",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/run/ama-task08",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/secrets",
+          "Type": "bind"
+        }
+      ],
+      "name": "/ama-test-task08-848e93aace8b4f0fa34fc548267f3dc5",
+      "nano_cpus": 1000000000,
+      "oom_killed": false,
+      "owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+      "pids": 256,
+      "ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "44727"
+          }
+        ]
+      },
+      "running": true,
+      "state": "running"
+    },
+    "schemas": {
+      "behavior": {
+        "database": "ama_t08_848e93aace8b_behavior",
+        "url": "jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_behavior"
+      },
+      "fairheld": {
+        "database": "ama_t08_848e93aace8b_fairheld",
+        "url": "jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_fairheld"
+      },
+      "fairunregistered": {
+        "database": "ama_t08_848e93aace8b_fairunregistered",
+        "url": "jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_fairunregistered"
+      },
+      "overflow": {
+        "database": "ama_t08_848e93aace8b_overflow",
+        "url": "jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_overflow"
+      }
+    },
+    "privateEnvPath": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/env.sh",
+    "actualNowTablesPerSchema": 0
+  },
+  "authorization": "Task6adopted12ca5436; oneTask8soleauthor may bootstrap frozenold14 normally on eachnewemptytarget BEFOREcopyingnew13.3 intoautodiscoveredresources, captureeachactual14prefix; then copyexact164Bfrozennewresource and use normalFlywaynew1/rerun0 oneachfiveexactschemas. Sharedalready14: no reset/bootstrap. No furtherhumanconfirmation needed withinthisauthorizedlocaltestscope.",
+  "preservation": "Quiesce ownwriters/currenttransactions beforefullphysical+completealloldcolumn/row NULL-length-byte PKhashsnapshots on sharedandfresh actual14. Preserveeveryold14fullhistoryprefix andallolddata/allocators except newserverallocatedordinal; preserveTask6inputindex. ExactOperationnewcolumnordinal16/signedbigintNOTNULLdefaultNULLnocharEXTRAauto_increment/newuniquevisibleBTREEkey;completeoldID->newpositiveuniqueordinalmapping. Normalrerun0allstable; perconnectionmetadatawait5seconds; actualrebuildelapsed/locks recorded.",
+  "boundaries": "Onlyfresh4schemasmayhostoverflow/restore; neversharedcounterMAX/resequence. No root.cnf forauthorbusiness/migrations; newtestuserprivateenvonly. No newresource/schema unless rootguarded; noreset/repair/clean/outOfOrder/oldSQL/rootattribute/rawrewrite. Failurepreserveactualstate, forwardonlyrootruling."
+}

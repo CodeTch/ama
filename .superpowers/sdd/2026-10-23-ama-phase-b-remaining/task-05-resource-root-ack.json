@@ -1,0 +1,26 @@
+{
+  "approved_at_utc": "2026-10-23T12:00:51.716848+00:00",
+  "task": 5,
+  "base": "35b2325aee8e6c09aa1bdebc880c4f09bd37837b",
+  "plan": "task-05-resource-activation-preflight-20261023.md",
+  "plan_sha256": "35b7ef4bc0a9f84fae22cb31d48f1ed95f79b5ed1eb1145d603ef2f356ce06ef",
+  "image": "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+  "image_metadata": {
+    "id": "sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+    "digests": [
+      "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922"
+    ],
+    "os": "linux",
+    "arch": "amd64"
+  },
+  "container_name": "ama-task05-s3-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+  "owner": "ama-task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+  "new_roots": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-05/run-5237a2db-e8d5-4cbe-b357-b35df5cfcba5"
+  ],
+  "guards_rechecked": true,
+  "authorized_new_resource_limits": "RustFS2GiBmemory+swap/2CPU/256PID;127.0.0.1ephemeral9000 only;2exactbindmounts;newprivatecredentials;native64MiB2CPU;test/Worker512MiB2CPU",
+  "container_created_by_root": false,
+  "conditions": "author repeats exact immediate guards/exclusive writes/selectedCIDreceipt; no oldresources/reset/DDL/engine changes; genuine blocked-reader termination proof required"
+}

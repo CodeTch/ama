@@ -1,0 +1,25 @@
+{
+  "exit": 0,
+  "counts": {
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.config.json.Task09CandidatePlanTest",
+      "name": "independentPlansUseDifferentServerIdsAndOnlyHistorySlotsAreBoundLater",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09CandidatePlanTest",
+      "name": "completeCandidatePlanRemapsEveryTableAndGrantsNoAcceptedActionOrReview",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

@@ -1,0 +1,578 @@
+[
+  {
+    "run": "cv1-genuine-carriers-and-validator",
+    "changedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "final-affected-regressions",
+    "changedFromFinal": [],
+    "productChangedFromFinal": [],
+    "testChangedFromFinal": []
+  },
+  {
+    "run": "final-all-units",
+    "changedFromFinal": [],
+    "productChangedFromFinal": [],
+    "testChangedFromFinal": []
+  },
+  {
+    "run": "final-local-lifetime-custody",
+    "changedFromFinal": [],
+    "productChangedFromFinal": [],
+    "testChangedFromFinal": []
+  },
+  {
+    "run": "finite-fixture-maintenance",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenanceIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenanceIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "finite-fixture-maintenance-actor-corrected",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenanceIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenanceIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "finite-fixture-maintenance-times-corrected",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenanceIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenanceIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "green-local-open",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "green-s3-open",
+    "changedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "green-shutdown",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java",
+      "backend/worker/src/main/java/ama/worker/WorkerLoop.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/worker/src/main/java/ama/worker/WorkerLoop.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "green-shutdown-compile-corrected",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "local-before-headers",
+    "changedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java"
+    ],
+    "productChangedFromFinal": [],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java"
+    ]
+  },
+  {
+    "run": "red-local-batch-clean-fixture",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "red-local-open",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "red-local-open-accessor-corrected",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "red-local-renewal-clean-fixture",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "red-s3-control-open",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "red-shutdown",
+    "changedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java",
+      "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "backend/worker/src/main/java/ama/worker/WorkerLoop.java"
+    ],
+    "productChangedFromFinal": [
+      "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "backend/worker/src/main/java/ama/worker/WorkerLoop.java"
+    ],
+    "testChangedFromFinal": [
+      "backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixCarrierIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixMaintenance.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixNativeFixture.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixS3OpenIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixTransportRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java",
+      "backend/integration-tests/src/test/java/ama/storage/s3/Task05FixS3DeadlineRegressionIT.java",
+      "backend/integration-tests/src/test/java/ama/task/Task05FixCancellationRegressionIT.java"
+    ]
+  },
+  {
+    "run": "s3-before-headers",
+    "changedFromFinal": [
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java"
+    ],
+    "productChangedFromFinal": [],
+    "testChangedFromFinal": [
+      "backend/integration-tests/src/test/java/ama/storage/Task05FixOpenIT.java"
+    ]
+  }
+]

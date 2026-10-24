@@ -1,0 +1,401 @@
+{
+  "kind": "read-only-Task07-fix01-mechanical-custody",
+  "originalBase": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+  "fixBase": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
+  "head": "6cce4794dba473825d83fb9bccafc043cd611b5c",
+  "overall": "PASS",
+  "checks": {
+    "frozen_HEAD": {
+      "pass": true,
+      "detail": null
+    },
+    "9143_cumulative_manifest_complete_self_excluded": {
+      "pass": true,
+      "detail": {
+        "cumulative": 9143,
+        "listed": 9142
+      }
+    },
+    "all_9142_manifest_FS_bytes_equal_HEAD": {
+      "pass": true,
+      "detail": {
+        "bytes": 72645256,
+        "errors": []
+      }
+    },
+    "450_fix_delta_13_exact_backend_focus": {
+      "pass": true,
+      "detail": {
+        "delta": 450,
+        "backend": 13,
+        "main": 5,
+        "test": 8
+      }
+    },
+    "9777_adopted_inputs_FS_equal_original_BASE": {
+      "pass": true,
+      "detail": {
+        "checked": 9777,
+        "errors": []
+      }
+    },
+    "8669_initial_delivery_immutable_FS_equal_FIXBASE": {
+      "pass": true,
+      "detail": {
+        "checked": 8669,
+        "permittedMutable": 36,
+        "errors": []
+      }
+    },
+    "five_original_metadata_exact_archives": {
+      "pass": true,
+      "detail": {
+        "archives": 5,
+        "errors": []
+      }
+    },
+    "fix_packages_and_six_input_seals": {
+      "pass": true,
+      "detail": {
+        "packages": 2,
+        "inputs": 6,
+        "errors": []
+      }
+    },
+    "13_fix_windows_XML_receipts_status_source_copies": {
+      "pass": true,
+      "detail": {
+        "windows": 13,
+        "sourceCopies": 272,
+        "errors": [],
+        "status": {
+          "fix01/crash-settlement-and-capacity": {
+            "exit": 0,
+            "counts": {
+              "tests": 5,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/final-integration": {
+            "exit": 0,
+            "counts": {
+              "tests": 141,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/final-unit": {
+            "exit": 0,
+            "counts": {
+              "tests": 254,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/framework-matrix": {
+            "exit": 0,
+            "counts": {
+              "tests": 10,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/ir01-diagnostic": {
+            "exit": 1,
+            "counts": {
+              "tests": 1,
+              "failures": 0,
+              "errors": 1,
+              "skipped": 0
+            }
+          },
+          "fix01/ir01-diagnostic2": {
+            "exit": 1,
+            "counts": {
+              "tests": 4,
+              "failures": 2,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/ir01-diagnostic3": {
+            "exit": 1,
+            "counts": {
+              "tests": 1,
+              "failures": 1,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/ir01-green": {
+            "exit": 1,
+            "counts": {
+              "tests": 2,
+              "failures": 1,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/ir01-red": {
+            "exit": 1,
+            "counts": {
+              "tests": 2,
+              "failures": 2,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/ir02-rr-green": {
+            "exit": 0,
+            "counts": {
+              "tests": 3,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/ir02-rr-red": {
+            "exit": 1,
+            "counts": {
+              "tests": 3,
+              "failures": 3,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/ir03-green": {
+            "exit": 0,
+            "counts": {
+              "tests": 3,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "fix01/ir03-red": {
+            "exit": 1,
+            "counts": {
+              "tests": 3,
+              "failures": 1,
+              "errors": 0,
+              "skipped": 0
+            }
+          }
+        }
+      }
+    },
+    "original30_windows_374_selection_preserved_plus21_new": {
+      "pass": true,
+      "detail": {
+        "oldWindows": 30,
+        "oldCases": 374,
+        "newCases": 21
+      }
+    },
+    "395_distinct_final_cases_141IT_254unit_all_PASS": {
+      "pass": true,
+      "detail": {
+        "counts": {
+          "integration": 141,
+          "unit": 254
+        },
+        "errors": []
+      }
+    },
+    "final_window_all14_production_and_selected_test_helper_closure_exact_current": {
+      "pass": true,
+      "detail": [
+        {
+          "window": "fix01/final-integration",
+          "mappedPaths": 467,
+          "copiedFiles": 31,
+          "productionMapped": 14,
+          "productionCopied": 5,
+          "selectedClasses": 17,
+          "errors": []
+        },
+        {
+          "window": "fix01/final-unit",
+          "mappedPaths": 467,
+          "copiedFiles": 54,
+          "productionMapped": 14,
+          "productionCopied": 5,
+          "selectedClasses": 41,
+          "errors": []
+        }
+      ]
+    },
+    "original_and_fix_history_all15_full_rows_identical_normal_rerun0": {
+      "pass": true,
+      "detail": {
+        "snapshots": 5,
+        "rows": 15,
+        "rerun": 0,
+        "exits": [
+          0,
+          0
+        ]
+      }
+    },
+    "Task8_scan_lock_renew_7103bytes_exact_original_BASE": {
+      "pass": true,
+      "detail": {
+        "bytes": 7103
+      }
+    },
+    "four_recorded_child_PIDs_gone_64MiB_2CPU_command": {
+      "pass": true,
+      "detail": {
+        "recordedPids": [
+          1277931,
+          1296943,
+          1299071,
+          1300741
+        ],
+        "statusFiles": 2,
+        "liveQueried": false
+      }
+    },
+    "public_report_exact_original_prefix_plus_fix_append": {
+      "pass": true,
+      "detail": {
+        "originalBytes": 12119,
+        "currentBytes": 13960,
+        "appendBytes": 1841
+      }
+    },
+    "backend_delta_5main_8test_6added": {
+      "pass": true,
+      "detail": {
+        "main": 5,
+        "test": 8,
+        "newTestsOrChildren": 6
+      }
+    },
+    "both_final_windows_complete_467_backend_java_SQL_maps_equal_current": {
+      "pass": true,
+      "detail": [
+        {
+          "window": "final-integration",
+          "mapped": 467,
+          "complete": true,
+          "hashErrors": []
+        },
+        {
+          "window": "final-unit",
+          "mapped": 467,
+          "complete": true,
+          "hashErrors": []
+        }
+      ]
+    },
+    "final_logged_policy_scanner_recovery_costs_within_declared_bounds": {
+      "pass": true,
+      "detail": {
+        "policy": [
+          17,
+          16,
+          32,
+          32
+        ],
+        "scan": [
+          1,
+          29,
+          26,
+          32,
+          32,
+          45,
+          43
+        ],
+        "recovery": [
+          1,
+          3,
+          3
+        ]
+      }
+    },
+    "two_marker_and_two_terminal_recorded_child_deaths": {
+      "pass": true,
+      "detail": {
+        "markerPids": [
+          1277931,
+          1300741
+        ],
+        "terminalPids": [
+          1296943,
+          1299071
+        ],
+        "terminalExit": 137,
+        "liveQueried": false
+      }
+    },
+    "final_database_check_64MiB_2CPU_recorded_command": {
+      "pass": true,
+      "detail": {
+        "commandCount": 2,
+        "exits": [
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "issues": [],
+  "unknowns": [
+    "Recorded database/process/resource evidence only; no live DB, Docker or process queries.",
+    "No independent code-quality or business-assertion verdict.",
+    "No global DB emptiness, physical storage I/O, enterprise or HA inference.",
+    "Private six-value/PEM scan was not repeated here; root runs it independently."
+  ],
+  "stableInputs": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-report-20261024.md",
+      "bytes": 12707,
+      "sha256": "4878d25960159c7415a39fcfc9ce2cd2ded878c2b2bc094d3f8f3a66ee912759"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-report.md",
+      "bytes": 3538,
+      "sha256": "04b66878e320e543bf71b96f665cbd9f957d36ec59b7b551d0ea276fa2212362"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/report.md",
+      "bytes": 13960,
+      "sha256": "bc510879456b817880d990fbe811465ce32bf616423a73565e397401d2aa86fe"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/manifest.json",
+      "bytes": 2484884,
+      "sha256": "964c66616b9966b44c12708a61d385640b51bbffbdaaaef3a4cb030654997ca2"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/qualification-ledger.json",
+      "bytes": 549054,
+      "sha256": "3037e92594cd3b95c46b0c2ef2673d9bb297d6ea26d7f6e4adea8f25f28f0b9b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/delivery-custody.json",
+      "bytes": 2527,
+      "sha256": "993d8a45af93b99c66ce12f03ff72fdba90a97cff9d7d1f90723ca5b613696c0"
+    }
+  ],
+  "packageSeals": [
+    {
+      "kind": "source",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-source-review-package-20261024.diff",
+      "bytes": 143011,
+      "sha256": "b13ea387e1cddd3a57b7fea66af4059ac24e4b2ee7da268acabe826df49792b4"
+    },
+    {
+      "kind": "full",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-full-review-package-20261024.diff",
+      "bytes": 7923118,
+      "sha256": "057c18be12df22d045ade69cf195ffabb5c09b30cd8074b8f73617e4203cc36a"
+    }
+  ]
+}

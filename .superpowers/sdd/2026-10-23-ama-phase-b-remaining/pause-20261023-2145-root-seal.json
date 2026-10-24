@@ -1,0 +1,29 @@
+{
+  "utc": "2026-10-23T13:50:41.500510+00:00",
+  "product_head": "857102b917bbef77c38fae3211e3a65207a98c6c",
+  "protected_immutable_verified": 4727,
+  "protected_mismatches": [],
+  "current_generated_schema_exception_sha256": "d3094336b4d55d9389b2fd1d852d627b93e0ac0394b9b1801e258a154b0cb445",
+  "frozen_V013_1_verified": true,
+  "tracked_changes_before_checkpoint": [
+    "DEVELOPMENT_HANDOFF.md",
+    "docs/acceptance/development-resume-b-remaining-2026-10-23.md"
+  ],
+  "staged_before_checkpoint": [],
+  "fix01_product_test_edits": false,
+  "fix01_test_commands_launched": false,
+  "fix01_starter_files": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05-fix-01/protected-old-evidence.json",
+      "bytes": 92396,
+      "sha256": "0ae6b4bd684e937e3421a1822b90a2bfba0736ea0923e935a3db65d1e371a50a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05-fix-01/run-focused.py",
+      "bytes": 1683,
+      "sha256": "6bbba70ee2881606c00227eda77c386d1728aefd4467cf2d955d46459b673de8"
+    }
+  ],
+  "all_child_agents_stopped": true,
+  "source": "freshrootfilesystem/Gitcheck plus verifiedauthorhandoffs; no business tests or DB writes"
+}

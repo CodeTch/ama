@@ -1,0 +1,36 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07*IT"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07InheritedReconciliationWorkerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07PreparedContradictionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07SettlementWindowsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxConsumerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07PreparedMatrixIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07AdmissionWindowsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+  ],
+  "elapsedSeconds": 160.17535853385925,
+  "counts": {
+    "tests": 141,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

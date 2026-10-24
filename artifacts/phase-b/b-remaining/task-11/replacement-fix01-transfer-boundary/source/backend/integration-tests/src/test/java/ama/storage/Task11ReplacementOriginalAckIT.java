@@ -1,0 +1,7 @@
+package ama.storage;
+import java.nio.file.*;import java.util.*;import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;
+class Task11ReplacementOriginalAckIT extends Task11ReplacementBoundaryIT {
+ @Override @Test void genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate()throws Exception {
+  String pub="368767a5-c477-40fc-8e27-13705667c5a0",old="302565ef-16e7-49df-b5c2-76caa2a13e33",next="1a8dc6bb-2076-44d2-8ff0-aa1b5f630e27";var before=inventory(pub);var service=ama.api.Task11RuntimeProbe.publication(app);var actor=new ama.contract.IdentityContracts.Actor("task09-a117e955-0e39-4a1d-8c39-3b0682b84e3b",ama.contract.IdentityContracts.Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));assertEquals(ama.contract.ExternalContracts.ObservationResult.APPLIED,service.recoverOriginalFailure(actor,meeting,pub,old));assertEquals(before,inventory(pub));assertEquals("READY",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,next));assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM task_attempt WHERE task_id=?",Integer.class,next));assertEquals(Map.of("getWriteAttempts",1L,"postWriteAttempts",0L),service.traffic());Files.writeString(receipt.resolve("original-failure-ack-no-send.json"),json.writeValueAsString(Map.of("oldTask",old,"successorTask",next,"before",before,"after",inventory(pub),"traffic",service.traffic(),"result","APPLIED immutable original failure ACK; successor unchanged")));
+ }
+}

@@ -1,0 +1,75 @@
+{
+  "utc": "2026-10-24T02:26:18.167104+00:00",
+  "scope": "Completed fix02 receipts/XML only; intermediate changing-source, finalIT ongoing. No final-source pass or review/adoption claim.",
+  "windows": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix02/old-zero-green/receipt.json",
+      "receiptSha256": "f197062fd0c0218a52889a7ec7006d7089671c1f4c89589c0a41f98cf6467187",
+      "exit": 1,
+      "counts": {
+        "tests": 12,
+        "failures": 1,
+        "errors": 2,
+        "skipped": 0
+      },
+      "xml": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/old-zero-green/integration-tests-TEST-ama.task.Task07SupersededReceiptIT.xml",
+          "sha256": "d7f0a4d48cdfb5e559aac3f6c66ba61670326c7ead47046cb0971d6cc6adb35d",
+          "counts": {
+            "tests": 12,
+            "failures": 1,
+            "errors": 2,
+            "skipped": 0
+          }
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix02/old-zero-green-corrected/receipt.json",
+      "receiptSha256": "c453767c0d513902e33e850fc58e5283de62ac6d33788c1e7df52bd803ba9a7f",
+      "exit": 0,
+      "counts": {
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xml": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/old-zero-green-corrected/integration-tests-TEST-ama.task.Task07SupersededReceiptIT.xml",
+          "sha256": "108acb55e158e2bbcf5dc12bf893b563653e0252dbbb4c14a040cf59545a16eb",
+          "counts": {
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix02/old-zero-red/receipt.json",
+      "receiptSha256": "638fc0d4fcaa7d0532b3165f5ab5afc9164924ba65e03b48f36d2e670bf7cbe0",
+      "exit": 1,
+      "counts": {
+        "tests": 12,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xml": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/old-zero-red/integration-tests-TEST-ama.task.Task07SupersededReceiptIT.xml",
+          "sha256": "de63fd29ca19fb05763ab333b011eb4c66f35a3c0743065e0ac1f7d8d1428686",
+          "counts": {
+            "tests": 12,
+            "failures": 3,
+            "errors": 0,
+            "skipped": 0
+          }
+        }
+      ]
+    }
+  ]
+}

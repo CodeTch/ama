@@ -1,0 +1,43 @@
+{
+  "status": "AUTHORIZED_EXACT_ONE_INVOCATION_NOT_YET_EXECUTED",
+  "issuedUtc": "2026-10-24T06:49:40.754943+00:00",
+  "issuer": "/root/b_controlled_coordinator under explicit delegated root authority",
+  "authority": "Adopted Task9 R1 controlled installation; user permits dedicated local provider secret; existing DB/S3/PKI untouched",
+  "bundle": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01",
+  "helperSha256": "d665023ea9778c8622bd8942b2b3fb7a3626ac2300d676aa544d43923debaefc",
+  "manifestSha256": "831171c0e72ab13cad2f73071634501a95a3da5e08493daec33b1330ff3cb841",
+  "boundarySha256": "ccac444088b423adf8897d93b87a54d25a6e383ac8af9c7b86e3454f8acc9ee3",
+  "command": [
+    "python3",
+    "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/install.py",
+    "--execute"
+  ],
+  "scope": {
+    "schema": "ama_t09_2d0e28ea7755_behavior",
+    "owner": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task09-2d0e28ea775540f8b3525f9344edf5f0/controlled-installation-20261024",
+    "templateId": "067313c0-bb33-4b83-8674-47058c6e9a6d",
+    "revisionId": "0f7d6a2b-214e-4bff-ac66-5823755c0718",
+    "archiveObjects": 19,
+    "model": "CONTROLLED_MINUTES_V1",
+    "capacity": 1,
+    "modelConfigRevision": 1,
+    "privateProviderSecret": "new dedicated0600 within0700 owner; no contents or digest published",
+    "providerPort": 45989,
+    "providerStart": false,
+    "newGenerationOrInitialEnabled": false,
+    "ddl": false,
+    "existingEnvEdit": false
+  },
+  "checks": {
+    "allClasspathHashes": 136,
+    "allDirectSourceHashes": 15,
+    "directNewAdminDmlConfigSourceRead": true,
+    "adoptedArchiveWriterReaderAndPermitPoolUnchangedFromHEAD": true,
+    "queueExternalDiffNoConstructorChange": true,
+    "ownerInitiallyOnlyPrivateInstallConfig": true,
+    "selectedExactCidAndLimits": "task-09-admin-selected-resource-before-20261024.json",
+    "test": "controlled-admin-green-01 actual1PASS result/XML/hash/interval checked",
+    "binaryOrigin": "same canonical successful reactor jar packaging; frozen3jars byteidentical current target; all captured direct sources match that window;2JSONresources match sealed jar entries"
+  },
+  "failureRule": "No automatic retry/reset/cleanup/repair; preserve partial owner and exact failure first. No provider start in this authorization."
+}

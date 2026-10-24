@@ -1,0 +1,166 @@
+{
+  "timestampUtc": "2026-10-24T00:48:06.147191+00:00",
+  "scope": "Freshrootselectedexact3CIDs only, nofullinspect/Config.Env/DB/businessread/mutation. Allspecifiedowner/image/running/bounds/actualpublishedloopbackports checked; ownedname/fullmounts equalpriorrootcreationguard. ExactrecordedonePIDgone, notglobalprocessabsence. NoS3/PKIactivitybyTask7inferredfromthisguard.",
+  "resources": [
+    {
+      "role": "shared",
+      "selected": {
+        "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+        "name": "/ama-test-b01-ad9f1af29eff",
+        "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+        "owner": "remaining-20261023",
+        "memory": 805306368,
+        "swap": 805306368,
+        "cpus": 1000000000,
+        "pids": 256,
+        "ports": {
+          "3306/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "46653"
+            }
+          ]
+        },
+        "mounts": [
+          {
+            "Destination": "/var/lib/mysql",
+            "Driver": "local",
+            "Mode": "",
+            "Name": "d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b/_data",
+            "Type": "volume"
+          }
+        ],
+        "running": true,
+        "oom": false
+      },
+      "checks": {
+        "exactCid": true,
+        "owner": true,
+        "image": true,
+        "memorySwap": true,
+        "cpus": true,
+        "pids": true,
+        "runningNotOom": true,
+        "actualExpectedLoopbackPort": true,
+        "allExposedPortsLoopback": true
+      }
+    },
+    {
+      "role": "owned",
+      "selected": {
+        "id": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+        "name": "/ama-test-task08-848e93aace8b4f0fa34fc548267f3dc5",
+        "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+        "owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+        "memory": 805306368,
+        "swap": 805306368,
+        "cpus": 1000000000,
+        "pids": 256,
+        "ports": {
+          "3306/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "44727"
+            }
+          ]
+        },
+        "mounts": [
+          {
+            "Destination": "/var/lib/mysql",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/data",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/run/ama-task08",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": false,
+            "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/secrets",
+            "Type": "bind"
+          }
+        ],
+        "running": true,
+        "oom": false
+      },
+      "checks": {
+        "exactCid": true,
+        "owner": true,
+        "image": true,
+        "memorySwap": true,
+        "cpus": true,
+        "pids": true,
+        "runningNotOom": true,
+        "actualExpectedLoopbackPort": true,
+        "allExposedPortsLoopback": true
+      }
+    },
+    {
+      "role": "s3",
+      "selected": {
+        "id": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+        "name": "/ama-task05-s3-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+        "image": "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+        "owner": "ama-task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+        "memory": 2147483648,
+        "swap": 2147483648,
+        "cpus": 2000000000,
+        "pids": 256,
+        "ports": {
+          "9000/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "45501"
+            }
+          ]
+        },
+        "mounts": [
+          {
+            "Destination": "/data",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/data",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/logs",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/logs",
+            "Type": "bind"
+          }
+        ],
+        "running": true,
+        "oom": false
+      },
+      "checks": {
+        "exactCid": true,
+        "owner": true,
+        "image": true,
+        "memorySwap": true,
+        "cpus": true,
+        "pids": true,
+        "runningNotOom": true,
+        "actualExpectedLoopbackPort": true,
+        "allExposedPortsLoopback": true
+      }
+    }
+  ],
+  "ownedParentNameAndAllMountsEqualCreationGuard": true,
+  "recordedPidChecks": [
+    {
+      "pid": 1277931,
+      "gone": true
+    }
+  ],
+  "priorTask8SelectedProofPathByExactKnownHash": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-root-selected-resources-pids-20261024.json"
+  ]
+}

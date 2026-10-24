@@ -1,0 +1,203 @@
+{
+  "utc": "2026-10-24T02:44:08.707269+00:00",
+  "head": "bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc",
+  "custodyReportSha256": "2d41fbf06a13f2bf256575779719aa8a44ce30ea1622cc09b78dc62bc37df41a",
+  "actualPackageInputSealsVerified": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix02-brief-20261024.md",
+      "bytes": 5403,
+      "sha256": "c8d4f486a0f6b9a0dd01d7c4afbd2b45df774664efc42371a0cf8e17f04bde34"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-independent-review-20261024.md",
+      "bytes": 19093,
+      "sha256": "1d4eee2f878e5dcde8fea04c03b07b4a579483c3e01390ddf24677739a55a18e"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix02-report-20261024.md",
+      "bytes": 15046,
+      "sha256": "02bd2c083da3248fb1aedeb5b38e56d67345c2efa1f4237404bf9724faf01600"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/report.md",
+      "bytes": 15965,
+      "sha256": "b94d580a65a4c87ab7ea17c7585926d79af16f928fec10050549f033f5169880"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/manifest.json",
+      "bytes": 3090409,
+      "sha256": "56b454547de4f90b66bc68a4dd4e57bb891ba9ef18e52a69eb8d355fbb8b77b8"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/qualification-ledger.json",
+      "bytes": 903464,
+      "sha256": "0ade6895b74165d83b44fff082fb516ab07a38f652280572aef80e26879d19d6"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix02-source-review-package-20261024.diff",
+      "bytes": 83670,
+      "sha256": "76103abd0f622e6325dd80c07ce2565b4fe0b53b0f733d514af375ca90b8396d"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix02-full-review-package-20261024.diff",
+      "bytes": 12754355,
+      "sha256": "6a9e672cc8ba4d3841e452d0be0081eebce73bc94ea74579c043c05529379b3a"
+    }
+  ],
+  "freshSelectedExactResources": [
+    {
+      "role": "shared",
+      "selected": {
+        "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+        "name": "/ama-test-b01-ad9f1af29eff",
+        "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+        "owner": "remaining-20261023",
+        "memory": 805306368,
+        "swap": 805306368,
+        "cpus": 1000000000,
+        "pids": 256,
+        "ports": {
+          "3306/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "46653"
+            }
+          ]
+        },
+        "mounts": [
+          {
+            "Destination": "/var/lib/mysql",
+            "Driver": "local",
+            "Mode": "",
+            "Name": "d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b/_data",
+            "Type": "volume"
+          }
+        ],
+        "running": true,
+        "oom": false
+      },
+      "same": true
+    },
+    {
+      "role": "owned",
+      "selected": {
+        "id": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+        "name": "/ama-test-task08-848e93aace8b4f0fa34fc548267f3dc5",
+        "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+        "owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+        "memory": 805306368,
+        "swap": 805306368,
+        "cpus": 1000000000,
+        "pids": 256,
+        "ports": {
+          "3306/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "44727"
+            }
+          ]
+        },
+        "mounts": [
+          {
+            "Destination": "/run/ama-task08",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": false,
+            "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/secrets",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/var/lib/mysql",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/data",
+            "Type": "bind"
+          }
+        ],
+        "running": true,
+        "oom": false
+      },
+      "same": true
+    },
+    {
+      "role": "s3",
+      "selected": {
+        "id": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+        "name": "/ama-task05-s3-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+        "image": "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+        "owner": "ama-task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+        "memory": 2147483648,
+        "swap": 2147483648,
+        "cpus": 2000000000,
+        "pids": 256,
+        "ports": {
+          "9000/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "45501"
+            }
+          ]
+        },
+        "mounts": [
+          {
+            "Destination": "/data",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/data",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/logs",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/logs",
+            "Type": "bind"
+          }
+        ],
+        "running": true,
+        "oom": false
+      },
+      "same": true
+    }
+  ],
+  "freshExactRecordedPidsGone": [
+    {
+      "pid": 1277931,
+      "gone": true
+    },
+    {
+      "pid": 1296943,
+      "gone": true
+    },
+    {
+      "pid": 1299071,
+      "gone": true
+    },
+    {
+      "pid": 1300741,
+      "gone": true
+    },
+    {
+      "pid": 1320122,
+      "gone": true
+    },
+    {
+      "pid": 1324519,
+      "gone": true
+    }
+  ],
+  "privateScan": {
+    "knownDistinctValues": 6,
+    "files": 1510,
+    "bytes": 27156936,
+    "matches": 0,
+    "scope": "actual1505changedfiles plus8sealedinputs/packages/custody; in-memoryknownvalues+PEM only, no value/hash output, notuniversalcredentialaudit"
+  },
+  "scope": "No product edits/test rerun/DB access; freshresource/PID checks limitedexacttargets; no adoption or semantics verdict."
+}

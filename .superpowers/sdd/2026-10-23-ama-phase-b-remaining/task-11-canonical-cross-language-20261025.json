@@ -1,0 +1,50 @@
+{
+  "utc": "2026-10-24T18:03:09.653157+00:00",
+  "qualification": "Actual Java renderer/client output bytes and SHA compared directly with actual Python provider canonical function; synthetic format fixtures, no business/provenance qualification.",
+  "providerSourceSha256": "6dd1fb77a7800530c476d94eb649453eb4749dfa84e1dddc1e176381a4101a39",
+  "javaActualFiles": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-11/knowledge-canonical-cross-01/canonical-java-actual.json",
+      "sha256": "fdbbba3687ae4f5976bce90d9ccdf0fd88a5e30bc43f2f00f950b4597aa08df5"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-11/knowledge-canonical-cross-01/renderer-client-java-actual.json",
+      "sha256": "109ffcd44f4ca0eeb96ec767e7f3ad90eb330f7eaa5cf58b6667f09d5974ea9a"
+    }
+  ],
+  "results": [
+    {
+      "case": "client-0",
+      "bytes": 70,
+      "sha256": "7396498861958782ee4b71da1dd930968651211dcb0103d11c9c7dcb10788f55",
+      "exactBytesEqual": true
+    },
+    {
+      "case": "client-1",
+      "bytes": 36,
+      "sha256": "d7dce2425300ac0417387858fba9ab9ef4378796354c9469378ff1cdb09b3851",
+      "exactBytesEqual": true
+    },
+    {
+      "case": "client-2",
+      "bytes": 56,
+      "sha256": "dc03333d70bdf97e637cdfec858fdbbf09637c274c49ff1b863185d874690985",
+      "exactBytesEqual": true
+    },
+    {
+      "case": "client-3",
+      "bytes": 56,
+      "sha256": "9892291355dc300df478d6a73b0796cbfd64218ce07170b6178697a093117c80",
+      "exactBytesEqual": true
+    },
+    {
+      "case": "actual-renderer-client-provider",
+      "bytes": 1380,
+      "payloadSha256": "1d965fbd9bc691c01ea0eb895b31d470123ddbaddc2213d52580b2bb18f297fd",
+      "exactBytesEqual": true
+    }
+  ],
+  "networkCalls": 0,
+  "databaseOpens": 0,
+  "providerStarts": 0
+}

@@ -1,0 +1,403 @@
+{
+  "status": "PASS",
+  "scope": "One bounded current-filesystem byte/size/SHA256 check only. No tests, DB, commands outside tree, implementation, source-quality review, qualification, migration application or historical custody re-audit. Only this new report written.",
+  "capture": {
+    "startUtc": "2026-10-23T21:48:53.598452+00:00",
+    "endUtc": "2026-10-23T21:48:53.600023+00:00",
+    "uniqueFileCount": 33,
+    "note": "Files read once in this capture; metadata checked around each read. Input hashes cover complete bytes, including SQL migration files. No private environment or secrets inspected."
+  },
+  "identities": {
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-task-union-index-feasibility-inputs-20261024-dde4879a5fdd.json": {
+      "bytes": 8114,
+      "sha256": "a194af722b884dd8384d38c9e9ed508a70f2295f5135da741d0a872c4111060e",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-task-union/SavedTranscriptGraph.java": {
+      "bytes": 12592,
+      "sha256": "3edd7124d86f0d41a12ce556e596ad2de26ef984c8ff036515d331527090e3ef",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-task-union/actual-diff.patch": {
+      "bytes": 1648,
+      "sha256": "04303cb1ebdb0e2be4253c043687c46835d0232868692d3033d00e7e9648b588",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-task-union/proof.json": {
+      "bytes": 1873,
+      "sha256": "f65824ee183db7f07d84292d97f2226a5a5b1c96912ede2632329557d72b986f",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java": {
+      "bytes": 12592,
+      "sha256": "3edd7124d86f0d41a12ce556e596ad2de26ef984c8ff036515d331527090e3ef",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java": {
+      "bytes": 6190,
+      "sha256": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-refresh/source/backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java": {
+      "bytes": 6190,
+      "sha256": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java": {
+      "bytes": 17372,
+      "sha256": "410331e9d9957440c459a1b3ac6558bbad510c82416fa6b57be75c08393e183a",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/java/ama/transcript/TranscriptReadGraph.java": {
+      "bytes": 6879,
+      "sha256": "1aad12427b0a296247e841c52d35ff0d8cffedbc4ea87b9efb277ffca33b1481",
+      "stableDuringRead": true
+    },
+    "docs/superpowers/specs/2026-10-23-ama-phase-b-saved-transcript.md": {
+      "bytes": 3796,
+      "sha256": "8cd56e23dcab78cebd9553a93b9ccab1d8d72f4fad72d9c7e800dbb3fe3a7ede",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/controller-saved-transcript-design/task-06-saved-transcript-design-r1.md": {
+      "bytes": 62167,
+      "sha256": "b2c023a2ee8639c668a078cfccce83f712c3dc99d65f9a64fab5a32a98687253",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-saved-transcript-design.md": {
+      "bytes": 43417,
+      "sha256": "1734217a8d6954a8d408b30a3f5912c1e93f1c9592b2313375d80af2f6389a3e",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-saved-transcript-design-r1.md": {
+      "bytes": 62167,
+      "sha256": "b2c023a2ee8639c668a078cfccce83f712c3dc99d65f9a64fab5a32a98687253",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-fix-01-qualification-rootproof-20261024.json": {
+      "bytes": 4790,
+      "sha256": "71be2eff6e90f7db19b886ae543707fa56c1543a6d069de754dbe5843dcde8b2",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V001__foundation.sql": {
+      "bytes": 709,
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql": {
+      "bytes": 1781,
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql": {
+      "bytes": 2461,
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql": {
+      "bytes": 1864,
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql": {
+      "bytes": 3795,
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql": {
+      "bytes": 11205,
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql": {
+      "bytes": 7239,
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql": {
+      "bytes": 35136,
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql": {
+      "bytes": 397,
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql": {
+      "bytes": 10941,
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql": {
+      "bytes": 21260,
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql": {
+      "bytes": 1817,
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "stableDuringRead": true
+    },
+    "backend/adapters/src/main/resources/db/migration/V013__publications.sql": {
+      "bytes": 7661,
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-task-union-index-feasibility-plan-input-20261024-6800e0b5d0ac.json": {
+      "bytes": 657,
+      "sha256": "7570f981067d80e72bf5f9e7aee65815c9fcbeb2fd48bfbbb630c33be7530597",
+      "stableDuringRead": true
+    },
+    "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-e92b4258-237f-49c2-9782-d08156b98375/actual-task-query-plans.json": {
+      "bytes": 2009,
+      "sha256": "b184d24314acb99a4d5364e7588304f20fc84713850968964cc4c56a93eb1a66",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-design-review-20261024.md": {
+      "bytes": 14661,
+      "sha256": "8e8bdfd7be35fd7f527de1acbce086f76cfddb0841f168a9cdca7a56aa2a66dd",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-supplement-design-20261024.md": {
+      "bytes": 8822,
+      "sha256": "12e6ee018b84ce6055e76f13181b830d59d3485af11f8c6a409abbb334ce735f",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-supplement-plan-20261024.md": {
+      "bytes": 4815,
+      "sha256": "cf0ccc424e6c42ac466cb7a2fb5e566e26ab6220e442a98b0b8986474136a1d0",
+      "stableDuringRead": true
+    },
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-proposal-20261024.sql": {
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "stableDuringRead": true
+    }
+  },
+  "feasibilityManifests": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-task-union-index-feasibility-inputs-20261024-dde4879a5fdd.json",
+      "suppliedExpectedSha256Prefix": "a194af72",
+      "manifestHashPrefixMatches": true,
+      "expectedInputCount": 26,
+      "actualInputCount": 26,
+      "inputs": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-task-union/SavedTranscriptGraph.java",
+          "expectedBytes": 12592,
+          "expectedSha256": "3edd7124d86f0d41a12ce556e596ad2de26ef984c8ff036515d331527090e3ef",
+          "matches": true
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-task-union/actual-diff.patch",
+          "expectedBytes": 1648,
+          "expectedSha256": "04303cb1ebdb0e2be4253c043687c46835d0232868692d3033d00e7e9648b588",
+          "matches": true
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-task-union/proof.json",
+          "expectedBytes": 1873,
+          "expectedSha256": "f65824ee183db7f07d84292d97f2226a5a5b1c96912ede2632329557d72b986f",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+          "expectedBytes": 12592,
+          "expectedSha256": "3edd7124d86f0d41a12ce556e596ad2de26ef984c8ff036515d331527090e3ef",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java",
+          "expectedBytes": 6190,
+          "expectedSha256": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877",
+          "matches": true
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-refresh/source/backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java",
+          "expectedBytes": 6190,
+          "expectedSha256": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+          "expectedBytes": 17372,
+          "expectedSha256": "410331e9d9957440c459a1b3ac6558bbad510c82416fa6b57be75c08393e183a",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/java/ama/transcript/TranscriptReadGraph.java",
+          "expectedBytes": 6879,
+          "expectedSha256": "1aad12427b0a296247e841c52d35ff0d8cffedbc4ea87b9efb277ffca33b1481",
+          "matches": true
+        },
+        {
+          "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-saved-transcript.md",
+          "expectedBytes": 3796,
+          "expectedSha256": "8cd56e23dcab78cebd9553a93b9ccab1d8d72f4fad72d9c7e800dbb3fe3a7ede",
+          "matches": true
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/controller-saved-transcript-design/task-06-saved-transcript-design-r1.md",
+          "expectedBytes": 62167,
+          "expectedSha256": "b2c023a2ee8639c668a078cfccce83f712c3dc99d65f9a64fab5a32a98687253",
+          "matches": true
+        },
+        {
+          "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-saved-transcript-design.md",
+          "expectedBytes": 43417,
+          "expectedSha256": "1734217a8d6954a8d408b30a3f5912c1e93f1c9592b2313375d80af2f6389a3e",
+          "matches": true
+        },
+        {
+          "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-saved-transcript-design-r1.md",
+          "expectedBytes": 62167,
+          "expectedSha256": "b2c023a2ee8639c668a078cfccce83f712c3dc99d65f9a64fab5a32a98687253",
+          "matches": true
+        },
+        {
+          "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-fix-01-qualification-rootproof-20261024.json",
+          "expectedBytes": 4790,
+          "expectedSha256": "71be2eff6e90f7db19b886ae543707fa56c1543a6d069de754dbe5843dcde8b2",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+          "expectedBytes": 709,
+          "expectedSha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+          "expectedBytes": 1781,
+          "expectedSha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+          "expectedBytes": 2461,
+          "expectedSha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+          "expectedBytes": 1864,
+          "expectedSha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+          "expectedBytes": 3795,
+          "expectedSha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+          "expectedBytes": 11205,
+          "expectedSha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+          "expectedBytes": 7239,
+          "expectedSha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+          "expectedBytes": 35136,
+          "expectedSha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+          "expectedBytes": 397,
+          "expectedSha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+          "expectedBytes": 10941,
+          "expectedSha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+          "expectedBytes": 21260,
+          "expectedSha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+          "expectedBytes": 1817,
+          "expectedSha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+          "matches": true
+        },
+        {
+          "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+          "expectedBytes": 7661,
+          "expectedSha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-task-union-index-feasibility-plan-input-20261024-6800e0b5d0ac.json",
+      "suppliedExpectedSha256Prefix": "7570f981",
+      "manifestHashPrefixMatches": true,
+      "expectedInputCount": 1,
+      "actualInputCount": 1,
+      "inputs": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-06/fix-01/pipeline-e92b4258-237f-49c2-9782-d08156b98375/actual-task-query-plans.json",
+          "expectedBytes": 2009,
+          "expectedSha256": "b184d24314acb99a4d5364e7588304f20fc84713850968964cc4c56a93eb1a66",
+          "matches": true
+        }
+      ]
+    }
+  ],
+  "independentDesignReview": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-design-review-20261024.md",
+    "suppliedExpectedSha256Prefix": "8e8bdfd7",
+    "reportHashPrefixMatches": true,
+    "reviewedProposals": [
+      {
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-supplement-design-20261024.md",
+        "reviewedBytes": 8822,
+        "reviewedSha256": "12e6ee018b84ce6055e76f13181b830d59d3485af11f8c6a409abbb334ce735f",
+        "reviewTableContainsExactSeal": true,
+        "currentFileMatchesReviewedSeal": true
+      },
+      {
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-supplement-plan-20261024.md",
+        "reviewedBytes": 4815,
+        "reviewedSha256": "cf0ccc424e6c42ac466cb7a2fb5e566e26ab6220e442a98b0b8986474136a1d0",
+        "reviewTableContainsExactSeal": true,
+        "currentFileMatchesReviewedSeal": true
+      },
+      {
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-proposal-20261024.sql",
+        "reviewedBytes": 75,
+        "reviewedSha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+        "reviewTableContainsExactSeal": true,
+        "currentFileMatchesReviewedSeal": true
+      }
+    ],
+    "exactSqlBodyPlusSingleLFMatches": true,
+    "note": "This verifies report and proposal custody only; it does not repeat or expand the independent review verdict."
+  },
+  "counts": {
+    "feasibilityInputs": 27,
+    "mainManifestInputs": 26,
+    "supplementalPlanInputs": 1,
+    "reviewedProposals": 3,
+    "manifestFiles": 2,
+    "reviewReports": 1,
+    "uniqueFiles": 33
+  },
+  "limitations": [
+    "Only abbreviated expected manifest/report hashes were supplied; their prefixes match and exact full current SHA256 values are retained. Input/proposal seals were checked against full expected hashes.",
+    "Current filesystem snapshot does not assert future state or runtime qualification."
+  ],
+  "issues": []
+}

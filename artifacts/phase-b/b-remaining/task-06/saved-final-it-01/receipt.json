@@ -1,0 +1,22 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06*IT"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06ConcurrencyIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06AtomicityIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06HttpIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06SavedGraphIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06CompositionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06RestartIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06AccessIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06GuardsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06SavedCommandsIT.xml"
+  ],
+  "elapsedSeconds": 108.79132008552551,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

@@ -1,0 +1,36 @@
+{
+  "exitCode": 0,
+  "processExitCode": 0,
+  "startedNs": 1792873641047074789,
+  "finishedNs": 1792873690854411775,
+  "suites": [
+    {
+      "path": "junit/backend/integration-tests/target/failsafe-reports/TEST-ama.publication.Task11BootstrapIT.xml",
+      "suite": "ama.publication.Task11BootstrapIT",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.publication.Task11BootstrapIT",
+      "reportSha256": "8b6be001e7f89b851852742b7a2d69271147dd648d7d7aa3bce02f8e04d7aeb7",
+      "reportMtimeNs": 1792873690737338287,
+      "startedNs": 1792873641047074789,
+      "endedNs": 1792873690854411775,
+      "class": "ama.publication.Task11BootstrapIT",
+      "name": "freshApprovedSchemaNormalSixteenThenZeroPreservesCompleteUtcHistoryAndSubmissionMetadata",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

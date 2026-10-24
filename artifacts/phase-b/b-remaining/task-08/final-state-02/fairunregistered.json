@@ -1,0 +1,209 @@
+{
+  "target" : "fairunregistered",
+  "scope" : "Read-only retained control fixture state; no company pipeline/HA/capacity claim",
+  "history" : [ {
+    "installed_rank" : "1",
+    "version" : "001",
+    "description" : "foundation",
+    "type" : "SQL",
+    "script" : "V001__foundation.sql",
+    "checksum" : "1201435595",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:58",
+    "execution_time" : "110",
+    "success" : "1"
+  }, {
+    "installed_rank" : "2",
+    "version" : "002",
+    "description" : "identity acl",
+    "type" : "SQL",
+    "script" : "V002__identity_acl.sql",
+    "checksum" : "1757300424",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:58",
+    "execution_time" : "239",
+    "success" : "1"
+  }, {
+    "installed_rank" : "3",
+    "version" : "005",
+    "description" : "tasks outbox",
+    "type" : "SQL",
+    "script" : "V005__tasks_outbox.sql",
+    "checksum" : "-1999355348",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:59",
+    "execution_time" : "412",
+    "success" : "1"
+  }, {
+    "installed_rank" : "4",
+    "version" : "006",
+    "description" : "audit metadata",
+    "type" : "SQL",
+    "script" : "V006__audit_metadata.sql",
+    "checksum" : "-1744360556",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:44:59",
+    "execution_time" : "190",
+    "success" : "1"
+  }, {
+    "installed_rank" : "5",
+    "version" : "007",
+    "description" : "identity sessions",
+    "type" : "SQL",
+    "script" : "V007__identity_sessions.sql",
+    "checksum" : "157746768",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:45:00",
+    "execution_time" : "728",
+    "success" : "1"
+  }, {
+    "installed_rank" : "6",
+    "version" : "008",
+    "description" : "meeting schema",
+    "type" : "SQL",
+    "script" : "V008__meeting_schema.sql",
+    "checksum" : "-1747387036",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:45:03",
+    "execution_time" : "3421",
+    "success" : "1"
+  }, {
+    "installed_rank" : "7",
+    "version" : "009",
+    "description" : "file schema",
+    "type" : "SQL",
+    "script" : "V009__file_schema.sql",
+    "checksum" : "-287948759",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:45:05",
+    "execution_time" : "2147",
+    "success" : "1"
+  }, {
+    "installed_rank" : "8",
+    "version" : "010",
+    "description" : "reliable execution",
+    "type" : "SQL",
+    "script" : "V010__reliable_execution.sql",
+    "checksum" : "-1187397378",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:45:08",
+    "execution_time" : "3065",
+    "success" : "1"
+  }, {
+    "installed_rank" : "9",
+    "version" : "011",
+    "description" : "transcript schema",
+    "type" : "SQL",
+    "script" : "V011__transcript_schema.sql",
+    "checksum" : "-286330771",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:45:14",
+    "execution_time" : "5269",
+    "success" : "1"
+  }, {
+    "installed_rank" : "10",
+    "version" : "011.1",
+    "description" : "transcript material index",
+    "type" : "SQL",
+    "script" : "V011_1__transcript_material_index.sql",
+    "checksum" : "-570494170",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:45:14",
+    "execution_time" : "44",
+    "success" : "1"
+  }, {
+    "installed_rank" : "11",
+    "version" : "012",
+    "description" : "minutes evidence",
+    "type" : "SQL",
+    "script" : "V012__minutes_evidence.sql",
+    "checksum" : "2101765957",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:45:23",
+    "execution_time" : "9645",
+    "success" : "1"
+  }, {
+    "installed_rank" : "12",
+    "version" : "013",
+    "description" : "publications",
+    "type" : "SQL",
+    "script" : "V013__publications.sql",
+    "checksum" : "-847352333",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:45:27",
+    "execution_time" : "4128",
+    "success" : "1"
+  }, {
+    "installed_rank" : "13",
+    "version" : "013.1",
+    "description" : "b runtime metadata",
+    "type" : "SQL",
+    "script" : "V013_1__b_runtime_metadata.sql",
+    "checksum" : "-1898004857",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:45:28",
+    "execution_time" : "451",
+    "success" : "1"
+  }, {
+    "installed_rank" : "14",
+    "version" : "013.2",
+    "description" : "task input lookup",
+    "type" : "SQL",
+    "script" : "V013_2__task_input_lookup.sql",
+    "checksum" : "-1098175378",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:45:28",
+    "execution_time" : "56",
+    "success" : "1"
+  }, {
+    "installed_rank" : "15",
+    "version" : "013.3",
+    "description" : "external reconcile scan",
+    "type" : "SQL",
+    "script" : "V013_3__external_reconcile_scan.sql",
+    "checksum" : "-385117638",
+    "installed_by" : "ama_t08_848e93aace8b",
+    "installed_on" : "2026-10-23 22:47:54",
+    "execution_time" : "178",
+    "success" : "1"
+  } ],
+  "engine" : [ {
+    "version" : "8.4.6",
+    "metadataWaitSeconds" : "5",
+    "sqlMode" : "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+  } ],
+  "external_operation" : [ {
+    "state" : "MARKED",
+    "count" : "130"
+  } ],
+  "external_execution" : [ {
+    "state" : "MARKED",
+    "count" : "130"
+  } ],
+  "durable_task" : [ {
+    "state" : "RECONCILING",
+    "count" : "130"
+  } ],
+  "task_attempt" : [ {
+    "outcome" : null,
+    "count" : "130"
+  } ],
+  "outbox_consumer" : [ {
+    "count" : "0"
+  } ],
+  "model_reservation" : [ {
+    "count" : "0"
+  } ],
+  "ordinal" : [ {
+    "rowsTotal" : "130",
+    "distinctOrdinals" : "130",
+    "minimum" : "1",
+    "maximum" : "130",
+    "invalid" : "0"
+  } ],
+  "controlCounts" : [ {
+    "outboxRows" : "260",
+    "meetings" : "130",
+    "identities" : "130"
+  } ]
+}

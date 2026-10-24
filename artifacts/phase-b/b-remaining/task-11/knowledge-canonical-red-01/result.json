@@ -1,0 +1,36 @@
+{
+  "exitCode": 1,
+  "processExitCode": 1,
+  "startedNs": 1792864795802048624,
+  "finishedNs": 1792864801376618018,
+  "suites": [
+    {
+      "path": "junit/backend/adapters/target/surefire-reports/TEST-ama.transcript.Task11KnowledgeCanonicalTest.xml",
+      "suite": "ama.transcript.Task11KnowledgeCanonicalTest",
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.transcript.Task11KnowledgeCanonicalTest",
+      "reportSha256": "48d1e8e30dc52494b3e07a1e87b5634356d9fbadeb7cd8dce7ff0ccd0e91b420",
+      "reportMtimeNs": 1792864801307599836,
+      "startedNs": 1792864795802048624,
+      "endedNs": 1792864801376618018,
+      "class": "ama.transcript.Task11KnowledgeCanonicalTest",
+      "name": "exactRendererJsonBytesSurviveTransportAndFieldOrdering",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

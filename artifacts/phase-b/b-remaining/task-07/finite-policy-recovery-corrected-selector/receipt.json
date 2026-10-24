@@ -1,0 +1,21 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07RecoveryBoundsIT#*,Task07GenerationRetentionIT#controlledGenerationPolicyHasItsOwnFiniteQueryAndRowBudget"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/finite-policy-recovery-corrected-selector/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/finite-policy-recovery-corrected-selector/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+  ],
+  "elapsedSeconds": 15.657795429229736,
+  "counts": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

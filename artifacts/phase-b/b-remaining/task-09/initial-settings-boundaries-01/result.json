@@ -1,0 +1,53 @@
+{
+  "exit": 0,
+  "counts": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.storage.Task09InitialSettingsIT",
+      "name": "auditFailureRollsBackEverySettingsEffect",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09InitialSettingsIT",
+      "name": "partialSettingsAreNotRepaired",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09InitialSettingsIT",
+      "name": "differentKeyAndDetachedHistoryCannotReinitialize",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09InitialSettingsIT",
+      "name": "firstSettingsPersistRealTemplateEmptyExclusionAndAdvanceExactlyOnce",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09InitialSettingsIT",
+      "name": "committedReplayPrecedesNowUnavailableArchivesAndCurrentCas",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09InitialSettingsIT",
+      "name": "concurrentSameKeyHasOneCompleteWinnerAndOneReplay",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

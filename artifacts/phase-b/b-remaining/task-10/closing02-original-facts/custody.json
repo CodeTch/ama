@@ -1,0 +1,46 @@
+[
+  {
+    "input": "ea22c355-a2f3-4f2b-a203-f56ea4e88d85",
+    "archivePin": "3291ea1f00bd17327ccde6acb71a12f855a9c7f68ef432a2a4d1c7f132ea2370",
+    "providerPort": 46469,
+    "task": "5371fac5-6674-499f-9187-4505749e93f1",
+    "store": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task10-1e48b41fc5c84a98af3a14b51b17884f/provider-test-7700524380455929794",
+    "pipeline": "artifacts/phase-b/b-remaining/task-10/closing-cas-retained-02/pipeline-256c8f8a-870b-478b-99b3-33b0309f880e",
+    "providerFiles": [
+      "store.lock",
+      "journal.bin",
+      "envelopes/42df8b68-5d77-4f3d-904a-8976c8660b98.json",
+      "results/cmr-317c197a-95cc-4ae8-b265-5488dbb825bf.json",
+      "payloads/42df8b68-5d77-4f3d-904a-8976c8660b98.json",
+      "requests/42df8b68-5d77-4f3d-904a-8976c8660b98.json"
+    ],
+    "providerStart": {
+      "executionMode": "IN_PROCESS_512MiB_2CPU",
+      "model": "CONTROLLED_MINUTES_V1",
+      "store": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task10-1e48b41fc5c84a98af3a14b51b17884f/provider-test-7700524380455929794",
+      "providerPort": 46469,
+      "mode": "CONTROLLED_INSTALLATION",
+      "endpoint": "http://127.0.0.1:46469"
+    }
+  },
+  {
+    "input": "aa59a414-729d-4e55-8df0-670bff82d66f",
+    "archivePin": "6f92a4d5dfad3c6ba2676a4eaeeb7a695b73f78cdaf4320802adf2b6afd20c2f",
+    "providerPort": 45487,
+    "task": "fc5cc42c-d03d-4363-8b4d-8d4e5e87d638",
+    "store": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task10-1e48b41fc5c84a98af3a14b51b17884f/provider-test-13598115174239746984",
+    "pipeline": "artifacts/phase-b/b-remaining/task-10/closing-cas-retained-02/pipeline-5c51bec0-4fbc-4b37-abf0-9d6ca65bda10",
+    "providerFiles": [
+      "store.lock",
+      "journal.bin"
+    ],
+    "providerStart": {
+      "executionMode": "IN_PROCESS_512MiB_2CPU",
+      "model": "CONTROLLED_MINUTES_V1",
+      "store": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task10-1e48b41fc5c84a98af3a14b51b17884f/provider-test-13598115174239746984",
+      "providerPort": 45487,
+      "mode": "CONTROLLED_INSTALLATION",
+      "endpoint": "http://127.0.0.1:45487"
+    }
+  }
+]

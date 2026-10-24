@@ -21,12 +21,15 @@ public final class TranscriptConfirmationHash {
  }
  static CanonicalValue data(String confirmationId,StoredFactsIndex index){
   var c=index.one(Table.TRANSCRIPT_CONFIRMATION,confirmationId,PROVENANCE_UNAVAILABLE);String meeting=c.string("meeting_id");
-  var revision=index.one(Table.TRANSCRIPT_REVISION,c.string("revision_id"),PROVENANCE_UNAVAILABLE);index.meeting(revision,meeting);
+  return savedData(meeting,c.string("revision_id"),index);
+ }
+ static CanonicalValue savedData(String meeting,String revisionId,StoredFactsIndex index){
+  var saved=index.sources.validatedTranscriptRevision(meeting,revisionId);var revision=saved.revision();
   var segments=new ArrayList<>(index.matching(Table.TRANSCRIPT_SEGMENT,"revision_id",revision.string("id")));
   segments.sort(Comparator.comparingLong(r->r.number("ordinal")));require(!segments.isEmpty(),INPUT_INVALID);
   var session=index.sources;var output=new ArrayList<CanonicalValue>();
   for(var segment:segments){
-   check(index.cancelled);session.transcript(c,segment.string("segment_id"),meeting);
+   check(index.cancelled);session.savedMember(saved,segment);
    var marks=new ArrayList<Mark>();for(var mark:index.matching(Table.TRANSCRIPT_SEGMENT_MARK,"revision_id",revision.string("id"))){
     check(index.cancelled);if(mark.string("segment_id").equals(segment.string("segment_id")))marks.add(Mark.valueOf(mark.string("mark")));
    }marks.sort(Comparator.naturalOrder());require(new HashSet<>(marks).size()==marks.size(),SOURCE_MEMBERSHIP_MISMATCH);
@@ -48,11 +51,23 @@ public final class TranscriptConfirmationHash {
  String hashBound(String confirmationId,Artifact profile,StoredFactsIndex index){
   var budget=index.budget;var cancelled=index.cancelled;var c=index.one(Table.TRANSCRIPT_CONFIRMATION,confirmationId,PROVENANCE_UNAVAILABLE);
   var revision=index.one(Table.TRANSCRIPT_REVISION,c.string("revision_id"),PROVENANCE_UNAVAILABLE);
+  index.meeting(revision,c.string("meeting_id"));
+  return hashSaved(c.string("meeting_id"),revision,profile,index);
+ }
+ public String hashDraft(ConfirmationDraft draft,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
+  var operation=resolver.open(draft.stored(),cancelled);var index=new StoredFactsIndex(draft.stored(),budget,cancelled);
+  var revision=index.one(Table.TRANSCRIPT_REVISION,draft.revisionId(),PROVENANCE_UNAVAILABLE);index.meeting(revision,draft.meetingId());
+  require("WORKING".equals(revision.string("kind")),INPUT_INVALID);
+  String result=new TranscriptConfirmationHash(operation.resolver()).hashSaved(draft.meetingId(),revision,profile,index);
+  operation.finish();check(cancelled);return result;
+ }
+ private String hashSaved(String meeting,FullRow revision,Artifact profile,StoredFactsIndex index){
+  var budget=index.budget;var cancelled=index.cancelled;
   var processing=index.one(Table.TRANSCRIPTION_INPUT,revision.string("processing_input_id"),PROFILE_UNAVAILABLE);
-  index.meeting(processing,c.string("meeting_id"));require(processing.string("batch_id").equals(revision.string("batch_id")),PROFILE_UNAVAILABLE);
+  index.meeting(processing,meeting);require(processing.string("batch_id").equals(revision.string("batch_id")),PROFILE_UNAVAILABLE);
   var bound=resolver.confirmation(processing,index.facts,budget,cancelled);
   require(profile!=null&&profile.equals(bound),PROFILE_UNAVAILABLE);
-  return DomainHash.hash(profile,PROFILE,"TRANSCRIPT_CONFIRMATION",data(confirmationId,index),minimum(budget.canonical(),resolver.processingBudget(processing,cancelled)),cancelled);
+  return DomainHash.hash(profile,PROFILE,"TRANSCRIPT_CONFIRMATION",savedData(meeting,revision.string("id"),index),minimum(budget.canonical(),resolver.processingBudget(processing,cancelled)),cancelled);
  }
 
  static CanonicalBudget minimum(CanonicalBudget a,CanonicalBudget b){return new CanonicalBudget(Math.min(a.maxEncodedBytes(),b.maxEncodedBytes()),Math.min(a.maxDepth(),b.maxDepth()),Math.min(a.maxNodes(),b.maxNodes()),Math.min(a.maxStringBytes(),b.maxStringBytes()),Math.min(a.maxContainerEntries(),b.maxContainerEntries()));}

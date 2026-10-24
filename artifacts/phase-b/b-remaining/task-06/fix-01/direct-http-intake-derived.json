@@ -1,0 +1,31 @@
+{
+  "scope": "Derived after execution from current SELECT mapping and source/XML; not an independently captured historical accepted receipt",
+  "rows": [
+    {
+      "task": "e8b18179-d4a1-45f0-ad3f-43a5eba0b616",
+      "batch": "42d76766-599e-4982-8b1b-e4a0f04bc810",
+      "files": 1,
+      "input": "be6d2647-d136-499f-b64e-9ec341ebc1b4",
+      "state": "SUCCEEDED",
+      "output": "b5ae4a4f-805f-402f-8704-2a721d988c48",
+      "meeting": "61f0f21c-d086-493e-81e7-fb332de29ff5",
+      "members": 1,
+      "rawChain": 1,
+      "acceptances": 1,
+      "batchMeeting": "61f0f21c-d086-493e-81e7-fb332de29ff5",
+      "currentOwner": "task06-2239c1f9-61de-4655-b249-6ae786084b7f",
+      "inputMeeting": "61f0f21c-d086-493e-81e7-fb332de29ff5",
+      "unendedAttempts": 0,
+      "evidence": {
+        "scope": "derived current DB mapping; direct HTTP intake has no independent accepted JSON"
+      }
+    }
+  ],
+  "source": "backend/integration-tests/src/test/java/ama/storage/Task06SavedCommandsIT.java",
+  "sourceSha256": "10911b1882b1c335430e574ada43743958d7f81fbf1986fa9c357e14be26e6ac",
+  "method": "newIntakeClearsPointerThenNewConfirmationReattachesOriginalIdentity",
+  "line": 28,
+  "assertions": "actual POST next-input HTTP202; returned taskId; WorkerLoop result SUCCEEDED; pointer cleared then original confirmation identity reattached",
+  "xml": "artifacts/phase-b/b-remaining/task-06/fix-01/final-integration-01/integration-tests-TEST-ama.storage.Task06SavedCommandsIT.xml",
+  "xmlSha256": "026897352ad23ca33bf6139502d1c92576a1dc8bf61a266bf332afab64d9ada4"
+}

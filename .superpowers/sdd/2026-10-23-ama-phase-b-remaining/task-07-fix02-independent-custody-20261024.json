@@ -1,0 +1,256 @@
+{
+  "databaseHistory": {
+    "allFieldsEqualOriginalPostBootstrapRows": true,
+    "evidenceOnly": "No live database access in this review.",
+    "fullHistoricalRows": 15,
+    "normalMigrationRerun": 0,
+    "probeCompileAndRunRecordedExitZero": true,
+    "probeSourceHashesMatchReceipt": true,
+    "schema": "ama_t07_0cea85a0e472_behavior"
+  },
+  "gitAndManifest": {
+    "allManifestEntryFsHashesAndSizesMatch": true,
+    "backendChangedPaths": {
+      "production": [
+        "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java"
+      ],
+      "tests": [
+        "backend/integration-tests/src/test/java/ama/task/Task07InheritedB06QueueSeamsIT.java",
+        "backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java",
+        "backend/integration-tests/src/test/java/ama/task/Task07RecoveryBoundsIT.java",
+        "backend/integration-tests/src/test/java/ama/task/Task07SupersededReceiptIT.java"
+      ]
+    },
+    "changedPathFsBytesEqualFrozenGit": true,
+    "controllerDirtyPathsInCommit": 0,
+    "cumulativeManifestEntries": 10638,
+    "cumulativeManifestExactUnionOfPriorAndFix02OwnedExceptSelf": true,
+    "headExact": true,
+    "indexEmpty": true,
+    "initialAndFix01ManifestSealsMatch": true,
+    "manifestSelfExcluded": true,
+    "noOldSqlOrModelPathInFix02Diff": true,
+    "ownChangedPaths": 1505,
+    "ownListPackageManifestAndGitPathSetsEqual": true
+  },
+  "issues": [],
+  "mechanicalVerdict": "PASS",
+  "packageAndMetadata": {
+    "archivedPreimagesVerified": 13,
+    "existingMetadataUpdatesClassifiedAsAuthorized": true,
+    "fix01DetailedReportUnchanged": true,
+    "fullPackage": {
+      "bytes": 12754355,
+      "sha256": "6a9e672cc8ba4d3841e452d0be0081eebce73bc94ea74579c043c05529379b3a"
+    },
+    "mutablePublicMetadataPathsVerifiedAgainstPreimages": 4,
+    "packageSealsVerified": 8,
+    "sameWTask07ReportVerifiedAgainstPreimage": true,
+    "sourcePackage": {
+      "bytes": 83670,
+      "sha256": "76103abd0f622e6325dd80c07ce2565b4fe0b53b0f733d514af375ca90b8396d"
+    }
+  },
+  "protectedRaw": {
+    "adoptedProtectedEntriesChecked": 9777,
+    "allSizesAndSha256Match": true,
+    "countsArePerListNotAdditive": true,
+    "newRawConfinedToTask07Fix02": true,
+    "oldTask7AndFix01RawImmutable": true,
+    "overlap": 9717,
+    "preFix02PublicProtectedEntriesChecked": 18836
+  },
+  "qualificationBoundary": "Mechanical custody passes. The two inherited original full-batch FAIL/ERROR causes remain UNKNOWN; later focused passes do not close their root causes. No all-green full integration assertion or adoption decision is made.",
+  "resourceAndPrivateEvidence": {
+    "authorBeforeAndAfterExactSelectionAttestationsPresent": true,
+    "authorRecordedOwnedChildPidsGone": 6,
+    "jvm512MiB2CpuInRunnerAndAllSixLogs": true,
+    "knownSixPrivateValuesAndPemScan": {
+      "authorRecordedMatches": 0,
+      "authorRecordedPemMatches": 0,
+      "independentlyReperformed": false
+    },
+    "limits": "Selected resource state, PID absence and private scans are archived author attestations; no live recheck or global process-empty claim.",
+    "native64MiB2CpuCommandAndLog": true,
+    "requiredSelectedFieldsAndSortedFullMountsRecordedForAll": true,
+    "selectedResourceSnapshotCount": 3
+  },
+  "review": "Task7 fix02 independent incremental mechanical custody",
+  "scope": {
+    "fixBase": "6cce4794dba473825d83fb9bccafc043cd611b5c",
+    "frozenHead": "bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc",
+    "method": "Read-only Git, filesystem hashes, archived receipts and XML; no test, database, Docker, network or process rerun and no private value access.",
+    "originalTask7Base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+    "semanticReview": "Separate independent Astra review"
+  },
+  "selectedSourceClosure": {
+    "all14Task7ProductionFilesExactCurrentInThreeFinalSelectedWindows": true,
+    "allThreeDependencyProofSourceManifestSealsMatch": true,
+    "diagnosticReplacementSourceAndFinalUnitSourceExactCurrent": true,
+    "existingAssertionsEqual": true,
+    "finalIntegrationHasOnlyTwoPostBatchTestMethodChanges": true,
+    "fullBackendHashMapExactCurrentInDiagnosticAndUnitWindows": true,
+    "nestedB06ProbeSourceTailByteEqualAndProofShaMatches": true,
+    "outsideThoseTwoMethodsByteEqual": true
+  },
+  "selection": {
+    "allNew12PresentAndPassingInFullFinalIntegration": true,
+    "allPrevious395IdentitiesIncluded": true,
+    "caseKeyAndXmlProvenanceExact": true,
+    "composition": {
+      "exactLaterDiagnosticReplacements": 2,
+      "passingFinalUnit": 254,
+      "passingFromFullFinalIntegration": 151
+    },
+    "distinctSelected": 407,
+    "duplicates": 0,
+    "failedOriginalCasesRetained": [
+      {
+        "case": "Task07RecoveryBoundsIT.transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass",
+        "cause": "UNKNOWN",
+        "later": "PASS",
+        "note": "Existing consumed-position assertion failed; earlier cursor/highwater data were not captured.",
+        "original": "FAIL"
+      },
+      {
+        "case": "Task07InheritedB06QueueSeamsIT.disabledExpiredCurrentExternalFactMustStillBeRetained",
+        "cause": "UNKNOWN",
+        "later": "PASS",
+        "note": "Optional.orElseThrow at initial queue claim, before disabled-fact behavior assertions.",
+        "original": "ERROR"
+      }
+    ],
+    "fullIntegrationCommandGreen": false,
+    "integration": 153,
+    "unit": 254
+  },
+  "windowVerification": {
+    "allCaseKeysUniqueWithinEachWindow": true,
+    "allCopiedSourceBytesMatchWindowHashes": true,
+    "allExecutedTestClassSourceFilesPresentInWindowCopies": true,
+    "allSixSourceMapsCoverComplete468BackendJavaSqlPathSet": true,
+    "oldRedProductionByteHashEqualsFixBase": true,
+    "productionChangedBetweenRedAndFirstGreenOnly": true,
+    "productionSameAcrossAllLaterWindows": true,
+    "receiptCommandsExitsCountsEqualActualXml": true,
+    "reconstructionLimit": "Uncopied backend files have contemporaneous SHA256 entries but no window byte copy; this report makes no full source reconstruction claim."
+  },
+  "windows": [
+    {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07SupersededReceiptIT"
+      ],
+      "exactCopiedSourceFiles": 220,
+      "exit": 1,
+      "interpretation": "Genuine production RED: two finite-condition failures and one APPLIED versus STALE_TOKEN; nine negative controls pass.",
+      "name": "old-zero-red",
+      "sourceMapFiles": 468,
+      "xml": {
+        "error": 0,
+        "fail": 3,
+        "pass": 9,
+        "skip": 0,
+        "tests": 12
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07SupersededReceiptIT"
+      ],
+      "exactCopiedSourceFiles": 220,
+      "exit": 1,
+      "interpretation": "Production path corrected; two temporal JSON serialization errors and one test token-identity failure remain.",
+      "name": "old-zero-green",
+      "sourceMapFiles": 468,
+      "xml": {
+        "error": 2,
+        "fail": 1,
+        "pass": 9,
+        "skip": 0,
+        "tests": 12
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07SupersededReceiptIT"
+      ],
+      "exactCopiedSourceFiles": 220,
+      "exit": 0,
+      "name": "old-zero-green-corrected",
+      "sourceMapFiles": 468,
+      "xml": {
+        "error": 0,
+        "fail": 0,
+        "pass": 12,
+        "skip": 0,
+        "tests": 12
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07*IT"
+      ],
+      "exactCopiedSourceFiles": 237,
+      "exit": 1,
+      "name": "final-integration",
+      "sourceMapFiles": 468,
+      "xml": {
+        "error": 1,
+        "fail": 1,
+        "pass": 151,
+        "skip": 0,
+        "tests": 153
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07RecoveryBoundsIT#transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass,Task07InheritedB06QueueSeamsIT#disabledExpiredCurrentExternalFactMustStillBeRetained"
+      ],
+      "exactCopiedSourceFiles": 221,
+      "exit": 0,
+      "name": "inherited-diagnostic",
+      "sourceMapFiles": 468,
+      "xml": {
+        "error": 0,
+        "fail": 0,
+        "pass": 2,
+        "skip": 0,
+        "tests": 2
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "*"
+      ],
+      "exactCopiedSourceFiles": 255,
+      "exit": 0,
+      "name": "final-unit",
+      "sourceMapFiles": 468,
+      "xml": {
+        "error": 0,
+        "fail": 0,
+        "pass": 254,
+        "skip": 0,
+        "tests": 254
+      }
+    }
+  ]
+}

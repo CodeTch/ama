@@ -1,0 +1,19 @@
+{
+  "status": "AUTHORIZED_EXACT_SAME_OWNER_CONTINUATION",
+  "issuedUtc": "2026-10-24T06:51:20.712041+00:00",
+  "issuer": "/root/b_controlled_coordinator under delegated root authority",
+  "previousAuthorization": "task-09-admin-execution-root-ack-20261024.json",
+  "previousActualFailure": "task-09-admin-invocation01-prejava-failure-20261024.json",
+  "helperSha256": "07ac9f72bd90b13c9a9be8fdd115ad0115ff2a1bccbc046f4fcf217969c765c5",
+  "command": [
+    "python3",
+    "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/install-v2.py",
+    "--execute"
+  ],
+  "correction": "exactly2keyname substitutions AMA_TEST_DATABASE_CONTAINER\u2192AMA_TEST_CONTAINER",
+  "scope": "All previous targets/binaries/source/manifest/config/owner/secret/no-provider-start/noDDL limits unchanged",
+  "controllerOfflineChecks": "actual8key set and canonicalCID match; owner stillonlyinstall.properties; execution-01absent",
+  "invocationNumber": 2,
+  "priorActualJavaAdminInvocations": 0,
+  "failureRule": "retain failure/partial state; noautomaticretry/reset/cleanup"
+}

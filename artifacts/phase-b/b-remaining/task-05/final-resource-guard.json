@@ -1,0 +1,51 @@
+{
+  "utc": "2026-10-23T13:14:23.912395+00:00",
+  "containers": [
+    {
+      "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "name": "/ama-test-b01-ad9f1af29eff",
+      "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+      "owner": "remaining-20261023",
+      "memory": 805306368,
+      "nanoCpus": 1000000000,
+      "pids": 256,
+      "ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "46653"
+          }
+        ]
+      },
+      "state": "running"
+    },
+    {
+      "id": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+      "name": "/ama-task05-s3-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+      "image": "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+      "owner": "ama-task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+      "memory": 2147483648,
+      "nanoCpus": 2000000000,
+      "pids": 256,
+      "ports": {
+        "9000/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "45501"
+          }
+        ]
+      },
+      "state": "running"
+    }
+  ],
+  "actualOwnedProcessIds": [],
+  "certificatePublicDetails": {
+    "ca": "sha256 Fingerprint=1F:DC:9B:6E:FB:22:81:74:5E:47:AE:33:95:72:8B:53:12:18:A2:07:13:1C:ED:9E:10:63:FE:86:50:77:CE:5A\nsubject=CN = AMA task05 local CA\nnotBefore=Oct 23 12:13:34 2026 GMT\nnotAfter=Oct 25 12:13:34 2026 GMT\n",
+    "server": "sha256 Fingerprint=C9:FA:0C:BC:0B:97:A5:D5:5D:CA:6C:17:0F:CD:A6:7A:95:97:00:66:F0:91:43:7E:9C:0B:0A:79:3D:62:B2:3C\nsubject=CN = server\nnotBefore=Oct 23 12:13:34 2026 GMT\nnotAfter=Oct 25 12:13:34 2026 GMT\n",
+    "writer": "sha256 Fingerprint=0E:96:16:85:6F:71:C8:F1:D1:0B:E6:7A:0D:0A:42:DC:5F:08:45:38:F2:D3:A0:00:CF:A4:E5:67:88:4F:2A:A6\nsubject=CN = writer\nnotBefore=Oct 23 12:13:34 2026 GMT\nnotAfter=Oct 25 12:13:34 2026 GMT\n",
+    "reader": "sha256 Fingerprint=C4:DA:62:40:47:59:63:2A:9A:2A:F4:58:3C:89:65:A5:5F:CC:48:EA:7D:31:56:DE:A5:EE:93:4A:E5:AB:C6:55\nsubject=CN = reader\nnotBefore=Oct 23 12:13:34 2026 GMT\nnotAfter=Oct 25 12:13:34 2026 GMT\n",
+    "outsider": "sha256 Fingerprint=90:22:6B:F0:A4:6C:F7:83:50:29:3E:5C:97:82:68:FB:31:B0:4F:16:A9:C9:7B:33:C0:A4:7D:7B:7C:3D:A5:09\nsubject=CN = outsider\nnotBefore=Oct 23 12:13:34 2026 GMT\nnotAfter=Oct 25 12:13:34 2026 GMT\n"
+  },
+  "historyReceipt": "final-projection/history.json",
+  "rootInstallReceipt": "root-install-invocation.txt"
+}

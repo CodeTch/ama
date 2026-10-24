@@ -1,0 +1,63 @@
+{
+  "status": "BOUNDED_OWN_FIXTURE_RETIREMENT_VERIFIED_FROM_RAW",
+  "rows": 11,
+  "synthetic": 10,
+  "failedRealPipeline": 1,
+  "onlyChangedField": "state READY\u2192CANCELLED",
+  "facts": [
+    "completecapturedtasks sets/fields compared independently",
+    "10syntheticfullpredicate checked from before input/meeting/task maps",
+    "all11attempt0/no lease/expires",
+    "two retainedsyntheticexternalexecutions PREPARED/nullmarked/nullattempt, not sentmarker",
+    "fulltestsource read: bounded65selection/completeidentitylocks/quiescencequeries/perrowCAS/afterequality",
+    "firstattemptserializationERROR preserved beforetransaction; second1PASS/exit0"
+  ],
+  "limits": [
+    "no new liveDB requery or test rerun by coordinator",
+    "test asserts no activeattempts/permits and stoppedPIDs; not an independenthistoricalprocessobservation",
+    "fixturemaintenance not productbusinessRED/PASS qualification"
+  ],
+  "files": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/fixture-isolation-retirement-02/retirement-before.json",
+      "bytes": 22110,
+      "sha256": "4cdbf9ad9e0c19ac700f4217381328d6e45eed9ae0cd8890d9adfd2d22be838a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/fixture-isolation-retirement-02/retirement-after.json",
+      "bytes": 8388,
+      "sha256": "151c0388029cfea1d434667c4d67c4be3bb7785cdeb6a6b00de707939f93f450"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/fixture-isolation-retirement-02/result.json",
+      "bytes": 334,
+      "sha256": "cbe5be6f83e22d56a8957b0e931ff5d62aa71e01981ffec8e42810115b7bd204"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/fixture-isolation-retirement-02/report-custody.json",
+      "bytes": 497,
+      "sha256": "61271c572f5e5a263e6e8c4ae25e662ad9ede858da4cd9adc0dc40f615d6b8bc"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/fixture-isolation-retirement-02/integration-tests-TEST-ama.minutes.Task09FixtureIsolationIT.xml",
+      "bytes": 32800,
+      "sha256": "4cb751b6862899bc19a4428daa948a3ba607a5f1d1a6e8b630158eca2afedba6"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/fixture-isolation-retirement-02/source/backend/integration-tests/src/test/java/ama/minutes/Task09FixtureIsolationIT.java",
+      "bytes": 5677,
+      "sha256": "e34bc0c091ea5cb0171c911928e82ffe17cc64823bfb3b54f1032f06a7658dc0"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/fixture-isolation-retirement-01/result.json",
+      "bytes": 333,
+      "sha256": "9eb5cb093026768cc7a0267ef656393289bc74e89b78b6353eb9b0634b00f9bb"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/fixture-isolation-retirement-01/integration-tests-TEST-ama.minutes.Task09FixtureIsolationIT.xml",
+      "bytes": 35897,
+      "sha256": "e3439e68eb7e793b2ba876711333421608c7c829da92d37092bd4a040fe08b8d"
+    }
+  ],
+  "collectorActualWindow": "actualreportSHA matchescopy; mtime withinclosednsinterval; previousmtimeprecedesstart andpreviousSHA matchesretainedfirstERRORXML"
+}

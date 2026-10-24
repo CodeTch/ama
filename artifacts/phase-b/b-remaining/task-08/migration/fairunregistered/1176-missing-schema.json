@@ -1,0 +1,5 @@
+{
+  "errorCode" : 1176,
+  "sql" : "SELECT id FROM external_operation FORCE INDEX (external_reconcile_scan) LIMIT 1",
+  "sqlState" : "42000"
+}

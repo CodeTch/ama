@@ -1,0 +1,40 @@
+{
+  "baseCommit": "0e22b812000f2efa00c2ef8ed66e06d8254beab5",
+  "windows": {
+    "unit-green-01": {
+      "allSourceEntries": 686,
+      "mainSourceEntries": 274,
+      "mainSourceAllMatchFinal": true,
+      "differentFromFinal": [
+        "backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupProcess.java"
+      ]
+    },
+    "integration-green-01": {
+      "allSourceEntries": 686,
+      "mainSourceEntries": 274,
+      "mainSourceAllMatchFinal": true,
+      "differentFromFinal": [
+        "backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupProcess.java"
+      ]
+    },
+    "denied-green-02": {
+      "allSourceEntries": 686,
+      "mainSourceEntries": 274,
+      "mainSourceAllMatchFinal": true,
+      "differentFromFinal": []
+    },
+    "store-regression-01": {
+      "allSourceEntries": 686,
+      "mainSourceEntries": 274,
+      "mainSourceAllMatchFinal": true,
+      "differentFromFinal": []
+    },
+    "openapi-green-01": {
+      "allSourceEntries": 686,
+      "mainSourceEntries": 274,
+      "mainSourceAllMatchFinal": true,
+      "differentFromFinal": []
+    }
+  },
+  "qualification": "Five PASS IT cases from integration-green-01 plus fresh denied-green-02. Only denied child test wait/recording changed after first GREEN; no production source changed."
+}

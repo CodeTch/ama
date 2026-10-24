@@ -1,0 +1,827 @@
+{
+  "utc": "2026-10-24T02:31:53.507246+00:00",
+  "scope": "Completed receipts/XML; no tests rerun. Units/sourceclosure/reviews pending.",
+  "windows": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/receipt.json",
+      "sha256": "8f83c571fcd28c65321852e6d2cc2f6a83c629058416becac64aec167afe4656",
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07*IT"
+        ],
+        "exit": 1,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedReconciliationWorkerIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07PreparedContradictionIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07SettlementWindowsIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxConsumerIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07PreparedMatrixIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07AdmissionWindowsIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07SupersededReceiptIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+        ],
+        "elapsedSeconds": 227.20245599746704,
+        "counts": {
+          "tests": 153,
+          "failures": 1,
+          "errors": 1,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "suites": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07AdmissionWindowsIT.xml",
+          "sha256": "1b0d028f41cce2d41ac5c6bd3a0ba7bf90c5f00f38b3bb380c000f46fff6b635",
+          "counts": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+          "sha256": "71ac5ee97fef808d25fc890a9e8aaaec53bbb7f38d0208627ab009f5df9eb9e1",
+          "counts": {
+            "tests": 9,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+          "sha256": "6175d35d1b91a06b17017c7ca9a5a357594390e88fd1d56477b1dfd49a0ba41e",
+          "counts": {
+            "tests": 16,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+          "sha256": "ee475ee4a33c386d994d55b0adf556ce731516cf4dd9b496c7fb2e35ed007067",
+          "counts": {
+            "tests": 18,
+            "failures": 0,
+            "errors": 1,
+            "skipped": 0
+          },
+          "failures": [
+            {
+              "class": "ama.task.Task07InheritedB06QueueSeamsIT",
+              "name": "disabledExpiredCurrentExternalFactMustStillBeRetained",
+              "kind": "error",
+              "message": "No value present"
+            }
+          ]
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+          "sha256": "4e81c79862c238056f6acb68aa5e6450df763aee897a328e0b2beee812104f39",
+          "counts": {
+            "tests": 10,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+          "sha256": "0ad15dab5adce5db6cd6545ae4b8e13b9a407d4b71a80da103f3305f9c046e25",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxConsumerIT.xml",
+          "sha256": "b23c7470c93602f45e1e370e861304c231f690cdcfe47e956687f9d903cbe442",
+          "counts": {
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+          "sha256": "26aebcccb5683c51f00e348698bdd79b2c01ca012e3f78f18b268e62b354c920",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+          "sha256": "612a1950b00ba37c9b638199320f8f19214ba6e48816385b252d841c0bd68b96",
+          "counts": {
+            "tests": 18,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedReconciliationWorkerIT.xml",
+          "sha256": "c8f7873881a37151f76f5ddf0254ddc3444e3f7f869adb8f42560aa6e60da167",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+          "sha256": "c44713f646157b30a524ce31dd9d115aa18effc0403360acaad7f9a8d120b4b5",
+          "counts": {
+            "tests": 13,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07PreparedContradictionIT.xml",
+          "sha256": "b94f9ab92bf7138730f2adeda6fae7d2f75ca4d97d7f0a399424cb8cefdd3c70",
+          "counts": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+          "sha256": "040d9352a004be04320e9c15bb54ea05c8e3129d4209f42037ff7d24c934b946",
+          "counts": {
+            "tests": 18,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07PreparedMatrixIT.xml",
+          "sha256": "1e653e0a381709f544ad3e6d336fb3bcc47e84258fc42457a320ed84accebd4f",
+          "counts": {
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml",
+          "sha256": "6f7fa19d4b10a998cde3e4fce9cfae2cd4f873926b4b6d5d75265b39ef2b3851",
+          "counts": {
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+          "sha256": "4a866c369b8f4be3a8a0e7bad98b80899c401ff8735bd8f03c22418d77af3cec",
+          "counts": {
+            "tests": 4,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": [
+            {
+              "class": "ama.task.Task07RecoveryBoundsIT",
+              "name": "transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass",
+              "kind": "failure",
+              "message": "Failed candidate must be consumed before the next call ==> expected: <true> but was: <false>"
+            }
+          ]
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07SettlementWindowsIT.xml",
+          "sha256": "6cf009f3803081b6f551d2c19c641e17ebab7e121cd2d60b01738e2ebdc91ff4",
+          "counts": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-integration/integration-tests-TEST-ama.task.Task07SupersededReceiptIT.xml",
+          "sha256": "e4ff41c07f81ef63fcd2010ad18e79370ae6cad60ffb8d1be7fa99a36731eb6f",
+          "counts": {
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/receipt.json",
+      "sha256": "5517f0cef6f1d52366f9934aecc9db6d0dc3fd468b704a866bfcd3d62e90784f",
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "unit",
+          "*"
+        ],
+        "exit": 0,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.DraftConfirmationHashTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.FileBackendDefinitionsTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.transcript.MeasuredTextTranscriptParserTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.DeadlineInputStreamTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.task.TaskMetadataTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.SavedTranscriptAdmissionTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.transcript.TranscriptImportProducerTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.IdentityContractsTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.HttpRevisionTokensTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.TranscriptWireTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.FileConfigurationTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/worker-TEST-ama.worker.WorkerShutdownTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/worker-TEST-ama.worker.WorkerLoopTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/integration-tests-TEST-ama.storage.ContractFixtureTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/integration-tests-TEST-ama.support.ContractClientTest.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/final-unit/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml"
+        ],
+        "elapsedSeconds": 39.338385820388794,
+        "counts": {
+          "tests": 254,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": null
+      },
+      "suites": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+          "sha256": "a66a26bfed5d0822aa035e45549744f1700467f5eb14c386cae847b275eece8b",
+          "counts": {
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+          "sha256": "9d42b0c3f62a0cb174b2903699f8ee5f68487ba19b0eaf576e31b3c8c30ed8aa",
+          "counts": {
+            "tests": 24,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+          "sha256": "0d451e2c6c396496646189252fcb1dbc48f57ef7b91a5671278ab8b390a9483b",
+          "counts": {
+            "tests": 15,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+          "sha256": "6215d081f81fbc4de39fe4a4e3ea9f2de82b421dbf19d5e988efdd1a33caae07",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+          "sha256": "bb674cdc1badf562bb6fa2a35bc28b408fa1985ea9ef73bb0cb60994948d80e5",
+          "counts": {
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.DraftConfirmationHashTest.xml",
+          "sha256": "23e46e590b531f18f779210d6f749321c477a0e6a69f26b57579a6297e6bbf66",
+          "counts": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+          "sha256": "dde81228d2e75f3493b2f18e753e83b73f917ec7ccbceea317d62e31536bf90f",
+          "counts": {
+            "tests": 25,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.config.json.SavedTranscriptAdmissionTest.xml",
+          "sha256": "d379ea5d1568c192d8ceadf05b7f90a9a2c9e063311affffe11c1fa540722ff0",
+          "counts": {
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+          "sha256": "a22c700c591da1532a4f7c0ecab20514363a003aae46d1207a6eeb624097494f",
+          "counts": {
+            "tests": 16,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+          "sha256": "08e7600b1a56270d4f9d03717017f430cba4271d5b91b247143d20b75de47c99",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.DeadlineInputStreamTest.xml",
+          "sha256": "b4c6d1daaffcad995f2bd7052a27fe3f5150703c73a098d1bdca82a0c7e968a8",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.FileBackendDefinitionsTest.xml",
+          "sha256": "fb5e31ab46acfa0277f93e476e8a83d5dc68e27dedddf28768bd2184fd32ce27",
+          "counts": {
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+          "sha256": "2fcb60caea2039359a6495e330c7c07bc29f1e6a13a381c726523c0af7376ec7",
+          "counts": {
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+          "sha256": "e0302c59b7cfb8f09c9dbe861e9aad87bb83da502d84f52ef950257b71d5ed7c",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+          "sha256": "e8c42444b4df83bab51df9658c25facefebdd989257badc045667defca1a682d",
+          "counts": {
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+          "sha256": "5985a890a3de84341adc3e8a55689aec0de82c5cfa2df60f382c573b1f622226",
+          "counts": {
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+          "sha256": "3e167343a47cefe5ce0aadc09342d48db1b65f3f5fabd3686fd10f1baabedcc6",
+          "counts": {
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.task.TaskMetadataTest.xml",
+          "sha256": "3357019c8f144bd1d37bbdcc7c26e9561f34681a7a70a67511313ce18dbd49de",
+          "counts": {
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.transcript.MeasuredTextTranscriptParserTest.xml",
+          "sha256": "9fed12aba88d7492f67b30c2062a4144ea63df945351cc22e4c1d90ae4dae478",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+          "sha256": "26ae0cbf8fb3ef0bd4508e4d49098d6653f50c834aa00eccae3bf2ba1c3194ad",
+          "counts": {
+            "tests": 19,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+          "sha256": "501f2de0a2eb67bda3a0c367bb171e60a7daca82f10a0846930ebd65ed6c29df",
+          "counts": {
+            "tests": 9,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.FileConfigurationTest.xml",
+          "sha256": "451ba8c690215a119f44a495ff275d7f80a8081356f349ef3f6ef035e928a1d0",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.HttpRevisionTokensTest.xml",
+          "sha256": "daf74388796f0d5cb0cb1ca3e85a0d39fec82c0eade16801e863caadf4003d6d",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.IdentityContractsTest.xml",
+          "sha256": "b4e7dc71dfd1eb685db1ae078d2a8d5b8881268cf9b652062fb930ad4e20c5b1",
+          "counts": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+          "sha256": "880493774c00c4a427b50190472a20ab8cd4d20a68543d6ce14175ed12f32e14",
+          "counts": {
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/api-TEST-ama.api.TranscriptWireTest.xml",
+          "sha256": "ce6d77fa41f00f091be58d6be909860bbf68edb430d0839a4173c9c8cffdd528",
+          "counts": {
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml",
+          "sha256": "b1d8dc2dfec29e85b292c4b501bc79e63b5242ecc0700bc2634eb76abd750065",
+          "counts": {
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+          "sha256": "7802ce77b41866dac94c89617d1e87d5226ee87b493a745691826dd826d53fcd",
+          "counts": {
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+          "sha256": "dbfd8cc8d138404a1e7c33b54957dd0194c1a28d165394fa16139a23d0fa1d09",
+          "counts": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+          "sha256": "690570718cf08c89814ab1c7708bfa697e24b2b06b5cc33b88c20271b1616e3f",
+          "counts": {
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+          "sha256": "46f02aa3ffe40b02be0fb2e6db9ffbf1c0f31386b8f59c6206d279c7de8c6512",
+          "counts": {
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+          "sha256": "ecf7e21504c86816244dd3c9f10f29421f08ff757171bed64878e9c4e70f5f76",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+          "sha256": "159556ceab012ac758e6d1c87a306f8b76da26e8d63b82eadc997c77d0836b52",
+          "counts": {
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+          "sha256": "db894f6c169ec3800df94179e94a329f5ad8b8a5ee6767239e394d965ae7e6e7",
+          "counts": {
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+          "sha256": "4151d132063afe109053c90265669f05ae3843240082f274e6f051338a51ee79",
+          "counts": {
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/core-TEST-ama.transcript.TranscriptImportProducerTest.xml",
+          "sha256": "959fd46e8e4f61e923b9bed165af2e44272797eb4d3a5fa2ae08d2076bfa1ade",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/integration-tests-TEST-ama.storage.ContractFixtureTest.xml",
+          "sha256": "9f86153e050552f80049620cae834677153da16753f02887cfc71c456238073d",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/integration-tests-TEST-ama.support.ContractClientTest.xml",
+          "sha256": "d8ec1d74c21d5d01b3ee1a73cd6448783c998a0530c757bfe2881edab1247975",
+          "counts": {
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+          "sha256": "2953cebaa11f641e37054822196eb1fb3d2396b2754d6aad2212ca78c913aed3",
+          "counts": {
+            "tests": 9,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/worker-TEST-ama.worker.WorkerLoopTest.xml",
+          "sha256": "37ca348af1119b90d0215eec0ea9160d6a5754b7ade866abbdadb9cdebbf66c0",
+          "counts": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/final-unit/worker-TEST-ama.worker.WorkerShutdownTest.xml",
+          "sha256": "da0d50f022177a052c8908f46200caa27183d80e3b851c310f2ffb8046b948b0",
+          "counts": {
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix02/inherited-diagnostic/receipt.json",
+      "sha256": "2e6361cbb8784aedab1b5fda29c94387ecd1cf68bee1dc9b82dc88246f21d890",
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07RecoveryBoundsIT#transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass,Task07InheritedB06QueueSeamsIT#disabledExpiredCurrentExternalFactMustStillBeRetained"
+        ],
+        "exit": 0,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/inherited-diagnostic/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/inherited-diagnostic/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml"
+        ],
+        "elapsedSeconds": 28.157756805419922,
+        "counts": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "suites": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/inherited-diagnostic/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+          "sha256": "5f07a95c97a1bcb4967d2fbe791a8f11e7c7d02eec3f0530bff53889c3879186",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix02/inherited-diagnostic/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+          "sha256": "a459ee4353e8c1668241698ebbac92299edfedaccc2c3ab31fe547c7d4494427",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "failures": []
+        }
+      ]
+    }
+  ]
+}

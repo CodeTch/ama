@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09DeniedFactPolicyIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "2936edd53c9be0249ff9a2834e941ebee79cfbb8f395659472753b8a749db94b",
+  "startedUtc": "2026-10-24T07:09:15.200894+00:00"
+}

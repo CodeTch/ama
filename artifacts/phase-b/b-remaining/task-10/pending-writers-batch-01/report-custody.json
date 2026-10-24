@@ -1,0 +1,54 @@
+{
+  "startedNs": 1792845185156376446,
+  "endedNs": 1792845253931982350,
+  "reports": [
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10PendingAbsentIT.xml",
+      "mtimeNs": 1792845225669267872,
+      "sha256": "4bac76037cbec262d2d7165ad0e173e9fae19e77d9d77d36e9dbc77acc03f287",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10PendingAbsentIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10PendingInfoIT.xml",
+      "mtimeNs": 1792845253510250182,
+      "sha256": "3ccd2af0c7b3ad99afef6ad41920be9082344f5579fc7e2e1a6550779da1e62a",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10PendingInfoIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10PendingIntakeIT.xml",
+      "mtimeNs": 1792845235524106362,
+      "sha256": "1253dad84946bb50137b599375c73c17ecd6080acf8fa2f92bb1b5836a84e616",
+      "previous": [
+        1792845113521290348,
+        "a83ea4e14a3fb4f348baa6069e6ea5aea8a191def76457315be869d88dcf8f01"
+      ],
+      "qualified": true,
+      "suite": "ama.storage.Task10PendingIntakeIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10PendingRosterIT.xml",
+      "mtimeNs": 1792845222710937138,
+      "sha256": "e6f5f02ee4d5786336a8ce5f6c4cdea0495e62609056f17d016f8cd0240f9630",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10PendingRosterIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10PendingTranscriptIT.xml",
+      "mtimeNs": 1792845245456878149,
+      "sha256": "ee6d647a24bea4671bedb3bb2c738ee8a038273f8896be2d11a8401e2fa77eb3",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10PendingTranscriptIT",
+      "canonicalLogAssociation": true
+    }
+  ]
+}

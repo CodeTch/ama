@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-24T10:43:52.245042+00:00",
+  "actualScope": "Standaloneinstalledimport/reconciliationcomposite start-close; no new minutes dispatch/full10-11businessworkflow qualification",
+  "selectedResult": {
+    "ordinaryObservation": "Observation[state=RUNNING, progressAgeMillis=1435, active=0]",
+    "providerPid": 4068832,
+    "providerPort": 45989,
+    "nativePid": 4068804,
+    "archives": 19,
+    "newGenerationDispatch": false,
+    "runtimeHeap": 67108864,
+    "processors": 2,
+    "providerExit": 143,
+    "providerGone": true,
+    "guardsAndBeforeAfterEqual": true,
+    "retainedTaskRows": 18,
+    "retainedObservableOperations": 10,
+    "nativeExit": 137,
+    "processGroup": {
+      "pid": 4068758,
+      "pgid": 4068758,
+      "exit": 0,
+      "timedOut": false,
+      "forcedGroupCleanup": false,
+      "groupRemaining": false
+    },
+    "exit": 0
+  },
+  "files": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/formal-runtime-start-01/exit.json",
+      "sha256": "bc3368f5db0ba0a0be06dd19dd44506056aa0c43bfbb0f138f5a73840507b3fe"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/formal-runtime-start-01/formal-provider.log",
+      "sha256": "6720fdee412b62d3f1bdaaa78f0d12eadf0afa88d712c107267a3b8b67af3509"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/formal-runtime-start-01/command.json",
+      "sha256": "c8c6eb1940bacc283d0c16cafa90e7d4cc2f66b3b7b4c8e05c2be818f5656149"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/formal-runtime-start-01/formal-runtime-result.json",
+      "sha256": "10c7e04999f4237c13582d724cad08b0f05a68d043065d0c228933c7c74180e4"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/formal-runtime-start-01/formal-runtime-bd65f570-0c7e-4b77-8da7-c5581238d9fd-native-closed.json",
+      "sha256": "63c8bb17aafc2d24bc9fada92d2d2387fb0169d09b2d27c155795e6d4e6a8c9a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/formal-runtime-start-01/output.log",
+      "sha256": "56e4958585a6bc55caabbf674e8a7516aa2a7126f424ed45f4f53ecd7e336c07"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/formal-runtime-start-01/process-lifecycle.json",
+      "sha256": "c35be269843c533139a6996fbd297ddabfc075d2483a9b1c3e0f9f012cebce64"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/formal-runtime-start-01/formal-runtime-bd65f570-0c7e-4b77-8da7-c5581238d9fd-managed-service.log",
+      "sha256": "a08b1e3999e99d4236e9d9c65c1719fed3cbc82cc0bd60db897e12cdbd6d7706"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/formal-runtime-start-01/formal-runtime-bd65f570-0c7e-4b77-8da7-c5581238d9fd-native-started.json",
+      "sha256": "6a4803c988d188e3bc642d80a8dd54970381800caf82bdabd930ec5754937db1"
+    }
+  ]
+}

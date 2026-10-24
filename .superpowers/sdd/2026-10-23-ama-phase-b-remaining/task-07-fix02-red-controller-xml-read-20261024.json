@@ -1,0 +1,54 @@
+{
+  "utc": "2026-10-24T02:22:23.741742+00:00",
+  "scope": "Actual read-only RED XML/receipt; changing-source intermediate proof only, not final correctness/adoption. Initial TEST-* glob found zero because module-prefix names; archived draft not relied on.",
+  "receipt": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task07SupersededReceiptIT"
+    ],
+    "exit": 1,
+    "reports": [
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/old-zero-red/integration-tests-TEST-ama.task.Task07SupersededReceiptIT.xml"
+    ],
+    "elapsedSeconds": 62.35058069229126,
+    "counts": {
+      "tests": 12,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0
+    },
+    "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+  },
+  "receiptSha256": "638fc0d4fcaa7d0532b3165f5ab5afc9164924ba65e03b48f36d2e670bf7cbe0",
+  "suites": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix02/old-zero-red/integration-tests-TEST-ama.task.Task07SupersededReceiptIT.xml",
+      "sha256": "de63fd29ca19fb05763ab333b011eb4c66f35a3c0743065e0ac1f7d8d1428686",
+      "counts": {
+        "tests": 12,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "failures": [
+        {
+          "class": "ama.task.Task07SupersededReceiptIT",
+          "name": "oldCommitAckLossThenPreparedSuccessorRetiresActualWorkerSlotOnce",
+          "message": "Finite condition timed out"
+        },
+        {
+          "class": "ama.task.Task07SupersededReceiptIT",
+          "name": "oldFactRecoveryLeavesRunningSuccessorAndRealPermitUntouched",
+          "message": "expected: <APPLIED> but was: <STALE_TOKEN>"
+        },
+        {
+          "class": "ama.task.Task07SupersededReceiptIT",
+          "name": "preparedReconciliationRetiresOldZeroReceiptAndRunsUnrelatedWorkOnSameSlot",
+          "message": "Finite condition timed out"
+        }
+      ]
+    }
+  ]
+}

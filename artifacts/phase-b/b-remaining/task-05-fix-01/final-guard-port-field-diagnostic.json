@@ -1,0 +1,28 @@
+{
+  "command": [
+    "docker",
+    "inspect",
+    "--format",
+    "{\"configured\":{{json .HostConfig.PortBindings}},\"effective\":{{json .NetworkSettings.Ports}}}",
+    "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502"
+  ],
+  "selected": {
+    "configured": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": ""
+        }
+      ]
+    },
+    "effective": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "46653"
+        }
+      ]
+    }
+  },
+  "qualification": "first final guard compared configured dynamic port binding against root effective-port proof; no identity mutation"
+}

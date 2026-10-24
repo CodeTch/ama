@@ -1,0 +1,207 @@
+{
+  "timestampUtc": "2026-10-24T00:11:04.636474+00:00",
+  "scope": "Read ONLY newlycapturedXML beyondfirst6, no tests/DB/product/Git. Separatewindows no final-sourceclaim; preserved genuineRED/setupERROR/Green distinctions.",
+  "windows": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/retention-green/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "sha256": "0f0df242242fcc56aeac2d0dc1ae7f2347a237bd3a3d31f391dcab327a673022",
+      "counts": {
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "businessOnlyStaleRetainsCompletePrivateGraphWithoutChangingRoot",
+          "failureTypes": [],
+          "errorTypes": []
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07GenerationRetentionIT"
+        ],
+        "exit": 0,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-green/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+        ],
+        "elapsedSeconds": 15.873700618743896,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "a6155d5388e3b90cf48a70eabc79dd2d1ac066b3fe361d79addf32dc68fce3e9"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/retention-red/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "sha256": "6e6fcb2aaee42f56a73f87f292e0011b41ce6c664d0841b43e7a242f5de42603",
+      "counts": {
+        "tests": "1",
+        "failures": "0",
+        "errors": "1",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "businessOnlyStaleRetainsCompletePrivateGraphWithoutChangingRoot",
+          "failureTypes": [],
+          "errorTypes": [
+            "org.springframework.dao.DataIntegrityViolationException"
+          ]
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07GenerationRetentionIT"
+        ],
+        "exit": 1,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-red/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+        ],
+        "elapsedSeconds": 18.866226196289062,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 1,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "e5bbbf32c3bc8f7c40f11728180e795f63073a47bf037a32a5320a59cd7caffc"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/retention-red-corrected/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "sha256": "b5bf8f5b9ea997c82c260d9bb75ac5db16022c2cc8d3d51d65b6367695901cdc",
+      "counts": {
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "businessOnlyStaleRetainsCompletePrivateGraphWithoutChangingRoot",
+          "failureTypes": [
+            "org.opentest4j.AssertionFailedError"
+          ],
+          "errorTypes": []
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07GenerationRetentionIT"
+        ],
+        "exit": 1,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/retention-red-corrected/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+        ],
+        "elapsedSeconds": 12.370566368103027,
+        "counts": {
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "0bc4088c101624cd45491c821b5dae2a3da23fad512dc087330c0223f56ccf1e"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/worker-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "db98f5a23fef8a713e76526a26dfed84fc0864e6ce23b0311500076d8b8c29d0",
+      "counts": {
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "actualWorkerOwnsMarkerTransportAndCompletionExactlyOnce",
+          "failureTypes": [],
+          "errorTypes": []
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07PreparedExternalIT#actualWorkerOwnsMarkerTransportAndCompletionExactlyOnce"
+        ],
+        "exit": 0,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/worker-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+        ],
+        "elapsedSeconds": 15.829693794250488,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "ea96d72175c97bb8a07ba6a19c63ab1273fde20783b9a9a960fc7259c64a1953"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/worker-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "26d67bd5a0ff4298e0f049009d13c729bd9797d6dfd4f81214c483cd0e75c40e",
+      "counts": {
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "actualWorkerOwnsMarkerTransportAndCompletionExactlyOnce",
+          "failureTypes": [
+            "org.opentest4j.AssertionFailedError"
+          ],
+          "errorTypes": []
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07PreparedExternalIT#actualWorkerOwnsMarkerTransportAndCompletionExactlyOnce"
+        ],
+        "exit": 1,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/worker-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+        ],
+        "elapsedSeconds": 13.977881908416748,
+        "counts": {
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "25a392c74681efc0e2aef02c5ae2e62e3f2cdc1576d805f6766acc4c3e7e1c3a"
+    }
+  ]
+}

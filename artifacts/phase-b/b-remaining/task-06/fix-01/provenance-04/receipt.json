@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06FixProvenanceIT"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/provenance-04/integration-tests-TEST-ama.storage.Task06FixProvenanceIT.xml"
+  ],
+  "elapsedSeconds": 25.647931575775146,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

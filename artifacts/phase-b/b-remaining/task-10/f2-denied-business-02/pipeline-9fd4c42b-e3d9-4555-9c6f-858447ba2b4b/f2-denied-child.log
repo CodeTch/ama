@@ -1,0 +1,11 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+Oct 24, 2026 10:18:42 PM ama.worker.ReconciliationLoop poll
+WARNING: Reconciliation poll unavailable: Failure
+Exception in thread "main" org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:41)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:35)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:195)
+	at ama.storage.Task10DeniedLookupProcess.main(Task10DeniedLookupProcess.java:25)

@@ -1,0 +1,33 @@
+--- backend/integration-tests/src/test/java/ama/storage/s3/Task05FixProxy.java
++++ backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02Proxy.java
+@@ -10,7 +10,7 @@
+ import java.util.function.Supplier;
+ 
+ /** Test-only streaming HTTP proxy. Preserves signed Host, counts bytes read from real upstream. */
+-public final class Task05FixProxy implements AutoCloseable {
++public final class Task05Fix02Proxy implements AutoCloseable {
+   record Event(
+       String method,
+       String path,
+@@ -37,11 +37,12 @@
+   final ExecutorService pool = Executors.newCachedThreadPool();
+   private final List<Event> events = new ArrayList<>();
+   final AtomicReference<Fault> fault = new AtomicReference<>();
++  public final AtomicInteger requestsSeen=new AtomicInteger();
+   final AtomicInteger active = new AtomicInteger();
+   final AtomicInteger upstreamActive = new AtomicInteger(), peakUpstream = new AtomicInteger();
+   volatile boolean closed;
+ 
+-  public Task05FixProxy() throws IOException {
++  public Task05Fix02Proxy() throws IOException {
+     upstream = URI.create(S3Fixture.required("AMA_S3_ENDPOINT"));
+     listener = new ServerSocket(0, 64, InetAddress.getLoopbackAddress());
+     pool.submit(
+@@ -134,6 +135,7 @@
+       var serverOut = backend.getOutputStream();
+       String first = line(clientIn);
+       if (first == null) return;
++      requestsSeen.incrementAndGet();
+       String[] split = first.split(" ");
+       method = split[0];
+       path = split[1];

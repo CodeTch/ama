@@ -1,0 +1,12 @@
+--- backend/integration-tests/src/test/java/ama/storage/Task05FixSuccessRegressionIT.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05Fix02SuccessRegressionIT.java
+@@ -1,7 +1,7 @@
+ package ama.storage;
+ import java.nio.file.*;import java.util.*;import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;
+-class Task05FixSuccessRegressionIT extends Task05FixFixture {
+- @Test void actualNativeHttpIntakeWorkerAndRawRegression()throws Exception {
++class Task05Fix02SuccessRegressionIT extends Task05Fix02Fixture {
++ void actualNativeHttpIntakeWorkerAndRawRegression()throws Exception {
+   var first=upload("\ufeffAlpha😀\r\n \r\nBeta");var second=upload("Gamma\nDelta");
+   var accepted=call("POST","/meetings/"+meeting+"/transcript-imports",json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(first,second))),"import");
+   assertEquals(202,accepted.statusCode(),accepted.body());String task=body(accepted).get("taskId").asText();Files.writeString(receipt.resolve("accepted-"+task+".json"),json.writeValueAsString(Map.of("task",task,"owner",owner,"meeting",meeting,"httpStatus",accepted.statusCode())));

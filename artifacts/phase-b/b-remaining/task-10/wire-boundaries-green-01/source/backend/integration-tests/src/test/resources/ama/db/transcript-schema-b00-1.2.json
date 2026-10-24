@@ -1,0 +1,1405 @@
+{
+  "status": "PREPARATION_ONLY_NOT_SCHEMA_ACCEPTANCE",
+  "design_version": "B00-1.2-review",
+  "source_path": "docs/acceptance/b/database-upload-addendum-metadata-evidence.json",
+  "source_sha256": "3de8041db8860f1547ff53a94b4ddd79470c4881340111fdafbc3ce5322399ad",
+  "source_ddl_sha256": "402def655f133ab10caa44b94e89ed6692756623d32705e6ab63c8176d79c362",
+  "source_mysql_version": "8.4.6",
+  "tables": [
+    "input_batch",
+    "input_batch_file",
+    "speaker",
+    "transcript_confirmation",
+    "transcript_revision",
+    "transcript_segment",
+    "transcript_segment_mark",
+    "transcription_input"
+  ],
+  "excluded_foreign_keys": [
+    {
+      "table": "transcription_input",
+      "name": "fk_transcription_input_3",
+      "column": "material_snapshot_id",
+      "target": "material_snapshot",
+      "remote": "id",
+      "reserved_version": "V017"
+    }
+  ],
+  "counts": {
+    "tables": 8,
+    "columns": 63,
+    "indexes": 39,
+    "checks": 13,
+    "foreign_keys": 22
+  },
+  "metadata": {
+    "tables": [
+      {
+        "table": "input_batch",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "input_batch_file",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "speaker",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "transcript_confirmation",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "transcript_revision",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "transcript_segment",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "transcript_segment_mark",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "transcription_input",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      }
+    ],
+    "columns": [
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "input_batch",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "input_batch",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "input_batch",
+        "column": "kind",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "input_batch",
+        "column": "input_fingerprint",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "input_batch",
+        "column": "base_revision",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "input_batch",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "input_batch_file",
+        "column": "batch_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "input_batch_file",
+        "column": "ordinal",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "input_batch_file",
+        "column": "file_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "input_batch_file",
+        "column": "sha256",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "speaker",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "speaker",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "speaker",
+        "column": "display_name",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "speaker",
+        "column": "enterprise_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "speaker",
+        "column": "identity_source",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "speaker",
+        "column": "merged_into_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "speaker",
+        "column": "revision",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_confirmation",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_confirmation",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_confirmation",
+        "column": "revision_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "transcript_confirmation",
+        "column": "content_hash",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "transcript_confirmation",
+        "column": "confirmed_by",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "transcript_confirmation",
+        "column": "confirmed_at",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "revision",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "kind",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "batch_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "parent_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "input_fingerprint",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "created_by",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "processing_input_id",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_revision",
+        "column": "producer_task_id",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_segment",
+        "column": "revision_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_segment",
+        "column": "segment_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "transcript_segment",
+        "column": "ordinal",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "transcript_segment",
+        "column": "body",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_segment",
+        "column": "source_file_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "transcript_segment",
+        "column": "source_paragraph",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "transcript_segment",
+        "column": "start_ms",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "transcript_segment",
+        "column": "end_ms",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_segment",
+        "column": "speaker_id",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_segment_mark",
+        "column": "revision_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcript_segment_mark",
+        "column": "segment_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "transcript_segment_mark",
+        "column": "mark",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "batch_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "kind",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "source_revision_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "material_snapshot_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "material_mode",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "processing_config_version",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "parser_version",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "model_config_version",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "prompt_version",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "int unsigned",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "manifest_schema_version",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "config_manifest",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "input_fingerprint",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "base_revision",
+        "default": null,
+        "ordinal": 15,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "cancel_epoch",
+        "default": null,
+        "ordinal": 16,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "transcription_input",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 17,
+        "nullable": "NO",
+        "collation": null
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 1,
+        "name": "fk_input_batch_0",
+        "type": "BTREE",
+        "table": "input_batch",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "input_batch",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "batch_file_unique",
+        "type": "BTREE",
+        "table": "input_batch_file",
+        "column": "batch_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "batch_file_unique",
+        "type": "BTREE",
+        "table": "input_batch_file",
+        "column": "file_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_input_batch_file_1",
+        "type": "BTREE",
+        "table": "input_batch_file",
+        "column": "file_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "input_batch_file",
+        "column": "batch_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "input_batch_file",
+        "column": "ordinal",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_speaker_0",
+        "type": "BTREE",
+        "table": "speaker",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_speaker_1",
+        "type": "BTREE",
+        "table": "speaker",
+        "column": "enterprise_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_speaker_2",
+        "type": "BTREE",
+        "table": "speaker",
+        "column": "merged_into_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "speaker",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcript_confirmation_1",
+        "type": "BTREE",
+        "table": "transcript_confirmation",
+        "column": "revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcript_confirmation_2",
+        "type": "BTREE",
+        "table": "transcript_confirmation",
+        "column": "confirmed_by",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcript_confirmation",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "transcript_confirm_once",
+        "type": "BTREE",
+        "table": "transcript_confirmation",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "transcript_confirm_once",
+        "type": "BTREE",
+        "table": "transcript_confirmation",
+        "column": "revision_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcript_revision_1",
+        "type": "BTREE",
+        "table": "transcript_revision",
+        "column": "batch_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcript_revision_2",
+        "type": "BTREE",
+        "table": "transcript_revision",
+        "column": "parent_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcript_revision_3",
+        "type": "BTREE",
+        "table": "transcript_revision",
+        "column": "processing_input_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcript_revision_4",
+        "type": "BTREE",
+        "table": "transcript_revision",
+        "column": "producer_task_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcript_revision",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "transcript_history",
+        "type": "BTREE",
+        "table": "transcript_revision",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "transcript_history",
+        "type": "BTREE",
+        "table": "transcript_revision",
+        "column": "revision",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcript_segment_1",
+        "type": "BTREE",
+        "table": "transcript_segment",
+        "column": "source_file_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcript_segment_2",
+        "type": "BTREE",
+        "table": "transcript_segment",
+        "column": "speaker_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcript_segment",
+        "column": "revision_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcript_segment",
+        "column": "segment_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "segment_order",
+        "type": "BTREE",
+        "table": "transcript_segment",
+        "column": "revision_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "segment_order",
+        "type": "BTREE",
+        "table": "transcript_segment",
+        "column": "ordinal",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcript_segment_mark",
+        "column": "revision_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcript_segment_mark",
+        "column": "segment_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcript_segment_mark",
+        "column": "mark",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcription_input_1",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "batch_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcription_input_2",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "source_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_transcription_input_3",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "material_snapshot_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "transcription_input_history",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "transcription_input_history",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "created_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "transcription_input_history",
+        "type": "BTREE",
+        "table": "transcription_input",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      }
+    ],
+    "checks": [
+      {
+        "name": "ck_input_batch_0",
+        "table": "input_batch",
+        "clause": "(`kind` in (_ascii\\'TRANSCRIPT\\',_ascii\\'MEDIA\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_input_batch_file_0",
+        "table": "input_batch_file",
+        "clause": "(`ordinal` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_speaker_0",
+        "table": "speaker",
+        "clause": "(`identity_source` in (_ascii\\'ANONYMOUS\\',_ascii\\'HUMAN\\',_ascii\\'VOICE_CANDIDATE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcript_revision_0",
+        "table": "transcript_revision",
+        "clause": "(`kind` in (_ascii\\'RAW\\',_ascii\\'ENHANCED\\',_ascii\\'WORKING\\',_ascii\\'CANDIDATE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcript_segment_0",
+        "table": "transcript_segment",
+        "clause": "(((`start_ms` is null) and (`end_ms` is null)) or ((`start_ms` is not null) and (`end_ms` is not null) and (`end_ms` >= `start_ms`)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcript_segment_mark_0",
+        "table": "transcript_segment_mark",
+        "clause": "(`mark` in (_ascii\\'KEY\\',_ascii\\'CONCLUSION\\',_ascii\\'DISPUTE\\',_ascii\\'GENERATION_FOCUS\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_0",
+        "table": "transcription_input",
+        "clause": "(`kind` in (_ascii\\'IMPORT\\',_ascii\\'ASR\\',_ascii\\'ENHANCE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_1",
+        "table": "transcription_input",
+        "clause": "(`material_mode` in (_ascii\\'EMPTY\\',_ascii\\'PINNED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_2",
+        "table": "transcription_input",
+        "clause": "(((`material_mode` = _ascii\\'EMPTY\\') and (`material_snapshot_id` is null)) or ((`material_mode` = _ascii\\'PINNED\\') and (`material_snapshot_id` is not null)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_3",
+        "table": "transcription_input",
+        "clause": "((`kind` <> _ascii\\'ENHANCE\\') or (`source_revision_id` is not null))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_4",
+        "table": "transcription_input",
+        "clause": "((`kind` <> _ascii\\'IMPORT\\') or (`parser_version` is not null))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_5",
+        "table": "transcription_input",
+        "clause": "((`kind` = _ascii\\'IMPORT\\') or (`model_config_version` is not null))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_transcription_input_6",
+        "table": "transcription_input",
+        "clause": "(`manifest_schema_version` > 0)",
+        "enforced": "YES"
+      }
+    ],
+    "foreign_keys": [
+      {
+        "name": "fk_input_batch_0",
+        "table": "input_batch",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_input_batch_file_0",
+        "table": "input_batch_file",
+        "column": "batch_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "input_batch",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_input_batch_file_1",
+        "table": "input_batch_file",
+        "column": "file_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "file_object",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_speaker_0",
+        "table": "speaker",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_speaker_1",
+        "table": "speaker",
+        "column": "enterprise_id",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_speaker_2",
+        "table": "speaker",
+        "column": "merged_into_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "speaker",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_confirmation_0",
+        "table": "transcript_confirmation",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_confirmation_1",
+        "table": "transcript_confirmation",
+        "column": "revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "transcript_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_confirmation_2",
+        "table": "transcript_confirmation",
+        "column": "confirmed_by",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_revision_0",
+        "table": "transcript_revision",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_revision_1",
+        "table": "transcript_revision",
+        "column": "batch_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "input_batch",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_revision_2",
+        "table": "transcript_revision",
+        "column": "parent_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "transcript_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_revision_3",
+        "table": "transcript_revision",
+        "column": "processing_input_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "transcription_input",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_revision_4",
+        "table": "transcript_revision",
+        "column": "producer_task_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "durable_task",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_segment_0",
+        "table": "transcript_segment",
+        "column": "revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "transcript_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_segment_1",
+        "table": "transcript_segment",
+        "column": "source_file_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "file_object",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_segment_2",
+        "table": "transcript_segment",
+        "column": "speaker_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "speaker",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_segment_mark_0",
+        "table": "transcript_segment_mark",
+        "column": "revision_id",
+        "delete": "RESTRICT",
+        "remote": "revision_id",
+        "target": "transcript_segment",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcript_segment_mark_0",
+        "table": "transcript_segment_mark",
+        "column": "segment_id",
+        "delete": "RESTRICT",
+        "remote": "segment_id",
+        "target": "transcript_segment",
+        "update": "RESTRICT",
+        "ordinal": 2
+      },
+      {
+        "name": "fk_transcription_input_0",
+        "table": "transcription_input",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcription_input_1",
+        "table": "transcription_input",
+        "column": "batch_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "input_batch",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_transcription_input_2",
+        "table": "transcription_input",
+        "column": "source_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "transcript_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      }
+    ]
+  }
+}

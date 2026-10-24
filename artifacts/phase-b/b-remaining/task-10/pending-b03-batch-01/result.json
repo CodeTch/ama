@@ -1,0 +1,47 @@
+{
+  "exit": 0,
+  "counts": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task10PendingAbsentIT",
+      "reportSha256": "c2ea1b895deb16071c8edc2f9ab7bec00dab3f0c5eafc7a229791d22d14bfbb2",
+      "reportMtimeNs": 1792844938158367881,
+      "startedNs": 1792844894919804976,
+      "endedNs": 1792844949540438879,
+      "class": "ama.storage.Task10PendingAbsentIT",
+      "name": "missingContributionRejectsNewEffectsButKeepsAcceptedReceiptsAndRead",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10PendingInfoIT",
+      "reportSha256": "5e2fdfe3c9817ff24cfa5dbc0ce9f2746886d215732bd01d756a786f8ddb5795",
+      "reportMtimeNs": 1792844949084826736,
+      "startedNs": 1792844894919804976,
+      "endedNs": 1792844949540438879,
+      "class": "ama.storage.Task10PendingInfoIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10PendingRosterIT",
+      "reportSha256": "ab1ace8a832471c96a797d0ee1a788e5405159c3d792789d1fbdf38a4377d094",
+      "reportMtimeNs": 1792844934534156939,
+      "startedNs": 1792844894919804976,
+      "endedNs": 1792844949540438879,
+      "class": "ama.storage.Task10PendingRosterIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

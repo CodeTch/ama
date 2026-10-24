@@ -1,0 +1,47 @@
+{
+  "observedAt": "2026-10-23T13:05:16.803480+00:00",
+  "correction": "Earlier exact process pattern used ama.integration.Task05WorkerProcess, but actual helper is ama.storage.Task05WorkerProcess. Prior joined exit receipts establish those child exits independently. This current diagnostic is additive; a final integration run is now in progress.",
+  "actualMatchingProcesses": [],
+  "priorRunExitReceipts": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05/pipeline-ce67f6ba-ddc4-4117-bcf5-60adb2109104/worker-exit.txt",
+      "text": "pid=1001786 exit=143 alive=false"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05/pipeline-c1e640b2-6467-459c-b144-7c7fd9b708cb/worker-exit.txt",
+      "text": "pid=978421 exit=143 alive=false"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05/pipeline-2772dfb0-0680-4b06-9cfc-368ad362f549/worker-exit.txt",
+      "text": "pid=1022325 exit=143 alive=false"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05/pipeline-d7af78ab-bcdb-47d5-a604-5cd6e618a807/worker-exit.txt",
+      "text": "pid=1002656 exit=143 alive=false"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05/pipeline-774a2194-a61a-4756-a783-e486c3ee6354/worker-exit.txt",
+      "text": "pid=993743 exit=143 alive=false"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05/pipeline-50c28e00-b462-4e9b-942d-e0ca65ec5ad4/worker-exit.txt",
+      "text": "pid=1004928 exit=143 alive=false"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05/pipeline-e3be2a12-5ae5-4b18-80dd-a8f532f3bd4f/worker-exit.txt",
+      "text": "pid=992905 exit=143 alive=false"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05/pipeline-bd5d417f-2d9c-41a7-9f22-0c083df81230/worker-exit.txt",
+      "text": "pid=1003732 exit=143 alive=false"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05/pipeline-12d1f349-a812-4701-940e-80752d34085d/worker-exit.txt",
+      "text": "pid=1021177 exit=143 alive=false"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-05/pipeline-a58a8944-61a5-4077-b7a7-36dde05aa722/worker-exit.txt",
+      "text": "pid=978837 exit=143 alive=false"
+    }
+  ]
+}

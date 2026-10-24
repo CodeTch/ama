@@ -1,0 +1,30 @@
+--- backend/integration-tests/src/test/java/ama/task/Task05LegacyPreparedCompletionIT.java
++++ backend/integration-tests/src/test/java/ama/task/Task06InheritedPreparedCompletionIT.java
+@@ -19,7 +19,7 @@
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ /** Real owned MySQL, authentic B03 identity preparation and actual immutable output rows. No resets. */
+-class Task05LegacyPreparedCompletionIT {
++class Task06InheritedPreparedCompletionIT {
+     final AtomicBoolean failFlush = new AtomicBoolean(), failAudit = new AtomicBoolean(), failEvent = new AtomicBoolean();
+     final DataSource source = new B06QueueSeamsIT.ProbeSource(MysqlTestDatabase.dataSource(), sql -> {
+         if (failAudit.get() && sql.startsWith("INSERT INTO audit_event(")) throw new IllegalStateException("CONTROLLED_AUDIT_FAILURE");
+@@ -29,10 +29,10 @@
+     final TransactionRunner tx = new TransactionRunner(source);
+     final JdbcSubjectFences fences = new JdbcSubjectFences(source, Set.of("MEETING"));
+     final JdbcMeetingAccess access = new JdbcMeetingAccess(source, tx, fences);
+-    final String owner = "prepared-" + UUID.randomUUID(), meeting = UUID.randomUUID().toString();
++    final String owner = "task06-fix-prepared-" + UUID.randomUUID(), meeting = UUID.randomUUID().toString();
+     final String input = UUID.randomUUID().toString(), output = UUID.randomUUID().toString();
+     final Actor actor = new Actor(owner, Status.ACTIVE, Set.of(Role.USER));
+-    final TaskSpec spec = new TaskSpec("PREPARED_TEST", "PREPARED_" + UUID.randomUUID(),
++    final TaskSpec spec = new TaskSpec("PREPARED_TEST", "TASK06_FIX_PREPARED_" + UUID.randomUUID(),
+             new SubjectRef("MEETING", meeting), TaskFixture.hash(input + "producer"),
+             new TypedRef("TEST_INFO", input), TaskFixture.hash(input), 0, 0, 0, 3);
+     final AtomicInteger writes = new AtomicInteger(), validations = new AtomicInteger();
+@@ -236,4 +236,5 @@
+         assertEquals("SUCCEEDED", jdbc.queryForObject("SELECT outcome FROM task_attempt WHERE task_id=? AND attempt=2", String.class, lease.taskId()));
+     }
+ 
++ @AfterEach void closeOwnedFixture()throws Exception {failAudit.set(false);failFlush.set(false);failEvent.set(false);tx.required(()->{var ids=jdbc.queryForList("SELECT id FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? AND pool=? FOR UPDATE",String.class,meeting,spec.pool());for(String id:ids){jdbc.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='FAILED',error_code='TASK06_FIXTURE_CLOSED' WHERE task_id=? AND ended_at IS NULL",id);jdbc.update("UPDATE durable_task SET state='FAILED',lease_owner=NULL,expires_at=NULL WHERE id=? AND state IN ('READY','RUNNING')",id);}return null;});var root=java.nio.file.Path.of(System.getenv("AMA_TASK05_ROOT")).getParent().getParent().resolve("artifacts/phase-b/b-remaining/task-06/fix-01/inherited-queue");java.nio.file.Files.createDirectories(root);java.nio.file.Files.writeString(root.resolve(meeting+".json"),new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(Map.of("owner",owner,"meeting",meeting,"pool",spec.pool(),"tasks",jdbc.queryForList("SELECT id,state FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? AND pool=?",meeting,spec.pool()),"scope","controlled forward inherited queue policy")));}
+ }

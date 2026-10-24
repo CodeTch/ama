@@ -1,0 +1,89 @@
+{
+  "utc": "2026-10-23T21:53:05.033991+00:00",
+  "scope": "rootreadonly exact4FS/Gitbaseline/7range seals +SQLdeclarationcounts, no generator import/execution/DB/tests",
+  "files": [
+    {
+      "path": "tools/checks/database_design.py",
+      "sha256": "91493cbb251c99c800bd2aec7861596d50ac76acbf9a159d14c59aaf5b71e6a0",
+      "bytes": 108070,
+      "baseline_equal": true
+    },
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "sha256": "d3094336b4d55d9389b2fd1d852d627b93e0ac0394b9b1801e258a154b0cb445",
+      "bytes": 116623,
+      "baseline_equal": true
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "sha256": "cd6a909abbcd4d20afaf00a3b98ce6329cc633b31e5e941166f16ddbd3177c74",
+      "bytes": 167091,
+      "baseline_equal": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "sha256": "05bfe0fdf1f2c05af67598ef8298c19a1ec138f51948026f44b9ee41c9793f04",
+      "bytes": 117367,
+      "baseline_equal": true
+    }
+  ],
+  "ranges": [
+    {
+      "path": "tools/checks/database_design.py",
+      "start": 87,
+      "end": 88,
+      "bytes": 1732,
+      "sha256": "ef1349f9955ec5fb9708da1cda6e2191e8d139e87f8473ef0dc5aa6350df7a6f"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "start": 448,
+      "end": 485,
+      "bytes": 3711,
+      "sha256": "568338e1bdd25e1e4947fdbe71f9c6db55ed0e758f535b95e38e6e3d471aca6f"
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "start": 487,
+      "end": 504,
+      "bytes": 1338,
+      "sha256": "c89c974a76553ca8ce07e0562ac740c68a58ecf0aa69a51b99813a96c5002d04"
+    },
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "start": 320,
+      "end": 351,
+      "bytes": 1960,
+      "sha256": "23655bd22c196c90338f89cbef38050f6e0af0916e21e108fe33b85a4ecf9a2a"
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "start": 542,
+      "end": 581,
+      "bytes": 2955,
+      "sha256": "597fd9e9656fe845a50406f34ba7600c492ae1d34c48e9a7bcbc1f664f6c74b9"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "start": 523,
+      "end": 545,
+      "bytes": 665,
+      "sha256": "40216ad778245b12f56b8afee341576d8a751491e83552373d18b1cff4346bc2"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "start": 1284,
+      "end": 1284,
+      "bytes": 57,
+      "sha256": "51174e62067a937307b0f429c6194b369b7164b9653102d08f11d04fb75f8f8c"
+    }
+  ],
+  "sqlIndexDefinitions": {
+    "primary": 98,
+    "secondary": 89,
+    "total": 187
+  },
+  "manifestSha256": "290b00aa76d92aa98d2e80d529e8ddfa6e507aa87836b201af57a46c2ab7b79b",
+  "reportSha256": "439fb9305a015341ed2d64f68538ef74409b10efd2c9416b9fa50b29fba90096",
+  "methodQualification": "Initialcounter expected KEY spelling; assertionfailedbeforeanywrite, inspectedactualSQL INDEX syntax andcorrectedcounter. No generator/DB/test run."
+}

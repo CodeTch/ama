@@ -1,0 +1,77 @@
+{
+  "status": "PREPARED_UNUSED",
+  "task": 11,
+  "runtimeExecuted": false,
+  "privateInputsReadOrStatted": false,
+  "dockerOrDbUsed": false,
+  "sourceHelper": {
+    "path": "task-10-fixture-provisioning-prepared-20261024.py",
+    "bytes": 19813,
+    "sha256": "c624807461392d0844a299ff73ef1cea64cb76aa39cc43846a973c068c86fa18"
+  },
+  "publicEvidence": {
+    "task10CreationGuard": {
+      "path": "task-10-fixture-creation-guard-20261024.json",
+      "bytes": 5195,
+      "sha256": "8d999f4af9ccee70d9903755c0a0d4594e05a70e81310c9026a879991f902c62"
+    },
+    "task10OriginalApplicationAck": {
+      "path": "task-10-root-fixture-application-ack-20261024.json",
+      "bytes": 2445,
+      "sha256": "808a552c4afbfdb77e9663979ba44f6068f11b6af7611adb633af4bbd2991df3"
+    },
+    "task10RecoveryApplicationAck": {
+      "path": "task-10-mysql-recovery-application-ack-20261024.json",
+      "bytes": 3250,
+      "sha256": "096cbdc38cb350b756c6958a0982d31277e4f0a4bc2f7a10e4f24fd1fc40b767"
+    },
+    "task10AdoptionAck": {
+      "path": "task-10-consumer-activation-root-ack-20261025.json",
+      "bytes": 1544,
+      "sha256": "763c7da6870188b6ac07177391e197df956c121bdea10a9df2afd81d998f5fb3"
+    }
+  },
+  "sourceOwner": "task10-1e48b41fc5c84a98af3a14b51b17884f",
+  "sourceSchema": "ama_t10_1e48b41fc5c8_behavior",
+  "sourceEnvPathOnly": ".tools/task10-1e48b41fc5c84a98af3a14b51b17884f/mysql-recovery-20261024/env.sh",
+  "currentEffectivePort": 46151,
+  "historicalPort": 44727,
+  "newOwnerPattern": "task11-<32 lowercase hex>",
+  "newSchemaPattern": "ama_t11_<same first 12 hex>_behavior",
+  "offlineTests": {
+    "methods": 4,
+    "exit": 0,
+    "onlyInMemoryPrivateValues": true
+  },
+  "files": [
+    {
+      "path": "task-11-fixture-provisioning-prepared-20261025.py",
+      "bytes": 22694,
+      "sha256": "e097391ad12f3a6395904ce56ad76ae07b5b09a67a0fafcd7b2762b9015c6659"
+    },
+    {
+      "path": "task-11-fixture-helper-offline-20261025.py",
+      "bytes": 11730,
+      "sha256": "ca81ec64be195aaa1431ede092cad0f9e2675993b80c8a7a050aa917eb5437a0"
+    },
+    {
+      "path": "task-11-fixture-helper-offline-20261025.raw.txt",
+      "bytes": 617,
+      "sha256": "197a3a02899ffb8201a4e4a5bb18ac570b983427d089475186000e7deede094e"
+    },
+    {
+      "path": "task-11-fixture-provisioning-prepared-20261025.md",
+      "bytes": 4713,
+      "sha256": "fabb57fe27873374136f4e934cb3008157f6cf6a4c429db35743da16dc7dbaca"
+    }
+  ],
+  "futureGates": [
+    "independent narrow review of exact helper and offline evidence",
+    "one root invocation with fresh matching owner/schema",
+    "separate Task11 application ACK after actual empty-schema verification"
+  ],
+  "limits": [
+    "No provisioning helper execution, resource/DB access, or private env read during preparation.",
+    "Offline simulation does not establish live parent selection or SQL outcome."
+  ]
+}

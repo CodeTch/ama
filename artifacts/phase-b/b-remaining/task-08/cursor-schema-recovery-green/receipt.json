@@ -1,0 +1,23 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task08[CSBR]*IT"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/cursor-schema-recovery-green/integration-tests-TEST-ama.task.Task08RestartIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/cursor-schema-recovery-green/integration-tests-TEST-ama.task.Task08SchemaIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/cursor-schema-recovery-green/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/cursor-schema-recovery-green/integration-tests-TEST-ama.task.Task08BudgetIT.xml"
+  ],
+  "elapsedSeconds": 67.60081887245178,
+  "counts": {
+    "tests": 19,
+    "failures": 1,
+    "errors": 1,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task08OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

@@ -1,10 +1,10 @@
-# AMA 数据字典 — B00-1.5-runtime-metadata
+# AMA 数据字典 — B00-1.7-publication-submission
 
 生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。
 
 全表 InnoDB / utf8mb4_0900_ai_ci；稳定标识使用 utf8mb4_0900_bin（NO PAD），UUID/协议码/哈希用 ascii_bin。每字段的类型中明确覆盖排序规则。DATETIME(6) 一律 UTC；DATE 为 Asia/Shanghai 业务日。默认值 `无` 意味必须由应用明确赋值（可空字段默认 NULL）。主键唯一性的业务依据为稳定实体标识或明确复合业务键；UUID 不承载顺序。LONGTEXT 的物理容量不是产品字数限制。
 
-全部 FK 均 ON UPDATE RESTRICT / ON DELETE RESTRICT，根与历史不级联；拥有任务负责在同事务验证同会议/同所有者、状态及快照成员关系。字典中无 FK 的 typed ID 和循环当前指针见设计文档“逻辑关系与删除”，不可按裸 ID 绕过鉴权。
+全部 FK 立即限制父更新/删除；CHECK引用的publication_submission两个可空FK使用InnoDB默认NO ACTION（等同RESTRICT），其余显式RESTRICT；根与历史不级联；拥有任务负责在同事务验证同会议/同所有者、状态及快照成员关系。字典中无 FK 的 typed ID 和循环当前指针见设计文档“逻辑关系与删除”，不可按裸 ID 绕过鉴权。
 
 R1上下文根：所有纳入minutes_element.source_context_id无论证据数量均为basis根，与域内精确usage上下文取并集。ROWSET v2/PINNED用已保存输入要素集全部basis及set证据/目录，排除body/applied exclusion；REVIEW_SOURCES仅选定复核要素basis及精确相交证据（正文复核无要素basis）；FINAL用全部冻结纳入要素basis及既有body/set证据、目录、applied exclusion。各根完整context/selection/profile按实际完整PK去重及unsigned UTF8排序，缺失/额外行拒绝；无usage的basis同样验证并保留依赖。basis不伪造EVIDENCE、不增加usage数、不授予支持信用；草稿仍无自身fingerprint/TaskSpec，祖先按图依赖判断。
 
@@ -110,6 +110,7 @@ R1上下文根：所有纳入minutes_element.source_context_id无论证据数量
 |parsed_document_profile|D-01|UNASSIGNED-D01|解析文档的明确格式及不可变解析配置归档引用|
 |input_batch_fingerprint_profile|B-06/runtime Task2|V013.1|明确不可变输入批次指纹算法；缺失为legacy/unknown|
 |meeting_minutes_editor_guard|B-03/B-07/runtime Task2|V013.1|持久单调编辑意图；仅新建会议原事务可写零|
+|publication_submission|B-08/runtime Task11|V013.4|真实受理任务的不可变发布绑定与未标记本地终结|
 
 ## audit_event
 
@@ -573,6 +574,7 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 - 索引 `task_ready(pool,state,available_at,id)`：分开扫描 READY。
 - 索引 `task_expired(pool,state,expires_at,id)`：分开扫描过期 RUNNING。
 - 索引 `task_subject_history(subject_kind,subject_id,created_at,id)`：聚合任务历史。
+- 索引 `task_input_lookup(input_kind,input_id,id)`：固定 typed 输入的完整任务并集有界枚举。
 - CHECK `ck_durable_task_0`：`state IN ('READY','RUNNING','RECONCILING','SUCCEEDED','FAILED','CANCELLED','STALE')`。
 - CHECK `ck_durable_task_1`：`max_attempts > 0`。
 - CHECK `ck_durable_task_2`：`state <> 'RUNNING' OR (lease_owner IS NOT NULL AND expires_at IS NOT NULL)`。
@@ -620,15 +622,17 @@ AI 信息建议的独立候选。所属 D-02，计划 V018。
 |subject_kind|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|聚合类型|
 |subject_id|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|聚合ID|
 |current_execution_no|`bigint unsigned`|否|无|当前执行代际；初次1|
+|reconcile_scan_seq|`bigint`|否|无|服务器 AUTO_INCREMENT 分配的正 Java long 扫描序号；持久化后应用不可改写；无显式默认是服务器分配例外，写入省略本列|
 
 主键：`id`。
 - 唯一约束 `external_key(operation_kind,business_key)`：同类型业务键唯一。
 - 索引 `external_due(state,next_check_at,id)`：到期对账。
+- 唯一约束 `external_reconcile_scan(reconcile_scan_seq)`：不可变序号原始 keyset 扫描与固定高水位。
 - CHECK `ck_external_operation_0`：`state IN ('MARKED','UNKNOWN','RETRY_QUEUED','SUCCEEDED','FAILED','MANUAL_REQUIRED')`。
 - CHECK `ck_external_operation_1`：`current_execution_no > 0`。
 - FK `fk_external_operation_0`：`subject_kind,subject_id` → `task_subject(subject_kind,subject_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
-更新/删除与完整性：operation_kind/business_key全历史唯一；不归单个task。current_execution_no由同聚合锁下CAS；独立reconcile_epoch跨执行永久递增、不清零。当前执行由(operation_id,no)应用校验。仅FAILED且当前execution有确定零效果证据可追加执行；UNKNOWN禁止重发。
+更新/删除与完整性：operation_kind/business_key全历史唯一；不归单个task。current_execution_no由同聚合锁下CAS；独立reconcile_epoch跨执行永久递增、不清零。当前执行由(operation_id,no)应用校验。仅FAILED且当前execution有确定零效果证据可追加执行；UNKNOWN禁止重发；reconcile_scan_seq仅作有界枚举元数据，不授予任务/发送权限；服务器分配正long，应用持久化后不改写；受控恢复保留映射并完整校验正值/唯一性。
 
 ## task_outbox_sequence
 
@@ -2332,3 +2336,49 @@ R6 片段多选标记随转写版本冻结；不是纪要要素。所属 B-06/C-
 - FK `fk_meeting_minutes_editor_guard_0`：`meeting_id` → `meeting(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
 
 更新/删除与完整性：新建会议原事务插入0；真正授权编辑意图在根锁下由未知写1或严格递增，无减少/重置/超时/删除。上限前条件增量且一行，否则关闭失败；无默认。创建重放和旧行读取不补零；缺TABLE为schema unavailable。逻辑删除保留，只有永久删除父时协调清理；epoch不授予权限。
+
+## publication_submission
+
+真实受理任务的不可变发布绑定与未标记本地终结。所属 B-08/runtime Task11，计划 V013.4。
+
+|字段|MySQL 类型/排序规则|可空|默认|含义|
+|---|---|---|---|---|
+|task_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|真实受理任务；无执行时也存在|
+|publication_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|唯一发布根|
+|submission_no|`bigint unsigned`|否|无|每发布根正数序号；上限9223372036854775806|
+|confirmation_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|本次固定最终确认|
+|provider_id|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|显式配置提供方|
+|business_key|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|publicationId:confirmationId|
+|library_id|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|真实库ID|
+|folder_id|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|真实目录ID|
+|requester_id|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|原真实负责人|
+|logical_request_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|固定逻辑请求SHA256|
+|execution_request_hash|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|固定执行请求SHA256|
+|request_manifest|`longtext`|否|无|无正文/秘密的严格绑定清单；最多65536 UTF8 bytes及65536 UTF16 units|
+|created_at|`datetime(6)`|否|无|真实受理UTC时间|
+|local_state|`varchar(32) CHARACTER SET ascii COLLATE ascii_bin`|否|无|UNDECIDED或NEVER_MARKED|
+|local_decided_at|`datetime(6)`|是|无|本地原子终结UTC时间|
+|local_reason|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|是|无|精确白名单本地原因|
+|local_decided_by|`varchar(255) COLLATE utf8mb4_0900_bin`|是|无|真实fresh授权负责人；不是虚构人工点击|
+|local_attempt_no|`bigint unsigned`|是|无|真实队列attempt；未领取允许0|
+|local_execution_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|是|无|真实未标记执行；无执行时NULL|
+
+主键：`task_id`。
+- 唯一约束 `publication_submission_number(publication_id,submission_no)`：完整历史及单调序号。
+- 索引 `publication_submission_undecided(local_state,created_at,task_id)`：有界恢复扫描。
+- 索引 `publication_submission_confirmation(confirmation_id)`：固定最终确认。
+- 索引 `publication_submission_requester(requester_id)`：原受理人。
+- 索引 `publication_submission_decider(local_decided_by)`：本地授权人。
+- 索引 `publication_submission_execution(local_execution_id)`：真实未标记执行。
+- CHECK `ck_publication_submission_0`：`submission_no BETWEEN 1 AND 9223372036854775806`。
+- CHECK `ck_publication_submission_1`：`(local_state = 'UNDECIDED' AND OCTET_LENGTH(local_state) = 9) OR (local_state = 'NEVER_MARKED' AND OCTET_LENGTH(local_state) = 12)`。
+- CHECK `ck_publication_submission_2`：`OCTET_LENGTH(request_manifest) <= 65536`。
+- CHECK `ck_publication_submission_3`：`(local_state = 'UNDECIDED' AND local_decided_at IS NULL AND local_reason IS NULL AND local_decided_by IS NULL AND local_attempt_no IS NULL AND local_execution_id IS NULL) OR (local_state = 'NEVER_MARKED' AND local_decided_at IS NOT NULL AND local_reason IS NOT NULL AND ((local_reason = 'PREPARATION_EXHAUSTED' AND OCTET_LENGTH(local_reason) = 21) OR (local_reason = 'TERMINAL_UNMARKED_FAILURE' AND OCTET_LENGTH(local_reason) = 25) OR (local_reason = 'EXPIRED_UNMARKED_ABANDONED' AND OCTET_LENGTH(local_reason) = 26)) AND local_decided_by IS NOT NULL AND local_attempt_no IS NOT NULL)`。
+- FK `fk_publication_submission_task`：`task_id` → `durable_task(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_publication_submission_publication`：`publication_id` → `publication(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_publication_submission_confirmation`：`confirmation_id` → `final_confirmation(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_publication_submission_requester`：`requester_id` → `enterprise_identity(enterprise_id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+- FK `fk_publication_submission_decider`：`local_decided_by` → `enterprise_identity(enterprise_id)`。MySQL CHECK引用列省略显式action；InnoDB立即NO ACTION等同RESTRICT。
+- FK `fk_publication_submission_execution`：`local_execution_id` → `external_execution(id)`。MySQL CHECK引用列省略显式action；InnoDB立即NO ACTION等同RESTRICT。
+
+更新/删除与完整性：固定绑定永不更新；只允许真实完整锁定证明下UNDECIDED一次CAS到NEVER_MARKED，重放原time/reason/actor/attempt，禁止回退/补造历史。FK不证明同会议/spec/marker；领域原子校验完整历史。无执行不造operation/attempt或provider proof；所有旧未决轮仍冻结。manifest内容与UTF16由运行时先界定；无自动清理。

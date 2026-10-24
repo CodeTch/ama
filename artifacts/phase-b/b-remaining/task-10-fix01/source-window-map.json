@@ -1,0 +1,114 @@
+{
+  "frozenCurrentSourceManifestSha256": "b1ddb0963b5d0837066420b03cdb296a80b740e78f3a2aa450e95df87f6e53a5",
+  "windows": [
+    {
+      "window": "capacity-red-02",
+      "resultSha256": "45cd8e2d09560c2d81855d69876ae37666c059442ea6bc9347b3b6bc5c8d06fd",
+      "sourceManifestSha256": "aa8e6292dffbf454c777d3dea2c923bbbffd5da7c78707fad1b0813e892da716",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task10Fix01CapacityIT"
+      ],
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 1
+    },
+    {
+      "window": "final-affected-01",
+      "resultSha256": "aea47d658c4e2e483b12e54d5e76a7ac06b1790aedcbc567f385d37d11e6994d",
+      "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task10Fix01*IT"
+      ],
+      "counts": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 0
+    },
+    {
+      "window": "focused-green-01",
+      "resultSha256": "0f2498493257bd98f73b44655400f9c359b31862f635423b77a7863f906c6281",
+      "sourceManifestSha256": "83dd72255aded9a8c1f61e6ef1d35aabd80d9311eacdb5171f91922ad8d68663",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task10Fix01*IT"
+      ],
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 0
+    },
+    {
+      "window": "focused-red-01",
+      "resultSha256": "d69d30efd9399cca14a34f098bdf21fabea733310ee33e44fe2da4b654011622",
+      "sourceManifestSha256": "e0d89e06d080e4f5fd761b374046c6b175b7829ee45d1989907e971a57dc6e7e",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task10Fix01*IT"
+      ],
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 1
+    },
+    {
+      "window": "legacy-io-final-01",
+      "resultSha256": "0a6fff898bfeb65cf804fb8408ccd99620bf11faa2d1a9b0ae6736e17a7fdc98",
+      "sourceManifestSha256": "d73bf2458e8a8aae6030c17d1fd91a4ae168a3c217b5f476ec84ac6166faba00",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task10Fix01LegacyIoIT"
+      ],
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 0
+    },
+    {
+      "window": "pure-final-01",
+      "resultSha256": "72124c258cfe01188ec3799809977dfa98ea12903f46118991d6aae7dc5e8aa0",
+      "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "Task10Fix01*Test"
+      ],
+      "counts": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exit": 0
+    }
+  ],
+  "inheritance": "final-affected-01 covers final I1/I2 core; subsequent only four legacy ordinary classifier additions accepting precise ARCHIVE_IO_UNAVAILABLE, covered by pure-final-01 and actual legacy-io-final-01. Test-only additions do not change product. No old whole-task windows rerun."
+}

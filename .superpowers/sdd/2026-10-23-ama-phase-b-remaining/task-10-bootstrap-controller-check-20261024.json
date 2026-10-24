@@ -1,0 +1,40 @@
+{
+  "resultExit": 0,
+  "xmlTests": "1",
+  "xmlFailures": "0",
+  "xmlErrors": "0",
+  "xmlSha256": "5d3ab8762d9f9ea6345688f41aee9529126e2c684ddb3f232c05194ff552159e",
+  "case": "approvedEmptySchemaNormalFifteenThenZeroRetainsCompleteHistory",
+  "historySha256": "e1892506eabdd6e257eee7c3ae35d2536f922f7767d4de3a935ed83f53bf3549",
+  "historyKeys": [
+    "initialTables",
+    "initialMigrations",
+    "after",
+    "baseline",
+    "session",
+    "rerunMigrations"
+  ],
+  "claim": "Controller independently read actual XML/result and full history JSON shapes; no DB/migration rerun.",
+  "initialTables": 0,
+  "initialMigrations": 15,
+  "rerunMigrations": 0,
+  "all15RowsBeforeAfterEqual": true,
+  "historyRowFields": [
+    "installed_rank",
+    "version",
+    "description",
+    "type",
+    "script",
+    "checksum",
+    "installed_by",
+    "installed_on",
+    "execution_time",
+    "success"
+  ],
+  "session": {
+    "zone": "+00:00",
+    "charset": "utf8mb4",
+    "metadata_wait": 5,
+    "row_wait": 5
+  }
+}

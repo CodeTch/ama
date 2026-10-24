@@ -1,0 +1,129 @@
+{
+  "head": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
+  "rootFullRead": "Independent all findings/CV01-04 and all custody nonseal checks; exact seven custody input/package seals reverified",
+  "review": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-independent-review-20261024.md",
+    "bytes": 18438,
+    "sha256": "91a257d83d8c1eb1fe1fa7a9a2f7d76c48a178e995e82cb631cbc05ad298dc7f"
+  },
+  "custody": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-final-delivery-custody-20261024.json",
+    "bytes": 9350,
+    "sha256": "3421b8d4134d82bc7e397a3c4bf0cafd92640761ba3a37f76f7f3e5af002cb9b"
+  },
+  "stableInputsVerified": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/report.md",
+      "bytes": 12119,
+      "sha256": "a2a637bd05772b22131211cea5ac94ffa854fad96608706de29dca01aa608ede"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/manifest.json",
+      "bytes": 2314712,
+      "sha256": "20e92193cd509606b93375c968b30b23d023b45ba3b440bf5234dd0e0625b0bd"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/qualification-ledger.json",
+      "bytes": 190724,
+      "sha256": "cd736e2be23f7544664a2cb812e63cda57de6dc173f5b8fea57534854cd9b568"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/delivery-custody.json",
+      "bytes": 1137,
+      "sha256": "a7735e65fdb9115775daae1e652f5e87a5052ef19d434dbd03996ff1a28a6388"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-report.md",
+      "bytes": 1697,
+      "sha256": "e15b9ed536f07b24b78032ebfdbf91d08bdc7819339c137615561dee085ab7dc"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-source-review-package-20261024.diff",
+      "bytes": 301399,
+      "sha256": "a9f829782085d0b51a2dc69e3e7f465c318140cca21d82b4727e7c5af70bf72b"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-full-review-package-20261024.diff",
+      "bytes": 74464132,
+      "sha256": "6d083627878760b2bedddd6219eb4bd1da6f2a21fe510d0721c18ef420d34a9a"
+    }
+  ],
+  "selectedResourcesAndPID": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-root-selected-resources-and-pids-20261024.json",
+    "bytes": 5342,
+    "sha256": "0b1f6f148f6fe86b217e1af227b9ab8f649341ea23615e76d4610992c9f075d5"
+  },
+  "archives": [
+    {
+      "original": {
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-report.md",
+        "bytes": 1697,
+        "sha256": "e15b9ed536f07b24b78032ebfdbf91d08bdc7819339c137615561dee085ab7dc"
+      },
+      "archive": {
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-before-fix01-20261024/W-task-07-report.md",
+        "bytes": 1697,
+        "sha256": "e15b9ed536f07b24b78032ebfdbf91d08bdc7819339c137615561dee085ab7dc"
+      }
+    },
+    {
+      "original": {
+        "path": "artifacts/phase-b/b-remaining/task-07/report.md",
+        "bytes": 12119,
+        "sha256": "a2a637bd05772b22131211cea5ac94ffa854fad96608706de29dca01aa608ede"
+      },
+      "archive": {
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-before-fix01-20261024/report.md",
+        "bytes": 12119,
+        "sha256": "a2a637bd05772b22131211cea5ac94ffa854fad96608706de29dca01aa608ede"
+      }
+    },
+    {
+      "original": {
+        "path": "artifacts/phase-b/b-remaining/task-07/manifest.json",
+        "bytes": 2314712,
+        "sha256": "20e92193cd509606b93375c968b30b23d023b45ba3b440bf5234dd0e0625b0bd"
+      },
+      "archive": {
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-before-fix01-20261024/manifest.json",
+        "bytes": 2314712,
+        "sha256": "20e92193cd509606b93375c968b30b23d023b45ba3b440bf5234dd0e0625b0bd"
+      }
+    },
+    {
+      "original": {
+        "path": "artifacts/phase-b/b-remaining/task-07/qualification-ledger.json",
+        "bytes": 190724,
+        "sha256": "cd736e2be23f7544664a2cb812e63cda57de6dc173f5b8fea57534854cd9b568"
+      },
+      "archive": {
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-before-fix01-20261024/qualification-ledger.json",
+        "bytes": 190724,
+        "sha256": "cd736e2be23f7544664a2cb812e63cda57de6dc173f5b8fea57534854cd9b568"
+      }
+    },
+    {
+      "original": {
+        "path": "artifacts/phase-b/b-remaining/task-07/delivery-custody.json",
+        "bytes": 1137,
+        "sha256": "a7735e65fdb9115775daae1e652f5e87a5052ef19d434dbd03996ff1a28a6388"
+      },
+      "archive": {
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-before-fix01-20261024/delivery-custody.json",
+        "bytes": 1137,
+        "sha256": "a7735e65fdb9115775daae1e652f5e87a5052ef19d434dbd03996ff1a28a6388"
+      }
+    }
+  ],
+  "protectedDelivery": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-pre-fix01-delivery-protected-20261024.json",
+    "bytes": 2308966,
+    "sha256": "0a095f189e8f0664e3279bd491f31ecf46647dc4b0b7e44dea3cdafa50b0b233"
+  },
+  "CVDisposition": {
+    "T7CV-01": "CONFIRMED framework evidence gap; mandatory focused tests this fix round",
+    "T7CV-02": "CONFIRMED framework evidence gap; mandatory focused tests this fix round",
+    "T7CV-03": "CONFIRMED framework evidence gap; mandatory focused tests this fix round",
+    "T7CV-04": "DEFERRED actual Tasks9-11 consumer contracts; fail-closed registrations remain; not framework approval"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06AtomicityIT"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/atomicity-recovery-green-01/integration-tests-TEST-ama.storage.Task06AtomicityIT.xml"
+  ],
+  "elapsedSeconds": 30.43989324569702,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

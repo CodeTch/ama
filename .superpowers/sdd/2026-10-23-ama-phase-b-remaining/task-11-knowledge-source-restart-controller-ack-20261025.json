@@ -1,0 +1,27 @@
+{
+  "utc": "2026-10-24T18:06:28.397037+00:00",
+  "status": "AUTHORIZED_ONE_BOUNDED_SOURCE_RESTART_AND_ONE_NEW_MAINCHAIN",
+  "authority": "Parent delegated routine owned controlled fixture ACK; full B user authorization; coordinator read-only integration gate completed",
+  "r4Freeze": "task-11-publication-path-review-source-r4-20261025.json",
+  "r4Sha256": "4fad4aa5b3001257f285bfe57025f9274b2dcb172f901e77793344c773dd5396",
+  "sourceFilesChecked": 27,
+  "sourceMismatches": 0,
+  "crossEvidence": "task-11-canonical-cross-language-20261025.json",
+  "crossQualification": "2 JUnit PASS; actual Java client four cases and actual renderer/client fifth case bytes and payloadSha directly equal Python output; synthetic encoding only",
+  "preparation": "task-11-knowledge-source-restart-preparation-20261025.json",
+  "preparationSha256": "b373988829f59be83332041ec1e5ab1df0f48b9cd0bac9513bb6c9f9c0b9017a",
+  "exactOldProcess": {
+    "pid": 142211,
+    "pgid": 142211,
+    "startTicks": "11511090",
+    "port": 46287,
+    "checks": "Coordinator independently matched live PID/PGID/startticks/argv/config bytes and existing store"
+  },
+  "constraints": [
+    "Immediately revalidate same process before bounded TERM original PGID; if needed only reverified same PGID KILL after deadline. Preserve source/config/store/sidefiles/backups.",
+    "Next fixture reopen same storeInstanceId/endpoint/keys with initialize=false, same64Mi/2CPU. Capture newPID/PGID/source and actual original-store identity before business.",
+    "Allow one new publication mainchain only. Do not resend/requery/change original UNKNOWN execution07327d2f-3b2f-4bc1-ba6d-f9f03246d08a.",
+    "Use repaired shared waiter, before/after-close state custody and actual transport counters; unresolved state retains attributable provider.",
+    "This narrow gate is not full R1 acceptance, behavior/restart qualification or independent Task11 SPEC/quality review."
+  ]
+}

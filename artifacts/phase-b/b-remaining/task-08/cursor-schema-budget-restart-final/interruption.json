@@ -1,0 +1,6 @@
+{
+  "pid": 1229590,
+  "action": "SIGTERM exact owned test JVM after diagnostic",
+  "reason": "Mixed subject barrier used subject_id without leading subject_kind PK component; MySQL full-index locking scan can also lock tail. Both fresh eligible rows remain unclaimed; test helper repeated passes. Test barrier correction required; no production change.",
+  "utcSeconds": 1792797252.5257163
+}

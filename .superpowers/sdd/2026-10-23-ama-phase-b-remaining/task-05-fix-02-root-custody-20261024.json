@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-23T19:30:55.017986+00:00",
+  "head": "c943d15f4a2b9f294e4b7791fb51eb67d3acce5d",
+  "base": "11eb54086da95c675862fcf4225821104aa8e87d",
+  "kind": "independent read-only custody; no new test execution",
+  "mismatches": [],
+  "evidence_entries": 270,
+  "source_entries": 505,
+  "commit_paths": 290,
+  "old_evidence": 552,
+  "fix01_evidence": 341,
+  "historical_unchanged": 4727,
+  "current_model_exception": 1,
+  "original_report_prefix": true,
+  "final-all-units": {
+    "xml_suites": 37,
+    "tests": 240,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "green-s3-admission": {
+    "xml_suites": 1,
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "final-affected-s3-regressions": {
+    "xml_suites": 3,
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "distinct_IT": 6,
+  "env_distinct_private_values": 3,
+  "secret_scan": {
+    "public_files": 290,
+    "known_private_values": 4,
+    "findings": []
+  },
+  "resource_ack_keys": [
+    "utc",
+    "containers",
+    "allSelectedFieldsMatchResume"
+  ],
+  "selected_resource_receipt_sha256": "54386968d1bf7e45d78e9f2eb9e2ea2fad2475c66ff0ba00a3c253139650484d",
+  "recorded_processes": 9,
+  "tracked_diff": "",
+  "index_diff": ""
+}

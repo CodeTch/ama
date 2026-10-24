@@ -1,0 +1,39 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 4,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.minutes.Task09GraphCaptureIT",
+      "name": "foreignAndExpiredScopesNeverBecomeAmbientTransactionAuthority",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.minutes.Task09GraphCaptureIT",
+      "name": "oversizedLongtextIsRejectedBeforeAnyBodySelect",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.minutes.Task09GraphCaptureIT",
+      "name": "authenticSameIssuerHolderCapturesProtectedBodyAndExactEmptySets",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.minutes.Task09GraphCaptureIT",
+      "name": "childSetChangedAfterDiscoveryIsRejected",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06FixHttpsIT"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/https-04/integration-tests-TEST-ama.storage.Task06FixHttpsIT.xml"
+  ],
+  "elapsedSeconds": 30.989657640457153,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

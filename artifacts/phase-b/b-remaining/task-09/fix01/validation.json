@@ -1,0 +1,435 @@
+{
+  "denied-green-02": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task09Fix01DeniedLookupIT"
+    ],
+    "sourceManifestSha256": "d371a3ef79258ce842a3dab5440176af693cfb6f4d4a8cbb3ab85a6a765598c9",
+    "exit": 0,
+    "counts": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": [
+      {
+        "class": "ama.storage.Task09Fix01DeniedLookupIT",
+        "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      }
+    ]
+  },
+  "integration-green-01": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task09Fix01*IT"
+    ],
+    "sourceManifestSha256": "bb36d4cb46a484daf455aacfe413ce7b67e3b30174440da3a45ee15f9a169e65",
+    "exit": 1,
+    "counts": {
+      "tests": 6,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": [
+      {
+        "class": "ama.storage.Task09Fix01ActiveLookupIT",
+        "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.storage.Task09Fix01DeniedLookupIT",
+        "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+        "failure": true,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.storage.Task09Fix01HttpIT",
+        "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.storage.Task09Fix01ParentReplayIT",
+        "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.storage.Task09Fix01ResponseBudgetIT",
+        "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.storage.Task09Fix01RootsIT",
+        "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      }
+    ]
+  },
+  "openapi-green-01": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "contract",
+      "OpenApi"
+    ],
+    "sourceManifestSha256": "d371a3ef79258ce842a3dab5440176af693cfb6f4d4a8cbb3ab85a6a765598c9",
+    "exit": 0,
+    "counts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": []
+  },
+  "provenance-red-01": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task09Fix01*IT"
+    ],
+    "sourceManifestSha256": "d39ac9a15ef5576830ac228da752fa67309ee8bd8f2bfbdfab9ac41eef8fd493",
+    "exit": 1,
+    "counts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": []
+  },
+  "provenance-red-02": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task09Fix01*IT"
+    ],
+    "sourceManifestSha256": "3660247d4bbd0ba4bca93bde099ffc854eba094a18092dff77065ce3bfa51697",
+    "exit": 1,
+    "counts": {
+      "tests": 2,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": [
+      {
+        "class": "ama.storage.Task09Fix01ParentReplayIT",
+        "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+        "failure": true,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.storage.Task09Fix01RootsIT",
+        "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+        "failure": true,
+        "error": false,
+        "skipped": false
+      }
+    ]
+  },
+  "store-regression-01": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "Task09ControlledStoreTest"
+    ],
+    "sourceManifestSha256": "d371a3ef79258ce842a3dab5440176af693cfb6f4d4a8cbb3ab85a6a765598c9",
+    "exit": 0,
+    "counts": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": [
+      {
+        "class": "ama.model.Task09ControlledStoreTest",
+        "name": "incompleteUnacknowledgedJournalTailPreservesCompletePrefix",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.model.Task09ControlledStoreTest",
+        "name": "reserveAndSuccessSurviveRestartAndDuplicateReturnsExactIdentity",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.model.Task09ControlledStoreTest",
+        "name": "corruptAcknowledgedResultFailsClosedOnReopen",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.model.Task09ControlledStoreTest",
+        "name": "rejectedModeAndOversizeNeverReserve",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.model.Task09ControlledStoreTest",
+        "name": "exclusiveStoreLockRejectsSecondProcessOwner",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.model.Task09ControlledStoreTest",
+        "name": "reservedComputationSurvivesRestartAndLookupDoesNotCompute",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.model.Task09ControlledStoreTest",
+        "name": "immutableLogicalAndExecutionTuplesRejectChangedBytes",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.model.Task09ControlledStoreTest",
+        "name": "definitiveRejectionIsDurableAndPermanentlyProhibitsComputation",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      }
+    ]
+  },
+  "unit-green-01": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "Task09Fix01*Test"
+    ],
+    "sourceManifestSha256": "bb36d4cb46a484daf455aacfe413ce7b67e3b30174440da3a45ee15f9a169e65",
+    "exit": 0,
+    "counts": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": [
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "corruptEnvelopeCannotBeRepairedByDuplicatePost",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "changedEnvelopeWithOldHashesNeverChangesExistingMapping",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "lookupLeavesReservedExecutionUnknownAcrossReopen",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "exactCanonicalEnvelopeAndPayloadAreValidatedAfterReopen",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "unjournaledCrashTemporaryConsumesFiniteAdmissionWithoutCleanup",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "conflictingFreshExecutionsNeverWriteAnyDurableFile",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "capacityRejectsBeforeFilesAndAcceptedMappingsSurviveRestart",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.api.Task09Fix01WireTest",
+        "name": "initialSettingsRemainsSeparate",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.api.Task09Fix01WireTest",
+        "name": "fullStillRejectsDuplicateAndUnknownFields",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.api.Task09Fix01WireTest",
+        "name": "missingOrWrongScopeIsNeverImplicitFull",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.api.Task09Fix01WireTest",
+        "name": "fullScopeAcceptsTokenLegacyAndEqualDualForms",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      }
+    ]
+  },
+  "unit-red-01": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "Task09Fix01*Test"
+    ],
+    "sourceManifestSha256": "c8744046b4d9981ebf0f617d694a7c52913e338c6594a72b30bd093716f49191",
+    "exit": 1,
+    "counts": {
+      "tests": 7,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": [
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "corruptEnvelopeCannotBeRepairedByDuplicatePost",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "changedEnvelopeWithOldHashesNeverChangesExistingMapping",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "lookupLeavesReservedExecutionUnknownAcrossReopen",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "exactCanonicalEnvelopeAndPayloadAreValidatedAfterReopen",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "unjournaledCrashTemporaryConsumesFiniteAdmissionWithoutCleanup",
+        "failure": true,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "conflictingFreshExecutionsNeverWriteAnyDurableFile",
+        "failure": true,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+        "name": "capacityRejectsBeforeFilesAndAcceptedMappingsSurviveRestart",
+        "failure": true,
+        "error": false,
+        "skipped": false
+      }
+    ]
+  },
+  "wire-red-01": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "Task09Fix01WireTest"
+    ],
+    "sourceManifestSha256": "c8744046b4d9981ebf0f617d694a7c52913e338c6594a72b30bd093716f49191",
+    "exit": 1,
+    "counts": {
+      "tests": 4,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": [
+      {
+        "class": "ama.api.Task09Fix01WireTest",
+        "name": "initialSettingsRemainsSeparate",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.api.Task09Fix01WireTest",
+        "name": "fullStillRejectsDuplicateAndUnknownFields",
+        "failure": false,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.api.Task09Fix01WireTest",
+        "name": "missingOrWrongScopeIsNeverImplicitFull",
+        "failure": true,
+        "error": false,
+        "skipped": false
+      },
+      {
+        "class": "ama.api.Task09Fix01WireTest",
+        "name": "fullScopeAcceptsTokenLegacyAndEqualDualForms",
+        "failure": true,
+        "error": false,
+        "skipped": false
+      }
+    ]
+  }
+}

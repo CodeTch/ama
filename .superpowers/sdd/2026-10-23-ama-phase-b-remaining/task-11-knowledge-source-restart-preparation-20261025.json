@@ -1,0 +1,74 @@
+{
+  "utc": "2026-10-24T18:04:54.643075+00:00",
+  "status": "PREPARED_READ_ONLY_NO_STOP_OR_RESTART",
+  "pid": 142211,
+  "pgid": 142211,
+  "procStartTicks": "11511090",
+  "arguments": [
+    "/usr/bin/python3",
+    "/home/tanren/ama/.worktrees/phase-b-completion/tools/providers/controlled_knowledge.py",
+    "--config",
+    "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/provider-5318a7e5-b6df-4f5e-bf5e-efd863d963d2.json"
+  ],
+  "config": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/provider-5318a7e5-b6df-4f5e-bf5e-efd863d963d2.json",
+  "configSha256": "c184b7928bb1c53b139217a21f6fc4d1a80e070ab94d390c42f7c4c8faaa2cb4",
+  "port": 46287,
+  "store": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/knowledge.sqlite",
+  "identities": {
+    "assertionKeyId": "assertion-d14929352e2b4ee8b1b87fd42b6cd483",
+    "clientId": "task11-client-4eb92c355faf4bc496ac7e538d00f876",
+    "delegationKeyId": "delegation-dcdec1c1d49d45df84c0431caef6d967",
+    "providerId": "CONTROLLED_KNOWLEDGE_V1",
+    "storeInstanceId": "98863bbd-a519-4553-9a09-1246ab221ec9"
+  },
+  "credentialPaths": {
+    "bearerVerifier": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/provider/service-bearer-verifier",
+    "delegationPublic": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/provider/delegation-public.spki",
+    "assertionPrivate": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/provider/assertion-private.pk8"
+  },
+  "oldLoadedSourceEvidence": "artifacts/phase-b/b-remaining/task-11/publication-original-main-02/source/tools/providers/controlled_knowledge.py",
+  "oldSourceSha256": "a66956c7cae80a0bd0dfc247daed4ef07836652c3a337490f2fe8647f258b983",
+  "newSourceSha256": "6dd1fb77a7800530c476d94eb649453eb4749dfa84e1dddc1e176381a4101a39",
+  "privateBeforeImages": [
+    {
+      "name": "knowledge.sqlite",
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/source-restart-before-97b38a903a374f2888c3b903fbcfa3d9/knowledge.sqlite",
+      "bytes": 4096,
+      "sha256": "e3ba06536f7dbba337dee3c1c5f01b43660ce276abb54c5cee2d5defc5b970aa"
+    },
+    {
+      "name": "knowledge.sqlite-wal",
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/source-restart-before-97b38a903a374f2888c3b903fbcfa3d9/knowledge.sqlite-wal",
+      "bytes": 115392,
+      "sha256": "d3c7ba5fc685cb51608ea4926078258c67053c753f8d4511fb55ec396dc6e26b"
+    },
+    {
+      "name": "knowledge.sqlite-shm",
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/source-restart-before-97b38a903a374f2888c3b903fbcfa3d9/knowledge.sqlite-shm",
+      "bytes": 32768,
+      "sha256": "60700d209fc551b6b7f039c198db7b362f1cbea678d39e49dad369d9de5c6af3"
+    }
+  ],
+  "consistentBackup": {
+    "path": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/source-restart-before-97b38a903a374f2888c3b903fbcfa3d9/consistent-backup.sqlite",
+    "bytes": 73728,
+    "sha256": "a2544848aba417f39000ead35b3d2b01c31fd6d9e8d71ec1dea0e3c3ccfb2329"
+  },
+  "sqliteTablesAndCounts": {
+    "document": 0,
+    "execution": 0,
+    "folder": 1,
+    "grant_record": 1,
+    "identity": 1,
+    "library": 1,
+    "publication_slot": 0
+  },
+  "originalExecution": "07327d2f-3b2f-4bc1-ba6d-f9f03246d08a",
+  "originalOutcome": "UNKNOWN; retained; no GET/POST/resend",
+  "nextSteps": [
+    "Coordinator approve exact source/lifecycle transition.",
+    "Validate same pid/pgid/startticks/argv/config before SIGTERM only original PGID, bounded 5s then exact-reverified SIGKILL if necessary; preserve all runtime files.",
+    "Next one real main-chain window uses existing Task11KnowledgeFixture: exact endpoint/store/keys, source preseal, initialize=false, new config/ready files, same durable store, existing 64Mi/2CPU limits. No --initialize.",
+    "Capture actual new PID/PGID and original store identity, then permit only new publicationId request; never resend original UNKNOWN."
+  ]
+}

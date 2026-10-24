@@ -25,11 +25,15 @@ public final class JdbcMeetingRepository implements MeetingRepository {
     private final OutboxPort outbox;
     private final AuditPort audit;
     private final CategoryDictionary categories;
+    private final ama.transcript.JdbcTranscriptAuthority minutes;
     private record Replay(String scope,String result,int status,boolean matches) {}
     private record Roster(String id,long revision,String state) {}
     public JdbcMeetingRepository(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,SubjectFencePort fences,
                                  OutboxPort outbox,AuditPort audit,CategoryDictionary categories){
-        j=new JdbcTemplate(source);this.tx=tx;this.access=access;this.fences=fences;this.outbox=outbox;this.audit=audit;this.categories=categories;
+        this(source,tx,access,fences,outbox,audit,categories,null);
+    }
+    public JdbcMeetingRepository(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,SubjectFencePort fences,OutboxPort outbox,AuditPort audit,CategoryDictionary categories,ama.transcript.JdbcTranscriptAuthority minutes){
+        j=new JdbcTemplate(source);this.tx=tx;this.access=access;this.fences=fences;this.outbox=outbox;this.audit=audit;this.categories=categories;this.minutes=minutes;
     }
     @Override public Created create(Actor actor,String key,String trace){
         independent();
@@ -62,6 +66,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
         independent();
         // Discovery owns no locks; CAS under root rejects any intervening aggregate change.
         var affected=affected(id);affected.addAll(request.rosterDraftIds());
+        var prepared=prepareMinutes(actor,id);
         return tx.required(()->{
             var replay=claim(actor,id,"SAVE_INFO",key,MeetingDigests.save(request));
             var identities=access.lockIdentities(actor,affected);
@@ -78,6 +83,9 @@ public final class JdbcMeetingRepository implements MeetingRepository {
                 desired.add(new Member(uuid(),personId,person.name(),"ENTERPRISE"));
             }
             for(String name:request.externalRosterNames())desired.add(new Member(uuid(),null,name,"EXTERNAL"));
+            if(minutes==null)throw new ama.contract.TranscriptContracts.Failure(503,"MINUTES_TRANSITION_UNAVAILABLE");
+            if(prepared.failure()!=null)throw prepared.failure();
+            var transition=minutes.lockMinutesTransition(prepared.value(),actor,id,held);
             long version=held.root.revision()+1;String info=uuid();
             insertInfo(info,id,version,request.name(),request.category(),request.summary(),request.occurredOn(),actor.enterpriseId());
             var latest=latest(id);
@@ -85,6 +93,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             j.update("UPDATE meeting SET revision=?,info_revision_id=?,actual_meeting_date=?,final_confirmation_id=NULL,updated_at=UTC_TIMESTAMP(6) WHERE id=?",version,info,request.occurredOn(),id);
             j.update("UPDATE meeting_search_projection SET info_revision_id=?,name_search=?,category_id=?,meeting_revision=? WHERE meeting_id=?",info,request.name(),request.category(),version,id);
             fences.advance(held.subject,version,held.root.cancelEpoch(),false);
+            minutes.finishMinutesTransition(transition,version);
             complete(replay,info,200);
             finish(actor,id,version,"MEETING_INFO_SAVED","MEETING_INFO",info,trace);
             return new Mutation(id,version);
@@ -92,6 +101,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
     }
     @Override public Mutation confirm(Actor actor,String id,String key,ConfirmRoster request,String trace){
         independent();var affected=affected(id);
+        var prepared=prepareMinutes(actor,id);
         return tx.required(()->{
             var replay=claim(actor,id,"CONFIRM_ROSTER",key,MeetingDigests.fields("meeting-roster-confirm-v1",request.expectedRevision().toString()));
             var identities=access.lockIdentities(actor,affected);
@@ -108,6 +118,9 @@ public final class JdbcMeetingRepository implements MeetingRepository {
                 // A discovery race cannot acquire a new lower-order identity lock here.
                 if(current==null||!current.status().equals("ACTIVE"))throw new Conflict();
             }
+            if(minutes==null)throw new ama.contract.TranscriptContracts.Failure(503,"MINUTES_TRANSITION_UNAVAILABLE");
+            if(prepared.failure()!=null)throw prepared.failure();
+            var transition=minutes.lockMinutesTransition(prepared.value(),actor,id,held);
             long version=held.root.revision()+1;
             String confirmed=insertRoster(id,version,"CONFIRMED",people,actor.enterpriseId());
             // Full replacement is an atomic diff under the single root; removed grants cannot survive.
@@ -118,6 +131,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             j.update("DELETE FROM meeting_person_search WHERE meeting_id=?",id);
             j.update("INSERT INTO meeting_person_search(meeting_id,roster_id,member_id,name_search) SELECT ?,roster_id,member_id,display_name FROM roster_member WHERE roster_id=?",id,confirmed);
             fences.advance(held.subject,version,held.root.cancelEpoch(),false);
+            minutes.finishMinutesTransition(transition,version);
             complete(replay,confirmed,200);
             finish(actor,id,version,"MEETING_ROSTER_CONFIRMED","MEETING_ROSTER",confirmed,trace);
             return new Mutation(id,version);
@@ -136,6 +150,8 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             return new Saved(id,root.revision(),root.accessRevision(),root.stage(),(String)info.get("name"),(String)info.get("category_id"),(String)info.get("summary"),date==null?null:((java.sql.Date)date).toLocalDate(),root.rosterId(),confirmed,draft==null?null:draft.id(),draftMembers);
         });
     }
+    private record Pending(ama.transcript.JdbcTranscriptAuthority.PreparedMinutesTransition value,RuntimeException failure) {}
+    private Pending prepareMinutes(Actor actor,String id){try{return new Pending(minutes==null?null:minutes.prepareMinutesTransition(actor,id),null);}catch(RuntimeException unavailable){return new Pending(null,unavailable);}}
     private Replay claim(Actor actor,String resource,String operation,String key,String requestHash){
         String scope=MeetingDigests.fields(actor.enterpriseId(),resource,operation,key),keyHash=MeetingDigests.fields(key);
         j.update("INSERT INTO idempotency_record(scope_hash,actor_id,resource_id,operation,key_hash,request_hash,state,http_status,created_at) VALUES (?,?,?,?,?,?,'SUCCEEDED',0,UTC_TIMESTAMP(6)) ON DUPLICATE KEY UPDATE scope_hash=idempotency_record.scope_hash",scope,actor.enterpriseId(),resource,operation,keyHash,requestHash);

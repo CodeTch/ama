@@ -1,0 +1,21 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+06:44:57.851 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_fairunregistered (MySQL 8.4)
+06:44:57.979 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Schema history table `ama_t08_848e93aace8b_fairunregistered`.`flyway_schema_history` does not exist yet
+06:44:57.984 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 14 migrations (execution time 00:00.032s)
+06:44:58.006 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Creating Schema History table `ama_t08_848e93aace8b_fairunregistered`.`flyway_schema_history` ...
+06:44:58.151 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_t08_848e93aace8b_fairunregistered`: << Empty Schema >>
+06:44:58.165 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "001 - foundation"
+06:44:58.323 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "002 - identity acl"
+06:44:58.607 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "005 - tasks outbox"
+06:44:59.057 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "006 - audit metadata"
+06:44:59.284 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "007 - identity sessions"
+06:45:00.064 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "008 - meeting schema"
+06:45:03.478 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "009 - file schema"
+06:45:05.673 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "010 - reliable execution"
+06:45:08.771 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "011 - transcript schema"
+06:45:14.078 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "011.1 - transcript material index"
+06:45:14.160 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "012 - minutes evidence"
+06:45:23.838 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "013 - publications"
+06:45:27.994 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "013.1 - b runtime metadata"
+06:45:28.476 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairunregistered` to version "013.2 - task input lookup"
+06:45:28.565 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 14 migrations to schema `ama_t08_848e93aace8b_fairunregistered`, now at version v013.2 (execution time 00:29.905s)

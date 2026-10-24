@@ -1,0 +1,489 @@
+{
+  "kind": "task12_deferred_boundary_read_only_preparation",
+  "base_commit": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+  "source_method": "git show BASE:path; no checkout or live product reads",
+  "scope": [
+    "T4SR-04",
+    "T4SR-05",
+    "T4SR-06"
+  ],
+  "entries": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md",
+      "base_git_blob_sha1": "2d962f6aba9d91c91c19a7a6aff7bdfe721753cd",
+      "size_bytes": 4432,
+      "sha256": "487f7d9437d9f13a91bacbda5249f28600790a7b617892c9a76c3dd9d6bc8a06",
+      "line_count": 28,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          1,
+          28
+        ]
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-04-review/task-04-review.md",
+      "base_git_blob_sha1": "a010f8299cf17e6a0dc58962137aac44820db818",
+      "size_bytes": 12990,
+      "sha256": "85cddaff6454b01504f2fdbeb601081f162ac41e3898fb1a4f847516131d535d",
+      "line_count": 64,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          46,
+          52
+        ]
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-04-review/task-04-fix-01-review.md",
+      "base_git_blob_sha1": "9a08286cad23e968ae1f4e2659fcb0fbadb96b1b",
+      "size_bytes": 9279,
+      "sha256": "a51b3b30a642b63795b36b7b958bb812db53bda509ec4bc5b4aafdf375878b07",
+      "line_count": 47,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          3,
+          7
+        ],
+        [
+          37,
+          43
+        ]
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/ProcessingDiscoveryController.java",
+      "base_git_blob_sha1": "e1accc7f3195a7058145131d0716215672b4fbc8",
+      "size_bytes": 4195,
+      "sha256": "7d092ab8fb814f82e4d9e4b77a8625be5f7a835f8c4eb4b25ba8d42b5a6351c2",
+      "line_count": 75,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          9,
+          48
+        ],
+        [
+          53,
+          74
+        ]
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/ProcessingErrors.java",
+      "base_git_blob_sha1": "95a136bc8fe1aed75a3e228fe8cc0b1e973235bd",
+      "size_bytes": 2865,
+      "sha256": "b614e66e4e72202f8646bea62b95a691b53b30f0cca2b9ff04008127a13e0a91",
+      "line_count": 42,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          6,
+          17
+        ],
+        [
+          36,
+          41
+        ]
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingDiscovery.java",
+      "base_git_blob_sha1": "989597cada2046607af9761a66021e4379c79d86",
+      "size_bytes": 27820,
+      "sha256": "b91a4c63af9d12ff4c3b5363d588fc2c729129f10439941ed11fefda87f40f36",
+      "line_count": 409,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          35,
+          50
+        ],
+        [
+          77,
+          94
+        ],
+        [
+          146,
+          176
+        ],
+        [
+          228,
+          234
+        ],
+        [
+          384,
+          391
+        ]
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/ProcessingConfiguration.java",
+      "base_git_blob_sha1": "5abd7937a9f9a64990e09605b4506919c1854f6d",
+      "size_bytes": 8384,
+      "sha256": "ed895ba2e6e514e28bb687dc62497fa166f86c5961516afa1a9ec892754d9001",
+      "line_count": 113,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          96,
+          98
+        ]
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/FileConfiguration.java",
+      "base_git_blob_sha1": "3751a21da2205d5dfed8ffe9eed79cea7b618717",
+      "size_bytes": 2998,
+      "sha256": "d2042b9a6fad67c0933d2fc9eb6b269fc924da8e65a44e25be6cd398fb7e6c69",
+      "line_count": 89,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          58,
+          76
+        ]
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/JdbcFileUploads.java",
+      "base_git_blob_sha1": "14b7b45f5eddb6ebd9ee244436c501940574f5f8",
+      "size_bytes": 25015,
+      "sha256": "cf3c274731272b20233e29f20398ed34ad0ca82712a33b00cd8e8ce415d403f9",
+      "line_count": 561,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          64,
+          82
+        ]
+      ]
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/FileContracts.java",
+      "base_git_blob_sha1": "346645af88e0ea0761da07406cf000ede9c248d6",
+      "size_bytes": 2534,
+      "sha256": "b1647179cf9938fce587811aacc0c04d1ab553458928a3ae6bcaf7896532beca",
+      "line_count": 77,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          25,
+          35
+        ]
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/ProcessingIntakeHttpIT.java",
+      "base_git_blob_sha1": "3caf121fc821c2c7d2e5bc13e788e981b3a78e6b",
+      "size_bytes": 66307,
+      "sha256": "c5f6e3ba5399a53020fc5a0d8fcfdcf5287cbf2daa70d88a4a09c2dcf1fb3d07",
+      "line_count": 853,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          47,
+          62
+        ],
+        [
+          85,
+          108
+        ],
+        [
+          126,
+          134
+        ],
+        [
+          191,
+          216
+        ],
+        [
+          506,
+          511
+        ],
+        [
+          825,
+          853
+        ]
+      ]
+    },
+    {
+      "path": "backend/integration-tests/pom.xml",
+      "base_git_blob_sha1": "bf8be4908bdc08d556e28d88b6758725ae1686bd",
+      "size_bytes": 1565,
+      "sha256": "420963360d124c233cad3f73488bcc842d461e860f64b4830ba90ab900338519",
+      "line_count": 9,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          1,
+          9
+        ]
+      ]
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "base_git_blob_sha1": "ceea478c6bd5518b6a3eeebe052ea85902522402",
+      "size_bytes": 2390,
+      "sha256": "0855b5d4a130a77aa88a341c1ab203a5843300d04f388d9a4bb1a5eb6ce38ad8",
+      "line_count": 64,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          30,
+          57
+        ]
+      ]
+    },
+    {
+      "path": "contracts/openapi/processing.yaml",
+      "base_git_blob_sha1": "7a560d4611f60fe2ad10ccbf8a46af2b25d47c9b",
+      "size_bytes": 59297,
+      "sha256": "34b5bb977997f6c94b895fc5ecb37ba3b51671e5c1532be30cd69d423beb86a1",
+      "line_count": 2309,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          382,
+          382
+        ],
+        [
+          454,
+          476
+        ],
+        [
+          933,
+          961
+        ],
+        [
+          1280,
+          1317
+        ],
+        [
+          1535,
+          1575
+        ],
+        [
+          1677,
+          1704
+        ],
+        [
+          1806,
+          1833
+        ],
+        [
+          2064,
+          2091
+        ]
+      ]
+    },
+    {
+      "path": "contracts/openapi/files.yaml",
+      "base_git_blob_sha1": "a75b56f0a7949265ca347b7b06c5b6c7d492621c",
+      "size_bytes": 13140,
+      "sha256": "3326e098f97a5f6b3c2fa10b95ef1c877de799b9ea4e7b088947007e4422f77b",
+      "line_count": 555,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          38,
+          58
+        ],
+        [
+          76,
+          78
+        ],
+        [
+          134,
+          154
+        ],
+        [
+          207,
+          227
+        ],
+        [
+          272,
+          292
+        ],
+        [
+          373,
+          393
+        ],
+        [
+          441,
+          465
+        ],
+        [
+          525,
+          544
+        ]
+      ]
+    },
+    {
+      "path": "contracts/openapi/meetings.yaml",
+      "base_git_blob_sha1": "6d0a422dc90e5d454e1391fda3c70cb22645fe42",
+      "size_bytes": 10136,
+      "sha256": "87335ee4a182dcaf47b8fc86f53a782c82ab349e44eb879830840ea88681d74b",
+      "line_count": 304,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          287,
+          292
+        ]
+      ]
+    },
+    {
+      "path": "contracts/openapi/identity.yaml",
+      "base_git_blob_sha1": "c5da190152c7a1f0b2896a13750c151e47051c1d",
+      "size_bytes": 6133,
+      "sha256": "25a23f5c9aecb7d4e7e688e2c72b287b05a2ff71b1fe0b85924bad55860c999e",
+      "line_count": 224,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          219,
+          224
+        ]
+      ]
+    },
+    {
+      "path": "web/package.json",
+      "base_git_blob_sha1": "2d746c212806e2c7dd1d26d1679e3a1245d8cb43",
+      "size_bytes": 975,
+      "sha256": "0c6e3334e70a699d95bbfc6c43ccb9b087341883588db994b3126cf9152c034d",
+      "line_count": 38,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          11,
+          19
+        ]
+      ]
+    },
+    {
+      "path": "web/scripts/check-api.mjs",
+      "base_git_blob_sha1": "8bf9a57af5a7635bee3dc320d595846206930b96",
+      "size_bytes": 873,
+      "sha256": "7da55705dee56f2b0a56d0eba811ae7529696c6c727b9db9b03c13088368f72e",
+      "line_count": 13,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          1,
+          13
+        ]
+      ]
+    },
+    {
+      "path": "web/src/shared/api/generated.ts",
+      "base_git_blob_sha1": "f81228685650ed0bb4865049d44bd6d7c7b27b6d",
+      "size_bytes": 100250,
+      "sha256": "2adec56dc7b80074642499a6c520e5d35a6d2634f7e0ebe504d20cbff1625a37",
+      "line_count": 2515,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          610,
+          619
+        ],
+        [
+          721,
+          727
+        ]
+      ]
+    },
+    {
+      "path": "package.json",
+      "base_git_blob_sha1": "2053504daf902fd38822e70bcde375393d92ff41",
+      "size_bytes": 385,
+      "sha256": "fe42268cfb50065dea011d3bee7a21a306dfcf18a04ee6139f1c8a055e534757",
+      "line_count": 10,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          1,
+          10
+        ]
+      ]
+    },
+    {
+      "path": "redocly.yaml",
+      "base_git_blob_sha1": "1bad279ba62cc6844cccb729d9bf8acac7bfddb2",
+      "size_bytes": 81,
+      "sha256": "42e2d9f7352c3778026650bbe1c386220b78dcba12d0eedf17c5b1419b03ad19",
+      "line_count": 4,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          1,
+          4
+        ]
+      ]
+    },
+    {
+      "path": "tools/checks/run.py",
+      "base_git_blob_sha1": "16a750cee47604dcff7452b225a3e255352b63f4",
+      "size_bytes": 9743,
+      "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217",
+      "line_count": 176,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          13,
+          24
+        ],
+        [
+          46,
+          84
+        ],
+        [
+          147,
+          159
+        ]
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-04/openapi-size-final-bundle.log",
+      "base_git_blob_sha1": "257d9e01468aed225e23e5c2599764a606e53d3a",
+      "size_bytes": 1683,
+      "sha256": "cf6a4c096067543a035db9bf9fc307555e4ad1defd17877aa182d8529f7e1f8a",
+      "line_count": 47,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          2,
+          8
+        ],
+        [
+          10,
+          47
+        ]
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-04-fix-01/http-schema.py",
+      "base_git_blob_sha1": "4032e6c6eb0a6743ecb0f2b1db27dbffc11e9c16",
+      "size_bytes": 958,
+      "sha256": "27036f7ed91158e7bb3fe5122c6d0b5d2d14d1fd9b61d9e9f0e725b34a68291e",
+      "line_count": 12,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          1,
+          12
+        ]
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-04-fix-01/eligibility-schema.py",
+      "base_git_blob_sha1": "cd99a6e92e34b8d19f7ca8635889719eb566ae44",
+      "size_bytes": 925,
+      "sha256": "bc826704935634141a29fbddfafd1655aabd1d15869b37d1aa3150278cfc3ff6",
+      "line_count": 14,
+      "evidence_ranges_1_based_inclusive": [
+        [
+          1,
+          14
+        ]
+      ]
+    }
+  ],
+  "limitations": [
+    "Not implementation, test execution, independent review or closure",
+    "No repeat of completed Task12 web/design preflight",
+    "No current Task6 live source inspection",
+    "No tests/generators/network/browser/DB/resources/privateenv access",
+    "Command paths are future lanes, not run receipts",
+    "Existing regex does not enforce numeric signed-long ceiling",
+    "Historical warnings/banner and composed-suite limits retained",
+    "Actual Tasks6/8/7/9/10/11 API/source repin mandatory at Task12 activation"
+  ],
+  "output": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-deferred-boundary-map-20261024.md",
+    "size_bytes": 14217,
+    "sha256": "154de68991632899889ecb655dd63830e22f346b105019349eb4dd1f584c2ed8"
+  },
+  "writes_only": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-deferred-boundary-map-20261024.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-deferred-boundary-map-20261024-manifest.json"
+  ]
+}

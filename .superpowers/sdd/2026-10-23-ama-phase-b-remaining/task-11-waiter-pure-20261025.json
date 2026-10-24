@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-24T17:42:07.063420+00:00",
+  "command": [
+    "/home/tanren/ama/.worktrees/phase-a/.tools/zulu21.52.203-ca-jdk21.0.12.1-linux_x64/bin/java",
+    "-Xmx64m",
+    "-XX:ActiveProcessorCount=2",
+    "backend/integration-tests/src/test/java/ama/storage/Task11PublicationWaiter.java"
+  ],
+  "sourceSha256": "b22c11ccc29dd60a1d4b34c4ff97134f237241411e91f2581ec97576e946f7fa",
+  "result": {
+    "checks": 23,
+    "passed": true,
+    "businessCalls": 0,
+    "databaseCalls": 0,
+    "providerStarts": 0
+  },
+  "earlierInvocation": "Outer PowerShell direct JVM option forwarding rejected before source execution; rerun argv through Python, no business/DB."
+}

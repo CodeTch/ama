@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09GenerationPhysicalCancelIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "44bb37e93d5a46ce8b83563f93326debd8559a3d3efa4e38c7679e61cca33d31",
+  "startedUtc": "2026-10-24T07:20:30.257687+00:00"
+}

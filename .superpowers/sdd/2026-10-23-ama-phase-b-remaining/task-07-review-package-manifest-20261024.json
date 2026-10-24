@@ -1,0 +1,86 @@
+{
+  "timestampUtc": "2026-10-24T00:42:58.366430+00:00",
+  "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+  "head": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
+  "pathsTotal": 8705,
+  "focusCount": 31,
+  "focusPaths": [
+    "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+    "backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java",
+    "backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java",
+    "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+    "backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java",
+    "backend/core/src/main/java/ama/task/ModelPermitPool.java",
+    "backend/core/src/main/java/ama/task/PreparedExternalPolicy.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07DataSource.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07ExternalWorkerIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07GenerationRetentionIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedB06QueueSeamsIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedExternalExecutionIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedFixture.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedMarkerCrashProbe.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedModelPermitIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedOutboxConsumerIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedOutboxFenceIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedPreparedCompletionIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedReconciliationWorkerIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedResources.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedTaskLeaseIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07ProbeSource.java",
+    "backend/integration-tests/src/test/java/ama/task/Task07RecoveryBoundsIT.java",
+    "backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java",
+    "backend/worker/src/main/java/ama/worker/ExternalOperationHeartbeat.java",
+    "backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java",
+    "backend/worker/src/main/java/ama/worker/ReconciliationLoop.java",
+    "backend/worker/src/main/java/ama/worker/WorkerLoop.java"
+  ],
+  "packages": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-source-review-package-20261024.diff",
+      "bytes": 301399,
+      "sha256": "a9f829782085d0b51a2dc69e3e7f465c318140cca21d82b4727e7c5af70bf72b",
+      "scope": "all31product+testchanges"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-full-review-package-20261024.diff",
+      "bytes": 74464132,
+      "sha256": "6d083627878760b2bedddd6219eb4bd1da6f2a21fe510d0721c18ef420d34a9a",
+      "scope": "all8705authordeliverypaths"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/report.md",
+      "bytes": 12119,
+      "sha256": "a2a637bd05772b22131211cea5ac94ffa854fad96608706de29dca01aa608ede"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/manifest.json",
+      "bytes": 2314712,
+      "sha256": "20e92193cd509606b93375c968b30b23d023b45ba3b440bf5234dd0e0625b0bd"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/qualification-ledger.json",
+      "bytes": 190724,
+      "sha256": "cd736e2be23f7544664a2cb812e63cda57de6dc173f5b8fea57534854cd9b568"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/delivery-custody.json",
+      "bytes": 1137,
+      "sha256": "a7735e65fdb9115775daae1e652f5e87a5052ef19d434dbd03996ff1a28a6388"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-report.md",
+      "bytes": 1697,
+      "sha256": "e15b9ed536f07b24b78032ebfdbf91d08bdc7819339c137615561dee085ab7dc"
+    }
+  ],
+  "brief": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-independent-review-brief-20261024.md",
+    "bytes": 25688,
+    "sha256": "ce720ac2dace7efd81111d6bebe3ee69886d3112798784aa66a0f61eea7d4a3c"
+  }
+}

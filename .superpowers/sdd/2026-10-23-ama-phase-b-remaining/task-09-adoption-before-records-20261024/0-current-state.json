@@ -1,0 +1,438 @@
+{
+  "schema_version": 2,
+  "updated_utc": "2026-10-24T11:48:13.654364+00:00",
+  "objective": "Complete all remaining local controlled Phase B tasks with subagents/tests/independent review/records, then deliver. Do not stop after a slice.",
+  "latest_user_instruction": "superpowers:using-superpowers 继续任务 — resumed full remaining B; stop after B, no C/D/E/F.",
+  "pause_request_active": false,
+  "status_precedence": "Latest explicit user continuation revokes prior pause; historical pause snapshots preserved. Task9 continues from actual response-budget RED.",
+  "historical_state_archive": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-normalization-20261024.json",
+    "sha256": "599708de6497fe18816d9e1b34d636858e883b127e7c869dfa3c1dbc7a9c159b",
+    "kind": "exact full pre-normalization bytes; all prior task/pause/qualification observations retained as history"
+  },
+  "coordination_tree": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "branch": "codex/phase-b-completion-20261023",
+  "canonical_plan": "docs/superpowers/plans/2026-10-23-ama-phase-b-remaining.md",
+  "ledger": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
+  "active_context": "resume-20261024-active-context.md (latest ACTIVE continuation header authoritative)",
+  "last_root_commit": "591545a4a1a4ce27edea54baa94e9d11666807b7",
+  "task6_base": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+  "primary_main_last_observed_head": "c71a44adb679a78d4c28dde7a4223aad1a23b40f",
+  "primary_scope": "Only exact discovery handoff/resume docs uncommitted; product/mainmerge/push not authorized in this continuation; verify actual main before later precise doc update.",
+  "execution_status": "ACTIVE_TASK9_FIX1_SCOPED_REVIEW",
+  "active_implementation": {
+    "task": 9,
+    "status": "FIX1_AUTHOR_DONE_COMMITTED_NOT_ADOPTED",
+    "base": "cff858e163ca7dea774dcf05c707ef7551956156",
+    "productActivated": true,
+    "agent": "/root/b_continuation_coordinator/b09_continuation_author",
+    "brief": "task-09-activation-author-brief-20261024.md",
+    "protected": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-protected-adopted-inputs-20261024.json",
+    "fixtureAck": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-root-fixture-application-ack-20261024.json",
+    "fixtureAckSha256": "6f926c62b9710dab9c889eee104543b3250bfd5e33fc23d67fb655677e4c7e5d",
+    "privateEnv": ".tools/task09-2d0e28ea775540f8b3525f9344edf5f0/env.sh",
+    "bootstrapEvidence": "artifacts/phase-b/b-remaining/task-09/bootstrap-01/",
+    "bootstrapControllerProof": "task-09-bootstrap-controller-xml-read-20261024.json",
+    "current_milestone": "Fix1 own commit591545a4, exact6342paths/indexempty. Focused original-reviewer F1–F4 re-review and sameSol delta custody active; F5 remains final-review OPEN.",
+    "admissionCancellationRuling": "task-09-external-admission-cancellation-ruling-20261024.md",
+    "pendingOriginalExternal": {
+      "taskId": "1106f41b-077f-4d54-8329-1341eceebcd7",
+      "executionId": "6521f9b2-bfd3-476a-93ec-6e9fcbe8a4f1",
+      "permitId": "736364f2-5f6d-42f3-902f-de1a5ecfeff1",
+      "observedStatus": "RECOVERED_SAME_FACT: task/execution/operation SUCCEEDED; same permit actually settled; original provider files unchanged",
+      "failureWindow": "artifacts/phase-b/b-remaining/task-09/generation-external-green-02",
+      "diagnostic": "artifacts/phase-b/b-remaining/task-09/external-diagnostic-01",
+      "nextAction": "Preserve original failure UNKNOWN and separate proven recovery04 UTC defect; no repeat of one-time recovery helper",
+      "controllerProof": "task-09-original-external-recovery-controller-check-20261024.json",
+      "outputId": "94707e50-beb5-4fef-b192-7f6d961c8037",
+      "externalResultId": "cmr-3adb5d09-9aa1-4ee7-9da6-2de296808942"
+    },
+    "newWorkerCandidateProof": "task-09-first-new-worker-candidate-controller-check-20261024.json",
+    "remainingInventory": "task-09-remaining-inventory-20261024.md",
+    "administrativeInstallation": {
+      "status": "APPLIED_PROVIDER_NOT_STARTED",
+      "ack": "task-09-controlled-admin-application-ack-20261024.json",
+      "ackSha256": "96354b009f7e8183c48fc2ebfbfb84fecdfa783bef7083b29c994d3a27fce7c2",
+      "owner": ".tools/task09-2d0e28ea775540f8b3525f9344edf5f0/controlled-installation-20261024",
+      "templateId": "067313c0-bb33-4b83-8674-47058c6e9a6d",
+      "revisionId": "0f7d6a2b-214e-4bff-ac66-5823755c0718",
+      "indexSha": "111a10855e0de56049bb8d9004f4b5ef43e2fa5cb888d024bde9b3f409d1e21c",
+      "actualIndexEntries": 19,
+      "actualIndexHashVerified": true,
+      "schema": "ama_t09_2d0e28ea7755_behavior",
+      "invocations": 2,
+      "actualJavaInvocations": 1,
+      "old8KeyEnvUnchanged": true,
+      "formalNewInitialAndGenerationEnabled": false
+    },
+    "pendingDeniedLookupExternal": {
+      "window": "artifacts/phase-b/b-remaining/task-09/denied-lookup-green-02",
+      "taskId": "f85adc4c-d90d-43cc-86e7-6d069e5fd444",
+      "executionId": "ce929e14-f580-4cd3-b4bf-86c7c9178115",
+      "status": "RECOVERED_SAME_FACT:01genuineGET/observercommittedRECORDED_FENCED despiteassertionFAIL;02actualsettlement1PASS/0providerCalls;0candidate",
+      "next": "Original fact recovered; fresh denied green04/deleted/lookup validity evidence preserved in author handoff. Do not repeat one-time recovery; final source qualification/review remains pending.",
+      "controllerProof": "task-09-denied-original-recovery-controller-check-20261024.json"
+    },
+    "resumeFirst": "Read fix1 scoped review + delta custody; if allgatepass adopt Task9 then activateTask10 StageA. Otherwise sameauthor boundedfix2.",
+    "agent_status_at_document_finalization": "Fresh same-task continuation author dispatched after root confirmed old live handle unavailable.",
+    "author_commit": "0e22b812000f2efa00c2ef8ed66e06d8254beab5",
+    "fix_round": 1,
+    "fix_base": "0e22b812000f2efa00c2ef8ed66e06d8254beab5",
+    "fix_brief": "task-09-fix01-author-brief-20261024.md",
+    "pendingFix01DeniedFact": {
+      "task": "fa172992-cbf0-4527-a638-ab6e4853b819",
+      "execution": "3ea4befa-a586-4170-aa2c-5923fd678ae4",
+      "operation": "da316d18-5827-4ca3-95e8-387d6935f2d9",
+      "permit": "120e2368-6b9b-46eb-9e5f-f53df037580c",
+      "observation": "Exact JdbcModelPermitPool.settled once: exit0/true/unsettled0; task STALE, execution/operation SUCCEEDED, candidate0; no GET/POST",
+      "next": "Original exact permit settled; fresh denied-green-02 1PASS observed recovery0/0/0/1 targetcount1→0,10sdeadline~1.3s. Both evidence sources retained; original cause unproven.",
+      "evidence": "artifacts/phase-b/b-remaining/task-09/fix01/original-settlement-receipt.json",
+      "status": "ORIGINAL_SAME_PERMIT_SETTLED_BY_PRODUCT_CALL",
+      "cause": "Original final zero-count FAIL remains; loop-close/tryLock competition hypothesis not proven by old window"
+    },
+    "fix_commit": "591545a4a1a4ce27edea54baa94e9d11666807b7"
+  },
+  "completed_implementation_tasks": {
+    "1": {
+      "author": "cb92f1135bb304c2aec6a7f28e7530860c004710",
+      "adopted": "a3b2933ef83035e858d2d3336decba4617f22a1f",
+      "dual_review": "PASS/APPROVED",
+      "tests": "221unit+84IT0fail/error/skip"
+    },
+    "2": {
+      "author": "66e70fdeef286a38592395ce94bdfbb1a93bce4a",
+      "adopted": "3e393dbc9485b187b89bfc03abd88821a0aabddb",
+      "dual_review": "PASS/APPROVED",
+      "tests": "221unit+45IT0fail/error/skip"
+    },
+    "3": {
+      "author": "aa0b5f08a19649091b0bcd60959bd741fb5c7850",
+      "fix01": "912945df2ad09d7ff265f6ba97e304a2b98a4b79",
+      "adopted": "2ec38c0350f466fc4292d588051c5694cc099cb5",
+      "dual_review": "PASS/APPROVED after1fixround",
+      "tests": "349 composed-sourcewindow; exactfix35PASS0fail/error/skip; initialhandshakeunresolved"
+    },
+    "4": "Adopted 35b2325aee8e6c09aa1bdebc880c4f09bd37837b original59c8/fix1ce4 scopeddualPASSa51b3b30",
+    "5": {
+      "author": "857102b917bbef77c38fae3211e3a65207a98c6c",
+      "fix01": "11eb54086da95c675862fcf4225821104aa8e87d",
+      "fix02": "c943d15f4a2b9f294e4b7791fb51eb67d3acce5d",
+      "dual_review": "SPEC PASS/quality Approved; two residuals closed; CV1 addressed",
+      "adoption": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+      "tests": "final units240; fix02 final-product6distinctIT; prior windows retained not summed",
+      "custody": "270evidence/505source/290delivery/4727immutable/552old+341fix01;4private0;14actualchains/13SQLhistorysame"
+    },
+    "6": {
+      "author": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+      "fix01": "d54b2e8841c664e691d03192507e7a192be38430",
+      "dual_review": "b71b6a02 SPEC PASS/Approved;2Important+CV01–04closed0new;MinorT6SR03Task12open",
+      "tests": "121distinctcomposed(34current+87inherited),254units;failed121batch/affected5replacementpreserved",
+      "adoption_doc": "docs/acceptance/b/task-B-remaining-06-saved-transcript-adoption-20261024.md",
+      "root_mirror_manifest": "artifacts/phase-b/b-remaining/controller-task06-adoption-20261024/manifest.json",
+      "root_mirror_sha256": "3ca4b8b7bea125343d1a9a6ca735b401f0668e78c2340635b28f9ecca3ad9075",
+      "qualification": "COMPLETE controlled accepted12ca/d54/b71; Task8closedTask6currentmodelsync; minorT6SR03Task12.",
+      "adoption": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6"
+    },
+    "8": {
+      "author": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "spec_quality_review": "f7187193 SPEC compliant/Approved0Critical0Important1Minor",
+      "final_custody": "58e832ea +6acea297 scopedCVclosure",
+      "tests": "254unitsonce+104distinctselectedIT; interrupted/failed/componentwindows preserved",
+      "root_adoption_doc": "docs/acceptance/b/task-B-remaining-08-reconciliation-fairness-adoption-20261024.md",
+      "root_mirror_manifest": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/manifest.json",
+      "root_mirror_sha256": "fc6ae32569e620af792ef10dd3835665050cd866b7f0bda9c532f76749791e0a",
+      "closed_followups": [
+        "FUP-B05-CANDIDATE-01 controlledscope",
+        "T6-INDEX-MODEL-SYNC"
+      ],
+      "minor_open": "T8SR-M1 Task13; OptionalfailurecauseUNKNOWN retained",
+      "adoption": "de1611a67ba483afe21f3b29bb69c2d32028efef"
+    },
+    "7": {
+      "source": "bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc",
+      "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+      "review": "22818db8 SPEC COMPLIANT/APPROVED0new",
+      "custody": "2d41fbf0PASS/controllera9552f78",
+      "tests": "407selectedcomposed153IT151+2replacements+254units; originalfull153batch1FAIL1ERRORcausesUNKNOWN",
+      "adoption_doc": "docs/acceptance/b/task-B-remaining-07-prepared-external-adoption-20261024.md",
+      "future": "CV04 realconsumers9/10/11",
+      "adoption": "cff858e163ca7dea774dcf05c707ef7551956156"
+    }
+  },
+  "source_tasks_remaining": [
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "next_steps": "ACTIVE: await Task9 fix1 scoped review/custody → if gates pass adopt and StageA Task10; else bounded sameauthor fix2 → Tasks10/11/12/13 final review → stop afterB.",
+  "writer_policy": "One product writer, serialized heavy tests; coordinator bookkeeping/DDL gates only. Preserve all historical evidence/W.",
+  "root_owned_dirty_paths": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md",
+    "DEVELOPMENT_HANDOFF.md",
+    "docs/acceptance/development-resume-b-remaining-2026-10-24.md",
+    "docs/acceptance/development-pause-b-remaining-2026-10-24-0930.md",
+    "artifacts/phase-b/b-remaining/controller-task11-sql-probe-20261024/ (newrootproofs, ignored)",
+    "newrootWpreparation/reviews/protocols/archives/index (ignored; preserve)"
+  ],
+  "design_gates_remaining": {
+    "6": "COMPLETE12ca; onlyminorT6SR03Task12.",
+    "7": "COMPLETE_ADOPTEDcff858e/sourcebdf/review22818db8; onlyCV04futureconsumers/Q01Q02historicalUNKNOWNcarry.",
+    "8": "COMPLETEde1611a/sourceDA/reviewf718/custody58+6acea; FUPfairness/modelsyncclosed. MinorT8SR-M1Task13/historicalOptionalunknown retained.",
+    "10": "Adopted 875047cdbcd6ddd17f5c267f8998b7a5a4378b6c exactrawdesign/review/sharedrank; independentAstra SPEC PASS/designAPPROVED zero findings. Source/runtime gates remain.",
+    "9": "Design adopted; source0e22 independent review changes required F1–F4, fix1 active; no adoption.",
+    "11": "Adopted exactR1/original/closure/reviews/manifest at f176382618924d9a00fd5fbabf93bbc30c78dd71; dualPASS2closed0new. Logical-only schema, source/runtime gates pending.",
+    "12": "Adopted exactR1/original/closure/reviews/diff/manifest at 8e7a82e237a9552ace2d7491adadbf08416feaee; T12DR01closeddualPASS0new; source/runtime pending."
+  },
+  "parallel_preparation": {
+    "task": 10,
+    "status": "HELPER_PREPARED_UNUSED_REVIEW_APPROVED",
+    "agent": null,
+    "helper": "task-10-fixture-provisioning-prepared-20261024.py",
+    "sha256": "c624807461392d0844a299ff73ef1cea64cb76aa39cc43846a973c068c86fa18",
+    "productActivated": false,
+    "runtimeExecuted": false,
+    "review": "task-10-fixture-helper-independent-review-20261024.md",
+    "reviewSha256": "8423cc2e1ce8938f43ace27042329ee98a565ef53be3ca843356b5861f4f90d1"
+  },
+  "preparation_status": "All prior6/8/7/13 preparations and resumed9/10/new11 readonly preflights COMPLETE. Actual upstream source repins at activation remain; do not repeat full completedpreflights.",
+  "task5_final": {
+    "adoption_commit": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+    "product_source": "c943d15f4a2b9f294e4b7791fb51eb67d3acce5d",
+    "fix01": "11eb54086da95c675862fcf4225821104aa8e87d",
+    "review": "task-05-fix-02-review-20261024.md SHA3a3b3855 SPEC PASS/qualityApproved,0findings; T5SR01/02 andCV1closed",
+    "custody": "270evidence/505source/290commitpaths/old552+341/protected4727/prefix/fourprivate0;14actualHTTPchains=13negativefixturemaintenance+1successRAW2uploads;13historysame;selectedresourcesunchanged",
+    "tests": "37suites240units +6distinctIT atfinalproduct; priororiginal/fix01composedsourcewindows/historicalexecutionquals retained; no retroactivepristinefullsuite claim",
+    "adoption_doc": "docs/acceptance/b/task-B-remaining-05-worker-adoption-20261024.md"
+  },
+  "task6_current": {
+    "status": "COMPLETE",
+    "source": "d54b2e8841c664e691d03192507e7a192be38430",
+    "adoption": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+    "review": "b71b6a02 SPEC PASS/Approved",
+    "tests": "254units+121distinctcomposedIT (34current+87inherited); failed121batch/same5replacement preserved, never126/pristinebatch",
+    "qualification": "PIN03/sourceequivalence controlled; Task8modelsyncclosed/T6SR03Task12open. Fulloldchronology exactTask7pointerarchive."
+  },
+  "fixture": {
+    "name": "ama-test-b01-ad9f1af29eff",
+    "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+    "port": 46653,
+    "env": ".tools/phase-b-remaining/env.sh",
+    "owner": "remaining-20261023",
+    "only_this_run_owned_reuse": true,
+    "no_reset_or_old_env": true,
+    "historical_completed_test_ports": [
+      58062
+    ],
+    "restoration_history": "SameCIDstartedafterDockerDesktopstop/exited255/OOMfalse; originalHostConfigdynamicportblank remapped45157; no recreate/reset/DDL; privatecurrentenvURLonlyupdated with0600backup; original58062rawreceiptsunchanged."
+  },
+  "owned_s3": {
+    "id": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+    "name": "ama-task05-s3-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+    "port": 45501,
+    "rootproof": "task-05-s3-resource-rootproof.json",
+    "retained": true
+  },
+  "resource_policy": {
+    "current_ports": {
+      "shared_mysql": 46653,
+      "owned_s3": 45501,
+      "task8_owned_mysql": 44727
+    },
+    "private_env": ".tools/phase-b-remaining/env.sh",
+    ".tools_root": ".tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+    "selected_only": "Selected exact CID/owner/image/mount/limits fields only; never full inspect/Config.Env. Reuse retained shared MySQL/S3/env/PKI. Task8 new bounded owned MySQL already provisioned under explicit rootguard, no recreate/reset. Activationbrief controls target-specific migration access.",
+    "limits": "Test/Worker512MiB2CPU; native/probe64MiB2CPU; Task5scoped3preparations/admission2proofcompleted no needrepeat",
+    "new_case_resources": "Only fresh UUID descendants runtime/native/data under existingroot and newcasebuckets; nooldartifactpaths; ownerguard first",
+    "maintenance": "Only exactnewcaseHTTPactor/meeting/input/upload/spec/attemptchain+observednegative/Workerstop-join-zeroactive/noRAW-external-reservation; guardedmaintenancebeforerouteclose; notbusinesssuccess",
+    "task8_owned_mysql": {
+      "id": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+      "owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+      "port": 44727,
+      "limits": "768MiB memory=swap/1CPU/256PID",
+      "private_env": ".tools/task08-848e93aace8b4f0fa34fc548267f3dc5/env.sh",
+      "ready_proof": "task-08-owned-resource-ready-20261024.json SHA334d4f881e2b658eb9f5c21217bea7fa3d029dbcbf33f7e9a05e546a1235eec3",
+      "initial_targets": "4 fresh schemas behavior/fairheld/fairunregistered/overflow, empty at ready observation; actual author bootstrap/migration report pending",
+      "historical_target_addition": "SameexistingCID/rootselectedguard5d55bd4e/newemptyama_t08_848e93aace8b_historical010/testusergrant/ready8.4.6;no newcontainer/credentials. PrivateenvappendedAMA_TASK08_HISTORICAL010_DATABASE_URL exactoldprefix/0600backupretained. SeparateACKbe461cd4 target010only/new8frozenoldscripts/rerun0; no13.3orreset."
+    }
+  },
+  "schema_protection": {
+    "initial_paths": 4728,
+    "unchanged_historical": 4727,
+    "single_authorized_current_generated_model_exception": "docs/database/ama-schema-draft.sql; oldexactblob task-02-review/prior-current-schema-draft.sql.txt; originalsnapshotunchanged",
+    "new_frozen_SQL": "V013_1__b_runtime_metadata.sql SHA9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520/1817B/checksum-1898004857",
+    "frozen_additions": "frozen-additions.json",
+    "reserved": "003/004gaps;014..027owners;nextinteger028, root compatiblepatchallocation only afterproof"
+  },
+  "schema_history": "Root fresh SELECT-only16c60cfe confirms exact15 through013.3 checksum-385117638 on all5acknowledgedtargets, full15historyfields +selectedordinal/indexparts match completedrerun; old14historyprefix preserved by0f5f6e89. OldSQLimmutable,013.3full164B023fe875. Nextversions014..027reserved,integer028; laterTask11DDLunallocated.",
+  "current_generated_model": {
+    "path": "docs/database/ama-schema-draft.sql",
+    "sha256": "0beb9eace26afd5c45ade81a2f990583c0d5a58ffda963c15d17836a1fa3af68",
+    "version": "B00-1.6-reconcile-scan",
+    "initial_protection_fact": "Initial4728 lists currentSQLdraft only; currentdictionary/design notmembersofthatJSON. Preserve historicalconstraints andnewTask6snapshot independently. Originalprotectedbaselineunchanged.",
+    "task8_ownership_ruling": "Original task-08-model-output-root-ruling-20261024.md PLUS task-08-model-output-input-index-amendment-20261024.md; exact4baseblobpreservationbeforewrite; durable_taskindexgenerator87-88/SQL320-351/dict542-581; noERindexchange; Operationregions+headers/statusprefixsame; combined98tables732cols189indexes/B00-1.6. ActualTask8activationafter6adoption.",
+    "task8_ddl_status": "COMPLETE accepted013.3/fiveforward15/old8historicalseparate; static+rootfreeze+ACK+normal1-rerun0+fullpreservation+reviewaccepted.",
+    "task11_ddl_status": "ExactR1 isolated engine probe already completed (29 PASS); formal version/freeze/separate ACK/model/runtime work pending actual7/9/10/full-prefix repin. Do not repeat isolated probe.",
+    "counts": "98tables732columns189explicitindexes116checks208FK; deployed65/492distinct"
+  },
+  "binding_cross_task_rulings": {
+    "task9_ruling": "enqueue currentr/e no contentadvance, retainactualdebt; complete same-root outstanding generation tasks/input readiness gates final/publish, enqueue actualinprogresspubguard; exact indexedboundedclosure andconcurrencyproof required.",
+    "task9_initialization_ruling": "Task9 owns real firstminutes-settings/template origin/emptyexclusion prerequisite underowner/idempotentCAS/strictfirst-only; noB03defaultbackfill/noDDL/noSQLfakeflow. Task10lateredits/shareddisposition, Task11freeze.",
+    "shared_rank_ruling": "task-09-10-shared-rank-ruling.md SHA3b10ab12f46f7b4a2f70a91871f20d4f4052662b1cfee2b08700b02188b6bc75; originalTask9/10unchanged, Task3/6 domainfirst thenTask9minutestableextension/candidateheaderslastdomain beforeallsources/tasks, earlydiscoveryonly.",
+    "task11_zeroeffect_ruling": "Originalrequirements869/1030..1036 allow prefirstsuccessmodify/refinal/reconfigure after authoritativezeroeffect; do not blanketFAILEDforeverlock. SamepublicationUUID+immutablehistory/newexecution exactguards designpending.",
+    "task5_package_alignment_ruling": "R1 queue-private registration/AfterTask/invocation remainama.task. Minimal constructor-boundregistration delegates existing transcript-private graph/held verification to SAMEauthority/JdbcTaskPreparationsissuer; collaborator notsecondissuer/admissionpolicy. Exactfixedregisteredidentity, no publicmint/setter/DTOgrant; actualAPI+Worker installoneconfinedregistration. Sourceproof/reviewrequired.",
+    "task5_shared_assembly_ruling": "task-05-shared-assembly-root-ruling.md",
+    "task5_shared_assembly_ruling_sha256": "c4f9181933462d66e5377dd5049f344c7e2369943a42763863c7e8bf1309ca2c",
+    "task9_terminal_replay_source_check": "AtTask9actualTask7adoptionrepin inspectpreparedpolicyverifyReplaydefaultfalse; realTask9consumerneedsowncomplete exactstoredgraph validation fornormalSUCCESS, invalidlocalFAILED/null andretainedSTALE/null terminalreplay underauthenticcontext, no newwriters/resend onreplay. Currentauthorreportscontrolledproofonly; awaitTask7independentreview beforeproductadoption.",
+    "task7_CV04_consumer_qualification": "Independent Task7 review91a257d8 CV04: Tasks9/10/11 remain mandatory real-consumer gates: full archived producer/input closure; bounded strict provider payload/result identity across restart; full stored graph equivalence/adoption; zero/positive/missing editor guards; all version-writer PENDING disposition; readiness before final advancement; publication read/application projection. Fixture private object identity/T07_FIXED/WORKING graph does not qualify real provider/full consumer. Actual final Task7 source must be repinned after fixes before installation; preserve failclosed registrations."
+  },
+  "pending_issue_register": "task-13-pending-issue-register-20261024.md; Task9 response budget closed with exact413 ruling; F1–F4 fix1 active, F5 Minor deferred; CV04 later consumers, Task12 minors, Task13 historical limitations retained.",
+  "final_review_lower_bound": "34cb226aefe99c67d3681af68d748b0aeea4e073",
+  "final_review_base_ruling": "InitialallworkBASE evenifmainindependentlyintegratedTasks1–4; notfreshmainmergebase",
+  "open_optional_followups": [
+    "FUP-B-REMAINING-TEST-01 heartbeat-test100mssleep",
+    "FUP-B-REMAINING-TEST-02 expectedWARNING/deprecationnoise",
+    "T03-IR-M01 compressedsecuritycodereadability",
+    "T03-IR-M02 unresolvedinitialuploadhandshake"
+  ],
+  "final_limits": [
+    "B01IMMpermanentPARTIAL",
+    "B04Q401UNKNOWN",
+    "companySSO/directory/model/KB unavailable",
+    "noHA/capacity/nativeIOqualification",
+    "noactualproductionpublish/mail/push/mainmerge"
+  ],
+  "skill_runtime": "Superpowers7.0.1; actualavailableagenthandles authoritative; approvalnever omit sandbox_permissions; stable nonUNCWindowscwd/literalPSstdin→WSLPython argv. No routineuserpermissionstalls.",
+  "historical_execution_qualifications": "Full prior details kept in exactarchive and original reports: Task4/5composedwindows/clockhandshakecauseunproven/fullinspect/javapwithoutflags/setupfailures/source-reconstruction/maintenancechronology; do notretroclaim orformat-onlyrerun. TwoearlyTask6ITverifycommandsranunits; laterMAVEN_CONFIG skipsunitselector; preservecounts/sourcewindows/finalunitsseparate.",
+  "schema_forward_history": {
+    "actualAdoptedCount": 15,
+    "latestLiteral": "013.3",
+    "latestScript": "V013_3__external_reconcile_scan.sql",
+    "latestChecksum": -385117638,
+    "latestBodySha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+    "task6Index": "013.2/75B11adae7d/checksum-1098175378",
+    "acceptedEvidence": "Task8migration0f5/rootlive16c60/fullposttest0d73-bf57/custody6acea;fiveforward15+separatehistorical8 accepted; alloldSQLimmutable",
+    "task7FreshOwnBootstrapRootCheck": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-bootstrap-root-evidence-check-20261024.json",
+      "bytes": 5010,
+      "sha256": "c4fbd3ba5436b93d408863fd4dd1125babfc8188fb4d76954c63741c9d1c31ab"
+    },
+    "future": "Task11 exactR1 isolated SQL probe completed; formal version/resource/model/DB application pending upstream activation, freeze and separate ACK. No formal future version allocated."
+  },
+  "task8_current": {
+    "status": "COMPLETE",
+    "source": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+    "adoption": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+    "review": "f7187193 SPECcompliant/Approved0Critical0Important1Minor",
+    "tests": "254unitsonce+104distinctselectedIT; allfailed/setup/interrupted/componentsourcewindowsretained",
+    "custody": "58e832ea+6acea297 scopedCVclosure; shared34791rowfull0d73-bf57;7SHAexacthelperrecovery455c retrospective/notcontemporaneous",
+    "closed": "FUP-B05-CANDIDATE-01 controlledscope +T6-INDEX-MODEL-SYNC",
+    "open": "MinorT8SR-M1Task13/historicalOptionalemptycauseUNKNOWN",
+    "migration": "013.3exact164B023fe875/new1-rerun0/fiveforward15; separatehistorical0108/0+adapted3oraclePASS; retainedoverflowMAXintentionallyexhausted NEVERreuse",
+    "model": "B00-1.6/98tables732cols189indexes116checks208FK; deployed65/492distinct",
+    "mirrorManifest": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/manifest.json SHAfc6ae32569e620af792ef10dd3835665050cd866b7f0bda9c532f76749791e0a"
+  },
+  "pointer_normalization_archives": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-task8-pointer-normalization-20261024.json",
+      "bytes": 30756,
+      "sha256": "03ea0e8521a24ab81ab35f33318ada5e19238c598d6f124c2c3f5ea709a56ec2"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-context-before-task8-pointer-normalization-20261024.md",
+      "bytes": 11407,
+      "sha256": "7cd464ed8f9e32aa7c1aca6af38564a4f912b8da21cfe84eb82347b829d44dc1"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-task7-pointer-normalization-20261024.json",
+      "bytes": 41250,
+      "sha256": "620a98da0f3d3cc6a2b1ba883950eab2555ea7ee0c0b06541ced7a320cc91007"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-context-before-task7-pointer-normalization-20261024.md",
+      "bytes": 12203,
+      "sha256": "6d1ce9fe25c333feffdd4ca6dd6f162043d0d9d0b58d0eb77e5d632365144b77"
+    },
+    {
+      "path": "current-state-before-task9-active-normalization-20261024.json",
+      "sha256": "6f513a9c85c2a454c9dc167aec15a1dde55efd8392f52f73c7ec0ea519a79572"
+    }
+  ],
+  "task7_current": {
+    "status": "COMPLETE_ADOPTED",
+    "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+    "source": "bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc",
+    "adoption": "cff858e163ca7dea774dcf05c707ef7551956156",
+    "review": "task-07-fix02-independent-review-20261024.md SHA22818db8d10088d0485213cd52e673750abbba0892fab2553643dbe8a9e6bc27 SPEC COMPLIANT/APPROVED0new",
+    "custody": "2d41fbf0PASS/controllera9552f78",
+    "tests": "407distinctselectedcomposed153IT151+2diagnosticreplacements+254units; originalfull153batch1FAIL1ERRORcausesUNKNOWN retainedQ01Q02",
+    "future": "CV04actual9/10/11consumerqualificationOPEN",
+    "consumerAck": "task-07-consumer-activation-root-ack-20261024.json SHA24ce0b8a9f15f9a37b43b6b41c62394f87b97d93924473cc08d20165032ab817",
+    "historicalDetailsArchive": "current-state-before-task9-active-normalization-20261024.json"
+  },
+  "stop_after_phase_b": true,
+  "phase_b_exit_contract": "Afterall13tasks/finalreview/recordsclose: stopexecution, preserveexactcommits/evidence/handoffs andcompleted/open/pendingboundary index; next继续任务 mustreadcanonicalhandoff beforework and startONLY firstunfinishedpostBnode, notredoB.",
+  "pause_handoff": "docs/acceptance/development-pause-b-remaining-2026-10-24-1613.md",
+  "pause_source_head": "cff858e163ca7dea774dcf05c707ef7551956156",
+  "pause_records_commit": "NONE; noTask9commit/adoption; indexempty; uncommittedproductandpause docsretained",
+  "pause_before_record_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records",
+  "pause_record_index": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-record-index.json",
+  "delegated_coordinator": "/root/b_continuation_coordinator",
+  "delegated_root_ack_authority": "Explicit root delegation for normal coordination and controlled DDL applications within existing plan.",
+  "resume_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024T095746Z-before-records/manifest.json",
+  "active_context_previous_archive": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/active-context-before-task9-normalization-20261024.md",
+    "sha256": "a1a3a152540049dc683519fcec69d98c0d77db41218fa56358e2760398e68068"
+  },
+  "task9_fixture_attempt": {
+    "owner": "task09-2d0e28ea775540f8b3525f9344edf5f0",
+    "schema": "ama_t09_2d0e28ea7755_behavior",
+    "status": "PROVISIONING_COMPLETED_HISTORICALLY; bootstrap15/rerun0 completed; schema now populated by Task9 evidence; never assume empty or recreate.",
+    "cause": "originalTask7envexactselectedcontainername vshelperCID-only assumption",
+    "correctiveScope": "newhelperminimalfix/review thenSAMEUUIDcontinuation, oldenvunchanged",
+    "invocations": 2,
+    "actualCreateGrantInvocations": 1,
+    "guardSha256": "d9b8f75b2dccda19f4e77fa05dc03d512881fa3af9b14ee30bd9c22f5ea6d0f1",
+    "applicationAckSha256": "6f926c62b9710dab9c889eee104543b3250bfd5e33fc23d67fb655677e4c7e5d"
+  },
+  "active_review": {
+    "task": 9,
+    "agent": "/root/b_continuation_coordinator/b09_independent_review",
+    "model": "gpt-6-astra high",
+    "base": "0e22b812000f2efa00c2ef8ed66e06d8254beab5",
+    "head": "591545a4a1a4ce27edea54baa94e9d11666807b7",
+    "package": "task-09-fix01-review-package-20261024.diff",
+    "packageSha256": "5c1be4983227616011738c5d22a51ba8560068de2cce43990eb43e5ff1ef6027",
+    "report": "task-09-fix01-independent-review-20261024.md",
+    "status": "FIX1_SCOPED_REVIEW_ACTIVE",
+    "spec": "FAIL",
+    "quality": "FAIL",
+    "critical": 0,
+    "important": 4,
+    "minor": 1,
+    "reportSha256": "aafb78dce63f2daea5fb97d08d52072fd5d8ce8fe30bc465a30702071ce2da6d",
+    "fix_round": 1
+  },
+  "task9_envelope_supplement": {
+    "status": "DESIGN_ADOPTED; partial implementation and scoped evidence exist; final Task9 source review/adoption pending.",
+    "sha256": "150f2a12df60f117edb35c1d3fdb265713b79b7116209d095287f155faff5c49",
+    "reviewSha256": "2269ba7eec235042b0c21cc86d0614e70ae583be06c4bcf160e5f70ab6864c68",
+    "wrapper": "docs/superpowers/specs/2026-10-24-ama-phase-b-controlled-envelope.md"
+  },
+  "pause_current_source_manifest": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source-manifest.json",
+  "pause_author_handoff": "task-09-author-pause-handoff-20261024.md",
+  "pause_runtime_observation": "lastsession13914 exited1; scopedreadonlyprocesssnapshots noownedmatchingprocess; no pause-timeSQL/allDBzero claim; no knownoutstandingoriginalfact basedsavedreceipts",
+  "pause_finalization_preimage": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-record-finalization-before-20261024T083119Z/manifest.json",
+  "active_mechanical_custody": {
+    "agent": "/root/b_continuation_coordinator/b09_mechanical_custody",
+    "model": "gpt-6-sol xhigh",
+    "scope": "Onlyfix1 new9results/14XML,274main/22own,originalfact7files,scanreceipt/6342commitpaths. Reuse allpreviouscustody; no oldraw rehash.",
+    "report": "task-09-fix01-mechanical-custody-20261024.md",
+    "status": "FIX1_FINAL_DONE_NO_MECHANICAL_BLOCKERS",
+    "reportSha256": "9c418088216a10a96c6677c93e60e8c56d20ffb7c4713ae0ae2ada78f7bb48ea"
+  }
+}

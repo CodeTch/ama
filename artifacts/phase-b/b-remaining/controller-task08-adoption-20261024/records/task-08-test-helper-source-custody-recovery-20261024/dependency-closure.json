@@ -1,0 +1,155 @@
+{
+  "scope": "Source-level direct/transitive helper closure for the selected104 IT cases; this is inspection, not a new runtime trace or rerun.",
+  "cursorHelperBytes": {
+    "static Object cursor(": {
+      "text": " static Object cursor(JdbcExternalOperations scanner)throws Exception{var f=JdbcExternalOperations.class.getDeclaredField(\"scanCursor\");f.setAccessible(true);return f.get(scanner);}",
+      "sha256IncludingNewline": "41caedb3a8ad94e5f7267eb1b84363615fcbf81f19c269e019349b358335ff42",
+      "identicalAcrossSchemaWindowPassingWindowAndDA": true
+    },
+    "static long position(": {
+      "text": " static long position(JdbcExternalOperations scanner,String field)throws Exception{Object c=cursor(scanner);var f=c.getClass().getDeclaredField(field);f.setAccessible(true);return f.getLong(c);}",
+      "sha256IncludingNewline": "614f1ad7a5a86e98479ff07dbe14528ed2264578ce18422fef37cafb44c9632d",
+      "identicalAcrossSchemaWindowPassingWindowAndDA": true
+    },
+    "static boolean active(": {
+      "text": " static boolean active(JdbcExternalOperations scanner)throws Exception{Object c=cursor(scanner);var f=c.getClass().getDeclaredField(\"active\");f.setAccessible(true);return f.getBoolean(c);}",
+      "sha256IncludingNewline": "9bdbc6cb30b04bfb8a5ffbcd9b6567bfdbca6a510a72dfa4806bd22ec2e4ba83",
+      "identicalAcrossSchemaWindowPassingWindowAndDA": true
+    }
+  },
+  "selectedRestoreMethodIdenticalToDA": {
+    "sha256": "322b03312136243ac731174854a350b73e5adfabc7891436248982ce5790957b",
+    "bytes": 3439
+  },
+  "fixtureDataSourceIdenticalAcrossOldAndDA": {
+    "sha256": "6469ee7ac3edfd3253172d142e3eeebb638cafad12501642c81df92d25d28424",
+    "bytes": 963
+  },
+  "unitSourceTask08References": [],
+  "windows": [
+    {
+      "window": "fairness-green",
+      "selected": 2,
+      "roots": [
+        "Task08FairnessIT"
+      ],
+      "used": [
+        "Task08Fixture full",
+        "Task08ProbeSource full"
+      ],
+      "excluded": [
+        "Task08CursorIT",
+        "Task08ZOverflowIT"
+      ],
+      "basis": "Fairness creates Fixture and reads ProbeSource.Sql; neither it nor those helpers references Cursor/Overflow."
+    },
+    {
+      "window": "inherited-forward-final",
+      "selected": 76,
+      "roots": [
+        "Task08Inherited*IT (eight selected classes)"
+      ],
+      "used": [
+        "Task08InheritedFixture",
+        "Task08InheritedResources",
+        "Task08Fixture.dataSource only",
+        "Task08InheritedB06QueueSeamsIT.ProbeSource",
+        "Task08InheritedMarkerCrashProbe child",
+        "WorkerProcessIT.await static utility"
+      ],
+      "excluded": [
+        "Task08ProbeSource",
+        "Task08CursorIT",
+        "Task08ZOverflowIT"
+      ],
+      "basis": "Resources calls only static Fixture.dataSource, which returns the plain guarded DriverManagerDataSource. It never constructs Fixture/its ProbeSource. Prepared/B06 use their own nested observation proxy."
+    },
+    {
+      "window": "cursor-schema-budget-restart-final",
+      "selected": 8,
+      "roots": [
+        "Task08SchemaIT four cases",
+        "Task08BudgetIT four cases"
+      ],
+      "used": [
+        "Task08Fixture full",
+        "Task08ProbeSource full",
+        "Task08CursorIT.active -> cursor static helpers only for Schema gap case"
+      ],
+      "excluded": [
+        "Task08CursorIT test methods",
+        "Task08ZOverflowIT"
+      ],
+      "basis": "This interrupted window contributes only completed Schema/Budget XML. Schema directly calls active; exact recovered726ddd7d source proves its active/cursor lines identical to DA. Changed next/lock-barrier methods are not called by Schema/Budget."
+    },
+    {
+      "window": "cursor-mixed-restart-final",
+      "selected": 13,
+      "roots": [
+        "Task08CursorIT eleven cases",
+        "Task08MixedBlockersIT one case",
+        "Task08RestartIT one case"
+      ],
+      "used": [
+        "Task08Fixture full",
+        "Task08ProbeSource full",
+        "Task08CursorIT recovered66f8b9bc full",
+        "Task08RestartProbe child"
+      ],
+      "excluded": [
+        "Task08ZOverflowIT"
+      ],
+      "basis": "Cursor test body is recovered exactly; only line102 trailing space differs from DA. Mixed and Restart do not call Cursor test methods. None references Overflow."
+    },
+    {
+      "window": "historical010-oracle-final",
+      "selected": 3,
+      "roots": [
+        "Task08Historical010IT"
+      ],
+      "used": [
+        "Task08Historical010Source"
+      ],
+      "excluded": [
+        "Task08Fixture",
+        "Task08ProbeSource",
+        "Task08CursorIT",
+        "Task08ZOverflowIT"
+      ],
+      "basis": "Exact historical source binds its own source class directly; no transitive Task08 helper dependency."
+    },
+    {
+      "window": "overflow-resume-final",
+      "selected": 1,
+      "roots": [
+        "Task08ZOverflowIT.controlledRestorePreservesExactMappingAndDetectsHiddenNonpositiveMetadata"
+      ],
+      "used": [
+        "Task08Fixture full",
+        "Task08ProbeSource null-tolerant full",
+        "Task08ZOverflowIT.insert helper"
+      ],
+      "excluded": [
+        "Task08ZOverflowIT MAX test method",
+        "Task08CursorIT methods"
+      ],
+      "basis": "Recovered9f092d06 full source matches sealed run. Selected first method bytes equal DA exactly; later changes affect only the unselected MAX method. Only MAX calls Cursor helpers."
+    },
+    {
+      "window": "overflow-max-complete-atomicity-final",
+      "selected": 1,
+      "roots": [
+        "Task08ZOverflowIT.signedLongMaximumDoesNotWrapAndAllocationExhaustionReturnsNoToken"
+      ],
+      "used": [
+        "Task08Fixture full",
+        "Task08ProbeSource full",
+        "Task08CursorIT.position/active -> cursor static helpers"
+      ],
+      "excluded": [
+        "Task08CursorIT test methods"
+      ],
+      "basis": "Whole Overflow and helper files match DA except Cursor historical line102 space; used static lines proven exact."
+    }
+  ]
+}

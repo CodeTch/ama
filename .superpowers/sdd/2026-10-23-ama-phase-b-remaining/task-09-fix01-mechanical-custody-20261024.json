@@ -1,0 +1,911 @@
+{
+  "generatedUtc": "2026-10-24T11:47:32.252128+00:00",
+  "reusedHistorical": {
+    "initial165": true,
+    "protected20557": true,
+    "priorFinalRaw96140": true,
+    "noOldRescan": true
+  },
+  "summary": {
+    "windows": 9,
+    "xml": 14,
+    "caseObservations": 39,
+    "distinctCases": 25,
+    "outcomes": {
+      "PASS": 4,
+      "ASSERTION_FAIL": 4,
+      "COMPILE_OR_SETUP": 1
+    },
+    "windowIssues": 0,
+    "ownIssues": 0,
+    "factIssues": 0,
+    "rawPathIssues": 0,
+    "rawSizeIssues": 0,
+    "commitPathIssues": 0
+  },
+  "windows": [
+    {
+      "window": "denied-green-02",
+      "exit": 0,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "outcome": "PASS",
+      "xmlCount": 1,
+      "sourceEntries": 686,
+      "sourceManifestSha256": "d371a3ef79258ce842a3dab5440176af693cfb6f4d4a8cbb3ab85a6a765598c9",
+      "resultSha256": "3f58fee680e487571eab6947ad26ddf8f02119d8a75ce3b66b013a6ebc7f66d7",
+      "commandSha256": "1d4f6e8d316cd2d1e9efdb0dc83eccc33ccdefa3c9efb5a47c70d4027a4837b4",
+      "custodySha256": "8bd897ec95f90a6d633a0f6708705f07d6b99752b9001792d0fbe193d3a9e8c2",
+      "closedIntervalNs": [
+        1792841970961647413,
+        1792842038608806873
+      ],
+      "reports": [
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01DeniedLookupIT.xml",
+          "sha256": "af46d155968d69bbe0614ed0b6ac28a728d11ad7600ecddafae2457766a6650a",
+          "cases": [
+            {
+              "key": "ama.storage.Task09Fix01DeniedLookupIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+              "status": "PASS"
+            }
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01DeniedLookupIT.xml",
+          "qualified": true,
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01DeniedLookupIT.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": true
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.storage.Task09Fix01DeniedLookupIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        }
+      ],
+      "issues": [],
+      "sourceSnapshotIssues": []
+    },
+    {
+      "window": "integration-green-01",
+      "exit": 1,
+      "counts": {
+        "tests": 6,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "outcome": "ASSERTION_FAIL",
+      "xmlCount": 6,
+      "sourceEntries": 686,
+      "sourceManifestSha256": "bb36d4cb46a484daf455aacfe413ce7b67e3b30174440da3a45ee15f9a169e65",
+      "resultSha256": "c4d2a90eef033611d11315127eafff4a3cfcf2093972089418e8f55d8912df64",
+      "commandSha256": "8b090b822d7b48978c12a498d885af74d251790da4529957ceb8418741cea0fe",
+      "custodySha256": "eb34c891d52907e737d797c03ad4b1edd4eeaacc55da93b592d2102329031e1d",
+      "closedIntervalNs": [
+        1792841569407259253,
+        1792841735936113083
+      ],
+      "reports": [
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01ActiveLookupIT.xml",
+          "sha256": "2b54cb48ec0ed1597647e7b54d1d765c881b42f26b19e6ad1a2118c0b36df818",
+          "cases": [
+            {
+              "key": "ama.storage.Task09Fix01ActiveLookupIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01DeniedLookupIT.xml",
+          "sha256": "4abaa12fb3257f754902ac85416bc060d2e349e88eec52a7d25472d0790e3996",
+          "cases": [
+            {
+              "key": "ama.storage.Task09Fix01DeniedLookupIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+              "status": "FAIL"
+            }
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01HttpIT.xml",
+          "sha256": "c08191264c666fd2f3ad00d0a7ad73e1c88b8c3c6bb85d1e3d12a9f004a5b518",
+          "cases": [
+            {
+              "key": "ama.storage.Task09Fix01HttpIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01ParentReplayIT.xml",
+          "sha256": "f784eb84aecd42627d46ceb842f02106723ba1fbb1b379e726c198a143110823",
+          "cases": [
+            {
+              "key": "ama.storage.Task09Fix01ParentReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01ResponseBudgetIT.xml",
+          "sha256": "c3087132c4e4fa06c89c5fc66a94d4fd243f1fab54e0a50252b37812f846b754",
+          "cases": [
+            {
+              "key": "ama.storage.Task09Fix01ResponseBudgetIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01RootsIT.xml",
+          "sha256": "86731677ce5a334591cf3b3bbbde445259d7e9bea1122ff87608f136323c7206",
+          "cases": [
+            {
+              "key": "ama.storage.Task09Fix01RootsIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+              "status": "PASS"
+            }
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01ActiveLookupIT.xml",
+          "qualified": true,
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01ActiveLookupIT.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": false
+        },
+        {
+          "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01DeniedLookupIT.xml",
+          "qualified": true,
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01DeniedLookupIT.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": false
+        },
+        {
+          "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01HttpIT.xml",
+          "qualified": true,
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01HttpIT.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": false
+        },
+        {
+          "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01ParentReplayIT.xml",
+          "qualified": true,
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01ParentReplayIT.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": true
+        },
+        {
+          "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01ResponseBudgetIT.xml",
+          "qualified": true,
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01ResponseBudgetIT.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": false
+        },
+        {
+          "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01RootsIT.xml",
+          "qualified": true,
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01RootsIT.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": true
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.storage.Task09Fix01ActiveLookupIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task09Fix01DeniedLookupIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "FAIL"
+        },
+        {
+          "key": "ama.storage.Task09Fix01HttpIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task09Fix01ParentReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task09Fix01ResponseBudgetIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task09Fix01RootsIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        }
+      ],
+      "issues": [],
+      "sourceSnapshotIssues": []
+    },
+    {
+      "window": "openapi-green-01",
+      "exit": 0,
+      "counts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "outcome": "PASS",
+      "xmlCount": 0,
+      "sourceEntries": 686,
+      "sourceManifestSha256": "d371a3ef79258ce842a3dab5440176af693cfb6f4d4a8cbb3ab85a6a765598c9",
+      "resultSha256": "e8ed766f828071aab791a5f6d851fe4ba72e715b9ac9bc99dc0a1a7e6d46ad03",
+      "commandSha256": "52c85659f626ad2f12ac641ef3f5129ea79373858a490ae9f9fb60b09433106e",
+      "custodySha256": "a358b2b6d9f6891ba033e1e36f932f7b5f86f1f79eacaac6e79868d98a3cc0e4",
+      "closedIntervalNs": [
+        1792842062798810960,
+        1792842067926952033
+      ],
+      "reports": [],
+      "custodyReports": [
+        {
+          "path": "backend/adapters/target/surefire-reports/TEST-ama.model.Task09ControlledStoreTest.xml",
+          "qualified": false,
+          "copy": "adapters-TEST-ama.model.Task09ControlledStoreTest.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": true
+        }
+      ],
+      "cases": [],
+      "issues": [],
+      "sourceSnapshotIssues": []
+    },
+    {
+      "window": "provenance-red-01",
+      "exit": 1,
+      "counts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "outcome": "COMPILE_OR_SETUP",
+      "xmlCount": 0,
+      "sourceEntries": 682,
+      "sourceManifestSha256": "d39ac9a15ef5576830ac228da752fa67309ee8bd8f2bfbdfab9ac41eef8fd493",
+      "resultSha256": "bb40e515184b40b24ad49c0b97e96bcad6f5a46f9df293c7a906dd80de0f3ce2",
+      "commandSha256": "c741729623c2b7c352b81bf53594f0f24a85137b7917dae27a1c933cdbe96e8c",
+      "custodySha256": "a9bb625a80472444249c50d97ae3c3778e1df32f62bfbc25905ebc511a736da9",
+      "closedIntervalNs": [
+        1792841138482442741,
+        1792841156154426304
+      ],
+      "reports": [],
+      "custodyReports": [],
+      "cases": [],
+      "issues": [],
+      "sourceSnapshotIssues": []
+    },
+    {
+      "window": "provenance-red-02",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "outcome": "ASSERTION_FAIL",
+      "xmlCount": 2,
+      "sourceEntries": 682,
+      "sourceManifestSha256": "3660247d4bbd0ba4bca93bde099ffc854eba094a18092dff77065ce3bfa51697",
+      "resultSha256": "feb78cb6f290f2691fdb93251544e208d421f733b1cf21d53b9e8b5d5b92e54f",
+      "commandSha256": "6de752cae925fea804001f0ee96126e8730cb0fb3e94e76f4d9ab8e87540cf4b",
+      "custodySha256": "069728d2b8c33546cebeb52781ce10ef350ced1040751dde2b0f93f755c635a6",
+      "closedIntervalNs": [
+        1792841213230563274,
+        1792841262204929476
+      ],
+      "reports": [
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01ParentReplayIT.xml",
+          "sha256": "1166700903f42e84e9236b315d16a7e22be82d94bda8133f11980ae88eef015d",
+          "cases": [
+            {
+              "key": "ama.storage.Task09Fix01ParentReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+              "status": "FAIL"
+            }
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01RootsIT.xml",
+          "sha256": "02af38bbfddc3ccbe2e772830a34344a4d52d0a782631429bcea0787d9bdfc99",
+          "cases": [
+            {
+              "key": "ama.storage.Task09Fix01RootsIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+              "status": "FAIL"
+            }
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01ParentReplayIT.xml",
+          "qualified": true,
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01ParentReplayIT.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": false
+        },
+        {
+          "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01RootsIT.xml",
+          "qualified": true,
+          "copy": "integration-tests-TEST-ama.storage.Task09Fix01RootsIT.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": false
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.storage.Task09Fix01ParentReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "FAIL"
+        },
+        {
+          "key": "ama.storage.Task09Fix01RootsIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "FAIL"
+        }
+      ],
+      "issues": [],
+      "sourceSnapshotIssues": []
+    },
+    {
+      "window": "store-regression-01",
+      "exit": 0,
+      "counts": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "outcome": "PASS",
+      "xmlCount": 1,
+      "sourceEntries": 686,
+      "sourceManifestSha256": "d371a3ef79258ce842a3dab5440176af693cfb6f4d4a8cbb3ab85a6a765598c9",
+      "resultSha256": "2e19b3fb6265c286ec9c5209e0840d3f40adec7eb79cc833b31f976657fc8d0e",
+      "commandSha256": "26fe38f241fc12d332bd717a940fc53b94675668ec9cba7952a35186b52d703f",
+      "custodySha256": "93c35bdecea60bfcc6c889d3a52d0948d3b991385bbc8fe1ca15fa9305e56ea5",
+      "closedIntervalNs": [
+        1792842052299101472,
+        1792842057122576163
+      ],
+      "reports": [
+        {
+          "copy": "adapters-TEST-ama.model.Task09ControlledStoreTest.xml",
+          "sha256": "fcb474fda64bd19cc693b389b5feb503cfbd4316736b63cc8ddf9950f0745029",
+          "cases": [
+            {
+              "key": "ama.model.Task09ControlledStoreTest#incompleteUnacknowledgedJournalTailPreservesCompletePrefix",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.model.Task09ControlledStoreTest#reserveAndSuccessSurviveRestartAndDuplicateReturnsExactIdentity",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.model.Task09ControlledStoreTest#corruptAcknowledgedResultFailsClosedOnReopen",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.model.Task09ControlledStoreTest#rejectedModeAndOversizeNeverReserve",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.model.Task09ControlledStoreTest#exclusiveStoreLockRejectsSecondProcessOwner",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.model.Task09ControlledStoreTest#reservedComputationSurvivesRestartAndLookupDoesNotCompute",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.model.Task09ControlledStoreTest#immutableLogicalAndExecutionTuplesRejectChangedBytes",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.model.Task09ControlledStoreTest#definitiveRejectionIsDurableAndPermanentlyProhibitsComputation",
+              "status": "PASS"
+            }
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "path": "backend/adapters/target/surefire-reports/TEST-ama.model.Task09ControlledStoreTest.xml",
+          "qualified": true,
+          "copy": "adapters-TEST-ama.model.Task09ControlledStoreTest.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": false
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.model.Task09ControlledStoreTest#incompleteUnacknowledgedJournalTailPreservesCompletePrefix",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.model.Task09ControlledStoreTest#reserveAndSuccessSurviveRestartAndDuplicateReturnsExactIdentity",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.model.Task09ControlledStoreTest#corruptAcknowledgedResultFailsClosedOnReopen",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.model.Task09ControlledStoreTest#rejectedModeAndOversizeNeverReserve",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.model.Task09ControlledStoreTest#exclusiveStoreLockRejectsSecondProcessOwner",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.model.Task09ControlledStoreTest#reservedComputationSurvivesRestartAndLookupDoesNotCompute",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.model.Task09ControlledStoreTest#immutableLogicalAndExecutionTuplesRejectChangedBytes",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.model.Task09ControlledStoreTest#definitiveRejectionIsDurableAndPermanentlyProhibitsComputation",
+          "status": "PASS"
+        }
+      ],
+      "issues": [],
+      "sourceSnapshotIssues": []
+    },
+    {
+      "window": "unit-green-01",
+      "exit": 0,
+      "counts": {
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "outcome": "PASS",
+      "xmlCount": 2,
+      "sourceEntries": 686,
+      "sourceManifestSha256": "bb36d4cb46a484daf455aacfe413ce7b67e3b30174440da3a45ee15f9a169e65",
+      "resultSha256": "61971dd976764cf93cdfbcf4402cab57dfe37e6c977189ae6b4bb7aee177d23e",
+      "commandSha256": "804edddbdbf06f8ebd836d68e3070d8a4601cba3aa63d489cca570285c5e1f4f",
+      "custodySha256": "83b32037186665ff3a7f3dea06e40d6e41ea8539de8609ddfeebe2e954a1b87c",
+      "closedIntervalNs": [
+        1792841371382508477,
+        1792841393062846171
+      ],
+      "reports": [
+        {
+          "copy": "adapters-TEST-ama.config.json.Task09Fix01ProviderAdmissionTest.xml",
+          "sha256": "4ca553e35ed307d6c58db48322aa5080592f2d18e95115d6998ffe28d24ccad7",
+          "cases": [
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#corruptEnvelopeCannotBeRepairedByDuplicatePost",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#changedEnvelopeWithOldHashesNeverChangesExistingMapping",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#lookupLeavesReservedExecutionUnknownAcrossReopen",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#exactCanonicalEnvelopeAndPayloadAreValidatedAfterReopen",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#unjournaledCrashTemporaryConsumesFiniteAdmissionWithoutCleanup",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#conflictingFreshExecutionsNeverWriteAnyDurableFile",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#capacityRejectsBeforeFilesAndAcceptedMappingsSurviveRestart",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "copy": "api-TEST-ama.api.Task09Fix01WireTest.xml",
+          "sha256": "3bbe3e35eb2872323f453a75ffb421062ec0e0ca0f3d483dcaaee508a15b61c9",
+          "cases": [
+            {
+              "key": "ama.api.Task09Fix01WireTest#initialSettingsRemainsSeparate",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.api.Task09Fix01WireTest#fullStillRejectsDuplicateAndUnknownFields",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.api.Task09Fix01WireTest#missingOrWrongScopeIsNeverImplicitFull",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.api.Task09Fix01WireTest#fullScopeAcceptsTokenLegacyAndEqualDualForms",
+              "status": "PASS"
+            }
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "path": "backend/adapters/target/surefire-reports/TEST-ama.config.json.Task09Fix01ProviderAdmissionTest.xml",
+          "qualified": true,
+          "copy": "adapters-TEST-ama.config.json.Task09Fix01ProviderAdmissionTest.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": false
+        },
+        {
+          "path": "backend/api/target/surefire-reports/TEST-ama.api.Task09Fix01WireTest.xml",
+          "qualified": true,
+          "copy": "api-TEST-ama.api.Task09Fix01WireTest.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": true
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#corruptEnvelopeCannotBeRepairedByDuplicatePost",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#changedEnvelopeWithOldHashesNeverChangesExistingMapping",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#lookupLeavesReservedExecutionUnknownAcrossReopen",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#exactCanonicalEnvelopeAndPayloadAreValidatedAfterReopen",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#unjournaledCrashTemporaryConsumesFiniteAdmissionWithoutCleanup",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#conflictingFreshExecutionsNeverWriteAnyDurableFile",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#capacityRejectsBeforeFilesAndAcceptedMappingsSurviveRestart",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.api.Task09Fix01WireTest#initialSettingsRemainsSeparate",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.api.Task09Fix01WireTest#fullStillRejectsDuplicateAndUnknownFields",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.api.Task09Fix01WireTest#missingOrWrongScopeIsNeverImplicitFull",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.api.Task09Fix01WireTest#fullScopeAcceptsTokenLegacyAndEqualDualForms",
+          "status": "PASS"
+        }
+      ],
+      "issues": [],
+      "sourceSnapshotIssues": []
+    },
+    {
+      "window": "unit-red-01",
+      "exit": 1,
+      "counts": {
+        "tests": 7,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "outcome": "ASSERTION_FAIL",
+      "xmlCount": 1,
+      "sourceEntries": 678,
+      "sourceManifestSha256": "c8744046b4d9981ebf0f617d694a7c52913e338c6594a72b30bd093716f49191",
+      "resultSha256": "b15cf1c56914b52aafecaaf19b895b77f3ad58f29ba5f4ec9cca98d61aa47dcf",
+      "commandSha256": "cf8734eabb3a0a77b8a8b106864a74bda362f260933bcfa9bdbb6274cd8a89ee",
+      "custodySha256": "d5d0cb4d587e22329505bfd88f8045e0a40f59fdba3ace7e198ba98cf9dc15f2",
+      "closedIntervalNs": [
+        1792840977097901800,
+        1792840989138729952
+      ],
+      "reports": [
+        {
+          "copy": "adapters-TEST-ama.config.json.Task09Fix01ProviderAdmissionTest.xml",
+          "sha256": "6a1dd0c464586756a29ec97cde498143e1892b43c2932b581d47211402a993f9",
+          "cases": [
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#corruptEnvelopeCannotBeRepairedByDuplicatePost",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#changedEnvelopeWithOldHashesNeverChangesExistingMapping",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#lookupLeavesReservedExecutionUnknownAcrossReopen",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#exactCanonicalEnvelopeAndPayloadAreValidatedAfterReopen",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#unjournaledCrashTemporaryConsumesFiniteAdmissionWithoutCleanup",
+              "status": "FAIL"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#conflictingFreshExecutionsNeverWriteAnyDurableFile",
+              "status": "FAIL"
+            },
+            {
+              "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#capacityRejectsBeforeFilesAndAcceptedMappingsSurviveRestart",
+              "status": "FAIL"
+            }
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "path": "backend/adapters/target/surefire-reports/TEST-ama.config.json.Task09Fix01ProviderAdmissionTest.xml",
+          "qualified": true,
+          "copy": "adapters-TEST-ama.config.json.Task09Fix01ProviderAdmissionTest.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": false
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#corruptEnvelopeCannotBeRepairedByDuplicatePost",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#changedEnvelopeWithOldHashesNeverChangesExistingMapping",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#lookupLeavesReservedExecutionUnknownAcrossReopen",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#exactCanonicalEnvelopeAndPayloadAreValidatedAfterReopen",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#unjournaledCrashTemporaryConsumesFiniteAdmissionWithoutCleanup",
+          "status": "FAIL"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#conflictingFreshExecutionsNeverWriteAnyDurableFile",
+          "status": "FAIL"
+        },
+        {
+          "key": "ama.config.json.Task09Fix01ProviderAdmissionTest#capacityRejectsBeforeFilesAndAcceptedMappingsSurviveRestart",
+          "status": "FAIL"
+        }
+      ],
+      "issues": [],
+      "sourceSnapshotIssues": []
+    },
+    {
+      "window": "wire-red-01",
+      "exit": 1,
+      "counts": {
+        "tests": 4,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "outcome": "ASSERTION_FAIL",
+      "xmlCount": 1,
+      "sourceEntries": 678,
+      "sourceManifestSha256": "c8744046b4d9981ebf0f617d694a7c52913e338c6594a72b30bd093716f49191",
+      "resultSha256": "bc76815395ae7b46e9506cb87dd281cce41d35ffa65ccaeb0c1f4b110a5b6e8f",
+      "commandSha256": "b1837a418a4dae8c4572058d4f309817e329e4192e6b9fa809a03cbbb4e95d6b",
+      "custodySha256": "87ac7874213b284bafc19a42b87441fbd4f74d288f9d962e8957637c21939a4b",
+      "closedIntervalNs": [
+        1792841037058754500,
+        1792841043153094072
+      ],
+      "reports": [
+        {
+          "copy": "api-TEST-ama.api.Task09Fix01WireTest.xml",
+          "sha256": "9813a3fa0ef0848220da45788dff37ad160af222bd4ac67ed2d445a22aa40259",
+          "cases": [
+            {
+              "key": "ama.api.Task09Fix01WireTest#initialSettingsRemainsSeparate",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.api.Task09Fix01WireTest#fullStillRejectsDuplicateAndUnknownFields",
+              "status": "PASS"
+            },
+            {
+              "key": "ama.api.Task09Fix01WireTest#missingOrWrongScopeIsNeverImplicitFull",
+              "status": "FAIL"
+            },
+            {
+              "key": "ama.api.Task09Fix01WireTest#fullScopeAcceptsTokenLegacyAndEqualDualForms",
+              "status": "FAIL"
+            }
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "path": "backend/api/target/surefire-reports/TEST-ama.api.Task09Fix01WireTest.xml",
+          "qualified": true,
+          "copy": "api-TEST-ama.api.Task09Fix01WireTest.xml",
+          "copyAndIntervalValid": true,
+          "previousRecorded": false
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.api.Task09Fix01WireTest#initialSettingsRemainsSeparate",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.api.Task09Fix01WireTest#fullStillRejectsDuplicateAndUnknownFields",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.api.Task09Fix01WireTest#missingOrWrongScopeIsNeverImplicitFull",
+          "status": "FAIL"
+        },
+        {
+          "key": "ama.api.Task09Fix01WireTest#fullScopeAcceptsTokenLegacyAndEqualDualForms",
+          "status": "FAIL"
+        }
+      ],
+      "issues": [],
+      "sourceSnapshotIssues": []
+    }
+  ],
+  "sourceClosure": {
+    "baseCommit": "0e22b812000f2efa00c2ef8ed66e06d8254beab5",
+    "ownPaths": 22,
+    "ownIssues": [],
+    "windows": [
+      {
+        "window": "unit-green-01",
+        "allSourceEntries": 686,
+        "mainSourceEntries": 274,
+        "mainMatchesFinal": true,
+        "differentPaths": [
+          "backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupProcess.java"
+        ],
+        "claimMatches": true
+      },
+      {
+        "window": "integration-green-01",
+        "allSourceEntries": 686,
+        "mainSourceEntries": 274,
+        "mainMatchesFinal": true,
+        "differentPaths": [
+          "backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupProcess.java"
+        ],
+        "claimMatches": true
+      },
+      {
+        "window": "denied-green-02",
+        "allSourceEntries": 686,
+        "mainSourceEntries": 274,
+        "mainMatchesFinal": true,
+        "differentPaths": [],
+        "claimMatches": true
+      },
+      {
+        "window": "store-regression-01",
+        "allSourceEntries": 686,
+        "mainSourceEntries": 274,
+        "mainMatchesFinal": true,
+        "differentPaths": [],
+        "claimMatches": true
+      },
+      {
+        "window": "openapi-green-01",
+        "allSourceEntries": 686,
+        "mainSourceEntries": 274,
+        "mainMatchesFinal": true,
+        "differentPaths": [],
+        "claimMatches": true
+      }
+    ]
+  },
+  "originalFact": {
+    "compiledProductSourceWindow": "integration-green-01",
+    "files": 7,
+    "hashIssues": [],
+    "oneBeforeRow": true,
+    "sameIdentityFields": {
+      "task": true,
+      "execution": true,
+      "operation": true,
+      "reservation": true
+    },
+    "sameFourIdentities": true,
+    "beforeUnsettled": true,
+    "beforeStates": [
+      "STALE",
+      "SUCCEEDED",
+      "SUCCEEDED"
+    ],
+    "settledResult": true,
+    "unsettledCount": 0,
+    "noLookupOrPost": true
+  },
+  "scannerAndReceipt": {
+    "scriptHashMatchesReceipt": true,
+    "rootParentsFive": true,
+    "ownerRootCount": 1,
+    "providerSecretMetadataCount": 2,
+    "providersRegularNoSymlink": true,
+    "rawRecursiveAll": true,
+    "rawOnlyReceiptExcluded": true,
+    "cachedExactPaths": true,
+    "stagedBlobBatch": true,
+    "privatePemPattern": true,
+    "receiptMemoryCheck": true,
+    "knownOriginal": 6,
+    "actualProviders": 2,
+    "uniqueValues": 8,
+    "exactValueHits": 0,
+    "privatePemHits": 0,
+    "receiptScannedInMemory": true,
+    "rawFiles": 6317,
+    "stagedPaths": 6341,
+    "uniqueStagedBlobs": 838
+  },
+  "publication": {
+    "base": "0e22b812000f2efa00c2ef8ed66e06d8254beab5",
+    "head": "591545a4a1a4ce27edea54baa94e9d11666807b7",
+    "baseMatches": true,
+    "headMatches": true,
+    "rawManifestEntries": 6316,
+    "rawManifestDuplicatePaths": 0,
+    "rawPathCoverageIssues": 0,
+    "rawSizeIssues": 0,
+    "currentRawFiles": 6318,
+    "stageSourcesEqualOwn22": true,
+    "stageScopeBaseMatches": true,
+    "stageSubtreeMatches": true,
+    "stageReportCopiesEqual": true,
+    "preReceiptPaths": 6341,
+    "commitPaths": 6342,
+    "commitExactDelta": true,
+    "commitMissing": [],
+    "commitExtra": [],
+    "indexEmpty": true,
+    "receiptBlobMatchesWorking": true,
+    "uniquePreReceiptBlobs": 838,
+    "scanRawCountMatchesCurrentMinusReceipt": true,
+    "scanStageCountMatchesExpected": true,
+    "scanBlobCountMatchesCommit": true,
+    "privateToolsInDelta": 0
+  },
+  "rawManifestSha256": "c6aacf5349b461a7261e422a0ec3815e7d46dc93f73c4a92d7f83171e1a9fa72",
+  "stageScopeSha256": "fc77e45ee3da2e862dfd38b2d4534eb7b8dec2f74d31d55d5c3515b30572ec3b",
+  "scanReceiptSha256": "695c40aca3c00bca5f439e21c94f8e9059813f6d6c4e63593c39844e28c14afd",
+  "validationSha256": "9ac9a9926d071268a357bd642941b80dd18a034f102488ac48ef562fa43e2178"
+}

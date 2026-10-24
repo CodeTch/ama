@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-23T20:52:51.287803+00:00",
+  "scope": "Interim actual XML custody only, not source/Task6 adoption",
+  "records": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/installed-http-01/integration-tests-TEST-ama.storage.Task06HttpIT.xml",
+      "bytes": 33349,
+      "sha256": "40815abba9195d457cd44976d6ba5d4c132b05dcbeb3434f7628352b9407f008",
+      "suite": "ama.storage.Task06HttpIT",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/installed-access-01/integration-tests-TEST-ama.storage.Task06AccessIT.xml",
+      "bytes": 33315,
+      "sha256": "067a4d9e1ab8072b12c612d3d04289f0e819ac7c41e84ee231387a136afd1698",
+      "suite": "ama.storage.Task06AccessIT",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "authorReportedPending": "Atomicity S ordinary-budget-failure accepted lookup fix; only JdbcSavedTranscripts qualified seam changed; actual targeted GREEN and additive root refresh pending"
+}

@@ -1,0 +1,31 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07*IT"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedModelPermitIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedReconciliationWorkerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedPreparedCompletionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedTaskLeaseIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxFenceIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedOutboxConsumerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07InheritedExternalExecutionIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-owned-integration/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+  ],
+  "elapsedSeconds": 85.9315538406372,
+  "counts": {
+    "tests": 116,
+    "failures": 1,
+    "errors": 1,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

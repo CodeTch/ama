@@ -1,0 +1,439 @@
+{
+  "schema_version": 2,
+  "updated_utc": "2026-10-24T01:22:44.572987+00:00",
+  "objective": "Complete all remaining local controlled Phase B tasks with subagents/tests/independent review/records, then deliver. Do not stop after a slice.",
+  "latest_user_instruction": "Complete ALL Phase B tasks, THEN STOP; record tasks and write precise continuation documents so future 继续任务 resumes correct nextdevelopmentnode with no repeatedcompletedwork/omittedunfinishedissues. Do not start C/D/E/F.",
+  "pause_request_active": false,
+  "status_precedence": "This normalized current-state + resume-20261024-active-context + latest progress override all historical pause/old Task5-active notices. Do not redispatch completed tasks/preparations.",
+  "historical_state_archive": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-normalization-20261024.json",
+    "sha256": "599708de6497fe18816d9e1b34d636858e883b127e7c869dfa3c1dbc7a9c159b",
+    "kind": "exact full pre-normalization bytes; all prior task/pause/qualification observations retained as history"
+  },
+  "coordination_tree": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "branch": "codex/phase-b-completion-20261023",
+  "canonical_plan": "docs/superpowers/plans/2026-10-23-ama-phase-b-remaining.md",
+  "ledger": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
+  "active_context": "resume-20261024-active-context.md (Task7 soleauthor ACTIVE; all prior exact context archived)",
+  "last_root_commit": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+  "task6_base": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+  "primary_main_last_observed_head": "c71a44adb679a78d4c28dde7a4223aad1a23b40f",
+  "primary_scope": "Only exact discovery handoff/resume docs uncommitted; product/mainmerge/push not authorized in this continuation; verify actual main before later precise doc update.",
+  "execution_status": "TASK7_FIX01_INDEPENDENT_REVIEW_AND_CUSTODY",
+  "active_implementation": {
+    "task": 7,
+    "status": "FIX01_AUTHOR_DONE_INDEPENDENT_REVIEW",
+    "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+    "brief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-activation-brief-20261024.md",
+    "briefSha256": "d8505d46b4e3a6f713e1d4754aef29eb90f1fbeeb311fd48a4fafaba40df7bd6",
+    "agent": "/root/b07_prepared_external_runtime",
+    "sourceCommit": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
+    "reviewer": "/root/b07_independent_review",
+    "custodyAgent": "/root/b07_delivery_custody",
+    "fixBase": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
+    "fixRound": 1,
+    "fixBrief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-brief-20261024.md",
+    "fixSourceCommit": "6cce4794dba473825d83fb9bccafc043cd611b5c",
+    "reviewBrief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-independent-review-brief-20261024.md"
+  },
+  "completed_implementation_tasks": {
+    "1": {
+      "author": "cb92f1135bb304c2aec6a7f28e7530860c004710",
+      "adopted": "a3b2933ef83035e858d2d3336decba4617f22a1f",
+      "dual_review": "PASS/APPROVED",
+      "tests": "221unit+84IT0fail/error/skip"
+    },
+    "2": {
+      "author": "66e70fdeef286a38592395ce94bdfbb1a93bce4a",
+      "adopted": "3e393dbc9485b187b89bfc03abd88821a0aabddb",
+      "dual_review": "PASS/APPROVED",
+      "tests": "221unit+45IT0fail/error/skip"
+    },
+    "3": {
+      "author": "aa0b5f08a19649091b0bcd60959bd741fb5c7850",
+      "fix01": "912945df2ad09d7ff265f6ba97e304a2b98a4b79",
+      "adopted": "2ec38c0350f466fc4292d588051c5694cc099cb5",
+      "dual_review": "PASS/APPROVED after1fixround",
+      "tests": "349 composed-sourcewindow; exactfix35PASS0fail/error/skip; initialhandshakeunresolved"
+    },
+    "4": "Adopted 35b2325aee8e6c09aa1bdebc880c4f09bd37837b original59c8/fix1ce4 scopeddualPASSa51b3b30",
+    "5": {
+      "author": "857102b917bbef77c38fae3211e3a65207a98c6c",
+      "fix01": "11eb54086da95c675862fcf4225821104aa8e87d",
+      "fix02": "c943d15f4a2b9f294e4b7791fb51eb67d3acce5d",
+      "dual_review": "SPEC PASS/quality Approved; two residuals closed; CV1 addressed",
+      "adoption": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+      "tests": "final units240; fix02 final-product6distinctIT; prior windows retained not summed",
+      "custody": "270evidence/505source/290delivery/4727immutable/552old+341fix01;4private0;14actualchains/13SQLhistorysame"
+    },
+    "6": {
+      "author": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+      "fix01": "d54b2e8841c664e691d03192507e7a192be38430",
+      "dual_review": "b71b6a02 SPEC PASS/Approved;2Important+CV01–04closed0new;MinorT6SR03Task12open",
+      "tests": "121distinctcomposed(34current+87inherited),254units;failed121batch/affected5replacementpreserved",
+      "adoption_doc": "docs/acceptance/b/task-B-remaining-06-saved-transcript-adoption-20261024.md",
+      "root_mirror_manifest": "artifacts/phase-b/b-remaining/controller-task06-adoption-20261024/manifest.json",
+      "root_mirror_sha256": "3ca4b8b7bea125343d1a9a6ca735b401f0668e78c2340635b28f9ecca3ad9075",
+      "qualification": "COMPLETE controlled accepted12ca/d54/b71; Task8closedTask6currentmodelsync; minorT6SR03Task12.",
+      "adoption": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6"
+    },
+    "8": {
+      "author": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "spec_quality_review": "f7187193 SPEC compliant/Approved0Critical0Important1Minor",
+      "final_custody": "58e832ea +6acea297 scopedCVclosure",
+      "tests": "254unitsonce+104distinctselectedIT; interrupted/failed/componentwindows preserved",
+      "root_adoption_doc": "docs/acceptance/b/task-B-remaining-08-reconciliation-fairness-adoption-20261024.md",
+      "root_mirror_manifest": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/manifest.json",
+      "root_mirror_sha256": "fc6ae32569e620af792ef10dd3835665050cd866b7f0bda9c532f76749791e0a",
+      "closed_followups": [
+        "FUP-B05-CANDIDATE-01 controlledscope",
+        "T6-INDEX-MODEL-SYNC"
+      ],
+      "minor_open": "T8SR-M1 Task13; OptionalfailurecauseUNKNOWN retained",
+      "adoption": "de1611a67ba483afe21f3b29bb69c2d32028efef"
+    }
+  },
+  "source_tasks_remaining": [
+    7,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "next_steps": "Task7 fix01 sameauthor→scoped dualreview+delta custody→adoption only after closure→9→10→11→12→13→wholebranchreview",
+  "writer_policy": "RootHEAD/index frozenatTask7author84b4b0b duringindependentreview; rootcentral/newWonly. Authorinactiveuntilactualreviewfix, thenreadfix-loop/sameauthorrounds1-3. NoTask9productactivationuntilTask7adoption.",
+  "root_owned_dirty_paths": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md"
+  ],
+  "design_gates_remaining": {
+    "6": "COMPLETE12ca; onlyminorT6SR03Task12.",
+    "7": "Protocol/rulingsadopted; actualimplementationACTIVEb07 fromde1611a/briefd8505d46; freshnormal15/0rootparsed.",
+    "8": "COMPLETEde1611a/sourceDA/reviewf718/custody58+6acea; FUPfairness/modelsyncclosed. MinorT8SR-M1Task13/historicalOptionalunknown retained.",
+    "10": "Adopted 875047cdbcd6ddd17f5c267f8998b7a5a4378b6c exactrawdesign/review/sharedrank; independentAstra SPEC PASS/designAPPROVED zero findings. Source/runtime gates remain.",
+    "9": "Original+R1/sharedrank exactraw adopted af331c7e2eaff1af7ca2d743e717c3e31fff43d9; T9DR01 ADDRESSED, independentdualPASS2c563fb7. No implementation/runtimequalification.",
+    "11": "Adopted exactR1/original/closure/reviews/manifest at f176382618924d9a00fd5fbabf93bbc30c78dd71; dualPASS2closed0new. Logical-only schema, source/runtime gates pending.",
+    "12": "Adopted exactR1/original/closure/reviews/diff/manifest at 8e7a82e237a9552ace2d7491adadbf08416feaee; T12DR01closeddualPASS0new; source/runtime pending."
+  },
+  "parallel_preparation": {
+    "task6": "COMPLETE prior source/budget/candidate/finalrepins; activeTask6 implementationusesexactadopted80, not preparationpending",
+    "task8": "COMPLETEde1611a; no pending Task8source/runtime/modelgates.",
+    "task7": "Completedpreflights/post6/post8/actualDErepin reused; sourceACTIVEfromDE.",
+    "task6_budget": "Complete1e1f6a32 rootFULLREAD30472B+21baselinehash/rangeverified; unqualifiedfinitecandidatesonly, final5runtime/originalarchivesrepinmandatory",
+    "task13_gates": "Complete6ef4353b rootFULLREAD16089B+21SHA/blob/lengthverified; Task12minimaloutputforwardingruling task-12-final-gate-output-alignment-prepared.md; no tests/gatesrun",
+    "task6_candidate_repin": "208c0d59 FULLREAD34293B,51bytesSHA+18focusedrangeSHA+12unchangedB/Crootverified, candidate857NOTadopted; actualfix01affectedseamsrepinlater",
+    "task10_20261024": "Readonlypreflight complete3724471d report/3a326825manifest; rootFULLREAD+81committed857+5WrawSHA/size/linecountverified; no runtime/sourceadoption, final6/8/7/9repinmandatory.",
+    "task9_20261024": "Completef08d955a report/da80db8b manifest; rootFULLREAD21377B+68committed857+4Worigins verified0mismatch; actual5fix/6/8/7 repinmandatory, runtimeunimplemented.",
+    "task11_20261024": "Completec0c8a59dreport/6803f10fmanifest; rootFULLREAD19931B/47content+197search+14rawdesign+13SQLuniqueSHAverified; noformalDDL, actual5fix02/6/8/7/9/10repin.",
+    "task6_final_task5": "COMPLETE c207bc7a/root99sealsverified actualc943finalsource carriedthroughdocs-only80; no repeat",
+    "task8_model_ownership": "6814b7dc FULLREAD/source-rootproof verified; rootruling narrowcurrent3outputs+headers/exactprior4blobpreservation atactivation; noformalDDLnow",
+    "task8_resolved_version_parser": "Original013.2 candidate proof preserved as historical; Task6 consumed013.2. Completed additive actualFlyway12.4.0/c3f proof22517b3b establishes013.2<013.3<014. Task8 formal013.3 allocated; no repeat parser/preflight.",
+    "task6_interim_custody": "Complete4b5f81fb report:36completedwindows/29XML/initialsnapshot20:54UTC;14failingXML+compile3+selector1+contract1 preserved;2earlyverifywindows duplicated244units each/no sum. Final16cohort excluded live, separately rootverified.",
+    "task12_deferred_boundaries": "Complete154de689 FULLREAD14KB +manifest15872104;root26BASEblobs/56ranges verified; T4SR04 actualall5GETlimitnarrowing/05partSizepositiveLong andnumericminimum/06namesvsbanner routing only; no fix/test/adoption. Actual6/8/7/9/10/11repin at12activation.",
+    "task12_transcript_types": "Complete95489503 FULLREAD/manifest507f2fa9/root5BASEaablobs+24ranges verified;fouraliases/revisionanyOf/rootgenerator7.13.0/type-use+runtimecompatibilityevidence mapped, priorT4map unchanged. T6SR03stillOPEN, actualupstreamrepinTask12.",
+    "task6_union_index_feasibility": "Complete969316e1 FULLREAD; rootindependent33inputcustodybdcbe663 verifies26inputs+planinput+designreviewand3proposals0mismatch",
+    "task6_input_index_design_review": "COMPLETE8e8bdfd7 FULLREAD SPEC PASS/Approved/exact75BSQLPASS/0findings; runtime/apply separate",
+    "task8_input_index_model_regions": "Complete439fb930 FULLREAD/manifest290b00aa/root4FS+Git7ranges/187SQLindexdefsverified; additive rootamendment task-08-model-output-input-index-amendment-20261024.md 73b13bc553fd16cff728220e14ea409cdf71ae83bb9149b436b5b3d88fb4e73b; no source/modelwrite/generatorexecution.",
+    "task8_post6_candidate_version": "013.3allocated/applied/adoptedDE; no repeatparser/staticDDLproof.",
+    "task8_isolated_fixture_ruling": "COMPLETED/adopted. Task8casesretained; overflowMAXneverreuse.",
+    "task8_provisioning_helper": "COMPLETED earlier. Sameowned11009a/44727 retained; Task7onlynewownschemaalreadyACKed. Do notprovisionagain.",
+    "task7_post6_delta": "COMPLETE75a76269 FULLoriginal+exactcorrectiondiffREAD/manifest9c54de00; root27BASEblobs42ranges/61oldappendix58rawsame3actualchanged verified0mismatch. Originalfbd29ff5preserved; genericphysicalindexallkinds clarified. ActualTask8source/migration repin stillrequired.",
+    "task9_post6_delta": "COMPLETE1e14eaa8 FULLREAD11722B/manifest61434b49; root focused33/ranges46/unchanged53 old+BASEraw verified0mismatch. Committed12ca only; Task8/7/sharedTask9-11facade actualrepin remains; no qualification.",
+    "task8_current_model_custody": "COMPLETE47a282a7/root769f1828 adoptedDE; T6modelsyncCLOSED.",
+    "task11_forward_ddl": "COMPLETE UNVERSIONEDstaticR1SQL195bec3b/report243146df/manifestdb9459d7; scoped721a2136 dualApproved0findings closes2ImportantSTATICafter1round. RootFULLREAD/d73927seals+exactpatch; actual8.4.6CREATE/negative/FKprobeOPENTask11-SQL-PROBE, actual7/9/10/prefix/version/freeze/ACK/models/sourcefuture. Task11implementationNOTcomplete.",
+    "task9_fixture_helper": "COMPLETESTATICONLY a868bc63helper/1b68e652note/944873f3manifest; scopeda4a53e81 SPEC PASS/Approved0findings closes4P2+1P3 after1helperround; rootFULLREAD9seals+exactdiff4f3e5e14. Notexecuted/noTask9schemaorproductactivation. FutureTask7rootpublicconsumerACK+actualsource/prefix/liveguard/helperoneattempt/separateTask9ACK mandatory.",
+    "task13_T8SR_M1_case": "COMPLETEreadonlye2b8687eplan/4887eb52manifest; rootFULLREAD8423B+7DEblobs9rangesverified 8e4e825908656ec1aab0ccc963c261879328fa2d412a2901bb2f5c8178b4ee21. SharedtestDataSource capturesactualrawmappedpair/statement-closeafterprefetchdelete/zero-rowcandidate/cursorhighersurvivor, retainoldgap. No source/test/DBimplementation, T8SR-M1stillOPENTask13; actual7/9/10/11focusedrepinlater.",
+    "task11_isolated_ddl_probe": {
+      "status": "ACTUAL_ONE_ATTEMPT_EXIT0_INDEPENDENT_CUSTODY_PENDING",
+      "agent": "/root/b11_isolated_probe_prepared",
+      "brief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-preparation-brief-20261024.md",
+      "briefSha256": "579f3bdf8cc48e87cc339cd20358aadfe1cd046b7f1ca7e66d8e0f8c20d23bc9",
+      "limits": "No DB/Docker/helper import or execution/private/source/Git mutations. Root independent review and separate exact public probe ACK precede any new isolated schema.",
+      "authorFiles": [
+        {
+          "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024.py",
+          "bytes": 31365,
+          "sha256": "8372c5b11f171ce9a9f09a0aa5530057118763ca52a7cf7d0a76b8853bec0b7f"
+        },
+        {
+          "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024.md",
+          "bytes": 10163,
+          "sha256": "f5a82f342b5ca54b4c174b31c0e585d2fed55af51d5bdb97164a7d7af9767478"
+        },
+        {
+          "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024-manifest.json",
+          "bytes": 4221,
+          "sha256": "c935d739463681d8cf1f97d508285e80e68c93691a1320acb71ac09ed7fceef0"
+        }
+      ],
+      "reviewer": "/root/b11_isolated_probe_static_review",
+      "reviewBrief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-static-review-brief-20261024.md",
+      "concern": "AuthorallegedV002/R1identitycollationmismatchnotaccepted; rootobservedV007laterALTERto0900bin; independentfinal15prefixcheckpending. NoDDLproposalchange/ACK/schema/helperexecution.",
+      "reviewSha256": "f7d81d5aa7a964b3277080d41169dc810bf50426511ab1eefa7cd2bce34fdd15",
+      "fixRound": 1,
+      "fixBrief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-fix01-brief-20261024.md",
+      "concernDisposition": "InitialallegedR1mismatchfalseforfinalprefix; actualhelperwrongV002stubI1 plusprivateparentI2; exactR1DDLunchanged.",
+      "scopedReviewSha256": "10618cb4674a753aef8ad147db26d3c6a2b511792a901394b10d527771411fc3",
+      "helperSha256": "ba481d2e00272b8ce7acbf86da57dbed5fda5a4e3cd1d54d73d28fdd8f8d79a7",
+      "reportSha256": "fc6a8e80be818d5d85655944b706c312ba59d79f5844f53ec2819288e95f07c8",
+      "manifestSha256": "9dfab5613a0864ce06ffa0e82644e277e04032f7c789743a21fc9af6feba5ea9",
+      "acceptance": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-helper-preparation-acceptance-20261024.md",
+      "acceptanceSha256": "89cf774863bba0c9283744b05fafd53c20b2c7542b7b26fdae7fbc5171a1108c",
+      "minor": "T11PROBE-M1 reportfour-vs-five nextreportedit/finaltriage",
+      "executionGate": "Root exactpublicACK/liveguard/oneattempt only afterTask7author testsstop; noACK/schema now.",
+      "rootACKSha256": "3bf88ca50d3c65e9cff1c18dbbc02cd494b94c3c20ef3f36b5d908af90e60a2f",
+      "owner": "task11-probe-fc2e1fdaf6ad4f88b40a4baf410340d1",
+      "schema": "ama_t11_fc2e1fdaf6ad_probe",
+      "rawPublicManifest": "artifacts/phase-b/b-remaining/controller-task11-sql-probe-20261024/manifest.json",
+      "rawPublicManifestSha256": "8f280464533b807b875839c4176d7e421cf6f1eaca193716776f8c3c461faabb",
+      "actualCounts": "369appendstates/232commands231MySQL/127outcomes=17directpositive55negative55controls; exit0 no stdout/stderr; independentauditpending, notfullTask11",
+      "auditBrief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-actual-custody-brief-20261024.md"
+    }
+  },
+  "preparation_status": "All prior6/8/7/13 preparations and resumed9/10/new11 readonly preflights COMPLETE. Actual upstream source repins at activation remain; do not repeat full completedpreflights.",
+  "task5_final": {
+    "adoption_commit": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+    "product_source": "c943d15f4a2b9f294e4b7791fb51eb67d3acce5d",
+    "fix01": "11eb54086da95c675862fcf4225821104aa8e87d",
+    "review": "task-05-fix-02-review-20261024.md SHA3a3b3855 SPEC PASS/qualityApproved,0findings; T5SR01/02 andCV1closed",
+    "custody": "270evidence/505source/290commitpaths/old552+341/protected4727/prefix/fourprivate0;14actualHTTPchains=13negativefixturemaintenance+1successRAW2uploads;13historysame;selectedresourcesunchanged",
+    "tests": "37suites240units +6distinctIT atfinalproduct; priororiginal/fix01composedsourcewindows/historicalexecutionquals retained; no retroactivepristinefullsuite claim",
+    "adoption_doc": "docs/acceptance/b/task-B-remaining-05-worker-adoption-20261024.md"
+  },
+  "task6_current": {
+    "status": "COMPLETE",
+    "source": "d54b2e8841c664e691d03192507e7a192be38430",
+    "adoption": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+    "review": "b71b6a02 SPEC PASS/Approved",
+    "tests": "254units+121distinctcomposedIT (34current+87inherited); failed121batch/same5replacement preserved, never126/pristinebatch",
+    "qualification": "PIN03/sourceequivalence controlled; Task8modelsyncclosed/T6SR03Task12open. Fulloldchronology exactTask7pointerarchive."
+  },
+  "fixture": {
+    "name": "ama-test-b01-ad9f1af29eff",
+    "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+    "port": 46653,
+    "env": ".tools/phase-b-remaining/env.sh",
+    "owner": "remaining-20261023",
+    "only_this_run_owned_reuse": true,
+    "no_reset_or_old_env": true,
+    "historical_completed_test_ports": [
+      58062
+    ],
+    "restoration_history": "SameCIDstartedafterDockerDesktopstop/exited255/OOMfalse; originalHostConfigdynamicportblank remapped45157; no recreate/reset/DDL; privatecurrentenvURLonlyupdated with0600backup; original58062rawreceiptsunchanged."
+  },
+  "owned_s3": {
+    "id": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+    "name": "ama-task05-s3-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+    "port": 45501,
+    "rootproof": "task-05-s3-resource-rootproof.json",
+    "retained": true
+  },
+  "resource_policy": {
+    "current_ports": {
+      "shared_mysql": 46653,
+      "owned_s3": 45501,
+      "task8_owned_mysql": 44727
+    },
+    "private_env": ".tools/phase-b-remaining/env.sh",
+    ".tools_root": ".tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+    "selected_only": "Selected exact CID/owner/image/mount/limits fields only; never full inspect/Config.Env. Reuse retained shared MySQL/S3/env/PKI. Task8 new bounded owned MySQL already provisioned under explicit rootguard, no recreate/reset. Activationbrief controls target-specific migration access.",
+    "limits": "Test/Worker512MiB2CPU; native/probe64MiB2CPU; Task5scoped3preparations/admission2proofcompleted no needrepeat",
+    "new_case_resources": "Only fresh UUID descendants runtime/native/data under existingroot and newcasebuckets; nooldartifactpaths; ownerguard first",
+    "maintenance": "Only exactnewcaseHTTPactor/meeting/input/upload/spec/attemptchain+observednegative/Workerstop-join-zeroactive/noRAW-external-reservation; guardedmaintenancebeforerouteclose; notbusinesssuccess",
+    "task8_owned_mysql": {
+      "id": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+      "owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+      "port": 44727,
+      "limits": "768MiB memory=swap/1CPU/256PID",
+      "private_env": ".tools/task08-848e93aace8b4f0fa34fc548267f3dc5/env.sh",
+      "ready_proof": "task-08-owned-resource-ready-20261024.json SHA334d4f881e2b658eb9f5c21217bea7fa3d029dbcbf33f7e9a05e546a1235eec3",
+      "initial_targets": "4 fresh schemas behavior/fairheld/fairunregistered/overflow, empty at ready observation; actual author bootstrap/migration report pending",
+      "historical_target_addition": "SameexistingCID/rootselectedguard5d55bd4e/newemptyama_t08_848e93aace8b_historical010/testusergrant/ready8.4.6;no newcontainer/credentials. PrivateenvappendedAMA_TASK08_HISTORICAL010_DATABASE_URL exactoldprefix/0600backupretained. SeparateACKbe461cd4 target010only/new8frozenoldscripts/rerun0; no13.3orreset."
+    }
+  },
+  "schema_protection": {
+    "initial_paths": 4728,
+    "unchanged_historical": 4727,
+    "single_authorized_current_generated_model_exception": "docs/database/ama-schema-draft.sql; oldexactblob task-02-review/prior-current-schema-draft.sql.txt; originalsnapshotunchanged",
+    "new_frozen_SQL": "V013_1__b_runtime_metadata.sql SHA9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520/1817B/checksum-1898004857",
+    "frozen_additions": "frozen-additions.json",
+    "reserved": "003/004gaps;014..027owners;nextinteger028, root compatiblepatchallocation only afterproof"
+  },
+  "schema_history": "Root fresh SELECT-only16c60cfe confirms exact15 through013.3 checksum-385117638 on all5acknowledgedtargets, full15historyfields +selectedordinal/indexparts match completedrerun; old14historyprefix preserved by0f5f6e89. OldSQLimmutable,013.3full164B023fe875. Nextversions014..027reserved,integer028; laterTask11DDLunallocated.",
+  "current_generated_model": {
+    "path": "docs/database/ama-schema-draft.sql",
+    "sha256": "0beb9eace26afd5c45ade81a2f990583c0d5a58ffda963c15d17836a1fa3af68",
+    "version": "B00-1.6-reconcile-scan",
+    "initial_protection_fact": "Initial4728 lists currentSQLdraft only; currentdictionary/design notmembersofthatJSON. Preserve historicalconstraints andnewTask6snapshot independently. Originalprotectedbaselineunchanged.",
+    "task8_ownership_ruling": "Original task-08-model-output-root-ruling-20261024.md PLUS task-08-model-output-input-index-amendment-20261024.md; exact4baseblobpreservationbeforewrite; durable_taskindexgenerator87-88/SQL320-351/dict542-581; noERindexchange; Operationregions+headers/statusprefixsame; combined98tables732cols189indexes/B00-1.6. ActualTask8activationafter6adoption.",
+    "task8_ddl_status": "COMPLETE accepted013.3/fiveforward15/old8historicalseparate; static+rootfreeze+ACK+normal1-rerun0+fullpreservation+reviewaccepted.",
+    "task11_ddl_status": "UnversionedR1exactSQLstaticApproved721a after1fixround; actualisolatedengineprobe +7/9/10/prefixrepin beforeformalversion/freeze/separateACK/modelwrites. Noallocatedfutureversion.",
+    "counts": "98tables732columns189explicitindexes116checks208FK; deployed65/492distinct"
+  },
+  "binding_cross_task_rulings": {
+    "task9_ruling": "enqueue currentr/e no contentadvance, retainactualdebt; complete same-root outstanding generation tasks/input readiness gates final/publish, enqueue actualinprogresspubguard; exact indexedboundedclosure andconcurrencyproof required.",
+    "task9_initialization_ruling": "Task9 owns real firstminutes-settings/template origin/emptyexclusion prerequisite underowner/idempotentCAS/strictfirst-only; noB03defaultbackfill/noDDL/noSQLfakeflow. Task10lateredits/shareddisposition, Task11freeze.",
+    "shared_rank_ruling": "task-09-10-shared-rank-ruling.md SHA3b10ab12f46f7b4a2f70a91871f20d4f4052662b1cfee2b08700b02188b6bc75; originalTask9/10unchanged, Task3/6 domainfirst thenTask9minutestableextension/candidateheaderslastdomain beforeallsources/tasks, earlydiscoveryonly.",
+    "task11_zeroeffect_ruling": "Originalrequirements869/1030..1036 allow prefirstsuccessmodify/refinal/reconfigure after authoritativezeroeffect; do not blanketFAILEDforeverlock. SamepublicationUUID+immutablehistory/newexecution exactguards designpending.",
+    "task5_package_alignment_ruling": "R1 queue-private registration/AfterTask/invocation remainama.task. Minimal constructor-boundregistration delegates existing transcript-private graph/held verification to SAMEauthority/JdbcTaskPreparationsissuer; collaborator notsecondissuer/admissionpolicy. Exactfixedregisteredidentity, no publicmint/setter/DTOgrant; actualAPI+Worker installoneconfinedregistration. Sourceproof/reviewrequired.",
+    "task5_shared_assembly_ruling": "task-05-shared-assembly-root-ruling.md",
+    "task5_shared_assembly_ruling_sha256": "c4f9181933462d66e5377dd5049f344c7e2369943a42763863c7e8bf1309ca2c",
+    "task9_terminal_replay_source_check": "AtTask9actualTask7adoptionrepin inspectpreparedpolicyverifyReplaydefaultfalse; realTask9consumerneedsowncomplete exactstoredgraph validation fornormalSUCCESS, invalidlocalFAILED/null andretainedSTALE/null terminalreplay underauthenticcontext, no newwriters/resend onreplay. Currentauthorreportscontrolledproofonly; awaitTask7independentreview beforeproductadoption.",
+    "task7_CV04_consumer_qualification": "Independent Task7 review91a257d8 CV04: Tasks9/10/11 remain mandatory real-consumer gates: full archived producer/input closure; bounded strict provider payload/result identity across restart; full stored graph equivalence/adoption; zero/positive/missing editor guards; all version-writer PENDING disposition; readiness before final advancement; publication read/application projection. Fixture private object identity/T07_FIXED/WORKING graph does not qualify real provider/full consumer. Actual final Task7 source must be repinned after fixes before installation; preserve failclosed registrations."
+  },
+  "pending_issue_register": "task-13-pending-issue-register-20261024.md; Task5T5SR01/02/CV1closed; fairnessFUPTask8OPEN; T4SR04/05Task12; allotherminors/permanentlimitscarryforward",
+  "final_review_lower_bound": "34cb226aefe99c67d3681af68d748b0aeea4e073",
+  "final_review_base_ruling": "InitialallworkBASE evenifmainindependentlyintegratedTasks1–4; notfreshmainmergebase",
+  "open_optional_followups": [
+    "FUP-B-REMAINING-TEST-01 heartbeat-test100mssleep",
+    "FUP-B-REMAINING-TEST-02 expectedWARNING/deprecationnoise",
+    "T03-IR-M01 compressedsecuritycodereadability",
+    "T03-IR-M02 unresolvedinitialuploadhandshake"
+  ],
+  "final_limits": [
+    "B01IMMpermanentPARTIAL",
+    "B04Q401UNKNOWN",
+    "companySSO/directory/model/KB unavailable",
+    "noHA/capacity/nativeIOqualification",
+    "noactualproductionpublish/mail/push/mainmerge"
+  ],
+  "skill_runtime": "Superpowers7.0.1; actualavailableagenthandles authoritative; approvalnever omit sandbox_permissions; stable nonUNCWindowscwd/literalPSstdin→WSLPython argv. No routineuserpermissionstalls.",
+  "historical_execution_qualifications": "Full prior details kept in exactarchive and original reports: Task4/5composedwindows/clockhandshakecauseunproven/fullinspect/javapwithoutflags/setupfailures/source-reconstruction/maintenancechronology; do notretroclaim orformat-onlyrerun. TwoearlyTask6ITverifycommandsranunits; laterMAVEN_CONFIG skipsunitselector; preservecounts/sourcewindows/finalunitsseparate.",
+  "schema_forward_history": {
+    "actualAdoptedCount": 15,
+    "latestLiteral": "013.3",
+    "latestScript": "V013_3__external_reconcile_scan.sql",
+    "latestChecksum": -385117638,
+    "latestBodySha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+    "task6Index": "013.2/75B11adae7d/checksum-1098175378",
+    "acceptedEvidence": "Task8migration0f5/rootlive16c60/fullposttest0d73-bf57/custody6acea;fiveforward15+separatehistorical8 accepted; alloldSQLimmutable",
+    "task7FreshOwnBootstrapRootCheck": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-bootstrap-root-evidence-check-20261024.json",
+      "bytes": 5010,
+      "sha256": "c4fbd3ba5436b93d408863fd4dd1125babfc8188fb4d76954c63741c9d1c31ab"
+    },
+    "future": "Task11unversionedWSQLprepACTIVE after8; no formalversion/resourcecopy/model/DB writes. Actual7/9/10/prefixrepin/staticreview/freeze/separateACKlater."
+  },
+  "task8_current": {
+    "status": "COMPLETE",
+    "source": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+    "adoption": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+    "review": "f7187193 SPECcompliant/Approved0Critical0Important1Minor",
+    "tests": "254unitsonce+104distinctselectedIT; allfailed/setup/interrupted/componentsourcewindowsretained",
+    "custody": "58e832ea+6acea297 scopedCVclosure; shared34791rowfull0d73-bf57;7SHAexacthelperrecovery455c retrospective/notcontemporaneous",
+    "closed": "FUP-B05-CANDIDATE-01 controlledscope +T6-INDEX-MODEL-SYNC",
+    "open": "MinorT8SR-M1Task13/historicalOptionalemptycauseUNKNOWN",
+    "migration": "013.3exact164B023fe875/new1-rerun0/fiveforward15; separatehistorical0108/0+adapted3oraclePASS; retainedoverflowMAXintentionallyexhausted NEVERreuse",
+    "model": "B00-1.6/98tables732cols189indexes116checks208FK; deployed65/492distinct",
+    "mirrorManifest": "artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/manifest.json SHAfc6ae32569e620af792ef10dd3835665050cd866b7f0bda9c532f76749791e0a"
+  },
+  "pointer_normalization_archives": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-task8-pointer-normalization-20261024.json",
+      "bytes": 30756,
+      "sha256": "03ea0e8521a24ab81ab35f33318ada5e19238c598d6f124c2c3f5ea709a56ec2"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-context-before-task8-pointer-normalization-20261024.md",
+      "bytes": 11407,
+      "sha256": "7cd464ed8f9e32aa7c1aca6af38564a4f912b8da21cfe84eb82347b829d44dc1"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-task7-pointer-normalization-20261024.json",
+      "bytes": 41250,
+      "sha256": "620a98da0f3d3cc6a2b1ba883950eab2555ea7ee0c0b06541ced7a320cc91007"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-context-before-task7-pointer-normalization-20261024.md",
+      "bytes": 12203,
+      "sha256": "6d1ce9fe25c333feffdd4ca6dd6f162043d0d9d0b58d0eb77e5d632365144b77"
+    }
+  ],
+  "task7_current": {
+    "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+    "fixtureOwner": "task07-0cea85a0e4724e78bd7aa6aabfc243bc",
+    "schema": "ama_t07_0cea85a0e472_behavior",
+    "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+    "port": 44727,
+    "privateEnv": ".tools/task07-0cea85a0e4724e78bd7aa6aabfc243bc/env.sh",
+    "rootFixtureAckSha256": "ee73ff0b98e136674da3254e3dda1c3508491676753437eebdce3844ff31ddaf",
+    "ready": "Normal15initial/0rerun exactnewownschema captured; all15fullhistorybefore-aftersame/adopted7stablefields/current15SQLunchanged; rootproofc4fbd3ba5436b93d408863fd4dd1125babfc8188fb4d76954c63741c9d1c31ab",
+    "protected": "9777/c207a1abc26071074928caf66ec8c3e2ab0da0410e6ce6f3fc846c061a4d1f86/no modelexceptions",
+    "actualTask8RepinSha256": "06e1e6910ae270e333701042a25cde55c3a666be3ceb9d57dc6fc0bef0fb8c9a",
+    "status": "AuthorDONE6cce/395PASS; independentreview+custodypending; noadoption",
+    "interim": "Rootreadonly6XML/receipts3100ba16: prepared1RED→GREEN1/recovery1RED→GREEN1/replay2RED→correctedGREEN2. Separate4distinctbehaviorcases, sourceongoing/Worker/finalqualificationspending, no aggregatefinalpassclaim.",
+    "interim02": "AuthorcontrolledgenerationSTALEcompletegraph/rootunchanged +actualWorkerclaim-marker-permit-I/O-output-attempt-commit-settlement/ordinarycomplete0 reported. Rootactualnew5XML/receipts f281a493: retention1setupFKERROR separately→correctedRED1assertion→GREEN1, actualWorkerRED1assertion→GREEN1; no finalsource/semanticsreviewclaim. Authority/rollback/heartbeat/close/saturatedmaintenance/finalqualificationpending.",
+    "interim03": "Rootactualnew6XML ff5625e9fc9357172269be6d7713d2a56d00018b0a676dda2716f5150f97d856: prepared-adversarial17PASS/Worker-races8PASS/maintenanceRED1→GREEN1; retentionadversarial10/1ERRORunresolved+retentionforgeryRED1. Keepfailedwindow, authornotified/handling. Separateoverlapping/sourcewindowcasesnotfinalsum; finalsource/custody/reviewpending.",
+    "futureConsumerActivationReceipt": "AfteractualTask7adoptionONLY rootwillissue public W/task-07-consumer-activation-root-ack-20261024.json withtask7/statusCOMPLETE_ADOPTED/baseDE/sourceCommit/adoptionCommit/reviewSpecPASS/reviewQualityApproved/openCriticalImportant0/exactadoptiondoc+SHA. Futurehelperrejectsprivate/arbitraryevidence. Doesnotexistnow; noTask7completionclaim.",
+    "latest_author_status": "Authorfinal44closure42PASS/2maintenance-timingFAIL fromfixed2ticks underretainedhistory; changedonly2methodbodiestosnapshotfinitepollbounds/corrected2PASS. Selectedlegacy76+custom44=120distinctIT +254units=374authorproposedcomposed, source14exactequal/noUnit→IThelperdependencyreported. Specialreplay2PASS. Normalmigrator0/full15same/protected9777same/known6+PEM0/recordedchildgone reported. Reportswritten, completemanifest+exactowncommitbuilding. No rootadoption/custody/qualityreviewyet.",
+    "phase": "FIX01_INDEPENDENT_REVIEW_AND_CUSTODY",
+    "latest_root_receipts": "Rootselectedreceipts 6732818f796b02e502cd7b2d9d8a02578c0496a7c0578ab46f100eaeab54c8e0: original116=114PASS/1FAIL/1ERROR; affected38PASS,recovery4PASS,unit254PASS. Laternewterminal-special-replay-red2assertFAIL (invalidterminal/retainedSTALEexactreplay)OPEN; authoractiveinitialimplementation. Units predatenewfix, no finalsource/pass/adoptionclaim. RawXML/sourcecustody/report/owncommit/reviewpending.",
+    "sourceCommit": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
+    "reports": "RootFULLREADcurrentW1697Be15b9ed5/public12119Ba2a637bd inclpost-executiononeblanklinequalification; actualledgercd736e2b/man20e92193. 8705ownedpaths=31source14main17test+1Wreport+8673artifacts; sourcepackagea9f82978/full74.5MB6d083627/briefce720ac2/manifest09507e13.",
+    "rootPrivateScan": "Rootindependentinmemoryknown6distinctprivatevalues+PEMpatternscan all8705actualdeliveryFSfiles andbothreviewpackages; no values/digests/privatefilecontents printed/persisted. Notuniversalcredentialpatternaudit. 8707files/143526442B/0matches",
+    "independentReview": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-independent-review-20261024.md",
+      "bytes": 18438,
+      "sha256": "91a257d83d8c1eb1fe1fa7a9a2f7d76c48a178e995e82cb631cbc05ad298dc7f"
+    },
+    "initialCustody": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-final-delivery-custody-20261024.json",
+      "bytes": 9350,
+      "sha256": "3421b8d4134d82bc7e397a3c4bf0cafd92640761ba3a37f76f7f3e5af002cb9b"
+    },
+    "rootReviewRead": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-review-and-custody-root-read-20261024.json",
+      "bytes": 5463,
+      "sha256": "8c401bd520bff13e5768e0b5b0a1b5eb79a9ef29f0d54c415f37992b49d249f4"
+    },
+    "rootSelectedResources": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-root-selected-resources-and-pids-20261024.json",
+      "bytes": 5342,
+      "sha256": "0b1f6f148f6fe86b217e1af227b9ab8f649341ea23615e76d4610992c9f075d5"
+    },
+    "fix01InterimIR03": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-ir03-root-xml-read-20261024.json",
+      "sha256": "822dfc2f578c0d1317496f7344a218c77fbbac9f44bc22189226a24ba4beeae8",
+      "scope": "3caseRED(1assertfail)→GREEN3, intermediate notfinalsourcequalification"
+    },
+    "fix01LatestEvidence": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-framework-interim-root-read-20261024.json",
+      "sha256": "21c367b5f3aa3bd3e151e89011ee9f9ae6e84c66156788f096d662c1df1feb62",
+      "status": "AuthorfinalaffectedIT underway, thenunit/history/custody/report/owncommit; noadoption",
+      "countQualification": "10and5separatePASSwindows include2repeatedIR01cases; finalselectionpending"
+    },
+    "fixSourceCommit": "6cce4794dba473825d83fb9bccafc043cd611b5c",
+    "fixReport": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-report-20261024.md",
+      "bytes": 12707,
+      "sha256": "4878d25960159c7415a39fcfc9ce2cd2ded878c2b2bc094d3f8f3a66ee912759"
+    },
+    "fixPackages": [
+      {
+        "kind": "source",
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-source-review-package-20261024.diff",
+        "bytes": 143011,
+        "sha256": "b13ea387e1cddd3a57b7fea66af4059ac24e4b2ee7da268acabe826df49792b4"
+      },
+      {
+        "kind": "full",
+        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-full-review-package-20261024.diff",
+        "bytes": 7923118,
+        "sha256": "057c18be12df22d045ade69cf195ffabb5c09b30cd8074b8f73617e4203cc36a"
+      }
+    ],
+    "ownedChildPids": [
+      1277931,
+      1296943,
+      1299071,
+      1300741
+    ],
+    "fix01RootSelectedResourceProof": "5794fe4078f8169ceae28d2b54466c9ecbfaf3de4c4cb7e70f2c033daa47a096 all3selectedFULLfields/name/mounts unchanged,4exactPIDs gone",
+    "fix01RootPrivateScan": "3ba2f58c94b2eb99128ca4f6152a2b852ae7fddb5e9d8f4eceac3b7c4863504e 9516files317531891B known6+PEM0 inclall369probeappendstates+backendpreimages"
+  },
+  "stop_after_phase_b": true,
+  "phase_b_exit_contract": "Afterall13tasks/finalreview/recordsclose: stopexecution, preserveexactcommits/evidence/handoffs andcompleted/open/pendingboundary index; next继续任务 mustreadcanonicalhandoff beforework and startONLY firstunfinishedpostBnode, notredoB."
+}

@@ -1,0 +1,16 @@
+Original approval: task-05-resource-root-ack.json; operation was exact new uid/gid/mode ownership installation.
+First sudo -n invocation failed before credentials/container/PKI creation, retained in run-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/setup-failure-01.json.
+Invocation mechanism ACK arrived after successful execution; it is not represented as prior approval.
+Executed via PowerShell literal here-string piped to: wsl -d Ubuntu-24.04 -u root -- python3 -
+from pathlib import Path
+import subprocess
+r=Path('/home/tanren/ama/.worktrees/phase-b-completion')
+for name in ('data','logs'):
+ p=r/'.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3'/name
+ assert not p.exists() and not p.is_symlink() and p.resolve().is_relative_to(r)
+ for a in p.parents:
+  assert not a.is_symlink()
+  if a==r:break
+ subprocess.run(['install','-d','-o','10001','-g','10001','-m','750',str(p)],check=True)
+No other root mutation. Subsequent unprivileged resource-resume.py verified exact uid10001/gid10001/mode0750 and selected Docker identity/mount/limits receipt.
+Future privileged calls follow root's direct /usr/bin/install-only instruction.

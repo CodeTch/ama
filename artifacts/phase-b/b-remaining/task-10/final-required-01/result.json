@@ -1,0 +1,47 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task10FinalCheckCasIT",
+      "reportSha256": "5fd13eb978644fe1b9cb04bb735ca171851cb262852b273efb4358dc57d763ed",
+      "reportMtimeNs": 1792854024954877199,
+      "startedNs": 1792853987175019779,
+      "endedNs": 1792854040851010961,
+      "class": "ama.storage.Task10FinalCheckCasIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10FinalCheckEmptyIT",
+      "reportSha256": "5aeb9a365c04ce9781df9c76a3b9715464a92394b4b9a529c55420288b547018",
+      "reportMtimeNs": 1792854040423323217,
+      "startedNs": 1792853987175019779,
+      "endedNs": 1792854040851010961,
+      "class": "ama.storage.Task10FinalCheckEmptyIT",
+      "name": "genuineEmptyCurrentIsNotMissingCapability",
+      "failure": false,
+      "error": true,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10FinalCheckRetainedIT",
+      "reportSha256": "2e7f3c934fab878c87f04676f4cff4a40a61080e4debcb85076e775174180ae7",
+      "reportMtimeNs": 1792854038572815968,
+      "startedNs": 1792853987175019779,
+      "endedNs": 1792854040851010961,
+      "class": "ama.storage.Task10FinalCheckRetainedIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

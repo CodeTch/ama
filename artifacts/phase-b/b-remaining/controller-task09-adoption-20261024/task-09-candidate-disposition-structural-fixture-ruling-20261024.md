@@ -1,0 +1,7 @@
+# Task9 four-state candidate structural fixture ruling — 2026-10-24T10:08:52.029763+00:00
+
+Ruling: permit isolated fresh-case candidate disposition fixtures for Task9 reader/list/terminal-replay capability. Each candidate must first be created by the real production generation chain and have terminal settled execution. Under genuine meeting root and candidate PK lock, perform exact CAS from PENDING/decided_at NULL to one selected ADOPTED/REJECTED/STALE plus decided_at. Retain independent fresh case per state, do not restore, and alter no other candidate field/input/task/graph/current pointer/root revision. Preserve exact before/after and unchanged-field/root assertions. No old case or schema mutation.
+
+Why: adopted R1 line265 requires four-state metadata/detail reading; line250 expressly separates isolated candidate capability from actual Task10 installation. Task10 production adoption/disposition does not yet exist. Cost if wrong is bounded fixture replacement/requalification; it cannot close Task10 workflow or cross-task integration. Evidence must be labeled structural fixture, not business adoption/first-save or actualcurrentPINNED. Later Task10/11/12 genuine saved/adopted/settings/generation chain remains OPEN.
+
+Coordinator inspected V012 generation_candidate shape/enum and R1 four-state routes/stage boundary. No product/SQL/test mutation by coordinator. Author proceeds combined remaining matrix while preserving failed windows and exact source qualifications.

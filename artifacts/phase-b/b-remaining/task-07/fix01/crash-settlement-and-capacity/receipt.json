@@ -1,0 +1,21 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07SettlementWindowsIT#*,Task07ReceiptRecoveryIT#*"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/crash-settlement-and-capacity/integration-tests-TEST-ama.task.Task07SettlementWindowsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/crash-settlement-and-capacity/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml"
+  ],
+  "elapsedSeconds": 55.02136301994324,
+  "counts": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

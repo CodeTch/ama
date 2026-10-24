@@ -1,0 +1,257 @@
+--- old/task-11-isolated-ddl-probe-prepared-20261024.py
++++ new/task-11-isolated-ddl-probe-prepared-20261024.py
+@@ -10,6 +10,7 @@
+ import os
+ from pathlib import Path
+ import re
++import stat
+ import subprocess
+ import sys
+ from datetime import datetime, timezone
+@@ -29,6 +30,7 @@
+ BASE_SEALS = {
+     'V002__identity_acl.sql': '68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0',
+     'V005__tasks_outbox.sql': '55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7',
++    'V007__identity_sessions.sql': '859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d',
+     'V010__reliable_execution.sql': '03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db',
+     'V013__publications.sql': '1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c',
+ }
+@@ -59,11 +61,11 @@
+     'publication_submission_execution': ['local_execution_id'],
+ }
+ STUBS = [
+-    # Exact referenced key definitions from DE V010:72, V013:18/45, V002:5, V010:188.
++    # Effective referenced keys from DE V010:72, V013:18/45, V007:30-31, V010:188.
+     'CREATE TABLE durable_task (id char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL, PRIMARY KEY(id)) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci',
+     'CREATE TABLE publication (id char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL, PRIMARY KEY(id)) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci',
+     'CREATE TABLE final_confirmation (id char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL, PRIMARY KEY(id)) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci',
+-    'CREATE TABLE enterprise_identity (enterprise_id varchar(255) COLLATE utf8mb4_bin NOT NULL, PRIMARY KEY(enterprise_id)) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci',
++    'CREATE TABLE enterprise_identity (enterprise_id varchar(255) COLLATE utf8mb4_0900_bin NOT NULL, PRIMARY KEY(enterprise_id)) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci',
+     'CREATE TABLE external_execution (id char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL, PRIMARY KEY(id)) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci',
+ ]
+ 
+@@ -77,9 +79,25 @@
+ 
+ 
+ def public_file(path, expected):
+-    if path.is_symlink() or not path.is_file() or sha(path.read_bytes()) != expected:
++    if path.is_symlink() or not path.is_file():
+         fail('public sealed input missing or changed: ' + path.name)
+-    return path.read_bytes()
++    data = path.read_bytes()
++    if sha(data) != expected:
++        fail('public sealed input missing or changed: ' + path.name)
++    return data
++
++
++def validate_private_parent(root, private_parent, euid):
++    # No private contents are read. Resolving the root detects any aliased ancestor.
++    if root.is_symlink() or not root.is_dir() or root.resolve(strict=True) != root:
++        fail('workspace root is not canonical')
++    if private_parent != root / '.tools' or private_parent.is_symlink() or \
++       private_parent.resolve(strict=True) != private_parent:
++        fail('private parent is not canonical')
++    parent_stat = private_parent.lstat()
++    if not stat.S_ISDIR(parent_stat.st_mode) or parent_stat.st_uid != euid or \
++       parent_stat.st_mode & 0o022:
++        fail('private parent type, owner, or write mode rejected')
+ 
+ 
+ def write_private(path, obj):
+@@ -116,6 +134,7 @@
+     excerpts = {
+         'V002__identity_acl.sql': ['enterprise_id VARCHAR(255) COLLATE utf8mb4_bin NOT NULL', 'PRIMARY KEY (enterprise_id)'],
+         'V005__tasks_outbox.sql': ['CREATE TABLE durable_task (', 'id CHAR(36) NOT NULL PRIMARY KEY'],
++        'V007__identity_sessions.sql': ['ALTER TABLE enterprise_identity', 'MODIFY enterprise_id VARCHAR(255) COLLATE utf8mb4_0900_bin NOT NULL'],
+         'V010__reliable_execution.sql': ['MODIFY COLUMN `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL FIRST', '`id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL', 'PRIMARY KEY (id)'],
+         'V013__publications.sql': ['CREATE TABLE final_confirmation (', 'CREATE TABLE publication (', '`id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL', 'PRIMARY KEY (id)'],
+     }
+@@ -425,7 +444,7 @@
+     if Path(__file__).resolve() != SELF or SELF.is_symlink() or ACK.is_symlink() or ACK.resolve().parent != W:
+         fail('helper/ACK canonical path mismatch')
+     helper_sha = sha(SELF.read_bytes())
+-    public_file(R1,R1_SHA)
++    r1_bytes = public_file(R1,R1_SHA)
+     guard = json.loads(public_file(GUARD,GUARD_SHA))
+     verify_baseline()
+     if not ACK.is_file():
+@@ -441,6 +460,7 @@
+        schema != 'ama_t11_'+owner[-32:-20]+'_probe':
+         fail('root ACK owner/schema contract mismatch')
+     state_dir = ROOT/'.tools'/owner
++    validate_private_parent(ROOT, ROOT/'.tools', os.geteuid())
+     if state_dir.exists() or state_dir.is_symlink() or list((ROOT/'.tools').glob('task11-probe-*')):
+         fail('preexisting or orphan probe state')
+     state_dir.mkdir(mode=0o700)
+@@ -466,7 +486,7 @@
+         expect = {'durable_task':('id','char(36)','ascii_bin'),
+                   'publication':('id','char(36)','ascii_bin'),
+                   'final_confirmation':('id','char(36)','ascii_bin'),
+-                  'enterprise_identity':('enterprise_id','varchar(255)','utf8mb4_bin'),
++                   'enterprise_identity':('enterprise_id','varchar(255)','utf8mb4_0900_bin'),
+                   'external_execution':('id','char(36)','ascii_bin')}
+         for table,(col,typ,coll) in expect.items():
+             query = ('SELECT COLUMN_NAME,COLUMN_TYPE,COLLATION_NAME FROM information_schema.COLUMNS '
+@@ -477,7 +497,9 @@
+                      +' AND TABLE_NAME='+q(table)+' AND INDEX_NAME=\'PRIMARY\';')
+             if p.scalar('parent-pk-'+table,query) != col:
+                 fail('parent primary key mismatch: '+table)
+-        r1_sql = R1.read_text()
++        if not r1_bytes.isascii():
++            fail('sealed R1 CREATE is not ASCII for exact UTF-8 transport')
++        r1_sql = r1_bytes.decode('ascii')
+         p.status = 'EXACT_R1_CREATE_ATTEMPTED'; p.record()
+         p.mysql('exact-byte-r1-create','USE `'+schema+'`; '+r1_sql)
+         p.status = 'EXACT_R1_CREATED'; p.record()
+--- old/task-11-isolated-ddl-probe-prepared-20261024.md
++++ new/task-11-isolated-ddl-probe-prepared-20261024.md
+@@ -11,12 +11,13 @@
+ | `task-08-owned-resource-ready-20261024.json` | `selectedReady`, full public identity/owner/image/limits/ports/mounts seed | `334d4f881e2b658eb9f5c21217bea7fa3d029dbcbf33f7e9a05e546a1235eec3` |
+ | DE `V002__identity_acl.sql` | lines 4–12, `enterprise_identity.enterprise_id` | `68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0` |
+ | DE `V005__tasks_outbox.sql` | lines 10–32, original `durable_task.id` and PK | `55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7` |
++| DE `V007__identity_sessions.sql` | lines 28–41, final `enterprise_identity.enterprise_id` collation | `859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d` |
+ | DE `V010__reliable_execution.sql` | lines 69–74 final `durable_task.id`; 187–209 `external_execution.id` and PK | `03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db` |
+ | DE `V013__publications.sql` | lines 17–35 `final_confirmation.id`; 44–59 `publication.id` | `1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c` |
+ 
+-DE is commit `de1611a67ba483afe21f3b29bb69c2d32028efef`. The helper reads these four immutable Git blobs by exact ref and SHA; it never edits Git. The five parent stubs contain **only** the exact final referenced key column and its primary key. Their complete SQL is public in the helper and, if authorized, in the append-only command ledger. No unrelated parent fields or checks are invented. This qualifies the isolated FK parser and row behavior only; it cannot prove the future full 15-file parent migration prefix.
++DE is commit `de1611a67ba483afe21f3b29bb69c2d32028efef`. The helper reads these five immutable Git blobs by exact ref and SHA; it never edits Git. The five parent stubs contain **only** the exact final referenced key column and its primary key. Their complete SQL is public in the helper and, if authorized, in the append-only command ledger. No unrelated parent fields or checks are invented. This qualifies the isolated FK parser and row behavior only; it cannot prove the future full 15-file parent migration prefix.
+ 
+-**Review concern before application:** DE `V002` defines `enterprise_identity.enterprise_id` as `VARCHAR(255) COLLATE utf8mb4_bin`, while R1 defines requester and decider as `VARCHAR(255) COLLATE utf8mb4_0900_bin`. MySQL may reject exact R1 CREATE as an incompatible FK. The helper deliberately preserves that mismatch and hard-stops on the exact CREATE error, leaving the new schema and parent stubs intact for root inspection. It does not alter R1 or claim this concern is an observed engine result.
++DE `V002` originally defines `enterprise_identity.enterprise_id` as `VARCHAR(255) COLLATE utf8mb4_bin`; DE `V007:30–31` changes it to `VARCHAR(255) COLLATE utf8mb4_0900_bin`. The latter is the effective adopted 15-file prefix key and matches R1 requester/decider. The helper's identity stub and metadata expectation now use that final key. This correction is static; exact CREATE remains untested on MySQL.
+ 
+ ## Root ACK contract and invocation
+ 
+@@ -43,7 +44,7 @@
+ }
+ ```
+ 
+-Only after root writes that exact ACK and reviews the self SHA should root invoke the absolute helper path with the single `--execute-reviewed-isolated-task11-probe` flag. No import, `python -m`, relative launch, or alternate flag is accepted. A new `.tools/task11-probe-UUID/` is created with mode 0700 immediately after ACK validation, and each append-only result file is mode 0600. Any preexisting `task11-probe-*` private path or `ama_t11_` server schema hard-stops. A partial DDL result stays in place; there is no retry, drop, cleanup, reset, old-schema use, migration installation, or application to shared schemas.
++Only after root writes that exact ACK and reviews the self SHA should root invoke the absolute helper path with the single `--execute-reviewed-isolated-task11-probe` flag. No import, `python -m`, relative launch, or alternate flag is accepted. A new `.tools/task11-probe-UUID/` is created with mode 0700 after ACK validation and a fail-closed canonical private-parent check, and each append-only result file is mode 0600. The parent `.tools` must be a real canonical directory owned by the executing UID with no group or other write; owner-owned 0755, 0750, and 0700 pass. The workspace root itself must resolve to its exact path without an aliased ancestor. Any preexisting `task11-probe-*` private path or `ama_t11_` server schema hard-stops. A partial DDL result stays in place; there is no retry, drop, cleanup, reset, old-schema use, migration installation, or application to shared schemas.
+ 
+ ## Command and expected-case ledger
+ 
+@@ -73,4 +74,33 @@
+ 
+ This probe can establish only exact isolated MySQL 8.4.6 R1 CREATE/CHECK/FK mechanics with minimal parent keys. It cannot establish the full future prefix migration, temporal binding immutability, one-way writer behavior, replay, application privileges, model sync, history order, or Task11 completion. Expected impact, if root later authorizes it, is one new isolated schema and public fixture data on the already-owned parent; no old schema, Flyway history, product source, or business data changes.
+ 
+-Static preparation used `ast.parse` and `compile(tree, path, 'exec')` only; the helper was never imported or called. The separate manifest records the resulting exact helper/report seals and check facts. Root should independently inspect potential MySQL behavior, especially the DE/R1 identity collation mismatch, before issuing any ACK.
++Static preparation used `ast.parse` and `compile(tree, path, 'exec')` only; the helper was never imported or called. The separate manifest records the resulting exact helper/report seals and check facts. Root should independently inspect the renewed helper before issuing any ACK.
++
++## Fix round 1 after independent static review
++
++The original prepared helper/report/manifest were archived by root under `task-11-isolated-probe-before-fix01-20261024/` with these exact SHA-256 seals: helper `8372c5b11f171ce9a9f09a0aa5530057118763ca52a7cf7d0a76b8853bec0b7f`, report `f5a82f342b5ca54b4c174b31c0e585d2fed55af51d5bdb97164a7d7af9767478`, manifest `c935d739463681d8cf1f97d508285e80e68c93691a1320acb71ac09ed7fceef0`. The first report's V002/R1 collation warning was a mistaken final-prefix inference. The archive preserves it; the effective key and current report are corrected here. No engine failure was observed.
++
++Independent review `task-11-isolated-ddl-probe-static-review-20261024.md` found I1 (effective V007 identity key), I2 (canonical private parent), and M1 (verified R1 byte buffer). The helper now seals DE V007, uses its `utf8mb4_0900_bin` identity key in the stub and metadata assertion, validates the canonical `.tools` owner/type/mode before leaf creation or first private write, and passes one verified R1 byte buffer through ASCII decode into the CREATE command. The R1 SQL file remains unchanged.
++
++Covering command (source check only):
++
++```text
++python3 /home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-fix01-static-check-20261024.py
++```
++
++The exact saved output is `task-11-isolated-probe-fix01-static-check-20261024.txt` (SHA-256 `f9728de94aac164c1e945b09696e42919813b2981d1dc61dad23a00be09bfc04`); check source SHA-256 is `da02d8c4f6a93f8781d95ba7404b23ef92f25ca468154d8f07976ca73384775f`. Its exit code was 0:
++
++```text
++AST_PARSE_COMPILE_OK
++V007_SEAL_AND_FINAL_KEY_RANGE_OK
++V007_STUB_EXPECTATION_SEAL_CHAIN_OK
++SINGLE_VERIFIED_R1_BUFFER_OK
++GUARD_BEFORE_FIRST_PRIVATE_WRITE_OK
++GUARD_ACCEPTS_OWNER_0755_OK
++GUARD_REJECTS_GROUP_WRITABLE_OK
++GUARD_REJECTS_WRONG_OWNER_OK
++GUARD_REJECTS_SYMLINK_PARENT_OK
++NO_HELPER_IMPORT_OR_EXECUTION_OK
++```
++
++The fixture exercised only the extracted pure path-guard function in a new temporary W directory; it did not import or execute the helper module, inspect existing private contents, or contact Docker/MySQL. The final three artifact seals are in the updated manifest. This fix remains prepared only; no ACK or probe schema exists.
+--- old/task-11-isolated-ddl-probe-prepared-20261024-manifest.json
++++ new/task-11-isolated-ddl-probe-prepared-20261024-manifest.json
+@@ -4,25 +4,49 @@
+     "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-root-ack-20261024.json",
+     "requiredCid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+     "requiredFlag": "--execute-reviewed-isolated-task11-probe",
+-    "requiredHelperSha256": "8372c5b11f171ce9a9f09a0aa5530057118763ca52a7cf7d0a76b8853bec0b7f",
++    "requiredHelperSha256": "ba481d2e00272b8ce7acbf86da57dbed5fda5a4e3cd1d54d73d28fdd8f8d79a7",
+     "requiredR1Sha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2",
+     "requiredStatus": "ROOT_ACK_EXACT_ISOLATED_TASK11_SQL_PROBE"
+   },
+   "artifacts": {
+     "helper": {
+-      "bytes": 31365,
++      "bytes": 32594,
+       "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024.py",
+-      "sha256": "8372c5b11f171ce9a9f09a0aa5530057118763ca52a7cf7d0a76b8853bec0b7f"
++      "sha256": "ba481d2e00272b8ce7acbf86da57dbed5fda5a4e3cd1d54d73d28fdd8f8d79a7"
+     },
+     "manifest": {
+       "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024-manifest.json",
+       "selfHashExcluded": true
+     },
+     "report": {
+-      "bytes": 10163,
++      "bytes": 12729,
+       "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024.md",
+-      "sha256": "f5a82f342b5ca54b4c174b31c0e585d2fed55af51d5bdb97164a7d7af9767478"
++      "sha256": "fc6a8e80be818d5d85655944b706c312ba59d79f5844f53ec2819288e95f07c8"
+     }
++  },
++  "fixRound1": {
++    "addressed": [
++      "I1-effective-V007-parent-key",
++      "I2-canonical-private-parent-before-write",
++      "M1-single-verified-R1-byte-buffer"
++    ],
++    "briefSha256": "6cf75dd680c4ef5478379ca7f7b378a7323e4dc900c6c0fd0f3bb63e80460006",
++    "coveringCheck": {
++      "exitCode": 0,
++      "helperExecuted": false,
++      "helperImported": false,
++      "outputPath": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-fix01-static-check-20261024.txt",
++      "outputSha256": "f9728de94aac164c1e945b09696e42919813b2981d1dc61dad23a00be09bfc04",
++      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-fix01-static-check-20261024.py",
++      "sha256": "da02d8c4f6a93f8781d95ba7404b23ef92f25ca468154d8f07976ca73384775f"
++    },
++    "independentReviewSha256": "f7d81d5aa7a964b3277080d41169dc810bf50426511ab1eefa7cd2bce34fdd15",
++    "oldArchivedSeals": {
++      "helper": "8372c5b11f171ce9a9f09a0aa5530057118763ca52a7cf7d0a76b8853bec0b7f",
++      "manifest": "c935d739463681d8cf1f97d508285e80e68c93691a1320acb71ac09ed7fceef0",
++      "report": "f5a82f342b5ca54b4c174b31c0e585d2fed55af51d5bdb97164a7d7af9767478"
++    },
++    "r1SqlUnchangedSha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2"
+   },
+   "immutableBaseline": {
+     "commit": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+@@ -38,6 +62,11 @@
+         "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7"
+       },
+       {
++        "lines": "28-41",
++        "name": "V007__identity_sessions.sql",
++        "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d"
++      },
++      {
+         "lines": "69-74,187-209",
+         "name": "V010__reliable_execution.sql",
+         "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db"
+@@ -50,7 +79,7 @@
+     ],
+     "migrationPathPrefix": "backend/adapters/src/main/resources/db/migration/"
+   },
+-  "knownStaticConcern": "DE V002 parent enterprise_identity key utf8mb4_bin differs from R1 requester/decider utf8mb4_0900_bin; exact CREATE may fail before row cases. This has not been tested on MySQL.",
++  "knownStaticConcern": "Corrected: V002 original enterprise_identity key utf8mb4_bin is changed by sealed DE V007 lines 30-31 to effective utf8mb4_0900_bin, matching R1. No MySQL behavior has been observed.",
+   "ledger": {
+     "commandBound": 300,
+     "eachNegativeHasValidControl": true,
+@@ -88,9 +117,10 @@
+     "networkCalled": false,
+     "privateEnvironmentRead": false,
+     "probeStateDirsAbsent": true,
++    "pureExtractedPrivateParentFixturePassed": true,
+     "sourceSealsMatched": true
+   },
+   "status": "PREPARED_STATIC_ONLY_NO_PROBE_EXECUTION",
+-  "utc": "2026-10-24T00:59:11.738226+00:00",
++  "utc": "2026-10-24T01:07:15.231921+00:00",
+   "workspace": "/home/tanren/ama/.worktrees/phase-b-completion"
+ }

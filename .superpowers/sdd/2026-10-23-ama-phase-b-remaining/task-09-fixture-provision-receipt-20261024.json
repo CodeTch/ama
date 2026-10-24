@@ -1,0 +1,23 @@
+{
+  "command": [
+    "python3",
+    "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-prepared-20261024.py",
+    "--execute-reviewed-task9-provisioning",
+    "--approved-helper-sha256",
+    "a868bc63152e65a4ff0b3165811c1f0f5c80e682e922c06fdf66ca8e3f90deac",
+    "--task7-adoption-evidence",
+    "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-consumer-activation-root-ack-20261024.json",
+    "--task7-adoption-sha256",
+    "24ce0b8a9f15f9a37b43b6b41c62394f87b97d93924473cc08d20165032ab817",
+    "--owner",
+    "task09-2d0e28ea775540f8b3525f9344edf5f0",
+    "--schema",
+    "ama_t09_2d0e28ea7755_behavior"
+  ],
+  "exit": 1,
+  "elapsedSeconds": 0.3960677229988505,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-prepared-20261024.py\", line 393, in <module>\n    main()\n  File \"/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-prepared-20261024.py\", line 389, in main\n    provision(parser.parse_args())\n  File \"/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-prepared-20261024.py\", line 313, in provision\n    cloned_env = env_clone(schema, owner, folder)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-prepared-20261024.py\", line 258, in env_clone\n    fail(\"Task 7 env reference/credential guard failed\")\n  File \"/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-prepared-20261024.py\", line 43, in fail\n    raise RuntimeError(message)\nRuntimeError: Task 7 env reference/credential guard failed\n",
+  "owner": "task09-2d0e28ea775540f8b3525f9344edf5f0",
+  "schema": "ama_t09_2d0e28ea7755_behavior"
+}

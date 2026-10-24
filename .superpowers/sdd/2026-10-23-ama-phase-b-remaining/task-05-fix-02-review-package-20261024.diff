@@ -1,0 +1,1314 @@
+# Task5 fix02 scoped review package
+FIX_BASE 11eb54086da95c675862fcf4225821104aa8e87d
+HEAD c943d15f4a2b9f294e4b7791fb51eb67d3acce5d
+Complete14owned backend source/test/helper delta; publicraw/report/sourcewindows inspected separately.
+
+c943d15 fix(task): cancel saturated S3 admission and close every backend
+
+ .../java/ama/storage/FileBackendDefinitions.java   |  16 +-
+ .../main/java/ama/storage/SourceReadLifetime.java  |  21 ++
+ .../src/main/java/ama/storage/s3/S3Objects.java    |   2 +-
+ .../ama/storage/FileBackendDefinitionsTest.java    |  31 ++
+ .../java/ama/storage/SourceReadLifetimeTest.java   |  41 ++-
+ .../java/ama/storage/Task05Fix02AdmissionIT.java   | 110 +++++++
+ .../test/java/ama/storage/Task05Fix02Fixture.java  | 131 ++++++++
+ .../java/ama/storage/Task05Fix02Maintenance.java   |  55 ++++
+ .../java/ama/storage/Task05Fix02NativeFixture.java | 158 ++++++++++
+ .../ama/storage/Task05Fix02S3OpenRegressionIT.java |  53 ++++
+ .../storage/Task05Fix02SuccessRegressionIT.java    |  22 ++
+ .../test/java/ama/storage/s3/Task05Fix02Proxy.java | 329 +++++++++++++++++++++
+ .../s3/Task05Fix02S3DeadlineRegressionIT.java      |  39 +++
+ .../test/java/ama/worker/WorkerShutdownTest.java   |  31 +-
+ 14 files changed, 1025 insertions(+), 14 deletions(-)
+
+diff --git a/backend/adapters/src/main/java/ama/storage/FileBackendDefinitions.java b/backend/adapters/src/main/java/ama/storage/FileBackendDefinitions.java
+index 092dff5..35473a1 100644
+--- a/backend/adapters/src/main/java/ama/storage/FileBackendDefinitions.java
++++ b/backend/adapters/src/main/java/ama/storage/FileBackendDefinitions.java
+@@ -3,16 +3,28 @@ package ama.storage;
+ import java.util.List;
+ 
+ /** Complete immutable physical definitions retained for every historical managed backend. */
+ public record FileBackendDefinitions(List<FileBackendCatalog.Backend> backends, String defaultId)
+         implements AutoCloseable {
+     public FileBackendDefinitions {
+         backends = List.copyOf(backends);
+         if (defaultId != null && backends.stream().noneMatch(b -> b.id().equals(defaultId)))
+             throw new IllegalArgumentException("Unknown default backend");
+     }
+ 
+     public void close() throws Exception {
+-        for (var backend : backends)
+-            if (backend.storage() instanceof AutoCloseable closeable) closeable.close();
++        Throwable failure=null;
++        boolean interrupted=Thread.currentThread().isInterrupted();
++        try {
++            for (var backend : backends)
++                if (backend.storage() instanceof AutoCloseable closeable)
++                    try {closeable.close();}
++                    catch(Exception|Error error) {
++                        if(error instanceof InterruptedException)interrupted=true;
++                        if(failure==null)failure=error;
++                        else if(failure!=error&&failure.getSuppressed().length<8)failure.addSuppressed(error);
++                    }
++        } finally {if(interrupted)Thread.currentThread().interrupt();}
++        if(failure instanceof Exception error)throw error;
++        if(failure instanceof Error error)throw error;
+     }
+ }
+diff --git a/backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java b/backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java
+index fa22862..1f4d764 100644
+--- a/backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java
++++ b/backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java
+@@ -8,50 +8,71 @@ import java.util.concurrent.atomic.AtomicBoolean;
+ /** Deny-only transport lifetime. Carries no source, lease, plan, holder or write authority. */
+ public final class SourceReadLifetime implements AutoCloseable {
+     private static final ThreadLocal<SourceReadLifetime> CURRENT=new ThreadLocal<>();
+     private static final Semaphore CAPACITY=new Semaphore(1024);
+     private static final ScheduledThreadPoolExecutor TIMER;
+     static {
+         TIMER=new ScheduledThreadPoolExecutor(2,r->{var t=new Thread(r,"ama-source-deadline");t.setDaemon(true);return t;});
+         TIMER.setRemoveOnCancelPolicy(true);
+     }
+     private final Set<Registration> requests=new HashSet<>();
+     private final AutoCloseable cancellation;
+     private final ScheduledFuture<?> timer;
++    private final long deadline;
+     private final AtomicBoolean closed=new AtomicBoolean();
+     private boolean aborted;
+ 
+     public SourceReadLifetime(PreparationCancellation signal,long deadline) throws Exception {
+         Objects.requireNonNull(signal);
++        this.deadline=deadline;
+         if(CURRENT.get()!=null)throw new IllegalStateException("Nested source lifetime");
+         if(!CAPACITY.tryAcquire())throw new IllegalStateException("Source lifetime capacity exhausted");
+         AutoCloseable registered=null;
+         try {
+             registered=signal.register(this::abort);
+             timer=TIMER.schedule(this::abort,Math.max(0,deadline-System.nanoTime()),TimeUnit.NANOSECONDS);
+             cancellation=registered;
+             CURRENT.set(this);
+         }catch(Exception|Error failure){if(registered!=null)try{registered.close();}catch(Exception cleanup){failure.addSuppressed(cleanup);}CAPACITY.release();throw failure;}
+     }
+ 
+     /** Register on the calling preparation thread before the actual blocking transport call. */
+     public static Registration track(Runnable abort) {
+         var current=CURRENT.get();var registration=new Registration(current,Objects.requireNonNull(abort));
+         if(current==null)return registration;
+         boolean rejected;
+         synchronized(current){rejected=current.aborted||current.closed.get();if(!rejected)current.requests.add(registration);}
+         if(rejected){registration.abort();throw new IllegalStateException("Source lifetime cancelled");}
+         return registration;
+     }
+ 
++    /** Admission is part of the same deny-only lifetime, before an SDK request exists. */
++    public static boolean tryAcquire(Semaphore permits,long timeout,TimeUnit unit) throws InterruptedException {
++        var current=CURRENT.get();
++        if(current==null)return permits.tryAcquire(timeout,unit);
++        long started=System.nanoTime(),budget=unit.toNanos(timeout);
++        while(true) {
++            long now=System.nanoTime();
++            long remaining=Math.min(budget-(now-started),current.deadline-now);
++            if(remaining<=0||current.stopped())return false;
++            // Bounded polling wakes known loss without interrupting a reusable Worker thread or spawning a waiter.
++            if(permits.tryAcquire(Math.min(remaining,TimeUnit.MILLISECONDS.toNanos(50)),TimeUnit.NANOSECONDS)) {
++                if(current.stopped()||current.deadline-System.nanoTime()<=0){permits.release();return false;}
++                return true;
++            }
++        }
++    }
++
++    private synchronized boolean stopped(){return aborted||closed.get();}
++
+     private void abort() {
+         List<Registration> active;
+         synchronized(this){if(aborted)return;aborted=true;active=List.copyOf(requests);requests.clear();}
+         Throwable failure=null;
+         for(var request:active)try{request.abort();}catch(RuntimeException|Error error){if(failure==null)failure=error;else if(failure!=error&&failure.getSuppressed().length<8)failure.addSuppressed(error);}
+         if(failure instanceof RuntimeException error)throw error;
+         if(failure instanceof Error error)throw error;
+     }
+ 
+     @Override public void close() throws Exception {
+         if(!closed.compareAndSet(false,true))return;
+         try {abort();} finally {
+diff --git a/backend/adapters/src/main/java/ama/storage/s3/S3Objects.java b/backend/adapters/src/main/java/ama/storage/s3/S3Objects.java
+index 93ddd21..d2c9c6c 100644
+--- a/backend/adapters/src/main/java/ama/storage/s3/S3Objects.java
++++ b/backend/adapters/src/main/java/ama/storage/s3/S3Objects.java
+@@ -23,25 +23,25 @@ final class S3Objects {
+         this.client = client;
+         this.config = config;
+         requests = new Semaphore(config.admission());
+         streamingRequests = new Semaphore(config.admission() - 1);
+     }
+ 
+     private void acquire() {
+         acquire(requests);
+     }
+ 
+     private void acquire(Semaphore permits) {
+         try {
+-            if (!permits.tryAcquire(config.timeout().toMillis(), TimeUnit.MILLISECONDS))
++            if (!ama.storage.SourceReadLifetime.tryAcquire(permits,config.timeout().toMillis(),TimeUnit.MILLISECONDS))
+                 throw ControlCodec.unavailable();
+         } catch (InterruptedException e) {
+             Thread.currentThread().interrupt();
+             throw ControlCodec.unavailable();
+         }
+     }
+ 
+     /** Native request bodies fetch staging chunks; leave one shared slot for that nested I/O. */
+     <T> T streaming(Supplier<T> action) {
+         acquire(streamingRequests);
+         try {
+             return call(action);
+diff --git a/backend/adapters/src/test/java/ama/storage/FileBackendDefinitionsTest.java b/backend/adapters/src/test/java/ama/storage/FileBackendDefinitionsTest.java
+new file mode 100644
+index 0000000..a4094cd
+--- /dev/null
++++ b/backend/adapters/src/test/java/ama/storage/FileBackendDefinitionsTest.java
+@@ -0,0 +1,31 @@
++package ama.storage;
++import java.io.IOException;
++import java.lang.reflect.Proxy;
++import java.util.*;
++import java.util.concurrent.atomic.AtomicInteger;
++import org.junit.jupiter.api.Test;
++import static org.junit.jupiter.api.Assertions.*;
++
++class FileBackendDefinitionsTest {
++    @Test void allBackendsAreAttemptedWithBoundedSuppressionAndInterruptedFailurePreserved() throws Exception {
++        var first=new IOException("FIRST_BACKEND_CLOSE");var count=new AtomicInteger();var backends=new ArrayList<FileBackendCatalog.Backend>();
++        for(int n=0;n<12;n++){int index=n;backends.add(backend(n,()->{count.incrementAndGet();if(index==0)throw first;if(index==1)throw new InterruptedException("INTERRUPTED_BACKEND_CLOSE");throw new IllegalStateException("LATER_BACKEND_CLOSE");}));}
++        try {
++            var definitions=new FileBackendDefinitions(backends,null);
++            assertSame(first,assertThrows(IOException.class,definitions::close));
++            assertEquals(12,count.get());assertEquals(8,first.getSuppressed().length);assertTrue(Thread.currentThread().isInterrupted());
++        }finally{Thread.interrupted();}
++    }
++    @Test void errorFromFirstBackendCannotSkipSecondBackend() throws Exception {
++        var first=new AssertionError("BACKEND_CLOSE_ERROR");var count=new AtomicInteger();
++        var definitions=new FileBackendDefinitions(List.of(backend(0,()->{count.incrementAndGet();throw first;}),backend(1,count::incrementAndGet)),null);
++        assertSame(first,assertThrows(AssertionError.class,definitions::close));assertEquals(2,count.get());
++    }
++    static FileBackendCatalog.Backend backend(int n,AutoCloseable close) {
++        var storage=(FileStoragePort)Proxy.newProxyInstance(FileBackendDefinitionsTest.class.getClassLoader(),new Class<?>[]{FileStoragePort.class,AutoCloseable.class},(proxy,method,args)->{
++            if(method.getName().equals("close")){close.close();return null;}throw new AssertionError("Unexpected storage call");
++        });
++        var definition=new ManagedBackendId.Local("https://localhost:443","owned-close-"+n,".","ext4");
++        return new FileBackendCatalog.Backend(definition.id(),"local",1,"READ_ONLY",storage,definition);
++    }
++}
+diff --git a/backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java b/backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java
+index 7786c2d..13646ad 100644
+--- a/backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java
++++ b/backend/adapters/src/test/java/ama/storage/SourceReadLifetimeTest.java
+@@ -31,19 +31,58 @@ class SourceReadLifetimeTest {
+         }
+         assertEquals(1,closes.get());assertFalse(signal.cancelled());
+     }
+     @Test void failedAbortStillReleasesOtherOwnedRequestsAndRepeatedCloseIsSafe() throws Exception {
+         var signal=new Signal();var closes=new AtomicInteger();var failure=new IllegalStateException("OWNED_CLOSE_FAILED");
+         var scope=new SourceReadLifetime(signal,System.nanoTime()+TimeUnit.SECONDS.toNanos(3));
+         SourceReadLifetime.track(()->{closes.incrementAndGet();throw failure;});SourceReadLifetime.track(closes::incrementAndGet);
+         assertSame(failure,assertThrows(IllegalStateException.class,scope::close));scope.close();
+         assertEquals(2,closes.get());assertNull(signal.action.get());
+         // Failure cannot strand thread-scoped admission or prevent the next independent preparation.
+         try(var next=new SourceReadLifetime(signal,System.nanoTime()+TimeUnit.SECONDS.toNanos(3))){assertFalse(signal.cancelled());}
+     }
++    @Test void saturatedAdmissionDeadlineCannotReleaseAnUnownedPermit() throws Exception {
++        var permits=new Semaphore(0);var pool=Executors.newSingleThreadExecutor();
++        try {
++            var waiting=pool.submit(()->{
++                try(var scope=new SourceReadLifetime(new Signal(),System.nanoTime()+TimeUnit.MILLISECONDS.toNanos(100))){return SourceReadLifetime.tryAcquire(permits,30,TimeUnit.SECONDS);}
++            });
++            assertFalse(waiting.get(2,TimeUnit.SECONDS));assertEquals(0,permits.availablePermits());
++        }finally{pool.shutdownNow();assertTrue(pool.awaitTermination(2,TimeUnit.SECONDS));}
++    }
++    @Test void knownLossWakesActualAdmissionWithoutInterruptingReusableThread() throws Exception {
++        var permits=new Semaphore(0);var signal=new Signal();var pool=Executors.newSingleThreadExecutor();var thread=new AtomicReference<Thread>();
++        try {
++            var waiting=pool.submit(()->{
++                thread.set(Thread.currentThread());
++                try(var scope=new SourceReadLifetime(signal,System.nanoTime()+TimeUnit.SECONDS.toNanos(30))){
++                    boolean acquired=SourceReadLifetime.tryAcquire(permits,30,TimeUnit.SECONDS);
++                    assertFalse(Thread.currentThread().isInterrupted());return acquired;
++                }
++            });
++            long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(2);boolean blocked=false;
++            while(System.nanoTime()<deadline){var current=thread.get();if(current!=null&&java.util.Arrays.stream(current.getStackTrace()).anyMatch(f->f.getClassName().equals("java.util.concurrent.Semaphore")&&f.getMethodName().equals("tryAcquire"))){blocked=true;break;}Thread.sleep(5);}
++            assertTrue(blocked);signal.cancel();assertFalse(waiting.get(1,TimeUnit.SECONDS));assertEquals(0,permits.availablePermits());
++            // The same executor can be reused without a stray interrupt or thread-scoped lifetime.
++            permits.release();assertTrue(pool.submit(()->SourceReadLifetime.tryAcquire(permits,1,TimeUnit.SECONDS)).get(2,TimeUnit.SECONDS));assertEquals(0,permits.availablePermits());
++        }finally{pool.shutdownNow();assertTrue(pool.awaitTermination(2,TimeUnit.SECONDS));}
++    }
++    @Test void cancellationWinningImmediatelyAfterActualAcquireReturnsExactlyThatPermit() throws Exception {
++        var signal=new Signal();var acquired=new AtomicInteger();
++        var permits=new Semaphore(1){
++            @Override public boolean tryAcquire(long timeout,TimeUnit unit) throws InterruptedException {
++                boolean value=super.tryAcquire(timeout,unit);
++                if(value){acquired.incrementAndGet();signal.cancel();}return value;
++            }
++        };
++        try(var scope=new SourceReadLifetime(signal,System.nanoTime()+TimeUnit.SECONDS.toNanos(3))){
++            assertFalse(SourceReadLifetime.tryAcquire(permits,2,TimeUnit.SECONDS));
++        }
++        assertEquals(1,acquired.get());assertEquals(1,permits.availablePermits());
++    }
+     private static final class Signal implements PreparationCancellation {
+-        final AtomicReference<Runnable> action=new AtomicReference<>();private boolean lost;
++        final AtomicReference<Runnable> action=new AtomicReference<>();private volatile boolean lost;
+         public boolean cancelled(){return lost;}
+         public AutoCloseable register(Runnable abort){assertTrue(action.compareAndSet(null,abort));return ()->action.compareAndSet(abort,null);}
+         void cancel(){lost=true;var abort=action.get();if(abort!=null)abort.run();}
+     }
+ }
+diff --git a/backend/integration-tests/src/test/java/ama/storage/Task05Fix02AdmissionIT.java b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02AdmissionIT.java
+new file mode 100644
+index 0000000..a36f3d1
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02AdmissionIT.java
+@@ -0,0 +1,110 @@
++package ama.storage;
++
++import ama.contract.TaskContracts.*;
++import ama.task.*;
++import ama.worker.WorkerLoop;
++import ama.storage.s3.Task05Fix02Proxy;
++import java.nio.file.*;
++import java.time.*;
++import java.util.*;
++import java.util.concurrent.*;
++import java.util.concurrent.atomic.*;
++import org.junit.jupiter.api.Test;
++import static org.junit.jupiter.api.Assertions.*;
++
++class Task05Fix02AdmissionIT extends Task05Fix02Fixture {
++    @Test void genuineS3AdmissionDeadlineExitsBeforeEitherPermitHolderRelease() throws Exception { saturated(false); }
++    @Test void genuineS3AdmissionRealRenewalLossExitsBeforeEitherPermitHolderRelease() throws Exception { saturated(true); }
++
++    void saturated(boolean loss) throws Exception {
++        String first=accept(List.of(upload("Holder Alpha")));newMeeting();
++        String second=accept(List.of(upload("Holder Beta")));newMeeting();
++        String target=accept(List.of(upload("Genuine target")));
++        var tasks=List.of(first,second,target);var queue=app.getBean(JdbcTaskQueue.class);var normal=settings();
++        var holderSettings=new TranscriptImportRuntime.Settings(normal.archives(),normal.archiveBudget(),normal.aggregate(),Duration.ofSeconds(60));
++        var targetSettings=new TranscriptImportRuntime.Settings(normal.archives(),normal.archiveBudget(),normal.aggregate(),Duration.ofSeconds(loss?30:1));
++        var firstFault=s3Proxy.arm("stall-body",path->path.startsWith("GET ")&&path.contains("/"+s3Fixture.config.controlBucket()+"/"));
++        var secondFault=new AtomicReference<Task05Fix02Proxy.Fault>();var secondArmed=new CountDownLatch(1);
++        var targetExited=new CountDownLatch(1);var holdExecution=new CountDownLatch(1);
++        var targetThread=new AtomicReference<Thread>();var targetLease=new AtomicReference<TaskLease>();
++        var aborts=new AtomicInteger();var failures=new ConcurrentHashMap<String,String>();var events=new CopyOnWriteArrayList<Map<String,Object>>();
++        var ioField=actualStoragePort.getClass().getDeclaredField("io");ioField.setAccessible(true);Object io=ioField.get(actualStoragePort);
++        var requestsField=io.getClass().getDeclaredField("requests");requestsField.setAccessible(true);var permits=(Semaphore)requestsField.get(io);
++        assertEquals(2,permits.availablePermits());
++        var loop=WorkerLoop.contextual(queue,Map.of("TRANSCRIPT_IMPORT",3),Map.of("TRANSCRIPT_IMPORT_V1",(lease,cancel)->{
++            assertTrue(tasks.contains(lease.taskId()),"Only this case's genuine accepted tasks may be claimed");
++            boolean isTarget=target.equals(lease.taskId());
++            if(second.equals(lease.taskId())) {
++                assertTrue(firstFault.reached.await(5,TimeUnit.SECONDS));
++                secondFault.set(s3Proxy.arm("stall-body",path->path.startsWith("GET ")&&path.contains("/"+s3Fixture.config.controlBucket()+"/")));
++                secondArmed.countDown();
++            }
++            if(isTarget){
++                assertTrue(secondArmed.await(6,TimeUnit.SECONDS));assertTrue(secondFault.get().reached.await(5,TimeUnit.SECONDS));
++                targetThread.set(Thread.currentThread());targetLease.set(lease);
++            }
++            PreparationCancellation counted=new PreparationCancellation(){
++                public boolean cancelled(){return cancel.cancelled();}
++                public AutoCloseable register(Runnable abort){return cancel.register(()->{if(isTarget)aborts.incrementAndGet();abort.run();});}
++            };
++            try{return TranscriptImportRuntime.prepare(queue,lease,isTarget?targetSettings:holderSettings,counted);}
++            catch(Exception failure){failures.put(lease.taskId(),failure.getClass().getSimpleName());throw failure;}
++            finally {
++                if(isTarget){
++                    event(events,"target-preparation-exited");targetExited.countDown();
++                    // Keep the same owned execution from reclaiming its deliberately expired fixture lease.
++                    // Actual source preparation has returned/failed; close interrupts and joins this bounded test gate.
++                    holdExecution.await(12,TimeUnit.SECONDS);
++                }
++            }
++        }),"TASK05_FIX02_ADMISSION");
++        Throwable primary=null;
++        try {
++            loop.start();assertTrue(secondArmed.await(7,TimeUnit.SECONDS));assertTrue(secondFault.get().reached.await(5,TimeUnit.SECONDS));
++            long until=System.nanoTime()+TimeUnit.MILLISECONDS.toNanos(800);boolean waiting=false;
++            List<String> stack=List.of();Thread reader=null;
++            while(System.nanoTime()<until){
++                reader=targetThread.get();
++                if(reader!=null){
++                    stack=Arrays.stream(reader.getStackTrace()).map(x->x.getClassName()+"."+x.getMethodName()).toList();
++                    waiting=stack.contains("ama.storage.s3.S3Objects.acquire")&&stack.contains("java.util.concurrent.Semaphore.tryAcquire");
++                    if(waiting)break;
++                }
++                Thread.sleep(5);
++            }
++            assertTrue(waiting,"Observe the real target waiting inside existing S3 semaphore admission before any SDK request");
++            assertTrue(actualReadThreads.contains(reader),"Genuine selected source reached actual read outside its authorization transaction");
++            assertFalse(probe.rootsHeld.contains(reader));assertEquals(0,permits.availablePermits());
++            int requestsBefore=s3Proxy.requestsSeen.get();
++            Files.writeString(receipt.resolve("admission-wait.json"),json.writeValueAsString(Map.of("tasks",tasks,"target",target,"targetThread",reader.getName(),"state",reader.getState().toString(),"stack",stack,"permits",permits.availablePermits(),"requestsSeen",requestsBefore,"firstHeld",firstFault.release.getCount(),"secondHeld",secondFault.get().release.getCount(),"utc",Instant.now().toString())),StandardOpenOption.CREATE_NEW);
++            event(events,"target-admission-wait-observed");
++            if(loss){var lease=targetLease.get();assertEquals(1,j.update("UPDATE durable_task SET expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=? AND state='RUNNING' AND attempt=? AND lease_owner=?",target,lease.attempt(),lease.leaseOwner()));event(events,"target-persisted-lease-expired");}
++            long began=System.nanoTime();boolean exited=targetExited.await(loss?8:3,TimeUnit.SECONDS);
++            Files.writeString(receipt.resolve("admission-result.json"),json.writeValueAsString(fields("target",target,"loss",loss,"targetExitedBeforeHolderRelease",exited,"elapsedAfterObservedWaitMillis",TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-began),"batchMillis",targetSettings.batchDeadline().toMillis(),"transportMillis",20000,"firstHeld",firstFault.release.getCount(),"secondHeld",secondFault.get().release.getCount(),"requestsBefore",requestsBefore,"requestsAfter",s3Proxy.requestsSeen.get(),"targetWorkerAborts",aborts.get())),StandardOpenOption.CREATE_NEW);
++            assertTrue(exited,"Genuine target preparation must exit admission before either occupied permit is released");
++            assertEquals(1,firstFault.release.getCount());assertEquals(1,secondFault.get().release.getCount());
++            assertEquals(requestsBefore,s3Proxy.requestsSeen.get(),"Cancelled admission must execute no target HTTP");
++            assertEquals(0,permits.availablePermits(),"Target cannot release permits it never acquired");
++            if(loss)assertEquals(1,aborts.get(),"Actual target renewal loss signals its lifetime once");
++            for(String task:tasks){assertNull(j.queryForObject("SELECT output_id FROM durable_task WHERE id=?",String.class,task));assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM transcript_revision WHERE producer_task_id=?",Integer.class,task));}
++        }catch(Exception|AssertionError failure){primary=failure;throw failure;}finally{
++            try {
++                event(events,"worker-close-begin");loop.close();event(events,"worker-close-return");holdExecution.countDown();
++                assertEquals(0,loop.observation().active());assertTrue(targetExited.await(2,TimeUnit.SECONDS));
++                assertFalse(targetThread.get()!=null&&targetThread.get().isAlive(),"Exact target worker thread must be joined");
++                assertEquals(2,permits.availablePermits(),"Every actual holder abort returns one permit, with no over-release");
++                assertTrue(permits.tryAcquire(2));assertFalse(permits.tryAcquire());permits.release(2);
++                event(events,"all-owned-executions-joined-permits-exactly-two");
++                firstFault.release.countDown();if(secondFault.get()!=null)secondFault.get().release.countDown();event(events,"proxy-stall-holders-released-route-still-open");
++                for(String task:tasks){event(events,"maintenance-before-"+task);Task05Fix02Maintenance.apply(source,task,receipt.resolve("accepted-"+task+".json"),receipt);event(events,"maintenance-after-"+task);}
++            }catch(Exception|AssertionError cleanup){if(primary!=null)primary.addSuppressed(cleanup);else throw cleanup;}
++            finally {
++                firstFault.release.countDown();if(secondFault.get()!=null)secondFault.get().release.countDown();holdExecution.countDown();
++                s3Proxy.close();s3Proxy=null;event(events,"proxy-route-closed-and-threads-joined");
++                Files.writeString(receipt.resolve("admission-lifecycle.json"),json.writeValueAsString(Map.of("events",events,"observedFailures",failures)),StandardOpenOption.CREATE_NEW);
++            }
++        }
++    }
++    static void event(List<Map<String,Object>> events,String action){events.add(Map.of("action",action,"utc",Instant.now().toString()));}
++    static Map<String,Object> fields(Object... pairs){var values=new LinkedHashMap<String,Object>();for(int i=0;i<pairs.length;i+=2)values.put((String)pairs[i],pairs[i+1]);return values;}
++}
+diff --git a/backend/integration-tests/src/test/java/ama/storage/Task05Fix02Fixture.java b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02Fixture.java
+new file mode 100644
+index 0000000..daa0991
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02Fixture.java
+@@ -0,0 +1,131 @@
++package ama.storage;
++import ama.api.ApiApplication;
++import ama.config.*;
++import ama.config.file.*;
++import ama.contract.ConfigArchiveContracts.*;
++import ama.support.MysqlTestDatabase;
++import ama.transcript.TranscriptFilePurposePolicy;
++import com.fasterxml.jackson.databind.*;
++import org.junit.jupiter.api.*;
++import org.springframework.boot.builder.SpringApplicationBuilder;
++import org.springframework.context.ConfigurableApplicationContext;
++import org.springframework.context.support.GenericApplicationContext;
++import org.springframework.jdbc.core.JdbcTemplate;
++import java.net.*;
++import java.net.http.*;
++import java.nio.charset.StandardCharsets;
++import java.nio.file.*;
++import java.util.*;
++import static org.junit.jupiter.api.Assertions.*;
++import static ama.transcript.ArchiveProcessingFixture.B;
++class Task05Fix02Fixture {
++ ama.worker.WorkerHealthServer health;final java.util.concurrent.atomic.AtomicReference<ama.worker.WorkerLoop> healthLoop=new java.util.concurrent.atomic.AtomicReference<>();
++ Task04ProbeSource probe;ConfigurableApplicationContext app;JdbcTemplate j;javax.sql.DataSource source;
++ final ObjectMapper json=new ObjectMapper();String owner,token,meeting;final String csrf="T".repeat(43),origin="https://task05.example.invalid";
++ FileStoragePort actualStoragePort;final java.util.Set<Thread> actualReadThreads=java.util.concurrent.ConcurrentHashMap.newKeySet();ama.storage.s3.Task05Fix02Proxy s3Proxy;ama.storage.s3.S3Fixture s3Fixture;boolean s3Mode;Path receipt;Task05Fix02NativeFixture nativeFixture;FileBackendDefinitions definitions;Path archive;String pin;Ref processing;Map<String,Object> bounds;
++ static final Path ROOT=Path.of(System.getenv("AMA_TASK05_ROOT"));
++ @BeforeEach void start(TestInfo info)throws Exception {
++  probe=new Task04ProbeSource(MysqlTestDatabase.dataSource());source=probe;j=new JdbcTemplate(source);
++  assertEquals(13,j.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=1",Integer.class));
++  Path publicRoot=Path.of("artifacts/phase-b/b-remaining/task-05-fix-02").toAbsolutePath();
++  while(!Files.exists(publicRoot.getParent()))publicRoot=Path.of("../../artifacts/phase-b/b-remaining/task-05-fix-02").toAbsolutePath().normalize();
++  receipt=Files.createDirectory(publicRoot.resolve("pipeline-"+UUID.randomUUID()));
++  Path durable=ROOT.resolve("native/data");if(!Files.exists(durable))Files.createDirectory(durable);
++  nativeFixture=new Task05Fix02NativeFixture(durable.resolve("case-"+UUID.randomUUID()));
++  var storage=nativeFixture.startProcess();
++  s3Mode=info.getTestMethod().orElseThrow().getName().contains("S3");
++  if(s3Mode){
++   s3Proxy=new ama.storage.s3.Task05Fix02Proxy();s3Fixture=new ama.storage.s3.S3Fixture("task05-fix-infrastructure",s3Proxy.endpoint());var c=s3Fixture.config;
++   var binding=new ManagedBackendId.S3(c.endpoint().toString(),c.region(),c.dataBucket(),c.controlBucket(),c.pathStyle(),c.keyBudget());
++   definitions=new FileBackendDefinitions(List.of(ManagedBackendAdapters.s3(admissionTwo(ama.storage.s3.S3Fixture.config(binding.id(),c.endpoint(),c.dataBucket(),c.controlBucket())),1,"WRITABLE")),binding.id());
++  }else definitions=new FileBackendDefinitions(List.of(new FileBackendCatalog.Backend(nativeFixture.binding.id(),"local",1,"WRITABLE",storage,nativeFixture.binding)),nativeFixture.binding.id());
++  var actualBackend=definitions.backends().getFirst();var actualStorage=actualBackend.storage();actualStoragePort=actualStorage;
++  FileStoragePort observed=(FileStoragePort)java.lang.reflect.Proxy.newProxyInstance(getClass().getClassLoader(),actualStorage instanceof AutoCloseable?new Class[]{FileStoragePort.class,AutoCloseable.class}:new Class[]{FileStoragePort.class},(proxy,method,args)->{
++   if(Set.of("read","stat").contains(method.getName()))assertFalse(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive(),"Actual source I/O under transaction");
++   if(method.getName().equals("read"))actualReadThreads.add(Thread.currentThread());
++   Object result;try{result=method.invoke(actualStorage,args);}catch(java.lang.reflect.InvocationTargetException failure){throw failure.getCause();}
++   if(result instanceof java.io.InputStream stream)return new java.io.FilterInputStream(stream){public int read()throws java.io.IOException{assertFalse(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive());return super.read();}public int read(byte[] b,int o,int n)throws java.io.IOException{assertFalse(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive());return in.read(b,o,n);}};
++   return result;
++  });
++  definitions=new FileBackendDefinitions(List.of(new FileBackendCatalog.Backend(actualBackend.id(),actualBackend.type(),actualBackend.revision(),actualBackend.status(),observed,actualBackend.definition())),actualBackend.id());
++  archive=Files.createDirectory(ROOT.resolve("runtime/archive-"+UUID.randomUUID()));
++  LocalFixture.privateMode(archive,true);LocalFixture.privateMode(durable,true);
++  var raw=new ArrayList<RawArchive>();
++  for(String name:List.of("codec","confirmation","parser","processing1")){
++   var type=switch(name){case "codec"->ArtifactType.CANONICAL_CODEC;case "confirmation"->ArtifactType.CONFIRMATION_HASH;case "parser"->ArtifactType.PARSER_CONFIG;default->ArtifactType.PROCESSING_CONFIG;};
++   String version=switch(name){case "codec"->"ama.canonical-value.v1";case "confirmation"->"ama.transcript-confirmation.v1";case "parser"->"ama.strict-utf8-lines.v1";default->"b06.controlled.import-txt.1";};
++   try(var in=getClass().getResourceAsStream("/ama/transcript/restart/"+name+".json")){raw.add(new RawArchive(type,version,in.readAllBytes()));}
++  }
++  var ib=new ConfigArchiveIndex.IndexBudget(4194304,4096,67108864,128);pin=new ControlledArchiveReleaseWriter().publish(archive,null,raw,ib,B,()->false);
++  processing=new ControlledConfigArchiveSource().open(archive,pin,ib,B,()->false).index().entries().stream().map(ConfigArchiveIndex.Entry::ref).filter(x->x.artifactType()==ArtifactType.PROCESSING_CONFIG).findFirst().orElseThrow();
++  bounds=new HashMap<>();String[] names={"artifact-bytes","archive-total-bytes","artifacts","dependencies","graph-depth","json-tokens","json-depth","name-utf16","string-utf16","string-utf8","aggregate-scalars","manifest-bytes","batch-files","fact-rows","fact-edges","canonical-bytes","canonical-depth","canonical-nodes","canonical-string-utf8","canonical-scalars","index-bytes","index-entries","release-bytes","index-generations","total-source-bytes"};
++  long[] values={65536,1048576,16,32,8,200000,32,255,65536,262144,1048576,65536,32,250000,500000,16777216,32,1000000,2097152,250000,4194304,4096,67108864,128,1048576};
++  for(int n=0;n<names.length;n++)bounds.put("processing.bounds."+names[n],values[n]);
++  if(info.getTestMethod().orElseThrow().getName().contains("Health")){
++   health=new ama.worker.WorkerHealthServer(new InetSocketAddress("127.0.0.1",0),Task05TransportIT.tls("server"),"spiffe://ama/writer",()->{var loop=healthLoop.get();return loop==null?new ama.worker.WorkerLoop.Observation("STARTING",Long.MAX_VALUE,0):loop.observation();});health.start();
++   String password=Files.readString(ROOT.resolve("pki/keystore-password"));java.security.cert.Certificate cert;try(var in=Files.newInputStream(ROOT.resolve("pki/server.crt"))){cert=java.security.cert.CertificateFactory.getInstance("X.509").generateCertificate(in);}
++   bounds.put("processing.worker.health-url","https://localhost:"+health.port());bounds.put("processing.worker.key-store",ROOT.resolve("pki/writer.p12").toString());bounds.put("processing.worker.trust-store",ROOT.resolve("pki/trust.p12").toString());bounds.put("processing.worker.key-store-password",password);bounds.put("processing.worker.trust-store-password",password);bounds.put("processing.worker.server-cert-sha256",HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(cert.getEncoded())));bounds.put("processing.worker.max-age-ms",10000);
++  }
++  app=new SpringApplicationBuilder(ApiApplication.class).properties(bounds).initializers(context->{var c=(GenericApplicationContext)context;c.registerBean("task05Source",javax.sql.DataSource.class,()->source);c.registerBean("task05Backends",FileBackendDefinitions.class,()->definitions);}).run("--server.address=127.0.0.1","--server.port=0","--management.server.port=0","--logging.level.root=ERROR","--identity.allowed-origin="+origin,"--processing.enabled=true","--processing.archive-root="+archive,"--processing.index-sha="+pin,"--processing.config-version="+processing.version(),"--processing.config-sha="+processing.sha256());
++  owner="task05-"+UUID.randomUUID();token=identity(owner);var created=call("POST","/meetings","{}","create");assertEquals(201,created.statusCode(),created.body());meeting=body(created).get("id").asText();
++  Files.writeString(receipt.resolve("resource.json"),json.writeValueAsString(Map.of("nativePid",nativeFixture.process.pid(),"nativePort",nativeFixture.port,"managedId",definitions.backends().getFirst().id(),"nativePath",nativeFixture.base.root.toString(),"archive",archive.toString(),"pin",pin,"databaseNow",j.queryForObject("SELECT UTC_TIMESTAMP(6)",String.class),"jvmNow",java.time.Instant.now().toString(),"maxMemory",Runtime.getRuntime().maxMemory(),"owner",owner)));
++ }
++ static ama.storage.s3.S3Config admissionTwo(ama.storage.s3.S3Config c){return new ama.storage.s3.S3Config(c.backendId(),c.endpoint(),c.region(),c.dataBucket(),c.controlBucket(),c.credentials(),c.pathStyle(),c.keyBudget(),c.chunkBytes(),c.nativeMinimum(),c.nativeMaximum(),c.nativeMaxParts(),c.maximumObject(),2,c.timeout());}
++ ama.task.TranscriptImportRuntime.Settings settings(){return new ama.task.TranscriptImportRuntime.Settings(()->new ControlledConfigArchiveSource().open(archive,pin,new ConfigArchiveIndex.IndexBudget(4194304,4096,67108864,128),B,()->false),B,new ama.transcript.TranscriptDocumentParser.ParseBudget(1048576,1048576,4096),java.time.Duration.ofSeconds(60));}
++ static final ama.task.PreparationCancellation NEVER=new ama.task.PreparationCancellation(){public boolean cancelled(){return false;}public AutoCloseable register(Runnable abort){return ()->{};}};
++ void newMeeting()throws Exception {var created=call("POST","/meetings","{}",UUID.randomUUID().toString());assertEquals(201,created.statusCode(),created.body());meeting=body(created).get("id").asText();}
++ String accept(List<String> files)throws Exception {var accepted=call("POST","/meetings/"+meeting+"/transcript-imports",json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",files)),UUID.randomUUID().toString());assertEquals(202,accepted.statusCode(),accepted.body());String acceptedTask=body(accepted).get("taskId").asText();Files.writeString(receipt.resolve("accepted-"+acceptedTask+".json"),json.writeValueAsString(Map.of("task",acceptedTask,"owner",owner,"meeting",meeting,"files",files)));return acceptedTask;}
++ ama.contract.TaskContracts.TaskLease claim(String task){var lease=app.getBean(ama.task.JdbcTaskQueue.class).claim("TRANSCRIPT_IMPORT","TASK05_BOUNDARY").orElseThrow();assertEquals(task,lease.taskId());return lease;}
++ @AfterEach void close()throws Exception {if(app!=null)app.close();if(health!=null)health.close();if(nativeFixture!=null)nativeFixture.close();if(s3Fixture!=null)s3Fixture.close();if(s3Proxy!=null)s3Proxy.close();}
++    String identity(String id) throws Exception {
++        return identity(id,true);
++    }
++    String identity(String id,boolean alreadyIssued) throws Exception {
++        String value=Base64.getUrlEncoder().withoutPadding().encodeToString(java.security.SecureRandom.getSeed(32));
++        j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",id,id);
++        // Only the new positive integrity fixtures use a recent already-issued session after the observed backward clock step.
++        String issued=alreadyIssued?"UTC_TIMESTAMP(6)-INTERVAL 1 MINUTE":"UTC_TIMESTAMP(6)";
++        j.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (?,?,0,?,"+issued+",UTC_TIMESTAMP(6)+INTERVAL 1 HOUR)",hash(value),id,csrf);
++        return value;
++    }
++    static String hash(String value) throws Exception {
++        return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8)));
++    }
++    JsonNode body(HttpResponse<String> response) throws Exception {
++        return json.readTree(response.body());
++    }
++    HttpResponse<String> call(String method,String path,String payload,String key) throws Exception {
++        var request=HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+app.getEnvironment().getProperty("local.server.port")+"/api/v1"+path)).header("Cookie","__Host-AMA_SESSION="+token).header("Origin",origin).header("X-CSRF-Token",csrf).header("Content-Type","application/json");
++        if(key!=null)request.header("Idempotency-Key",key);
++        var built=request.method(method,HttpRequest.BodyPublishers.ofString(payload)).build();
++        var response=HttpClient.newHttpClient().send(built,HttpResponse.BodyHandlers.ofString());
++        if(response.statusCode()==401)authDiagnostic(method+" "+path,built);
++        return response;
++    }
++    void authDiagnostic(String operation,HttpRequest request)throws Exception {
++        Files.writeString(receipt.resolve("authentication-failure.txt"),"operation="+operation+" databaseNow="+j.queryForObject("SELECT UTC_TIMESTAMP(6)",String.class)+" JVM="+java.time.Instant.now()+"\n",StandardOpenOption.CREATE,StandardOpenOption.APPEND);
++    }
++    String open(String value) throws Exception {
++        String checksum=hash(value);
++        var begin=call("POST","/meetings/"+meeting+"/uploads",json.writeValueAsString(Map.of("purpose","TRANSCRIPT_INPUT","name","original😀.txt","size",value.getBytes(StandardCharsets.UTF_8).length,"sha256",checksum)),UUID.randomUUID().toString());
++        assertEquals(201,begin.statusCode(),begin.body());
++        String upload=body(begin).get("uploadId").asText();
++        var part=part(upload,value);
++        assertEquals(204,part.statusCode(),part.body());
++        return upload;
++    }
++    HttpResponse<String> part(String upload,String value) throws Exception {
++        var req=HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+app.getEnvironment().getProperty("local.server.port")+"/api/v1/uploads/"+upload+"/parts/1")).header("Cookie","__Host-AMA_SESSION="+token).header("Origin",origin).header("X-CSRF-Token",csrf).header("Content-Type","application/octet-stream").header("X-Checksum-SHA256",hash(value)).PUT(HttpRequest.BodyPublishers.ofString(value)).build();
++        var response=HttpClient.newHttpClient().send(req,HttpResponse.BodyHandlers.ofString());
++        if(response.statusCode()==401)authDiagnostic("PART "+upload,req);
++        return response;
++    }
++    HttpResponse<String> complete(String upload,String value) throws Exception {
++        return call("POST","/uploads/"+upload+"/completion",json.writeValueAsString(Map.of("parts",List.of(Map.of("part",1,"sha256",hash(value))),"sha256",hash(value))),null);
++    }
++    String upload(String value) throws Exception {
++        var completed=complete(open(value),value);
++        assertEquals(200,completed.statusCode(),completed.body());
++        return body(completed).get("fileId").asText();
++    }
++}
+diff --git a/backend/integration-tests/src/test/java/ama/storage/Task05Fix02Maintenance.java b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02Maintenance.java
+new file mode 100644
+index 0000000..3a68b34
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02Maintenance.java
+@@ -0,0 +1,55 @@
++package ama.storage;
++
++import java.nio.file.*;
++import java.util.*;
++import javax.sql.DataSource;
++import org.springframework.jdbc.core.JdbcTemplate;
++import org.springframework.jdbc.datasource.DataSourceTransactionManager;
++import org.springframework.transaction.support.TransactionTemplate;
++import com.fasterxml.jackson.databind.ObjectMapper;
++import static org.junit.jupiter.api.Assertions.*;
++
++/** Finite prelinked owned-case fixture maintenance; never business cancellation/success evidence. */
++final class Task05Fix02Maintenance {
++    static Object safe(Object value){
++        if(value instanceof java.time.temporal.TemporalAccessor)return value.toString();
++        if(value instanceof Map<?,?> map){var converted=new LinkedHashMap<String,Object>();map.forEach((k,v)->converted.put(k.toString(),safe(v)));return converted;}
++        if(value instanceof Collection<?> list)return list.stream().map(Task05Fix02Maintenance::safe).toList();
++        return value;
++    }
++    static void apply(DataSource source,String task,Path accepted,Path output) throws Exception {
++        var json=new ObjectMapper().findAndRegisterModules(); var j=new JdbcTemplate(source);
++        var receipt=json.readTree(Files.readString(accepted));
++        assertEquals(task,receipt.get("task").asText());
++        String owner=receipt.get("owner").asText(), meeting=receipt.get("meeting").asText();
++        var before=j.queryForMap("SELECT * FROM durable_task WHERE id=?",task);
++        var link=j.queryForMap("SELECT m.owner_id,i.id input_id,i.meeting_id,i.batch_id FROM meeting m JOIN transcription_input i ON i.meeting_id=m.id WHERE m.id=? AND i.id=?",meeting,before.get("input_id"));
++        assertEquals(owner,link.get("owner_id")); assertEquals(meeting,before.get("subject_id"));
++        var files=j.queryForList("SELECT f.id,f.meeting_id,f.backend_id,f.namespace,f.object_key,u.id upload_id,u.state upload_state FROM input_batch_file b JOIN file_object f ON f.id=b.file_id JOIN upload_session u ON u.backend_id=f.backend_id AND u.namespace=f.namespace AND u.object_key=f.object_key WHERE b.batch_id=? ORDER BY b.ordinal",link.get("batch_id"));
++        assertFalse(files.isEmpty());
++        var acceptedRow=j.queryForMap("SELECT actor_id,resource_id,operation,result_id,http_status,state FROM idempotency_record WHERE result_id=? AND operation='PROCESSING_IMPORT'",task);
++        assertEquals(owner,acceptedRow.get("actor_id"));assertEquals(meeting,acceptedRow.get("resource_id"));assertEquals(202,((Number)acceptedRow.get("http_status")).intValue());assertEquals("SUCCEEDED",acceptedRow.get("state"));
++        for(var file:files){assertEquals(meeting,file.get("meeting_id"));assertEquals("COMPLETED",file.get("upload_state"));}
++        Files.writeString(output.resolve("maintenance-prelinked-"+task+".json"),json.writeValueAsString(safe(Map.of("accepted",accepted.toString(),"link",link,"files",files,"actualAcceptance",acceptedRow,"before",before))),StandardOpenOption.CREATE_NEW);
++        var template=new TransactionTemplate(new DataSourceTransactionManager(source));
++        var counts=template.execute(status->{
++            var row=j.queryForMap("SELECT * FROM durable_task WHERE id=? FOR UPDATE",task); assertEquals(before,row);
++            assertEquals("TRANSCRIPT_IMPORT_V1",row.get("task_type"));assertEquals("TRANSCRIPT_IMPORT",row.get("pool"));
++            assertEquals("MEETING",row.get("subject_kind"));assertEquals(meeting,row.get("subject_id"));
++            assertNull(row.get("output_id"));assertNull(row.get("output_kind"));
++            assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM transcript_revision WHERE producer_task_id=?",Integer.class,task));
++            assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM external_operation WHERE subject_kind='MEETING' AND subject_id=?",Integer.class,meeting));
++            assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM external_execution WHERE task_id=?",Integer.class,task));
++            assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM model_reservation r JOIN external_execution e ON e.id=r.execution_id WHERE e.task_id=?",Integer.class,task));
++            long attempt=((Number)row.get("attempt")).longValue();int ended=0;
++            if(row.get("state").equals("RUNNING")) {
++                assertTrue(attempt>0);var a=j.queryForMap("SELECT * FROM task_attempt WHERE task_id=? AND attempt=? FOR UPDATE",task,attempt);
++                assertEquals(row.get("lease_owner"),a.get("owner"));assertNull(a.get("ended_at"));
++                ended=j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='CANCELLED',error_code='TASK05_FIXTURE_CLEANUP' WHERE task_id=? AND attempt=? AND owner=? AND ended_at IS NULL",task,attempt,row.get("lease_owner"));assertEquals(1,ended);
++            }else{assertEquals("READY",row.get("state"));assertEquals(0,attempt);assertNull(row.get("lease_owner"));}
++            int changed=j.update("UPDATE durable_task SET state='CANCELLED',lease_owner=NULL,expires_at=NULL,last_error='TASK05_FIXTURE_CLEANUP' WHERE id=? AND state=? AND attempt=? AND lease_owner <=> ? AND output_id IS NULL AND output_kind IS NULL",task,row.get("state"),attempt,row.get("lease_owner"));
++            assertEquals(1,changed);return Map.of("taskRows",changed,"attemptRows",ended);
++        });
++        Files.writeString(output.resolve("maintenance-after-"+task+".json"),json.writeValueAsString(safe(Map.of("counts",counts,"task",j.queryForMap("SELECT * FROM durable_task WHERE id=?",task),"attempts",j.queryForList("SELECT * FROM task_attempt WHERE task_id=? ORDER BY attempt",task)))),StandardOpenOption.CREATE_NEW);
++    }
++}
+diff --git a/backend/integration-tests/src/test/java/ama/storage/Task05Fix02NativeFixture.java b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02NativeFixture.java
+new file mode 100644
+index 0000000..2588950
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02NativeFixture.java
+@@ -0,0 +1,158 @@
++package ama.storage;
++
++import ama.file.*;
++
++import java.io.*;
++import java.net.*;
++import java.nio.file.*;
++import java.time.Instant;
++import java.util.*;
++import java.util.concurrent.TimeUnit;
++
++/**
++ * Owns new managed-ID roots; reuses reviewed PKI/mount setup without changing infrastructure
++ * helpers.
++ */
++final class Task05Fix02NativeFixture implements AutoCloseable {
++    final OwnedRoot base;
++    final ManagedBackendId.Local binding;
++    final URI uri;
++    final int port;
++    LocalFileStore store;
++    InternalFileController server;
++    Process process;
++    Path configuration;
++
++    Task05Fix02NativeFixture(Path root) throws Exception {
++        if(Files.exists(root)||Files.isSymbolicLink(root)||!root.toAbsolutePath().normalize().startsWith(Path.of(System.getenv("AMA_TASK05_ROOT"),"native","data")))throw new IllegalStateException("Native case custody");
++        if(Files.isSymbolicLink(root.getParent())||!root.getParent().toRealPath().startsWith(Path.of(System.getenv("AMA_TASK05_ROOT")).toRealPath()))throw new IllegalStateException("Native parent custody");
++        LocalFixture.pki=Path.of(System.getenv("AMA_TASK05_ROOT"),"pki");
++        base = new OwnedRoot(root);
++        try (var socket = new ServerSocket(0, 0, InetAddress.getLoopbackAddress())) {
++            port = socket.getLocalPort();
++        }
++        uri = URI.create("https://localhost:" + port);
++        String relative =
++                base.config.root().equals(base.config.mountpoint())
++                        ? "."
++                        : base.config.mountpoint().relativize(base.config.root()).toString();
++        binding =
++                new ManagedBackendId.Local(
++                        uri.toString(), base.config.volumeId(), relative, base.config.filesystem());
++    }
++
++    FileStoragePort startServer() throws Exception {
++        store =
++                new LocalFileStore(
++                        base.root,
++                        binding.id(),
++                        new MountedVolumeGuard(base.config),
++                        DurabilityHooks.NONE);
++        server =
++                new InternalFileController(
++                        store,
++                        new InetSocketAddress("127.0.0.1", port),
++                        Task05TransportIT.tls("server"),
++                        Map.of("spiffe://ama/writer", InternalFileController.Role.WRITE));
++        server.start();
++        receipt("started-in-process");
++        return client();
++    }
++
++    FileStoragePort client() throws Exception {
++        return new LocalFileClient(uri, Task05TransportIT.tls("writer"));
++    }
++
++    FileStoragePort startProcess() throws Exception {
++        LocalFixture.ensurePki();
++        Properties p = new Properties();
++        p.setProperty("root", base.root.toString());
++        p.setProperty("mountpoint", base.config.mountpoint().toString());
++        p.setProperty("device", base.config.device());
++        p.setProperty("filesystem", base.config.filesystem());
++        p.setProperty("source", base.config.source());
++        p.setProperty("volumeId", base.config.volumeId());
++        p.setProperty("roleFile", base.role.toString());
++        p.setProperty("activeRole", base.config.activeRole());
++        p.setProperty("backendId", binding.id());
++        p.setProperty("serviceOrigin", uri.toString());
++        p.setProperty("keyStore", LocalFixture.pki.resolve("server.p12").toString());
++        p.setProperty("trustStore", LocalFixture.pki.resolve("trust.p12").toString());
++        p.setProperty("writerIdentities", "spiffe://ama/writer");
++        p.setProperty("bindAddress", "127.0.0.1");
++        p.setProperty("port", Integer.toString(port));
++        configuration = base.root.resolveSibling(base.root.getFileName() + "-managed.properties");
++        Files.createFile(configuration,java.nio.file.attribute.PosixFilePermissions.asFileAttribute(java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")));
++        try (var out = Files.newOutputStream(configuration,StandardOpenOption.WRITE)) {
++            p.store(out, "owned managed service configuration");
++        }
++        LocalFixture.privateMode(configuration, false);
++        Path log = base.root.resolveSibling(base.root.getFileName() + "-managed-service.log");
++        Files.createFile(log,java.nio.file.attribute.PosixFilePermissions.asFileAttribute(java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")));
++        process = launch(configuration, log);
++        receipt("started");
++        Instant end = Instant.now().plusSeconds(30);
++        while (Instant.now().isBefore(end)) {
++            for (String line : Files.readAllLines(log))
++                if (line.startsWith("READY ")) return client();
++            if (!process.isAlive())
++                throw new AssertionError("managed native process failed; log=" + log);
++            Thread.sleep(50);
++        }
++        throw new AssertionError("managed native startup deadline");
++    }
++
++    static Process launch(Path properties, Path log) throws Exception {
++        Path repo = Path.of("").toAbsolutePath();
++        while (!Files.exists(repo.resolve("tools/checks/run.py"))) repo = repo.getParent();
++        var builder =
++                new ProcessBuilder(
++                        Path.of(System.getProperty("java.home"), "bin/java").toString(),
++                        "-Xmx64m",
++                        "-XX:ActiveProcessorCount=2",
++                        "-jar",
++                        repo.resolve(
++                                        "backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar")
++                                .toString(),
++                        properties.toString());
++        builder.environment().put("AMA_FILE_KEYSTORE_PASSWORD", Files.readString(Path.of(System.getenv("AMA_TASK05_ROOT"),"pki","keystore-password")));
++        builder.environment()
++                .put("AMA_FILE_TRUSTSTORE_PASSWORD", Files.readString(Path.of(System.getenv("AMA_TASK05_ROOT"),"pki","keystore-password")));
++        return builder.redirectErrorStream(true).redirectOutput(log.toFile()).start();
++    }
++
++    void receipt(String state)throws Exception {
++        Path output=evidencePath().resolve(base.root.getFileName()+"-native-"+state+".json");
++        var data=new LinkedHashMap<String,Object>();data.put("state",state);data.put("observedAt",Instant.now().toString());data.put("root",base.root.toString());data.put("role",base.role.toString());data.put("managedId",binding.id());data.put("origin",uri.toString());data.put("port",port);data.put("parentPid",ProcessHandle.current().pid());data.put("mode",process==null?"in-process":"child");
++        if(process!=null){data.put("pid",process.pid());data.put("alive",process.isAlive());data.put("startInstant",process.info().startInstant().map(Object::toString).orElse("unavailable-after-exit"));if(!process.isAlive())data.put("exit",process.exitValue());data.put("command",List.of(Path.of(System.getProperty("java.home"),"bin/java").toString(),"-Xmx64m","-XX:ActiveProcessorCount=2","-jar",repoRoot().resolve("backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar").toString(),configuration.toString()));}
++        Files.writeString(output,new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(data),StandardOpenOption.CREATE_NEW);
++    }
++    static Path repoRoot() {
++        Path root=Path.of("").toAbsolutePath();
++        while(!Files.exists(root.resolve("tools/checks/run.py")))root=root.getParent();
++        return root;
++    }
++    static Path evidencePath(){return repoRoot().resolve("artifacts/phase-b/b-remaining/task-05-fix-02");}
++    static final class OwnedRoot {
++        final Path root,role;final MountedVolumeGuard.Config config;
++        OwnedRoot(Path selectedRoot)throws Exception {
++            root=selectedRoot;Files.createDirectory(root,java.nio.file.attribute.PosixFilePermissions.asFileAttribute(java.nio.file.attribute.PosixFilePermissions.fromString("rwx------")));
++            role=root.resolveSibling(root.getFileName()+"-role");Files.createFile(role,java.nio.file.attribute.PosixFilePermissions.asFileAttribute(java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")));Files.writeString(role,"active-instance",StandardOpenOption.WRITE);
++            Path volume=root.resolve(".volume-id");Files.createFile(volume,java.nio.file.attribute.PosixFilePermissions.asFileAttribute(java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")));Files.writeString(volume,"fixture-volume",StandardOpenOption.WRITE);
++            String[] selected=null;
++            for(String line:Files.readAllLines(Path.of("/proc/self/mountinfo"))){String[] fields=line.split(" ");Path mount=Path.of(LocalFixture.unescape(fields[4]));if(root.startsWith(mount)&&(selected==null||fields[4].length()>selected[4].length()))selected=fields;}
++            if(selected==null)throw new IllegalStateException("No kernel mount");int separator=Arrays.asList(selected).indexOf("-");
++            config=new MountedVolumeGuard.Config(root,Path.of(LocalFixture.unescape(selected[4])),selected[2],selected[separator+1],LocalFixture.unescape(selected[separator+2]),"fixture-volume",role,"active-instance");
++        }
++    }
++    public void close() throws Exception {
++        if (process != null) {
++            process.destroyForcibly();
++            if (!process.waitFor(10, TimeUnit.SECONDS))
++                throw new AssertionError("owned managed process did not stop");
++        }
++        if (server != null) server.close();
++        if (store != null) store.close();
++        receipt("closed");
++    }
++}
+diff --git a/backend/integration-tests/src/test/java/ama/storage/Task05Fix02S3OpenRegressionIT.java b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02S3OpenRegressionIT.java
+new file mode 100644
+index 0000000..77c12af
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02S3OpenRegressionIT.java
+@@ -0,0 +1,53 @@
++package ama.storage;
++import ama.task.*;
++import ama.worker.WorkerLoop;
++import ama.contract.TaskContracts.*;
++import java.nio.file.*;
++import java.time.*;
++import java.util.*;
++import java.util.concurrent.*;
++import java.util.concurrent.atomic.*;
++import org.junit.jupiter.api.Test;
++import static org.junit.jupiter.api.Assertions.*;
++
++class Task05Fix02S3OpenRegressionIT extends Task05Fix02Fixture {
++    @Test void genuineS3ControlOpenExitsAtBatchDeadlineBeforeProxyRelease() throws Exception {open(false,false);}
++    void open(boolean lost,boolean error) throws Exception {open(lost,error,false);}
++    void open(boolean lost,boolean error,boolean headers) throws Exception {
++        String task=accept(List.of(upload("Original S3 source\nSecond")));
++        var queue=app.getBean(JdbcTaskQueue.class);var normal=settings();
++        var settings=new TranscriptImportRuntime.Settings(normal.archives(),normal.archiveBudget(),normal.aggregate(),Duration.ofSeconds(lost?30:1));
++        var fault=s3Proxy.arm(headers?"pause":error?"stall-error":"stall-body",path->path.startsWith("GET ")&&path.contains("/"+s3Fixture.config.controlBucket()+"/"));
++        var exited=new CountDownLatch(1);var lease=new AtomicReference<TaskLease>();var aborts=new AtomicInteger();
++        var loop=WorkerLoop.contextual(queue,Map.of("TRANSCRIPT_IMPORT",1),Map.of("TRANSCRIPT_IMPORT_V1",(claimed,cancel)->{
++            assertEquals(task,claimed.taskId());lease.set(claimed);
++            PreparationCancellation counted=new PreparationCancellation(){
++                public boolean cancelled(){return cancel.cancelled();}
++                public AutoCloseable register(Runnable abort){return cancel.register(()->{aborts.incrementAndGet();abort.run();});}
++            };
++            try{return TranscriptImportRuntime.prepare(queue,claimed,settings,counted);}finally{exited.countDown();}
++        }),"TASK05_FIX_S3_OPEN");
++        Throwable primary=null;long started=System.nanoTime();
++        try {
++            loop.start();assertTrue(fault.reached.await(5,TimeUnit.SECONDS));
++            if(lost){var current=lease.get();assertEquals(1,j.update("UPDATE durable_task SET expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=? AND state='RUNNING' AND attempt=? AND lease_owner=?",task,current.attempt(),current.leaseOwner()));}
++            boolean done=exited.await(lost?8:3,TimeUnit.SECONDS);
++            Files.writeString(receipt.resolve("s3-open-observation.json"),json.writeValueAsString(Map.of("task",task,"renewalLoss",lost,"errorBody",error,"preparationExitedBeforeProxyRelease",done,"releaseCount",fault.release.getCount(),"registeredAbortCount",aborts.get(),"elapsedMillis",TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-started),"batchMillis",settings.batchDeadline().toMillis(),"transportMillis",20000)),StandardOpenOption.CREATE_NEW);
++            assertTrue(done,"Genuine S3 preparation must exit its control/error open before proxy release");assertEquals(1,fault.release.getCount());
++            if(lost)assertEquals(1,aborts.get());
++            assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM transcript_revision WHERE producer_task_id=?",Integer.class,task));
++            assertNull(j.queryForObject("SELECT output_id FROM durable_task WHERE id=?",String.class,task));
++        }catch(Exception|AssertionError failure){primary=failure;throw failure;}finally{
++            try{
++                try{loop.close();}catch(IllegalStateException timeout){Files.writeString(receipt.resolve("close-before-release.txt"),timeout.getClass().getSimpleName());}
++                fault.release.countDown();assertTrue(exited.await(3,TimeUnit.SECONDS));
++                long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(3);while(loop.observation().active()!=0&&System.nanoTime()<end)Thread.sleep(10);
++                assertEquals(0,loop.observation().active());
++                String maintenanceBefore=java.time.Instant.now().toString();
++                Task05Fix02Maintenance.apply(source,task,receipt.resolve("accepted-"+task+".json"),receipt);
++                String maintenanceAfter=java.time.Instant.now().toString();s3Proxy.close();s3Proxy=null;
++                Files.writeString(receipt.resolve("lifecycle-order.json"),json.writeValueAsString(Map.of("workerJoinedBeforeMaintenance",loop.observation().active()==0,"maintenanceBefore",maintenanceBefore,"maintenanceAfter",maintenanceAfter,"routeClosedAfterMaintenance",java.time.Instant.now().toString())));
++            }catch(Exception|AssertionError cleanup){if(primary!=null)primary.addSuppressed(cleanup);else throw cleanup;}
++        }
++    }
++}
+diff --git a/backend/integration-tests/src/test/java/ama/storage/Task05Fix02SuccessRegressionIT.java b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02SuccessRegressionIT.java
+new file mode 100644
+index 0000000..694baad
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/storage/Task05Fix02SuccessRegressionIT.java
+@@ -0,0 +1,22 @@
++package ama.storage;
++import java.nio.file.*;import java.util.*;import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;
++class Task05Fix02SuccessRegressionIT extends Task05Fix02Fixture {
++ void actualNativeHttpIntakeWorkerAndRawRegression()throws Exception {
++  var first=upload("\ufeffAlpha😀\r\n \r\nBeta");var second=upload("Gamma\nDelta");
++  var accepted=call("POST","/meetings/"+meeting+"/transcript-imports",json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(first,second))),"import");
++  assertEquals(202,accepted.statusCode(),accepted.body());String task=body(accepted).get("taskId").asText();Files.writeString(receipt.resolve("accepted-"+task+".json"),json.writeValueAsString(Map.of("task",task,"owner",owner,"meeting",meeting,"httpStatus",accepted.statusCode())));
++  assertEquals("READY",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,task));
++  var queue=app.getBean(ama.task.JdbcTaskQueue.class);
++  try(var loop=ama.worker.WorkerLoop.contextual(queue,Map.of("TRANSCRIPT_IMPORT",1),Map.of("TRANSCRIPT_IMPORT_V1",(lease,cancel)->ama.task.TranscriptImportRuntime.prepare(queue,lease,settings(),cancel)),"TASK05_ACTUAL")){
++   loop.start();long end=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(20);
++   while(System.nanoTime()<end&&List.of("READY","RUNNING").contains(j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,task)))Thread.sleep(50);
++  }
++  var actual=j.queryForMap("SELECT state,output_kind,output_id,last_error,business_version FROM durable_task WHERE id=?",task);Files.writeString(receipt.resolve("task.json"),json.writeValueAsString(actual));
++  assertEquals("SUCCEEDED",actual.get("state"),actual.toString());String raw=(String)actual.get("output_id");
++  assertEquals("TRANSCRIPT_REVISION",actual.get("output_kind"));assertEquals(List.of("Alpha😀","Beta","Gamma","Delta"),j.queryForList("SELECT body FROM transcript_segment WHERE revision_id=? ORDER BY ordinal",String.class,raw));
++  assertEquals(List.of(1L,3L,1L,2L),j.queryForList("SELECT source_paragraph FROM transcript_segment WHERE revision_id=? ORDER BY ordinal",Long.class,raw));
++  assertEquals(((Number)actual.get("business_version")).longValue(),j.queryForObject("SELECT revision FROM transcript_revision WHERE id=?",Long.class,raw));
++  assertNull(j.queryForObject("SELECT transcript_revision_id FROM meeting WHERE id=?",String.class,meeting));
++ }
++ @Test void actualS3HttpIntakeWorkerAndRawRegression()throws Exception {actualNativeHttpIntakeWorkerAndRawRegression();}
++}
+diff --git a/backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02Proxy.java b/backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02Proxy.java
+new file mode 100644
+index 0000000..2ab59f0
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02Proxy.java
+@@ -0,0 +1,329 @@
++package ama.storage.s3;
++
++import java.io.*;
++import java.net.*;
++import java.nio.charset.StandardCharsets;
++import java.util.*;
++import java.util.concurrent.*;
++import java.util.concurrent.atomic.*;
++import java.util.function.Predicate;
++import java.util.function.Supplier;
++
++/** Test-only streaming HTTP proxy. Preserves signed Host, counts bytes read from real upstream. */
++public final class Task05Fix02Proxy implements AutoCloseable {
++  record Event(
++      String method,
++      String path,
++      Map<String, String> request,
++      int status,
++      Map<String, String> response,
++      long upstreamBytes,
++      long downstreamBytes,
++      boolean fault) {}
++
++  public static final class Fault {
++    final Predicate<String> selector;
++    final String action;
++    public final CountDownLatch reached = new CountDownLatch(1), release = new CountDownLatch(1);
++
++    Fault(Predicate<String> selector, String action) {
++      this.selector = selector;
++      this.action = action;
++    }
++  }
++
++  final ServerSocket listener;
++  final URI upstream;
++  final ExecutorService pool = Executors.newCachedThreadPool();
++  private final List<Event> events = new ArrayList<>();
++  final AtomicReference<Fault> fault = new AtomicReference<>();
++  public final AtomicInteger requestsSeen=new AtomicInteger();
++  final AtomicInteger active = new AtomicInteger();
++  final AtomicInteger upstreamActive = new AtomicInteger(), peakUpstream = new AtomicInteger();
++  volatile boolean closed;
++
++  public Task05Fix02Proxy() throws IOException {
++    upstream = URI.create(S3Fixture.required("AMA_S3_ENDPOINT"));
++    listener = new ServerSocket(0, 64, InetAddress.getLoopbackAddress());
++    pool.submit(
++        () -> {
++          while (!closed)
++            try {
++              Socket socket = listener.accept();
++              synchronized (events) {
++                active.incrementAndGet();
++              }
++              pool.submit(() -> handle(socket));
++            } catch (IOException e) {
++              if (!closed) throw new UncheckedIOException(e);
++            }
++        });
++  }
++
++  public URI endpoint() {
++    return URI.create("http://127.0.0.1:" + listener.getLocalPort());
++  }
++
++  public Fault arm(String action, Predicate<String> selector) {
++    Fault f = new Fault(selector, action);
++    if (!fault.compareAndSet(null, f)) throw new IllegalStateException();
++    return f;
++  }
++
++  static String line(InputStream in) throws IOException {
++    var out = new ByteArrayOutputStream();
++    int prior = -1, n;
++    while ((n = in.read()) != -1) {
++      if (prior == '\r' && n == '\n') {
++        byte[] b = out.toByteArray();
++        return new String(b, 0, b.length - 1, StandardCharsets.ISO_8859_1);
++      }
++      out.write(n);
++      prior = n;
++      if (out.size() > 65536) throw new IOException("header bound");
++    }
++    if (out.size() == 0) return null;
++    throw new EOFException();
++  }
++
++  static Map<String, String> headers(InputStream in) throws IOException {
++    Map<String, String> h = new LinkedHashMap<>();
++    String l;
++    while ((l = line(in)) != null && !l.isEmpty()) {
++      int colon = l.indexOf(':');
++      if (colon < 1) throw new IOException("bad header");
++      h.put(l.substring(0, colon).toLowerCase(Locale.ROOT), l.substring(colon + 1).trim());
++    }
++    return h;
++  }
++
++  static void text(OutputStream out, String s) throws IOException {
++    out.write(s.getBytes(StandardCharsets.ISO_8859_1));
++  }
++
++  static long copy(InputStream in, OutputStream out, long length) throws IOException {
++    byte[] b = new byte[8192];
++    long n = 0;
++    while (n < length) {
++      int k = in.read(b, 0, (int) Math.min(b.length, length - n));
++      if (k < 0) throw new EOFException();
++      out.write(b, 0, k);
++      out.flush();
++      n += k;
++    }
++    return n;
++  }
++
++  void handle(Socket downstream) {
++    String method = "", path = "";
++    Map<String, String> request = Map.of(), response = Map.of();
++    int status = 0;
++    long received = 0, sent = 0;
++    boolean injected = false;
++    boolean upstreamInFlight = false;
++    try (downstream;
++        Socket backend = new Socket(upstream.getHost(), upstream.getPort())) {
++      downstream.setSoTimeout(60000);
++      backend.setSoTimeout(60000);
++      downstream.setSendBufferSize(8192);
++      backend.setReceiveBufferSize(8192);
++      var clientIn = new BufferedInputStream(downstream.getInputStream(), 8192);
++      var clientOut = downstream.getOutputStream();
++      // Count every upstream body byte read from the socket, without hidden user-space
++      // readahead.
++      var serverIn = backend.getInputStream();
++      var serverOut = backend.getOutputStream();
++      String first = line(clientIn);
++      if (first == null) return;
++      requestsSeen.incrementAndGet();
++      String[] split = first.split(" ");
++      method = split[0];
++      path = split[1];
++      request = headers(clientIn);
++      Fault f = fault.get();
++      if (f != null && f.selector.test(method + " " + path) && fault.compareAndSet(f, null)) {
++        injected = true;
++      } else f = null;
++      upstreamInFlight = true;
++      peakUpstream.accumulateAndGet(upstreamActive.incrementAndGet(), Math::max);
++      text(serverOut, first + "\r\n");
++      for (var h : request.entrySet())
++        if (!h.getKey().equals("connection") && !h.getKey().equals("expect"))
++          text(serverOut, h.getKey() + ": " + h.getValue() + "\r\n");
++      text(serverOut, "Connection: close\r\n\r\n");
++      serverOut.flush();
++      if (request.containsKey("expect")) {
++        text(clientOut, "HTTP/1.1 100 Continue\r\n\r\n");
++        clientOut.flush();
++      }
++      long length = Long.parseLong(request.getOrDefault("content-length", "0"));
++      copy(clientIn, serverOut, length);
++      String statusLine = line(serverIn);
++      status = Integer.parseInt(statusLine.split(" ")[1]);
++      response = headers(serverIn);
++      long body =
++          method.equals("HEAD") ? 0 : Long.parseLong(response.getOrDefault("content-length", "0"));
++      if (body == 0) {
++        upstreamActive.decrementAndGet();
++        upstreamInFlight = false;
++      }
++      if (f != null && f.action.equals("pause")) {
++        f.reached.countDown();
++        if (!f.release.await(45, TimeUnit.SECONDS)) throw new IOException("barrier timeout");
++      }
++      if (f != null && f.action.equals("drop")) {
++        received = copy(serverIn, OutputStream.nullOutputStream(), body);
++        f.reached.countDown();
++        return;
++      }
++      if (f != null && f.action.equals("stall-error")) {
++        text(clientOut,"HTTP/1.1 503 Service Unavailable\r\nContent-Type: application/xml\r\nContent-Length: 64\r\nConnection: close\r\n\r\n<");clientOut.flush();
++        f.reached.countDown();if(!f.release.await(10,TimeUnit.SECONDS))throw new IOException("barrier timeout");return;
++      }
++      Map<String, String> outgoing = new LinkedHashMap<>(response);
++      String sendStatus = statusLine;
++      if (f != null && f.action.equals("ignore-range")) {
++        sendStatus = "HTTP/1.1 200 OK";
++        outgoing.remove("content-range");
++      }
++      if (f != null && f.action.equals("wrong-range")) outgoing.put("content-range", "bytes 0-0/1");
++      if (f != null && f.action.equals("overlong"))
++        outgoing.put("content-length", Long.toString(body + 1));
++      if (f != null && Set.of("omit-length", "chunked-no-length").contains(f.action))
++        outgoing.remove("content-length");
++      boolean chunked = f != null && f.action.equals("chunked-no-length");
++      if (chunked) outgoing.put("transfer-encoding", "chunked");
++      if (f != null && f.action.equals("wrong-version"))
++        outgoing.put("x-amz-version-id", "wrong-version");
++      if (f != null && Set.of("error200", "error409", "error412", "nosuch").contains(f.action)) {
++        received = copy(serverIn, OutputStream.nullOutputStream(), body);
++        String code =
++            switch (f.action) {
++              case "error409" -> "ConditionalRequestConflict";
++              case "error412" -> "PreconditionFailed";
++              case "nosuch" -> "NoSuchUpload";
++              default -> "InternalError";
++            };
++        String http =
++            switch (f.action) {
++              case "error409" -> "409 Conflict";
++              case "error412" -> "412 Precondition Failed";
++              case "nosuch" -> "404 Not Found";
++              default -> "200 OK";
++            };
++        byte[] error =
++            ("<Error><Code>"
++                    + code
++                    + "</Code><Message>injected after real"
++                    + " commit</Message></Error>")
++                .getBytes(StandardCharsets.UTF_8);
++        text(
++            clientOut,
++            "HTTP/1.1 "
++                + http
++                + "\r\nContent-Type: application/xml\r\nContent-Length: "
++                + error.length
++                + "\r\nConnection: close\r\n\r\n");
++        clientOut.write(error);
++        clientOut.flush();
++        f.reached.countDown();
++        return;
++      }
++      text(clientOut, sendStatus + "\r\n");
++      for (var h : outgoing.entrySet())
++        if (!h.getKey().equals("connection"))
++          text(clientOut, h.getKey() + ": " + h.getValue() + "\r\n");
++      text(clientOut, "Connection: close\r\n\r\n");
++      clientOut.flush();
++      if (f != null && f.action.equals("stall-body")) {
++        f.reached.countDown();if(!f.release.await(10,TimeUnit.SECONDS))throw new IOException("barrier timeout");
++      }
++      byte[] b = new byte[8192];
++      long bound = f != null && f.action.equals("truncate") ? body / 2 : body;
++      while (received < bound) {
++        int k = serverIn.read(b, 0, (int) Math.min(b.length, bound - received));
++        if (k < 0) break;
++        received += k;
++        if (received == body && upstreamInFlight) {
++          // Upstream finished before the last byte can let the client release admission.
++          upstreamActive.decrementAndGet();
++          upstreamInFlight = false;
++        }
++        if (chunked) text(clientOut, Integer.toHexString(k) + "\r\n");
++        clientOut.write(b, 0, k);
++        if (chunked) text(clientOut, "\r\n");
++        clientOut.flush();
++        sent += k;
++      }
++      if (chunked && received == body) {
++        text(clientOut, "0\r\n\r\n");
++        clientOut.flush();
++      }
++      if (f != null) f.reached.countDown();
++    } catch (Exception e) {
++      /* Downstream abort is expected; evidence keeps actual counters. */
++    } finally {
++      if (upstreamInFlight) upstreamActive.decrementAndGet();
++      Map<String, String> safe = new LinkedHashMap<>();
++      for (String k : List.of("range", "if-match", "if-none-match", "content-length"))
++        if (request.containsKey(k)) safe.put(k, request.get(k));
++      safe.put("signed", Boolean.toString(request.containsKey("authorization")));
++      // Native UploadId and credentials never enter retained events.
++      synchronized (events) {
++        events.add(
++            new Event(
++                method,
++                path.replaceAll("uploadId=[^& ]+", "uploadId=REDACTED"),
++                Map.copyOf(safe),
++                status,
++                response.entrySet().stream()
++                    .filter(
++                        e ->
++                            Set.of("content-length", "content-range", "x-amz-version-id", "etag")
++                                .contains(e.getKey()))
++                    .collect(
++                        java.util.stream.Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
++                received,
++                sent,
++                injected));
++        active.decrementAndGet();
++      }
++    }
++  }
++
++  void settle() throws InterruptedException {
++    settled(() -> null);
++  }
++
++  List<Event> snapshot() throws InterruptedException {
++    return settled(() -> List.copyOf(events));
++  }
++
++  void reset() throws InterruptedException {
++    settled(
++        () -> {
++          events.clear();
++          return null;
++        });
++  }
++
++  private <T> T settled(Supplier<T> action) throws InterruptedException {
++    long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
++    while (true) {
++      synchronized (events) {
++        if (active.get() == 0) return action.get();
++      }
++      if (System.nanoTime() >= deadline)
++        throw new AssertionError("proxy still has active exchanges; counters are incomplete");
++      Thread.sleep(10);
++    }
++  }
++
++  @Override
++  public void close() throws Exception {
++    closed = true;
++    listener.close();
++    pool.shutdownNow();
++    if(!pool.awaitTermination(5, TimeUnit.SECONDS))throw new AssertionError("Owned fix proxy threads did not terminate");
++  }
++}
+diff --git a/backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02S3DeadlineRegressionIT.java b/backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02S3DeadlineRegressionIT.java
+new file mode 100644
+index 0000000..e6467f9
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/storage/s3/Task05Fix02S3DeadlineRegressionIT.java
+@@ -0,0 +1,39 @@
++package ama.storage.s3;
++import java.time.*;
++import java.util.concurrent.*;
++import org.junit.jupiter.api.Test;
++import static org.junit.jupiter.api.Assertions.*;
++import software.amazon.awssdk.services.s3.model.*;
++import software.amazon.awssdk.core.sync.RequestBody;
++class Task05Fix02S3DeadlineRegressionIT {
++ @Test void actualS3SuccessAndControlBodiesExitBeforeProxyReleaseAndReturnAdmission()throws Exception {
++  try(var proxy=new Task05Fix02Proxy();var f=new S3Fixture("task05-deadline",proxy.endpoint());var client=S3FileStorage.client(f.config)){
++   var c=f.config;var bound=new S3Config(c.backendId(),c.endpoint(),c.region(),c.dataBucket(),c.controlBucket(),c.credentials(),c.pathStyle(),c.keyBudget(),c.chunkBytes(),c.nativeMinimum(),c.nativeMaximum(),c.nativeMaxParts(),c.maximumObject(),2,Duration.ofMillis(350));
++   var io=new S3Objects(client,bound);
++   for(String bucket:new String[]{c.dataBucket(),c.controlBucket()}){
++    String key="task05-body";f.admin.putObject(PutObjectRequest.builder().bucket(bucket).key(key).build(),RequestBody.fromString("actual original source"));
++    var fault=proxy.arm("stall-body",path->path.startsWith("GET ")&&path.contains("/"+bucket+"/"));
++    var pool=Executors.newSingleThreadExecutor();
++    try{
++     var result=pool.submit(()->{try(var body=io.raw(GetObjectRequest.builder().bucket(bucket).key(key).build())){return body.readAllBytes();}});
++     assertTrue(fault.reached.await(3,TimeUnit.SECONDS));try{assertThrows(ExecutionException.class,()->result.get(2,TimeUnit.SECONDS));}catch(AssertionError failure){
++      var trace=new StringBuilder();Thread.getAllStackTraces().forEach((thread,stack)->{trace.append(thread.getName()).append(" ").append(thread.getState()).append("\n");for(var frame:stack)trace.append("  ").append(frame).append("\n");});
++      java.nio.file.Path evidence=java.nio.file.Path.of("../../artifacts/phase-b/b-remaining/task-05-fix-02/s3-blocked-"+java.util.UUID.randomUUID()+".txt");java.nio.file.Files.writeString(evidence,trace);throw failure;
++     }assertEquals(1,fault.release.getCount());
++     // Both finite permits remain available after watchdog+finally close compete.
++     try(var one=io.raw(GetObjectRequest.builder().bucket(bucket).key(key).build());var two=io.raw(GetObjectRequest.builder().bucket(bucket).key(key).build())){assertEquals(22,one.readAllBytes().length);assertEquals(22,two.readAllBytes().length);}
++    }finally{fault.release.countDown();pool.shutdownNow();assertTrue(pool.awaitTermination(2,TimeUnit.SECONDS));proxy.settle();}
++   }
++  }
++ }
++ @Test void sdkErrorBodyDeadlineActuallyTerminatesReader()throws Exception {
++  try(var proxy=new Task05Fix02Proxy();var f=new S3Fixture("task05-errors",proxy.endpoint())){
++   var c=f.config;var bound=new S3Config(c.backendId(),c.endpoint(),c.region(),c.dataBucket(),c.controlBucket(),c.credentials(),c.pathStyle(),c.keyBudget(),c.chunkBytes(),c.nativeMinimum(),c.nativeMaximum(),c.nativeMaxParts(),c.maximumObject(),2,Duration.ofMillis(500));
++   try(var storage=new S3FileStorage(bound)){
++    var fault=proxy.arm("stall-error",path->path.startsWith("GET "));var pool=Executors.newSingleThreadExecutor();
++    try{var result=pool.submit(()->storage.stat(new ama.contract.StorageContracts.StorageKey(c.backendId(),"test","missing")));assertTrue(fault.reached.await(3,TimeUnit.SECONDS));assertThrows(ExecutionException.class,()->result.get(2,TimeUnit.SECONDS));assertEquals(1,fault.release.getCount());}
++    finally{fault.release.countDown();pool.shutdownNow();assertTrue(pool.awaitTermination(2,TimeUnit.SECONDS));}
++   }
++  }
++ }
++}
+diff --git a/backend/worker/src/test/java/ama/worker/WorkerShutdownTest.java b/backend/worker/src/test/java/ama/worker/WorkerShutdownTest.java
+index 89c4a18..3174c4a 100644
+--- a/backend/worker/src/test/java/ama/worker/WorkerShutdownTest.java
++++ b/backend/worker/src/test/java/ama/worker/WorkerShutdownTest.java
+@@ -2,76 +2,87 @@ package ama.worker;
+ 
+ import ama.storage.*;
+ import java.lang.reflect.*;
+ import java.util.*;
+ import java.util.concurrent.*;
+ import java.util.concurrent.atomic.*;
+ import org.junit.jupiter.api.Test;
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ /** Lifecycle scheduling only; no synthetic queue is evidence of business authorization. */
+ class WorkerShutdownTest {
+     @Test void failedAbortStillCancelsAllExecutionsAndClosesBackendOnce() throws Exception {
+-        failedAbortCleanup(false);
++        failedAbortCleanup(false,true);
+     }
+ 
+     @Test void interruptedCloseStillCleansUpAndPreservesInterruption() throws Exception {
+-        failedAbortCleanup(true);
++        failedAbortCleanup(true,true);
+     }
+ 
+-    private void failedAbortCleanup(boolean interrupt) throws Exception {
++    @Test void firstBackendFailureStillClosesSecondBackendOnce() throws Exception {failedAbortCleanup(false,false);}
++    @Test void interruptedFirstBackendFailureStillClosesSecondBackendOnce() throws Exception {failedAbortCleanup(true,false);}
++
++    private void failedAbortCleanup(boolean interrupt,boolean abortFailure) throws Exception {
+         var queue = new WorkerLoopTest.LocalTasks(); queue.add("cpu"); queue.add("cpu");
+         var ready = new CountDownLatch(2); var release = new CountDownLatch(1);
+         var aborts = new AtomicInteger(); var preparations = new AtomicInteger();
+-        var writers = new AtomicInteger(); var backendCloses = new AtomicInteger();
++        var writers = new AtomicInteger(); var backendCloses = new AtomicInteger();var secondBackendCloses=new AtomicInteger();
++        var backendFailure=new IllegalStateException("FIRST_BACKEND_CLOSE_FAILED");
+         var firstFailure = new IllegalStateException("OWNED_ABORT_FAILED");
+         var loop = WorkerLoop.contextual(queue, Map.of("cpu", 2), Map.of("TEST", (lease, cancellation) -> {
+             int index = preparations.incrementAndGet();
+             try (var registration = cancellation.register(() -> {
+                 aborts.incrementAndGet();
+-                if (index == 1) throw firstFailure;
++                if (index == 1 && abortFailure) throw firstFailure;
+             })) {
+                 ready.countDown();
+                 release.await();
+                 return () -> { writers.incrementAndGet(); return WorkerLoopTest.success(); };
+             }
+         }), "worker");
+         var storage = (FileStoragePort) Proxy.newProxyInstance(getClass().getClassLoader(),
+                 new Class<?>[] {FileStoragePort.class, AutoCloseable.class}, (proxy, method, args) -> {
+-                    if (method.getName().equals("close")) { backendCloses.incrementAndGet(); return null; }
++                    if (method.getName().equals("close")) { backendCloses.incrementAndGet(); throw backendFailure; }
+                     throw new AssertionError("Unexpected backend operation " + method.getName());
+                 });
+         var definition = new ManagedBackendId.Local("https://localhost:443", "owned-lifecycle", ".", "ext4");
++        var secondStorage=(FileStoragePort)Proxy.newProxyInstance(getClass().getClassLoader(),new Class<?>[]{FileStoragePort.class,AutoCloseable.class},(proxy,method,args)->{
++            if(method.getName().equals("close")){secondBackendCloses.incrementAndGet();return null;}
++            throw new AssertionError("Unexpected second backend operation");
++        });
++        var secondDefinition=new ManagedBackendId.Local("https://localhost:443","owned-lifecycle-second",".","ext4");
+         var definitions = new FileBackendDefinitions(List.of(new FileBackendCatalog.Backend(
+-                definition.id(), "local", 1, "READ_ONLY", storage, definition)), null);
++                definition.id(), "local", 1, "READ_ONLY", storage, definition),new FileBackendCatalog.Backend(secondDefinition.id(),"local",1,"READ_ONLY",secondStorage,secondDefinition)), null);
+         var constructor = TranscriptWorkerRuntimeProvider.Runtime.class
+                 .getDeclaredConstructor(WorkerLoop.class, FileBackendDefinitions.class);
+         constructor.setAccessible(true);
+         var runtime = constructor.newInstance(loop, definitions);
+         var executors = executors(loop);
+         try {
+             loop.pollOnce("cpu"); assertTrue(ready.await(2, TimeUnit.SECONDS));
+             if (interrupt) Thread.currentThread().interrupt();
+             var thrown = assertThrows(IllegalStateException.class, runtime::close);
+             boolean retainedInterrupt = Thread.interrupted();
+             assertAll(
+-                    () -> assertSame(firstFailure, thrown, "Preserve the first owned cleanup failure"),
++                    () -> assertSame(abortFailure?firstFailure:backendFailure, thrown, "Preserve the first owned cleanup failure"),
+                     () -> assertEquals(2, aborts.get(), "A failed abort cannot skip another owned execution"),
+-                    () -> assertEquals(1, backendCloses.get(), "Provider must close its backend after loop failure"),
++                    () -> assertEquals(1, backendCloses.get(), "Provider must attempt the first backend once"),
++                    () -> assertEquals(1,secondBackendCloses.get(),"Failed backend close cannot abandon later owned backend"),
++                    () -> {if(abortFailure)assertTrue(Arrays.asList(thrown.getSuppressed()).contains(backendFailure));},
+                     () -> assertTrue(executors.stream().allMatch(ExecutorService::isTerminated), "Every owned executor must terminate"),
+                     () -> assertEquals(interrupt, retainedInterrupt),
+                     () -> assertEquals(0, writers.get()),
+                     () -> assertTrue(queue.outputs.isEmpty(), "No completion or quarantine after close"));
+             runtime.close();
+-            assertEquals(1, backendCloses.get()); assertEquals(2, aborts.get());
++            assertEquals(1, backendCloses.get());assertEquals(1,secondBackendCloses.get()); assertEquals(2, aborts.get());
+         } finally {
+             // Rescue the known old implementation after RED so its leaked JVM threads cannot hang Surefire.
+             Thread.interrupted(); release.countDown();
+             for (var executor : executors) executor.shutdownNow();
+             for (var executor : executors) assertTrue(executor.awaitTermination(3, TimeUnit.SECONDS));
+         }
+     }
+ 
+     private static List<ExecutorService> executors(WorkerLoop loop) throws Exception {
+         var result = new ArrayList<ExecutorService>();
+         var heartbeats = WorkerLoop.class.getDeclaredField("heartbeats"); heartbeats.setAccessible(true);
+         result.add((ExecutorService) heartbeats.get(loop));
+

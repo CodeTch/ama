@@ -1,0 +1,28 @@
+{
+  "timestampUtc": "2026-10-24T00:01:51.356744+00:00",
+  "scope": "Only two exact primary discovery docs prepend currentTask7pointer; entire oldbytes suffix preserved/archived. No product/main/index/HEAD change. Historicalpause untouched.",
+  "rootHelperHistory": "First read-only guard used .strip() on porcelain, removing firststatus leading space and causing allowlist assertion before any writes. Corrected to rstrip(newline) preserves exact status columns. No product test or file mutation in failed guard.",
+  "primaryHead": "c71a44adb679a78d4c28dde7a4223aad1a23b40f",
+  "branch": "main",
+  "records": [
+    {
+      "path": "DEVELOPMENT_HANDOFF.md",
+      "beforeBytes": 9711,
+      "beforeSha256": "5711bcc35b9225583ac9d1ea44bfb9bb83fa5a17c8eb423968a7d70e3b938d35",
+      "archivePath": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/primary-discovery-before-task7-pointer-20261024/DEVELOPMENT_HANDOFF.md",
+      "afterBytes": 11997,
+      "afterSha256": "eccc9af537ce3e548544ceb8c1494bc530ad74b8c970703a97d813108c25041f",
+      "exactOldSuffixPreserved": true
+    },
+    {
+      "path": "docs/acceptance/development-resume-b-remaining-2026-10-24.md",
+      "beforeBytes": 11017,
+      "beforeSha256": "0b27aac6de804f19105a95c6c16628bd7755a605950c6258ff5e9fa856fe6933",
+      "archivePath": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/primary-discovery-before-task7-pointer-20261024/development-resume-b-remaining-2026-10-24.md",
+      "afterBytes": 13303,
+      "afterSha256": "9a0d4ff844f80ff19df7a2503affcb882ac77b183e7aae139f2eb0cada908163",
+      "exactOldSuffixPreserved": true
+    }
+  ],
+  "statusBeforeAfterSame": true
+}

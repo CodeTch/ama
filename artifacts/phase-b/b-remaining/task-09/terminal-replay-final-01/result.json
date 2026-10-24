@@ -1,0 +1,46 @@
+{
+  "exit": 0,
+  "counts": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.storage.Task09GenerationInvalidReplayIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09GenerationReplayIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09GenerationStaleReplayIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09GenerationZeroEffectReplayIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.storage.Task09RemainingInitialReplayIT",
+      "name": "replayLocksActualParentBeforeRevisionAndProvesEmptyExclusion",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

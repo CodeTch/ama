@@ -1,0 +1,101 @@
+{
+  "timestampUtc": "2026-10-24T00:36:26.224722+00:00",
+  "scope": "RootFULLREAD8423Bplan/2432Bmanifest; verified7committedDEblobs/9focusedranges andreportseal. NotcurrentTask7sourcequalification/no testimplementation/DB/Gitmutation. Existinggapkept; plannedoneSHAREDwrappedDataSource avoidsqueue/outboxsourceidentityerror. T8SR-M1OPENuntilTask13actualtests/review/upstreamrepin.",
+  "manifestSha256": "4887eb529825a923c19a4496d674354b5d73f09362db7c40bc2140b2b635cc30",
+  "source": [
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08SchemaIT.java",
+      "bytes": 8269,
+      "sha256": "b57dcf6ccf26d9f3921134eabae7221f6c445d61b22ed91307a578df59aaaec0",
+      "ranges": [
+        {
+          "range": "31-40",
+          "bytes": 2376,
+          "sha256": "f18b8ed992351b8b6dc4f7f2647e724534cd34296c693f4adac6c5361d314be3"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+      "bytes": 9718,
+      "sha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+      "ranges": [
+        {
+          "range": "21-35",
+          "bytes": 2133,
+          "sha256": "76ea3f4f2233a9bb296d7bed2d2fbd80dc89a64abb3e4a37d9d061543c106754"
+        },
+        {
+          "range": "62-71",
+          "bytes": 2306,
+          "sha256": "72fa6bb158fca3b38bc4663c49ef3058e6bb4a706797ada66acda89c558f50b6"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+      "bytes": 2829,
+      "sha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+      "ranges": [
+        {
+          "range": "12-45",
+          "bytes": 2474,
+          "sha256": "7e804a9d9804dcaaea87a295c8eb50f1eaf2604cacb358c632616882bd7d2643"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "bytes": 24214,
+      "sha256": "65908b5abf03625922bb739474e20ae545a84d0f2eccc9c7db84cacc44ded6d5",
+      "ranges": [
+        {
+          "range": "24-32",
+          "bytes": 776,
+          "sha256": "973b86412a2984cf8037af63910e75cdec154626d463f08fe038703fd95167be"
+        },
+        {
+          "range": "75-115",
+          "bytes": 3105,
+          "sha256": "783539dedd7a45c1d4a7a4b565aebb95bfdbd7572717570c262dc634478c6e0f"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "bytes": 21398,
+      "sha256": "05d9965f0d448d37295680288aeb46c79d3908fc943edb6955c10d0fec94bc64",
+      "ranges": [
+        {
+          "range": "20-35",
+          "bytes": 1859,
+          "sha256": "3ea7de74d2e101f3717bda444b8c0f22b9ca441e9642e2172a078554d6f3422a"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+      "bytes": 3151,
+      "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909",
+      "ranges": [
+        {
+          "range": "19-48",
+          "bytes": 1670,
+          "sha256": "97c545969f483cc537446012bf8f9599e13334aaab5801d998380754c9e7a46b"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TaskTransactionContext.java",
+      "bytes": 2503,
+      "sha256": "111780076f9b7fd49fc8bc86df24bf25d8e499a4bcc0a2fae12ed811b4214b19",
+      "ranges": [
+        {
+          "range": "19-23",
+          "bytes": 415,
+          "sha256": "049b41912b44f91e66de8f4c6ec9ba94026fe451c3ef8b72e7fb7e65ffaf93e2"
+        }
+      ]
+    }
+  ]
+}

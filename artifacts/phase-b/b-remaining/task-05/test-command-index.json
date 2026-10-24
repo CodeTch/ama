@@ -1,0 +1,1547 @@
+[
+  {
+    "tag": "assembly-compile",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "ConfigBindingsTest"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:12:11.792963+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.config.json.ConfigBindingsTest",
+        "tests": "7",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "atomic-matrix-first",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT#everyAtomicFailureRollsBackRawSegmentsTaskAttemptAuditAndOutbox"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:58:40.902344+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "attempt-green",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05AttemptIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:08:50.484800+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05AttemptIT",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "attempt-red",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05AttemptIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:07:53.864736+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 2,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05AttemptIT",
+        "tests": "2",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "budget-green",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "ConfigBindingsTest"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:06:42.406140+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.config.json.ConfigBindingsTest",
+        "tests": "7",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "budget-red",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "ConfigBindingsTest#originalParseBudgetSurvivesCompleteClosure"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:05:46.034087+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "budget-red2",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "ConfigBindingsTest#originalParseBudgetSurvivesCompleteClosure"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:06:18.374802+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.config.json.ConfigBindingsTest",
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "cancellation-real-transport",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05CancellationIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T13:01:30.390968+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05CancellationIT",
+        "tests": "1",
+        "failures": "0",
+        "errors": "1",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "cancellation-real-transport-fixed",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05CancellationIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T13:02:46.776916+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05CancellationIT",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "confined-runnable-green",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05AfterTaskIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T13:10:17.080788+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05AfterTaskIT",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "confined-runnable-red",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05AfterTaskIT#ordinaryFailedRunnableCannotEnterConfinedRegistration"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T13:09:31.572545+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05AfterTaskIT",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "confined-runnable-red2",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05AfterTaskIT#ordinaryFailedRunnableCannotEnterConfinedRegistration"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T13:09:50.229709+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05AfterTaskIT",
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "expiry-and-transports",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05AttemptIT,Task05TransportIT,Task05S3DeadlineIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:30:06.659675+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05AttemptIT",
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": true,
+    "executed": 0,
+    "qualification": "Command rejected selector before Maven; collected XML is stale and is not execution evidence."
+  },
+  {
+    "tag": "expiry-red",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05AttemptIT#expiryAfterActualAttemptLockWaitDeniesRenewal"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:29:08.518824+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05AttemptIT",
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "expiry-transports-green",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05[ATS]*IT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:30:54.426123+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 7,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05AttemptIT",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.s3.Task05S3DeadlineIT",
+        "tests": "2",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.Task05TransportIT",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "final-all-units",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "*"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T13:13:02.154286+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 227,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.transcript.MeasuredTextTranscriptParserTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.minutes.contract.GenerationFingerprintTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.s3.S3LayoutV3Test",
+        "tests": "5",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "tests": "24",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.ManagedBackendIdentityTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.config.json.ConfigWireReaderTest",
+        "tests": "6",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.canonical.CanonicalValueCodecTest",
+        "tests": "5",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.minutes.contract.HashProfilesTest",
+        "tests": "6",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.StorageRouterTest",
+        "tests": "8",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.api.FileConfigurationTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.api.HttpRevisionTokensTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.minutes.contract.FinalAndCoverageTest",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.worker.WorkerLoopTest",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.transcript.BatchFingerprintTest",
+        "tests": "6",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.ContractFixtureTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.transcript.TextTranscriptParserTest",
+        "tests": "19",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.config.json.ArchiveBudgetTest",
+        "tests": "15",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.minutes.json.StrictMinutesJsonReaderTest",
+        "tests": "7",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.config.json.RawHashChainTest",
+        "tests": "25",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.minutes.contract.SourceAndSupportTest",
+        "tests": "7",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.config.json.ConfigBindingsTest",
+        "tests": "7",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.DeadlineInputStreamTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.minutes.contract.StoredSourceGraphTest",
+        "tests": "8",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.config.file.ControlledArchiveFix1Test",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.s3.S3ProtocolTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.api.IdentitySecurityTest",
+        "tests": "6",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.api.DeploymentConfigTest",
+        "tests": "9",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.support.ContractClientTest",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.worker.PreparedWorkerLoopTest",
+        "tests": "9",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.contract.MinutesFactBudgetTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.minutes.json.OutputBudgetBoundaryTest",
+        "tests": "16",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.api.IdentityContractsTest",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.task.TaskMetadataTest",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.transcript.TranscriptImportProducerTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "final-confined-production",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT#actualCarrierRejectsDirectForeignAndOrdinaryCompletionThenWritesOnce+aggregateCountsAllDecodedUnitsAcrossOrderedFilesWithoutPartialRaw"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T13:10:52.077920+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "final-inherited-upload",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05LegacyUploadIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T13:06:45.522943+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 39,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05LegacyUploadIT",
+        "tests": "39",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "final-legacy-prepared",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05LegacyPreparedCompletionIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T13:11:54.298510+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 18,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05LegacyPreparedCompletionIT",
+        "tests": "18",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "final-owned-integration",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05*IT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T13:05:23.351679+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 102,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.Task05CancellationIT",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "11",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.task.Task05AfterTaskIT",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.task.Task05AttemptIT",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.s3.Task05S3DeadlineIT",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.Task05LegacyCatalogIT",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.Task05LegacyAuthorityIT",
+        "tests": "22",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.Task05TransportIT",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.storage.Task05LegacyUploadIT",
+        "tests": "39",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.task.Task05LegacyPreparedCompletionIT",
+        "tests": "18",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "final-pipeline-custody",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T13:08:56.906604+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "11",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "final-task-lease",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "TaskLeaseIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T13:12:12.984954+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 13,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.task.TaskLeaseIT",
+        "tests": "13",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "health-and-local",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05TransportIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:24:16.854791+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05TransportIT",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "parser-green",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "*TextTranscriptParserTest"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:03:02.678171+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 20,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.transcript.MeasuredTextTranscriptParserTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "ama.transcript.TextTranscriptParserTest",
+        "tests": "19",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "parser-red",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "MeasuredTextTranscriptParserTest"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:02:46.245804+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.transcript.MeasuredTextTranscriptParserTest",
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "pipeline-local-first",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:18:35.311231+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "pipeline-local-s3-restart",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:21:12.641869+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "pipeline-local-second",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:19:05.143520+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "pipeline-local-third",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:19:34.665028+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "raw-boundaries-and-restart",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:38:22.945734+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 7,
+    "failures": 3,
+    "errors": 3,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "7",
+        "failures": "3",
+        "errors": "3",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "raw-boundaries-restart-fixed",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:45:01.026470+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 7,
+    "failures": 4,
+    "errors": 3,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "7",
+        "failures": "4",
+        "errors": "3",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "raw-full-boundaries",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:50:28.463866+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 11,
+    "failures": 1,
+    "errors": 1,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "11",
+        "failures": "1",
+        "errors": "1",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "renewal-green",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "PreparedWorkerLoopTest"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:05:17.428230+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.worker.PreparedWorkerLoopTest",
+        "tests": "9",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "renewal-red",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "PreparedWorkerLoopTest#selectedRenewalDrainsBeforeCompletionEntry"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:04:20.589288+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.worker.PreparedWorkerLoopTest",
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "retained-verifier-green",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05PipelineIT#adoptedAndStaleEmptyPreparationsCannotAuthorizeCompletion"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:58:08.969773+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05PipelineIT",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "s3-abort-capable-green",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05S3DeadlineIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:33:16.231752+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "s3-abort-capable-green2",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05S3DeadlineIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:33:38.315812+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "s3-abort-capable-green3",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05S3DeadlineIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:33:55.023684+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 2,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.s3.Task05S3DeadlineIT",
+        "tests": "2",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "s3-abort-capable-green4",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05S3DeadlineIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:36:05.962707+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.s3.Task05S3DeadlineIT",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "s3-body-diagnostic-red",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05S3DeadlineIT#actualS3SuccessAndControlBodiesExitBeforeProxyReleaseAndReturnAdmission"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:31:58.976628+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.s3.Task05S3DeadlineIT",
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "transport-green",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05TransportIT"
+      ],
+      "exit": 0,
+      "utc": "2026-10-23T12:16:10.734879+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05TransportIT",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  },
+  {
+    "tag": "transport-red",
+    "command": {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task05TransportIT"
+      ],
+      "exit": 1,
+      "utc": "2026-10-23T12:15:17.512063+00:00",
+      "source_seal": "source.json",
+      "limits": "512MiB / 2 active processors"
+    },
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05TransportIT",
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "xmlCountsAreCollectedNotAutomaticallyExecuted": true,
+    "zeroMatchingSelector": false
+  }
+]

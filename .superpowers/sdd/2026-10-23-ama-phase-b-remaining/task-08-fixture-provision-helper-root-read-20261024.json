@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-23T22:20:50.620024+00:00",
+  "status": "PREPARED_CURRENTSOURCE_ROOT_FULLREAD_AST_ONLY_NOT_EXECUTED",
+  "helper": "task08_prepare_owned_mysql.py",
+  "helperBytes": 13590,
+  "helperSha256": "2ee558e19d0b57ccd8f6d97036d7245720d9d5a159e765dee74ca9f426844d94",
+  "noteSha256": "3d2f843e4c2590b96bb06a3a876a96e7b855eb0f431721fc92e91997fba17d16",
+  "rootRead": "FULLREAD finalhelper+finalnote; ast.parse passed; onlycurrent exactbytes qualify. Priorreported hashes retainednote, earlierbytecopiesnotretained so no exacthistoricaltextdiff/prefixpreservationclaim. Rootinitialnote-prefixassertionincorrectbecauseusageprosealsochanged; exitedwithoutwrites/execution, fullcurrenthash/read usedinstead.",
+  "changesRequiredByRoot": "UUID-derivedowner, selectedRunningtrue/OOMfalse, fullCID forclientexec and selectedidentity/image/mount/bounds/loopback check beforeSQL andafterreadiness",
+  "scope": "Preparationonly rootcoordination; no Docker/DB/JVM/helperplan/apply/privateenv/network execution. Futureactualhost/Task6adoptionguard/runtimecompatibility mandatory. No Task8sourceorDDLactivation."
+}

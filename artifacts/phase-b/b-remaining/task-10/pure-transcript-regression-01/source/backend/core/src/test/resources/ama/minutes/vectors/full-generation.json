@@ -1,0 +1,174 @@
+{
+  "profile": "ama.generation-input.v2",
+  "kind": "GENERATION_INPUT",
+  "data": {
+    "meetingId": "11111111-1111-4111-8111-111111111111",
+    "inputId": "55555555-5555-4555-8555-555555555555",
+    "confirmation": {
+      "id": "88888888-8888-4888-8888-888888888888",
+      "revisionId": "66666666-6666-4666-8666-666666666666",
+      "hashProfile": "ama.transcript-confirmation.v1",
+      "contentHash": "1dbc5181a4c390a211dee5fed9f2dd55240f587bd376f017a098f49ada83eb97"
+    },
+    "segments": [
+      {
+        "segmentId": "77777777-7777-4777-8777-777777777777",
+        "ordinal": 1,
+        "sourceFileId": "44444444-4444-4444-8444-444444444444",
+        "sourceParagraph": 1,
+        "startMs": null,
+        "endMs": null,
+        "speakerId": null,
+        "marks": []
+      }
+    ],
+    "batch": {
+      "id": "33333333-3333-4333-8333-333333333333",
+      "files": [
+        {
+          "ordinal": 1,
+          "fileId": "44444444-4444-4444-8444-444444444444",
+          "sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+          "sizeBytes": 1
+        }
+      ]
+    },
+    "materials": {
+      "mode": "EMPTY",
+      "items": []
+    },
+    "template": {
+      "mode": "DEFAULT",
+      "revisionId": "99999999-9999-4999-8999-999999999999",
+      "revision": 1,
+      "contentHash": "1cfbc0d777d9bed2dc4cb384392967a0d279d8fb4525dc1c0d89af51fa323759"
+    },
+    "exclusion": {
+      "mode": "EMPTY",
+      "revisionId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "revision": 1,
+      "contentHash": "7d7c598d7612db7e69b3710d0109fbed09d79add7cfe6c5e5eaefbeb2e36f9e7",
+      "entries": []
+    },
+    "elements": {
+      "mode": "EMPTY",
+      "items": []
+    },
+    "sources": [
+      {
+        "sourceId": "s1",
+        "locator": {
+          "kind": "TRANSCRIPT",
+          "transcriptRevisionId": "66666666-6666-4666-8666-666666666666",
+          "segmentId": "77777777-7777-4777-8777-777777777777"
+        },
+        "role": "MEETING",
+        "sourceVersion": {
+          "kind": "TRANSCRIPT",
+          "confirmationId": "88888888-8888-4888-8888-888888888888",
+          "revisionId": "66666666-6666-4666-8666-666666666666",
+          "batchId": "33333333-3333-4333-8333-333333333333",
+          "sourceFileId": "44444444-4444-4444-8444-444444444444",
+          "sourceFileSha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd"
+        },
+        "sourceContentHash": "1dbc5181a4c390a211dee5fed9f2dd55240f587bd376f017a098f49ada83eb97"
+      }
+    ],
+    "configs": {
+      "prompt": {
+        "version": "test.generation.prompt.1",
+        "sha256": "5de679cf89b0fcadd641e7cf1e535ba4a7174ebafc88a314dfabc4fbbfcd3398"
+      },
+      "model": {
+        "version": "test.generation.model.1",
+        "sha256": "13a10bf5c2ac73d261e700254a8f2156fcc2cbf6216bf5595b9ea5cfa05667e9"
+      },
+      "profiles": [
+        {
+          "kind": "ANCHOR",
+          "version": "ama.anchor.v1",
+          "sha256": "a9e260aeb1d1d460685eb41ad56c0f5395294259557c56f331ac71c40f6991ba"
+        },
+        {
+          "kind": "CANONICAL_CODEC",
+          "version": "ama.canonical-value.v1",
+          "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+        },
+        {
+          "kind": "CATALOG",
+          "version": "ama.transcript-catalog.v1",
+          "sha256": "fe883b2f59e089b161ea9344ace6b3d22f48d5c90c43a5bebe51c789a825f131"
+        },
+        {
+          "kind": "CHUNK_PLAN",
+          "version": "ama.no-chunk.v1",
+          "sha256": "9a6435b97a73b8da157629e398a35715d714e33fb92ce654c10ad22588be8e71"
+        },
+        {
+          "kind": "CONFIRMATION_HASH",
+          "version": "ama.transcript-confirmation.v1",
+          "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+        },
+        {
+          "kind": "EXCLUSION",
+          "version": "ama.exclusion-physical-union.v1",
+          "sha256": "4abed84c4e2e2354ea138fbd95f7cd6fa8f4eb4131a8b31141bc55468e752701"
+        },
+        {
+          "kind": "FINAL_SOURCES",
+          "version": "ama.final-sources.v2",
+          "sha256": "598a8a9a4bd6d8d2c79749952cd038160e3f04bf2d7ed4c19b57974e0414c7ae"
+        },
+        {
+          "kind": "GENERATION_HASH",
+          "version": "ama.generation-input.v2",
+          "sha256": "3104da95da03afe19f071fd1bcc65edfbd062b88e2482565179cbac801074d58"
+        },
+        {
+          "kind": "OUTPUT_SCHEMA",
+          "version": "ama.minutes-output.v1",
+          "sha256": "34710d24b30090b8f0fd301dab7a458d61c0516be37816fad7485042a35176a4"
+        },
+        {
+          "kind": "RENDER",
+          "version": "test.renderer-binding.1",
+          "sha256": "81e76ed8a16a746a52aa7ff1a25272ebe75c87fd191b1e4b924f3688c398a0e3"
+        },
+        {
+          "kind": "REVIEW_HASH",
+          "version": "ama.result-review.v2",
+          "sha256": "bb9f54d929091131121631c867493048b6b024aa1bb4f7c621b73f2f260fd634"
+        },
+        {
+          "kind": "ROWSET_HASH",
+          "version": "ama.rowset.v1",
+          "sha256": "098bccdb6f17ffe74f354c8167a3e0b99fe073653c95a4b59c0c89a094cbcf5c"
+        },
+        {
+          "kind": "SUPPORT",
+          "version": "ama.creation-support.v1",
+          "sha256": "7e0db1faa8566bbf02fb31ac8856990589ecc30a3c2bf33613c16609b8740ba9"
+        },
+        {
+          "kind": "TITLE",
+          "version": "ama.title-suggestion.v1",
+          "sha256": "9a920326a5a4e9b49ab5115fe46c6d14dca90b5b96838ed6843cbdaa236fc937"
+        },
+        {
+          "kind": "VALIDATION_BUDGET",
+          "version": "test.minutes-budget.1",
+          "sha256": "9f231197926b2b1284dc076526a077e550aff089c59e9cf8198d5fce10b66468"
+        }
+      ]
+    },
+    "scope": {
+      "kind": "FULL",
+      "target": null
+    },
+    "base": {
+      "meetingRevision": 10,
+      "subjectBusinessVersion": 11,
+      "cancelEpoch": 2
+    }
+  }
+}

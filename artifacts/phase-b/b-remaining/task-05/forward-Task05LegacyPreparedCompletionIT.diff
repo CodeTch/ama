@@ -1,0 +1,23 @@
+--- backend/integration-tests/src/test/java/ama/task/PreparedCompletionIT.java
++++ backend/integration-tests/src/test/java/ama/task/Task05LegacyPreparedCompletionIT.java
+@@ -19,7 +19,7 @@
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ /** Real owned MySQL, authentic B03 identity preparation and actual immutable output rows. No resets. */
+-class PreparedCompletionIT {
++class Task05LegacyPreparedCompletionIT {
+     final AtomicBoolean failFlush = new AtomicBoolean(), failAudit = new AtomicBoolean(), failEvent = new AtomicBoolean();
+     final DataSource source = new B06QueueSeamsIT.ProbeSource(MysqlTestDatabase.dataSource(), sql -> {
+         if (failAudit.get() && sql.startsWith("INSERT INTO audit_event(")) throw new IllegalStateException("CONTROLLED_AUDIT_FAILURE");
+@@ -74,9 +74,9 @@
+ 
+     @BeforeAll static void migrateOwnedEmptyFixture() {
+         var source = MysqlTestDatabase.dataSource();
+-        new SchemaMigrator(source).migrate();
++        // Forward schema guard only; no migration invocation.
+         var history = new JdbcTemplate(source).queryForList("SELECT installed_rank,version,script,checksum,success FROM flyway_schema_history ORDER BY installed_rank");
+-        assertEquals(12, history.size());
++        assertEquals(13, history.size());
+         System.out.println("PREPARED completion pre-test immutable history: " + history);
+     }
+     @BeforeEach void setup() {

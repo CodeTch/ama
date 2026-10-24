@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06SavedCommandsIT"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-command-green-attempt-02/integration-tests-TEST-ama.storage.Task06SavedCommandsIT.xml"
+  ],
+  "elapsedSeconds": 37.43436026573181,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

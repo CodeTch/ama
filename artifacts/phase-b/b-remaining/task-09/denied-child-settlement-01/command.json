@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09DeniedSettlementRecoveryIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "2b38ab9c9410bad48fc3c8f427981a0bc19b9360167e60e67e373184841b963d",
+  "startedUtc": "2026-10-24T07:40:07.220469+00:00"
+}

@@ -1,0 +1,11 @@
+--- schema14/backend/integration-tests/src/test/java/ama/meeting/Task06InheritedMeetingConcurrencyIT.java
++++ namespacefix/backend/integration-tests/src/test/java/ama/meeting/Task06InheritedMeetingConcurrencyIT.java
+@@ -84,7 +84,7 @@
+         assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM task_outbox WHERE subject_id=? AND event_type='MEETING_ROSTER_CONFIRMED'",Integer.class,id));
+     }
+     @Test void actualServiceLocksSortedIdentitiesBeforeRootAndFlushesLast(){
+-        String prefix="sort-"+UUID.randomUUID()+"-",bmp=prefix+"\uE000",nonBmp=prefix+"\uD800\uDC00";
++        String prefix="task06-fix-concurrency-sort-"+UUID.randomUUID()+"-",bmp=prefix+"\uE000",nonBmp=prefix+"\uD800\uDC00";
+         for(String person:List.of(bmp,nonBmp))j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",person,person);
+         var sqls=new ArrayList<String>();var identities=new ArrayList<String>();
+         var source=new ProbeSource(actual,new Probe(){public void before(String sql,Map<Integer,Object> args){sqls.add(sql);if(sql.contains("FROM enterprise_identity")&&sql.contains("FOR UPDATE"))identities.add((String)args.get(1));}});

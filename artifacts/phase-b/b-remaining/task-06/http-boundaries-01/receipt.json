@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06WireHttpIT"
+  ],
+  "exit": 1,
+  "reports": [],
+  "elapsedSeconds": 9.644821166992188,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

@@ -1,0 +1,18 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.storage.Task09DeniedFactPolicyIT",
+      "name": "disabledOwnerAllowsOnlyBoundFactRootCaptureWithoutBusinessOrSourceAuthority",
+      "failure": false,
+      "error": true,
+      "skipped": false
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "preparedFiles": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024.py",
+      "bytes": 31365,
+      "sha256": "8372c5b11f171ce9a9f09a0aa5530057118763ca52a7cf7d0a76b8853bec0b7f"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024.md",
+      "bytes": 10163,
+      "sha256": "f5a82f342b5ca54b4c174b31c0e585d2fed55af51d5bdb97164a7d7af9767478"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024-manifest.json",
+      "bytes": 4221,
+      "sha256": "c935d739463681d8cf1f97d508285e80e68c93691a1320acb71ac09ed7fceef0"
+    }
+  ],
+  "verifiedPublicAndDEInputSeals": [
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-r1-20261024.sql",
+      "sha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-preparation-acceptance-20261024.md",
+      "sha256": "0ffd892b914b9d23869e5c4d829ddd730b0c8a644d481e54daa58ac83c3f5f90"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-owned-resource-ready-20261024.json",
+      "sha256": "334d4f881e2b658eb9f5c21217bea7fa3d029dbcbf33f7e9a05e546a1235eec3"
+    },
+    {
+      "name": "V002__identity_acl.sql",
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0"
+    },
+    {
+      "name": "V005__tasks_outbox.sql",
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7"
+    },
+    {
+      "name": "V010__reliable_execution.sql",
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db"
+    },
+    {
+      "name": "V013__publications.sql",
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c"
+    }
+  ],
+  "rootRead": "Fullreport/manifest and fullhelper source acrosssplitreads; noexecution. Independentreadonlyreviewactive",
+  "namedRisk": "V00730\u201331 altersenterpriseidentitykeyafterV002; finalprefix/stubvalidityindependentlyreviewedbeforeanyDDLchange/application",
+  "ACKExists": false
+}

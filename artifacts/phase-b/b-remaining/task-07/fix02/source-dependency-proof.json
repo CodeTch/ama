@@ -1,0 +1,53 @@
+{
+  "windows": [
+    {
+      "window": "fix02/final-integration",
+      "fullBackendJavaSqlHashMapExactExceptExplicitMethods": true,
+      "all14Task07ProductionExactCurrent": true,
+      "exactCopiedSourceFiles": 237,
+      "allOtherCopiedBytesExactCurrent": true,
+      "methodExceptions": [
+        {
+          "path": "backend/integration-tests/src/test/java/ama/task/Task07InheritedB06QueueSeamsIT.java",
+          "beforeSha256": "1301c705fd53afe46676dc3407e58e8392a20880d1cd4a0e6faaead3d5ad6550",
+          "currentSha256": "edd3eeda0dbaab818143e32fb94b2620660ad85301405bc63de355655ed69c37",
+          "onlyChangedMethod": "disabledExpiredCurrentExternalFactMustStillBeRetained",
+          "outsideMethodSha256": "8c4ba3c93654c7ba41a4030c948d0fdc410dfa5a18d8f692b07c66bf00420774",
+          "outsideMethodByteEqual": true,
+          "diagnosticOnly": true
+        },
+        {
+          "path": "backend/integration-tests/src/test/java/ama/task/Task07RecoveryBoundsIT.java",
+          "beforeSha256": "24ebba0cc36bb88041a58a326762197f8d69174dc55869c159d637c7a49c7406",
+          "currentSha256": "84a6904a77adbaceab92301276500b0e903a1d7f1c9f94056805b7ffa215a931",
+          "onlyChangedMethod": "transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass",
+          "outsideMethodSha256": "3a02a8de0c4eb89fac5017bc72569872a75424892257a73e82e6bfe51b6b3e2f",
+          "outsideMethodByteEqual": true,
+          "diagnosticOnly": true
+        }
+      ],
+      "sourceManifestSha256": "25bb9a04cd438e688c0fb25e99257917aa43c81afb4aa0bea3564e274faada0e"
+    },
+    {
+      "window": "fix02/inherited-diagnostic",
+      "fullBackendJavaSqlHashMapExactExceptExplicitMethods": true,
+      "all14Task07ProductionExactCurrent": true,
+      "exactCopiedSourceFiles": 221,
+      "allOtherCopiedBytesExactCurrent": true,
+      "methodExceptions": [],
+      "sourceManifestSha256": "882f4dd3803c6496541e088305d5aa5da53c2909ab8592d7809a73df65ec80e0"
+    },
+    {
+      "window": "fix02/final-unit",
+      "fullBackendJavaSqlHashMapExactExceptExplicitMethods": true,
+      "all14Task07ProductionExactCurrent": true,
+      "exactCopiedSourceFiles": 255,
+      "allOtherCopiedBytesExactCurrent": true,
+      "methodExceptions": [],
+      "sourceManifestSha256": "882f4dd3803c6496541e088305d5aa5da53c2909ab8592d7809a73df65ec80e0"
+    }
+  ],
+  "inheritedProbeSourceExactCurrent": true,
+  "probeSourceTailSha256": "cd449662a0080457c428d9102df48a85f27c2d1435a36a79929bd9044a8b3c3b",
+  "selection": "151 passing integration cases + 2 explicitly replaced diagnostic cases +254 units. Two earlier causes remain UNKNOWN."
+}

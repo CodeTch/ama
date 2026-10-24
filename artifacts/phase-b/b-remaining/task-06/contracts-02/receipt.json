@@ -1,0 +1,47 @@
+[
+  {
+    "command": [
+      "node",
+      "node_modules/@redocly/cli/bin/cli.js",
+      "lint",
+      "contracts/openapi/api.yaml",
+      "--config",
+      "redocly.yaml"
+    ],
+    "cwd": ".",
+    "exit": 0
+  },
+  {
+    "command": [
+      "node",
+      "node_modules/@redocly/cli/bin/cli.js",
+      "bundle",
+      "contracts/openapi/api.yaml",
+      "--config",
+      "redocly.yaml",
+      "--output",
+      "artifacts/phase-b/b-remaining/task-06/contracts-02/api.yaml"
+    ],
+    "cwd": ".",
+    "exit": 0
+  },
+  {
+    "command": [
+      "node",
+      "node_modules/openapi-typescript/bin/cli.js",
+      "../contracts/openapi/api.yaml",
+      "-o",
+      "src/shared/api/generated.ts"
+    ],
+    "cwd": "web",
+    "exit": 0
+  },
+  {
+    "command": [
+      "node",
+      "scripts/check-api.mjs"
+    ],
+    "cwd": "web",
+    "exit": 0
+  }
+]

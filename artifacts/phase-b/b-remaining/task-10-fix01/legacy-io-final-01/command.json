@@ -1,0 +1,18 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task10Fix01LegacyIoIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task10NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "originalApplicationAckSha256": "808a552c4afbfdb77e9663979ba44f6068f11b6af7611adb633af4bbd2991df3",
+  "recoveryApplicationAckSha256": "096cbdc38cb350b756c6958a0982d31277e4f0a4bc2f7a10e4f24fd1fc40b767",
+  "recoveryEpoch": "mysql-recovery-20261024",
+  "effectivePort": 46151,
+  "sourceSha256": "d73bf2458e8a8aae6030c17d1fd91a4ae168a3c217b5f476ec84ac6166faba00",
+  "startedUtc": "2026-10-24T16:04:56.089535+00:00"
+}

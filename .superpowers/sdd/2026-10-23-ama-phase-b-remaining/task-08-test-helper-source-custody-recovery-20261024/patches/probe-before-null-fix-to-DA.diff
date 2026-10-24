@@ -1,0 +1,11 @@
+--- probe-before-null-fix/Task08ProbeSource.java
++++ da15415524f4727c2504cd3f5cba978f1a5adb76/backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java
+@@ -31,7 +31,7 @@
+     return Proxy.newProxyInstance(getClass().getClassLoader(),new Class<?>[]{prepared==null?Statement.class:PreparedStatement.class},(p2,m2,a2)->{
+      String n=m2.getName();
+      if(prepared!=null&&n.startsWith("set")&&a2!=null&&a2.length>=2&&a2[0] instanceof Integer k)params.put(k,a2[1]);
+-     Sql event=null;if(n.startsWith("execute")){event=new Sql(prepared==null?(String)a2[0]:prepared,Map.copyOf(params));sql.add(event);before.accept(event);}
++     Sql event=null;if(n.startsWith("execute")){event=new Sql(prepared==null?(String)a2[0]:prepared,Collections.unmodifiableMap(new TreeMap<>(params)));sql.add(event);before.accept(event);}
+      Object v=invoke(statement,m2,a2);
+      if(event!=null){if(v instanceof Integer count&&count>0)rows+=count;if(v instanceof Long count&&count>0)rows+=count;after.accept(event);}
+      if(v instanceof ResultSet result)return Proxy.newProxyInstance(getClass().getClassLoader(),new Class<?>[]{ResultSet.class},(p3,m3,a3)->{Object x=invoke(result,m3,a3);if(m3.getName().equals("next")&&Boolean.TRUE.equals(x))rows++;return x;});

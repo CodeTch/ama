@@ -1,0 +1,9 @@
+{
+  "cause": "Copied owner/member namespace changed lexicographic ordering relative to unchanged sort- identities; actual production ordering was correct. Original and copied full sources read before correction.",
+  "change": "Only normalize fresh sort- probe identities to same task06-fix-concurrency prefix. Preserve original expected List(member,owner,bmp,nonBmp), actual MySQL binary-order and Unicode distinction assertions.",
+  "beforeSha256": "5cd7c4ea3cd88ab974e2745a135d6664bcaec4d9cebc814c97b0c7d59ff9bff1",
+  "afterSha256": "8afd7a5a643fec567bb7e1de01b6cfe7bdaec7d16d0f0da2817ef59ae5de8661",
+  "productChanged": false,
+  "failedWindow": "final-integration-01",
+  "retryScope": "Only affected inherited class; count5 distinct cases, never duplicate prior4 passes."
+}

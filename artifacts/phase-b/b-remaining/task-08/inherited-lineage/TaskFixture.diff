@@ -1,0 +1,36 @@
+--- backend/integration-tests/src/test/java/ama/task/TaskFixture.java
++++ backend/integration-tests/src/test/java/ama/task/Task08InheritedFixture.java
+@@ -9,9 +9,9 @@
+ import org.springframework.jdbc.core.JdbcTemplate;
+ import static org.junit.jupiter.api.Assertions.*;
+ /** Test-only policy against actual reviewed meeting and immutable info revision tables. */
+-class TaskFixture {
++class Task08InheritedFixture {
+  final String runId=UUID.randomUUID().toString();
+- final DataSource source=MysqlTestDatabase.dataSource();
++ final DataSource source=Task08InheritedResources.source();
+  final JdbcTemplate j=new JdbcTemplate(source);
+  final TransactionRunner tx=new TransactionRunner(source);
+  final JdbcSubjectFences fences=new JdbcSubjectFences(source,Set.of("MEETING"));
+@@ -42,10 +42,10 @@
+   var rows=j.queryForList("SELECT meeting_id,revision FROM meeting_info_revision WHERE id=?",e.reference().id());
+   if(rows.size()!=1 || !rows.getFirst().get("meeting_id").equals(e.subject().id()) || ((Number)rows.getFirst().get("revision")).longValue()!=e.subjectRevision())throw new IllegalArgumentException("Wrong event input");
+  }));
+- JdbcTaskQueue queue(){return new JdbcTaskQueue(source,fences,outbox,Map.of("TEST_TASK",policy));}
++ JdbcTaskQueue queue(){return new JdbcTaskQueue(source,fences,outbox,Map.of("T08_INHERITED_TASK",policy));}
+  TaskSpec spec(){return spec("TEST_POOL",3);}
+  TaskSpec spec(String pool,int attempts){
+-  String id=UUID.randomUUID().toString(),input=UUID.randomUUID().toString(),owner="b05-"+UUID.randomUUID();
++  String id=UUID.randomUUID().toString(),input=UUID.randomUUID().toString(),owner="t08-inherited-"+UUID.randomUUID();
+   var subject=new SubjectRef("MEETING",id);
+   tx.required(()->{
+    j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",owner,owner);
+@@ -54,7 +54,7 @@
+    j.update("INSERT INTO meeting_info_revision(id,meeting_id,revision,name,created_by,created_at) VALUES (?,?,0,'test',?,UTC_TIMESTAMP(6))",input,id,owner);
+    return null;
+   });
+-  return new TaskSpec("TEST_TASK",pool+"_"+runId,subject,hash(UUID.randomUUID().toString()),new TypedRef("TEST_INFO",input),hash(input),0,0,0,attempts);
++  return new TaskSpec("T08_INHERITED_TASK",pool+"_"+runId,subject,hash(UUID.randomUUID().toString()),new TypedRef("TEST_INFO",input),hash(input),0,0,0,attempts);
+  }
+  static String hash(String s){try{return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(s.getBytes(java.nio.charset.StandardCharsets.UTF_8)));}catch(Exception e){throw new RuntimeException(e);}}
+  TaskLease claimed(JdbcTaskQueue q,TaskSpec s){q.enqueue(s);var lease=q.claim(s.pool(),"worker-a");assertTrue(lease.isPresent(),"enqueued task must be claimed");return lease.orElseThrow();}

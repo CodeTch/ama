@@ -1,0 +1,226 @@
+{
+  "shared": {
+    "completeHistoryRecords": 15,
+    "historyAllFieldsUnchanged": true,
+    "ordinal": [
+      {
+        "rowsTotal": "45",
+        "distinctOrdinals": "45",
+        "minimum": "1",
+        "maximum": "45",
+        "invalid": "0"
+      }
+    ],
+    "operationsByState": [
+      {
+        "state": "FAILED",
+        "count": "1"
+      },
+      {
+        "state": "MANUAL_REQUIRED",
+        "count": "7"
+      },
+      {
+        "state": "MARKED",
+        "count": "18"
+      },
+      {
+        "state": "RETRY_QUEUED",
+        "count": "5"
+      },
+      {
+        "state": "SUCCEEDED",
+        "count": "13"
+      },
+      {
+        "state": "UNKNOWN",
+        "count": "1"
+      }
+    ],
+    "tasksByState": [
+      {
+        "state": "CANCELLED",
+        "count": "224"
+      },
+      {
+        "state": "FAILED",
+        "count": "109"
+      },
+      {
+        "state": "READY",
+        "count": "72"
+      },
+      {
+        "state": "RECONCILING",
+        "count": "23"
+      },
+      {
+        "state": "RUNNING",
+        "count": "110"
+      },
+      {
+        "state": "STALE",
+        "count": "17"
+      },
+      {
+        "state": "SUCCEEDED",
+        "count": "300"
+      }
+    ]
+  },
+  "behavior": {
+    "completeHistoryRecords": 15,
+    "historyAllFieldsUnchanged": true,
+    "ordinal": [
+      {
+        "rowsTotal": "344",
+        "distinctOrdinals": "344",
+        "minimum": "1",
+        "maximum": "348",
+        "invalid": "0"
+      }
+    ],
+    "operationsByState": [
+      {
+        "state": "FAILED",
+        "count": "2"
+      },
+      {
+        "state": "MANUAL_REQUIRED",
+        "count": "3"
+      },
+      {
+        "state": "MARKED",
+        "count": "314"
+      },
+      {
+        "state": "RETRY_QUEUED",
+        "count": "5"
+      },
+      {
+        "state": "SUCCEEDED",
+        "count": "10"
+      },
+      {
+        "state": "UNKNOWN",
+        "count": "10"
+      }
+    ],
+    "tasksByState": [
+      {
+        "state": "FAILED",
+        "count": "13"
+      },
+      {
+        "state": "READY",
+        "count": "20"
+      },
+      {
+        "state": "RECONCILING",
+        "count": "327"
+      },
+      {
+        "state": "RUNNING",
+        "count": "30"
+      },
+      {
+        "state": "STALE",
+        "count": "4"
+      },
+      {
+        "state": "SUCCEEDED",
+        "count": "10"
+      }
+    ]
+  },
+  "fairheld": {
+    "completeHistoryRecords": 15,
+    "historyAllFieldsUnchanged": true,
+    "ordinal": [
+      {
+        "rowsTotal": "130",
+        "distinctOrdinals": "130",
+        "minimum": "1",
+        "maximum": "130",
+        "invalid": "0"
+      }
+    ],
+    "operationsByState": [
+      {
+        "state": "MARKED",
+        "count": "130"
+      }
+    ],
+    "tasksByState": [
+      {
+        "state": "RECONCILING",
+        "count": "130"
+      }
+    ]
+  },
+  "fairunregistered": {
+    "completeHistoryRecords": 15,
+    "historyAllFieldsUnchanged": true,
+    "ordinal": [
+      {
+        "rowsTotal": "130",
+        "distinctOrdinals": "130",
+        "minimum": "1",
+        "maximum": "130",
+        "invalid": "0"
+      }
+    ],
+    "operationsByState": [
+      {
+        "state": "MARKED",
+        "count": "130"
+      }
+    ],
+    "tasksByState": [
+      {
+        "state": "RECONCILING",
+        "count": "130"
+      }
+    ]
+  },
+  "overflow": {
+    "completeHistoryRecords": 15,
+    "historyAllFieldsUnchanged": true,
+    "ordinal": [
+      {
+        "rowsTotal": "3",
+        "distinctOrdinals": "3",
+        "minimum": "1",
+        "maximum": "9223372036854775807",
+        "invalid": "0"
+      }
+    ],
+    "operationsByState": [
+      {
+        "state": "MARKED",
+        "count": "2"
+      },
+      {
+        "state": "SUCCEEDED",
+        "count": "1"
+      }
+    ],
+    "tasksByState": [
+      {
+        "state": "RECONCILING",
+        "count": "2"
+      },
+      {
+        "state": "RUNNING",
+        "count": "3"
+      }
+    ]
+  },
+  "historical010": {
+    "completeHistoryRecords": 8,
+    "historyAllFieldsUnchanged": true,
+    "ordinal": null,
+    "operationsByState": [],
+    "tasksByState": []
+  }
+}

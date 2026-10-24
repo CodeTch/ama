@@ -71,4 +71,28 @@ public final class JdbcModelPermitPool implements ModelPermitPool {
    j.update("UPDATE model_reservation SET settled_at=UTC_TIMESTAMP(6) WHERE id=? AND settled_at IS NULL",permit.id());return true;
   });
  }
+ private final java.util.concurrent.locks.ReentrantLock recoveryLock=new java.util.concurrent.locks.ReentrantLock();
+ private String recoveryAfter="",recoveryUpper;
+ /** Finite all-reservation keyset pass. Terminal status is rechecked by settled, never inferred from discovery. */
+ @Override public int recoverSettlements(int scanLimit){
+  independent();if(scanLimit<1||scanLimit>64)throw new IllegalArgumentException("Settlement scan limit must be 1..64");
+  if(!recoveryLock.tryLock())return 0;
+  try{
+   if(recoveryUpper==null){var upper=j.queryForList("SELECT id FROM model_reservation ORDER BY id DESC LIMIT 1",String.class);if(upper.isEmpty())return 0;recoveryUpper=upper.getFirst();recoveryAfter="";}
+   var rows=j.query("SELECT id,model,execution_id,config_revision,safe_deadline FROM model_reservation WHERE id>? AND id<=? ORDER BY id LIMIT ?",
+     (r,n)->new Permit(r.getString("id"),r.getString("model"),r.getString("execution_id"),r.getLong("config_revision"),instant(r,"safe_deadline")),recoveryAfter,recoveryUpper,scanLimit);
+   int recovered=0;
+   for(var permit:rows){
+    recoveryAfter=permit.id();
+    try{
+     // Eligible committed debt only. A racing transition still receives full independent fresh locking.
+     var eligible=j.queryForObject("SELECT COUNT(*) FROM model_reservation r JOIN external_execution e ON e.id=r.execution_id WHERE r.id=? AND r.settled_at IS NULL AND (e.state='SUCCEEDED' OR (e.state='FAILED' AND e.no_effect_basis IS NOT NULL AND e.no_effect_evidence IS NOT NULL AND e.no_effect_verified_at IS NOT NULL))",Integer.class,permit.id());
+     if(eligible==1&&settled(permit))recovered++;
+    }catch(org.springframework.dao.DataAccessException unavailable){/* consume; revisit on next complete pass */}
+   }
+   if(rows.size()<scanLimit||recoveryAfter.equals(recoveryUpper))recoveryUpper=null;
+   return recovered;
+  }finally{recoveryLock.unlock();}
+ }
+
 }

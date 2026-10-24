@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09LookupAuthorityIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "8204beb5a78bde96a160ec696bddddefd79a3e119e0d1f1652a422cf075af815",
+  "startedUtc": "2026-10-24T07:46:14.356843+00:00"
+}

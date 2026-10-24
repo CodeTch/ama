@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-24T01:20:33.602320+00:00",
+  "status": "FILESYSTEM_PREEXECUTION_ONLY_NO_ACK_OR_SCHEMA",
+  "owner": "task11-probe-fc2e1fdaf6ad4f88b40a4baf410340d1",
+  "schema": "ama_t11_fc2e1fdaf6ad_probe",
+  "root": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "privateParent": "/home/tanren/ama/.worktrees/phase-b-completion/.tools",
+  "parentMode": "0o755",
+  "parentUid": 1000,
+  "executorUid": 1000,
+  "canonicalNonsymlink": true,
+  "priorProbePrivateStates": 0,
+  "memAvailableBytes": 18507935744,
+  "diskFreeBytes": 834751254528,
+  "minimum": "2GiBavailableRAM/4GiBdisk only readiness, not capacity qualification",
+  "helperSha256": "ba481d2e00272b8ce7acbf86da57dbed5fda5a4e3cd1d54d73d28fdd8f8d79a7",
+  "sqlSha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2",
+  "executionGate": "WAITTask7author testfreeze thenrootfixedpublicACK/helperliveexactresource+schemaabsence guard beforefirstSQL; no DB/Docker invoked bythisproof"
+}

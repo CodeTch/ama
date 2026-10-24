@@ -1,0 +1,23 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07PreparedExternalIT#*,Task07GenerationRetentionIT#*,Task07ExternalWorkerIT#*,Task07RecoveryBoundsIT#*"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/final-custom-replay-closure/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+  ],
+  "elapsedSeconds": 67.33105611801147,
+  "counts": {
+    "tests": 44,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

@@ -1,0 +1,179 @@
+{
+  "status": "INTERIM_RECEIPT_XML_READ_ONLY",
+  "windows": [
+    {
+      "window": "bindings-red-01",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/bindings-red-01/command.json",
+          "bytes": 345,
+          "sha256": "ba0a34fd811b2155878f11efdeea7761b70f7783e6415aad87081904c016a38c"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/bindings-red-01/result.json",
+          "bytes": 578,
+          "sha256": "cfb88be4f0c35c55bb03c0169b0ba7580977816da85715086ce0c13cf127e8f3"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/bindings-red-01/adapters-TEST-ama.config.json.Task09GenerationBindingTest.xml",
+          "bytes": 18363,
+          "sha256": "c8ff75a04013bc1b07b54af7d64e73de1813ac39705428a7649c1eebc23f64a1"
+        }
+      ],
+      "implicitXmlFiles": 0
+    },
+    {
+      "window": "bindings-green-01",
+      "exit": 0,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/bindings-green-01/command.json",
+          "bytes": 345,
+          "sha256": "6ee0ef6760fbb976a5234dd47e1c548d22f84a9f2db23c026306fd1721c7e75a"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/bindings-green-01/result.json",
+          "bytes": 580,
+          "sha256": "65640e6a3d211a1380b323ff5fa52e69707da97b7371f76b7a5fbfeaac81aa50"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/bindings-green-01/adapters-TEST-ama.config.json.Task09GenerationBindingTest.xml",
+          "bytes": 16259,
+          "sha256": "63cc19e454ea01f60a4f1b8846191499368313acf5291022e144f0694e80f810"
+        }
+      ],
+      "implicitXmlFiles": 0
+    },
+    {
+      "window": "template-red-01",
+      "exit": 1,
+      "counts": {
+        "tests": 3,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/template-red-01/command.json",
+          "bytes": 332,
+          "sha256": "4c52e79d9b326470f49452683ad88faf61f6c5f5b8b7be2a50f84d8356d962ce"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/template-red-01/result.json",
+          "bytes": 738,
+          "sha256": "fdb90b8d97f571673d00b1c88cee8f093b3bec6d253d19a65dda5cda8cf463d9"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/template-red-01/integration-tests-TEST-ama.minutes.Task09TemplateIT.xml",
+          "bytes": 38562,
+          "sha256": "a2e43c383e6d8497bad8d6b323dc2158f33436d1da01b0ad3470075772bce6b6"
+        }
+      ],
+      "implicitXmlFiles": 42
+    },
+    {
+      "window": "template-green-01",
+      "exit": 0,
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/template-green-01/command.json",
+          "bytes": 423,
+          "sha256": "d38ca74840e4a34823e05e0a17d15a11cf6e47e6c15ebb0dca99454b4d748544"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/template-green-01/result.json",
+          "bytes": 741,
+          "sha256": "8ab0df23b79844c11d979059028ab07fad014b504a9cfd59bb3adffecd092dbd"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/template-green-01/integration-tests-TEST-ama.minutes.Task09TemplateIT.xml",
+          "bytes": 32918,
+          "sha256": "42a4d7765127e5a5aec23ac95f60861923e1b41b086fcde22a90a23f8f35bb44"
+        }
+      ],
+      "implicitXmlFiles": 0
+    },
+    {
+      "window": "provider-store-red-01",
+      "exit": 1,
+      "counts": {
+        "tests": 8,
+        "failures": 8,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/provider-store-red-01/command.json",
+          "bytes": 364,
+          "sha256": "977a72609e80004944d76061c5c21a59c433e88d1083f66653c92d6a85d36579"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/provider-store-red-01/result.json",
+          "bytes": 1759,
+          "sha256": "eb16383605ee1d0e37e4d2db4e6d7531d4a03373d8c4cc13fa26e5c9bae6f0ff"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/provider-store-red-01/adapters-TEST-ama.model.Task09ControlledStoreTest.xml",
+          "bytes": 31071,
+          "sha256": "d4302cdb0634a3fafe820906aabb29c91ea9078cdf9f82772d03b0ef79b4bb2a"
+        }
+      ],
+      "implicitXmlFiles": 0
+    },
+    {
+      "window": "provider-store-green-01",
+      "exit": 0,
+      "counts": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/provider-store-green-01/command.json",
+          "bytes": 364,
+          "sha256": "78af413150f9c0a180c0ec280b591195e6180ac7dab933d0897358ce1e3d4c91"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/provider-store-green-01/result.json",
+          "bytes": 1767,
+          "sha256": "2e19b3fb6265c286ec9c5209e0840d3f40adec7eb79cc833b31f976657fc8d0e"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/provider-store-green-01/adapters-TEST-ama.model.Task09ControlledStoreTest.xml",
+          "bytes": 17010,
+          "sha256": "3c76b3e7a89ade41021bca57615c46f77336df548b080ab3f5b2c3b83a1ad468"
+        }
+      ],
+      "implicitXmlFiles": 0
+    }
+  ],
+  "limits": [
+    "not final source closure",
+    "not independent semantics review",
+    "implicit inherited units retained separately and not added to unique counts",
+    "no live HTTP/provider/runtime or CV04 closure inferred"
+  ]
+}

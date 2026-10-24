@@ -1,0 +1,50 @@
+COMMAND
+@'
+from pathlib import Path
+import hashlib,json,subprocess,difflib,re
+w=Path('/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining')
+o='task-11-forward-ddl-proposal-20261024'; n='task-11-forward-ddl-proposal-r1-20261024'
+old=[w/(o+x) for x in ('.sql','.md','-manifest.json')]
+new=[w/(n+x) for x in ('.sql','.md','-manifest.json')]
+digest=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert [digest(p) for p in old]==['e9026197dba789e7cbdbf6acee56065d0f8fa98665595d204bece1afc8eedd43','930eddac25fe68adf832b007c2ffc2a74581bdebd9e6535df01ac19c4933ef1d','ca422802295e79892b014357a1b7d682ff70eb17fd306b89aeefe81f63724bf6']
+m=json.loads(new[2].read_text()); assert m['baseline_commit']=='de1611a67ba483afe21f3b29bb69c2d32028efef' and len(m['migration_sources'])==15
+for x in m['migration_sources']:
+ b=subprocess.check_output(['git','-C','/home/tanren/ama/.worktrees/phase-b-completion','show',m['baseline_commit']+':'+x['path']])
+ assert len(b)==x['bytes'] and hashlib.sha256(b).hexdigest()==x['sha256']
+ for q in x.get('selected_ranges',[]):
+  z=b''.join(b.splitlines(keepends=True)[q['start_line']-1:q['end_line']])
+  assert len(z)==q['bytes'] and hashlib.sha256(z).hexdigest()==q['sha256']
+for x in m['outputs']:
+ p=Path(x['path']); assert len(p.read_bytes())==x['bytes'] and digest(p)==x['sha256']
+s=new[0].read_text()
+assert len(re.findall(r'^  [a-z_]+ ',s,re.M))==19
+assert len(re.findall(r'^  CONSTRAINT fk_publication_submission_',s,re.M))==6
+assert len(re.findall(r'^  CONSTRAINT ck_publication_submission_',s,re.M))==4
+assert len(re.findall(r'^  (?:UNIQUE )?INDEX publication_submission_',s,re.M))==6
+assert s.count('ON UPDATE RESTRICT ON DELETE RESTRICT')==4
+for name,l in [('UNDECIDED',9),('NEVER_MARKED',12),('PREPARATION_EXHAUSTED',21),('TERMINAL_UNMARKED_FAILURE',25),('EXPIRED_UNMARKED_ABANDONED',26)]:
+ assert len(name.encode())==l and len((name+' ').encode())!=l
+ assert name in s and 'OCTET_LENGTH(local_state) = '+str(l) in s if name in ('UNDECIDED','NEVER_MARKED') else name in s and 'OCTET_LENGTH(local_reason) = '+str(l) in s
+for x in ('local_decided_at','local_reason','local_decided_by','local_attempt_no','local_execution_id'): assert 'AND '+x+' IS NULL' in s
+for x in ('local_decided_at','local_reason','local_decided_by','local_attempt_no'): assert 'AND '+x+' IS NOT NULL' in s
+assert 'FOREIGN KEY (local_decided_by) REFERENCES enterprise_identity (enterprise_id),' in s
+assert 'FOREIGN KEY (local_execution_id) REFERENCES external_execution (id)' in s
+p=''.join(''.join(difflib.unified_diff(a.read_text().splitlines(keepends=True),b.read_text().splitlines(keepends=True),fromfile=a.name,tofile=b.name,n=3)) for a,b in zip(old,new))
+diff=w/'task-11-forward-ddl-proposal-old-to-r1-20261024.diff'; assert p.encode()==diff.read_bytes()
+print('STATIC_COVERAGE_OK: 15 committed migration pins/ranges; 19 fields, 6 FKs, 4 CHECKs, 6 secondary indexes')
+print('I1 paired lengths: 9/12 state, 21/25/26 reason; trailing-space length mismatch modeled')
+print('I2 four explicit RESTRICT and two implicit-action FK clauses; full decision tuple retained')
+print('MySQL 8.4.6 parser, negative-row and FK probes NOT RUN')
+for f in new+[diff]: print(f.name,len(f.read_bytes()),digest(f))
+'@ | wsl.exe -d Ubuntu-24.04 -- python3 -
+OUTPUT
+STATIC_COVERAGE_OK: 15 committed migration pins/ranges; 19 fields, 6 FKs, 4 CHECKs, 6 secondary indexes
+I1 paired lengths: 9/12 state, 21/25/26 reason; trailing-space length mismatch modeled
+I2 four explicit RESTRICT and two implicit-action FK clauses; full decision tuple retained
+MySQL 8.4.6 parser, negative-row and FK probes NOT RUN
+task-11-forward-ddl-proposal-r1-20261024.sql 4287 195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2
+task-11-forward-ddl-proposal-r1-20261024.md 11168 243146dffb571181103d8ed052ac5feb5ecc79c9057f77c950c6e203edcba46e
+task-11-forward-ddl-proposal-r1-20261024-manifest.json 11156 db9459d72123908c3a9ace6eec95cc9d1939ff6982bdbf7cc5c6b3b09e955eab
+task-11-forward-ddl-proposal-old-to-r1-20261024.diff 16723 ad0cec798423aab7b70655bbd9601af2d48e6d800908f3874ce552e85f554e21
+

@@ -1,0 +1,21 @@
+{
+  "migration_rows": [
+    "1\t001\tfoundation\tSQL\tV001__foundation.sql\t1201435595\t1",
+    "2\t002\tidentity acl\tSQL\tV002__identity_acl.sql\t1757300424\t1",
+    "3\t005\ttasks outbox\tSQL\tV005__tasks_outbox.sql\t-1999355348\t1",
+    "4\t006\taudit metadata\tSQL\tV006__audit_metadata.sql\t-1744360556\t1",
+    "5\t007\tidentity sessions\tSQL\tV007__identity_sessions.sql\t157746768\t1",
+    "6\t008\tmeeting schema\tSQL\tV008__meeting_schema.sql\t-1747387036\t1",
+    "7\t009\tfile schema\tSQL\tV009__file_schema.sql\t-287948759\t1",
+    "8\t010\treliable execution\tSQL\tV010__reliable_execution.sql\t-1187397378\t1",
+    "9\t011\ttranscript schema\tSQL\tV011__transcript_schema.sql\t-286330771\t1",
+    "10\t011.1\ttranscript material index\tSQL\tV011_1__transcript_material_index.sql\t-570494170\t1",
+    "11\t012\tminutes evidence\tSQL\tV012__minutes_evidence.sql\t2101765957\t1",
+    "12\t013\tpublications\tSQL\tV013__publications.sql\t-847352333\t1",
+    "13\t013.1\tb runtime metadata\tSQL\tV013_1__b_runtime_metadata.sql\t-1898004857\t1"
+  ],
+  "config": "0\t+00:00\tama_b01_fixture",
+  "history_sha256": "0ab67350675840227eb3138f2825f85ad6be55931762736da9c71b1cee48ca36",
+  "sql_count": 13,
+  "checked_at_utc": "2026-10-23T11:29:30.234278+00:00"
+}

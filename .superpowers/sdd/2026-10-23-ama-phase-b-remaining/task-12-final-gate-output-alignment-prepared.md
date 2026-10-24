@@ -1,0 +1,5 @@
+# Task12 final-gate output alignment — PREPARED ONLY
+
+Read task-13-gate-custody-preflight-20261023.md SHA6ef4353b65e8201e105a67971b0dfbdf6bc8e02b9a3bd14c4aeaa81ec5098067 (root FULLREAD and21baselinefile seals independently verified). It supplements existing Task12 UI/evidence scope; does not activate Task12 or override actual final source.
+
+Ruling: Task12 source author owns minimal fresh-output forwarding for canonical runner Python/web/e2e/visual sinks, root OpenAPI bundle and per-invocation Playwright results/config/ports. Preserve exact discovery/counting/failclosed semantics and old visual reference/baselines. Existing direct check:api temp comparison and Vite --outDir suffice; no redundant new abstraction. Check actual postTask11 source before changes, add meaningful narrow output-forwarding/no-old-writes checks. This is necessary to execute final canonical affected gates without overwriting protected historical evidence. Task13 stays docs-only; it repins reviewed output controls and runs affected full components once, preserves failures, routes any required code repair to its author/review. No gate PASS/runtime qualification follows from preparation.

@@ -1,0 +1,23 @@
+package ama.storage;
+import ama.transcript.*;import ama.model.*;import ama.task.*;import ama.contract.ExternalContracts.*;import ama.contract.TaskContracts.*;import java.util.*;import org.junit.jupiter.api.AfterEach;import static org.junit.jupiter.api.Assertions.*;
+class Task10AdoptIT extends Task10GenerationFixture {
+ Task09ControlledRelay relay;
+ @Override String instruction(){return "controlled:rich-output";}
+ @Override ControlledMinutesClient controlledClient(int port){try{relay=new Task09ControlledRelay(port,()->{});return super.controlledClient(relay.port());}catch(Exception e){throw new IllegalStateException(e);}}
+ @AfterEach void closeRelay()throws Exception{if(relay!=null)relay.close();}
+ @Override void beforeWorker(String task){new JdbcMinutesEditor(ama.api.Task09RuntimeProbe.components(app).authority()).intent(actor(),meeting,"sticky-editor",4);}
+ @Override void afterCandidate(Map<String,Object> candidate,JdbcMinutesFactsReader.Snapshot facts)throws Exception {
+  var service=new JdbcMinutesSavedCommands(ama.api.Task09RuntimeProbe.components(app).authority(),this::snapshot,pin,new TranscriptAcquisitionBudget(16777216,16777216,16777216,268435456,134217728,8388608,128,256,256));
+  String id=(String)candidate.get("id"),input=(String)candidate.get("input_id"),fingerprint=(String)candidate.get("input_fingerprint");
+  var adopted=assertDoesNotThrow(()->service.adopt(actor(),meeting,"actual-adopt",4,id,input,fingerprint,UUID.randomUUID().toString()));assertEquals(id,adopted.get("resultId"));assertEquals("MINUTES_ADOPT",adopted.get("operation"));
+  assertEquals("ADOPTED",j.queryForObject("SELECT state FROM generation_candidate WHERE id=?",String.class,id));assertNotEquals(candidate.get("minutes_revision_id"),j.queryForObject("SELECT minutes_revision_id FROM meeting WHERE id=?",String.class,meeting));assertEquals(5L,j.queryForObject("SELECT revision FROM meeting WHERE id=?",Long.class,meeting));
+  archiveUnavailable.set(true);var replay=service.adopt(actor(),meeting,"actual-adopt",4,id,input,fingerprint,UUID.randomUUID().toString());assertEquals(true,replay.get("replayed"));assertEquals(id,replay.get("resultId"));archiveUnavailable.set(false);
+ }
+ @Override void afterExternal(Map<String,Object> candidate,MinutesExternalPreparation preparation,ControlledMinutesClient client,JdbcExternalOperations operations)throws Exception {
+  String task=(String)candidate.get("task_id");var before=j.queryForMap("SELECT * FROM generation_candidate WHERE id=?",candidate.get("id"));var root=j.queryForMap("SELECT * FROM meeting WHERE id=?",meeting);var taskBefore=j.queryForMap("SELECT * FROM durable_task WHERE id=?",task);var bodies=j.queryForList("SELECT * FROM minutes_revision WHERE meeting_id=? ORDER BY id",meeting);var sets=j.queryForList("SELECT * FROM element_set WHERE meeting_id=? ORDER BY id",meeting);
+  var row=j.queryForMap("SELECT o.*,e.id execution_id FROM external_operation o JOIN external_execution e ON e.operation_id=o.id AND e.execution_no=o.current_execution_no WHERE e.task_id=?",task);var token=new OperationToken((String)row.get("id"),(String)row.get("execution_id"),((Number)row.get("current_execution_no")).longValue(),((Number)row.get("reconcile_epoch")).longValue(),(String)row.get("reconcile_owner"),((java.time.LocalDateTime)row.get("reconcile_expires_at")).toInstant(java.time.ZoneOffset.UTC),new SubjectRef("MEETING",meeting));
+  int posts=relay.posts.get(),gets=relay.gets.get();var request=preparation.prepareLookup(token);var wire=client.prepare(request.body(token.executionId()),request.envelope(),request.outputLimit());var remote=client.lookup(wire,NEVER);var observation=preparation.accept(request,token,wire,remote,NEVER);assertEquals(ObservationResult.APPLIED,operations.recoverPreparedFact(token,observation));
+  assertEquals(posts,relay.posts.get());assertTrue(relay.gets.get()>gets);assertNull(relay.failure.get());assertEquals(before,j.queryForMap("SELECT * FROM generation_candidate WHERE id=?",candidate.get("id")));assertEquals(root,j.queryForMap("SELECT * FROM meeting WHERE id=?",meeting));assertEquals(taskBefore,j.queryForMap("SELECT * FROM durable_task WHERE id=?",task));assertEquals(bodies,j.queryForList("SELECT * FROM minutes_revision WHERE meeting_id=? ORDER BY id",meeting));assertEquals(sets,j.queryForList("SELECT * FROM element_set WHERE meeting_id=? ORDER BY id",meeting));
+  java.nio.file.Files.writeString(receipt.resolve("real-adopt-current-change-terminal-replay.json"),json.writeValueAsString(Map.of("task",task,"candidate",candidate.get("id"),"actualCurrentChangedBy","MINUTES_ADOPT","postsBefore",posts,"postsAfter",relay.posts.get(),"getsBefore",gets,"getsAfter",relay.gets.get(),"rootCandidateTaskBodiesSetsUnchanged",true)));
+ }
+}

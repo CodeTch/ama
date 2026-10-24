@@ -1,0 +1,23 @@
+{
+  "checks": [
+    {
+      "baseline": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-root-protected-adopted-inputs-20261024.json",
+      "baselineSha256": "622bc7a39c2a11fdaff0e1f9f4029b3ed07d3aa3f9bf427f3cdd79fe21e143ff",
+      "entries": 7935,
+      "mismatches": []
+    },
+    {
+      "baseline": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-before-fix-01-protected-20261024.json",
+      "baselineSha256": "a92f634e44515c870881f0a8a0fac878d9e519fdac205d7694602253e457131d",
+      "entries": 443,
+      "mismatches": []
+    }
+  ],
+  "originalReportPrefix": {
+    "bytes": 11383,
+    "sha256": "a4d3006e215f9393642f99d0cd78f16b5fa70c727bd20ec6d826fc17ccc3e345",
+    "unchanged": true
+  },
+  "modelFiles": "No model/generator diff; exact own source list excludes all current model artifacts",
+  "scope": "Physical file bytes checked after final testing and report append; original artifacts and SQL unchanged"
+}

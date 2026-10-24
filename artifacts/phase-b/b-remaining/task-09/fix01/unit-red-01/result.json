@@ -1,0 +1,60 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 7,
+    "failures": 3,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "corruptEnvelopeCannotBeRepairedByDuplicatePost",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "changedEnvelopeWithOldHashesNeverChangesExistingMapping",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "lookupLeavesReservedExecutionUnknownAcrossReopen",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "exactCanonicalEnvelopeAndPayloadAreValidatedAfterReopen",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "unjournaledCrashTemporaryConsumesFiniteAdmissionWithoutCleanup",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "conflictingFreshExecutionsNeverWriteAnyDurableFile",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09Fix01ProviderAdmissionTest",
+      "name": "capacityRejectsBeforeFilesAndAcceptedMappingsSurviveRestart",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

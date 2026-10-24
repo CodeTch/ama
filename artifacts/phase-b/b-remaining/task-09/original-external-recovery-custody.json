@@ -1,0 +1,22 @@
+{
+  "originalSource": "backend/integration-tests/src/test/java/ama/storage/Task09OriginalExternalRecoveryIT.java",
+  "preservedSource": "artifacts/phase-b/b-remaining/task-09/original-external-recovery-05/source/backend/integration-tests/src/test/java/ama/storage/Task09OriginalExternalRecoveryIT.java",
+  "sha256": "784d67a2d62ea7ccae056c550da7c9660185505a520f527ce8b1117fc5941217",
+  "reason": "Exact original failed-window recovery completed; exclude one-time fixture from all normal selectors",
+  "originalWindow": "generation-external-green-02",
+  "originalCause": "UNKNOWN: original stack not retained",
+  "recoveryWindows": [
+    "original-external-recovery-02",
+    "original-external-recovery-03",
+    "original-external-recovery-04",
+    "original-external-recovery-05"
+  ],
+  "reproducedDefect": "UTC Instant passed as java.sql.Timestamp was stored using JVM Asia/Shanghai wall-clock; candidate created_at readback differs by 8 hours",
+  "fix": "Bind explicit UTC LocalDateTime for domain timestamps",
+  "actualResult": "Same original execution/result; GET only; genuine Task7 observePrepared APPLIED, complete PENDING candidate, task/operation/execution SUCCEEDED; recoverSettlements=1; exact provider files unchanged",
+  "limits": [
+    "Original first failure cause not proven retrospectively",
+    "Recovery uses real reconciliation takeover + observePrepared; it is not observePreparedFact/recoverPreparedFact and does not prove receipt-only disabled-owner path",
+    "One simple body with empty seven categories/directories; richer matrix pending"
+  ]
+}

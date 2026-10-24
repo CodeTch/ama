@@ -1,0 +1,112 @@
+{
+  "utc": "2026-10-23T21:27:51.314239+00:00",
+  "kind": "Additive changed-source functionalqualificationproof; not findingsclosure/taskadoption",
+  "candidateSha256": "af31d1027dd6e6c1daf136f720a97873fe0b65a0e35985bb06043e68f321950f",
+  "previousPinSha256": "23221a61c7bebb7d57be2d4855b1a6d86ffa57edc7b944d6ff4a2eb86c604f8a",
+  "base": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+  "qualifiedSourceFiles": 12,
+  "allTwelveSnapshotCurrentAndGitPriorMatch": true,
+  "changedQualifiedPaths": [
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java"
+  ],
+  "exactGitPatchBytes": 16723,
+  "patchSha256": "8231af25490722dd3def40f9b1256ed8b7794b4edac90178409a078f6f91f4c8",
+  "evidence": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/integrity-red-01/receipt.json",
+      "bytes": 441,
+      "sha256": "a7cb51d8b9938ec8f4c3387ff706fe6b37c41431a431af891db360d5e72e4d7d"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/integrity-red-01/source.json",
+      "bytes": 54717,
+      "sha256": "0b19b8f8eb5ddb12c9ebacbe1e26e3503f3977f4ed0cde23f404970626b17ab4"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/integrity-red-01/integration-tests-TEST-ama.storage.Task06FixIntegrityIT.xml",
+      "bytes": 34974,
+      "sha256": "121dcc8fe41d074f0550f2a40befa1cd4a4ebc24f3bc9e2ecdc73c33e6fe781e"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/integrity-green-01/receipt.json",
+      "bytes": 442,
+      "sha256": "00a4fcc30927e093bb9f9f33d33e092635ab5549a312ed929a3c8f8b14c33a7a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/integrity-green-01/source.json",
+      "bytes": 54717,
+      "sha256": "02ae8bea7d8ce77df82c481cf7e72e14bddee6b2c9129ef5bc17fe9493847430"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/integrity-green-01/integration-tests-TEST-ama.storage.Task06FixIntegrityIT.xml",
+      "bytes": 33479,
+      "sha256": "3f6cfcb42ab347a2eb96bf53579f4d3621db990009a090cdfdf0efc905be0328"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/https-04/receipt.json",
+      "bytes": 425,
+      "sha256": "f694017ddbd2656ec363335ceadd6a7b467278e0dfc7c92b2913cd8609559fac"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/https-04/source.json",
+      "bytes": 54864,
+      "sha256": "f0c7e6ca63b16521a418536f8171cd018d96c20bda497585b3cc76fe9c76289b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/https-04/integration-tests-TEST-ama.storage.Task06FixHttpsIT.xml",
+      "bytes": 33425,
+      "sha256": "7826ee3319456c092d1991f3f0c169f0202518600cb358d93c4af53d9db6f0dd"
+    }
+  ],
+  "xmlWindows": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/integrity-red-01/integration-tests-TEST-ama.storage.Task06FixIntegrityIT.xml",
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/integrity-green-01/integration-tests-TEST-ama.storage.Task06FixIntegrityIT.xml",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/https-04/integration-tests-TEST-ama.storage.Task06FixHttpsIT.xml",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "sourceDeltas": {
+    "integrity-green-01": {
+      "qualifiedCurrentDifferences": [
+        "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java"
+      ],
+      "productDifferences": []
+    },
+    "https-04": {
+      "qualifiedCurrentDifferences": [],
+      "productDifferences": []
+    }
+  },
+  "numericQualification": "Carried by exact unchanged config/admission/budget/correction/transitions/originalrefs/minima sources + fixture diff contains no bound/declaration change; new HTTPS actual installed GREEN uses unchanged tuple. No new independent perboot raw composition tuple claimed.",
+  "scope": "Same retainedresources/PKI/numeric recipe; prospective chain and CURRENTpointer fixes + fresh-output/transportfixture; continue mandatoryCV02\u201304 newownedtests; no browser/company/fullB/Task6adoption",
+  "rootSourceRead": [
+    "full exact3-filepatch",
+    "full boundary-integrity test",
+    "full actualpublicHTTPS/SessionCookies/SecureJavajar LOCAL-S3 fourroles+token test"
+  ],
+  "notClosure": "Formal twoImportant/CV01\u201304 scopedre-review stillrequired; deferredMinorT6SR03Task12"
+}

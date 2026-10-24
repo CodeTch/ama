@@ -1,0 +1,39 @@
+{
+  "exit": 0,
+  "counts": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.config.json.Task09ControlledProtocolTest",
+      "name": "rejectsNoncanonicalBodyDuplicateNumbersAndWrongExecution",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledProtocolTest",
+      "name": "rejectsMissingCombinedPaddingNoncanonicalAndOversizeHeaders",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledProtocolTest",
+      "name": "rejectsWrongInputFingerprintAndDuplicateUnsortedRoots",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.config.json.Task09ControlledProtocolTest",
+      "name": "recomputesRealV2InputAndLogicalEnvelopeInsteadOfComparingSuppliedHashes",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

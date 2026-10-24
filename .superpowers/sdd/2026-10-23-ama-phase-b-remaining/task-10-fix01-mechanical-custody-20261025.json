@@ -1,0 +1,2105 @@
+{
+  "generatedAtUtc": "2026-10-24T16:07:29.032777+00:00",
+  "role": "Task10-fix01-sealed-window-mechanical-custody",
+  "base": "5657d24a4a58916dfca14a29e352ad361dda3319",
+  "headAtIndex": null,
+  "fixedWindowNames": [
+    "capacity-red-02",
+    "final-affected-01",
+    "focused-green-01",
+    "focused-red-01",
+    "legacy-io-final-01",
+    "pure-final-01"
+  ],
+  "summary": {
+    "sealedResultWindows": 6,
+    "freshXml": 16,
+    "caseObservations": 45,
+    "distinctCaseKeys": 39,
+    "keysWithWholeWindowQualifiedPass": 39,
+    "windowQualifications": {
+      "assertion-failure": 2,
+      "qualified-pass": 4
+    },
+    "resultCountTotals": {
+      "tests": 45,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0
+    },
+    "mechanicalIssues": 0
+  },
+  "windows": [
+    {
+      "window": "capacity-red-02",
+      "commandSha256": "d574ef427c48ee7788e4d81bd9eee63d198e54be445e0b0d6acd95dc93f7f841",
+      "resultSha256": "45cd8e2d09560c2d81855d69876ae37666c059442ea6bc9347b3b6bc5c8d06fd",
+      "sourceManifestSha256": "aa8e6292dffbf454c777d3dea2c923bbbffd5da7c78707fad1b0813e892da716",
+      "reportCustodySha256": "5d8cf1c409a847a15ec28005599243f67de119c515b6b3200335b07d88283b83",
+      "startedUtc": "2026-10-24T15:48:12.417203+00:00",
+      "closedIntervalNs": [
+        1792856892418352537,
+        1792856922575501932
+      ],
+      "exit": 1,
+      "resultCounts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xmlCount": 1,
+      "xmlCounts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceEntries": 748,
+      "sourceSnapshotIssues": [],
+      "reports": [
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "sha256": "a862972abb0c41ab3fc09f16d4050b04877f0c2b7278092c3370e39e19a9128b",
+          "counts": {
+            "tests": 1,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01CapacityIT#reservesRemainingAttemptsAndMergedSourceBeforeAdmission"
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "sha256": "a862972abb0c41ab3fc09f16d4050b04877f0c2b7278092c3370e39e19a9128b",
+          "mtimeNs": 1792856922166757993,
+          "previous": [
+            1792856685860432261,
+            "6ab8229fc4f30264c98ab4abea21862941a1defb4b4c5d2630c9326f3938979c"
+          ],
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.storage.Task10Fix01CapacityIT#reservesRemainingAttemptsAndMergedSourceBeforeAdmission",
+          "status": "FAIL"
+        }
+      ],
+      "qualification": "assertion-failure",
+      "issues": []
+    },
+    {
+      "window": "final-affected-01",
+      "commandSha256": "2606fe06d7b3808a1bfaf575d7f17e8f9756f82f80fcbe1046dd83fa78f22ef4",
+      "resultSha256": "aea47d658c4e2e483b12e54d5e76a7ac06b1790aedcbc567f385d37d11e6994d",
+      "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+      "reportCustodySha256": "1a9013f8f79a54a95ec386a01ca51e7a4d42af41e2f8763939b8ecb965690959",
+      "startedUtc": "2026-10-24T15:58:31.160840+00:00",
+      "closedIntervalNs": [
+        1792857511161798122,
+        1792857626160153671
+      ],
+      "exit": 0,
+      "resultCounts": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xmlCount": 6,
+      "xmlCounts": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceEntries": 755,
+      "sourceSnapshotIssues": [],
+      "reports": [
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "sha256": "782cb9913bf1afc56f56d876003e636c65fa6b461f128608e5239b95ea3de501",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01CapacityIT#reservesRemainingAttemptsAndMergedSourceBeforeAdmission"
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01DecisionIT.xml",
+          "sha256": "968a304f3f846af4bec5d00ecbcbb4cd34cf0717873430859e6ab77fb23e4620",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01DecisionIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate"
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01IntakeIT.xml",
+          "sha256": "93bbb1eaa86efb1fcfa9e46977a34dc5d1bf5eeb0ebf759a67b5245fbd71144b",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01IntakeIT#actualIntakeReservesSharedCapacityBeforeAnyWritesAndKeepsReceiptReplay"
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01RegressionB03IT.xml",
+          "sha256": "a8d5d4dd75581a9fbdbdacc24c24fe5e9c71d393f7189b92faf07321be55a1d0",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01RegressionB03IT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate"
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01RegressionSourceIT.xml",
+          "sha256": "4818158783818156599ae2cd0de5393a6919ecdc14b50409ce67e53620c30c6c",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01RegressionSourceIT#actualMetadataAndFkLocksProtectGrowthChildrenAndEmptyMarksInBothPhases"
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01ReplayIT.xml",
+          "sha256": "a644776a20d25801b62ec4071ce7488673ca27a460f049fdcb4f7dfcd0e6726a",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01ReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate"
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "sha256": "782cb9913bf1afc56f56d876003e636c65fa6b461f128608e5239b95ea3de501",
+          "mtimeNs": 1792857611415939819,
+          "previous": [
+            1792857322495837552,
+            "807c5715ae2557472a8d2a3d301c875f6555caf183b75caea8f83d66f66c1072"
+          ],
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        },
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01DecisionIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01DecisionIT.xml",
+          "sha256": "968a304f3f846af4bec5d00ecbcbb4cd34cf0717873430859e6ab77fb23e4620",
+          "mtimeNs": 1792857546402907104,
+          "previous": [
+            1792857265328802775,
+            "f85657122b7e174ff8a88ed795d45a68bc7311534b7c96ab678fc36028e3f8bb"
+          ],
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        },
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01IntakeIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01IntakeIT.xml",
+          "sha256": "93bbb1eaa86efb1fcfa9e46977a34dc5d1bf5eeb0ebf759a67b5245fbd71144b",
+          "mtimeNs": 1792857625726358489,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        },
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01RegressionB03IT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01RegressionB03IT.xml",
+          "sha256": "a8d5d4dd75581a9fbdbdacc24c24fe5e9c71d393f7189b92faf07321be55a1d0",
+          "mtimeNs": 1792857619043328666,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        },
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01RegressionSourceIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01RegressionSourceIT.xml",
+          "sha256": "4818158783818156599ae2cd0de5393a6919ecdc14b50409ce67e53620c30c6c",
+          "mtimeNs": 1792857554725365049,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        },
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01ReplayIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01ReplayIT.xml",
+          "sha256": "a644776a20d25801b62ec4071ce7488673ca27a460f049fdcb4f7dfcd0e6726a",
+          "mtimeNs": 1792857603659742841,
+          "previous": [
+            1792857314819095979,
+            "b488825368487439df293945fe8611f89f1b007d32631ad060920fdf13d5d0e3"
+          ],
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.storage.Task10Fix01CapacityIT#reservesRemainingAttemptsAndMergedSourceBeforeAdmission",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task10Fix01DecisionIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task10Fix01IntakeIT#actualIntakeReservesSharedCapacityBeforeAnyWritesAndKeepsReceiptReplay",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task10Fix01RegressionB03IT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task10Fix01RegressionSourceIT#actualMetadataAndFkLocksProtectGrowthChildrenAndEmptyMarksInBothPhases",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task10Fix01ReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        }
+      ],
+      "qualification": "qualified-pass",
+      "issues": []
+    },
+    {
+      "window": "focused-green-01",
+      "commandSha256": "865f0cb8b9d1a82425e25d7bc00f6f9b085ae0b35261ca82d43a91b13a7209db",
+      "resultSha256": "0f2498493257bd98f73b44655400f9c359b31862f635423b77a7863f906c6281",
+      "sourceManifestSha256": "83dd72255aded9a8c1f61e6ef1d35aabd80d9311eacdb5171f91922ad8d68663",
+      "reportCustodySha256": "c8157c75c7288864013708af3ee5d8e76d1d2c79472489bb3453b9bf3b0ae0dc",
+      "startedUtc": "2026-10-24T15:53:48.488440+00:00",
+      "closedIntervalNs": [
+        1792857228489335319,
+        1792857322921049092
+      ],
+      "exit": 0,
+      "resultCounts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xmlCount": 3,
+      "xmlCounts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceEntries": 752,
+      "sourceSnapshotIssues": [],
+      "reports": [
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "sha256": "807c5715ae2557472a8d2a3d301c875f6555caf183b75caea8f83d66f66c1072",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01CapacityIT#reservesRemainingAttemptsAndMergedSourceBeforeAdmission"
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01DecisionIT.xml",
+          "sha256": "f85657122b7e174ff8a88ed795d45a68bc7311534b7c96ab678fc36028e3f8bb",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01DecisionIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate"
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01ReplayIT.xml",
+          "sha256": "b488825368487439df293945fe8611f89f1b007d32631ad060920fdf13d5d0e3",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01ReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate"
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "sha256": "807c5715ae2557472a8d2a3d301c875f6555caf183b75caea8f83d66f66c1072",
+          "mtimeNs": 1792857322495837552,
+          "previous": [
+            1792856922166757993,
+            "a862972abb0c41ab3fc09f16d4050b04877f0c2b7278092c3370e39e19a9128b"
+          ],
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        },
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01DecisionIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01DecisionIT.xml",
+          "sha256": "f85657122b7e174ff8a88ed795d45a68bc7311534b7c96ab678fc36028e3f8bb",
+          "mtimeNs": 1792857265328802775,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        },
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01ReplayIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01ReplayIT.xml",
+          "sha256": "b488825368487439df293945fe8611f89f1b007d32631ad060920fdf13d5d0e3",
+          "mtimeNs": 1792857314819095979,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.storage.Task10Fix01CapacityIT#reservesRemainingAttemptsAndMergedSourceBeforeAdmission",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task10Fix01DecisionIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.storage.Task10Fix01ReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "PASS"
+        }
+      ],
+      "qualification": "qualified-pass",
+      "issues": []
+    },
+    {
+      "window": "focused-red-01",
+      "commandSha256": "cd5badccf5e1eda2ff30b390158ff06c964f2c7596e98308ddaf5adc5f02a88e",
+      "resultSha256": "d69d30efd9399cca14a34f098bdf21fabea733310ee33e44fe2da4b654011622",
+      "sourceManifestSha256": "e0d89e06d080e4f5fd761b374046c6b175b7829ee45d1989907e971a57dc6e7e",
+      "reportCustodySha256": "827ae14d9b1f81d2d3051852af24753689750af5a74b03693952ff128d92a790",
+      "startedUtc": "2026-10-24T15:43:37.014799+00:00",
+      "closedIntervalNs": [
+        1792856617015998216,
+        1792856686300719445
+      ],
+      "exit": 1,
+      "resultCounts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xmlCount": 2,
+      "xmlCounts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceEntries": 748,
+      "sourceSnapshotIssues": [],
+      "reports": [
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "sha256": "6ab8229fc4f30264c98ab4abea21862941a1defb4b4c5d2630c9326f3938979c",
+          "counts": {
+            "tests": 1,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01CapacityIT#reservesRemainingAttemptsAndMergedSourceBeforeAdmission"
+          ]
+        },
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01ReplayIT.xml",
+          "sha256": "20933a962f7ee8089d85ced78c7906cfc8ad054bc1536415c6570fef6e2ce51d",
+          "counts": {
+            "tests": 1,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01ReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate"
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01CapacityIT.xml",
+          "sha256": "6ab8229fc4f30264c98ab4abea21862941a1defb4b4c5d2630c9326f3938979c",
+          "mtimeNs": 1792856685860432261,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        },
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01ReplayIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01ReplayIT.xml",
+          "sha256": "20933a962f7ee8089d85ced78c7906cfc8ad054bc1536415c6570fef6e2ce51d",
+          "mtimeNs": 1792856678952354071,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.storage.Task10Fix01CapacityIT#reservesRemainingAttemptsAndMergedSourceBeforeAdmission",
+          "status": "FAIL"
+        },
+        {
+          "key": "ama.storage.Task10Fix01ReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+          "status": "FAIL"
+        }
+      ],
+      "qualification": "assertion-failure",
+      "issues": []
+    },
+    {
+      "window": "legacy-io-final-01",
+      "commandSha256": "373a8cc21d86e1ef8a84b20839192c5852ccdf701eabf0a9e15e8cc92a0577e6",
+      "resultSha256": "0a6fff898bfeb65cf804fb8408ccd99620bf11faa2d1a9b0ae6736e17a7fdc98",
+      "sourceManifestSha256": "d73bf2458e8a8aae6030c17d1fd91a4ae168a3c217b5f476ec84ac6166faba00",
+      "reportCustodySha256": "5d094bbbcbce534342f2edc85fc86660953190fbb97859cce7f3489aa9baa445",
+      "startedUtc": "2026-10-24T16:04:56.089535+00:00",
+      "closedIntervalNs": [
+        1792857896090806106,
+        1792857927554005680
+      ],
+      "exit": 0,
+      "resultCounts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xmlCount": 1,
+      "xmlCounts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceEntries": 758,
+      "sourceSnapshotIssues": [],
+      "reports": [
+        {
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01LegacyIoIT.xml",
+          "sha256": "183a13964e30bf0a01efb7a0a494f90ae7ef5a1070ecd7ea41cfadc05b64a066",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.storage.Task10Fix01LegacyIoIT#fourLegacyCommandsRecoverRealConcurrentWinnerAfterNamedArchiveIo"
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "sourceReport": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01LegacyIoIT.xml",
+          "copy": "integration-tests-TEST-ama.storage.Task10Fix01LegacyIoIT.xml",
+          "sha256": "183a13964e30bf0a01efb7a0a494f90ae7ef5a1070ecd7ea41cfadc05b64a066",
+          "mtimeNs": 1792857927120369157,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.storage.Task10Fix01LegacyIoIT#fourLegacyCommandsRecoverRealConcurrentWinnerAfterNamedArchiveIo",
+          "status": "PASS"
+        }
+      ],
+      "qualification": "qualified-pass",
+      "issues": []
+    },
+    {
+      "window": "pure-final-01",
+      "commandSha256": "533b870cb7657d76b3709f3be638e8ef24909a9b79f979af5d599c02e38aabb3",
+      "resultSha256": "72124c258cfe01188ec3799809977dfa98ea12903f46118991d6aae7dc5e8aa0",
+      "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+      "reportCustodySha256": "753a8b835bb169b82f84ada9618ad68c821faf4183ed596d9f6385872da53761",
+      "startedUtc": "2026-10-24T16:02:10.375406+00:00",
+      "closedIntervalNs": [
+        1792857730376678483,
+        1792857747707144159
+      ],
+      "exit": 0,
+      "resultCounts": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "xmlCount": 3,
+      "xmlCounts": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceEntries": 757,
+      "sourceSnapshotIssues": [],
+      "reports": [
+        {
+          "copy": "adapters-TEST-ama.config.file.Task10Fix01ArchiveTest.xml",
+          "sha256": "b648f83ff84e64c02743a2318dec7b6f83e909e165b54744a34603161b781eee",
+          "counts": {
+            "tests": 24,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.config.file.Task10Fix01ArchiveTest#startupValidatesAllObjectsIncludingUnselectedHistory",
+            "ama.config.file.Task10Fix01ArchiveTest#everyLoadRechecksLengthEofHashAndMissingObjects",
+            "ama.config.file.Task10Fix01ArchiveTest#nonregularFilesAndUnsupportedSecureFilesystemFailUnavailable",
+            "ama.config.file.Task10Fix01ArchiveTest#cancellationAndInterruptFailClosedWithoutPayloadDiagnostics",
+            "ama.config.file.Task10Fix01ArchiveTest#publisherRejectsRemapDuplicateMissingClosureAndCancellationWithoutChangingOldRelease",
+            "ama.config.file.Task10Fix01ArchiveTest#closureBudgetsReserveManifestBeforeAnyTransportAllocation",
+            "ama.config.file.Task10Fix01ArchiveTest#publisherCreatesLiteralReleasesAndPreservesPriorBytes",
+            "ama.config.file.Task10Fix01ArchiveTest#indexEntryOrderUniquenessAndSizeAreStrict",
+            "ama.config.file.Task10Fix01ArchiveTest#releaseObjectsCannotContainUnindexedFiles",
+            "ama.config.file.Task10Fix01ArchiveTest#heldPublishingLockAndLockSymlinkRejectSecondPublisher",
+            "ama.config.file.Task10Fix01ArchiveTest#controlledLiteralClosureRemainsAcceptableToUnchangedS1",
+            "ama.config.file.Task10Fix01ArchiveTest#versionsUseUnsignedUtf8OrderingRatherThanUtf16Ordering",
+            "ama.config.file.Task10Fix01ArchiveTest#noLatestOrMissingHistoryFallback",
+            "ama.config.file.Task10Fix01ArchiveTest#boundedStartupSharesTokenScalarAndByteBudgets",
+            "ama.config.file.Task10Fix01ArchiveTest#publisherWritesSameIsolatedBytesEvenWhenCallerMutatesTransportAfterValidation",
+            "ama.config.file.Task10Fix01ArchiveTest#historyRemapDropAndGenerationGapFailClosed",
+            "ama.config.file.Task10Fix01ArchiveTest#missingDependencyCycleAndWrongHeaderAreNeverPublishable",
+            "ama.config.file.Task10Fix01ArchiveTest#manifestDiscoveryReturnsHistoricalRefsAndNeverRepairsMalformedBytes",
+            "ama.config.file.Task10Fix01ArchiveTest#cancellationAtDirectoryAcquisitionBoundariesClosesEveryHandle",
+            "ama.config.file.Task10Fix01ArchiveTest#cancellationAfterPartialStagingLeavesPreviousReleaseIntact",
+            "ama.config.file.Task10Fix01ArchiveTest#pinnedHistoryLoadsExactOldClosureWithFreshTransportArrays",
+            "ama.config.file.Task10Fix01ArchiveTest#strictIndexRejectsUnknownDuplicateNoncanonicalAndInvalidUtf8",
+            "ama.config.file.Task10Fix01ArchiveTest#initialPublicationCannotResetAnExistingReleaseHistory",
+            "ama.config.file.Task10Fix01ArchiveTest#symlinkRootAncestorObjectDirectoryAndReplacementAreRejected"
+          ]
+        },
+        {
+          "copy": "adapters-TEST-ama.transcript.Task10Fix01DeferredTest.xml",
+          "sha256": "44a99bf02e3fbba21d5314a50ff221cd1e748e06d30f1b2b15bd485256c0c054",
+          "counts": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.transcript.Task10Fix01DeferredTest#legacyOrdinaryProtocolsRetainActualIoClassification",
+            "ama.transcript.Task10Fix01DeferredTest#onlyNamedOrdinaryFailuresCanYieldToWinner",
+            "ama.transcript.Task10Fix01DeferredTest#interruptionNeverBecomesSuccessfulReplay"
+          ]
+        },
+        {
+          "copy": "adapters-TEST-ama.transcript.Task10Fix01DomainCapacityTest.xml",
+          "sha256": "cf97738932bec01b68531bc6d31d164359c99d4a78a2465216b0bd7239f78bdc",
+          "counts": {
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "caseKeys": [
+            "ama.transcript.Task10Fix01DomainCapacityTest#lastAttemptSlotIncludesRetainedSourceAndAllRemainingClaims",
+            "ama.transcript.Task10Fix01DomainCapacityTest#consumedAttemptNotDoubleCountedAndTerminalHistoryRemains",
+            "ama.transcript.Task10Fix01DomainCapacityTest#existingExternalAndCandidateRowsConsumeTheirReservationOnce",
+            "ama.transcript.Task10Fix01DomainCapacityTest#explicitLegacyOverflowNeverTruncates",
+            "ama.transcript.Task10Fix01DomainCapacityTest#sourceAdmissionReservesOnlyRealLocalAttemptFootprint"
+          ]
+        }
+      ],
+      "custodyReports": [
+        {
+          "sourceReport": "backend/adapters/target/surefire-reports/TEST-ama.config.file.Task10Fix01ArchiveTest.xml",
+          "copy": "adapters-TEST-ama.config.file.Task10Fix01ArchiveTest.xml",
+          "sha256": "b648f83ff84e64c02743a2318dec7b6f83e909e165b54744a34603161b781eee",
+          "mtimeNs": 1792857740562468933,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        },
+        {
+          "sourceReport": "backend/adapters/target/surefire-reports/TEST-ama.transcript.Task10Fix01DeferredTest.xml",
+          "copy": "adapters-TEST-ama.transcript.Task10Fix01DeferredTest.xml",
+          "sha256": "44a99bf02e3fbba21d5314a50ff221cd1e748e06d30f1b2b15bd485256c0c054",
+          "mtimeNs": 1792857739297320768,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        },
+        {
+          "sourceReport": "backend/adapters/target/surefire-reports/TEST-ama.transcript.Task10Fix01DomainCapacityTest.xml",
+          "copy": "adapters-TEST-ama.transcript.Task10Fix01DomainCapacityTest.xml",
+          "sha256": "cf97738932bec01b68531bc6d31d164359c99d4a78a2465216b0bd7239f78bdc",
+          "mtimeNs": 1792857739325684065,
+          "previous": null,
+          "freshQualified": true,
+          "inClosedInterval": true,
+          "copyHashValid": true,
+          "canonicalLogAssociation": true
+        }
+      ],
+      "cases": [
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#startupValidatesAllObjectsIncludingUnselectedHistory",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#everyLoadRechecksLengthEofHashAndMissingObjects",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#nonregularFilesAndUnsupportedSecureFilesystemFailUnavailable",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#cancellationAndInterruptFailClosedWithoutPayloadDiagnostics",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#publisherRejectsRemapDuplicateMissingClosureAndCancellationWithoutChangingOldRelease",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#closureBudgetsReserveManifestBeforeAnyTransportAllocation",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#publisherCreatesLiteralReleasesAndPreservesPriorBytes",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#indexEntryOrderUniquenessAndSizeAreStrict",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#releaseObjectsCannotContainUnindexedFiles",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#heldPublishingLockAndLockSymlinkRejectSecondPublisher",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#controlledLiteralClosureRemainsAcceptableToUnchangedS1",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#versionsUseUnsignedUtf8OrderingRatherThanUtf16Ordering",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#noLatestOrMissingHistoryFallback",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#boundedStartupSharesTokenScalarAndByteBudgets",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#publisherWritesSameIsolatedBytesEvenWhenCallerMutatesTransportAfterValidation",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#historyRemapDropAndGenerationGapFailClosed",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#missingDependencyCycleAndWrongHeaderAreNeverPublishable",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#manifestDiscoveryReturnsHistoricalRefsAndNeverRepairsMalformedBytes",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#cancellationAtDirectoryAcquisitionBoundariesClosesEveryHandle",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#cancellationAfterPartialStagingLeavesPreviousReleaseIntact",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#pinnedHistoryLoadsExactOldClosureWithFreshTransportArrays",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#strictIndexRejectsUnknownDuplicateNoncanonicalAndInvalidUtf8",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#initialPublicationCannotResetAnExistingReleaseHistory",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.config.file.Task10Fix01ArchiveTest#symlinkRootAncestorObjectDirectoryAndReplacementAreRejected",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.transcript.Task10Fix01DeferredTest#legacyOrdinaryProtocolsRetainActualIoClassification",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.transcript.Task10Fix01DeferredTest#onlyNamedOrdinaryFailuresCanYieldToWinner",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.transcript.Task10Fix01DeferredTest#interruptionNeverBecomesSuccessfulReplay",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.transcript.Task10Fix01DomainCapacityTest#lastAttemptSlotIncludesRetainedSourceAndAllRemainingClaims",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.transcript.Task10Fix01DomainCapacityTest#consumedAttemptNotDoubleCountedAndTerminalHistoryRemains",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.transcript.Task10Fix01DomainCapacityTest#existingExternalAndCandidateRowsConsumeTheirReservationOnce",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.transcript.Task10Fix01DomainCapacityTest#explicitLegacyOverflowNeverTruncates",
+          "status": "PASS"
+        },
+        {
+          "key": "ama.transcript.Task10Fix01DomainCapacityTest#sourceAdmissionReservesOnlyRealLocalAttemptFootprint",
+          "status": "PASS"
+        }
+      ],
+      "qualification": "qualified-pass",
+      "issues": []
+    }
+  ],
+  "caseMatrix": [
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#boundedStartupSharesTokenScalarAndByteBudgets",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#cancellationAfterPartialStagingLeavesPreviousReleaseIntact",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#cancellationAndInterruptFailClosedWithoutPayloadDiagnostics",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#cancellationAtDirectoryAcquisitionBoundariesClosesEveryHandle",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#closureBudgetsReserveManifestBeforeAnyTransportAllocation",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#controlledLiteralClosureRemainsAcceptableToUnchangedS1",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#everyLoadRechecksLengthEofHashAndMissingObjects",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#heldPublishingLockAndLockSymlinkRejectSecondPublisher",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#historyRemapDropAndGenerationGapFailClosed",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#indexEntryOrderUniquenessAndSizeAreStrict",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#initialPublicationCannotResetAnExistingReleaseHistory",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#manifestDiscoveryReturnsHistoricalRefsAndNeverRepairsMalformedBytes",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#missingDependencyCycleAndWrongHeaderAreNeverPublishable",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#noLatestOrMissingHistoryFallback",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#nonregularFilesAndUnsupportedSecureFilesystemFailUnavailable",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#pinnedHistoryLoadsExactOldClosureWithFreshTransportArrays",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#publisherCreatesLiteralReleasesAndPreservesPriorBytes",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#publisherRejectsRemapDuplicateMissingClosureAndCancellationWithoutChangingOldRelease",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#publisherWritesSameIsolatedBytesEvenWhenCallerMutatesTransportAfterValidation",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#releaseObjectsCannotContainUnindexedFiles",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#startupValidatesAllObjectsIncludingUnselectedHistory",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#strictIndexRejectsUnknownDuplicateNoncanonicalAndInvalidUtf8",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#symlinkRootAncestorObjectDirectoryAndReplacementAreRejected",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.config.file.Task10Fix01ArchiveTest#versionsUseUnsignedUtf8OrderingRatherThanUtf16Ordering",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.storage.Task10Fix01CapacityIT#reservesRemainingAttemptsAndMergedSourceBeforeAdmission",
+      "observations": [
+        {
+          "window": "focused-red-01",
+          "status": "FAIL",
+          "sourceManifestSha256": "e0d89e06d080e4f5fd761b374046c6b175b7829ee45d1989907e971a57dc6e7e",
+          "windowQualification": "assertion-failure"
+        },
+        {
+          "window": "capacity-red-02",
+          "status": "FAIL",
+          "sourceManifestSha256": "aa8e6292dffbf454c777d3dea2c923bbbffd5da7c78707fad1b0813e892da716",
+          "windowQualification": "assertion-failure"
+        },
+        {
+          "window": "focused-green-01",
+          "status": "PASS",
+          "sourceManifestSha256": "83dd72255aded9a8c1f61e6ef1d35aabd80d9311eacdb5171f91922ad8d68663",
+          "windowQualification": "qualified-pass"
+        },
+        {
+          "window": "final-affected-01",
+          "status": "PASS",
+          "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.storage.Task10Fix01DecisionIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "observations": [
+        {
+          "window": "focused-green-01",
+          "status": "PASS",
+          "sourceManifestSha256": "83dd72255aded9a8c1f61e6ef1d35aabd80d9311eacdb5171f91922ad8d68663",
+          "windowQualification": "qualified-pass"
+        },
+        {
+          "window": "final-affected-01",
+          "status": "PASS",
+          "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.storage.Task10Fix01IntakeIT#actualIntakeReservesSharedCapacityBeforeAnyWritesAndKeepsReceiptReplay",
+      "observations": [
+        {
+          "window": "final-affected-01",
+          "status": "PASS",
+          "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.storage.Task10Fix01LegacyIoIT#fourLegacyCommandsRecoverRealConcurrentWinnerAfterNamedArchiveIo",
+      "observations": [
+        {
+          "window": "legacy-io-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "d73bf2458e8a8aae6030c17d1fd91a4ae168a3c217b5f476ec84ac6166faba00",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "legacy-io-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "d73bf2458e8a8aae6030c17d1fd91a4ae168a3c217b5f476ec84ac6166faba00",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "legacy-io-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "d73bf2458e8a8aae6030c17d1fd91a4ae168a3c217b5f476ec84ac6166faba00",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "legacy-io-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "d73bf2458e8a8aae6030c17d1fd91a4ae168a3c217b5f476ec84ac6166faba00",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.storage.Task10Fix01RegressionB03IT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "observations": [
+        {
+          "window": "final-affected-01",
+          "status": "PASS",
+          "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.storage.Task10Fix01RegressionSourceIT#actualMetadataAndFkLocksProtectGrowthChildrenAndEmptyMarksInBothPhases",
+      "observations": [
+        {
+          "window": "final-affected-01",
+          "status": "PASS",
+          "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.storage.Task10Fix01ReplayIT#genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "observations": [
+        {
+          "window": "focused-red-01",
+          "status": "FAIL",
+          "sourceManifestSha256": "e0d89e06d080e4f5fd761b374046c6b175b7829ee45d1989907e971a57dc6e7e",
+          "windowQualification": "assertion-failure"
+        },
+        {
+          "window": "focused-green-01",
+          "status": "PASS",
+          "sourceManifestSha256": "83dd72255aded9a8c1f61e6ef1d35aabd80d9311eacdb5171f91922ad8d68663",
+          "windowQualification": "qualified-pass"
+        },
+        {
+          "window": "final-affected-01",
+          "status": "PASS",
+          "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "final-affected-01",
+        "status": "PASS",
+        "sourceManifestSha256": "16b63ba5c9e81dab3ab6a41bec3ebadcd75594f3538103ecc93f4e2907bf02d9",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.transcript.Task10Fix01DeferredTest#interruptionNeverBecomesSuccessfulReplay",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.transcript.Task10Fix01DeferredTest#legacyOrdinaryProtocolsRetainActualIoClassification",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.transcript.Task10Fix01DeferredTest#onlyNamedOrdinaryFailuresCanYieldToWinner",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.transcript.Task10Fix01DomainCapacityTest#consumedAttemptNotDoubleCountedAndTerminalHistoryRemains",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.transcript.Task10Fix01DomainCapacityTest#existingExternalAndCandidateRowsConsumeTheirReservationOnce",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.transcript.Task10Fix01DomainCapacityTest#explicitLegacyOverflowNeverTruncates",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.transcript.Task10Fix01DomainCapacityTest#lastAttemptSlotIncludesRetainedSourceAndAllRemainingClaims",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    },
+    {
+      "key": "ama.transcript.Task10Fix01DomainCapacityTest#sourceAdmissionReservesOnlyRealLocalAttemptFootprint",
+      "observations": [
+        {
+          "window": "pure-final-01",
+          "status": "PASS",
+          "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+          "windowQualification": "qualified-pass"
+        }
+      ],
+      "lastQualifiedExecution": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "lastObservedPass": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      },
+      "latestObservation": {
+        "window": "pure-final-01",
+        "status": "PASS",
+        "sourceManifestSha256": "3b1c907f6e6a12d2817459ee5cd20e832b300fd898adf19f654ec07354932329",
+        "windowQualification": "qualified-pass"
+      }
+    }
+  ],
+  "semanticDispositionFromCoordinator": {
+    "focused-red-01": "I1 genuine RED; I2 oracle used tasks4 as 256 attempts and is not a qualified I2 RED. Both original assertion FAIL observations remain.",
+    "capacity-red-02": "Corrected I2 genuine assertion FAIL with tasks2.",
+    "focused-green-01": "3 whole-window PASS observations.",
+    "final-affected-01": "6 whole-window PASS observations.",
+    "pure-final-01": "32 whole-window PASS observations: 24 archive, 5 capacity, 3 deferred.",
+    "legacy-io-final-01": "1 whole-window PASS observation for four actual callers and concurrent winner; interpretation awaits author report/source review.",
+    "retainedOpen": "Original fd323464 and 0469c111 UNKNOWN, Task9 F5, Task11 M1 unchanged; B-FINAL-REPLAY-INTEGRITY-01 mixed PROFILE classifier risk carried to Task13."
+  },
+  "authorReportSha256": "d01c0bc777a4a3b91330fa6dc78d3621eea24b5197d09d26af40e13f0a41eb48",
+  "commitCheck": "complete-limited-final-delta",
+  "issues": [],
+  "limits": [
+    "No earlier 58 Task10 windows, protected 123051 paths, secrets, DB, or raw logs were rescanned.",
+    "Result case observations are retained per source-window, and repeated keys are counted once in distinct coverage.",
+    "Mechanical checks establish artifact identity and freshness, not product semantics or SPEC disposition."
+  ],
+  "finalCommitCustody": {
+    "base": "5657d24a4a58916dfca14a29e352ad361dda3319",
+    "head": "86777940c3f9500b1b89d884deaae2a48740d9a9",
+    "checkedAtUtc": "2026-10-24T16:14:58.805972+00:00",
+    "commitChangedPaths": 4726,
+    "indexEmpty": true,
+    "payloadPaths": 4724,
+    "payloadExactCommitTreeEntries": 4724,
+    "payloadIssues": [],
+    "attestationPaths": [
+      "artifacts/phase-b/b-remaining/task-10-fix01/private-scan.json",
+      "artifacts/phase-b/b-remaining/task-10-fix01/scan-membership.json"
+    ],
+    "attestationExactCommitBlobIssues": [],
+    "ownSourcePaths": 29,
+    "ownSourceCommittedByteShaAndCurrentCleanIssues": [],
+    "sourceWindowMapIssues": [],
+    "rawManifestPaths": 4692,
+    "rawMembershipPaths": 4694,
+    "rawCommittedSizeIssues": [],
+    "rawPerFileShaIndependentlyRechecked": 0,
+    "scanScope": {
+      "rawRoot": "artifacts/phase-b/b-remaining/task-10-fix01",
+      "rawFiles": 4694,
+      "exactStagedPayloadPaths": 4724,
+      "uniqueStagedPayloadBlobs": 941,
+      "bytesScannedIncludingOverlap": 43415865,
+      "membershipPath": "artifacts/phase-b/b-remaining/task-10-fix01/scan-membership.json",
+      "membershipSha256": "93b9418e54120aa681b9d62b6aa6b22305d99aafe54bf87d81d612d965a34821",
+      "excludedSelfAttestations": [
+        "artifacts/phase-b/b-remaining/task-10-fix01/private-scan.json",
+        "artifacts/phase-b/b-remaining/task-10-fix01/scan-membership.json"
+      ]
+    },
+    "scanScopeArithmeticMatched": true,
+    "reportedPrivateValueHits": 0,
+    "reportedPrivatePemHits": 0,
+    "privateValuesReadOrScanRerun": false,
+    "protectedReceipt": {
+      "manifestHashMatched": true,
+      "checkedPathsReported": 123051,
+      "mismatchesReported": 0,
+      "protectedTreeRescanned": false
+    },
+    "reportSha256": "d01c0bc777a4a3b91330fa6dc78d3621eea24b5197d09d26af40e13f0a41eb48",
+    "issues": [],
+    "limits": [
+      "Earlier six fix windows reused from this report, not rescanned.",
+      "Raw per-path SHA in scan-membership matches raw-manifest for 4692 overlap but was not independently recomputed from all raw bytes; raw path/committed blob size and payload OID/mode identity were independently checked.",
+      "Secret values, historical 58 windows, protected paths and DB were not reread.",
+      "Receipt reports private scan outcome; this audit did not rerun it or judge product semantics."
+    ],
+    "pathspecPayloadExact": true,
+    "rawManifestSelfExclusionsMatched": true,
+    "rawManifestAdditionalInventoryPaths": [
+      "artifacts/phase-b/b-remaining/task-10-fix01/own-stage-pathspec",
+      "artifacts/phase-b/b-remaining/task-10-fix01/raw-manifest.json"
+    ],
+    "namedArtifactCurrentBytesEqualCommitted": true,
+    "namedArtifactCountChecked": 9
+  }
+}

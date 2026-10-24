@@ -1,0 +1,6 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+06:47:51.839 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:44727/ama_t08_848e93aace8b_fairheld (MySQL 8.4)
+06:47:52.008 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 15 migrations (execution time 00:00.056s)
+06:47:52.033 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_t08_848e93aace8b_fairheld`: 013.2
+06:47:52.048 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t08_848e93aace8b_fairheld` to version "013.3 - external reconcile scan"
+06:47:52.300 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 1 migration to schema `ama_t08_848e93aace8b_fairheld`, now at version v013.3 (execution time 00:00.204s)

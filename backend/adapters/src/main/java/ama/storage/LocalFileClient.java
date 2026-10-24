@@ -18,8 +18,12 @@ public final class LocalFileClient implements FileStoragePort {
     private static final ObjectMapper JSON = new ObjectMapper();
     private final URI base;
     private final HttpClient http;
+    private final Duration bodyLifetime;
 
-    public LocalFileClient(URI base, SSLContext tls) {
+    public LocalFileClient(URI base, SSLContext tls) {this(base,tls,Duration.ofMinutes(5));}
+    public LocalFileClient(URI base, SSLContext tls, Duration bodyLifetime) {
+        if(bodyLifetime==null||bodyLifetime.isNegative()||bodyLifetime.isZero()||bodyLifetime.compareTo(Duration.ofMinutes(5))>0)throw new IllegalArgumentException("Finite body lifetime required");
+        this.bodyLifetime=bodyLifetime;
         if (base == null
                 || !"https".equals(base.getScheme())
                 || base.getHost() == null
@@ -50,7 +54,9 @@ public final class LocalFileClient implements FileStoragePort {
                 null);
     }
 
-    private HttpResponse<InputStream> send(String operation, Request value, InputStream body) {
+    private InputStream send(String operation, Request value, InputStream body) {
+        var owned=new RequestLifetime();
+        SourceReadLifetime.Registration scoped=null;boolean returned=false;
         try {
             String metadata =
                     Base64.getUrlEncoder()
@@ -68,9 +74,15 @@ public final class LocalFileClient implements FileStoragePort {
                     body == null
                             ? HttpRequest.BodyPublishers.noBody()
                             : HttpRequest.BodyPublishers.ofInputStream(() -> body));
-            var response = http.send(request.build(), HttpResponse.BodyHandlers.ofInputStream());
+            scoped=SourceReadLifetime.track(owned::abort);
+            var future=http.sendAsync(request.build(),HttpResponse.BodyHandlers.ofInputStream());
+            owned.future(future);
+            var response=future.get();
+            owned.body(response.body());
+            var registration=scoped;
+            var lifetime=new DeadlineInputStream(response.body(),bodyLifetime,()->{try{owned.abort();}finally{registration.close();}});
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
-                try (var in = response.body()) {
+                try (var in = lifetime) {
                     byte[] bytes = in.readNBytes(4097);
                     if (bytes.length > 4096) throw unavailable();
                     Failure error = JSON.readValue(bytes, Failure.class);
@@ -83,17 +95,30 @@ public final class LocalFileClient implements FileStoragePort {
                     throw new StorageException(code);
                 }
             }
-            return response;
+            returned=true;return lifetime;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw unavailable();
-        } catch (IOException | IllegalArgumentException e) {
+        } catch (java.util.concurrent.ExecutionException | java.util.concurrent.CancellationException | IOException | IllegalArgumentException e) {
             throw unavailable();
+        } finally {
+            if(!returned)try{owned.abort();}finally{if(scoped!=null)scoped.close();}
         }
     }
 
+    /** Assignment races with deadline/loss are closed without a dedicated body-reader thread. */
+    private static final class RequestLifetime {
+        private final java.util.concurrent.atomic.AtomicBoolean aborted=new java.util.concurrent.atomic.AtomicBoolean();
+        private final java.util.concurrent.atomic.AtomicReference<java.util.concurrent.CompletableFuture<?>> future=new java.util.concurrent.atomic.AtomicReference<>();
+        private final java.util.concurrent.atomic.AtomicReference<InputStream> body=new java.util.concurrent.atomic.AtomicReference<>();
+        void future(java.util.concurrent.CompletableFuture<?> value){future.set(value);if(aborted.get())value.cancel(true);}
+        void body(InputStream value){body.set(value);if(aborted.get())release();}
+        void abort(){aborted.set(true);var pending=future.get();if(pending!=null)pending.cancel(true);release();}
+        private void release(){var value=body.getAndSet(null);if(value!=null)try{value.close();}catch(IOException failure){throw new UncheckedIOException(failure);}}
+    }
+
     private <T> T json(String operation, Request value, InputStream body, Class<T> type) {
-        try (var in = send(operation, value, body).body()) {
+        try (var in = send(operation, value, body)) {
             byte[] bytes = in.readNBytes(1048577);
             if (bytes.length > 1048576) throw unavailable();
             return JSON.readValue(bytes, type);
@@ -103,7 +128,7 @@ public final class LocalFileClient implements FileStoragePort {
     }
 
     private void empty(String operation, Request value) {
-        try (var in = send(operation, value, null).body()) {
+        try (var in = send(operation, value, null)) {
             if (in.read() != -1) throw unavailable();
         } catch (IOException e) {
             throw unavailable();
@@ -130,8 +155,7 @@ public final class LocalFileClient implements FileStoragePort {
                         new Request(
                                 key, null, null, null, null, null, null, null, null, null, null,
                                 null, offset, length),
-                        null)
-                .body();
+                        null);
     }
 
     @Override

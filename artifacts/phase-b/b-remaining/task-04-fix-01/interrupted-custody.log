@@ -1,0 +1,6 @@
+
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-04-fix-01/interrupted-custody.py", line 3, in <module>
+    r=subprocess.run(['docker','exec','-e','MYSQL_PWD','ama-test-b01-ad9f1af29eff','mysql','-u',os.environ['AMA_TEST_DATABASE_USERNAME'],'--database=ama_b01_fixture','--batch','--raw','-e',q],capture_output=True,text=True);assert r.returncode==0;print(r.stdout);assert len(r.stdout.splitlines())==1,'Owned unfinished rows need exact custody reconciliation'
+                                                                                                                                                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Owned unfinished rows need exact custody reconciliation

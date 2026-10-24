@@ -1,0 +1,28 @@
+--- backend/integration-tests/src/test/java/ama/storage/ManagedRegistryFixture.java
++++ backend/integration-tests/src/test/java/ama/storage/Task05RegistryFixture.java
+@@ -4,13 +4,13 @@
+ 
+ import java.nio.file.Path;
+ 
+-final class ManagedRegistryFixture implements AutoCloseable {
+-    final ManagedLocalFixture local;
++final class Task05RegistryFixture implements AutoCloseable {
++    final Task05NativeFixture local;
+     final S3Fixture s3;
+     final ManagedBackendId.Definition binding;
+     final FileStoragePort storage;
+ 
+-    ManagedRegistryFixture(Path root) throws Exception {
++    Task05RegistryFixture(Path root) throws Exception {
+         if ("s3".equals(System.getenv("AMA_STORAGE_CONTRACT"))) {
+             local = null;
+             s3 = new S3Fixture("infrastructure-fixture");
+@@ -28,7 +28,7 @@
+                             S3Fixture.config(
+                                     binding.id(), c.endpoint(), c.dataBucket(), c.controlBucket()));
+         } else {
+-            local = new ManagedLocalFixture(root);
++            local = new Task05NativeFixture(root);
+             s3 = null;
+             binding = local.binding;
+             storage = local.startServer();

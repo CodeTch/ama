@@ -66,18 +66,14 @@ class PreparedWorkerLoopTest {
         }
         assertEquals(0, callbacks.get()); assertEquals(0, queue.preparedCalls.get()); assertEquals(0, queue.ordinaryCalls.get());
     }
-    @Test void heartbeatLossWhileCompletionWaitsAlsoSuppressesCallback() throws Exception {
-        var queue = new Queue(); queue.renewAllowed = false; queue.pauseCompletion = true;
-        var callbacks = new AtomicInteger();
-        try (var worker = prepared(queue, lease -> () -> { callbacks.incrementAndGet(); return WorkerLoopTest.success(); })) {
-            try {
-                worker.pollOnce("cpu"); assertTrue(queue.atCompletion.await(2, TimeUnit.SECONDS));
-                assertTrue(queue.renewed.await(7, TimeUnit.SECONDS));
-                Thread.sleep(100);
-            } finally { queue.releaseCompletion.countDown(); }
-            assertTrue(queue.done.await(2, TimeUnit.SECONDS));
+    @Test void closeWhileCompletionWaitsSuppressesCallback() throws Exception {
+        var queue=new Queue();queue.pauseCompletion=true;var callbacks=new AtomicInteger();
+        try(var worker=prepared(queue,lease->()->{callbacks.incrementAndGet();return WorkerLoopTest.success();})) {
+            worker.pollOnce("cpu");assertTrue(queue.atCompletion.await(2,TimeUnit.SECONDS));
+            worker.close();queue.releaseCompletion.countDown();assertTrue(queue.done.await(2,TimeUnit.SECONDS));
         }
-        assertEquals(0, callbacks.get()); assertEquals(1, queue.preparedCalls.get()); assertEquals(0, queue.ordinaryCalls.get());
+        assertEquals(0,callbacks.get());assertEquals(1,queue.preparedCalls.get());assertEquals(0,queue.ordinaryCalls.get());
+        assertEquals(1,queue.renewed.getCount(),"No tick after dispatch");
     }
     @Test void nullPreparedCallbackHasOneQuarantineCompletion() throws Exception {
         var queue = new Queue();
@@ -92,18 +88,38 @@ class PreparedWorkerLoopTest {
         assertThrows(UnsupportedOperationException.class, () -> unsupported.completeWithEffects(null, () -> { callbacks.incrementAndGet(); return WorkerLoopTest.success(); }));
         assertEquals(0, callbacks.get());
     }
+    @Test void selectedRenewalDrainsBeforeCompletionEntry() throws Exception {
+        var queue=new Queue();queue.pauseRenew=true;
+        var prepared=new CountDownLatch(1);
+        try(var worker=prepared(queue,lease->{
+            assertTrue(queue.renewEntered.await(7,TimeUnit.SECONDS));
+            prepared.countDown();return WorkerLoopTest::success;
+        })) {
+            worker.pollOnce("cpu");assertTrue(prepared.await(8,TimeUnit.SECONDS));
+            try {assertFalse(queue.atCompletion.await(300,TimeUnit.MILLISECONDS),"Completion must not acquire DB roots until selected renew exits");}
+            finally {queue.releaseRenew.countDown();}
+            assertTrue(queue.done.await(2,TimeUnit.SECONDS));
+        }
+        assertEquals(1,queue.preparedCalls.get());assertEquals(0,queue.ordinaryCalls.get());
+    }
     static final class Queue implements TaskQueue {
         final WorkerLoopTest.LocalTasks tasks = new WorkerLoopTest.LocalTasks();
         final AtomicInteger ordinaryCalls = new AtomicInteger(), preparedCalls = new AtomicInteger();
         final ThreadLocal<Boolean> insideCompletion = ThreadLocal.withInitial(() -> false);
         final CountDownLatch done = new CountDownLatch(1), renewed = new CountDownLatch(1);
         final CountDownLatch atCompletion = new CountDownLatch(1), releaseCompletion = new CountDownLatch(1);
-        volatile boolean pauseCompletion, failCompletion, renewAllowed = true;
+        volatile boolean pauseCompletion, failCompletion, renewAllowed = true, pauseRenew;
+        final CountDownLatch renewEntered=new CountDownLatch(1),releaseRenew=new CountDownLatch(1);
         volatile TaskResult result;
         Queue() { tasks.add("cpu"); }
         public String enqueue(TaskSpec spec) { return tasks.enqueue(spec); }
         public Optional<TaskLease> claim(String pool, String owner) { return tasks.claim(pool, owner); }
-        public boolean renew(TaskLease lease) { renewed.countDown(); return renewAllowed; }
+        public boolean renew(TaskLease lease) {
+            renewEntered.countDown();
+            if(pauseRenew)try {if(!releaseRenew.await(8,TimeUnit.SECONDS))throw new IllegalStateException("RENEW_GATE_TIMEOUT");}
+            catch(InterruptedException e){Thread.currentThread().interrupt();return false;}
+            renewed.countDown(); return renewAllowed;
+        }
         public boolean complete(TaskLease lease, TaskResult value) {
             ordinaryCalls.incrementAndGet(); result = value; done.countDown();
             if (failCompletion) throw new IllegalStateException("COMPLETION_FAILED"); return true;

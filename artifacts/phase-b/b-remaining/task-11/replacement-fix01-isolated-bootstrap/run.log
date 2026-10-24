@@ -1,0 +1,259 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ama-parent                                                         [pom]
+[INFO] ama-contracts                                                      [jar]
+[INFO] ama-core                                                           [jar]
+[INFO] ama-adapters                                                       [jar]
+[INFO] ama-api                                                            [jar]
+[INFO] ama-file-service                                                   [jar]
+[INFO] ama-worker                                                         [jar]
+[INFO] ama-integration-tests                                              [jar]
+[INFO] 
+[INFO] ---------------------------< ama:ama-parent >---------------------------
+[INFO] Building ama-parent 0.1.0-SNAPSHOT                                 [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] -------------------------< ama:ama-contracts >--------------------------
+[INFO] Building ama-contracts 0.1.0-SNAPSHOT                              [2/8]
+[INFO]   from backend/contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-contracts ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-contracts ---
+[INFO] 
+[INFO] ----------------------------< ama:ama-core >----------------------------
+[INFO] Building ama-core 0.1.0-SNAPSHOT                                   [3/8]
+[INFO]   from backend/core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-core ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/core/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/core/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-core ---
+[INFO] Copying 59 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-core ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-core ---
+[INFO] 
+[INFO] --------------------------< ama:ama-adapters >--------------------------
+[INFO] Building ama-adapters 0.1.0-SNAPSHOT                               [4/8]
+[INFO]   from backend/adapters/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-adapters ---
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] Copying 18 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-adapters ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 142 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-adapters ---
+[INFO] Copying 63 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-adapters ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 42 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] /home/tanren/ama/.worktrees/phase-b-completion/backend/adapters/src/test/java/ama/transcript/Task11KnowledgeProofTest.java: Some input files use unchecked or unsafe operations.
+[INFO] /home/tanren/ama/.worktrees/phase-b-completion/backend/adapters/src/test/java/ama/transcript/Task11KnowledgeProofTest.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-adapters ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-adapters ---
+[INFO] Building jar: /home/tanren/ama/.worktrees/phase-b-completion/backend/adapters/target/ama-adapters-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ----------------------------< ama:ama-api >-----------------------------
+[INFO] Building ama-api 0.1.0-SNAPSHOT                                    [5/8]
+[INFO]   from backend/api/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-api ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-api ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 35 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-api ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/api/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-api ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 9 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-api ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-api ---
+[INFO] Building jar: /home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/ama-api-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ama-api ---
+[INFO] Attaching repackaged archive /home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/ama-api-0.1.0-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ------------------------< ama:ama-file-service >------------------------
+[INFO] Building ama-file-service 0.1.0-SNAPSHOT                           [6/8]
+[INFO]   from backend/file-service/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-file-service ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-file-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 10 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-file-service ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-file-service ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-file-service ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-file-service ---
+[INFO] Building jar: /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ama-file-service ---
+[INFO] Attaching repackaged archive /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ---------------------------< ama:ama-worker >---------------------------
+[INFO] Building ama-worker 0.1.0-SNAPSHOT                                 [7/8]
+[INFO]   from backend/worker/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-worker ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-worker ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 15 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-worker ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-worker ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 3 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-worker ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-worker ---
+[INFO] Building jar: /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/target/ama-worker-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------------< ama:ama-integration-tests >----------------------
+[INFO] Building ama-integration-tests 0.1.0-SNAPSHOT                      [8/8]
+[INFO]   from backend/integration-tests/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-integration-tests ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-integration-tests ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-integration-tests ---
+[INFO] Copying 17 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-integration-tests ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 358 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java: Some input files use or override a deprecated API.
+[INFO] /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java: Recompile with -Xlint:deprecation for details.
+[INFO] /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/test/java/ama/storage/Task06SavedGraphIT.java: Some input files use unchecked or unsafe operations.
+[INFO] /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/test/java/ama/storage/Task06SavedGraphIT.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-integration-tests ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-integration-tests ---
+[INFO] Skipping packaging of the jar
+[INFO] 
+[INFO] --- failsafe:3.5.6:integration-test (default) @ ama-integration-tests ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+[INFO] Running ama.publication.Task11BootstrapIT
+04:27:39.495 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:46151/ama_t11fix1_49609b94161e_behavior (MySQL 8.4)
+04:27:39.628 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Schema history table `ama_t11fix1_49609b94161e_behavior`.`flyway_schema_history` does not exist yet
+04:27:39.634 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 16 migrations (execution time 00:00.032s)
+04:27:39.663 [main] INFO org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory -- Creating Schema History table `ama_t11fix1_49609b94161e_behavior`.`flyway_schema_history` ...
+04:27:39.801 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_t11fix1_49609b94161e_behavior`: << Empty Schema >>
+04:27:39.815 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "001 - foundation"
+04:27:39.979 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "002 - identity acl"
+04:27:40.272 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "005 - tasks outbox"
+04:27:40.807 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "006 - audit metadata"
+04:27:41.031 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "007 - identity sessions"
+04:27:41.773 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "008 - meeting schema"
+04:27:45.104 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "009 - file schema"
+04:27:47.207 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "010 - reliable execution"
+04:27:50.210 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "011 - transcript schema"
+04:27:54.599 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "011.1 - transcript material index"
+04:27:54.674 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "012 - minutes evidence"
+04:28:05.007 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "013 - publications"
+04:28:09.330 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "013.1 - b runtime metadata"
+04:28:09.756 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "013.2 - task input lookup"
+04:28:09.831 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "013.3 - external reconcile scan"
+04:28:10.028 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Migrating schema `ama_t11fix1_49609b94161e_behavior` to version "013.4 - publication submission"
+04:28:10.220 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 16 migrations to schema `ama_t11fix1_49609b94161e_behavior`, now at version v013.4 (execution time 00:30.042s)
+04:28:10.337 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:46151/ama_t11fix1_49609b94161e_behavior (MySQL 8.4)
+04:28:10.393 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 16 migrations (execution time 00:00.020s)
+04:28:10.411 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_t11fix1_49609b94161e_behavior`: 013.4
+04:28:10.413 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_t11fix1_49609b94161e_behavior` is up to date. No migration necessary.
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 32.12 s -- in ama.publication.Task11BootstrapIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.5.6:verify (default) @ ama-integration-tests ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ama-parent 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] ama-parent ......................................... SUCCESS [  0.003 s]
+[INFO] ama-contracts ...................................... SUCCESS [  0.728 s]
+[INFO] ama-core ........................................... SUCCESS [  0.081 s]
+[INFO] ama-adapters ....................................... SUCCESS [  6.642 s]
+[INFO] ama-api ............................................ SUCCESS [  1.262 s]
+[INFO] ama-file-service ................................... SUCCESS [  0.253 s]
+[INFO] ama-worker ......................................... SUCCESS [  0.426 s]
+[INFO] ama-integration-tests .............................. SUCCESS [ 38.889 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  48.641 s
+[INFO] Finished at: 2026-10-25T04:28:10+08:00
+[INFO] ------------------------------------------------------------------------
+PASS: executed=1, failures=0; evidence=/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/failsafe-reports/TEST-ama.publication.Task11BootstrapIT.xml

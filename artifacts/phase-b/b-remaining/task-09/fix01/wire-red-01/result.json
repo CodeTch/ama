@@ -1,0 +1,39 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 4,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "class": "ama.api.Task09Fix01WireTest",
+      "name": "initialSettingsRemainsSeparate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.api.Task09Fix01WireTest",
+      "name": "fullStillRejectsDuplicateAndUnknownFields",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.api.Task09Fix01WireTest",
+      "name": "missingOrWrongScopeIsNeverImplicitFull",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "class": "ama.api.Task09Fix01WireTest",
+      "name": "fullScopeAcceptsTokenLegacyAndEqualDualForms",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

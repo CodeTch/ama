@@ -1,0 +1,18 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task10ClosingSecondLookupIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task10NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "originalApplicationAckSha256": "808a552c4afbfdb77e9663979ba44f6068f11b6af7611adb633af4bbd2991df3",
+  "recoveryApplicationAckSha256": "096cbdc38cb350b756c6958a0982d31277e4f0a4bc2f7a10e4f24fd1fc40b767",
+  "recoveryEpoch": "mysql-recovery-20261024",
+  "effectivePort": 46151,
+  "sourceSha256": "57cd862dca0af5dc2ac052ec48b8a1bacbbb64fcb2008f7e3526ac45f12ab7ca",
+  "startedUtc": "2026-10-24T14:58:00.508483+00:00"
+}

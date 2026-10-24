@@ -55,6 +55,98 @@ paths:
     $ref: './processing.yaml#/tasks'
   /api/v1/meetings/{id}/processing-tasks/{task}:
     $ref: './processing.yaml#/task'
+  /api/v1/meetings/{meetingId}/transcript:
+    $ref: './transcripts.yaml#/current'
+  /api/v1/meetings/{meetingId}/transcript/history:
+    $ref: './transcripts.yaml#/history'
+  /api/v1/meetings/{meetingId}/transcript/revisions/{revisionId}:
+    $ref: './transcripts.yaml#/revision'
+  /api/v1/meetings/{meetingId}/transcript/marks:
+    $ref: './transcripts.yaml#/marks'
+  /api/v1/meetings/{meetingId}/transcript/revisions/{revisionId}/marks:
+    $ref: './transcripts.yaml#/revisionMarks'
+  /api/v1/meetings/{meetingId}/transcript/confirmation:
+    $ref: './transcripts.yaml#/confirmation'
+  /api/v1/meetings/{meetingId}/transcript/confirmations:
+    $ref: './transcripts.yaml#/confirmations'
+  /api/v1/meetings/{meetingId}/transcript/confirmations/{confirmationId}:
+    $ref: './transcripts.yaml#/confirmationItem'
+  /api/v1/meetings/{meetingId}/transcript/restorations:
+    $ref: './transcripts.yaml#/restorations'
+  /api/v1/meetings/{meetingId}/transcript/sources/{fileId}:
+    $ref: './transcripts.yaml#/source'
+  /api/v1/meetings/{meetingId}/transcript/revisions/{revisionId}/sources/{fileId}:
+    $ref: './transcripts.yaml#/revisionSource'
+  /api/v1/meetings/{meetingId}/minutes/templates:
+    $ref: './minutes.yaml#/templates'
+  /api/v1/meetings/{meetingId}/minutes/initial-settings:
+    $ref: './minutes.yaml#/initial'
+  /api/v1/meetings/{meetingId}/minutes/generations:
+    $ref: './minutes.yaml#/generate'
+  /api/v1/meetings/{meetingId}/minutes/generation-inputs/current:
+    $ref: './minutes.yaml#/current'
+  /api/v1/meetings/{meetingId}/minutes/generation-inputs/{inputId}:
+    $ref: './minutes.yaml#/input'
+  /api/v1/meetings/{meetingId}/minutes/generation-tasks:
+    $ref: './minutes.yaml#/tasks'
+  /api/v1/meetings/{meetingId}/minutes/generation-tasks/{taskId}:
+    $ref: './minutes.yaml#/task'
+  /api/v1/meetings/{meetingId}/minutes/candidates:
+    $ref: './minutes.yaml#/candidates'
+  /api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}:
+    $ref: './minutes.yaml#/candidate'
+  /api/v1/meetings/{meetingId}/minutes:
+    $ref: './minutes.yaml#/savedCurrent'
+  /api/v1/meetings/{meetingId}/minutes/editor-intent:
+    $ref: './minutes.yaml#/savedIntent'
+  /api/v1/meetings/{meetingId}/minutes/editor-intents:
+    $ref: './minutes.yaml#/savedIntents'
+  /api/v1/meetings/{meetingId}/minutes/history:
+    $ref: './minutes.yaml#/savedHistory'
+  /api/v1/meetings/{meetingId}/minutes/element-sets:
+    $ref: './minutes.yaml#/savedSets'
+  /api/v1/meetings/{meetingId}/minutes/revisions/{revisionId}:
+    $ref: './minutes.yaml#/savedRevision'
+  /api/v1/meetings/{meetingId}/minutes/element-sets/{setId}:
+    $ref: './minutes.yaml#/savedSet'
+  /api/v1/meetings/{meetingId}/minutes/settings:
+    $ref: './minutes.yaml#/savedSettings'
+  /api/v1/meetings/{meetingId}/minutes/readiness:
+    $ref: './minutes.yaml#/savedReadiness'
+  /api/v1/meetings/{meetingId}/minutes/sources/{locatorId}:
+    $ref: './minutes.yaml#/savedSource'
+  /api/v1/meetings/{meetingId}/minutes/revisions/{revisionId}/sources/{locatorId}:
+    $ref: './minutes.yaml#/savedRevisionSource'
+  /api/v1/meetings/{meetingId}/minutes/element-sets/{setId}/sources/{locatorId}:
+    $ref: './minutes.yaml#/savedSetSource'
+  /api/v1/meetings/{meetingId}/minutes/reviews:
+    $ref: './minutes.yaml#/savedReviews'
+  /api/v1/meetings/{meetingId}/minutes/reviews/{reviewId}:
+    $ref: './minutes.yaml#/savedReview'
+  /api/v1/meetings/{meetingId}/minutes/command-discovery:
+    $ref: './minutes.yaml#/savedDiscovery'
+  /api/v1/meetings/{meetingId}/minutes/body:
+    $ref: './minutes.yaml#/savedBodyWrite'
+  /api/v1/meetings/{meetingId}/minutes/elements/{elementId}:
+    $ref: './minutes.yaml#/savedElementWrite'
+  /api/v1/meetings/{meetingId}/minutes/elements/{elementId}/action-fields:
+    $ref: './minutes.yaml#/savedActionWrite'
+  /api/v1/meetings/{meetingId}/minutes/elements/{elementId}/open-question:
+    $ref: './minutes.yaml#/savedQuestionWrite'
+  /api/v1/meetings/{meetingId}/minutes/body-restorations:
+    $ref: './minutes.yaml#/savedBodyRestore'
+  /api/v1/meetings/{meetingId}/minutes/element-set-restorations:
+    $ref: './minutes.yaml#/savedSetRestore'
+  /api/v1/meetings/{meetingId}/minutes/settings/template:
+    $ref: './minutes.yaml#/savedTemplateWrite'
+  /api/v1/meetings/{meetingId}/minutes/settings/exclusions:
+    $ref: './minutes.yaml#/savedExclusionWrite'
+  /api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}/adoptions:
+    $ref: './minutes.yaml#/savedAdopt'
+  /api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}/rejections:
+    $ref: './minutes.yaml#/savedReject'
+  /api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}/disposals:
+    $ref: './minutes.yaml#/savedDispose'
 components:
   securitySchemes:
     enterpriseSession:

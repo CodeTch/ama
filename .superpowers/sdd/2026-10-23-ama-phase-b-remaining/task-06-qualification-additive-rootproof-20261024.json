@@ -1,0 +1,373 @@
+{
+  "utc": "2026-10-23T20:55:57.938088+00:00",
+  "kind": "additive affected-source/runtime proof; not task review/adoption",
+  "frozenPinSha256": "922ef12101c4f7111e89a1ca2ca86ca84c2c64b74999d104254a1917ccd940a2",
+  "candidateSha256": "7370bd3128cabed3bf87b0b05ba98f404efefc3d54dae560c5ca6eeaf4b4164d",
+  "manifestSha256": "d83d98d8af60e0934f423289dfa9dee54b41d227c49f01c50e2435e2ace720c4",
+  "evidenceFiles": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06ConcurrencyIT.xml",
+      "bytes": 33480,
+      "sha256": "6562fe9b8dcc91e0c915d05b196c526c4e0321777d5a8fc2e17ac5fd620fe97d"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06AtomicityIT.xml",
+      "bytes": 33757,
+      "sha256": "06c7c71177089b7f8585bd22434c07f9a7dc8063a4759db7367c3c9ba4e1f64a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06HttpIT.xml",
+      "bytes": 33493,
+      "sha256": "1619801d210606da66027a18dd338d0b2b859e66e0a33d7e70689065f095bfb7"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06AccessIT.xml",
+      "bytes": 33456,
+      "sha256": "cc9e5539b569b630b01cb360fc5a6fbfb631aa8c94b7a3aab3b9ff8103e0e8dd"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/receipt.json",
+      "bytes": 1753,
+      "sha256": "d8a44bff375063a3e8ad139800eef7aefcbb6aa43b614b1c327c2762c64ff244"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/source.json",
+      "bytes": 54272,
+      "sha256": "e8eaa7e4e033e847b96d5312984e0eb9c75f27b1f020627e7ae6e9ddc199ba6f"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06SavedGraphIT.xml",
+      "bytes": 33480,
+      "sha256": "bf290d374df17aaa19dd97d0ebc0c12a36143fc615b2d165743600408fcd76c9"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06SavedCommandsIT.xml",
+      "bytes": 33616,
+      "sha256": "3e89669cef1e67ccfff6b667d45e412807583d3f6a44ab3669a3f6e7584590a4"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06GuardsIT.xml",
+      "bytes": 33741,
+      "sha256": "171454b588b76a9cc3b327098a647f02a0711dd381070842f3120d9ff169d28b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06CompositionIT.xml",
+      "bytes": 33469,
+      "sha256": "c1dc82b1fac4662b697928243bd4f0fc64df7f23c2b3878ea64702f8d5643f49"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06RestartIT.xml",
+      "bytes": 33581,
+      "sha256": "58081e91a9c50467e648831f86ff26c3c26988b83ee93e89bc907df999fc6cff"
+    }
+  ],
+  "sourceWindow": {
+    "paths": 379,
+    "currentAllMatch": true
+  },
+  "qualifiedChanges": [
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "oldHashOnly": "b61a0c099a4d2d43355983057a2183c06dd9c1e2ae94fc9a13ade0ec93b7a7d9",
+      "newSha256": "0684b4b4adf50446c0f7dcf09fc34600d03bfb2b53b9cd153ab2a0e2fae1847c"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java",
+      "oldHashOnly": "b02a3d45dbe36495be5bc270a472f41d37cce095fd16d0517e7957901aeb9440",
+      "newSha256": "7f9d75c0df4fc01fbf16df3cf63edab01fe6eb867c6556998fcfe58b5149caef"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java",
+      "oldHashOnly": "1e4a65109e6dbe47ab353ae911f3c35f69c237d107233a85597f0f21a30aafee",
+      "newSha256": "7a26747d9e6aa4f79f6d92a1eddee5cd59a9cf2069e4a93d6a61f0ea63c18763"
+    }
+  ],
+  "currentSourceByteSnapshots": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-pin-refresh-01-source",
+  "currentQualifiedSeals": {
+    "backend/api/src/main/java/ama/api/TranscriptConfiguration.java": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java": "0684b4b4adf50446c0f7dcf09fc34600d03bfb2b53b9cd153ab2a0e2fae1847c",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java": "1ee6c5cb70c62237850b2739b46b0e9c548d3f1e594d2e91b53cdcc1b825a9a7",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+    "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076",
+    "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+    "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+    "backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java": "3b5db92905a817ba9336103cb3c65c2b0e25efe1b8e46e9394e8e3cdabe9d09d",
+    "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java": "7f9d75c0df4fc01fbf16df3cf63edab01fe6eb867c6556998fcfe58b5149caef",
+    "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java": "7a26747d9e6aa4f79f6d92a1eddee5cd59a9cf2069e4a93d6a61f0ea63c18763"
+  },
+  "xmlCounts": {
+    "tests": 16,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "xml": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06AccessIT.xml",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "effectiveMemberOwnerHistoryAndEpochTransferRemainDistinct"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06AtomicityIT.xml",
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "failedTransactionRollsBackAllAndLostAcknowledgmentReplaysActualResult",
+        "ordinarySnapshotBudgetFailureAfterConcurrentAcceptanceReturnsWinner",
+        "twoConcurrentDifferentKeysCanAdvanceExpectedRevisionOnlyOnce"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06CompositionIT.xml",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "noninstalledActualCompositionAndPretransferBudgetConsumption"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06ConcurrencyIT.xml",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "actualMetadataAndFkLocksProtectGrowthChildrenAndEmptyMarksInBothPhases"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06GuardsIT.xml",
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "ownerHistoryUsesBoundedExclusiveCursorWithoutFullGraphReads",
+        "markInsertedBetweenSnapshotAndFinalCannotEscapeCompleteSetComparison",
+        "futureInstallationClosesAdvertisedWritesAndAcceptedReplaySurvives"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06HttpIT.xml",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "installedLOCAL",
+        "installedS3"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06RestartIT.xml",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "freshJvmLOCALRetainsOriginalHashAcrossChangedDefaults",
+        "freshJvmS3RetainsOriginalHashAcrossChangedDefaults"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06SavedCommandsIT.xml",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "newIntakeClearsPointerThenNewConfirmationReattachesOriginalIdentity",
+        "immutableSaveMarksRestoreAndStableConfirmationReceipts"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06SavedGraphIT.xml",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "noninstalledCompleteRawInspectionPreservesActualBodyAndExplicitEmptyMarks"
+      ]
+    }
+  ],
+  "actualReceipt": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06*IT"
+    ],
+    "exit": 0,
+    "reports": [
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06ConcurrencyIT.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06AtomicityIT.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06HttpIT.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06SavedGraphIT.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06CompositionIT.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06RestartIT.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06AccessIT.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06GuardsIT.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/saved-final-it-01/integration-tests-TEST-ama.storage.Task06SavedCommandsIT.xml"
+    ],
+    "elapsedSeconds": 108.79132008552551,
+    "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+  },
+  "observations": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/pipeline-04991b70-b671-417c-9e73-3ac7a34c4fb3/fresh-jvm.json",
+      "sha256": "d8b6358e69e9bf204f4aeae014164d0e6493f8be20eead02fca6772de23c4cb9",
+      "numericRecipeAndDeclarationsMatch": true,
+      "originalFourIdentityAndMinimaMatch": true,
+      "originalCount": 5,
+      "bootObservation": "0b7b6189-5211-4f3f-b68b-f82b2cc70fac",
+      "scope": "actual observation; exact cohort linkage not newly inferred from directory order",
+      "pid": 1179839,
+      "maxMemory": 536870912,
+      "processors": 2,
+      "currentDefault": "b06.controlled.import-txt.2",
+      "originalProcessing": "b06.controlled.import-txt.1",
+      "completeRestartProofSha256": "94a97959172b93666d853a299d23017e959ebc44d39ea25bfb15052f16a2a052",
+      "retainedHashAndDistinctPidMatch": true
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/pipeline-21c03019-286c-4af4-beb3-4b2ee63489ec/installed-composition.json",
+      "sha256": "dce4bd33b03f3e3bb71c240abe1fc5b9dffd6cfdf2609d2d0f49476fefcbfbd9",
+      "numericRecipeAndDeclarationsMatch": true,
+      "originalFourIdentityAndMinimaMatch": true,
+      "originalCount": 4,
+      "bootObservation": "176278e8-5236-436d-8039-0cee4db0bce4",
+      "scope": "actual observation; exact cohort linkage not newly inferred from directory order"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/pipeline-38685bda-2590-4bf4-a2bd-ea6d064f9629/fresh-jvm.json",
+      "sha256": "895b754dbb7b902afe594839f8cca58ee64a2d220d4bf3a41f0e0d2fe6842ec9",
+      "numericRecipeAndDeclarationsMatch": true,
+      "originalFourIdentityAndMinimaMatch": true,
+      "originalCount": 5,
+      "bootObservation": "d5cb83bc-5733-42da-a528-ae24e2043916",
+      "scope": "actual observation; exact cohort linkage not newly inferred from directory order",
+      "pid": 1176908,
+      "maxMemory": 536870912,
+      "processors": 2,
+      "currentDefault": "b06.controlled.import-txt.2",
+      "originalProcessing": "b06.controlled.import-txt.1"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/pipeline-3f4211fa-dc63-48f4-a199-d4e27907480d/installed-composition.json",
+      "sha256": "8cd421913746cbc3e6757cf1ac8577ffd5394e27c5fbf3440f851659be415d47",
+      "numericRecipeAndDeclarationsMatch": true,
+      "originalFourIdentityAndMinimaMatch": true,
+      "originalCount": 4,
+      "bootObservation": "a30443a9-b28b-4911-9a7a-2103d82d3bb6",
+      "scope": "actual observation; exact cohort linkage not newly inferred from directory order"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/pipeline-764ce01a-9ae0-461c-aad3-2fc8a0e38b04/fresh-jvm.json",
+      "sha256": "d261a52cbe80462fc6ad426882cb6ae263d79f639565055b7d5421afd575ba11",
+      "numericRecipeAndDeclarationsMatch": true,
+      "originalFourIdentityAndMinimaMatch": true,
+      "originalCount": 5,
+      "bootObservation": "368adf2c-8828-4dc4-ace0-88315b1e9b86",
+      "scope": "actual observation; exact cohort linkage not newly inferred from directory order",
+      "pid": 1177093,
+      "maxMemory": 536870912,
+      "processors": 2,
+      "currentDefault": "b06.controlled.import-txt.2",
+      "originalProcessing": "b06.controlled.import-txt.1"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/pipeline-983cde0f-8d06-4589-966a-cfb030a15c1b/installed-composition.json",
+      "sha256": "eea6fe8c073ed8734731e6623a9e9966aefb4fedac7e96d3e3d4446434323885",
+      "numericRecipeAndDeclarationsMatch": true,
+      "originalFourIdentityAndMinimaMatch": true,
+      "originalCount": 4,
+      "bootObservation": "debc4f48-4ce8-4205-9701-e47cddf66bc2",
+      "scope": "actual observation; exact cohort linkage not newly inferred from directory order"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/pipeline-d0eb3668-a6cf-4eb2-bebb-a0796fdbfb1b/installed-composition.json",
+      "sha256": "73b338e3ba2a889e814e95a441d2688fa74d67b40f28ec776ae63d07167e4f1e",
+      "numericRecipeAndDeclarationsMatch": true,
+      "originalFourIdentityAndMinimaMatch": true,
+      "originalCount": 4,
+      "bootObservation": "003c43c8-bf09-4715-bf20-ca4c63db3a1d",
+      "scope": "actual observation; exact cohort linkage not newly inferred from directory order"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/pipeline-f0014c67-8bf5-47e5-8445-4e213197c1ec/fresh-jvm.json",
+      "sha256": "8230d2d3e59b8fc5f9a8fa5380878d25f680e6400a9657e56e697a711ca22608",
+      "numericRecipeAndDeclarationsMatch": true,
+      "originalFourIdentityAndMinimaMatch": true,
+      "originalCount": 5,
+      "bootObservation": "dcb856de-7029-4e54-b2c0-28590e2974b7",
+      "scope": "actual observation; exact cohort linkage not newly inferred from directory order",
+      "pid": 1179649,
+      "maxMemory": 536870912,
+      "processors": 2,
+      "currentDefault": "b06.controlled.import-txt.2",
+      "originalProcessing": "b06.controlled.import-txt.1",
+      "completeRestartProofSha256": "da622f4ee4811268ec87a748d3e4490b6b0b4a9926bc42ebd3e3060e8e16c5fc",
+      "retainedHashAndDistinctPidMatch": true
+    }
+  ],
+  "actualOriginalArchiveRehash": [
+    {
+      "case": "pipeline-04991b70-b671-417c-9e73-3ac7a34c4fb3",
+      "archiveContainedInApprovedPrivateRuntimeRoot": true,
+      "boundedFilesRead": 12,
+      "originalFourActualRawFileHashesAndSizesMatch": true,
+      "originalBytes": 1884
+    },
+    {
+      "case": "pipeline-f0014c67-8bf5-47e5-8445-4e213197c1ec",
+      "archiveContainedInApprovedPrivateRuntimeRoot": true,
+      "boundedFilesRead": 12,
+      "originalFourActualRawFileHashesAndSizesMatch": true,
+      "originalBytes": 1884
+    }
+  ],
+  "historicalSourceLimit": "No separately retained b61a pinned bytes; no exact historical textual diff claimed. Actual author edit description + current full source + preserved historical hash seals + targeted fresh tests read. New twelve-source exact byte snapshot begins only now.",
+  "rootSourceChecks": [
+    "current mutate51 ordinary named failure performs one fresh receipts.lookup; receipts lookup25 fresh access gate",
+    "mutate57 nonordinary A error rethrown before accepted winner restoration58 after fresh F gate56",
+    "history140 metadata page reserves sentinel before IDs selection,142 sorted parent UUID locks",
+    "prepare199 WORKING parent history strictly earlier",
+    "projection214 actual future absence gates writable flags",
+    "fixture67+145 default false installation hook; runtime actual7 actual bean; actual directly-VALUES writers19 with two retained S/F gates32"
+  ],
+  "notQualified": [
+    "Task6 source SPEC/quality/adoption pending",
+    "Final extra HTTP boundaries/final units/preservation report pending",
+    "HA/capacity/native IO/company/fullB or installed futureTask10/11"
+  ]
+}

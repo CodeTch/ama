@@ -1,0 +1,28 @@
+{
+  "profile": "ama.result-review.v2",
+  "kind": "REVIEW_TARGET",
+  "data": {
+    "meetingId": "00000000-0000-0000-0000-000000000001",
+    "reviewKind": "SOURCE_SUPPORT",
+    "target": {
+      "kind": "ELEMENT",
+      "id": "00000000-0000-0000-0000-000000000012",
+      "setId": "00000000-0000-0000-0000-000000000011",
+      "setRevision": 1,
+      "minutesRevision": null
+    },
+    "content": {
+      "title": null,
+      "body": "A😀B",
+      "category": "CONCLUSION",
+      "action": null
+    },
+    "anchor": {
+      "schemaVersion": "ama.anchor.v1",
+      "unit": "UNICODE_SCALAR",
+      "start": 0,
+      "end": 3,
+      "targetTextSha256": "aacfb6637bd0df2238641c5b15898d1a61df3157b1d0b4099f590fc0b0b6fbbd"
+    }
+  }
+}

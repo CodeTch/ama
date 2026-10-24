@@ -1,0 +1,222 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ama-parent                                                         [pom]
+[INFO] ama-contracts                                                      [jar]
+[INFO] ama-core                                                           [jar]
+[INFO] ama-adapters                                                       [jar]
+[INFO] ama-api                                                            [jar]
+[INFO] ama-file-service                                                   [jar]
+[INFO] ama-worker                                                         [jar]
+[INFO] ama-integration-tests                                              [jar]
+[INFO] 
+[INFO] ---------------------------< ama:ama-parent >---------------------------
+[INFO] Building ama-parent 0.1.0-SNAPSHOT                                 [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] -------------------------< ama:ama-contracts >--------------------------
+[INFO] Building ama-contracts 0.1.0-SNAPSHOT                              [2/8]
+[INFO]   from backend/contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-contracts ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/contracts/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-contracts ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-contracts ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-contracts ---
+[INFO] 
+[INFO] ----------------------------< ama:ama-core >----------------------------
+[INFO] Building ama-core 0.1.0-SNAPSHOT                                   [3/8]
+[INFO]   from backend/core/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-core ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/core/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/core/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-core ---
+[INFO] Copying 59 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-core ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-core ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-core ---
+[INFO] 
+[INFO] --------------------------< ama:ama-adapters >--------------------------
+[INFO] Building ama-adapters 0.1.0-SNAPSHOT                               [4/8]
+[INFO]   from backend/adapters/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-adapters ---
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] Copying 17 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-adapters ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-adapters ---
+[INFO] Copying 61 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-adapters ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-adapters ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-adapters ---
+[INFO] 
+[INFO] ----------------------------< ama:ama-api >-----------------------------
+[INFO] Building ama-api 0.1.0-SNAPSHOT                                    [5/8]
+[INFO]   from backend/api/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-api ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-api ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-api ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/api/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-api ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-api ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-api ---
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ama-api ---
+[INFO] Attaching repackaged archive /home/tanren/ama/.worktrees/phase-b-completion/backend/api/target/ama-api-0.1.0-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ------------------------< ama:ama-file-service >------------------------
+[INFO] Building ama-file-service 0.1.0-SNAPSHOT                           [6/8]
+[INFO]   from backend/file-service/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-file-service ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-file-service ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-file-service ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-file-service ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-file-service ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-file-service ---
+[INFO] Building jar: /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ama-file-service ---
+[INFO] Attaching repackaged archive /home/tanren/ama/.worktrees/phase-b-completion/backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ---------------------------< ama:ama-worker >---------------------------
+[INFO] Building ama-worker 0.1.0-SNAPSHOT                                 [7/8]
+[INFO]   from backend/worker/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-worker ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-worker ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-worker ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-worker ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-worker ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-worker ---
+[INFO] Building jar: /home/tanren/ama/.worktrees/phase-b-completion/backend/worker/target/ama-worker-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------------< ama:ama-integration-tests >----------------------
+[INFO] Building ama-integration-tests 0.1.0-SNAPSHOT                      [8/8]
+[INFO]   from backend/integration-tests/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ama-integration-tests ---
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ ama-integration-tests ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ama-integration-tests ---
+[INFO] Copying 17 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ama-integration-tests ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 280 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java: Some input files use or override a deprecated API.
+[INFO] /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/test/java/ama/meeting/DeclaredErrorResponse.java: Recompile with -Xlint:deprecation for details.
+[INFO] /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/test/java/ama/storage/Task06SavedGraphIT.java: Some input files use unchecked or unsafe operations.
+[INFO] /home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/src/test/java/ama/storage/Task06SavedGraphIT.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ ama-integration-tests ---
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ama-integration-tests ---
+[INFO] Skipping packaging of the jar
+[INFO] 
+[INFO] --- failsafe:3.5.6:integration-test (default) @ ama-integration-tests ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+Picked up JAVA_TOOL_OPTIONS: -Xmx512m -XX:ActiveProcessorCount=2
+[INFO] Running ama.storage.Task09Fix01DeniedLookupIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 48.16 s -- in ama.storage.Task09Fix01DeniedLookupIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.5.6:verify (default) @ ama-integration-tests ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ama-parent 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] ama-parent ......................................... SUCCESS [  0.002 s]
+[INFO] ama-contracts ...................................... SUCCESS [  0.850 s]
+[INFO] ama-core ........................................... SUCCESS [  0.087 s]
+[INFO] ama-adapters ....................................... SUCCESS [  0.166 s]
+[INFO] ama-api ............................................ SUCCESS [  0.615 s]
+[INFO] ama-file-service ................................... SUCCESS [  0.175 s]
+[INFO] ama-worker ......................................... SUCCESS [  0.059 s]
+[INFO] ama-integration-tests .............................. SUCCESS [01:03 min]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:05 min
+[INFO] Finished at: 2026-10-24T19:40:38+08:00
+[INFO] ------------------------------------------------------------------------
+PASS: executed=1, failures=0; evidence=/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task09Fix01DeniedLookupIT.xml

@@ -1,0 +1,19 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "backend"
+  ],
+  "exit": 0,
+  "output": "",
+  "changedBackend": {
+    "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java": "93b040bba816394cd590869031cd55ec0dd60f011d7bcea2eabc2710ffc12e23",
+    "backend/integration-tests/src/test/java/ama/task/Task07InheritedB06QueueSeamsIT.java": "edd3eeda0dbaab818143e32fb94b2620660ad85301405bc63de355655ed69c37",
+    "backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java": "ef23445e042f29b7caf9d3f61824da37fb1e0d5282711eb75f3f79c88e92f9e7",
+    "backend/integration-tests/src/test/java/ama/task/Task07RecoveryBoundsIT.java": "84a6904a77adbaceab92301276500b0e903a1d7f1c9f94056805b7ffa215a931",
+    "backend/integration-tests/src/test/java/ama/task/Task07SupersededReceiptIT.java": "6e3c6e360d0e219a261b9d803de96235964487e07738799514f753a48687c62d"
+  },
+  "productionSelfReview": "Only recovery branch after authentic complete observation scope and contradiction; exact old proof/result/ended attempt; no writes/authority transfer; unchanged ordinary/current recovery/token/permit/scanner paths. Diagnostics leave original test assertions unchanged."
+}

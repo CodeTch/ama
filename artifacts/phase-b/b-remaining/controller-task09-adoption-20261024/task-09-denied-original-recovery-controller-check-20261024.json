@@ -1,0 +1,79 @@
+{
+  "checkedUtc": "2026-10-24T07:38:13.086431+00:00",
+  "scope": "Readbothrecoverytestsource/result/dbsnapshots; sealedXML/hash/interval; compared recovery01before-provider to02after-provider map",
+  "originalWindow": "denied-lookup-green-02 actual1FAIL; snapshot has grantLookup definition but no invocation in claimreturnpath",
+  "getObserverWindow": "denied-original-recovery-01 actual1FAIL: committed RECORDED_FENCED but testexpectedAPPLIED, so settlement not reached; copytoken/foreignissuer assertions ran beforeobserver",
+  "settlementWindow": "denied-original-recovery-02 actual1PASS; zero provider calls; actual recoverSettlements(64)=1,0candidate; no fakebusinesspass for01",
+  "sameOriginalTask": "f85adc4c-d90d-43cc-86e7-6d069e5fd444",
+  "sameOriginalExecution": "ce929e14-f580-4cd3-b4bf-86c7c9178115",
+  "after": {
+    "execution_state": "SUCCEEDED",
+    "external_result_id": "cmr-cb910e28-b5f3-4324-93e0-0f8884521f99",
+    "operation_state": "SUCCEEDED",
+    "settled_at": "2026-10-24T07:36:22.918278",
+    "task_state": "STALE"
+  },
+  "provider6FileMapEqual": true,
+  "files": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-lookup-green-02/result.json",
+      "sha256": "64962198a3c7f6b0ce3cfba81b93a81ddf1dbc0c8f9704eb7bac12302ddbf0c3"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-lookup-green-02/report-custody.json",
+      "sha256": "eebcfe6f4807ae591678dea912513c14bcad509c9330ae2a148b4857f360cccf"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-01/result.json",
+      "sha256": "7367a7a86561bbe4376439bde6ff87dba30aa011e1ae491ff1f927c4a922005b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-01/report-custody.json",
+      "sha256": "42ee03a266ae30b61cccdd44a5f4119a80a97cadbfb0f3e7e76993e5e1f911e0"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-01/before.json",
+      "sha256": "8b0eef71bfab45f0ccf98376d29c69863ffff3a88d2941337dd2cdfc81614782"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-01/provider-before.json",
+      "sha256": "5a845fd9dc34bf511ad15c8d9a34119d96cf0efc448bd68e78bfe6441dfa8679"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-01/source/backend/integration-tests/src/test/java/ama/storage/Task09DeniedOriginalRecoveryIT.java",
+      "sha256": "c96772b766a4fc0a8494788671dd4d61014d4a7e2dfd4f41515e16f8bb06ccd1"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-02/result.json",
+      "sha256": "c4f3e95704d531783c8c034f09047e6fcfbf3bfc1807250415a1d520a1d0aaea"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-02/report-custody.json",
+      "sha256": "79a13ee224e876b5179853570dbd5e0f2ca37bcd22ee18a2d61f9d1c2592f883"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-02/before.json",
+      "sha256": "01c7bb658a5bcc6db2325aededdc5fc8bc8816cd2ef388a41088a684aed0d6d6"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-02/after.json",
+      "sha256": "4efbd901eb1968d4196f504a564102e514a69fb12bf6aedc377d108f43bcb71d"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-02/provider-before.json",
+      "sha256": "5a845fd9dc34bf511ad15c8d9a34119d96cf0efc448bd68e78bfe6441dfa8679"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-02/provider-after.json",
+      "sha256": "5a845fd9dc34bf511ad15c8d9a34119d96cf0efc448bd68e78bfe6441dfa8679"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-02/recovery-chain.json",
+      "sha256": "9dd638cea7ff95b8b4019e83ebbe5ef635717c60cbcc9edfb78a448701a86fd8"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/denied-original-recovery-02/source/backend/integration-tests/src/test/java/ama/storage/Task09DeniedOriginalRecoveryIT.java",
+      "sha256": "46a67bd1a20ffe33233a4f2e95081a91d8f241b37ae199a201e648e27073e5dd"
+    }
+  ]
+}

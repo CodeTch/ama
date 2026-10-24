@@ -1,0 +1,13 @@
+# Task8 model ownership amendment: Task6 typed-input index
+
+This additive root ruling supplements task-08-model-output-root-ruling-20261024.md; preserve that exact prior document. Evidence: approved Task6 design/review12e6ee01/8e8bdfd7, formal013.2freeze d40844b3, separateapplicationACK0b709604; actual application/sourcequalification separate. Task8 activates only after Task6adoption.
+
+Ruling: Task8 must synchronize exactly durable_task task_input_lookup(input_kind,input_id,id) NONUNIQUE in addition to its own reviewed external_operation column/index. This closes explicit T6-INDEX-MODEL-SYNC and prevents omission of the added accesspath. Wrongcost is bounded generated-output rework, not permission to rewrite oldschemas/history.
+
+Readonlymap439fb930/manifest290b00aa FULLREAD; root independently verifies all4actualFS==80c878f Git bytes,7citedrange hashes/bytes, SQL98primary+89secondary=187definitions. At Task8activation recheck actual4blobs and preserveexactcommitted/currentbytes before anywrite using previouslyruled fresh preservation directory. Neverrun old mutating verify()/--metadata-only or overwrite oldraw.
+
+Extend generator ownership by exactly durable_task declaration/indexlist old80lines87–88. Extend generated SQL ownership by durable_task entity old320–351 (indexes344–347), dictionary ownership old542–581 (indexes572–575). Add one ordinary index entry/reason through existinggenerator; no unrelated column/PK/check/FK/edge/policy change. Existing Operationregions/header/currentstatusprepend/sharedAUTO_INCREMENTpredicate authorizations remain aspreviouslyruled. ER generator doesnotrepresentsecondaryindexes: durable_task ERentity523–545 and relation1284 mustremainunchanged for this index-onlydelta. No invented ERannotations/globalrendererchanges.
+
+Combined nextmodel remains B00-1.6-reconcile-scan. Expectedfullmodel98tables/732cols/189explicitindexdefinitions (98PK+91secondary), existingchecks/FKsunchanged; fullreviewdraft remainsdistinctfrom incremental deployedschema. Newstatusblock mustdescribe both inputlookup and Operationdelta and keep priorhumanprefix exactcontiguousbytes afterit. OriginalTask8ruling98/732/oneindex wording ishistorical; this amendment controls combinedcounts/scope.
+
+Task8 formalFlywayversion mustbeallocated byroot fromactualpost6 fullhistory. Its old013.2candidate wasunassigned and is superseded by Task6formal013.2. Neveredit Task6newmigration/old13SQL. Task8 ownexact164Bbody needs formalnumber/fullbytefreeze/separatefreshselectedtargetACK before resourcecopy/apply; priorstaticPASS isnotruntimequalification. FUP-B05-CANDIDATE-01 staysOPEN untilactualfairness/sourceindependentreview closesit.

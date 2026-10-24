@@ -1,0 +1,22 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task08*IT"
+  ],
+  "exit": 1,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/cursor-budget-green/integration-tests-TEST-ama.task.Task08FairnessIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/cursor-budget-green/integration-tests-TEST-ama.task.Task08CursorIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-08/cursor-budget-green/integration-tests-TEST-ama.task.Task08BudgetIT.xml"
+  ],
+  "elapsedSeconds": 40.405550956726074,
+  "counts": {
+    "tests": 15,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task08OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

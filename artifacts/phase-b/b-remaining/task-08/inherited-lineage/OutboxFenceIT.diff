@@ -1,0 +1,29 @@
+--- backend/integration-tests/src/test/java/ama/task/OutboxFenceIT.java
++++ backend/integration-tests/src/test/java/ama/task/Task08InheritedOutboxFenceIT.java
+@@ -16,7 +16,7 @@
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ /** Prepared for the centrally frozen V010. Never migrates, resets, or repairs an existing fixture. */
+-class OutboxFenceIT {
++class Task08InheritedOutboxFenceIT {
+     DataSource source;
+     JdbcTemplate jdbc;
+     TransactionRunner tx;
+@@ -26,7 +26,7 @@
+     SubjectRef second;
+ 
+     @BeforeEach void prepareDataAfterApprovedMigration() {
+-        source = MysqlTestDatabase.dataSource();
++        source = Task08InheritedResources.source();
+         jdbc = new JdbcTemplate(source);
+         assertEquals(1, jdbc.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE version='010' AND success=1", Integer.class),
+                 "Requires a new owned fixture with centrally frozen, ordered V010 already applied");
+@@ -44,7 +44,7 @@
+ 
+     SubjectRef createMeeting() {
+         var subject = new SubjectRef("MEETING", UUID.randomUUID().toString());
+-        String owner = "b05-test-" + UUID.randomUUID();
++        String owner = "t08-inherited-test-" + UUID.randomUUID();
+         tx.required(() -> {
+             jdbc.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,session_generation,verified_at) VALUES (?,?,'ACTIVE',0,UTC_TIMESTAMP(6))", owner, owner);
+             fences.create(subject, 0, 0);

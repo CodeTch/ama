@@ -1,0 +1,11 @@
+package ama.api;
+import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;import static org.mockito.Mockito.*;import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;import org.springframework.test.web.servlet.setup.MockMvcBuilders;import ama.contract.IdentityContracts.*;import java.util.*;import java.time.Instant;
+class Task11PublicationErrorsTest {
+ @Test void actualControllerUsesSpecificFailureAdviceWithoutErrorDispatch()throws Exception {
+  var local=mock(ama.transcript.JdbcPublicationLocalRecovery.class);var runtime=new MinutesConfiguration.Runtime(null,null,null,null,null,null,null,local,65536);var mvc=MockMvcBuilders.standaloneSetup(new PublicationController(runtime,null,null)).setControllerAdvice(new PublicationErrors()).build();var actor=new Actor("owner",Status.ACTIVE,Set.of(Role.USER));var session=new ResolvedSession(actor,"T".repeat(43),Instant.now().plusSeconds(60));
+  for(var fixture:List.of(new Object[]{new ama.contract.TranscriptContracts.Failure(409,"PUBLICATION_LOCAL_RECOVERY_UNAVAILABLE"),409,"PUBLICATION_LOCAL_RECOVERY_UNAVAILABLE"},new Object[]{new ama.contract.TranscriptContracts.Failure(409,"REVISION_CONFLICT"),409,"REVISION_CONFLICT"},new Object[]{new ama.contract.MinutesContracts.Failure(ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED),413,"REQUEST_TOO_LARGE"})) {
+   doThrow((RuntimeException)fixture[0]).when(local).recover(any(),anyString(),anyString(),anyString(),anyString(),anyLong(),anyLong(),anyString());
+   var result=mvc.perform(post("/api/v1/meetings/12345678-1234-4234-8234-123456789abc/publications/12345678-1234-4234-8234-123456789abd/local-recoveries").requestAttr(SessionSecurityFilter.SESSION,session).header("Idempotency-Key","local-recovery-map").contentType("application/json").content("{\"taskId\":\"12345678-1234-4234-8234-123456789abe\",\"expectedRevisionToken\":\"13\",\"expectedPublicationRevisionToken\":\"1\"}")).andReturn();assertEquals(fixture[1],result.getResponse().getStatus());assertTrue(result.getResponse().getContentAsString().contains((String)fixture[2]));assertEquals("private, no-store",result.getResponse().getHeader("Cache-Control"));assertNull(result.getResponse().getForwardedUrl());
+  }
+ }
+}

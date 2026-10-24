@@ -1,0 +1,19 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "tools/checks/run.py",
+    "it",
+    "Task11ReplacementOriginalAckIT"
+  ],
+  "canonicalSelector": "ama.storage.Task11ReplacementOriginalAckIT",
+  "reportsBeforeSha256": "86aecf36b81b9fefe547a7c8d90b764983f489965b5436ad7dcaaf6c0e469d02",
+  "reportsClearedSha256": "47fcc2c439fc0ae90701e02936614613a86ef3db1b3ae87675aecf79a2599594",
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "startedNs": 1792872785326493156,
+  "startedUtc": "2026-10-24T20:13:05.326592+00:00",
+  "heapMiB": 512,
+  "processors": 2,
+  "schema": "ama_t11_9714255c9e2c_behavior",
+  "ackSha256": "dcab31da53de0a4e065aa05914f5143a5afd68ddbd785a87617455db1aa1574d",
+  "sourceManifestSha256": "bd3a82a95f15e6feb892f31f0f8c214e2c8a8ef00c60c92e7aa6fdbc88ed1393"
+}

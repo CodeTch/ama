@@ -1,0 +1,191 @@
+{
+  "kind": "task11_fix01_isolated_fixture_prepared",
+  "status": "PREPARED_UNUSED",
+  "preparedUtc": "2026-10-24T20:19:09.374975+00:00",
+  "headAtPreparation": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+  "runtimeExecuted": false,
+  "privateEnvReadOrStatted": false,
+  "dockerOrMysqlUsed": false,
+  "providerStoreOrKeysAccessed": false,
+  "sourceHelper": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-fixture-provisioning-prepared-20261025.py",
+    "bytes": 22694,
+    "sha256": "e097391ad12f3a6395904ce56ad76ae07b5b09a67a0fafcd7b2762b9015c6659",
+    "controllerReviewSha256": "5207f976e123ecbd633b0311e9070df5550b5e53747b0dbe55ca77c3ccccf6a6"
+  },
+  "sourcePublicInputs": [
+    {
+      "path": "task-11-fixture-creation-guard-20261025.json",
+      "sha256": "93d8afa8809ccdcf7ae811af258f2de12b443c032017f2aee16dbad44abb20a3"
+    },
+    {
+      "path": "task-11-root-fixture-application-ack-20261025.json",
+      "sha256": "dcab31da53de0a4e065aa05914f5143a5afd68ddbd785a87617455db1aa1574d"
+    },
+    {
+      "path": "task-10-mysql-recovery-application-ack-20261024.json",
+      "sha256": "096cbdc38cb350b756c6958a0982d31277e4f0a4bc2f7a10e4f24fd1fc40b767"
+    },
+    {
+      "path": "task-11-formal-migration-freeze-20261025.json",
+      "sha256": "83665f7f6a2443addc1a39b7faa5efc91e0d7f82ad49a2fa6aa6ded69c422a43"
+    }
+  ],
+  "sourceOwner": "task11-9714255c9e2c4861a2795cfaaec8e97f",
+  "sourceSchema": "ama_t11_9714255c9e2c_behavior",
+  "sourcePrivateEnvPathOnly": ".tools/task11-9714255c9e2c4861a2795cfaaec8e97f/env.sh",
+  "sameResource": {
+    "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+    "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "effectivePort": 46151,
+    "historicalTask10Port": 44727,
+    "parentOwner": "task08-848e93aace8b4f0fa34fc548267f3dc5"
+  },
+  "freshTarget": {
+    "ownerPattern": "task11fix1-<32 lowercase hex>",
+    "schemaPattern": "ama_t11fix1_<same first 12 hex>_behavior",
+    "privateEnvKeys": [
+      "AMA_TEST_DATABASE_URL",
+      "AMA_TEST_DATABASE_USERNAME",
+      "AMA_TEST_DATABASE_PASSWORD",
+      "AMA_TEST_CONTAINER",
+      "AMA_TASK11_OWNER",
+      "AMA_TASK11_RUN_ROOT",
+      "AMA_TASK11_S3_ENV",
+      "AMA_TASK11_PKI_ROOT"
+    ],
+    "newSchemaMustBeAbsent": true,
+    "oneShot": true,
+    "newPrivateOwnerMode": "0700",
+    "newPrivateEnvMode": "0600"
+  },
+  "migrationFreeze": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-formal-migration-freeze-20261025.json",
+    "sha256": "83665f7f6a2443addc1a39b7faa5efc91e0d7f82ad49a2fa6aa6ded69c422a43",
+    "prefixCount": 15,
+    "finalVersion": "013.4",
+    "finalBytes": 4332,
+    "finalSha256": "4709fc7a81fa0d3c252b2f2de165a6722d2197d7187f1ec066f1feebb9e42559",
+    "actualSourceFilesMatch": true,
+    "migrations": [
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+        "bytes": 709,
+        "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+        "bytes": 1781,
+        "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+        "bytes": 2461,
+        "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+        "bytes": 1864,
+        "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+        "bytes": 3795,
+        "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+        "bytes": 11205,
+        "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+        "bytes": 7239,
+        "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+        "bytes": 35136,
+        "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+        "bytes": 10941,
+        "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+        "bytes": 397,
+        "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+        "bytes": 21260,
+        "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+        "bytes": 7661,
+        "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+        "bytes": 1817,
+        "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+        "bytes": 75,
+        "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+        "bytes": 164,
+        "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee"
+      },
+      {
+        "path": "backend/adapters/src/main/resources/db/migration/V013_4__publication_submission.sql",
+        "bytes": 4332,
+        "sha256": "4709fc7a81fa0d3c252b2f2de165a6722d2197d7187f1ec066f1feebb9e42559"
+      }
+    ],
+    "helperAppliesMigrations": false
+  },
+  "files": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-fix01-isolated-fixture-prepared-20261025.py",
+      "bytes": 29313,
+      "sha256": "ee25bbc05b81981ca25f682d058e5979d50ff10ee87f306ecdea757306d780be"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-fix01-isolated-fixture-prepared-20261025.md",
+      "bytes": 6320,
+      "sha256": "7f4a5bd2fe454d9eea794d6cbd90bf31522b2eb2f267f1e6d1406c4b23a9c15e"
+    }
+  ],
+  "futurePublicPaths": {
+    "plan": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-fix01-isolated-fixture-prepared-20261025.md",
+    "guard": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-fix01-fixture-creation-guard-20261025.json",
+    "rootApplicationAck": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-fix01-root-fixture-application-ack-20261025.json"
+  },
+  "offlineChecks": {
+    "astParse": "PASS",
+    "publicAckAndFreezeFunctions": "PASS",
+    "syntheticEightKeyEnv": "PASS",
+    "freezeBeforeFirstWriteAndSql": "PASS",
+    "noLiveResourceOperation": true
+  },
+  "providerBoundary": "Original controlled provider owner/store/keys and port 46287; no provider credential read, copy, create, or change in this helper.",
+  "nextGates": [
+    "independent narrow review of exact new helper SHA",
+    "root protection before first write and one fresh owner/schema",
+    "one reviewed empty-schema/create-grant/env invocation",
+    "new fix01 root application ACK and launcher fixed-name/ACK SHA binding",
+    "author normal 16 migration bootstrap/rerun-zero; no 29-check DDL probe rerun"
+  ],
+  "limits": [
+    "No current primary schema or task queue read/claim/modify",
+    "Original Task11/Task10 guard, ACK, private owner and provider owner retained read-only",
+    "No final product/runtime qualification"
+  ]
+}

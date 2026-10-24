@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-23T23:34:01.683046+00:00",
+  "priorRootproofSha256": "9ab7b1b984097e04541bdfc36baefc70a13268e98cece3dbc3dbb32881229b01",
+  "freshRootSelectedProofSha256": "2dd448560bef7387f1eea64d80a844153b9389e79fb6deb6ca5e506b4a0c6ac2",
+  "checks": {
+    "id": true,
+    "name": true,
+    "image": true,
+    "owner": true,
+    "memory": true,
+    "swap": true,
+    "pids": true,
+    "ports": true,
+    "cpu": true,
+    "mounts": true
+  },
+  "scope": "AllselectedS3identity/image/owner/memoryswapcpuPIDlimits/allocatedports/mounts exactsameasprioracceptedrootproof. No repeatedDockercommand/fullinspect/Env or secretread."
+}

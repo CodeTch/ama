@@ -106,23 +106,36 @@ public final class ResultHashProfiles {
  public CanonicalValue finalData(FinalFacts facts,GraphBudget budget,BooleanSupplier cancelled){
   return finalData(facts,new StoredFactsIndex(facts.stored(),budget,cancelled));
  }
- private CanonicalValue finalData(FinalFacts facts,StoredFactsIndex index){
-  var budget=index.budget;var cancelled=index.cancelled;var finalRow=index.one(Table.FINAL_CONFIRMATION,facts.confirmationId(),PROVENANCE_UNAVAILABLE);String meeting=finalRow.string("meeting_id");
-  var body=index.one(Table.MINUTES_REVISION,finalRow.string("minutes_revision_id"),PROVENANCE_UNAVAILABLE);index.meeting(body,meeting);
+ private CanonicalValue finalData(FinalFacts facts,StoredFactsIndex index){return finalData(selection(facts,index),index);}
+ public CanonicalValue finalData(FinalDraft draft,GraphBudget budget,BooleanSupplier cancelled){return finalData(draft,new StoredFactsIndex(draft.stored(),budget,cancelled));}
+ private static FinalDraft selection(FinalFacts facts,StoredFactsIndex index){
+  var row=index.one(Table.FINAL_CONFIRMATION,facts.confirmationId(),PROVENANCE_UNAVAILABLE);
+  return new FinalDraft(row.string("id"),row.string("meeting_id"),row.number("meeting_revision"),row.string("info_revision_id"),row.string("roster_revision_id"),row.string("transcript_confirmation_id"),row.string("minutes_revision_id"),row.nullableString("material_snapshot_id"),row.string("element_set_id"),row.string("template_revision_id"),row.string("exclusion_revision_id"),row.string("input_fingerprint"),row.string("confirmed_by"),row.string("confirmed_at"),index.matching(Table.FINAL_RESULT_REVIEW,"confirmation_id",row.string("id")).stream().map(r->r.string("review_id")).toList(),facts.stored());
+ }
+ private static String selected(FinalDraft draft,String field){return switch(field){
+  case "id"->draft.confirmationId();case "meeting_id"->draft.meetingId();case "minutes_revision_id"->draft.minutesRevisionId();case "element_set_id"->draft.elementSetId();case "transcript_confirmation_id"->draft.transcriptConfirmationId();case "material_snapshot_id"->draft.materialSnapshotId();case "template_revision_id"->draft.templateRevisionId();case "exclusion_revision_id"->draft.exclusionRevisionId();case "input_fingerprint"->draft.inputFingerprint();default->throw fail(INVALID_ARGUMENT);
+ };}
+ private static CanonicalValue finalMembership(FinalDraft draft,BooleanSupplier cancelled){
+  var ids=new ArrayList<>(draft.reviewIds());ids.sort((a,b)->CanonicalValueCodec.compareUtf8(a,b,cancelled));var rows=new ArrayList<CanonicalValue>();
+  for(String id:ids){check(cancelled);rows.add(object(field("confirmation_id",string(draft.confirmationId())),field("review_id",string(id))));}return new CanonicalValue.Sequence(rows);
+ }
+ private CanonicalValue finalData(FinalDraft draft,StoredFactsIndex index){
+  var budget=index.budget;var cancelled=index.cancelled;String meeting=draft.meetingId();
+  var body=index.one(Table.MINUTES_REVISION,selected(draft,"minutes_revision_id"),PROVENANCE_UNAVAILABLE);index.meeting(body,meeting);
   String inputId=body.nullableString("generation_input_id");require(inputId!=null,PROFILE_UNAVAILABLE);var input=index.one(Table.GENERATION_INPUT,inputId,PROFILE_UNAVAILABLE);index.meeting(input,meeting);
-  for(var column:List.of("transcript_confirmation_id","material_snapshot_id","template_revision_id","exclusion_revision_id"))require(Objects.equals(input.nullableString(column),finalRow.nullableString(column)),SOURCE_MEMBERSHIP_MISMATCH);
-  require(input.string("input_fingerprint").equals(finalRow.string("input_fingerprint")),FINGERPRINT_MISMATCH);
-  var session=index.sources;var graph=session.graph(new GraphSelection(meeting,body.string("id"),finalRow.string("element_set_id"),finalRow.string("exclusion_revision_id"),inputId),null);session.walk(graph.sourceUsages(),meeting);
+  for(var column:List.of("transcript_confirmation_id","material_snapshot_id","template_revision_id","exclusion_revision_id"))require(Objects.equals(input.nullableString(column),selected(draft,column)),SOURCE_MEMBERSHIP_MISMATCH);
+  require(input.string("input_fingerprint").equals(selected(draft,"input_fingerprint")),FINGERPRINT_MISMATCH);
+  var session=index.sources;var graph=session.graph(new GraphSelection(meeting,body.string("id"),selected(draft,"element_set_id"),selected(draft,"exclusion_revision_id"),inputId),null);session.walk(graph.sourceUsages(),meeting);
   var evidenceIds=new HashSet<String>();for(var usage:graph.sourceUsages())if(usage.usage() instanceof EvidenceUsage e)evidenceIds.add(e.evidenceId());
   var evidenceRows=new ArrayList<FullRow>();for(var row:index.rows(Table.EVIDENCE_LINK))if(evidenceIds.contains(row.string("id")))evidenceRows.add(row);
-  var setRows=RowsetProjection.elements(index,meeting,finalRow.string("element_set_id"));
+  var setRows=RowsetProjection.elements(index,meeting,selected(draft,"element_set_id"));
   var directoryRows=new ArrayList<FullRow>();var elementIds=new HashSet<String>();
   for(var row:setRows){check(cancelled);if(RowsetProjection.DIRECTORY_TABLES.contains(row.table()))directoryRows.add(row);if(row.table()==Table.MINUTES_ELEMENT)elementIds.add(row.string("id"));}
-  var exclusionRows=RowsetProjection.exclusions(index,meeting,finalRow.string("exclusion_revision_id"));
-  var reviewRows=new ArrayList<FullRow>();var reviewEvidence=new ArrayList<FullRow>();var finalReviews=index.matching(Table.FINAL_RESULT_REVIEW,"confirmation_id",finalRow.string("id"));
+  var exclusionRows=RowsetProjection.exclusions(index,meeting,selected(draft,"exclusion_revision_id"));
+  var reviewRows=new ArrayList<FullRow>();var reviewEvidence=new ArrayList<FullRow>();var finalReviews=draft.reviewIds();
   var reviewNumbers=new HashSet<Long>();
   for(var member:finalReviews){
-   check(cancelled);var review=index.one(Table.RESULT_REVIEW,member.string("review_id"),PROVENANCE_UNAVAILABLE);index.meeting(review,meeting);positive(review.number("review_no"));require(reviewNumbers.add(review.number("review_no")),SOURCE_MEMBERSHIP_MISMATCH);
+   check(cancelled);var review=index.one(Table.RESULT_REVIEW,member,PROVENANCE_UNAVAILABLE);index.meeting(review,meeting);positive(review.number("review_no"));require(reviewNumbers.add(review.number("review_no")),SOURCE_MEMBERSHIP_MISMATCH);
    require(review.nullableString("element_id")!=null&&elementIds.contains(review.string("element_id"))||body.string("id").equals(review.nullableString("minutes_revision_id")),SOURCE_MEMBERSHIP_MISMATCH);
    require(review.string("hash_profile").equals(REVIEW_PROFILE),PROFILE_UNAVAILABLE);
    var reviewFacts=storedReview(review,index);var target=targetData(reviewFacts,index);
@@ -132,27 +145,31 @@ public final class ResultHashProfiles {
    reviewRows.add(review);reviewEvidence.addAll(index.matching(Table.RESULT_REVIEW_EVIDENCE,"review_id",review.string("id")));
   }
   check(cancelled);
-  return object(field("meetingId",string(meeting)),field("confirmationId",string(finalRow.string("id"))),field("minutesRevisionId",string(body.string("id"))),field("elementSetId",string(finalRow.string("element_set_id"))),
-   field("transcriptConfirmationId",string(finalRow.string("transcript_confirmation_id"))),field("materialSnapshotId",ContractValues.nullable(finalRow.nullableString("material_snapshot_id"))),field("templateRevisionId",string(finalRow.string("template_revision_id"))),field("exclusionRevisionId",string(finalRow.string("exclusion_revision_id"))),field("inputFingerprint",string(input.string("input_fingerprint"))),
+  return object(field("meetingId",string(meeting)),field("confirmationId",string(selected(draft,"id"))),field("minutesRevisionId",string(body.string("id"))),field("elementSetId",string(selected(draft,"element_set_id"))),
+   field("transcriptConfirmationId",string(selected(draft,"transcript_confirmation_id"))),field("materialSnapshotId",ContractValues.nullable(selected(draft,"material_snapshot_id"))),field("templateRevisionId",string(selected(draft,"template_revision_id"))),field("exclusionRevisionId",string(selected(draft,"exclusion_revision_id"))),field("inputFingerprint",string(input.string("input_fingerprint"))),
    field("locatorRows",RowValues.rows(graph.locatorRows(),cancelled)),field("sourceUsages",RowValues.usages(graph.sourceUsages(),cancelled)),field("evidenceRows",RowValues.rows(evidenceRows,cancelled)),
    field("directoryRows",RowsetProjection.tableArray(directoryRows,RowsetProjection.DIRECTORY_TABLES,index)),field("exclusionRows",RowsetProjection.tableArray(exclusionRows,EnumSet.of(Table.EXCLUSION_REVISION,Table.SENSITIVE_EXCLUSION),index)),
-   field("reviewRows",RowValues.rows(reviewRows,cancelled)),field("reviewEvidenceRows",RowValues.rows(reviewEvidence,cancelled)),field("finalReviewRows",RowValues.rows(finalReviews,cancelled)));
+   field("reviewRows",RowValues.rows(reviewRows,cancelled)),field("reviewEvidenceRows",RowValues.rows(reviewEvidence,cancelled)),field("finalReviewRows",finalMembership(draft,cancelled)));
  }
  public String finalSources(FinalFacts facts,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
   var operation=resolver.open(facts.stored(),cancelled);String result=new ResultHashProfiles(operation.resolver()).finalSourcesBound(facts,profile,budget,cancelled);operation.finish();check(cancelled);return result;
  }
- private String finalSourcesBound(FinalFacts facts,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
-  var index=new StoredFactsIndex(facts.stored(),budget,cancelled);var f=index.one(Table.FINAL_CONFIRMATION,facts.confirmationId(),PROVENANCE_UNAVAILABLE);var body=index.one(Table.MINUTES_REVISION,f.string("minutes_revision_id"),PROVENANCE_UNAVAILABLE);
+ public String finalSources(FinalDraft draft,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
+  var operation=resolver.open(draft.stored(),cancelled);String result=new ResultHashProfiles(operation.resolver()).finalSourcesBound(draft,profile,budget,cancelled);operation.finish();check(cancelled);return result;
+ }
+ private String finalSourcesBound(FinalFacts facts,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){return finalSourcesBound(selection(facts,new StoredFactsIndex(facts.stored(),budget,cancelled)),profile,budget,cancelled);}
+ private String finalSourcesBound(FinalDraft draft,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
+  var index=new StoredFactsIndex(draft.stored(),budget,cancelled);var body=index.one(Table.MINUTES_REVISION,draft.minutesRevisionId(),PROVENANCE_UNAVAILABLE);
   String inputId=body.nullableString("generation_input_id");require(inputId!=null,PROFILE_UNAVAILABLE);var input=index.one(Table.GENERATION_INPUT,inputId,PROFILE_UNAVAILABLE);
-  var bound=resolver.generation(input,facts.stored(),budget,cancelled);require(bound.equals(index.config(input))&&bound.profiles().definition(ProfileKind.FINAL_SOURCES).equals(profile),PROFILE_UNAVAILABLE);
-  GenerationFingerprint.historicalFence(input,facts.stored(),cancelled);
-  for(var member:index.matching(Table.FINAL_RESULT_REVIEW,"confirmation_id",f.string("id"))){
-   check(cancelled);var review=index.one(Table.RESULT_REVIEW,member.string("review_id"),PROVENANCE_UNAVAILABLE);var reviewFacts=storedReview(review,index);
-   require(review.string("hash_profile").equals(REVIEW_PROFILE),PROFILE_UNAVAILABLE);var reviewProfile=resolver.review(review,facts.stored(),budget,cancelled);
+  var bound=resolver.generation(input,draft.stored(),budget,cancelled);require(bound.equals(index.config(input))&&bound.profiles().definition(ProfileKind.FINAL_SOURCES).equals(profile),PROFILE_UNAVAILABLE);
+  GenerationFingerprint.historicalFence(input,draft.stored(),cancelled);
+  for(var member:draft.reviewIds()){
+   check(cancelled);var review=index.one(Table.RESULT_REVIEW,member,PROVENANCE_UNAVAILABLE);var reviewFacts=storedReview(review,index);
+   require(review.string("hash_profile").equals(REVIEW_PROFILE),PROFILE_UNAVAILABLE);var reviewProfile=resolver.review(review,draft.stored(),budget,cancelled);
    require(targetBound(reviewFacts,reviewProfile,index).equals(review.string("target_hash"))&&sourcesBound(reviewFacts,reviewProfile,index).equals(review.string("source_set_hash")),FINGERPRINT_MISMATCH);
   }
-  var session=index.sources;var graph=session.graph(new GraphSelection(f.string("meeting_id"),body.string("id"),f.string("element_set_id"),f.string("exclusion_revision_id"),inputId),null);
-  session.walkInputs(List.of(inputId),f.string("meeting_id"));OriginChainVerifier.verify(index,session,graph,resolver);
-  return DomainHash.hash(profile,FINAL_PROFILE,"FINAL_SOURCES",finalData(facts,index),TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled)),cancelled);
+  var session=index.sources;var graph=session.graph(new GraphSelection(selected(draft,"meeting_id"),body.string("id"),selected(draft,"element_set_id"),selected(draft,"exclusion_revision_id"),inputId),null);
+  session.walkInputs(List.of(inputId),selected(draft,"meeting_id"));OriginChainVerifier.verify(index,session,graph,resolver);
+  return DomainHash.hash(profile,FINAL_PROFILE,"FINAL_SOURCES",finalData(draft,index),TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled)),cancelled);
  }
 }

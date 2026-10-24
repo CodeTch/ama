@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task06InheritedMeetingConcurrencyIT"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-06/fix-01/inherited-concurrency-green-01/integration-tests-TEST-ama.meeting.Task06InheritedMeetingConcurrencyIT.xml"
+  ],
+  "elapsedSeconds": 14.859894037246704,
+  "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

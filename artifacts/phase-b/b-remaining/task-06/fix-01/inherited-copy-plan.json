@@ -1,0 +1,182 @@
+{
+  "copies": [
+    {
+      "source": "backend/integration-tests/src/test/java/ama/meeting/MeetingRevisionIT.java",
+      "sourceSha256": "fcff90df12115e390c3a87ce8f3664f3da57971e2a0f819036bf2a74a900b901",
+      "copy": "backend/integration-tests/src/test/java/ama/meeting/Task06InheritedMeetingRevisionIT.java",
+      "replacements": [
+        [
+          "MeetingRevisionIT",
+          "Task06InheritedMeetingRevisionIT"
+        ],
+        [
+          "\"owner-\"",
+          "\"task06-fix-meeting-owner-\""
+        ],
+        [
+          "\"member-\"",
+          "\"task06-fix-meeting-member-\""
+        ]
+      ],
+      "extra": "meeting"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/meeting/MeetingConcurrencyIT.java",
+      "sourceSha256": "ec3a1d20605be74131350fd02848fd8bd64ece9e26a6862f215cfe2651ccb3d3",
+      "copy": "backend/integration-tests/src/test/java/ama/meeting/Task06InheritedMeetingConcurrencyIT.java",
+      "replacements": [
+        [
+          "MeetingConcurrencyIT",
+          "Task06InheritedMeetingConcurrencyIT"
+        ],
+        [
+          "new SchemaMigrator(actual).migrate();",
+          "assertEquals(13,j.queryForObject(\"SELECT COUNT(*) FROM flyway_schema_history WHERE success=1\",Integer.class));"
+        ],
+        [
+          "\"owner-\"",
+          "\"task06-fix-concurrency-owner-\""
+        ],
+        [
+          "\"member-\"",
+          "\"task06-fix-concurrency-member-\""
+        ]
+      ],
+      "extra": null
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/storage/Task05RegressionResources.java",
+      "sourceSha256": "5c2b4809731e10b8ed7b9e17012138e8f3f5ae290034554425b12f4e909d8fb8",
+      "copy": "backend/integration-tests/src/test/java/ama/storage/Task06InheritedResources.java",
+      "replacements": [
+        [
+          "Task05RegressionResources",
+          "Task06InheritedResources"
+        ],
+        [
+          "task-05/forward-custody",
+          "task-06/fix-01/inherited-custody"
+        ]
+      ],
+      "extra": null
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/storage/Task05RegistryFixture.java",
+      "sourceSha256": "4ff6f0313681f50d37493d8747bad927fd58661de349104125f4fa418743c655",
+      "copy": "backend/integration-tests/src/test/java/ama/storage/Task06InheritedRegistryFixture.java",
+      "replacements": [
+        [
+          "Task05RegistryFixture",
+          "Task06InheritedRegistryFixture"
+        ],
+        [
+          "Task05NativeFixture",
+          "Task06NativeFixture"
+        ]
+      ],
+      "extra": null
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/storage/Task05AuthorityFixture.java",
+      "sourceSha256": "603e49f60466dc5d58170f80c2e538b6c5029f2b6d343a5b6fc5c446d227ae45",
+      "copy": "backend/integration-tests/src/test/java/ama/storage/Task06InheritedAuthorityFixture.java",
+      "replacements": [
+        [
+          "Task05AuthorityFixture",
+          "Task06InheritedAuthorityFixture"
+        ],
+        [
+          "Task05RegistryFixture",
+          "Task06InheritedRegistryFixture"
+        ],
+        [
+          "Task05RegressionResources",
+          "Task06InheritedResources"
+        ],
+        [
+          "\"authority-\"",
+          "\"task06-fix-inherited-authority-\""
+        ]
+      ],
+      "extra": null
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/storage/Task05LegacyAuthorityIT.java",
+      "sourceSha256": "0ece458b2feadde0bc2b2b15ef9014baaa03d4c71cbe3a933cf721923e54dfa0",
+      "copy": "backend/integration-tests/src/test/java/ama/storage/Task06InheritedAuthorityIT.java",
+      "replacements": [
+        [
+          "Task05LegacyAuthorityIT",
+          "Task06InheritedAuthorityIT"
+        ],
+        [
+          "Task05AuthorityFixture",
+          "Task06InheritedAuthorityFixture"
+        ],
+        [
+          "Task05RegressionResources",
+          "Task06InheritedResources"
+        ],
+        [
+          "\"authority-\"",
+          "\"task06-fix-inherited-authority-\""
+        ]
+      ],
+      "extra": null
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+      "sourceSha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3",
+      "copy": "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedProcessingFixture.java",
+      "replacements": [
+        [
+          "ArchiveProcessingFixture",
+          "Task06InheritedProcessingFixture"
+        ],
+        [
+          "\"b06-facts-\"",
+          "\"task06-fix-metadata-\""
+        ]
+      ],
+      "extra": "facts"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+      "sourceSha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2",
+      "copy": "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedFactsReaderIT.java",
+      "replacements": [
+        [
+          "ProcessingFactsReaderIT",
+          "Task06InheritedFactsReaderIT"
+        ],
+        [
+          "ArchiveProcessingFixture",
+          "Task06InheritedProcessingFixture"
+        ]
+      ],
+      "extra": "reader"
+    },
+    {
+      "source": "backend/integration-tests/src/test/java/ama/task/Task05LegacyPreparedCompletionIT.java",
+      "sourceSha256": "c29dde8d718a4690fde6806e250c845c393c4d6c0bb949d78c86f46ac939a1df",
+      "copy": "backend/integration-tests/src/test/java/ama/task/Task06InheritedPreparedCompletionIT.java",
+      "replacements": [
+        [
+          "Task05LegacyPreparedCompletionIT",
+          "Task06InheritedPreparedCompletionIT"
+        ],
+        [
+          "\"prepared-\"",
+          "\"task06-fix-prepared-\""
+        ],
+        [
+          "\"PREPARED_\"",
+          "\"TASK06_FIX_PREPARED_\""
+        ]
+      ],
+      "extra": "prepared"
+    }
+  ],
+  "excluded": "MeetingRevision global task_outbox_sequence overflow mutation method is not annotated Test; actual Task06FixAtomicityIT flush failure covers rollback without global mutation.",
+  "claims": "Only explicitly copied inherited assertions, controlled metadata and queue policies are not positive production pipeline qualification."
+}

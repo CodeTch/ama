@@ -1,0 +1,28 @@
+{
+  "utc": "2026-10-24T18:32:25.927812+00:00",
+  "status": "AUTHORIZED_ONE_EXACT_OWNED_SOURCE_RESTART_AND_REJECTION_WINDOW",
+  "preparation": "task-11-knowledge-proof-source-restart-preparation-20261025.json",
+  "preparationSha256": "c5396fb9c02b73b663525169bae837c3e3fe1da02755b8831c1eb6b05d794049",
+  "coordinatorActualChecks": {
+    "pgid": true,
+    "startTicks": true,
+    "argv": true,
+    "config": true,
+    "store": true,
+    "source": true,
+    "backup": true
+  },
+  "pid": 146718,
+  "pgid": 146718,
+  "procStartTicks": "11701853",
+  "port": 46287,
+  "sourceSha256": "cd80e61d6b338fca1627e2dc403acb15280ce504cebfe1286d62968b643efc13",
+  "limits": "same64Mi/2CPU",
+  "constraints": [
+    "Immediately revalidate originalPID/PGID/startticks/argv/config then boundedTERM onlyexactPGID; revalidatedKILLfallback only if necessary.",
+    "Preserve originalstore/sidefiles/backups/keys andexisting2documents/2executions. No schema/credentials changes, initialize=false only.",
+    "Capture newPID/PGID/source/storeidentity before single new signed permanent rejection window.",
+    "OriginalUNKNOWN remainsOPEN: noGET/observe/send/fabricatedclosure. Failure retains attributableprovider/facts; do notstartanothercase.",
+    "Unit4PASS andpure8PASS are limited verifier/binding evidence; this adminACK is not protocol/retry/supersession or fullTask11review approval."
+  ]
+}

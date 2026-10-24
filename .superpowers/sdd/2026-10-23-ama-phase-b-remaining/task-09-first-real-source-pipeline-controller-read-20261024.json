@@ -1,0 +1,115 @@
+{
+  "status": "INTERIM_REAL_SOURCE_PIPELINE_RECEIPT_XML_TESTSOURCE_READ",
+  "windows": [
+    {
+      "window": "pipeline-source-red-01",
+      "exit": 1,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "collectorIntervalAndXmlHashVerified": true,
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-red-01/result.json",
+          "bytes": 337,
+          "sha256": "e52fba35fdd26331db09ccb597b02146a82c6eaf08bbf67d200853c0450dfe12"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-red-01/command.json",
+          "bytes": 430,
+          "sha256": "38254a7244b3dbd2f1579ccae8656831af015ff1c17fcc703c97337ae29ee593"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-red-01/integration-tests-TEST-ama.storage.Task09PipelineGraphIT.xml",
+          "bytes": 34267,
+          "sha256": "0257dbf3974b3169cf88488b649aeba6ee03e8928c24cb9dbbaedd153ea60012"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-red-01/report-custody.json",
+          "bytes": 385,
+          "sha256": "0e2f7a8a3d8fbd0941c98d268d83942573cd2b0c1472058f703268953337b8c1"
+        }
+      ]
+    },
+    {
+      "window": "pipeline-source-red-02",
+      "exit": 1,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "collectorIntervalAndXmlHashVerified": true,
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-red-02/result.json",
+          "bytes": 337,
+          "sha256": "e52fba35fdd26331db09ccb597b02146a82c6eaf08bbf67d200853c0450dfe12"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-red-02/command.json",
+          "bytes": 430,
+          "sha256": "910315c55e87021911d7c4e203294ce158a85312c0b00ff3ca14859f29be7fb6"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-red-02/integration-tests-TEST-ama.storage.Task09PipelineGraphIT.xml",
+          "bytes": 35019,
+          "sha256": "ba0ab02b10a4a61ca39ce41daffa06ad7c9b026b61f6cd3e42852323697f9d52"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-red-02/report-custody.json",
+          "bytes": 385,
+          "sha256": "5ba1869b8d3f033c6eef880e75dc46a507f467e28b26caf8458b7e90fbc97097"
+        }
+      ]
+    },
+    {
+      "window": "pipeline-source-green-01",
+      "exit": 0,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "collectorIntervalAndXmlHashVerified": true,
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-green-01/result.json",
+          "bytes": 338,
+          "sha256": "bd7f6d2ac6c697a99333452acfff5bf7fc13c472d4a63f2005b08f31abe2478b"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-green-01/command.json",
+          "bytes": 430,
+          "sha256": "890ac34e33d592426655b542b3a35143ddd1d959e307aa4d4b7d64d584add16a"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-green-01/integration-tests-TEST-ama.storage.Task09PipelineGraphIT.xml",
+          "bytes": 33345,
+          "sha256": "6e9cfb5045cf8f9c23be740db0c7cf3bd96727ffb77348cba2d929a68a5ea660"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-green-01/report-custody.json",
+          "bytes": 494,
+          "sha256": "f01a67f0f7b8f8e57840d67025ab87ca048af33cb0b9cb88325b200f5c6ca3c7"
+        }
+      ]
+    }
+  ],
+  "testSource": {
+    "path": "artifacts/phase-b/b-remaining/task-09/pipeline-source-green-01/source/backend/integration-tests/src/test/java/ama/storage/Task09PipelineGraphIT.java",
+    "sha256": "f4f6e100fb31f3daf0325809e12c1488681cca2656c2916309408ad88c308be6"
+  },
+  "limits": [
+    "red01 READY isolationfailure notbusinessRED",
+    "red02 ClassNotFound assertion for missingreader",
+    "green01 real source chain only; generation/body/set/review/final branches still failclosed/underimplementation",
+    "candidatewriter/generationqueue not yet completed; noCV04closure orfinalsourceequivalenceclaim",
+    "test fixture helper/nativeHTTP behavior requires final independent semantics review"
+  ]
+}

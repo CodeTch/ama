@@ -1,0 +1,128 @@
+{
+  "utc": "2026-10-24T17:51:15.850069+00:00",
+  "previousManifestSha256": "5c3dd1c4f86c91a478b5bc1de2259264cfd041a9553392cc9bdc9d64ca215b56",
+  "compileEvidence": "artifacts/phase-b/b-remaining/task-11/publication-path-compile-02/result.json",
+  "qualification": "All selected source compiles; zero executed tests, no behavioral qualification of newly added fenced lookup or runtime wiring. Pure waiter unchanged 23 checks. No business/provider calls since original-get-02.",
+  "files": [
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "bytes": 40419,
+      "sha256": "e102df73dc59dea6a0ad328dc7a2da490923bb2f253f5fd943130476bc6fa5a5"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "bytes": 22099,
+      "sha256": "906f741ca7315633e5555e263093105b5f3b293443552fc5e3e4ea763bc3f93b"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ConfiguredPublication.java",
+      "bytes": 1905,
+      "sha256": "bfe4255a98e00084724d3b438785eb0ab1c488fd21669220abb15cbf850dffef"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ControlledKnowledgeClient.java",
+      "bytes": 12648,
+      "sha256": "6fc436f6bc2d9b2e7a4cd59c317afe24446c6858f880bf3ddab6c48f1f32aa4f"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcPublicationService.java",
+      "bytes": 29928,
+      "sha256": "d68eef807b8aaec4c3179c58ca7f7845021e2b285336160a0bf9d1dffeb73b37"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "bytes": 62993,
+      "sha256": "6f0771e259c1f79781614409cf0c214585a16f1927eab5fa13a05c46956edf67"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/PublicationGraph.java",
+      "bytes": 5051,
+      "sha256": "34444c2635895ba405cafdab4fc71c6bf56c608a0e02da8841445f31a7b2c3fe"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/PublicationRecordedLookup.java",
+      "bytes": 7610,
+      "sha256": "5d928d659fd1d1ab9ebbe7e7488b5e45b3f935dd210d8cfbff4bd01b381da15e"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/PublicationTaskDomainPolicy.java",
+      "bytes": 15724,
+      "sha256": "ef92f2052482a7c8045206a87c86ede25cbd8af82c189809d7ca3e61ded63b43"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/PublicationController.java",
+      "bytes": 2984,
+      "sha256": "0196a4764fc56ce1720d4fe1b1731eae8499a9f550738297c9d8fad5acd7a03f"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task11FinalPublicationIT.java",
+      "bytes": 13264,
+      "sha256": "54b6bb4b314c87c30e81b34ab456c2d7b0d88dcdb9d3eec71115501f71084ae1"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task11KnowledgeFixture.java",
+      "bytes": 9306,
+      "sha256": "fa9d4555e63316b6873737708bfb95dc94d07979da552529620cff8bd10d9471"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task11PublicationOriginalLookupIT.java",
+      "bytes": 2277,
+      "sha256": "bbd53a21cc87c3941fe7a3a3fccf1cae16780602da111cdb0764c9962f9af044"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task11PublicationResumeIT.java",
+      "bytes": 6609,
+      "sha256": "e3caef24ca76136293f55521df178e6b572c071596e865323dbaa94e3b90e7ac"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task11PublicationWaiter.java",
+      "bytes": 3222,
+      "sha256": "b22c11ccc29dd60a1d4b34c4ff97134f237241411e91f2581ec97576e946f7fa"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java",
+      "bytes": 9213,
+      "sha256": "4ce3c8cdbea5389281225fc3373a4dad6051654fd33136c6f711619b1bc2c4a2"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/KnowledgePublicationHandler.java",
+      "bytes": 1078,
+      "sha256": "81c7bf6c3c777db4979a4478dfc37865db747158158c75994e25c6cd2977881e"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/KnowledgeReconciliationHandler.java",
+      "bytes": 1163,
+      "sha256": "991cdf2d8f33487995822ef65f819c21ca90d9574ba46eaf4bd2116c3841d903"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ReconciliationLoop.java",
+      "bytes": 6525,
+      "sha256": "9bf3a8a230f1d2bdc29a54b1ef1b3e41be9d35df412a59748765bdc5ceeae424"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java",
+      "bytes": 2845,
+      "sha256": "c1bc1822b71160bceaa4d2592e687d8d96863bbae77f85a3e5a88964f0c1bc28"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "bytes": 9071,
+      "sha256": "be5152e94533832fdca0c8fa0c037299ff36289f50250c274b7f72101a5633ba"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "bytes": 18368,
+      "sha256": "9fa33c9cc2445570880ff0d0e98ae5ce8ec39bfb3005c40b63974303da99ff7a"
+    },
+    {
+      "path": "tools/providers/controlled_knowledge.py",
+      "bytes": 20493,
+      "sha256": "a66956c7cae80a0bd0dfc247daed4ef07836652c3a337490f2fe8647f258b983"
+    },
+    {
+      "path": "tools/task11_window.py",
+      "bytes": 8188,
+      "sha256": "31d1d7648af5ee6b38f7c8dc28e1a819f5e0756103af0a4548d28dd1b7399bdc"
+    }
+  ]
+}

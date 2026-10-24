@@ -1,0 +1,56 @@
+{
+  "utc": "2026-10-23T18:59:17.900763+00:00",
+  "head": "11eb54086da95c675862fcf4225821104aa8e87d",
+  "evidenceManifestVerified": 340,
+  "sourceSealFSGitVerified": 496,
+  "deliveryFSGitVerified": 368,
+  "protectedUnchanged": 4727,
+  "currentGeneratedException": 1,
+  "oldEvidenceVerified": 552,
+  "originalReportPrefixVerified": true,
+  "unitsSuites": 36,
+  "units": [
+    233,
+    0,
+    0,
+    0
+  ],
+  "selectedIntegration": {
+    "green-s3-open": [
+      3,
+      0,
+      0,
+      0
+    ],
+    "cv1-genuine-carriers-and-validator": [
+      2,
+      0,
+      0,
+      0
+    ],
+    "s3-before-headers": [
+      1,
+      0,
+      0,
+      0
+    ],
+    "final-affected-regressions": [
+      7,
+      0,
+      0,
+      0
+    ],
+    "final-local-lifetime-custody": [
+      3,
+      0,
+      0,
+      0
+    ]
+  },
+  "distinctPassingIntegration": 16,
+  "exactPrivateNeedles": 3,
+  "publicFilesScanned": 368,
+  "secretFindings": [],
+  "mismatches": [],
+  "meaning": "custody/XML/static byte verification; independent source review pending"
+}

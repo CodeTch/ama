@@ -1,0 +1,26 @@
+package ama.storage;
+import ama.config.*;import ama.config.file.*;import ama.contract.ConfigArchiveContracts.*;import ama.contract.TranscriptContracts.*;import org.junit.jupiter.api.Test;
+import java.util.*;import java.nio.file.*;
+import static org.junit.jupiter.api.Assertions.*;import static ama.transcript.ArchiveProcessingFixture.B;
+class Task06RestartIT extends Task06Fixture {
+ @Override boolean installedTranscript(){return true;}
+ @Test void freshJvmLOCALRetainsOriginalHashAcrossChangedDefaults()throws Exception {restart();}
+ @Test void freshJvmS3RetainsOriginalHashAcrossChangedDefaults()throws Exception {restart();}
+ void restart()throws Exception {
+  String raw=raw();var actual=ama.api.Task06RuntimeProbe.actual(app);var service=actual.service();var ids=j.queryForList("SELECT segment_id FROM transcript_segment WHERE revision_id=? ORDER BY ordinal",String.class,raw);
+  var saved=service.mutate(actor(),meeting,"save",new Command(Operation.SAVE,1,raw,ids.stream().map(id->new Edit(id,"Restart😀",List.of(ama.contract.MinutesContracts.Mark.KEY))).toList()),UUID.randomUUID().toString());String working=(String)((Map<?,?>)saved.get("result")).get("revisionId");
+  var confirmed=service.mutate(actor(),meeting,"confirm",new Command(Operation.CONFIRM,2,working,List.of()),UUID.randomUUID().toString());String hash=(String)((Map<?,?>)confirmed.get("result")).get("contentHash");
+  Files.writeString(receipt.resolve("before-restart-composition.json"),json.writeValueAsString(actual.qualification()));
+  byte[] next;try(var in=getClass().getResourceAsStream("/ama/transcript/restart/processing2.json")){next=in.readAllBytes();}var index=new ConfigArchiveIndex.IndexBudget(4194304,4096,67108864,128);
+  pin=new ControlledArchiveReleaseWriter().publish(archive,pin,List.of(new RawArchive(ArtifactType.PROCESSING_CONFIG,"b06.controlled.import-txt.2",next)),index,B,()->false);var snapshot=new ControlledConfigArchiveSource().open(archive,pin,index,B,()->false);var nextRef=snapshot.index().entries().stream().map(ConfigArchiveIndex.Entry::ref).filter(r->r.version().equals("b06.controlled.import-txt.2")).findFirst().orElseThrow();
+  var props=new Properties();for(var entry:bounds.entrySet())props.setProperty(entry.getKey(),entry.getValue().toString());props.setProperty("transcript.enabled","true");props.setProperty("processing.enabled","true");props.setProperty("processing.archive-root",archive.toString());props.setProperty("processing.index-sha",pin);props.setProperty("processing.config-version",nextRef.version());props.setProperty("processing.config-sha",nextRef.sha256());
+  props.setProperty("owner",owner);props.setProperty("meeting",meeting);props.setProperty("working",working);props.setProperty("hash",hash);props.setProperty("mode",s3Mode?"s3":"local");props.setProperty("id",definitions.backends().getFirst().id());
+  if(s3Mode){var c=s3Fixture.config;props.setProperty("endpoint",c.endpoint().toString());props.setProperty("data",c.dataBucket());props.setProperty("control",c.controlBucket());}
+  else{var b=nativeFixture.binding;props.setProperty("origin",b.serviceOrigin());props.setProperty("volume",b.volumeId());props.setProperty("root",b.relativeRoot());props.setProperty("filesystem",b.filesystem());}
+  Path config=ROOT.resolve("runtime/saved-"+UUID.randomUUID()+".properties");Files.createFile(config,java.nio.file.attribute.PosixFilePermissions.asFileAttribute(java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")));try(var out=Files.newOutputStream(config)){props.store(out,"Task6 retained nonsecret composition");}
+  app.close();assertFalse(app.isActive());var command=List.of(Path.of(System.getProperty("java.home"),"bin/java").toString(),"-Xmx512m","-XX:ActiveProcessorCount=2","-cp",System.getProperty("java.class.path"),"ama.storage.Task06Process",config.toString(),receipt.resolve("fresh-jvm.json").toString());
+  var child=new ProcessBuilder(command).redirectErrorStream(true).redirectOutput(receipt.resolve("fresh-jvm.log").toFile()).start();try{assertTrue(child.waitFor(30,java.util.concurrent.TimeUnit.SECONDS));assertEquals(0,child.exitValue(),"See fresh-jvm.log");}finally{if(child.isAlive()){child.destroyForcibly();child.waitFor(5,java.util.concurrent.TimeUnit.SECONDS);}}
+  var observed=json.readTree(Files.readString(receipt.resolve("fresh-jvm.json")));assertNotEquals(ProcessHandle.current().pid(),observed.path("pid").asLong());assertEquals(nextRef.version(),observed.path("currentDefault").asText());assertEquals("b06.controlled.import-txt.1",observed.path("inspection").path("processingConfigVersion").asText());assertEquals(hash,observed.path("inspection").path("selectedConfirmation").path("contentHash").asText());assertNotEquals(actual.qualification().get("bootObservation"),observed.path("qualification").path("bootObservation").asText());assertEquals(json.readTree(json.writeValueAsString(actual.qualification().get("effectiveAdmission"))),observed.path("qualification").path("effectiveAdmission"));
+  Files.writeString(receipt.resolve("restart-proof.json"),json.writeValueAsString(Map.of("parentPid",ProcessHandle.current().pid(),"childPid",child.pid(),"newDefault",nextRef,"originalHash",hash,"apiClosedBeforeChild",!app.isActive(),"originalArchivesRetained",snapshot.index().entries().size(),"command",command)));
+ }
+}

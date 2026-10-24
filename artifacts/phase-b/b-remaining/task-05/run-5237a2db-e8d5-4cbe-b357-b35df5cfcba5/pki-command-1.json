@@ -1,0 +1,16 @@
+{
+  "command": [
+    "openssl",
+    "req",
+    "-newkey",
+    "rsa:2048",
+    "-noenc",
+    "-keyout",
+    "server.key",
+    "-out",
+    "server.csr",
+    "-subj",
+    "/CN=server"
+  ],
+  "exit": 0
+}

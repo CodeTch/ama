@@ -1,0 +1,38 @@
+{
+  "windows": [
+    {
+      "window": "final-integration-01",
+      "exit": 1,
+      "xmlFiles": 24,
+      "tests": 121,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "inherited-concurrency-green-01",
+      "exit": 0,
+      "xmlFiles": 1,
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+    },
+    {
+      "window": "final-units-01",
+      "exit": 0,
+      "xmlFiles": 41,
+      "tests": 254,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mavenConfig": null
+    }
+  ],
+  "composedDistinctIntegration": 121,
+  "currentTask6": 34,
+  "inherited": 87,
+  "claim": "Initial cohort121/1failed; only affected namespace fixture class5rerun PASS. Distinct current integration121 passed across accurately linked windows; not126 cases. Final unit total separate."
+}

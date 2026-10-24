@@ -1,0 +1,127 @@
+{
+  "recordedUtc": "2026-10-24T08:31:40.570481+00:00",
+  "scope": "Documentation-only pause finalization. No new tests/SQL/resource mutation/product edits. Hash checks are not Task9 acceptance. Index intentionally does not hash itself.",
+  "task": 9,
+  "resumeNode": "minutes-response-budget-red-01: response budget1 HTTP200 vs expected503; no fix/GREEN",
+  "phaseBComplete": false,
+  "sourceSnapshot": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source-manifest.json",
+    "sha256": "6ace1437cd668ec5f5cbb7c7a57812a7355c7ccee7786cc1020b3716075c0648",
+    "files": 134,
+    "bytes": 912772,
+    "currentAndCopyMismatches": []
+  },
+  "trees": [
+    {
+      "root": "/home/tanren/ama/.worktrees/phase-b-completion",
+      "head": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "branch": "codex/phase-b-completion-20261023",
+      "indexEmpty": true,
+      "porcelain": "M .superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json\n M .superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md\n M .superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md\n M .superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md\n M DEVELOPMENT_HANDOFF.md\n M backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java\n M backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java\n M backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java\n M backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java\n M backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java\n M backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java\n M backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java\n M backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java\n M backend/api/src/main/java/ama/api/MeetingConfiguration.java\n M backend/api/src/main/java/ama/api/SessionSecurityFilter.java\n M backend/core/src/main/java/ama/config/ConfigBindings.java\n M backend/core/src/main/java/ama/minutes/contract/ArchivedProfileResolver.java\n M backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java\n M backend/core/src/main/java/ama/task/ExternalOperationPort.java\n M backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java\n M backend/core/src/main/java/ama/task/PreparedExternalPolicy.java\n M backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java\n M backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java\n M backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java\n M backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java\n M backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java\n M contracts/openapi/api.yaml\n M docs/acceptance/development-resume-b-remaining-2026-10-24.md\n?? backend/adapters/src/main/java/ama/minutes/ControlledMinutesAdmin.java\n?? backend/adapters/src/main/java/ama/minutes/ControlledMinutesArchives.java\n?? backend/adapters/src/main/java/ama/minutes/ControlledMinutesDataSource.java\n?? backend/adapters/src/main/java/ama/minutes/ControlledMinutesTemplateInstaller.java\n?? backend/adapters/src/main/java/ama/minutes/MinutesCatalogAdmission.java\n?? backend/adapters/src/main/java/ama/minutes/json/StoredMinutesAnchorReader.java\n?? backend/adapters/src/main/java/ama/model/BoundedModelJson.java\n?? backend/adapters/src/main/java/ama/model/ControlledMinutesClient.java\n?? backend/adapters/src/main/java/ama/model/ControlledMinutesHttpTransport.java\n?? backend/adapters/src/main/java/ama/model/ControlledMinutesProtocol.java\n?? backend/adapters/src/main/java/ama/model/ControlledMinutesProvider.java\n?? backend/adapters/src/main/java/ama/model/ControlledMinutesProviderStore.java\n?? backend/adapters/src/main/java/ama/model/ControlledMinutesStore.java\n?? backend/adapters/src/main/java/ama/transcript/ConfiguredMinutes.java\n?? backend/adapters/src/main/java/ama/transcript/ControlledMinutesArchiveAccess.java\n?? backend/adapters/src/main/java/ama/transcript/ControlledMinutesRenderer.java\n?? backend/adapters/src/main/java/ama/transcript/JdbcMinutesFactsReader.java\n?? backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationCommands.java\n?? backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationPreparation.java\n?? backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationReceipts.java\n?? backend/adapters/src/main/java/ama/transcript/JdbcMinutesInitialSettings.java\n?? backend/adapters/src/main/java/ama/transcript/JdbcMinutesQueries.java\n?? backend/adapters/src/main/java/ama/transcript/JdbcMinutesSettingsReceipts.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesCandidateGraphPlan.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesCandidateWriter.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesEventReferences.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesExternalPreparation.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesGraphCapture.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesMetadataPages.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesRecordedLookup.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesSourceRows.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesStoredFinals.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesStoredResults.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesStoredReviews.java\n?? backend/adapters/src/main/java/ama/transcript/MinutesTaskDomainPolicy.java\n?? backend/adapters/src/main/resources/ama/minutes/controlled/parser.json\n?? backend/adapters/src/main/resources/ama/minutes/controlled/processing1.json\n?? backend/adapters/src/test/java/ama/config/json/Task09CandidatePlanTest.java\n?? backend/adapters/src/test/java/ama/config/json/Task09ControlledArchivesTest.java\n?? backend/adapters/src/test/java/ama/config/json/Task09ControlledClientTest.java\n?? backend/adapters/src/test/java/ama/config/json/Task09ControlledEnvelopeStoreTest.java\n?? backend/adapters/src/test/java/ama/config/json/Task09ControlledHttpTest.java\n?? backend/adapters/src/test/java/ama/config/json/Task09ControlledProtocolTest.java\n?? backend/adapters/src/test/java/ama/config/json/Task09GenerationBindingTest.java\n?? backend/adapters/src/test/java/ama/config/json/Task09ProducerTest.java\n?? backend/adapters/src/test/java/ama/minutes/json/Task09StoredAnchorTest.java\n?? backend/adapters/src/test/java/ama/model/Task09ControlledStoreTest.java\n?? backend/adapters/src/test/java/ama/model/Task09TransportAbortTest.java\n?? backend/api/src/main/java/ama/api/MinutesConfiguration.java\n?? backend/api/src/main/java/ama/api/MinutesController.java\n?? backend/api/src/main/java/ama/api/MinutesErrors.java\n?? backend/api/src/main/java/ama/api/MinutesWire.java\n?? backend/core/src/main/java/ama/minutes/MinutesGenerateProducer.java\n?? backend/core/src/main/java/ama/minutes/contract/GenerationArchiveRefs.java\n?? backend/core/src/main/java/ama/task/RecordedFactRecoveryPolicy.java\n?? backend/integration-tests/src/test/java/ama/api/Task09RuntimeProbe.java\n?? backend/integration-tests/src/test/java/ama/minutes/Task09ControlledAdminIT.java\n?? backend/integration-tests/src/test/java/ama/minutes/Task09GraphCaptureIT.java\n?? backend/integration-tests/src/test/java/ama/minutes/Task09GraphDiscoveryIT.java\n?? backend/integration-tests/src/test/java/ama/minutes/Task09Source.java\n?? backend/integration-tests/src/test/java/ama/minutes/Task09SourceGraphIT.java\n?? backend/integration-tests/src/test/java/ama/minutes/Task09TemplateIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09ApplicationReplayProcess.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09CompositeRecoveryIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09ControlledRelay.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09DeletedLookupRecoveryIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09DeniedFactPolicyIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupProcess.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupRecoveryIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09ExecutionManifestBudgetIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationApplicationRestartIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationArchiveAppendIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationAuditRollbackIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationCandidateInsertRollbackIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationCandidateReadbackRollbackIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationDeletedIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationExternalIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationFinalReaderIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationInvalidReplayIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationOutboxRollbackIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationPhysicalCancelIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationPreparationIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationQueueIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationReplayIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationRestartIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationReviewIdentitiesIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationReviewReaderIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationRevokedIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationRichIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationRollbackFixture.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationStaleIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationStaleReplayIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationUnknownIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09GenerationZeroEffectReplayIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09InitialSettingsIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09LookupAuthorityIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09MinutesFixture.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09MinutesHttpBoundaryIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09MinutesHttpIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09MinutesPaginationIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09MinutesResponseBudgetIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09NativeFixture.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09ObservationCommitAckIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09PinnedRenderIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09PipelineFixture.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09PipelineGraphIT.java\n?? backend/integration-tests/src/test/java/ama/storage/Task09TraceSource.java\n?? backend/integration-tests/src/test/java/ama/worker/Task09SessionAbortTest.java\n?? backend/worker/src/main/java/ama/worker/MinutesGenerationHandler.java\n?? backend/worker/src/main/java/ama/worker/MinutesReconciliationHandler.java\n?? contracts/openapi/minutes.yaml\n?? docs/acceptance/development-pause-b-remaining-2026-10-24-1613.md\n?? docs/superpowers/specs/2026-10-24-ama-phase-b-controlled-envelope.md"
+    },
+    {
+      "root": "/home/tanren/ama",
+      "head": "c71a44adb679a78d4c28dde7a4223aad1a23b40f",
+      "branch": "main",
+      "indexEmpty": true,
+      "porcelain": "M DEVELOPMENT_HANDOFF.md\n?? docs/acceptance/development-pause-b-remaining-2026-10-23-2145.md\n?? docs/acceptance/development-resume-b-remaining-2026-10-24.md"
+    }
+  ],
+  "latestXml": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "processObservation": {
+    "scope": "cwd within product tree and comm java/mvn/node/python/python3 only; not global process absence or database debt audit",
+    "matching": []
+  },
+  "records": [
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/docs/acceptance/development-pause-b-remaining-2026-10-24-1613.md",
+      "bytes": 12201,
+      "sha256": "0e38e8bd3b5fce5b7c55f535022048a705fb4e28d641c34d79ddcee3dceea882"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
+      "bytes": 30943,
+      "sha256": "c77c2c1274498fc685b7357b49dd906c82097a3ec7554a3a149b72cf4fd80cbd"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md",
+      "bytes": 4057,
+      "sha256": "6bdc81af5517287541db6ec24eec36ee70f3bc062f0ec224612f58ab2308fc44"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
+      "bytes": 181762,
+      "sha256": "fd63fd6fbeaa6ef00d5e0eb57eddbb4b4142a6f630ec1168e01abd55e493aaee"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md",
+      "bytes": 16675,
+      "sha256": "8570ad5bb044eb19b2d391518f303ff87528776ed91b6eb0c9ab1633cbb37733"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-remaining-inventory-20261024.md",
+      "bytes": 5767,
+      "sha256": "3140d2afda2f63a35a941c3f7c12db8e24e7d6a2943c08bb0a4b3f7143748429"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/phase-b-cross-task-closure-map-20261024.md",
+      "bytes": 8347,
+      "sha256": "6b06b49304d8032866676a61ff4c7ade1e4343828b6ab5375b46108b920db23a"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-author-pause-handoff-20261024.md",
+      "bytes": 19248,
+      "sha256": "087dffba48fdb0610e57c8fe77269ffcc06ffc913ed129c8c720e925efa6fc58"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-review-context-prepared-20261024.md",
+      "bytes": 11958,
+      "sha256": "367dd067a9b6cefd78f8198967416bba32e2abfd681286ece744d613d0c5332d"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source-manifest.json",
+      "bytes": 63087,
+      "sha256": "6ace1437cd668ec5f5cbb7c7a57812a7355c7ccee7786cc1020b3716075c0648"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-record-finalization-before-20261024T083119Z/manifest.json",
+      "bytes": 3321,
+      "sha256": "7040c337a13102098f6dd475588f5d6deabe852ff6af0112a4ac950cb7bb6275"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-09/minutes-response-budget-red-01/result.json",
+      "bytes": 346,
+      "sha256": "783a3fb4c21624b76126ff2ef50676ec1610ab2d627ff3c782a381ea0a260408"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-09/minutes-response-budget-red-01/integration-tests-TEST-ama.storage.Task09MinutesResponseBudgetIT.xml",
+      "bytes": 35382,
+      "sha256": "44ebfd1673745074cd06159f09c1c31efa71596f3b51ba22a382a8f107c2015a"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/DEVELOPMENT_HANDOFF.md",
+      "bytes": 11243,
+      "sha256": "f54f163aef123d90043e449154e6d7f4a6b316872c017cf0d1fc6115e74d0d0c"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/docs/acceptance/development-resume-b-remaining-2026-10-24.md",
+      "bytes": 12214,
+      "sha256": "9efeaba36b249f0e9aa9cb41d3d52b176105ea6a08ec87341d87407952059d30"
+    },
+    {
+      "path": "/home/tanren/ama/DEVELOPMENT_HANDOFF.md",
+      "bytes": 16357,
+      "sha256": "829d58d3f34e7c7d38adfabd1eea8934ac9cbfe5510fb15994466c85cfa9bc34"
+    },
+    {
+      "path": "/home/tanren/ama/docs/acceptance/development-resume-b-remaining-2026-10-24.md",
+      "bytes": 17663,
+      "sha256": "a3c4b978e85440f03a00a1567a7759a8148ca2d1a28f5dc7a0064f7207bc559f"
+    }
+  ]
+}

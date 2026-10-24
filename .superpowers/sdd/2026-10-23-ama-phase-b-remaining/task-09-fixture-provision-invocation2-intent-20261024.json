@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-24T03:08:23.507470+00:00",
+  "invocation": 2,
+  "initialInvocation": "retainedpreSQLfailure; schemaCOUNT0/ownerabsentactualdiagnostic",
+  "sameOwner": "task09-2d0e28ea775540f8b3525f9344edf5f0",
+  "sameSchema": "ama_t09_2d0e28ea7755_behavior",
+  "helperSha256": "14c6692710382aab0e2a47448864607f8c5e76f08f0aab9f9f51a2c113edff5f",
+  "scopedReviewSha256": "af2eef5dc572f46c4a7c1d09d07ef12946363ec4a6fd76c788eb75c941753d14",
+  "command": [
+    "python3",
+    "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-runtime-fix02-20261024.py",
+    "--execute-reviewed-task9-provisioning",
+    "--approved-helper-sha256",
+    "14c6692710382aab0e2a47448864607f8c5e76f08f0aab9f9f51a2c113edff5f",
+    "--task7-adoption-evidence",
+    "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-consumer-activation-root-ack-20261024.json",
+    "--task7-adoption-sha256",
+    "24ce0b8a9f15f9a37b43b6b41c62394f87b97d93924473cc08d20165032ab817",
+    "--owner",
+    "task09-2d0e28ea775540f8b3525f9344edf5f0",
+    "--schema",
+    "ama_t09_2d0e28ea7755_behavior"
+  ],
+  "authorization": "Sameintent/name continuationafterexact3linefixreview; firstandonlyactualCREATE/GRANTallowed; no alternateUUID/reset/drop."
+}

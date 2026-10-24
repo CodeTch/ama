@@ -1,0 +1,1290 @@
+66e70fd feat: persist runtime metadata and atomic new-meeting guard
+c2f7a64 docs: record V013.1 first success and strict oracle alias ruling
+15a124c docs: acknowledge exact V013.1 apply on owned remaining-B fixture
+64908b1 docs: freeze reviewed V013.1 runtime metadata bytes before apply
+
+ .../runtime-metadata-ack/.gitattributes            |     1 +
+ .../b-remaining/runtime-metadata-ack/ack.json      |    32 +
+ .../creator-real-schema-unavailable.log            |   352 +
+ .../creator-real-schema-unavailable.xml            |    64 +
+ .../runtime-metadata-ack/fresh-prefix-proof.json   |    91 +
+ .../runtime-metadata-ack/legacy-recomputation.json |    33 +
+ .../b-remaining/runtime-metadata-ack/manifest.json |    15 +
+ .../runtime-metadata-ack/prefix-at-ack.tsv         |    15 +
+ .../prior-table-ddl-preservation.json              |   102 +
+ .../schema-assertion-red.command.json              |    11 +
+ .../schema-assertion-red.counts.json               |   250 +
+ .../runtime-metadata-ack/schema-assertion-red.log  |   371 +
+ .../runtime-metadata-ack/schema-assertion-red.xml  |    70 +
+ .../runtime-metadata-ack/selected-at-ack.json      |     1 +
+ .../.gitattributes                                 |     1 +
+ .../actual-history-native-utc.tsv                  |    16 +
+ .../apply-preservation.json                        |    10 +
+ .../length-alias-ascii-supplementary-proof.json    |    12 +
+ .../manifest.json                                  |     7 +
+ .../observation.json                               |    15 +
+ .../runtime-metadata-freeze/.gitattributes         |     1 +
+ .../V013_1__b_runtime_metadata.sql.txt             |    34 +
+ .../runtime-metadata-freeze/fixture-identity.json  |    24 +
+ .../runtime-metadata-freeze/freeze.json            |    13 +
+ .../runtime-metadata-freeze/manifest.json          |     8 +
+ .../runtime-metadata-freeze/old-sql-sha256.json    |    14 +
+ .../runtime-metadata-freeze/schema-red.json        |     7 +
+ .../phase-b/b-remaining/task-02/.gitattributes     |     1 +
+ .../task-02/V013_1__b_runtime_metadata.sql.txt     |    34 +
+ .../phase-b/b-remaining/task-02/after-apply.json   | 11351 +++++++++++++++++
+ .../b-remaining/task-02/after-business-tests.json  | 12135 +++++++++++++++++++
+ .../b-remaining/task-02/after-constraints.json     | 11351 +++++++++++++++++
+ .../b-remaining/task-02/after-latest-rerun.json    | 11351 +++++++++++++++++
+ .../b-remaining/task-02/after-legacy-seed.json     | 11244 +++++++++++++++++
+ .../b-remaining/task-02/after-private-rerun.json   | 11351 +++++++++++++++++
+ .../phase-b/b-remaining/task-02/after-red.json     | 11231 +++++++++++++++++
+ .../b-remaining/task-02/apply-preservation.json    |    10 +
+ .../b-remaining/task-02/before-constraints.json    | 11351 +++++++++++++++++
+ .../b-remaining/task-02/before-legacy-seed.json    | 11231 +++++++++++++++++
+ .../phase-b/b-remaining/task-02/before-red.json    | 11231 +++++++++++++++++
+ .../b-remaining/task-02/constraint-results.json    |   276 +
+ .../task-02/creator-assertion-red.command.json     |    24 +
+ .../task-02/creator-assertion-red.counts.json      |   250 +
+ .../b-remaining/task-02/creator-assertion-red.log  |   371 +
+ .../task-02/creator-assertion-red.sources.json     |   273 +
+ .../b-remaining/task-02/creator-assertion-red.xml  |    70 +
+ ...ted-TEST-ama.meeting.MeetingCreationGuardIT.xml |    69 +
+ .../creator-commit-boundary-corrected.command.json |    25 +
+ .../creator-commit-boundary-corrected.counts.json  |    10 +
+ .../task-02/creator-commit-boundary-corrected.log  |   222 +
+ .../creator-commit-boundary-corrected.sources.json |   275 +
+ ...een-TEST-ama.meeting.MeetingCreationGuardIT.xml |    81 +
+ .../creator-green-initial-callback-test.java.txt   |   116 +
+ .../b-remaining/task-02/creator-green.command.json |    25 +
+ .../b-remaining/task-02/creator-green.counts.json  |    10 +
+ .../phase-b/b-remaining/task-02/creator-green.log  |   243 +
+ .../b-remaining/task-02/creator-green.sources.json |   275 +
+ .../creator-real-schema-unavailable.command.json   |    24 +
+ .../creator-real-schema-unavailable.counts.json    |   250 +
+ .../task-02/creator-real-schema-unavailable.log    |   352 +
+ .../creator-real-schema-unavailable.sources.json   |   273 +
+ .../task-02/creator-real-schema-unavailable.xml    |    64 +
+ .../b-remaining/task-02/evidence-sha256.json       |   136 +
+ ...all-units-TEST-ama.api.DeploymentConfigTest.xml |    79 +
+ ...ll-units-TEST-ama.api.FileConfigurationTest.xml |    71 +
+ ...ll-units-TEST-ama.api.IdentityContractsTest.xml |    73 +
+ ...all-units-TEST-ama.api.IdentitySecurityTest.xml |    76 +
+ ...-TEST-ama.canonical.CanonicalValueCodecTest.xml |    64 +
+ ...T-ama.config.file.ControlledArchiveFix1Test.xml |    66 +
+ ...nfig.file.ControlledConfigArchiveSourceTest.xml |    83 +
+ ...nits-TEST-ama.config.json.ArchiveBudgetTest.xml |    74 +
+ ...its-TEST-ama.config.json.ConfigBindingsTest.xml |    65 +
+ ...s-TEST-ama.config.json.ConfigWireReaderTest.xml |    65 +
+ ...units-TEST-ama.config.json.RawHashChainTest.xml |    84 +
+ ...its-TEST-ama.contract.MinutesFactBudgetTest.xml |    63 +
+ ...T-ama.minutes.contract.FinalAndCoverageTest.xml |    62 +
+ ....minutes.contract.GenerationFingerprintTest.xml |    63 +
+ ...-TEST-ama.minutes.contract.HashProfilesTest.xml |    65 +
+ ...T-ama.minutes.contract.SourceAndSupportTest.xml |    66 +
+ ...-ama.minutes.contract.StoredSourceGraphTest.xml |    67 +
+ ...T-ama.minutes.json.OutputBudgetBoundaryTest.xml |    75 +
+ ...ma.minutes.json.StrictMinutesJsonReaderTest.xml |    66 +
+ ...-units-TEST-ama.storage.ContractFixtureTest.xml |    60 +
+ ...TEST-ama.storage.ManagedBackendIdentityTest.xml |    63 +
+ ...ll-units-TEST-ama.storage.StorageRouterTest.xml |    67 +
+ ...ll-units-TEST-ama.storage.s3.S3LayoutV3Test.xml |    64 +
+ ...ll-units-TEST-ama.storage.s3.S3ProtocolTest.xml |    63 +
+ ...l-units-TEST-ama.support.ContractClientTest.xml |    62 +
+ ...al-all-units-TEST-ama.task.TaskMetadataTest.xml |    61 +
+ ...ts-TEST-ama.transcript.BatchFingerprintTest.xml |    65 +
+ ...EST-ama.transcript.TextTranscriptParserTest.xml |    78 +
+ ...nits-TEST-ama.worker.PreparedWorkerLoopTest.xml |    80 +
+ ...al-all-units-TEST-ama.worker.WorkerLoopTest.xml |    63 +
+ .../task-02/final-all-units.command.json           |    22 +
+ .../task-02/final-all-units.counts.json            |   242 +
+ .../b-remaining/task-02/final-all-units.log        |   303 +
+ .../task-02/final-all-units.sources.json           |   275 +
+ .../task-02/final-generator-verification.json      |    10 +
+ ...ssion-TEST-ama.meeting.MeetingConcurrencyIT.xml |    99 +
+ ...ion-TEST-ama.meeting.MeetingCreationGuardIT.xml |    78 +
+ ...gression-TEST-ama.meeting.MeetingRevisionIT.xml |   121 +
+ ...on-TEST-ama.meeting.RuntimeMetadataSchemaIT.xml |    82 +
+ .../task-02/final-meeting-regression.command.json  |    25 +
+ .../task-02/final-meeting-regression.counts.json   |    34 +
+ .../task-02/final-meeting-regression.log           |   267 +
+ .../task-02/final-meeting-regression.sources.json  |   275 +
+ .../task-02/final-preservation-qualified.json      |    23 +
+ .../b-remaining/task-02/final-source-sha256.json   |    12 +
+ .../task-02/first-apply-native-clock.json          |    14 +
+ .../b-remaining/task-02/first-apply.command.json   |    25 +
+ .../b-remaining/task-02/first-apply.counts.json    |    10 +
+ .../phase-b/b-remaining/task-02/first-apply.log    |   227 +
+ .../b-remaining/task-02/first-apply.sources.json   |   274 +
+ .../phase-b/b-remaining/task-02/first-apply.xml    |    71 +
+ .../b-remaining/task-02/fixture-identity.json      |    24 +
+ .../task-02/fresh-preapply-identity.json           |    24 +
+ .../b-remaining/task-02/fresh-prefix-proof.json    |    91 +
+ .../task-02/immediate-before-apply.json            | 11244 +++++++++++++++++
+ ...un-TEST-ama.meeting.RuntimeMetadataSchemaIT.xml |    70 +
+ .../b-remaining/task-02/latest-rerun.command.json  |    25 +
+ .../b-remaining/task-02/latest-rerun.counts.json   |    10 +
+ .../phase-b/b-remaining/task-02/latest-rerun.log   |   219 +
+ .../b-remaining/task-02/latest-rerun.sources.json  |   275 +
+ .../b-remaining/task-02/legacy-recomputation.json  |    33 +
+ .../phase-b/b-remaining/task-02/legacy-seed.json   |    55 +
+ .../length-alias-ascii-supplementary-proof.json    |    12 +
+ .../task-02/length-alias-investigation.json        |     7 +
+ .../b-remaining/task-02/model-preservation.json    |    97 +
+ .../phase-b/b-remaining/task-02/mysql-raw.jsonl    |  1507 +++
+ .../b-remaining/task-02/old-sql-sha256.json        |    14 +
+ .../phase-b/b-remaining/task-02/placement-ack.json |     7 +
+ .../task-02/precommit-coordinator-head.json        |    15 +
+ .../task-02/prior-table-ddl-preservation.json      |   102 +
+ ...un-TEST-ama.meeting.RuntimeMetadataSchemaIT.xml |    70 +
+ .../task-02/private-target-rerun.command.json      |    25 +
+ .../task-02/private-target-rerun.counts.json       |    10 +
+ .../b-remaining/task-02/private-target-rerun.log   |   222 +
+ .../task-02/private-target-rerun.sources.json      |   275 +
+ .../phase-b/b-remaining/task-02/run_task02.py      |    27 +
+ .../task-02/schema-assertion-red-test.java.txt     |    45 +
+ .../task-02/schema-assertion-red.command.json      |    24 +
+ .../task-02/schema-assertion-red.counts.json       |   250 +
+ .../b-remaining/task-02/schema-assertion-red.log   |   371 +
+ .../task-02/schema-assertion-red.sources.json      |   273 +
+ .../b-remaining/task-02/schema-assertion-red.xml   |    70 +
+ ...ed-TEST-ama.meeting.RuntimeMetadataSchemaIT.xml |    67 +
+ .../task-02/schema-green-corrected.command.json    |    25 +
+ .../task-02/schema-green-corrected.counts.json     |    10 +
+ .../b-remaining/task-02/schema-green-corrected.log |   219 +
+ .../task-02/schema-green-corrected.sources.json    |   275 +
+ .../task-02/schema-green-initial-failure.xml       |    73 +
+ .../task-02/schema-green-initial-oracle.java.txt   |    45 +
+ .../b-remaining/task-02/schema-green.command.json  |    25 +
+ .../b-remaining/task-02/schema-green.counts.json   |    10 +
+ .../phase-b/b-remaining/task-02/schema-green.log   |   242 +
+ .../b-remaining/task-02/schema-green.sources.json  |   274 +
+ .../phase-b/b-remaining/task-02/schema-red.json    |     7 +
+ .../phase-b/b-remaining/task-02/schema_evidence.py |   182 +
+ .../b-remaining/task-02/session-utc-sqlmode.json   |    12 +
+ .../task-02/setup-model-namespace-failure.log      |     1 +
+ .../phase-b/b-remaining/task-02/task-02-report.md  |    55 +
+ .../b-remaining/task-02/verification-summary.json  |    67 +
+ .../java/ama/meeting/JdbcMeetingRepository.java    |     3 +
+ .../db/migration/V013_1__b_runtime_metadata.sql    |    34 +
+ .../java/ama/meeting/MeetingCreationGuardIT.java   |   129 +
+ .../ama/meeting/RuntimeMetadataCheckOracle.java    |    46 +
+ .../java/ama/meeting/RuntimeMetadataSchemaIT.java  |    53 +
+ .../b/database-runtime-metadata-task-02.md         |    41 +
+ docs/database/ama-data-dictionary.md               |    34 +-
+ docs/database/ama-schema-draft.sql                 |    24 +-
+ docs/database/migration-register.md                |    26 +-
+ .../specs/2026-10-21-ama-database-design.md        |    14 +-
+ tools/checks/database_design.py                    |    19 +-
+ 173 files changed, 141197 insertions(+), 6 deletions(-)
+
+diff --git a/artifacts/phase-b/b-remaining/task-02/final-preservation-qualified.json b/artifacts/phase-b/b-remaining/task-02/final-preservation-qualified.json
+new file mode 100644
+index 0000000..f9bc287
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-02/final-preservation-qualified.json
+@@ -0,0 +1,23 @@
++{
++  "all_metadata_equal": true,
++  "history_13_rows_exact": true,
++  "all_original_rows_retained_except_intentionally_advanced_shared_outbox_sequence": true,
++  "shared_outbox_sequence_before": [
++    "1\t217"
++  ],
++  "shared_outbox_sequence_after": [
++    "1\t300"
++  ],
++  "show_create_runtime_counter_changes": {
++    "audit_event": {
++      "before": "audit_event\tCREATE TABLE `audit_event` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `actor_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `action` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `resource_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `revision` bigint unsigned NOT NULL,\n  `result` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `trace_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `occurred_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `audit_resource_time` (`resource_id`,`occurred_at`,`id`),\n  KEY `audit_trace` (`trace_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n",
++      "after": "audit_event\tCREATE TABLE `audit_event` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `actor_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `action` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `resource_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `revision` bigint unsigned NOT NULL,\n  `result` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,\n  `trace_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,\n  `occurred_at` datetime(6) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `audit_resource_time` (`resource_id`,`occurred_at`,`id`),\n  KEY `audit_trace` (`trace_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\n"
++    }
++  },
++  "legacy_batch": "c815c8b9-a297-4bc4-b8d1-19fc0c97bd95",
++  "legacy_meeting": "814f7870-14c5-4b12-ba69-e5c27ea1e30f",
++  "legacy_matching_hash_preserved": true,
++  "legacy_profile_absent": true,
++  "legacy_guard_absent": true,
++  "scope": "Post-business checks; exact complete equality was already proved in migration/constraint/zero-rerun windows"
++}
+diff --git a/artifacts/phase-b/b-remaining/task-02/run_task02.py b/artifacts/phase-b/b-remaining/task-02/run_task02.py
+new file mode 100644
+index 0000000..901a2b2
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-02/run_task02.py
+@@ -0,0 +1,27 @@
++import pathlib,sys,subprocess,json,hashlib,xml.etree.ElementTree as ET,os
++ROOT=pathlib.Path(__file__).resolve().parents[4];OUT=pathlib.Path(__file__).resolve().parent
++sys.path.insert(0,str(ROOT/'tools/checks'));import run
++name=sys.argv[1];kind=sys.argv[2];selector=sys.argv[3] if len(sys.argv)>3 else '*'
++files=list(ROOT.glob('backend/**/src/**/*.java'))+list(ROOT.glob('backend/adapters/src/main/resources/db/migration/*.sql'))
++(OUT/(name+'.sources.json')).write_text(json.dumps({str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(files)},indent=2)+'\n')
++(OUT/(name+'.command.json')).write_text(json.dumps(dict(argv=sys.argv[1:],runner='tools/checks/run.py java_tests',jdk=os.environ['JAVA_HOME'],fixture=os.environ.get('AMA_TEST_CONTAINER'),private_env='.tools/phase-b-remaining/env.sh'),indent=2)+'\n')
++original_execute=run.execute
++def capture_execute(command,cwd,reports):
++    path=OUT/(name+'.command.json');value=json.loads(path.read_text());value['actual_command']=command;value['cwd']=str(cwd);path.write_text(json.dumps(value,indent=2)+'\n')
++    return original_execute(command,cwd,reports)
++run.execute=capture_execute
++if kind=='it':
++    reports=set(ROOT.glob('backend/*/target/failsafe-reports/TEST-*.xml'))
++    for one in selector.split(','):
++        for src in (ROOT/'backend/integration-tests/src/test/java').rglob(one.split('#')[0]+'.java'):
++            package=src.read_text().split('package ',1)[1].split(';',1)[0].strip()
++            reports.add(ROOT/'backend/integration-tests/target/failsafe-reports'/('TEST-'+package+'.'+src.stem+'.xml'))
++    command=[str(ROOT/'mvnw'),'-B','-ntp','-pl','backend/integration-tests','-am','-Dtest=RuntimeMetadataNoUnitSelector','-Dsurefire.failIfNoSpecifiedTests=false','-Dit.test='+selector,'-Dfailsafe.failIfNoSpecifiedTests=false','verify']
++    status=run.execute(command,ROOT,sorted(reports))
++else:
++    status=run.java_tests(selector,integration=False)
++counts=[]
++for p in sorted(ROOT.glob('backend/*/target/'+('failsafe-reports' if kind=='it' else 'surefire-reports')+'/TEST-*.xml')):
++ t=ET.parse(p).getroot();counts.append(dict(report=str(p.relative_to(ROOT)),**{k:t.get(k) for k in ['name','tests','failures','errors','skipped']}))
++ (OUT/(name+'-'+p.name)).write_bytes(p.read_bytes())
++(OUT/(name+'.counts.json')).write_text(json.dumps(counts,indent=2)+'\n');sys.exit(status)
+diff --git a/artifacts/phase-b/b-remaining/task-02/schema_evidence.py b/artifacts/phase-b/b-remaining/task-02/schema_evidence.py
+new file mode 100644
+index 0000000..7a99642
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-02/schema_evidence.py
+@@ -0,0 +1,182 @@
++"""Task 2 guarded append-only schema evidence. Only this run fixture; no reset/DDL."""
++import hashlib,json,pathlib,subprocess,sys,shlex
++ROOT=pathlib.Path(__file__).resolve().parents[4]
++OUT=pathlib.Path(__file__).resolve().parent
++CONTAINER='ama-test-b01-ad9f1af29eff'
++ID='eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502'
++NEW={'input_batch_fingerprint_profile','meeting_minutes_editor_guard'}
++def write(name,value):
++    path=OUT/(name+'.json');assert not path.exists(),str(path)
++    path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
++def query(sql,ok=True):
++    r=subprocess.run(['docker','exec','-i',CONTAINER,'sh','-c','MYSQL_PWD="$MYSQL_PASSWORD" mysql --protocol=TCP -h127.0.0.1 --user="$MYSQL_USER" "$MYSQL_DATABASE" --batch --raw --skip-column-names'],input=sql,text=True,capture_output=True)
++    with (OUT/'mysql-raw.jsonl').open('a') as f:f.write(json.dumps(dict(sql=sql,exit=r.returncode,stdout=r.stdout,stderr=r.stderr),ensure_ascii=False)+'\n')
++    if ok:r.check_returncode()
++    return r
++QUERIES={
++ 'tables':"SELECT JSON_OBJECT('table',TABLE_NAME,'engine',ENGINE,'collation',TABLE_COLLATION) FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() ORDER BY TABLE_NAME",
++ 'columns':"SELECT JSON_OBJECT('table',TABLE_NAME,'column',COLUMN_NAME,'ordinal',ORDINAL_POSITION,'type',COLUMN_TYPE,'nullable',IS_NULLABLE,'default',COLUMN_DEFAULT,'collation',COLLATION_NAME,'extra',EXTRA) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() ORDER BY TABLE_NAME,ORDINAL_POSITION",
++ 'indexes':"SELECT JSON_OBJECT('table',TABLE_NAME,'name',INDEX_NAME,'unique',1-NON_UNIQUE,'seq',SEQ_IN_INDEX,'column',COLUMN_NAME,'direction',COLLATION,'prefix',SUB_PART,'type',INDEX_TYPE) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() ORDER BY TABLE_NAME,INDEX_NAME,SEQ_IN_INDEX",
++ 'checks':"SELECT JSON_OBJECT('table',t.TABLE_NAME,'name',t.CONSTRAINT_NAME,'clause',c.CHECK_CLAUSE,'enforced',t.ENFORCED) FROM information_schema.TABLE_CONSTRAINTS t JOIN information_schema.CHECK_CONSTRAINTS c ON c.CONSTRAINT_SCHEMA=t.CONSTRAINT_SCHEMA AND c.CONSTRAINT_NAME=t.CONSTRAINT_NAME WHERE t.CONSTRAINT_SCHEMA=DATABASE() AND t.CONSTRAINT_TYPE='CHECK' ORDER BY t.TABLE_NAME,t.CONSTRAINT_NAME",
++ 'foreign_keys':"SELECT JSON_OBJECT('table',k.TABLE_NAME,'name',k.CONSTRAINT_NAME,'column',k.COLUMN_NAME,'ordinal',k.ORDINAL_POSITION,'target',k.REFERENCED_TABLE_NAME,'remote',k.REFERENCED_COLUMN_NAME,'delete',r.DELETE_RULE,'update',r.UPDATE_RULE) FROM information_schema.KEY_COLUMN_USAGE k JOIN information_schema.REFERENTIAL_CONSTRAINTS r ON r.CONSTRAINT_SCHEMA=k.CONSTRAINT_SCHEMA AND r.CONSTRAINT_NAME=k.CONSTRAINT_NAME WHERE k.CONSTRAINT_SCHEMA=DATABASE() AND k.REFERENCED_TABLE_NAME IS NOT NULL ORDER BY k.TABLE_NAME,k.CONSTRAINT_NAME,k.ORDINAL_POSITION"}
++def guard():
++    m=json.loads(subprocess.check_output(['docker','inspect',CONTAINER],text=True))[0]
++    assert m['Id']==ID
++    assert m['Config']['Labels']['ama.remaining.owner']=='remaining-20261023'
++    assert m['Config']['Labels']['ama.test-fixture']=='b01'
++    assert m['NetworkSettings']['Ports']['3306/tcp']==[{'HostIp':'127.0.0.1','HostPort':'58062'}]
++    assert m['HostConfig']['Memory']==805306368 and m['HostConfig']['NanoCpus']==1000000000 and m['HostConfig']['PidsLimit']==256
++    assert m['Image']=='sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9'
++    assert m['Config']['Image']=='mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9'
++    assert m['Name']=='/'+CONTAINER and m['State']['Running']
++    assert query('SELECT VERSION(),DATABASE(),@@innodb_use_native_aio').stdout.strip()=='8.4.6\tama_b01_fixture\t0'
++    return {k:m[k] for k in ['Id','Image','Name']}|{'labels':m['Config']['Labels'],'imageReference':m['Config']['Image'],'ports':m['NetworkSettings']['Ports'],'resources':{k:m['HostConfig'][k] for k in ['Memory','NanoCpus','PidsLimit']}}
++def snapshot():
++    metadata={k:[json.loads(x) for x in query(q).stdout.splitlines()] for k,q in QUERIES.items()}
++    names=[x['table'] for x in metadata['tables']]
++    rows={n:sorted(query('SELECT * FROM `'+n+'`').stdout.splitlines()) for n in names if n!='flyway_schema_history'}
++    creates={n:query('SHOW CREATE TABLE `'+n+'`').stdout for n in names if n!='flyway_schema_history'}
++    history=query('SELECT installed_rank,version,description,type,script,checksum,installed_by,installed_on,execution_time,success FROM flyway_schema_history ORDER BY installed_rank').stdout.splitlines()
++    return dict(metadata=metadata,rows=rows,creates=creates,history=history)
++def old_equal(before,after):
++    assert before['history']==after['history'][:len(before['history'])]
++    for group in before['metadata']:
++        assert before['metadata'][group]==[x for x in after['metadata'][group] if x['table'] not in NEW],group
++    for key in ['rows','creates']:
++        assert before[key]=={k:v for k,v in after[key].items() if k not in NEW},key
++def seed_legacy():
++    # Physical metadata fixture only: the committed literal establishes matching v1 bytes,
++    # not authentic production intake or managed file persistence.
++    literal=ROOT/'backend/core/src/test/resources/ama/transcript/batch-v1.literal.bytes'
++    digest=hashlib.sha256(literal.read_bytes()).hexdigest()
++    expected=(literal.with_suffix('.sha256')).read_text().strip()
++    assert digest==expected=='c4a558e4dc8aff8289b4ed60193efdfbc7f64f73ae642e2eec6398c473458053'
++    payload=json.loads(literal.with_suffix('.json').read_text())['data']
++    import os,uuid
++    meeting=str(uuid.uuid4());batch=str(uuid.uuid4())
++    for f in payload['files']:f['fileId']=str(uuid.uuid4())
++    payload['meetingId']=meeting;payload['batchId']=batch
++    # Invoke the adopted production BatchFingerprint against exact new member/file facts.
++    members=','.join('new BatchFingerprint.Member(%d,"%s","%s",%d)'%(f['ordinal'],f['fileId'],f['sha256'],f['sizeBytes']) for f in payload['files'])
++    java='import ama.transcript.*; import ama.contract.MinutesContracts.*; import java.util.*;\n'
++    java+='System.out.println("NEW_HASH:"+new BatchFingerprint().compute("%s","%s","TRANSCRIPT",9,List.of(%s),new CanonicalBudget(10000,16,1000,1000,100),()->false));\n'%(meeting,batch,members)
++    golden=json.loads(literal.with_suffix('.json').read_text())['data']
++    golden_members=','.join('new BatchFingerprint.Member(%d,"%s","%s",%d)'%(f['ordinal'],f['fileId'],f['sha256'],f['sizeBytes']) for f in golden['files'])
++    java+='System.out.println("GOLDEN_HASH:"+new BatchFingerprint().compute("%s","%s","TRANSCRIPT",9,List.of(%s),new CanonicalBudget(10000,16,1000,1000,100),()->false));\n'%(golden['meetingId'],golden['batchId'],golden_members)
++    cp=str(ROOT/'backend/core/target/classes')+':'+str(ROOT/'backend/contracts/target/classes')
++    command=[os.environ['JAVA_HOME']+'/bin/jshell','--class-path',cp,'-']
++    result=subprocess.run(command,input=java,text=True,capture_output=True)
++    write('legacy-recomputation',dict(command=command,source=java,exit=result.returncode,stdout=result.stdout,stderr=result.stderr,literal_golden_sha256=digest,exact_new_facts=payload))
++    assert result.returncode==0 and 'GOLDEN_HASH:'+digest in result.stdout,result.stderr
++    digest=result.stdout.split('NEW_HASH:')[1].splitlines()[0].strip()
++    assert len(digest)==64 and all(c in '0123456789abcdef' for c in digest)
++    owner='runtime-legacy-'+str(uuid.uuid4());backend='runtime-legacy-'+str(uuid.uuid4())
++    assert query("SELECT COUNT(*) FROM meeting WHERE id='"+meeting+"'").stdout.strip()=='0'
++    before=snapshot();assert before==json.loads((OUT/'after-red.json').read_text());write('before-legacy-seed',before)
++    statements=["START TRANSACTION",
++      "INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES ('"+owner+"','legacy metadata fixture','ACTIVE',UTC_TIMESTAMP(6))",
++      "INSERT INTO task_subject VALUES ('MEETING','"+meeting+"',9,0,0)",
++      "INSERT INTO meeting(id,owner_id,revision,stage,created_at,updated_at) VALUES ('"+meeting+"','"+owner+"',9,'ENTRY',UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))",
++      "INSERT INTO storage_backend VALUES ('"+backend+"','local','READ_ONLY',1)",
++      "INSERT INTO input_batch VALUES ('"+batch+"','"+meeting+"','TRANSCRIPT','"+digest+"',9,UTC_TIMESTAMP(6))"]
++    for f in payload['files']:
++        statements.append("INSERT INTO file_object(id,meeting_id,backend_id,storage_type,namespace,object_key,display_name,size_bytes,sha256,state,created_at) VALUES ('%s','%s','%s','local','task02','%s','physical metadata only',%d,'%s','AVAILABLE',UTC_TIMESTAMP(6))"%(f['fileId'],meeting,backend,f['fileId'],f['sizeBytes'],f['sha256']))
++        statements.append("INSERT INTO input_batch_file VALUES ('%s',%d,'%s','%s')"%(batch,f['ordinal'],f['fileId'],f['sha256']))
++    statements+=['COMMIT'];query(';\n'.join(statements)+';')
++    after=snapshot();write('after-legacy-seed',after)
++    assert before['metadata']==after['metadata'] and before['creates']==after['creates'] and before['history']==after['history']
++    for name,rows in before['rows'].items(): assert set(rows)<=set(after['rows'][name]),name
++    additions={n:sorted(set(v)-set(before['rows'][n])) for n,v in after['rows'].items() if v!=before['rows'][n]}
++    write('legacy-seed',dict(scope='metadata-only schema fixture, not authentic intake/files',meeting=meeting,batch=batch,owner=owner,new_fingerprint=digest,exact_new_facts=payload,canonical_vector_sha256=expected,canonical_vector_bytes=len(literal.read_bytes()),additions=additions,all_prior_rows_preserved=True))
++def before_apply():
++    write('fresh-preapply-identity',guard());a=snapshot();write('immediate-before-apply',a)
++    old=json.loads((OUT/'after-legacy-seed.json').read_text());assert old==a,'preapply attempts changed rows/schema/history'
++    assert len(a['history'])==12 and all(x.endswith('\t1') for x in a['history'])
++    prefix=[line.split('\t') for line in query('SELECT installed_rank,version,script,checksum,success FROM flyway_schema_history ORDER BY installed_rank').stdout.splitlines()]
++    required=[line.split('\t') for line in (ROOT/'artifacts/phase-b/b-remaining/task-01/fixture/history-after.log').read_text().splitlines()[1:13]]
++    assert prefix==required
++    write('fresh-prefix-proof',dict(exact_task1_prefix=prefix,success=True,no_applied_14_or_later=True,required_tables_absent=not NEW.intersection(x['table'] for x in a['metadata']['tables'])))
++    print('READY: current guarded identity, exact 12-success prefix and all legacy/Task1 rows/schema/history snapshotted')
++def after_apply():
++    guard();before=json.loads((OUT/'immediate-before-apply.json').read_text());after=snapshot()
++    old_equal(before,after);assert len(after['history'])==13 and after['history'][-1].split('\t')[1]=='013.1' and after['history'][-1].endswith('\t1')
++    assert all(not after['rows'][n] for n in NEW),'migration must not populate historical sidecars'
++    original=json.loads((OUT/'old-sql-sha256.json').read_text())
++    assert original=={name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in original}
++    candidate=OUT/'V013_1__b_runtime_metadata.sql.txt';formal=ROOT/'backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql'
++    assert candidate.read_bytes()==formal.read_bytes() and hashlib.sha256(formal.read_bytes()).hexdigest()=='9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520'
++    write('after-apply',after)
++    write('apply-preservation',dict(old_user_tables=len(before['rows']),old_rows=sum(map(len,before['rows'].values())),all_old_rows_show_create_five_groups_equal=True,history_prefix_equal=True,history_appended=after['history'][-1],new_tables_empty=True,old_source_hashes_unchanged=True,frozen_candidate_equals_formal=True))
++    print('APPLY preservation PASS: exact 1103 old rows/all old schema/12historyprefix plus1successful013.1; newsidecars empty')
++def capture_rerun(name):
++    guard();a=snapshot();b=json.loads((OUT/'after-apply.json').read_text());assert a==b;write(name,a)
++    print(name+': exact complete metadata/rows/history equal after-apply')
++def capture_session():
++    guard()
++    sql="SET NAMES utf8mb4; SET time_zone='+00:00'; SELECT JSON_OBJECT('version',VERSION(),'global_sql_mode',@@global.sql_mode,'session_sql_mode',@@session.sql_mode,'session_timezone',@@session.time_zone,'system_timezone',@@system_time_zone,'now',NOW(6),'utc',UTC_TIMESTAMP(6),'native_epoch',UNIX_TIMESTAMP(UTC_TIMESTAMP(6)),'database',DATABASE(),'native_aio',@@innodb_use_native_aio);"
++    value=json.loads(query(sql).stdout.strip());assert 'STRICT_TRANS_TABLES' in value['session_sql_mode'] and value['session_timezone']=='+00:00' and value['now']==value['utc'];write('session-utc-sqlmode',value)
++
++def constraint_probes():
++    import uuid
++    before=snapshot();write('before-constraints',before);results=[]
++    meeting=str(uuid.uuid4());batch=str(uuid.uuid4());owner='constraints-'+str(uuid.uuid4())
++    pre="SET NAMES utf8mb4; SET time_zone='+00:00'; START TRANSACTION; INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES ('%s','constraint','ACTIVE',UTC_TIMESTAMP(6)); INSERT INTO meeting(id,owner_id,stage,created_at,updated_at) VALUES ('%s','%s','ENTRY',UTC_TIMESTAMP(6),UTC_TIMESTAMP(6)); INSERT INTO input_batch VALUES ('%s','%s','TRANSCRIPT',REPEAT('a',64),0,UTC_TIMESTAMP(6)); "%(owner,meeting,owner,batch,meeting)
++    guard="INSERT INTO meeting_minutes_editor_guard VALUES ('%s',%%s);"%meeting
++    profile="INSERT INTO input_batch_fingerprint_profile VALUES ('%s',%%s);"%batch
++    def attempt(label,sql,code=None):
++        result=query(pre+sql+' ROLLBACK;',False)
++        assert (result.returncode==0 if code is None else result.returncode!=0 and any(str(c) in result.stderr for c in code)),(label,result.stderr)
++        results.append(dict(label=label,exit=result.returncode,expected_mysql_errors=code,stdout=result.stdout,stderr=result.stderr))
++    for n in ['0','1','9223372036854775806']:attempt('valid epoch '+n,guard%n+" SELECT intent_epoch FROM meeting_minutes_editor_guard WHERE meeting_id='"+meeting+"';")
++    attempt('valid exact v1',profile%"'ama.input-batch.v1'")
++    for n in ['-1','9223372036854775807']:attempt('reject epoch '+n,guard%n,[3819])
++    attempt('reject bigint overflow',guard%'9223372036854775808',[1264])
++    for value in ["''","'AMA.input-batch.v1'","'ama.input-batch.v2'","' ama.input-batch.v1'","'ama.input-batch.v1 '","'ama.input-batch.v1  '","'ama.input-batch.v1é'"]:
++        attempt('reject profile '+value,profile%value,[3819,1366])
++    for name,statement in [
++      ('duplicate guard',guard%'0'+guard%'1'),('duplicate profile',profile%"'ama.input-batch.v1'"+profile%"'ama.input-batch.v1'")]:attempt(name,statement,[1062])
++    for name,statement in [
++      ('orphan guard',"INSERT INTO meeting_minutes_editor_guard VALUES ('00000000-0000-4000-8000-000000000001',0);"),
++      ('orphan profile',"INSERT INTO input_batch_fingerprint_profile VALUES ('00000000-0000-4000-8000-000000000001','ama.input-batch.v1');")]:attempt(name,statement,[1452])
++    for name,statement in [
++      ('null meeting',"INSERT INTO meeting_minutes_editor_guard VALUES (NULL,0);"),('null epoch',guard%'NULL'),
++      ('null batch',"INSERT INTO input_batch_fingerprint_profile VALUES (NULL,'ama.input-batch.v1');"),('null profile',profile%'NULL')]:attempt(name,statement,[1048])
++    for name,statement in [
++      ('missing epoch',"INSERT INTO meeting_minutes_editor_guard(meeting_id) VALUES ('%s');"%meeting),
++      ('missing meeting',"INSERT INTO meeting_minutes_editor_guard(intent_epoch) VALUES (0);"),
++      ('missing profile',"INSERT INTO input_batch_fingerprint_profile(batch_id) VALUES ('%s');"%batch),
++      ('missing batch',"INSERT INTO input_batch_fingerprint_profile(profile) VALUES ('ama.input-batch.v1');")]:attempt(name,statement,[1364])
++    for table,key,val,child in [('meeting','id',meeting,"DELETE FROM input_batch WHERE id='"+batch+"';"+guard%'0'),('input_batch','id',batch,profile%"'ama.input-batch.v1'")]:
++        attempt('restrict delete '+table,child+" DELETE FROM %s WHERE %s='%s';"%(table,key,val),[1451])
++        attempt('restrict update '+table,child+" UPDATE %s SET %s='%s' WHERE %s='%s';"%(table,key,str(uuid.uuid4()),key,val),[1451])
++    after=snapshot();assert before==after;write('after-constraints',after);write('constraint-results',dict(positives=sum(x['exit']==0 for x in results),negatives=sum(x['exit']!=0 for x in results),probes=results,all_dml_rolled_back=True))
++    print('Constraint probes PASS: '+str(len(results))+'; full before/after equality')
++
++if __name__=='__main__':
++    action=sys.argv[1]
++    if action=='session': capture_session()
++    elif action=='after-apply': after_apply()
++    elif action in ['after-private-rerun','after-latest-rerun']: capture_rerun(action)
++    elif action=='seed-legacy': seed_legacy()
++    elif action=='before-apply': before_apply()
++    elif action=='constraints': guard();constraint_probes()
++    elif action=='stage-a':
++        write('fixture-identity',guard())
++        old=sorted((ROOT/'backend/adapters/src/main/resources/db/migration').glob('*.sql'))
++        assert len(old)==12
++        write('old-sql-sha256',{str(x.relative_to(ROOT)):hashlib.sha256(x.read_bytes()).hexdigest() for x in old})
++        a=snapshot();assert len(a['history'])==12 and all(x.endswith('\t1') for x in a['history'])
++        assert not NEW.intersection(x['table'] for x in a['metadata']['tables'])
++        write('before-red',a)
++        r=query('SELECT batch_id,profile FROM input_batch_fingerprint_profile; SELECT meeting_id,intent_epoch FROM meeting_minutes_editor_guard;',False)
++        assert r.returncode!=0 and '1146' in r.stderr and 'input_batch_fingerprint_profile' in r.stderr
++        r2=query('SELECT meeting_id,intent_epoch FROM meeting_minutes_editor_guard',False)
++        assert r2.returncode!=0 and '1146' in r2.stderr and 'meeting_minutes_editor_guard' in r2.stderr
++        b=snapshot();assert a==b;write('after-red',b)
++        write('schema-red',dict(result='RED: both required tables missing (1146)',preservation='exact before/after snapshot equality',tables=len(a['rows']),rows=sum(map(len,a['rows'].values())),history=12))
++        env={x.split('=',1)[0]:x.split('=',1)[1] for x in json.loads(subprocess.check_output(['docker','inspect',CONTAINER],text=True))[0]['Config']['Env']}
++        private=ROOT/'.tools/phase-b-remaining/env.sh'
++        if not private.exists():
++            private.parent.mkdir(parents=True,exist_ok=True)
++            private.write_text('\n'.join('export '+k+'='+shlex.quote(v) for k,v in dict(AMA_TEST_CONTAINER=CONTAINER,AMA_TEST_DATABASE_URL='jdbc:mysql://127.0.0.1:58062/ama_b01_fixture',AMA_TEST_DATABASE_USERNAME=env['MYSQL_USER'],AMA_TEST_DATABASE_PASSWORD=env['MYSQL_PASSWORD']).items())+'\n');private.chmod(0o600)
++        print(json.dumps(json.loads((OUT/'schema-red.json').read_text())))
+diff --git a/artifacts/phase-b/b-remaining/task-02/task-02-report.md b/artifacts/phase-b/b-remaining/task-02/task-02-report.md
+new file mode 100644
+index 0000000..9d8fc87
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-02/task-02-report.md
+@@ -0,0 +1,55 @@
++# Task 2 implementation and evidence report
++
++2026-10-23. Task-only completion, pending root independent review/adoption. No overall Phase B, company-runtime or full future-model completion claim.
++
++## Authority, exact baselines and change
++
++- Isolated checkout `/home/tanren/ama/.worktrees/phase-b-completion`, branch `codex/phase-b-completion-20261023`, clean starting BASE `a3b2933ef83035e858d2d3336decba4617f22a1f` (Task 1 adopted).
++- Root allocation only: `46a1adad4dd4afda3272e34669235d4126c480d6`. Permanent complete-byte freeze: `64908b1aef4c28f0806846128fcb44005f1b75e1`. Separate exact-SHA/apply ACK: `15a124c607d4682b59993f4ff0945bf6dcbef57a`. Root alone authored the migration register and those central receipts; this implementation stages only owned paths.
++- Formal `V013_1__b_runtime_metadata.sql`: exactly 1817 bytes, SHA-256 `9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520`. Candidate remains under this directory as `.sql.txt`; formal bytes equal it exactly. Two CREATEs plus two FK ALTERs, no other statements. Header finalized before freeze; neither SQL copy changed afterward.
++- Application change: one guard-zero INSERT, with two explanatory comments, in only JdbcMeetingRepository.create's genuinely new branch, after meeting insertion and before history/projection work. Existing replay/read branches remain unchanged. Same DataSource/transaction owns subject, meeting, guard, history, projections, idempotency, audit, outbox and final flush. Missing schema throws and rolls back without DDL/default/lazy initialization.
++- Generator/model, dictionary, review DDL and ER updated consistently to B00-1.5-runtime-metadata: actual 98 tables / 731 columns. Every parent B00-1.4-proposed record, policy and all 96 prior CREATE/FK definitions match both comparison directions; parent 96/727 hash `7027c77804e53479d1c1b7fe6953bd482b6c70ee7dbba1ddf7bffc5caaf6167f`. D01 proposed three tables/two columns remain UNASSIGNED-D01. No protected historical copy or original twelve SQL source changed.
++
++## Selected fixture and preapply RED
++
++The only database is this run's root-authorized `ama-test-b01-ad9f1af29eff`, full container ID `eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502`, owner label `remaining-20261023`, 127.0.0.1:58062 / ama_b01_fixture. Exact image `mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9`, MySQL 8.4.6, 768MiB / 1 CPU / 256 PIDs and native AIO=0. Guarded selected identity/ports/image/resources, complete successful history, SQL mode and native UTC/epoch receipts are retained. Only new private `.tools/phase-b-remaining/env.sh` was loaded; credentials were never printed or staged.
++
++Before apply, all twelve old source hashes and ordered script/checksum/success history matched Task 1 exactly. Actual JUnit RuntimeMetadataSchemaIT expected both exact sidecar table names/engine/collation and found an empty set: **1 assertion failure / 0 errors / 0 skips**. `schema-assertion-red*` retains command, source SHA, XML and log. Separate raw missing-table probes returned 1146 for each table; `schema-red.json` is an absence preflight, not a handled-error claim of JUnit RED. Complete before-red/after-red snapshots were identical: 62 old user tables / 1094 rows, all SHOW CREATE, five metadata groups and full history.
++
++A rollback-safe creator TDD assertion forced failure before info insertion and found no guard insertion attempt under original code: **1 assertion failure / 0 errors / 0 skips** (`creator-assertion-red*`). Root explicitly allowed implementing the narrow insert before migration for an actual missing-schema test. `creator-real-schema-unavailable*` then executed actual missing guard TABLE creation: **1 pass / 0 failures / 0 errors / 0 skips**, with all creation DML rolled back. Unused test-owned identity cleanup restores complete baseline snapshots; `before-legacy-seed.json == after-red.json` proves neither RED nor missing-schema attempt left rows/schema/history changes.
++
++With root authorization, a new synthetic legacy metadata graph added nine explicitly identified rows only: one identity, meeting and subject, one storage backend, two files, one input_batch and two members; all UUIDs newly generated. Adopted production BatchFingerprint was invoked through public JDK jshell against these exact member/file facts. New digest `5da1efc49379ce1b38d22ac17c708616999c27ba9496414d5672ac83e76b0f60`; independent pinned literal golden recomputation `c4a558e4dc8aff8289b4ed60193efdfbc7f64f73ae642e2eec6398c473458053`. This is schema metadata only, not authentic file persistence, upload or worker qualification. All original Task 1 rows remain exact. The fresh immediate-before-apply snapshot is 62 tables / **1103 rows**, equals after-legacy-seed, and retains exact schema/history. Root independently checked this before its separate ACK. `fresh-prefix-proof.json`, identity receipts and legacy-recomputation/seed receipts bind that window.
++
++## First apply, physical shape, constraints and reruns
++
++Only after committed freeze plus separate ACK were identical candidate bytes copied into the formal Flyway location. `first-apply*`: migrationsExecuted=1, **1 pass / 0 failures/errors/skips**. The appended successful row is rank 13 / version 013.1 / checksum **-1898004857**; native SQL timestamp 2026-10-23 04:10:47 UTC and native epoch are retained in first-apply-native-clock.json. SQL/session UTC was selected on the server before UNIX_TIMESTAMP conversion; no JDBC default timezone inference was used.
++
++`after-apply.json` and apply-preservation.json prove every prior 1103 row, every old SHOW CREATE and every record of all five metadata groups equal before, with the exact twelve-row history prefix plus one new success. Both new sidecars are empty: neither matching-hash legacy batch nor absent legacy guard was backfilled. Original twelve SQL hashes are unchanged and formal frozen bytes match the candidate.
++
++The independent hardcoded physical oracle compares actual and expected sets both ways: **2 tables / 4 columns / 2 primary index columns / 2 enforced CHECKs / 2 physical FK columns**. It checks engine/default collation, every ordinal/type/null/default/collation/extra, signed BIGINT, PK/index shape, exact CHECK semantics and RESTRICT update/delete actions. Existing parent metadata gains no indexes.
++
++The initial postapply test failed one assertion solely because MySQL stores OCTET_LENGTH(profile) as LENGTH(profile). The original failure, exact source body (SHA-verified against its original run binding) and actual SHOW CREATE/information_schema output are preserved. Root accepted an oracle-only adjustment after server ASCII/supplementary evidence: LENGTH=OCTET_LENGTH gives 1 and 4 bytes, CHAR_LENGTH gives 1 and 1 characters. A restricted AST normalizes only that function-token synonym; it rejects CHAR_LENGTH, altered numeric bounds, literal case changes and changed AND/OR grouping. SQL, DDL and history never changed. Corrected full metadata/oracle semantic selector: **2 passes / 0 failures/errors/skips**. Generator CHECK parser accepts the same narrow byte synonym while keeping earlier semantics.
++
++`constraint-results.json`: **4 positives + 26 expected negatives**, with separate transaction rollback per probe. Positives: epoch 0, 1, max 9223372036854775806, exact profile v1. Rejections: negative/Long.MAX_VALUE/overflow epoch; duplicate PK; orphan parent; NULL and omitted required fields for all four columns; empty, wrong-case, unknown, non-ASCII, leading/trailing whitespace profile; parent key delete/update RESTRICT. Meeting-parent RESTRICT probes remove their synthetic input_batch first so another FK cannot mask the guard FK. All constraints before/after snapshots are identical, including old data/schema/history.
++
++`private-target-rerun*` and `latest-rerun*`: each **1 pass / 0 failures/errors/skips**, migrationsExecuted=0. Each complete after-rerun snapshot equals after-apply exactly. No IF NOT EXISTS, repair, reset, DROP, restart, outOfOrder or frozen SQL modification occurred.
++
++## Creator rollback, replay and final regressions
++
++Focused tests exercise actual new zero guard, exactly one row, positive epoch retained by creation replay, actual historical absent guard retained by replay/read, disabled-owner replay reauthorization, guard-before-info transaction ordering, whole-create rollback at info/audit/flush, and schema-unavailable behavior. Postapply missing-table exception injection is explicitly labeled; the genuine absence proof is the preapply run above.
++
++An initial focused run had five passes / one assertion failure because test setup registered an extra Spring beforeCommit synchronization. Existing TaskTransactionContext correctly disallows other synchronizations, so the intended boundary was not reached. Complete JdbcOutbox/TaskTransactionContext sources were read; no production restriction was weakened. Its original source body is archived and SHA-matched to its failed run binding. The corrected test aborts only the actual bound new test JDBC connection, synchronously via Runnable::run, immediately before commit is sent. Actual commit throws TransactionSystemException; server disconnection rolls back. Closed-connection assertion, complete DML snapshot equality and bounded ten-second cleanup queries verify the outcome. This is **abort-before-commit** proof, not uncertain ACK / after-commit resolution. Corrected affected selector: **1 pass**, four actual rollback boundaries.
++
++Final unchanged-source meeting/schema regression (`final-meeting-regression*`): **45 tests / 0 failures / 0 errors / 0 skips**: MeetingConcurrencyIT 5, MeetingCreationGuardIT 6, MeetingRevisionIT 30, RuntimeMetadataSchemaIT 4. Final canonical complete units (`final-all-units*`): **221 tests / 0 failures / 0 errors / 0 skips**. Fresh JUnit XML and actual expanded commands are retained. Public read-only Zulu JDK21.0.12.1 and pinned ./mvnw 3.10.0 were used; all accounting uses tools/checks/run.py. Early canonical integration invocations incidentally ran reactor unit tests; they are not counted as additional final-suite qualification. Later bounded IT runs select no unit classes; the final standalone complete unit suite ran once on final sources.
++
++No Task 1 queue/worker/completion source changed; its direct-SQL fixture tests do not use JdbcMeetingRepository.create, so their fixed historical twelve-row schema assertion was not rerun as new-schema acceptance. Existing B05SchemaIT and reset suites were not run. Current meeting tests and all units cover the affected creator behavior.
++
++After authorized positive business tests, complete metadata and all thirteen history rows remain exact. Every original domain/audit/outbox row is retained; legitimate new creation/meeting events advance task_outbox_sequence, and audit auto-increment display advances (including rollback gaps). `final-preservation-qualified.json` records these exact before/after values. This is intentionally distinguished from migration/constraint/rerun windows, where full row/SHOW CREATE equality was proved. The predeployment synthetic batch still has its exact matching digest and no profile; the predeployment meeting still has no guard after new connections and application test lifetimes.
++
++## Source, setup, self-review and limits
++
++`final-source-sha256.json` binds every owned source/doc/SQL; final IT and unit source bindings match every Java/formal SQL byte. Evidence manifest hashes all retained task evidence except itself. Raw evidence uses task-local `.gitattributes` with `* -text -whitespace`; root .gitattributes and other tasks' artifacts are untouched. One read-only model comparison setup initially failed NameError due to separate exec globals/locals; corrected shared namespace produced the full per-table equality proof. That setup failure is retained separately, not counted as RED. The two later test-oracle/setup failures and fixes above remain explicit.
++
++Self-review confirmed the production diff is exactly the new INSERT and comments, immutable final SQL is identical to the frozen candidate, generated outputs/ER match the current source, every prior model table definition is unchanged, and no old SQL/private environment/fixture/reset operation or unrelated source was introduced. Git diff checks and staged path/source/evidence checks are recorded separately before commit. Root's independent implementation review follows this report; no subagent/reviewer was spawned here.
++
++No editor-intent endpoint, auto-save/adoption behavior, batch writer/profile issuance, stale candidate retention, external execution, company protocol, UI, capacity/HA or full future 98-table physical validation is claimed. D01 remains proposed/unassigned. This task proves only local two-sidecar physical schema, preservation and narrow new-meeting atomic guard behavior.
+diff --git a/artifacts/phase-b/b-remaining/task-02/verification-summary.json b/artifacts/phase-b/b-remaining/task-02/verification-summary.json
+new file mode 100644
+index 0000000..70741ab
+--- /dev/null
++++ b/artifacts/phase-b/b-remaining/task-02/verification-summary.json
+@@ -0,0 +1,67 @@
++{
++  "schema_red": {
++    "tests": 1,
++    "failures": 1,
++    "errors": 0,
++    "skips": 0,
++    "reason": "actual required two tables absent"
++  },
++  "creator_red": {
++    "tests": 1,
++    "failures": 1,
++    "errors": 0,
++    "skips": 0,
++    "reason": "original creator missing guard insertion"
++  },
++  "actual_preapply_schema_unavailable": {
++    "tests": 1,
++    "failures": 0,
++    "errors": 0,
++    "skips": 0
++  },
++  "first_apply": {
++    "migrations_executed": 1,
++    "checksum": -1898004857
++  },
++  "exact_physical": {
++    "tables": 2,
++    "columns": 4,
++    "primary_index_columns": 2,
++    "enforced_checks": 2,
++    "foreign_key_columns": 2
++  },
++  "constraints": {
++    "positive": 4,
++    "negative": 26
++  },
++  "private_target_rerun": 0,
++  "latest_rerun": 0,
++  "migration_old_rows_exact": 1103,
++  "original_task1_rows_retained": 1094,
++  "meeting_regression": {
++    "tests": 45,
++    "failures": 0,
++    "errors": 0,
++    "skips": 0
++  },
++  "canonical_complete_units": {
++    "tests": 221,
++    "failures": 0,
++    "errors": 0,
++    "skips": 0
++  },
++  "generated_model": {
++    "tables": 98,
++    "columns": 731,
++    "prior_tables_unchanged": 96,
++    "full_future_model_physical_run": false
++  },
++  "source_bindings_match_final_it_and_units": true,
++  "all_twelve_sql_hashes_unchanged": true,
++  "frozen_sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
++  "staged_paths_owned_only": true,
++  "git_diff_check_exit": 0,
++  "credential_values_absent": true,
++  "independent_review": "root next",
++  "overall_phase_b_claim": false
++}
+diff --git a/backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java b/backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java
+index f9e867d..df4d79d 100644
+--- a/backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java
++++ b/backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java
+@@ -39,20 +39,23 @@ public final class JdbcMeetingRepository implements MeetingRepository {
+             if(replay.result()!=null){
+                 var result=restore(replay,"meeting_info_revision");
+                 access.require(access.lockMeeting(identities,result.id()),Action.EDIT);
+                 checkReplay(replay);
+                 return new Created(result.id(),result.revision(),"ENTRY");
+             }
+             checkReplay(replay);
+             String id=uuid(),info=uuid();var subject=new SubjectRef("MEETING",id);
+             fences.create(subject,0,0);
+             j.update("INSERT INTO meeting(id,owner_id,stage,created_at,updated_at) VALUES (?,?,'ENTRY',UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))",id,actor.enterpriseId());
++            // Only genuine creation proves untouched state; replay and legacy reads never initialize it.
++            // The required schema insert shares every creation write, audit and final outbox flush.
++            j.update("INSERT INTO meeting_minutes_editor_guard(meeting_id,intent_epoch) VALUES (?,0)",id);
+             insertInfo(info,id,0,null,null,null,null,actor.enterpriseId());
+             insertRoster(id,0,"DRAFT",List.of(),null);
+             j.update("UPDATE meeting SET info_revision_id=? WHERE id=?",info,id);
+             j.update("INSERT INTO meeting_search_projection(meeting_id,info_revision_id,number_search,meeting_revision) VALUES (?,?,?,0)",id,info,id);
+             complete(replay,info,201);
+             finish(actor,id,0,"MEETING_CREATED","MEETING_INFO",info,trace);
+             return new Created(id,0,"ENTRY");
+         });
+     }
+     @Override public Mutation save(Actor actor,String id,String key,SaveInfo request,String trace){
+diff --git a/backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql b/backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql
+new file mode 100644
+index 0000000..8d3fa8f
+--- /dev/null
++++ b/backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql
+@@ -0,0 +1,34 @@
++-- V013_1__b_runtime_metadata.sql; owner: Phase B remaining Task 2.
++-- Reviewed runtime metadata: immutable batch profile and sticky editor intent guard.
++-- Root allocated 013.1 in 46a1adad4dd4afda3272e34669235d4126c480d6.
++-- Source baseline a3b2933ef83035e858d2d3336decba4617f22a1f.
++-- Apply only after committed complete-byte SHA freeze and separate exact-SHA ACK.
++-- No historical backfill, inferred profile, legacy guard initialization or defaults.
++-- Existing twelve scripts and reserved integers 014..027 remain immutable.
++-- MySQL DDL can partially commit: preserve partial failure/history; no reset,
++-- repair, outOfOrder, old SQL rewrite or runtime activation.
++
++CREATE TABLE input_batch_fingerprint_profile (
++  `batch_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
++  `profile` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
++  PRIMARY KEY (batch_id),
++  CONSTRAINT ck_input_batch_fingerprint_profile_0
++    CHECK (OCTET_LENGTH(profile) = 18 AND profile = 'ama.input-batch.v1')
++) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
++
++CREATE TABLE meeting_minutes_editor_guard (
++  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
++  `intent_epoch` bigint NOT NULL,
++  PRIMARY KEY (meeting_id),
++  CONSTRAINT ck_meeting_minutes_editor_guard_0 CHECK (intent_epoch BETWEEN 0 AND 9223372036854775806)
++) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
++
++ALTER TABLE input_batch_fingerprint_profile
++  ADD CONSTRAINT fk_input_batch_fingerprint_profile_0
++  FOREIGN KEY (batch_id) REFERENCES input_batch (id)
++  ON UPDATE RESTRICT ON DELETE RESTRICT;
++
++ALTER TABLE meeting_minutes_editor_guard
++  ADD CONSTRAINT fk_meeting_minutes_editor_guard_0
++  FOREIGN KEY (meeting_id) REFERENCES meeting (id)
++  ON UPDATE RESTRICT ON DELETE RESTRICT;
+diff --git a/backend/integration-tests/src/test/java/ama/meeting/MeetingCreationGuardIT.java b/backend/integration-tests/src/test/java/ama/meeting/MeetingCreationGuardIT.java
+new file mode 100644
+index 0000000..7f1c14f
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/meeting/MeetingCreationGuardIT.java
+@@ -0,0 +1,129 @@
++package ama.meeting;
++
++import ama.audit.JdbcAuditAdapter;
++import ama.access.MeetingAccess.AccessDeniedException;
++import ama.contract.IdentityContracts.*;
++import ama.db.*;
++import ama.support.MysqlTestDatabase;
++import ama.task.*;
++import java.util.*;
++import java.util.concurrent.atomic.AtomicBoolean;
++import javax.sql.DataSource;
++import org.junit.jupiter.api.*;
++import org.springframework.jdbc.core.JdbcTemplate;
++import static org.junit.jupiter.api.Assertions.*;
++
++/** Genuine creator transactions on this run's fixture. Never resets, migrates or deletes a guard. */
++class MeetingCreationGuardIT {
++    final DataSource source=MysqlTestDatabase.dataSource();
++    final JdbcTemplate j=new JdbcTemplate(source);
++    { j.setQueryTimeout(10); }
++    final String owner="guard-"+UUID.randomUUID();
++    final Actor actor=new Actor(owner,Status.ACTIVE,Set.of(Role.USER));
++    @BeforeEach void identity(){j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",owner,owner);}
++    @AfterEach void removeOnlyUnusedTestIdentity(){
++        if(j.queryForObject("SELECT COUNT(*) FROM meeting WHERE owner_id=?",Integer.class,owner)==0)
++            j.update("DELETE FROM enterprise_identity WHERE enterprise_id=?",owner);
++    }
++    @Test void creatorMustAttemptGuardInOriginalTransactionBeforeInfo(){
++        var seen=new AtomicBoolean();
++        var probe=new MeetingConcurrencyIT.ProbeSource(source,new MeetingConcurrencyIT.Probe(){
++            public void before(String sql,Map<Integer,Object> args){
++                if(sql.startsWith("INSERT INTO meeting_minutes_editor_guard"))seen.set(true);
++                if(sql.startsWith("INSERT INTO meeting_info_revision"))throw new IllegalStateException("CONTROLLED_BEFORE_INFO");
++            }
++        });
++        var before=snapshot();assertThrows(RuntimeException.class,()->runtime(probe).create(actor,"guard-order","guard-test"));
++        assertTrue(seen.get(),"new creator must insert its guard in the original transaction before info");
++        assertEquals(before,snapshot());
++    }
++    MeetingService runtime(DataSource source){
++        var tx=new TransactionRunner(source);var fences=new JdbcSubjectFences(source,Set.of("MEETING"));
++        var access=new JdbcMeetingAccess(source,tx,fences);
++        return new MeetingService(new JdbcMeetingRepository(source,tx,access,fences,
++                new JdbcOutbox(source,new MeetingEventReferences(source).validators()),new JdbcAuditAdapter(source),id->{}));
++    }
++    Map<String,List<Map<String,Object>>> snapshot(){
++        var result=new TreeMap<String,List<Map<String,Object>>>();
++        for(String table:List.of("meeting","task_subject","meeting_info_revision","roster_revision","roster_member","meeting_search_projection","meeting_person_search","idempotency_record","audit_event","task_outbox","task_outbox_sequence"))
++            result.put(table,j.queryForList("SELECT * FROM "+table+" ORDER BY 1"));
++        if(present())result.put("meeting_minutes_editor_guard",j.queryForList("SELECT * FROM meeting_minutes_editor_guard ORDER BY meeting_id"));
++        return result;
++    }
++    boolean present(){return j.queryForObject("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='meeting_minutes_editor_guard'",Integer.class)==1;}
++    @Test void newCreateHasExactlyOneZeroGuardAndReplayPreservesPositive(){
++        var service=runtime(source);var created=service.create(actor,"create","guard-test");
++        assertEquals(0L,j.queryForObject("SELECT intent_epoch FROM meeting_minutes_editor_guard WHERE meeting_id=?",Long.class,created.id()));
++        assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM meeting_minutes_editor_guard WHERE meeting_id=?",Integer.class,created.id()));
++        j.update("UPDATE meeting_minutes_editor_guard SET intent_epoch=1 WHERE meeting_id=?",created.id());
++        var before=snapshot();assertEquals(created,service.create(actor,"create","guard-test"));assertEquals(before,snapshot());
++    }
++    @Test void unavailableSchemaRollsBackWholeCreate(){
++        var before=snapshot();
++        // Pre-apply run uses actual missing TABLE. Post-apply run explicitly injects the same JDBC failure;
++        // it does not claim a missing live table and never drops shared schema.
++        boolean realMissing=!present();
++        var denied=new MeetingConcurrencyIT.ProbeSource(source,new MeetingConcurrencyIT.Probe(){
++            public void before(String sql,Map<Integer,Object> args){if(!realMissing&&sql.startsWith("INSERT INTO meeting_minutes_editor_guard"))
++                throw new org.springframework.jdbc.BadSqlGrammarException("injected missing table",sql,new java.sql.SQLSyntaxErrorException("Injected missing guard table","42S02",1146));}
++        });
++        var failure=assertThrows(org.springframework.dao.DataAccessException.class,()->runtime(denied).create(actor,"unavailable","guard-test"));
++        assertTrue(failure.getMessage().contains("meeting_minutes_editor_guard"));assertEquals(before,snapshot());
++        System.out.println("GUARD unavailable proof: "+(realMissing?"REAL missing table before migration":"EXPLICIT JDBC missing-table fault injection after migration"));
++    }
++    @Test void failureAfterGuardAtInfoAuditFlushAndCommitRollsBackEverything(){
++        assertTrue(present());
++        for(String boundary:List.of("info","audit","flush","commit")){
++            var sawGuard=new AtomicBoolean();var reached=new AtomicBoolean();
++            var heldSource=new java.util.concurrent.atomic.AtomicReference<DataSource>();
++            var probe=new MeetingConcurrencyIT.ProbeSource(source,new MeetingConcurrencyIT.Probe(){
++                public void before(String sql,Map<Integer,Object> args){
++                    if(sql.startsWith("INSERT INTO meeting_minutes_editor_guard")){
++                        sawGuard.set(true);
++                    }
++                    if((boundary.equals("info")&&sql.startsWith("INSERT INTO meeting_info_revision"))||
++                       (boundary.equals("audit")&&sql.startsWith("INSERT INTO audit_event"))||
++                       (boundary.equals("flush")&&sql.startsWith("INSERT INTO task_outbox("))){reached.set(true);throw new IllegalStateException("CONTROLLED_"+boundary);}
++                }
++                public void beforeCommit(){
++                    if(boundary.equals("commit")){
++                        reached.set(true);
++                        // Abort only this transaction's live JDBC connection before commit is sent.
++                        // The server rolls back the disconnected transaction; the actual commit fails.
++                        try{
++                            var bound=org.springframework.jdbc.datasource.DataSourceUtils.getConnection(heldSource.get());
++                            bound.abort(Runnable::run);assertTrue(bound.isClosed(),"only the owned transaction connection was aborted");
++                        }
++                        catch(java.sql.SQLException failure){throw new IllegalStateException("CONTROLLED_abort_setup",failure);}
++                    }
++                }
++            });
++            heldSource.set(probe);
++            var before=snapshot();var failure=assertThrows(RuntimeException.class,()->runtime(probe).create(actor,boundary,"guard-test"));
++            System.out.println("GUARD rollback boundary="+boundary+" failure="+failure.getClass().getName()+" message="+failure.getMessage());
++            if(boundary.equals("commit"))assertInstanceOf(org.springframework.transaction.TransactionException.class,failure);
++            assertTrue(sawGuard.get(),boundary+" guard insert");assertTrue(reached.get(),boundary+" failure reached");assertEquals(before,snapshot(),boundary);
++        }
++    }
++    @Test void realLegacyCreationReplayAndReadNeverInitializeMissingGuard(){
++        String id=UUID.randomUUID().toString(),info=UUID.randomUUID().toString(),key="legacy";
++        String scope=MeetingDigests.fields(owner,"meetings","CREATE",key);
++        new TransactionRunner(source).required(()->{
++            j.update("INSERT INTO task_subject VALUES ('MEETING',?,0,0,0)",id);
++            j.update("INSERT INTO meeting(id,owner_id,stage,created_at,updated_at) VALUES (?,?,'ENTRY',UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))",id,owner);
++            j.update("INSERT INTO meeting_info_revision(id,meeting_id,revision,created_by,created_at) VALUES (?,?,0,?,UTC_TIMESTAMP(6))",info,id,owner);
++            j.update("UPDATE meeting SET info_revision_id=? WHERE id=?",info,id);
++            j.update("INSERT INTO idempotency_record VALUES (?,?,?,'CREATE',?,?,'SUCCEEDED',?,201,UTC_TIMESTAMP(6))",scope,owner,"meetings",MeetingDigests.fields(key),MeetingDigests.fields("meeting-create-v1"),info);
++            return null;
++        });
++        var before=snapshot();var service=runtime(source);
++        assertEquals(id,service.create(actor,key,"guard-test").id());assertEquals(id,service.read(actor,id).id());
++        assertEquals(before,snapshot());assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM meeting_minutes_editor_guard WHERE meeting_id=?",Integer.class,id));
++    }
++    @Test void creationReplayReauthorizesWithoutGuardMutation(){
++        var service=runtime(source);var created=service.create(actor,"reauth","guard-test");
++        j.update("UPDATE enterprise_identity SET status='DISABLED' WHERE enterprise_id=?",owner);var before=snapshot();
++        assertThrows(AccessDeniedException.class,()->service.create(actor,"reauth","guard-test"));assertEquals(before,snapshot());
++        assertEquals(0L,j.queryForObject("SELECT intent_epoch FROM meeting_minutes_editor_guard WHERE meeting_id=?",Long.class,created.id()));
++    }
++}
+diff --git a/backend/integration-tests/src/test/java/ama/meeting/RuntimeMetadataCheckOracle.java b/backend/integration-tests/src/test/java/ama/meeting/RuntimeMetadataCheckOracle.java
+new file mode 100644
+index 0000000..b1e12ba
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/meeting/RuntimeMetadataCheckOracle.java
+@@ -0,0 +1,46 @@
++package ama.meeting;
++
++import java.util.*;
++import java.util.regex.*;
++
++/** Restricted CHECK AST: literal case and AND/OR grouping survive; only byte-length aliases agree. */
++final class RuntimeMetadataCheckOracle {
++    private final List<String> tokens=new ArrayList<>();
++    private int at;
++    private RuntimeMetadataCheckOracle(String expression){
++        String source=expression.replace("`","").replace("\\'","'");
++        var pattern=Pattern.compile("\\s+|_ascii(?=')|'(?:[^']|'')*'|[A-Za-z_][A-Za-z_0-9]*|[0-9]+|[(),=]");
++        var matcher=pattern.matcher(source);int end=0;
++        while(matcher.find()){
++            if(matcher.start()!=end)throw new IllegalArgumentException("Unsupported CHECK token");
++            String token=matcher.group();end=matcher.end();
++            if(!token.isBlank()&&!token.equals("_ascii"))tokens.add(token);
++        }
++        if(end!=source.length())throw new IllegalArgumentException("Unsupported CHECK suffix");
++    }
++    static String ast(String expression){
++        var parser=new RuntimeMetadataCheckOracle(expression);String result=parser.or();
++        if(parser.at!=parser.tokens.size())throw new IllegalArgumentException("Unparsed CHECK tokens");return result;
++    }
++    String peek(){return at<tokens.size()?tokens.get(at):"";}
++    String take(){if(at==tokens.size())throw new IllegalArgumentException("Incomplete CHECK");return tokens.get(at++);}
++    void require(String token){if(!take().equalsIgnoreCase(token))throw new IllegalArgumentException("Unexpected CHECK token");}
++    String or(){var parts=new ArrayList<String>();parts.add(and());while(peek().equalsIgnoreCase("or")){take();parts.add(and());}return parts.size()==1?parts.getFirst():"OR"+parts;}
++    String and(){var parts=new ArrayList<String>();parts.add(compare());while(peek().equalsIgnoreCase("and")){take();parts.add(compare());}return parts.size()==1?parts.getFirst():"AND"+parts;}
++    String compare(){
++        String left=atom();
++        if(peek().equals("=")){take();return "EQ["+left+","+atom()+"]";}
++        if(peek().equalsIgnoreCase("between")){take();String low=atom();require("and");return "BETWEEN["+left+","+low+","+atom()+"]";}
++        return left;
++    }
++    String atom(){
++        if(peek().equals("(")){take();String value=or();require(")");return value;}
++        String value=take();
++        if(peek().equals("(")){
++            String function=value.toLowerCase(Locale.ROOT);
++            if(!Set.of("length","octet_length").contains(function))throw new IllegalArgumentException("Unsupported CHECK function");
++            take();String arg=or();require(")");return "CALL:octet_length["+arg+"]";
++        }
++        return value.startsWith("'")?"LITERAL:"+value:"TOKEN:"+value.toLowerCase(Locale.ROOT);
++    }
++}
+diff --git a/backend/integration-tests/src/test/java/ama/meeting/RuntimeMetadataSchemaIT.java b/backend/integration-tests/src/test/java/ama/meeting/RuntimeMetadataSchemaIT.java
+new file mode 100644
+index 0000000..0434ac8
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/meeting/RuntimeMetadataSchemaIT.java
+@@ -0,0 +1,53 @@
++package ama.meeting;
++
++import ama.db.SchemaMigrator;
++import ama.support.MysqlTestDatabase;
++import org.flywaydb.core.Flyway;
++import org.junit.jupiter.api.Test;
++import org.springframework.jdbc.core.JdbcTemplate;
++import java.util.*;
++import static org.junit.jupiter.api.Assertions.*;
++
++/** Independent exact live sidecar oracle. No reset or schema fallback. */
++class RuntimeMetadataSchemaIT {
++    final javax.sql.DataSource source=MysqlTestDatabase.dataSource();
++    final JdbcTemplate j=new JdbcTemplate(source);
++    static final String FILTER="table_schema=DATABASE() AND table_name IN ('input_batch_fingerprint_profile','meeting_minutes_editor_guard')";
++    Set<String> rows(String sql){var values=j.queryForList(sql,String.class);assertEquals(values.size(),new HashSet<>(values).size());return new TreeSet<>(values);}
++    @Test void exactSidecarTablesAndMetadata(){
++        assertEquals(Set.of("input_batch_fingerprint_profile|InnoDB|utf8mb4_0900_ai_ci","meeting_minutes_editor_guard|InnoDB|utf8mb4_0900_ai_ci"),
++                rows("SELECT CONCAT_WS('|',table_name,engine,table_collation) FROM information_schema.tables WHERE "+FILTER),"both required sidecar tables must physically exist");
++        assertEquals(Set.of(
++            "input_batch_fingerprint_profile|batch_id|1|char(36)|NO|<NULL>|ascii_bin|",
++            "input_batch_fingerprint_profile|profile|2|varchar(64)|NO|<NULL>|ascii_bin|",
++            "meeting_minutes_editor_guard|meeting_id|1|char(36)|NO|<NULL>|ascii_bin|",
++            "meeting_minutes_editor_guard|intent_epoch|2|bigint|NO|<NULL>|<NULL>|"),
++            rows("SELECT CONCAT_WS('|',table_name,column_name,ordinal_position,column_type,is_nullable,COALESCE(column_default,'<NULL>'),COALESCE(collation_name,'<NULL>'),extra) FROM information_schema.columns WHERE "+FILTER));
++        assertEquals(Set.of("input_batch_fingerprint_profile|PRIMARY|0|1|batch_id|A|<NULL>|BTREE","meeting_minutes_editor_guard|PRIMARY|0|1|meeting_id|A|<NULL>|BTREE"),
++            rows("SELECT CONCAT_WS('|',table_name,index_name,non_unique,seq_in_index,column_name,collation,COALESCE(sub_part,'<NULL>'),index_type) FROM information_schema.statistics WHERE "+FILTER));
++        assertEquals(Set.of("input_batch_fingerprint_profile|fk_input_batch_fingerprint_profile_0|batch_id|1|input_batch|id|RESTRICT|RESTRICT","meeting_minutes_editor_guard|fk_meeting_minutes_editor_guard_0|meeting_id|1|meeting|id|RESTRICT|RESTRICT"),
++            rows("SELECT CONCAT_WS('|',k.table_name,k.constraint_name,k.column_name,k.ordinal_position,k.referenced_table_name,k.referenced_column_name,r.delete_rule,r.update_rule) FROM information_schema.key_column_usage k JOIN information_schema.referential_constraints r ON r.constraint_schema=k.constraint_schema AND r.constraint_name=k.constraint_name WHERE k.table_schema=DATABASE() AND k.table_name IN ('input_batch_fingerprint_profile','meeting_minutes_editor_guard') AND k.referenced_table_name IS NOT NULL"));
++        var checks=j.query("SELECT t.table_name,t.constraint_name,c.check_clause,t.enforced FROM information_schema.table_constraints t JOIN information_schema.check_constraints c ON c.constraint_schema=t.constraint_schema AND c.constraint_name=t.constraint_name WHERE t.table_schema=DATABASE() AND t.table_name IN ('input_batch_fingerprint_profile','meeting_minutes_editor_guard') AND t.constraint_type='CHECK'",(rs,n)->rs.getString(1)+"|"+rs.getString(2)+"|"+RuntimeMetadataCheckOracle.ast(rs.getString(3))+"|"+rs.getString(4));
++        assertEquals(2,checks.size());
++        assertEquals(Set.of("input_batch_fingerprint_profile|ck_input_batch_fingerprint_profile_0|"+RuntimeMetadataCheckOracle.ast("OCTET_LENGTH(profile) = 18 AND profile = 'ama.input-batch.v1'")+"|YES",
++            "meeting_minutes_editor_guard|ck_meeting_minutes_editor_guard_0|"+RuntimeMetadataCheckOracle.ast("intent_epoch BETWEEN 0 AND 9223372036854775806")+"|YES"),new HashSet<>(checks));
++        System.out.println("Exact bidirectional live metadata PASS: 2 tables/4 columns/2 PK columns/2 enforced CHECKs/2 RESTRICT FK columns");
++    }
++    @Test void checkOraclePreservesSemanticsAndOnlyByteLengthAlias(){
++        assertEquals(RuntimeMetadataCheckOracle.ast("OCTET_LENGTH(profile)=18 AND profile='ama.input-batch.v1'"),RuntimeMetadataCheckOracle.ast("(length(`profile`)=18) and (`profile`=_ascii'ama.input-batch.v1')"));
++        assertThrows(IllegalArgumentException.class,()->RuntimeMetadataCheckOracle.ast("CHAR_LENGTH(profile)=18"));
++        assertNotEquals(RuntimeMetadataCheckOracle.ast("length(profile)=18"),RuntimeMetadataCheckOracle.ast("length(profile)=19"));
++        assertNotEquals(RuntimeMetadataCheckOracle.ast("profile='ama.input-batch.v1'"),RuntimeMetadataCheckOracle.ast("profile='AMA.input-batch.v1'"));
++        assertNotEquals(RuntimeMetadataCheckOracle.ast("a=1 OR (b=2 AND c=3)"),RuntimeMetadataCheckOracle.ast("(a=1 OR b=2) AND c=3"));
++    }
++    @Test void explicitFrozenMigration(){
++        assertEquals("ama-test-b01-ad9f1af29eff",System.getenv("AMA_TEST_CONTAINER"));
++        assertEquals("jdbc:mysql://127.0.0.1:58062/ama_b01_fixture",System.getenv("AMA_TEST_DATABASE_URL"));
++        int expected=Integer.parseInt(System.getenv().getOrDefault("AMA_TASK02_EXPECT_MIGRATIONS","0"));
++        assertEquals(expected,new SchemaMigrator(source).migrate());
++    }
++    @Test void privateTargetRerunAppliesZero(){
++        assertEquals(0,Flyway.configure().dataSource(source).locations("classpath:db/migration").target("013.1")
++                .initSql("SET NAMES utf8mb4; SET time_zone = '+00:00'").cleanDisabled(true).load().migrate().migrationsExecuted);
++    }
++}
+diff --git a/docs/acceptance/b/database-runtime-metadata-task-02.md b/docs/acceptance/b/database-runtime-metadata-task-02.md
+new file mode 100644
+index 0000000..44c6990
+--- /dev/null
++++ b/docs/acceptance/b/database-runtime-metadata-task-02.md
+@@ -0,0 +1,41 @@
++# Runtime metadata and new-meeting creation — Task 2
++
++2026-10-23. Source parent `a3b2933ef83035e858d2d3336decba4617f22a1f`; permanent SQL freeze `64908b1aef4c28f0806846128fcb44005f1b75e1`; separate exact ACK `15a124c607d4682b59993f4ff0945bf6dcbef57a`. This record covers only the two reviewed runtime sidecars and the narrow atomic creator insert. The full execution report is [task-02-report.md](../../../artifacts/phase-b/b-remaining/task-02/task-02-report.md).
++
++## Current design and historical boundaries
++
++`tools/checks/database_design.py` now declares **B00-1.5-runtime-metadata**, an actual generated inventory of **98 tables / 731 columns**. Its parent B00-1.4-proposed inventory is 96 / 727. Every prior model record, policy, CREATE and FK statement is identical in both comparison directions. The parent model's D01 three proposed tables and two nullable columns remain UNASSIGNED-D01; this work neither assigns nor installs their migration. Protected historical design files and all twelve original deployed migration scripts remain unchanged.
++
++The current dictionary, review-only DDL and complete ER are generated consistently from this source. The physical evidence in this record targets **two** new tables and preserves the old deployed schema; it is not a fresh physical validation of the complete 98-table future model. Prior validation remains qualified by its original version and scope.
++
++## Exact adopted sidecar contract
++
++- `input_batch_fingerprint_profile`: `batch_id CHAR(36) ascii_bin NOT NULL` primary/FK to input_batch(id), and `profile VARCHAR(64) ascii_bin NOT NULL`, without defaults. Its enforced CHECK requires byte length 18 and exact `ama.input-batch.v1`. Missing sidecar remains legacy/unknown even when a stored digest matches a v1 recomputation; no backfill, inference or default is installed.
++- `meeting_minutes_editor_guard`: `meeting_id CHAR(36) ascii_bin NOT NULL` primary/FK to meeting(id), and signed `intent_epoch BIGINT NOT NULL`, without defaults. Its enforced bound is 0 through 9223372036854775806. Only genuine new meeting creation initializes zero in its original transaction. Existing absence remains unknown; reads and creation replay never initialize it.
++- Both tables use InnoDB / utf8mb4_0900_ai_ci. Both physical FKs are RESTRICT for delete and update. Their primary indexes already support the FK; no extra parent index is created. No old table, canonical FullRow, generation fingerprint, hash profile or archive format changes.
++
++Positive epochs are sticky suppression of automatic first save; they are not edit authority, leases, close/timeout state or a resettable flag. No editor-intent API, auto-save, intake writer or retention behavior is activated here. Those future writers must enforce authentic profile issuance, monotonic increment/exhaustion and full current authority in their owning transactions.
++
++## Frozen migration and physical evidence
++
++`V013_1__b_runtime_metadata.sql` is exactly **1817 bytes**, SHA-256 `9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520`, with exactly two CREATEs and two FK ALTERs. Root allocated, fully read, froze and separately acknowledged these bytes before formal placement and first apply. Twelve historical SQL hashes and successful ordered history checksums are preserved. Reserved integers 014..027 and next new integer 028 are unaffected.
++
++The only target is this run's owned `ama-test-b01-ad9f1af29eff`, full ID `eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502`, 127.0.0.1:58062 / ama_b01_fixture. Exact MySQL 8.4.6 image SHA, selected label, 768MiB / 1 CPU / 256 PIDs and native AIO=0 are guarded. The new private environment path is `.tools/phase-b-remaining/env.sh`; credentials are absent from evidence.
++
++The first actual JUnit schema assertion failed for the genuine absence of both required tables: one assertion failure, zero errors and skips. Both missing tables also returned MySQL 1146. Complete before/after snapshots were identical across 62 existing user tables / 1094 rows, SHOW CREATE, all five metadata groups and the twelve-row history. A separate actual missing-table creator run passed its whole-create rollback assertion before migration.
++
++An explicitly identified metadata-only negative fixture adds nine new synthetic rows, each with fresh UUIDs. Adopted production BatchFingerprint computed the digest from its exact member/file facts, and independently recomputed the existing pinned literal golden. This creates no authentic upload or worker qualification. All original 1094 rows remain exact; the immediate migration snapshot contains 1103 rows. First apply added exactly one successful history row, checksum **-1898004857**, retaining its twelve-row prefix and every prior row/SHOW CREATE/metadata record. Both sidecars were empty immediately afterward.
++
++RuntimeMetadataSchemaIT compares actual and expected metadata in both directions: exact 2 tables / 4 columns / 2 PK columns / 2 enforced CHECKs / 2 FK columns, including type, signedness, ordinal, null/default, collation, engine, index detail and referential actions. The first postapply oracle exposed MySQL's canonical rendering of OCTET_LENGTH as LENGTH. The original failure is retained. Server ASCII/supplementary probes prove byte lengths 1/4 and character lengths 1/1. A restricted CHECK AST accepts only this byte-function synonym and preserves literal case and AND/OR grouping; CHAR_LENGTH and changed literals/numbers fail. Frozen SQL and live DDL were never edited to address the representation difference.
++
++Thirty physical constraint probes passed: four positives (epochs 0, 1, max; exact v1) and twenty-six expected rejections (bounds/overflow, duplicate PK, orphan, NULL, omitted required fields, case/unknown/empty/non-ASCII/whitespace profiles, and update/delete RESTRICT). Every probe used a separate rollback transaction; complete snapshots remained equal.
++
++## Creator change and limits
++
++The only application change is the required guard-zero INSERT in JdbcMeetingRepository.create's genuinely new branch, after its parent meeting insert and before info/history/projection work. It shares the existing subject/meeting/history/idempotency/audit/outbox transaction and final flush. The replay branch and reads are unchanged. A missing table fails the actual creation transaction; there is no DDL, fallback, upsert or lazy initialization.
++
++Focused tests cover committed zero, positive-epoch replay preservation, actual legacy replay/read absence, replay reauthorization, and rollback after guard insertion at info, audit, flush and an actual owned JDBC connection abort before commit. Postapply missing-schema fault injection is explicitly labeled separately from the genuine preapply missing-table proof. The abort probe closes only the bound test transaction connection before the commit is sent, then the actual JDBC commit fails. Server rollback visibility and bounded cleanup are checked; this does not resolve uncertain commits or already committed response loss. An initial test-only callback setup was correctly rejected by the existing outbox synchronization policy; that failed receipt is retained and no production policy was weakened.
++
++Migration-window equality ends before positive business tests, whose new audit/outbox events legitimately advance the shared outbox sequence and audit auto-increment state. Final reports distinguish those authorized test writes from migration preservation. No reset, DROP DATABASE/table, restart, repair, outOfOrder, old environment access or old artifact rewrite occurred. SQL remains permanently immutable after freeze; MySQL DDL partial failure would require preservation and a root forward ruling, not a rollback claim.
++
++This is local schema/transaction evidence only. Company runtime, full future model, external services, capacity/HA, UI/editor intent, automatic saving and Phase B completion are outside this acceptance scope.
+diff --git a/docs/database/ama-data-dictionary.md b/docs/database/ama-data-dictionary.md
+index 3582de4..d506e33 100644
+--- a/docs/database/ama-data-dictionary.md
++++ b/docs/database/ama-data-dictionary.md
+@@ -1,11 +1,11 @@
+-# AMA 数据字典 — B00-1.4-proposed
++# AMA 数据字典 — B00-1.5-runtime-metadata
+ 
+ 生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。
+ 
+ 全表 InnoDB / utf8mb4_0900_ai_ci；稳定标识使用 utf8mb4_0900_bin（NO PAD），UUID/协议码/哈希用 ascii_bin。每字段的类型中明确覆盖排序规则。DATETIME(6) 一律 UTC；DATE 为 Asia/Shanghai 业务日。默认值 `无` 意味必须由应用明确赋值（可空字段默认 NULL）。主键唯一性的业务依据为稳定实体标识或明确复合业务键；UUID 不承载顺序。LONGTEXT 的物理容量不是产品字数限制。
+ 
+ 全部 FK 均 ON UPDATE RESTRICT / ON DELETE RESTRICT，根与历史不级联；拥有任务负责在同事务验证同会议/同所有者、状态及快照成员关系。字典中无 FK 的 typed ID 和循环当前指针见设计文档“逻辑关系与删除”，不可按裸 ID 绕过鉴权。
+ 
+ R1上下文根：所有纳入minutes_element.source_context_id无论证据数量均为basis根，与域内精确usage上下文取并集。ROWSET v2/PINNED用已保存输入要素集全部basis及set证据/目录，排除body/applied exclusion；REVIEW_SOURCES仅选定复核要素basis及精确相交证据（正文复核无要素basis）；FINAL用全部冻结纳入要素basis及既有body/set证据、目录、applied exclusion。各根完整context/selection/profile按实际完整PK去重及unsigned UTF8排序，缺失/额外行拒绝；无usage的basis同样验证并保留依赖。basis不伪造EVIDENCE、不增加usage数、不授予支持信用；草稿仍无自身fingerprint/TaskSpec，祖先按图依赖判断。
+ 
+ ## 表清单与分期
+@@ -101,20 +101,22 @@ R1上下文根：所有纳入minutes_element.source_context_id无论证据数量
+ |sensitive_detection_source|B-07/D-03|V012|敏感检测的完整无序来源集合|
+ |background_note|B-07/D-03|V012|生成背景补充正文；不冒充会议发言/决定/行动|
+ |background_note_source|B-07/D-03|V012|背景补充的完整来源集合|
+ |action_suggestion|B-07/D-03|V012|未核实的模型负责人原文和日期建议；与接受字段分离|
+ |result_review|B-07/D-03/B-08|V012|人类对精确目标内容和完整证据集合的不可变断言|
+ |result_review_evidence|B-07/D-03/B-08|V012|复核实际使用的完整证据集合，不只存支持项|
+ |final_result_review|B-08|V013|最终确认冻结精确复核成员，不读取以后最新复核|
+ |source_context|D-01/B-07|UNASSIGNED-D01|不可变完整来源选择；生成与人工选择显式分型|
+ |source_context_material|D-01/B-07|UNASSIGNED-D01|上下文内每个材料版本唯一明确选择解析文档|
+ |parsed_document_profile|D-01|UNASSIGNED-D01|解析文档的明确格式及不可变解析配置归档引用|
++|input_batch_fingerprint_profile|B-06/runtime Task2|V013.1|明确不可变输入批次指纹算法；缺失为legacy/unknown|
++|meeting_minutes_editor_guard|B-03/B-07/runtime Task2|V013.1|持久单调编辑意图；仅新建会议原事务可写零|
+ 
+ ## audit_event
+ 
+ 最小事务审计（V001 的目标增量形态）。所属 B-01，计划 V006。
+ 
+ |字段|MySQL 类型/排序规则|可空|默认|含义|
+ |---|---|---|---|---|
+ |id|`bigint unsigned`|否|无|审计自增编号；不能作提交顺序游标|
+ |actor_id|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|操作者稳定 ID 或受控系统主体|
+ |action|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|动作码|
+@@ -2293,10 +2295,40 @@ R6 片段多选标记随转写版本冻结；不是纪要要素。所属 B-06/C-
+ |parser_config_version|`varchar(255) COLLATE utf8mb4_0900_bin`|否|无|可恢复归档PARSER_CONFIG版本|
+ |parser_config_sha256|`char(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|解析配置归档原始字节SHA256|
+ 
+ 主键：`document_id`。
+ - 索引 `profile_parser(parser_config_version,document_id)`：配置历史依赖枚举。
+ - CHECK `ck_parsed_document_profile_0`：`format IN ('PDF','PPT','WORD','TXT')`。
+ - CHECK `ck_parsed_document_profile_1`：`REGEXP_LIKE(parser_config_sha256, '^[0-9a-f]{64}$', 'c')`。
+ - FK `fk_parsed_document_profile_0`：`document_id` → `parsed_document(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
+ 
+ 更新/删除与完整性：与实际解析输出原子创建；服务验证parser_version等于归档version、格式和映射匹配；缺少sidecar为legacy unavailable，禁止推测/补造READY。配置归档保留由领域负责，非跨库FK。
++
++## input_batch_fingerprint_profile
++
++明确不可变输入批次指纹算法；缺失为legacy/unknown。所属 B-06/runtime Task2，计划 V013.1。
++
++|字段|MySQL 类型/排序规则|可空|默认|含义|
++|---|---|---|---|---|
++|batch_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|原子新建批次的唯一父；禁止历史推断或补填|
++|profile|`varchar(64) CHARACTER SET ascii COLLATE ascii_bin`|否|无|服务器真实选择的固定算法 ama.input-batch.v1；不可归一化|
++
++主键：`batch_id`。
++- CHECK `ck_input_batch_fingerprint_profile_0`：`OCTET_LENGTH(profile) = 18 AND profile = 'ama.input-batch.v1'`。
++- FK `fk_input_batch_fingerprint_profile_0`：`batch_id` → `input_batch(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
++
++更新/删除与完整性：与真实新批次及成员/输入/任务/审计原子创建；不可变，无默认与历史回填。缺行明确unsupported；无推断/懒填/自动TTL。授权永久父清理时先解除保留来源再删除子行；FK仅证存在，不证明算法或授权。
++
++## meeting_minutes_editor_guard
++
++持久单调编辑意图；仅新建会议原事务可写零。所属 B-03/B-07/runtime Task2，计划 V013.1。
++
++|字段|MySQL 类型/排序规则|可空|默认|含义|
++|---|---|---|---|---|
++|meeting_id|`char(36) CHARACTER SET ascii COLLATE ascii_bin`|否|无|唯一会议父；历史缺行是UNKNOWN，重放/读/生成不得初始化|
++|intent_epoch|`bigint`|否|无|服务器单调非负epoch；0仅证明新会未编辑，正数永久阻止首次自动保存|
++
++主键：`meeting_id`。
++- CHECK `ck_meeting_minutes_editor_guard_0`：`intent_epoch BETWEEN 0 AND 9223372036854775806`。
++- FK `fk_meeting_minutes_editor_guard_0`：`meeting_id` → `meeting(id)`。同一事务校验同会议/同所有者；删除 RESTRICT，先显式解除子引用。
++
++更新/删除与完整性：新建会议原事务插入0；真正授权编辑意图在根锁下由未知写1或严格递增，无减少/重置/超时/删除。上限前条件增量且一行，否则关闭失败；无默认。创建重放和旧行读取不补零；缺TABLE为schema unavailable。逻辑删除保留，只有永久删除父时协调清理；epoch不授予权限。
+diff --git a/docs/database/ama-schema-draft.sql b/docs/database/ama-schema-draft.sql
+index 20ecb55..1754f96 100644
+--- a/docs/database/ama-schema-draft.sql
++++ b/docs/database/ama-schema-draft.sql
+@@ -1,11 +1,11 @@
+--- B00-1.4-proposed: REVIEW ONLY; never place this file in Flyway locations.
++-- B00-1.5-runtime-metadata: REVIEW ONLY; never place this file in Flyway locations.
+ 
+ -- All future tables exist ONLY in the disposable review database.
+ 
+ SET NAMES utf8mb4;
+ 
+ SET time_zone = '+00:00';
+ 
+ -- Owner B-01; planned V006: 最小事务审计（V001 的目标增量形态）
+ 
+ CREATE TABLE audit_event (
+@@ -1505,20 +1505,38 @@ CREATE TABLE parsed_document_profile (
+   `document_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+   `format` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+   `parser_config_version` varchar(255) COLLATE utf8mb4_0900_bin NOT NULL,
+   `parser_config_sha256` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+   PRIMARY KEY (document_id),
+   INDEX profile_parser (parser_config_version,document_id),
+   CONSTRAINT ck_parsed_document_profile_0 CHECK (format IN ('PDF','PPT','WORD','TXT')),
+   CONSTRAINT ck_parsed_document_profile_1 CHECK (REGEXP_LIKE(parser_config_sha256, '^[0-9a-f]{64}$', 'c'))
+ ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+ 
++-- Owner B-06/runtime Task2; planned V013.1: 明确不可变输入批次指纹算法；缺失为legacy/unknown
++
++CREATE TABLE input_batch_fingerprint_profile (
++  `batch_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
++  `profile` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
++  PRIMARY KEY (batch_id),
++  CONSTRAINT ck_input_batch_fingerprint_profile_0 CHECK (OCTET_LENGTH(profile) = 18 AND profile = 'ama.input-batch.v1')
++) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
++
++-- Owner B-03/B-07/runtime Task2; planned V013.1: 持久单调编辑意图；仅新建会议原事务可写零
++
++CREATE TABLE meeting_minutes_editor_guard (
++  `meeting_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
++  `intent_epoch` bigint NOT NULL,
++  PRIMARY KEY (meeting_id),
++  CONSTRAINT ck_meeting_minutes_editor_guard_0 CHECK (intent_epoch BETWEEN 0 AND 9223372036854775806)
++) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
++
+ ALTER TABLE department ADD CONSTRAINT fk_department_0 FOREIGN KEY (parent_id) REFERENCES department (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ 
+ ALTER TABLE enterprise_identity ADD CONSTRAINT fk_enterprise_identity_0 FOREIGN KEY (department_id) REFERENCES department (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ 
+ ALTER TABLE role_assignment ADD CONSTRAINT fk_role_assignment_0 FOREIGN KEY (enterprise_id) REFERENCES enterprise_identity (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ 
+ ALTER TABLE identity_session ADD CONSTRAINT fk_identity_session_0 FOREIGN KEY (enterprise_id) REFERENCES enterprise_identity (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ 
+ ALTER TABLE meeting ADD CONSTRAINT fk_meeting_0 FOREIGN KEY (owner_id) REFERENCES enterprise_identity (enterprise_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ 
+@@ -1917,11 +1935,15 @@ ALTER TABLE source_context ADD CONSTRAINT fk_source_context_2 FOREIGN KEY (trans
+ ALTER TABLE source_context ADD CONSTRAINT fk_source_context_3 FOREIGN KEY (material_snapshot_id) REFERENCES material_snapshot (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ 
+ ALTER TABLE source_context_material ADD CONSTRAINT fk_source_context_material_0 FOREIGN KEY (context_id) REFERENCES source_context (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ 
+ ALTER TABLE source_context_material ADD CONSTRAINT fk_source_context_material_1 FOREIGN KEY (material_revision_id) REFERENCES material_revision (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ 
+ ALTER TABLE source_context_material ADD CONSTRAINT fk_source_context_material_2 FOREIGN KEY (parsed_document_id) REFERENCES parsed_document (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ 
+ ALTER TABLE parsed_document_profile ADD CONSTRAINT fk_parsed_document_profile_0 FOREIGN KEY (document_id) REFERENCES parsed_document (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ 
++ALTER TABLE input_batch_fingerprint_profile ADD CONSTRAINT fk_input_batch_fingerprint_profile_0 FOREIGN KEY (batch_id) REFERENCES input_batch (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
++
++ALTER TABLE meeting_minutes_editor_guard ADD CONSTRAINT fk_meeting_minutes_editor_guard_0 FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
++
+ INSERT INTO task_outbox_sequence(id,next_id) VALUES(1,1);
+diff --git a/docs/database/migration-register.md b/docs/database/migration-register.md
+index 20f9420..77fb01d 100644
+--- a/docs/database/migration-register.md
++++ b/docs/database/migration-register.md
+@@ -26,21 +26,21 @@
+ |---|---|---|---|---|
+ |V006|B-01|V001不变|审计binary标识/安全动作码与索引目标；审计脏数据后增量ALTER|来源 f5b4495+0e8f698 → 集成751d31c+95a264e；冻结f36…；独立复审支持新建确认空白fixture限定采用，历史偏差保留|
+ |V007|B-02|V002不变|目录部门、身份generation、角色、会话时间/代际及binary精确语义；保留旧ACL待切换|来源39b447d → 集成bec9393；SHA859970b8…冻结；前置实现独立评审通过，正例/隔离拒绝证据已保全；完整B02授权切换待V008|
+ |V008|B-03＋B-02授权切换/D-02消费|原V003|meeting/info/roster/member/idempotency/meeting_access_grant及R1 meeting_search_projection/person_search、更新时间索引；依赖V007，验证旧ACL迁移来源|来源ff22197 → 集成dac4cc1；SHAfa44424a…冻结，结构前置独立Approved0findings；正例与两类拒绝已保全，完整B03/B02授权仍OPEN|
+ |V009|B-04|原V004|backend/file/reference/upload/part/cleanup；含已采用1.2 upload_session.display_name LONGTEXT NOT NULL、purpose ASCII CODE NOT NULL及冻结/恢复不变量；依赖V008|来源45715b6+fd3c3d8 → 集成1a00ca4；SHA79f04898…冻结，结构前置独立Approved0findings/95已选用例通过；完整B04仍OPEN|
+ |V010|B-05|V005不变|修正subject/task/outbox/permit并补attempt、稳定external_operation及R4 external_execution、consumer；permit关联具体执行；依赖V008/009|03e89cc8…冻结/首次成功；完整框架及fix1已独立采用（8a3b77b/e9d2eca/a79ce67），真实公司/领域消费者门另计|
+ |V011|B-06|原V006|批次/文件、R5 transcription_input、转写/片段/确认及R6 segment_mark、speaker；依赖V008—010；处理输入material FK延至V017，B只EMPTY/NULL|a926c8b5…冻结；首次success/旧缺索引失败原件保留，配合V011.1结构独立PASS，归集022f68a/71c7c5c/1d710f9；完整B06仍OPEN|
+ |V011.1|B-06 前向修正|V011不变|补齐B00-1.2已评审material_snapshot_id支撑索引；依赖成功V011，必须在预留V012前应用；正式文件V011_1__transcript_material_index.sql|9efc688e…冻结；ACK后rank10首次success/checksum-570494170；实际11suite全通过/五组元数据一致，独立PASS采用；仅纠正索引|
+ |V012|B-07/D-04消费|原V007|R2 minutes_template逻辑根/规范名称摘要桶、模板版本、生成输入/候选、正文、要素、排除、来源/证据；1.3新增敏感/背景目录及来源关联、action_suggestion、result_review/evidence共七表，排除PK保留双标签；依赖纠正后V011.1；material指针B只能NULL|10742ca2…冻结/ACK后首次success checksum2101765957；实际19/123/92/21/45、11IT通过，fresh独立PASS0findings采用；完整B07仍OPEN|
+ |V013|B-08|原V008|final_confirmation、1.3 final_result_review双physicalFK、publication/attempt/mapping；attempt关联R4具体execution，同确认安全重试复用逻辑操作；依赖V012|1de37066…冻结/ACK后rank12首次success checksum-847352333；实际5/42/30/4/18、10IT通过，独立PASS0findings采用ee0bcd2/9bb6fe2；完整B08仍OPEN|
+-|V013.1|B-06/B-07 本地受控运行时 / remaining Task2|2026-10-23 中央阶段补丁|仅 input_batch_fingerprint_profile 与 meeting_minutes_editor_guard 两侧表；依赖原 V013；保留 V014..027/下一整数 V028|设计与 SQL 候选独立 PASS；实际 pinned Flyway 排序/命名及本轮独有 fixture 十二条成功前缀已核对；仅登记号，最终字节冻结/单独 ACK/首次应用仍未执行|
++|V013.1|B-06/B-07 本地受控运行时 / remaining Task2|2026-10-23 中央阶段补丁|仅 input_batch_fingerprint_profile 与 meeting_minutes_editor_guard 两侧表；依赖原 V013；保留 V014..027/下一整数 V028|最终SHA9280baea…/1817B冻结64908b1，单独ACK15a124c；本轮独有fixture已首成功checksum-1898004857，原62表/1103行/旧前缀保全；Task2实现/生成设计最终独立复审仍待|
+ |V014|C-01/C-02|原V009|media_source/span；依赖V009/011|预留，未编写|
+ |V015|C-03|原V010|correction/edit_operation；speaker基础已在V011，任何必要扩展另在本号|预留，未编写|
+ |V016|C-04/C-06|原V011|recording/session/part/chunk、subtitle；依赖V009/010/014|预留，未编写|
+ |V017|D-01|原V012|material/reference/revision/snapshot/items/parsed_document/unit；为已有transcription_input/generation/final/locator加材料FK后才允许非空，不能用可变meeting当前指针代旧输入|预留，未编写|
+ |V018|D-02/D-03|原无固定号（必要增量）|info_suggestion；列表/来源完整性加强；既有要素/排除不重复建|预留，未编写|
+ |V019|D-04|原V013|消费V012模板/版本/候选；必要索引或功能扩展需增量评审；若无DDL则永久保留空号|预留，未编写|
+ |V020|D-05|原无固定号（必要增量）|publication_governance、external_event_receipt；依赖V013/010|预留，未编写|
+ |V021|D-06|原V014|export_job；依赖V009/010/012/013|预留，未编写|
+ |V022|D-07|原无固定号（必要增量）|meeting_deletion；消费V009清理；依赖V008/010|预留，未编写|
+ |V023|D-08|原V015|topic/meeting_topic含R2完整规范名/非唯一摘要桶、R3可选description；依赖V008/013，命名空间锁复用V007 identity行|预留，未编写|
+@@ -230,10 +230,34 @@ root独立从actual1.3metadata a6c758d4…过滤验证oracle d051aaa9…；目
+ 
+ B00-1.4-proposed adds source_context/source_context_material/parsed_document_profile and nullable minutes_element/evidence_link.source_context_id in the review-only complete-schema draft. [Detailed addendum](../superpowers/specs/2026-10-22-ama-material-provenance-addendum.md) and [actual isolated validation](../acceptance/b/database-material-provenance-addendum-review.md) require fresh independent SPEC/quality review before adoption. No new version is assigned; UNASSIGNED-D01 in the review draft is a design label, not a Flyway version. Root centrally allocates a compatible ordered forward correction after review. All formal001..013 including011.1 remain immutable. Existing reserved D01/V017 descriptions do not authorize editing/applying that version, out-of-order execution or runtime enablement.
+ 
+ ## 2026-10-23 中央阶段补丁登记 V013.1 — 尚未冻结或授权应用
+ 
+ 依据本轮用户明确要求继续完成 B 本地受控闭环，以及受控运行时技术设计 R1 和两次独立设计/SQL 复审，root 逐案登记 V013.1，拥有者为 remaining Task2，目标文件 V013_1__b_runtime_metadata.sql。范围只增 input_batch_fingerprint_profile（真实新批次算法显式判别、旧行无推断或回填）与 meeting_minutes_editor_guard（新建会议同事务0、正值永久抑制首版自动保存、历史缺行 UNKNOWN）两侧表。原12份SQL、V003/V004永久空号、V014..V027已预留任务及下一新增整数V028全部不变；不分配D01/v3材料迁移。
+ 
+ root 已完整读取未分配 SQL 候选1563f2806fcd9e6a804870a54f803852b722cfa29716613d6767af3f0cb51810；独立 schema review SPEC PASS / SQL/design APPROVED、0 findings。此处允许准备最终具名候选，最终文件头与完整SHA须再次完整读取并在提交中冻结，随后另发精确SHA和fixture ACK；本登记本身不能放入正式location或执行SQL。没有运行时代码、业务资格或阶段B完成许可。
+ 
+ 实际Flyway12.4.0 jar SHA c3f93df1f3e0c9d14652adb5ade97401f2ede503859ac693c2af5c06e2797799 离线 MigrationVersion 与 ResourceNameParser 均验证013<013.1<014，文件名解析013.1且valid；探针无DB连接。新独有fixture ama-test-b01-ad9f1af29eff（完整ID eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502，loopback58062）初始0表和资源限定记录保留；登记前再次仅选定元数据核对ID/标签/端口，当前history001→002→005→006→007→008→009→010→011→011.1→012→013全success，原checksum一致，无更高版本。证据在artifacts/phase-b/b-remaining/runtime-metadata-allocation。仅此本轮新拥有fixture可继续准备，其他旧fixture/未知失败/高水位库不在路径内；ACK前仍须新鲜核对，禁止reset/repair/outOfOrder或修改冻结SQL。
++
++### V013.1 最终候选字节冻结 — ACK 另发
++
++正式目标 V013_1__b_runtime_metadata.sql，1817 bytes，SHA256 **9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520**。root 已完整阅读最终候选，与独立已审未分配 SQL1563f280…逐条去注释比较，四条DDL完全相同，仅更新最终拥有者/版本/基线说明。两张表/四列/两PK索引列/两CHECK/两FK列，字节精确算法标识与有界signed epoch，无旧表ALTER/回填/default/seed。采用已独立批准的两表字典/生命周期设计；作者当前完整生成器/字典/ER增量仍须Task2实现独立复审，本冻结不提前采用其全部新输出，更不应用D01未来表。
++
++本轮同一独有fixture精确ID/标签/loopback58062已核对。作者preapply完整快照62旧用户表/1094行/SHOW CREATE/五组元数据/十二条history在缺表探测前后相等，root独立程序复核JSON相等和原12SQL SHA。缺表1146探测仅为存在性前置检查，不能替代实际assertion RED；root要求在ACK前提供缺二表断言失败及before/after保全证据。精确原件和root比较见artifacts/phase-b/b-remaining/runtime-metadata-freeze，原探测名schema-red.json保留而不把含义升级。
++
++本提交起最终候选字节永久冻结。单独精确SHA/fixture ACK尚未发出，仍不得放正式location或首次应用。未知/失败/更高版本目标不在许可范围。失败保留原件/实际schema/history，只能中央登记前向修正，禁止改旧SQL、repair/reset/outOfOrder。此冻结不是Task2或完整B验收。
++
++### V013.1 root 单独精确 ACK（仅本轮独有 fixture）
++
++在64908b1aef4c28f0806846128fcb44005f1b75e1完整字节冻结提交后，root再次独立核对最终SHA **9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520 / 1817B**、正式location尚无该文件、选定fixture完整ID/标签/loopback58062及最新原十二条success/script/checksum前缀。实际JUnit缺二表assertion RED为1/1/0/0；真实缺守护TABLE时create完整回滚为1/0/0/0。root程序比较原1094行全部精确保留，metadata/SHOWCREATE/history相同；作者另加9条明确新UUID的合成legacy metadata反例，即时preapply62旧表/1103行，已与seed后原件逐字节结构相等。负例批次用既有BatchFingerprint真实重算匹配，仍无profile/guard，不冒称合格业务上传。
++
++现单独ACK仅允许作者把精确冻结文件V013_1__b_runtime_metadata.sql放正式location，并在ama-test-b01-ad9f1af29eff（完整ID eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502，ama_b01_fixture，127.0.0.1:58062）首次Flyway应用及已审结构/约束/旧数据与前缀保全/private目标及latest零增量测试。精确UTC/epoch、冻结提交先后、独立fresh prefix和比较结果在artifacts/phase-b/b-remaining/runtime-metadata-ack。应用成功记录及Task2实现独立复审仍待交付；此处不宣称已应用或开启领域业务。
++
++失败必须保留实际schema/history和所有原件，中央登记前向路径；禁止修改冻结SQL、reset/repair/outOfOrder、旧fixture操作或其他目标应用。所有公司/HA/容量/I/O资格不变。
++
++### V013.1 首次成功观察及结构 oracle 修正边界
++
++root 独立以原生MySQL文本/UTC和epoch读取实际history：installed_rank13、version013.1、success1、checksum **-1898004857**、installed_epoch **1792728647**。先后关系：冻结提交epoch1792727994 < 单独ACK1792728585.822351 < 首应用1792728647；正式文件SHA9280baea…与冻结1817B完全相同。即时preapply/afterapply快照中62旧用户表/1103行及SHOW CREATE相等；作者同时记录五组旧元数据和十二条script/checksum/success前缀完全保留，新两表为空。证据和root独立观察在artifacts/phase-b/b-remaining/runtime-metadata-first-observation。此保全指迁移窗口；后续合法业务测试会追加数据/推进outbox计数，不能混称仍完全静止。
++
++首轮完整结构oracle出现1个assertion failure：MySQL将冻结OCTET_LENGTH(profile)规范展示为length(profile)。失败原件schema-green.log与schema-green-initial-failure.xml保留，SQL/liveDDL/history均不改。root允许仅在CHECK函数token/AST层归一LENGTH与OCTET_LENGTH字节长度同义词，不归一CHAR_LENGTH、不放松数值/字面量大小写/AND-OR分组或其他条件。真实MySQL ASCII为1/1/1，补充字符为4/4/1，证明字节/字符区别；修正后全部两表/四列/两PK索引列/两CHECK/两FK列和oracle区分测试通过。此为oracle表述修正，不是假称数据库DDL缺陷已修复或前滚迁移。
++
++作者后报四个正例/二十六约束反例、private013.1/latest重跑各0并保全窗口。最终创建业务回归、完整源/证据审阅与独立Task2 SPEC/quality门仍待，不能据此提前采用整个运行时或验收B。永久冻结本SQL及所有低版本；以后缺陷仅登记有序前向版本。
+diff --git a/docs/superpowers/specs/2026-10-21-ama-database-design.md b/docs/superpowers/specs/2026-10-21-ama-database-design.md
+index a8cebc5..8187838 100644
+--- a/docs/superpowers/specs/2026-10-21-ama-database-design.md
++++ b/docs/superpowers/specs/2026-10-21-ama-database-design.md
+@@ -1,13 +1,15 @@
+ # AMA 数据库详细设计基线
+ 
+-当前设计版本：**B00-1.4-proposed**，96表/727列；仅设计提案与独立审阅库验证，尚未采用。新增3个规范化来源/解析选择关系及2个可空历史兼容字段。详见[来源补充规格](2026-10-22-ama-material-provenance-addendum.md)及[验证记录](../../acceptance/b/database-material-provenance-addendum-review.md)。正式SQL001..013（含011.1）不可变；未分配正式迁移号，运行时不变。B00-1.3四份原始文件及SHA保存在[历史清单](../../database/design-history/B00-1.3/manifest.json)，原93表实际metadata及raw evidence保持原路径原字节。以下1.3说明保留为历史范围，不授予新方案采用状态。
++当前设计版本：**B00-1.5-runtime-metadata**，98表/731列；在完整 B00-1.4-proposed 模型上仅新增两个运行时 sidecar。V013.1 的实际验证仅覆盖这两表及原部署模型不变性；未重跑完整未来模型验证。原 D01 三表与两列仍为 UNASSIGNED-D01，不由此启用。详见[运行时补充与证据](../../acceptance/b/database-runtime-metadata-task-02.md)。
++
++父版本历史（保留）：当前设计版本：**B00-1.4-proposed**，96表/727列；仅设计提案与独立审阅库验证，尚未采用。新增3个规范化来源/解析选择关系及2个可空历史兼容字段。详见[来源补充规格](2026-10-22-ama-material-provenance-addendum.md)及[验证记录](../../acceptance/b/database-material-provenance-addendum-review.md)。正式SQL001..013（含011.1）不可变；未分配正式迁移号，运行时不变。B00-1.3四份原始文件及SHA保存在[历史清单](../../database/design-history/B00-1.3/manifest.json)，原93表实际metadata及raw evidence保持原路径原字节。以下1.3说明保留为历史范围，不授予新方案采用状态。
+ 
+ 历史版本说明：**B00-1.3-review**，2026-10-22；状态：**生成结果关系持久化方案已获根任务技术 ACK，详细设计及独立评审待完成；不得据此声称 B07/正式迁移/生产通过**。已采用的 B00-1.2（85表/674列，含1.1 R1—R6）保持历史效力；本版新增8表，仅改变原表 sensitive_exclusion 的多标签主键和 CHECK。基线 `0d2079cd64e5b61bc5787ca5adfaa782e5cd4a40`，工作树 `/home/tanren/ama/.worktrees/phase-b-generation-design`；[本次记录](../../acceptance/b/database-generation-addendum-review.md)。
+ 
+ 1.2 原始状态全文、设计/字典/DDL/声明源字节及SHA已保存于 [design-history/B00-1.2](../../database/design-history/B00-1.2/manifest.json)。原上传补充段标题曾写“待独立评审”，但同版本顶部及采用记录已明确通过；本版只更正当前标题并保留此前原字节，不重签或覆盖1.2评审。
+ 
+ 既有采用历史：首版 `c73a765` 有六项 Important，未采用；`bd43ca3` 修正列表共同查询、个人名称去重、专题说明、同确认发布重试、转写处理快照与片段标记，经独立复审全部关闭，集成 `69f33a8`＋`bca9b89`，由 `6dd2cdd` 采用为 1.1。原始 BASE `e8c88d2aaed1a19b0d0202ddce9cb51ee01d84ee`、FIX_BASE `c73a7656fc1c5c2cb07d8b94ead68122059b549f` 与原工作树 `/home/tanren/ama/.worktrees/phase-b-database-design` 仅指该历史版；原评审及 metadata 文件保持原字节。
+ 
+ 绑定依据为架构 v0.2 第 6、8—10、12、14 节、需求对应清单 v0.2、A-02 决定台账与接口清单，以及用户已确认的 `2026-10-21-ama-product-supplement.md`。补充规格优先于旧台账中“建议/待确认”措辞：实际日期可选、转写显式保存、纪要显式及自动保存、人工标题保护、同批音视频可合并而不与纯转写混批、邮件仅受控链接和已确认且仍可读的企业参会人、治理候选/审核/生效、声纹用途授权可撤销、配置独立审批和新修订回滚。公司协议和运维证据仍 pending；测试 manifest 的空 fields/evidence 不构成认证。
+ 
+ 配套：[`ama-data-dictionary.md`](../../database/ama-data-dictionary.md) 是逐字段定义；[`ama-schema-draft.sql`](../../database/ama-schema-draft.sql) 仅供一次性 MySQL 8.4 审阅库；[`migration-register.md`](../../database/migration-register.md) 管理实际及预留迁移；[`database-design-review.md`](../../acceptance/b/database-design-review.md) 记录覆盖、实现差异及验证。声明源 `tools/checks/database_design.py` 生成字典、DDL、本文完整 ER，实际数据库元数据另行核对，不以生成成功替代验证。
+@@ -1240,20 +1242,28 @@ erDiagram
+         char_36_ context_id PK,FK
+         char_36_ material_revision_id PK,FK
+         char_36_ parsed_document_id FK
+     }
+     parsed_document_profile {
+         char_36_ document_id PK,FK
+         varchar_64_ format
+         varchar_255_ parser_config_version
+         char_64_ parser_config_sha256
+     }
++    input_batch_fingerprint_profile {
++        char_36_ batch_id PK,FK
++        varchar_64_ profile
++    }
++    meeting_minutes_editor_guard {
++        char_36_ meeting_id PK,FK
++        bigint intent_epoch
++    }
+     department o|--o{ department : fk_department_0
+     department o|--o{ enterprise_identity : fk_enterprise_identity_0
+     enterprise_identity ||--o{ role_assignment : fk_role_assignment_0
+     enterprise_identity ||--o{ identity_session : fk_identity_session_0
+     enterprise_identity ||--o{ meeting : fk_meeting_0
+     meeting ||--o{ meeting_info_revision : fk_meeting_info_revision_0
+     enterprise_identity ||--o{ meeting_info_revision : fk_meeting_info_revision_1
+     meeting ||--o{ roster_revision : fk_roster_revision_0
+     enterprise_identity o|--o{ roster_revision : fk_roster_revision_1
+     roster_revision ||--o{ roster_member : fk_roster_member_0
+@@ -1446,11 +1456,13 @@ erDiagram
+     final_confirmation ||--o{ final_result_review : fk_final_result_review_0
+     result_review ||--o{ final_result_review : fk_final_result_review_1
+     meeting ||--o{ source_context : fk_source_context_0
+     generation_input o|--o| source_context : fk_source_context_1
+     transcript_confirmation ||--o{ source_context : fk_source_context_2
+     material_snapshot o|--o{ source_context : fk_source_context_3
+     source_context ||--o{ source_context_material : fk_source_context_material_0
+     material_revision ||--o{ source_context_material : fk_source_context_material_1
+     parsed_document ||--o{ source_context_material : fk_source_context_material_2
+     parsed_document ||--o| parsed_document_profile : fk_parsed_document_profile_0
++    input_batch ||--o| input_batch_fingerprint_profile : fk_input_batch_fingerprint_profile_0
++    meeting ||--o| meeting_minutes_editor_guard : fk_meeting_minutes_editor_guard_0
+ ```
+diff --git a/tools/checks/database_design.py b/tools/checks/database_design.py
+index 8df2fcd..f699d85 100644
+--- a/tools/checks/database_design.py
++++ b/tools/checks/database_design.py
+@@ -4,21 +4,21 @@ python3 tools/checks/database_design.py generate
+ python3 tools/checks/database_design.py verify --container <NEW owned fixture>
+ """
+ import argparse
+ import hashlib
+ import json
+ import pathlib
+ import re
+ import subprocess
+ 
+ ROOT = pathlib.Path(__file__).resolve().parents[2]
+-VERSION = 'B00-1.4-proposed'
++VERSION = 'B00-1.5-runtime-metadata'
+ PROVENANCE_ROOT_RULE = 'R1上下文根：所有纳入minutes_element.source_context_id无论证据数量均为basis根，与域内精确usage上下文取并集。ROWSET v2/PINNED用已保存输入要素集全部basis及set证据/目录，排除body/applied exclusion；REVIEW_SOURCES仅选定复核要素basis及精确相交证据（正文复核无要素basis）；FINAL用全部冻结纳入要素basis及既有body/set证据、目录、applied exclusion。各根完整context/selection/profile按实际完整PK去重及unsigned UTF8排序，缺失/额外行拒绝；无usage的basis同样验证并保留依赖。basis不伪造EVIDENCE、不增加usage数、不授予支持信用；草稿仍无自身fingerprint/TaskSpec，祖先按图依赖判断。'
+ TABLES = []
+ ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
+ KEY = 'varchar(255) COLLATE utf8mb4_0900_bin'
+ CODE = 'varchar(64) CHARACTER SET ascii COLLATE ascii_bin'
+ HASH = 'char(64) CHARACTER SET ascii COLLATE ascii_bin'
+ 
+ def col(name, typ, meaning, nullable=False, default=None):
+     return dict(name=name, type=typ, meaning=meaning, nullable=nullable, default=default)
+ def ident(name='id', meaning='内部 UUID；服务器生成，永不复用', nullable=False):
+@@ -422,20 +422,34 @@ table('parsed_document_profile','D-01','UNASSIGNED-D01','解析文档的明确
+ for name in ('minutes_element','evidence_link'):
+     t=next(t for t in TABLES if t['name']==name)
+     t['cols'].append(ref('source_context_id','不可变来源选择；NULL仅历史未知；v3新写必填由服务验证',True))
+     t['indexes'].append(idx(name+'_context','source_context_id,id','历史来源选择反向依赖'))
+     t['fks'].append(fk('source_context_id','source_context'))
+     t['policy'] += '；B00-1.4-proposed来源basis由自身source_context_id确定，人工改写不声称模型生成；evidence自身上下文优先，不能从要素/正文/ACTION建议推断。新v3写NULL由应用拒绝；旧NULL明确不可恢复'
+     if name == 'minutes_element':
+         t['policy'] += '；所有纳入要素basis无论证据数量均为域内根，完整选择/profile须验证与保留；根精确作用域见R1上下文根，不伪造证据或支持信用'
+ 
+ 
++
++# B00-1.5: reviewed runtime sidecars only. B00-1.4-proposed D01 stays unassigned.
++table('input_batch_fingerprint_profile','B-06/runtime Task2','V013.1','明确不可变输入批次指纹算法；缺失为legacy/unknown',[
++    ref('batch_id','原子新建批次的唯一父；禁止历史推断或补填'),code('profile','服务器真实选择的固定算法 ama.input-batch.v1；不可归一化')],
++    pk='batch_id',fks=[fk('batch_id','input_batch')],
++    checks=["OCTET_LENGTH(profile) = 18 AND profile = 'ama.input-batch.v1'"],
++    policy='与真实新批次及成员/输入/任务/审计原子创建；不可变，无默认与历史回填。缺行明确unsupported；无推断/懒填/自动TTL。授权永久父清理时先解除保留来源再删除子行；FK仅证存在，不证明算法或授权')
++table('meeting_minutes_editor_guard','B-03/B-07/runtime Task2','V013.1','持久单调编辑意图；仅新建会议原事务可写零',[
++    ref('meeting_id','唯一会议父；历史缺行是UNKNOWN，重放/读/生成不得初始化'),col('intent_epoch','bigint','服务器单调非负epoch；0仅证明新会未编辑，正数永久阻止首次自动保存')],
++    pk='meeting_id',fks=[fk('meeting_id','meeting')],
++    checks=['intent_epoch BETWEEN 0 AND 9223372036854775806'],
++    policy='新建会议原事务插入0；真正授权编辑意图在根锁下由未知写1或严格递增，无减少/重置/超时/删除。上限前条件增量且一行，否则关闭失败；无默认。创建重放和旧行读取不补零；缺TABLE为schema unavailable。逻辑删除保留，只有永久删除父时协调清理；epoch不授予权限')
++
++
+ def cname(t, n): return f"ck_{t['name']}_{n}"
+ def fname(t, n): return f"fk_{t['name']}_{n}"
+ def sql():
+     result = [f'-- {VERSION}: REVIEW ONLY; never place this file in Flyway locations.',
+               '-- All future tables exist ONLY in the disposable review database.',
+               "SET NAMES utf8mb4;", "SET time_zone = '+00:00';"]
+     for t in TABLES:
+         lines=[]
+         for c in t['cols']:
+             s=f"  `{c['name']}` {c['type']} {'NULL' if c['nullable'] else 'NOT NULL'}"
+@@ -521,21 +535,22 @@ def check_ast(expression):
+     def take(expected=None):
+         nonlocal position
+         value=tokens[position]; position+=1
+         assert expected is None or value.lower()==expected, (value,expected)
+         return value
+     def atom():
+         if peek()=='(':
+             take('('); value=disjunction(); take(')'); return value
+         value=take()
+         if peek()=='(':
+-            assert value.lower()=='regexp_like', 'Unsupported CHECK function'
++            assert value.lower() in ('regexp_like','octet_length','length'), 'Unsupported CHECK function'
++            if value.lower() == 'length': value = 'octet_length'
+             take('('); args=[disjunction()]
+             while peek()==',': take(); args.append(disjunction())
+             take(')'); return ('call',value.lower(),tuple(args))
+         return ('literal',value) if value.startswith("'") or value.isdigit() else ('identifier',value.lower())
+     def comparison():
+         left=atom(); op=peek()
+         if op in ('=','<>','>','<','>=','<='):
+             take(); return (op,left,atom())
+         if op=='is':
+             take(); negate=False

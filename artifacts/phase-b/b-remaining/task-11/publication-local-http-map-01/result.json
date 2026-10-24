@@ -1,0 +1,36 @@
+{
+  "exitCode": 1,
+  "processExitCode": 1,
+  "startedNs": 1792869238873371872,
+  "finishedNs": 1792869244599041524,
+  "suites": [
+    {
+      "path": "junit/backend/api/target/surefire-reports/TEST-ama.api.Task11PublicationErrorsTest.xml",
+      "suite": "ama.api.Task11PublicationErrorsTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 1,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.api.Task11PublicationErrorsTest",
+      "reportSha256": "f083c566ee38f62fa97a65b37a39f3d7747fd2ce4d1d8dce241682b4e58687e4",
+      "reportMtimeNs": 1792869244523632551,
+      "startedNs": 1792869238873371872,
+      "endedNs": 1792869244599041524,
+      "class": "ama.api.Task11PublicationErrorsTest",
+      "name": "actualControllerUsesSpecificFailureAdviceWithoutErrorDispatch",
+      "failure": false,
+      "error": true,
+      "skipped": false
+    }
+  ]
+}

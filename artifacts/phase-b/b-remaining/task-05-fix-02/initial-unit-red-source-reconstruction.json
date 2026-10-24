@@ -1,0 +1,25 @@
+{
+  "qualification": "additive post-run reconstruction against actual pre-run hashes; not a backdated standalone source capture",
+  "entries": [
+    {
+      "path": "backend/worker/src/test/java/ama/worker/WorkerShutdownTest.java",
+      "sha256": "115e4981f30401af1f9bbb5ee2bff3bd26face66e47b171d99ec877cb38aa780",
+      "method": "current same bytes"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "sha256": "c9d331c12432222ec0bc93732317cc6f1a87fcde5a65dcd22c87c2a983d99f48",
+      "method": "current same bytes"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "sha256": "2bf351bc9625a0ba4491bdaf752da7c1499193cd9f96cabe0747e9d8b88529cf",
+      "method": "current same bytes"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/FileBackendDefinitions.java",
+      "sha256": "0efed46db6c5c836c7f2c1d0935dce4b878bc73ce8bea1487ffc390c5c5b600a",
+      "method": "exact FIX_BASE Git blob"
+    }
+  ]
+}

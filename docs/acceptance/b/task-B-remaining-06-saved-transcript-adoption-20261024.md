@@ -1,0 +1,25 @@
+# Task6 saved transcript adoption — 2026-10-24
+
+Task6 is accepted for the local controlled runtime. Original source aa490afc2690e9517a691cc8d1ae9487a025806d plus sameauthor fix01 d54b2e8841c664e691d03192507e7a192be38430 are reviewed. Scoped independent SPEC PASS / quality Approved, review b71b6a02ffd538943d5543b5347c20fd480211a3cedcd2ba74ad408a20aa9e9d, closes T6SR01/T6SR02 and mandatory CV01–04 with0newfindings/0remainingin-scopeCannotVerify. Originalreview/failingwindows remainpreserved.
+
+SAVE/MARKS/RESTORE reserve the prospective ancestry node and expose consistent capabilities. CURRENT validates the actual confirmation relation; owner storedhistory remainsdistinct. Complete typed-input taskmembership uses a bounded indexed ID set plus actualproducer and exactPK locks/rechecks. Real loopbackHTTPS LOCAL/S3 owner/member/outsider/admin wire/replay, provenance negatives, atomicity/lostACK/currentauthority/phase/cancellation/retainedlocks and default/READCOMMITTED evidence support this scope.
+
+## Verification and source windows
+
+Final units41XML254PASS0failure/error/skip. Integration121distinct=34Task6+87inherited: first24XML121 had1copiednamespace-sort assertionfailure; only the affected5caseclass reranGREEN after test-onlyprefixcorrection, replacing those5 results. This is121, not126 or a pristinegreenbatch. Tenforwardcopies/sixITclasses preserve exactsource/diffs/ownership and exclude the original sharedglobaloutboxsequenceoverflowcase; actualflushfault supplies the stated scoped replacement. Controlledmetadata/archive/queuefixtures are not intake→Worker qualification. Source400Java/current12PIN03seams verifiedFS/Git andwindows; only inheritedtestnamespace changedbetweenfinalwindows.
+
+Independent mechanicalcustody9a1d5e708a38850fa7c988e70d618e748db58cf72a566a717fee37f9b0f6e1dd validates935authorcommitpaths/906publicmanifestseals/400Java/12PIN03seams/443originalTask6artifacts/7935adopted+4727historicalinputs/4currentmodels/old13SQL/reportprefix. Root fresh935file+fullfixdiff fourprivate-value/PEMscan0 aced961e9c32b1b1e38a1fa8e75ec037389e5e7c5c502b78b96b1fb4b03df04a. Rootfresh2selectedCIDfields/100recordedPIDsgone cb2da1bb92fe45ae00da3cc7f4aba048d0f19df2232f3ba3039fdf2ddb961340; no globalprocessabsenceclaim.
+
+RootfreshSELECTonly1e317a918347a37ddd2b96b07df24ca807e6cb4055ffd5915153fd02e24b2782 confirms105fix01actualtypedinput→Worker→RAWchains (104acceptedJSON+1dateddirectHTTPderivation) allSUCCEEDED/unended0. OriginalTask6fortychains areseparatehistoricalcoverage. Inherited45controlledtasks=9SUCCEEDED/36FAILED/unended0 areseparatescope; their ownedfixtureterminalizationafterassertions isnotpipelinecompletionrepair. HistoricalREADY72+RUNNING110182 and23RECONCILING(wider205), globalunended126 remainuntouched; no cleanup/globalactive0claim.
+
+## Additive schema and qualification
+
+A proved missing inputindex required independentlyreviewed root supplement; no subjectnarrowing/unindexedglobalOR waiver. Formal013.2 V013_2__task_input_lookup.sql is75bytes SHA11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f. Design/exactDDLreview8e8bdfd7, fullbytefreeze d40844b3 and separateselectedtargetACK0b709604 precede normalmigration1/rerun0. Migrationproof1c36d5ee/independent2aa97698/rootfreshbbb322fd verifyallold13historyfields/SQL,65actualtables491columns/64business30393rows+allocator data and oldphysicalmetadata unchanged exceptexactnew3indexparts/SHOWCREATEline. Actualhistorynow14, newchecksum-1098175378. This65table deployedprefix differsfromthe98tablefullreviewmodel.
+
+PIN03 8a8d5edcdc376151d97f72c022fa02bd8e00aaeec29dfb3df7fdd88dee56ed36 supports currentfunctionaltests. Numericrecipe/effectiveUTF8+scalar1Mi versusconfigured16Mi, originalcomponentminima/archive references, trusteddisableddeclarations/inventory carrybyunchangedsourceequivalence; no newindependentperbootrawtupleclaim. GlobalORintermediate wasneverqualified. Existingmanagedruntime/resourcebounds andhistoricalexecutionqualifications remain; no capacity/HA/production/browser/company/future10/11 claim.
+
+## Required continuation
+
+Task8 next owns fairnessFUP closure and currentmodel sync of task_input_lookup alongside its Operationcolumn/index (rootownershipamendment73b13bc5); current4modelsunchanged. T6SR03 generatedrequestunknown remainsOPENTask12, with T4SR04/05 andtoolingtriage. Permanent B01IMM PARTIAL/B04Q401 UNKNOWN/company-serviceabsence andotherregisteredlimits remain. Continue8→7→9→10→11→12→13; thismilestone doesnotfinishwholePhaseB.
+
+Root coordination records, reviews/pins/sourcecopies/rawpackages and precise downstreampreparations are mirrored byte-for-byte in artifacts/phase-b/b-remaining/controller-task06-adoption-20261024/manifest.json (SHA 3ca4b8b7bea125343d1a9a6ca735b401f0668e78c2340635b28f9ecca3ad9075). Newmirrorattributespreserve literalrawbytes; root/oldattributes untouched. OriginalW retainedperuserinstruction. Publicauthorreport/manifest remain immutable under task-06/fix-01. Rootrecordadoptionchanges no backend/contract/productsource and performs no mainmerge/push/publishing.

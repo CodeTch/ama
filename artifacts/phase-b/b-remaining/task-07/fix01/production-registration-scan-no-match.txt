@@ -1,0 +1,2 @@
+Command: ['rg', '-n', 'PreparedExternalPolicy|GenerationRetentionPolicy|ReconciliationLoop.prepared|WorkerLoop.external|recoverPreparedFact', 'backend', '--glob', '*/src/main/**/*.java']
+Exit: 1

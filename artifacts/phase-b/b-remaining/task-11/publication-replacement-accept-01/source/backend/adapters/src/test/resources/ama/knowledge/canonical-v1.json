@@ -1,0 +1,40 @@
+[
+  {
+    "value": {
+      "z": "literal\\n\n\t\b\f\r😀",
+      "a": [
+        null,
+        true,
+        0
+      ]
+    },
+    "canonical": "{\"a\":[null,true,0],\"z\":\"literal\\\\n\\u000a\\u0009\\u0008\\u000c\\u000d😀\"}"
+  },
+  {
+    "value": {
+      "": "bmp",
+      "😀": "supplementary"
+    },
+    "canonical": "{\"\":\"bmp\",\"😀\":\"supplementary\"}"
+  },
+  {
+    "value": {
+      "body": "原文\u0000\u001f\\\"/",
+      "empty": "",
+      "nil": null
+    },
+    "canonical": "{\"body\":\"原文\\u0000\\u001f\\\\\\\"/\",\"empty\":\"\",\"nil\":null}"
+  },
+  {
+    "value": {
+      "max": 9223372036854775807,
+      "array": [
+        3,
+        2,
+        1
+      ],
+      "flag": false
+    },
+    "canonical": "{\"array\":[3,2,1],\"flag\":false,\"max\":9223372036854775807}"
+  }
+]

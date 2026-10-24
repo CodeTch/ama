@@ -1,0 +1,248 @@
+{
+  "timestampUtc": "2026-10-24T00:04:55.687702+00:00",
+  "scope": "Root read-only interim6XML+receipts, no tests/DB/product/Git; separateexecutionwindows not summed, sourcefinality/policy/Worker/finaladoption notassessed. Authorstillactive.",
+  "windows": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/prepared-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "7edc6a02a3ce11d67e8339e90b399aaf93f790df33b3c98370221c28bc60e247",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "preparedOutputIsCreatedBeforeValidationAndAttemptEndsAtomically",
+          "failures": [],
+          "errors": []
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07PreparedExternalIT"
+        ],
+        "exit": 0,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/prepared-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+        ],
+        "elapsedSeconds": 17.371492385864258,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "8f5a472db618dce71a531732196c3008bb6d1b954fdba47c9737490fed7cacea"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/prepared-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "400cec99dcba6aa4d2cbb8d2c1b4f8d654cb48b76915478d9d201ae5096ba832",
+      "tests": "1",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "preparedOutputIsCreatedBeforeValidationAndAttemptEndsAtomically",
+          "failures": [
+            "org.opentest4j.AssertionFailedError"
+          ],
+          "errors": []
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07PreparedExternalIT"
+        ],
+        "exit": 1,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/prepared-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+        ],
+        "elapsedSeconds": 20.60711693763733,
+        "counts": {
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "a1188f1db657f2dfe942408e42a9ab99b18a251eabc35d40a5612b48bd0b8ef5"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/recovery-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "b0d8089ec31ade3504124d69b2b7ba6fc5c92e014f5af8c283bc9841d9f6d5c5",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "terminalDebtRecoversWithoutCallerPermitWhileUnknownCapacityRemainsHeld",
+          "failures": [],
+          "errors": []
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07PreparedExternalIT#terminalDebtRecoversWithoutCallerPermitWhileUnknownCapacityRemainsHeld"
+        ],
+        "exit": 0,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/recovery-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+        ],
+        "elapsedSeconds": 15.6681649684906,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "e9058264055d4feedadea507d95c4a993b6c7a459f3656917bbe6384c629e29a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/recovery-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "92f5d38a47f1d9053d35fe37d5d77b3a0928737625011a7b5614895b1fc52ae5",
+      "tests": "1",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "terminalDebtRecoversWithoutCallerPermitWhileUnknownCapacityRemainsHeld",
+          "failures": [
+            "org.opentest4j.AssertionFailedError"
+          ],
+          "errors": []
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07PreparedExternalIT#terminalDebtRecoversWithoutCallerPermitWhileUnknownCapacityRemainsHeld"
+        ],
+        "exit": 1,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/recovery-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+        ],
+        "elapsedSeconds": 18.12218165397644,
+        "counts": {
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "5d21ceb7ed31f2753e0f5a8a69911e748ae1a430675744de827462498122f930"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/replay-green-corrected/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "34fd8dcb6714211405b71f9e5babe5d84e1be670cfe039d3cba37e557f2bef2c",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter",
+          "failures": [],
+          "errors": []
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07PreparedExternalIT#samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter+registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest"
+        ],
+        "exit": 0,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/replay-green-corrected/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+        ],
+        "elapsedSeconds": 17.529656887054443,
+        "counts": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "6b1d8b759d6ac75e8beba2cb1e61e966dfae5c46092af0259dd7c10c67813635"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/replay-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "0e51d3244bf072d2b06c74dcc6b7b9a7702ac5adb628eb3083b9fb4bb2d2998c",
+      "tests": "2",
+      "failures": "2",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest",
+          "failures": [
+            "org.opentest4j.AssertionFailedError"
+          ],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter",
+          "failures": [
+            "org.opentest4j.AssertionFailedError"
+          ],
+          "errors": []
+        }
+      ],
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07PreparedExternalIT#samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter+registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest"
+        ],
+        "exit": 1,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/replay-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml"
+        ],
+        "elapsedSeconds": 14.14488172531128,
+        "counts": {
+          "tests": 2,
+          "failures": 2,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "receiptSha256": "b8c584246ffa8cdd5d4eea7d94d22ffec8fdc8414442b994f9a2a8c80667bbf1"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task07RecoveryBoundsIT#transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass,Task07InheritedB06QueueSeamsIT#disabledExpiredCurrentExternalFactMustStillBeRetained"
+  ],
+  "exit": 0,
+  "reports": [
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/inherited-diagnostic/integration-tests-TEST-ama.task.Task07InheritedB06QueueSeamsIT.xml",
+    "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix02/inherited-diagnostic/integration-tests-TEST-ama.task.Task07RecoveryBoundsIT.xml"
+  ],
+  "elapsedSeconds": 28.157756805419922,
+  "counts": {
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+}

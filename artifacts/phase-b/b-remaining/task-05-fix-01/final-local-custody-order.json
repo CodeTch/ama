@@ -1,0 +1,75 @@
+{
+  "utc": "2026-10-23T18:51:18.524635+00:00",
+  "sourceSha256": "5f6b26c5e5e211924a085516db2f775e6556896ea629b5042b10f584e960490f",
+  "cases": [
+    {
+      "case": "pipeline-c14e04d9-dddd-44da-84f5-598369e44f26",
+      "nativePid": 1148016,
+      "port": 45339,
+      "observedPortClosedUtc": "2026-10-23T18:51:18.521868+00:00",
+      "connectExit": 111,
+      "file_times": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-05-fix-01/pipeline-c14e04d9-dddd-44da-84f5-598369e44f26/maintenance-prelinked-88b18e19-aab8-4c95-9a4a-5346787721b5.json",
+          "mtimeUtc": "2026-10-23T18:48:57.662494+00:00"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-05-fix-01/pipeline-c14e04d9-dddd-44da-84f5-598369e44f26/maintenance-after-88b18e19-aab8-4c95-9a4a-5346787721b5.json",
+          "mtimeUtc": "2026-10-23T18:48:57.766615+00:00"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-05-fix-01/pipeline-c14e04d9-dddd-44da-84f5-598369e44f26/loop-close.json",
+          "mtimeUtc": "2026-10-23T18:48:57.770620+00:00"
+        }
+      ],
+      "source_order": "loop.close join -> preparation exit/active=0 -> guarded maintenance -> loop-close receipt -> finally server.stop -> @AfterEach native receipt",
+      "qualification": "file times plus executed source order; port closure observed now, no invented historical server.stop timestamp"
+    },
+    {
+      "case": "pipeline-304e46ab-c6c4-4c66-b802-7b120ef100e9",
+      "nativePid": 1148155,
+      "port": 45179,
+      "observedPortClosedUtc": "2026-10-23T18:51:18.523032+00:00",
+      "connectExit": 111,
+      "file_times": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-05-fix-01/pipeline-304e46ab-c6c4-4c66-b802-7b120ef100e9/maintenance-prelinked-21232bd8-7d23-485f-80ba-a4e35863891e.json",
+          "mtimeUtc": "2026-10-23T18:49:06.940220+00:00"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-05-fix-01/pipeline-304e46ab-c6c4-4c66-b802-7b120ef100e9/maintenance-after-21232bd8-7d23-485f-80ba-a4e35863891e.json",
+          "mtimeUtc": "2026-10-23T18:49:07.008380+00:00"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-05-fix-01/pipeline-304e46ab-c6c4-4c66-b802-7b120ef100e9/loop-close.json",
+          "mtimeUtc": "2026-10-23T18:49:07.008380+00:00"
+        }
+      ],
+      "source_order": "loop.close join -> preparation exit/active=0 -> guarded maintenance -> loop-close receipt -> finally server.stop -> @AfterEach native receipt",
+      "qualification": "file times plus executed source order; port closure observed now, no invented historical server.stop timestamp"
+    },
+    {
+      "case": "pipeline-d8df1337-4d3b-441f-9b9f-ebed1cc5acb3",
+      "nativePid": 1148317,
+      "port": 45199,
+      "observedPortClosedUtc": "2026-10-23T18:51:18.524155+00:00",
+      "connectExit": 111,
+      "file_times": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-05-fix-01/pipeline-d8df1337-4d3b-441f-9b9f-ebed1cc5acb3/maintenance-prelinked-e4083b57-7b35-49aa-be80-075c37e89ab2.json",
+          "mtimeUtc": "2026-10-23T18:49:11.078368+00:00"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-05-fix-01/pipeline-d8df1337-4d3b-441f-9b9f-ebed1cc5acb3/maintenance-after-e4083b57-7b35-49aa-be80-075c37e89ab2.json",
+          "mtimeUtc": "2026-10-23T18:49:11.150552+00:00"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-05-fix-01/pipeline-d8df1337-4d3b-441f-9b9f-ebed1cc5acb3/loop-close.json",
+          "mtimeUtc": "2026-10-23T18:49:11.150552+00:00"
+        }
+      ],
+      "source_order": "loop.close join -> preparation exit/active=0 -> guarded maintenance -> loop-close receipt -> finally server.stop -> @AfterEach native receipt",
+      "qualification": "file times plus executed source order; port closure observed now, no invented historical server.stop timestamp"
+    }
+  ]
+}

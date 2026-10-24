@@ -1,0 +1,72 @@
+$ python3 /home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-helper-runtime-fix02-offline-20261024.py --helper old --case exact-name
+exit=1
+OFFLINE helper=old case=exact-name; fake inputs only; provision/main never called
+test_exact_guarded_name_accepted (__main__.Contract.test_exact_guarded_name_accepted) ... FAIL
+
+======================================================================
+FAIL: test_exact_guarded_name_accepted (__main__.Contract.test_exact_guarded_name_accepted)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-helper-runtime-fix02-offline-20261024.py", line 132, in test_exact_guarded_name_accepted
+    result = self.clone()
+             ^^^^^^^^^^^^
+  File "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-helper-runtime-fix02-offline-20261024.py", line 126, in clone
+    output = m.env_clone(*args)
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-prepared-20261024.py", line 258, in env_clone
+    fail("Task 7 env reference/credential guard failed")
+  File "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-prepared-20261024.py", line 43, in fail
+    raise RuntimeError(message)
+RuntimeError: Task 7 env reference/credential guard failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-helper-runtime-fix02-offline-20261024.py", line 134, in test_exact_guarded_name_accepted
+    self.fail("exact freshly guarded parent name was rejected: " + str(exc))
+AssertionError: exact freshly guarded parent name was rejected: Task 7 env reference/credential guard failed
+
+----------------------------------------------------------------------
+Ran 1 test in 0.008s
+
+FAILED (failures=1)
+
+$ python3 /home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-helper-runtime-fix02-offline-20261024.py --helper new --case exact-name
+exit=0
+OFFLINE helper=new case=exact-name; fake inputs only; provision/main never called
+test_exact_guarded_name_accepted (__main__.Contract.test_exact_guarded_name_accepted) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.009s
+
+OK
+
+$ python3 /home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-helper-runtime-fix02-offline-20261024.py --helper new --case all
+exit=0
+OFFLINE helper=new case=all; fake inputs only; provision/main never called
+test_exact_guarded_name_accepted (__main__.Contract.test_exact_guarded_name_accepted) ... ok
+test_fresh_selected_identity_binding_required (__main__.Contract.test_fresh_selected_identity_binding_required) ... ok
+test_fresh_selected_mount_binding_required (__main__.Contract.test_fresh_selected_mount_binding_required) ... ok
+test_full_cid_accepted (__main__.Contract.test_full_cid_accepted) ... ok
+test_output_canonical_cid_and_task9_only_url (__main__.Contract.test_output_canonical_cid_and_task9_only_url) ... ok
+test_parent_ack_binding_required (__main__.Contract.test_parent_ack_binding_required) ... ok
+test_provision_binds_clone_to_fresh_selected_after_records (__main__.Contract.test_provision_binds_clone_to_fresh_selected_after_records) ... ok
+test_untrusted_references_rejected (__main__.Contract.test_untrusted_references_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.051s
+
+OK
+
+$ focused in-memory exact-diff/AST/archive-seal verification (full Python command recorded in report)
+exit=0
+VERIFY_OK exact three-line repair; all other helper text unchanged
+VERIFY_OK ast.parse task-09-fixture-provisioning-runtime-fix02-20261024.py
+VERIFY_OK ast.parse task-09-helper-runtime-fix02-offline-20261024.py
+VERIFY_OK original+archive unchanged task-09-fixture-provisioning-prepared-20261024.py
+VERIFY_OK original+archive unchanged task-09-fixture-provisioning-prepared-20261024.md
+VERIFY_OK original+archive unchanged task-09-fixture-provisioning-prepared-20261024-manifest.json
+VERIFY_OK original+archive unchanged task-09-fixture-provision-intent-20261024.json
+VERIFY_OK original+archive unchanged task-09-fixture-provision-receipt-20261024.json
+VERIFY_OK original+archive unchanged task-09-fixture-pre-sql-failure-diagnostic-20261024.json
+VERIFY_DONE exit=0; six preserved original/archive pairs; no private reads or runtime actions

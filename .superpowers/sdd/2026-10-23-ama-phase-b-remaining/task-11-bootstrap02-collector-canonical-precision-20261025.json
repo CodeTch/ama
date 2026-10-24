@@ -1,0 +1,9 @@
+{
+  "utc": "2026-10-24T16:52:50.676273+00:00",
+  "corrects": "Any earlier shorthand noactualdelete/nocanonical must be read as lackofexplicitlauncherprestate/custody evidence, not absenceofunderlyingprocedure.",
+  "actualCanonicalSource": "tools/checks/run.py",
+  "sourceSha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217",
+  "matchesBootstrap02SourceManifest": true,
+  "facts": "Common run.py execute lines13-16 removes selectedreports with unlink(missing_ok=True); java selectors expanded at71-75 thenexecute. Bootstrap02 command actually invokes thissamecanonicalrun and log confirms suite execution. Latest Task10fix01 launcher uses samecanonicalprocess and adds beforemtime/SHA/closedmtime/logassociation/cases.",
+  "remainingGap": "Task11 launcher didnot recordbeforestate orapplycloseduppermtime/logassociation/SHA/cases. Existingposthoc cannotreconstructmissingprestate. Originalwindow unchanged; fixonlycollector beforefuturebusiness."
+}

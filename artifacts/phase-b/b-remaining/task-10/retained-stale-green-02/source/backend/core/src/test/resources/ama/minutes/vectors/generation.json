@@ -1,0 +1,174 @@
+{
+  "profile": "ama.generation-input.v2",
+  "kind": "GENERATION_INPUT",
+  "data": {
+    "meetingId": "00000000-0000-0000-0000-000000000001",
+    "inputId": "00000000-0000-0000-0000-000000000008",
+    "confirmation": {
+      "id": "00000000-0000-0000-0000-000000000007",
+      "revisionId": "00000000-0000-0000-0000-000000000005",
+      "hashProfile": "ama.transcript-confirmation.v1",
+      "contentHash": "cb9ff149976f0075e7215487dedbc15267d3fa9d79a0f99956ff087b3924c182"
+    },
+    "segments": [
+      {
+        "segmentId": "00000000-0000-0000-0000-000000000006",
+        "ordinal": 1,
+        "sourceFileId": "00000000-0000-0000-0000-000000000003",
+        "sourceParagraph": 4,
+        "startMs": null,
+        "endMs": null,
+        "speakerId": null,
+        "marks": []
+      }
+    ],
+    "batch": {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "files": [
+        {
+          "ordinal": 1,
+          "fileId": "00000000-0000-0000-0000-000000000003",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sizeBytes": 9
+        }
+      ]
+    },
+    "materials": {
+      "mode": "EMPTY",
+      "items": []
+    },
+    "template": {
+      "mode": "DEFAULT",
+      "revisionId": "00000000-0000-0000-0000-000000000009",
+      "revision": 1,
+      "contentHash": "cd55300edac93671a0d0f7ae11f402f5456d2c31dd0b9433f489a9d9a718765c"
+    },
+    "exclusion": {
+      "mode": "EMPTY",
+      "revisionId": "00000000-0000-0000-0000-000000000010",
+      "revision": 1,
+      "contentHash": "0ab3f2a100f28ce028cd3d487ce4c7ae9a71cfd9f4b8d66d6f214182a0389592",
+      "entries": []
+    },
+    "elements": {
+      "mode": "EMPTY",
+      "items": []
+    },
+    "sources": [
+      {
+        "sourceId": "s1",
+        "locator": {
+          "kind": "TRANSCRIPT",
+          "transcriptRevisionId": "00000000-0000-0000-0000-000000000005",
+          "segmentId": "00000000-0000-0000-0000-000000000006"
+        },
+        "role": "MEETING",
+        "sourceVersion": {
+          "kind": "TRANSCRIPT",
+          "confirmationId": "00000000-0000-0000-0000-000000000007",
+          "revisionId": "00000000-0000-0000-0000-000000000005",
+          "batchId": "00000000-0000-0000-0000-000000000002",
+          "sourceFileId": "00000000-0000-0000-0000-000000000003",
+          "sourceFileSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "sourceContentHash": "cb9ff149976f0075e7215487dedbc15267d3fa9d79a0f99956ff087b3924c182"
+      }
+    ],
+    "configs": {
+      "prompt": {
+        "version": "prompt",
+        "sha256": "cf07194ee232eb531e15f690000d19846dea69cf05504782658afcfacb9228a2"
+      },
+      "model": {
+        "version": "model",
+        "sha256": "9372c470eeadd5ecd9c3c74c2b3cb633f8e2f2fad799250a0f70d652b6b825e4"
+      },
+      "profiles": [
+        {
+          "kind": "ANCHOR",
+          "version": "ANCHOR.v1",
+          "sha256": "dc07c2232868e191eb6918b135179268091dcee0a87625b5955adf2b5feb0cf2"
+        },
+        {
+          "kind": "CANONICAL_CODEC",
+          "version": "ama.canonical-value.v1",
+          "sha256": "348e5b27264de2d86f9c0955af75fb0e6ffec8a51b5c132fbf9f4e0116448378"
+        },
+        {
+          "kind": "CATALOG",
+          "version": "CATALOG.v1",
+          "sha256": "e6872c279f2695849f20e757f23892e49ff3b32839fbc2588f933c69ce1becfe"
+        },
+        {
+          "kind": "CHUNK_PLAN",
+          "version": "CHUNK_PLAN.v1",
+          "sha256": "b54ca4288351440e76455b9c7eda5f084f43ff64b8d95c08ea4b0c1b57d361d4"
+        },
+        {
+          "kind": "CONFIRMATION_HASH",
+          "version": "ama.transcript-confirmation.v1",
+          "sha256": "cfa4dbb1252cdaff19d5cda401b2d4aa88ffaa1b4769b75d2d5958793335a324"
+        },
+        {
+          "kind": "EXCLUSION",
+          "version": "EXCLUSION.v1",
+          "sha256": "a87d3e5aeda793da78721812937e8d7c893f64574d03d2c10b1e0c2a1bacd020"
+        },
+        {
+          "kind": "FINAL_SOURCES",
+          "version": "ama.final-sources.v2",
+          "sha256": "5d16a85c7cdbc616d1971193190de14cf689cb4563641ff64302f6f674035bf3"
+        },
+        {
+          "kind": "GENERATION_HASH",
+          "version": "ama.generation-input.v2",
+          "sha256": "42c35115c09b4f67c863cd9c384c1d010d3c281ba8372f32dbe9950b8e912eac"
+        },
+        {
+          "kind": "OUTPUT_SCHEMA",
+          "version": "OUTPUT_SCHEMA.v1",
+          "sha256": "01db1a1359eb63069f0bf8c1b87a7a9ba69949515074c2a42d948815b7881ba7"
+        },
+        {
+          "kind": "RENDER",
+          "version": "RENDER.v1",
+          "sha256": "a014c05e9a1b6fcaa707c70c6062c3340753de45b8247d9ec9cf766a6af452ba"
+        },
+        {
+          "kind": "REVIEW_HASH",
+          "version": "ama.result-review.v2",
+          "sha256": "004ef140fc795c084775b9d0afa203a66161c96dc4aaf78596192ab35d34695a"
+        },
+        {
+          "kind": "ROWSET_HASH",
+          "version": "ama.rowset.v1",
+          "sha256": "7fc93083d419fb9ab8e7797352564f5e30d336df454ec0c5de0f570fc3217fd8"
+        },
+        {
+          "kind": "SUPPORT",
+          "version": "SUPPORT.v1",
+          "sha256": "7fdf0015b82f52dbaf3e3d6fe5afcca003bfdd45c0009965246b247a0b112621"
+        },
+        {
+          "kind": "TITLE",
+          "version": "TITLE.v1",
+          "sha256": "6c7a5e73c96c697715a1cb58cecfa2692d79e35d976de826623b67f0799a4726"
+        },
+        {
+          "kind": "VALIDATION_BUDGET",
+          "version": "VALIDATION_BUDGET.v1",
+          "sha256": "001221f20d616138a840f0254a671e8a9dc688ee59646fa8a73f2b7caf94bbee"
+        }
+      ]
+    },
+    "scope": {
+      "kind": "FULL",
+      "target": null
+    },
+    "base": {
+      "meetingRevision": 1,
+      "subjectBusinessVersion": 2,
+      "cancelEpoch": 3
+    }
+  }
+}

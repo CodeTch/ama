@@ -1,0 +1,15 @@
+--- backend/integration-tests/src/test/java/ama/task/TaskLeaseIT.java
++++ backend/integration-tests/src/test/java/ama/task/Task08InheritedTaskLeaseIT.java
+@@ -6,9 +6,9 @@
+ import java.util.concurrent.atomic.AtomicInteger;
+ import static org.junit.jupiter.api.Assertions.*;
+ /** Real concurrent connections; catches duplicate claims, reversed locks and unfenced effects. Never resets fixtures. */
+-class TaskLeaseIT {
+- TaskFixture f; JdbcTaskQueue q;
+- @BeforeEach void setup(){f=new TaskFixture();q=f.queue();}
++class Task08InheritedTaskLeaseIT {
++ Task08InheritedFixture f; JdbcTaskQueue q;
++ @BeforeEach void setup(){f=new Task08InheritedFixture();q=f.queue();}
+  @Test void twoWorkersCompeteForOneTask() throws Exception {
+   var s=f.spec();String id=q.enqueue(s);var go=new CountDownLatch(1);
+   try(var es=Executors.newFixedThreadPool(2)){

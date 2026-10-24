@@ -1,0 +1,84 @@
+{
+  "exitCode": 1,
+  "processExitCode": 1,
+  "startedNs": 1792872146185212268,
+  "finishedNs": 1792872152440489473,
+  "suites": [
+    {
+      "path": "junit/backend/adapters/target/surefire-reports/TEST-ama.transcript.Task11PublicationManifestTest.xml",
+      "suite": "ama.transcript.Task11PublicationManifestTest",
+      "tests": 5,
+      "failures": 4,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 5,
+    "failures": 4,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.transcript.Task11PublicationManifestTest",
+      "reportSha256": "87ec3668118219d78bf3fca07b0b338c1966e4fa2ef5be1e4c762803dcd998af",
+      "reportMtimeNs": 1792872152361947114,
+      "startedNs": 1792872146185212268,
+      "endedNs": 1792872152440489473,
+      "class": "ama.transcript.Task11PublicationManifestTest",
+      "name": "validLocalOnlyGapAndFirstRequest",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.transcript.Task11PublicationManifestTest",
+      "reportSha256": "87ec3668118219d78bf3fca07b0b338c1966e4fa2ef5be1e4c762803dcd998af",
+      "reportMtimeNs": 1792872152361947114,
+      "startedNs": 1792872146185212268,
+      "endedNs": 1792872152440489473,
+      "class": "ama.transcript.Task11PublicationManifestTest",
+      "name": "transitionShapeAndIdentityAreExact",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.transcript.Task11PublicationManifestTest",
+      "reportSha256": "87ec3668118219d78bf3fca07b0b338c1966e4fa2ef5be1e4c762803dcd998af",
+      "reportMtimeNs": 1792872152361947114,
+      "startedNs": 1792872146185212268,
+      "endedNs": 1792872152440489473,
+      "class": "ama.transcript.Task11PublicationManifestTest",
+      "name": "duplicateAndUnsortedPredecessorsRejected",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.transcript.Task11PublicationManifestTest",
+      "reportSha256": "87ec3668118219d78bf3fca07b0b338c1966e4fa2ef5be1e4c762803dcd998af",
+      "reportMtimeNs": 1792872152361947114,
+      "startedNs": 1792872146185212268,
+      "endedNs": 1792872152440489473,
+      "class": "ama.transcript.Task11PublicationManifestTest",
+      "name": "malformedShapeAndDigestRejected",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.transcript.Task11PublicationManifestTest",
+      "reportSha256": "87ec3668118219d78bf3fca07b0b338c1966e4fa2ef5be1e4c762803dcd998af",
+      "reportMtimeNs": 1792872152361947114,
+      "startedNs": 1792872146185212268,
+      "endedNs": 1792872152440489473,
+      "class": "ama.transcript.Task11PublicationManifestTest",
+      "name": "missingOrNullTransitionCannotHideProofs",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

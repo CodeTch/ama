@@ -1,0 +1,1040 @@
+{
+  "kind": "Task9 post-Task6 narrow committed-source delta map; preparation only",
+  "old_preflight_commit": "857102b917bbef77c38fae3211e3a65207a98c6c",
+  "committed_base": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+  "preflight_manifest_path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-source-alignment-preflight-20261024-source-manifest.json",
+  "preflight_manifest_sha256": "da80db8b992e1ce3bc72fbb2411bba9768730a6ee16f1fe4937ff88458baeeac",
+  "custody": "Product source and test reads via git show BASE:path. Range hashes include exact line terminators, inclusive one-based lines. Whole-file hash is custody, not full review. No runtime/test/DB/private-env reads.",
+  "changed_or_focused_committed": [
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "status_since_preflight": "added",
+      "sha256": "1082731ac484632f243f5ae6e9b03e7e5f00846de0b38a887653a713af0d8ea8",
+      "bytes": 4805,
+      "lines": 89,
+      "inspected_ranges": [
+        {
+          "start": 9,
+          "end": 12,
+          "sha256": "0d42e021eab5032fa47558fbdeea9745e44caab0228432a02428cfd53259fd1d",
+          "first_anchor": "public final class SourceReadLifetime implements AutoCloseable {",
+          "last_anchor": "private static final ScheduledThreadPoolExecutor TIMER;"
+        },
+        {
+          "start": 24,
+          "end": 46,
+          "sha256": "92172013f9a83f85fc2914be10136249e04a9ac93e1922c878955019a21f7991",
+          "first_anchor": "public SourceReadLifetime(PreparationCancellation signal,long deadline) throws Exception {",
+          "last_anchor": "}"
+        },
+        {
+          "start": 48,
+          "end": 80,
+          "sha256": "e9e35ff34f6079a824d410cda68cd0eaa583817e86be7d766e543c746616556a",
+          "first_anchor": "/** Admission is part of the same deny-only lifetime, before an SDK request exists. */",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "status_since_preflight": "changed",
+      "sha256": "0b3a791e3aa93cc63ef04e117b5f65e3b186c75f4b6a7f6b6f9b8aaab1d2a214",
+      "bytes": 9057,
+      "lines": 214,
+      "inspected_ranges": [
+        {
+          "start": 57,
+          "end": 111,
+          "sha256": "e40882ff23cc1085c1b0c29dda923d020d1d67e2b23e2b9c35b48f64f4122930",
+          "first_anchor": "private InputStream send(String operation, Request value, InputStream body) {",
+          "last_anchor": "private final java.util.concurrent.atomic.AtomicBoolean aborted=new java.util.concurrent.atomic.AtomicBoolean();"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "status_since_preflight": "added",
+      "sha256": "b26bdf44ac6538377d0ea29b5c53de1623b4c39e3b0856b71026521b6603b31b",
+      "bytes": 2614,
+      "lines": 45,
+      "inspected_ranges": [
+        {
+          "start": 9,
+          "end": 44,
+          "sha256": "cf05c7831eb9083d727a0835e7b4cf58fea72f924240fe8fc5774fc2c356f6d3",
+          "first_anchor": "/** Binds the actual Apache request before call(), including headers and SDK error/control reads. */",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/s3/S3Objects.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/storage/s3/S3Objects.java",
+      "status_since_preflight": "changed",
+      "sha256": "3d4df6d7eff8d8cb7c8b37df73dec23eb7508c3f427c808401dcd2ba1a70ce99",
+      "bytes": 7488,
+      "lines": 203,
+      "inspected_ranges": [
+        {
+          "start": 28,
+          "end": 42,
+          "sha256": "4afcfaa77975329bbeb77756240a92d1f7ea662d5218e7e45cba083f641cb1ba",
+          "first_anchor": "",
+          "last_anchor": ""
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "status_since_preflight": "changed",
+      "sha256": "5b9ffc7b767c01cdd51c1434318b8eb375fbf2e37a81b96107e8569eb714d39b",
+      "bytes": 14078,
+      "lines": 146,
+      "inspected_ranges": [
+        {
+          "start": 60,
+          "end": 98,
+          "sha256": "546e1844093d864d7402ce1579cc449cea73dbb822a79abcea958fc802dedbc2",
+          "first_anchor": "Carrier(Raw raw,BooleanSupplier cancelled){this.raw=raw;this.cancelled=cancelled;}",
+          "last_anchor": "return new Carrier(new Raw(lease,UUID.randomUUID().toString(),owner,input.string(\"batch_id\"),Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS),seg"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "status_since_preflight": "changed",
+      "sha256": "2bf351bc9625a0ba4491bdaf752da7c1499193cd9f96cabe0747e9d8b88529cf",
+      "bytes": 14374,
+      "lines": 242,
+      "inspected_ranges": [
+        {
+          "start": 204,
+          "end": 238,
+          "sha256": "98927bd32059775d6df2da7ffe5c73ca8629f488412d897a587b32c27c338d9b",
+          "first_anchor": "@Override public void close() {",
+          "last_anchor": "private static ThreadFactory threads(String prefix) {"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "status_since_preflight": "changed",
+      "sha256": "c9d331c12432222ec0bc93732317cc6f1a87fcde5a65dcd22c87c2a983d99f48",
+      "bytes": 3628,
+      "lines": 50,
+      "inspected_ranges": [
+        {
+          "start": 35,
+          "end": 50,
+          "sha256": "e63b74c4b5711fb6a81e9c7ba5be95404f8d17630ba70bb6e48f51201fca8ac7",
+          "first_anchor": "public static final class Runtime implements WorkerRuntime {",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "status_since_preflight": "added",
+      "sha256": "720a77843bf23829d5ff3da8aae9fbe2ee52855b9eb61fc962475d1024e8f994",
+      "bytes": 32920,
+      "lines": 241,
+      "inspected_ranges": [
+        {
+          "start": 34,
+          "end": 87,
+          "sha256": "ebe155dd560699b8c1310ae1a266cda9b9e9947fff5cc1ad59129f841361dbdf",
+          "first_anchor": "private Selection discover(String meeting,String revision,TranscriptAcquisitionBudget.Ledger budget){",
+          "last_anchor": "});"
+        },
+        {
+          "start": 136,
+          "end": 176,
+          "sha256": "7ae325c9ba5f790db87eb6b99e620f8663d9dfe35a65af99924f9c76f4ce70ac",
+          "first_anchor": "public Map<String,Object> readOwner(Actor actor,String meeting,String revision){uuid(revision);return read(actor,meeting,revision,JdbcTranscriptAuthority.SavedP",
+          "last_anchor": "return projection(expected,owner);"
+        },
+        {
+          "start": 179,
+          "end": 225,
+          "sha256": "8f9178af7c7f82d90f7e7353df4d7f03038574a08657e44a371d4c0fbcb1b99a",
+          "first_anchor": "private Prepared prepare(SavedTranscriptGraph graph,TranscriptAcquisitionBudget.Ledger budget){",
+          "last_anchor": "out.put(\"confirmation\",confirmation!=null&&Boolean.TRUE.equals(confirmation.get(\"isCurrent\"))?confirmation:null);if(owner)out.put(\"selectedConfirmation\",confirm"
+        },
+        {
+          "start": 230,
+          "end": 240,
+          "sha256": "a54c5db5b534865fedb9b449aa2b5218c0ad86e981f8ac5b1f3bc791c610e845",
+          "first_anchor": "private Map<String,Object> detail(SavedTranscriptGraph g,boolean owner){",
+          "last_anchor": "private static void cancellation(RuntimeException error){if(Thread.currentThread().isInterrupted()||error instanceof Failure f&&f.code()==CANCELLED)throw error;"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscriptReceipts.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscriptReceipts.java",
+      "status_since_preflight": "added",
+      "sha256": "64d03eccbe8c1394a1726473facd649ba9127bd05f767e7e3b0f3a0519514dba",
+      "bytes": 7110,
+      "lines": 62,
+      "inspected_ranges": [
+        {
+          "start": 16,
+          "end": 53,
+          "sha256": "4c944b951797940f885fd219b9fa322824dec73bb31af05b141b1a90ae346c5b",
+          "first_anchor": "record Identity(String scope,String key,String request,String operation) {}",
+          "last_anchor": "private static Failure unavailable(){return new Failure(503,\"PROVENANCE_UNAVAILABLE\");}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "status_since_preflight": "changed",
+      "sha256": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+      "bytes": 40777,
+      "lines": 396,
+      "inspected_ranges": [
+        {
+          "start": 201,
+          "end": 229,
+          "sha256": "b26aad702a3b80901a81072dcf77f907b422a1583dbf8c0d5d42c847fd6cc81a",
+          "first_anchor": "enum SavedPurpose { OWNER_INSPECTION, CURRENT, MUTATION }",
+          "last_anchor": "void requireTaskPurpose(Actor actor,String meeting){purposes.require(actor,meeting,PURPOSE);}"
+        },
+        {
+          "start": 274,
+          "end": 340,
+          "sha256": "a9c3362b1407c875f97a2b993dc7cf847ff15da5bcfe4a403dc8df5bec743999",
+          "first_anchor": "private final class TaskUnion {",
+          "last_anchor": "return scope.prepared.graph.members.stream().map(m->new CompleteReadPolicy.ReadMember(reference(scope),TranscriptReadGraph.text(m,\"file_id\"))).toList();"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+      "status_since_preflight": "added",
+      "sha256": "bc393ba23f5c1b618bf00cef44c59e45c937feb598a5a20cc161f415d347147f",
+      "bytes": 13380,
+      "lines": 114,
+      "inspected_ranges": [
+        {
+          "start": 16,
+          "end": 19,
+          "sha256": "c55efeab23627294f202c778c5a3117e6dad509bc25def7e6e5492c211149f7f",
+          "first_anchor": "static final Shape ROOT=metadata(\"meeting\",\"id\",\"id owner_id revision# cancel_epoch# access_revision# stage lifecycle governance_state ever_published# transcrip",
+          "last_anchor": "static final Shape TASK=metadata(\"durable_task\",\"id\",BoundedTranscriptMetadata.TASK+\" state output_kind output_id\");"
+        },
+        {
+          "start": 20,
+          "end": 49,
+          "sha256": "50f8ef2d292edfb90b11af099cfa3b34cc11091c61c06a8fc60e7daeabe29940",
+          "first_anchor": "record Discovery(String selected,SortedMap<String,List<String>> ancestry) {}",
+          "last_anchor": "}"
+        },
+        {
+          "start": 50,
+          "end": 107,
+          "sha256": "b3593588329fb69b0baa3d8260572caea3433767e096d3bf6998cb7d2fdb8be2",
+          "first_anchor": "int maxRows=(int)Math.min(Integer.MAX_VALUE-2L,authority.readBudget().maxFactRows());",
+          "last_anchor": "return new SavedTranscriptGraph(meeting,discovered.selected,root,List.copyOf(rows),List.copyOf(sessions),List.copyOf(files),task,(String)profileRows.getFirst()."
+        },
+        {
+          "start": 109,
+          "end": 113,
+          "sha256": "00deb87d7f8339bc5722171c512dd3a5e93cceba1be1dd05357db6f5603a3fc4",
+          "first_anchor": "StoredProvenanceFacts facts(long maximum){return new StoredProvenanceFacts(rows,files.stream().map(f->new ContentFile((String)f.get(\"id\"),(String)f.get(\"sha256\"",
+          "last_anchor": "static long num(Map<String,Object> map,String name){Object n=map.get(name);require(n instanceof Long,PROVENANCE_UNAVAILABLE);return (Long)n;}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java",
+      "status_since_preflight": "added",
+      "sha256": "994ea23103299bb4d6c83d3fb313ddc872a5e027278593a30dbb022153d1d968",
+      "bytes": 7115,
+      "lines": 83,
+      "inspected_ranges": [
+        {
+          "start": 20,
+          "end": 40,
+          "sha256": "92df4c180fd74d5c2855f720b5af0b9d3bbfa3cffd05994452643951d92d483e",
+          "first_anchor": "List<FullRow> rows(Table t,String where,String order,int max,boolean projected,Object...args){",
+          "last_anchor": "void reserveTaskId(){budget.row(1);budget.capture(36,36,36,4);}"
+        },
+        {
+          "start": 41,
+          "end": 80,
+          "sha256": "dc14f92dc405679263e992cbc29552c7b5a76872e7799a06257d96ea8b01bc88",
+          "first_anchor": "private List<Measured> admit(Shape shape,String where,String order,int maximum,boolean projected,Object...args){",
+          "last_anchor": "budget.check();return List.copyOf(result);"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java",
+      "status_since_preflight": "added",
+      "sha256": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+      "bytes": 3770,
+      "lines": 34,
+      "inspected_ranges": [
+        {
+          "start": 12,
+          "end": 33,
+          "sha256": "71288c4f79d4cbaddad3d89b99deb04b5970eefd129faa3744d83d68d9219f3d",
+          "first_anchor": "public record SavedTranscriptAdmission(String indexSha,CanonicalBudget canonical,List<Map<String,Object>> originals) {",
+          "last_anchor": "public static CanonicalBudget minimum(CanonicalBudget a,CanonicalBudget b){return new CanonicalBudget(Math.min(a.maxEncodedBytes(),b.maxEncodedBytes()),Math.min"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "status_since_preflight": "added",
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "bytes": 75,
+      "lines": 1,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 1,
+          "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+          "first_anchor": "CREATE INDEX task_input_lookup ON durable_task (input_kind, input_id, id);",
+          "last_anchor": "CREATE INDEX task_input_lookup ON durable_task (input_kind, input_id, id);"
+        }
+      ]
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "status_since_preflight": "changed",
+      "sha256": "2a772b4587298ca39fd92ab5031d5178657828689cc70c4ce9e195ad1d904382",
+      "bytes": 37168,
+      "lines": 354,
+      "inspected_ranges": [
+        {
+          "start": 324,
+          "end": 353,
+          "sha256": "068b059f0a69db7c40b7e1de08bdd024172d95cbaff0ebe809f6c0302aeb4329",
+          "first_anchor": "public record GraphSelection(String meetingId,String minutesRevisionId,String elementSetId,String exclusionRevisionId,String appliedInputId) {",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/TranscriptContracts.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/contracts/src/main/java/ama/contract/TranscriptContracts.java",
+      "status_since_preflight": "added",
+      "sha256": "0e8aa4395ee1b4a7354565a374c86da171cf166067c5b9594866df8474c29081",
+      "bytes": 1724,
+      "lines": 18,
+      "inspected_ranges": [
+        {
+          "start": 4,
+          "end": 17,
+          "sha256": "2f73f6aaabbb70949887eec890b1a52563ccb07e6a9296c6bc8111acf9ffb9bc",
+          "first_anchor": "/** Stable protocol envelope; deployment admission is separate and follows accepted-result lookup. */",
+          "last_anchor": "public static final class Failure extends RuntimeException {private final int status;private final String code;public Failure(int status,String code){super(code"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+      "status_since_preflight": "changed",
+      "sha256": "7a92026a2553e1209544db14d4f3bd6f8879c17bdba6e909a7fca75e39b074a2",
+      "bytes": 18512,
+      "lines": 187,
+      "inspected_ranges": [
+        {
+          "start": 130,
+          "end": 155,
+          "sha256": "a5be02d0d6360959a6e018ebb317bbb112f39d321f4d34ada8528af15b4ad3ca",
+          "first_anchor": "record SavedTranscript(FullRow revision,FullRow batch,List<FullRow> segments,List<FullRow> files) {}",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/TranscriptConfirmationHash.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/core/src/main/java/ama/minutes/contract/TranscriptConfirmationHash.java",
+      "status_since_preflight": "changed",
+      "sha256": "82e6093254f1a9c76d3e119bfeaef295de35418c1b466d06958b7891022037bc",
+      "bytes": 6240,
+      "lines": 74,
+      "inspected_ranges": [
+        {
+          "start": 22,
+          "end": 70,
+          "sha256": "9f7c74884b689cd4553a8928f47f83cdf76b08715ed6914c1d941d51e8200a02",
+          "first_anchor": "static CanonicalValue data(String confirmationId,StoredFactsIndex index){",
+          "last_anchor": "return DomainHash.hash(profile,PROFILE,\"TRANSCRIPT_CONFIRMATION\",savedData(meeting,revision.string(\"id\"),index),minimum(budget.canonical(),resolver.processingBu"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java",
+      "status_since_preflight": "added",
+      "sha256": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076",
+      "bytes": 3762,
+      "lines": 42,
+      "inspected_ranges": [
+        {
+          "start": 8,
+          "end": 40,
+          "sha256": "1ace798eb4f4a5bfcef2583e38047e52c66072ee004d81bcebb70fe19119948c",
+          "first_anchor": "public record TranscriptAcquisitionBudget(long utf8,long scalars,long utf16,long copyBytes,long copyUtf16,long responseBytes,int revisionDepth,int revisionNodes",
+          "last_anchor": "public void check(){ama.contract.MinutesContracts.check(cancel);require(System.nanoTime()-deadline<0,BUDGET_EXCEEDED);}"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java",
+      "status_since_preflight": "added",
+      "sha256": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+      "bytes": 1283,
+      "lines": 10,
+      "inspected_ranges": [
+        {
+          "start": 3,
+          "end": 10,
+          "sha256": "82c77e581d699fd8a26828bf63edfdedc7f62677f9d94eedd65b6a75d0aab855",
+          "first_anchor": "/** Installation boundary for future Task10 disposition and Task11 publication freeze. */",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/TranscriptConfiguration.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/api/src/main/java/ama/api/TranscriptConfiguration.java",
+      "status_since_preflight": "added",
+      "sha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+      "bytes": 6803,
+      "lines": 45,
+      "inspected_ranges": [
+        {
+          "start": 17,
+          "end": 39,
+          "sha256": "088d3e32738e239676108ce0a26efd4a52abe6c5d4cd3aa3c99d7c1954111dd9",
+          "first_anchor": "record Runtime(JdbcSavedTranscripts service,CorrectionInstallation correction,Map<String,Object> qualification) {}",
+          "last_anchor": "return new Runtime(service,correction,Collections.unmodifiableMap(receipt));"
+        }
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/TranscriptController.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/api/src/main/java/ama/api/TranscriptController.java",
+      "status_since_preflight": "added",
+      "sha256": "3e39bf1d96022e5f6859cc5d50d80924b3c5e4b2c5ab24f6314677250d52757b",
+      "bytes": 7667,
+      "lines": 44,
+      "inspected_ranges": [
+        {
+          "start": 13,
+          "end": 43,
+          "sha256": "f902dac33766023df0cef2e476e6823fb328c01f5583755835dbcfa3dc5edd46",
+          "first_anchor": "@RestController @RequestMapping(\"/api/v1/meetings/{meetingId}/transcript\") class TranscriptController {",
+          "last_anchor": "private static Actor actor(HttpServletRequest request){return ((ResolvedSession)request.getAttribute(SessionSecurityFilter.SESSION)).actor();}"
+        }
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/SessionSecurityFilter.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/api/src/main/java/ama/api/SessionSecurityFilter.java",
+      "status_since_preflight": "changed",
+      "sha256": "bd92c8e7b18134a2b58f0b1f5203f22800fd79a0d54c54acd857081ff38c0882",
+      "bytes": 4054,
+      "lines": 61,
+      "inspected_ranges": [
+        {
+          "start": 23,
+          "end": 44,
+          "sha256": "c5b6904c0ea4ac8e8029df317297b9bfd3729e897177d0cc047cd937318c52c6",
+          "first_anchor": "@Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {",
+          "last_anchor": "if (!List.of(\"GET\", \"HEAD\", \"OPTIONS\").contains(request.getMethod())) {"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06IndexedTasksIT.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/integration-tests/src/test/java/ama/storage/Task06IndexedTasksIT.java",
+      "status_since_preflight": "added",
+      "sha256": "e71c48726948e1f90952f65e482fb6d8bbb7a326fec8cad5cb9625dad4306ef4",
+      "bytes": 10496,
+      "lines": 50,
+      "inspected_ranges": [
+        {
+          "start": 4,
+          "end": 49,
+          "sha256": "3f00153652f2928168d3350d79cc4d3933c61f47d0f77db2c05f7f3e72b18035",
+          "first_anchor": "@Test void completeInputMembershipUsesForcedIndexThenExactProducerPkInBothIsolationLevels()throws Exception{",
+          "last_anchor": ""
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixProvenanceIT.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/integration-tests/src/test/java/ama/storage/Task06FixProvenanceIT.java",
+      "status_since_preflight": "added",
+      "sha256": "6df8ef0db5def28886d5e36443611b8a51a3eb33265bc70c72d8b722a256c90a",
+      "bytes": 10553,
+      "lines": 44,
+      "inspected_ranges": [
+        {
+          "start": 10,
+          "end": 43,
+          "sha256": "ce904ac5ba4a9cceb3ce1d2502cb77ae64e598b5f8538c52736c1202131939d7",
+          "first_anchor": "void extraTaskProbe(String label,String sourceTask,String subject,Runnable read)throws Exception{",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixIntegrityIT.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/integration-tests/src/test/java/ama/storage/Task06FixIntegrityIT.java",
+      "status_since_preflight": "added",
+      "sha256": "f34b8ace2a60d299af3700a64d1f7ccd974214b9d95531906249c0f0278dfca7",
+      "bytes": 3656,
+      "lines": 21,
+      "inspected_ranges": [
+        {
+          "start": 5,
+          "end": 20,
+          "sha256": "9f1676f20661981aa563b265a579f99caef0f7e048cab9abd8dff06ff54bd9a3",
+          "first_anchor": "@Test void everyAppendReservesProspectiveDepthAndNodeAtBoundary()throws Exception {",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06TaskQueryPlanIT.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/integration-tests/src/test/java/ama/storage/Task06TaskQueryPlanIT.java",
+      "status_since_preflight": "added",
+      "sha256": "ef5e5c9bc43dac3b9136e59ed7ab5e35d2630a209aab5293c0c6a782652fef73",
+      "bytes": 1633,
+      "lines": 5,
+      "inspected_ranges": [
+        {
+          "start": 4,
+          "end": 5,
+          "sha256": "c6e1a91536a334ccc25617cadedd9c68b204bb587cdc3067fe6caacde71d4ec2",
+          "first_anchor": "@Test void actualTaskIndexesAndSubjectBoundedPlan()throws Exception{String raw=raw(),task=j.queryForObject(\"SELECT producer_task_id FROM transcript_revision WHE",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixLocksIT.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/integration-tests/src/test/java/ama/storage/Task06FixLocksIT.java",
+      "status_since_preflight": "added",
+      "sha256": "4d72cda0b41cbb55560216ed4f3626a3443b148f9b0feaa6124cd48c3d1acc02",
+      "bytes": 4412,
+      "lines": 19,
+      "inspected_ranges": [
+        {
+          "start": 5,
+          "end": 18,
+          "sha256": "0f09a6218ec7653053b726cda35ef13c15a628b4a72d223cc21202c59b423ed9",
+          "first_anchor": "@Test void retainedCompleteSetsDefaultIsolation()throws Exception{exercise(null);}",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06SavedGraphIT.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/integration-tests/src/test/java/ama/storage/Task06SavedGraphIT.java",
+      "status_since_preflight": "added",
+      "sha256": "76803c06622792e7cbf304dbdbd49ed2d5bc85ddbf5f67b4b2cb1e4071987ebc",
+      "bytes": 1115,
+      "lines": 19,
+      "inspected_ranges": [
+        {
+          "start": 12,
+          "end": 18,
+          "sha256": "c15d68fc8ef201cccb141c9395219b876fbcf06302a93131015fde0ac312af53",
+          "first_anchor": "@Test void noninstalledCompleteRawInspectionPreservesActualBodyAndExplicitEmptyMarks()throws Exception {",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task06InheritedPreparedCompletionIT.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/integration-tests/src/test/java/ama/task/Task06InheritedPreparedCompletionIT.java",
+      "status_since_preflight": "added",
+      "sha256": "ae57fdac77552a51c64522fd8c97ad42d470b392657e5067f89f5e86587a6650",
+      "bytes": 18131,
+      "lines": 240,
+      "inspected_ranges": [
+        {
+          "start": 75,
+          "end": 82,
+          "sha256": "2774e4ffc2ea68d08ced80850992ada659a68c23e90dc27a62fc1da17b2668d3",
+          "first_anchor": "@BeforeAll static void migrateOwnedEmptyFixture() {",
+          "last_anchor": "@BeforeEach void setup() {"
+        },
+        {
+          "start": 112,
+          "end": 165,
+          "sha256": "0db6e56e49aa8efdafca3dc8d0c8f4e4b64142c612be7eb6c841d4008a35684b",
+          "first_anchor": "@Test void newOutputIsWrittenBeforeValidationAndCommitsWithTaskAndAttempt() {",
+          "last_anchor": "@Test void auditFailureRollsBackOutputTaskAttemptAndOutbox() {"
+        },
+        {
+          "start": 239,
+          "end": 240,
+          "sha256": "7414a12a7610a790472ead283759dc7fcd98ae233aafb021b90a2248085be64c",
+          "first_anchor": "@AfterEach void closeOwnedFixture()throws Exception {failAudit.set(false);failFlush.set(false);failEvent.set(false);tx.required(()->{var ids=jdbc.queryForList(\"",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedFactsReaderIT.java",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:backend/integration-tests/src/test/java/ama/transcript/Task06InheritedFactsReaderIT.java",
+      "status_since_preflight": "added",
+      "sha256": "4cba9f6fc9705e5b2652c146d04cf122db45d47c456031f16783d358d60569c2",
+      "bytes": 17167,
+      "lines": 156,
+      "inspected_ranges": [
+        {
+          "start": 14,
+          "end": 49,
+          "sha256": "517f15066c62a32684366e2d751b71e507d32a5fb9ead2279851b2798676c375",
+          "first_anchor": "@Test void readsCompleteStoredProcessingFromActualRows(){",
+          "last_anchor": "}"
+        },
+        {
+          "start": 80,
+          "end": 126,
+          "sha256": "66cdd53cbbd98aa23d9fa820a8a7feb812f91e787afb861fa9fc28f6f4df5cad",
+          "first_anchor": "@Test void octetLengthGatePrecedesLongtextTransferAndRowsUseCurrentReads() {",
+          "last_anchor": "@Test void supplementaryManifestUtf16LimitPrecedesLongtextProjection() {"
+        }
+      ]
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:contracts/openapi/api.yaml",
+      "status_since_preflight": "changed",
+      "sha256": "085fd6c00d84f7d469c327d2316f8aed434bc1e6729a713c5b5573cf57b2af19",
+      "bytes": 3533,
+      "lines": 86,
+      "inspected_ranges": [
+        {
+          "start": 20,
+          "end": 65,
+          "sha256": "f0f9445f9a4d3f1ac3bcdd42aeaa6e80a19e5441f2f8272ef3d1f17b2359203e",
+          "first_anchor": "/api/v1/directory/people:",
+          "last_anchor": "$ref: './transcripts.yaml#/marks'"
+        }
+      ]
+    },
+    {
+      "path": "contracts/openapi/transcripts.yaml",
+      "source": "git show 12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6:contracts/openapi/transcripts.yaml",
+      "status_since_preflight": "added",
+      "sha256": "207cf5409fecfea7a594158fb952780af74a876e84b8e5bba85a553773be3dcc",
+      "bytes": 116651,
+      "lines": 4041,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 40,
+          "sha256": "b3c6787ad5c6f15088ff831e2082786bc49b3c3ead2cfdcca62af2d5bf3dc83d",
+          "first_anchor": "{",
+          "last_anchor": "},"
+        }
+      ]
+    }
+  ],
+  "preflight_assertions_carried_by_exact_source_equivalence": [
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "sha256": "79adef52e2fc6886b0a279d7272ab5e855ee5d6586b66e0dcd629b81035a3c0a",
+      "bytes": 21843,
+      "lines": 185,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigSchema.java",
+      "sha256": "20207ac4da3ec1b9566f9ed24f812605a660fe7179dee242990c5bbd6e6badba",
+      "bytes": 10265,
+      "lines": 83,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8",
+      "bytes": 741,
+      "lines": 17,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25",
+      "bytes": 1466,
+      "lines": 22,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java",
+      "sha256": "9897d025afebbc9d042b148362d6ca9474099ac0a666856d476cb4d0b83a20a3",
+      "bytes": 15846,
+      "lines": 139,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OutputValidation.java",
+      "sha256": "98df9ea7b45ee5266327b1336adde5f01e82a701fae6f6e73c21b6f0f06e6c06",
+      "bytes": 3752,
+      "lines": 57,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/CreationSupport.java",
+      "sha256": "003b2d0081938c011caaee11748a4b6de46d9388e47f5f9bd6d759b3c4148186",
+      "bytes": 1505,
+      "lines": 23,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ModelOutputReader.java",
+      "sha256": "72b3fa65abb8dee94f1729a0cc5ef8a5aa28e642f2bbab9731729fb5dceb74c1",
+      "bytes": 819,
+      "lines": 12,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OriginChainVerifier.java",
+      "sha256": "7c2022a0ab317829613afe6bd074e48353d825ab36c7ac8a67b2a50cb0a08af0",
+      "bytes": 2402,
+      "lines": 35,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/RowsetProjection.java",
+      "sha256": "c550bc224504152c6eee559a7a5ee99f2709ac4ea2ccb2cd8da1d16baf16f4ec",
+      "bytes": 4246,
+      "lines": 47,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredFactsIndex.java",
+      "sha256": "d3a1feaa336e7abef93de75ff708e3e0d0aa6de1fdaa60f03ac797db7a9a1f7d",
+      "bytes": 7398,
+      "lines": 79,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+      "sha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8",
+      "bytes": 16170,
+      "lines": 158,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d",
+      "bytes": 717,
+      "lines": 14,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+      "sha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620",
+      "bytes": 2647,
+      "lines": 43,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+      "sha256": "6230e84a6294c5252d149db66d8ba1ef2eca50bb2e26eff5b4a25851eecdee08",
+      "bytes": 1613,
+      "lines": 25,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ModelPermitPool.java",
+      "sha256": "f6b9b10755583686d7e1984940e2bf8ecbdc5e7df29d45c4e9f0146f45c03f32",
+      "bytes": 836,
+      "lines": 17,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskQueue.java",
+      "sha256": "756036a23b7c101b3a6bf90dd56617b87b7425da1e3b1b76ee72bed87351d4f4",
+      "bytes": 1353,
+      "lines": 27,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e",
+      "bytes": 7759,
+      "lines": 85,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/json/StrictMinutesJsonReader.java",
+      "sha256": "976954647aaa6b8fd5ad5168ac6f6d64532d1d34dfe199e8dd8635bfbaf08593",
+      "bytes": 12592,
+      "lines": 175,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "sha256": "410331e9d9957440c459a1b3ac6558bbad510c82416fa6b57be75c08393e183a",
+      "bytes": 17372,
+      "lines": 245,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ImportTaskDomainPolicy.java",
+      "sha256": "f1f75c031c0129ee0f3b9d9e5d737d4dca5c7cf0d72e359befa409ab20bab342",
+      "bytes": 14273,
+      "lines": 174,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java",
+      "sha256": "0b158c87197700310499935b8b6ff7e60d8b4ba971818d02c6caa4f812ab3166",
+      "bytes": 15682,
+      "lines": 194,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "sha256": "75917561fcd0e91cdf097997189a3c28d7998bbaf28db62c16a8162f6bdb64ec",
+      "bytes": 10622,
+      "lines": 135,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905",
+      "bytes": 3050,
+      "lines": 51,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "sha256": "05d9965f0d448d37295680288aeb46c79d3908fc943edb6955c10d0fec94bc64",
+      "bytes": 21398,
+      "lines": 218,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "sha256": "63e84274395c74c8d5e5375fcfc898c5cc39f19447318a2093eebaff1496ad19",
+      "bytes": 19114,
+      "lines": 176,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java",
+      "sha256": "229db724cc7eec612060eaed2b689258485dae861c3202d4cd665b902619281d",
+      "bytes": 6961,
+      "lines": 74,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java",
+      "sha256": "eeb7ba5eb2dbb57606b42ee72a21f7395d53d2355d35a2ad6d0b1a710e086e2e",
+      "bytes": 2319,
+      "lines": 29,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MeetingController.java",
+      "sha256": "0329f1afa1f2a2484a0f1c904de593bf298a2f31525f9664f4a7bac63e6c06ea",
+      "bytes": 5095,
+      "lines": 64,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/HttpRevisionTokens.java",
+      "sha256": "f81b6e91ccc5e69bda2e97c1198b944cceab66bec401ebba0fd9c55eec8edf06",
+      "bytes": 1778,
+      "lines": 32,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "bytes": 21260,
+      "lines": 335,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "bytes": 35136,
+      "lines": 225,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "bytes": 1817,
+      "lines": 34,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/TaskFixture.java",
+      "sha256": "032d7842bfaf1f0ff71fecc5a4674bed4dcd5057b555a9f9000e87d60f7dd22d",
+      "bytes": 5518,
+      "lines": 65,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+      "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3",
+      "bytes": 8133,
+      "lines": 62,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+      "sha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2",
+      "bytes": 16024,
+      "lines": 155,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9",
+      "bytes": 7590,
+      "lines": 74,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/ExternalExecutionIT.java",
+      "sha256": "1699ba7e6627ce9eb811aa8b816fa83464c0af26332b90279f8a9c4b5c37dd29",
+      "bytes": 11485,
+      "lines": 45,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/ModelPermitIT.java",
+      "sha256": "415b930e8e76a02826eb8be5f29d415f95827d2a71f681f6d1f1fe54efbf0fc8",
+      "bytes": 6598,
+      "lines": 25,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/PreparedCompletionIT.java",
+      "sha256": "d3296fd1bcbfbec7d97acfe77044a146535c0ea6384dc1531a42423d66f03c5b",
+      "bytes": 16868,
+      "lines": 239,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/db/MinutesSchemaIT.java",
+      "sha256": "414721c6d2d9e24ed5e5793676680051006fee581d1205bc68109445c1deda2b",
+      "bytes": 37396,
+      "lines": 481,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/identity/IdentityAccessIT.java",
+      "sha256": "c11bb807711682d4cc5fb0d9ca61d45392acafbd48fff1d0dc5e3f9203610c45",
+      "bytes": 17065,
+      "lines": 212,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/support/MysqlTestDatabase.java",
+      "sha256": "a734c9bc0c30e0e176d28fe1505c4d7d0a2a7dc188a09f31d4c38f79a96c878a",
+      "bytes": 1465,
+      "lines": 31,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/GenerationFingerprintTest.java",
+      "sha256": "542ec403f8b8dd835841ef37c2a0df3763af32d750f6118ba43029df423545cf",
+      "bytes": 2544,
+      "lines": 35,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/StoredSourceGraphTest.java",
+      "sha256": "2da3c1eed8202db20afc2d736bd41f1d220556ff600f66b65729b14b363ce9c1",
+      "bytes": 10743,
+      "lines": 117,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/SourceAndSupportTest.java",
+      "sha256": "2e0cc389fb909d033bed176175b2097e30ead12bce3706b6e11430b6960f4bc0",
+      "bytes": 5950,
+      "lines": 69,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/FinalAndCoverageTest.java",
+      "sha256": "a63d4dbbdf62209d132c59cffb2b42bc7c17cd65a84283d3fa1be9de719b48bf",
+      "bytes": 3468,
+      "lines": 45,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/HashProfilesTest.java",
+      "sha256": "d3084a6dda0e1f910dc3adacc4b71b841a585145797d444ebf0341dfdcd56574",
+      "bytes": 7541,
+      "lines": 88,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/ConfigBindingsTest.java",
+      "sha256": "a7742d7571a060e101592bd0ee316273f1050dc5406e2999828b545afdf123cd",
+      "bytes": 8480,
+      "lines": 75,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/minutes/json/StrictMinutesJsonReaderTest.java",
+      "sha256": "fb5e79d53f56b5c55f692a8fedeb6feb0015168c27ef15e20ef773a536b206f6",
+      "bytes": 8390,
+      "lines": 94,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/minutes/json/OutputBudgetBoundaryTest.java",
+      "sha256": "48842e2461c8a9cbf4925a93b85d8dc22181e721f59b9d39f3e7d5d544a40b92",
+      "bytes": 4381,
+      "lines": 42,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+      "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61",
+      "bytes": 20262,
+      "lines": 200,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    },
+    {
+      "path": "backend/contracts/src/test/java/ama/contract/MinutesFactBudgetTest.java",
+      "sha256": "3ad2c0a8585f348a0a244492a2816f207d9733776a61554b5c90efce67c03827",
+      "bytes": 2265,
+      "lines": 35,
+      "equivalence": "raw git show BASE equals old preflight hash"
+    }
+  ],
+  "pending_repin": [
+    "Task8 final adopted source",
+    "Task7 final adopted source",
+    "Task9/10 shared facade at activation"
+  ]
+}

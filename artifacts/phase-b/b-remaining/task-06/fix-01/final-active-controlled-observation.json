@@ -1,0 +1,36 @@
+{
+  "query": "SELECT JSON_OBJECT('task',t.id,'type',t.task_type,'pool',t.pool,'subjectKind',t.subject_kind,'subject',t.subject_id,'state',t.state,'owner',m.owner_id,'created',t.created_at) FROM durable_task t LEFT JOIN meeting m ON t.subject_kind='MEETING' AND m.id=t.subject_id WHERE t.state IN ('READY','RUNNING','RECONCILING') AND (t.pool LIKE 'TASK06%' OR m.owner_id LIKE 'task06%' OR m.owner_id LIKE 'b06-restart-%') ORDER BY t.id;",
+  "rows": [
+    {
+      "pool": "B06_RESTART_TEST",
+      "task": "4c996fbe-be1e-444b-9378-f1ce6a59dc46",
+      "type": "B06_RESTART_TEST",
+      "owner": "b06-restart-4547a5ec-21bc-4cc7-a678-083cc2a09272",
+      "state": "READY",
+      "created": "2026-10-23 08:14:28.757157",
+      "subject": "cb25bb11-ec4c-4eea-9985-926801d99908",
+      "subjectKind": "MEETING"
+    },
+    {
+      "pool": "B06_RESTART_TEST",
+      "task": "8b50ec17-9d30-417d-aab7-560d1f5b5ad5",
+      "type": "B06_RESTART_TEST",
+      "owner": "b06-restart-661dd71a-6a59-496a-b19a-f52808c655a0",
+      "state": "READY",
+      "created": "2026-10-23 05:57:08.600297",
+      "subject": "d92cd10b-4f26-4f08-a667-adc1d1520f8b",
+      "subjectKind": "MEETING"
+    }
+  ],
+  "scope": "SELECT-only namespace observation; no cancellation or cleanup",
+  "globalStateCounts": {
+    "FAILED": 109,
+    "READY": 72,
+    "STALE": 17,
+    "RECONCILING": 23,
+    "RUNNING": 110,
+    "SUCCEEDED": 300,
+    "CANCELLED": 224
+  },
+  "interpretation": "READY+RUNNING=182 historical count; including RECONCILING gives205. Two matching b06-restart READY rows predate fix01 and remain untouched."
+}

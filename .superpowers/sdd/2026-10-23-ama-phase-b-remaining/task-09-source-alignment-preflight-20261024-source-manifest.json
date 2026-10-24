@@ -1,0 +1,585 @@
+{
+  "kind": "Task9 source alignment preparation only",
+  "date": "2026-10-24",
+  "baseline_commit": "857102b917bbef77c38fae3211e3a65207a98c6c",
+  "worktree": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "meaning": "Raw committed file hashes and actual inspected scopes, not complete-source review, adoption or runtime qualification. Whole-file hashing does not mean unprinted bodies were reviewed. No tests/runtime operations executed.",
+  "committed": [
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design.md",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design.md",
+      "sha256": "cf174e2a54827da3c2e2152dbddf7cfc292680882e676f0291fd1c014835c56b",
+      "bytes": 70518,
+      "lines": 309,
+      "inspected_scope": "full R1 and full original/R1 byte-exact delta; all original unchanged content covered through R1"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-r1.md",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-r1.md",
+      "sha256": "b1b3343a1216b9df621c3db560412fdde908499890823c9e75820e620969add2",
+      "bytes": 70871,
+      "lines": 309,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-r1-closure.md",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-r1-closure.md",
+      "sha256": "8192adacd6a1e333524502cf21e6283a35b0f34dd7b0d96038296da3844c4fe5",
+      "bytes": 4557,
+      "lines": 28,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-review.md",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-review.md",
+      "sha256": "3a2458bc60723256906103b260bdc20afab9e9cd2f83ad9d22da276b794d7e1a",
+      "bytes": 12975,
+      "lines": 49,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-r1-review.md",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-minutes-generation-design-r1-review.md",
+      "sha256": "2c563fb7485c3af5905f1f23d78d5af2edbd40ba570154431815aa14364e3103",
+      "bytes": 4564,
+      "lines": 44,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-10-shared-rank-ruling.md",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:artifacts/phase-b/b-remaining/controller-minutes-generation-design/task-09-10-shared-rank-ruling.md",
+      "sha256": "3b10ab12f46f7b4a2f70a91871f20d4f4052662b1cfee2b08700b02188b6bc75",
+      "bytes": 3478,
+      "lines": 13,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-generation.md",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-generation.md",
+      "sha256": "99746a067ed0386f15817d06c09762feb87d2071387fc50d50d47b6195b109db",
+      "bytes": 4449,
+      "lines": 17,
+      "inspected_scope": "full including normative R1 through end"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-controlled-runtime.md",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:docs/superpowers/specs/2026-10-23-ama-phase-b-controlled-runtime.md",
+      "sha256": "8bec16ce2935cef50aee5771c4be3ea899db11fed28e4255b2feeb2f7a016b54",
+      "bytes": 20733,
+      "lines": 81,
+      "inspected_scope": "full including normative R1 through end"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "sha256": "a37aeb05d3ae8aa95434b34c324887891262b2e63515ca4a29771e8ed3ff2db9",
+      "bytes": 36849,
+      "lines": 350,
+      "inspected_scope": "selected definitions through350; full289-308,324-350"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "sha256": "79adef52e2fc6886b0a279d7272ab5e855ee5d6586b66e0dcd629b81035a3c0a",
+      "bytes": 21843,
+      "lines": 185,
+      "inspected_scope": "selected declarations15-185; full128-185"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigSchema.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/config/ConfigSchema.java",
+      "sha256": "20207ac4da3ec1b9566f9ed24f812605a660fe7179dee242990c5bbd6e6badba",
+      "bytes": 10265,
+      "lines": 83,
+      "inspected_scope": "selected schema/budget/declarations12-75"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8",
+      "bytes": 741,
+      "lines": 17,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25",
+      "bytes": 1466,
+      "lines": 22,
+      "inspected_scope": "definitions9-22"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java",
+      "sha256": "9897d025afebbc9d042b148362d6ca9474099ac0a666856d476cb4d0b83a20a3",
+      "bytes": 15846,
+      "lines": 139,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OutputValidation.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/minutes/contract/OutputValidation.java",
+      "sha256": "98df9ea7b45ee5266327b1336adde5f01e82a701fae6f6e73c21b6f0f06e6c06",
+      "bytes": 3752,
+      "lines": 57,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/CreationSupport.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/minutes/contract/CreationSupport.java",
+      "sha256": "003b2d0081938c011caaee11748a4b6de46d9388e47f5f9bd6d759b3c4148186",
+      "bytes": 1505,
+      "lines": 23,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ModelOutputReader.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/minutes/contract/ModelOutputReader.java",
+      "sha256": "72b3fa65abb8dee94f1729a0cc5ef8a5aa28e642f2bbab9731729fb5dceb74c1",
+      "bytes": 819,
+      "lines": 12,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+      "sha256": "32f04f856dc98080e73fa8346c46e757df3db7b60c7b809c43be6174e7ba7812",
+      "bytes": 18056,
+      "lines": 179,
+      "inspected_scope": "1-42"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OriginChainVerifier.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/minutes/contract/OriginChainVerifier.java",
+      "sha256": "7c2022a0ab317829613afe6bd074e48353d825ab36c7ac8a67b2a50cb0a08af0",
+      "bytes": 2402,
+      "lines": 35,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/RowsetProjection.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/minutes/contract/RowsetProjection.java",
+      "sha256": "c550bc224504152c6eee559a7a5ee99f2709ac4ea2ccb2cd8da1d16baf16f4ec",
+      "bytes": 4246,
+      "lines": 47,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredFactsIndex.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/minutes/contract/StoredFactsIndex.java",
+      "sha256": "d3a1feaa336e7abef93de75ff708e3e0d0aa6de1fdaa60f03ac797db7a9a1f7d",
+      "bytes": 7398,
+      "lines": 79,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+      "sha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8",
+      "bytes": 16170,
+      "lines": 158,
+      "inspected_scope": "1-36,106-158; selected declarations37-105"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d",
+      "bytes": 717,
+      "lines": 14,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+      "sha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620",
+      "bytes": 2647,
+      "lines": 43,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+      "sha256": "6230e84a6294c5252d149db66d8ba1ef2eca50bb2e26eff5b4a25851eecdee08",
+      "bytes": 1613,
+      "lines": 25,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ModelPermitPool.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/task/ModelPermitPool.java",
+      "sha256": "f6b9b10755583686d7e1984940e2bf8ecbdc5e7df29d45c4e9f0146f45c03f32",
+      "bytes": 836,
+      "lines": 17,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskQueue.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/main/java/ama/task/TaskQueue.java",
+      "sha256": "756036a23b7c101b3a6bf90dd56617b87b7425da1e3b1b76ee72bed87351d4f4",
+      "bytes": 1353,
+      "lines": 27,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e",
+      "bytes": 7759,
+      "lines": 85,
+      "inspected_scope": "selected publication/budget17-85"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/json/StrictMinutesJsonReader.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/java/ama/minutes/json/StrictMinutesJsonReader.java",
+      "sha256": "976954647aaa6b8fd5ad5168ac6f6d64532d1d34dfe199e8dd8635bfbaf08593",
+      "bytes": 12592,
+      "lines": 175,
+      "inspected_scope": "1-55,119-175"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "sha256": "410331e9d9957440c459a1b3ac6558bbad510c82416fa6b57be75c08393e183a",
+      "bytes": 17372,
+      "lines": 245,
+      "inspected_scope": "66-170; selected query/acquisition declarations32-245"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ImportTaskDomainPolicy.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/java/ama/transcript/ImportTaskDomainPolicy.java",
+      "sha256": "f1f75c031c0129ee0f3b9d9e5d737d4dca5c7cf0d72e359befa409ab20bab342",
+      "bytes": 14273,
+      "lines": 174,
+      "inspected_scope": "selected preparation/completion/validation declarations22-168"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java",
+      "sha256": "0b158c87197700310499935b8b6ff7e60d8b4ba971818d02c6caa4f812ab3166",
+      "bytes": 15682,
+      "lines": 194,
+      "inspected_scope": "selected34-57,113-121,139-143,183-192"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "sha256": "75917561fcd0e91cdf097997189a3c28d7998bbaf28db62c16a8162f6bdb64ec",
+      "bytes": 10622,
+      "lines": 135,
+      "inspected_scope": "57-133"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "sha256": "43e93c567664bb916c03a52381ee4892aa153a58dff0cfa9537c11f4e68d6905",
+      "bytes": 3050,
+      "lines": 51,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "sha256": "05d9965f0d448d37295680288aeb46c79d3908fc943edb6955c10d0fec94bc64",
+      "bytes": 21398,
+      "lines": 218,
+      "inspected_scope": "20-80; selected completion/attempt declarations81-218"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "sha256": "63e84274395c74c8d5e5375fcfc898c5cc39f19447318a2093eebaff1496ad19",
+      "bytes": 19114,
+      "lines": 176,
+      "inspected_scope": "1-54,81-145"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java",
+      "sha256": "229db724cc7eec612060eaed2b689258485dae861c3202d4cd665b902619281d",
+      "bytes": 6961,
+      "lines": 74,
+      "inspected_scope": "42-73"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "sha256": "8a06a569ba19b109d3ecbb0217bcacb7c6c1c04c6136bb610441e2a23d19431e",
+      "bytes": 13176,
+      "lines": 221,
+      "inspected_scope": "selected registration/ownership/renewal/completion17-204"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java",
+      "sha256": "eeb7ba5eb2dbb57606b42ee72a21f7395d53d2355d35a2ad6d0b1a710e086e2e",
+      "bytes": 2319,
+      "lines": 29,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "sha256": "5f1c9a5a9b5a3268dcb99a93f24cede2c1686e653a8db67e4220423896d6f677",
+      "bytes": 3303,
+      "lines": 42,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MeetingController.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/api/src/main/java/ama/api/MeetingController.java",
+      "sha256": "0329f1afa1f2a2484a0f1c904de593bf298a2f31525f9664f4a7bac63e6c06ea",
+      "bytes": 5095,
+      "lines": 64,
+      "inspected_scope": "routes29-44"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/HttpRevisionTokens.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/api/src/main/java/ama/api/HttpRevisionTokens.java",
+      "sha256": "f81b6e91ccc5e69bda2e97c1198b944cceab66bec401ebba0fd9c55eec8edf06",
+      "bytes": 1778,
+      "lines": 32,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/SessionSecurityFilter.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/api/src/main/java/ama/api/SessionSecurityFilter.java",
+      "sha256": "725f7d21ed057077222185c30ab510956112e051f5b9cdde5b19b355845890cc",
+      "bytes": 4043,
+      "lines": 61,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "bytes": 21260,
+      "lines": 335,
+      "inspected_scope": "1-245 and all FK/check/index declarations249-335"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "bytes": 35136,
+      "lines": 225,
+      "inspected_scope": "selected task history/state/external columns96-98,113-124,187-196"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "bytes": 1817,
+      "lines": 34,
+      "inspected_scope": "full"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/TaskFixture.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/integration-tests/src/test/java/ama/task/TaskFixture.java",
+      "sha256": "032d7842bfaf1f0ff71fecc5a4674bed4dcd5057b555a9f9000e87d60f7dd22d",
+      "bytes": 5518,
+      "lines": 65,
+      "inspected_scope": "selected policy21-37;45-65"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+      "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3",
+      "bytes": 8133,
+      "lines": 62,
+      "inspected_scope": "1-40"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+      "sha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2",
+      "bytes": 16024,
+      "lines": 155,
+      "inspected_scope": "selected test methods/boundaries14-126"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9",
+      "bytes": 7590,
+      "lines": 74,
+      "inspected_scope": "selected restart/damage methods28-61"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/ExternalExecutionIT.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/integration-tests/src/test/java/ama/task/ExternalExecutionIT.java",
+      "sha256": "1699ba7e6627ce9eb811aa8b816fa83464c0af26332b90279f8a9c4b5c37dd29",
+      "bytes": 11485,
+      "lines": 45,
+      "inspected_scope": "selected setup/test methods10-44"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/ModelPermitIT.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/integration-tests/src/test/java/ama/task/ModelPermitIT.java",
+      "sha256": "415b930e8e76a02826eb8be5f29d415f95827d2a71f681f6d1f1fe54efbf0fc8",
+      "bytes": 6598,
+      "lines": 25,
+      "inspected_scope": "selected setup/test methods7-24"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/PreparedCompletionIT.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/integration-tests/src/test/java/ama/task/PreparedCompletionIT.java",
+      "sha256": "d3296fd1bcbfbec7d97acfe77044a146535c0ea6384dc1531a42423d66f03c5b",
+      "bytes": 16868,
+      "lines": 239,
+      "inspected_scope": "selected setup/history/test methods45-238"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/db/MinutesSchemaIT.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/integration-tests/src/test/java/ama/db/MinutesSchemaIT.java",
+      "sha256": "414721c6d2d9e24ed5e5793676680051006fee581d1205bc68109445c1deda2b",
+      "bytes": 37396,
+      "lines": 481,
+      "inspected_scope": "selected setup/history/schema/environment/evidence methods70-478"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/identity/IdentityAccessIT.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/integration-tests/src/test/java/ama/identity/IdentityAccessIT.java",
+      "sha256": "c11bb807711682d4cc5fb0d9ca61d45392acafbd48fff1d0dc5e3f9203610c45",
+      "bytes": 17065,
+      "lines": 212,
+      "inspected_scope": "setup/destructive cleanup29-44; test declarations73-208"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/support/MysqlTestDatabase.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/integration-tests/src/test/java/ama/support/MysqlTestDatabase.java",
+      "sha256": "a734c9bc0c30e0e176d28fe1505c4d7d0a2a7dc188a09f31d4c38f79a96c878a",
+      "bytes": 1465,
+      "lines": 31,
+      "inspected_scope": "reset declaration and DROP DATABASE11-14"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/GenerationFingerprintTest.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/test/java/ama/minutes/contract/GenerationFingerprintTest.java",
+      "sha256": "542ec403f8b8dd835841ef37c2a0df3763af32d750f6118ba43029df423545cf",
+      "bytes": 2544,
+      "lines": 35,
+      "inspected_scope": "test declarations16-35"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/StoredSourceGraphTest.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/test/java/ama/minutes/contract/StoredSourceGraphTest.java",
+      "sha256": "2da3c1eed8202db20afc2d736bd41f1d220556ff600f66b65729b14b363ce9c1",
+      "bytes": 10743,
+      "lines": 117,
+      "inspected_scope": "test declarations11-117"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/SourceAndSupportTest.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/test/java/ama/minutes/contract/SourceAndSupportTest.java",
+      "sha256": "2e0cc389fb909d033bed176175b2097e30ead12bce3706b6e11430b6960f4bc0",
+      "bytes": 5950,
+      "lines": 69,
+      "inspected_scope": "test declarations20-69"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/FinalAndCoverageTest.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/test/java/ama/minutes/contract/FinalAndCoverageTest.java",
+      "sha256": "a63d4dbbdf62209d132c59cffb2b42bc7c17cd65a84283d3fa1be9de719b48bf",
+      "bytes": 3468,
+      "lines": 45,
+      "inspected_scope": "test declarations20-45"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/HashProfilesTest.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/core/src/test/java/ama/minutes/contract/HashProfilesTest.java",
+      "sha256": "d3084a6dda0e1f910dc3adacc4b71b841a585145797d444ebf0341dfdcd56574",
+      "bytes": 7541,
+      "lines": 88,
+      "inspected_scope": "vector loader27-29; test declarations34-88"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/ConfigBindingsTest.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/test/java/ama/config/json/ConfigBindingsTest.java",
+      "sha256": "a7742d7571a060e101592bd0ee316273f1050dc5406e2999828b545afdf123cd",
+      "bytes": 8480,
+      "lines": 75,
+      "inspected_scope": "test declarations17-75"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/minutes/json/StrictMinutesJsonReaderTest.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/test/java/ama/minutes/json/StrictMinutesJsonReaderTest.java",
+      "sha256": "fb5e79d53f56b5c55f692a8fedeb6feb0015168c27ef15e20ef773a536b206f6",
+      "bytes": 8390,
+      "lines": 94,
+      "inspected_scope": "test declarations27-94"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/minutes/json/OutputBudgetBoundaryTest.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/test/java/ama/minutes/json/OutputBudgetBoundaryTest.java",
+      "sha256": "48842e2461c8a9cbf4925a93b85d8dc22181e721f59b9d39f3e7d5d544a40b92",
+      "bytes": 4381,
+      "lines": 42,
+      "inspected_scope": "test declarations8-42"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+      "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61",
+      "bytes": 20262,
+      "lines": 200,
+      "inspected_scope": "test declarations54-200"
+    },
+    {
+      "path": "backend/contracts/src/test/java/ama/contract/MinutesFactBudgetTest.java",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:backend/contracts/src/test/java/ama/contract/MinutesFactBudgetTest.java",
+      "sha256": "3ad2c0a8585f348a0a244492a2816f207d9733776a61554b5c90efce67c03827",
+      "bytes": 2265,
+      "lines": 35,
+      "inspected_scope": "test declarations5-35"
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:contracts/openapi/api.yaml",
+      "sha256": "0855b5d4a130a77aa88a341c1ab203a5843300d04f388d9a4bb1a5eb6ce38ad8",
+      "bytes": 2390,
+      "lines": 64,
+      "inspected_scope": "paths/refs9-57"
+    },
+    {
+      "path": "tools/checks/run.py",
+      "source": "git show 857102b917bbef77c38fae3211e3a65207a98c6c:tools/checks/run.py",
+      "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217",
+      "bytes": 9743,
+      "lines": 176,
+      "inspected_scope": "13-75; selected entrypoint declarations77-176"
+    }
+  ],
+  "working_references": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-preflight-pause-handoff-20261023.md",
+      "sha256": "82ae27289fbfb2f1318114f222cb25d5a1a199cec8d516a40d0505429063765c",
+      "bytes": 3741,
+      "lines": 27,
+      "inspected_scope": "full"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-source-preflight-dispatch.md",
+      "sha256": "3989259e329d5c3153fb0cab4b45c1041a4ac6e0de0e04f41eccd0bdc02ad72b",
+      "bytes": 2475,
+      "lines": 10,
+      "inspected_scope": "full"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-10-shared-rank-ruling.md",
+      "sha256": "3b10ab12f46f7b4a2f70a91871f20d4f4052662b1cfee2b08700b02188b6bc75",
+      "bytes": 3478,
+      "lines": 13,
+      "inspected_scope": "full"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-source-alignment-preflight-20261023.md",
+      "sha256": "1a991429e02c7dcbba4605425408a28fbd66e7ff1cbbf7be8df01b4ecaf23bb9",
+      "bytes": 37675,
+      "lines": 199,
+      "inspected_scope": "13-110 focused interfaces/repin/test hazards only"
+    }
+  ],
+  "original_r1_exact_byte_delta_verified": true,
+  "negative_inventory": "git ls-tree at BASE: proposed Task9 runtime/initial-settings classes and contracts/openapi/minutes.yaml absent; report gives exact names."
+}

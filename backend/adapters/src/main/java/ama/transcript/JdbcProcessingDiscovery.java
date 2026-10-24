@@ -31,7 +31,12 @@ public final class JdbcProcessingDiscovery {
     private final FileRegistry registry;
     private final Map<String,Object> budgets;
     private final BooleanSupplier available;
+    private final Supplier<String> execution;
     public JdbcProcessingDiscovery(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,FileBackendCatalog backends,FileRegistry registry,Map<String,Object> budgets,BooleanSupplier available,long partSize) {
+        this(source,tx,access,purposes,backends,registry,budgets,available,partSize,()->"NOT_INSTALLED");
+    }
+    public JdbcProcessingDiscovery(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,FileBackendCatalog backends,FileRegistry registry,Map<String,Object> budgets,BooleanSupplier available,long partSize,Supplier<String> execution) {
+        this.execution=Objects.requireNonNull(execution);
         j=new JdbcTemplate(source);
         j.setQueryTimeout(5);
         this.tx=tx;
@@ -56,11 +61,13 @@ public final class JdbcProcessingDiscovery {
         });
         boolean owner=(Boolean)result.remove("owner"),writable=(Boolean)result.remove("writable");
         boolean ready=owner&&available.getAsBoolean();
-        result.put("canSubmit",owner&&writable&&ready);
-        if(owner)result.put("readOnlyReason",!writable?"READ_ONLY":ready?null:"PROCESSING_UNAVAILABLE");
+        boolean exhausted=((Number)result.get("revision")).longValue()>=Long.MAX_VALUE-1;
+        result.put("canSubmit",owner&&writable&&ready&&!exhausted);
+        if(owner)result.put("readOnlyReason",!writable?"READ_ONLY":exhausted?"REVISION_EXHAUSTED":ready?null:"PROCESSING_UNAVAILABLE");
         result.put("intake",ready?"AVAILABLE":"UNAVAILABLE");
-        result.put("execution","NOT_INSTALLED");
-        result.put("businessReady",false);
+        String installed=execution.get();if(!Set.of("INSTALLED","NOT_INSTALLED","UNAVAILABLE").contains(installed))installed="UNAVAILABLE";
+        result.put("execution",installed);
+        result.put("businessReady",ready&&writable&&!exhausted&&installed.equals("INSTALLED"));
         result.put("formats",List.of("TXT"));
         result.put("purpose","TRANSCRIPT_INPUT");
         result.put("materialMode","EMPTY");

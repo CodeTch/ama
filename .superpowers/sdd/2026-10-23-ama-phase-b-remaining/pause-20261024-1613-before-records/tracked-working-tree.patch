@@ -1,0 +1,1356 @@
+diff --git a/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json b/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json
+index 92f8827..8f19b0d 100644
+--- a/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json
++++ b/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json
+@@ -1,10 +1,10 @@
+ {
+   "schema_version": 2,
+-  "updated_utc": "2026-10-24T02:46:05.419287+00:00",
++  "updated_utc": "2026-10-24T08:05:27.243286+00:00",
+   "objective": "Complete all remaining local controlled Phase B tasks with subagents/tests/independent review/records, then deliver. Do not stop after a slice.",
+   "latest_user_instruction": "Resume and complete all remaining Phase B with controlled agents; coordinator Astra high, core authors/review Astra high, final review Astra xhigh, mechanical Sol xhigh; stop after B and accurate continuation docs; no CDEF.",
+   "pause_request_active": false,
+-  "status_precedence": "This active resume revokes prior immediate pause; archived pause remains historical. Task7 not adopted; round2 continuation starts from6cce.",
++  "status_precedence": "Active completion instruction supersedes historical pause; Task7 adopted cff858e; Task9 active, Tasks10-13 remain.",
+   "historical_state_archive": {
+     "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-normalization-20261024.json",
+     "sha256": "599708de6497fe18816d9e1b34d636858e883b127e7c869dfa3c1dbc7a9c159b",
+@@ -14,32 +14,65 @@
+   "branch": "codex/phase-b-completion-20261023",
+   "canonical_plan": "docs/superpowers/plans/2026-10-23-ama-phase-b-remaining.md",
+   "ledger": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
+-  "active_context": "resume-20261024-active-context.md (Task7 soleauthor ACTIVE; all prior exact context archived)",
+-  "last_root_commit": "de1611a67ba483afe21f3b29bb69c2d32028efef",
++  "active_context": "resume-20261024-active-context.md (authoritative normalizedTask9activation; priorfullcontextarchived)",
++  "last_root_commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+   "task6_base": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+   "primary_main_last_observed_head": "c71a44adb679a78d4c28dde7a4223aad1a23b40f",
+   "primary_scope": "Only exact discovery handoff/resume docs uncommitted; product/mainmerge/push not authorized in this continuation; verify actual main before later precise doc update.",
+-  "execution_status": "TASK7_APPROVED_ADOPTION_COMMIT_PENDING",
++  "execution_status": "ACTIVE_TASK9_FULL_IMPLEMENTATION_MATRIX",
+   "active_implementation": {
+-    "task": 7,
+-    "status": "APPROVED_WAIT_ADOPTION_COMMIT",
+-    "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+-    "brief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-activation-brief-20261024.md",
+-    "briefSha256": "d8505d46b4e3a6f713e1d4754aef29eb90f1fbeeb311fd48a4fafaba40df7bd6",
+-    "agent": "/root/b_controlled_coordinator/b07_fix02_continuation",
+-    "sourceCommit": "bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc",
+-    "reviewer": "/root/b_controlled_coordinator/b07_fix02_independent_review",
+-    "custodyAgent": "/root/b_controlled_coordinator/b07_fix02_mechanical_custody",
+-    "fixBase": "6cce4794dba473825d83fb9bccafc043cd611b5c",
+-    "fixRound": 2,
+-    "fixBrief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix02-brief-20261024.md",
+-    "fixSourceCommit": "bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc",
+-    "reviewBrief": "task-07-fix02-independent-review-brief-20261024.md",
+-    "nextFixRound": 2,
+-    "nextFixDispatched": false,
+-    "initialSourceCommit": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
+-    "priorAuthorUnavailable": "Root followup_task returned live agent path not found; replacement same round2 per fix-loop fallback.",
+-    "fixReport": "task-07-fix02-report-20261024.md"
++    "task": 9,
++    "status": "PRODUCT_TDD_AFTER_REAL_15_BOOTSTRAP",
++    "base": "cff858e163ca7dea774dcf05c707ef7551956156",
++    "productActivated": true,
++    "agent": "/root/b_controlled_coordinator/b09_minutes_generation",
++    "brief": "task-09-activation-author-brief-20261024.md",
++    "protected": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-protected-adopted-inputs-20261024.json",
++    "fixtureAck": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-root-fixture-application-ack-20261024.json",
++    "fixtureAckSha256": "6f926c62b9710dab9c889eee104543b3250bfd5e33fc23d67fb655677e4c7e5d",
++    "privateEnv": ".tools/task09-2d0e28ea775540f8b3525f9344edf5f0/env.sh",
++    "bootstrapEvidence": "artifacts/phase-b/b-remaining/task-09/bootstrap-01/",
++    "bootstrapControllerProof": "task-09-bootstrap-controller-xml-read-20261024.json",
++    "current_milestone": "PINNED/exclusion capability andrealarchive/defaultappend oldrequestreconstruction nowreportedPASS; currentcommitACKsamefactrecoverymatrix. Remainingcandidate4state/prospectiveunion/Q-R-outputbudgets/installedprovider-runtime/finalregression-custody-reviews; explicitlaterworkflowdepsOPEN.",
++    "admissionCancellationRuling": "task-09-external-admission-cancellation-ruling-20261024.md",
++    "pendingOriginalExternal": {
++      "taskId": "1106f41b-077f-4d54-8329-1341eceebcd7",
++      "executionId": "6521f9b2-bfd3-476a-93ec-6e9fcbe8a4f1",
++      "permitId": "736364f2-5f6d-42f3-902f-de1a5ecfeff1",
++      "observedStatus": "RECOVERED_SAME_FACT: task/execution/operation SUCCEEDED; same permit actually settled; original provider files unchanged",
++      "failureWindow": "artifacts/phase-b/b-remaining/task-09/generation-external-green-02",
++      "diagnostic": "artifacts/phase-b/b-remaining/task-09/external-diagnostic-01",
++      "nextAction": "Preserve original failure UNKNOWN and separate proven recovery04 UTC defect; no repeat of one-time recovery helper",
++      "controllerProof": "task-09-original-external-recovery-controller-check-20261024.json",
++      "outputId": "94707e50-beb5-4fef-b192-7f6d961c8037",
++      "externalResultId": "cmr-3adb5d09-9aa1-4ee7-9da6-2de296808942"
++    },
++    "newWorkerCandidateProof": "task-09-first-new-worker-candidate-controller-check-20261024.json",
++    "remainingInventory": "task-09-remaining-inventory-20261024.md",
++    "administrativeInstallation": {
++      "status": "APPLIED_PROVIDER_NOT_STARTED",
++      "ack": "task-09-controlled-admin-application-ack-20261024.json",
++      "ackSha256": "96354b009f7e8183c48fc2ebfbfb84fecdfa783bef7083b29c994d3a27fce7c2",
++      "owner": ".tools/task09-2d0e28ea775540f8b3525f9344edf5f0/controlled-installation-20261024",
++      "templateId": "067313c0-bb33-4b83-8674-47058c6e9a6d",
++      "revisionId": "0f7d6a2b-214e-4bff-ac66-5823755c0718",
++      "indexSha": "111a10855e0de56049bb8d9004f4b5ef43e2fa5cb888d024bde9b3f409d1e21c",
++      "actualIndexEntries": 19,
++      "actualIndexHashVerified": true,
++      "schema": "ama_t09_2d0e28ea7755_behavior",
++      "invocations": 2,
++      "actualJavaInvocations": 1,
++      "old8KeyEnvUnchanged": true,
++      "formalNewInitialAndGenerationEnabled": false
++    },
++    "pendingDeniedLookupExternal": {
++      "window": "artifacts/phase-b/b-remaining/task-09/denied-lookup-green-02",
++      "taskId": "f85adc4c-d90d-43cc-86e7-6d069e5fd444",
++      "executionId": "ce929e14-f580-4cd3-b4bf-86c7c9178115",
++      "status": "RECOVERED_SAME_FACT:01genuineGET/observercommittedRECORDED_FENCED despiteassertionFAIL;02actualsettlement1PASS/0providerCalls;0candidate",
++      "next": "preserveoriginal/recovery01failures; one-timehelperisolated; resume freshdeniedGET/deleted/process/tamper matrix",
++      "controllerProof": "task-09-denied-original-recovery-controller-check-20261024.json"
++    }
+   },
+   "completed_implementation_tasks": {
+     "1": {
+@@ -74,7 +107,7 @@
+     "6": {
+       "author": "aa490afc2690e9517a691cc8d1ae9487a025806d",
+       "fix01": "d54b2e8841c664e691d03192507e7a192be38430",
+-      "dual_review": "b71b6a02 SPEC PASS/Approved;2Important+CV01–04closed0new;MinorT6SR03Task12open",
++      "dual_review": "b71b6a02 SPEC PASS/Approved;2Important+CV01\u201304closed0new;MinorT6SR03Task12open",
+       "tests": "121distinctcomposed(34current+87inherited),254units;failed121batch/affected5replacementpreserved",
+       "adoption_doc": "docs/acceptance/b/task-B-remaining-06-saved-transcript-adoption-20261024.md",
+       "root_mirror_manifest": "artifacts/phase-b/b-remaining/controller-task06-adoption-20261024/manifest.json",
+@@ -104,7 +137,8 @@
+       "custody": "2d41fbf0PASS/controllera9552f78",
+       "tests": "407selectedcomposed153IT151+2replacements+254units; originalfull153batch1FAIL1ERRORcausesUNKNOWN",
+       "adoption_doc": "docs/acceptance/b/task-B-remaining-07-prepared-external-adoption-20261024.md",
+-      "future": "CV04 realconsumers9/10/11"
++      "future": "CV04 realconsumers9/10/11",
++      "adoption": "cff858e163ca7dea774dcf05c707ef7551956156"
+     }
+   },
+   "source_tasks_remaining": [
+@@ -114,7 +148,7 @@
+     12,
+     13
+   ],
+-  "next_steps": "CommitTask7adoption thenexactpublicconsumerACK; Task9focusedfinalsource/prefixrepin→reviewedhelpernewemptyfixture→separateapplicationACK→authorimplementation. Continue10→11→12→13/finalreview/docs;STOPbeforeCDEF.",
++  "next_steps": "Complete activeTask9 fullimplementation/realconsumer evidence\u2192preciseauthorcommit\u2192freshindependentSPEC+quality/mechanicalcustody\u2192adoption. ThenTask10minimalfinalupstreamrepin/reviewedfreshfixturehelper/separateACK\u2192implementation;11formalDDL/source/runtime;12browser/contracts;13finaltriage/wholebranchreview/accuratehandoff. STOPbeforeCDEF. Do notrepeatTask7 orTask9completedbootstrap/preparations.",
+   "writer_policy": "One product writer, serialized heavy tests; coordinator bookkeeping/DDL gates only. Preserve all historical evidence/W.",
+   "root_owned_dirty_paths": [
+     ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
+@@ -129,91 +163,23 @@
+   ],
+   "design_gates_remaining": {
+     "6": "COMPLETE12ca; onlyminorT6SR03Task12.",
+-    "7": "Protocol/rulingsadopted; actualimplementationACTIVEb07 fromde1611a/briefd8505d46; freshnormal15/0rootparsed.",
++    "7": "COMPLETE_ADOPTEDcff858e/sourcebdf/review22818db8; onlyCV04futureconsumers/Q01Q02historicalUNKNOWNcarry.",
+     "8": "COMPLETEde1611a/sourceDA/reviewf718/custody58+6acea; FUPfairness/modelsyncclosed. MinorT8SR-M1Task13/historicalOptionalunknown retained.",
+     "10": "Adopted 875047cdbcd6ddd17f5c267f8998b7a5a4378b6c exactrawdesign/review/sharedrank; independentAstra SPEC PASS/designAPPROVED zero findings. Source/runtime gates remain.",
+-    "9": "Original+R1/sharedrank exactraw adopted af331c7e2eaff1af7ca2d743e717c3e31fff43d9; T9DR01 ADDRESSED, independentdualPASS2c563fb7. No implementation/runtimequalification.",
++    "9": "OriginalR1/sharedrankadopted; narrowcontrolled-envelope150f2a12/review2269ba7e adopted. FullTask9implementationACTIVE, no finalsource/runtimeadoptionyet.",
+     "11": "Adopted exactR1/original/closure/reviews/manifest at f176382618924d9a00fd5fbabf93bbc30c78dd71; dualPASS2closed0new. Logical-only schema, source/runtime gates pending.",
+     "12": "Adopted exactR1/original/closure/reviews/diff/manifest at 8e7a82e237a9552ace2d7491adadbf08416feaee; T12DR01closeddualPASS0new; source/runtime pending."
+   },
+   "parallel_preparation": {
+-    "task6": "COMPLETE prior source/budget/candidate/finalrepins; activeTask6 implementationusesexactadopted80, not preparationpending",
+-    "task8": "COMPLETEde1611a; no pending Task8source/runtime/modelgates.",
+-    "task7": "Completedpreflights/post6/post8/actualDErepin reused; sourceACTIVEfromDE.",
+-    "task6_budget": "Complete1e1f6a32 rootFULLREAD30472B+21baselinehash/rangeverified; unqualifiedfinitecandidatesonly, final5runtime/originalarchivesrepinmandatory",
+-    "task13_gates": "Complete6ef4353b rootFULLREAD16089B+21SHA/blob/lengthverified; Task12minimaloutputforwardingruling task-12-final-gate-output-alignment-prepared.md; no tests/gatesrun",
+-    "task6_candidate_repin": "208c0d59 FULLREAD34293B,51bytesSHA+18focusedrangeSHA+12unchangedB/Crootverified, candidate857NOTadopted; actualfix01affectedseamsrepinlater",
+-    "task10_20261024": "Readonlypreflight complete3724471d report/3a326825manifest; rootFULLREAD+81committed857+5WrawSHA/size/linecountverified; no runtime/sourceadoption, final6/8/7/9repinmandatory.",
+-    "task9_20261024": "Completef08d955a report/da80db8b manifest; rootFULLREAD21377B+68committed857+4Worigins verified0mismatch; actual5fix/6/8/7 repinmandatory, runtimeunimplemented.",
+-    "task11_20261024": "Completec0c8a59dreport/6803f10fmanifest; rootFULLREAD19931B/47content+197search+14rawdesign+13SQLuniqueSHAverified; noformalDDL, actual5fix02/6/8/7/9/10repin.",
+-    "task6_final_task5": "COMPLETE c207bc7a/root99sealsverified actualc943finalsource carriedthroughdocs-only80; no repeat",
+-    "task8_model_ownership": "6814b7dc FULLREAD/source-rootproof verified; rootruling narrowcurrent3outputs+headers/exactprior4blobpreservation atactivation; noformalDDLnow",
+-    "task8_resolved_version_parser": "Original013.2 candidate proof preserved as historical; Task6 consumed013.2. Completed additive actualFlyway12.4.0/c3f proof22517b3b establishes013.2<013.3<014. Task8 formal013.3 allocated; no repeat parser/preflight.",
+-    "task6_interim_custody": "Complete4b5f81fb report:36completedwindows/29XML/initialsnapshot20:54UTC;14failingXML+compile3+selector1+contract1 preserved;2earlyverifywindows duplicated244units each/no sum. Final16cohort excluded live, separately rootverified.",
+-    "task12_deferred_boundaries": "Complete154de689 FULLREAD14KB +manifest15872104;root26BASEblobs/56ranges verified; T4SR04 actualall5GETlimitnarrowing/05partSizepositiveLong andnumericminimum/06namesvsbanner routing only; no fix/test/adoption. Actual6/8/7/9/10/11repin at12activation.",
+-    "task12_transcript_types": "Complete95489503 FULLREAD/manifest507f2fa9/root5BASEaablobs+24ranges verified;fouraliases/revisionanyOf/rootgenerator7.13.0/type-use+runtimecompatibilityevidence mapped, priorT4map unchanged. T6SR03stillOPEN, actualupstreamrepinTask12.",
+-    "task6_union_index_feasibility": "Complete969316e1 FULLREAD; rootindependent33inputcustodybdcbe663 verifies26inputs+planinput+designreviewand3proposals0mismatch",
+-    "task6_input_index_design_review": "COMPLETE8e8bdfd7 FULLREAD SPEC PASS/Approved/exact75BSQLPASS/0findings; runtime/apply separate",
+-    "task8_input_index_model_regions": "Complete439fb930 FULLREAD/manifest290b00aa/root4FS+Git7ranges/187SQLindexdefsverified; additive rootamendment task-08-model-output-input-index-amendment-20261024.md 73b13bc553fd16cff728220e14ea409cdf71ae83bb9149b436b5b3d88fb4e73b; no source/modelwrite/generatorexecution.",
+-    "task8_post6_candidate_version": "013.3allocated/applied/adoptedDE; no repeatparser/staticDDLproof.",
+-    "task8_isolated_fixture_ruling": "COMPLETED/adopted. Task8casesretained; overflowMAXneverreuse.",
+-    "task8_provisioning_helper": "COMPLETED earlier. Sameowned11009a/44727 retained; Task7onlynewownschemaalreadyACKed. Do notprovisionagain.",
+-    "task7_post6_delta": "COMPLETE75a76269 FULLoriginal+exactcorrectiondiffREAD/manifest9c54de00; root27BASEblobs42ranges/61oldappendix58rawsame3actualchanged verified0mismatch. Originalfbd29ff5preserved; genericphysicalindexallkinds clarified. ActualTask8source/migration repin stillrequired.",
+-    "task9_post6_delta": "COMPLETE1e14eaa8 FULLREAD11722B/manifest61434b49; root focused33/ranges46/unchanged53 old+BASEraw verified0mismatch. Committed12ca only; Task8/7/sharedTask9-11facade actualrepin remains; no qualification.",
+-    "task8_current_model_custody": "COMPLETE47a282a7/root769f1828 adoptedDE; T6modelsyncCLOSED.",
+-    "task11_forward_ddl": "COMPLETE UNVERSIONEDstaticR1SQL195bec3b/report243146df/manifestdb9459d7; scoped721a2136 dualApproved0findings closes2ImportantSTATICafter1round. RootFULLREAD/d73927seals+exactpatch; actual8.4.6CREATE/negative/FKprobeOPENTask11-SQL-PROBE, actual7/9/10/prefix/version/freeze/ACK/models/sourcefuture. Task11implementationNOTcomplete.",
+-    "task9_fixture_helper": "COMPLETESTATICONLY a868bc63helper/1b68e652note/944873f3manifest; scopeda4a53e81 SPEC PASS/Approved0findings closes4P2+1P3 after1helperround; rootFULLREAD9seals+exactdiff4f3e5e14. Notexecuted/noTask9schemaorproductactivation. FutureTask7rootpublicconsumerACK+actualsource/prefix/liveguard/helperoneattempt/separateTask9ACK mandatory.",
+-    "task13_T8SR_M1_case": "COMPLETEreadonlye2b8687eplan/4887eb52manifest; rootFULLREAD8423B+7DEblobs9rangesverified 8e4e825908656ec1aab0ccc963c261879328fa2d412a2901bb2f5c8178b4ee21. SharedtestDataSource capturesactualrawmappedpair/statement-closeafterprefetchdelete/zero-rowcandidate/cursorhighersurvivor, retainoldgap. No source/test/DBimplementation, T8SR-M1stillOPENTask13; actual7/9/10/11focusedrepinlater.",
+-    "task11_isolated_ddl_probe": {
+-      "status": "EXACT_R1_ISOLATED_ENGINE_GATE_CLOSED_SOURCE_ACTIVATION_NOT_DONE",
+-      "agent": "/root/b11_isolated_probe_prepared",
+-      "brief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-preparation-brief-20261024.md",
+-      "briefSha256": "579f3bdf8cc48e87cc339cd20358aadfe1cd046b7f1ca7e66d8e0f8c20d23bc9",
+-      "limits": "No DB/Docker/helper import or execution/private/source/Git mutations. Root independent review and separate exact public probe ACK precede any new isolated schema.",
+-      "authorFiles": [
+-        {
+-          "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024.py",
+-          "bytes": 31365,
+-          "sha256": "8372c5b11f171ce9a9f09a0aa5530057118763ca52a7cf7d0a76b8853bec0b7f"
+-        },
+-        {
+-          "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024.md",
+-          "bytes": 10163,
+-          "sha256": "f5a82f342b5ca54b4c174b31c0e585d2fed55af51d5bdb97164a7d7af9767478"
+-        },
+-        {
+-          "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024-manifest.json",
+-          "bytes": 4221,
+-          "sha256": "c935d739463681d8cf1f97d508285e80e68c93691a1320acb71ac09ed7fceef0"
+-        }
+-      ],
+-      "reviewer": "/root/b11_isolated_probe_static_review",
+-      "reviewBrief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-static-review-brief-20261024.md",
+-      "concern": "AuthorallegedV002/R1identitycollationmismatchnotaccepted; rootobservedV007laterALTERto0900bin; independentfinal15prefixcheckpending. NoDDLproposalchange/ACK/schema/helperexecution.",
+-      "reviewSha256": "f7d81d5aa7a964b3277080d41169dc810bf50426511ab1eefa7cd2bce34fdd15",
+-      "fixRound": 1,
+-      "fixBrief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-fix01-brief-20261024.md",
+-      "concernDisposition": "InitialallegedR1mismatchfalseforfinalprefix; actualhelperwrongV002stubI1 plusprivateparentI2; exactR1DDLunchanged.",
+-      "scopedReviewSha256": "10618cb4674a753aef8ad147db26d3c6a2b511792a901394b10d527771411fc3",
+-      "helperSha256": "ba481d2e00272b8ce7acbf86da57dbed5fda5a4e3cd1d54d73d28fdd8f8d79a7",
+-      "reportSha256": "fc6a8e80be818d5d85655944b706c312ba59d79f5844f53ec2819288e95f07c8",
+-      "manifestSha256": "9dfab5613a0864ce06ffa0e82644e277e04032f7c789743a21fc9af6feba5ea9",
+-      "acceptance": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-helper-preparation-acceptance-20261024.md",
+-      "acceptanceSha256": "89cf774863bba0c9283744b05fafd53c20b2c7542b7b26fdae7fbc5171a1108c",
+-      "minor": "T11PROBE-M1 reportfour-vs-five nextreportedit/finaltriage",
+-      "executionGate": "Root exactpublicACK/liveguard/oneattempt only afterTask7author testsstop; noACK/schema now.",
+-      "rootACKSha256": "3bf88ca50d3c65e9cff1c18dbbc02cd494b94c3c20ef3f36b5d908af90e60a2f",
+-      "owner": "task11-probe-fc2e1fdaf6ad4f88b40a4baf410340d1",
+-      "schema": "ama_t11_fc2e1fdaf6ad_probe",
+-      "rawPublicManifest": "artifacts/phase-b/b-remaining/controller-task11-sql-probe-20261024/manifest.json",
+-      "rawPublicManifestSha256": "8f280464533b807b875839c4176d7e421cf6f1eaca193716776f8c3c461faabb",
+-      "actualCounts": "369appendstates/232commands231MySQL/127outcomes=17directpositive55negative55controls; exit0 no stdout/stderr; independentauditpending, notfullTask11",
+-      "auditBrief": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-actual-custody-brief-20261024.md",
+-      "actualCustodySha256": "f92d9440310a1c44858ab6bc7093d56909a2b28663099a7803919ebbb425d28a",
+-      "actualRootAcceptance": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-actual-acceptance-20261024.md",
+-      "actualRootAcceptanceSha256": "95b97483888ec857d00c7f5fe9e383a6e8718f6970214225a6430418f4a40f7e",
+-      "noRerunUnlessChanged": true
+-    }
++    "task": 10,
++    "status": "HELPER_PREPARED_UNUSED_REVIEW_APPROVED",
++    "agent": null,
++    "helper": "task-10-fixture-provisioning-prepared-20261024.py",
++    "sha256": "c624807461392d0844a299ff73ef1cea64cb76aa39cc43846a973c068c86fa18",
++    "productActivated": false,
++    "runtimeExecuted": false,
++    "review": "task-10-fixture-helper-independent-review-20261024.md",
++    "reviewSha256": "8423cc2e1ce8938f43ace27042329ee98a565ef53be3ca843356b5861f4f90d1"
+   },
+   "preparation_status": "All prior6/8/7/13 preparations and resumed9/10/new11 readonly preflights COMPLETE. Actual upstream source repins at activation remain; do not repeat full completedpreflights.",
+   "task5_final": {
+@@ -308,7 +274,7 @@
+   },
+   "pending_issue_register": "task-13-pending-issue-register-20261024.md; Task5T5SR01/02/CV1closed; fairnessFUPTask8OPEN; T4SR04/05Task12; allotherminors/permanentlimitscarryforward",
+   "final_review_lower_bound": "34cb226aefe99c67d3681af68d748b0aeea4e073",
+-  "final_review_base_ruling": "InitialallworkBASE evenifmainindependentlyintegratedTasks1–4; notfreshmainmergebase",
++  "final_review_base_ruling": "InitialallworkBASE evenifmainindependentlyintegratedTasks1\u20134; notfreshmainmergebase",
+   "open_optional_followups": [
+     "FUP-B-REMAINING-TEST-01 heartbeat-test100mssleep",
+     "FUP-B-REMAINING-TEST-02 expectedWARNING/deprecationnoise",
+@@ -322,7 +288,7 @@
+     "noHA/capacity/nativeIOqualification",
+     "noactualproductionpublish/mail/push/mainmerge"
+   ],
+-  "skill_runtime": "Superpowers7.0.1; actualavailableagenthandles authoritative; approvalnever omit sandbox_permissions; stable nonUNCWindowscwd/literalPSstdin→WSLPython argv. No routineuserpermissionstalls.",
++  "skill_runtime": "Superpowers7.0.1; actualavailableagenthandles authoritative; approvalnever omit sandbox_permissions; stable nonUNCWindowscwd/literalPSstdin\u2192WSLPython argv. No routineuserpermissionstalls.",
+   "historical_execution_qualifications": "Full prior details kept in exactarchive and original reports: Task4/5composedwindows/clockhandshakecauseunproven/fullinspect/javapwithoutflags/setupfailures/source-reconstruction/maintenancechronology; do notretroclaim orformat-onlyrerun. TwoearlyTask6ITverifycommandsranunits; laterMAVEN_CONFIG skipsunitselector; preservecounts/sourcewindows/finalunitsseparate.",
+   "schema_forward_history": {
+     "actualAdoptedCount": 15,
+@@ -372,104 +338,26 @@
+       "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-context-before-task7-pointer-normalization-20261024.md",
+       "bytes": 12203,
+       "sha256": "6d1ce9fe25c333feffdd4ca6dd6f162043d0d9d0b58d0eb77e5d632365144b77"
++    },
++    {
++      "path": "current-state-before-task9-active-normalization-20261024.json",
++      "sha256": "6f513a9c85c2a454c9dc167aec15a1dde55efd8392f52f73c7ec0ea519a79572"
+     }
+   ],
+   "task7_current": {
++    "status": "COMPLETE_ADOPTED",
+     "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+-    "fixtureOwner": "task07-0cea85a0e4724e78bd7aa6aabfc243bc",
+-    "schema": "ama_t07_0cea85a0e472_behavior",
+-    "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+-    "port": 44727,
+-    "privateEnv": ".tools/task07-0cea85a0e4724e78bd7aa6aabfc243bc/env.sh",
+-    "rootFixtureAckSha256": "ee73ff0b98e136674da3254e3dda1c3508491676753437eebdce3844ff31ddaf",
+-    "ready": "Normal15initial/0rerun exactnewownschema captured; all15fullhistorybefore-aftersame/adopted7stablefields/current15SQLunchanged; rootproofc4fbd3ba5436b93d408863fd4dd1125babfc8188fb4d76954c63741c9d1c31ab",
+-    "protected": "9777/c207a1abc26071074928caf66ec8c3e2ab0da0410e6ce6f3fc846c061a4d1f86/no modelexceptions",
+-    "actualTask8RepinSha256": "06e1e6910ae270e333701042a25cde55c3a666be3ceb9d57dc6fc0bef0fb8c9a",
+-    "status": "APPROVED_PENDING_ADOPTION_COMMIT",
+-    "interim": "Rootreadonly6XML/receipts3100ba16: prepared1RED→GREEN1/recovery1RED→GREEN1/replay2RED→correctedGREEN2. Separate4distinctbehaviorcases, sourceongoing/Worker/finalqualificationspending, no aggregatefinalpassclaim.",
+-    "interim02": "AuthorcontrolledgenerationSTALEcompletegraph/rootunchanged +actualWorkerclaim-marker-permit-I/O-output-attempt-commit-settlement/ordinarycomplete0 reported. Rootactualnew5XML/receipts f281a493: retention1setupFKERROR separately→correctedRED1assertion→GREEN1, actualWorkerRED1assertion→GREEN1; no finalsource/semanticsreviewclaim. Authority/rollback/heartbeat/close/saturatedmaintenance/finalqualificationpending.",
+-    "interim03": "Rootactualnew6XML ff5625e9fc9357172269be6d7713d2a56d00018b0a676dda2716f5150f97d856: prepared-adversarial17PASS/Worker-races8PASS/maintenanceRED1→GREEN1; retentionadversarial10/1ERRORunresolved+retentionforgeryRED1. Keepfailedwindow, authornotified/handling. Separateoverlapping/sourcewindowcasesnotfinalsum; finalsource/custody/reviewpending.",
+-    "futureConsumerActivationReceipt": "AfteractualTask7adoptionONLY rootwillissue public W/task-07-consumer-activation-root-ack-20261024.json withtask7/statusCOMPLETE_ADOPTED/baseDE/sourceCommit/adoptionCommit/reviewSpecPASS/reviewQualityApproved/openCriticalImportant0/exactadoptiondoc+SHA. Futurehelperrejectsprivate/arbitraryevidence. Doesnotexistnow; noTask7completionclaim.",
+-    "latest_author_status": "DONE407selectedcomposed; original153batch1FAIL1ERRORUNKNOWN; frozenforreview",
+-    "phase": "REVIEW_COMPLETE",
+-    "latest_root_receipts": "Rootselectedreceipts 6732818f796b02e502cd7b2d9d8a02578c0496a7c0578ab46f100eaeab54c8e0: original116=114PASS/1FAIL/1ERROR; affected38PASS,recovery4PASS,unit254PASS. Laternewterminal-special-replay-red2assertFAIL (invalidterminal/retainedSTALEexactreplay)OPEN; authoractiveinitialimplementation. Units predatenewfix, no finalsource/pass/adoptionclaim. RawXML/sourcecustody/report/owncommit/reviewpending.",
+-    "sourceCommit": "bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc",
+-    "reports": "RootFULLREADcurrentW1697Be15b9ed5/public12119Ba2a637bd inclpost-executiononeblanklinequalification; actualledgercd736e2b/man20e92193. 8705ownedpaths=31source14main17test+1Wreport+8673artifacts; sourcepackagea9f82978/full74.5MB6d083627/briefce720ac2/manifest09507e13.",
+-    "rootPrivateScan": "Rootindependentinmemoryknown6distinctprivatevalues+PEMpatternscan all8705actualdeliveryFSfiles andbothreviewpackages; no values/digests/privatefilecontents printed/persisted. Notuniversalcredentialpatternaudit. 8707files/143526442B/0matches",
+-    "independentReview": {
+-      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-independent-review-20261024.md",
+-      "bytes": 18438,
+-      "sha256": "91a257d83d8c1eb1fe1fa7a9a2f7d76c48a178e995e82cb631cbc05ad298dc7f"
+-    },
+-    "initialCustody": {
+-      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-final-delivery-custody-20261024.json",
+-      "bytes": 9350,
+-      "sha256": "3421b8d4134d82bc7e397a3c4bf0cafd92640761ba3a37f76f7f3e5af002cb9b"
+-    },
+-    "rootReviewRead": {
+-      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-review-and-custody-root-read-20261024.json",
+-      "bytes": 5463,
+-      "sha256": "8c401bd520bff13e5768e0b5b0a1b5eb79a9ef29f0d54c415f37992b49d249f4"
+-    },
+-    "rootSelectedResources": {
+-      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-root-selected-resources-and-pids-20261024.json",
+-      "bytes": 5342,
+-      "sha256": "0b1f6f148f6fe86b217e1af227b9ab8f649341ea23615e76d4610992c9f075d5"
+-    },
+-    "fix01InterimIR03": {
+-      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-ir03-root-xml-read-20261024.json",
+-      "sha256": "822dfc2f578c0d1317496f7344a218c77fbbac9f44bc22189226a24ba4beeae8",
+-      "scope": "3caseRED(1assertfail)→GREEN3, intermediate notfinalsourcequalification"
+-    },
+-    "fix01LatestEvidence": {
+-      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-framework-interim-root-read-20261024.json",
+-      "sha256": "21c367b5f3aa3bd3e151e89011ee9f9ae6e84c66156788f096d662c1df1feb62",
+-      "status": "AuthorfinalaffectedIT underway, thenunit/history/custody/report/owncommit; noadoption",
+-      "countQualification": "10and5separatePASSwindows include2repeatedIR01cases; finalselectionpending"
+-    },
+-    "fixSourceCommit": "bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc",
+-    "fixReport": {
+-      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-report-20261024.md",
+-      "bytes": 12707,
+-      "sha256": "4878d25960159c7415a39fcfc9ce2cd2ded878c2b2bc094d3f8f3a66ee912759"
+-    },
+-    "fixPackages": [
+-      {
+-        "kind": "source",
+-        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-source-review-package-20261024.diff",
+-        "bytes": 143011,
+-        "sha256": "b13ea387e1cddd3a57b7fea66af4059ac24e4b2ee7da268acabe826df49792b4"
+-      },
+-      {
+-        "kind": "full",
+-        "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-full-review-package-20261024.diff",
+-        "bytes": 7923118,
+-        "sha256": "057c18be12df22d045ade69cf195ffabb5c09b30cd8074b8f73617e4203cc36a"
+-      }
+-    ],
+-    "ownedChildPids": [
+-      1277931,
+-      1296943,
+-      1299071,
+-      1300741
+-    ],
+-    "fix01RootSelectedResourceProof": "5794fe4078f8169ceae28d2b54466c9ecbfaf3de4c4cb7e70f2c033daa47a096 all3selectedFULLfields/name/mounts unchanged,4exactPIDs gone",
+-    "fix01RootPrivateScan": "3ba2f58c94b2eb99128ca4f6152a2b852ae7fddb5e9d8f4eceac3b7c4863504e 9516files317531891B known6+PEM0 inclall369probeappendstates+backendpreimages",
+-    "fixReview": {
+-      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix01-independent-review-20261024.md",
+-      "sha256": "1d4eee2f878e5dcde8fea04c03b07b4a579483c3e01390ddf24677739a55a18e"
+-    },
+-    "fixRound1Disposition": "5of6reviewitems addressed(IR02/IR03/CV01/02/03); IR01partiallyunresolved exactoldzeroeffectreceiptACKloss+authorizedsuccessor; round2NOTdispatched",
+-    "custody": "b6c55f52PASS21/roota689actual8seals; independentqualitystillblocking",
+-    "initialSourceCommit": "84b4b0bbf8212ec5606c3f8583a0989f10af681e",
+-    "independentFix02Review": {
+-      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fix02-independent-review-20261024.md",
+-      "sha256": "22818db8d10088d0485213cd52e673750abbba0892fab2553643dbe8a9e6bc27"
+-    },
+-    "mirrorManifestSha256": "b1587153fb4f8e0a67e779fc37393ed907b5fac964614dbe83dc366bc9f168ed"
++    "source": "bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc",
++    "adoption": "cff858e163ca7dea774dcf05c707ef7551956156",
++    "review": "task-07-fix02-independent-review-20261024.md SHA22818db8d10088d0485213cd52e673750abbba0892fab2553643dbe8a9e6bc27 SPEC COMPLIANT/APPROVED0new",
++    "custody": "2d41fbf0PASS/controllera9552f78",
++    "tests": "407distinctselectedcomposed153IT151+2diagnosticreplacements+254units; originalfull153batch1FAIL1ERRORcausesUNKNOWN retainedQ01Q02",
++    "future": "CV04actual9/10/11consumerqualificationOPEN",
++    "consumerAck": "task-07-consumer-activation-root-ack-20261024.json SHA24ce0b8a9f15f9a37b43b6b41c62394f87b97d93924473cc08d20165032ab817",
++    "historicalDetailsArchive": "current-state-before-task9-active-normalization-20261024.json"
+   },
+   "stop_after_phase_b": true,
+-  "phase_b_exit_contract": "Afterall13tasks/finalreview/recordsclose: stopexecution, preserveexactcommits/evidence/handoffs andcompleted/open/pendingboundary index; next继续任务 mustreadcanonicalhandoff beforework and startONLY firstunfinishedpostBnode, notredoB.",
++  "phase_b_exit_contract": "Afterall13tasks/finalreview/recordsclose: stopexecution, preserveexactcommits/evidence/handoffs andcompleted/open/pendingboundary index; next\u7ee7\u7eed\u4efb\u52a1 mustreadcanonicalhandoff beforework and startONLY firstunfinishedpostBnode, notredoB.",
+   "pause_handoff": "docs/acceptance/development-pause-b-remaining-2026-10-24-0930.md",
+   "pause_source_head": "6cce4794dba473825d83fb9bccafc043cd611b5c",
+   "pause_records_commit": "NONE; preserveuncommittedrootdocumentationandnewW/publicprobeartifacts; indexempty/sourceHEADunchanged",
+@@ -477,5 +365,27 @@
+   "pause_record_index": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-0930-record-index.json",
+   "delegated_coordinator": "/root/b_controlled_coordinator",
+   "delegated_root_ack_authority": "Explicit root delegation for normal coordination and controlled DDL applications within existing plan.",
+-  "resume_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-fix02-before-records-20261024/manifest.json"
++  "resume_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-fix02-before-records-20261024/manifest.json",
++  "active_context_previous_archive": {
++    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/active-context-before-task9-normalization-20261024.md",
++    "sha256": "a1a3a152540049dc683519fcec69d98c0d77db41218fa56358e2760398e68068"
++  },
++  "task9_fixture_attempt": {
++    "owner": "task09-2d0e28ea775540f8b3525f9344edf5f0",
++    "schema": "ama_t09_2d0e28ea7755_behavior",
++    "status": "READY_EMPTY_SCHEMA_ACKED_AFTER_INVOCATION2",
++    "cause": "originalTask7envexactselectedcontainername vshelperCID-only assumption",
++    "correctiveScope": "newhelperminimalfix/review thenSAMEUUIDcontinuation, oldenvunchanged",
++    "invocations": 2,
++    "actualCreateGrantInvocations": 1,
++    "guardSha256": "d9b8f75b2dccda19f4e77fa05dc03d512881fa3af9b14ee30bd9c22f5ea6d0f1",
++    "applicationAckSha256": "6f926c62b9710dab9c889eee104543b3250bfd5e33fc23d67fb655677e4c7e5d"
++  },
++  "active_review": null,
++  "task9_envelope_supplement": {
++    "status": "DESIGN_ADOPTED_IMPLEMENTATION_PENDING",
++    "sha256": "150f2a12df60f117edb35c1d3fdb265713b79b7116209d095287f155faff5c49",
++    "reviewSha256": "2269ba7eec235042b0c21cc86d0614e70ae583be06c4bcf160e5f70ab6864c68",
++    "wrapper": "docs/superpowers/specs/2026-10-24-ama-phase-b-controlled-envelope.md"
++  }
+ }
+diff --git a/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md b/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md
+index c63e1ba..863ce13 100644
+--- a/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md
++++ b/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md
+@@ -630,3 +630,121 @@ Ruling: Task9 adopted R1 section6.2 explicitly authorizes a dedicated per-run be
+ Task 7: fix round 2/5 (1 addressed, 0 open — T7IR-01 old committed zero-effect receipt after authorized successor now retires boundedly; commits 6cce479..bdf9762). Independent22818db8 SPEC COMPLIANT/qualityAPPROVED0new; mechanical2d41fbf0PASS, controllera9552f78 actual8seals/3resources/6PIDs/known6scan0.
+ Ruling: review Q-01/Q-02 cannot verify two inherited full-batch failure causes; retainUNKNOWN and carryTask13, notconfirmednewfix02defects because failingpaths do notselectnewold-FAILEDbranch and actualIR01final12PASS. Accept scopedcomposed407 sourceclosure; costifwrong laterfinalreview/repeatabilityrepair, neverclaimsinglegreenbatch orrootcauseclosure. CV04 remainsfutureconsumerqualification.
+ Task 7: complete (commits de1611a..bdf9762, review clean forframeworkscope; Q01/Q02 evidencequalifications retained, CV04 actual9–11 open). Rootadoptiondocumentandmirrorsprepared, adoptioncommitnext.
++
++Task7 ROOTADOPTION cff858e163ca7dea774dcf05c707ef7551956156 parentbdf exact49docs/evidencepaths/no backendchanges. Actualsource+adoptiondocGitverified; fixedpublicconsumerACK issuedbydelegatedcoordinator. Task9 focusedsource/prefixrepin andnewownemptyfixture/separateapplicationACK next; productNOTactivated.
++
++Task9 samefreshAstrahighauthor /root/b_controlled_coordinator/b09_minutes_generation dispatched StageAreadonlyfinalupstreamrepin onactualcff858e; brieffd76a018. OnlynewWreport/manifest permitted; no product/DB/runtime. Reusefulladopteddesign/preflights; afteractualrepin coordinatorreviewedhelper/separatefixtureACK→StageB. ProtectedactualBASE list 20557entries sealed; noTask9modelexceptions.
++
++CoordinatornormalizedactivecontextatTask9 toremovecontradictoryhistoricalactive/pauseprose; exactpriorbytesarchived active-context-before-task9-normalization-20261024.md SHAa1a3a152540049dc683519fcec69d98c0d77db41218fa56358e2760398e68068. No product/gatechange.
++
++Task9StageAREADONLYCOMPLETE report07089205 FULLREAD18506B/manifestf1666322; controller actual{'changed_production': 16, 'focused_hooks_and_test_source': 12, 'unchanged_post6_carry': 79, 'authorities': 21, 'complete_sql_prefix': 15} +36rangeseals/full15SQL/Flywayjar verified. FirstreadonlycheckerKeyError absentoptionalbytes ononeauthorityentry correctedwithmandatorySHAall/noearlierPASS. Ruling acceptconcreteTask9sharedregistryextension/sameissuer/control-rankpublicationprelock+exactrevisit/boundedexecutionmanifestpretransferread asrequiredR1implementation, notnewdesign/nofenceloosen. IndependentTask9source reviewlater. NowexistingreviewedhelperonefreshTask9schema thenSEPARATEapplicationACK→sameauthorStageB.
++
++Task9helperactualinitialinvocationexit1preSQL/env_clone expectedCID butactualTask7envexactguardedname; allothercompatibilitychecksPASS. readonlyactualschemaCOUNT0/ownerabsent captured, originalintent/receipt/6inputsarchived. No schema/grant/envcreation. Originalhelperauthorfollowupactualnotfound; freshAstrahighhelperround2/5 narrowname↔pinnedCID compatibility withnewhelperfile, oldbytesimmutable. Ruling sameUUIDcontinuationafterindependentreview authorized because actualzeroDDL/owner proven; keepallinvocationsdistinct, neveralternateUUID/reset/drop or claimoneinvocation. Costifwrong controllednewemptyfixturepartialstate remainsforinspection; no olddatawrites. Task9productStageBnotyetactivated.
++
++Task9helper runtimefixround2/5 (H09R2-01ADDRESSED,0open; W-onlya868→14c669/noProductcommit), independentaf2eef5d SPEC PASS/Approved0new FULLREAD. ActualSAMEUUIDinvocation2exit0, firstpreSQLfailurepreserved; ONEactualCREATE/GRANT, newTask9schemaama_t09_2d0e28ea7755_behavior ready0tables/existingtestprincipalactualreadonlyverified, env0700owner/0600file/canonicalCID/privateequalboolonly. SeparateTask9applicationACK 6f926c62b9710dab9c889eee104543b3250bfd5e33fc23d67fb655677e4c7e5d issuedfornormal15bootstrap/rerun0. SameauthorStageBACTIVATE now, no furtherapprovalgate.
++
++Ruling: preparefutureTask10freshownschemahelperinparallelreadonlywithTask9productauthor, becauseTask9globalterminalmaintenancewouldotherwisealterpriorownedcasehistory. Reuseboundedexistingparent/no newcontainer/credential; actualexecutionONLYafterTask9adoption/actualprefixrepin/separateTask10applicationACK. Costifwrong unusedW-onlyhelper; no newresource. This isnewfixtureprep, notrepeatdesign/preflight. NarrowadaptreviewedTask9fixedhelper14c669; Task10productnotactivated.
++
++Task9actualbootstrap-01exit0/1PASSXMLc61fbd35; initially0tables/normal15/rerun0/sourcecaptured. Controllerparsedfull15after-history; initialtestdidNOTcapturetwofullbefore/afterstates, finalnormal0comparisonagainstthisbaselinepending(no bootstraprepeat). InitialDriverManagerDataSource/FlywayinitSqlUTCutf8butouter/diagnosticconnectionmetadatawait5unproven, futureguardedDSrequired; authornotified, no retrospectiveclaim/newgate. Actualproof task-09-bootstrap-controller-xml-read-20261024.json. Task9businessTDD underway.
++
++Task10 futurehelper PREPARED_UNUSED c6248074: coordinator fullread9056Bnote/minimaldiff/manifest and actual4deliverablesealsverified. Independent narrowAstrahigh /root/b_controlled_coordinator/b10_future_fixture_helper_review dispatched; noTask10product/DBactivation/execution, futureTask9adoptionACKmissingbydesign. Task9 soleproductwriter continues.
++
++Task10futurehelper preparation accepted ONLY: independent8423cc2e FULLREAD SPEC PASS/Approved0issues; helperc6248074 PREPARED_UNUSED. Ruling futureCannotVerify boundaries remain explicitactual9adoption/prefix/resource/schema/separateACK obligations, notprematureTask10completion; acceptance file task-10-fixture-helper-preparation-acceptance-20261024.md. No helperexecution/productactivation.
++
++Task9interim actualreceipt/XML controllerread: bindings2REDassert→2GREEN, template3REDassert→3GREEN, provider-store8REDassert→8GREEN; zeroerrors/skips inselectedcases, exactsixwindowproof task-09-bindings-template-provider-store-controller-xml-read-20261024.json. Inheritedimplicitunits preservedbutnotcountedasnewunique. No finalsource/HTTP/runtime/CV04closure inferred. Authorcontinuingwire/transport/completefacts.
++
++Task9author identified concreteR1wiregap: completegeneration/processing/reviewroots boundlogicalhash absentexactPOSTpayload, providercannotrecompute. Ruling PROPOSED narrowcontent-freecanonical-envelopeheader preservesbody/hashsemantics; parentendorsedboundedencoding/duplicate/cumulativeactualserverclientlimits/fullbinding/restartscope. Supplement150f2a12 andcompleteadditiondiff; independentAstrahigh /root/b_controlled_coordinator/b09_envelope_supplement_review active. Authorcontinuesothergraphwork, wirechangeawaitssupplementreview; no newuserapproval/broaddesignrepeat. Costifwronglocalcontrolledwire/journalrework, nocompanyprotocolclaim.
++
++Task9narrowwire supplement150f2a12 adopted through new2026-10-24controlled-envelope wrapper+exactpublicmirror; independent2269ba7e FULLREAD SPEC PASS/Approved0issues. Ruling4CannotVerify items areactualTask9implementation/runtimeobligations, notclaimeddesignproof; authorwireimplementationnowauthorized, noextrausergate. ProtectedoldR1/wrapper unchanged. Newcoordinatordocs/artifacts excludedfromauthorcommit.
++
++Coordinator normalizedactivecontext afterwireadoption; priorbytes archived active-context-before-task9-wire-adoption-20261024.md SHA1794b0c1455f53358e3311f0a461ca13c545d40ea6b7fe6e1e0e613681493d2c. No product/gatechange.
++
++Task9interimcontrolleractual11windowXML/receipts: anchors3,graphdiscovery4,protocol4,envelopestore4,providerHTTP5 eachRED→GREEN; protocol-green-01exit1/0testsambiguousRefcompilefailure retained, actualprotocolGREEN02. Proof task-09-graph-protocol-http-interim-controller-xml-read-20261024.json. Authorreportsreal64Mi2CPUchildrestartsameid/rawheadernegatives; semantics/finalsourceclosurepending, exactsupportedmax/clientabortpending. GraphsameissuerS/A/F/fullproducerclosure/candidatewriter/queue/productroutesstillunderimplementation, CV04OPEN.
++
++RulingTask9actualInitialSendAdmission mapsadoptedgenuineExternalExecutionSession.send marker+permit+oneshotcallback, no newissuer/DTO/publicflag. MinimalreadonlyPreparationCancellation view/registration allowed, abortoutsideallmonitors/roots, stickyclose/renewloss, late/double/race tests, UNKNOWNneverreleases. Actual4sourceinputsread/sealed; task-09-external-admission-cancellation-ruling-20261024.md bindsimplementation/finalindependentreview. No newDDL/adminaction.
++
++Coordinatorcurrent-statenormalization: exactoldarchive current-state-before-task9-active-normalization-20261024.json SHA6f513a9c85c2a454c9dc167aec15a1dde55efd8392f52f73c7ec0ea519a79572. RemovedhistoricalTask7interimclaimsfromcurrentobject, fixedstalenext_steps/design7toactualadoptedTask7/activeTask9. Fullchronologyretainedinarchive/ledger; no productchange.
++
++Coordinator added phase-b-cross-task-closure-map-20261024.md ascurrentexplicitcross-taskindex; eachopenobligationrequiresactualsource/evidence/reviewclosurepointer, futureownershipaloneisnotclosure. No taskactivation/testclaim.
++
++Task9 collector custody issue: graph-controls-green-01 command exit1 rejected comma selector BEFORE tests, but old collector copied prior Task09GraphDiscoveryIT XML6cases. Preserve originalcommand/result/XML; ALLsixcopiedcasecounts EXCLUDED, neitherREDnorPASS. Author appendonly correction artifacts/phase-b/b-remaining/task-09/prior-window-report-custody-correction-20261024.json SHA41a828e1afed65eeeee6e5552942d73bb2fdf2e8030283e2815dabc247d99a3b audits28completedwindows (includingallpreviousPASS) against owncanonical log suite/class/count; authorreports onlyoneunqualifiedwindow. Coordinatorreadall28compactauditentries, notindependentlyalllogs; root /root has exactreadonlyindependentauditassignment. Correct graph-controls-green-02 actually10PASS(capture4+discovery6), overlappingnotadditive. Collector firstmtimefixsealedthere; currentfullbeforemtime+SHA/closednsinterval/report-custody tobe sealednextactualwindow. FinalTask9review/custodyMUSTreceive error mechanism/scope/exclusion/rootaudit/anyunprovablesourcewindow; onlygenuinelyunqualifieditemsneedadditionaltest, nogeneralrerun. Historicaloldwrongreceiptsnotrewritten.
++
++Task9collectorrootindependentaudit COMPLETE28windows/69XML:68ownlogmatch, onlygraph-controls-green-01old6excluded. Actualcanonicalvalidselectorpredeletesoldreportkind; commaearlyreturnexplainsdefect. Retrospectivesuite-levelcustodyacceptedwitholdnoXMLtimestamp/noeachsuccesscase/log/no before+closednsinterval limitation; notcontemporaneouspercasefileidentityproof. task-09-prior-collector-root-independent-audit-20261024.json storesrootfacts/ruling. No broadrerun; newcollectoractualwindowverification/finalsourceclosurepending.
++
++RulingTask9testisolation: syntheticTask09SourceGraphIT READYmetadataheadsusedrealTRANSCRIPT_IMPORTpool/type andblockedactualnativeHTTPupload/importpipeline; pipeline-source-red-01 1FAIL nonbusinessRED retained. Delegatedroot oneboundedownschema exact-ID/fullpredicate CAS READY→CANCELLED authorized withfullpreimages/noactiveattempt-marker-permit/stoppedcaseprocesses/afterrowcounts; no otherfield/rows/spec/productionlogicchanges. ACK task-09-owned-fixture-retirement-root-ack-20261024.json. Futurefreshsyntheticpool TASK09_METADATA. Actualreceiptpending; noDDL/reset/delete.
++
++Task9ownfixturemaintenanceactualcompleted11rows(10strictsynthetic+1failedrealpipeline), onlystateREADY→CANCELLED; fullbefore/after/source/receiptindependentlyreadandcompared in task-09-owned-fixture-retirement-controller-check-20261024.json. Two syntheticexternalPREPARED/nullmarker/noattempt rowsretainedunchanged. Firstretirement01serialization1ERRORbeforetransaction preserved; retirement02 1PASS notbusinessqualification. Newcollectoractual02SHA/closednsmtime/previous01SHAchecked. Freshnativepipelinecontinuing.
++
++Task9firstreal sourcepipeline actualRED02missingreaderassert→GREEN01 1PASS, red01READYfixturefailurepreserved. ControllerXML/receipt/actualtestsource/newcollectorintervalSHAchecked in task-09-first-real-source-pipeline-controller-read-20261024.json. RealRAW→WORKING→confirmation/sourcepreparation only; generation/body/set/review/finalclosurestillfailclosed, candidatewriter/queuepending, CV04OPEN.
++
++RulingTask9source-first test-onlynoninstalledcompositionperalreadyacceptedstagedscope: actualproductioncommands/policy/genuineissuer-gate-sessionallowedforisolatedqualification, nofakefuturecontribution/alwaysPENDING/defaultbypass. Formalnewcommand/handlerfailcloseduntilactual10/11; history/replayseparate; negativeproofrequired. task-09-isolated-composition-boundary-ruling-20261024.md. Authorcontinuescandidatewriter/queue; no newgate.
++
++Task9initialsettingsactualRED02twoassertions→GREEN01twoPASS andsessionabort3RED→3GREEN controllerXML/receipt/newcollectorchecked task-09-settings-session-interim-controller-read-20261024.json; initialsettingsRED01zeroexecutedtests retained. Actualfirstsettings/replaycommand isolatedscope, sessionphysicalabortcomponent, no formal10/11/genuineDBsend/candidatewriter/queueclosure.
++
++Task9generation-prepare-red-01 actual1assertRED→green-01 1PASS receipt/XMLread; realproducerchain→genuineS/A/F→computeGeneration→completeenvelope/protocolconsistency, inertpreparationonly(noinput/task/rootwrites), no queue/sendqualification. initial-settings-boundaries-01actual6PASS includesprior2plus4new(auditrollback/partial-historydeny/newkey-historydeny/samekeyconcurrency), NEVER2+6unique. Candidatewriter/DBexternal/queueunfinished.
++
++Task9generation-queue-red-01→green-01actual1assertRED/1PASS XML+actualtestsourcecontrollerread: JdbcMinutesGenerationCommands/authority-ownedminutesTaskPolicy/genuinePreparedDomain atomicallyinsertinput+READYtask+receipt/audit/outbox, meetingunchanged, replaybeforeunavailablearchives. NotWorkertransport/candidatecompletion. AuthorfoundnewTask9RRsnapshotfreshnessgap, twoactualconcurrentREDsunderway; rulingexactheldPKcurrent-readrevisitallowed, completedomainmembershipchangeabortbeforehigherlockphase, nonewlatechild/parentlockaftertask/external. No newdesigngate; finalreviewcovers.
++
++Task9RRfreshnessauthor reports graph-current-read-red-01 6cases/2FAIL→green-01 6PASS; currentnewmemberdetectionatdomainrank/exactheldPKlater. Realgeneration-queue-claim-01claim/renew/controlledFAILED terminalpassed; stored-binding-green-01 originalroots/config/producer/fingerprint1PASS, candidatewriter/realexternalcompletionstillpending. RulingrequestManifestkeepsR1exactrootfieldset; ama.minutes-model-execution.v1isfixedcodec/schemaidentity, noextraunlisted schemaVersion member; task-09-request-manifest-schema-ruling-20261024.md.
++
++RulingTask9implementationorderifreader/writerinterdependence: firstrealminimalcompleteS1verticalslice existinginput/task→actualprovider→strictparse→genuineTask7observer→fullcandidateinsert/readback, thencompleteallcategory/directory/nullable/history-review-final/negative-rollback-STALEmatrix. No scope reduction/no fullfuturebranchprerequisite/newdesigngate. Costifwrongboundedorderrework; finalTask9fullrequirements/reviewunchanged. Authornotified.
++
++Task9actualreceipts: generation-worker-prepare-red-01 1ERRORmissingentry→green01 1PASS; controlled-client2RED→green02 2PASS(firstgreen01compile0testsfailurepreserved). generation-external-red-01actual1assertFAIL missingMinutesExternalPreparation; fixedpreparation/observer+MinutesCandidateWriter+genuinesessionhandlerunderimplementation. No candidateDB/sendadmissionclosureyet/noexternalblock.
++
++Task9firstrealexternal marker+permit+HTTPsend executed, generation-external-green-02actual1FAIL; task1106f41b-077f-4d54-8329-1341eceebcd7 RECONCILING/execution6521f9b2-bfd3-476a-93ec-6e9fcbe8a4f1 MARKED/permit736364f2-5f6d-42f3-902f-de1a5ecfeff1unsettled; providerownedstoredurableSUCCEEDED/result. external-diagnostic-01readonlypreserved. Authoractuallookup/observerdiagnosisandgenuineTask7samefactreceipt-onlyrecovery nextbeforenewtests. NOsend/retryAfterZeroEffect/newexecution/manualterminal/permitrelease/fixturecleanup; pendingoriginalIDs MUSTresume exactly ifinterrupted. NotPASS/noexternalblock.
++
++T9FIRSTEXT-OBS currentqualification: generation-external-green-02 originalobserver failure stack NOT retained (fixtureloggingERROR/defaultWorkerfixedsafeexceptionrecording), originalcauseUNKNOWN. DB MARKED/RECONCILING/unsettledpermit andsameproviderdurableSUCCEEDEDretained. NewprepareLookup/recoveryusesexactoldinput/request/store/result GETonly/genuineobserver, safetype/code/frames andsourcewindowdifferences; a laterrecoverysuccessalonecannotestablishoriginalcause. FinalTask9review/custody/Task13mustreceivethis unlessactualcausalevidenceclosesit. No manualterminal/permitrelease/resend/newexecution.
++
++
++### Task9 original external fact recovered — 2026-10-24T05:41:12.103691+00:00
++Controller checked recovery05 XML1PASS/report custody/entire lookup-only test source, exact same task/execution/operation/reservation/attempt before-after, six provider file hashes unchanged. Genuine claimReconciliation + observePrepared wrote candidate 94707e50-beb5-4fef-b192-7f6d961c8037; actual recoverSettlements(64) settled old permit. Proof: `task-09-original-external-recovery-controller-check-20261024.json`. Recovery04 UTC serialization/readback defect is independently diagnosed; original first-send failure remains UNKNOWN because original stack was not retained. Fresh full Worker send case green03 reported by author; full Task9 remains active, no Task10 activation.
++
++
++### Task9 rich candidate milestone — 2026-10-24T05:47:40.198986+00:00
++Author reports actual rich DB/HTTP seven-category8element/9evidence graph with sensitive directories/background joins, nullable action fields, locator reuse and no human reviews. Coordinator checked generation-rich-green-02 result1PASS, sealed XML hash and run interval; candidate-reader-green-01 also1PASS (overlapping scenario, not unique-count sum). Full owner graph/binding reader present. Replay/fresh-process/rollback/STALE/API/finalqualification still active; noTask9adoption/CV04closure/Task10activation.
++
++
++### Task9 terminal replay and provider-only restart — 2026-10-24T05:55:52.230421+00:00
++Actual terminal-replay-green-01 and generation-provider-restart-01 each1PASS; controller matched sealed XML/hash/closedinterval. Read complete provider restart source and actualchildclosed receipt: new64Mi/2CPU JVM sameport/store, originalresultGETonly, sixfileshashmap unchanged, childclosed. App/preparation/client/operations remainparentJVM: this is provider-only restart, notdualend freshprocess. Author asked to distinguish and close requiredapplication reconstruction in existingmatrix. businessSTALE/rollback/API/formalruntimeadmin remainactive; noTask9adoption/CV04closure.
++
++Task9 business-stale-green-01: actual1PASS result/XMLhash/closedinterval controllerverified; authorreports realTask6SAVE r4→r5 followed by genuine retention ofrichSTALEcandidate/rootpreservation. Originalred01 missingcandidate1ERROR retained. Fullsource/finalmatrixreviewpending. Applicationfreshprocess/rollback/API/formaladminremain.
++
++
++### Task9 application child heap exception — 2026-10-24T06:05:48.773025+00:00
++Author reports application-provider-restart-02 business1PASS but actual newapplication child mistakenlyused-Xmx512m/2CPU, violating child64MiB brief. Childexited; originalcommand/XML/source retained. Thiswindow is resourceUNQUALIFIED and excluded from qualifiedrestart count; no retroactivechange. Author corrects onlychildheap64MiB and reruns affectedscenario. If actual64MiBfailure occurs, diagnose before anynewresourceRuling. No acceptanceclaim from02.
++
++Task9 application-provider-restart-03: actual1PASS result/XMLhash/closedinterval verified; controller selectedcommandflags show BOTHchildren-Xmx64m/2CPU; appchildexit0/alivefalse/parentApplicationClosedtrue, providerchildexit143/alivefalse. Source-first productionprimitive reconstruction only, not formalcombinedHTTP10/11 startup. Original02resourceUNQUALIFIED retained/excluded.
++
++Task9 STALE terminal replay + insert/readback/audit/outbox rollback:5windows each1PASS result/XMLhash/interval checked, see task-09-stale-rollback-interim-controller-xml-check-20261024.json. Author reports genuine originalfact claim/GET recovery and settledpermit/noresend. Review reader structuralfixture1PASS is readercapability only, notTask10humanworkflow; final/frozen/identityunion/API/adminremain.
++
++FullcurrentTask9remainingcategories are recorded in `task-09-remaining-inventory-20261024.md`; Task9 remains substantialactiveimplementation, not merelyreportfinishing. Thisinventory distinguishes scopedexistingPASS from allremainingcapabilities/gates.
++
++Ruling: Task9 implementation order after rich/readers/realWorker/replay core is current narrowverticalcase→realAPI/projections/OAS and single registry/composite/recoveryruntime/admin executableartifact→concentrated remaining negative/ACK/budget/union matrix→finalregression/custody. Why: complete remaining inventory shows majorHTTP/runtime modules not yetstarted; endlessreader-only refinement delays an assessable completeTask9. Costifwrong: some focusedinterface/test rework, not scope loss. Every knowncriticalnegative/category remainsmandatory and scopedexisting evidence is reused. Coordinator retains exactadministrativeACK role; no waitforroot/user. Author notified.
++
++Ruling: formalnewinitial-settings requires realTask11 publicationfreeze as R1§5.1 explicitly mandates; missing→503, authenticacceptedreplay/catalog independent. Exactreason/cost/stagedHTTPsuccess closure in `task-09-initial-settings-installation-boundary-ruling-20261024.md`. Author continuesAPI; nofakehooks/TODOnewbranch.
++
++Task9 generation-invalid-terminal-replay-01 andminutes-http-green-01 each1PASS; controllerresult/XMLhash/closedinterval verified. AuthorAPI scope realcatalog/6queries/acceptedinitial200-enqueue202/session/409-400-403/new503 missingdependencies; highwater/keyset/multiflow pagination stillpending. Single registry/composite lookup/runtime/adminnext; fullremaininginventory mandatory.
++
++Task9 composite-recovery-green-01 result1PASS/XMLhash/closedinterval verified. Authorreports actualproductionTranscriptWorkerRuntimeProvider freshassembly afterobserverrollback, samegenuineGETfact recovery/richcandidate/permitsettlement; noformalnewsend/configureconstructor/no10-11fakehooks. Adminartifact/OAS next. Coordinator will readminimumconcreteadminbundle for delegatedexecutionACK, notduplicateallTask9review.
++
++Task9 admininvocation1 actualexit1 athelperline18 exactenvkeyassertion: helperexpectedAMA_TEST_DATABASE_CONTAINER, actualapprovedeightkeyusesAMA_TEST_CONTAINER. Coordinatorreadsourcebutmissedactualkeynamecomparisonbeforeinvoke. Actualowneronlyinstall.properties andexecutiondirabsent confirmpreJava stop; noSQL/secret/archive/configure. Failure task-09-admin-invocation01-prejava-failure-20261024.json. Originalbundleunchanged; onlynewhelperkeynamecorrection/sameowner explicitinvocation2ACK; noenvedit/rebuild/retest/reset.
++
++Task9 actualcontrolledadmin installed via sameownerinvocation2/newhelper07ac9f72: exit0, exactly1Javaadmincall; invocation1preJava-keyfailure preserved. Newtemplate/revision/19archive/modelcapacity1rev1/privateprovidersecret+configs; noDDL/envchange/providerstart/newbranchactivation. `task-09-controlled-admin-application-ack-20261024.json` carriesexactactualreceipt andscope. Authorreleasedtoserialmatrix; runtime startup remainsseparateexactwindow.
++
++Ruling: authority-denied same-fact GET-only reconstruction is permitted/required under existingR1+Task7; no sourcegrant/domainpermission/mutable requester. Exactbinding/bounds/negativegates in `task-09-authority-denied-fact-lookup-ruling-20261024.md`; actualreadsource hashes preserved.
++
++Task9 deleted-consumer negative fixture authorized onlyfreshownedcase/twoexactroot-heldCASfields; productiondeleteAPIabsent, notbusinessdeletionproof. Scope/unchangeddataassertions in `task-09-deleted-negative-fixture-ruling-20261024.md`.
++
++Task9 revoked/deleted/productionphysicalcancel eachactual1PASS XMLhash+closedinterval verified: task-09-revoked-deleted-cancel-interim-controller-xml-check-20261024.json. Author reports genuine terminalfact/noeffects underrevoked/deleted/API403; productionWorkerclose socketEOF after1durablePOST, beforefactpermitunsettled, laterexpiry sameGET/observer settlement. Freshprocess deniedGET/manifestbudget/foreign-tamper remainOPEN; fullsource qualification finalreview.
++
++Task9 denied-lookup-green-02 actual1FAIL: Genuine committed reconciliation claim required; originaltaskf85adc4c/executionce929e14 MARKED/unsettled/providerdurablesuccess retained. Authorreports missingactualpostcommitgrant insertion; systematicnarrowfix thenoriginalsamefactGET-onlygenuineclaim/observer recovery, no newexternalcase/resend/manualstate/grant. State records exactIDs/window.
++
++Originaldeniedlookup factrecovered: green02 grantmissing1FAIL→recovery01 GET/observeractuallycommitsRECORDED_FENCED buttestwrongAPPLIEDexpectation1FAIL→recovery02settlementonly1PASS/0providerCalls/0candidate. Sixprovidermap01before=02after; exactproof task-09-denied-original-recovery-controller-check-20261024.json. Nevercallrecovery01allPASS or02standaloneGETproof; compositionandfailuresretained. One-timehelperisolated.
++
++Freshdeniedapp green03 actualobservercommit thenfinalsingle-scannerexpectationFAIL; settlementonly denied-child-settlement-01 actual1PASS/0providerCalls, no businessfactrewrite. Readreceipt/XMLcustody in task-09-denied-child-settlement-controller-read-20261024.json. Preservecomposedqualification; boundedcontinuationtestadaptation leavesproductionfairscannerunchanged.
++
++Ruling: Task9 PINNED/exclusion fullcapability now usingactualrichgraph/ref structural/source-firstselection; nofakecurrentpointers/Task10success. ActualTask10-currentPINNED+activeexclusion→newgeneration/Worker mandatorylaterintegration, explicitOPEN inclosuremap. See task-09-pinned-exclusion-stage-boundary-ruling-20261024.md.
++
++FreshdeniedGET/deletedGET/lookupvalidity green04/green01/green01 eachactual1PASS result/XMLhash/interval verified; task-09-denied-lookup-authority-interim-controller-xml-check-20261024.json. Actualclaim expiry/replacedepoch/close revokesnewlookup whilepriorverifiedreceipt canrecord. Tamper tests are clearlyJDBCread-faultinjection, notpersistedDBcorruption. Finalsource/privateauthority review remainsmandatory.
++
++Task9 latestcapability milestones (authorreported, fullindependentreviewpending): pinned-render-green-04 actual1PASS complete11reuse rows/physicalunion/doublelabels/no currentpointerchanges/strict excludedbody-element rejection-directoryallow. PriorINVALID_SCHEMA wasemptytestbody; productrules unchanged. archive-append-green-01 actual1PASS afterrealnewtemplate+17versionappend/defaultswitch andboth64Mi newprocesses; originalrequestHash/result/candidateunchanged. ActualRED02 oldindexreopenmissing fixedwithnewTask9 trustedroot ControlledMinutesArchiveAccess, notTask3Snapshot change. RED01testselectedoldref/notrealswitch excludedfromtargetRED. Next actualobservationcommitACKloss→sameprivatereceiptrecovery matrix.
+diff --git a/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md b/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md
+index 796fc9a..1ce91cd 100644
+--- a/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md
++++ b/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md
+@@ -1,55 +1,116 @@
+-# Active continuation — Task7 implementation (2026-10-24)
++# Authoritative active continuation — Task9 implementation
+ 
+-Current authority: current-state.json + latest progress.md + task-13-pending-issue-register-20261024.md. User requests all remaining local controlled tasks using subagents without routine clarification/milestone stops. No active pause. Exact prior state/context preserved in pointer_normalization_archives; historical pending paragraphs are not current.
++User resumed ALL remaining Phase B, then STOP before C/D/E/F. This replaces historical active/pause prose. progress.md retains chronology; current-state.json execution_status/active_implementation and this document describe now. Prior exact context preserved as active-context-before-task9-wire-adoption-20261024.md. W=.superpowers/sdd/2026-10-23-ama-phase-b-remaining. No goal was requested.
+ 
+-Only product tree /home/tanren/ama/.worktrees/phase-b-completion, branch codex/phase-b-completion-20261023. Tasks1–6 and8 COMPLETE. Task8 sourceDAda154155/reviewf718SPECcompliantApproved/rootadoptionDEde1611a67ba483afe21f3b29bb69c2d32028efef. FUP-B05-CANDIDATE-01 controlledscope andT6-INDEX-MODEL-SYNC CLOSED; carryMinorT8SR-M1Task13/historicalOptionalcauseUNKNOWN. Remaining7→9→10→11→12→13, thenwholebranchreviewlowerbound34cb226aefe99c67d3681af68d748b0aeea4e073. Do not stopafteraslice.
++## Authority and execution
+ 
+-Task7 soleauthor /root/b07_prepared_external_runtime (freshAstrahigh), BASEDE. Read-first task-07-activation-brief-20261024.md SHAd8505d46b4e3a6f713e1d4754aef29eb90f1fbeeb311fd48a4fafaba40df7bd6 +referencedadoptedfullprotocol/R1/rulings. RootHEAD/indexFROZENuntilauthorowncommit; rootcentral/newWonly, no productfixes. Exact4rootcentralexcludedauthorstage. Authorno subagents. IndependentdualSPEC+qualityreview afterDONEreport/owncommit; actualfixroundreadfix-loop first/sameauthor1–3. Do notredispatchTask7orredoacceptedpreflights.
++Only product tree /home/tanren/ama/.worktrees/phase-b-completion; branch codex/phase-b-completion-20261023. Last adopted HEAD cff858e163ca7dea774dcf05c707ef7551956156; active Task9 author may now change/commit its precise own paths. Final whole-branch review BASE fixed34cb226aefe99c67d3681af68d748b0aeea4e073, never main merge-base. Main /home/tanren/ama remainsc71a44adb679a78d4c28dde7a4223aad1a23b40f; onlyexacttwo existing discovery docs with preimages may update, no index/code/maincommit/merge/push/publish/mail.
+ 
+-Task7exactnewownschema ama_t07_0cea85a0e472_behavior /owner task07-0cea85a0e4724e78bd7aa6aabfc243bc onexistingTask8MySQL11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad/44727/768Mi=swap1CPU256PID/8.4.6AIO0/serverUUID1bdea6eb-cf32-11f1-8fe3-fef4aa4b3a25. Privateenv.tools/task07-0cea85a0e4724e78bd7aa6aabfc243bc/env.sh0600; ACKee73ff0b/guardd685ad27. Fresh normalSchemaMigrator15initial/0rerun captured artifacts/phase-b/b-remaining/task-07/migration.json; root evidence-only parsedall15fullbefore-aftersame/adoptedstablefields/current15SQLunchanged, see task-07-bootstrap-root-evidence-check-20261024.json. Notruntimecompletion. No newDDL/currentmodel. Protected9777c207a1ab/all15SQL immutable/no modelexceptions; actualTask8DA→DE3seamrepin06e1e691 complete.
++Root /root monitors/usercommunication only. Delegated coordinator /root/b_controlled_coordinator Astrahigh owns bookkeeping/rulings/controlledDDL/adminACK/adoption, NEVERproductcode. Userauthorized controlledagents: oneproductwriter, heavytestsserial; author/taskreview Astrahigh, finalwholebranchreview Astraxhigh, mechanical Solxhigh. Skills7.0.1 realpath /mnt/c/Users/LING/.codex/plugins/cache/openai-curated-remote/superpowers/7.0.1/skills; read fix-loop beforeeachround. PreserveW/evidence peruser. PowerShellliteralhere-string→wsl Ubuntu-24.04 python3; never sandbox_permissions. No broadsetup/design/preflightrepeats.
+ 
+-Task7 actualprivatepreparedauthority/atomicDB-onlywriter/postvalidation/verifiedAFTERcommitpermitsettlement/boundedterminalrecovery, generation-onlynarrowSTALEretention, Worker MARKING→OPERATION→SETTLING/ordinaryrenewdrain/noDBorcontextmonitorI/O/commitACKbeforeIO/oneheartbeat/nosecondsend/noordinarycompleteuncertainty/closefactretention required. OwnfiniteQ/R+actualcontrolledpolicy/privateclosureproof; future9/10/11productionconsumersuninstalledfailclosed, notenterprisequalification. Perexecutedwindowretain exactmutablehelper/keyseambytes+hashes/commands/exits/XML; nohash-onlyhelpergap. Authorfinalallunitsonce/proportionateinheritednewforwardcopies/sourcecustody/report/publicmanifest/owncommitthenreview. W/task-07-report.md pending.
++## Completed and current first action
+ 
+-RetainedoldsharedMySQL eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502/46653/768Mi1CPU256PID and S3 a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51/45501/2Gi2CPU256PID unchanged. Task7businessonlynewownschema/namespaces; nooldshared/Task8casewrites. Task8overflowMAXintentionallyexhausted NEVERreuse. No newcredentials;6knownprivatevalues neverprint/digest. No fullinspect/Config.Env; selectedexactCIDfields only. Test/WorkerJVM512Mi2CPU, standalone/native64Mi2CPU. No reset/drop/clean/repair/outOfOrder/oldSQL/raw/goldenedits.
++Tasks1–6/8 alreadyadopted. Task7 sourcebdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc adoptedcff858e. Review task-07-fix02-independent-review-20261024.md SHA22818db8d10088d0485213cd52e673750abbba0892fab2553643dbe8a9e6bc27: SPEC COMPLIANT/APPROVED0new, IR01ADDRESSED, IR02/03/CV01–03closed. Mechanical2d41fbf0PASS. Originalolderauthoractualfollowupnotfound; replacementcontinuedSAMEfixround2/5, notnewround. Do notredoTask7.
+ 
+-ParallelREADONLY /root/b11_forward_ddl_proposal standardSolhigh preparingNEW Task11 exactUNVERSIONEDpublication_submissionWSQL/report/manifest after8. Completed235filepreflight/designnotrepeated; noformalversion/resourcecopy/modelwrite/DB/tests/Git/source edits. Actual7/9/10/prefixrepin +independentstaticreview/rootfreeze/separateapplicationACK future. Prior7/9/10/11/12/13preparationsCOMPLETE, usefocusedactualupstreamrepinsatactivationonly.
++ACTIVE soleproductwriter /root/b_controlled_coordinator/b09_minutes_generation Astrahigh. Brief task-09-activation-author-brief-20261024.md fd76a018. StageA DONE07089205/f1666322, coordinator e82f0b9e verifies16changed+12hooks+79carry+21authorities+15SQL/36ranges. StageB alreadyACTIVATED oncff858e afteractualfreshfixture/separateACK. Continue fullTask9 TDD/source/report/preciseowncommit; thenfreshindependentSPEC+quality andmechanicalcustody/adoption. Do notstopatTask9; proceed10→11→12→13/finalreview/accuratehandoffthenSTOP.
+ 
+-Pendingregister authoritative: T6SR03fouraliases+T4SR04limitoverflow400+T4SR05positivepartSizeLongTask12;T4SR06Redoclynames/banner12/13;T8SR-M1prefetcheddeletiontestTask13;historicalOptionalunknown;FUPTEST01heartbeat100ms/FUPTEST02warnings/T03M01readability/T03M02initial29handshakeerrorscauseunproven. B01IMMpermanentPARTIAL/B04Q401UNKNOWN/companycontractsabsent/HA-capacity-nativeIOunqualified. Allfailedsource/executionwindows retained. No productionpublish/mail/mainmerge/push.
++Task9 fixture .tools/task09-2d0e28ea775540f8b3525f9344edf5f0/env.sh0600 in0700owner; schemaama_t09_2d0e28ea7755_behavior. Creationguardd9b8f75b and separate task-09-root-fixture-application-ack-20261024.json SHA6f926c62b9710dab9c889eee104543b3250bfd5e33fc23d67fb655677e4c7e5d. Actualinitialbootstrap15/rerun0/1PASS artifacts/phase-b/b-remaining/task-09/bootstrap-01/. Controllerfullafter-history matchesprefix. Initialdiagnosticconnectionsettings andtwocompletebefore/afterhistoriesunproven retained; finalnormal0mustcomparebaseline, neverrepeatbootstrap. FutureDSUTC/utf8mb4/metadata+InnoDBlockwait5.
+ 
+-Stableexec: WindowsPowerShellworkdir C:/Users/LING/.codex/visualizations/2026/10/23/01a169f9-afbd-7c50-a721-92fccad7e5c1; literalhere-string→wsl.exe -d Ubuntu-24.04 --cd producttree -- python3 -, subprocessargv. Never sandbox_permissions. Longexec preserve session_id/poll, commentary≤60s/boundedwait60s. Primarymainlastactualc71a44a; onlyexactdiscoverydocs refreshafterguard, no product/commit. PreserveW/handoffs peruser.
++InterimcontrolleractualsixXML/receipts: bindings2RED→2GREEN; template3RED→3GREEN; providerstore8RED→8GREEN. Proof task-09-bindings-template-provider-store-controller-xml-read-20261024.json SHA54da6c90a90aeb10a30086918dd3e070305b79dcda2a4e2be92911228110a535. Rawsubdirectoriesbindings/template/provider-store-{red,green}-01. ImplicitSurefireunitsranininitialITwindowsandretained; do notinflateuniqueorclaimunitsexecutedonlyonce. SubsequentrealproviderHTTP5RED→5GREEN,protocol4/envelopestore4/graphdiscovery4/anchors3RED→GREEN; proof task-09-graph-protocol-http-interim-controller-xml-read-20261024.json b96dd12c. protocol-green-01exit1/0testsambiguousRefcompilefailure preserved, correctedGREEN02. Authorreportsactual64Mi2CPUchildrestartsame-result/rawheadernegatives; deploymentheaders16384/field8192/count32, exactsupportedmax/clientabortpending. SameissuerS/A/Ffullgraph/source/task/externalclosure/candidatewriter/queue/composite/productroutesstillimplementation. No fullruntimeinstallation/CV04closureyet.
+ 
+-LATESTTask11deferredUNVERSIONEDphysicalDDLpreparation COMPLETEONLY: R1SQL195bec3b/report243146df/manifestdb9459d7; scoped721a2136 dualApproved0findings closes2ImportantSTATIC1round, rootFULLREAD27seals+exactpatchd739. Originale902/3c0e preserved. Actual8.4.6exactCREATE/negative/FK/LOBprobeOPENTask11-SQL-PROBE beforeallocation/freeze/ACK; actual7/9/10/prefix/writer/source/modelsfuture. Noformalversion/DB/source/modelactivation; Task11implementationunfinished. Task7stillsoleactiveauthorDE.
++## Newly adopted narrow wire supplement
+ 
+-ParallelNEWreadonly /root/b09_fixture_helper_prepared preparingTask9ONEnewabsentschemahelper onSAMEowned11009a/44727/reusedcredentials; W-only/noexecution/DB/Docker/source/Git. ActualexecuteonlyafterTask7adoption/rootstaticreview/separateACK. NoTask9activation/preflightrepeat.
++AuthorfoundR1completegeneration/processing/reviewrootsboundlogicalhashbutabsentexactPOSTpayload, so providercouldnotrecompute. Rootendorsednarrowheaderresolution. Supplement task-09-controlled-envelope-supplement-20261024.md SHA150f2a12df60f117edb35c1d3fdb265713b79b7116209d095287f155faff5c49 adoptedthroughnew docs/superpowers/specs/2026-10-24-ama-phase-b-controlled-envelope.md. Independentreview task-09-controlled-envelope-supplement-independent-review-20261024.md SHA2269ba7eec235042b0c21cc86d0614e70ae583be06c4bcf160e5f70ab6864c68 FULLREAD SPEC PASS/Approved0issues. Threeexactsealedinputs mirrored artifacts/phase-b/b-remaining/controller-task09-envelope-supplement-20261024/. Thesearecoordinatorpaths, excludeauthorcommit; oldR1/wrapperunchangedprotected. Authoralreadyreceivedwireimplementationrelease.
+ 
+-LATESTTask9fixturehelperpreparationCOMPLETESTATICONLY: a868bc63152e65a4ff0b3165811c1f0f5c80e682e922c06fdf66ca8e3f90deac/manifest944873f3; scopeda4a53e81 SPEC PASS/Approved0open after1helperfixround, oldexactbcb3files preservedc102. RootFULLREAD4f3e5e14 nineinputs+exactdiff. Noexecution/schema/productTask9activation. AfteractualTask7adoption rootMUSTissuefixedpublic W/task-07-consumer-activation-root-ack-20261024.json with exactfieldsinhelperREADME/fixbrief506b72d9 andpublicdoc docs/acceptance/b/task-B-remaining-07-prepared-external-adoption-20261024.md. ACKabsentnow. Thenactual9source/prefixrepin/liveguard/helperoneattempt/newemptydb/separateTask9applicationACK beforeauthorbootstrap. Do notredispatchcompletedhelperpreparation. Task7stillactiveDE; Task11unversionedSQLstaticreadyonly, engineprobeopen.
++Onebase64url-unpaddedcanonicalJ(existingrequestdata)header, body/payload/typedhashunchanged. FourfutureTask9evidenceobligations: actualaggregate/prehandler/clientservernumericboundsandrawduplicate/foldvisibility; completeauthenticoriginalroots/pre-admissioncrossbindingsandproviderhashrecompute; durablestoredexactenvelope/payloadfresh-processsame-resultidentity; focusednegative/positiveandfinalindependentsourcereview. Notcompanywire/runtimePASS/CV04closure.
+ 
+-LATESTTask7initialimplementationFINALCOHORT authorreports116IT=114PASS/1assertFAIL/1setup-policyERROR; actualoldwindowpreserved. Fixingtwofixturehistoryassumptions(recoverytotal<=32/fixed-inputpolicyencountersoldsamefamilyrows) via snapshotfinitebound+explicitcontrolledcoveragefence; rerunaffectedONLY, productunchangedsinceWorkerduplicate-terminalslotfix. InheritedcopiesinclrealchildkillPASSreported; finalrootXML/qualifications/units/report/owncommit/reviewpending. RootHEAD/indexstillDEfreeze. Task9helperprepCOMPLETESTATICa868/a4a5notexecuted/noTask9schema; Task11unversionedSQLstaticready195b/721a actualengineprobeOPEN.
++## Fixture helper correction and futureTask10
+ 
+-NEWparallelreadonly /root/b13_prefetched_deletion_case_prepared preparingonlynewT8SR-M1Task13exactprefetchedIDdeletecase oncommittedDE/rangepins/test-onlyinstrumentation. No actualsource/test/DB/Gitwrites; completedTask13preflightnotrepeated. T8SR-M1remainsOPEN.
++OldTask9helpera868 firstactualinvocationfailedenv_clonepreSQL/nameversusCID; actualschemaCOUNT0/ownerabsentproved. Oldauthorunavailable; freshhelperSAMEround2/5 narrow3linescompatibility, alloldbytespreserved. Newhelper14c669 approvedaf2eef5d. ExplicitRulingSAMEUUIDinvocation2authorizedbecauseactualzeroeffects, exit0/actualCREATE+GRANTonce. Keepbothinvocations and6preimages, noalternateUUID/reset/drop. Thisisclosed, do notrepeat.
+ 
+-LATESTTask7rootselectedreceiptsinterim04: affected38PASS/recovery4PASS/unit254PASS afterold116batch114/1FAIL/1ERROR; thenNEWspecialterminalreplayRED2assertFAIL invalidterminal+retainedSTALE exactreplay remainsOPEN/sourceauthoractive. Do notclaim254unitsfinalsourceforlaterfix, donotstop/adoptTask7yet. FinalactualXML/sourcecustody/report/owncommit→freshdualreviewstillpending.
++FutureTask10helper task-10-fixture-provisioning-prepared-20261024.py SHAc624807461392d0844a299ff73ef1cea64cb76aa39cc43846a973c068c86fa18 PREPARED_UNUSED. Independent8423cc2e1ce8938f43ace27042329ee98a565ef53be3ca843356b5861f4f90d1 FULLREAD PASS/Approved0issues. PreparationacceptanceWfileexists. Itreusesreviewed14c669withonlytaskidentity/sourceenv/exactpublicpins/futureTask9adoptionACKdifferences. Actualfuturefixed task-09-consumer-activation-root-ack-20261024.json DOESNOTEXIST. Issueonlyafteractual9adoption, minimallyrepinTask10source/fullprefix, executeONCEfreshTask10owner/schema, actualready/separateapplicationACK→sameTask10authorStageB. Task9globalmaintenancecouldchangeoldcasehistory, hencefreshTask10schema. NoTask10productactivated. Preparednotdispatchedauthorbrief task-10-activation-author-brief-prepared-20261024.md reusescompleteddesign/preflight; fillactualsource/adoption/protectionatdispatch.
+ 
+-LATESTTask7authorresolvedRED2asTESTPOLICYconformancegap: verifyReplayproductiondefaultfalse conservative; twofixturepoliciesneedauthenticcontext+storedoutput/completegraphspecialFAILED/nullandSTALE/nullchecks. Prod14pathsunchangedfromunit254/original116reported. Custom44RUNNING toreplacecustom40+legacy76carry=prospective120distinct; rootactualsource/dependency/XML/custody/report/owncommit/reviewstillpending. Do notbroadunitrepeatiftest-onlydependencyproofholds. NoTask9consumerinstalled.
++## Resources, private boundaries, custody
+ 
+-LATESTTask13T8SR-M1readonlycasepreparationCOMPLETEe2b8687e/4887eb52/root7blobs9rangesverified 8e4e825908656ec1aab0ccc963c261879328fa2d412a2901bb2f5c8178b4ee21. ActualmappedprefetchedID/deleteonrealStatement.close/zero-rowcandidate/highercursor-survivor; ONEsharedwrappedDataSourceforwholeownedfixture. Existinggapretained/noProdtesthook. Noimplementation/test/DB; T8SR-M1OPENuntilTask13actualproof/review/upstreamfocusedrepin. Do notredispatchcompletedpreparation.
++ExactsharedMySQLCIDeefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502 port46653; ownerremaining-20261023,768Mi=swap1CPU256PID. OwnedparentCID11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad port44727/nameama-test-task08-848e93aace8b4f0fa34fc548267f3dc5,768Mi=swap1CPU256PID,MySQL8.4.6/AIO0/UUID1bdea6eb-cf32-11f1-8fe3-fef4aa4b3a25. S3CIDa91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51 port45501,2Gi=swap2CPU256PID. Fullmounts/loopback/ownerimmutable. Selectedfields only; neverConfig.Env/fullinspect/privatevaluesorvaluehashes.
+ 
+-AUTHORITATIVE Task7AUTHOR_DONE84b4b0bbf8212ec5606c3f8583a0989f10af681e parentDE,8705paths31source14main17test+1Wreport+8673artifacts; indexempty/root4centraldirty. Wreport1697Be15/fullpublic12119Ba2a637bd ROOTFULLREAD incloneblanklinequalification; ledgercd736/man20e9. Sourcepkg301399Ba9f82978/full74.5MB6d083627/briefce720ac2/pkgmanifest09507e13. FreshindependentAstrahigh /root/b07_independent_review andstandardSolhigh /root/b07_delivery_custody ACTIVE. Rootknown6/PEMscan0onall8705+bothpackages; selectedliveguard/PIDrootcheckpending. RootHEAD/indexfrozen84untilverdict; noTask7adoption/Task9activationyet. Needreview+custody/CVs→sameauthorfix(readfix-loop)/scopedreviewifneeded→rootadopt7+fixedpublicconsumerACK→executealreadyreviewedTask9helpera868/actualnewfixtureACK→source9activation→10→11→12→13; no stop.
++Task9protected20557entries324049183B task-09-protected-adopted-inputs-20261024.json SHA5a985b323877ed199d027079bf329e2a9322d4c2efa4feda4eeeb61ecc2ac81c. NoDDL/model exceptions. Alloldraw/plans/specs/adoptedBacceptanceimmutable; coordinatorcentralrecords/newdocs excluded. Newauthorrawonlytask-09. JVM512Mi2CPU/native-standalone-child64Mi2CPU. No oldfixturebootstrap/reset/drop/repair/outOfOrder/clean; Task8MAXfixtureintentionallyexhaustedneverreuse. Singleheavytestowner.
+ 
++RootRuling: Task9R1section6.2 authorizesNEWdedicatedprivatecontrolledproviderbearersecret/storewhenactualinstallationneeded, withexplicitcoordinatoradminACK/ownedloopback/config. ExistingDB/S3/PKIcredentialsandcontainersunchanged; no values/valuehashoutput. Nonecreatedbycoordinatoryet. Templateinstallerandpermit.configureactualfullruntimeadminrequireconcretecoordinatorinvocation/ACK; explicitfocusedtestinstallerwithinnewownfixturealreadytestauthorized. No constructorfallback.
+ 
+-AUTHORITATIVE TASK7 FIX ROUND1: Independent review91a257d8 found3Important T7IR01–03; SPEC ISSUES/qualityNEEDS FIXES. CV01–03 confirmed framework evidence gaps in same round; CV04 deferred9–11. Initialcustody3421b8d4 verified old374 andoriginal84 only. Sole original author resumed with task-07-fix01-brief-20261024.md; FIX_BASE84, rootfrozenexceptauthorownfixcommit, preserveall30windows/9777adopted/originaldeliverymetadataarchives. Next scopedreview+delta custody before7adoption; tasks9–13 remain.
++## Retained limitations and later closure
+ 
++Task7final407distinctselected=153IT(151fullbatch+2diagnosticreplacement)+254units. Actualfull153exit1 had1RecoveryBoundsassertFAIL+1B06initialclaimsetupERROR, bothcausesUNKNOWN, laterpassdoesnotexplain/fix. Q01/Q02finaltriage; actual12IR01focusedPASS. Original395onlyhistorical6cce. T7CV04actual9archives/payload/resultidentity/fullcandidategraph/normal-invalid-STALEreplay,10copy/intent/allversionwriterPENDING,11readiness/final/publication remainopenuntilactualsource/evidence. Task9formalcombinednewgeneration mustfailcloseduntilreal10/11integration; acceptedreplay/historyseparate. FullLOCAL+S3pipeline11/12mustclose, notindefinitecarry.
+ 
+-AUTHORITATIVE Task7FIX01AUTHOR_DONE6cce4794dba473825d83fb9bccafc043cd611b5c, actual141IT+254unit395PASS rootXML; sourcefix5main/8test,450ownedpaths; reports4878d259/bc510879/manifest964c6661. TESTFREEZE, now independent6itemscopedreview+mechanicaldelta before7adoption. RootfrozenHEAD/index6cce,4centraldirty. Task11probe staticacceptedba481d2e mayexecuteONEisolatedschema underrootACKwhileTask7readonlyreview; noTask7schemawrites. Latestuser: finishALLBthenSTOP, writeprecisecontinuationdocs for继续任务; doNOTstartC/D/E/F. Tasks9–13remain.
++Task11exactR1isolatedSQLprobealreadyONEactualrun helperba481d2e/SQL195bec3b/custodyf92d9440 29PASS, schemaama_t11_fc2e1fdaf6ad_probe/all369statesretained. DO NOTrepeatunchangedprobe. Formal11stillneedsactual7/9/10/fullprefix/versionallocation/freeze/separateACK/models/privatewriter/runtime. MinorT11PROBE-M1four-versusfivewordingcarry. Task12ownsT4SR04limitoverflow400/T4SR05positivepartSizeToken/T6SR03fouraliasesunknown/T4SR06toolnamesvsbanner andactualbrowserlosslessHTTP/allprojections/intentdraft. Task13T8SR-M1after-prefetched-deleteactualteststillpreparedonly; heartbeat100ms/warnings/Task3readability/initial29handshakeUNKNOWN/Task8OptionalUNKNOWNandTask7Q01/Q02triage. Fullregister task-13-pending-issue-register-20261024.md. Currentcross-taskclosureindex phase-b-cross-task-closure-map-20261024.md requiresactualsource/evidence/reviewperclosedrow; movingtofuturetaskisnotclosure.
+ 
++PermanentB01IMM PARTIAL/B04Q401UNKNOWN/companySSO-directory-model-KBabsent/HA-capacity-nativephysicalIOnotqualified. Nofabricatedenterpriseclaim. FinalpreserveW/evidence/exactnextunfinishedpostBentry; noautomaticC/D/E/F.
+ 
+-## AUTHORITATIVE IMMEDIATE USER PAUSE — 2026-10-24 09:30Asia/Shanghai
++## Latest actual admission/cancellation facade ruling
++W/task-09-external-admission-cancellation-ruling-20261024.md +4actualsourceinputseals: R1InitialSendAdmission mapsgenuineadoptedExternalExecutionSession.send marker+permit+oneshotcallback; allowminimalreadonlyPreparationCancellation view/oneabortregistration, abortoutsidemonitors/roots onclose/renewloss/shutdown. No fake/copyDTO/publicflagproductionauthority, noUNKNOWNrelease/NOT_SENTretroclaim. Authorreceivedimplementationrelease; finalTask9sourcereview/focusedactualsessionheldsocketcasespending. Lowlevelrawtransport3RED→3GREENauthorreportedonly. No newDDL.
+ 
+-STOPPED. Canonical `docs/acceptance/development-pause-b-remaining-2026-10-24-0930.md`. SourceHEAD6cce4794dba473825d83fb9bccafc043cd611b5c/indexempty, rootrecords saveduncommitted. Task7fix01review1d4eee2f COMPLETE SPEC ISSUES REMAIN/NEEDS FIXES1ImportantIR01oldzeroeffectACKloss→authorizedsuccessor leavesoldpendingcapacity; IR02/03/CV01–03ADDRESSED. Round2/5 originalb07authorNOTdispatched. Final395PASS/mechanicalb6c55/roota689 preservednotadoption. Task11actualprobeONErun/custodyf92d9440 29PASS closesONLYexactR1mechanics, fullsourceactivationOPEN; donotrepeat. Allagentsstopped, no active test/probe. Future继续任务revokepauseandfirstreadfullpausehandoff/state/ledger/register; resumeTask7fix2then9→10→11→12→13/finalreview/records; STOPafterB/noCDE/F.
++## Latest collector provenance issue
++Task9graph-controls-green-01selectorrejectedbeforetestsbutoldcollectorcopiedprior6caseXML; originalsretained/ALLcopiedcountsEXCLUDED. Author28windowaudit41a828e1 matchesownlogs/class/count, root /rootindependentauditingexactscope(no tests). Currentbeforemtime+SHA/closednsinterval/report-custody collector fixawaitsnextrealwindowseal. Correctgraph-controls-green-02actual10PASS(capture4+discovery6), overlappingnotadditive. Finalreview/custodymustreceivefullqualification.
+ 
++Task9collectorrootindependentaudit COMPLETE28windows/69XML:68ownlogmatch, onlygraph-controls-green-01old6excluded. Actualcanonicalvalidselectorpredeletesoldreportkind; commaearlyreturnexplainsdefect. Retrospectivesuite-levelcustodyacceptedwitholdnoXMLtimestamp/noeachsuccesscase/log/no before+closednsinterval limitation; notcontemporaneouspercasefileidentityproof. task-09-prior-collector-root-independent-audit-20261024.json storesrootfacts/ruling. No broadrerun; newcollectoractualwindowverification/finalsourceclosurepending.
+ 
+-AUTHORITATIVE RESUME 2026-10-24: user revoked pause, complete ALL B then STOP before C/D/E/F. Root delegates full normal coordination and controlled DDL ACK authority to /root/b_controlled_coordinator (Astra high), root monitoring only; one product writer and serialized heavy tests. Actual HEAD6cce/indexempty, original seven dirty coordinator paths preserved in exact13-file preimage archive. Fresh role-specific3CID resource guard PASS; initial generic label/mount-order mismatch was read-only checker error, corrected from historical label definitions before any write/DB/test. All18836 public raw paths includingfix01 protected; adopted9777 remains binding. Ruling: root actually failed followup_task old /root/b07_prepared_external_runtime with live agent path not found; use fresh Astra high continuation author SAME round2/5 under fix-loop fallback, no reimplementation/reset/increment — cost if wrong bounded context reconstruction, full reports/brief/review provided. Task7 sole residualIR01 remains open, no adoption/Task9 activation. Plan/probe/design completed preparation reused. Final review lowerbound34cb226aefe99c67d3681af68d748b0aeea4e073; W/evidence retained by user requirement.
++## Latest own fixture isolation correction
++Task09SourceGraphITsyntheticREADYheadswronglyusedrealTRANSCRIPT_IMPORTpool/type; nativeHTTPupload/importacceptedbutWorkerblocked, pipeline-source-red-01 1FAILnonbusinessRED. ExactownschemafixtureCASretirementauthorizedby task-09-owned-fixture-retirement-root-ack-20261024.json; before/fullidentity/noactivework/afterproofrequired, onlyREADY→CANCELLED, nootherfields/spec/rows; actualreceiptpending. Newsyntheticfixtures TASK09_METADATA; productionqueuenotloosened/noDDL/reset/delete.
+ 
+-Ruling: Task9 adopted R1 section6.2 explicitly authorizes a dedicated per-run bearer secret and durable localcontrolledHTTP model-provider store. Earlier resume no-new-credentials resource wording preserves existing DB/S3/PKI and current Task7 scope; it does not cancel this adopted future provider prerequisite. Root confirmed no narrower human instruction and delegated implementation authority. At Task9 actual installation use a private new scoped provider secret only, no values/value-digests output, no existingcredential/container change, with explicit administrative ACK/ownedloopback/store containment. Costifwrong localcontrolledsecret/store cleanup/reconfiguration, notcompanyauth orproductioneffects. No provider resource/credential has been created at this ruling.
++Task9ownfixturemaintenanceactualcompleted11rows(10strictsynthetic+1failedrealpipeline), onlystateREADY→CANCELLED; fullbefore/after/source/receiptindependentlyreadandcompared in task-09-owned-fixture-retirement-controller-check-20261024.json. Two syntheticexternalPREPARED/nullmarker/noattempt rowsretainedunchanged. Firstretirement01serialization1ERRORbeforetransaction preserved; retirement02 1PASS notbusinessqualification. Newcollectoractual02SHA/closednsmtime/previous01SHAchecked. Freshnativepipelinecontinuing.
+ 
+-AUTHORITATIVE Task7fix02bdf9762 reviewed22818db8 SPEC COMPLIANT/APPROVED0new, custody2d41fbf0PASS/controllera9552f78; completeframework407composedqualified, Q01/Q02UNKNOWN retained/CV04future9–11. Adoptiondoc+publicmirrorprepared; exactrootadoptioncommit/publicACKnext, thenTask9focusedsource/prefix/ownedfixtureACK; noTask9productactivatedyet.
++## Latest real source pipeline
++Task9pipeline-source-green-01actual1PASS afterrealnativeHTTPupload/Task5Workerimport/Task6save-confirm/sameissuerJdbcMinutesFactsReaderS/A/F. Controller task-09-first-real-source-pipeline-controller-read-20261024.json verifies3windowsXML/receipt/testsource/newcollectorinterval+SHA. RED01fixtureREADYfailurepreserved; RED02missingreaderassert genuineTDD. Generation/body/set/review/finalbranchesstillfailclosedandbeingextended; candidatewriter/queueunfinished/CV04OPEN. One-timebootstrap/retirementactive test sourcesremovedwithexactoriginalsourcewindows andone-time-fixtures-isolated-20261024.json custody, no moremaintenanceexecution.
++
++## Latest isolated composition ruling
++Task9source-first test-onlycomposition boundaryrecorded task-09-isolated-composition-boundary-ruling-20261024.md; actualcommand/policy/genuineissuer/gate/sessionqualificationallowed, productionnewcommand/handlerremainfailclosedwithout10/11. NoalwaysPENDING/fakefuturecontribution/defaultbypass, formalnegative+history/replaytestsrequired. FullUX/LOCAL+S3loopstill11/12. Authorcontinuescandidatewriter/queue, no newgate.
++
++Task9initialsettingsactualRED02twoassertions→GREEN01twoPASS andsessionabort3RED→3GREEN controllerXML/receipt/newcollectorchecked task-09-settings-session-interim-controller-read-20261024.json; initialsettingsRED01zeroexecutedtests retained. Actualfirstsettings/replaycommand isolatedscope, sessionphysicalabortcomponent, no formal10/11/genuineDBsend/candidatewriter/queueclosure.
++
++Task9generation-prepare-red-01 actual1assertRED→green-01 1PASS receipt/XMLread; realproducerchain→genuineS/A/F→computeGeneration→completeenvelope/protocolconsistency, inertpreparationonly(noinput/task/rootwrites), no queue/sendqualification. initial-settings-boundaries-01actual6PASS includesprior2plus4new(auditrollback/partial-historydeny/newkey-historydeny/samekeyconcurrency), NEVER2+6unique. Candidatewriter/DBexternal/queueunfinished.
++
++Task9generation-queue-red-01→green-01actual1assertRED/1PASS XML+actualtestsourcecontrollerread: JdbcMinutesGenerationCommands/authority-ownedminutesTaskPolicy/genuinePreparedDomain atomicallyinsertinput+READYtask+receipt/audit/outbox, meetingunchanged, replaybeforeunavailablearchives. NotWorkertransport/candidatecompletion. AuthorfoundnewTask9RRsnapshotfreshnessgap, twoactualconcurrentREDsunderway; rulingexactheldPKcurrent-readrevisitallowed, completedomainmembershipchangeabortbeforehigherlockphase, nonewlatechild/parentlockaftertask/external. No newdesigngate; finalreviewcovers.
++
++Task9RRfreshnessauthor reports graph-current-read-red-01 6cases/2FAIL→green-01 6PASS; currentnewmemberdetectionatdomainrank/exactheldPKlater. Realgeneration-queue-claim-01claim/renew/controlledFAILED terminalpassed; stored-binding-green-01 originalroots/config/producer/fingerprint1PASS, candidatewriter/realexternalcompletionstillpending. RulingrequestManifestkeepsR1exactrootfieldset; ama.minutes-model-execution.v1isfixedcodec/schemaidentity, noextraunlisted schemaVersion member; task-09-request-manifest-schema-ruling-20261024.md.
++
++Task9actualreceipts: generation-worker-prepare-red-01 1ERRORmissingentry→green01 1PASS; controlled-client2RED→green02 2PASS(firstgreen01compile0testsfailurepreserved). generation-external-red-01actual1assertFAIL missingMinutesExternalPreparation; fixedpreparation/observer+MinutesCandidateWriter+genuinesessionhandlerunderimplementation. No candidateDB/sendadmissionclosureyet/noexternalblock.
++
++Task9firstrealexternal marker+permit+HTTPsend executed, generation-external-green-02actual1FAIL; task1106f41b-077f-4d54-8329-1341eceebcd7 RECONCILING/execution6521f9b2-bfd3-476a-93ec-6e9fcbe8a4f1 MARKED/permit736364f2-5f6d-42f3-902f-de1a5ecfeff1unsettled; providerownedstoredurableSUCCEEDED/result. external-diagnostic-01readonlypreserved. Authoractuallookup/observerdiagnosisandgenuineTask7samefactreceipt-onlyrecovery nextbeforenewtests. NOsend/retryAfterZeroEffect/newexecution/manualterminal/permitrelease/fixturecleanup; pendingoriginalIDs MUSTresume exactly ifinterrupted. NotPASS/noexternalblock.
++
++T9FIRSTEXT-OBS currentqualification: generation-external-green-02 originalobserver failure stack NOT retained (fixtureloggingERROR/defaultWorkerfixedsafeexceptionrecording), originalcauseUNKNOWN. DB MARKED/RECONCILING/unsettledpermit andsameproviderdurableSUCCEEDEDretained. NewprepareLookup/recoveryusesexactoldinput/request/store/result GETonly/genuineobserver, safetype/code/frames andsourcewindowdifferences; a laterrecoverysuccessalonecannotestablishoriginalcause. FinalTask9review/custody/Task13mustreceivethis unlessactualcausalevidenceclosesit. No manualterminal/permitrelease/resend/newexecution.
++
++
++### Task9 original external fact recovered — 2026-10-24T05:41:12.103691+00:00
++Controller checked recovery05 XML1PASS/report custody/entire lookup-only test source, exact same task/execution/operation/reservation/attempt before-after, six provider file hashes unchanged. Genuine claimReconciliation + observePrepared wrote candidate 94707e50-beb5-4fef-b192-7f6d961c8037; actual recoverSettlements(64) settled old permit. Proof: `task-09-original-external-recovery-controller-check-20261024.json`. Recovery04 UTC serialization/readback defect is independently diagnosed; original first-send failure remains UNKNOWN because original stack was not retained. Fresh full Worker send case green03 reported by author; full Task9 remains active, no Task10 activation.
++
++
++### Task9 rich candidate milestone — 2026-10-24T05:47:40.198986+00:00
++Author reports actual rich DB/HTTP seven-category8element/9evidence graph with sensitive directories/background joins, nullable action fields, locator reuse and no human reviews. Coordinator checked generation-rich-green-02 result1PASS, sealed XML hash and run interval; candidate-reader-green-01 also1PASS (overlapping scenario, not unique-count sum). Full owner graph/binding reader present. Replay/fresh-process/rollback/STALE/API/finalqualification still active; noTask9adoption/CV04closure/Task10activation.
++
++
++### Task9 terminal replay and provider-only restart — 2026-10-24T05:55:52.230421+00:00
++Actual terminal-replay-green-01 and generation-provider-restart-01 each1PASS; controller matched sealed XML/hash/closedinterval. Read complete provider restart source and actualchildclosed receipt: new64Mi/2CPU JVM sameport/store, originalresultGETonly, sixfileshashmap unchanged, childclosed. App/preparation/client/operations remainparentJVM: this is provider-only restart, notdualend freshprocess. Author asked to distinguish and close requiredapplication reconstruction in existingmatrix. businessSTALE/rollback/API/formalruntimeadmin remainactive; noTask9adoption/CV04closure.
++
++Task9 application-provider-restart-03: actual1PASS result/XMLhash/closedinterval verified; controller selectedcommandflags show BOTHchildren-Xmx64m/2CPU; appchildexit0/alivefalse/parentApplicationClosedtrue, providerchildexit143/alivefalse. Source-first productionprimitive reconstruction only, not formalcombinedHTTP10/11 startup. Original02resourceUNQUALIFIED retained/excluded.
++
++FullcurrentTask9remainingcategories are recorded in `task-09-remaining-inventory-20261024.md`; Task9 remains substantialactiveimplementation, not merelyreportfinishing. Thisinventory distinguishes scopedexistingPASS from allremainingcapabilities/gates.
++
++Ruling: Task9 implementation order after rich/readers/realWorker/replay core is current narrowverticalcase→realAPI/projections/OAS and single registry/composite/recoveryruntime/admin executableartifact→concentrated remaining negative/ACK/budget/union matrix→finalregression/custody. Why: complete remaining inventory shows majorHTTP/runtime modules not yetstarted; endlessreader-only refinement delays an assessable completeTask9. Costifwrong: some focusedinterface/test rework, not scope loss. Every knowncriticalnegative/category remainsmandatory and scopedexisting evidence is reused. Coordinator retains exactadministrativeACK role; no waitforroot/user. Author notified.
++
++Ruling: formalnewinitial-settings requires realTask11 publicationfreeze as R1§5.1 explicitly mandates; missing→503, authenticacceptedreplay/catalog independent. Exactreason/cost/stagedHTTPsuccess closure in `task-09-initial-settings-installation-boundary-ruling-20261024.md`. Author continuesAPI; nofakehooks/TODOnewbranch.
++
++Task9 actualcontrolledadmin installed via sameownerinvocation2/newhelper07ac9f72: exit0, exactly1Javaadmincall; invocation1preJava-keyfailure preserved. Newtemplate/revision/19archive/modelcapacity1rev1/privateprovidersecret+configs; noDDL/envchange/providerstart/newbranchactivation. `task-09-controlled-admin-application-ack-20261024.json` carriesexactactualreceipt andscope. Authorreleasedtoserialmatrix; runtime startup remainsseparateexactwindow.
++
++Originaldeniedlookup factrecovered: green02 grantmissing1FAIL→recovery01 GET/observeractuallycommitsRECORDED_FENCED buttestwrongAPPLIEDexpectation1FAIL→recovery02settlementonly1PASS/0providerCalls/0candidate. Sixprovidermap01before=02after; exactproof task-09-denied-original-recovery-controller-check-20261024.json. Nevercallrecovery01allPASS or02standaloneGETproof; compositionandfailuresretained. One-timehelperisolated.
++
++Ruling: Task9 PINNED/exclusion fullcapability now usingactualrichgraph/ref structural/source-firstselection; nofakecurrentpointers/Task10success. ActualTask10-currentPINNED+activeexclusion→newgeneration/Worker mandatorylaterintegration, explicitOPEN inclosuremap. See task-09-pinned-exclusion-stage-boundary-ruling-20261024.md.
++
++## Current convergence update — 2026-10-24T07:54:31.713364+00:00
++
++Existing scoped evidence now includes API/auth/replay/tokens/OAS; single composite GET recovery; actualadmin install; normal/invalid/STALE replay; insert/readback/audit/outbox rollback; revoked/deleted/productioncancel/freshapp GET/lookupclaim-validity. Final independent source review still pending.
++
++Task9 itself still must close: PINNED/exclusion strictoutput capability (current INVALID_SCHEMA diagnosis, externalalreadyterminal/noowedpermit); originalarchive/defaultappend reconstruction; necessarymarker/commitACK cases; candidate4statepagination/prospectiveidentityunion; explicitQ/R/connectionbudgets+originaloutputbudget; actualinstalledprovider/runtime startup window; finalnormal15→0/fullhistory, unitsonce/affectedinheritedIT/custody/owncommit.
++
++Only explicitly staged workflow dependencies: actualTask10 firstsave/adopt/settings→currentPINNED+activeexclusions thennewgeneration/Worker; successfulnewinitial/newgenerationHTTP afterreal10/11registration; combinedpublication/fullLOCAL+S3UX. These remainexplicitOPEN later, nofakeSQLcurrentpointer. Task9-owned sourcecapabilities anddenialbranches are notdeferred. Do not infinitelyextendonecapability matrix; finishknownrequirements thenfinalregression/review.
++
++Task9 latestcapability milestones (authorreported, fullindependentreviewpending): pinned-render-green-04 actual1PASS complete11reuse rows/physicalunion/doublelabels/no currentpointerchanges/strict excludedbody-element rejection-directoryallow. PriorINVALID_SCHEMA wasemptytestbody; productrules unchanged. archive-append-green-01 actual1PASS afterrealnewtemplate+17versionappend/defaultswitch andboth64Mi newprocesses; originalrequestHash/result/candidateunchanged. ActualRED02 oldindexreopenmissing fixedwithnewTask9 trustedroot ControlledMinutesArchiveAccess, notTask3Snapshot change. RED01testselectedoldref/notrealswitch excludedfromtargetRED. Next actualobservationcommitACKloss→sameprivatereceiptrecovery matrix.
+diff --git a/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md b/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md
+index 2d70a91..11b1f7b 100644
+--- a/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md
++++ b/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md
+@@ -51,3 +51,17 @@ AUTHORITATIVE RESUME 2026-10-24: user revoked pause, complete ALL B then STOP be
+ Task7fix02 new preserved qualification: final153IT batch151PASS/1assertFAIL Task07RecoveryBoundsIT transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass/1setupERROR Task07InheritedB06QueueSeamsIT disabledExpiredCurrentExternalFactMustStillBeRetained initialqueue.claim Optionalempty beforebusinesscase. Later exact2diagnosticcasesPASS with sameproduction/unchangedassertions and capturedcursor evidence; originalbothcausesUNKNOWN, no inferredhighwatercause. Independentfix02review andTask13finaltriage mustreceivethis limitation; replacementsourceclosure stillpending. These are notsilentlydiscarded ordeclaredfixedrootcauses.
+ 
+ AUTHORITATIVE Task7fix02 closure: T7IR01ADDRESSED/IR02IR03CV01–03remainclosed, independent22818db8 SPEC COMPLIANT/APPROVED0new. Q-01/Q-02 twooriginalinheritedfailuresUNKNOWN nonblockingforthisfix perreview; FINALREVIEWmusttriage. CV04 stillOPEN exactreal9/10/11consumers, nofixturepasssubstitution.
++
++Task9 collector custody issue: graph-controls-green-01 command exit1 rejected comma selector BEFORE tests, but old collector copied prior Task09GraphDiscoveryIT XML6cases. Preserve originalcommand/result/XML; ALLsixcopiedcasecounts EXCLUDED, neitherREDnorPASS. Author appendonly correction artifacts/phase-b/b-remaining/task-09/prior-window-report-custody-correction-20261024.json SHA41a828e1afed65eeeee6e5552942d73bb2fdf2e8030283e2815dabc247d99a3b audits28completedwindows (includingallpreviousPASS) against owncanonical log suite/class/count; authorreports onlyoneunqualifiedwindow. Coordinatorreadall28compactauditentries, notindependentlyalllogs; root /root has exactreadonlyindependentauditassignment. Correct graph-controls-green-02 actually10PASS(capture4+discovery6), overlappingnotadditive. Collector firstmtimefixsealedthere; currentfullbeforemtime+SHA/closednsinterval/report-custody tobe sealednextactualwindow. FinalTask9review/custodyMUSTreceive error mechanism/scope/exclusion/rootaudit/anyunprovablesourcewindow; onlygenuinelyunqualifieditemsneedadditionaltest, nogeneralrerun. Historicaloldwrongreceiptsnotrewritten.
++
++Task9collectorrootindependentaudit COMPLETE28windows/69XML:68ownlogmatch, onlygraph-controls-green-01old6excluded. Actualcanonicalvalidselectorpredeletesoldreportkind; commaearlyreturnexplainsdefect. Retrospectivesuite-levelcustodyacceptedwitholdnoXMLtimestamp/noeachsuccesscase/log/no before+closednsinterval limitation; notcontemporaneouspercasefileidentityproof. task-09-prior-collector-root-independent-audit-20261024.json storesrootfacts/ruling. No broadrerun; newcollectoractualwindowverification/finalsourceclosurepending.
++
++T9FIRSTEXT-OBS currentqualification: generation-external-green-02 originalobserver failure stack NOT retained (fixtureloggingERROR/defaultWorkerfixedsafeexceptionrecording), originalcauseUNKNOWN. DB MARKED/RECONCILING/unsettledpermit andsameproviderdurableSUCCEEDEDretained. NewprepareLookup/recoveryusesexactoldinput/request/store/result GETonly/genuineobserver, safetype/code/frames andsourcewindowdifferences; a laterrecoverysuccessalonecannotestablishoriginalcause. FinalTask9review/custody/Task13mustreceivethis unlessactualcausalevidenceclosesit. No manualterminal/permitrelease/resend/newexecution.
++
++
++### Task9 original external fact recovered — 2026-10-24T05:41:12.103691+00:00
++Controller checked recovery05 XML1PASS/report custody/entire lookup-only test source, exact same task/execution/operation/reservation/attempt before-after, six provider file hashes unchanged. Genuine claimReconciliation + observePrepared wrote candidate 94707e50-beb5-4fef-b192-7f6d961c8037; actual recoverSettlements(64) settled old permit. Proof: `task-09-original-external-recovery-controller-check-20261024.json`. Recovery04 UTC serialization/readback defect is independently diagnosed; original first-send failure remains UNKNOWN because original stack was not retained. Fresh full Worker send case green03 reported by author; full Task9 remains active, no Task10 activation.
++
++
++### Task9 application child heap exception — 2026-10-24T06:05:48.773025+00:00
++Author reports application-provider-restart-02 business1PASS but actual newapplication child mistakenlyused-Xmx512m/2CPU, violating child64MiB brief. Childexited; originalcommand/XML/source retained. Thiswindow is resourceUNQUALIFIED and excluded from qualifiedrestart count; no retroactivechange. Author corrects onlychildheap64MiB and reruns affectedscenario. If actual64MiBfailure occurs, diagnose before anynewresourceRuling. No acceptanceclaim from02.
+diff --git a/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java b/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java
+index 80b3c18..3b830d2 100644
+--- a/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java
++++ b/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java
+@@ -54,6 +54,38 @@ public final class JdbcMeetingAccess implements MeetingAccess {
+     @Override public Optional<LockedIdentities> tryLockIdentities(Actor actor,Collection<String> affected,boolean skip){
+         return captureIdentities(actor,affected,skip,true,false);
+     }
++    /** Status-only complete historical identity union; only the current actor must remain ACTIVE. */
++    public Optional<LockedIdentities> tryLockHistoricalIdentities(Actor actor,Collection<String> historical,boolean skip){
++        var captured=captureIdentities(actor,historical,skip,false,false);
++        if(captured.isPresent()&&!((IdentityCapture)captured.orElseThrow()).ids().containsAll(historical))throw new IllegalArgumentException("Historical identity no longer exists");
++        return captured;
++    }
++    /** Internal operation facts only. These opaque classes implement neither Locked nor LockedIdentities. */
++    public final class FactIdentities {
++        private final Object holder;private final String actor;private final Map<String,IdentityStatus> statuses;
++        private FactIdentities(String actor,Map<String,IdentityStatus> statuses){holder=transaction();this.actor=actor;this.statuses=Map.copyOf(statuses);}
++        private JdbcMeetingAccess issuer(){return JdbcMeetingAccess.this;}
++    }
++    public final class FactRoot {
++        private final FactIdentities identities;private final SubjectFencePort.LockedSubject subject;private final Root root;
++        private FactRoot(FactIdentities identities,SubjectFencePort.LockedSubject subject,Root root){this.identities=identities;this.subject=subject;this.root=root;}
++        private JdbcMeetingAccess issuer(){return JdbcMeetingAccess.this;}
++    }
++    public Optional<FactIdentities> tryLockFactIdentities(Actor actor,Collection<String> historical,boolean skip){
++        Object holder=transaction();if(rootsStarted.containsKey(holder))throw new IllegalStateException("Fact identities cannot follow a root");Objects.requireNonNull(actor);Objects.requireNonNull(historical);
++        var ids=new TreeSet<String>((a,b)->Arrays.compareUnsigned(a.getBytes(StandardCharsets.UTF_8),b.getBytes(StandardCharsets.UTF_8)));ids.add(actor.enterpriseId());ids.addAll(historical);var statuses=new HashMap<String,IdentityStatus>();
++        for(String id:ids){var rows=j.query("SELECT enterprise_id,status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),(row,n)->new IdentityStatus(row.getString(1),row.getString(2)),id);if(rows.isEmpty()){if(skip)return Optional.empty();throw new AccessDeniedException();}statuses.put(id,rows.getFirst());}
++        return Optional.of(new FactIdentities(actor.enterpriseId(),statuses));
++    }
++    public boolean factActorActive(FactIdentities identities){checkFact(identities);return identities.statuses.get(identities.actor).status().equals("ACTIVE");}
++    public Optional<FactRoot> lockFactRoot(FactIdentities identities,String meeting,boolean skip){
++        checkFact(identities);rootsStarted.put(transaction(),true);var subject=fences.lock(new SubjectRef("MEETING",meeting),skip);if(subject.isEmpty())return Optional.empty();var row=roots(meeting,skip);if(row.isEmpty())return Optional.empty();var root=row.orElseThrow();var fence=subject.orElseThrow();if(root.revision()!=fence.businessVersion()||root.cancelEpoch()!=fence.cancelEpoch())throw new IllegalStateException("Meeting fact fence mismatch");return Optional.of(new FactRoot(identities,fence,root));
++    }
++    public boolean factAllowsBusiness(FactRoot value,long expectedEpoch,long originalVersion){checkFact(value);var root=value.root;return factActorActive(value.identities)&&root.owner().equals(value.identities.actor)&&root.lifecycle().equals("ACTIVE")&&root.governance().equals("ACTIVE")&&!root.published()&&!value.subject.deleted()&&root.cancelEpoch()==expectedEpoch&&root.revision()>=originalVersion;}
++    /** Converts only an actually authorized current root; the denied fact capability is never a source grant. */
++    public Locked authorizeFactRoot(FactRoot value,long expectedEpoch,long originalVersion){checkFact(value);if(!factAllowsBusiness(value,expectedEpoch,originalVersion))throw new AccessDeniedException();var ids=new AuthorizationIdentities(value.identities.actor,value.identities.statuses);var held=new Held(ids,value.subject,value.root);require(held,Action.EDIT);return held;}
++    private void checkFact(FactIdentities value){if(value==null||value.issuer()!=this||value.holder!=transaction())throw new IllegalArgumentException("Foreign or expired fact identities");}
++    private void checkFact(FactRoot value){if(value==null||value.issuer()!=this)throw new IllegalArgumentException("Foreign fact root");checkFact(value.identities);}
+     private Optional<LockedIdentities> captureIdentities(Actor actor,Collection<String> affected,boolean skip,boolean allActive,boolean names){
+         Object currentTransaction=transaction();
+         if(rootsStarted.containsKey(currentTransaction))throw new IllegalStateException("Identity prelock cannot follow a meeting root lock");
+diff --git a/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java b/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java
+index a685844..a5a29a9 100644
+--- a/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java
++++ b/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java
+@@ -19,6 +19,18 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+  private synchronized void grantCallAuthority(OperationToken token){callAuthorities.removeIf(ref->ref.get()==null);callAuthorities.add(new WeakReference<>(token));}
+  boolean hasCallAuthority(OperationToken token){synchronized(this){callAuthorities.removeIf(ref->ref.get()==null);return callAuthorities.stream().anyMatch(ref->ref.get()==token);}}
+  private synchronized void revokeCallAuthority(OperationToken token){callAuthorities.removeIf(ref->ref.get()==null||ref.get()==token);}
++ private final List<WeakReference<OperationToken>> lookupAuthorities=new ArrayList<>();
++ private synchronized void grantLookup(OperationToken token){lookupAuthorities.removeIf(r->r.get()==null);lookupAuthorities.add(new WeakReference<>(token));}
++ /** Private-constructor identity capability. It carries no send or domain-effect authority. */
++ public static final class RecordedLookup {
++  private final JdbcExternalOperations issuer;private final OperationToken token;
++  private RecordedLookup(JdbcExternalOperations issuer,OperationToken token){this.issuer=issuer;this.token=token;}
++  public void require(javax.sql.DataSource source,OperationToken actual){if(issuer.q.source!=source||token!=actual)throw new IllegalArgumentException("Foreign recorded lookup");issuer.requireLiveLookup(token);}
++ }
++ private synchronized void requireLookup(OperationToken token){lookupAuthorities.removeIf(r->r.get()==null);if(lookupAuthorities.stream().noneMatch(r->r.get()==token))throw new IllegalArgumentException("Genuine committed reconciliation claim required");}
++ private void requireLiveLookup(OperationToken token){independent();requireLookup(token);var o=operation(token.operationId(),false,false).orElseThrow();var e=execution(o.id(),token.executionNo(),false,false).orElseThrow();if(!valid(o,e,token))throw new IllegalArgumentException("Stale recorded lookup claim");}
++ public RecordedLookup recordedLookup(OperationToken token){requireLiveLookup(token);return new RecordedLookup(this,token);}
++ @Override public synchronized void releaseRecordedLookup(OperationToken token){lookupAuthorities.removeIf(r->r.get()==null||r.get()==token);}
+  record Operation(String id,String kind,String key,String hash,String state,SubjectRef subject,long execution,long epoch,String owner,Instant expiry){}
+  record Execution(String id,String operation,long number,String task,String state,String hash,String manifest,String basis,String evidence,Instant verified){}
+  private final ReconciliationScanBudget scanBudget;
+@@ -33,7 +45,17 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+  private static Operation op(ResultSet r,int n)throws SQLException{return new Operation(r.getString("id"),r.getString("operation_kind"),r.getString("business_key"),r.getString("request_hash"),r.getString("state"),new SubjectRef(r.getString("subject_kind"),r.getString("subject_id")),r.getLong("current_execution_no"),r.getLong("reconcile_epoch"),r.getString("reconcile_owner"),instant(r,"reconcile_expires_at"));}
+  private static Execution ex(ResultSet r,int n)throws SQLException{return new Execution(r.getString("id"),r.getString("operation_id"),r.getLong("execution_no"),r.getString("task_id"),r.getString("state"),r.getString("request_hash"),r.getString("request_manifest"),r.getString("no_effect_basis"),r.getString("no_effect_evidence"),instant(r,"no_effect_verified_at"));}
+  Optional<Operation> operation(String id,boolean lock,boolean skip){return j.query("SELECT * FROM external_operation WHERE id=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::op,id).stream().findFirst();}
+- Optional<Execution> execution(String operation,long n,boolean lock,boolean skip){return j.query("SELECT * FROM external_execution WHERE operation_id=? AND execution_no=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::ex,operation,n).stream().findFirst();}
++ Optional<Execution> execution(String operation,long n,boolean lock,boolean skip){
++  // Metadata only before any Task9 manifest transfer, including pre-domain discovery.
++  var sizes=j.queryForList("SELECT e.id,e.task_id,t.task_type,OCTET_LENGTH(e.request_manifest) AS manifest_bytes FROM external_execution e JOIN durable_task t ON t.id=e.task_id WHERE e.operation_id=? AND e.execution_no=?",operation,n);
++  if(sizes.isEmpty())return Optional.empty();if(sizes.size()!=1)throw new DomainPreparationUnavailableException();var size=sizes.getFirst();
++  if("MINUTES_GENERATE_V1".equals(size.get("task_type"))){
++   if(!(size.get("manifest_bytes") instanceof Number bytes)||bytes.longValue()<1||bytes.longValue()>65536)throw new DomainPreparationUnavailableException();
++   // Repeat the size and identity predicate in the actual content query to close growth/rebinding races.
++   return j.query("SELECT * FROM external_execution WHERE operation_id=? AND execution_no=? AND id=? AND task_id=? AND OCTET_LENGTH(request_manifest) BETWEEN 1 AND 65536"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::ex,operation,n,size.get("id"),size.get("task_id")).stream().findFirst();
++  }
++  return j.query("SELECT * FROM external_execution WHERE operation_id=? AND execution_no=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::ex,operation,n).stream().findFirst();
++ }
+  boolean valid(Operation o,Execution e,OperationToken t){return o.subject().equals(t.subject())&&o.id().equals(t.operationId())&&o.execution()==t.executionNo()&&e.id().equals(t.executionId())&&e.number()==t.executionNo()&&o.epoch()==t.reconcileEpoch()&&Objects.equals(o.owner(),t.owner())&&o.expiry()!=null&&o.expiry().isAfter(q.now())&&(o.state().equals("MARKED")||o.state().equals("UNKNOWN"))&&(e.state().equals("MARKED")||e.state().equals("UNKNOWN"));}
+  OperationToken token(Operation o,Execution e){return new OperationToken(o.id(),e.id(),o.execution(),o.epoch(),o.owner(),o.expiry(),o.subject());}
+  private final class Context implements ExecutionContext {
+@@ -51,6 +73,9 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+    JdbcTaskPreparations.requireTransaction(q.source,scope.prepared());scope.policy().requirePrepared(scope.specs(),scope.purpose(),scope.prepared());
+   }
+  }
++ static TaskDomainPolicy.PreparedDomain contextPreparation(javax.sql.DataSource source,ExecutionContext execution){
++  if(!(execution instanceof JdbcExternalOperations.Context c)||c.issuer().q.source!=source)throw new IllegalArgumentException("Foreign external context");c.require();return c.scope.prepared();
++ }
+  static JdbcTaskPreparations.ExternalFacts requireContext(javax.sql.DataSource source,TaskDomainPolicy.PreparedDomain held,ExecutionContext execution){
+   if(!(execution instanceof JdbcExternalOperations.Context c)||c.issuer().q.source!=source||c.scope.prepared()!=held)throw new IllegalArgumentException("Foreign external context");
+   c.require();return new JdbcTaskPreparations.ExternalFacts(c.task.id(),c.task.spec(),c.operation.id(),c.execution.id(),c.execution.number(),c.execution.hash(),c.execution.manifest());
+@@ -137,6 +162,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+      var answer=claimCandidate(candidate,owner);
+      boolean finished=scanCursor.after==scanCursor.upper||(page.size()<limit&&position==page.size()-1);
+      if(finished)scanCursor.active=false;
++     if(answer.isPresent())grantLookup(answer.orElseThrow());
+      if(answer.isPresent()||finished)return answer;
+      // Unconsumed prefetched rows are discarded on success and refetched next call.
+     }
+@@ -156,7 +182,8 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+   var current=execution(seen.id(),seen.execution(),false,false);if(current.isEmpty())return Optional.empty();var seenExecution=current.orElseThrow();
+   var task=q.row(seenExecution.task(),false,false);if(task.isEmpty())return Optional.empty();var seenTask=task.orElseThrow();
+   if(!q.policies.containsKey(seenTask.spec().type()))return Optional.empty();
+-  var scope=q.prepareDomain(List.of(seenTask.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,true,null);if(scope.isEmpty())return Optional.empty();
++  var claimPurpose=q.policy(seenTask.spec()) instanceof RecordedFactRecoveryPolicy?TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION:TaskDomainPolicy.Acquisition.TASK_MUTATION;
++   var scope=q.prepareDomain(List.of(seenTask.spec()),claimPurpose,true,null);if(scope.isEmpty())return Optional.empty();
+   if(q.lockDomain(scope.orElseThrow(),seenTask.spec(),true).isEmpty())return Optional.empty();
+   var heldTask=q.row(seenTask.id(),true,true);if(heldTask.isEmpty()||!heldTask.orElseThrow().spec().equals(seenTask.spec()))return Optional.empty();
+   q.policy(heldTask.orElseThrow().spec()).validateInput(heldTask.orElseThrow().spec());
+@@ -192,7 +219,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+  @Override public ObservationResult observePreparedFact(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,true,false);}
+  @Override public ObservationResult recoverPreparedFact(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,true,true);}
+  private ObservationResult observePrepared(OperationToken token,PreparedObservation prepared,boolean factOnly,boolean recovery){
+-  independent();Objects.requireNonNull(prepared);revokeCallAuthority(token);
++  independent();Objects.requireNonNull(prepared);revokeCallAuthority(token);releaseRecordedLookup(token);
+   for(int attempt=0;attempt<OBSERVATION_DISCOVERY_ATTEMPTS;attempt++)try{return q.work(()->observeCurrent(token,null,null,prepared,factOnly,recovery));}catch(RediscoverObservation changed){}
+   throw new ObservationRetryRequiredException();
+  }
+diff --git a/backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java b/backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java
+index d2e457e..7e92ec5 100644
+--- a/backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java
++++ b/backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java
+@@ -15,8 +15,8 @@ public final class JdbcGenerationRetention {
+  private final DataSource source;private final JdbcTaskPreparations preparations;private final JdbcMeetingAccess access;private final JdbcTemplate j;
+  public JdbcGenerationRetention(DataSource source,JdbcTaskPreparations preparations,JdbcMeetingAccess access){this.source=Objects.requireNonNull(source);this.preparations=Objects.requireNonNull(preparations);this.access=Objects.requireNonNull(access);j=new JdbcTemplate(source);j.setQueryTimeout(2);}
+  /** Issued only during the domain-lock phase, before any task or external row lock. */
+- static final class PublicationFacts {
+-  private final DataSource source;private final Object holder;private final PreparedDomain domain;private final String meeting;private final boolean frozen;
++ static final class PublicationFacts implements GenerationRetentionPolicy.PublicationPreparation {
++  private final DataSource source;private final Object holder;private final PreparedDomain domain;private final String meeting;private final boolean frozen;private List<PublicationRow> rows;
+   private PublicationFacts(DataSource source,PreparedDomain domain,String meeting,boolean frozen){this.source=source;this.domain=domain;this.meeting=meeting;this.frozen=frozen;holder=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(source);}
+   boolean frozen(DataSource source,PreparedDomain domain,String meeting){
+    if(this.source!=source||this.domain!=domain||!this.meeting.equals(meeting)||holder==null||holder!=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(source))throw new IllegalArgumentException("Foreign publication facts");
+@@ -28,6 +28,18 @@ public final class JdbcGenerationRetention {
+   var states=jdbc.queryForList("SELECT state FROM publication WHERE meeting_id=? FOR UPDATE",String.class,meeting);
+   return new PublicationFacts(source,domain,meeting,states.stream().anyMatch(Set.of("READY","RUNNING","RECONCILING")::contains));
+  }
++ private record PublicationRow(String id,String state) {}
++ /** Registered policy calls this at its actual control rank, before domain/task/external locks. */
++ public static GenerationRetentionPolicy.PublicationPreparation prelockPublication(DataSource source,PreparedDomain domain,String meeting){
++  JdbcTaskPreparations.requireTransaction(source,domain);var jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(2);var rows=jdbc.query("SELECT id,state FROM publication WHERE meeting_id=? ORDER BY id LIMIT 2 FOR UPDATE",(r,n)->new PublicationRow(r.getString(1),r.getString(2)),meeting);if(rows.size()>1)throw new DomainPreparationUnavailableException();var facts=new PublicationFacts(source,domain,meeting,rows.stream().anyMatch(r->Set.of("READY","RUNNING","RECONCILING").contains(r.state())));facts.rows=List.copyOf(rows);return facts;
++ }
++ /** Later framework phase revisits only exact PKs already acquired; it never discovers new members. */
++ static PublicationFacts revisitPublication(DataSource source,PreparedDomain domain,String meeting,GenerationRetentionPolicy.PublicationPreparation prepared){
++  if(!(prepared instanceof PublicationFacts facts)||facts.rows==null)throw new IllegalArgumentException("Foreign publication preparation");facts.frozen(source,domain,meeting);var jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(2);for(var row:facts.rows){var states=jdbc.queryForList("SELECT state FROM publication WHERE id=? FOR UPDATE",String.class,row.id());if(!states.equals(List.of(row.state())))throw new DomainPreparationUnavailableException();}return facts;
++ }
++ public record Invocation(JdbcTaskPreparations.ExternalFacts facts,PreparedDomain domain,ExecutionContext context) {}
++ /** Read-only view of an already consumed same-call retention invocation. */
++ public Invocation requireInvocation(GenerationRetentionPolicy.Retention retention){var facts=require(retention);var held=(Held)retention;return new Invocation(facts,held.domain,held.context);}
+  private final class Held implements GenerationRetentionPolicy.Retention {
+   final PreparedDomain domain;final ExecutionContext context;final JdbcTaskPreparations.ExternalFacts facts;
+   final Map<String,Object> root,subject;boolean used;
+diff --git a/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java b/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java
+index 97e7490..d886b68 100644
+--- a/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java
++++ b/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java
+@@ -32,6 +32,10 @@ public final class JdbcTaskPreparations {
+         held(prepared);
+         return JdbcExternalOperations.requireContext(source, prepared, execution);
+     }
++    /** Actual context resolves its own held preparation; issuer validation still applies. */
++    public ExternalFacts requireExternal(ama.task.ExternalOperationPort.ExecutionContext execution) {
++        var prepared=JdbcExternalOperations.contextPreparation(source,execution);held(prepared);return requireExternal(prepared,execution);
++    }
+     /** JDBC queue consumption independently enforces its own source/actual-holder boundary. */
+     static void requireTransaction(DataSource expected, PreparedDomain prepared) {
+         if(!(prepared instanceof Held held)||held.source()!=expected
+diff --git a/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java b/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java
+index 280b407..a12d8db 100644
+--- a/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java
++++ b/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java
+@@ -69,9 +69,9 @@ public final class JdbcTaskQueue implements TaskQueue {
+   if(scope.locked!=null)return Optional.of(scope.locked);
+   var held=fences.lock(s.subject(),skip);
+   if(held.isEmpty()||!scope.policy().lockRoots(scope.specs(),skip,scope.prepared()))return Optional.empty();
+-  if(scope.purpose()==TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION&&scope.policy() instanceof GenerationRetentionPolicy
++  if(scope.purpose()==TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION&&scope.policy() instanceof GenerationRetentionPolicy retention
+     &&s.type().equals("MINUTES_GENERATE_V1")&&s.input().kind().equals("GENERATION_INPUT"))
+-   scope.publicationFacts=JdbcGenerationRetention.capturePublication(source,scope.prepared(),s.subject().id());
++  {var preparedPublication=retention.prelockedPublication(scope.prepared());scope.publicationFacts=preparedPublication.isPresent()?JdbcGenerationRetention.revisitPublication(source,scope.prepared(),s.subject().id(),preparedPublication.orElseThrow()):JdbcGenerationRetention.capturePublication(source,scope.prepared(),s.subject().id());}
+   scope.locked=held.orElseThrow();return held;
+  }
+  Optional<SubjectFencePort.LockedSubject> lockDomain(TaskSpec s,boolean skip){
+diff --git a/backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java b/backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java
+index 66696b7..4cea012 100644
+--- a/backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java
++++ b/backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java
+@@ -32,7 +32,7 @@ public final class TranscriptImportRuntime {
+  }
+  public static JdbcTaskQueue install(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,JdbcTranscriptAuthority.Components components) {
+   components.authority().requireImportSource(source);
+-  return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components)));
++  return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components),"MINUTES_GENERATE_V1",components.authority().minutesTaskPolicy()));
+  }
+  public static Supplier<TaskResult> prepare(JdbcTaskQueue queue,TaskLease lease,Settings settings,PreparationCancellation cancellation) throws Exception {
+   if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Import preparation requires independent reads");
+diff --git a/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java b/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java
+index e55717a..bbfee67 100644
+--- a/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java
++++ b/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java
+@@ -31,7 +31,7 @@ public final class JdbcTranscriptAuthority {
+  private FileRegistry registry;
+  private FileBackendCatalog savedBackends;
+  private FilePurposePolicy purposes;
+- private final ImportTaskDomainPolicy taskPolicy;
++ private final ImportTaskDomainPolicy taskPolicy;private final MinutesTaskDomainPolicy minutesTaskPolicy;
+  private final InputBatchFileReferencePolicy policy;
+  private static final DateTimeFormatter TIME=DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+  public interface ReservedIntake extends FileRegistry.ReferenceContext {}
+@@ -59,7 +59,7 @@ public final class JdbcTranscriptAuthority {
+  }
+  public record Components(FileRegistry registry,JdbcTranscriptAuthority authority,ProcessingIntakeFacts intake,ProcessingSourceReader sources) {}
+  private JdbcTranscriptAuthority(DataSource source,TransactionRunner tx,MeetingAccess access,ArchiveReadBudget budget,CanonicalBudget canonical){
+-  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);
++  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);minutesTaskPolicy=new MinutesTaskDomainPolicy(this,source);
+  }
+  MeetingAccess savedAccess(){return access;}
+  public static Components create(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,
+@@ -187,6 +187,8 @@ public final class JdbcTranscriptAuthority {
+   return facts;
+  }
+  public ama.task.TaskDomainPolicy taskPolicy(){return taskPolicy;}
++ public ama.task.TaskDomainPolicy minutesTaskPolicy(){return minutesTaskPolicy;}
++ MinutesTaskDomainPolicy minutesDomain(){return minutesTaskPolicy;}
+  public ama.task.TaskDomainPolicy.PreparedDomain adoptCreated(FileRegistry.LockedMeeting gate,HeldProcessingFacts held,TaskSpec spec){return taskPolicy.adopt(gate,held,spec);}
+  public List<FileRegistry.CompletedSource> originals(PreparedIntake prepared){
+   if(prepared==null||prepared.issuer!=this)throw new IllegalArgumentException("Foreign preparation");return prepared.draft.orderedSources();
+@@ -198,6 +200,32 @@ public final class JdbcTranscriptAuthority {
+   require(number(root,"revision")==spec.businessVersion()&&number(root,"cancel_epoch")==spec.cancelEpoch()&&draft.revision()+1==spec.businessVersion()&&Objects.equals(root.get("owner_id"),draft.actor().enterpriseId()),FINGERPRINT_MISMATCH);
+   require(j.queryForObject("SELECT COUNT(*) FROM task_subject WHERE subject_kind='MEETING' AND subject_id=? AND business_version=? AND cancel_epoch=? AND deleted=0",Long.class,draft.meetingId(),spec.businessVersion(),spec.cancelEpoch())==1,FINGERPRINT_MISMATCH);
+  }
++
++ /** Minutes capture shares this exact issuer, DataSource holder and genuine B03/B04 gate. */
++ private final class MinutesScope {
++  final Object holder=transaction();final FileRegistry.LockedMeeting gate;final Actor actor;final String meeting;
++  MinutesGraphCapture.Graph graph;boolean writing;
++  MinutesScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting){this.gate=gate;this.actor=actor;this.meeting=meeting;}
++  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
++ }
++ Object minutesScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting){
++  access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);
++  require(actor.enterpriseId().equals(j.queryForObject("SELECT owner_id FROM meeting WHERE id=?",String.class,meeting)),PROVENANCE_UNAVAILABLE);
++  return new MinutesScope(gate,actor,meeting);
++ }
++ void requireMinutesScope(Object value,FileRegistry.LockedMeeting gate,Actor actor,String meeting){
++  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||!scope.meeting.equals(meeting)||scope.graph!=null)throw new IllegalArgumentException("Foreign, expired or consumed minutes capture scope");
++  registry.access(gate); // Identity/root authorization was established before domain locks.
++ }
++ void sealMinutesCapture(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph){
++  requireMinutesScope(value,gate,actor,graph.discovery().meeting());((MinutesScope)value).graph=graph;
++ }
++ void claimMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph){
++  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||!scope.meeting.equals(graph.discovery().meeting())||scope.graph!=graph||scope.writing)throw new IllegalArgumentException("Foreign, expired or reused minutes write invocation");registry.access(gate);scope.writing=true;
++ }
++ void requireMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph){
++  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||scope.graph!=graph||!scope.writing)throw new IllegalArgumentException("Foreign or inactive minutes write scope");registry.access(gate);
++ }
+  enum SavedPurpose { OWNER_INSPECTION, CURRENT, MUTATION }
+  public interface HeldSavedTranscript {}
+  private final class SavedScope implements HeldSavedTranscript {
+diff --git a/backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java b/backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java
+index 30dc08a..9225a8f 100644
+--- a/backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java
++++ b/backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java
+@@ -26,7 +26,8 @@ final class SavedTranscriptRows {
+  }
+  Map<String,Object> one(Shape shape,String id){var found=read(shape,"id=?","id",1,false,id);require(found.size()==1,PROVENANCE_UNAVAILABLE);return found.getFirst();}
+  private record Measured(List<Object> key,List<long[]> sizes) {}
+- List<Map<String,Object>> read(Shape shape,String where,String order,int maximum,boolean projected,Object...args){return transfer(shape,admit(shape,where,order,maximum,projected,args));}
++ List<Map<String,Object>> read(Shape shape,String where,String order,int maximum,boolean projected,Object...args){return deferRead(shape,where,order,maximum,projected,args).get();}
++ java.util.function.Supplier<List<Map<String,Object>>> deferRead(Shape shape,String where,String order,int maximum,boolean projected,Object...args){var admitted=admit(shape,where,order,maximum,projected,args);return ()->transfer(shape,admitted);}
+  /** ID-only membership proof after the genuine gate; it grants no task authority. */
+  List<String> inputTaskIds(String input,int maximum){
+   budget.check();require(maximum>0,BUDGET_EXCEEDED);long sentinel=(long)maximum+1;
+@@ -51,7 +52,7 @@ final class SavedTranscriptRows {
+     // Reserve before any content-bearing query or growing owned row/cell/string captures.
+     for(int i=0;i<texts.size();i++){
+      long b=rs.getLong(offset+3*i+1),p=rs.getLong(offset+3*i+2),u=rs.getLong(offset+3*i+3);
+-     if(texts.get(i).equals("config_manifest"))require(b<=manifest,BUDGET_EXCEEDED);
++     if(Set.of("config_manifest","request_manifest","no_effect_evidence","external_result_id").contains(texts.get(i)))require(b<=manifest,BUDGET_EXCEEDED);
+      budget.text(b,p,u,8,projected);sizes.add(new long[]{b,p,u});
+     }
+     for(var ignored:shape.timestamps)budget.text(27,27,27,8,projected);
+@@ -66,7 +67,7 @@ final class SavedTranscriptRows {
+   var result=new ArrayList<Map<String,Object>>();
+   String exactWhere=String.join(" AND ",shape.keys.stream().map(k->k+"=?").toList());
+   for(var row:admitted){
+-   budget.check();var found=j.query("SELECT "+String.join(",",shape.columns)+" FROM "+shape.table+" WHERE "+exactWhere,rs->{
++   budget.check();var found=j.query("SELECT "+String.join(",",shape.columns)+" FROM "+shape.table+" WHERE "+exactWhere+" FOR UPDATE",rs->{
+     require(rs.next(),READ_FAILED);var value=new LinkedHashMap<String,Object>();int i=0;
+     for(String col:shape.columns){
+      if(shape.numbers.contains(col))value.put(col,exact(rs,col));
+diff --git a/backend/api/src/main/java/ama/api/MeetingConfiguration.java b/backend/api/src/main/java/ama/api/MeetingConfiguration.java
+index 848b31c..75a6669 100644
+--- a/backend/api/src/main/java/ama/api/MeetingConfiguration.java
++++ b/backend/api/src/main/java/ama/api/MeetingConfiguration.java
+@@ -16,6 +16,7 @@ class MeetingConfiguration {
+     @Bean JdbcOutbox meetingOutbox(DataSource source){
+         var validators=new java.util.HashMap<String,OutboxReferenceValidator>(new MeetingEventReferences(source).validators());
+         new ama.transcript.TranscriptEventReferences(source).validators().forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
++        new ama.transcript.MinutesEventReferences(source).validators().forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
+         return new JdbcOutbox(source,validators);
+     }
+     @Bean JdbcMeetingAccess meetingAccess(DataSource source,TransactionRunner tx,JdbcSubjectFences fences){return new JdbcMeetingAccess(source,tx,fences);}
+diff --git a/backend/api/src/main/java/ama/api/SessionSecurityFilter.java b/backend/api/src/main/java/ama/api/SessionSecurityFilter.java
+index 6e0e3be..2e5722c 100644
+--- a/backend/api/src/main/java/ama/api/SessionSecurityFilter.java
++++ b/backend/api/src/main/java/ama/api/SessionSecurityFilter.java
+@@ -22,7 +22,7 @@ final class SessionSecurityFilter extends OncePerRequestFilter {
+     SessionSecurityFilter(SessionPort sessions, Environment environment) { this.sessions = sessions; this.environment = environment; }
+     @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+         String uri=request.getRequestURI();
+-        boolean processing=uri.matches("/api/v1/meetings/[^/]+/(processing-capabilities|transcript-imports|transcript|completed-files|processing-inputs|processing-tasks)(/.*)?")
++        boolean processing=uri.matches("/api/v1/meetings/[^/]+/(processing-capabilities|transcript-imports|transcript|minutes|completed-files|processing-inputs|processing-tasks)(/.*)?")
+                 ||request.getMethod().equals("GET")&&uri.matches("/api/v1/meetings/[^/]+/uploads(/.*)?");
+         if(processing)response=new HttpServletResponseWrapper(response){
+             @Override public void setHeader(String name,String value){super.setHeader(name,name.equalsIgnoreCase("Cache-Control")?"private, no-store":value);}
+diff --git a/backend/core/src/main/java/ama/config/ConfigBindings.java b/backend/core/src/main/java/ama/config/ConfigBindings.java
+index 29644aa..8f5d556 100644
+--- a/backend/core/src/main/java/ama/config/ConfigBindings.java
++++ b/backend/core/src/main/java/ama/config/ConfigBindings.java
+@@ -124,6 +124,12 @@ public final class ConfigBindings {
+   public CanonicalBudget generationBudget(FullRow input){var config=generation(input);var profile=node(new Identity(ArtifactType.VALIDATION_BUDGET,config.profiles().definition(ProfileKind.VALIDATION_BUDGET).version()));return ConfigSchema.canonicalBudget(fields(fields(profile.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition"),"output","canonical").get("canonical"));}
+   public CanonicalBudget generationBudget(GenerationDraft draft){var config=generation(draft);var profile=node(new Identity(ArtifactType.VALIDATION_BUDGET,config.profiles().definition(ProfileKind.VALIDATION_BUDGET).version()));return ConfigSchema.canonicalBudget(fields(fields(profile.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition"),"output","canonical").get("canonical"));}
+   public ValidationBudget outputBudget(GenerationConfiguration config){var profile=node(new Identity(ArtifactType.VALIDATION_BUDGET,config.profiles().definition(ProfileKind.VALIDATION_BUDGET).version()));return ConfigSchema.validationBudget(fields(fields(profile.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition"),"output","canonical").get("output"));}
++  /** Strict parsed original definition; provisional data, never database authority. */
++  public CanonicalValue.ObjectValue generationDefinition(ArtifactType kind,String version){
++   require(kind==ArtifactType.PROMPT_CONFIG||kind==ArtifactType.MODEL_CONFIG,INVALID_ARGUMENT);
++   var value=node(new Identity(kind,version));
++   return (CanonicalValue.ObjectValue)fields(value.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition");
++  }
+   public Artifact confirmation(FullRow processing){var binding=processingStored(processing);return artifact(binding.confirmation());}
+   public GenerationConfiguration generation(FullRow input){
+    active();require(input.table()==Table.GENERATION_INPUT,INPUT_INVALID);require(input.nullableString("material_snapshot_id")==null,CAPABILITY_UNAVAILABLE);
+@@ -171,9 +177,10 @@ public final class ConfigBindings {
+ 
+  public static final class ValidatedGenerationBinding {
+   private final ama.minutes.contract.GenerationFingerprint.Projection projection;
+-  private ValidatedGenerationBinding(ama.minutes.contract.GenerationFingerprint.Projection projection){require(projection.operation()!=null&&projection.profiles()!=null&&projection.outputBudget()!=null&&projection.canonicalBudget()!=null,PROFILE_UNAVAILABLE);this.projection=projection;}
++  private ValidatedGenerationBinding(ama.minutes.contract.GenerationFingerprint.Projection projection){require(projection.operation()!=null&&projection.profiles()!=null&&projection.outputBudget()!=null&&projection.canonicalBudget()!=null&&projection.catalog()!=null&&projection.promptDefinition()!=null&&projection.modelDefinition()!=null,PROFILE_UNAVAILABLE);this.projection=projection;}
+   public String fingerprint(){return projection.fingerprint();}public CanonicalValue manifest(){return projection.manifest();}
+   public Profiles profiles(){return projection.profiles();}public ValidationBudget outputBudget(){return projection.outputBudget();}public CanonicalBudget canonicalBudget(){return projection.canonicalBudget();}
++  public Catalog catalog(){return projection.catalog();}public CanonicalValue.ObjectValue promptDefinition(){return projection.promptDefinition();}public CanonicalValue.ObjectValue modelDefinition(){return projection.modelDefinition();}
+  }
+  public ValidatedGenerationBinding computeGeneration(GenerationDraft draft,StoredProvenanceFacts prerequisites,Fence fence,List<RawArchive> raw,GraphBudget graphBudget,ArchiveReadBudget readBudget,BooleanSupplier cancelled){
+   var projection=new ama.minutes.contract.GenerationFingerprint(this,raw,readBudget).compute(draft,prerequisites,fence,graphBudget,cancelled);return new ValidatedGenerationBinding(projection);
+diff --git a/backend/core/src/main/java/ama/minutes/contract/ArchivedProfileResolver.java b/backend/core/src/main/java/ama/minutes/contract/ArchivedProfileResolver.java
+index 4ea7e0a..a6c5880 100644
+--- a/backend/core/src/main/java/ama/minutes/contract/ArchivedProfileResolver.java
++++ b/backend/core/src/main/java/ama/minutes/contract/ArchivedProfileResolver.java
+@@ -31,5 +31,7 @@ final class ArchivedProfileResolver {
+ 
+  CanonicalBudget generationBudget(GenerationDraft draft,BooleanSupplier cancelled){available(cancelled);return context.generationBudget(draft);}
+ 
++ ama.canonical.CanonicalValue.ObjectValue promptDefinition(GenerationConfiguration config,BooleanSupplier cancelled){available(cancelled);return context.generationDefinition(ArtifactType.PROMPT_CONFIG,config.prompt().version());}
++ ama.canonical.CanonicalValue.ObjectValue modelDefinition(GenerationConfiguration config,BooleanSupplier cancelled){available(cancelled);return context.generationDefinition(ArtifactType.MODEL_CONFIG,config.model().version());}
+  ValidationBudget outputBudget(GenerationConfiguration config,BooleanSupplier cancelled){available(cancelled);return context.outputBudget(config);}
+ }
+diff --git a/backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java b/backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java
+index 6824d68..c7cbfdf 100644
+--- a/backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java
++++ b/backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java
+@@ -13,8 +13,9 @@ import static ama.contract.MinutesContracts.FailureCode.*;
+ 
+ public final class GenerationFingerprint {
+  public static final String PROFILE="ama.generation-input.v2";
+- public record Projection(CanonicalValue manifest,String fingerprint,Profiles profiles,ValidationBudget outputBudget,CanonicalBudget canonicalBudget,ConfigBindings.ValidatedOperation operation){
+-  private Projection complete(ConfigBindings.ValidatedOperation operation){return new Projection(manifest,fingerprint,profiles,outputBudget,canonicalBudget,operation);}
++ public record Projection(CanonicalValue manifest,String fingerprint,Profiles profiles,ValidationBudget outputBudget,CanonicalBudget canonicalBudget,ConfigBindings.ValidatedOperation operation,Catalog catalog,CanonicalValue.ObjectValue promptDefinition,CanonicalValue.ObjectValue modelDefinition){
++  public Projection(CanonicalValue manifest,String fingerprint,Profiles profiles,ValidationBudget outputBudget,CanonicalBudget canonicalBudget,ConfigBindings.ValidatedOperation operation){this(manifest,fingerprint,profiles,outputBudget,canonicalBudget,operation,null,null,null);}
++  private Projection complete(ConfigBindings.ValidatedOperation operation){return new Projection(manifest,fingerprint,profiles,outputBudget,canonicalBudget,operation,catalog,promptDefinition,modelDefinition);}
+  }
+  private final ArchivedProfileResolver resolver;
+  public GenerationFingerprint(){this(ArchivedProfileResolver.unavailable());}
+@@ -28,7 +29,9 @@ public final class GenerationFingerprint {
+  static CanonicalValue reference(Artifact artifact){return object(field("version",string(artifact.version())),field("sha256",string(artifact.sha256())));}
+  static GenerationDraft draft(FullRow input){return new GenerationDraft(input.string("id"),input.string("meeting_id"),input.string("transcript_confirmation_id"),input.nullableString("material_snapshot_id"),input.string("template_revision_id"),input.string("exclusion_revision_id"),input.nullableString("element_set_id"),input.string("prompt_version"),input.string("model_config_version"),Scope.valueOf(input.string("scope")),input.nullableString("target_element_id"));}
+  static CanonicalValue data(FullRow input,Fence fence,StoredFactsIndex index){require(input.number("base_revision")==fence.meetingRevision(),INPUT_INVALID);return project(draft(input),fence,index,index.config(input));}
+- static CanonicalValue project(GenerationDraft draft,Fence fence,StoredFactsIndex index,GenerationConfiguration config){
++ private record PreparedProjection(CanonicalValue manifest,Catalog catalog) {}
++ static CanonicalValue project(GenerationDraft draft,Fence fence,StoredFactsIndex index,GenerationConfiguration config){return prepareProjection(draft,fence,index,config).manifest();}
++ private static PreparedProjection prepareProjection(GenerationDraft draft,Fence fence,StoredFactsIndex index,GenerationConfiguration config){
+   check(index.cancelled);
+   require(draft.scope()==Scope.FULL&&draft.targetElementId()==null,CAPABILITY_UNAVAILABLE);
+   // Archived material parser-to-locator capability is a separate required D01 contract. Never enumerate existing locator rows as a complete model catalog.
+@@ -74,7 +77,7 @@ public final class GenerationFingerprint {
+   var kinds=new ArrayList<>(profiles.definitions().keySet());kinds.sort(Comparator.comparing(Enum::name));var profileValues=new ArrayList<CanonicalValue>();
+   for(var kind:kinds){check(index.cancelled);var artifact=profiles.definition(kind);profileValues.add(object(field("kind",string(kind.name())),field("version",string(artifact.version())),field("sha256",string(artifact.sha256()))));}
+   check(index.cancelled);
+-  return object(field("meetingId",string(meeting)),field("inputId",string(draft.inputId())),
++  return new PreparedProjection(object(field("meetingId",string(meeting)),field("inputId",string(draft.inputId())),
+    field("confirmation",object(field("id",string(confirmation.string("id"))),field("revisionId",string(revision.string("id"))),field("hashProfile",string(confirmationProfile.version())),field("contentHash",string(confirmationHash)))),
+    field("segments",new Sequence(segments)),field("batch",object(field("id",string(revision.string("batch_id"))),field("files",new Sequence(files)))),
+    field("materials",object(field("mode",string("EMPTY")),field("items",list()))),
+@@ -83,7 +86,7 @@ public final class GenerationFingerprint {
+    field("elements",elements),field("sources",new Sequence(sources)),
+    field("configs",object(field("prompt",reference(config.prompt())),field("model",reference(config.model())),field("profiles",new Sequence(profileValues)))),
+    field("scope",object(field("kind",string("FULL")),field("target",nil()))),
+-   field("base",object(field("meetingRevision",number(fence.meetingRevision())),field("subjectBusinessVersion",number(fence.subjectBusinessVersion())),field("cancelEpoch",number(fence.cancelEpoch())))));
++   field("base",object(field("meetingRevision",number(fence.meetingRevision())),field("subjectBusinessVersion",number(fence.subjectBusinessVersion())),field("cancelEpoch",number(fence.cancelEpoch()))))),catalog);
+  }
+  Projection recomputeStored(FullRow input,Fence fence,Profiles profiles,StoredFactsIndex index){
+   var budget=index.budget;var cancelled=index.cancelled;
+@@ -93,8 +96,8 @@ public final class GenerationFingerprint {
+   require(confirmationHash.equals(confirmation.string("content_hash")),FINGERPRINT_MISMATCH);
+   var previous=index.hashBudget;
+   try {
+-   index.hashBudget=TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled));var manifest=data(input,fence,index);String fingerprint=DomainHash.hash(profiles.definition(ProfileKind.GENERATION_HASH),PROFILE,"GENERATION_INPUT",manifest,index.hashBudget,cancelled);
+-   check(cancelled);return new Projection(manifest,fingerprint,bound.profiles(),resolver.outputBudget(bound,cancelled),resolver.generationBudget(input,cancelled),null);
++   index.hashBudget=TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled));var prepared=prepareProjection(draft(input),fence,index,bound);var manifest=prepared.manifest();String fingerprint=DomainHash.hash(profiles.definition(ProfileKind.GENERATION_HASH),PROFILE,"GENERATION_INPUT",manifest,index.hashBudget,cancelled);
++   check(cancelled);return new Projection(manifest,fingerprint,bound.profiles(),resolver.outputBudget(bound,cancelled),resolver.generationBudget(input,cancelled),null,prepared.catalog(),resolver.promptDefinition(bound,cancelled),resolver.modelDefinition(bound,cancelled));
+   } finally {index.hashBudget=previous;}
+  }
+  static void task(FullRow input,TaskSpec task){
+@@ -128,12 +131,12 @@ public final class GenerationFingerprint {
+   var confirmation=index.one(Table.TRANSCRIPT_CONFIRMATION,draft.transcriptConfirmationId(),PROVENANCE_UNAVAILABLE);
+   String confirmed=new TranscriptConfirmationHash(active).hashBound(draft.transcriptConfirmationId(),config.profiles().definition(ProfileKind.CONFIRMATION_HASH),index);
+   require(confirmed.equals(confirmation.string("content_hash")),FINGERPRINT_MISMATCH);
+-  index.hashBudget=TranscriptConfirmationHash.minimum(budget.canonical(),active.generationBudget(draft,cancelled));var manifest=project(draft,fence,index,config);
++  index.hashBudget=TranscriptConfirmationHash.minimum(budget.canonical(),active.generationBudget(draft,cancelled));var prepared=prepareProjection(draft,fence,index,config);var manifest=prepared.manifest();
+   if(draft.elementSetId()!=null){
+    var session=index.sources;var graph=session.graph(new GraphSelection(draft.meetingId(),null,draft.elementSetId(),null,null),null);
+    OriginChainVerifier.verify(index,session,graph,active);
+   }
+   String fingerprint=DomainHash.hash(config.profiles().definition(ProfileKind.GENERATION_HASH),PROFILE,"GENERATION_INPUT",manifest,TranscriptConfirmationHash.minimum(budget.canonical(),active.generationBudget(draft,cancelled)),cancelled);
+-  var outputBudget=active.outputBudget(config,cancelled);var canonicalBudget=active.generationBudget(draft,cancelled);var verified=operation.finish();check(cancelled);return new Projection(manifest,fingerprint,config.profiles(),outputBudget,canonicalBudget,verified);
++  var outputBudget=active.outputBudget(config,cancelled);var canonicalBudget=active.generationBudget(draft,cancelled);var prompt=active.promptDefinition(config,cancelled);var model=active.modelDefinition(config,cancelled);var verified=operation.finish();check(cancelled);return new Projection(manifest,fingerprint,config.profiles(),outputBudget,canonicalBudget,verified,prepared.catalog(),prompt,model);
+  }
+ }
+diff --git a/backend/core/src/main/java/ama/task/ExternalOperationPort.java b/backend/core/src/main/java/ama/task/ExternalOperationPort.java
+index d2acf59..7403270 100644
+--- a/backend/core/src/main/java/ama/task/ExternalOperationPort.java
++++ b/backend/core/src/main/java/ama/task/ExternalOperationPort.java
+@@ -27,6 +27,8 @@ public interface ExternalOperationPort {
+     /** Independent due-operation takeover; never sends or creates another execution for UNKNOWN. */
+     Optional<OperationToken> claimReconciliation(String owner);
+     boolean renew(OperationToken token);
++    /** Revokes only local lookup minting; already verified receipts retain their fact-recording rules. */
++    default void releaseRecordedLookup(OperationToken token) {}
+     /**
+      * Independent short transaction; rejects ambient transactions before any effects. Domain policy
+      * prelocks roots before tasks/operation. The current independent token authorizes business effects;
+diff --git a/backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java b/backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java
+index b6d6bac..bc361cb 100644
+--- a/backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java
++++ b/backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java
+@@ -5,6 +5,9 @@ import java.util.Optional;
+ /** Explicit generation-only extension. Interface membership alone grants no retention authority. */
+ public interface GenerationRetentionPolicy extends PreparedExternalPolicy {
+  interface Retention {}
++ /** Opaque authentic control-rank acquisition, never a caller-supplied publication row list. */
++ interface PublicationPreparation {}
++ default Optional<PublicationPreparation> prelockedPublication(PreparedDomain held){return Optional.empty();}
+  Optional<Retention> prepareRetention(PreparedDomain held,ExecutionContext context,PreparedObservation observation);
+  TypedRef retainStale(Retention retention,PreparedObservation observation);
+  void validateRetained(Retention retention,PreparedObservation observation,TypedRef candidate);
+diff --git a/backend/core/src/main/java/ama/task/PreparedExternalPolicy.java b/backend/core/src/main/java/ama/task/PreparedExternalPolicy.java
+index 8fbcbed..829e56b 100644
+--- a/backend/core/src/main/java/ama/task/PreparedExternalPolicy.java
++++ b/backend/core/src/main/java/ama/task/PreparedExternalPolicy.java
+@@ -6,6 +6,7 @@ import ama.task.ExternalOperationPort.*;
+ 
+ /** Constructor-registered DB-only policy; prepared payloads are data, never caller-selected writers. */
+ public interface PreparedExternalPolicy extends TaskDomainPolicy {
++    default java.util.Optional<PreparedDomain> prepareObservation(java.util.List<ama.contract.TaskContracts.TaskSpec> specs, PreparedObservation observation, boolean skip) { return prepare(specs, Acquisition.EXTERNAL_FACT_OBSERVATION, skip); }
+     record StoredResult(String state, String errorCode, TypedRef output) {}
+     ExternalRequest requireRequest(TaskSpec actual, PreparedRequest request);
+     void writeMarked(PreparedDomain held, ExecutionContext execution, PreparedRequest request);
+diff --git a/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java b/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java
+index 64eb842..84b14ed 100644
+--- a/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java
++++ b/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java
+@@ -19,6 +19,12 @@ public record TranscriptAcquisitionBudget(long utf8,long scalars,long utf16,long
+    reserve(b,p,u,ownedCopies,projected);encoded+=b+9;
+   }
+   public void capture(long b,long p,long u,int ownedCopies){check();require(b>=0&&p>=0&&u>=0&&ownedCopies>0,INVALID_ARGUMENT);reserve(b,p,u,ownedCopies,false);}
++  /** Transient JDBC result admission before execution; actual retained captures are charged separately. */
++  public void admitCapture(long b,long p,long u,int ownedCopies){
++   check();require(b>=0&&p>=0&&u>=0&&ownedCopies>0,INVALID_ARGUMENT);
++   require(b<=Math.min(limits.utf8,archive.maxTotalBytes())-bytes&&p<=Math.min(limits.scalars,archive.maxAggregateScalars())-points&&u<=limits.utf16-units,BUDGET_EXCEEDED);
++   require(b<=(limits.copyBytes-copies)/ownedCopies&&u<=(limits.copyUtf16-copyUnits)/ownedCopies,BUDGET_EXCEEDED);
++  }
+   private void reserve(long b,long p,long u,int ownedCopies,boolean projected){
+    require(b<=Math.min(limits.utf8,archive.maxTotalBytes())-bytes&&p<=Math.min(limits.scalars,archive.maxAggregateScalars())-points&&u<=limits.utf16-units,BUDGET_EXCEEDED);
+    require(b<=(limits.copyBytes-copies)/ownedCopies&&u<=(limits.copyUtf16-copyUnits)/ownedCopies,BUDGET_EXCEEDED);
+diff --git a/backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java b/backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java
+index 027cd91..c9fcf3e 100644
+--- a/backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java
++++ b/backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java
+@@ -17,6 +17,25 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
+  private final ExternalOperationHeartbeat heartbeats;private final String model;private final BooleanSupplier open;private final Admission admission;
+  private Phase phase=Phase.ORDINARY;private OperationToken token;private Permit permit;private ExternalOperationHeartbeat.Tracked tracker;
+  private boolean receiptOnly,renewing,sent,recoverReceipt;private PreparedObservation pending;
++ private AbortRegistration abortRegistration;
++ private final class AbortRegistration implements AutoCloseable {
++  final Runnable action;boolean registered=true;
++  AbortRegistration(Runnable action){this.action=action;}
++  public void close(){synchronized(monitor){if(registered){registered=false;if(abortRegistration==this)abortRegistration=null;}}}
++ }
++ private final ama.task.PreparationCancellation cancellation=new ama.task.PreparationCancellation(){
++  public boolean cancelled(){synchronized(monitor){return receiptOnly||phase==Phase.FINISHED||!open.getAsBoolean();}}
++  public AutoCloseable register(Runnable action){
++   Objects.requireNonNull(action);AbortRegistration registration;boolean rejected;
++   synchronized(monitor){rejected=receiptOnly||phase==Phase.FINISHED||!open.getAsBoolean();if(!rejected&&abortRegistration!=null)throw new IllegalStateException("Only one active external exchange");registration=new AbortRegistration(action);if(rejected)registration.registered=false;else abortRegistration=registration;}
++   if(rejected)abort(registration);return registration;
++  }
++ };
++ public ama.task.PreparationCancellation cancellation(){return cancellation;}
++ /** Caller holds monitor; actual close/abort always runs after releasing it. */
++ private AbortRegistration detachAbort(){var registration=abortRegistration;abortRegistration=null;if(registration!=null)registration.registered=false;return registration;}
++ private static void abort(AbortRegistration registration){if(registration!=null)try{registration.action.run();}catch(RuntimeException ignored){/* Cancellation remains sticky even if a transport close fails. */}}
++
+  ExternalExecutionSession(Object monitor,TaskLease lease,ExternalOperationPort operations,ModelPermitPool permits,ExternalOperationHeartbeat heartbeats,String model,BooleanSupplier open,Admission admission){
+   this.monitor=monitor;this.lease=lease;this.operations=operations;this.permits=permits;this.heartbeats=heartbeats;this.model=model;this.open=open;this.admission=admission;
+  }
+@@ -25,6 +44,8 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
+   synchronized(session.monitor){session.token=token;session.phase=Phase.OPERATION;session.sent=true;}
+   session.tracker=heartbeats.track(session::renew);return session;
+  }
++ void requireBinding(ExternalOperationPort expected,ModelPermitPool expectedPermits,String expectedModel){if(operations!=expected||permits!=expectedPermits||!Objects.equals(model,expectedModel)||lease==null)throw new IllegalArgumentException("Foreign production external session");}
++ void requireReconciliationBinding(ExternalOperationPort expected,ModelPermitPool expectedPermits){if(operations!=expected||permits!=expectedPermits||lease!=null||model!=null)throw new IllegalArgumentException("Foreign production reconciliation session");}
+  public TaskLease lease(){if(lease==null)throw new IllegalStateException("Reconciliation has no ordinary lease");return lease;}
+  public OperationToken token(){synchronized(monitor){if(token==null)throw new IllegalStateException("No acknowledged marker");return token;}}
+  public boolean begin(PreparedRequest request)throws InterruptedException{
+@@ -42,7 +63,7 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
+   OperationToken current;
+   synchronized(monitor){if(phase!=Phase.OPERATION||renewing||receiptOnly||!open.getAsBoolean())return;renewing=true;current=token;}
+   boolean ok=false;try{ok=operations.renew(current);}catch(RuntimeException unavailable){/* sticky receipt-only */}
+-  finally{synchronized(monitor){renewing=false;if(!ok)receiptOnly=true;monitor.notifyAll();}}
++  finally{AbortRegistration aborted=null;synchronized(monitor){renewing=false;if(!ok){receiptOnly=true;aborted=detachAbort();}monitor.notifyAll();}if(!ok&&current!=null)operations.releaseRecordedLookup(current);abort(aborted);}
+  }
+  public boolean send(Callable<PreparedObservation> transport)throws Exception{
+   Objects.requireNonNull(transport);
+@@ -76,5 +97,5 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
+  }
+  boolean pending(){synchronized(monitor){return pending!=null;}}
+  void retry(){PreparedObservation observation;synchronized(monitor){observation=pending;}if(observation==null)return;try{observe(observation);}catch(InterruptedException e){Thread.currentThread().interrupt();}catch(RuntimeException unavailable){/* one bounded retry on the existing poll cadence */}}
+- public void close(){ExternalOperationHeartbeat.Tracked current;synchronized(monitor){receiptOnly=true;current=tracker;monitor.notifyAll();}if(current!=null)current.close();}
++ public void close(){ExternalOperationHeartbeat.Tracked current;AbortRegistration aborted;OperationToken released;synchronized(monitor){receiptOnly=true;current=tracker;released=token;aborted=detachAbort();monitor.notifyAll();}try{if(released!=null)operations.releaseRecordedLookup(released);abort(aborted);}finally{if(current!=null)current.close();}}
+ }
+diff --git a/backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java b/backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java
+index 84b6531..860449e 100644
+--- a/backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java
++++ b/backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java
+@@ -5,6 +5,8 @@ import ama.task.ExternalOperationPort.*;
+ import java.util.concurrent.Callable;
+ /** One external owner; transport executes outside every transaction and context monitor. */
+ public interface ExternalTaskExecution {
++ /** Read-only physical-I/O cancellation; an implementation is not send authority. */
++ default ama.task.PreparationCancellation cancellation(){throw new IllegalStateException("External cancellation not installed");}
+  TaskLease lease();
+  OperationToken token();
+  boolean begin(PreparedRequest request) throws InterruptedException;
+diff --git a/backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java b/backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java
+index faaaf60..80f375b 100644
+--- a/backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java
++++ b/backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java
+@@ -17,7 +17,7 @@ public final class TranscriptWorkerMain {
+   var env=new StandardEnvironment();env.getPropertySources().addFirst(new PropertiesPropertySource("worker",properties));
+   var source=new DriverManagerDataSource(env.getRequiredProperty("database.url"),env.getRequiredProperty("database.user"),env.getRequiredProperty("database.password"));
+   var settings=ConfiguredProcessing.read(env);var definitions=ConfiguredBackends.read(env);
+-  var provider=new TranscriptWorkerRuntimeProvider(source,definitions,settings.read(),settings.canonical(),settings.preparation(),env.getRequiredProperty("worker.id"),env.getRequiredProperty("worker.capacity",Integer.class));
++  var provider=new TranscriptWorkerRuntimeProvider(source,definitions,settings.read(),settings.canonical(),settings.preparation(),env.getRequiredProperty("worker.id"),env.getRequiredProperty("worker.capacity",Integer.class),env.getProperty("minutes.enabled",Boolean.class,false)?ama.transcript.ConfiguredMinutes.read(env,settings.read(),settings.index()):null);
+   var runtime=(TranscriptWorkerRuntimeProvider.Runtime)provider.create();
+   try(runtime){
+   var tls=ServiceTls.context(Path.of(env.getRequiredProperty("worker.health.key-store")),env.getRequiredProperty("worker.health.key-store-password").toCharArray(),Path.of(env.getRequiredProperty("worker.health.trust-store")),env.getRequiredProperty("worker.health.trust-store-password").toCharArray());
+diff --git a/backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java b/backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java
+index b4976f8..b25011e 100644
+--- a/backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java
++++ b/backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java
+@@ -12,12 +12,17 @@ import java.util.*;
+ /** Explicit TXT-only provider. Every graph collaborator in this process shares the one assembly. */
+ public final class TranscriptWorkerRuntimeProvider implements WorkerRuntimeProvider {
+  private final DataSource source;private final FileBackendDefinitions definitions;private final ArchiveReadBudget budget;private final CanonicalBudget canonical;
+- private final TranscriptImportRuntime.Settings settings;private final String worker;private final int capacity;
++ private final TranscriptImportRuntime.Settings settings;private final String worker;private final int capacity;private final ConfiguredMinutes minutes;
+  public TranscriptWorkerRuntimeProvider(DataSource source,FileBackendDefinitions definitions,ArchiveReadBudget budget,CanonicalBudget canonical,TranscriptImportRuntime.Settings settings,String worker,int capacity){
++  this(source,definitions,budget,canonical,settings,worker,capacity,null);
++ }
++ public TranscriptWorkerRuntimeProvider(DataSource source,FileBackendDefinitions definitions,ArchiveReadBudget budget,CanonicalBudget canonical,TranscriptImportRuntime.Settings settings,String worker,int capacity,ConfiguredMinutes minutes){
++  this.minutes=minutes;
+   this.source=Objects.requireNonNull(source);this.definitions=Objects.requireNonNull(definitions);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);this.settings=Objects.requireNonNull(settings);this.worker=worker;this.capacity=capacity;
+   if(capacity<1||capacity>64)throw new IllegalArgumentException("Bounded worker capacity required");
+  }
+  @Override public WorkerRuntime create(){
++  ama.model.ControlledMinutesClient minutesClient=null;
+   try{
+    // Validate retained archive index before any poll, independent of the current processing default.
+    settings.archives().get();
+@@ -25,22 +30,31 @@ public final class TranscriptWorkerRuntimeProvider implements WorkerRuntimeProvi
+    var catalog=new FileBackendCatalog(source,definitions.backends(),definitions.defaultId());catalog.configure();
+    var validators=new HashMap<String,OutboxReferenceValidator>(new MeetingEventReferences(source).validators());
+    new TranscriptEventReferences(source).validators().forEach((k,v)->{if(validators.putIfAbsent(k,v)!=null)throw new IllegalArgumentException("Duplicate outbox validator");});
++   new MinutesEventReferences(source).validators().forEach((k,v)->{if(validators.putIfAbsent(k,v)!=null)throw new IllegalArgumentException("Duplicate outbox validator");});
+    var outbox=new JdbcOutbox(source,validators);
+    var components=JdbcTranscriptAuthority.create(source,tx,access,new TranscriptFilePurposePolicy(),catalog,Map.of(),budget,canonical);
+    var queue=TranscriptImportRuntime.install(source,fences,outbox,components);
+    var loop=WorkerLoop.contextual(queue,Map.of("TRANSCRIPT_IMPORT",capacity),Map.of("TRANSCRIPT_IMPORT_V1",(lease,cancel)->TranscriptImportRuntime.prepare(queue,lease,settings,cancel)),worker);
+-   return new Runtime(loop,definitions);
+-  }catch(RuntimeException failure){try{definitions.close();}catch(Exception ignored){}throw failure;}
++   ReconciliationLoop reconciliation=null;
++   if(minutes!=null){
++    minutes.archives().get();minutesClient=minutes.client();var operations=new JdbcExternalOperations(queue);var permits=new JdbcModelPermitPool(operations,Map.of(ama.model.ControlledMinutesProtocol.MODEL,minutes.modelConfiguration()),(t,m,d)->{throw new IllegalStateException("No controlled cutoff proof");});
++    var preparation=new MinutesExternalPreparation(components.authority(),minutes.preparation(components.authority()),minutesClient);
++    reconciliation=ReconciliationLoop.prepared(operations,permits,minutes.reconciliationCapacity(),new MinutesReconciliationHandler(preparation,minutesClient,operations,permits),worker);
++   }
++   return new Runtime(loop,reconciliation,minutesClient,definitions);
++  }catch(RuntimeException failure){if(minutesClient!=null)minutesClient.close();try{definitions.close();}catch(Exception ignored){}throw failure;}
+  }
+  public static final class Runtime implements WorkerRuntime {
+-  private final WorkerLoop loop;private final FileBackendDefinitions definitions;private boolean closed;
+-  private Runtime(WorkerLoop loop,FileBackendDefinitions definitions){this.loop=loop;this.definitions=definitions;}
+-  public void start(){loop.start();}
++  private final WorkerLoop loop;private final ReconciliationLoop reconciliation;private final ama.model.ControlledMinutesClient client;private final FileBackendDefinitions definitions;private boolean closed;
++  private Runtime(WorkerLoop loop,ReconciliationLoop reconciliation,ama.model.ControlledMinutesClient client,FileBackendDefinitions definitions){this.loop=loop;this.reconciliation=reconciliation;this.client=client;this.definitions=definitions;}
++  public void start(){loop.start();if(reconciliation!=null)reconciliation.start();}
+   public WorkerLoop.Observation observation(){return loop.observation();}
+   public synchronized void close(){
+    if(closed)return;closed=true;
+    Throwable failure=null;
+    try{loop.close();}catch(RuntimeException|Error error){failure=error;}
++   try{if(reconciliation!=null)reconciliation.close();}catch(RuntimeException|Error error){if(failure==null)failure=error;else failure.addSuppressed(error);}
++   try{if(client!=null)client.close();}catch(RuntimeException|Error error){if(failure==null)failure=error;else failure.addSuppressed(error);}
+    try{definitions.close();}catch(Exception|Error error){if(failure==null)failure=error;else if(failure!=error)failure.addSuppressed(error);}
+    if(failure instanceof RuntimeException error)throw error;
+    if(failure instanceof Error error)throw error;
+diff --git a/contracts/openapi/api.yaml b/contracts/openapi/api.yaml
+index f4bd066..93f206c 100644
+--- a/contracts/openapi/api.yaml
++++ b/contracts/openapi/api.yaml
+@@ -77,6 +77,24 @@ paths:
+     $ref: './transcripts.yaml#/source'
+   /api/v1/meetings/{meetingId}/transcript/revisions/{revisionId}/sources/{fileId}:
+     $ref: './transcripts.yaml#/revisionSource'
++  /api/v1/meetings/{meetingId}/minutes/templates:
++    $ref: './minutes.yaml#/templates'
++  /api/v1/meetings/{meetingId}/minutes/initial-settings:
++    $ref: './minutes.yaml#/initial'
++  /api/v1/meetings/{meetingId}/minutes/generations:
++    $ref: './minutes.yaml#/generate'
++  /api/v1/meetings/{meetingId}/minutes/generation-inputs/current:
++    $ref: './minutes.yaml#/current'
++  /api/v1/meetings/{meetingId}/minutes/generation-inputs/{inputId}:
++    $ref: './minutes.yaml#/input'
++  /api/v1/meetings/{meetingId}/minutes/generation-tasks:
++    $ref: './minutes.yaml#/tasks'
++  /api/v1/meetings/{meetingId}/minutes/generation-tasks/{taskId}:
++    $ref: './minutes.yaml#/task'
++  /api/v1/meetings/{meetingId}/minutes/candidates:
++    $ref: './minutes.yaml#/candidates'
++  /api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}:
++    $ref: './minutes.yaml#/candidate'
+ components:
+   securitySchemes:
+     enterpriseSession:

@@ -1,0 +1,632 @@
+{
+  "classpath": [
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-09/admin-bundle-01/lib/ama-contracts-0.1.0-SNAPSHOT.jar",
+      "sha256": "4d28ade43dd8d04766ec7a150f8603a4cd6b717d66a17543c5c1e2a8ce5d439e"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-09/admin-bundle-01/lib/ama-core-0.1.0-SNAPSHOT.jar",
+      "sha256": "ad4b52a5e3c4397ca216453ff22590f777f7abc01ddd8cabfa49d20185bf283e"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-09/admin-bundle-01/lib/ama-adapters-0.1.0-SNAPSHOT.jar",
+      "sha256": "3d3cabd29086968fa8e945787466d6fe1c4612b3828f8070a1edaef344afec63"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/net/java/dev/jna/jna/5.18.1/jna-5.18.1.jar",
+      "sha256": "260c4b1e22b1db9e110ee441c4f13ce115f841fa48c41d78750986214b395557"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.21.5/jackson-core-2.21.5.jar",
+      "sha256": "b64b5874162b503a0e58a8f7758266e8dd9f91bf49e3a59ae0b5f47589a231b7"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/s3/2.56.0/s3-2.56.0.jar",
+      "sha256": "ff4f6a6c4ce5c44df5258dff778b2f786dd3ca7b4e1685a36f01845eff2564ca"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/aws-xml-protocol/2.56.0/aws-xml-protocol-2.56.0.jar",
+      "sha256": "9871880fa6eac9d43f8e958de964773d0b71a97284d74f7fc0bfc28f41c060d0"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/aws-query-protocol/2.56.0/aws-query-protocol-2.56.0.jar",
+      "sha256": "05bca55e8570ceda98df11e0b70f595a8aba5cd3d896ab5fda4f93ccc3e9285d"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/protocol-core/2.56.0/protocol-core-2.56.0.jar",
+      "sha256": "fff7dd13a27ce89929438736d5badf97d17c8f44ee4e40ffff70cb19afab92b8"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/arns/2.56.0/arns-2.56.0.jar",
+      "sha256": "337bad947d022dd67fbc0da95a63b9883e63c4883609e5721999f873fd4329f3"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/profiles/2.56.0/profiles-2.56.0.jar",
+      "sha256": "65ee508eccda857d20694fcad1cfb07147fa644ab9b9e57931283bfb0a28bc6a"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/crt-core/2.56.0/crt-core-2.56.0.jar",
+      "sha256": "3898c34b2fc062fdd09e3a520654054bf4524fe7dff89f1c44985ef769b5de58"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/http-auth/2.56.0/http-auth-2.56.0.jar",
+      "sha256": "92da16dc5ee9fb0b226b736811f1643b748b592afe2eace5cb63ac627e98abbd"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/identity-spi/2.56.0/identity-spi-2.56.0.jar",
+      "sha256": "eede78992fa70364ecdb457bf41a9b3dc097cafcfc3e40fa78cd1be650f909c8"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/http-auth-spi/2.56.0/http-auth-spi-2.56.0.jar",
+      "sha256": "e4889eaa94f2133527eee004c7e21926beb028e8b0b20cf0330ad2bd0247fbe3"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar",
+      "sha256": "f75ca597789b3dac58f61857b9ac2e1034a68fa672db35055a8fb4509e325f28"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/http-auth-aws/2.56.0/http-auth-aws-2.56.0.jar",
+      "sha256": "d68bcec5558daa87493568c6a269a93f0efd2f3dac9c8f084ce57b0853858cf0"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/checksums/2.56.0/checksums-2.56.0.jar",
+      "sha256": "169e7e03eb7b6b8c7a827fb04c1b9f5f2928534ad8bf249f90f68dd7f91516bd"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/checksums-spi/2.56.0/checksums-spi-2.56.0.jar",
+      "sha256": "84e71d00efc277bd257d7560f239c030436fd3d1ab58fd47b95e54c99f031c43"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/retries-spi/2.56.0/retries-spi-2.56.0.jar",
+      "sha256": "4c48f913a1b20ecd929064b1f5250a12981ae2f286e606778615fdb880b9508a"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/sdk-core/2.56.0/sdk-core-2.56.0.jar",
+      "sha256": "37e763863fc25227f4c0dd9718c7b60f97d008a1435ee59a21d2ce176e746a42"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/retries/2.56.0/retries-2.56.0.jar",
+      "sha256": "51c077475baeeea0cd3802af0e0f01e5c0e618342ebb1911ec9ce7c82114c038"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/auth/2.56.0/auth-2.56.0.jar",
+      "sha256": "9b01ce9e95f6118cacb5a508cf2bd2ca9da2d4296553318cf0007dc703afcc59"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/http-auth-aws-eventstream/2.56.0/http-auth-aws-eventstream-2.56.0.jar",
+      "sha256": "87e7dc94134934ebf720b8471eb62313da2b8fe696ea85f1cdc7e028d8eefcca"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/eventstream/eventstream/1.0.1/eventstream-1.0.1.jar",
+      "sha256": "0c37d8e696117f02c302191b8110b0d0eb20fa412fce34c3a269ec73c16ce822"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/http-client-spi/2.56.0/http-client-spi-2.56.0.jar",
+      "sha256": "2674468e262b73e0aed82434e473ea430b6f9a21cce11d2f6bf2ea5d388858b9"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/regions/2.56.0/regions-2.56.0.jar",
+      "sha256": "eb430b446886e15f9d60e4c7b2ecd471d2ce18a1487aed5cdb9f84d189e1bd1e"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/annotations/2.56.0/annotations-2.56.0.jar",
+      "sha256": "d69f78bda022da6ed37075861a56def042352bae66499d9e566c6cb19abe5018"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/utils/2.56.0/utils-2.56.0.jar",
+      "sha256": "e9006e0207d9520c1eb57f5a0890f063ee49b6311b53ae2f9975c11efb51c2aa"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/aws-core/2.56.0/aws-core-2.56.0.jar",
+      "sha256": "21740c28bd83fbcdbcd4b879c996ba2b490fa047e7dfee410eb34f2d4b043aaa"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/utils-lite/2.56.0/utils-lite-2.56.0.jar",
+      "sha256": "7c50301338f0542d19d6fd685f1f4a3bc0f80d677415813cc81497c7821aec66"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/metrics-spi/2.56.0/metrics-spi-2.56.0.jar",
+      "sha256": "4353cc3da07d68e0ebd5e66131f724593d91bd58f493d4104f337175cd273516"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/json-utils/2.56.0/json-utils-2.56.0.jar",
+      "sha256": "961212ec6832617f26c18cae62b8a20ac769794aa1c1e0ece4be6a7694b05ab0"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/third-party-jackson-core/2.56.0/third-party-jackson-core-2.56.0.jar",
+      "sha256": "40aa389232ab0a83574392d0f28b7e3e8aa38d59248bfff0bba56af066d8db67"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/endpoints-spi/2.56.0/endpoints-spi-2.56.0.jar",
+      "sha256": "b6be09fd91b2e61f333b0977a841437ae7ad056fd63f51077fc663658df749b0"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/url-connection-client/2.56.0/url-connection-client-2.56.0.jar",
+      "sha256": "a9826303fae4d0ba7789cf4d6e252016ae873d649380fb6de881c9f5a50a28f9"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/software/amazon/awssdk/apache5-client/2.56.0/apache5-client-2.56.0.jar",
+      "sha256": "33f980ab16e788d243572e5324f899b1151bd411386d7595f1beb866f2d5b08a"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/apache/httpcomponents/client5/httpclient5/5.6.4/httpclient5-5.6.4.jar",
+      "sha256": "bdef5f8841145cd76c4c605ff301bc840eea0d5292332b7b892a93316c0d8ee1"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/apache/httpcomponents/core5/httpcore5-h2/5.4.3/httpcore5-h2-5.4.3.jar",
+      "sha256": "c7db7026b8e2dea39132b04a6069f6671e2858309b20a146ec5c7dd6ed73a0b6"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/apache/httpcomponents/core5/httpcore5/5.4.3/httpcore5-5.4.3.jar",
+      "sha256": "18bfbbabb478dfb67f31aeaf428c387f3c3df654582e1309f708ee1f3086830a"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.jar",
+      "sha256": "ca0d9af1c5721eef8cac1f94c8b9d27a753248bc33c86e3472bd3d1dbd78f450"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.jar",
+      "sha256": "ff218b827a25c9e8929b0cd56dfb56916cea9d5b669ed97dc7cb262508ff548b"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.jar",
+      "sha256": "bfb15da6e096e2c0752e9db9987d2415bf0da1d744efc988535c10c6b6c2eedd"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/flywaydb/flyway-core/12.4.0/flyway-core-12.4.0.jar",
+      "sha256": "c3f93df1f3e0c9d14652adb5ade97401f2ede503859ac693c2af5c06e2797799"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.jar",
+      "sha256": "3a2338d996fd3056791df8d335fa9ba8a62a706ed4245ecf81b3e583df37d08a"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/tools/jackson/core/jackson-core/3.1.5/jackson-core-3.1.5.jar",
+      "sha256": "9431b7fa2673bbb618c11d865fe15e13222fd182a214ff998cb7e56afd8f35d2"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/flywaydb/flyway-mysql/12.4.0/flyway-mysql-12.4.0.jar",
+      "sha256": "de0eac641b3d0104e4ebe3d6340fb25f49cbd154a636b4d2d13b98115f60b055"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/com/mysql/mysql-connector-j/9.7.0/mysql-connector-j-9.7.0.jar",
+      "sha256": "0353648eaa1c91e0f4020c959abf756bc866ffd583df22ae6b6f6e0cbd43eb44"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.1/spring-boot-starter-webmvc-4.1.1.jar",
+      "sha256": "4aec3edbdf6317fefe23db1b989d8bba143a45a51c1fc32346146ecebf67d625"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.jar",
+      "sha256": "d30e594a3e0f3a090438fc22000a87ab577a3b80c674180a10544ca331207f24"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.jar",
+      "sha256": "69a9b4d8850a0532a5e44ff7306a03621485b26596e7f9481de7d28e68a2dd42"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.jar",
+      "sha256": "f224d8504be3b413825ee85ef549a7b1598ee8512e062c6bd5ddce1043cd388a"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.jar",
+      "sha256": "580f0d9a9d02a1a6e387640e422af42f9dbdf302836d562ec595fdb2b31a1c29"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.jar",
+      "sha256": "6912fb1fdf7f657a61ac050760fa835fb1e7496399291697e2901f82887a4fee"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.jar",
+      "sha256": "e7b966dcaac8c5ffa4f10e44031ebf5b71f2123560c08ac8b7120028615aea08"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.jar",
+      "sha256": "ad0546f12dace008aacce18ba13222137760b310ca719e173d3e13021b9af6c6"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.jar",
+      "sha256": "825160101f0da4a10e19b5730c2ae2f99f8c2c7a7211ac05562726c5e97ab91e"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.jar",
+      "sha256": "17f65629e4eb3c979c0572b69b57d630bb12e64869e9d7520adddaa6734256b6"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.jar",
+      "sha256": "52a167430a918c223b2ccd2eb62aff91a8e43e6daebe5a07caa37b9a04c61cb9"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/spring-web/7.0.9/spring-web-7.0.9.jar",
+      "sha256": "941ced476427bde2533872f293da535fd0258de3f3a650a7f1bfe01ed2927302"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.jar",
+      "sha256": "9f08c1fb938c45a8693fec5f3065be3aca203948a7ab4d56b06444986f75a6b2"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.jar",
+      "sha256": "4dcb156e311a4c1ad5f1ed7eabd94a78ea74510b05c429a4fcfdcf8beb9d5882"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.jar",
+      "sha256": "8f114c1461692c5e534e82b27de23b7fb23370db8dee7ce0c92d5106906c9555"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.jar",
+      "sha256": "046434c40f43819729b9b1db0e6c659dfa68184c1c2c2efa5f7b3a5b27c4e2e2"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter-security/4.1.1/spring-boot-starter-security-4.1.1.jar",
+      "sha256": "38628875b75cbed6ba4642f3b0a4baf4735bd4f82b49450e4ae5a5e4d1b7b4a9"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-security/4.1.1/spring-boot-security-4.1.1.jar",
+      "sha256": "c940697be9bc67820d5011b86d58105836b7cae7c8fb5d4e61d635b51b392cbe"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/security/spring-security-config/7.1.1/spring-security-config-7.1.1.jar",
+      "sha256": "1f947c853f14cab76563464ee22e72f6672f3913db52647d2f5d1df5f2b1e5a5"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/security/spring-security-core/7.1.1/spring-security-core-7.1.1.jar",
+      "sha256": "98a5011baa78df36fb184e6ce0e8e086ca9a64fcdd8f161c0a96475a3a0907bd"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/security/spring-security-crypto/7.1.1/spring-security-crypto-7.1.1.jar",
+      "sha256": "6e8bb2337faccabd30626f917ed1d2bfa9dde982229b6b373b644d1a01635403"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/security/spring-security-web/7.1.1/spring-security-web-7.1.1.jar",
+      "sha256": "dece134a2332c976a2c94ecf13f816c64e8ea7f2139795485afe655fba0408f3"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.jar",
+      "sha256": "b8c5d6bfcb1f4993f2cc124f7ab7fac40edf5256b9e43c2f7250a733cb5510e9"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter-actuator/4.1.1/spring-boot-starter-actuator-4.1.1.jar",
+      "sha256": "d26bb8461ccc417c97a869fbd2e9f0067ce8a56a9ab6058093097ca16e4cc128"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter-micrometer-metrics/4.1.1/spring-boot-starter-micrometer-metrics-4.1.1.jar",
+      "sha256": "ad34ce3535a82b3920efea7f9c5d6322de484969f3ab5fa6da05030edd7c14d4"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-micrometer-metrics/4.1.1/spring-boot-micrometer-metrics-4.1.1.jar",
+      "sha256": "70dd91dcc319d00998ce5e410b03b841e682aa2f60e4bab159c78ff0ecdb7d0f"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-micrometer-observation/4.1.1/spring-boot-micrometer-observation-4.1.1.jar",
+      "sha256": "09ebd9ff7de21d10b1f11c70ca0ea8766a8a727affd19642584bee5a314ea11a"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-actuator-autoconfigure/4.1.1/spring-boot-actuator-autoconfigure-4.1.1.jar",
+      "sha256": "bedbd4282a0f0c6a08bd5342d3940b50d8a013420d8a536695aedb1421b5e0f5"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-actuator/4.1.1/spring-boot-actuator-4.1.1.jar",
+      "sha256": "2bbb38417af25cfc6f57a9b01a85db9b6ccdcadb9e5d40f6b1b2f54a08f8b798"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-health/4.1.1/spring-boot-health-4.1.1.jar",
+      "sha256": "f60151e1f014b40761d0644be1cb04f82df7fc3e9b7bf6e946848547eec399e7"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar",
+      "sha256": "eb34f0cd84a879393ae5c21160fc06385ccdc74f36a4d1e31b199f59acfdaf71"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar",
+      "sha256": "f2cee6ef046e72eec8128474c7f58c6217173b45ae373c30de0289f2a56ab0fd"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/io/micrometer/micrometer-jakarta9/1.17.1/micrometer-jakarta9-1.17.1.jar",
+      "sha256": "37fbb0a98ba92e185ae7ebe0804fe6c1394bf7fba7573b204fa6fc3998c2e246"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/io/micrometer/micrometer-core/1.17.1/micrometer-core-1.17.1.jar",
+      "sha256": "9ca47dfa831409b40253c8dc98c17b9d3e050ebbde4d1543c5521dca2b95ad56"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar",
+      "sha256": "22d1d4316c4ec13a68b559e98c8256d69071593731da96136640f864fa14fad8"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.jar",
+      "sha256": "c51b28a3793168bff837eea90b1ae641efc3a28d6cdb980dd2b0b230914e93ee"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.jar",
+      "sha256": "30de56a06ccedb40245fd3a69a5107c7b3c0500447bb982a54a3b5da2859ae2c"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.jar",
+      "sha256": "fa4f6ddded1bb3bbc496897686336d8433e34f1f22daa886872be2aa184def23"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.jar",
+      "sha256": "e7f2fad4fe65bf6aaf1b1a538a68a1cf69988adb558f4a0fc0992a8be4fddf64"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.jar",
+      "sha256": "0f78d2556ac3ed75f9eaf3134a1fba94ad1ec3414b52aa279c1f690217e71e3c"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar",
+      "sha256": "f1e612fa27345be3107a85431e8a8aeb205c15364ab2f2d411e40a9d7bb08095"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.1/spring-boot-starter-test-4.1.1.jar",
+      "sha256": "37baecb7fdf6bd5ffc1f88320b04ea166da0e0af0b22b35bca17d48bbc7a5d1e"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar",
+      "sha256": "de5b2dd28400eda20914fd4a6054d0c201e68d2e4de35a25a4d89f054ccc2e63"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.jar",
+      "sha256": "8eca7d72c8434f5c3b935385c656cd5337f473434bdbcb4913b3b3a34897d178"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar",
+      "sha256": "afb439c61fa287c9e1925523b13baab03617e724406a389d48b61c2c3e46b700"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar",
+      "sha256": "a855a0fc97b1d06f4efb1c3bba5ebd0eb508d8b58e68e89e4bbc23a85135c883"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar",
+      "sha256": "b68e8b47342dbc9b35644a14fe2efc0b7bf18da703910cd05ad5501ffe07bba1"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar",
+      "sha256": "64777f73ea0b3104c04eb82befbdccc30a425a19e83ad06cb2f93aa303511863"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/slf4j/jul-to-slf4j/2.0.18/jul-to-slf4j-2.0.18.jar",
+      "sha256": "cbb7d1aaaa9e871eb1a06594abd911bf97027152976edf1edc315be75239204e"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar",
+      "sha256": "59228756ddd76cea050f95d86deff334789bc53b6688beaa673b1af2b9794592"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar",
+      "sha256": "b01f55552284cfb149411e64eabca75e942d26d2e1786b32914250e4330afaa2"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar",
+      "sha256": "c8f7a98e7394adda02f6317249710e4d1b4c7a25aa8c7eace0c2eea52eb8bf85"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-test/4.1.1/spring-boot-test-4.1.1.jar",
+      "sha256": "c16efcceaf7c0f7fff6c2cbac5ba1e7e47ee68bacc6a446f8adfe07ffe4ea579"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.jar",
+      "sha256": "0d92b532b1d4020640e72d78c31af175c23db8e0ddd45b81855b7fdf4c9c70f0"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar",
+      "sha256": "7552a2fcfa30cea53eb14d7a65a7a8e1b1dd82e832a7164fb7e6fb105f438858"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar",
+      "sha256": "fcae103bb2ca65226f225b846b210ba19fbfc42bdec1bf7009d3083baeb819b8"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar",
+      "sha256": "890daa95dd3892d34d9fabc27cd5153656e6f369358625c88f4dc7b79cbd6c5a"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar",
+      "sha256": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar",
+      "sha256": "5e489b6c874c4119e003ff1403db523ee3a8959ec499f3de29e77245efccf216"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar",
+      "sha256": "c9db52100ce6c8aac95cc39075f95720d2e561b11f8051b81c121ad4effd7004"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar",
+      "sha256": "1ae4b561458afb540be8ec5c6dbb4f2e715a319a7ae64854998aaf924770d61b"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar",
+      "sha256": "222c9f547bb20a99fc486403a398352d1306fb671b38abd7ecab6401df170e61"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar",
+      "sha256": "8cadd43ac5eb6d09de05faecca38b917a040bb9139c7edeb4cc81c740b713281"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar",
+      "sha256": "c4a445426c3c2861666863b842cc4ec7bbb1c4226fefd370b6d2fe83d6c4ff0f"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar",
+      "sha256": "e32f454c2c1f4aca982f9ec764ed892d9a6eee7e8a77f435cbdd180f6ffdb821"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar",
+      "sha256": "ee58568ea5945dcf988551501655183dc184e23e45a8e013fdfd9036194e6f7b"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar",
+      "sha256": "5d66b6a4a680755cb6ed7cb104fa7835ef644667586ff0737adeb977c39ecdbc"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar",
+      "sha256": "784b65815f479a0c99a9d3a573b142e2a525efb6025d97f751b19e72f90aeda3"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar",
+      "sha256": "d655d7e6f0c7ae07f10a2f3bbaaebb6d30e9b26204a068ad9e9b3950aa28792c"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar",
+      "sha256": "48e2df636cab6563ced64dcdff8abb2355627cb236ef0bf37598682ddf742f1b"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar",
+      "sha256": "39f262d09c3d52719fe0b77f080e90a3695e285d779a41b232e17963ae5da200"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar",
+      "sha256": "b509448ac506d607319f182537f0b35d71007582ec741832a1f111e5b5b70b38"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar",
+      "sha256": "cf2947e2302b9f8c8a059259a277881c1cadae8fbc2514c16a925cfeb7beb2e5"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar",
+      "sha256": "1e2fab61ad27ea08fc7c70dd9677cf8c6d1ae5434d42dcfdd633b12c7e7c04d0"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar",
+      "sha256": "491e9e4f745f161b8a8e4186a1a7c6a450ea12c70930c9aedae427215301d947"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar",
+      "sha256": "ae295bebd5d11fab97ab297815dc7617188b86003cbce3dfd5c0d5c3a6cc4a0c"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar",
+      "sha256": "780b3601c34150ab9fb822673c472f7229c1041e8e2a12facf6a5de9ba7a2d64"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar",
+      "sha256": "02dfd0b0439a5591e35b708ed2f5474eb0948f53abf74637e959b8e4ef69bfeb"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar",
+      "sha256": "65938526fdc311bb3a1c0015eb1c8a0be81515aa998f22b9f4e92f1b668e4f63"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar",
+      "sha256": "719095c07d4203961320da593441d8b3b643c18eb1d81aa98ea933bb7eb351ba"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar",
+      "sha256": "dfb7bae2f404cfe0b72b4d23944698cb716b7665171812a0a4d0f5926c0fac79"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/spring-core/7.0.9/spring-core-7.0.9.jar",
+      "sha256": "5195f4722699b39878d99a832549fe65df2890b159d063b88fff31b1ca65ae36"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar",
+      "sha256": "f8ead8943401081dea0aa824b5b1ba40a0e4ed297a572a0f02258150a0b62357"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar",
+      "sha256": "070d75f261fe4c5b8202508366715f7f2d4660f88c8ef7e6d3575e48c9683b66"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/springframework/spring-test/7.0.9/spring-test-7.0.9.jar",
+      "sha256": "6ce8fc116f5d309b9ac50a6738bd1b15ea4012a4a5563c0ee89b795bfc9af0dc"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar",
+      "sha256": "50970e6069c21182689eb44ae9f8193970e080b6f37fc13f22aa4201cca2dfe4"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.21.5/jackson-databind-2.21.5.jar",
+      "sha256": "507418c0fafd38b2b2cfb704521630da613a8e4cc8381195a6f418017883e2c0"
+    },
+    {
+      "path": "/home/tanren/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar",
+      "sha256": "53ca085f4a150f703f49e1aabd935bd03b43e1ea3d55d135438292af22cef56b"
+    }
+  ],
+  "source": [
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/ControlledMinutesAdmin.java",
+      "sha256": "9260307a7a1e89697deded1d391e0e3800f56fc7c887e1ff74436fe2d08032d6",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/minutes/ControlledMinutesAdmin.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/ControlledMinutesDataSource.java",
+      "sha256": "572c9dba2cee389eb214c7bdf986ae0e880d5ed2fdfd25ac37d846b8870d4e75",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/minutes/ControlledMinutesDataSource.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/ControlledMinutesTemplateInstaller.java",
+      "sha256": "0f24a0c3a33d6934e953371705f8dae877c5db8333e88892ae0e569d3bfb032c",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/minutes/ControlledMinutesTemplateInstaller.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/ControlledMinutesArchives.java",
+      "sha256": "f7331fe8856061fc900d00f466bb009309293dcff4104a716194e1f5b322a220",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/minutes/ControlledMinutesArchives.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/config/file/ControlledArchiveReleaseWriter.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+      "sha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/config/file/ControlledConfigArchiveSource.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java",
+      "sha256": "84a2ffe1f74978f794a1cac1ddbc44e238bf46520f4e73ea342e2ccdf3bc7f5d",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/task/JdbcModelPermitPool.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "sha256": "906f741ca7315633e5555e263093105b5f3b293443552fc5e3e4ea763bc3f93b",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/task/JdbcTaskQueue.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "sha256": "c470940cd8bc771976e8af0b2da6bd4025ce1a842dd1a5d0964dfcdb4ae18901",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/task/JdbcExternalOperations.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesProvider.java",
+      "sha256": "220741da7dc23b5bb53347a97d242e72ffe95f4cb699ba2d4bb6b1fd50620a6a",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/model/ControlledMinutesProvider.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesProviderStore.java",
+      "sha256": "16290fb16e3d75a21a0cb083d645e67103d3954c68d94de4e5abb7fac07c1724",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/model/ControlledMinutesProviderStore.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesStore.java",
+      "sha256": "3c81aa1b4d65e6230e4b256e0855a64364105d29194d459f8d484b18a0ca5bb9",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/model/ControlledMinutesStore.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesProtocol.java",
+      "sha256": "6541eb100e4fed6662239faa5b3ad1766dc920c0bcfdd4156dd958aa0188e926",
+      "frozen": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/source/ama/model/ControlledMinutesProtocol.java"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/ama/minutes/controlled/parser.json",
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/ama/minutes/controlled/processing1.json",
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+    }
+  ],
+  "configuration": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task09-2d0e28ea775540f8b3525f9344edf5f0/controlled-installation-20261024/install.properties",
+  "configurationSha256": "357c37d7f6668c9b964901fc881aaa76f441950c3650a9cc5a3284388e54f8c3",
+  "owner": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task09-2d0e28ea775540f8b3525f9344edf5f0/controlled-installation-20261024",
+  "schema": "ama_t09_2d0e28ea7755_behavior",
+  "templateId": "067313c0-bb33-4b83-8674-47058c6e9a6d",
+  "revisionId": "0f7d6a2b-214e-4bff-ac66-5823755c0718",
+  "port": 45989,
+  "heapMiB": 64,
+  "processors": 2
+}

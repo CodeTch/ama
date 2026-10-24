@@ -1,0 +1,214 @@
+{
+  "status": "PINNED_FOR_CONTROLLED_INSTALLED_LOCAL_AND_S3_FUNCTIONAL_TESTS_ONLY",
+  "utc": "2026-10-23T20:33:36.512280+00:00",
+  "base": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+  "candidate": "task-06-qualification-candidate.md",
+  "candidateSha256": "3778c4fd9c90757805495001b075fa9304f913ee974c29078685c24729176229",
+  "manifest": "artifacts/phase-b/b-remaining/task-06/qualification-candidate-manifest.json",
+  "manifestSha256": "3659226adfb673bbd33b2956e82d4cc4825780c1afb5b888f8dd6c26bd16221f",
+  "sourceWindowSha256": "09dabef2601a7ef1b324c93f9ff89c3b1da4329f343ddffa6d275a28bea65eab",
+  "qualifiedSourceSeals": {
+    "backend/api/src/main/java/ama/api/TranscriptConfiguration.java": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java": "b61a0c099a4d2d43355983057a2183c06dd9c1e2ae94fc9a13ade0ec93b7a7d9",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java": "1ee6c5cb70c62237850b2739b46b0e9c548d3f1e594d2e91b53cdcc1b825a9a7",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+    "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076",
+    "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+    "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+    "backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java": "3b5db92905a817ba9336103cb3c65c2b0e25efe1b8e46e9394e8e3cdabe9d09d",
+    "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java": "b02a3d45dbe36495be5bc270a472f41d37cce095fd16d0517e7957901aeb9440",
+    "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java": "1e4a65109e6dbe47ab353ae911f3c35f69c237d107233a85597f0f21a30aafee"
+  },
+  "observedRecipe": {
+    "configuredAcquisition": {
+      "utf8": 16777216,
+      "scalars": 16777216,
+      "utf16": 16777216,
+      "copyBytes": 67108864,
+      "copyUtf16": 67108864,
+      "responseBytes": 33554432,
+      "revisionDepth": 128,
+      "revisionNodes": 256,
+      "tasks": 64
+    },
+    "sharedArchive": {
+      "maxArtifactBytes": 65536,
+      "maxTotalBytes": 1048576,
+      "maxArtifacts": 16,
+      "maxDependencies": 32,
+      "maxGraphDepth": 8,
+      "maxTokens": 200000,
+      "maxJsonDepth": 32,
+      "maxNameUtf16": 255,
+      "maxStringUtf16": 65536,
+      "maxStringUtf8Bytes": 262144,
+      "maxAggregateScalars": 1048576,
+      "maxManifestBytes": 65536,
+      "maxBatchFiles": 32,
+      "maxFactRows": 250000,
+      "maxFactEdges": 500000
+    },
+    "index": {
+      "maxIndexBytes": 4194304,
+      "maxEntries": 4096,
+      "maxReleaseBytes": 67108864,
+      "maxGenerations": 128
+    },
+    "admission": {
+      "indexSha": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d",
+      "canonical": {
+        "maxEncodedBytes": 16777216,
+        "maxDepth": 32,
+        "maxNodes": 1000000,
+        "maxStringBytes": 2097152,
+        "maxContainerEntries": 250000
+      },
+      "originals": [
+        {
+          "artifactType": "PROCESSING_CONFIG",
+          "version": "b06.controlled.import-txt.1",
+          "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e",
+          "bytes": 1016,
+          "utf16": 1016,
+          "scalars": 1016,
+          "dependencies": {
+            "CANONICAL_CODEC": {
+              "artifactType": "CANONICAL_CODEC",
+              "version": "ama.canonical-value.v1",
+              "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+            },
+            "CONFIRMATION_HASH": {
+              "artifactType": "CONFIRMATION_HASH",
+              "version": "ama.transcript-confirmation.v1",
+              "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+            },
+            "PARSER_CONFIG": {
+              "artifactType": "PARSER_CONFIG",
+              "version": "ama.strict-utf8-lines.v1",
+              "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+            }
+          },
+          "originalCanonical": {
+            "maxEncodedBytes": 16777216,
+            "maxDepth": 32,
+            "maxNodes": 1000000,
+            "maxStringBytes": 2097152,
+            "maxContainerEntries": 250000
+          },
+          "originalParser": {
+            "maxSourceBytes": 65536,
+            "maxUtf16CodeUnits": 65536,
+            "maxSegments": 2048
+          }
+        },
+        {
+          "artifactType": "CANONICAL_CODEC",
+          "version": "ama.canonical-value.v1",
+          "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19",
+          "bytes": 223,
+          "utf16": 223,
+          "scalars": 223,
+          "dependencies": {}
+        },
+        {
+          "artifactType": "CONFIRMATION_HASH",
+          "version": "ama.transcript-confirmation.v1",
+          "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa",
+          "bytes": 419,
+          "utf16": 419,
+          "scalars": 419,
+          "dependencies": {
+            "CANONICAL_CODEC": {
+              "artifactType": "CANONICAL_CODEC",
+              "version": "ama.canonical-value.v1",
+              "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+            }
+          }
+        },
+        {
+          "artifactType": "PARSER_CONFIG",
+          "version": "ama.strict-utf8-lines.v1",
+          "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a",
+          "bytes": 226,
+          "utf16": 226,
+          "scalars": 226,
+          "dependencies": {}
+        }
+      ]
+    },
+    "requestBytes": 8388608,
+    "responseBytes": 33554432,
+    "selectedCorrectionMode": "DISABLED_NOT_INSTALLED",
+    "declaredInstallation": "DISABLED_NOT_INSTALLED",
+    "declarationVersion": "1",
+    "providerInventory": [],
+    "correction": {
+      "mode": "DISABLED_NOT_INSTALLED",
+      "readiness": "NOT_APPLICABLE",
+      "qualificationId": "saved-correction-v1-f634c60d-7113-4fbe-a15c-2b4d6e2692ed"
+    },
+    "bootObservation": "f634c60d-7113-4fbe-a15c-2b4d6e2692ed",
+    "futureDomainInstallations": {
+      "declarationVersion": "1",
+      "candidateProviders": [],
+      "publicationInstallation": "DISABLED_NOT_INSTALLED",
+      "publicationProviders": [],
+      "candidateInstallation": "DISABLED_NOT_INSTALLED"
+    },
+    "cooperativeOperationDeadlineMillis": 30000,
+    "effectiveAdmission": {
+      "acquisitionUtf8Bytes": 1048576,
+      "acquisitionScalars": 1048576,
+      "acquisitionUtf16Units": 16777216,
+      "textUtf8Bytes": 262144,
+      "textUtf16Units": 65536,
+      "copyUtf8Bytes": 67108864,
+      "copyUtf16Units": 67108864,
+      "facts": 250000,
+      "edges": 500000,
+      "files": 32,
+      "tasks": 64,
+      "revisionDepth": 128,
+      "revisionNodes": 256,
+      "manifestBytes": 65536,
+      "artifactBytes": 65536,
+      "closureBytesWithManifest": 1048576,
+      "canonical": {
+        "maxEncodedBytes": 16777216,
+        "maxDepth": 32,
+        "maxNodes": 1000000,
+        "maxStringBytes": 2097152,
+        "maxContainerEntries": 250000
+      }
+    }
+  },
+  "rootActualProof": "task-06-qualification-root-actual-proof-20261024.json",
+  "rootActualProofSha256": "dd4e7c4e591490f8b146c246a59e088ca40381a9ffbba06a1c3026926f276e03",
+  "mechanicalProof": "task-06-qualification-mechanical-rootproof-20261024.json",
+  "mechanicalProofSha256": "e8a253a8b46954473f99e192e1c3c6f470550333a44211dc73c034e383d4ce95",
+  "independentOriginalRawRehash": {
+    "count": 4,
+    "bytes": 1884,
+    "indexSha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d",
+    "matched": true
+  },
+  "scope": [
+    "Enable exact TranscriptConfiguration.assemble service via transcript.enabled=true in actual owned LOCAL/S3 test apps",
+    "Use equivalent fresh owned-case catalog retaining these four exact original bytes/dependencies and componentwise minima",
+    "Fresh JVM/changed-current-defaults tests allowed with original archives retained and exact old-source semantics/minima; record new catalog/index observations, never loosen old minima",
+    "Selected correction mode+installation DISABLED_NOT_INSTALLED/version1 and actual empty CorrectionInstallation.Provider inventory; fresh component/qualification perboot, actual requireSame+requireReady",
+    "Selected candidate/publication installation DISABLED_NOT_INSTALLED/version1 and actual empty inventories with requireAbsent; no Task10/11 installed-disposition/freeze claim",
+    "Reuse exact retainedMySQL46653/S345501 and existing env/PKI; test/Worker512MiB2CPU/native64MiB2CPU; no new container/credential/PKI/DDL"
+  ],
+  "evidencePrecision": "Six low-bound outcomes supported by same-hash real MySQL JDBC probe assertions and freshXML, no standalone raw query trace. Root independently rehashed actual retained4archivebytes andindex. No format-onlyrerun/backfill required.",
+  "notQualified": [
+    "Task6 completion or independent SPEC/quality source review",
+    "Complete HTTP/member/history/ACL/replay/concurrency/empty-set/transfer/restart/response boundary coverage still pending",
+    "Memory/concurrency/HA/nativeIO/deploymentcapacity/company integrations or completeB",
+    "Actual C03 pending reader/Task10 disposition/Task11 publicationfreeze installation"
+  ],
+  "continuation": "Continue all remaining Task6 implementation/installed tests/contracts/generatedtypes/finalunits/regressions/scan/preservation/report/owncommit then independentreview. No userpermissionwait. Root never fixes product.",
+  "refreshRule": "If any qualified seam/settings/originalminima/declaration/providerinventory changes, retain old evidence, classify exactdelta and refresh affected proof before treating changed recipe asqualified. New HTTP/wire/contracts tests may proceed; no wholepreflightredo or approval-on-everyboot/token/Git-dependent runtime."
+}

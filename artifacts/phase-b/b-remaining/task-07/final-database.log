@@ -1,0 +1,5 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx64m -XX:ActiveProcessorCount=2
+08:36:47.259 [main] INFO org.flywaydb.core.FlywayExecutor -- Database: jdbc:mysql://127.0.0.1:44727/ama_t07_0cea85a0e472_behavior (MySQL 8.4)
+08:36:47.466 [main] INFO org.flywaydb.core.internal.command.DbValidate -- Successfully validated 15 migrations (execution time 00:00.069s)
+08:36:47.495 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Current version of schema `ama_t07_0cea85a0e472_behavior`: 013.3
+08:36:47.502 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_t07_0cea85a0e472_behavior` is up to date. No migration necessary.

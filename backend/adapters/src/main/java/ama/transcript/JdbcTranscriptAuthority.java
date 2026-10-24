@@ -29,8 +29,9 @@ public final class JdbcTranscriptAuthority {
  private final DataSource source;private final JdbcTemplate j;private final TransactionRunner tx;
  private final MeetingAccess access;private final ArchiveReadBudget budget;private final CanonicalBudget canonical;
  private FileRegistry registry;
+ private FileBackendCatalog savedBackends;
  private FilePurposePolicy purposes;
- private final ImportTaskDomainPolicy taskPolicy;
+ private final ImportTaskDomainPolicy taskPolicy;private final MinutesTaskDomainPolicy minutesTaskPolicy;private final PublicationTaskDomainPolicy publicationTaskPolicy;
  private final InputBatchFileReferencePolicy policy;
  private static final DateTimeFormatter TIME=DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
  public interface ReservedIntake extends FileRegistry.ReferenceContext {}
@@ -58,12 +59,13 @@ public final class JdbcTranscriptAuthority {
  }
  public record Components(FileRegistry registry,JdbcTranscriptAuthority authority,ProcessingIntakeFacts intake,ProcessingSourceReader sources) {}
  private JdbcTranscriptAuthority(DataSource source,TransactionRunner tx,MeetingAccess access,ArchiveReadBudget budget,CanonicalBudget canonical){
-  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);
+  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);minutesTaskPolicy=new MinutesTaskDomainPolicy(this,source);publicationTaskPolicy=new PublicationTaskDomainPolicy(this,source);
  }
+ MeetingAccess savedAccess(){return access;}
  public static Components create(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,
          FileBackendCatalog backends,Map<String,FileReferencePolicy> legacy,ArchiveReadBudget budget,CanonicalBudget canonical){
   if(legacy.containsKey(REFERENCE))throw new IllegalArgumentException("Production transcript authority owns its complete policy registration");
-  var authority=new JdbcTranscriptAuthority(source,tx,access,budget,canonical);authority.purposes=Objects.requireNonNull(purposes);var policies=new HashMap<>(legacy);policies.put(REFERENCE,authority.policy);
+  var authority=new JdbcTranscriptAuthority(source,tx,access,budget,canonical);authority.purposes=Objects.requireNonNull(purposes);authority.savedBackends=Objects.requireNonNull(backends);var policies=new HashMap<>(legacy);policies.put(REFERENCE,authority.policy);
   var registry=new JdbcFileRegistry(source,tx,access,purposes,backends,policies,budget);authority.attach(registry);
   return new Components(registry,authority,new JdbcProcessingIntakeFacts(authority),new JdbcProcessingSourceReader(authority));
  }
@@ -171,7 +173,24 @@ public final class JdbcTranscriptAuthority {
   r.phase=Phase.BOUND;
  }
  public StoredProvenanceFacts detached(HeldProcessingFacts token){return held(token).facts;}
+ DataSource dataSource(){return source;}TransactionRunner transactionRunner(){return tx;}
+ /** Deny-only verification of the exact retained complete graph; no acquisition or authority issuance. */
+ public void requireImportCompletion(List<TaskSpec> specs,ama.task.TaskDomainPolicy.PreparedDomain prepared){taskPolicy.requireCompletion(specs,prepared);}
+ public void requireImportSource(DataSource expected){if(source!=expected)throw new IllegalArgumentException("Foreign import source");}
+ public StoredProvenanceFacts readWorkerFacts(TaskLease lease,BooleanSupplier cancelled){
+  independent();Objects.requireNonNull(lease);check(cancelled);
+  var actual=j.queryForList("SELECT owner_id FROM meeting WHERE id=?",String.class,lease.spec().subject().id());
+  require(actual.size()==1,PROVENANCE_UNAVAILABLE);
+  var actor=new Actor(actual.getFirst(),ama.contract.IdentityContracts.Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
+  var facts=new JdbcProcessingFactsReader(this).readWorker(actor,lease,budget,cancelled);
+  require(facts.taskFacts().size()==1&&facts.taskFacts().getFirst().taskId().equals(lease.taskId())&&facts.taskFacts().getFirst().spec().equals(lease.spec()),PROVENANCE_UNAVAILABLE);
+  return facts;
+ }
  public ama.task.TaskDomainPolicy taskPolicy(){return taskPolicy;}
+ public ama.task.TaskDomainPolicy minutesTaskPolicy(){return minutesTaskPolicy;}
+ public ama.task.TaskDomainPolicy publicationTaskPolicy(){return publicationTaskPolicy;}
+ PublicationTaskDomainPolicy publicationDomain(){return publicationTaskPolicy;}
+ MinutesTaskDomainPolicy minutesDomain(){return minutesTaskPolicy;}
  public ama.task.TaskDomainPolicy.PreparedDomain adoptCreated(FileRegistry.LockedMeeting gate,HeldProcessingFacts held,TaskSpec spec){return taskPolicy.adopt(gate,held,spec);}
  public List<FileRegistry.CompletedSource> originals(PreparedIntake prepared){
   if(prepared==null||prepared.issuer!=this)throw new IllegalArgumentException("Foreign preparation");return prepared.draft.orderedSources();
@@ -183,6 +202,151 @@ public final class JdbcTranscriptAuthority {
   require(number(root,"revision")==spec.businessVersion()&&number(root,"cancel_epoch")==spec.cancelEpoch()&&draft.revision()+1==spec.businessVersion()&&Objects.equals(root.get("owner_id"),draft.actor().enterpriseId()),FINGERPRINT_MISMATCH);
   require(j.queryForObject("SELECT COUNT(*) FROM task_subject WHERE subject_kind='MEETING' AND subject_id=? AND business_version=? AND cancel_epoch=? AND deleted=0",Long.class,draft.meetingId(),spec.businessVersion(),spec.cancelEpoch())==1,FINGERPRINT_MISMATCH);
  }
+
+ public interface PreparedMinutesTransition {}
+ public interface HeldMinutesTransition {}
+ private final class TransitionPlan implements PreparedMinutesTransition {
+  final Actor actor;final String meeting;final MinutesPendingDiscovery.Plan pending;TaskSpec prospective;
+  TransitionPlan(Actor actor,String meeting,Collection<String> tasks){this.actor=actor;this.meeting=meeting;pending=MinutesPendingDiscovery.discover(source,meeting,tasks);}
+  TransitionPlan(Actor actor,String meeting,MinutesPendingDiscovery.Plan pending){this.actor=actor;this.meeting=meeting;this.pending=pending;}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ private enum TransitionPhase { CONTROL, DOMAIN, TASKS, CONSUMED }
+ private final class TransitionScope implements HeldMinutesTransition {
+  final Object holder=transaction();final TransitionPlan plan;final FileRegistry.LockedMeeting gate;final long before;TransitionPhase phase=TransitionPhase.CONTROL;
+  TransitionScope(TransitionPlan plan,FileRegistry.LockedMeeting gate,long before){this.plan=plan;this.gate=gate;this.before=before;}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ PreparedMinutesTransition prepareMinutesIntake(Actor actor,String meeting,TaskSpec prospective){var plan=(TransitionPlan)prepareMinutesTransition(actor,meeting);plan.prospective=Objects.requireNonNull(prospective);return plan;}
+ public PreparedMinutesTransition prepareMinutesTransition(Actor actor,String meeting){return prepareMinutesTransition(actor,meeting,List.of());}
+ PreparedMinutesTransition prepareMinutesTransition(Actor actor,String meeting,Collection<String> tasks){independent();uuid(meeting);return new TransitionPlan(actor,meeting,tasks);}
+ /** Existing B03 root is adopted, never independently reacquired. All prior controls must already be held. */
+ public HeldMinutesTransition lockMinutesTransition(PreparedMinutesTransition prepared,Actor actor,String meeting,MeetingAccess.Locked held){
+  access.requirePrepared(held,actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);var gate=registry.adopt(actor,meeting,held,MeetingAccess.Action.EDIT);
+  var value=beginMinutesTransition(prepared,actor,meeting,gate);lockMinutesTransitionDomain(value,gate);lockMinutesTransitionTasks(value,gate);return value;
+ }
+ HeldMinutesTransition beginMinutesTransition(PreparedMinutesTransition prepared,Actor actor,String meeting,FileRegistry.LockedMeeting gate){
+  if(!(prepared instanceof JdbcTranscriptAuthority.TransitionPlan plan)||plan.issuer()!=this||!plan.actor.equals(actor)||!plan.meeting.equals(meeting))throw new IllegalArgumentException("Foreign minutes transition declaration");
+  access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);
+  var root=j.queryForMap("SELECT revision,owner_id,ever_published,stage,final_confirmation_id FROM meeting WHERE id=?",meeting);if(!actor.enterpriseId().equals(root.get("owner_id")))throw new MeetingAccess.AccessDeniedException();
+  MinutesPendingDiscovery.lock(source,plan.pending,List.of("publication","final_confirmation"));
+  if(!plan.pending.rows().get("publication").isEmpty()||((Number)root.get("ever_published")).intValue()!=0||"PUBLISHED".equals(root.get("stage")))throw new ama.contract.TranscriptContracts.Failure(409,"MEETING_NOT_WRITABLE");
+  var finalId=root.get("final_confirmation_id");if(finalId!=null&&plan.pending.rows().get("final_confirmation").stream().filter(row->finalId.equals(row.get("id"))).count()!=1)throw MinutesPendingDiscovery.unavailable();
+  return new TransitionScope(plan,gate,((Number)root.get("revision")).longValue());
+ }
+ private TransitionScope transition(HeldMinutesTransition value,FileRegistry.LockedMeeting gate,TransitionPhase phase){
+  if(!(value instanceof JdbcTranscriptAuthority.TransitionScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||scope.phase!=phase)throw new IllegalArgumentException("Foreign, expired or out-of-phase minutes transition");registry.access(gate);return scope;
+ }
+ void lockMinutesTransitionDomain(HeldMinutesTransition value,FileRegistry.LockedMeeting gate){var scope=transition(value,gate,TransitionPhase.CONTROL);MinutesPendingDiscovery.lock(source,scope.plan.pending,MinutesPendingDiscovery.DOMAIN);scope.phase=TransitionPhase.DOMAIN;}
+ void lockMinutesTransitionTasks(HeldMinutesTransition value,FileRegistry.LockedMeeting gate){var scope=transition(value,gate,TransitionPhase.DOMAIN);MinutesPendingDiscovery.lock(source,scope.plan.pending,MinutesPendingDiscovery.TASKS);MinutesPendingDiscovery.validate(scope.plan.pending,scope.before);MinutesDomainCapacity.reserve(scope.plan.pending.rows(),minutesTaskPolicy.taskLimit(),256,scope.plan.prospective);scope.phase=TransitionPhase.TASKS;}
+ public void finishMinutesTransition(HeldMinutesTransition value,long revision){finishMinutesTransition(value,revision,null);}
+ private void finishMinutesTransition(HeldMinutesTransition value,long revision,String selected){
+  if(!(value instanceof JdbcTranscriptAuthority.TransitionScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.phase!=TransitionPhase.TASKS||revision!=scope.before+1)throw new IllegalArgumentException("Foreign, expired or consumed minutes transition");registry.access(scope.gate);
+  if(j.queryForObject("SELECT revision FROM meeting WHERE id=?",Long.class,scope.plan.meeting)!=revision||j.queryForObject("SELECT business_version FROM task_subject WHERE subject_kind='MEETING' AND subject_id=?",Long.class,scope.plan.meeting)!=revision)throw MinutesPendingDiscovery.unavailable();scope.phase=TransitionPhase.CONSUMED;
+  for(var candidate:scope.plan.pending.rows().get("generation_candidate")){if(Objects.equals(selected,candidate.get("id"))){var actual=j.queryForMap("SELECT * FROM generation_candidate WHERE id=?",selected);if(!Set.of("ADOPTED","REJECTED").contains(actual.get("state"))||actual.get("decided_at")==null)throw MinutesPendingDiscovery.unavailable();for(var field:candidate.entrySet())if(!Set.of("state","decided_at").contains(field.getKey())){Object actualValue=actual.get(field.getKey());if(actualValue instanceof Number number)actualValue=new java.math.BigDecimal(number.toString()).longValueExact();else if(actualValue instanceof java.sql.Timestamp timestamp)actualValue=timestamp.toLocalDateTime().toString();if(!Objects.equals(field.getValue(),actualValue))throw MinutesPendingDiscovery.unavailable();}continue;}if(j.update("UPDATE generation_candidate SET state='STALE',decided_at=UTC_TIMESTAMP(6) WHERE id=? AND meeting_id=? AND state='PENDING' AND base_revision=?",candidate.get("id"),scope.plan.meeting,candidate.get("base_revision"))!=1)throw MinutesPendingDiscovery.unavailable();}
+ }
+
+ private enum DecisionPurpose { REJECT, DISPOSE }
+ private final class DecisionPlan {
+  final Actor actor;final String meeting,candidate;final long expected;final DecisionPurpose purpose;final TransitionPlan transition;
+  DecisionPlan(Actor actor,String meeting,String candidate,long expected,DecisionPurpose purpose){this.actor=actor;this.meeting=meeting;this.candidate=candidate;this.expected=expected;this.purpose=purpose;this.transition=new TransitionPlan(actor,meeting,MinutesPendingDiscovery.discover(source,meeting,List.of(),candidate));var selected=this.transition.pending.rows().get("generation_candidate").stream().filter(row->candidate.equals(row.get("id"))).toList();if(selected.size()==1){var tasks=this.transition.pending.rows().get("durable_task").stream().filter(row->selected.getFirst().get("task_id").equals(row.get("id"))).toList();if(tasks.size()!=1)throw MinutesPendingDiscovery.unavailable();var task=tasks.getFirst();if(!"MEETING".equals(task.get("subject_kind"))||!meeting.equals(task.get("subject_id"))||!"GENERATION_INPUT".equals(task.get("input_kind"))||!ama.minutes.MinutesGenerateProducer.compute(meeting,(String)task.get("input_id"),(String)task.get("input_fingerprint"),number(task,"business_version"),number(task,"cancel_epoch"),canonicalBudget(),()->false).equals(task.get("producer_key")))throw MinutesPendingDiscovery.unavailable();}}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ private final class DecisionScope {
+  final Object holder=transaction();final DecisionPlan plan;final FileRegistry.LockedMeeting gate;final HeldMinutesTransition transition;boolean consumed;
+  DecisionScope(DecisionPlan plan,FileRegistry.LockedMeeting gate,HeldMinutesTransition transition){this.plan=plan;this.gate=gate;this.transition=transition;}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ Object prepareMinutesDecision(Actor actor,String meeting,String candidate,long expected,boolean disposal){independent();uuid(meeting);uuid(candidate);return new DecisionPlan(actor,meeting,candidate,expected,disposal?DecisionPurpose.DISPOSE:DecisionPurpose.REJECT);}
+ Object captureMinutesDecision(Object prepared,FileRegistry.LockedMeeting gate,Actor actor,String meeting){if(!(prepared instanceof JdbcTranscriptAuthority.DecisionPlan plan)||plan.issuer()!=this||!plan.actor.equals(actor)||!plan.meeting.equals(meeting))throw new IllegalArgumentException("Foreign decision plan");access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);var root=root(meeting);if(!actor.enterpriseId().equals(root.get("owner_id")))throw new MeetingAccess.AccessDeniedException();writable(root);if(number(root,"revision")!=plan.expected)throw new ama.contract.TranscriptContracts.Failure(409,"REVISION_CONFLICT");if(plan.expected>=Long.MAX_VALUE-1)throw new ama.contract.TranscriptContracts.Failure(409,"REVISION_EXHAUSTED");var transition=beginMinutesTransition(plan.transition,actor,meeting,gate);lockMinutesTransitionDomain(transition,gate);lockMinutesTransitionTasks(transition,gate);var candidates=plan.transition.pending.rows().get("generation_candidate").stream().filter(row->plan.candidate.equals(row.get("id"))).toList();if(candidates.size()!=1)throw new ama.contract.TranscriptContracts.Failure(404,"CANDIDATE_NOT_FOUND");var selected=candidates.getFirst();String wanted=plan.purpose==DecisionPurpose.REJECT?"PENDING":"STALE";if(!wanted.equals(selected.get("state"))||plan.purpose==DecisionPurpose.REJECT&&number(selected,"base_revision")!=plan.expected)throw new ama.contract.TranscriptContracts.Failure(409,"CANDIDATE_DECISION_CONFLICT");return new DecisionScope(plan,gate,transition);}
+ void writeMinutesDecision(Object value,Object prepared,FileRegistry.LockedMeeting gate){if(!(value instanceof JdbcTranscriptAuthority.DecisionScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||scope.plan!=prepared||scope.consumed)throw new IllegalArgumentException("Foreign, expired or consumed decision");registry.access(gate);scope.consumed=true;var plan=scope.plan;String prior=plan.purpose==DecisionPurpose.REJECT?"PENDING":"STALE";require(j.update("UPDATE generation_candidate SET state='REJECTED',decided_at=UTC_TIMESTAMP(6) WHERE id=? AND meeting_id=? AND state=?",plan.candidate,plan.meeting,prior)==1,PROVENANCE_UNAVAILABLE);var fences=new ama.task.JdbcSubjectFences(source,Set.of("MEETING"));var subject=fences.lock(new ama.contract.TaskContracts.SubjectRef("MEETING",plan.meeting),false).orElseThrow(()->fail(PROVENANCE_UNAVAILABLE));require(subject.businessVersion()==plan.expected,PROVENANCE_UNAVAILABLE);require(j.update("UPDATE meeting SET revision=?,final_confirmation_id=NULL,updated_at=UTC_TIMESTAMP(6) WHERE id=? AND revision=? AND cancel_epoch=?",plan.expected+1,plan.meeting,plan.expected,subject.cancelEpoch())==1,PROVENANCE_UNAVAILABLE);require(j.update("UPDATE meeting_search_projection SET meeting_revision=? WHERE meeting_id=?",plan.expected+1,plan.meeting)==1,PROVENANCE_UNAVAILABLE);fences.advance(subject,plan.expected+1,subject.cancelEpoch(),false);finishMinutesTransition(scope.transition,plan.expected+1,plan.candidate);}
+
+ /** A prepared intent is issuer-owned data; only its actual held gate can consume the write. */
+ private final class IntentPlan {
+  final Actor actor;final String meeting;final long expected;final Map<String,List<Map<String,Object>>> controls;
+  IntentPlan(Actor actor,String meeting,long expected){this.actor=actor;this.meeting=meeting;this.expected=expected;controls=MinutesIntentControl.read(j,meeting,false);}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ private enum EditorPurpose { EDIT_INTENT }
+ private final class IntentScope {
+  final Object holder=transaction();final FileRegistry.LockedMeeting gate;final IntentPlan plan;final EditorPurpose purpose=EditorPurpose.EDIT_INTENT;final Long before;boolean consumed;
+  IntentScope(FileRegistry.LockedMeeting gate,IntentPlan plan,Long before){this.gate=gate;this.plan=plan;this.before=before;}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ Object prepareMinutesIntent(Actor actor,String meeting,long expected){independent();return new IntentPlan(actor,meeting,expected);}
+ Object captureMinutesIntent(Object prepared,FileRegistry.LockedMeeting gate,Actor actor,String meeting,long expected){
+  if(!(prepared instanceof JdbcTranscriptAuthority.IntentPlan plan)||plan.issuer()!=this||!plan.actor.equals(actor)||!plan.meeting.equals(meeting)||plan.expected!=expected)throw new IllegalArgumentException("Foreign intent plan");
+  access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);
+  var root=j.queryForMap("SELECT * FROM meeting WHERE id=?",meeting);if(!actor.enterpriseId().equals(root.get("owner_id")))throw new ama.access.MeetingAccess.AccessDeniedException();
+  var guard=j.queryForList("SELECT intent_epoch FROM meeting_minutes_editor_guard WHERE meeting_id=? FOR UPDATE",Long.class,meeting);
+  var controls=MinutesIntentControl.read(j,meeting,true);if(!controls.equals(plan.controls))throw new ama.contract.TranscriptContracts.Failure(503,"INTENT_CONTRIBUTION_UNAVAILABLE");MinutesIntentControl.requireControlled(controls,root);
+  if(((Number)root.get("revision")).longValue()!=expected)throw new JdbcMinutesIntentReceipts.StaleIntent(new JdbcMinutesIntentReceipts(source,tx,access).projection(meeting,false));
+  if(guard.size()>1||!guard.isEmpty()&&guard.getFirst()<0)throw new ama.contract.TranscriptContracts.Failure(503,"PROVENANCE_UNAVAILABLE");
+  if(!guard.isEmpty()&&guard.getFirst()>=Long.MAX_VALUE-1)throw new ama.contract.TranscriptContracts.Failure(409,"INTENT_EXHAUSTED");
+  return new IntentScope(gate,plan,guard.isEmpty()?null:guard.getFirst());
+ }
+ void writeMinutesIntent(Object value,Object prepared,FileRegistry.LockedMeeting gate){
+  if(!(value instanceof JdbcTranscriptAuthority.IntentScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||scope.plan!=prepared||scope.purpose!=EditorPurpose.EDIT_INTENT||scope.consumed)throw new IllegalArgumentException("Foreign, expired or consumed intent write");
+  registry.access(gate);scope.consumed=true;long next=scope.before==null?1:scope.before+1;int changed=scope.before==null?j.update("INSERT INTO meeting_minutes_editor_guard(meeting_id,intent_epoch) VALUES (?,1)",scope.plan.meeting):j.update("UPDATE meeting_minutes_editor_guard SET intent_epoch=? WHERE meeting_id=? AND intent_epoch=?",next,scope.plan.meeting,scope.before);
+  if(changed!=1||!j.queryForList("SELECT intent_epoch FROM meeting_minutes_editor_guard WHERE meeting_id=?",Long.class,scope.plan.meeting).equals(List.of(next)))throw new ama.contract.TranscriptContracts.Failure(503,"PROVENANCE_UNAVAILABLE");
+ }
+
+ /** Minutes capture shares this exact issuer, DataSource holder and genuine B03/B04 gate. */
+ enum MinutesWritePurpose { INITIAL_SETTINGS, GENERATION_INPUT, GENERATION_COMPLETION, STALE_RETENTION, ADOPT, REJECT, DISPOSE, EDIT, REVIEW, SETTINGS, FINAL_CONFIRM, PUBLICATION_SUBMIT }
+ private final class MinutesScope {
+  final Object holder=transaction();final FileRegistry.LockedMeeting gate;final Actor actor;final String meeting;final MeetingAccess.Action action;
+  MinutesGraphCapture.Graph graph;TransitionScope transition;MinutesWritePurpose writePurpose;Object preparedWrite;String decidedCandidate;boolean writing;
+  MinutesScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting){this(gate,actor,meeting,MeetingAccess.Action.EDIT);}
+  MinutesScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting,MeetingAccess.Action action){this.gate=gate;this.actor=actor;this.meeting=meeting;this.action=action;}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ Object minutesScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting){
+  access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);
+  require(actor.enterpriseId().equals(j.queryForObject("SELECT owner_id FROM meeting WHERE id=?",String.class,meeting)),PROVENANCE_UNAVAILABLE);
+  return new MinutesScope(gate,actor,meeting);
+ }
+ Object minutesReadScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting){access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.READ);return new MinutesScope(gate,actor,meeting,MeetingAccess.Action.READ);}
+ void requireMinutesScope(Object value,FileRegistry.LockedMeeting gate,Actor actor,String meeting){
+  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||!scope.meeting.equals(meeting)||scope.graph!=null)throw new IllegalArgumentException("Foreign, expired or consumed minutes capture scope");
+  registry.access(gate); // Identity/root authorization was established before domain locks.
+ }
+ void sealMinutesCapture(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph){
+  requireMinutesScope(value,gate,actor,graph.discovery().meeting());var scope=(MinutesScope)value;scope.graph=graph;
+  if(graph.discovery().pending()!=null){var pending=graph.discovery().pending();long before=((Number)graph.discovery().root().get("revision")).longValue();MinutesPendingDiscovery.validate(pending,before);scope.transition=new TransitionScope(new TransitionPlan(actor,graph.discovery().meeting(),pending),gate,before);scope.transition.phase=TransitionPhase.TASKS;}
+ }
+ void claimMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph,MinutesWritePurpose purpose,Object prepared){claimMinutesWrite(value,gate,actor,graph,purpose,prepared,null);}
+ void claimMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph,MinutesWritePurpose purpose,Object prepared,String selected){
+  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||!scope.meeting.equals(graph.discovery().meeting())||scope.graph!=graph||scope.writing||scope.action!=MeetingAccess.Action.EDIT)throw new IllegalArgumentException("Foreign, expired or reused minutes write invocation");registry.access(gate);Objects.requireNonNull(purpose);Objects.requireNonNull(prepared);String kind=graph.discovery().kind();boolean valid=switch(purpose){case INITIAL_SETTINGS->kind.equals("INITIAL_SETTINGS");case GENERATION_INPUT->kind.equals("CURRENT_GENERATION");case GENERATION_COMPLETION,STALE_RETENTION->kind.equals("STORED_INPUT");case ADOPT->kind.equals("ADOPT");case SETTINGS->Set.of("SETTINGS_TEMPLATE","SETTINGS_EXCLUSIONS").contains(kind);case REVIEW->Set.of("REVIEW_BODY","REVIEW_ELEMENT").contains(kind);case FINAL_CONFIRM->kind.equals("READINESS");case PUBLICATION_SUBMIT->kind.equals("FINAL");case EDIT->Set.of("BODY_EDIT","BODY_RESTORE","SET_EDIT","SET_RESTORE").contains(kind);default->false;};if(!valid)throw new IllegalArgumentException("Wrong minutes invocation purpose");if(selected!=null&&!Set.of(MinutesWritePurpose.ADOPT,MinutesWritePurpose.REJECT,MinutesWritePurpose.DISPOSE).contains(purpose))throw new IllegalArgumentException("Unexpected candidate decision");if(selected!=null&&graph.auxiliary().getOrDefault("generation_candidate",List.of()).stream().filter(row->selected.equals(row.get("id"))).count()!=1)throw new IllegalArgumentException("Undeclared candidate decision");scope.writePurpose=purpose;scope.preparedWrite=prepared;scope.decidedCandidate=selected;scope.writing=true;
+ }
+ void requireMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph){
+  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||scope.graph!=graph||!scope.writing)throw new IllegalArgumentException("Foreign or inactive minutes write scope");registry.access(gate);
+ }
+ void requireMinutesInvocation(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph,MinutesWritePurpose purpose,Object prepared){requireMinutesWrite(value,gate,actor,graph);var scope=(MinutesScope)value;if(scope.writePurpose!=purpose||scope.preparedWrite!=prepared)throw new IllegalArgumentException("Foreign minutes purpose or prepared plan");}
+ void finishMinutesGraphTransition(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph,long revision){requireMinutesWrite(value,gate,actor,graph);var scope=(MinutesScope)value;if(scope.transition==null)throw MinutesPendingDiscovery.unavailable();finishMinutesTransition(scope.transition,revision,scope.decidedCandidate);}
+ enum SavedPurpose { OWNER_INSPECTION, CURRENT, MUTATION }
+ public interface HeldSavedTranscript {}
+ private final class SavedScope implements HeldSavedTranscript {
+  SavedTranscriptGraph complete;
+  final Object holder=transaction();final FileRegistry.LockedMeeting gate;final Actor actor;final String meeting;final SavedPurpose purpose;
+  SavedScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting,SavedPurpose purpose){this.gate=gate;this.actor=actor;this.meeting=meeting;this.purpose=purpose;}
+  JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
+ }
+ Object savedScope(FileRegistry.LockedMeeting gate,Actor actor,String meeting,SavedPurpose purpose){
+  access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),purpose==SavedPurpose.CURRENT?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);
+  return new SavedScope(gate,actor,meeting,purpose);
+ }
+ void requireSavedScope(Object value,FileRegistry.LockedMeeting gate,Actor actor,String meeting,SavedPurpose purpose){
+  if(!(value instanceof JdbcTranscriptAuthority.SavedScope s)||s.issuer()!=this||s.holder!=transaction()||s.gate!=gate||!s.actor.equals(actor)||!s.meeting.equals(meeting)||s.purpose!=purpose)throw new IllegalArgumentException("Foreign or expired saved transcript scope");
+  access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),purpose==SavedPurpose.CURRENT?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);
+ }
+ HeldSavedTranscript sealSavedGraph(Object value,FileRegistry.LockedMeeting gate,Actor actor,String meeting,SavedTranscriptGraph graph){
+  requireSavedScope(value,gate,actor,meeting,SavedPurpose.MUTATION);var scope=(SavedScope)value;require(scope.complete==null&&graph.meeting().equals(meeting)&&graph.selected()!=null,PROVENANCE_UNAVAILABLE);scope.complete=graph;return scope;
+ }
+ /** Future disposition/freeze integration must consume this exact retained root/graph handle. */
+ public void requireSavedHeld(HeldSavedTranscript value,FileRegistry.LockedMeeting gate,Actor actor,String meeting){
+  requireSavedScope(value,gate,actor,meeting,SavedPurpose.MUTATION);require(((SavedScope)value).complete!=null,PROVENANCE_UNAVAILABLE);
+ }
+ String savedRouteStatus(String backend){return savedBackends.historicalStatus(backend);}
  ArchiveReadBudget readBudget(){return budget;}
  CanonicalBudget canonicalBudget(){return canonical;}
  MeetingAccess meetingAccess(){return access;}

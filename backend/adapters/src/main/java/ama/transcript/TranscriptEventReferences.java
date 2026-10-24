@@ -13,7 +13,13 @@ public final class TranscriptEventReferences {
         j.setQueryTimeout(5);
     }
     public Map<String,OutboxReferenceValidator> validators() {
-        return Map.of("TRANSCRIPTION_INPUT",this::validate);
+        return Map.of("TRANSCRIPTION_INPUT",this::validate,"TRANSCRIPT_REVISION",this::saved,"TRANSCRIPT_CONFIRMATION",this::saved);
+    }
+    private void saved(EventDraft event) {
+        boolean confirm=event.reference().kind().equals("TRANSCRIPT_CONFIRMATION");
+        if(event.taskId()!=null||!event.subject().kind().equals("MEETING")||!event.eventType().equals(confirm?"TRANSCRIPT_CONFIRMED":"TRANSCRIPT_SAVED"))throw new IllegalArgumentException("Invalid saved transcript event");
+        String sql=confirm?"SELECT c.id FROM transcript_confirmation c JOIN meeting m ON m.id=c.meeting_id JOIN transcript_revision r ON r.id=c.revision_id WHERE c.id=? AND m.id=? AND m.revision=? AND m.transcript_confirmation_id=c.id AND m.transcript_revision_id=r.id AND r.meeting_id=m.id AND r.kind='WORKING'":"SELECT r.id FROM transcript_revision r JOIN meeting m ON m.id=r.meeting_id WHERE r.id=? AND m.id=? AND m.revision=? AND m.transcript_revision_id=r.id AND r.revision=m.revision AND r.kind='WORKING' AND r.producer_task_id IS NULL";
+        if(j.queryForList(sql,String.class,event.reference().id(),event.subject().id(),event.subjectRevision()).size()!=1)throw new IllegalArgumentException("Invalid saved transcript provenance");
     }
     private void validate(EventDraft event) {
         if(!EVENTS.contains(event.eventType())||event.taskId()==null||!event.subject().kind().equals("MEETING"))throw new IllegalArgumentException("Invalid processing event");

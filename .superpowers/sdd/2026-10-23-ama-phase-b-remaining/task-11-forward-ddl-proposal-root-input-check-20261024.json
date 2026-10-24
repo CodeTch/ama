@@ -1,0 +1,122 @@
+{
+  "timestampUtc": "2026-10-24T00:00:41.554541+00:00",
+  "scope": "Root fullread SQL3927B/report8903B/manifest and logicalR1\u00a78.5; all22source/outputseals plus12selectedranges verified against current bytes, 15migrationblobs additionally equal DE. No DB/test/Git/source action.",
+  "manifestSha256": "ca422802295e79892b014357a1b7d682ff70eb17fd306b89aeefe81f63724bf6",
+  "verified": [
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+      "selectedRanges": 0
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+      "selectedRanges": 0
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+      "selectedRanges": 0
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+      "selectedRanges": 0
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+      "selectedRanges": 1
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+      "selectedRanges": 2
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+      "selectedRanges": 0
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "selectedRanges": 3
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713",
+      "selectedRanges": 0
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+      "selectedRanges": 0
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "selectedRanges": 2
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "selectedRanges": 1
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "selectedRanges": 1
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+      "selectedRanges": 1
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+      "selectedRanges": 1
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1.md",
+      "sha256": "f18ae4734603709284d91345b2909eca9687627c825444fd8cfa06dd49d36ffc",
+      "selectedRanges": 0
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1-closure.md",
+      "sha256": "b906213c0ff8af494f54495b3dbd337cbf3283994dfabe2e6798255438808c51",
+      "selectedRanges": 0
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1-review.md",
+      "sha256": "247c16e565986ebb61c8b60589240fd0fbd6bf82153826cb57bde72db42d3241",
+      "selectedRanges": 0
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-zeroeffect-root-rulings.md",
+      "sha256": "9a4718ece70afbd631affe8464ccb75673d32af9e7b51820cdf2bae211709750",
+      "selectedRanges": 0
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-source-alignment-preflight-20261024.md",
+      "sha256": "c0c8a59d94d46c93ac44461401b108ba06915e08064b032de972b96b4d3ca2c9",
+      "selectedRanges": 0
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024.sql",
+      "sha256": "e9026197dba789e7cbdbf6acee56065d0f8fa98665595d204bece1afc8eedd43",
+      "selectedRanges": 0
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024.md",
+      "sha256": "930eddac25fe68adf832b007c2ffc2a74581bdebd9e6535df01ac19c4933ef1d",
+      "selectedRanges": 0
+    }
+  ],
+  "reviewPackage": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-static-review-package-20261024.diff",
+    "bytes": 4130,
+    "sha256": "33adb53fb2ac2a3fb72fd9a26e797e11d5589695172efd5589d2a3c6adb65298"
+  }
+}

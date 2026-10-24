@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/checks/run.py",
+    "it",
+    "Task09DeniedLookupRecoveryIT"
+  ],
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "heapMiB": 512,
+  "processors": 2,
+  "mavenConfig": "-Dtest=Task09NoImplicitUnitSuite -Dsurefire.failIfNoSpecifiedTests=false",
+  "sourceSha256": "2c174bd9994045145c95ad5581a43e828b8fada83cbe226cf7b934d1c8b33c9b",
+  "startedUtc": "2026-10-24T07:30:14.335037+00:00"
+}

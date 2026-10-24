@@ -1,3 +1,5 @@
+> 当前派生模型：B00-1.6-reconcile-scan，98 表、732 字段、189 个显式索引（含98个主键）。同步 Task6 typed 输入索引及 Task8 外部操作不可变扫描序号/唯一索引。下方原1.5正文原样保留为历史说明；完整未来审阅模型不等于已部署增量结构。实际013.3增量和保全证据见 [Task8 报告](../../../artifacts/phase-b/b-remaining/task-08/report.md)。
+
 # AMA 数据库详细设计基线
 
 当前设计版本：**B00-1.5-runtime-metadata**，98表/731列；在完整 B00-1.4-proposed 模型上仅新增两个运行时 sidecar。V013.1 的实际验证仅覆盖这两表及原部署模型不变性；未重跑完整未来模型验证。原 D01 三表与两列仍为 UNASSIGNED-D01，不由此启用。详见[运行时补充与证据](../../acceptance/b/database-runtime-metadata-task-02.md)。
@@ -569,6 +571,7 @@ erDiagram
         varchar_64_ subject_kind FK
         varchar_255_ subject_id FK
         bigint current_execution_no
+        bigint reconcile_scan_seq
     }
     task_outbox_sequence {
         int id PK
@@ -1257,6 +1260,27 @@ erDiagram
         char_36_ meeting_id PK,FK
         bigint intent_epoch
     }
+    publication_submission {
+        char_36_ task_id PK,FK
+        char_36_ publication_id FK
+        bigint submission_no
+        char_36_ confirmation_id FK
+        varchar_64_ provider_id
+        varchar_255_ business_key
+        varchar_255_ library_id
+        varchar_255_ folder_id
+        varchar_255_ requester_id FK
+        char_64_ logical_request_hash
+        char_64_ execution_request_hash
+        longtext request_manifest
+        datetime_6_ created_at
+        varchar_32_ local_state
+        datetime_6_ local_decided_at
+        varchar_64_ local_reason
+        varchar_255_ local_decided_by FK
+        bigint local_attempt_no
+        char_36_ local_execution_id FK
+    }
     department o|--o{ department : fk_department_0
     department o|--o{ enterprise_identity : fk_enterprise_identity_0
     enterprise_identity ||--o{ role_assignment : fk_role_assignment_0
@@ -1465,4 +1489,10 @@ erDiagram
     parsed_document ||--o| parsed_document_profile : fk_parsed_document_profile_0
     input_batch ||--o| input_batch_fingerprint_profile : fk_input_batch_fingerprint_profile_0
     meeting ||--o| meeting_minutes_editor_guard : fk_meeting_minutes_editor_guard_0
+    durable_task ||--o| publication_submission : fk_publication_submission_task
+    publication ||--o{ publication_submission : fk_publication_submission_publication
+    final_confirmation ||--o{ publication_submission : fk_publication_submission_confirmation
+    enterprise_identity ||--o{ publication_submission : fk_publication_submission_requester
+    enterprise_identity o|--o{ publication_submission : fk_publication_submission_decider
+    external_execution o|--o{ publication_submission : fk_publication_submission_execution
 ```

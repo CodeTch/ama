@@ -12,7 +12,19 @@ public record FileBackendDefinitions(List<FileBackendCatalog.Backend> backends, 
     }
 
     public void close() throws Exception {
-        for (var backend : backends)
-            if (backend.storage() instanceof AutoCloseable closeable) closeable.close();
+        Throwable failure=null;
+        boolean interrupted=Thread.currentThread().isInterrupted();
+        try {
+            for (var backend : backends)
+                if (backend.storage() instanceof AutoCloseable closeable)
+                    try {closeable.close();}
+                    catch(Exception|Error error) {
+                        if(error instanceof InterruptedException)interrupted=true;
+                        if(failure==null)failure=error;
+                        else if(failure!=error&&failure.getSuppressed().length<8)failure.addSuppressed(error);
+                    }
+        } finally {if(interrupted)Thread.currentThread().interrupt();}
+        if(failure instanceof Exception error)throw error;
+        if(failure instanceof Error error)throw error;
     }
 }

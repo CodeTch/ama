@@ -1,0 +1,69 @@
+{
+  "startedNs": 1792857511161798122,
+  "endedNs": 1792857626160153671,
+  "reports": [
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01CapacityIT.xml",
+      "mtimeNs": 1792857611415939819,
+      "sha256": "782cb9913bf1afc56f56d876003e636c65fa6b461f128608e5239b95ea3de501",
+      "previous": [
+        1792857322495837552,
+        "807c5715ae2557472a8d2a3d301c875f6555caf183b75caea8f83d66f66c1072"
+      ],
+      "qualified": true,
+      "suite": "ama.storage.Task10Fix01CapacityIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01DecisionIT.xml",
+      "mtimeNs": 1792857546402907104,
+      "sha256": "968a304f3f846af4bec5d00ecbcbb4cd34cf0717873430859e6ab77fb23e4620",
+      "previous": [
+        1792857265328802775,
+        "f85657122b7e174ff8a88ed795d45a68bc7311534b7c96ab678fc36028e3f8bb"
+      ],
+      "qualified": true,
+      "suite": "ama.storage.Task10Fix01DecisionIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01IntakeIT.xml",
+      "mtimeNs": 1792857625726358489,
+      "sha256": "93bbb1eaa86efb1fcfa9e46977a34dc5d1bf5eeb0ebf759a67b5245fbd71144b",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10Fix01IntakeIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01RegressionB03IT.xml",
+      "mtimeNs": 1792857619043328666,
+      "sha256": "a8d5d4dd75581a9fbdbdacc24c24fe5e9c71d393f7189b92faf07321be55a1d0",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10Fix01RegressionB03IT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01RegressionSourceIT.xml",
+      "mtimeNs": 1792857554725365049,
+      "sha256": "4818158783818156599ae2cd0de5393a6919ecdc14b50409ce67e53620c30c6c",
+      "previous": null,
+      "qualified": true,
+      "suite": "ama.storage.Task10Fix01RegressionSourceIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10Fix01ReplayIT.xml",
+      "mtimeNs": 1792857603659742841,
+      "sha256": "a644776a20d25801b62ec4071ce7488673ca27a460f049fdcb4f7dfcd0e6726a",
+      "previous": [
+        1792857314819095979,
+        "b488825368487439df293945fe8611f89f1b007d32631ad060920fdf13d5d0e3"
+      ],
+      "qualified": true,
+      "suite": "ama.storage.Task10Fix01ReplayIT",
+      "canonicalLogAssociation": true
+    }
+  ]
+}

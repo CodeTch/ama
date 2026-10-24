@@ -1,0 +1,27 @@
+{
+  "test": "backend/integration-tests/src/test/java/ama/task/Task11AffectedExternalIT.java",
+  "failedWindow": "replacement-fix01-generic-external",
+  "failedResultSha256": "e5fe78670d570ac9e198a6503f6a5205cd1a22e6396aa737b6331f2254742219",
+  "failedSource": {
+    "path": "backend/integration-tests/src/test/java/ama/task/Task11AffectedExternalIT.java",
+    "bytes": 2249,
+    "sha256": "6c241fe9da6b72788e5ac11d8d17dfbf2e8e4f2456a0b1e758aa557ca94c4fe9"
+  },
+  "latestBootstrapSource": {
+    "path": "backend/integration-tests/src/test/java/ama/task/Task11AffectedExternalIT.java",
+    "bytes": 2322,
+    "sha256": "89ccd38df03a3e18f114c52143c39d63ec4670a6070cb9945ad5dfcac1f4a61b"
+  },
+  "currentSourceSha256": "89ccd38df03a3e18f114c52143c39d63ec4670a6070cb9945ad5dfcac1f4a61b",
+  "postFailureSourceDeltaPaths": [
+    "backend/adapters/src/main/java/ama/transcript/JdbcPublicationService.java",
+    "backend/adapters/src/main/java/ama/transcript/PublicationTaskDomainPolicy.java",
+    "backend/integration-tests/src/test/java/ama/publication/Task11BootstrapIT.java",
+    "backend/integration-tests/src/test/java/ama/publication/Task11Source.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task11KnowledgeFixture.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task11ReplacementOriginalAckIT.java",
+    "backend/integration-tests/src/test/java/ama/task/Task11AffectedExternalIT.java",
+    "tools/task11_window.py"
+  ],
+  "interpretation": "Original failure cause unproven; test and 7 other paths changed before later bootstrap. Bootstrap did not run this selector. No current-source green for generic regression; inspect exact source revisions before one targeted rerun after diagnosis."
+}

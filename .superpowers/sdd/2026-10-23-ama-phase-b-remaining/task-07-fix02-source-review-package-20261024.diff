@@ -1,0 +1,787 @@
+FIX_BASE 6cce4794dba473825d83fb9bccafc043cd611b5c
+HEAD bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc
+bdf9762 fix(task): retire verified old zero-effect receipts after retry
+ .../main/java/ama/task/JdbcExternalOperations.java |  27 ++++
+ .../ama/task/Task07InheritedB06QueueSeamsIT.java   |   4 +-
+ .../java/ama/task/Task07PreparedExternalIT.java    |  13 +-
+ .../test/java/ama/task/Task07RecoveryBoundsIT.java |  10 +-
+ .../java/ama/task/Task07SupersededReceiptIT.java   | 139 +++++++++++++++++++++
+ 5 files changed, 188 insertions(+), 5 deletions(-)
+diff --git a/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java b/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java
+index c5326e5..a685844 100644
+--- a/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java
++++ b/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java
+@@ -161,171 +161,198 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+   var heldTask=q.row(seenTask.id(),true,true);if(heldTask.isEmpty()||!heldTask.orElseThrow().spec().equals(seenTask.spec()))return Optional.empty();
+   q.policy(heldTask.orElseThrow().spec()).validateInput(heldTask.orElseThrow().spec());
+   var locked=scanOperation(seen.id(),true);if(locked.isEmpty())return Optional.empty();var latest=locked.orElseThrow();var operation=latest.operation();
+   if(latest.sequence()!=candidate.sequence())throw new IllegalStateException("Reconciliation scan ordinal changed");
+   if(operation.execution()!=seen.execution()||!operation.subject().equals(seen.subject())||!operation.subject().equals(heldTask.orElseThrow().spec().subject()))return Optional.empty();
+   var heldExecution=execution(operation.id(),operation.execution(),true,true);if(heldExecution.isEmpty())return Optional.empty();var execution=heldExecution.orElseThrow();
+   if(!execution.id().equals(seenExecution.id())||!execution.operation().equals(operation.id())||execution.number()!=operation.execution()||!execution.task().equals(heldTask.orElseThrow().id()))return Optional.empty();
+   Instant now=q.now();
+   if(!observable(operation.state())||!observable(execution.state())||operation.expiry()==null||latest.nextCheck()==null||operation.expiry().isAfter(now)||latest.nextCheck().isAfter(now))return Optional.empty();
+   Instant expiry=now.plusSeconds(20);
+   j.update("UPDATE external_operation SET reconcile_epoch=reconcile_epoch+1,reconcile_owner=?,reconcile_expires_at=?,next_check_at=? WHERE id=?",owner,sqlTime(expiry),sqlTime(expiry),operation.id());
+   return Optional.of(new OperationToken(operation.id(),execution.id(),operation.execution(),operation.epoch()+1,owner,expiry,operation.subject()));
+  });}
+  @Override public boolean renew(OperationToken token){independent();return q.work(()->{
+   var seen=operation(token.operationId(),false,false);if(seen.isEmpty())return false;var rows=lock(seen.orElseThrow(),false);if(rows.isEmpty())return false;var l=rows.orElseThrow();if(!valid(l.op(),l.execution(),token))return false;
+   j.update("UPDATE external_operation SET reconcile_expires_at=UTC_TIMESTAMP(6)+INTERVAL 20 SECOND,next_check_at=UTC_TIMESTAMP(6)+INTERVAL 20 SECOND WHERE id=?",token.operationId());return true;
+  });}
+  private static final int OBSERVATION_DISCOVERY_ATTEMPTS=4;
+  private static final class RediscoverObservation extends RuntimeException {}
+  @Override public ObservationResult observe(OperationToken token,ExternalObservation observation,Runnable effects){
+   independent();revokeCallAuthority(token);
+   for(int attempt=0;attempt<OBSERVATION_DISCOVERY_ATTEMPTS;attempt++){
+    try{return q.work(()->observeCurrent(token,observation,effects));}
+    catch(RediscoverObservation changed){
+     // q.work has rolled back and released every subject/task/operation lock and the RR ReadView.
+     // Never discover and lock a newly current task while retaining the previous operation lock.
+    }
+   }
+   throw new ObservationRetryRequiredException();
+  }
+  @Override public ObservationResult observePrepared(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,false,false);}
+  @Override public ObservationResult observePreparedFact(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,true,false);}
+  @Override public ObservationResult recoverPreparedFact(OperationToken token,PreparedObservation observation){return observePrepared(token,observation,true,true);}
+  private ObservationResult observePrepared(OperationToken token,PreparedObservation prepared,boolean factOnly,boolean recovery){
+   independent();Objects.requireNonNull(prepared);revokeCallAuthority(token);
+   for(int attempt=0;attempt<OBSERVATION_DISCOVERY_ATTEMPTS;attempt++)try{return q.work(()->observeCurrent(token,null,null,prepared,factOnly,recovery));}catch(RediscoverObservation changed){}
+   throw new ObservationRetryRequiredException();
+  }
+  private ObservationResult observeCurrent(OperationToken token,ExternalObservation observation,Runnable effects){return observeCurrent(token,observation,effects,null,false,false);}
+  private ObservationResult observeCurrent(OperationToken token,ExternalObservation observation,Runnable effects,PreparedObservation prepared,boolean factOnly,boolean recovery){
+   var seen=operation(token.operationId(),false,false);if(seen.isEmpty())return ObservationResult.STALE_TOKEN;
+   // Lock ALL involved tasks before operation when handling an old-generation contradiction.
+   var current=seen.orElseThrow();var old=execution(current.id(),token.executionNo(),false,false);
+   if(old.isEmpty()||!old.orElseThrow().id().equals(token.executionId())||!current.subject().equals(token.subject()))return ObservationResult.STALE_TOKEN;
+   var currentEx=execution(current.id(),current.execution(),false,false).orElseThrow();
+   var currentTask=q.row(currentEx.task(),false,false).orElseThrow();var oldTask=q.row(old.orElseThrow().task(),false,false).orElseThrow();
+   var scope=q.prepareDomain(List.of(currentTask.spec(),oldTask.spec()),TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION,false,null)
+     .orElseThrow(DomainPreparationUnavailableException::new);
+   var domain=q.lockDomain(scope,currentTask.spec(),false).orElseThrow(DomainPreparationUnavailableException::new);
+   var heldTasks=new HashMap<String,JdbcTaskQueue.Row>();
+   for(String id:new TreeSet<>(List.of(currentTask.id(),oldTask.id())))heldTasks.put(id,q.row(id,true,false).orElseThrow());
+   var lockedCurrent=heldTasks.get(currentTask.id());var lockedOld=heldTasks.get(oldTask.id());
+   if(!lockedCurrent.spec().equals(currentTask.spec())||!lockedOld.spec().equals(oldTask.spec()))throw new RediscoverObservation();
+   currentTask=lockedCurrent;oldTask=lockedOld;
+   var o=operation(current.id(),true,false).orElseThrow();
+   if(o.execution()!=current.execution())throw new RediscoverObservation();
+   var heldExecutions=new HashMap<Long,Execution>();
+   for(long number:new TreeSet<>(List.of(o.execution(),token.executionNo())))
+    heldExecutions.put(number,execution(o.id(),number,true,false).orElseThrow());
+   var e=heldExecutions.get(o.execution());var tokenExecution=heldExecutions.get(token.executionNo());
+   if(!e.task().equals(currentTask.id())||!tokenExecution.task().equals(oldTask.id()))throw new RediscoverObservation();
+   if(!tokenExecution.id().equals(token.executionId())||!o.subject().equals(token.subject()))return ObservationResult.STALE_TOKEN;
+   if(prepared==null&&scope.policy() instanceof PreparedExternalPolicy)throw new IllegalArgumentException("Prepared observation required");
+   Context context=prepared==null?null:new Context(scope,oldTask,o,tokenExecution);
+   try {
+   if(context!=null){context.require();q.policy(oldTask.spec()).validateInput(oldTask.spec());observation=Objects.requireNonNull(preparedPolicy(oldTask.spec()).verifyRemoteFact(oldTask.spec(),context,prepared));context.require();}
+   boolean effectsAllowed=scope.policy().permitsDomainEffects(scope.prepared());
+   // A current authoritative fact can outlive business authority. Identity fencing cannot make
+   // that fact permanently unrecordable merely because the disabled principal cannot renew.
+   // Exact current execution and live observation states are still required; no lease is extended.
+   boolean terminalFact=observation.outcome()==ExternalOutcome.SUCCEEDED||observation.outcome()==ExternalOutcome.FAILED_ZERO_EFFECT;
+   boolean factOnlyCurrent=terminalFact&&!effectsAllowed&&o.execution()==token.executionNo()&&e.id().equals(token.executionId())
+     &&(o.state().equals("MARKED")||o.state().equals("UNKNOWN"))&&(e.state().equals("MARKED")||e.state().equals("UNKNOWN"));
+   // Verified proof contradiction precedes replay/conflict rejection for both current and older executions.
+   if(observation.outcome()==ExternalOutcome.SUCCEEDED&&tokenExecution.state().equals("FAILED")
+     &&tokenExecution.basis()!=null&&tokenExecution.evidence()!=null&&tokenExecution.verified()!=null){
+    if(prepared==null)q.policy(oldTask.spec()).validateExternalObservation(oldTask.spec(),observation);
+    j.update("UPDATE external_operation SET state='MANUAL_REQUIRED',last_error='CONTRADICTORY_SUCCESS',external_result_id=?,reconcile_epoch=reconcile_epoch+1 WHERE id=?",observation.externalResultId(),o.id());
+    q.event("EXTERNAL_CONTRADICTION",oldTask);return ObservationResult.QUARANTINED;
+   }
++  // An explicit retry may advance the mutable operation summary before an old commit ACK arrives.
++  // Recovery can acknowledge that immutable failure, but cannot borrow any successor authority.
++  if(recovery&&prepared!=null&&observation.outcome()==ExternalOutcome.FAILED_ZERO_EFFECT
++    &&o.execution()>token.executionNo()&&tokenExecution.state().equals("FAILED"))
++   return acknowledgeOldFailure(scope,context,oldTask,tokenExecution,prepared,observation);
+   if(prepared!=null&&terminalFact&&o.execution()==token.executionNo()&&(recovery||o.epoch()==token.reconcileEpoch()&&Objects.equals(o.owner(),token.owner()))
+     &&e.id().equals(token.executionId())&&(o.state().equals("SUCCEEDED")||o.state().equals("FAILED"))&&o.state().equals(e.state())){
+    var proof=observation.noEffectProof();
+    boolean same=observation.outcome()==ExternalOutcome.SUCCEEDED?o.state().equals("SUCCEEDED")&&Objects.equals(observation.externalResultId(),j.queryForObject("SELECT external_result_id FROM external_operation WHERE id=?",String.class,o.id())):
+       o.state().equals("FAILED")&&proof!=null&&Objects.equals(e.basis(),proof.basis().name())&&Objects.equals(e.evidence(),proof.safeEvidenceReference())&&Objects.equals(e.verified(),proof.verifiedAt());
+    if(!same)return ObservationResult.STALE_TOKEN;
+    var stored=j.queryForMap("SELECT state,last_error,output_kind,output_id FROM durable_task WHERE id=?",currentTask.id());
+    var kind=(String)stored.get("output_kind");var result=new PreparedExternalPolicy.StoredResult((String)stored.get("state"),(String)stored.get("last_error"),kind==null?null:new TypedRef(kind,(String)stored.get("output_id")));
+    if(!preparedPolicy(currentTask.spec()).verifyReplay(scope.prepared(),context,prepared,result))return ObservationResult.STALE_TOKEN;
+    context.require();return result.state().equals("STALE")?ObservationResult.RECORDED_FENCED:ObservationResult.APPLIED;
+   }
+   if(recovery){
+    // An old context never regains business authority. Only the same verified terminal receipt
+    // can take over an expired exact execution; a live newer owner is left untouched.
+    if(!terminalFact||o.execution()!=token.executionNo()||!e.id().equals(token.executionId())
+      ||!(o.state().equals("MARKED")||o.state().equals("UNKNOWN"))||!(e.state().equals("MARKED")||e.state().equals("UNKNOWN"))
+      ||o.expiry()==null||o.expiry().isAfter(q.now()))return ObservationResult.STALE_TOKEN;
+    var now=q.now();
+    j.update("UPDATE external_operation SET reconcile_epoch=reconcile_epoch+1,reconcile_owner=?,reconcile_expires_at=? WHERE id=?","RECEIPT_"+UUID.randomUUID(),sqlTime(now.plusSeconds(20)),o.id());
+    o=operation(o.id(),true,false).orElseThrow();token=token(o,e);
+   }
+   if(!valid(o,e,token)&&!factOnlyCurrent)return ObservationResult.STALE_TOKEN;
+   if(prepared==null)q.policy(currentTask.spec()).validateExternalObservation(currentTask.spec(),observation);
+   if(observation.outcome()==ExternalOutcome.UNKNOWN||observation.outcome()==ExternalOutcome.MANUAL_REQUIRED){
+    j.update("UPDATE external_operation SET state=?,last_error=?,next_check_at=reconcile_expires_at WHERE id=?",observation.outcome()==ExternalOutcome.UNKNOWN?"UNKNOWN":"MANUAL_REQUIRED",observation.errorCode(),o.id());
+    j.update("UPDATE external_execution SET state='UNKNOWN' WHERE id=?",e.id());q.event("EXTERNAL_UNKNOWN",currentTask);return ObservationResult.APPLIED;
+   }
+   boolean canApply=!factOnly&&effectsAllowed&&valid(o,e,token)&&q.current(domain,currentTask.spec());
+   TaskResult local=null;
+   if(canApply){
+    if(prepared==null){q.policy(currentTask.spec()).validateOutput(currentTask.spec(),new TaskResult(observation.outcome()==ExternalOutcome.SUCCEEDED?Outcome.SUCCEEDED:Outcome.FAILED,observation.output(),observation.errorCode()));effects.run();}
+    else {
+     context.require();local=Objects.requireNonNull(preparedPolicy(currentTask.spec()).writeCurrent(scope.prepared(),context,prepared));context.require();
+     if(local.outcome()!=Outcome.SUCCEEDED&&local.outcome()!=Outcome.FAILED||local.outcome()==Outcome.SUCCEEDED&&observation.outcome()!=ExternalOutcome.SUCCEEDED
+       ||local.outcome()==Outcome.FAILED&&observation.outcome()==ExternalOutcome.SUCCEEDED&&(!"INVALID_MODEL_OUTPUT".equals(local.errorCode())||local.output()!=null))throw new IllegalArgumentException("Invalid remote/local outcome mapping");
+     q.policy(currentTask.spec()).validateOutput(currentTask.spec(),local);preparedPolicy(currentTask.spec()).validateStoredResult(scope.prepared(),context,prepared,local);context.require();
+    }
+   }
+   if(!canApply&&!factOnly&&prepared!=null&&effectsAllowed&&valid(o,e,token)&&observation.outcome()==ExternalOutcome.SUCCEEDED
+     &&!domain.deleted()&&domain.cancelEpoch()==currentTask.spec().cancelEpoch()&&domain.businessVersion()>currentTask.spec().businessVersion()
+     &&scope.policy() instanceof GenerationRetentionPolicy retention&&currentTask.spec().type().equals("MINUTES_GENERATE_V1")&&currentTask.spec().input().kind().equals("GENERATION_INPUT")){
+    context.retaining=true;
+    try{var capability=retention.prepareRetention(scope.prepared(),context,prepared);
+     if(capability.isPresent()){var held=capability.orElseThrow();JdbcGenerationRetention.consume(q.source,scope.prepared(),context,held);
+      var candidate=retention.retainStale(held,prepared);retention.validateRetained(held,prepared,candidate);JdbcGenerationRetention.validate(q.source,scope.prepared(),context,held,candidate);}
+    }finally{context.retaining=false;}
+   }
+   String state=observation.outcome()==ExternalOutcome.SUCCEEDED?"SUCCEEDED":"FAILED";
+   var proof=observation.noEffectProof();
+   j.update("UPDATE external_execution SET state=?,finished_at=UTC_TIMESTAMP(6),no_effect_basis=?,no_effect_evidence=?,no_effect_verified_at=? WHERE id=?",state,proof==null?null:proof.basis().name(),proof==null?null:proof.safeEvidenceReference(),proof==null?null:sqlTime(proof.verifiedAt()),e.id());
+   j.update("UPDATE external_operation SET state=?,external_result_id=?,last_error=? WHERE id=?",state,observation.externalResultId(),observation.errorCode(),o.id());
+   String localState=canApply?(local==null?state:local.outcome().name()):"STALE";
+   String localError=canApply?(local==null?observation.errorCode():local.errorCode()):"BUSINESS_FENCED";
+   var localOutput=canApply?(local==null?observation.output():local.output()):null;
+   if(prepared!=null){
+    if(!currentTask.state().equals("RECONCILING")||j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome=?,error_code=? WHERE task_id=? AND attempt=? AND owner=? AND ended_at IS NULL",localState,localError,currentTask.id(),currentTask.attempt(),currentTask.owner())!=1)throw new IllegalStateException("Current external attempt must end exactly once");
+   }
+   q.finish(currentTask,localState,localError,localOutput);
+   return canApply?ObservationResult.APPLIED:ObservationResult.RECORDED_FENCED;
+   } finally {if(context!=null)context.open=false;}
+  }
++ /** Fact-only lookup: both task/execution rows are already locked in the complete observation scope. */
++ private ObservationResult acknowledgeOldFailure(JdbcTaskQueue.DomainScope scope,Context context,Row oldTask,
++     Execution oldExecution,PreparedObservation prepared,ExternalObservation observation){
++  var proof=observation.noEffectProof();
++  if(proof==null||oldExecution.basis()==null||oldExecution.evidence()==null||oldExecution.verified()==null
++    ||!oldExecution.basis().equals(proof.basis().name())||!oldExecution.evidence().equals(proof.safeEvidenceReference())
++    ||!oldExecution.verified().equals(proof.verifiedAt()))return ObservationResult.STALE_TOKEN;
++  // Locking reads remain current under RR and select the OLD task, never the successor's result.
++  var stored=j.queryForMap("SELECT state,last_error,output_kind,output_id FROM durable_task WHERE id=? FOR UPDATE",oldTask.id());
++  var kind=(String)stored.get("output_kind");
++  var result=new PreparedExternalPolicy.StoredResult((String)stored.get("state"),(String)stored.get("last_error"),kind==null?null:new TypedRef(kind,(String)stored.get("output_id")));
++  if(!result.state().equals("FAILED")&&!result.state().equals("STALE"))return ObservationResult.STALE_TOKEN;
++  // The execution's exact marked attempt must be the old terminal task's attempt and already
++  // ended with that same local result. Nothing here ends an attempt or rewrites a durable fact.
++  var attempts=j.query("SELECT a.owner,a.ended_at,a.outcome,a.error_code,e.finished_at FROM external_execution e JOIN task_attempt a ON a.task_id=e.task_id AND a.attempt=e.task_attempt WHERE e.id=? AND a.task_id=? AND a.attempt=? FOR UPDATE",
++      (r,n)->r.getString("owner")!=null&&r.getObject("ended_at")!=null&&r.getObject("finished_at")!=null
++        &&result.state().equals(r.getString("outcome"))&&Objects.equals(result.errorCode(),r.getString("error_code")),
++      oldExecution.id(),oldTask.id(),oldTask.attempt());
++  if(attempts.size()!=1||!attempts.getFirst())return ObservationResult.STALE_TOKEN;
++  if(!preparedPolicy(oldTask.spec()).verifyReplay(scope.prepared(),context,prepared,result))return ObservationResult.STALE_TOKEN;
++  context.require();return result.state().equals("STALE")?ObservationResult.RECORDED_FENCED:ObservationResult.APPLIED;
++ }
+  @Override public String retryAfterZeroEffect(String id,long expected,TaskSpec next,ExternalRequest request){return q.work(()->{
+   // Discover the COMPLETE immutable old/new spec set before identities, subject, roots or tasks.
+   var seen=operation(id,false,false).orElseThrow();
+   var ex=execution(id,expected,false,false).orElseThrow();var old=q.row(ex.task(),false,false).orElseThrow();
+   var scope=q.prepareDomain(List.of(next,old.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,null)
+     .orElseThrow(DomainPreparationUnavailableException::new);
+   q.lockDomain(scope,next,false).orElseThrow();q.policy(next).validateInput(next);q.policy(next).validateExternalRequest(next,request);
+   // A locking read is current even when the preliminary discovery established an RR snapshot.
+   var replay=j.query("SELECT * FROM durable_task WHERE producer_key=? FOR UPDATE",JdbcTaskQueue::read,next.producerKey());
+   if(!replay.isEmpty()){
+    var task=replay.getFirst();if(!task.spec().equals(next))throw new IllegalArgumentException("Retry producer conflicts with immutable spec");
+    q.lockDomain(scope,next,false).orElseThrow();q.policy(next).validateInput(next);q.policy(next).validateExternalRequest(next,request);
+    q.row(task.id(),true,false).orElseThrow();var o=operation(id,true,false).orElseThrow();
+    var e=execution(id,expected+1,true,false).orElseThrow(()->new IllegalArgumentException("Retry producer belongs to another execution"));
+    if(!e.task().equals(task.id())||!e.hash().equals(request.executionRequestHash())||!e.manifest().equals(request.requestManifest())||!o.subject().equals(next.subject())||!o.kind().equals(request.operationKind())||!o.key().equals(request.businessKey())||!o.hash().equals(request.logicalRequestHash()))throw new IllegalArgumentException("Retry replay conflicts with original acceptance");
+    return task.id();
+   }
+   if(!seen.state().equals("FAILED"))throw new IllegalStateException("Only definitive zero-effect failure permits retry");
+   if(!old.spec().subject().equals(next.subject())||old.spec().businessVersion()!=next.businessVersion()||old.spec().cancelEpoch()!=next.cancelEpoch()||!old.spec().input().equals(next.input())||!old.spec().inputFingerprint().equals(next.inputFingerprint()))throw new IllegalArgumentException("Retry requires same fixed input");
+   var subject=q.lockDomain(scope,next,false).orElseThrow();if(!q.current(subject,next))throw new IllegalStateException("Retry is fenced");q.policy(next).validateInput(next);q.policy(next).validateExternalRequest(next,request);
+   if(!request.operationKind().equals(seen.kind())||!request.businessKey().equals(seen.key())||!request.logicalRequestHash().equals(seen.hash()))throw new IllegalArgumentException("Logical effect cannot change");
+   String task=UUID.randomUUID().toString();
+   if(task.compareTo(old.id())<0){q.insertNew(next,task);q.row(old.id(),true,false).orElseThrow();}else{q.row(old.id(),true,false).orElseThrow();q.insertNew(next,task);}
+   var o=operation(id,true,false).orElseThrow();var e=execution(id,expected,true,false).orElseThrow();
+   if(o.execution()!=expected||!o.state().equals("FAILED")||!e.state().equals("FAILED")||e.basis()==null||e.evidence()==null||e.verified()==null)throw new IllegalStateException("Retry lacks definitive zero-effect evidence");
+   j.update("INSERT INTO external_execution(id,operation_id,execution_no,task_id,state,request_hash,request_manifest,created_at) VALUES (?,?,?,?,'PREPARED',?,?,UTC_TIMESTAMP(6))",UUID.randomUUID().toString(),id,expected+1,task,request.executionRequestHash(),request.requestManifest());
+   j.update("UPDATE external_operation SET state='RETRY_QUEUED',current_execution_no=?,reconcile_epoch=reconcile_epoch+1,reconcile_owner=NULL,reconcile_expires_at=NULL,last_error=NULL WHERE id=?",expected+1,id);
+   return task;
+  });}
+ }
+diff --git a/backend/integration-tests/src/test/java/ama/task/Task07InheritedB06QueueSeamsIT.java b/backend/integration-tests/src/test/java/ama/task/Task07InheritedB06QueueSeamsIT.java
+index d9b655b..8c37acb 100644
+--- a/backend/integration-tests/src/test/java/ama/task/Task07InheritedB06QueueSeamsIT.java
++++ b/backend/integration-tests/src/test/java/ama/task/Task07InheritedB06QueueSeamsIT.java
+@@ -317,161 +317,163 @@ class Task07InheritedB06QueueSeamsIT {
+         });
+         tx.required(()->{assertThrows(IllegalArgumentException.class,()->access.lockPrepared(identities.get(),meeting,false));return null;});
+     }
+ 
+     @Test void disabledExternalSuccessIsRetainedWithoutEffectsOrRenewalOrResend(){
+         queue.enqueue(spec);var lease=queue.claim(spec.pool(),"FACT_WORKER").orElseThrow();
+         var external=new JdbcExternalOperations(queue,new ReconciliationScanBudget(16,512));
+         var token=external.beginExternal(lease,request(spec)).orElseThrow();
+         j.update("UPDATE enterprise_identity SET status='DISABLED' WHERE enterprise_id=?",owner);
+         var callbacks=new AtomicInteger();trace.clear();
+         assertEquals(ama.contract.ExternalContracts.ObservationResult.RECORDED_FENCED,
+                 external.observe(token,success(spec),callbacks::incrementAndGet));
+         assertEquals(0,callbacks.get());
+         assertEquals("SUCCEEDED",j.queryForObject("SELECT state FROM external_execution WHERE id=?",String.class,token.executionId()));
+         assertEquals("SEAM_RESULT:"+input,j.queryForObject("SELECT external_result_id FROM external_operation WHERE id=?",String.class,token.operationId()));
+         assertEquals("STALE",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,lease.taskId()));
+         assertFalse(external.hasCallAuthority(token));
+         assertThrows(MeetingAccess.AccessDeniedException.class,()->queue.renew(lease));
+         assertThrows(MeetingAccess.AccessDeniedException.class,()->external.renew(token));
+         assertThrows(MeetingAccess.AccessDeniedException.class,()->external.beginExternal(lease,request(spec)));
+         assertThrows(MeetingAccess.AccessDeniedException.class,()->external.retryAfterZeroEffect(token.operationId(),1,variant("RETRY_DISABLED"),request(spec)));
+         assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM external_execution WHERE operation_id=?",Integer.class,token.operationId()));
+     }
+ 
+     @Test void zeroEffectRetryReusesOnePreparationAndCompleteRootBatch(){
+         queue.enqueue(spec);var lease=queue.claim(spec.pool(),"RETRY_SCOPE").orElseThrow();
+         var external=new JdbcExternalOperations(queue,new ReconciliationScanBudget(16,512));var token=external.beginExternal(lease,request(spec)).orElseThrow();
+         external.observe(token,zeroEffect(),()->{});
+         policy.prepares.set(0);policy.rootBatches.set(0);trace.clear();
+         var next=variant("RETRY_OK");
+         String task=external.retryAfterZeroEffect(token.operationId(),1,next,request(next));
+         assertEquals(1,policy.prepares.get());assertEquals(1,policy.rootBatches.get());
+         assertEquals(1,trace.stream().filter(x->x.contains("FROM enterprise_identity")).count());
+         int firstTask=index(trace,"FROM durable_task");
+         for(int i=firstTask+1;i<trace.size();i++)assertFalse(trace.get(i).contains("FROM enterprise_identity")||trace.get(i).contains("FROM meeting WHERE")||trace.get(i).contains("FROM meeting_info_revision"),trace.toString());
+         policy.prepares.set(0);policy.rootBatches.set(0);
+         assertEquals(task,external.retryAfterZeroEffect(token.operationId(),1,next,request(next)));
+         assertEquals(1,policy.prepares.get());assertEquals(1,policy.rootBatches.get());
+     }
+ 
+     @Test void crossPolicyObservationIsNonAcknowledgmentAndSameFactCanBeResubmitted(){
+         var original=new JdbcTaskQueue(source,fences,outbox,Map.of(taskType,policy,otherTaskType,policy));
+         original.enqueue(spec);var lease=original.claim(spec.pool(),"UNION_A").orElseThrow();
+         var external=new JdbcExternalOperations(original);var old=external.beginExternal(lease,request(spec)).orElseThrow();
+         external.observe(old,zeroEffect(),()->{});
+         var candidate=variant("UNION_B");
+         var next=new TaskSpec(otherTaskType,candidate.pool(),candidate.subject(),candidate.producerKey(),candidate.input(),candidate.inputFingerprint(),candidate.businessVersion(),candidate.priority(),candidate.cancelEpoch(),candidate.maxAttempts());
+         external.retryAfterZeroEffect(old.operationId(),1,next,request(next));
+         var nextLease=original.claim(next.pool(),"UNION_B").orElseThrow();
+         var current=external.beginExternal(nextLease,request(next)).orElseThrow();
+         TaskDomainPolicy foreign=new TaskDomainPolicy(){
+             public boolean lockRoot(TaskSpec s,boolean skip){throw new AssertionError("Cross-family root must not run");}
+             public void validateInput(TaskSpec s){throw new AssertionError();}
+             public void validateOutput(TaskSpec s,TaskResult r){throw new AssertionError();}
+             public void validateExternalRequest(TaskSpec s,ExternalRequest r){throw new AssertionError();}
+         };
+         var mismatched=new JdbcExternalOperations(new JdbcTaskQueue(source,fences,outbox,Map.of(taskType,policy,otherTaskType,foreign)));
+         trace.clear();
+         assertThrows(DomainPreparationUnavailableException.class,()->mismatched.observe(old,success(spec),()->fail("cross policy callback")));
+         assertEquals(-1,index(trace,"FOR UPDATE"),"unknown common issuer must reject before any locks");
+         assertEquals("MARKED",j.queryForObject("SELECT state FROM external_operation WHERE id=?",String.class,current.operationId()));
+         assertEquals(ama.contract.ExternalContracts.ObservationResult.QUARANTINED,external.observe(old,success(spec),()->fail("old success effects")));
+         assertEquals("MANUAL_REQUIRED",j.queryForObject("SELECT state FROM external_operation WHERE id=?",String.class,current.operationId()));
+         assertEquals(2,j.queryForObject("SELECT COUNT(*) FROM external_execution WHERE operation_id=?",Integer.class,current.operationId()));
+     }
+ 
+     @Test void registeredIdentityFreeDomainMustExplicitlyOptIn(){
+         TaskDomainPolicy unprepared=new TaskDomainPolicy(){
+             public boolean lockRoot(TaskSpec s,boolean skip){throw new AssertionError("Unprepared domain root must not run");}
+             public void validateInput(TaskSpec s){throw new AssertionError();}
+             public void validateOutput(TaskSpec s,TaskResult r){throw new AssertionError();}
+             public void validateExternalRequest(TaskSpec s,ExternalRequest r){throw new AssertionError();}
+         };
+         var unavailable=new JdbcTaskQueue(source,fences,outbox,Map.of(spec.type(),unprepared));
+         trace.clear();
+         assertThrows(DomainPreparationUnavailableException.class,()->unavailable.enqueue(spec));
+         assertEquals(-1,index(trace,"FOR UPDATE"));
+     }
+ 
+     @Test void disabledExpiredCurrentExternalFactMustStillBeRetained(){
+-        queue.enqueue(spec);var lease=queue.claim(spec.pool(),"EXPIRED_FACT").orElseThrow();
++        queue.enqueue(spec);var claimed=queue.claim(spec.pool(),"EXPIRED_FACT");
++        if(claimed.isEmpty())System.out.println("T07_INITIAL_CLAIM_EMPTY trace="+trace+" task="+j.queryForList("SELECT id,state,available_at,expires_at,UTC_TIMESTAMP(6) AS db_now FROM durable_task WHERE producer_key=?",spec.producerKey()));
++        var lease=claimed.orElseThrow();
+         var external=new JdbcExternalOperations(queue,new ReconciliationScanBudget(16,512));var token=external.beginExternal(lease,request(spec)).orElseThrow();
+         j.update("UPDATE enterprise_identity SET status='DISABLED' WHERE enterprise_id=?",owner);
+         j.update("UPDATE external_operation SET reconcile_expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=?",token.operationId());
+         var callbacks=new AtomicInteger();
+         var unverified=new ama.contract.ExternalContracts.ExternalObservation(ama.contract.ExternalContracts.ExternalOutcome.SUCCEEDED,"UNVERIFIED",spec.input(),null,null);
+         assertThrows(IllegalArgumentException.class,()->external.observe(token,unverified,callbacks::incrementAndGet));
+         assertEquals("MARKED",j.queryForObject("SELECT state FROM external_operation WHERE id=?",String.class,token.operationId()));
+         assertEquals(ama.contract.ExternalContracts.ObservationResult.RECORDED_FENCED,external.observe(token,success(spec),callbacks::incrementAndGet));
+         assertEquals(0,callbacks.get());
+         assertEquals("SUCCEEDED",j.queryForObject("SELECT state FROM external_execution WHERE id=?",String.class,token.executionId()));
+         assertEquals("SEAM_RESULT:"+input,j.queryForObject("SELECT external_result_id FROM external_operation WHERE id=?",String.class,token.operationId()));
+         assertEquals("STALE",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,lease.taskId()));
+         assertFalse(external.hasCallAuthority(token));
+     }
+ 
+     @Test void crossSubjectPreparationRejectsBeforeIdentityOrRootLocks(){
+         var foreign=new TaskSpec(spec.type(),spec.pool(),new SubjectRef("MEETING",UUID.randomUUID().toString()),spec.producerKey(),spec.input(),spec.inputFingerprint(),0,0,0,3);
+         trace.clear();
+         assertThrows(DomainPreparationUnavailableException.class,()->tx.required(()->queue.prepareDomain(List.of(spec,foreign),TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION,false,null)));
+         assertEquals(-1,index(trace,"FOR UPDATE"));
+     }
+ 
+     @Test void unregisteredReconciliationDomainIsSkippedWithoutGrantingAuthority(){
+         queue.enqueue(spec);var lease=queue.claim(spec.pool(),"UNKNOWN_RECON").orElseThrow();
+         var external=new JdbcExternalOperations(queue,new ReconciliationScanBudget(16,512));var token=external.beginExternal(lease,request(spec)).orElseThrow();
+         j.update("UPDATE external_operation SET reconcile_expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND,next_check_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=?",token.operationId());
+         var unavailable=new JdbcExternalOperations(new JdbcTaskQueue(source,fences,outbox,Map.of()));
+         assertTrue(assertDoesNotThrow(()->unavailable.claimReconciliation("UNREGISTERED_SCAN")).isEmpty());
+         assertThrows(DomainPreparationUnavailableException.class,()->unavailable.observe(token,success(spec),()->fail("unregistered callback")));
+         assertEquals("MARKED",j.queryForObject("SELECT state FROM external_operation WHERE id=?",String.class,token.operationId()));
+     }
+ 
+     @Test void factOnlyReceiptSeparatesExpiredOwnerEpochFromActiveAuthorityAndUnknown(){
+         queue.enqueue(spec);var lease=queue.claim(spec.pool(),"FACT_BOUNDARIES").orElseThrow();
+         var external=new JdbcExternalOperations(queue,new ReconciliationScanBudget(16,512));var token=external.beginExternal(lease,request(spec)).orElseThrow();
+         j.update("UPDATE external_operation SET reconcile_owner='NEW_OWNER',reconcile_epoch=reconcile_epoch+1,reconcile_expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=?",token.operationId());
+         var callbacks=new AtomicInteger();
+         assertEquals(ama.contract.ExternalContracts.ObservationResult.STALE_TOKEN,external.observe(token,success(spec),callbacks::incrementAndGet),"ACTIVE identity retains owner/epoch/expiry predicate");
+         j.update("UPDATE enterprise_identity SET status='DISABLED' WHERE enterprise_id=?",owner);
+         var wrong=new ama.contract.ExternalContracts.OperationToken(token.operationId(),UUID.randomUUID().toString(),token.executionNo(),token.reconcileEpoch(),token.owner(),token.expiresAt(),token.subject());
+         assertEquals(ama.contract.ExternalContracts.ObservationResult.STALE_TOKEN,external.observe(wrong,success(spec),callbacks::incrementAndGet));
+         var unknown=new ama.contract.ExternalContracts.ExternalObservation(ama.contract.ExternalContracts.ExternalOutcome.UNKNOWN,null,null,"CONTROLLED_UNKNOWN",null);
+         assertEquals(ama.contract.ExternalContracts.ObservationResult.STALE_TOKEN,external.observe(token,unknown,callbacks::incrementAndGet),"nonterminal control observation cannot regain expired authority");
+         assertEquals("MARKED",j.queryForObject("SELECT state FROM external_operation WHERE id=?",String.class,token.operationId()));
+         assertEquals(ama.contract.ExternalContracts.ObservationResult.RECORDED_FENCED,external.observe(token,success(spec),callbacks::incrementAndGet));
+         assertEquals(0,callbacks.get());assertFalse(external.hasCallAuthority(token));
+         assertEquals("NEW_OWNER",j.queryForObject("SELECT reconcile_owner FROM external_operation WHERE id=?",String.class,token.operationId()));
+         assertEquals(token.reconcileEpoch()+1,j.queryForObject("SELECT reconcile_epoch FROM external_operation WHERE id=?",Long.class,token.operationId()));
+         assertEquals("SUCCEEDED",j.queryForObject("SELECT state FROM external_execution WHERE id=?",String.class,token.executionId()));
+         assertEquals("STALE",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,lease.taskId()));
+     }
+ 
+     @Test void queueIndependentlyRejectsPreparedTokenFromAnotherBoundDataSource(){
+         var otherPreparations=new JdbcTaskPreparations(actual);
+         TaskDomainPolicy misconfigured=new TaskDomainPolicy(){
+             public Optional<PreparedDomain> prepare(List<TaskSpec> specs,Acquisition purpose,boolean skip){return Optional.of(otherPreparations.issue(specs,purpose,null,true));}
+             public void requirePrepared(List<TaskSpec> specs,Acquisition purpose,PreparedDomain held){otherPreparations.require(specs,purpose,held);}
+             public boolean permitsDomainEffects(PreparedDomain held){return otherPreparations.permitsEffects(held);}
+             public boolean lockRoot(TaskSpec s,boolean skip){return !j.queryForList("SELECT id FROM meeting WHERE id=? FOR UPDATE",String.class,meeting).isEmpty();}
+             public void validateInput(TaskSpec s){policy.validateInput(s);}
+             public void validateOutput(TaskSpec s,TaskResult r){policy.validateOutput(s,r);}
+             public void validateExternalRequest(TaskSpec s,ExternalRequest r){policy.validateExternalRequest(s,r);}
+         };
+         var bad=new JdbcTaskQueue(source,fences,outbox,Map.of(spec.type(),misconfigured));
+         trace.clear();
+         assertThrows(IllegalArgumentException.class,()->tx.required(()->new TransactionRunner(actual).required(()->{
+             bad.enqueue(spec);outbox.flush();return null;
+         })));
+         assertEquals(-1,index(trace,"FROM task_subject"),"source binding rejects before any domain lock");
+         assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM durable_task WHERE producer_key=?",Integer.class,spec.producerKey()));
+     }
+ 
+     TaskSpec variant(String marker){return new TaskSpec(spec.type(),spec.pool(),spec.subject(),Task07InheritedFixture.hash(marker+spec.producerKey()),spec.input(),spec.inputFingerprint(),spec.businessVersion(),spec.priority(),spec.cancelEpoch(),spec.maxAttempts());}
+     ExternalRequest request(TaskSpec s){return new ExternalRequest("SEAM_CALL",spec.producerKey(),Task07InheritedFixture.hash("logical"+input),Task07InheritedFixture.hash("execution"+input),"seam-v1:"+input);}
+     ama.contract.ExternalContracts.ExternalObservation success(TaskSpec s){return new ama.contract.ExternalContracts.ExternalObservation(ama.contract.ExternalContracts.ExternalOutcome.SUCCEEDED,"SEAM_RESULT:"+input,s.input(),null,null);}
+     ama.contract.ExternalContracts.ExternalObservation zeroEffect(){return new ama.contract.ExternalContracts.ExternalObservation(ama.contract.ExternalContracts.ExternalOutcome.FAILED_ZERO_EFFECT,null,null,"CONTROLLED_REJECTION",new ama.contract.ExternalContracts.NoEffectProof(ama.contract.ExternalContracts.NoEffectBasis.DEFINITIVE_REJECTION,"SEAM_VERIFIED_ZERO",java.time.Instant.now()));}
+ 
+     static int index(List<String> sql,String part){for(int i=0;i<sql.size();i++)if(sql.get(i).contains(part))return i;return -1;}
+     static void await(CountDownLatch latch){try{if(!latch.await(10,TimeUnit.SECONDS))throw new AssertionError("JDBC gate timeout");}catch(InterruptedException e){Thread.currentThread().interrupt();throw new AssertionError(e);}}
+     interface Probe {void before(String sql);}
+diff --git a/backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java b/backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java
+index 95e0523..79dd0b7 100644
+--- a/backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java
++++ b/backend/integration-tests/src/test/java/ama/task/Task07PreparedExternalIT.java
+@@ -1,180 +1,189 @@
+ package ama.task;
+ 
+ import ama.access.MeetingAccess;
+ import ama.contract.TaskContracts.*;
+ import ama.contract.ExternalContracts.*;
+ import ama.task.ExternalOperationPort.*;
+ import ama.contract.IdentityContracts.*;
+ import ama.db.*;
+ import ama.meeting.JdbcMeetingAccess;
+ import ama.support.MysqlTestDatabase;
+ import ama.worker.WorkerLoop;
+ import java.util.*;
+ import java.util.concurrent.*;
+ import java.util.concurrent.atomic.*;
+ import java.util.function.Supplier;
+ import javax.sql.DataSource;
+ import org.junit.jupiter.api.*;
+ import org.springframework.jdbc.core.JdbcTemplate;
+ import org.springframework.transaction.support.TransactionSynchronizationManager;
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ /** Real owned MySQL, authentic B03 identity preparation and actual immutable output rows. No resets. */
+ class Task07PreparedExternalIT {
+     final AtomicBoolean failFlush = new AtomicBoolean(), failAudit = new AtomicBoolean(), failEvent = new AtomicBoolean();
+     final Task07ProbeSource source=new Task07ProbeSource(Task07DataSource.create());
+     {source.before=event->{String sql=event.text();
+         if(failAudit.get()&&sql.startsWith("INSERT INTO audit_event("))throw new IllegalStateException("CONTROLLED_AUDIT_FAILURE");
+         if(failFlush.get()&&sql.startsWith("INSERT INTO task_outbox("))throw new IllegalStateException("CONTROLLED_FLUSH_FAILURE");
+     };}
+     final JdbcTemplate jdbc = new JdbcTemplate(source);
+     final TransactionRunner tx = new TransactionRunner(source);
+     final JdbcSubjectFences fences = new JdbcSubjectFences(source, Set.of("MEETING"));
+     final JdbcMeetingAccess access = new JdbcMeetingAccess(source, tx, fences);
+     final String owner = "prepared-" + UUID.randomUUID(), meeting = UUID.randomUUID().toString();
+     final String input = UUID.randomUUID().toString(), output = UUID.randomUUID().toString();
+     final Actor actor = new Actor(owner, Status.ACTIVE, Set.of(Role.USER));
+     final TaskSpec spec = new TaskSpec("T07_PREPARED_"+UUID.randomUUID(), "PREPARED_" + UUID.randomUUID(),
+             new SubjectRef("MEETING", meeting), Task08InheritedFixture.hash(input + "producer"),
+             new TypedRef("TEST_INFO", input), Task08InheritedFixture.hash(input), 0, 0, 0, 3);
+     final Set<TaskSpec> coveredSpecs=new HashSet<>(Set.of(spec));
+     final PreparedRequest preparedRequest=new PreparedRequest(){};
+     final PreparedObservation preparedObservation=new PreparedObservation(){};
++    final Map<PreparedObservation,JdbcTaskPreparations.ExternalFacts> replayBindings=new IdentityHashMap<>();
++    final AtomicInteger zeroReplays=new AtomicInteger(), terminalWrites=new AtomicInteger();
+     final Map<PreparedObservation,ExternalObservation> receipts=Collections.synchronizedMap(new IdentityHashMap<>());
+     PreparedObservation receipt(ExternalObservation value){var receipt=new PreparedObservation(){};receipts.put(receipt,value);return receipt;}
+     ExternalObservation remote(PreparedObservation observation){if(observation==preparedObservation)return fact;var value=receipts.get(observation);if(value==null)throw new IllegalArgumentException("Foreign observation");return value;}
+     final AtomicBoolean preparationUnavailable=new AtomicBoolean(),deniedFacts=new AtomicBoolean();
+     private record DeniedIdentity(String status) {}
+     final ExternalRequest wire=new ExternalRequest("T07_CALL",spec.producerKey(),Task08InheritedFixture.hash("logical"+input),Task08InheritedFixture.hash("execution"+input),"task07:"+input);
+     ExternalObservation fact=new ExternalObservation(ExternalOutcome.SUCCEEDED,"T07_RESULT:"+input,null,null,null);
+     final AtomicInteger markers=new AtomicInteger();
+     final AtomicBoolean invalid=new AtomicBoolean(),badOutput=new AtomicBoolean();
+     final JdbcTaskPreparations preparations=new JdbcTaskPreparations(source);
+     TaskDomainPolicy.PreparedDomain capturedDomain;ExecutionContext capturedContext;
+     final AtomicInteger writes = new AtomicInteger(), validations = new AtomicInteger();
+     final PreparedExternalPolicy policy = new PreparedExternalPolicy() {
+ 
+         public Optional<PreparedDomain> prepare(List<TaskSpec> specs, Acquisition purpose, boolean skip) {
+             if(preparationUnavailable.get())return Optional.empty();
+             if(deniedFacts.get()&&purpose==Acquisition.EXTERNAL_FACT_OBSERVATION){
+                 var status=jdbc.queryForObject("SELECT status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE",String.class,owner);
+                 return Optional.of(preparations.issue(specs,purpose,new DeniedIdentity(status),false));
+             }
+             return access.tryLockIdentities(actor, List.of(), skip)
+                     .map(held -> preparations.issue(specs, purpose, held, true));
+         }
+         public void requirePrepared(List<TaskSpec> specs, Acquisition purpose, PreparedDomain held) { preparations.require(specs, purpose, held); }
+         public boolean permitsDomainEffects(PreparedDomain held) { return preparations.permitsEffects(held); }
+         public boolean lockRoot(TaskSpec s, boolean skip) { throw new IllegalStateException("Authentic preparation required"); }
+         public boolean lockRoot(TaskSpec s, boolean skip, PreparedDomain prepared) {
+             if(preparations.value(prepared) instanceof DeniedIdentity denied){
+                 var root=jdbc.queryForMap("SELECT lifecycle,governance_state FROM meeting WHERE id=? FOR UPDATE",meeting);
+                 if(denied.status().equals("ACTIVE")&&root.get("lifecycle").equals("ACTIVE")&&root.get("governance_state").equals("ACTIVE"))throw new IllegalArgumentException("Actual denied facts required");
+                 return !jdbc.queryForList("SELECT id FROM meeting_info_revision WHERE id=? FOR UPDATE",input).isEmpty();
+             }
+             var identities = (MeetingAccess.LockedIdentities) preparations.value(prepared);
+             var held = access.lockPrepared(identities, meeting, skip);
+             if (held.isEmpty()) return false;
+             access.require(held.orElseThrow(), MeetingAccess.Action.EDIT);
+             return !jdbc.queryForList("SELECT id FROM meeting_info_revision WHERE id=? FOR UPDATE" + (skip ? " SKIP LOCKED" : ""), String.class, input).isEmpty();
+         }
+         public void validateInput(TaskSpec s) {
+             if (!coveredSpecs.contains(s) || jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=? AND meeting_id=? AND revision=0 AND name='input'", Integer.class, input, meeting) != 1)
+                 throw new IllegalArgumentException("Invalid saved input");
+         }
+         public void validateOutput(TaskSpec s, TaskResult result) {
+             validations.incrementAndGet();
+             if(result.outcome()==Outcome.FAILED&&result.output()==null&&!"INVALID_MODEL_OUTPUT".equals(result.errorCode()))return;
+             if(invalid.get()){if(result.outcome()!=Outcome.FAILED||result.output()!=null||!"INVALID_MODEL_OUTPUT".equals(result.errorCode()))throw new IllegalArgumentException();return;}
+             if (result.output() == null || !result.output().equals(new TypedRef("TEST_INFO", output))
+                     || jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=? AND meeting_id=? AND revision=1 AND name='output'", Integer.class, output, meeting) != 1)
+                 throw new IllegalArgumentException("Actual output must exist with matching provenance");
+             assertEquals("RECONCILING", state(), "terminal mutation must follow actual output validation");
+         }
+         public void validateExternalRequest(TaskSpec s, ExternalRequest request) { if(!request.requestManifest().equals("task07:"+input))throw new IllegalArgumentException("Request mismatch"); }
+         public ExternalRequest requireRequest(TaskSpec s, PreparedRequest request){if(request!=preparedRequest||!coveredSpecs.contains(s))throw new IllegalArgumentException("Foreign request");return wire;}
+         public void writeMarked(PreparedDomain held,ExecutionContext context,PreparedRequest request){preparations.requireExternal(held,context);capturedDomain=held;capturedContext=context;markers.incrementAndGet();}
+         public ExternalObservation verifyRemoteFact(TaskSpec s,ExecutionContext context,PreparedObservation observation){if(!coveredSpecs.contains(s))throw new IllegalArgumentException("Foreign spec");return remote(observation);}
+-        public TaskResult writeCurrent(PreparedDomain held,ExecutionContext context,PreparedObservation observation){preparations.requireExternal(held,context);if(remote(observation).outcome()==ExternalOutcome.FAILED_ZERO_EFFECT)return new TaskResult(Outcome.FAILED,null,remote(observation).errorCode());if(invalid.get())return new TaskResult(Outcome.FAILED,null,"INVALID_MODEL_OUTPUT");var result=writeOutput();return badOutput.get()?new TaskResult(Outcome.SUCCEEDED,new TypedRef("WRONG",output),null):result;}
++        public TaskResult writeCurrent(PreparedDomain held,ExecutionContext context,PreparedObservation observation){preparations.requireExternal(held,context);terminalWrites.incrementAndGet();if(remote(observation).outcome()==ExternalOutcome.FAILED_ZERO_EFFECT)return new TaskResult(Outcome.FAILED,null,remote(observation).errorCode());if(invalid.get())return new TaskResult(Outcome.FAILED,null,"INVALID_MODEL_OUTPUT");var result=writeOutput();return badOutput.get()?new TaskResult(Outcome.SUCCEEDED,new TypedRef("WRONG",output),null):result;}
+         public void validateStoredResult(PreparedDomain held,ExecutionContext context,PreparedObservation observation,TaskResult result){preparations.requireExternal(held,context);if(!invalid.get()&&remote(observation).outcome()==ExternalOutcome.SUCCEEDED)assertEquals(output,result.output().id());}
+-        public boolean verifyReplay(PreparedDomain held,ExecutionContext context,PreparedObservation observation,StoredResult stored){preparations.requireExternal(held,context);if(stored.state().equals("STALE"))return remote(observation).outcome()==ExternalOutcome.SUCCEEDED&&stored.output()==null&&"BUSINESS_FENCED".equals(stored.errorCode())&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?",Integer.class,output)==0;if(invalid.get())return observation==preparedObservation&&stored.state().equals("FAILED")&&"INVALID_MODEL_OUTPUT".equals(stored.errorCode())&&stored.output()==null&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?",Integer.class,output)==0;return observation==preparedObservation&&stored.state().equals("SUCCEEDED")&&stored.output()!=null&&stored.output().id().equals(output)&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=? AND meeting_id=? AND name='output'",Integer.class,output,meeting)==1;}
++        public boolean verifyReplay(PreparedDomain held,ExecutionContext context,PreparedObservation observation,StoredResult stored){var original=preparations.requireExternal(held,context);
++            if(remote(observation).outcome()==ExternalOutcome.FAILED_ZERO_EFFECT){
++                zeroReplays.incrementAndGet();
++                return original.equals(replayBindings.get(observation))&&stored.state().equals("FAILED")&&stored.output()==null
++                    &&Objects.equals(stored.errorCode(),remote(observation).errorCode())
++                    &&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?",Integer.class,output)==0;
++            }
++            if(stored.state().equals("STALE"))return remote(observation).outcome()==ExternalOutcome.SUCCEEDED&&stored.output()==null&&"BUSINESS_FENCED".equals(stored.errorCode())&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?",Integer.class,output)==0;if(invalid.get())return observation==preparedObservation&&stored.state().equals("FAILED")&&"INVALID_MODEL_OUTPUT".equals(stored.errorCode())&&stored.output()==null&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?",Integer.class,output)==0;return observation==preparedObservation&&stored.state().equals("SUCCEEDED")&&stored.output()!=null&&stored.output().id().equals(output)&&jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=? AND meeting_id=? AND name='output'",Integer.class,output,meeting)==1;}
+ 
+     };
+     final JdbcOutbox outbox = new JdbcOutbox(source, Map.of("TEST_INFO", event -> {
+         if (failEvent.get()) throw new IllegalArgumentException("CONTROLLED_EVENT_FAILURE");
+         if (!event.subject().equals(spec.subject()) || !event.reference().id().equals(input)) throw new IllegalArgumentException("Invalid event provenance");
+     }));
+     final JdbcTaskQueue queue = new JdbcTaskQueue(source, fences, outbox, Map.of(spec.type(), policy));
+     TaskLease lease;
+ 
+     @BeforeAll static void migrateOwnedEmptyFixture() {
+         var source = Task07DataSource.create();
+         assertEquals(15,new JdbcTemplate(source).queryForObject("SELECT COUNT(*) FROM flyway_schema_history",Integer.class));
+         var history = new JdbcTemplate(source).queryForList("SELECT installed_rank,version,script,checksum,success FROM flyway_schema_history ORDER BY installed_rank");
+         assertEquals(15, history.size());
+         System.out.println("PREPARED completion pre-test immutable history: " + history);
+     }
+     @BeforeEach void setup() {
+         tx.required(() -> {
+             jdbc.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))", owner, owner);
+             fences.create(spec.subject(), 0, 0);
+             jdbc.update("INSERT INTO meeting(id,owner_id,stage,created_at,updated_at) VALUES (?,?,'ENTRY',UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))", meeting, owner);
+             jdbc.update("INSERT INTO meeting_info_revision(id,meeting_id,revision,name,created_by,created_at) VALUES (?,?,0,'input',?,UTC_TIMESTAMP(6))", input, meeting, owner);
+             return null;
+         });
+         queue.enqueue(spec);
+         lease = queue.claim(spec.pool(), "PREPARED_WORKER").orElseThrow();
+     }
+     TaskResult writeOutput() {
+         assertTrue(TransactionSynchronizationManager.isActualTransactionActive());
+         writes.incrementAndGet();
+         jdbc.update("INSERT INTO meeting_info_revision(id,meeting_id,revision,name,created_by,created_at) VALUES (?,?,1,'output',?,UTC_TIMESTAMP(6))", output, meeting, owner);
+         new ama.audit.JdbcAuditAdapter(source).append(new ama.contract.AuditContracts.AuditEvent(
+                 owner, "PREPARED_OUTPUT", meeting, 1, "SUCCESS", UUID.randomUUID().toString(), java.time.Instant.now()));
+         return new TaskResult(Outcome.SUCCEEDED, new TypedRef("TEST_INFO", output), null);
+     }
+     String state() { return jdbc.queryForObject("SELECT state FROM durable_task WHERE producer_key=?", String.class, spec.producerKey()); }
+     int events() { return jdbc.queryForObject("SELECT COUNT(*) FROM task_outbox WHERE task_id=?", Integer.class, lease.taskId()); }
+     void rolledBack() {
+         assertEquals(0, jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?", Integer.class, output));
+         assertEquals("RUNNING", state());
+         assertNull(jdbc.queryForObject("SELECT output_id FROM durable_task WHERE id=?", String.class, lease.taskId()));
+         assertNull(jdbc.queryForObject("SELECT ended_at FROM task_attempt WHERE task_id=? AND attempt=1", java.sql.Timestamp.class, lease.taskId()));
+         assertEquals(1, events());
+         assertEquals(0, jdbc.queryForObject("SELECT COUNT(*) FROM audit_event WHERE resource_id=?", Integer.class, meeting));
+     }
+     boolean complete(Supplier<TaskResult> effects) { return queue.completeWithEffects(lease, effects); }
+     @Test void preparedOutputIsCreatedBeforeValidationAndAttemptEndsAtomically(){
+         var operations=new JdbcExternalOperations(queue);
+         var token=assertDoesNotThrow(()->operations.beginPrepared(lease,preparedRequest)).orElseThrow();
+         assertEquals(1,markers.get());assertEquals("RECONCILING",state());
+         assertEquals(ObservationResult.APPLIED,operations.observePrepared(token,preparedObservation));
+         assertEquals(1,writes.get());assertEquals(1,validations.get());assertEquals("SUCCEEDED",state());
+         assertEquals(output,jdbc.queryForObject("SELECT output_id FROM durable_task WHERE id=?",String.class,lease.taskId()));
+         assertEquals("SUCCEEDED",jdbc.queryForObject("SELECT outcome FROM task_attempt WHERE task_id=? AND attempt=1",String.class,lease.taskId()));
+         assertEquals("SUCCEEDED",jdbc.queryForObject("SELECT state FROM external_operation WHERE id=?",String.class,token.operationId()));
+         assertEquals("SUCCEEDED",jdbc.queryForObject("SELECT state FROM external_execution WHERE id=?",String.class,token.executionId()));
+         assertEquals(3,events());assertEquals(1,jdbc.queryForObject("SELECT COUNT(*) FROM audit_event WHERE resource_id=?",Integer.class,meeting));
+     }
+     @Test void terminalDebtRecoversWithoutCallerPermitWhileUnknownCapacityRemainsHeld(){
+         var operations=new JdbcExternalOperations(queue);
+         var token=operations.beginPrepared(lease,preparedRequest).orElseThrow();
+         String model="T07_"+UUID.randomUUID().toString().replace("-", "");
+         var pool=new JdbcModelPermitPool(operations,Map.of(model,new ModelConfiguration(model,1,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT)),(t,m,d)->{throw new IllegalStateException();});
+         pool.configure();var permit=pool.acquire(token,model,null).orElseThrow();
+         assertEquals(0,pool.recoverSettlements(1));
+         assertNull(jdbc.queryForObject("SELECT settled_at FROM model_reservation WHERE id=?",java.sql.Timestamp.class,permit.id()));
+         operations.observePrepared(token,preparedObservation);
+         assertNotNull(jdbc.queryForObject("SELECT finished_at FROM external_execution WHERE id=?",java.sql.Timestamp.class,token.executionId()));
+         int passLimit=2*jdbc.queryForObject("SELECT COUNT(*) FROM model_reservation",Integer.class)+2;boolean settled=false;for(int i=0;i<passLimit&&!settled;i++){pool.recoverSettlements(1);settled=jdbc.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,permit.id());}
+         assertTrue(settled,"Committed terminal debt must release without the lost in-memory permit");
+         assertTrue(pool.settled(permit));
+     }
+ 
+     @Test void samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter(){
+         var operations=new JdbcExternalOperations(queue);var token=operations.beginPrepared(lease,preparedRequest).orElseThrow();
+         assertEquals(ObservationResult.APPLIED,operations.observePrepared(token,preparedObservation));
+         assertEquals(ObservationResult.APPLIED,operations.observePrepared(token,preparedObservation));
+         assertEquals(1,writes.get());assertEquals(3,events());
+     }
+     @Test void registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest(){
+diff --git a/backend/integration-tests/src/test/java/ama/task/Task07RecoveryBoundsIT.java b/backend/integration-tests/src/test/java/ama/task/Task07RecoveryBoundsIT.java
+index f48c6b5..a800676 100644
+--- a/backend/integration-tests/src/test/java/ama/task/Task07RecoveryBoundsIT.java
++++ b/backend/integration-tests/src/test/java/ama/task/Task07RecoveryBoundsIT.java
+@@ -1,52 +1,58 @@
+ package ama.task;
+ import ama.contract.ExternalContracts.*;
+ import ama.contract.TaskContracts.*;
+ import java.util.*;
+ import java.util.concurrent.*;
+ import org.junit.jupiter.api.Test;
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ class Task07RecoveryBoundsIT {
+  @Test void keysetRecoveryHasFiniteQueriesRowsAndAdvancesPastUnknownDebt(){
+   var f=new Task07PreparedExternalIT();f.setup();var operations=new JdbcExternalOperations(f.queue);var token=operations.beginPrepared(f.lease,f.preparedRequest).orElseThrow();String model="T07_BOUND_"+UUID.randomUUID();
+   var p=new JdbcModelPermitPool(operations,Map.of(model,new ModelConfiguration(model,1,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT)),(a,b,c)->{throw new AssertionError();});p.configure();var unknown=p.acquire(token,model,null).orElseThrow();
+   assertThrows(IllegalArgumentException.class,()->p.recoverSettlements(0));assertThrows(IllegalArgumentException.class,()->p.recoverSettlements(65));
+   String after="";String upper=null;int maximumQueries=0;long maximumRows=0;boolean visited=false;
+   int reservations=f.jdbc.queryForObject("SELECT COUNT(*) FROM model_reservation",Integer.class);
+   for(int i=0;i<=reservations;i++){
+    f.source.clear();p.recoverSettlements(1);maximumQueries=Math.max(maximumQueries,f.source.sql.size());maximumRows=Math.max(maximumRows,f.source.rows);
+    assertTrue(f.source.sql.size()<=14);assertTrue(f.source.rows<=12);
+    var pages=f.source.sql.stream().filter(x->x.text().startsWith("SELECT id,model,execution_id")).toList();assertEquals(1,pages.size());var page=pages.getFirst();assertEquals(1,page.parameters().get(3));
+    String a=page.parameters().get(1).toString(),u=page.parameters().get(2).toString();if(upper==null)upper=u;else assertEquals(upper,u);
+    assertTrue(a.compareTo(after)>=0);after=a;
+    if(f.source.sql.stream().anyMatch(x->x.text().startsWith("SELECT COUNT(*) FROM model_reservation r")&&unknown.id().equals(x.parameters().get(1)))){visited=true;break;}
+   }
+   assertTrue(visited);assertNull(f.jdbc.queryForObject("SELECT settled_at FROM model_reservation WHERE id=?",java.sql.Timestamp.class,unknown.id()));
+   System.out.println("TASK07 recovery B=1 Qmax="+maximumQueries+" Rmax="+maximumRows+" envelope Q<=2+12B/R<=2+10B");
+  }
+  @Test void concurrentMaintenanceUsesOneCursorAndDoesNoSqlOnContendedInstance()throws Exception{
+   var f=new Task07PreparedExternalIT();f.setup();var operations=new JdbcExternalOperations(f.queue);String model="T07_BOUND_"+UUID.randomUUID();var p=new JdbcModelPermitPool(operations,Map.of(model,new ModelConfiguration(model,1,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT)),(a,b,c)->{});p.configure();p.acquire(operations.beginPrepared(f.lease,f.preparedRequest).orElseThrow(),model,null).orElseThrow();
+   var entered=new CountDownLatch(1);var release=new CountDownLatch(1);f.source.before=sql->{if(sql.text().startsWith("SELECT id,model,execution_id")){entered.countDown();Task07ExternalWorkerIT.await(release);}};
+   var executor=Executors.newSingleThreadExecutor();try{var first=executor.submit(()->p.recoverSettlements(1));Task07ExternalWorkerIT.await(entered);int count=f.source.sql.size();assertEquals(0,p.recoverSettlements(1));assertEquals(count,f.source.sql.size());release.countDown();first.get(5,TimeUnit.SECONDS);}finally{release.countDown();executor.shutdownNow();}
+  }
+  @Test void recoverySettlesOnlyOldVerifiedExecutionWhenNewGenerationIsUnknown(){
+   var f=new Task07InheritedFixture();var q=f.queue();var e=new JdbcExternalOperations(q);var s=f.spec();var lease=f.claimed(q,s);
+   var request=new ExternalRequest("TEST_CALL",s.producerKey(),Task07InheritedFixture.hash("logical"+s.producerKey()),Task07InheritedFixture.hash(s.input().id()),"test-v1:"+s.input().id());
+   var old=e.beginExternal(lease,request).orElseThrow();String model="T07_BOUND_"+UUID.randomUUID();var p=new JdbcModelPermitPool(e,Map.of(model,new ModelConfiguration(model,2,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT)),(a,b,c)->{});p.configure();var oldPermit=p.acquire(old,model,null).orElseThrow();
+   e.observe(old,new ExternalObservation(ExternalOutcome.FAILED_ZERO_EFFECT,null,null,"REJECTED",new NoEffectProof(NoEffectBasis.DEFINITIVE_REJECTION,"TEST_VERIFIED_ZERO",java.time.Instant.now())),()->{});
+   var next=new TaskSpec(s.type(),s.pool(),s.subject(),Task07InheritedFixture.hash("retry"+s.producerKey()),s.input(),s.inputFingerprint(),0,0,0,3);e.retryAfterZeroEffect(old.operationId(),1,next,request);var current=e.beginExternal(q.claim(s.pool(),"NEXT_GENERATION").orElseThrow(),request).orElseThrow();var currentPermit=p.acquire(current,model,null).orElseThrow();
+   int bound=2*f.j.queryForObject("SELECT COUNT(*) FROM model_reservation",Integer.class)+2;for(int i=0;i<bound&&!f.j.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,oldPermit.id());i++)p.recoverSettlements(1);
+   assertTrue(f.j.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,oldPermit.id()));assertNull(f.j.queryForObject("SELECT settled_at FROM model_reservation WHERE id=?",java.sql.Timestamp.class,currentPermit.id()));assertEquals("MARKED",f.j.queryForObject("SELECT state FROM external_operation WHERE id=?",String.class,current.operationId()));
+  }
+- @Test void transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass(){
++ @Test void transientSettlementFailureConsumesPositionThenRecoversOnTheNextPass()throws Exception{
+   var f=new Task07PreparedExternalIT();f.setup();var e=new JdbcExternalOperations(f.queue);var t=e.beginPrepared(f.lease,f.preparedRequest).orElseThrow();String model="T07_BOUND_"+UUID.randomUUID();var p=new JdbcModelPermitPool(e,Map.of(model,new ModelConfiguration(model,1,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT)),(a,b,c)->{});p.configure();var permit=p.acquire(t,model,null).orElseThrow();e.observePrepared(t,f.preparedObservation);
+   var failed=new java.util.concurrent.atomic.AtomicBoolean();f.source.before=sql->{if(sql.text().startsWith("SELECT * FROM external_operation WHERE id=? FOR UPDATE")&&t.operationId().equals(sql.parameters().get(1))&&failed.compareAndSet(false,true))throw new org.springframework.dao.TransientDataAccessResourceException("T07_RETRYABLE_SETTLEMENT_FAULT");};
+   int bound=2*f.jdbc.queryForObject("SELECT COUNT(*) FROM model_reservation",Integer.class)+2;boolean consumed=false;String previous=null;
++  var afterField=JdbcModelPermitPool.class.getDeclaredField("recoveryAfter");afterField.setAccessible(true);
++  var upperField=JdbcModelPermitPool.class.getDeclaredField("recoveryUpper");upperField.setAccessible(true);
++  var scans=new ArrayList<Map<String,Object>>();
+   for(int i=0;i<bound&&!f.jdbc.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,permit.id());i++){
+-   f.source.clear();p.recoverSettlements(1);assertTrue(f.source.sql.size()<=14);assertTrue(f.source.rows<=12);
++   var beforeAfter=afterField.get(p);var beforeUpper=upperField.get(p);
++   f.source.clear();int recovered=p.recoverSettlements(1);assertTrue(f.source.sql.size()<=14);assertTrue(f.source.rows<=12);
++   var diagnostic=new LinkedHashMap<String,Object>();diagnostic.put("slice",i);diagnostic.put("target",permit.id());diagnostic.put("beforeAfter",beforeAfter);diagnostic.put("beforeUpper",beforeUpper);diagnostic.put("after",afterField.get(p));diagnostic.put("upper",upperField.get(p));diagnostic.put("failed",failed.get());diagnostic.put("recovered",recovered);diagnostic.put("queries",f.source.sql.stream().map(sql->Map.of("sql",sql.text(),"parameters",sql.parameters())).toList());scans.add(diagnostic);
+    for(var sql:f.source.sql)if(sql.text().startsWith("SELECT id,model,execution_id")){String after=sql.parameters().get(1).toString();if(failed.get()&&permit.id().equals(after))consumed=true;previous=after;}
+   }
++  String evidence=System.getenv("TASK07_EVIDENCE_WINDOW");if(evidence!=null)new com.fasterxml.jackson.databind.ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(java.nio.file.Path.of(evidence,"settlement-cursor-diagnostic.json").toFile(),scans);
+   assertTrue(failed.get());assertTrue(consumed,"Failed candidate must be consumed before the next call");assertTrue(f.jdbc.queryForObject("SELECT settled_at IS NOT NULL FROM model_reservation WHERE id=?",Boolean.class,permit.id()));
+  }
+ 
+ }
+diff --git a/backend/integration-tests/src/test/java/ama/task/Task07SupersededReceiptIT.java b/backend/integration-tests/src/test/java/ama/task/Task07SupersededReceiptIT.java
+new file mode 100644
+index 0000000..7b89f5c
+--- /dev/null
++++ b/backend/integration-tests/src/test/java/ama/task/Task07SupersededReceiptIT.java
+@@ -0,0 +1,139 @@
++package ama.task;
++
++import ama.contract.ExternalContracts.*;
++import ama.contract.TaskContracts.*;
++import ama.task.ExternalOperationPort.*;
++import ama.worker.*;
++import java.time.Instant;
++import java.time.temporal.ChronoUnit;
++import java.util.*;
++import java.util.concurrent.*;
++import java.util.concurrent.atomic.*;
++import org.junit.jupiter.api.Test;
++import org.junit.jupiter.params.ParameterizedTest;
++import org.junit.jupiter.params.provider.ValueSource;
++import static org.junit.jupiter.api.Assertions.*;
++import static ama.task.Task07ExternalWorkerIT.*;
++
++/** Old terminal receipts survive a legitimate retry; every state transition uses the owned DB. */
++class Task07SupersededReceiptIT {
++ final Task07ReceiptRecoveryIT h=new Task07ReceiptRecoveryIT();
++ final Task07PreparedExternalIT f=h.f;
++ final JdbcExternalOperations operations=h.first;
++ PreparedObservation zero(OperationToken token,TaskLease lease){
++  var receipt=f.receipt(new ExternalObservation(ExternalOutcome.FAILED_ZERO_EFFECT,null,null,"T07_REJECTED",
++      new NoEffectProof(NoEffectBasis.DEFINITIVE_REJECTION,"T07_ZERO:"+token.executionId(),Instant.now().truncatedTo(ChronoUnit.MICROS))));
++  f.replayBindings.put(receipt,new JdbcTaskPreparations.ExternalFacts(lease.taskId(),lease.spec(),token.operationId(),token.executionId(),token.executionNo(),f.wire.executionRequestHash(),f.wire.requestManifest()));
++  return receipt;
++ }
++ String successor(OperationToken old){
++  var s=f.spec;var next=new TaskSpec(s.type(),s.pool(),s.subject(),Task07InheritedFixture.hash("retry:"+s.producerKey()),s.input(),s.inputFingerprint(),s.businessVersion(),s.priority(),s.cancelEpoch(),s.maxAttempts());
++  f.coveredSpecs.add(next);return operations.retryAfterZeroEffect(old.operationId(),old.executionNo(),next,f.wire);
++ }
++ Map<String,Object> oldRows(OperationToken old){
++  var rows=new LinkedHashMap<String,Object>();
++  rows.put("execution",f.jdbc.queryForMap("SELECT * FROM external_execution WHERE id=?",old.executionId()));
++  rows.put("task",f.jdbc.queryForMap("SELECT * FROM durable_task WHERE id=?",f.lease.taskId()));
++  rows.put("attempts",f.jdbc.queryForList("SELECT * FROM task_attempt WHERE task_id=? ORDER BY attempt",f.lease.taskId()));
++  rows.put("events",f.events());rows.put("outputs",f.jdbc.queryForObject("SELECT COUNT(*) FROM meeting_info_revision WHERE id=?",Integer.class,f.output));
++  rows.put("audit",f.jdbc.queryForObject("SELECT COUNT(*) FROM audit_event WHERE resource_id=?",Integer.class,f.meeting));return rows;
++ }
++ Map<String,Object> nextRows(String task,OperationToken old){
++  var rows=new LinkedHashMap<String,Object>();rows.put("operation",f.jdbc.queryForMap("SELECT * FROM external_operation WHERE id=?",old.operationId()));
++  rows.put("execution",f.jdbc.queryForMap("SELECT * FROM external_execution WHERE operation_id=? AND execution_no=?",old.operationId(),old.executionNo()+1));
++  rows.put("task",f.jdbc.queryForMap("SELECT * FROM durable_task WHERE id=?",task));
++  rows.put("attempts",f.jdbc.queryForList("SELECT * FROM task_attempt WHERE task_id=? ORDER BY attempt",task));
++  rows.put("permits",f.jdbc.queryForList("SELECT r.* FROM model_reservation r JOIN external_execution e ON e.id=r.execution_id WHERE e.task_id=?",task));return rows;
++ }
++ void assertEnded(OperationToken old){
++  var e=f.jdbc.queryForMap("SELECT * FROM external_execution WHERE id=?",old.executionId());
++  assertEquals("FAILED",e.get("state"));assertNotNull(e.get("finished_at"));assertEquals("DEFINITIVE_REJECTION",e.get("no_effect_basis"));assertEquals("T07_ZERO:"+old.executionId(),e.get("no_effect_evidence"));assertNotNull(e.get("no_effect_verified_at"));
++  var a=f.jdbc.queryForMap("SELECT * FROM task_attempt WHERE task_id=? AND attempt=?",f.lease.taskId(),e.get("task_attempt"));
++  assertNotNull(a.get("ended_at"));assertEquals("FAILED",a.get("outcome"));assertEquals("T07_REJECTED",a.get("error_code"));assertNotNull(a.get("owner"));
++  assertEquals("FAILED",f.state());assertEquals("T07_REJECTED",f.jdbc.queryForObject("SELECT last_error FROM durable_task WHERE id=?",String.class,f.lease.taskId()));
++  assertNull(f.jdbc.queryForObject("SELECT output_id FROM durable_task WHERE id=?",String.class,f.lease.taskId()));
++ }
++ void lostAck(Runnable action){
++  var once=new AtomicBoolean();f.source.committed=()->{if(once.compareAndSet(false,true))throw new IllegalStateException("T07_ZERO_ACK_LOST");};
++  try{var failure=assertThrows(IllegalStateException.class,action::run);assertEquals("T07_ZERO_ACK_LOST",failure.getMessage());}finally{f.source.committed=()->{};}
++ }
++ Object jsonValue(Object value){
++  if(value instanceof Map<?,?> map){var result=new LinkedHashMap<String,Object>();map.forEach((k,v)->result.put(k.toString(),jsonValue(v)));return result;}
++  if(value instanceof List<?> list)return list.stream().map(this::jsonValue).toList();
++  if(value instanceof java.time.temporal.TemporalAccessor||value instanceof java.util.Date)return value.toString();return value;
++ }
++ void evidence(String name,Map<String,Object> values)throws Exception{
++  var path=System.getenv("TASK07_EVIDENCE_WINDOW");if(path!=null)new com.fasterxml.jackson.databind.ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(java.nio.file.Path.of(path,name+".json").toFile(),jsonValue(values));
++ }
++ void immutable(Map<String,Object> before,OperationToken old){assertEquals(before,oldRows(old));assertEquals(1,f.terminalWrites.get());assertEquals(0,f.writes.get());}
++
++ @Test void oldCommitAckLossThenPreparedSuccessorRetiresActualWorkerSlotOnce()throws Exception{
++  f.setup();f.jdbc.update("UPDATE durable_task SET expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=?",f.lease.taskId());
++  var committed=new CountDownLatch(1);var release=new CountDownLatch(1);var otherDone=new CountDownLatch(1);var error=new AtomicReference<Throwable>();var session=new AtomicReference<ExternalTaskExecution>();var receipt=new AtomicReference<PreparedObservation>();var claimedFirst=new AtomicBoolean();var sends=new AtomicInteger();
++  TaskQueue queue=new TaskQueue(){public String enqueue(TaskSpec s){throw new AssertionError();}public Optional<TaskLease> claim(String p,String owner){if(!claimedFirst.get()){var l=f.queue.claim(f.spec.pool(),owner);if(l.isPresent())claimedFirst.set(true);return l;}return h.g.queue.claim(h.g.spec.pool(),owner);}public boolean renew(TaskLease l){return l.spec().equals(f.spec)?f.queue.renew(l):h.g.queue.renew(l);}public boolean complete(TaskLease l,TaskResult r){throw new AssertionError("No ordinary completion");}public boolean completeWithEffects(TaskLease l,TaskResult r,Runnable e){throw new AssertionError();}};
++  WorkerLoop.ExternalHandler handler=s->{try{
++   if(s.lease().spec().equals(f.spec)){
++    session.set(s);assertTrue(s.begin(f.preparedRequest));receipt.set(zero(s.token(),s.lease()));
++    // Set the actual JDBC after-commit fault only after real permit acquisition in send().
++    try{s.send(()->{sends.incrementAndGet();var once=new AtomicBoolean();f.source.committed=()->{if(once.compareAndSet(false,true))throw new IllegalStateException("T07_ZERO_ACK_LOST");};return receipt.get();});fail("Commit ACK must be lost");}
++    catch(IllegalStateException lost){assertEquals("T07_ZERO_ACK_LOST",lost.getMessage());}finally{f.source.committed=()->{};}
++    committed.countDown();await(release);
++   }else{assertTrue(s.begin(h.g.preparedRequest));assertTrue(s.send(()->{sends.incrementAndGet();return h.g.preparedObservation;}));otherDone.countDown();}
++  }catch(Throwable t){error.set(t);committed.countDown();otherDone.countDown();}};
++  var pool=h.permits();try(var worker=WorkerLoop.external(queue,h.route,pool,Map.of(f.spec.pool(),1),Map.of(f.spec.type(),handler,h.g.spec.type(),handler),Map.of(f.spec.type(),h.model),"T07_SUPERSEDED_WORKER")){
++   worker.pollOnce(f.spec.pool());await(committed);assertNull(error.get());var old=session.get().token();assertEnded(old);var before=oldRows(old);
++   String next=successor(old);var successorBefore=nextRows(next,old);assertEquals("RETRY_QUEUED",f.jdbc.queryForObject("SELECT state FROM external_operation WHERE id=?",String.class,old.operationId()));assertEquals("PREPARED",f.jdbc.queryForObject("SELECT state FROM external_execution WHERE task_id=?",String.class,next));
++   h.g.setup();h.g.jdbc.update("UPDATE durable_task SET expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=?",h.g.lease.taskId());release.countDown();
++   eventually(()->{worker.pollOnce(f.spec.pool());return otherDone.getCount()==0&&worker.observation().active()==0;});assertNull(error.get());
++   immutable(before,old);assertFalse(operations.hasCallAuthority(old));assertEquals(successorBefore,nextRows(next,old));assertEquals(2,sends.get());assertEquals("SUCCEEDED",h.g.state());assertEquals(1,f.zeroReplays.get());
++   assertEquals(ObservationResult.STALE_TOKEN,session.get().observe(receipt.get()));assertFalse(session.get().send(()->{throw new AssertionError("Never resend");}));
++   assertEquals(ObservationResult.STALE_TOKEN,operations.observePrepared(old,receipt.get()));assertEquals(ObservationResult.STALE_TOKEN,operations.observePreparedFact(old,receipt.get()));
++   h.settleBounded(pool,old.executionId());evidence("worker-old-receipt",Map.of("before",before,"after",oldRows(old),"successorBefore",successorBefore,"successorAfter",nextRows(next,old),"sends",sends.get(),"localActive",worker.observation().active()));
++  }finally{release.countDown();}
++ }
++
++ @Test void preparedReconciliationRetiresOldZeroReceiptAndRunsUnrelatedWorkOnSameSlot()throws Exception{
++  f.setup();var old=h.route.beginPrepared(f.lease,f.preparedRequest).orElseThrow();var pool=h.permits();pool.acquire(old,h.model,null).orElseThrow();h.expire(f,old);
++  var committed=new CountDownLatch(1);var release=new CountDownLatch(1);var otherDone=new CountDownLatch(1);var error=new AtomicReference<Throwable>();var session=new AtomicReference<ExternalTaskExecution>();
++  try(var loop=ReconciliationLoop.prepared(h.route,pool,1,s->{try{if(s.token().operationId().equals(old.operationId())){session.set(s);var receipt=zero(s.token(),f.lease);lostAck(()->{try{s.observe(receipt);}catch(InterruptedException x){throw new AssertionError(x);}});committed.countDown();await(release);}else{assertEquals(ObservationResult.APPLIED,s.observe(h.g.preparedObservation));otherDone.countDown();}}catch(Throwable t){error.set(t);committed.countDown();otherDone.countDown();}},"T07_SUPERSEDED_RECONCILER")){
++   h.pollUntil(loop,()->committed.getCount()==0);assertNull(error.get());assertEnded(old);var before=oldRows(old);String next=successor(old);var nextBefore=nextRows(next,old);
++   h.g.setup();var other=h.route.beginPrepared(h.g.lease,h.g.preparedRequest).orElseThrow();h.expire(h.g,other);release.countDown();h.pollUntil(loop,()->otherDone.getCount()==0);
++   assertNull(error.get());immutable(before,old);assertFalse(operations.hasCallAuthority(session.get().token()));assertTrue(pool.acquire(old,h.model,null).isEmpty());assertEquals(nextBefore,nextRows(next,old));assertEquals("SUCCEEDED",h.g.state());assertEquals(1,f.zeroReplays.get());h.settleBounded(pool,old.executionId());
++   assertFalse(session.get().send(()->{throw new AssertionError("Reconciliation never sends");}));evidence("reconciliation-old-receipt",Map.of("before",before,"after",oldRows(old),"successorBefore",nextBefore,"successorAfter",nextRows(next,old)));
++  }finally{release.countDown();}
++ }
++
++ @Test void oldFactRecoveryLeavesRunningSuccessorAndRealPermitUntouched()throws Exception{
++  f.setup();var old=operations.beginPrepared(f.lease,f.preparedRequest).orElseThrow();var zero=zero(old,f.lease);
++  var pool=new JdbcModelPermitPool(operations,Map.of(h.model,new ModelConfiguration(h.model,2,1,true,ModelConfiguration.CutoffPolicy.EXPLICIT_SETTLEMENT)),(t,m,d)->{});pool.configure();var oldPermit=pool.acquire(old,h.model,null).orElseThrow();
++  lostAck(()->operations.observePrepared(old,zero));assertEnded(old);var before=oldRows(old);String task=successor(old);var nextLease=f.queue.claim(f.spec.pool(),"T07_RUNNING_SUCCESSOR").orElseThrow();var next=operations.beginPrepared(nextLease,f.preparedRequest).orElseThrow();var permit=pool.acquire(next,h.model,null).orElseThrow();var nextBefore=nextRows(task,old);
++  assertTrue(operations.hasCallAuthority(next));f.source.clear();assertEquals(ObservationResult.APPLIED,operations.recoverPreparedFact(old,zero));
++  int recoveryQueries=f.source.sql.size();long recoveryRows=f.source.rows;
++  assertTrue(recoveryQueries<=48);assertTrue(recoveryRows<=48);
++  assertTrue(f.source.sql.stream().noneMatch(sql->sql.text().matches("(?is)^(UPDATE|INSERT|DELETE).*")),"Retirement must only read durable facts");
++  assertEquals(ObservationResult.APPLIED,operations.recoverPreparedFact(old,zero));
++  immutable(before,old);assertFalse(operations.hasCallAuthority(old));assertEquals(nextBefore,nextRows(task,old));assertTrue(operations.hasCallAuthority(next));assertFalse(pool.settled(permit));assertTrue(pool.settled(oldPermit));assertEquals(nextBefore,nextRows(task,old));
++  assertNull(f.jdbc.queryForObject("SELECT ended_at FROM task_attempt WHERE task_id=? AND attempt=?",java.sql.Timestamp.class,task,nextLease.attempt()));
++  evidence("running-successor-permit",Map.of("before",before,"after",oldRows(old),"successorBefore",nextBefore,"successorAfter",nextRows(task,old),"oldPermitSettled",true,"successorPermitSettled",false,"recoveryQueries",recoveryQueries,"recoveryRows",recoveryRows));
++ }
++
++ @ParameterizedTest @ValueSource(strings={"proof","result","unended","attemptNumber","attemptOutcome","attemptError","unknown","foreignExecution","foreignReceipt"})
++ void rejectsMismatchedOldFactOrUnendedAttempt(String mismatch){
++  f.setup();var old=operations.beginPrepared(f.lease,f.preparedRequest).orElseThrow();var receipt=zero(old,f.lease);operations.observePrepared(old,receipt);assertEnded(old);String task=successor(old);var nextBefore=nextRows(task,old);OperationToken supplied=old;PreparedObservation suppliedReceipt=receipt;
++  switch(mismatch){
++   case "proof" -> {var remote=f.remote(receipt);suppliedReceipt=f.receipt(new ExternalObservation(ExternalOutcome.FAILED_ZERO_EFFECT,null,null,"T07_REJECTED",new NoEffectProof(NoEffectBasis.DEFINITIVE_REJECTION,"DIFFERENT",remote.noEffectProof().verifiedAt())));f.replayBindings.put(suppliedReceipt,f.replayBindings.get(receipt));}
++   case "result" -> f.jdbc.update("UPDATE durable_task SET last_error='WRONG_RESULT' WHERE id=?",f.lease.taskId());
++   case "unended" -> f.jdbc.update("UPDATE task_attempt SET ended_at=NULL WHERE task_id=? AND attempt=?",f.lease.taskId(),f.lease.attempt());
++   case "attemptNumber" -> f.jdbc.update("UPDATE external_execution SET task_attempt=task_attempt+1 WHERE id=?",old.executionId());
++   case "attemptOutcome" -> f.jdbc.update("UPDATE task_attempt SET outcome='SUCCEEDED' WHERE task_id=? AND attempt=?",f.lease.taskId(),f.lease.attempt());
++   case "attemptError" -> f.jdbc.update("UPDATE task_attempt SET error_code='OTHER_ERROR' WHERE task_id=? AND attempt=?",f.lease.taskId(),f.lease.attempt());
++   case "unknown" -> suppliedReceipt=f.receipt(new ExternalObservation(ExternalOutcome.UNKNOWN,null,null,"T07_UNKNOWN",null));
++   case "foreignExecution" -> supplied=new OperationToken(old.operationId(),UUID.randomUUID().toString(),old.executionNo(),old.reconcileEpoch(),old.owner(),old.expiresAt(),old.subject());
++   case "foreignReceipt" -> suppliedReceipt=new PreparedObservation(){};
++   default -> throw new AssertionError();
++  }
++  var damaged=oldRows(old);final var token=supplied;final var observation=suppliedReceipt;
++  if(mismatch.equals("foreignReceipt"))assertThrows(IllegalArgumentException.class,()->operations.recoverPreparedFact(token,observation));else assertEquals(ObservationResult.STALE_TOKEN,operations.recoverPreparedFact(token,observation));
++  assertEquals(damaged,oldRows(old));assertEquals(nextBefore,nextRows(task,old));assertEquals(1,f.terminalWrites.get());assertEquals(0,f.writes.get());assertFalse(operations.hasCallAuthority(old));
++ }
++}

@@ -18,10 +18,15 @@ import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
 /** Unwired internal strict UTF-8 profile. The caller owns the source and its blocking timeout. */
-public final class TextTranscriptParser implements TranscriptDocumentParser {
+public final class TextTranscriptParser implements MeasuredTranscriptDocumentParser {
     public static final String PROFILE_VERSION = "ama.strict-utf8-lines.v1";
 
     @Override public Result parse(InputStream source, UUID fileId, String expectedSourceSha256,
+                                  ParseBudget budget, BooleanSupplier cancelled) throws ParseException {
+        return parseMeasured(source,fileId,expectedSourceSha256,budget,cancelled).result();
+    }
+
+    @Override public MeasuredResult parseMeasured(InputStream source, UUID fileId, String expectedSourceSha256,
                                   ParseBudget budget, BooleanSupplier cancelled) throws ParseException {
         if (source == null || fileId == null || expectedSourceSha256 == null
                 || !expectedSourceSha256.matches("[0-9a-f]{64}") || budget == null
@@ -64,7 +69,8 @@ public final class TextTranscriptParser implements TranscriptDocumentParser {
         lines.finishLine();
         checkCancellation(cancelled);
         if (lines.segments.isEmpty()) throw new ParseException(NO_TEXT);
-        return new Result(lines.segments, actualSha256, PROFILE_VERSION);
+        return new MeasuredResult(new Result(lines.segments, actualSha256, PROFILE_VERSION),
+            new Usage(boundedSource.used, lines.units, lines.segments.size()));
     }
 
     private static void checkCancellation(BooleanSupplier cancelled) throws ParseException {

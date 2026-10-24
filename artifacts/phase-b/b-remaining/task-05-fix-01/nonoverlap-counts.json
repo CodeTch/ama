@@ -1,0 +1,32 @@
+{
+  "selectedIntegrationRuns": [
+    "green-s3-open",
+    "cv1-genuine-carriers-and-validator",
+    "s3-before-headers",
+    "final-affected-regressions",
+    "final-local-lifetime-custody"
+  ],
+  "distinctPassingIntegrationCases": 16,
+  "caseIdentities": [
+    "ama.storage.Task05FixCarrierIT#actualPrivateValidatorRejectsJustInsertedBodySourceAndOrderCorruptionThenRecovers",
+    "ama.storage.Task05FixCarrierIT#twoGenuineDifferentPlansRejectCrossLeaseCarriersThenEachWritesItsOwnRows",
+    "ama.storage.Task05FixOpenIT#genuineLocalHeadersExitAtBatchDeadlineBeforeFixtureRelease",
+    "ama.storage.Task05FixOpenIT#genuineLocalPreparationExitsAtBatchDeadlineBeforeErrorBodyRelease",
+    "ama.storage.Task05FixOpenIT#genuineLocalPreparationExitsOnRealRenewalLossBeforeErrorBodyRelease",
+    "ama.storage.Task05FixS3OpenIT#genuineS3ControlOpenExitsAtBatchDeadlineBeforeProxyRelease",
+    "ama.storage.Task05FixS3OpenIT#genuineS3ControlOpenExitsOnRealRenewalLossBeforeProxyRelease",
+    "ama.storage.Task05FixS3OpenIT#genuineS3ErrorOpenExitsAtBatchDeadlineBeforeProxyRelease",
+    "ama.storage.Task05FixS3OpenIT#genuineS3HeadersOpenExitsAtBatchDeadlineBeforeProxyRelease",
+    "ama.storage.Task05FixSuccessRegressionIT#actualNativeHttpIntakeWorkerAndRawRegression",
+    "ama.storage.Task05FixSuccessRegressionIT#actualS3HttpIntakeWorkerAndRawRegression",
+    "ama.storage.Task05FixTransportRegressionIT#authenticatedActualLoopHealthRequiresRunningFreshMatchingPeer",
+    "ama.storage.Task05FixTransportRegressionIT#localMetadataAndErrorBodiesActuallyExitBeforeFixtureRelease",
+    "ama.storage.s3.Task05FixS3DeadlineRegressionIT#actualS3SuccessAndControlBodiesExitBeforeProxyReleaseAndReturnAdmission",
+    "ama.storage.s3.Task05FixS3DeadlineRegressionIT#sdkErrorBodyDeadlineActuallyTerminatesReader",
+    "ama.task.Task05FixCancellationRegressionIT#closeAndActualRenewalLossAbortReaderBeforeFixtureRelease"
+  ],
+  "finalAllUnits": 233,
+  "focusedShutdownAlreadyIncludedInUnits": 2,
+  "fixtureMaintenanceSeparate": 1,
+  "qualification": "16 distinct integration cases on final product; tests span source-windows.json, no overlapping rerun sum"
+}

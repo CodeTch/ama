@@ -1,0 +1,173 @@
+{
+  "scope": "Intermediate actualXML/receipt read; finalsource, coveringclosure andindependentreviewpending; no rerun",
+  "windows": [
+    {
+      "window": "ir01-green",
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07ReceiptRecoveryIT"
+        ],
+        "exit": 1,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/ir01-green/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml"
+        ],
+        "elapsedSeconds": 41.6469042301178,
+        "counts": {
+          "tests": 2,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07ReceiptRecoveryIT",
+          "name": "capacityOneReconcilerRecoversExpiredPendingReceiptThenProcessesUnrelatedWork",
+          "result": "FAIL",
+          "message": "Finite condition timed out"
+        },
+        {
+          "class": "ama.task.Task07ReceiptRecoveryIT",
+          "name": "oldWorkerSlotRetiresAfterFreshReconcilerCommitsSameExecution",
+          "result": "PASS",
+          "message": ""
+        }
+      ],
+      "seals": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir01-green/receipt.json",
+          "bytes": 523,
+          "sha256": "dccf6345d28ea45fe79986a3bbf798b5e6ff47bd40a1f9e4540e1d32f841112d"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir01-green/source.json",
+          "bytes": 67039,
+          "sha256": "14abf2c35e8573d2dac92e0ea26c28d5bd86a56c944b746a041183208b27eef2"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir01-green/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml",
+          "bytes": 33582,
+          "sha256": "18ac154c39419fb549c7a41fcd1d0b8ffe65cbd152f8bc68cd06d0ad510738a7"
+        }
+      ]
+    },
+    {
+      "window": "ir01-red",
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07ReceiptRecoveryIT"
+        ],
+        "exit": 1,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/ir01-red/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml"
+        ],
+        "elapsedSeconds": 52.99909949302673,
+        "counts": {
+          "tests": 2,
+          "failures": 2,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07ReceiptRecoveryIT",
+          "name": "capacityOneReconcilerRecoversExpiredPendingReceiptThenProcessesUnrelatedWork",
+          "result": "FAIL",
+          "message": "Finite condition timed out"
+        },
+        {
+          "class": "ama.task.Task07ReceiptRecoveryIT",
+          "name": "oldWorkerSlotRetiresAfterFreshReconcilerCommitsSameExecution",
+          "result": "FAIL",
+          "message": "Finite condition timed out"
+        }
+      ],
+      "seals": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir01-red/receipt.json",
+          "bytes": 522,
+          "sha256": "2220415a6c666136337e10552460d4da87cb4e4ae07d35fe97455517b9bd002a"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir01-red/source.json",
+          "bytes": 67039,
+          "sha256": "bf4bdae37f928ec1d7858a1fe200999dc30eb7ca56c8add96f033b5241342c52"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir01-red/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml",
+          "bytes": 34119,
+          "sha256": "1d8b41f478aa2d1fe9268d799fc676c53a0b7c23327f74541d8aac07c4c0cda5"
+        }
+      ]
+    },
+    {
+      "window": "ir02-rr-green",
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07GenerationRetentionIT#publicationCommittedAfterObservationSnapshotStillDeniesRetention"
+        ],
+        "exit": 0,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/ir02-rr-green/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml"
+        ],
+        "elapsedSeconds": 17.96901822090149,
+        "counts": {
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "publicationCommittedAfterObservationSnapshotStillDeniesRetention(String)[1]",
+          "result": "PASS",
+          "message": ""
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "publicationCommittedAfterObservationSnapshotStillDeniesRetention(String)[2]",
+          "result": "PASS",
+          "message": ""
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "publicationCommittedAfterObservationSnapshotStillDeniesRetention(String)[3]",
+          "result": "PASS",
+          "message": ""
+        }
+      ],
+      "seals": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir02-rr-green/receipt.json",
+          "bytes": 600,
+          "sha256": "0cac119fb0ed34e0a2d62a79dc20dd6994c048e2d245eda7d0e4988d224c2c64"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir02-rr-green/source.json",
+          "bytes": 66888,
+          "sha256": "2da5d72e5e7da90726e5409b59edddc12abfdbf241bb414bb85781ced8770d3e"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir02-rr-green/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+          "bytes": 33201,
+          "sha256": "b97eeef0a435e1ec2505ef9d6ab53d84ad43c8b0e9dba3a1ef4f7b372d32b6a2"
+        }
+      ]
+    }
+  ]
+}

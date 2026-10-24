@@ -1,0 +1,13 @@
+package ama.storage;
+import java.nio.file.*;
+import org.junit.jupiter.api.Test;
+/** One finite recovery of the preserved first fix01 fixture failures; not a business proof. */
+class Task05FixMaintenanceIT {
+    @Test void prelinkedFailedFixtureOnly() throws Exception {
+        Path root=Task05FixNativeFixture.evidencePath();
+        for(String pair:new String[]{"pipeline-80d13797-3a5e-4b52-9f27-697659913671/510121f8-fc8d-4438-bd86-7f04f88bc0a7", "pipeline-d1bd71b3-ad07-4bad-bbb5-1242de8fb67b/46a8ee01-593f-4d1e-9c48-b1131ee54693"}) {
+            String[] selected=pair.split("/");Path out=root.resolve(selected[0]);
+            Task05FixMaintenance.apply(ama.support.MysqlTestDatabase.dataSource(),selected[1],out.resolve("accepted-"+selected[1]+".json"),out);
+        }
+    }
+}

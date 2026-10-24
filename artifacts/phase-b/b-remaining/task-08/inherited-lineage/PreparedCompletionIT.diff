@@ -1,0 +1,39 @@
+--- backend/integration-tests/src/test/java/ama/task/PreparedCompletionIT.java
++++ backend/integration-tests/src/test/java/ama/task/Task08InheritedPreparedCompletionIT.java
+@@ -19,9 +19,9 @@
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ /** Real owned MySQL, authentic B03 identity preparation and actual immutable output rows. No resets. */
+-class PreparedCompletionIT {
++class Task08InheritedPreparedCompletionIT {
+     final AtomicBoolean failFlush = new AtomicBoolean(), failAudit = new AtomicBoolean(), failEvent = new AtomicBoolean();
+-    final DataSource source = new B06QueueSeamsIT.ProbeSource(MysqlTestDatabase.dataSource(), sql -> {
++    final DataSource source = new Task08InheritedB06QueueSeamsIT.ProbeSource(Task08InheritedResources.source(), sql -> {
+         if (failAudit.get() && sql.startsWith("INSERT INTO audit_event(")) throw new IllegalStateException("CONTROLLED_AUDIT_FAILURE");
+         if (failFlush.get() && sql.startsWith("INSERT INTO task_outbox(")) throw new IllegalStateException("CONTROLLED_FLUSH_FAILURE");
+     });
+@@ -33,8 +33,8 @@
+     final String input = UUID.randomUUID().toString(), output = UUID.randomUUID().toString();
+     final Actor actor = new Actor(owner, Status.ACTIVE, Set.of(Role.USER));
+     final TaskSpec spec = new TaskSpec("PREPARED_TEST", "PREPARED_" + UUID.randomUUID(),
+-            new SubjectRef("MEETING", meeting), TaskFixture.hash(input + "producer"),
+-            new TypedRef("TEST_INFO", input), TaskFixture.hash(input), 0, 0, 0, 3);
++            new SubjectRef("MEETING", meeting), Task08InheritedFixture.hash(input + "producer"),
++            new TypedRef("TEST_INFO", input), Task08InheritedFixture.hash(input), 0, 0, 0, 3);
+     final AtomicInteger writes = new AtomicInteger(), validations = new AtomicInteger();
+     final TaskDomainPolicy policy = new TaskDomainPolicy() {
+         final JdbcTaskPreparations preparations = new JdbcTaskPreparations(source);
+@@ -73,10 +73,10 @@
+     TaskLease lease;
+ 
+     @BeforeAll static void migrateOwnedEmptyFixture() {
+-        var source = MysqlTestDatabase.dataSource();
+-        new SchemaMigrator(source).migrate();
++        var source = Task08InheritedResources.source();
++        Task08InheritedResources.requireForward(source);
+         var history = new JdbcTemplate(source).queryForList("SELECT installed_rank,version,script,checksum,success FROM flyway_schema_history ORDER BY installed_rank");
+-        assertEquals(12, history.size());
++        assertEquals(15, history.size());
+         System.out.println("PREPARED completion pre-test immutable history: " + history);
+     }
+     @BeforeEach void setup() {

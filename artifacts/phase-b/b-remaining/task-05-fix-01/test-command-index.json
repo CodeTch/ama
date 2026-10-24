@@ -1,0 +1,919 @@
+[
+  {
+    "run": "cv1-genuine-carriers-and-validator",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixCarrierIT"
+    ],
+    "exit": 0,
+    "utc": "2026-10-23T18:44:08.486002+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixCarrierIT",
+        "cases": [
+          "twoGenuineDifferentPlansRejectCrossLeaseCarriersThenEachWritesItsOwnRows",
+          "actualPrivateValidatorRejectsJustInsertedBodySourceAndOrderCorruptionThenRecovers"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "final-affected-regressions",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05Fix*RegressionIT"
+    ],
+    "exit": 0,
+    "utc": "2026-10-23T18:48:18.645517+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixSuccessRegressionIT",
+        "cases": [
+          "actualNativeHttpIntakeWorkerAndRawRegression",
+          "actualS3HttpIntakeWorkerAndRawRegression"
+        ]
+      },
+      {
+        "name": "ama.storage.Task05FixTransportRegressionIT",
+        "cases": [
+          "authenticatedActualLoopHealthRequiresRunningFreshMatchingPeer",
+          "localMetadataAndErrorBodiesActuallyExitBeforeFixtureRelease"
+        ]
+      },
+      {
+        "name": "ama.storage.s3.Task05FixS3DeadlineRegressionIT",
+        "cases": [
+          "sdkErrorBodyDeadlineActuallyTerminatesReader",
+          "actualS3SuccessAndControlBodiesExitBeforeProxyReleaseAndReturnAdmission"
+        ]
+      },
+      {
+        "name": "ama.task.Task05FixCancellationRegressionIT",
+        "cases": [
+          "closeAndActualRenewalLossAbortReaderBeforeFixtureRelease"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "final-all-units",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "*"
+    ],
+    "exit": 0,
+    "utc": "2026-10-23T18:50:31.370372+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 233,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.config.file.ControlledArchiveFix1Test",
+        "cases": [
+          "startupReleaseCapacityRefusesBeforeAnyObjectAcquisition",
+          "publicationReservesEntireIndexChainAndReopensAtExactBoundary",
+          "publisherImpossibleReleaseBudgetPrecedesCallerPayloadInterpretation",
+          "namedPipePublishingLockFailsUnavailableInBoundedOwnedChild"
+        ]
+      },
+      {
+        "name": "ama.config.file.ControlledConfigArchiveSourceTest",
+        "cases": [
+          "startupValidatesAllObjectsIncludingUnselectedHistory",
+          "everyLoadRechecksLengthEofHashAndMissingObjects",
+          "nonregularFilesAndUnsupportedSecureFilesystemFailUnavailable",
+          "cancellationAndInterruptFailClosedWithoutPayloadDiagnostics",
+          "publisherRejectsRemapDuplicateMissingClosureAndCancellationWithoutChangingOldRelease",
+          "closureBudgetsReserveManifestBeforeAnyTransportAllocation",
+          "publisherCreatesLiteralReleasesAndPreservesPriorBytes",
+          "indexEntryOrderUniquenessAndSizeAreStrict",
+          "releaseObjectsCannotContainUnindexedFiles",
+          "heldPublishingLockAndLockSymlinkRejectSecondPublisher",
+          "controlledLiteralClosureRemainsAcceptableToUnchangedS1",
+          "versionsUseUnsignedUtf8OrderingRatherThanUtf16Ordering",
+          "noLatestOrMissingHistoryFallback",
+          "boundedStartupSharesTokenScalarAndByteBudgets",
+          "publisherWritesSameIsolatedBytesEvenWhenCallerMutatesTransportAfterValidation",
+          "historyRemapDropAndGenerationGapFailClosed",
+          "missingDependencyCycleAndWrongHeaderAreNeverPublishable",
+          "manifestDiscoveryReturnsHistoricalRefsAndNeverRepairsMalformedBytes",
+          "cancellationAtDirectoryAcquisitionBoundariesClosesEveryHandle",
+          "cancellationAfterPartialStagingLeavesPreviousReleaseIntact",
+          "pinnedHistoryLoadsExactOldClosureWithFreshTransportArrays",
+          "strictIndexRejectsUnknownDuplicateNoncanonicalAndInvalidUtf8",
+          "initialPublicationCannotResetAnExistingReleaseHistory",
+          "symlinkRootAncestorObjectDirectoryAndReplacementAreRejected"
+        ]
+      },
+      {
+        "name": "ama.config.json.ArchiveBudgetTest",
+        "cases": [
+          "independentExactCumulativeBudgetAcceptsAllFiveRawDocuments",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[1]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[2]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[3]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[4]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[5]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[6]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[7]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[8]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[9]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[10]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[11]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[12]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[13]",
+          "eachCumulativeBoundRejectsOneMoreThanItsLimit()[14]"
+        ]
+      },
+      {
+        "name": "ama.config.json.ConfigBindingsTest",
+        "cases": [
+          "storedVerifyRequiresActualDigestTaskAndProducerChain",
+          "injectedParsedDtoCannotAttestRawArchiveAndCancellationNeverMintsSuccess",
+          "fileMeetingSizeHashAndSavedTaskFencesAreRequiredFacts",
+          "invalidRawOrIncompleteArchiveClosureCannotMintBinding",
+          "draftComputeNeedsNoOwnStoredFingerprintTaskOrOutputRevision",
+          "originalParseBudgetSurvivesCompleteClosure",
+          "matchingArchiveIdentityCannotSubstituteDifferentRawDefinitionOrExtraNodes"
+        ]
+      },
+      {
+        "name": "ama.config.json.ConfigWireReaderTest",
+        "cases": [
+          "transportRejectsDuplicateUnknownNoncanonicalAndBadUnicode",
+          "rawArraysAreIsolatedAfterBoundCheckAndCumulativeBytesCannotReset",
+          "canonicalControlEscapesAndSupplementaryConfigTextArePreserved",
+          "unknownProcessingKindIsNotARecognizedFutureCapability",
+          "recognizedFutureProcessingAndPinnedMaterialsNeverFallBackToImport",
+          "adoptedRawVectorsReadTheirExactIdentitiesAndHashes"
+        ]
+      },
+      {
+        "name": "ama.config.json.RawHashChainTest",
+        "cases": [
+          "fix1RawBackedCycleAndCancellationCannotReturnBusinessDigest",
+          "storedTaskIdentityFactsCanSupplyCompleteHistoricalGenerationFence",
+          "fix1ValidNestedIntrinsicChainSucceedsAcrossAllBusinessEntryPoints",
+          "fix1SharedLeafDepthUsesEveryPathInEitherOriginOrdering",
+          "pinnedCanonicalBudgetAlsoProtectsTemplateRowsetBeforeItsDigestIsHidden",
+          "presentContradictorySuggestionNeverFallsBackToIntrinsicTranscript",
+          "pinnedSetResolvesAllActualHistoricalOriginsAndMatchesIndependentBytes",
+          "fix1ReviewRejectsCorruptedNestedIntrinsicConfirmation",
+          "newExclusionRevisionComputesIndependentlyAndAppliedOriginRequiresExactBodyInput",
+          "fix1FinalRejectsCorruptedNestedIntrinsicConfirmation",
+          "fix1OriginNodeBudgetIsUniqueAndCumulativeAcrossSharedBranches",
+          "exactReviewArchiveClosureAndIntrinsicConfirmationProduceIndependentHashes",
+          "rawFullGenerationComputesBeforeOwnRowTaskAndOutputExist",
+          "actualBodyActionDetectionBackgroundAndIntrinsicMatrixMatchesFullIndependentFinal",
+          "unrelatedCurrentConfigFactsAndQueryOrderCannotChangeHistoricalFinalHash",
+          "completeStoredGenerationAndFinalReloadHashesUseRawOriginalArchives",
+          "fix1ContextArtifactsReuseTheSameIsolatedBoundedOriginal",
+          "confirmationRawChainReloadRetainsOriginalProfileAndActualContent",
+          "selectedReviewUsesSavedScopeAndExactFrozenMemberships",
+          "fix1OuterDraftRejectsCorruptedNestedIntrinsicConfirmation",
+          "savedManualChildUsesExactBodyMarksAndInheritedOriginalProcessingProfile",
+          "fix1SharedHistoricalArchiveAcquisitionUsesOneCumulativeByteBudget",
+          "fix1DirectStoredVerifyRejectsCorruptedNestedIntrinsicConfirmation",
+          "fix1ReusedNonleafDiamondDepthUsesCachedSubtreeHeight",
+          "fix1DeepRawBackedOriginsMeetExactDepthAndRejectOneMore"
+        ]
+      },
+      {
+        "name": "ama.minutes.json.OutputBudgetBoundaryTest",
+        "cases": [
+          "exactEveryScalarTokenNameDepthAndWireBoundaryAccepts",
+          "exactAllDirectoryAndMembershipCountsAccept",
+          "eachContainerLimitIsCumulativeAndFailsAtOneOver()[1]",
+          "eachContainerLimitIsCumulativeAndFailsAtOneOver()[2]",
+          "eachContainerLimitIsCumulativeAndFailsAtOneOver()[3]",
+          "eachContainerLimitIsCumulativeAndFailsAtOneOver()[4]",
+          "eachContainerLimitIsCumulativeAndFailsAtOneOver()[5]",
+          "eachContainerLimitIsCumulativeAndFailsAtOneOver()[6]",
+          "eachBoundaryPlusOneFailsWithoutPartialResult()[1]",
+          "eachBoundaryPlusOneFailsWithoutPartialResult()[2]",
+          "eachBoundaryPlusOneFailsWithoutPartialResult()[3]",
+          "eachBoundaryPlusOneFailsWithoutPartialResult()[4]",
+          "eachBoundaryPlusOneFailsWithoutPartialResult()[5]",
+          "eachBoundaryPlusOneFailsWithoutPartialResult()[6]",
+          "eachBoundaryPlusOneFailsWithoutPartialResult()[7]",
+          "eachBoundaryPlusOneFailsWithoutPartialResult()[8]"
+        ]
+      },
+      {
+        "name": "ama.minutes.json.StrictMinutesJsonReaderTest",
+        "cases": [
+          "perFactoryTokenNameStringDepthAndMembershipLimits",
+          "exactWireBoundaryPlusOneSentinelAndNoCloseOnEveryOutcome",
+          "cancellationReadFailuresAndInterruptedIoAreRedactedAndPreserveOwnership",
+          "strictSchemaUnknownEscapedDuplicateMissingAndEof",
+          "allSevenKindsEmptyDirectoriesTitleAndNonBmpBody",
+          "rawActionSuggestionsStrictNumbersDatesAndScalarOffsets",
+          "utf8DecoderRejectsMalformedSuffixBomOtherEncodingsAndEscapedSurrogates"
+        ]
+      },
+      {
+        "name": "ama.storage.DeadlineInputStreamTest",
+        "cases": [
+          "normalEofCloseAndWatchdogReleaseExactlyOnce"
+        ]
+      },
+      {
+        "name": "ama.storage.ManagedBackendIdentityTest",
+        "cases": [
+          "ambiguousOriginsAndMalformedUnicodeFailClosed",
+          "physicalChangesCannotReuseManagedIdentity",
+          "credentialAndTimeoutRotationDoNotChangePhysicalId",
+          "fieldCountAndUtf8LengthsMatchIndependentPythonBytes"
+        ]
+      },
+      {
+        "name": "ama.storage.SourceReadLifetimeTest",
+        "cases": [
+          "alreadyLostScopeImmediatelyAbortsRacingNewRequestExactlyOnce",
+          "deadlineAbortsRealRegisteredWorkWithoutCancellingTheOriginalSignal",
+          "failedAbortStillReleasesOtherOwnedRequestsAndRepeatedCloseIsSafe",
+          "completedTransportDetachesAndClosingScopeDoesNotCancelOriginalCarrierSignal"
+        ]
+      },
+      {
+        "name": "ama.storage.StorageRouterTest",
+        "cases": [
+          "callerCannotReplaceBackendDefinitionAfterConstruction",
+          "defaultChangePreservesHistoricalKeysAndActiveUploads",
+          "uploadAndMetadataCannotCarryMissingIdentityOrReceipt",
+          "everyOperationUsesExplicitBackendAndPreservesArguments",
+          "unsafeLogicalKeysAreRejectedBeforeRouting",
+          "metadataRejectsFalseHashesAndNegativeSizes",
+          "blobPageCannotBeChangedByCaller",
+          "missingHistoricalBackendFailsClosedWithoutFallback"
+        ]
+      },
+      {
+        "name": "ama.storage.s3.S3LayoutV3Test",
+        "cases": [
+          "escapesAndShallowSegmentationPreserveExactOrderAndPrefix",
+          "everyControlTemplateIsShallowAndInvalidPhysicalNamesFailBeforeTransport",
+          "canonicalDecodingRejectsAlternateChunkingsAndEscapeSpellings",
+          "ordinary512AndExactBudgetHaveBoundedPhysicalSegments",
+          "credentialAndTimeoutRotationRetainsFullPhysicalScopeIdentity"
+        ]
+      },
+      {
+        "name": "ama.storage.s3.S3ProtocolTest",
+        "cases": [
+          "keyEncodingPreservesCodeUnitsPrefixesAndOrderWithoutNormalizing",
+          "nativePlannerUsesOverflowSafeCeilingAndNeverLogicalPartNumbers",
+          "admissionOneIsRejectedBeforeClientConstruction",
+          "canonicalRecordsRejectTrailingTruncatedUnknownSchemaAndNoncanonicalNumbers"
+        ]
+      },
+      {
+        "name": "ama.task.TaskMetadataTest",
+        "cases": [
+          "unsafeProtocolCodesAreRejectedBeforePersistence",
+          "vendorIdentifiersKeepTheirBinaryIdentity"
+        ]
+      },
+      {
+        "name": "ama.transcript.MeasuredTextTranscriptParserTest",
+        "cases": [
+          "reportsAllDecodedUnitsAndBytesWithoutChangingLegacyResult"
+        ]
+      },
+      {
+        "name": "ama.transcript.TextTranscriptParserTest",
+        "cases": [
+          "nulFailsExplicitlyWithoutDroppingIt",
+          "rejectsWrongHashIncludingChangedBomOrLineSeparators",
+          "cancellationBeforeReadingDoesNotTouchCallerStream",
+          "interruptedReadRestoresInterruptFlagWithoutExposingSourceDetails",
+          "readFailuresAreTypedSafeAndDoNotCloseCallerStream",
+          "streamRemainsCallerOwnedAfterSuccessAndHashFailure",
+          "byteBudgetReadsAtMostOneOverflowSentinel",
+          "cancellationAfterReadStopsBeforeAnotherReadAndNeverReturnsPartial",
+          "threadInterruptionIsPreservedAndPreventsRead",
+          "stableIdsRepeatButChangeWithFileOrExactSourceBytes",
+          "invalidArgumentsFailBeforeAnyIo",
+          "rejectsMalformedTruncatedAndLegacyUtf8WithoutPartialSuccess",
+          "delimitersAcrossBufferBoundariesDoNotRenumberBlankLines",
+          "matchingBytesWithoutConfirmedEofStillFailOnReadError",
+          "explicitBudgetsAcceptExactBoundaryAndFailOneOverWithoutTruncation",
+          "linesBeyondOneReadBufferRetainExactUnicodeWithoutSourceBuffering",
+          "preservesUnicodeSpacesAndPhysicalLinesWithoutInferringPeopleOrTimes",
+          "emptyAndJavaWhitespaceOnlyAreNoText",
+          "splitMultibyteCharactersAndMixedDelimitersWorkWithSingleByteReads"
+        ]
+      },
+      {
+        "name": "ama.api.DeploymentConfigTest",
+        "cases": [
+          "allFourDatabaseStorageCombinationsAreIndependent",
+          "localStartsWithoutS3Credentials",
+          "invalidConfigurationRejectedWithoutEchoingSecrets",
+          "readinessFailsWhenDatabaseUnavailable",
+          "untrustedNetworkCannotReadHealthAndForwardedHeadersAreIgnored",
+          "readinessRecoversFromRealDatabaseOutage",
+          "s3RejectsEachMissingRequiredFieldAndMalformedEndpoint",
+          "healthIsNotExposedOnPublicListener",
+          "s3MissingEndpointRejected"
+        ]
+      },
+      {
+        "name": "ama.api.FileConfigurationTest",
+        "cases": [
+          "productionAssemblyRejectsHttpEvenWithValidManagedIdentity"
+        ]
+      },
+      {
+        "name": "ama.api.HttpRevisionTokensTest",
+        "cases": [
+          "tokenOnlyRosterCommandPreservesEveryLongBit"
+        ]
+      },
+      {
+        "name": "ama.api.IdentityContractsTest",
+        "cases": [
+          "invalidActorCannotEnterAuthorizationBoundary",
+          "sessionTimestampsTruncateInsteadOfRound",
+          "actorCannotCarryMutablePrivileges"
+        ]
+      },
+      {
+        "name": "ama.api.IdentitySecurityTest",
+        "cases": [
+          "cookieUsesHostBoundaryAndNeverExposesCsrf",
+          "productionIssuerCannotIssueEvenWithValidLocalIdentity",
+          "sessionDiagnosticsRedactSecretsAndTruncateIssuedExpiry",
+          "opaqueOrNonOriginConfigurationIsRejected",
+          "databaseFailureProducesSafeUnavailableBusinessError",
+          "testModeConfigurationCannotStartProductionAssembly"
+        ]
+      },
+      {
+        "name": "ama.contract.MinutesFactBudgetTest",
+        "cases": [
+          "artifactCaptureRefusesSmallMaximumAndRemainingBeforeOwnedBytesExist",
+          "catalogSnapshotAlsoChecksItsBoundBeforeDefensiveCopy",
+          "factBagChecksCallerLimitBeforeAnyLargeDefensiveCopy",
+          "artifactReusesBoundedIsolatedCaptureWithoutExposingMutableArray"
+        ]
+      },
+      {
+        "name": "ama.canonical.CanonicalValueCodecTest",
+        "cases": [
+          "literalPrimitiveVectors",
+          "cancellationDuringScanSortAndHashNeverReturnsSuccess",
+          "unsignedUtf8SortPreservesListOrderAndExactControls",
+          "everyCanonicalBudgetBoundaryAndPlusOne",
+          "frozenEntriesRejectDuplicateBeforeConversionAndRejectLoneSurrogates"
+        ]
+      },
+      {
+        "name": "ama.minutes.contract.FinalAndCoverageTest",
+        "cases": [
+          "newTargetOrHashInvalidatesReviewAndMissingFinalInputFails",
+          "latestContraryExactScopeWinsAndPartialReviewsNeverGiveWholeCredit",
+          "independentFullFinalProjectionAndFrozenMembershipIgnoresLaterReview"
+        ]
+      },
+      {
+        "name": "ama.minutes.contract.GenerationFingerprintTest",
+        "cases": [
+          "fixedFenceChangesDigestAndRowBaseMustMatch",
+          "completeIndependentEmptyGenerationVector",
+          "taskVerificationRejectsCrossInputAndMissingOrConflictingHistoricalFences",
+          "computeCannotPretendUninterpretedArchiveFactsAreValidated"
+        ]
+      },
+      {
+        "name": "ama.minutes.contract.HashProfilesTest",
+        "cases": [
+          "completeIndependentConfirmationVectorAndFourMarkSetOrder",
+          "confirmationCannotClaimRawProfileChainWithoutConfiguredArchiveReader",
+          "eachSavedMarkAdditionAndRemovalChangesWholeConfirmationDomain",
+          "reviewSourcesRejectsSupportiveSubsetAndFullContentChangesTargetHash",
+          "materialReviewCannotBypassOwningRawArchiveChain",
+          "completeIndependentReviewTargetAndSourcesVectors"
+        ]
+      },
+      {
+        "name": "ama.minutes.contract.SourceAndSupportTest",
+        "cases": [
+          "aliasesAndFullTargetsValidatedWithoutInferringTruth",
+          "deterministicAliasesTranscriptFirstAndExactDedup",
+          "scalarAnchorHashesWholeTextAndFormatsCanonicalAscii",
+          "backgroundOnlyActionsStayUnsupportedAndSuggestionsNeverAcceptIdentity",
+          "unitMembershipUsesSavedPhysicalParagraphGapsAndVersion",
+          "syntheticAudioVersionHasNullMaterialAndParserFields",
+          "danglingDuplicateRangeAndPartialScopeNeverSucceed"
+        ]
+      },
+      {
+        "name": "ama.minutes.contract.StoredSourceGraphTest",
+        "cases": [
+          "completeIndependentOccurrenceGraphPreservesBothLabelsAndEitherParserHash",
+          "cycleBudgetAndCancellationApplyAcrossAllOrigins",
+          "suppliedMembershipMustBeExactBijection",
+          "artifactFactBudgetCountsUniqueAcquisitionAndRefusesWholeSnapshotExcess",
+          "onePhysicalLocatorKeepsBothActualNoteInputsAndParserContexts",
+          "orphanStoredMembershipCannotBeIgnoredAsAnUnrelatedUsage",
+          "ordinaryCopiedLocalElementNeverAcceptsAttractiveHistoricalInput",
+          "ambiguousPinnedParserSelectionRejectsInsteadOfChoosingOrder"
+        ]
+      },
+      {
+        "name": "ama.transcript.BatchFingerprintTest",
+        "cases": [
+          "verifyComparesActualBatchFingerprintAndReturnsComputedValue",
+          "literalVectorMatchesIndependentBytes",
+          "orderAndEveryIdentityFieldAffectDigest",
+          "canonicalBudgetsAndCancellationNeverReturnSuccess",
+          "verifyRejectsMissingExtraDuplicateForeignAndContradictoryMetadata",
+          "invalidOrIncompleteMembersFailClosed"
+        ]
+      },
+      {
+        "name": "ama.transcript.TranscriptImportProducerTest",
+        "cases": [
+          "independentProducerGoldenPreservesLongBitsAndEverySemanticField"
+        ]
+      },
+      {
+        "name": "ama.storage.ContractFixtureTest",
+        "cases": [
+          "unknownBackendSelectorCannotSilentlyRunLocalInstead"
+        ]
+      },
+      {
+        "name": "ama.support.ContractClientTest",
+        "cases": [
+          "preservesStatusAndJsonBodyAcrossRealHttp",
+          "rejectsCrossOriginRequestsBeforeSendingHeaders"
+        ]
+      },
+      {
+        "name": "ama.worker.PreparedWorkerLoopTest",
+        "cases": [
+          "selectedRenewalDrainsBeforeCompletionEntry",
+          "ordinaryCompletionFailureNeverStartsSecondCompletion",
+          "closeWhileCompletionWaitsSuppressesCallback",
+          "preparationFinishesBeforeSingleQueueOwnedCallback",
+          "nullPreparedCallbackHasOneQuarantineCompletion",
+          "preparationFailureHasOneQuarantineCompletion",
+          "lostHeartbeatSuppressesPreparedCallback",
+          "otherQueueImplementationsRejectAtomicEffectsWithoutRunningThem",
+          "preparedCompletionFailureNeverStartsSecondCompletion"
+        ]
+      },
+      {
+        "name": "ama.worker.WorkerLoopTest",
+        "cases": [
+          "independentHeartbeatRunsDuringBlockedHandler",
+          "boundedPoolStartsSecondHandlerOnlyAfterFirstReturns",
+          "blockedCpuHandlerDoesNotConsumeIoCapacity"
+        ]
+      },
+      {
+        "name": "ama.worker.WorkerShutdownTest",
+        "cases": [
+          "failedAbortStillCancelsAllExecutionsAndClosesBackendOnce",
+          "interruptedCloseStillCleansUpAndPreservesInterruption"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "final-local-lifetime-custody",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixOpenIT"
+    ],
+    "exit": 0,
+    "utc": "2026-10-23T18:49:11.630990+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixOpenIT",
+        "cases": [
+          "genuineLocalHeadersExitAtBatchDeadlineBeforeFixtureRelease",
+          "genuineLocalPreparationExitsOnRealRenewalLossBeforeErrorBodyRelease",
+          "genuineLocalPreparationExitsAtBatchDeadlineBeforeErrorBodyRelease"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "finite-fixture-maintenance",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixMaintenanceIT"
+    ],
+    "exit": 1,
+    "utc": "2026-10-23T18:35:00.707404+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 1,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixMaintenanceIT",
+        "cases": [
+          "prelinkedFailedFixtureOnly"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "finite-fixture-maintenance-actor-corrected",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixMaintenanceIT"
+    ],
+    "exit": 1,
+    "utc": "2026-10-23T18:36:13.495832+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 1,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixMaintenanceIT",
+        "cases": [
+          "prelinkedFailedFixtureOnly"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "finite-fixture-maintenance-times-corrected",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixMaintenanceIT"
+    ],
+    "exit": 0,
+    "utc": "2026-10-23T18:37:02.118491+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixMaintenanceIT",
+        "cases": [
+          "prelinkedFailedFixtureOnly"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "green-local-open",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixOpenIT"
+    ],
+    "exit": 0,
+    "utc": "2026-10-23T18:40:00.955411+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixOpenIT",
+        "cases": [
+          "genuineLocalPreparationExitsOnRealRenewalLossBeforeErrorBodyRelease",
+          "genuineLocalPreparationExitsAtBatchDeadlineBeforeErrorBodyRelease"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "green-s3-open",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixS3OpenIT"
+    ],
+    "exit": 0,
+    "utc": "2026-10-23T18:42:27.136327+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixS3OpenIT",
+        "cases": [
+          "genuineS3ErrorOpenExitsAtBatchDeadlineBeforeProxyRelease",
+          "genuineS3ControlOpenExitsAtBatchDeadlineBeforeProxyRelease",
+          "genuineS3ControlOpenExitsOnRealRenewalLossBeforeProxyRelease"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "green-shutdown",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "WorkerShutdownTest"
+    ],
+    "exit": 1,
+    "utc": "2026-10-23T18:28:38.806151+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "green-shutdown-compile-corrected",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "WorkerShutdownTest"
+    ],
+    "exit": 0,
+    "utc": "2026-10-23T18:29:05.927050+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.worker.WorkerShutdownTest",
+        "cases": [
+          "failedAbortStillCancelsAllExecutionsAndClosesBackendOnce",
+          "interruptedCloseStillCleansUpAndPreservesInterruption"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "local-before-headers",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixOpenIT#genuineLocalHeadersExitAtBatchDeadlineBeforeFixtureRelease"
+    ],
+    "exit": 0,
+    "utc": "2026-10-23T18:46:28.329463+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixOpenIT",
+        "cases": [
+          "genuineLocalHeadersExitAtBatchDeadlineBeforeFixtureRelease"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "red-local-batch-clean-fixture",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixOpenIT#genuineLocalPreparationExitsAtBatchDeadlineBeforeErrorBodyRelease"
+    ],
+    "exit": 1,
+    "utc": "2026-10-23T18:37:43.903113+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixOpenIT",
+        "cases": [
+          "genuineLocalPreparationExitsAtBatchDeadlineBeforeErrorBodyRelease"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "red-local-open",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixOpenIT"
+    ],
+    "exit": 1,
+    "utc": "2026-10-23T18:31:58.095821+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "red-local-open-accessor-corrected",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixOpenIT"
+    ],
+    "exit": 1,
+    "utc": "2026-10-23T18:33:18.089336+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 2,
+    "failures": 1,
+    "errors": 1,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixOpenIT",
+        "cases": [
+          "genuineLocalPreparationExitsOnRealRenewalLossBeforeErrorBodyRelease",
+          "genuineLocalPreparationExitsAtBatchDeadlineBeforeErrorBodyRelease"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "red-local-renewal-clean-fixture",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixOpenIT#genuineLocalPreparationExitsOnRealRenewalLossBeforeErrorBodyRelease"
+    ],
+    "exit": 1,
+    "utc": "2026-10-23T18:38:27.550540+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixOpenIT",
+        "cases": [
+          "genuineLocalPreparationExitsOnRealRenewalLossBeforeErrorBodyRelease"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "red-s3-control-open",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixS3OpenIT#genuineS3ControlOpenExitsAtBatchDeadlineBeforeProxyRelease"
+    ],
+    "exit": 1,
+    "utc": "2026-10-23T18:41:13.032167+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixS3OpenIT",
+        "cases": [
+          "genuineS3ControlOpenExitsAtBatchDeadlineBeforeProxyRelease"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "red-shutdown",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "WorkerShutdownTest"
+    ],
+    "exit": 1,
+    "utc": "2026-10-23T18:27:43.744819+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 2,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.worker.WorkerShutdownTest",
+        "cases": [
+          "failedAbortStillCancelsAllExecutionsAndClosesBackendOnce",
+          "interruptedCloseStillCleansUpAndPreservesInterruption"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  },
+  {
+    "run": "s3-before-headers",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task05FixS3OpenIT#genuineS3HeadersOpenExitsAtBatchDeadlineBeforeProxyRelease"
+    ],
+    "exit": 0,
+    "utc": "2026-10-23T18:47:11.309035+00:00",
+    "source_seal": "source.json",
+    "limits": "512MiB / 2 active processors",
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "ama.storage.Task05FixS3OpenIT",
+        "cases": [
+          "genuineS3HeadersOpenExitsAtBatchDeadlineBeforeProxyRelease"
+        ]
+      }
+    ],
+    "qualification": "fresh runner-collected XML; compile/setup failures may have zero XML"
+  }
+]

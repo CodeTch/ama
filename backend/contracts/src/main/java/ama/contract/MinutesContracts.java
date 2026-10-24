@@ -13,7 +13,7 @@ public final class MinutesContracts {
         INVALID_ARGUMENT, INPUT_INVALID, INVALID_UTF8, INVALID_JSON, UNKNOWN_FIELD, INVALID_SCHEMA,
         INVALID_SCALAR, INVALID_ID, INVALID_NUMBER, INVALID_DATE, BUDGET_EXCEEDED, SOURCE_NOT_IN_INPUT,
         LOCATOR_INVALID, TARGET_INVALID, FINGERPRINT_MISMATCH, CAPABILITY_UNAVAILABLE, PROFILE_UNAVAILABLE,
-        CANCELLED, READ_FAILED, PROVENANCE_UNAVAILABLE, SOURCE_CONTEXT_AMBIGUOUS, SOURCE_MEMBERSHIP_MISMATCH
+        CANCELLED, READ_FAILED, ARCHIVE_IO_UNAVAILABLE, PROVENANCE_UNAVAILABLE, SOURCE_CONTEXT_AMBIGUOUS, SOURCE_MEMBERSHIP_MISMATCH
     }
     /** Deliberately contains no raw input, cause, suppressed exception or writable stack trace. */
     public static final class Failure extends RuntimeException {
@@ -326,10 +326,26 @@ public final class MinutesContracts {
     }
     public record Fence(long meetingRevision,long subjectBusinessVersion,long cancelEpoch) {public Fence {uint(meetingRevision);uint(subjectBusinessVersion);uint(cancelEpoch);}}
     public record GenerationFacts(String inputId,StoredProvenanceFacts stored) {public GenerationFacts {uuid(inputId);require(stored!=null,FailureCode.INVALID_ARGUMENT);}}
+    /** Actual saved revision facts; does not assert confirmation or write permission. */
+    public record ConfirmationDraft(String meetingId,String revisionId,StoredProvenanceFacts stored) {
+        public ConfirmationDraft {uuid(meetingId);uuid(revisionId);require(stored!=null,FailureCode.INVALID_ARGUMENT);}
+    }
     public record ConfirmationFacts(String confirmationId,StoredProvenanceFacts stored) {public ConfirmationFacts {uuid(confirmationId);require(stored!=null,FailureCode.INVALID_ARGUMENT);}}
     public enum ReviewKind { SOURCE_SUPPORT,ACTION_FIELDS }
     public record ReviewFacts(String meetingId,ReviewKind kind,String elementId,String minutesRevisionId,Anchor anchor,List<String> selectedEvidenceIds,StoredProvenanceFacts stored) {
         public ReviewFacts {uuid(meetingId);require(kind!=null&&(elementId==null)!=(minutesRevisionId==null),FailureCode.INPUT_INVALID);if(elementId!=null)uuid(elementId);if(minutesRevisionId!=null)uuid(minutesRevisionId);require((kind==ReviewKind.SOURCE_SUPPORT)==(anchor!=null),FailureCode.TARGET_INVALID);selectedEvidenceIds=List.copyOf(selectedEvidenceIds);require(stored!=null,FailureCode.INVALID_ARGUMENT);}
+    }
+    /** Prospective final identity over actual saved facts; deliberately has no source hash or persisted row. */
+    public record FinalDraft(String confirmationId,String meetingId,long meetingRevision,String infoRevisionId,String rosterRevisionId,
+                             String transcriptConfirmationId,String minutesRevisionId,String materialSnapshotId,String elementSetId,
+                             String templateRevisionId,String exclusionRevisionId,String inputFingerprint,String confirmedBy,String confirmedAt,
+                             List<String> reviewIds,StoredProvenanceFacts stored) {
+        public FinalDraft {
+            for(String id:List.of(confirmationId,meetingId,infoRevisionId,rosterRevisionId,transcriptConfirmationId,minutesRevisionId,elementSetId,templateRevisionId,exclusionRevisionId))uuid(id);
+            if(materialSnapshotId!=null)uuid(materialSnapshotId);positive(meetingRevision);hash(inputFingerprint);
+            require(confirmedBy!=null&&!confirmedBy.isBlank()&&confirmedAt!=null&&stored!=null,FailureCode.INVALID_ARGUMENT);
+            reviewIds=List.copyOf(reviewIds);var unique=new HashSet<String>();for(String id:reviewIds){uuid(id);require(unique.add(id),FailureCode.SOURCE_MEMBERSHIP_MISMATCH);}
+        }
     }
     public record FinalFacts(String confirmationId,StoredProvenanceFacts stored) {public FinalFacts {uuid(confirmationId);require(stored!=null,FailureCode.INVALID_ARGUMENT);}}
 

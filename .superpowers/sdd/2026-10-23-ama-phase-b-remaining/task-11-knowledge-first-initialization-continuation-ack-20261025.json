@@ -1,0 +1,33 @@
+{
+  "status": "ONE_FIRST_INITIALIZATION_CONTINUATION_APPROVED_NOT_STORE_REBUILD",
+  "issuedUtc": "2026-10-24T17:29:06.963730+00:00",
+  "issuedBy": "/root/b_continuation_coordinator under explicitrootcontrolledfixtureauthority",
+  "owner": "task11-9714255c9e2c4861a2795cfaaec8e97f",
+  "credentialAckSha256": "3f465b3e881be207cad18514682d7fb6c1082b0ec2797cf37d57db93b2575055",
+  "identities": {
+    "assertionKeyId": "assertion-d14929352e2b4ee8b1b87fd42b6cd483",
+    "clientId": "task11-client-4eb92c355faf4bc496ac7e538d00f876",
+    "delegationKeyId": "delegation-dcdec1c1d49d45df84c0431caef6d967",
+    "providerId": "CONTROLLED_KNOWLEDGE_V1",
+    "storeInstanceId": "98863bbd-a519-4553-9a09-1246ab221ec9"
+  },
+  "host": "127.0.0.1",
+  "port": 46287,
+  "store": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/knowledge.sqlite",
+  "endpoint": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/endpoint.json",
+  "endpointSha256": "49e1e12d7ce9fbe78bab9064c882bc80f9ea177a35aff4609224778ff57c26eb",
+  "failedWindow": "artifacts/phase-b/b-remaining/task-11/publication-main-01",
+  "prestartEvidence": "artifacts/phase-b/b-remaining/task-11/publication-main-01/pipeline-8aa0c3ba-b113-488c-b5ca-6bd69a91a6ae/knowledge-before-start.json",
+  "prestartSha256": "63ccec766770c039ba2d733ac20ad3c3ff48cad7cf3c0d99390500cacf84836c",
+  "enoentLogSha256": "93ac20c5337c31d51760aaaa4a29681bad7938d5ed90977eb7967f671abfa386",
+  "readOnlyObservations": {
+    "storeAndWalShmAbsent": true,
+    "matchingLiveProviderProcesses": [],
+    "loopbackPortNotListening": true
+  },
+  "allowedInitializationAttempts": 1,
+  "requiredConsumePath": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/first-initialization-continuation-consumed.json",
+  "consumeRule": "Before first corrected process launch create consume file atomically O_EXCL/0600 containing publicACK hash+exact endpoint/store/IDs; never delete/reuse. Any later missingstore fails closed even ifACKstillpresent. If startupoutcome partial inspect exactstate, noautomaticretry/newstore/newidentity. Existingstore restart reloadsamefile/keys.",
+  "allowedChange": "Fix absolute repo scriptpath/cwd and include exactprovider source innewwindow. Do not alter/remove endpoint or regeneratekeys/storeID.",
+  "qualification": "Originalwrongpath process emittedENOENT beforeprovider code load; no storedrecord/KBPOST ormarker; first legitimateinitialize continuation only, notproofzeroeffect foranybusinessrequest. Existingpublication-main-01 remains1FAIL/noKBbusinessqualification."
+}

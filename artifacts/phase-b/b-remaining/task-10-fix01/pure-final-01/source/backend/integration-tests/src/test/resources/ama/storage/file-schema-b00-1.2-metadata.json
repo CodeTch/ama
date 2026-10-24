@@ -1,0 +1,1070 @@
+{
+  "provenance": "Independent adopted B00-1.2 actual MySQL capture; subset only, not candidate-derived",
+  "source": "docs/acceptance/b/database-upload-addendum-metadata-evidence.json",
+  "source_sha256": "3de8041db8860f1547ff53a94b4ddd79470c4881340111fdafbc3ce5322399ad",
+  "mysql_version": "8.4.6",
+  "metadata": {
+    "tables": [
+      {
+        "table": "file_cleanup",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "file_object",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "file_reference",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "storage_backend",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "upload_part",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "upload_session",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      }
+    ],
+    "columns": [
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "file_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "backend_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "namespace",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(512)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "object_key",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "expected_location_revision",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "expected_reference_epoch",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "state",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "not_before",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "attempt",
+        "default": "0",
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_cleanup",
+        "column": "last_error",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_object",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_object",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_object",
+        "column": "backend_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_object",
+        "column": "storage_type",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_object",
+        "column": "namespace",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(512)",
+        "extra": "",
+        "table": "file_object",
+        "column": "object_key",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "file_object",
+        "column": "provider_version_id",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "file_object",
+        "column": "display_name",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_object",
+        "column": "size_bytes",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "file_object",
+        "column": "sha256",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_object",
+        "column": "location_revision",
+        "default": "0",
+        "ordinal": 11,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_object",
+        "column": "state",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "file_object",
+        "column": "reference_epoch",
+        "default": "0",
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "file_object",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_reference",
+        "column": "file_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_reference",
+        "column": "owner_kind",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "file_reference",
+        "column": "owner_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "file_reference",
+        "column": "purpose",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "storage_backend",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "storage_backend",
+        "column": "storage_type",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "storage_backend",
+        "column": "status",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "storage_backend",
+        "column": "config_revision",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "upload_part",
+        "column": "upload_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "upload_part",
+        "column": "part_no",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "upload_part",
+        "column": "size_bytes",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "upload_part",
+        "column": "sha256",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "upload_part",
+        "column": "provider_token",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "backend_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "namespace",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(512)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "object_key",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "upload_session",
+        "column": "cancel_epoch",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "upload_session",
+        "column": "expected_size",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "expected_sha256",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "upload_session",
+        "column": "provider_upload_token",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "state",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "completed_file_id",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "updated_at",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "upload_session",
+        "column": "display_name",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "upload_session",
+        "column": "purpose",
+        "default": null,
+        "ordinal": 15,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 1,
+        "name": "cleanup_due",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "cleanup_due",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "not_before",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "cleanup_due",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "cleanup_target",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "backend_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "cleanup_target",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "namespace",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "cleanup_target",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "object_key",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_file_cleanup_0",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "file_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_cleanup",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "file_cleanup",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "file_cleanup",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "created_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "file_cleanup",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "file_location",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "backend_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "file_location",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "namespace",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "file_location",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "object_key",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "file_meeting",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "file_meeting",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "file_meeting",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_object",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "file_ref_owner",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "owner_kind",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "file_ref_owner",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "file_ref_owner",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "file_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "file_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "owner_kind",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "owner_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "file_reference",
+        "column": "purpose",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "storage_backend",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "upload_part",
+        "column": "upload_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "upload_part",
+        "column": "part_no",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_upload_session_2",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "completed_file_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "upload_meeting",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "upload_meeting",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "upload_meeting",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "upload_target",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "backend_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "upload_target",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "namespace",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "upload_target",
+        "type": "BTREE",
+        "table": "upload_session",
+        "column": "object_key",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      }
+    ],
+    "checks": [
+      {
+        "name": "ck_file_cleanup_0",
+        "table": "file_cleanup",
+        "clause": "(`state` in (_ascii\\'PENDING\\',_ascii\\'RUNNING\\',_ascii\\'FAILED\\',_ascii\\'COMPLETE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_file_object_0",
+        "table": "file_object",
+        "clause": "(`storage_type` in (_ascii\\'local\\',_ascii\\'s3\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_file_object_1",
+        "table": "file_object",
+        "clause": "(`state` in (_ascii\\'AVAILABLE\\',_ascii\\'DELETE_PENDING\\',_ascii\\'DELETED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_storage_backend_0",
+        "table": "storage_backend",
+        "clause": "(`storage_type` in (_utf8mb4\\'local\\',_utf8mb4\\'s3\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_storage_backend_1",
+        "table": "storage_backend",
+        "clause": "(`status` in (_utf8mb4\\'WRITABLE\\',_utf8mb4\\'READ_ONLY\\',_utf8mb4\\'DISABLED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_upload_part_0",
+        "table": "upload_part",
+        "clause": "(`part_no` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_upload_session_0",
+        "table": "upload_session",
+        "clause": "(`state` in (_ascii\\'OPEN\\',_ascii\\'FINALIZING\\',_ascii\\'COMPLETED\\',_ascii\\'ABORTED\\',_ascii\\'FAILED\\'))",
+        "enforced": "YES"
+      }
+    ],
+    "foreign_keys": [
+      {
+        "name": "fk_file_cleanup_0",
+        "table": "file_cleanup",
+        "column": "file_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "file_object",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_file_cleanup_1",
+        "table": "file_cleanup",
+        "column": "backend_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "storage_backend",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_file_object_0",
+        "table": "file_object",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_file_object_1",
+        "table": "file_object",
+        "column": "backend_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "storage_backend",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_file_reference_0",
+        "table": "file_reference",
+        "column": "file_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "file_object",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_upload_part_0",
+        "table": "upload_part",
+        "column": "upload_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "upload_session",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_upload_session_0",
+        "table": "upload_session",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_upload_session_1",
+        "table": "upload_session",
+        "column": "backend_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "storage_backend",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_upload_session_2",
+        "table": "upload_session",
+        "column": "completed_file_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "file_object",
+        "update": "RESTRICT",
+        "ordinal": 1
+      }
+    ]
+  }
+}

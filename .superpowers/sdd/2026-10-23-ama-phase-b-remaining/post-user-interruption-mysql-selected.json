@@ -1,0 +1,37 @@
+{
+  "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+  "name": "/ama-test-b01-ad9f1af29eff",
+  "owner": "remaining-20261023",
+  "image_reference": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "image_id": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "mounts": [
+    {
+      "Destination": "/var/lib/mysql",
+      "Driver": "local",
+      "Mode": "",
+      "Name": "d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b",
+      "Propagation": "",
+      "RW": true,
+      "Source": "/var/lib/docker/volumes/d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b/_data",
+      "Type": "volume"
+    }
+  ],
+  "ports_config": {
+    "3306/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": ""
+      }
+    ]
+  },
+  "ports_actual": {},
+  "memory": 805306368,
+  "memory_swap": 805306368,
+  "nano_cpus": 1000000000,
+  "pids_limit": 256,
+  "state": {
+    "status": "exited",
+    "exit_code": 255,
+    "oom": false
+  }
+}

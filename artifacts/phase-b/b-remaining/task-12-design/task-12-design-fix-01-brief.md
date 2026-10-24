@@ -1,0 +1,24 @@
+# Task12 design fix round1/5
+
+Read this first, then the complete original review: task-12-web-business-loop-design-review.md (SHA b9bbedb4fa71cac0ccf3c65c62d00703b947c9e10c6031586702308260f43566). Original designer resumes; no subagents. Original design/review bytes stay unchanged. Root FULLREAD whole design/review and independently checked V008 LONGTEXT columns and JdbcMeetingRepository.read SELECT * actual source. This finding is confirmed. Root reread fix-loop and receiving-review immediately before dispatch.
+
+Write additive task-12-web-business-loop-design-r1.md and task-12-web-business-loop-design-r1-closure.md ONLY. Repair this finding and directly related consistency; no unrelated redesign. No source, Git/index/HEAD, DB, Docker, private env, network, browser, dependency, resource or runtime-test operations. Reuse genuine producer protected readers where actually available; no invented public authority or second ACL gate. Preserve existing canonical rank and complete protected key sets. Actual producer/source reconciliation remains before source dispatch. Updated context: Task4 author committed59c8b080 but source review active; Task11R1 scoped design review PASS root FULLREAD approved, adoption imminent, still no source/DDL/runtime qualification.
+
+## Important — T12DR-01: assign a concrete pre-transfer content-budget protocol to the new backend readers
+
+Location: `task-12-web-business-loop-design.md:35` (new meeting list), `:37–43` (new workspace/category readers and shared read rules), and `:157` (backend acceptance).
+
+The design limits page size and response shape and forbids copying unbounded SELECT * helpers, but does not specify who protects content-bearing database reads before transfer, or how the new Task12 readers satisfy that requirement. A page of at most 50 rows is not a content bound: the existing schema stores meeting name and summary as LONGTEXT, and roster display names as LONGTEXT. The new list explicitly returns saved names. Existing saved-info access also transfers the entire info row, so composing workspace/info from that helper does not establish a bounded acquisition merely because the final DTO is smaller.
+
+Focused source evidence: `backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql:67`, `:69`, `:94`; `backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java:130–136`. The latter is contextual existing source, not a Task12 implementation finding or permission to rewrite historical source in this design task.
+
+The binding pre-transfer rule is explicit in `docs/superpowers/specs/2026-10-23-ama-phase-b-controlled-runtime.md:11`; Task6 R1 lines 148–158 and Task10 design lines 59–69 specify stable metadata protection and budget reservation before LONGTEXT reaches JDBC, including display labels, plus protected rereads. Task12's finite pagination/JSON response bounds and client draft/file memory limits do not replace that server obligation. An oversized saved name or concurrent change between length check and fetch can otherwise consume driver/application memory before the response limit or UI ever sees it.
+
+Required design repair: name Task12's backend projection owner and the B03/producer integration seam for this responsibility. For new list/workspace/category and any composed info/roster content reads, specify metadata-only bounded ID discovery, fresh genuine authorization, retained authentic root/row/parent protection in existing rank, complete protected key sets, and cumulative per-field UTF8/scalar/UTF16/copy/escaped-response reservation before any text-bearing SELECT. Reuse the reviewed producer protected reader where it actually provides these guarantees; do not add a second ACL/gate or claim generic DTO/page bounds suffice. A reviewed equivalent server-side size gate is acceptable only if it proves oversized fields never reach the driver. Overflow, inability to establish stable protection and missing capability must fail before transfer without truncating successful content or inventing a product name-length cap.
+
+Add focused prospective actual-MySQL instrumentation to the new reader acceptance: oversized saved name/display/category label and a length-check-versus-read race, including repeated/final read where applicable, prove no content-bearing SELECT occurs before protected reservation and no denied content is returned. Existing producer tests alone cannot establish this for newly introduced Task12 query paths.
+
+
+## Closure contract
+
+Give disposition, changed sections, focused source checks if necessary, complete actual original-to-R1 diff checks and exact commands/results; hashes/lengths of original, R1 and review. No runtime cases claimed passed. Root later packages actual delta for scoped independent ADDRESSED/NOTADDRESSED plus newly introduced breakage only. Return concise status/paths/rawSHA/concerns.
