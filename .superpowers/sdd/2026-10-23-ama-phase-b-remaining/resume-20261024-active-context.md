@@ -1,3 +1,55 @@
+# ACTIVE current node: Task10 fix1 scoped review
+
+FixHEAD86777940c3f9500b1b89d884deaae2a48740d9a9/BASE5657. SameuniqueAstra b10_independent_review reviewsI1/I2+directregression only; sameSol finalcommit/OIDdelta. Noextra tests/fullTask10review. Awaitgates→minimaladoption/consumerACK→Task11 preparedactivation; iffindingssameauthorfixloop. M1/F5/legacyintegrityrisk/twoUNKNOWNOPEN. Currentoverlay46151.
+
+# ACTIVE current node: Task10 fix1 source frozen, custody/commit
+
+Finalaffected6PASS+pure32PASS+actual4legacyIOcaller1PASS; no businesstestsremaining. Authornewreport/sourcewindowmap/protection/exactnewscopeprivatecheck/ownfixcommit, sameSol newwindowindexparallel. Then sameAstra b10_independent_review scoped5657..fixHEAD onlyI1/I2/directregression. M1Task11/F5Task13/B-FINAL-REPLAY-INTEGRITY-01 andtwoUNKNOWNremainOPEN. Date now2026-10-25AsiaShanghai; existing20261024paths retained. Currentoverlay46151.
+
+# ACTIVE current node: Task10 fix round1/5
+
+Unique fullreview on97e→5657 Needsfixes:0Critical2Important1Minor. Sameauthor b10_minutes_editor fixes I1 ordinary-vs-nonordinary prepfailed concurrentreplay and I2 prospective complete-domain capacity/maxAttempts/mergedsourcegrowth under `task-10-fix01-author-brief-20261024.md`, BASE5657. FocusedRED/GREEN/affectedregression only, thensame-reviewer5657..fixHEAD. M1Task11eligibility/F5Task13/twoUNKNOWNremainOPEN. NoTask11product/DDL, currentoverlay46151.
+
+# ACTIVE current node: Task10 unique independent review
+
+OwnHEAD5657d24a4a58916dfca14a29e352ad361dda3319/BASE97e788fe, notadopted. FreshuniqueAstrahigh b10_independent_review fullSPEC+quality; sameSol finalcommit/pure32delta parallel. Fullcurrentdiff+fullrawdiff+manifest ready. No repeatedtests. Awaitverdict→sameauthorfixloop ifneeded, otherwiseminimaladoption/consumerACK→Task11 existingpreparedactivation (neverrepeatSQLprobe). BothUNKNOWNs/F5/Task11legacyeligibility obligations explicit. Currentoverlay46151.
+
+# ACTIVE current node: Task10 source frozen, custody and own commit
+
+Author finalchecks complete: empty1/affected3/pure32 PASS, OAS+2actualDTO PASS, protected123051same andschema15x10same. Exactownpath stage+private raw/staged scan/report/commit ongoing. Do not repeatbusinessmatrix. Next fixedBASE97e788fe→authorHEAD unique fullTask10 independentAstrahigh review plus mechanicalfinaldelta. BothUNKNOWNs andF5 remain explicit; noTask11product until adoption. Currentoverlay46151.
+
+# ACTIVE current node: Task10 limited retained/CAS final verification
+
+Closing02 first original fact GET+samepermit productsettled; second exactoriginalGET produced UNKNOWN/manualOPEN, distinct old missingcustodyUNKNOWN. Bothprovidersclosed. Read `task-10-closing02-original-facts-disposition-20261024.md`. Hold superseded: sameauthor continues only retainedSTALE/CAS narrowedfix andaffectedregression/OAS thenfreeze/scan/commit/uniquereview. Everynewexternalfixture capacity/inflight guard beforegeneration/marker plus unresolvedfactfailfast. No repeatedoriginalGET/resend/reset, bothUNKNOWNs retained. Currentoverlay46151.
+
+# ACTIVE current node: Task10 composed F2 evidence and necessary final matrix
+
+Fresh DENIED target GET-only terminal and same-permit settlement succeeded; its window final global lock-trace assertion failed and is preserved. Original trace is not attributable; separately qualify narrow actual denied target-only trace, never reset/terminal shortcut. Original ACTIVE same-fact adopt/HUMAN remains. Original pre-F2 UNKNOWN remains OPEN under custody ruling. Same author now completes bounded writer/review/correction/member/source/rollback/CAS/budget/OAS/affected regressions, then freeze/scan/own commit/unique review. See current-state and author report for latest details; current overlay46151.
+
+# ACTIVE current node: Task10 fresh DENIED F2 qualification released
+
+Root operational/correction addendum in `task-10-f2-original-unknown-custody-ruling-20261024.md` resolves the prior questions. Genuine fair claims may change precise recorded lease/owner/time fields only; old UNKNOWN remains manual unresolved, no GET/observe/resend/business change. Actual qualified correction disabled/NOT_APPLICABLE is valid via same-boot component. One fresh independently sealed DENIED chain now proceeds, then necessary final matrix and independent review. ACTIVE original composed evidence reused, current overlay46151.
+
+# ACTIVE current node: Task10 original UNKNOWN sealed, fresh qualification preparation
+
+Latest ruling `task-10-f2-original-unknown-custody-ruling-20261024.md` supersedes the earlier both-facts-must-close hold below. ACTIVE original permit now product-settled; old DENIED UNKNOWN cannot be attributed to original provider and remains unresolved/manual. One fresh qualification authorized after explicit capacity/provider custody guards; awaiting operational fair-claim clarification. Current effective overlay46151. Continue same author, necessary matrix then unique review; do not resend old UNKNOWN.
+
+# ACTIVE current node: Task10 F2 original fact recovery; new tests held
+
+F2behavior02 ended2FAIL0ERROR. Resolve ACTIVE exacttask e81686bc-dbf6-4102-80ee-07ffa1eff6c6/execution7154f2fd-e931-4218-a87c-94dfc6d6ba68/op447bc5a3-9953-4ba5-8768-646f9e8041c1/permit622be833-7e7c-4cff-8bda-2951145e9a08 (remote/localSUCCEEDED, originalsettlementunconfirmed), then DENIEDinitialgenerationactor task09-e5cd2e28-8c15-479e-bc51-bea8fcb6af50 realMARKED unresolved. Author owns exactreadonly diagnostics/originalstoreGET-only; no newfixture/POST tohidefacts. Usecurrent46151overlay/recoveryACK only. No business testcaseuntilbothfactsclosed. See current-state pendingF2Facts forupdates.
+
+# ACTIVE current node: Task10 post-OOM recovery, effectiveport46151
+
+Use current-state runtime_resource_current and task-10-mysql-recovery-application-ack-20261024.json SHA096cbdc3…; Task10 sameowner overlay `mysql-recovery-20261024/env.sh` is current connection authority. Old44727envs/ACKs unchangedhistorical. SameCIDstartonce, original15historysame, originalcasealreadysettled/r7. Resumeoriginalauthor edits target with explicitdualACK andbeforeaftermemorysamples, neverrepeatbootstrap/helper or resendoldfact. SpecificOOMcauseUNKNOWN; anotherOOM stoptests/diagnose not restartloop.
+
+# ACTIVE current node: Task10 StageB implementation
+
+Task9adoption97e788fe/source591545a4 complete. Task10 sameauthor `/root/b_continuation_coordinator/b10_minutes_editor` explicitly resumedStageB. Exacthelper ranonce/CREATE+GRANT1; owner task10-1e48b41fc5c84a98af3a14b51b17884f, schema ama_t10_1e48b41fc5c8_behavior ready0tables. ActualapplicationACK `task-10-root-fixture-application-ack-20261024.json` SHA808a552c4afbfdb77e9663979ba44f6068f11b6af7611adb633af4bbd2991df3. Next ownnormal15bootstrap/rerun0 thenfulladoptedTask10TDD. Neverrerunhelper/newUUID/reset. PreparedStageA complete, donotrepeat.
+
+# ACTIVE current node: Task10 StageA final source repin
+
+Task9 adopted97e788fe96744af88513cc33bfed652b204c9972/source591545a4, exactconsumerACK issued. Task10 newauthorStageA only; preparedhelper remainsunused untilStageA thenactualfixtureACK. Read Task10brief and latestcurrentstate. F5finalreviewOPEN and realmulti-version/currentbodyreplay mandatoryTask10.
+
 # ACTIVE current node: Task9 adoption records → Task10 StageA
 
 2026-10-24T11:53:54.439232+00:00 — source591545a4; F1–F4 scopedreviewPASS and finaldelta custodydone. Adoption doc/mirror ready; exactcoordinator scan/commit and actualconsumerACK next, then freshTask10authorStageA. F5Minor remainsTask13OPEN; realmulti-versionmarker/currentbodyreplay andformalnew/fullLOCAL+S3 remainlatergates. Do notredo9 tests/review.

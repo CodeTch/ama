@@ -1,3 +1,11 @@
+# 最新节点：Task10 已通过限定采用门禁，接续 Task11 StageA（2026-10-25）
+
+Task10 source86777940、唯一复审I1/I2 ADDRESSED/scoped Pass/Approved，M2仅独立报告erratum。采用记录commit及actualconsumerACK正在封存；随后新Task11作者只做最终upstream/resource/15prefix最小repin，旧R1SQL probe29PASS复用，未授权提前DDL应用。当前连接权威是Task10 recovery overlay46151，旧44727历史不改。M1旧资格投影、F5、B-FINAL-REPLAY-INTEGRITY-01与两UNKNOWN逐项OPEN。动态状态只看产品树W/current-state.json；继续11→12→13全B后停，不入C/D/E/F。
+
+# 最新节点：Task10 StageA（Task9已采用）
+
+Task9 adopted `97e788fe96744af88513cc33bfed652b204c9972`，source `591545a4a1a4ce27edea54baa94e9d11666807b7`。Task10唯一作者 `/root/b_continuation_coordinator/b10_minutes_editor` 正在已批准brief的StageA最小最终repin；完成后由协调者执行既有已审helper一次、另发fixture ACK，再同作者StageB。当前无Task10产品/DB启动。动态状态以唯一产品树 `/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json` 为准。继续全部B，完成10→11→12→13/全分支后停止，不进入C/D/E/F；旧暂停仅历史。
+
 # 最新接续节点：Task9采用记录 → Task10（2026-10-24）
 
 用户已明确继续全部剩余B。Task9源码591545a4，F1–F4修复独立scoped PASS、机械增量核验完成；采用记录正在落commit，随后Task10 StageA最小上游repin。精确动态状态见唯一产品树 `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json` 与 `resume-20261024-active-context.md`；旧暂停/旧response-budget节点仅历史。F5 Minor保留Task13裁定。完成10→11→12→13和全分支审查后停止，不进入C/D/E/F。不得新建树/reset/clean/重bootstrap/重跑已闭合窗口。

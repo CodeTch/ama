@@ -1,0 +1,78 @@
+{
+  "generatedAtUtc": "2026-10-24T15:21:49.488024+00:00",
+  "role": "limited-final-incremental-mechanical-custody",
+  "base": "97e788fe96744af88513cc33bfed652b204c9972",
+  "head": "5657d24a4a58916dfca14a29e352ad361dda3319",
+  "commit": {
+    "changedPaths": 41957,
+    "indexEmpty": true,
+    "stageScopePaths": 41952,
+    "stageScopeAdditionalPaths": [
+      "artifacts/phase-b/b-remaining/task-10/final-verification/provider-secret-enumeration.json",
+      "artifacts/phase-b/b-remaining/task-10/own-stage-pathspec",
+      "artifacts/phase-b/b-remaining/task-10/own-stage-scope.json",
+      "artifacts/phase-b/b-remaining/task-10/private-scan.json",
+      "artifacts/phase-b/b-remaining/task-10/raw-manifest.json"
+    ],
+    "ownSourcePaths": 83,
+    "rawManifestFiles": 41871,
+    "rawCommittedPathsIncludingManifestAndReceipt": 41873,
+    "pathAllowlistExact": true,
+    "sourceManifestSha256": "9fd5334624dc91b79ea581103b35bbfc4741f00e9d7c0430653bc6d1bba43240",
+    "rawManifestSha256": "7ad255eee923da62bdae5de39fb1b94564c67a9182be72500dc67fa827676d41",
+    "privateScanSha256": "b29aa195ebf12f082aaafda6fcc8ed2110bd5746ca4748941b2203a020522575",
+    "reportSha256": "fcc8d968e0345557e2f17c2e65ec614d65ba3d4ef948db7940fdb1fea8f9028c",
+    "sourceExactShaAndBytesChecked": 83,
+    "sourceIssues": [],
+    "rawPathAndCommittedSizeChecked": 41871,
+    "rawCommittedSizeIssues": [],
+    "rawPerFileShaIndependentlyRechecked": 0
+  },
+  "scanReceipt": {
+    "scriptSha256": "8e84f2b70f5c2099430545847741954805b0ed3b4a5acf2978e0d9648c820605",
+    "actualScopeMatchesCommittedPathAndBlobSizes": true,
+    "scope": {
+      "rawRoot": "artifacts/phase-b/b-remaining/task-10",
+      "rawFiles": 41872,
+      "exactStagedPaths": 41957,
+      "uniqueStagedBlobs": 1801,
+      "bytesScannedIncludingOverlap": 353178803
+    },
+    "knownOriginalValueCount": 6,
+    "task9ProviderSecretFiles": 2,
+    "task10ProviderSecretFiles": 0,
+    "uniqueValues": 8,
+    "reportedExactValueHits": 0,
+    "reportedPrivatePemHits": 0,
+    "receiptScannedInMemory": true,
+    "privateValuesReadByThisAudit": false,
+    "scanRerunByThisAudit": false
+  },
+  "protectedReceipt": {
+    "manifestHashMatchesCurrent": true,
+    "pathsCheckedReported": 123051,
+    "differencesReported": 0,
+    "protectedPathsIndependentlyRechecked": 0
+  },
+  "historyReceipt": {
+    "rows": 15,
+    "completeColumns": 10,
+    "baselineEqualReported": true,
+    "sqlPrefixCount": 15,
+    "bootstrapRepeatedReported": false
+  },
+  "newWindowIndex": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-mechanical-sealed-window-index-20261024.json",
+    "window": "pure-transcript-regression-01",
+    "qualifiedPassCases": 32,
+    "freshXml": 6
+  },
+  "issues": [],
+  "limits": [
+    "Old 57 Task10 windows and Task9 evidence reused, not rescanned.",
+    "Raw manifest path and committed blob sizes checked; individual raw SHA entries not independently recomputed.",
+    "Private scan and protected scan receipts checked for scope and fields; no private values, protected paths, or raw secret scan reread.",
+    "No product behavior or SPEC judgment; historical failed windows and two original UNKNOWN facts remain open.",
+    "Private scan receipt records counts and byte total, not each scanned staged path/OID; this audit confirms arithmetic against the final commit, not an independently replayed historical membership proof."
+  ]
+}
