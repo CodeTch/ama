@@ -1,0 +1,27 @@
+{
+  "profile": "ama.transcript-confirmation.v1",
+  "kind": "TRANSCRIPT_CONFIRMATION",
+  "data": {
+    "meetingId": "00000000-0000-0000-0000-000000000001",
+    "revisionId": "00000000-0000-0000-0000-000000000005",
+    "batchId": "00000000-0000-0000-0000-000000000002",
+    "segments": [
+      {
+        "segmentId": "00000000-0000-0000-0000-000000000006",
+        "ordinal": 1,
+        "body": "meeting 7",
+        "sourceFileId": "00000000-0000-0000-0000-000000000003",
+        "sourceParagraph": 4,
+        "startMs": null,
+        "endMs": null,
+        "speakerId": null,
+        "marks": [
+          "KEY",
+          "CONCLUSION",
+          "DISPUTE",
+          "GENERATION_FOCUS"
+        ]
+      }
+    ]
+  }
+}

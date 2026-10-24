@@ -66,8 +66,10 @@ public final class JdbcProcessingIntake {
         var replay=lookup(actor,meeting,scope,keyHash,body,request);
         if(replay.isPresent())return replay.orElseThrow();
         JdbcTranscriptAuthority.PreparedIntake prepared;
+        JdbcTranscriptAuthority.PreparedMinutesTransition pending;
         try {
             prepared=preparer.prepare(actor,meeting,request);
+            pending=Objects.requireNonNull(components).authority().prepareMinutesTransition(actor,meeting);
         }
         catch(ama.contract.MinutesContracts.Failure failure) {
             // Cancellation is not an ordinary preparation failure and must never become an acceptance.
@@ -76,6 +78,7 @@ public final class JdbcProcessingIntake {
             if(winner.isPresent())return winner.orElseThrow();
             throw unavailable();
         }
+        catch(ama.contract.TranscriptContracts.Failure failure){var winner=lookup(actor,meeting,scope,keyHash,body,request);if(winner.isPresent())return winner.orElseThrow();throw failure;}
         catch(ama.contract.FileContracts.NotFound|ama.contract.FileContracts.Conflict failure) {
             var winner=lookup(actor,meeting,scope,keyHash,body,request);
             if(winner.isPresent())return winner.orElseThrow();
@@ -111,16 +114,20 @@ public final class JdbcProcessingIntake {
             var subject=fences.lock(prepared.spec().subject(),false).orElseThrow(ama.contract.ProcessingContracts::unavailable);
             if(subject.businessVersion()!=expected||subject.cancelEpoch()!=prepared.spec().cancelEpoch()||subject.deleted())throw conflict();
             var authority=c.authority();
+            var transition=authority.beginMinutesTransition(pending,actor,meeting,gate);
             var reserved=authority.reserveIntake(gate,prepared);
+            authority.lockMinutesTransitionDomain(transition,gate);
             var bindings=new ArrayList<FileRegistry.Binding>();
             for(var original:authority.originals(prepared))bindings.add(new FileRegistry.Binding(registry.prelock(gate,new FileRegistry.Reference(JdbcTranscriptAuthority.REFERENCE,prepared.batchId(),JdbcTranscriptAuthority.PURPOSE),original.file().fileId(),reserved),original.file().locationRevision(),original.uploadId()));
             var receipt=registry.prelockSources(gate,request.orderedFileIds(),false).orElseThrow(ama.contract.ProcessingContracts::unavailable);
+            authority.lockMinutesTransitionTasks(transition,gate);
             var held=authority.insertAndReadNew(reserved,receipt);
             registry.bindAll(receipt,bindings);
             authority.requireHeld(held,gate,prepared.spec());
             if(j.update("UPDATE meeting SET revision=?,transcript_confirmation_id=NULL,final_confirmation_id=NULL,needs_generation=1,updated_at=UTC_TIMESTAMP(6) WHERE id=? AND revision=? AND cancel_epoch=? AND ever_published=0 AND stage<>'PUBLISHED' AND lifecycle='ACTIVE' AND governance_state='ACTIVE'",expected+1,meeting,expected,prepared.spec().cancelEpoch())!=1)throw conflict();
             if(j.update("UPDATE meeting_search_projection SET meeting_revision=? WHERE meeting_id=?",expected+1,meeting)!=1)throw unavailable();
             fences.advance(subject,expected+1,prepared.spec().cancelEpoch(),false);
+            authority.finishMinutesTransition(transition,expected+1);
             String task=queue.enqueue(prepared.spec(),authority.adoptCreated(gate,held,prepared.spec()));
             if(j.update("UPDATE idempotency_record SET result_id=?,http_status=202 WHERE scope_hash=? AND result_id IS NULL",task,scope)!=1)throw unavailable();
             var result=new ImportAccepted(meeting,prepared.batchId(),prepared.inputId(),task,expected+1,Long.toString(expected+1),prepared.spec().inputFingerprint());

@@ -1,0 +1,59 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 4,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.api.Task10SavedWireTest",
+      "reportSha256": "47d532c985bba7183c3a51756197ee9ccbd23cae395a414426997a2d03435898",
+      "reportMtimeNs": 1792851029999362815,
+      "startedNs": 1792851024126923755,
+      "endedNs": 1792851030075611506,
+      "class": "ama.api.Task10SavedWireTest",
+      "name": "nullableActionTupleRequiresAllThreeMembers",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.api.Task10SavedWireTest",
+      "reportSha256": "47d532c985bba7183c3a51756197ee9ccbd23cae395a414426997a2d03435898",
+      "reportMtimeNs": 1792851029999362815,
+      "startedNs": 1792851024126923755,
+      "endedNs": 1792851030075611506,
+      "class": "ama.api.Task10SavedWireTest",
+      "name": "exactCountersAndDualFormsNormalizeBeforeDigest",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.api.Task10SavedWireTest",
+      "reportSha256": "47d532c985bba7183c3a51756197ee9ccbd23cae395a414426997a2d03435898",
+      "reportMtimeNs": 1792851029999362815,
+      "startedNs": 1792851024126923755,
+      "endedNs": 1792851030075611506,
+      "class": "ama.api.Task10SavedWireTest",
+      "name": "strictReviewUnionRejectsInapplicableOffsetsAndScopes",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.api.Task10SavedWireTest",
+      "reportSha256": "47d532c985bba7183c3a51756197ee9ccbd23cae395a414426997a2d03435898",
+      "reportMtimeNs": 1792851029999362815,
+      "startedNs": 1792851024126923755,
+      "endedNs": 1792851030075611506,
+      "class": "ama.api.Task10SavedWireTest",
+      "name": "duplicateUnknownAndTrailingDocumentsFail",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

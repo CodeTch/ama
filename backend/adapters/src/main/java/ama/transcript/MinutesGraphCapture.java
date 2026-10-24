@@ -35,17 +35,19 @@ final class MinutesGraphCapture {
    for(var row:expected.tables().getOrDefault(name,List.of()))auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(read.deferRead(control,String.join(" AND ",control.keys().stream().map(k->k+"=?").toList()),String.join(",",control.keys()),1,false,control.keys().stream().map(row::get).toArray()));
   }
   auxiliary.put("publication",read.read(metadata("publication","id","id meeting_id confirmation_id state revision#"),"meeting_id=?","id",1,false,expected.meeting()));
+  if(expected.pending()!=null){require(auxiliary.get("publication").equals(expected.pending().rows().get("publication")),PROVENANCE_UNAVAILABLE);if(!expected.kind().equals("READINESS"))require(auxiliary.get("publication").isEmpty(),CAPABILITY_UNAVAILABLE);}
   if(publication!=null)publication.run();
   var finalIds=new TreeSet<String>();if(expected.root().get("final_confirmation_id") instanceof String id)finalIds.add(id);for(var row:expected.tables().getOrDefault("final_confirmation",List.of()))finalIds.add((String)row.get("id"));
   MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,"final_confirmation",budget);
   for(String id:finalIds){if(expected.kind().equals("FINAL")&&id.equals(expected.selected()))transfers.add(read.deferRows(Table.FINAL_CONFIRMATION,"id=?","id",1,false,id));else auxiliaryTransfers.computeIfAbsent("final_control",k->new ArrayList<>()).add(read.deferRead(shape(Table.FINAL_CONFIRMATION),"id=?","id",1,false,id));}
   var byName=new HashMap<String,Table>();for(Table t:Table.values())byName.put(t.sqlName(),t);
   for(String name:DOMAIN_RANK){
-   if(name.equals("minutes_revision")||name.equals("element_set")){
-    budget.row(2);budget.capture(36,36,36,4);String index=name.equals("minutes_revision")?"minutes_history":"element_set_revision";
+   if(name.equals("minutes_revision")||name.equals("element_set")||name.equals("exclusion_revision")){
+    budget.row(2);budget.capture(36,36,36,4);String index=name.equals("minutes_revision")?"minutes_history":name.equals("element_set")?"element_set_revision":"exclusion_version";
     var highest=j.queryForList("SELECT id,revision FROM "+name+" FORCE INDEX ("+index+") WHERE meeting_id=? ORDER BY revision DESC LIMIT 1 FOR UPDATE",expected.meeting());
     auxiliary.put(name+"_history_max",List.copyOf(highest));
    }
+   if(name.equals("result_review")){budget.row(2);budget.capture(36,36,36,4);auxiliary.put("result_review_history_max",List.copyOf(j.queryForList("SELECT id,review_no FROM result_review FORCE INDEX (review_sequence) WHERE meeting_id=? ORDER BY review_no DESC LIMIT 1 FOR UPDATE",expected.meeting())));}
    MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,name,budget);
    var declared=expected.tables().getOrDefault(name,List.of());if(declared.isEmpty())continue;
    Table table=byName.get(name);Shape shape=table!=null?shape(table):name.equals("minutes_template")?TEMPLATE:name.equals("generation_candidate")?CANDIDATE:metadata("input_batch_fingerprint_profile","batch_id","batch_id profile");
@@ -61,7 +63,7 @@ final class MinutesGraphCapture {
    if(name.equals("external_execution"))declared.sort(Comparator.comparing((Map<String,Object> r)->(String)r.get("operation_id")).thenComparingLong(r->(Long)r.get("execution_no")));
    for(var row:declared)auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(read.deferRead(shape,String.join(" AND ",shape.keys().stream().map(k->k+"=?").toList()),String.join(",",shape.keys()),1,false,shape.keys().stream().map(row::get).toArray()));
    if(currentSources&&name.equals("file_reference")){
-   var ids=expected.tables().getOrDefault("file_object",List.of()).stream().map(r->(String)r.get("id")).sorted().toList();require(!ids.isEmpty(),PROVENANCE_UNAVAILABLE);authority.requireTaskPurpose(actor,expected.meeting());
+   var ids=expected.tables().getOrDefault("file_object",List.of()).stream().map(r->(String)r.get("id")).sorted().toList();if(ids.isEmpty()&&Set.of("SAVED_EFFECTIVE","READINESS").contains(expected.kind())&&expected.root().get("minutes_revision_id")==null&&expected.root().get("element_set_id")==null)continue;require(!ids.isEmpty(),PROVENANCE_UNAVAILABLE);authority.requireTaskPurpose(actor,expected.meeting());
    var locked=authority.fileRegistry().prelockSources(gate,ids,false).orElseThrow(()->fail(PROVENANCE_UNAVAILABLE));var originals=authority.fileRegistry().sources(gate,locked,ids);require(originals.size()==ids.size(),PROVENANCE_UNAVAILABLE);
    for(var source:originals){var row=expected.tables().get("file_object").stream().filter(r->source.file().fileId().equals(r.get("id"))).findFirst().orElseThrow(()->fail(PROVENANCE_UNAVAILABLE));require(JdbcTranscriptAuthority.PURPOSE.equals(source.originalPurpose())&&source.file().sha256().equals(row.get("sha256"))&&source.file().size()==((Number)row.get("size_bytes")).longValue(),PROVENANCE_UNAVAILABLE);}
   }

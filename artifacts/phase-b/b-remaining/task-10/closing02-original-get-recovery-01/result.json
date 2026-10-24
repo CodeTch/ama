@@ -1,0 +1,23 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task10ClosingOriginalRecoveryIT",
+      "reportSha256": "672b80e440a8fa4bf541a9b589d9fffa0f59cc6edb75cfeef98d2018d7a2598c",
+      "reportMtimeNs": 1792853771232795648,
+      "startedNs": 1792853748572483511,
+      "endedNs": 1792853771651057859,
+      "class": "ama.storage.Task10ClosingOriginalRecoveryIT",
+      "name": "recoverOnlySealedOriginalExecutions",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

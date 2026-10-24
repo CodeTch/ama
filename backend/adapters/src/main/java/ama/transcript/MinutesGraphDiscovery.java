@@ -11,7 +11,9 @@ import static ama.contract.MinutesContracts.FailureCode.*;
  * or certifies provenance. The authentic S/F capture must lock and recheck this complete plan. */
 final class MinutesGraphDiscovery {
  record Discovery(String meeting,String kind,String selected,Map<String,Object> root,
-    Map<String,List<Map<String,Object>>> tables,Map<String,List<List<Object>>> memberships,Set<String> identities,List<Selector> selectors) {}
+    Map<String,List<Map<String,Object>>> tables,Map<String,List<List<Object>>> memberships,Set<String> identities,List<Selector> selectors,MinutesPendingDiscovery.Plan pending) {
+  Discovery(String meeting,String kind,String selected,Map<String,Object> root,Map<String,List<Map<String,Object>>> tables,Map<String,List<List<Object>>> memberships,Set<String> identities,List<Selector> selectors){this(meeting,kind,selected,root,tables,memberships,identities,selectors,null);}
+ }
  record Selector(String table,String column,Object value,String qualifier) {}
  private record Definition(String name,List<String> keys,List<String> columns) {}
  private record Query(String table,String column,Object value,int depth,boolean required,String qualifier) {Query(String table,String column,Object value,int depth,boolean required){this(table,column,value,depth,required,"");}}
@@ -29,16 +31,24 @@ final class MinutesGraphDiscovery {
  }
  static Discovery discover(DataSource source,String meeting,String kind,String selected,int maximum){return new MinutesGraphDiscovery(source,meeting,kind,selected,maximum).run();}
  static Discovery discover(DataSource source,String meeting,String kind,String selected,TranscriptAcquisitionBudget limits,ama.contract.ConfigArchiveContracts.ArchiveReadBudget read){var value=new MinutesGraphDiscovery(source,meeting,kind,selected,(int)Math.min(100000,read.maxFactRows()));value.taskMaximum=Math.min(256,limits.tasks());value.fileMaximum=Math.min(64,read.maxBatchFiles());value.revisionMaximum=Math.min(256,limits.revisionNodes());value.depthMaximum=Math.min(128,limits.revisionDepth());value.byteMaximum=Math.min(16777216,Math.min(limits.copyBytes(),Math.min(limits.utf8(),read.maxTotalBytes())));return value.run();}
+ static Discovery withPending(DataSource source,Discovery d,int taskLimit){var pending=MinutesPendingDiscovery.discover(source,d.meeting());require(pending.rows().get("durable_task").size()<=taskLimit,BUDGET_EXCEEDED);return new Discovery(d.meeting(),d.kind(),d.selected(),d.root(),d.tables(),d.memberships(),d.identities(),d.selectors(),pending);}
+ static List<String> metadataColumns(String table){return DEFINITIONS.get(table).columns();}
  private Discovery run(){
   var roots=select(new Query("meeting","id",meeting,0,true));require(roots.size()==1,PROVENANCE_UNAVAILABLE);var root=roots.getFirst();identities.add(text(root,"owner_id"));
   parent("meeting_info_revision",root.get("info_revision_id"),1);parent("roster_revision",root.get("roster_revision_id"),1);parent("final_confirmation",root.get("final_confirmation_id"),1);
   switch(kind){
    case "INITIAL_SETTINGS"->parent("template_revision",requiredSelection(),1);
-   case "CURRENT_GENERATION"->{for(String col:List.of("transcript_confirmation_id","template_revision_id","exclusion_revision_id","element_set_id"))parent(tableFor(col),root.get(col),1);unsupported(root,"material_snapshot_id");}
-   case "SAVED_EFFECTIVE"->{parent("minutes_revision",root.get("minutes_revision_id"),1);parent("element_set",root.get("element_set_id"),1);parent("exclusion_revision",root.get("exclusion_revision_id"),1);}
+   case "CURRENT_GENERATION"->{for(String col:List.of("transcript_confirmation_id","template_revision_id","exclusion_revision_id","element_set_id","minutes_revision_id"))parent(tableFor(col),root.get(col),1);unsupported(root,"material_snapshot_id");}
+   case "SAVED_EFFECTIVE","READINESS","SETTINGS_READ"->{parent("minutes_revision",root.get("minutes_revision_id"),1);parent("element_set",root.get("element_set_id"),1);parent("exclusion_revision",root.get("exclusion_revision_id"),1);parent("template_revision",root.get("template_revision_id"),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
+   case "OWNER_SET"->parent("element_set",requiredSelection(),1);
+   case "REVIEW_ID"->parent("result_review",requiredSelection(),1);
+   case "BODY_EDIT","BODY_RESTORE"->{parent("minutes_revision",requiredSelection(),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
+   case "SET_EDIT","SET_RESTORE"->{parent("element_set",requiredSelection(),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
    case "OWNER_REVISION"->parent("minutes_revision",requiredSelection(),1);
-   case "STORED_INPUT"->parent("generation_input",requiredSelection(),1);
+   case "STORED_INPUT"->{parent("generation_input",requiredSelection(),1);if(j.queryForList("SELECT id FROM generation_candidate WHERE input_id=? ORDER BY id LIMIT 2",String.class,selected).isEmpty())parent("minutes_revision",root.get("minutes_revision_id"),1);}
    case "REUSE_SOURCES"->{require(selected!=null&&selected.length()==73,INVALID_ARGUMENT);var ids=selected.split("/",-1);require(ids.length==2,INVALID_ARGUMENT);uuid(ids[0]);uuid(ids[1]);parent("generation_candidate",ids[0],1);parent("exclusion_revision",ids[1],1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);parent("template_revision",root.get("template_revision_id"),1);}
+   case "SETTINGS_TEMPLATE","SETTINGS_EXCLUSIONS"->{for(String col:List.of("minutes_revision_id","element_set_id","transcript_confirmation_id","template_revision_id","exclusion_revision_id"))parent(tableFor(col),root.get(col),1);if(kind.equals("SETTINGS_TEMPLATE"))parent("template_revision",requiredSelection(),1);}
+   case "ADOPT"->{parent("generation_candidate",requiredSelection(),1);parent("minutes_revision",root.get("minutes_revision_id"),1);}
    case "CANDIDATE"->parent("generation_candidate",requiredSelection(),1);
    case "REVIEW_BODY"->parent("minutes_revision",requiredSelection(),1);
    case "REVIEW_ELEMENT"->parent("minutes_element",requiredSelection(),1);
@@ -136,9 +146,10 @@ final class MinutesGraphDiscovery {
  /** Current metadata reads occur once per rank over the complete declared selector union.
   * An earlier RR discovery snapshot never substitutes for this protected membership comparison. */
  static void lockAndCompare(DataSource source,Discovery expected,String table,TranscriptAcquisitionBudget.Ledger budget){
-  var selectors=expected.selectors().stream().filter(s->s.table().equals(table)).toList();if(selectors.isEmpty())return;var definition=DEFINITIONS.get(table);var rows=table.equals("meeting")?List.of(expected.root()):expected.tables().getOrDefault(table,List.of());long limit=(long)rows.size()+1;
-  long maximum=(64L+definition.columns().size()*1088L)*limit;budget.admitCapture(maximum,maximum,maximum,2);var j=new JdbcTemplate(source);j.setQueryTimeout(2);String where=String.join(" OR ",selectors.stream().map(s->"("+s.column()+"=?"+s.qualifier()+")").toList());var arguments=new ArrayList<Object>();for(var selector:selectors)arguments.add(selector.value());arguments.add(limit);
-  var actual=j.query("SELECT "+String.join(",",definition.columns())+" FROM "+table+" WHERE "+where+" ORDER BY "+String.join(",",definition.keys())+" LIMIT ? FOR UPDATE",rs->{
+  var selectors=expected.selectors().stream().filter(s->s.table().equals(table)).toList();var contribution=expected.pending()==null?null:expected.pending().queries().stream().filter(q->q.table().equals(table)).findFirst().orElse(null);if(selectors.isEmpty()&&contribution==null)return;var definition=DEFINITIONS.get(table);var original=table.equals("meeting")?List.of(expected.root()):expected.tables().getOrDefault(table,List.of());
+  var union=new HashMap<List<Object>,Map<String,Object>>();for(var row:original)union.put(definition.keys().stream().map(row::get).toList(),row);if(contribution!=null)for(var row:expected.pending().rows().get(table)){var old=union.putIfAbsent(definition.keys().stream().map(row::get).toList(),row);require(old==null||old.equals(row),PROVENANCE_UNAVAILABLE);}var rows=new ArrayList<>(union.values());var orderedKeys=table.equals("generation_candidate")?List.of("created_at","id"):definition.keys();rows.sort((a,b)->compare(orderedKeys.stream().map(a::get).toList(),orderedKeys.stream().map(b::get).toList()));long limit=(long)rows.size()+1;
+  long maximum=(64L+definition.columns().size()*1088L)*limit;budget.admitCapture(maximum,maximum,maximum,2);var j=new JdbcTemplate(source);j.setQueryTimeout(2);var clauses=new ArrayList<>(selectors.stream().map(s->"("+s.column()+"=?"+s.qualifier()+")").toList());var arguments=new ArrayList<Object>();for(var selector:selectors)arguments.add(selector.value());if(contribution!=null){clauses.add("("+contribution.where()+")");arguments.addAll(contribution.args());}String where=String.join(" OR ",clauses);arguments.add(limit);
+  var actual=j.query("SELECT "+String.join(",",definition.columns())+" FROM "+table+(table.equals("generation_candidate")?" FORCE INDEX (candidate_pending)":"")+" WHERE "+where+" ORDER BY "+String.join(",",orderedKeys)+" LIMIT ? FOR UPDATE",rs->{
    var found=new ArrayList<Map<String,Object>>();while(rs.next()){budget.check();require(found.size()<rows.size(),PROVENANCE_UNAVAILABLE);budget.row(definition.columns().size());var row=new LinkedHashMap<String,Object>();
     for(String column:definition.columns()){Object value=rs.getObject(column);if(value instanceof Number n){try{value=new java.math.BigDecimal(n.toString()).longValueExact();}catch(ArithmeticException failure){throw fail(PROVENANCE_UNAVAILABLE);}}else if(value instanceof java.sql.Timestamp t)value=t.toLocalDateTime().toString();else if(value instanceof java.sql.Date date)value=date.toLocalDate().toString();if(value instanceof String text){require(text.length()<=1020,PROVENANCE_UNAVAILABLE);long bytes=ama.canonical.CanonicalValueCodec.utf8Length(text,()->false);budget.capture(bytes,text.codePointCount(0,text.length()),text.length(),4);}row.put(column,value);}found.add(Collections.unmodifiableMap(row));
    }return List.copyOf(found);
@@ -148,7 +159,7 @@ final class MinutesGraphDiscovery {
  private static void unsupported(Map<String,Object> row,String field){require(row.get(field)==null,CAPABILITY_UNAVAILABLE);}
  private static String text(Map<String,Object> row,String col){Object v=row.get(col);require(v instanceof String,PROVENANCE_UNAVAILABLE);return (String)v;}
  private void check(){ama.contract.MinutesContracts.check(()->System.nanoTime()>deadline);}
- private static int compare(List<Object>a,List<Object>b){for(int i=0;i<a.size();i++){Object x=a.get(i),y=b.get(i);int c=x instanceof Long l?Long.compare(l,(Long)y):ama.canonical.CanonicalValueCodec.compareUtf8((String)x,(String)y,()->false);if(c!=0)return c;}return 0;}
+ private static int compare(List<Object>a,List<Object>b){for(int i=0;i<a.size();i++){Object x=a.get(i),y=b.get(i);int c=x instanceof Long l?Long.compare(l,(Long)y):x instanceof java.time.LocalDateTime t?t.compareTo((java.time.LocalDateTime)y):x instanceof java.time.LocalDate d?d.compareTo((java.time.LocalDate)y):ama.canonical.CanonicalValueCodec.compareUtf8((String)x,(String)y,()->false);if(c!=0)return c;}return 0;}
  private static String tableFor(String col){return switch(col){case "transcript_confirmation_id"->"transcript_confirmation";case "minutes_revision_id"->"minutes_revision";case "element_set_id"->"element_set";case "template_revision_id"->"template_revision";case "exclusion_revision_id"->"exclusion_revision";default->throw fail(INVALID_ARGUMENT);};}
  private static Map<String,Definition> definitions(){
   var defs=new HashMap<String,Definition>();for(var shape:MinutesSourceRows.SHAPES.values())defs.put(shape.table(),new Definition(shape.table(),shape.keys(),shape.columns().stream().filter(c->!MinutesSourceRows.CONTENT.contains(c)).toList()));for(Table table:Table.values())defs.put(table.sqlName(),new Definition(table.sqlName(),table.primaryKey(),table.columns().stream().map(ColumnSpec::name).filter(c->!CONTENT.contains(c)).toList()));

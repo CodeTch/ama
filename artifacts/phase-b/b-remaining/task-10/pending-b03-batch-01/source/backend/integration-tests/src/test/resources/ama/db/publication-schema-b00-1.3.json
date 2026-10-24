@@ -1,0 +1,1052 @@
+{
+  "status": "INDEPENDENT_ACTUAL_METADATA_ORACLE_NOT_SCHEMA_ACCEPTANCE",
+  "design_version": "B00-1.3-review",
+  "source_path": "docs/acceptance/b/database-generation-addendum-metadata-evidence.json",
+  "source_sha256": "a6c758d488c490c97bb373f404bc25c5b50db001e7c0dcb82dfcf9a6668f7aa5",
+  "source_ddl_sha256": "ebf1eae51b303d00b2ed35c4fbd5ba4c166813564032875a6ba0fb35ba743c93",
+  "source_mysql_version": "8.4.6",
+  "tables": [
+    "external_document_mapping",
+    "final_confirmation",
+    "final_result_review",
+    "publication",
+    "publication_attempt"
+  ],
+  "deployed_lower_parents": [
+    "action_item",
+    "action_suggestion",
+    "audit_event",
+    "background_note",
+    "background_note_source",
+    "department",
+    "durable_task",
+    "element_set",
+    "enterprise_identity",
+    "evidence_link",
+    "exclusion_revision",
+    "external_execution",
+    "external_operation",
+    "file_cleanup",
+    "file_object",
+    "file_reference",
+    "generation_candidate",
+    "generation_input",
+    "idempotency_record",
+    "identity_session",
+    "input_batch",
+    "input_batch_file",
+    "meeting",
+    "meeting_access_grant",
+    "meeting_acl",
+    "meeting_info_revision",
+    "meeting_person_search",
+    "meeting_search_projection",
+    "minutes_element",
+    "minutes_revision",
+    "minutes_template",
+    "model_capacity",
+    "model_reservation",
+    "outbox_consumer",
+    "result_review",
+    "result_review_evidence",
+    "role_assignment",
+    "roster_member",
+    "roster_revision",
+    "sensitive_detection",
+    "sensitive_detection_source",
+    "sensitive_exclusion",
+    "source_locator",
+    "speaker",
+    "storage_backend",
+    "task_attempt",
+    "task_outbox",
+    "task_outbox_sequence",
+    "task_subject",
+    "template_revision",
+    "transcript_confirmation",
+    "transcript_revision",
+    "transcript_segment",
+    "transcript_segment_mark",
+    "transcription_input",
+    "upload_part",
+    "upload_session"
+  ],
+  "excluded_foreign_keys": [
+    {
+      "table": "final_confirmation",
+      "name": "fk_final_confirmation_9",
+      "column": "material_snapshot_id",
+      "target": "material_snapshot",
+      "remote": "id",
+      "reserved_version": "V017"
+    }
+  ],
+  "counts": {
+    "tables": 5,
+    "columns": 42,
+    "indexes": 30,
+    "checks": 4,
+    "foreign_keys": 18
+  },
+  "metadata": {
+    "tables": [
+      {
+        "table": "external_document_mapping",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "final_confirmation",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "final_result_review",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "publication",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "publication_attempt",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      }
+    ],
+    "columns": [
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "external_document_mapping",
+        "column": "publication_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_document_mapping",
+        "column": "provider_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "external_document_mapping",
+        "column": "external_document_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "external_document_mapping",
+        "column": "document_url",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_document_mapping",
+        "column": "authority_state",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_document_mapping",
+        "column": "verified_at",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "meeting_revision",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "info_revision_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "roster_revision_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "transcript_confirmation_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "minutes_revision_id",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "material_snapshot_id",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "element_set_id",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "template_revision_id",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "exclusion_revision_id",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "source_manifest_hash",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "input_fingerprint",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "confirmed_by",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "final_confirmation",
+        "column": "confirmed_at",
+        "default": null,
+        "ordinal": 15,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_result_review",
+        "column": "confirmation_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "final_result_review",
+        "column": "review_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "publication",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "publication",
+        "column": "meeting_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "publication",
+        "column": "confirmation_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "publication",
+        "column": "business_key",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "publication",
+        "column": "library_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "publication",
+        "column": "folder_id",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "publication",
+        "column": "state",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "publication",
+        "column": "revision",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "publication",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "publication",
+        "column": "published_at",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "publication_attempt",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "publication_attempt",
+        "column": "publication_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "publication_attempt",
+        "column": "confirmation_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "publication_attempt",
+        "column": "operation_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "publication_attempt",
+        "column": "kind",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "publication_attempt",
+        "column": "outcome",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "publication_attempt",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "publication_attempt",
+        "column": "finished_at",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "publication_attempt",
+        "column": "execution_id",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 1,
+        "name": "external_document_unique",
+        "type": "BTREE",
+        "table": "external_document_mapping",
+        "column": "provider_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "external_document_unique",
+        "type": "BTREE",
+        "table": "external_document_mapping",
+        "column": "external_document_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "external_document_mapping",
+        "column": "publication_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "final_revision",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "final_revision",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "meeting_revision",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_final_confirmation_1",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "info_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_final_confirmation_2",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "roster_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_final_confirmation_3",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "transcript_confirmation_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_final_confirmation_4",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "minutes_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_final_confirmation_5",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "element_set_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_final_confirmation_6",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "template_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_final_confirmation_7",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "exclusion_revision_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_final_confirmation_8",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "confirmed_by",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_final_confirmation_9",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "material_snapshot_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "final_confirmation",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "final_review_reverse",
+        "type": "BTREE",
+        "table": "final_result_review",
+        "column": "review_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "final_review_reverse",
+        "type": "BTREE",
+        "table": "final_result_review",
+        "column": "confirmation_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "final_result_review",
+        "column": "confirmation_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "final_result_review",
+        "column": "review_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_publication_1",
+        "type": "BTREE",
+        "table": "publication",
+        "column": "confirmation_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "publication",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "publication_key",
+        "type": "BTREE",
+        "table": "publication",
+        "column": "business_key",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "publication_meeting",
+        "type": "BTREE",
+        "table": "publication",
+        "column": "meeting_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_publication_attempt_1",
+        "type": "BTREE",
+        "table": "publication_attempt",
+        "column": "confirmation_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_publication_attempt_2",
+        "type": "BTREE",
+        "table": "publication_attempt",
+        "column": "operation_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_publication_attempt_3",
+        "type": "BTREE",
+        "table": "publication_attempt",
+        "column": "execution_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "publication_attempt",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "publication_attempt_history",
+        "type": "BTREE",
+        "table": "publication_attempt",
+        "column": "publication_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "publication_attempt_history",
+        "type": "BTREE",
+        "table": "publication_attempt",
+        "column": "created_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "publication_attempt_history",
+        "type": "BTREE",
+        "table": "publication_attempt",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      }
+    ],
+    "checks": [
+      {
+        "name": "ck_external_document_mapping_0",
+        "table": "external_document_mapping",
+        "clause": "(`authority_state` in (_ascii\\'ACTIVE\\',_ascii\\'WITHDRAWN\\',_ascii\\'OBSOLETE\\',_ascii\\'UNKNOWN\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_publication_0",
+        "table": "publication",
+        "clause": "(`state` in (_ascii\\'READY\\',_ascii\\'RUNNING\\',_ascii\\'RECONCILING\\',_ascii\\'FAILED\\',_ascii\\'SUCCEEDED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_publication_attempt_0",
+        "table": "publication_attempt",
+        "clause": "(`kind` in (_ascii\\'PUBLISH\\',_ascii\\'RECONCILE\\',_ascii\\'WITHDRAW\\',_ascii\\'OBSOLETE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_publication_attempt_1",
+        "table": "publication_attempt",
+        "clause": "(`outcome` in (_ascii\\'PENDING\\',_ascii\\'SUCCESS\\',_ascii\\'FAILED\\',_ascii\\'UNKNOWN\\'))",
+        "enforced": "YES"
+      }
+    ],
+    "foreign_keys": [
+      {
+        "name": "fk_external_document_mapping_0",
+        "table": "external_document_mapping",
+        "column": "publication_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "publication",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_confirmation_0",
+        "table": "final_confirmation",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_confirmation_1",
+        "table": "final_confirmation",
+        "column": "info_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting_info_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_confirmation_2",
+        "table": "final_confirmation",
+        "column": "roster_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "roster_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_confirmation_3",
+        "table": "final_confirmation",
+        "column": "transcript_confirmation_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "transcript_confirmation",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_confirmation_4",
+        "table": "final_confirmation",
+        "column": "minutes_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "minutes_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_confirmation_5",
+        "table": "final_confirmation",
+        "column": "element_set_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "element_set",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_confirmation_6",
+        "table": "final_confirmation",
+        "column": "template_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "template_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_confirmation_7",
+        "table": "final_confirmation",
+        "column": "exclusion_revision_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "exclusion_revision",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_confirmation_8",
+        "table": "final_confirmation",
+        "column": "confirmed_by",
+        "delete": "RESTRICT",
+        "remote": "enterprise_id",
+        "target": "enterprise_identity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_result_review_0",
+        "table": "final_result_review",
+        "column": "confirmation_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "final_confirmation",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_final_result_review_1",
+        "table": "final_result_review",
+        "column": "review_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "result_review",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_publication_0",
+        "table": "publication",
+        "column": "meeting_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "meeting",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_publication_1",
+        "table": "publication",
+        "column": "confirmation_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "final_confirmation",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_publication_attempt_0",
+        "table": "publication_attempt",
+        "column": "publication_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "publication",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_publication_attempt_1",
+        "table": "publication_attempt",
+        "column": "confirmation_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "final_confirmation",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_publication_attempt_2",
+        "table": "publication_attempt",
+        "column": "operation_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "external_operation",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_publication_attempt_3",
+        "table": "publication_attempt",
+        "column": "execution_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "external_execution",
+        "update": "RESTRICT",
+        "ordinal": 1
+      }
+    ]
+  }
+}

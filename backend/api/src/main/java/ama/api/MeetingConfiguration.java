@@ -22,8 +22,8 @@ class MeetingConfiguration {
     @Bean JdbcMeetingAccess meetingAccess(DataSource source,TransactionRunner tx,JdbcSubjectFences fences){return new JdbcMeetingAccess(source,tx,fences);}
     @Bean CategoryDictionary companyMeetingCategories(){return id->{throw new CategoryUnavailable();};}
     @Bean JdbcMeetingRepository meetingRepository(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,
-                                                 JdbcSubjectFences fences,JdbcOutbox outbox,CategoryDictionary categories){
-        return new JdbcMeetingRepository(source,tx,access,fences,outbox,new JdbcAuditAdapter(source),categories);
+                                                 JdbcSubjectFences fences,JdbcOutbox outbox,CategoryDictionary categories,ProcessingConfiguration.Runtime processing){
+        return new JdbcMeetingRepository(source,tx,access,fences,outbox,new JdbcAuditAdapter(source),categories,processing.components()==null?null:processing.components().authority());
     }
     @Bean MeetingService meetings(JdbcMeetingRepository repository){return new MeetingService(repository);}
     @Bean RosterService rosters(JdbcMeetingRepository repository){return new RosterService(repository);}

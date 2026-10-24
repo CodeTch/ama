@@ -31,7 +31,8 @@ record SavedTranscriptGraph(String meeting,String selected,Map<String,Object> ro
   }
   return new Discovery(selected,Collections.unmodifiableSortedMap(ids));
  }
- static SavedTranscriptGraph acquire(JdbcTranscriptAuthority authority,JdbcTemplate j,FileRegistry.LockedMeeting gate,Object scope,Actor actor,String meeting,JdbcTranscriptAuthority.SavedPurpose purpose,Discovery discovered,TranscriptAcquisitionBudget limits,TranscriptAcquisitionBudget.Ledger budget){
+ static SavedTranscriptGraph acquire(JdbcTranscriptAuthority authority,JdbcTemplate j,FileRegistry.LockedMeeting gate,Object scope,Actor actor,String meeting,JdbcTranscriptAuthority.SavedPurpose purpose,Discovery discovered,TranscriptAcquisitionBudget limits,TranscriptAcquisitionBudget.Ledger budget){return acquire(authority,j,gate,scope,actor,meeting,purpose,discovered,limits,budget,null);}
+ static SavedTranscriptGraph acquire(JdbcTranscriptAuthority authority,JdbcTemplate j,FileRegistry.LockedMeeting gate,Object scope,Actor actor,String meeting,JdbcTranscriptAuthority.SavedPurpose purpose,Discovery discovered,TranscriptAcquisitionBudget limits,TranscriptAcquisitionBudget.Ledger budget,JdbcTranscriptAuthority.HeldMinutesTransition transition){
   authority.requireSavedScope(scope,gate,actor,meeting,purpose);var read=new SavedTranscriptRows(j,budget,authority.readBudget().maxManifestBytes());var root=read.one(ROOT,meeting);
   if(purpose==JdbcTranscriptAuthority.SavedPurpose.CURRENT)require(Objects.equals(root.get("transcript_revision_id"),discovered.selected),PROVENANCE_UNAVAILABLE);
   if(discovered.selected==null){
@@ -66,6 +67,7 @@ record SavedTranscriptGraph(String meeting,String selected,Map<String,Object> ro
   var batchRows=read.rows(Table.INPUT_BATCH,"id=?","id",1,false,batchId);require(batchRows.size()==1,PROVENANCE_UNAVAILABLE);rows.addAll(batchRows);
   var profileRows=read.read(metadata("input_batch_fingerprint_profile","batch_id","batch_id profile"),"batch_id=?","batch_id",1,false,batchId);require(profileRows.size()==1&&BatchFingerprint.PROFILE.equals(profileRows.getFirst().get("profile")),PROFILE_UNAVAILABLE);
   var members=read.rows(Table.INPUT_BATCH_FILE,"batch_id=?","ordinal",authority.readBudget().maxBatchFiles(),true,batchId);require(!members.isEmpty(),PROVENANCE_UNAVAILABLE);rows.addAll(members);
+  if(transition!=null)authority.lockMinutesTransitionDomain(transition,gate);
   var associations=new TreeMap<String,String>();var sortedFiles=new TreeSet<String>();for(var member:members)require(sortedFiles.add(member.string("file_id")),PROVENANCE_UNAVAILABLE);
   for(String file:sortedFiles){budget.row(1);budget.text(72,72,72,2,false);var original=j.queryForList("SELECT id FROM upload_session WHERE completed_file_id=? AND state='COMPLETED' ORDER BY id LIMIT 2",String.class,file);require(original.size()==1,PROVENANCE_UNAVAILABLE);associations.put(file,original.getFirst());}
   var sessions=new ArrayList<Map<String,Object>>();var sessionByFile=new HashMap<String,Map<String,Object>>();
@@ -88,6 +90,7 @@ record SavedTranscriptGraph(String meeting,String selected,Map<String,Object> ro
    var sources=authority.fileRegistry().sources(gate,held,List.copyOf(sortedFiles));require(sources.size()==files.size(),PROVENANCE_UNAVAILABLE);
    for(var source:sources)require("TRANSCRIPT_INPUT".equals(source.originalPurpose()),PROVENANCE_UNAVAILABLE);
   }
+  if(transition!=null)authority.lockMinutesTransitionTasks(transition,gate);
   var raw=revisions.values().stream().filter(r->r.string("kind").equals("RAW")).toList();require(raw.size()==1&&limits.tasks()>=1,PROVENANCE_UNAVAILABLE);
   var inputTasks=read.inputTaskIds(inputId,limits.tasks());String producer=raw.getFirst().string("producer_task_id");
   if(!inputTasks.contains(producer))read.reserveTaskId();

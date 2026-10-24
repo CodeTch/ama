@@ -1,0 +1,2 @@
+SET time_zone='+00:00',lock_wait_timeout=5,innodb_lock_wait_timeout=5,MAX_EXECUTION_TIME=5000;
+SELECT c.id,c.state,c.decided_at,c.base_revision,c.input_id,c.task_id,t.state task_state,t.last_error,t.output_kind,t.output_id,e.id execution_id,e.state execution_state,o.id operation_id,o.state operation_state,o.external_result_id FROM generation_candidate c JOIN durable_task t ON t.id=c.task_id JOIN external_execution e ON e.task_id=t.id JOIN external_operation o ON o.id=e.operation_id WHERE t.id='17a63559-3849-4cdd-a7a9-fca8db7dd762';

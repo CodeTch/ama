@@ -1,0 +1,30 @@
+{
+  "startedNs": 1792850271554321876,
+  "endedNs": 1792850436968620466,
+  "reports": [
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10MultiVersionDeniedRecoveryIT.xml",
+      "mtimeNs": 1792850436515748827,
+      "sha256": "09ac2df8e6c9c3470dcef3443313c666a78fc7e45dfd7cd4570825295d839094",
+      "previous": [
+        1792850246257789261,
+        "d74a502b7b8ff4f5b8deb306d4d6c5b48cdd401d1ba35cd06299cbdc856e9b96"
+      ],
+      "qualified": true,
+      "suite": "ama.storage.Task10MultiVersionDeniedRecoveryIT",
+      "canonicalLogAssociation": true
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task10MultiVersionRecoveryIT.xml",
+      "mtimeNs": 1792850391193086728,
+      "sha256": "b08ec0587ea37eb2708de15154245951508d1341ebc3843937fd45a91e9dd94e",
+      "previous": [
+        1792850192019891698,
+        "8bd2fdd60c5f166a53186bd29bc342e2437d76d110943993f4eb5fa1a5b9b1b6"
+      ],
+      "qualified": true,
+      "suite": "ama.storage.Task10MultiVersionRecoveryIT",
+      "canonicalLogAssociation": true
+    }
+  ]
+}

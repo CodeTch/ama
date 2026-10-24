@@ -13,8 +13,8 @@ public final class MinutesExternalPreparation {
   public long outputLimit(){return input.binding().outputBudget().maxWireBytes();}public byte[] body(String execution){return input.requestBody(execution);}public String envelope(){return input.requestEnvelope();}
  }
  static final class Observation implements PreparedObservation {
-  final MinutesExternalPreparation issuer;final Request request;final OperationToken token;final ControlledMinutesClient.Request wire;final ControlledMinutesClient.Receipt receipt;final ExternalObservation fact;final MinutesCandidateGraphPlan plan;final String localError;
-  private Observation(MinutesExternalPreparation issuer,Request request,OperationToken token,ControlledMinutesClient.Request wire,ControlledMinutesClient.Receipt receipt,ExternalObservation fact,MinutesCandidateGraphPlan plan,String localError){this.issuer=issuer;this.request=request;this.token=token;this.wire=wire;this.receipt=receipt;this.fact=fact;this.plan=plan;this.localError=localError;}
+  final MinutesExternalPreparation issuer;final Request request;final OperationToken token;final ControlledMinutesClient.Request wire;final ControlledMinutesClient.Receipt receipt;final ExternalObservation fact;final MinutesCandidateGraphPlan plan;final MinutesSavedGraphPlan saved;final String localError;
+  private Observation(MinutesExternalPreparation issuer,Request request,OperationToken token,ControlledMinutesClient.Request wire,ControlledMinutesClient.Receipt receipt,ExternalObservation fact,MinutesCandidateGraphPlan plan,String localError){this.issuer=issuer;this.request=request;this.token=token;this.wire=wire;this.receipt=receipt;this.fact=fact;this.plan=plan;this.saved=plan==null?null:MinutesSavedGraphPlan.candidate(plan,request.input.snapshot().graph(),request.input.budget());this.localError=localError;}
  }
  static final class RecordedObservation implements PreparedObservation {
   final MinutesExternalPreparation issuer;final MinutesRecordedLookup request;final ControlledMinutesClient.FactReceipt receipt;final ExternalObservation fact;

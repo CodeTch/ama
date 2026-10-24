@@ -1,0 +1,20 @@
+{
+  "command": [
+    "docker",
+    "exec",
+    "-i",
+    "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+    "mysql",
+    "--defaults-extra-file=/run/ama-task08/test.cnf",
+    "--protocol=TCP",
+    "-h127.0.0.1",
+    "--connect-timeout=5",
+    "--default-character-set=utf8mb4",
+    "--batch",
+    "--column-names",
+    "--database",
+    "ama_t10_1e48b41fc5c8_behavior"
+  ],
+  "exit": 1,
+  "utc": "2026-10-24T14:02:39.222448+00:00"
+}

@@ -1,0 +1,16 @@
+installed_rank	version	description	type	script	checksum	installed_by	installed_on	execution_time	success
+1	001	foundation	SQL	V001__foundation.sql	1201435595	ama_t08_848e93aace8b	2026-10-24T12:08:21	142	1
+2	002	identity acl	SQL	V002__identity_acl.sql	1757300424	ama_t08_848e93aace8b	2026-10-24T12:08:21	360	1
+3	005	tasks outbox	SQL	V005__tasks_outbox.sql	-1999355348	ama_t08_848e93aace8b	2026-10-24T12:08:22	588	1
+4	006	audit metadata	SQL	V006__audit_metadata.sql	-1744360556	ama_t08_848e93aace8b	2026-10-24T12:08:22	270	1
+5	007	identity sessions	SQL	V007__identity_sessions.sql	157746768	ama_t08_848e93aace8b	2026-10-24T12:08:23	818	1
+6	008	meeting schema	SQL	V008__meeting_schema.sql	-1747387036	ama_t08_848e93aace8b	2026-10-24T12:08:26	3217	1
+7	009	file schema	SQL	V009__file_schema.sql	-287948759	ama_t08_848e93aace8b	2026-10-24T12:08:28	1937	1
+8	010	reliable execution	SQL	V010__reliable_execution.sql	-1187397378	ama_t08_848e93aace8b	2026-10-24T12:08:31	2669	1
+9	011	transcript schema	SQL	V011__transcript_schema.sql	-286330771	ama_t08_848e93aace8b	2026-10-24T12:08:35	4117	1
+10	011.1	transcript material index	SQL	V011_1__transcript_material_index.sql	-570494170	ama_t08_848e93aace8b	2026-10-24T12:08:35	59	1
+11	012	minutes evidence	SQL	V012__minutes_evidence.sql	2101765957	ama_t08_848e93aace8b	2026-10-24T12:08:44	9271	1
+12	013	publications	SQL	V013__publications.sql	-847352333	ama_t08_848e93aace8b	2026-10-24T12:08:48	4307	1
+13	013.1	b runtime metadata	SQL	V013_1__b_runtime_metadata.sql	-1898004857	ama_t08_848e93aace8b	2026-10-24T12:08:49	492	1
+14	013.2	task input lookup	SQL	V013_2__task_input_lookup.sql	-1098175378	ama_t08_848e93aace8b	2026-10-24T12:08:49	94	1
+15	013.3	external reconcile scan	SQL	V013_3__external_reconcile_scan.sql	-385117638	ama_t08_848e93aace8b	2026-10-24T12:08:49	191	1

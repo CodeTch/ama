@@ -1,0 +1,59 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task10FinalDeniedTraceIT",
+      "reportSha256": "ad967ae3a0662bb0b810ee1d35b47e5dfa7c104ba1b893f03cf2114eb806854f",
+      "reportMtimeNs": 1792852721486307506,
+      "startedNs": 1792852641145105383,
+      "endedNs": 1792852749749204223,
+      "class": "ama.storage.Task10FinalDeniedTraceIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10FinalMarksWriterIT",
+      "reportSha256": "b883fe6395c0b35835c40e5c2e7bc76ff4d4b2570e6889776c9ee2654995c64c",
+      "reportMtimeNs": 1792852734389493127,
+      "startedNs": 1792852641145105383,
+      "endedNs": 1792852749749204223,
+      "class": "ama.storage.Task10FinalMarksWriterIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10FinalRestoreWriterIT",
+      "reportSha256": "aed82b63ce4541213a53c7847a781b4e999a781a7d8466977e3c761bc67ee256",
+      "reportMtimeNs": 1792852749278287406,
+      "startedNs": 1792852641145105383,
+      "endedNs": 1792852749749204223,
+      "class": "ama.storage.Task10FinalRestoreWriterIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10FinalRetainedStaleIT",
+      "reportSha256": "5a436cc44ac777c54b9196b14d8a51a2092d89e107989c90bb337ed08a96bf61",
+      "reportMtimeNs": 1792852683416519422,
+      "startedNs": 1792852641145105383,
+      "endedNs": 1792852749749204223,
+      "class": "ama.storage.Task10FinalRetainedStaleIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": true,
+      "skipped": false
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 2,
+    "failures": 1,
+    "errors": 1,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task10ReviewCoverageBoundaryIT",
+      "reportSha256": "12081dcd3340d2b96756a9dbe8f0e976a44e27cc523ec212ab3cb1725f5f0934",
+      "reportMtimeNs": 1792851906411721221,
+      "startedNs": 1792851869709439082,
+      "endedNs": 1792851906833132457,
+      "class": "ama.storage.Task10ReviewCoverageBoundaryIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10SavedReadBoundaryIT",
+      "reportSha256": "b3bcc750a6a60adc32485a2b14b8be6aa901fa9dd278c9955fd44c4e6eb1494f",
+      "reportMtimeNs": 1792851895496717085,
+      "startedNs": 1792851869709439082,
+      "endedNs": 1792851906833132457,
+      "class": "ama.storage.Task10SavedReadBoundaryIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": true,
+      "skipped": false
+    }
+  ]
+}

@@ -1,0 +1,420 @@
+{
+  "base": "97e788fe96744af88513cc33bfed652b204c9972",
+  "files": [
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java",
+      "bytes": 17204,
+      "sha256": "4885abd7d4744f2dbc76c79f659edc8ce0cdeaf6a833ca6769fb0680ecce4dcb"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesProvider.java",
+      "bytes": 17791,
+      "sha256": "13d9a36d1856cefae1274e717fda37e2653b500b5a8294a413ee9f62767933ea"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesCommandReceipts.java",
+      "bytes": 7670,
+      "sha256": "2083cee189db9418d90b424644f3c85e2219844a7e01d2d15eb162da55b42c2c"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesDecisions.java",
+      "bytes": 3127,
+      "sha256": "6f11955689ce000e2f3d74961de868fd7bc0ab347aca16e67e0dc46bfc9c130c"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesEditor.java",
+      "bytes": 1451,
+      "sha256": "812cc684e5a2120c9d9be822eb72f9f4ad41184ff03901b6308c79e024bcd793"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesFactsReader.java",
+      "bytes": 21524,
+      "sha256": "98cf25f9058e3f3fe312d3d85d7a24acbe08a17cca6e7430274f52a63c868dea"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationPreparation.java",
+      "bytes": 20081,
+      "sha256": "085340e4da04ea02887c0ef7a0491e724184cf33124ae213c46cd5acf633fcad"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesInitialSettings.java",
+      "bytes": 11904,
+      "sha256": "c9bff39f649c5be4676daa8dc9f7b23a384503267630db9f67c3333f5badb0bf"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesIntentReceipts.java",
+      "bytes": 4972,
+      "sha256": "3b84a85b21589d9d6658745aabd7645d820e5a1eab8c694271ae39d1e80af64d"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesReviews.java",
+      "bytes": 13149,
+      "sha256": "f41d2c93e43a96a719f02b4d2c00f2b9574a8cced63fb3c4f6f98b04aa5dd9de"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesSavedCommands.java",
+      "bytes": 28285,
+      "sha256": "8cb5428782689814ec47abeaf45b765153cd0171cfa6375237b0af90f0b10625"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesSavedQueries.java",
+      "bytes": 24684,
+      "sha256": "c61dcdebdbf79e1c196c22e234eaae74da72d72d5a1dd164df73fb5e383a3ce6"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesSettingsCommands.java",
+      "bytes": 12227,
+      "sha256": "889b20d65d40525202238775aab3d6ad1b47cc5c22a387cde266547f49b59627"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java",
+      "bytes": 20795,
+      "sha256": "5d687b44e97d9ff0353fb592428a71a87298bc9c2ab9eeb611f8e5fc1ab3f6ff"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "bytes": 33712,
+      "sha256": "a0e7e105c93a9b54f5939286d45bff03c3c7cc459d310d6f19f20f5d44123c9c"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "bytes": 62203,
+      "sha256": "c9aae5ad46794cebf68fa143829238e699f1d4214005e603f7c88536c57f476f"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesCandidateWriter.java",
+      "bytes": 9007,
+      "sha256": "f4598cd5b1255b733a3ec8a20a4a24cfafb26a24d5aecd2c4690ba29cb245704"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesEditorRuntime.java",
+      "bytes": 1946,
+      "sha256": "09677d923ef85e1bd45ba0c10e66f884a044fc2267cf60711282ec36bb30b320"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesEventReferences.java",
+      "bytes": 7227,
+      "sha256": "a9c281a8efc5c18355f3733a17767b79d89c1e81e54d350ccfb7b098548ed478"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesExternalPreparation.java",
+      "bytes": 14028,
+      "sha256": "32edefb89304ee9d73111995ea4b5b9693d3d5d667a936f9627433e3e76e14c6"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesGraphCapture.java",
+      "bytes": 10352,
+      "sha256": "9b329d24fe10409920403dd1d46016d24beed3b233f27833e0215bdec2c4a7dc"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java",
+      "bytes": 24093,
+      "sha256": "1c942662cc80039a99a5fb97480856d26f1231562fc1e8b127b5baa96318dd74"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesHistorySlots.java",
+      "bytes": 726,
+      "sha256": "08bc31d0773de91212751c07059fd92bf4752bf01aae1a5b32e0bef6be5bc9a7"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesIntentControl.java",
+      "bytes": 2587,
+      "sha256": "a41d68c60444ef3ffe965aa3ca3c31170edb562de3f4b3181ca9d1c57fe46c5a"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesPendingDiscovery.java",
+      "bytes": 10440,
+      "sha256": "bda0522b2ed11dbef01cb19a7db0721fedc1d8ae7c38d869246fb521b1071563"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesSavedGraphPlan.java",
+      "bytes": 7099,
+      "sha256": "7fa5f1e65d64f11b1d08ed3fd95c0e55846785b15157ace9ee7d2e0a968f3ee6"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesSavedWriter.java",
+      "bytes": 9145,
+      "sha256": "1ad89d16921868b04ad4ebfb2951875d0da8a505a35546a3e4b59a7c92d7da81"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesTaskDomainPolicy.java",
+      "bytes": 18768,
+      "sha256": "c172fa051865a8aff88b70f316f80b06baf0a3e92809bc0a9adbd2517818ec7f"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+      "bytes": 13987,
+      "sha256": "8ec4d36ca09a9003e313052110df6a343b69b4137079c20bed36d4ebafc3af67"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MeetingConfiguration.java",
+      "bytes": 2283,
+      "sha256": "225052793b2b7df9a0008cbfdad5a53876c132d4e6945ec055f50f90ec4685aa"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesConfiguration.java",
+      "bytes": 3574,
+      "sha256": "d557654e4f6480ce231916ef9f802ca4d205f35cacf613883d24fb3a27a6e722"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesController.java",
+      "bytes": 6047,
+      "sha256": "8cd9170dd7265df5bd125d82ddae2e174a09af700611e3f93533d4443f5f6240"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesErrors.java",
+      "bytes": 1843,
+      "sha256": "90519d6489bf3983c8b9672218106a70f70eab473fa31b940412e8dcf49a28cd"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesSavedController.java",
+      "bytes": 8912,
+      "sha256": "4321ffa8fffd78437f4eb222d01d5c084357dcaea7cfad716e5e656cc9f8e887"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesSavedWire.java",
+      "bytes": 7578,
+      "sha256": "ae69ae16e5f4650464ba59a5df0f44dbc87bc3d2492918e2347c1dadf8e77434"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesWire.java",
+      "bytes": 2460,
+      "sha256": "21df56540583a02f3f3d4bc1224990ed8225f1f740d1c80d2d0f90a5aa6dd3af"
+    },
+    {
+      "path": "backend/api/src/test/java/ama/api/Task10SavedWireTest.java",
+      "bytes": 3131,
+      "sha256": "4c5ce83fe589ca30880043ed42531dd623dbfabc0be7ada84bddb6e5fef4b4a7"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java",
+      "bytes": 1485,
+      "sha256": "17c595728a0b82e189d5cac649aed0681404cb8fba9c992e21f8de34dc8561f1"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/minutes/Task10BootstrapIT.java",
+      "bytes": 1727,
+      "sha256": "051b0b35c121d604417222c05fe01a473cf0b19fea9c527cdcbcaf0c2b61c854"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/minutes/Task10Source.java",
+      "bytes": 435,
+      "sha256": "4616560885f5728c3f17fc3bbe440ecb44d70dfd97ca911b4b71cc5ce1f4b977"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10AdoptIT.java",
+      "bytes": 7366,
+      "sha256": "2f9b1bbb67a9dd5cb128be2709e82e66cdc157cbbf7316b86becdfe177b71fd5"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10AtomicTraceSource.java",
+      "bytes": 3057,
+      "sha256": "27d6d63f02e9cf3ed736f6169e523e6843af92455e3678dd580f2ee8cf748aa9"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10BodyIT.java",
+      "bytes": 2670,
+      "sha256": "c15d786d2b786785b0524dfd49453f4fb1dc4acf3f4b3b19e54b7c5502bb6a97"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10ClosingCasIT.java",
+      "bytes": 3052,
+      "sha256": "93bfa38dc0ce52fd0a24064579fe869dce4e5ebdc4f9aad9f902980917cdf617"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10ClosingOriginalRecoveryIT.java",
+      "bytes": 9241,
+      "sha256": "cdefcf82c7b9f9da148ccf4d80a1705d5503e06de4dd1903b1b7790b2e183693"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10ClosingOriginalSettlementIT.java",
+      "bytes": 2289,
+      "sha256": "c05571410a7fa124bb2a6547ada6db6f1af4130056f91a1729c32bc0c084cff0"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10ClosingRetainedIT.java",
+      "bytes": 89,
+      "sha256": "ebe94f72cd69e4957e118c76524443ead073879917882ad655afac68c95f938e"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10ClosingSecondLookupIT.java",
+      "bytes": 9300,
+      "sha256": "e43343fa33b0d3fbf443e4a2c5626c5bf581c4914473d2aead50c5de77e66a7c"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10DeniedLookupProcess.java",
+      "bytes": 13112,
+      "sha256": "bbe80d624925ec7e1b470e732e51bd50a3ab97b1d5aa77219191b03dab0553bf"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10DisposeDecisionIT.java",
+      "bytes": 124,
+      "sha256": "d09bd01ee4fb488c6421bfdd68e0f9386243b0812354fc6cbaa931499ad7a0bb"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10EditsIT.java",
+      "bytes": 4822,
+      "sha256": "a4b5c7f37c672baa13d4eeb1adc59494dac0b57afdc85df820c5ecf6a4bb5b57"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10F2OriginalAdoptIT.java",
+      "bytes": 5517,
+      "sha256": "0284598b6707f3f0e094227bcb60070266c30adb7659a10c4357bfa68b592b21"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10F2OriginalSettlementIT.java",
+      "bytes": 2284,
+      "sha256": "060cf018f7b541843de195347b3188a253f1f2cde766013020acccc91ca24f82"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10FinalCheckCasIT.java",
+      "bytes": 79,
+      "sha256": "2041c0c6075dc027c511ae8df63f760ed39949041bbebe48784454240e8ad050"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10FinalCheckEmptyIT.java",
+      "bytes": 1170,
+      "sha256": "77b23d8b959004eacab05626465ad0fb171032b24b1110a9c9f90fa9dd403462"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10FinalCheckRetainedIT.java",
+      "bytes": 92,
+      "sha256": "0c3e367fee46992035eb3495cf16319bb4127e7cdcf630adeb43d90e39d2787d"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10FinalDeniedTraceIT.java",
+      "bytes": 8557,
+      "sha256": "4e9335ecef9291d3f8151e0657f967f892f67f4238f3982a720a1b0df05aa5ef"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10FinalMarksWriterIT.java",
+      "bytes": 2761,
+      "sha256": "da40166f3ae8efd9104481bc69d507001c00673a26f9a68d5622781878394dfe"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10FinalRestoreWriterIT.java",
+      "bytes": 214,
+      "sha256": "57db03433c17ff9b284246e9a0347d6cbcb5997d79f3a5e199a83502f9ac9d22"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10FinalRetainedStaleIT.java",
+      "bytes": 5788,
+      "sha256": "d159f80667f5484622f43de3256874e30cf05959e0f32bee468a97d45c3b3b01"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10FirstSaveIT.java",
+      "bytes": 3910,
+      "sha256": "1d80bf94e0c02ec8c799487a851011067540bd39861f7dae6c30b690804f0ae3"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10GenerationFixture.java",
+      "bytes": 10522,
+      "sha256": "41a01068e38acce5b8622c9edf03eaec4f855969ed91d1bfd97828f43e1a773d"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10IntentIT.java",
+      "bytes": 4461,
+      "sha256": "8a90dbf4c82f20858e46f2f2411855960f8213a2e91fc5335a41e4b882f99b30"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10MultiVersionDeniedRecoveryIT.java",
+      "bytes": 144,
+      "sha256": "b6786d34315e048ef0da3c8576a3dee67cf2d5e7a5a807be3505431a271e129f"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10MultiVersionRecoveryIT.java",
+      "bytes": 17703,
+      "sha256": "96a09526b8ab3bc4f6169af657df5c3ab7f43d053969e97ebabbfe72fad38c02"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10PendingAbsentIT.java",
+      "bytes": 2166,
+      "sha256": "6831a5b2718ef4c9c28f637b589e798cb2d83eee029f521649331ebc2593a5df"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10PendingInfoIT.java",
+      "bytes": 1584,
+      "sha256": "6e878d7ccc8dab63777a80ccdd717ea2576ace2384063bd07baef202de8fc1fa"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10PendingIntakeIT.java",
+      "bytes": 1591,
+      "sha256": "42e752d5d94cb55241dc06f628fdf7eea2e5ded510e410ac10bb26ff6847410f"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10PendingRosterIT.java",
+      "bytes": 978,
+      "sha256": "7e9530f119f415dfeb3db7d6782d1e7495e2084c995d8d90a99d4c7ab7b2d18d"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10PendingTranscriptIT.java",
+      "bytes": 1545,
+      "sha256": "3e8becf9c7fccbd1b250a85ee515cd1c9f63fb9a12563a2c7f93c59502e50855"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10RegressionB03IT.java",
+      "bytes": 82,
+      "sha256": "e7fdc2b461b4843f08ef6f303e72e895d0ab16cbffcd4b4c77b55566c3c8cfd7"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10RegressionIntakeIT.java",
+      "bytes": 85,
+      "sha256": "d7a312101b0e40fd8c9f66f27c42f0f63ada1d2897ca71a34934444982575bb1"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10RegressionSourceIT.java",
+      "bytes": 4330,
+      "sha256": "219feae4a6ec3896261ffef2ff53ff5987ce2e0e1284cb1d178340bf54337a15"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10RejectDecisionIT.java",
+      "bytes": 2967,
+      "sha256": "ad1bf1064ec3ce9c06d939346e7f06e12cfb5d755687eed42af2162ee9e97a84"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10ReviewCoverageBoundaryIT.java",
+      "bytes": 4784,
+      "sha256": "b8bdab50761f4799ac3f7d407305cbfd874d979e9ef5c1343f7a48c20899cc78"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10ReviewIT.java",
+      "bytes": 3592,
+      "sha256": "3e8f90ebebaf1fdc87f9febfe750d8f5d6f673439843df189f5b724fcd07e382"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10SafetyMemberHttpIT.java",
+      "bytes": 6121,
+      "sha256": "d3045a6590f5cda7d49d042d9ace1ad12b0e7842ae9e589703d41c650a9e7cc9"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10SafetyRollbackCasIT.java",
+      "bytes": 8708,
+      "sha256": "4deccb664609ac7f82709fc22ef368f6c05162644709466e417e1e0e7d96c693"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10SavedHttpIT.java",
+      "bytes": 4227,
+      "sha256": "cb5c9e546f3f0529b853689ff876a3d35d3e328beba19fb73c5fc5f623ecee05"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10SavedReadBoundaryIT.java",
+      "bytes": 2222,
+      "sha256": "97e57844af29ac23d1d9303d4859653f9b7720faf48519406facf454c9ca0605"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10SettingsIT.java",
+      "bytes": 2898,
+      "sha256": "c88f4475d1c5a67026138471f91a7a4aefaf9c72cfcdf5c3b2a147659ced8d54"
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "bytes": 7080,
+      "sha256": "be6b4c6d8685de23fe35e52840bfcd76380bf31bdf2c1431c681052f8c6e171b"
+    },
+    {
+      "path": "contracts/openapi/minutes.yaml",
+      "bytes": 302362,
+      "sha256": "ee3b2b9aee6f4ab60b3e1de36d8ca77b3a4853c895be86876be54fe279a605a7"
+    }
+  ]
+}

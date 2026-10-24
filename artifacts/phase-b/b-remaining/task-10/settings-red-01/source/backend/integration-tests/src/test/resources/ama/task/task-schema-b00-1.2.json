@@ -1,0 +1,1602 @@
+{
+  "source": "docs/acceptance/b/database-upload-addendum-metadata-evidence.json",
+  "source_sha256": "3de8041db8860f1547ff53a94b4ddd79470c4881340111fdafbc3ce5322399ad",
+  "metadata": {
+    "tables": [
+      {
+        "table": "durable_task",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "external_execution",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "external_operation",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "model_capacity",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "model_reservation",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "outbox_consumer",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "task_attempt",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "task_outbox",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "task_outbox_sequence",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "table": "task_subject",
+        "engine": "InnoDB",
+        "collation": "utf8mb4_0900_ai_ci"
+      }
+    ],
+    "columns": [
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "task_type",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "pool",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "subject_kind",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "subject_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "producer_key",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "input_kind",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "input_id",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "input_fingerprint",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "durable_task",
+        "column": "business_version",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "durable_task",
+        "column": "cancel_epoch",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "int",
+        "extra": "",
+        "table": "durable_task",
+        "column": "priority",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "state",
+        "default": "READY",
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "durable_task",
+        "column": "attempt",
+        "default": "0",
+        "ordinal": 14,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "durable_task",
+        "column": "max_attempts",
+        "default": null,
+        "ordinal": 15,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "lease_owner",
+        "default": null,
+        "ordinal": 16,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "expires_at",
+        "default": null,
+        "ordinal": 17,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "available_at",
+        "default": null,
+        "ordinal": 18,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 19,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "output_kind",
+        "default": null,
+        "ordinal": 20,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "output_id",
+        "default": null,
+        "ordinal": 21,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "durable_task",
+        "column": "last_error",
+        "default": null,
+        "ordinal": 22,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "operation_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "external_execution",
+        "column": "execution_no",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "task_id",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "external_execution",
+        "column": "task_attempt",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "state",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "request_hash",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "external_execution",
+        "column": "request_manifest",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "marked_at",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "finished_at",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "no_effect_basis",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "external_execution",
+        "column": "no_effect_evidence",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_execution",
+        "column": "no_effect_verified_at",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "operation_kind",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "business_key",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "char(64)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "request_hash",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "state",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "marked_at",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "next_check_at",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "external_operation",
+        "column": "reconcile_epoch",
+        "default": "0",
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "reconcile_owner",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "reconcile_expires_at",
+        "default": null,
+        "ordinal": 10,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "longtext",
+        "extra": "",
+        "table": "external_operation",
+        "column": "external_result_id",
+        "default": null,
+        "ordinal": 11,
+        "nullable": "YES",
+        "collation": "utf8mb4_0900_ai_ci"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "last_error",
+        "default": null,
+        "ordinal": 12,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "subject_kind",
+        "default": null,
+        "ordinal": 13,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "external_operation",
+        "column": "subject_id",
+        "default": null,
+        "ordinal": 14,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "external_operation",
+        "column": "current_execution_no",
+        "default": null,
+        "ordinal": 15,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "model_capacity",
+        "column": "model",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "int unsigned",
+        "extra": "",
+        "table": "model_capacity",
+        "column": "capacity",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "model_capacity",
+        "column": "config_revision",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "tinyint unsigned",
+        "extra": "",
+        "table": "model_capacity",
+        "column": "enabled",
+        "default": "0",
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "model_capacity",
+        "column": "cutoff_policy",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "model_reservation",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "model_reservation",
+        "column": "model",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "model_reservation",
+        "column": "execution_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "model_reservation",
+        "column": "config_revision",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "model_reservation",
+        "column": "safe_deadline",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "model_reservation",
+        "column": "created_at",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "model_reservation",
+        "column": "settled_at",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "outbox_consumer",
+        "column": "consumer_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "outbox_consumer",
+        "column": "cursor",
+        "default": "0",
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "outbox_consumer",
+        "column": "epoch",
+        "default": "0",
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "outbox_consumer",
+        "column": "lease_owner",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "outbox_consumer",
+        "column": "expires_at",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "task_attempt",
+        "column": "task_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "task_attempt",
+        "column": "attempt",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "task_attempt",
+        "column": "owner",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "task_attempt",
+        "column": "started_at",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "task_attempt",
+        "column": "ended_at",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "YES",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "task_attempt",
+        "column": "outcome",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "task_attempt",
+        "column": "error_code",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "sequence_id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "event_type",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "task_id",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "YES",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "subject_kind",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "subject_id",
+        "default": null,
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "subject_revision",
+        "default": null,
+        "ordinal": 6,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "reference_kind",
+        "default": null,
+        "ordinal": 7,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "char(36)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "reference_id",
+        "default": null,
+        "ordinal": 8,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "datetime(6)",
+        "extra": "",
+        "table": "task_outbox",
+        "column": "occurred_at",
+        "default": null,
+        "ordinal": 9,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "int",
+        "extra": "",
+        "table": "task_outbox_sequence",
+        "column": "id",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "task_outbox_sequence",
+        "column": "next_id",
+        "default": "1",
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "varchar(64)",
+        "extra": "",
+        "table": "task_subject",
+        "column": "subject_kind",
+        "default": null,
+        "ordinal": 1,
+        "nullable": "NO",
+        "collation": "ascii_bin"
+      },
+      {
+        "type": "varchar(255)",
+        "extra": "",
+        "table": "task_subject",
+        "column": "subject_id",
+        "default": null,
+        "ordinal": 2,
+        "nullable": "NO",
+        "collation": "utf8mb4_0900_bin"
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "task_subject",
+        "column": "business_version",
+        "default": null,
+        "ordinal": 3,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "bigint unsigned",
+        "extra": "",
+        "table": "task_subject",
+        "column": "cancel_epoch",
+        "default": null,
+        "ordinal": 4,
+        "nullable": "NO",
+        "collation": null
+      },
+      {
+        "type": "tinyint unsigned",
+        "extra": "",
+        "table": "task_subject",
+        "column": "deleted",
+        "default": "0",
+        "ordinal": 5,
+        "nullable": "NO",
+        "collation": null
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "task_expired",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "pool",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "task_expired",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "task_expired",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "expires_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "task_expired",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "task_producer",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "producer_key",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "task_ready",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "pool",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "task_ready",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "task_ready",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "available_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "task_ready",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "task_subject_history",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "subject_kind",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "task_subject_history",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "subject_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "task_subject_history",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "created_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 4,
+        "name": "task_subject_history",
+        "type": "BTREE",
+        "table": "durable_task",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "external_execution_number",
+        "type": "BTREE",
+        "table": "external_execution",
+        "column": "operation_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "external_execution_number",
+        "type": "BTREE",
+        "table": "external_execution",
+        "column": "execution_no",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "external_execution_task",
+        "type": "BTREE",
+        "table": "external_execution",
+        "column": "task_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "external_execution",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "external_due",
+        "type": "BTREE",
+        "table": "external_operation",
+        "column": "state",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "external_due",
+        "type": "BTREE",
+        "table": "external_operation",
+        "column": "next_check_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "external_due",
+        "type": "BTREE",
+        "table": "external_operation",
+        "column": "id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "external_key",
+        "type": "BTREE",
+        "table": "external_operation",
+        "column": "operation_kind",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "external_key",
+        "type": "BTREE",
+        "table": "external_operation",
+        "column": "business_key",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_external_operation_0",
+        "type": "BTREE",
+        "table": "external_operation",
+        "column": "subject_kind",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "fk_external_operation_0",
+        "type": "BTREE",
+        "table": "external_operation",
+        "column": "subject_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "external_operation",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "model_capacity",
+        "column": "model",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "model_deadline",
+        "type": "BTREE",
+        "table": "model_reservation",
+        "column": "model",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "model_deadline",
+        "type": "BTREE",
+        "table": "model_reservation",
+        "column": "settled_at",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "model_deadline",
+        "type": "BTREE",
+        "table": "model_reservation",
+        "column": "safe_deadline",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "model_reservation",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "reservation_execution",
+        "type": "BTREE",
+        "table": "model_reservation",
+        "column": "execution_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "outbox_consumer",
+        "column": "consumer_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "task_attempt",
+        "column": "task_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "task_attempt",
+        "column": "attempt",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "fk_task_outbox_0",
+        "type": "BTREE",
+        "table": "task_outbox",
+        "column": "task_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "outbox_subject",
+        "type": "BTREE",
+        "table": "task_outbox",
+        "column": "subject_kind",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "outbox_subject",
+        "type": "BTREE",
+        "table": "task_outbox",
+        "column": "subject_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 3,
+        "name": "outbox_subject",
+        "type": "BTREE",
+        "table": "task_outbox",
+        "column": "sequence_id",
+        "prefix": null,
+        "unique": 0,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "task_outbox",
+        "column": "sequence_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "task_outbox_sequence",
+        "column": "id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 1,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "task_subject",
+        "column": "subject_kind",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      },
+      {
+        "seq": 2,
+        "name": "PRIMARY",
+        "type": "BTREE",
+        "table": "task_subject",
+        "column": "subject_id",
+        "prefix": null,
+        "unique": 1,
+        "direction": "A"
+      }
+    ],
+    "checks": [
+      {
+        "name": "ck_durable_task_0",
+        "table": "durable_task",
+        "clause": "(`state` in (_ascii\\'READY\\',_ascii\\'RUNNING\\',_ascii\\'RECONCILING\\',_ascii\\'SUCCEEDED\\',_ascii\\'FAILED\\',_ascii\\'CANCELLED\\',_ascii\\'STALE\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_durable_task_1",
+        "table": "durable_task",
+        "clause": "(`max_attempts` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_durable_task_2",
+        "table": "durable_task",
+        "clause": "((`state` <> _ascii\\'RUNNING\\') or ((`lease_owner` is not null) and (`expires_at` is not null)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_execution_0",
+        "table": "external_execution",
+        "clause": "(`execution_no` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_execution_1",
+        "table": "external_execution",
+        "clause": "(`state` in (_ascii\\'PREPARED\\',_ascii\\'MARKED\\',_ascii\\'UNKNOWN\\',_ascii\\'SUCCEEDED\\',_ascii\\'FAILED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_execution_2",
+        "table": "external_execution",
+        "clause": "((`state` <> _ascii\\'MARKED\\') or ((`task_attempt` is not null) and (`marked_at` is not null)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_execution_3",
+        "table": "external_execution",
+        "clause": "((`no_effect_basis` is null) or (`no_effect_basis` in (_ascii\\'NOT_SENT\\',_ascii\\'DEFINITIVE_REJECTION\\',_ascii\\'PROVEN_CUTOFF_FENCED\\')))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_execution_4",
+        "table": "external_execution",
+        "clause": "(((`no_effect_basis` is null) and (`no_effect_evidence` is null) and (`no_effect_verified_at` is null)) or ((`state` = _ascii\\'FAILED\\') and (`no_effect_basis` is not null) and (`no_effect_evidence` is not null) and (`no_effect_verified_at` is not null) and (`finished_at` is not null)))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_operation_0",
+        "table": "external_operation",
+        "clause": "(`state` in (_ascii\\'MARKED\\',_ascii\\'UNKNOWN\\',_ascii\\'RETRY_QUEUED\\',_ascii\\'SUCCEEDED\\',_ascii\\'FAILED\\',_ascii\\'MANUAL_REQUIRED\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_external_operation_1",
+        "table": "external_operation",
+        "clause": "(`current_execution_no` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_model_capacity_0",
+        "table": "model_capacity",
+        "clause": "(`capacity` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_model_capacity_1",
+        "table": "model_capacity",
+        "clause": "(`enabled` in (0,1))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_model_capacity_2",
+        "table": "model_capacity",
+        "clause": "(`cutoff_policy` in (_utf8mb4\\'PROVEN_DEADLINE\\',_utf8mb4\\'EXPLICIT_SETTLEMENT\\'))",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_task_outbox_sequence_0",
+        "table": "task_outbox_sequence",
+        "clause": "(`id` = 1)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_task_outbox_sequence_1",
+        "table": "task_outbox_sequence",
+        "clause": "(`next_id` > 0)",
+        "enforced": "YES"
+      },
+      {
+        "name": "ck_task_subject_0",
+        "table": "task_subject",
+        "clause": "(`deleted` in (0,1))",
+        "enforced": "YES"
+      }
+    ],
+    "foreign_keys": [
+      {
+        "name": "fk_durable_task_0",
+        "table": "durable_task",
+        "column": "subject_kind",
+        "delete": "RESTRICT",
+        "remote": "subject_kind",
+        "target": "task_subject",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_durable_task_0",
+        "table": "durable_task",
+        "column": "subject_id",
+        "delete": "RESTRICT",
+        "remote": "subject_id",
+        "target": "task_subject",
+        "update": "RESTRICT",
+        "ordinal": 2
+      },
+      {
+        "name": "fk_external_execution_0",
+        "table": "external_execution",
+        "column": "operation_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "external_operation",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_external_execution_1",
+        "table": "external_execution",
+        "column": "task_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "durable_task",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_external_operation_0",
+        "table": "external_operation",
+        "column": "subject_kind",
+        "delete": "RESTRICT",
+        "remote": "subject_kind",
+        "target": "task_subject",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_external_operation_0",
+        "table": "external_operation",
+        "column": "subject_id",
+        "delete": "RESTRICT",
+        "remote": "subject_id",
+        "target": "task_subject",
+        "update": "RESTRICT",
+        "ordinal": 2
+      },
+      {
+        "name": "fk_model_reservation_0",
+        "table": "model_reservation",
+        "column": "model",
+        "delete": "RESTRICT",
+        "remote": "model",
+        "target": "model_capacity",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_model_reservation_1",
+        "table": "model_reservation",
+        "column": "execution_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "external_execution",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_task_attempt_0",
+        "table": "task_attempt",
+        "column": "task_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "durable_task",
+        "update": "RESTRICT",
+        "ordinal": 1
+      },
+      {
+        "name": "fk_task_outbox_0",
+        "table": "task_outbox",
+        "column": "task_id",
+        "delete": "RESTRICT",
+        "remote": "id",
+        "target": "durable_task",
+        "update": "RESTRICT",
+        "ordinal": 1
+      }
+    ]
+  }
+}

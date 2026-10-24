@@ -19,6 +19,8 @@ public final class JdbcSavedTranscripts {
  private final SavedTranscriptAdmission admission;
  private final JdbcTranscriptAuthority authority;private final Supplier<ConfigArchiveSource.Snapshot> archives;
  private final TranscriptAcquisitionBudget limits;private final CorrectionInstallation correction;private final JdbcTemplate j;
+ CorrectionInstallation correctionFor(JdbcTranscriptAuthority expected){if(authority!=expected)throw fail(CAPABILITY_UNAVAILABLE);return correction;}
+ void requireCorrection(JdbcTranscriptAuthority expected,CorrectionInstallation captured,boolean ready){correctionFor(expected).requireSame(captured);if(ready)correction.requireReady();}
  public JdbcSavedTranscripts(JdbcTranscriptAuthority authority,Supplier<ConfigArchiveSource.Snapshot> archives,TranscriptAcquisitionBudget limits,CorrectionInstallation correction){
   this(authority,archives,limits,correction,new ama.task.JdbcSubjectFences(authority.dataSource(),Set.of("MEETING")),new ama.task.JdbcOutbox(authority.dataSource(),new TranscriptEventReferences(authority.dataSource()).validators()),new ama.audit.JdbcAuditAdapter(authority.dataSource()),new SavedTranscriptTransitions(null,null,null,List.of(),List.of()));
  }
@@ -49,18 +51,19 @@ public final class JdbcSavedTranscripts {
   SavedTranscriptGraph snapshot;
   try{snapshot=acquire(actor,meeting,selection,JdbcTranscriptAuthority.SavedPurpose.MUTATION,budget);}
   catch(RuntimeException failure){cancellation(failure);if(!ordinaryPreparationFailure(failure))throw failure;var winner=receipts.lookup(actor,meeting,identity,command);if(winner.isPresent())return winner.orElseThrow();throw failure;}
-  Write write=null;RuntimeException error=null;
-  try{transitions.requireAbsent();writable(snapshot,command);write=plan(actor,prepare(snapshot,budget),command,budget);}catch(RuntimeException failure){cancellation(failure);error=failure;}
-  final var expected=write;final var failed=error;
+  Write write=null;RuntimeException error=null;JdbcTranscriptAuthority.PreparedMinutesTransition pending=null;
+  try{transitions.requireControlledPublication();writable(snapshot,command);write=plan(actor,prepare(snapshot,budget),command,budget);pending=authority.prepareMinutesTransition(actor,meeting,selection.discovered().ancestry().values().stream().map(row->row.get(4)).filter(Objects::nonNull).toList());}catch(RuntimeException failure){cancellation(failure);error=failure;}
+  final var expected=write;final var failed=error;final var contribution=pending;
   return authority.transactionRunner().required(()->{
    var stored=receipts.claim(actor,meeting,identity);var gate=authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);JdbcSavedTranscriptReceipts.match(stored);
    if(failed!=null&&!ordinaryPreparationFailure(failed))throw failed;
    if(stored.result()!=null)return receipts.restore(meeting,stored,command,true);
    if(failed!=null)throw failed;
    var scope=authority.savedScope(gate,actor,meeting,JdbcTranscriptAuthority.SavedPurpose.MUTATION);
-   var fresh=SavedTranscriptGraph.acquire(authority,j,gate,scope,actor,meeting,JdbcTranscriptAuthority.SavedPurpose.MUTATION,selection.discovered(),limits,budget);
+   var transition=authority.beginMinutesTransition(contribution,actor,meeting,gate);
+   var fresh=SavedTranscriptGraph.acquire(authority,j,gate,scope,actor,meeting,JdbcTranscriptAuthority.SavedPurpose.MUTATION,selection.discovered(),limits,budget,transition);
    writable(fresh,command);require(fresh.equals(expected.prepared().graph()),PROVENANCE_UNAVAILABLE);
-   var held=authority.sealSavedGraph(scope,gate,actor,meeting,fresh);authority.requireSavedHeld(held,gate,actor,meeting);transitions.requireAbsent();
+   var held=authority.sealSavedGraph(scope,gate,actor,meeting,fresh);authority.requireSavedHeld(held,gate,actor,meeting);transitions.requireControlledPublication();
    boolean confirming=command.operation()==ama.contract.TranscriptContracts.Operation.CONFIRM;
    if(confirming){correction.requireSame(expected.installation());correction.requireReady();}
    boolean advance=!confirming||!expected.resultId().equals(fresh.root().get("transcript_confirmation_id"));long revision=command.expectedRevision();
@@ -79,7 +82,7 @@ public final class JdbcSavedTranscripts {
     revision++;
     String update=confirming?"transcript_confirmation_id=?":"transcript_revision_id=?,transcript_confirmation_id=NULL";
     if(j.update("UPDATE meeting SET "+update+",revision=?,final_confirmation_id=NULL,needs_generation=1,updated_at=UTC_TIMESTAMP(6) WHERE id=? AND revision=? AND cancel_epoch=? AND ever_published=0 AND stage<>'PUBLISHED' AND lifecycle='ACTIVE' AND governance_state='ACTIVE'",expected.resultId(),revision,meeting,command.expectedRevision(),subject.cancelEpoch())!=1)throw new ama.contract.TranscriptContracts.Failure(409,"REVISION_CONFLICT");
-    require(j.update("UPDATE meeting_search_projection SET meeting_revision=? WHERE meeting_id=?",revision,meeting)==1,PROVENANCE_UNAVAILABLE);fences.advance(subject,revision,subject.cancelEpoch(),false);
+    require(j.update("UPDATE meeting_search_projection SET meeting_revision=? WHERE meeting_id=?",revision,meeting)==1,PROVENANCE_UNAVAILABLE);fences.advance(subject,revision,subject.cancelEpoch(),false);authority.finishMinutesTransition(transition,revision);
    }
    receipts.accepted(identity,expected.resultId());var response=receipts.restore(meeting,new JdbcSavedTranscriptReceipts.Stored(expected.resultId(),200,true),command,false);
    if(advance){String event=confirming?"TRANSCRIPT_CONFIRMED":"TRANSCRIPT_SAVED";audit.append(new ama.contract.AuditContracts.AuditEvent(actor.enterpriseId(),event,meeting,revision,"SUCCEEDED",trace,java.time.Instant.now()));outbox.append(new ama.contract.OutboxContracts.EventDraft(event,null,new SubjectRef("MEETING",meeting),revision,new ama.contract.OutboxContracts.Reference(confirming?"TRANSCRIPT_CONFIRMATION":"TRANSCRIPT_REVISION",expected.resultId())));}
@@ -216,7 +219,7 @@ public final class JdbcSavedTranscripts {
  private Map<String,Object> projection(Prepared p,boolean owner){
   var g=p.graph();var out=new LinkedHashMap<String,Object>();out.put("meetingId",g.meeting());out.put("observation",observation(g.root()));out.put("storedInspection","AVAILABLE");
   out.put("selected",g.selected()==null?null:detail(g,owner));out.put("sourceBytes",g.sourceBytes());out.put("correction",correction.projection());
-  boolean transitionsReady;try{transitions.requireAbsent();transitionsReady=true;}catch(Failure unavailable){transitionsReady=false;}
+  boolean transitionsReady;try{transitions.requireControlledPublication();transitionsReady=true;}catch(Failure unavailable){transitionsReady=false;}
   boolean writable=transitionsReady&&owner&&SavedTranscriptGraph.num(g.root(),"ever_published")==0&&"ACTIVE".equals(g.root().get("lifecycle"))&&"ACTIVE".equals(g.root().get("governance_state"))&&!"PUBLISHED".equals(g.root().get("stage"))&&SavedTranscriptGraph.num(g.root(),"revision")<Long.MAX_VALUE-1;
   boolean bytes=g.selected()!=null&&g.sourceBytes().stream().allMatch(s->"ELIGIBLE".equals(s.get("eligibility")));boolean current=g.selected()!=null&&g.selected().equals(g.root().get("transcript_revision_id"));
   out.put("capabilities",Map.of("canReadHistory",owner,"canSave",writable&&bytes&&canAppend(g)&&(current||g.selectedRow().string("kind").equals("RAW")),"canRestore",writable&&bytes&&canAppend(g),"canReadSources",bytes,"canConfirm",writable&&bytes&&current&&g.selectedRow().string("kind").equals("WORKING")&&"NOT_APPLICABLE".equals(correction.projection().readiness())));

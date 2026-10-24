@@ -1,0 +1,52 @@
+{
+  "commands": [
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0,1",
+        "node",
+        "--max-old-space-size=512",
+        "/home/tanren/ama/.worktrees/phase-b-completion/node_modules/@redocly/cli/bin/cli.js",
+        "lint",
+        "contracts/openapi/api.yaml",
+        "--config",
+        "redocly.yaml"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0,1",
+        "node",
+        "--max-old-space-size=512",
+        "/home/tanren/ama/.worktrees/phase-b-completion/node_modules/@redocly/cli/bin/cli.js",
+        "bundle",
+        "contracts/openapi/api.yaml",
+        "--config",
+        "redocly.yaml",
+        "--output",
+        "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-10/openapi-final-01/api.yaml"
+      ],
+      "exit": 0
+    }
+  ],
+  "actualResponseChecks": [
+    {
+      "schema": "SavedCurrent",
+      "source": "artifacts/phase-b/b-remaining/task-10/safety-boundaries-01/pipeline-879da6fc-dd26-45a3-bd7a-fe1f908c3075/actual-member-http.json",
+      "errors": []
+    },
+    {
+      "schema": "SavedSource",
+      "source": "artifacts/phase-b/b-remaining/task-10/safety-boundaries-01/pipeline-879da6fc-dd26-45a3-bd7a-fe1f908c3075/actual-member-http.json",
+      "errors": []
+    }
+  ],
+  "source": {
+    "contracts/openapi/api.yaml": "be6b4c6d8685de23fe35e52840bfcd76380bf31bdf2c1431c681052f8c6e171b",
+    "contracts/openapi/minutes.yaml": "ee3b2b9aee6f4ab60b3e1de36d8ca77b3a4853c895be86876be54fe279a605a7"
+  }
+}

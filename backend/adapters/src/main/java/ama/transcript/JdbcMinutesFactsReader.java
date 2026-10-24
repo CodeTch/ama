@@ -22,30 +22,35 @@ public final class JdbcMinutesFactsReader {
  private final JdbcTranscriptAuthority authority;private final Supplier<ConfigArchiveSource.Snapshot> archives;private final String indexSha;private final TranscriptAcquisitionBudget limits;
  public JdbcMinutesFactsReader(JdbcTranscriptAuthority authority,Supplier<ConfigArchiveSource.Snapshot> archives,String indexSha,TranscriptAcquisitionBudget limits){this.authority=Objects.requireNonNull(authority);this.archives=Objects.requireNonNull(archives);hash(indexSha);this.indexSha=indexSha;this.limits=Objects.requireNonNull(limits);}
  public static final class Snapshot {
-  private final MinutesGraphCapture.Graph graph;private final StoredProvenanceFacts facts;private final List<Ref> roots;private final Map<String,String> generationManifests;
-  private Snapshot(MinutesGraphCapture.Graph graph,StoredProvenanceFacts facts,List<Ref> roots,Map<String,String> manifests){this.graph=graph;this.facts=facts;this.roots=List.copyOf(roots);this.generationManifests=Map.copyOf(manifests);}
-  MinutesGraphCapture.Graph graph(){return graph;}
+  private final MinutesGraphCapture.Graph graph;private final StoredProvenanceFacts facts;private final List<Ref> roots;private final Map<String,String> generationManifests;private final TranscriptAcquisitionBudget.Ledger budget;
+  private Snapshot(MinutesGraphCapture.Graph graph,StoredProvenanceFacts facts,List<Ref> roots,Map<String,String> manifests,TranscriptAcquisitionBudget.Ledger budget){this.budget=budget;this.graph=graph;this.facts=facts;this.roots=List.copyOf(roots);this.generationManifests=Map.copyOf(manifests);}
+  MinutesGraphCapture.Graph graph(){return graph;}TranscriptAcquisitionBudget.Ledger budget(){return budget;}
   public String generationManifestJson(String input){String value=generationManifests.get(input);require(value!=null,PROVENANCE_UNAVAILABLE);return value;}
   public StoredProvenanceFacts facts(){return facts;}public List<Ref> roots(){return roots;}public Map<String,Object> observation(){return graph.discovery().root();}
  }
  /** Authorized structural reuse selection; it never changes the current saved graph or adopts a candidate. */
  public Snapshot readReuseSources(Actor actor,String meeting,String candidate,String exclusion){uuid(candidate);uuid(exclusion);return readOwner(actor,meeting,"REUSE_SOURCES",candidate+"/"+exclusion);}
- public Snapshot readOwner(Actor actor,String meeting,String selector,String selected){
-  independent();uuid(meeting);require(Set.of("INITIAL_SETTINGS","CURRENT_GENERATION","STORED_INPUT","CANDIDATE","SAVED_EFFECTIVE","OWNER_REVISION","REVIEW_BODY","REVIEW_ELEMENT","FINAL","REUSE_SOURCES").contains(selector),INVALID_ARGUMENT);
+ public Snapshot readCurrent(Actor actor,String meeting){return read(actor,meeting,"SAVED_EFFECTIVE",null,true);}
+ public Snapshot readOwner(Actor actor,String meeting,String selector,String selected){return read(actor,meeting,selector,selected,false);}
+ private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member){
+  independent();uuid(meeting);require(Set.of("INITIAL_SETTINGS","CURRENT_GENERATION","STORED_INPUT","CANDIDATE","SAVED_EFFECTIVE","OWNER_REVISION","REVIEW_BODY","REVIEW_ELEMENT","FINAL","REUSE_SOURCES","OWNER_SET","REVIEW_ID","READINESS","SETTINGS_READ").contains(selector),INVALID_ARGUMENT);
   var budget=limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->false);
   MinutesGraphDiscovery.Discovery discovered=null;RuntimeException discoveryError=null;
-  try{discovered=MinutesGraphDiscovery.discover(authority.dataSource(),meeting,selector,selected,limits,authority.readBudget());charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}
+  try{discovered=MinutesGraphDiscovery.discover(authority.dataSource(),meeting,selector,selected,limits,authority.readBudget());if(selector.equals("READINESS"))discovered=MinutesGraphDiscovery.withPending(authority.dataSource(),discovered,limits.tasks());charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}
   final var plan=discovered;final var failedDiscovery=discoveryError;
-  var captured=authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,plan);if(failedDiscovery!=null)throw failedDiscovery;var scope=authority.minutesScope(gate,actor,meeting);return MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);});
+  var captured=authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,plan,member?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);if(failedDiscovery!=null)throw failedDiscovery;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);return member||selector.equals("READINESS")?MinutesGraphCapture.captureCurrent(authority,scope,gate,actor,plan,budget):MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);});
   Snapshot prepared=null;RuntimeException preparationError=null;
   try{prepared=prepare(captured,budget);}catch(RuntimeException failure){cancellation(failure);preparationError=failure;}
   final var result=prepared;final var failed=preparationError;
-  return authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,plan);if(failed!=null)throw failed;var scope=authority.minutesScope(gate,actor,meeting);var fresh=MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);require(captured.equals(fresh),PROVENANCE_UNAVAILABLE);return result;});
+  return authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,plan,member?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);if(failed!=null)throw failed;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);var fresh=member||selector.equals("READINESS")?MinutesGraphCapture.captureCurrent(authority,scope,gate,actor,plan,budget):MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);require(captured.equals(fresh),PROVENANCE_UNAVAILABLE);return result;});
  }
- static ama.storage.FileRegistry.LockedMeeting lockGraph(JdbcTranscriptAuthority authority,Actor actor,String meeting,MinutesGraphDiscovery.Discovery plan){
-  if(plan==null)return authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);
-  require(authority.meetingAccess() instanceof ama.meeting.JdbcMeetingAccess,PROVENANCE_UNAVAILABLE);var access=(ama.meeting.JdbcMeetingAccess)authority.meetingAccess();var ids=access.tryLockHistoricalIdentities(actor,plan.identities(),false).orElseThrow();var root=access.lockPrepared(ids,meeting,false).orElseThrow();access.requirePrepared(root,actor,meeting,plan.identities(),MeetingAccess.Action.EDIT);return authority.fileRegistry().adopt(actor,meeting,root,MeetingAccess.Action.EDIT);
+ static ama.storage.FileRegistry.LockedMeeting lockGraph(JdbcTranscriptAuthority authority,Actor actor,String meeting,MinutesGraphDiscovery.Discovery plan){return lockGraph(authority,actor,meeting,plan,MeetingAccess.Action.EDIT);}
+ static ama.storage.FileRegistry.LockedMeeting lockGraph(JdbcTranscriptAuthority authority,Actor actor,String meeting,MinutesGraphDiscovery.Discovery plan,MeetingAccess.Action action){
+  if(plan==null)return authority.fileRegistry().lock(actor,meeting,action);
+  require(authority.meetingAccess() instanceof ama.meeting.JdbcMeetingAccess,PROVENANCE_UNAVAILABLE);var access=(ama.meeting.JdbcMeetingAccess)authority.meetingAccess();var ids=access.tryLockHistoricalIdentities(actor,plan.identities(),false).orElseThrow();var root=access.lockPrepared(ids,meeting,false).orElseThrow();access.requirePrepared(root,actor,meeting,plan.identities(),action);return authority.fileRegistry().adopt(actor,meeting,root,action);
  }
+ void recheck(Actor actor,String meeting,Snapshot snapshot){recheck(actor,meeting,snapshot,null,null,false);}
+ void recheck(Actor actor,String meeting,Snapshot snapshot,JdbcSavedTranscripts transcripts,CorrectionInstallation installation,boolean ready){authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,snapshot.graph().discovery());var scope=authority.minutesScope(gate,actor,meeting);var fresh=snapshot.graph().discovery().kind().equals("READINESS")?MinutesGraphCapture.captureCurrent(authority,scope,gate,actor,snapshot.graph().discovery(),snapshot.budget()):MinutesGraphCapture.capture(authority,scope,gate,actor,snapshot.graph().discovery(),snapshot.budget());require(fresh.equals(snapshot.graph()),PROVENANCE_UNAVAILABLE);if(transcripts!=null)transcripts.requireCorrection(authority,installation,ready);return null;});}
  static void independent(){if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Minutes preparation requires no ambient transaction");}
  private static void cancellation(RuntimeException error){if(Thread.currentThread().isInterrupted()||error instanceof Failure f&&f.code()==CANCELLED)throw error;}
  static void charge(MinutesGraphDiscovery.Discovery graph,TranscriptAcquisitionBudget.Ledger budget){budget.row(graph.root().size());for(var value:graph.root().values())if(value instanceof String s)budget.capture(ama.canonical.CanonicalValueCodec.utf8Length(s,()->false),s.codePointCount(0,s.length()),s.length(),4);for(var group:graph.tables().values())for(var row:group){budget.row(row.size());for(var value:row.values())if(value instanceof String s)budget.capture(ama.canonical.CanonicalValueCodec.utf8Length(s,()->false),s.codePointCount(0,s.length()),s.length(),4);}for(var set:graph.memberships().values()){budget.row(set.size());for(var key:set)for(var value:key)if(value instanceof String s)budget.capture(s.length(),s.length(),s.length(),4);}}
@@ -80,7 +85,7 @@ public final class JdbcMinutesFactsReader {
   }
   for(var ref:MinutesStoredReviews.validate(facts,snapshot,bindings,read,graphBudget,budget)){var old=roots.putIfAbsent(ref.artifactType()+"|"+ref.version(),ref);require(old==null||old.equals(ref),PROFILE_UNAVAILABLE);}
   for(var ref:MinutesStoredFinals.validate(graph,facts,snapshot,bindings,read,graphBudget,budget)){var old=roots.putIfAbsent(ref.artifactType()+"|"+ref.version(),ref);require(old==null||old.equals(ref),PROFILE_UNAVAILABLE);}
-  MinutesStoredResults.validate(graph,facts,graphBudget,budget);budget.check();return new Snapshot(graph,facts,new ArrayList<>(roots.values()),manifests);
+  MinutesStoredResults.validate(graph,facts,graphBudget,budget);budget.check();return new Snapshot(graph,facts,new ArrayList<>(roots.values()),manifests,budget);
  }
  private void validateProcessingRows(MinutesGraphCapture.Graph graph,FullRow input,Map<String,Object> producer,ConfigBindings.ValidatedProcessingBinding binding,TaskSpec expected,List<ContentFile> files){
   String meeting=graph.discovery().meeting(),batchId=input.string("batch_id");var batch=one(graph,Table.INPUT_BATCH,batchId);require("TRANSCRIPT".equals(batch.string("kind"))&&batch.number("base_revision")==input.number("base_revision"),PROVENANCE_UNAVAILABLE);

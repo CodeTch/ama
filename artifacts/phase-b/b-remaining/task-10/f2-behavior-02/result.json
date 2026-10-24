@@ -1,0 +1,35 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 2,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task10MultiVersionDeniedRecoveryIT",
+      "reportSha256": "09ac2df8e6c9c3470dcef3443313c666a78fc7e45dfd7cd4570825295d839094",
+      "reportMtimeNs": 1792850436515748827,
+      "startedNs": 1792850271554321876,
+      "endedNs": 1792850436968620466,
+      "class": "ama.storage.Task10MultiVersionDeniedRecoveryIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10MultiVersionRecoveryIT",
+      "reportSha256": "b08ec0587ea37eb2708de15154245951508d1341ebc3843937fd45a91e9dd94e",
+      "reportMtimeNs": 1792850391193086728,
+      "startedNs": 1792850271554321876,
+      "endedNs": 1792850436968620466,
+      "class": "ama.storage.Task10MultiVersionRecoveryIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

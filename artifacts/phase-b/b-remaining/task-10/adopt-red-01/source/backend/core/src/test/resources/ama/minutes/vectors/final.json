@@ -1,0 +1,108 @@
+{
+  "profile": "ama.final-sources.v2",
+  "kind": "FINAL_SOURCES",
+  "data": {
+    "meetingId": "00000000-0000-0000-0000-000000000001",
+    "confirmationId": "00000000-0000-0000-0000-000000000020",
+    "minutesRevisionId": "00000000-0000-0000-0000-000000000013",
+    "elementSetId": "00000000-0000-0000-0000-000000000011",
+    "transcriptConfirmationId": "00000000-0000-0000-0000-000000000007",
+    "materialSnapshotId": null,
+    "templateRevisionId": "00000000-0000-0000-0000-000000000009",
+    "exclusionRevisionId": "00000000-0000-0000-0000-000000000010",
+    "inputFingerprint": "0000000000000000000000000000000000000000000000000000000000000000",
+    "locatorRows": [
+      {
+        "id": "00000000-0000-0000-0000-000000000014",
+        "meeting_id": "00000000-0000-0000-0000-000000000001",
+        "kind": "TRANSCRIPT",
+        "transcript_revision_id": "00000000-0000-0000-0000-000000000005",
+        "segment_id": "00000000-0000-0000-0000-000000000006",
+        "file_id": null,
+        "material_revision_id": null,
+        "page_no": null,
+        "paragraph_no": null,
+        "section_path": null,
+        "start_ms": null,
+        "end_ms": null
+      }
+    ],
+    "sourceUsages": [
+      {
+        "usage": {
+          "kind": "EVIDENCE",
+          "evidenceId": "00000000-0000-0000-0000-000000000015"
+        },
+        "locatorId": "00000000-0000-0000-0000-000000000014",
+        "origin": {
+          "kind": "TRANSCRIPT_CONFIRMATION",
+          "confirmationId": "00000000-0000-0000-0000-000000000007",
+          "revisionId": "00000000-0000-0000-0000-000000000005",
+          "contentHash": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "role": "MEETING",
+        "sourceVersion": {
+          "kind": "TRANSCRIPT",
+          "confirmationId": "00000000-0000-0000-0000-000000000007",
+          "revisionId": "00000000-0000-0000-0000-000000000005",
+          "batchId": "00000000-0000-0000-0000-000000000002",
+          "sourceFileId": "00000000-0000-0000-0000-000000000003",
+          "sourceFileSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "sourceContentHash": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    ],
+    "evidenceRows": [
+      {
+        "id": "00000000-0000-0000-0000-000000000015",
+        "locator_id": "00000000-0000-0000-0000-000000000014",
+        "element_id": "00000000-0000-0000-0000-000000000012",
+        "minutes_revision_id": null,
+        "support_state": "PARTIAL",
+        "target_anchor": "{\"schemaVersion\":\"ama.anchor.v1\",\"unit\":\"UNICODE_SCALAR\",\"start\":0,\"end\":2,\"targetTextSha256\":\"aacfb6637bd0df2238641c5b15898d1a61df3157b1d0b4099f590fc0b0b6fbbd\"}"
+      }
+    ],
+    "directoryRows": [
+      {
+        "name": "action_suggestion",
+        "rows": []
+      },
+      {
+        "name": "background_note",
+        "rows": []
+      },
+      {
+        "name": "background_note_source",
+        "rows": []
+      },
+      {
+        "name": "sensitive_detection",
+        "rows": []
+      },
+      {
+        "name": "sensitive_detection_source",
+        "rows": []
+      }
+    ],
+    "exclusionRows": [
+      {
+        "name": "exclusion_revision",
+        "rows": [
+          {
+            "id": "00000000-0000-0000-0000-000000000010",
+            "meeting_id": "00000000-0000-0000-0000-000000000001",
+            "revision": 1,
+            "created_at": "2026-10-22T00:00:00.000000Z"
+          }
+        ]
+      },
+      {
+        "name": "sensitive_exclusion",
+        "rows": []
+      }
+    ],
+    "reviewRows": [],
+    "reviewEvidenceRows": [],
+    "finalReviewRows": []
+  }
+}

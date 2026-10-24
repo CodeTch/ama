@@ -1,0 +1,35 @@
+{
+  "exit": 1,
+  "counts": {
+    "tests": 2,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task10IntentIT",
+      "reportSha256": "481ea60e2f721027ef39ba9041f3af3cbb6842cdde692182e6c306636986ffb3",
+      "reportMtimeNs": 1792844298198320572,
+      "startedNs": 1792844259241954938,
+      "endedNs": 1792844298678620442,
+      "class": "ama.storage.Task10IntentIT",
+      "name": "genuineZeroUnknownAndFormalNewIntentRemainDistinct",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.storage.Task10IntentIT",
+      "reportSha256": "481ea60e2f721027ef39ba9041f3af3cbb6842cdde692182e6c306636986ffb3",
+      "reportMtimeNs": 1792844298198320572,
+      "startedNs": 1792844259241954938,
+      "endedNs": 1792844298678620442,
+      "class": "ama.storage.Task10IntentIT",
+      "name": "controlledIntentIsStickyReplaysThroughHttpAndNeverChangesBusinessState",
+      "failure": true,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}
