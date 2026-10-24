@@ -1,0 +1,18 @@
+{
+  "status": "ROOT_ACK_EXACT_ISOLATED_TASK11_SQL_PROBE",
+  "helperSha256": "ba481d2e00272b8ce7acbf86da57dbed5fda5a4e3cd1d54d73d28fdd8f8d79a7",
+  "r1Sha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2",
+  "owner": "task11-probe-fc2e1fdaf6ad4f88b40a4baf410340d1",
+  "schema": "ama_t11_fc2e1fdaf6ad_probe",
+  "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+  "constraints": {
+    "oneAttempt": true,
+    "commandTimeoutSeconds": 15,
+    "maximumMysqlCommands": 300,
+    "newSchemaOnly": true,
+    "noCleanupOrRetry": true,
+    "foreignKeyChecks": 1,
+    "mysqlImageVersion": "8.4.6",
+    "noPrivateEnvironment": true
+  }
+}

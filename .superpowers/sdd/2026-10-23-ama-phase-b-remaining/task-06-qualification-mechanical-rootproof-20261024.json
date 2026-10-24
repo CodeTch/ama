@@ -1,0 +1,267 @@
+{
+  "observedAt": "2026-10-23T20:30:48.126895+00:00",
+  "scope": "Read-only mechanical custody and numeric evidence check only. No SPEC/quality adoption, no independent source review, no test rerun. Wrote only this new report.",
+  "artifacts": {
+    "manifest": {
+      "path": "artifacts/phase-b/b-remaining/task-06/qualification-candidate-manifest.json",
+      "expectedSha256": "3659226adfb673bbd33b2956e82d4cc4825780c1afb5b888f8dd6c26bd16221f",
+      "actualSha256": "3659226adfb673bbd33b2956e82d4cc4825780c1afb5b888f8dd6c26bd16221f",
+      "matches": true,
+      "bytes": 6150
+    },
+    "sourceWindow": {
+      "path": "artifacts/phase-b/b-remaining/task-06/composition-probe-03/source.json",
+      "expectedSha256": "09dabef2601a7ef1b324c93f9ff89c3b1da4329f343ddffa6d275a28bea65eab",
+      "actualSha256": "09dabef2601a7ef1b324c93f9ff89c3b1da4329f343ddffa6d275a28bea65eab",
+      "matches": true,
+      "bytes": 53103
+    },
+    "composition": {
+      "path": "artifacts/phase-b/b-remaining/task-06/pipeline-3443a020-9d22-42d8-b33f-d846facd0e37/noninstalled-composition.json",
+      "expectedSha256": "90464f948aac895d119004b45f200ce0573dd0f5645c594e7379c4ed7a940799",
+      "actualSha256": "90464f948aac895d119004b45f200ce0573dd0f5645c594e7379c4ed7a940799",
+      "matches": true,
+      "bytes": 3758
+    },
+    "boundaries": {
+      "path": "artifacts/phase-b/b-remaining/task-06/pipeline-3443a020-9d22-42d8-b33f-d846facd0e37/pretransfer-boundaries.json",
+      "expectedSha256": "eb875c7f688bb109beeff61f76835a862b1dc6202bcb4ece785ec3b9a61f4a90",
+      "actualSha256": "eb875c7f688bb109beeff61f76835a862b1dc6202bcb4ece785ec3b9a61f4a90",
+      "matches": true,
+      "bytes": 507
+    }
+  },
+  "qualificationMatchesActualComposition": true,
+  "probe": {
+    "receiptPath": "artifacts/phase-b/b-remaining/task-06/composition-probe-03/receipt.json",
+    "receiptSha256": "de42097489dcaf015e656444746013ed52307bdd7c7a55306dbd2e77fea2600c",
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "it",
+      "Task06CompositionIT"
+    ],
+    "exit": 0,
+    "actualMavenConfig": "-Dtest=__Task06OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false",
+    "xmlPath": "artifacts/phase-b/b-remaining/task-06/composition-probe-03/integration-tests-TEST-ama.storage.Task06CompositionIT.xml",
+    "xmlSha256": "eb99eb0c5846c101b07668492335b35ab7beca4e35580065f141c3a585505a12",
+    "suite": "ama.storage.Task06CompositionIT",
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "testcases": [
+      {
+        "name": "noninstalledActualCompositionAndPretransferBudgetConsumption",
+        "classname": "ama.storage.Task06CompositionIT",
+        "time": "11.54"
+      }
+    ]
+  },
+  "boundaries": {
+    "records": [
+      {
+        "bodyContentTransfers": 0,
+        "configured": 5000,
+        "dimension": 0,
+        "code": "BUDGET_EXCEEDED",
+        "dimensionName": "utf8"
+      },
+      {
+        "bodyContentTransfers": 0,
+        "configured": 5000,
+        "dimension": 1,
+        "code": "BUDGET_EXCEEDED",
+        "dimensionName": "scalars"
+      },
+      {
+        "bodyContentTransfers": 0,
+        "configured": 5000,
+        "dimension": 2,
+        "code": "BUDGET_EXCEEDED",
+        "dimensionName": "utf16"
+      },
+      {
+        "bodyContentTransfers": 0,
+        "configured": 40000,
+        "dimension": 3,
+        "code": "BUDGET_EXCEEDED",
+        "dimensionName": "copyBytes"
+      },
+      {
+        "bodyContentTransfers": 0,
+        "configured": 40000,
+        "dimension": 4,
+        "code": "BUDGET_EXCEEDED",
+        "dimensionName": "copyUtf16"
+      },
+      {
+        "bodyContentTransfers": 0,
+        "configured": 5000,
+        "dimension": 5,
+        "code": "BUDGET_EXCEEDED",
+        "dimensionName": "responseBytes"
+      }
+    ],
+    "sixExpectedLowBounds": true,
+    "testSourcePath": "backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java",
+    "testSourceSha256": "3b5db92905a817ba9336103cb3c65c2b0e25efe1b8e46e9394e8e3cdabe9d09d",
+    "testSourceMatchesProbe": true,
+    "observedAssertionEvidence": {
+      "lockedBodyMeasurement": true,
+      "zeroBodyContentSelect": true
+    },
+    "limitation": "Six generated outcome records plus passing probe and matching test-source assertions. No separately persisted per-query SQL trace located in the referenced public pipeline directory; no independent DB observation made."
+  },
+  "originalArchiveIdentity": {
+    "records": [
+      {
+        "artifactType": "PROCESSING_CONFIG",
+        "version": "b06.controlled.import-txt.1",
+        "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e",
+        "bytes": 1016,
+        "utf16": 1016,
+        "scalars": 1016,
+        "dependencies": {
+          "CANONICAL_CODEC": {
+            "artifactType": "CANONICAL_CODEC",
+            "version": "ama.canonical-value.v1",
+            "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+          },
+          "CONFIRMATION_HASH": {
+            "artifactType": "CONFIRMATION_HASH",
+            "version": "ama.transcript-confirmation.v1",
+            "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa"
+          },
+          "PARSER_CONFIG": {
+            "artifactType": "PARSER_CONFIG",
+            "version": "ama.strict-utf8-lines.v1",
+            "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a"
+          }
+        },
+        "originalCanonical": {
+          "maxEncodedBytes": 16777216,
+          "maxDepth": 32,
+          "maxNodes": 1000000,
+          "maxStringBytes": 2097152,
+          "maxContainerEntries": 250000
+        },
+        "originalParser": {
+          "maxSourceBytes": 65536,
+          "maxUtf16CodeUnits": 65536,
+          "maxSegments": 2048
+        }
+      },
+      {
+        "artifactType": "CANONICAL_CODEC",
+        "version": "ama.canonical-value.v1",
+        "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19",
+        "bytes": 223,
+        "utf16": 223,
+        "scalars": 223,
+        "dependencies": {}
+      },
+      {
+        "artifactType": "CONFIRMATION_HASH",
+        "version": "ama.transcript-confirmation.v1",
+        "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa",
+        "bytes": 419,
+        "utf16": 419,
+        "scalars": 419,
+        "dependencies": {
+          "CANONICAL_CODEC": {
+            "artifactType": "CANONICAL_CODEC",
+            "version": "ama.canonical-value.v1",
+            "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19"
+          }
+        }
+      },
+      {
+        "artifactType": "PARSER_CONFIG",
+        "version": "ama.strict-utf8-lines.v1",
+        "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a",
+        "bytes": 226,
+        "utf16": 226,
+        "scalars": 226,
+        "dependencies": {}
+      }
+    ],
+    "recordedTotalBytes": 1884,
+    "expectedTotalBytes": 1884,
+    "dependencyChecks": [
+      {
+        "from": "PROCESSING_CONFIG",
+        "to": "CANONICAL_CODEC",
+        "matchesTargetIdentity": true
+      },
+      {
+        "from": "PROCESSING_CONFIG",
+        "to": "CONFIRMATION_HASH",
+        "matchesTargetIdentity": true
+      },
+      {
+        "from": "PROCESSING_CONFIG",
+        "to": "PARSER_CONFIG",
+        "matchesTargetIdentity": true
+      },
+      {
+        "from": "CONFIRMATION_HASH",
+        "to": "CANONICAL_CODEC",
+        "matchesTargetIdentity": true
+      }
+    ],
+    "rawFileRehashPerformed": false,
+    "limitation": "Referenced public candidate, manifest, composition and pipeline directory do not identify public raw archive files. Identity, byte counts and dependencies checked for internal agreement; not independent raw-file rehash. Did not search private paths."
+  },
+  "numericRecomputation": {
+    "computedEffectiveAdmission": {
+      "acquisitionUtf8Bytes": 1048576,
+      "acquisitionScalars": 1048576,
+      "acquisitionUtf16Units": 16777216,
+      "textUtf8Bytes": 262144,
+      "textUtf16Units": 65536,
+      "copyUtf8Bytes": 67108864,
+      "copyUtf16Units": 67108864,
+      "facts": 250000,
+      "edges": 500000,
+      "files": 32,
+      "tasks": 64,
+      "revisionDepth": 128,
+      "revisionNodes": 256,
+      "manifestBytes": 65536,
+      "artifactBytes": 65536,
+      "closureBytesWithManifest": 1048576,
+      "canonical": {
+        "maxEncodedBytes": 16777216,
+        "maxDepth": 32,
+        "maxNodes": 1000000,
+        "maxStringBytes": 2097152,
+        "maxContainerEntries": 250000
+      }
+    },
+    "matchesManifest": true,
+    "matchesActualComposition": true,
+    "originalParserMinima": {
+      "maxSourceBytes": 65536,
+      "maxUtf16CodeUnits": 65536,
+      "maxSegments": 2048
+    },
+    "parserRuntimeInputBasis": "Task5 runtime 1048576/1048576/4096 recorded in candidate; numeric minimum recomputed, no separate Task5 source review.",
+    "notes": [
+      "Canonical minima calculated componentwise using recorded actual admission canonical and original canonical.",
+      "Separate counters and conservative reservations do not imply simultaneous reachability or production capacity."
+    ]
+  },
+  "sourceWindowCurrent": {
+    "recordedFiles": 371,
+    "changed": [],
+    "newJavaOutsideRecordedWindow": [],
+    "allRecordedPathsMatch": true,
+    "note": "Current byte comparison at observation time. Future edits need classification and affected-evidence refresh; no statement that earliest probe is invalid."
+  },
+  "rootAttentionFacts": [
+    "No independent raw archive rehash possible from supplied public locator evidence.",
+    "No standalone per-query SQL trace supplied; six outcomes are supported by matching passing test assertions."
+  ],
+  "prohibitedOperationsPerformed": false
+}

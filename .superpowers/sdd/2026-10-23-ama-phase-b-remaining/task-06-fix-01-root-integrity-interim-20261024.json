@@ -1,0 +1,34 @@
+{
+  "utc": "2026-10-23T21:21:11.571241+00:00",
+  "scope": "Interim actual RED/GREEN XML; no scopedreview/findingclosure/Task6adoption",
+  "rows": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/integrity-red-01/integration-tests-TEST-ama.storage.Task06FixIntegrityIT.xml",
+      "sha256": "121dcc8fe41d074f0550f2a40befa1cd4a4ebc24f3bc9e2ecdc73c33e6fe781e",
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "currentPointersMustBeExactForOwnerAndMemberWhileOldHistoryRemainsValid",
+        "everyAppendReservesProspectiveDepthAndNodeAtBoundary"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-06/fix-01/integrity-green-01/integration-tests-TEST-ama.storage.Task06FixIntegrityIT.xml",
+      "sha256": "3f6cfcb42ab347a2eb96bf53579f4d3621db990009a090cdfdf0efc905be0328",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        "currentPointersMustBeExactForOwnerAndMemberWhileOldHistoryRemainsValid",
+        "everyAppendReservesProspectiveDepthAndNodeAtBoundary"
+      ]
+    }
+  ]
+}

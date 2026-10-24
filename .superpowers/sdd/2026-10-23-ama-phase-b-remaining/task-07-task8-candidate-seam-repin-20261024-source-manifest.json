@@ -1,0 +1,207 @@
+{
+  "purpose": "Task8 candidate to Task7 seam repin preparation; candidate not yet adopted or activated",
+  "base_commit": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+  "candidate_commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+  "retrieval": "git show exact commit:path for product source; git diff base..candidate for scoped name-status and hunk review",
+  "range_sha256_convention": "SHA256 of original committed bytes in inclusive one-based line range including line terminators",
+  "changed_production_paths": [
+    "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+    "backend/adapters/src/main/java/ama/task/ReconciliationScanBudget.java",
+    "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql"
+  ],
+  "files": [
+    {
+      "commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "git_blob": "f333467cdcf7ec583a9ab3bc1133ed3226854a67",
+      "sha256": "65908b5abf03625922bb739474e20ae545a84d0f2eccc9c7db84cacc44ded6d5",
+      "bytes": 24214,
+      "line_count": 234,
+      "ranges": [
+        {
+          "start": 15,
+          "end": 23,
+          "sha256": "25afc2c2129b2a9a2fec565774be283e6a1e0558428dc56d99458ad2165f8719",
+          "first": " final JdbcTaskQueue q; final JdbcTemplate j;",
+          "last": " record Execution(String id,String operation,long number,String task,String state,String hash,String manifest,String basis,String evidence,I"
+        },
+        {
+          "start": 24,
+          "end": 38,
+          "sha256": "55bb9d4ae2ebada5f75447e198a515d389b960e651ae380329285d3a3f2c885b",
+          "first": " private final ReconciliationScanBudget scanBudget;",
+          "last": " OperationToken token(Operation o,Execution e){return new OperationToken(o.id(),e.id(),o.execution(),o.epoch(),o.owner(),o.expiry(),o.subjec"
+        },
+        {
+          "start": 39,
+          "end": 63,
+          "sha256": "027cf5452d0e7b2b5a54fd0e66ec98af5a9cb59e01be8c52ebe21435e54c2d33",
+          "first": " @Override public Optional<OperationToken> beginExternal(TaskLease lease,ExternalRequest request){",
+          "last": " }"
+        },
+        {
+          "start": 64,
+          "end": 73,
+          "sha256": "c96c63426bda10525d05c4c0e464557e6c76b579cd99c844698fd32ab3f3146f",
+          "first": " private record Locked(Operation op,Execution execution,JdbcTaskQueue.Row task,SubjectFencePort.LockedSubject subject){}",
+          "last": "  return Optional.of(new Locked(op.orElseThrow(),ex.orElseThrow(),heldTask.orElseThrow(),domain.orElseThrow()));"
+        },
+        {
+          "start": 75,
+          "end": 107,
+          "sha256": "9ced67a3609d83c1f3f70b378dbe612ed6e653ce58eb97e42bd6c4cd6f37adff",
+          "first": " /** Empty can mean the finite scan budget was consumed; retain this instance across polls. */",
+          "last": " }"
+        },
+        {
+          "start": 108,
+          "end": 134,
+          "sha256": "f35ba492483e0ce3f2588f650f45974db763994dc9c24a840170b273fab2a96b",
+          "first": " private Optional<ScanOperation> scanOperation(String id,boolean lock){",
+          "last": " });}"
+        },
+        {
+          "start": 135,
+          "end": 138,
+          "sha256": "6fdb789290807cebd5fdd9157ce470610e33f6e797a92dfe2c53e96741540dca",
+          "first": " @Override public boolean renew(OperationToken token){independent();return q.work(()->{",
+          "last": " });}"
+        },
+        {
+          "start": 139,
+          "end": 204,
+          "sha256": "9260e9bb256bc9a854f49f537dbb1afb050da55f5b4eff68b0583258bf343a5f",
+          "first": " private static final int OBSERVATION_DISCOVERY_ATTEMPTS=4;",
+          "last": " }"
+        },
+        {
+          "start": 205,
+          "end": 233,
+          "sha256": "ebb9a7e3e44f0f3d9bef9c75cbc86dc37ceb54338dc24cc52ce7e3ba5171c8de",
+          "first": " @Override public String retryAfterZeroEffect(String id,long expected,TaskSpec next,ExternalRequest request){return q.work(()->{",
+          "last": " });}"
+        }
+      ]
+    },
+    {
+      "commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "path": "backend/adapters/src/main/java/ama/task/ReconciliationScanBudget.java",
+      "git_blob": "419f4e02407096d406b2f7217b4a6a96d8e03b83",
+      "sha256": "3293bd3fcaa22223030dd874bf6d38add912ab9e09a660323ac77706ffaa992d",
+      "bytes": 392,
+      "line_count": 9,
+      "ranges": [
+        {
+          "start": 1,
+          "end": 9,
+          "sha256": "3293bd3fcaa22223030dd874bf6d38add912ab9e09a660323ac77706ffaa992d",
+          "first": "package ama.task;",
+          "last": "}"
+        }
+      ]
+    },
+    {
+      "commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "git_blob": "dfe6c47ecf23b0001b01e8c66d33841d3ed5b181",
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+      "bytes": 164,
+      "line_count": 3,
+      "ranges": [
+        {
+          "start": 1,
+          "end": 3,
+          "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+          "first": "ALTER TABLE external_operation",
+          "last": "    ADD UNIQUE INDEX external_reconcile_scan (reconcile_scan_seq);"
+        }
+      ]
+    }
+  ],
+  "focused_carry_forward_ranges": [
+    {
+      "label": "token_identity_and_records",
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "base_commit": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+      "base_start": 14,
+      "base_end": 22,
+      "candidate_commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "candidate_start": 15,
+      "candidate_end": 23,
+      "sha256": "25afc2c2129b2a9a2fec565774be283e6a1e0558428dc56d99458ad2165f8719",
+      "exact_bytes_equal": true
+    },
+    {
+      "label": "mappers_and_token_gate",
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "base_commit": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+      "base_start": 24,
+      "base_end": 29,
+      "candidate_commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "candidate_start": 33,
+      "candidate_end": 38,
+      "sha256": "47c7e08d0ce5a6719e30b872144db1cd7c68ab9b258daf873b0a28974e07bc12",
+      "exact_bytes_equal": true
+    },
+    {
+      "label": "independent_marker",
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "base_commit": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+      "base_start": 30,
+      "base_end": 54,
+      "candidate_commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "candidate_start": 39,
+      "candidate_end": 63,
+      "sha256": "027cf5452d0e7b2b5a54fd0e66ec98af5a9cb59e01be8c52ebe21435e54c2d33",
+      "exact_bytes_equal": true
+    },
+    {
+      "label": "common_locked_operation",
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "base_commit": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+      "base_start": 55,
+      "base_end": 64,
+      "candidate_commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "candidate_start": 64,
+      "candidate_end": 73,
+      "sha256": "c96c63426bda10525d05c4c0e464557e6c76b579cd99c844698fd32ab3f3146f",
+      "exact_bytes_equal": true
+    },
+    {
+      "label": "operation_renew",
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "base_commit": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+      "base_start": 77,
+      "base_end": 80,
+      "candidate_commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "candidate_start": 135,
+      "candidate_end": 138,
+      "sha256": "6fdb789290807cebd5fdd9157ce470610e33f6e797a92dfe2c53e96741540dca",
+      "exact_bytes_equal": true
+    },
+    {
+      "label": "observe_and_terminal_mapping",
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "base_commit": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+      "base_start": 81,
+      "base_end": 146,
+      "candidate_commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "candidate_start": 139,
+      "candidate_end": 204,
+      "sha256": "9260e9bb256bc9a854f49f537dbb1afb050da55f5b4eff68b0583258bf343a5f",
+      "exact_bytes_equal": true
+    },
+    {
+      "label": "zero_effect_retry",
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "base_commit": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+      "base_start": 147,
+      "base_end": 175,
+      "candidate_commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+      "candidate_start": 205,
+      "candidate_end": 233,
+      "sha256": "ebb9a7e3e44f0f3d9bef9c75cbc86dc37ceb54338dc24cc52ce7e3ba5171c8de",
+      "exact_bytes_equal": true
+    }
+  ]
+}

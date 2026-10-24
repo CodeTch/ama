@@ -1,0 +1,1081 @@
+{
+  "head": "cff858e163ca7dea774dcf05c707ef7551956156",
+  "branch": "codex/phase-b-completion-20261023",
+  "scope": "Current modified tracked and untracked public product/test/contracts/tool source; exact tracked diff additionally preserves all tracked public documentation changes. Excludes private env/PKI/tools runtime,target,node_modules,ignored raw/W. No commit/reset/test/SQL.",
+  "entries": [
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 15066,
+      "sha256": "6aedff24cc17b98f2d58d8cf5501cbb77901892ca8c5b37d1afdcd73ca4cf6aa",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/ControlledMinutesAdmin.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 11646,
+      "sha256": "9260307a7a1e89697deded1d391e0e3800f56fc7c887e1ff74436fe2d08032d6",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/minutes/ControlledMinutesAdmin.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/ControlledMinutesArchives.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 6262,
+      "sha256": "f7331fe8856061fc900d00f466bb009309293dcff4104a716194e1f5b322a220",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/minutes/ControlledMinutesArchives.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/ControlledMinutesDataSource.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1222,
+      "sha256": "572c9dba2cee389eb214c7bdf986ae0e880d5ed2fdfd25ac37d846b8870d4e75",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/minutes/ControlledMinutesDataSource.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/ControlledMinutesTemplateInstaller.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 5081,
+      "sha256": "0f24a0c3a33d6934e953371705f8dae877c5db8333e88892ae0e569d3bfb032c",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/minutes/ControlledMinutesTemplateInstaller.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/MinutesCatalogAdmission.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3409,
+      "sha256": "efb1da66cf70e5cb8306858f90290f1d42148749086bebc46d7a62700f2cd8bd",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/minutes/MinutesCatalogAdmission.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/json/StoredMinutesAnchorReader.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2804,
+      "sha256": "d8050c955e702d77a56c54ab3732052d8a42ecfed15f443a2d88127583475e35",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/minutes/json/StoredMinutesAnchorReader.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/BoundedModelJson.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3246,
+      "sha256": "f9c87570350546f7d846c7b28bd5fa14a0e16effd868352d684bbf674f1122fc",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/model/BoundedModelJson.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesClient.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 10819,
+      "sha256": "4931ef0ae12ef0d843493a49284bd33c741fc5f49779bb91262123ca63f2059b",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/model/ControlledMinutesClient.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesHttpTransport.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 10294,
+      "sha256": "81e3481a3f62a2c86902b444ce321fdbe6f3be1cb497e95b71dfbf59eafa22bb",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/model/ControlledMinutesHttpTransport.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesProtocol.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 8590,
+      "sha256": "6541eb100e4fed6662239faa5b3ad1766dc920c0bcfdd4156dd958aa0188e926",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/model/ControlledMinutesProtocol.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesProvider.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 17656,
+      "sha256": "220741da7dc23b5bb53347a97d242e72ffe95f4cb699ba2d4bb6b1fd50620a6a",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/model/ControlledMinutesProvider.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesProviderStore.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 5010,
+      "sha256": "16290fb16e3d75a21a0cb083d645e67103d3954c68d94de4e5abb7fac07c1724",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/model/ControlledMinutesProviderStore.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesStore.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 15367,
+      "sha256": "3c81aa1b4d65e6230e4b256e0855a64364105d29194d459f8d484b18a0ca5bb9",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/model/ControlledMinutesStore.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 40370,
+      "sha256": "d80275154b3a7ee0f6894510d282f5226ab08455c1105eb4e3731ad7ff3167f0",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 9518,
+      "sha256": "4df075976018effc5269f7e38ba917a39321ff8d1f739e2a17f3cbf88563b332",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 3909,
+      "sha256": "ab71c24bb8b174ad3b9f7a2a4851675f6b11c997a0c92d1a17840c34bd0342d6",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 22099,
+      "sha256": "906f741ca7315633e5555e263093105b5f3b293443552fc5e3e4ea763bc3f93b",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 14143,
+      "sha256": "31295fd510a7c4c3f1dd4f2c3a19e68e4cadab89dc84ac040ecec2ba007c520f",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ConfiguredMinutes.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4740,
+      "sha256": "2db0a0955bcd2d472d0da41cb8c5523e6f92ae5d7ec04379cce3fe54dce80bb7",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/ConfiguredMinutes.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ControlledMinutesArchiveAccess.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1188,
+      "sha256": "cc483458cfcc6b1901a2507dd9c66fc0fdd690781e459bdf07328e48d3677a1a",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/ControlledMinutesArchiveAccess.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ControlledMinutesRenderer.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 10233,
+      "sha256": "096bbb5e82137cfcf3e5451ea7e00be3600dfc59390b24f05d983e7397bb371a",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/ControlledMinutesRenderer.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesFactsReader.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 19291,
+      "sha256": "ce7d869c049590202a5edae020799574e14482c023318850af6a718b807ef016",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/JdbcMinutesFactsReader.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationCommands.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3426,
+      "sha256": "07a31861a1618fa04c52a232b14b6a67b87c57ef4191c31a3864aa1e36c3edf6",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationCommands.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationPreparation.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 19488,
+      "sha256": "b3fce3f08d5d6824fa507161346a773892b0bd0e18bc6ad65a20e8fa1dd9bc84",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationPreparation.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationReceipts.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 6211,
+      "sha256": "a4625481df4341b49bb7afed2119072f4424696bc5d37837cb3e73c4af721db2",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationReceipts.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesInitialSettings.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 11690,
+      "sha256": "7c0d04ebda7cbfd2d31be33b508d3c183b124cfd194effca9f12a5288f8b8c21",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/JdbcMinutesInitialSettings.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesQueries.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 10716,
+      "sha256": "51e997a3548d3a5b6623a5bb19d7d54bbfcaccb67242b4867f49cc07abb4601e",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/JdbcMinutesQueries.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesSettingsReceipts.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4886,
+      "sha256": "fc301da5195e329a3c0e338044031b65f57f0b3dae6bb04f5ffd97a2002519b9",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/JdbcMinutesSettingsReceipts.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 43587,
+      "sha256": "72be6bd00c9713a23d5ee995bf98bd16de042ff924485c73b49d3fcdc10b3f1d",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesCandidateGraphPlan.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 13048,
+      "sha256": "f6a686811fbbae9ee9ec7014da7e11d46ecd1ca4baaa7d4dde7690924e12c567",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesCandidateGraphPlan.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesCandidateWriter.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 8331,
+      "sha256": "f0f14c435720a02ed381758ad81184b9926a82eb522c64903553444faeaed4c0",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesCandidateWriter.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesEventReferences.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2647,
+      "sha256": "52e008df1e96eda68ab6fe0c7b87d2c7ed23ae42413f0f5e9c43494e9b37817f",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesEventReferences.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesExternalPreparation.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 13789,
+      "sha256": "24bf0fb6be2e7ae8743453c65d0c04c07821dcdae01da1426766d03cc8e5222e",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesExternalPreparation.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesGraphCapture.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 9523,
+      "sha256": "53b78fd3688553c46bcaa7646149e991dbb672c978886128f6d059f5df4f931a",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesGraphCapture.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 20112,
+      "sha256": "f15fefe9625ff1aa17730bbc41bbc24f447eda1eee3facf35d77690b92003236",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesMetadataPages.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 10589,
+      "sha256": "2ae651a81ae4328bbc1aa87fc0fef452039171c9cd585d9649fb6ffe1365118b",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesMetadataPages.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesRecordedLookup.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 8656,
+      "sha256": "f2bda848ebdab1e161ab7d155f4df9ff3ac48c843da689a847355bd89685459a",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesRecordedLookup.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesSourceRows.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2300,
+      "sha256": "6e32230b86306b50683580d2710e2576058d44ff8a4bc1b329d88b0fb47d2f0c",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesSourceRows.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesStoredFinals.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2767,
+      "sha256": "064efc81e9315f2fb71269d01755de469a4559e4c03b97ad063fa46ec5ce27cf",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesStoredFinals.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesStoredResults.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 6233,
+      "sha256": "8302b13e80662af78ca7a5561c478d565a27de1377bfc2f8b4459bdc227cdbde",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesStoredResults.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesStoredReviews.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4242,
+      "sha256": "c40fed862b3d80db43e5b3b42b3d35d6c9c31c3e78829228f4a703ba00d21bc3",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesStoredReviews.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesTaskDomainPolicy.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 17682,
+      "sha256": "2d6c9f04984f7856a6aa8eec8d2e9367081a06721b64c089d74a0b5d82a1c0d5",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/MinutesTaskDomainPolicy.java"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 7441,
+      "sha256": "bc7cf4b53efa45fc8f42ac20763387cf8e126ced69d091ab8fc3c3af3f4afba4",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/ama/minutes/controlled/parser.json",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 226,
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/resources/ama/minutes/controlled/parser.json"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/ama/minutes/controlled/processing1.json",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1016,
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/main/resources/ama/minutes/controlled/processing1.json"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/Task09CandidatePlanTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 5345,
+      "sha256": "ba0fc3e9e41795643698b6a21882656b546b2694e87b6005444e613bbc7b1278",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/config/json/Task09CandidatePlanTest.java"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/Task09ControlledArchivesTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2679,
+      "sha256": "f93d7013422a0a748d5f3fef2559c513d9553670f269221b5b8444a9cbdd1bd4",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/config/json/Task09ControlledArchivesTest.java"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/Task09ControlledClientTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4807,
+      "sha256": "49aebac361c612cb84d543ed60254dd21cc7d80adb64e782dd97aedf9043e0ed",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/config/json/Task09ControlledClientTest.java"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/Task09ControlledEnvelopeStoreTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2542,
+      "sha256": "dc589c591203746d0d8a0df78f6c1ab28a8f52a53e0cb890762d5e1329673be5",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/config/json/Task09ControlledEnvelopeStoreTest.java"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/Task09ControlledHttpTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 7389,
+      "sha256": "573ca747757cc168039fc1af023708beb84a13f62a203f4ffe092345f10aca40",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/config/json/Task09ControlledHttpTest.java"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/Task09ControlledProtocolTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 6191,
+      "sha256": "6a5b5143b55d6c3b28aaff6c8651cbcaee26844f73496081b63e51e01b12052b",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/config/json/Task09ControlledProtocolTest.java"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/Task09GenerationBindingTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2148,
+      "sha256": "977bdbb735e1dd3ded6247bcfb853d42fd0450a639978e17b4e200378153bfae",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/config/json/Task09GenerationBindingTest.java"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/Task09ProducerTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1495,
+      "sha256": "7f892d889cea1b3fdeb6baf6f10d85c44240ac0ba5e06f3908d802bc15abdafe",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/config/json/Task09ProducerTest.java"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/minutes/json/Task09StoredAnchorTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1632,
+      "sha256": "af99dc1058332d74b7df6950efabd569db8b9e6217b38fcaa3645056ec9f2e7b",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/minutes/json/Task09StoredAnchorTest.java"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/model/Task09ControlledStoreTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 5102,
+      "sha256": "84f725cb0ff11ca361628e5b8f2ebdb772facad97ea416d941246542f535ce56",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/model/Task09ControlledStoreTest.java"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/model/Task09TransportAbortTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4605,
+      "sha256": "0f8bfb61f0fa6cf6c17b1144802d58fef5c37b416e48b8c9a8b4883057c7b029",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/adapters/src/test/java/ama/model/Task09TransportAbortTest.java"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MeetingConfiguration.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 2063,
+      "sha256": "16473b0ab1661e294e08f7ef04d2c96367bd6170e9e9ca49c054f183070f9417",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/api/src/main/java/ama/api/MeetingConfiguration.java"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesConfiguration.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3076,
+      "sha256": "ffebb87b426d825cbba8227012582d849bd663f987f4b81461f318e85db9a53c",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/api/src/main/java/ama/api/MinutesConfiguration.java"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesController.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 5042,
+      "sha256": "7b163f81f2f0589dda198d9a9a9f6406a65cb70cf2d7d9faed79b9be0c2b3885",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/api/src/main/java/ama/api/MinutesController.java"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesErrors.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1812,
+      "sha256": "fed573729990a0756c0a0b8b58388baaa0adb7eca85a5f6bf2e1c73be82e3d54",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/api/src/main/java/ama/api/MinutesErrors.java"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesWire.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1927,
+      "sha256": "84474eeb708471825fd7f79ffcff508c7d5ed00e4f978d2be892b08573bcb2b5",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/api/src/main/java/ama/api/MinutesWire.java"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/SessionSecurityFilter.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 4062,
+      "sha256": "f77999f841986f8a82a986bce86358181e32f0f62a189dba032fcb36da161d11",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/api/src/main/java/ama/api/SessionSecurityFilter.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 22681,
+      "sha256": "8889269496387fe84e57a5a5cb3dce00d5a11e1c93102ebc065e5f0f70e80fe9",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/core/src/main/java/ama/config/ConfigBindings.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/MinutesGenerateProducer.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1140,
+      "sha256": "d4c85c8bbb0034ad653c93251cd70aa6bce89e02c15b2dc1f0ff85c3d1931e55",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/core/src/main/java/ama/minutes/MinutesGenerateProducer.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ArchivedProfileResolver.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 3879,
+      "sha256": "a30c564e04906e7cc8c9d9aab091c878081c669ab5606c3b10b393912e4e86e1",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/core/src/main/java/ama/minutes/contract/ArchivedProfileResolver.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/GenerationArchiveRefs.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 5637,
+      "sha256": "d82631dfb210db3f2146862f6427718f337101057301e068458c2e15a444d1ec",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/core/src/main/java/ama/minutes/contract/GenerationArchiveRefs.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 16929,
+      "sha256": "8400c26be2c2e064baa10fb14736814e93d3fdd2f744420496e686c1bce1cfa3",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 2771,
+      "sha256": "e0928b32505492358fcc9a4ed218708913f4e83cc086410b143cf12f9161d873",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/core/src/main/java/ama/task/ExternalOperationPort.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 866,
+      "sha256": "7be44ed1e7a54223d80802c2e44ad2e4c3bf20ad0ffa54715f0fac94d2500ae1",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/PreparedExternalPolicy.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 1434,
+      "sha256": "eae096920e1879c7acfe7da6d82bfa17f3f0e0325de8e1c621243f8303fc68af",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/core/src/main/java/ama/task/PreparedExternalPolicy.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/RecordedFactRecoveryPolicy.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 196,
+      "sha256": "d3395b335c85b4091bfb6adbe7195cd12087383ce5fd05396ea9df5d24678784",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/core/src/main/java/ama/task/RecordedFactRecoveryPolicy.java"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 4298,
+      "sha256": "cd232c2cda3a03ae3cd38a9c4542eb133b95df36b95931c07a9d0c6171a7f081",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/api/Task09RuntimeProbe.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1331,
+      "sha256": "9ba927c908accbf07e14bf296a49c440a00a8f4e533abe3c09733621de48e8c6",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/api/Task09RuntimeProbe.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/minutes/Task09ControlledAdminIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2757,
+      "sha256": "9339371fe98e3058fc41485ac7068d529aebab4215fc3a47b80cc9a9a1609598",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/minutes/Task09ControlledAdminIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/minutes/Task09GraphCaptureIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 8713,
+      "sha256": "8b392b67a517490cc4cfadb273da639068dc573f9ee1c8885e09415a778a5eb4",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/minutes/Task09GraphCaptureIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/minutes/Task09GraphDiscoveryIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 6297,
+      "sha256": "a78226b275a77ec48d74ce5a000e961398a10c5c4ffa18e03ae83b56aaad6058",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/minutes/Task09GraphDiscoveryIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/minutes/Task09Source.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1220,
+      "sha256": "fa02f27002b7f2a166020105efa1d805e1984051eb5ff85861ef757b24dbc348",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/minutes/Task09Source.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/minutes/Task09SourceGraphIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 5724,
+      "sha256": "7164721f97f887422cc688b7f45f18e308e9e5cb69a27d0c4672ecb315e6f1ce",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/minutes/Task09SourceGraphIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/minutes/Task09TemplateIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3093,
+      "sha256": "2c81a669b0a8027fd913891bfb8b8c2143842ec58da3ca8ab8ec5ba0282f7468",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/minutes/Task09TemplateIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09ApplicationReplayProcess.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 5665,
+      "sha256": "e20e61aa4f94fba537d17bc3e6a3a3fddc0d6c0f37e601308151a42ef72da431",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09ApplicationReplayProcess.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09CompositeRecoveryIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4244,
+      "sha256": "3ddafb4944eed101071afcab07051489ef11a986ea17dcad724d1525df4e30d8",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09CompositeRecoveryIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09ControlledRelay.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3025,
+      "sha256": "49ca01c217cb121f8329df2e69b877759c411e74447eb74458dda169f8d85287",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09ControlledRelay.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09DeletedLookupRecoveryIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2315,
+      "sha256": "53f167dd0f92c1ebc4150d00dfe8b552a5a0b89427d1adbf1eb66e31300e9c26",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09DeletedLookupRecoveryIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09DeniedFactPolicyIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2777,
+      "sha256": "08a2e51270cdb6cfbdd0ace794c3d9b759e0baf12e91d76eeeda8abe9ae18d40",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09DeniedFactPolicyIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupProcess.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 11473,
+      "sha256": "9ee02eb33b587604305dbf07ac274a27670e66184c1751efdd5400b4a281e4fc",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupProcess.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupRecoveryIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3952,
+      "sha256": "2e4de0854167a929fcf32ab76500d875eee21daf60e1715535fa86af2f2fea92",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupRecoveryIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09ExecutionManifestBudgetIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2823,
+      "sha256": "2d671893aabb2efffa15cb11436d7dee6394285682c03e95b9cb5365518c0c59",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09ExecutionManifestBudgetIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationApplicationRestartIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3102,
+      "sha256": "dbb9c7f463652390c2af5a5f07870cec386fbcac6190d005bcc4a7e5fa6940aa",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationApplicationRestartIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationArchiveAppendIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1716,
+      "sha256": "8aad75eddf2a205b6fe9c3a2b815e57384e28835c5678c7df70ace380ec7f68d",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationArchiveAppendIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationAuditRollbackIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 171,
+      "sha256": "1983dfa77c9539f7c96265bb288888cb82b4276b43589720be08cfdfb5b4eaf4",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationAuditRollbackIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationCandidateInsertRollbackIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 190,
+      "sha256": "ca5fe5c60bb647b0b2d330fe50cb7096bc9fa50190f4bf6712309f8d86c660cd",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationCandidateInsertRollbackIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationCandidateReadbackRollbackIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 232,
+      "sha256": "dd5e61d9b7e71ab8d211ccf8a5f3e6825d54f7a7df23cbb18495a6fb12ecfc14",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationCandidateReadbackRollbackIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationDeletedIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2308,
+      "sha256": "18574264b7d2417982706dfd5392b7bba01cc08517f443f1a442b27b1672dc61",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationDeletedIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationExternalIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 8525,
+      "sha256": "f69b321bd18aadd973cc3b0443fedae8c1a04e0378fdcfbcb04d7fe324ab738f",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationExternalIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationFinalReaderIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 5222,
+      "sha256": "98d12d8050f26a95ac403ec8f2c3748652d739abcc3c671dbfe205f8c240f191",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationFinalReaderIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationInvalidReplayIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2781,
+      "sha256": "eb3f5cf4a985ef2962ab335b93e746fccc933cbe6b9662b5cea4c3c61abd3f5f",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationInvalidReplayIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationOutboxRollbackIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 172,
+      "sha256": "1ae182a335b00f281a7fb4bdc32994020ad7ef9d10a3b5278b2d273b714e8d50",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationOutboxRollbackIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationPhysicalCancelIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4564,
+      "sha256": "a944b7f3909c1214e9ddd7b013c6e98e6f86a803fcd003089cf48737eeaa515f",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationPhysicalCancelIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationPreparationIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2980,
+      "sha256": "3402ec099bc3352baac7a8702075b077aa18608093ed74644cc68ad8dbd45fbd",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationPreparationIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationQueueIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4973,
+      "sha256": "d0a706758ca676871e4581489327473cc1d4987dbbd9879c5a0ce7625c211b83",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationQueueIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationReplayIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2225,
+      "sha256": "5adbfddf2b25ff0b1d80d20be5aac86f1e9245e6bde175a60897c7bf8dff9f83",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationReplayIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationRestartIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3493,
+      "sha256": "4ffd1311342b0a8075f1ebb4167f5f33ac6b505b5dd504cc1fe7d1bf10365bb6",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationRestartIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationReviewIdentitiesIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1473,
+      "sha256": "9d3c060660f523a0e4e72cbf6c6871a017e533c7fc33ec731f5b42f2f8d7f486",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationReviewIdentitiesIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationReviewReaderIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4511,
+      "sha256": "de9f2db5f2a4adc85fcfbdb509a3dc9785b7693919bce5abb03aca0fce485aaf",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationReviewReaderIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationRevokedIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3242,
+      "sha256": "438b0d11bebb6bdae3c5b59167c7780b0462c22a28ba2aca69c7b8641413ff91",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationRevokedIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationRichIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1987,
+      "sha256": "ce06bc9b0b0ad74a8d2161f2cd75e4bc804f0453932df0bbf7d9f4934149b539",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationRichIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationRollbackFixture.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4942,
+      "sha256": "953e28947f56a886f89b0a0bd655bf430f6754e94351e59a67ee2442b8de1d7d",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationRollbackFixture.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationStaleIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2433,
+      "sha256": "f023963181987b5f22ab6633a093a5a766c626568e23fe6343bbd36fea8386a0",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationStaleIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationStaleReplayIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2245,
+      "sha256": "0064c747a1b0ea30f6753324aa2b653eba6d5ac09b0300f4c9a454b540b71c55",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationStaleReplayIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationUnknownIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3992,
+      "sha256": "aeeecf151359072081f34609f7eed11a4ae319247240863619e926a959e575b5",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationUnknownIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationZeroEffectReplayIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2850,
+      "sha256": "55f2061b10bd7bfe8fad9eb36f4cadc41474f50060b1403d91ac2cdf6d3937f0",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationZeroEffectReplayIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09InitialSettingsIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 6602,
+      "sha256": "be46c4fd9e1104139267adef770a9afe082113a6bf97d5e1115176ad62ebe64e",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09InitialSettingsIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09LookupAuthorityIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 239,
+      "sha256": "daac48f772a708795c9e7af20237f9f51b2b726761ba47ae1cf1e36cc92358e6",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09LookupAuthorityIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesFixture.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4611,
+      "sha256": "f989d378bfc2085f1a9e613b9cdc9dc8b8750bc55d1724a59e3052e8a1521670",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09MinutesFixture.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesHttpBoundaryIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3390,
+      "sha256": "127ffe021fa5104aff8f2483433dd478c5e684bc17e27c76bfb2be8f8091e172",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09MinutesHttpBoundaryIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesHttpIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4943,
+      "sha256": "899e7742ab2aa9da61709c0a28821e284b9a0c9f40f5a3e99667250588ceee25",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09MinutesHttpIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesPaginationIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2815,
+      "sha256": "5e2952cb0b38f79bc55229313889ce4a880c91f78c6382d45885fc2a8c99d4e8",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09MinutesPaginationIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesResponseBudgetIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 834,
+      "sha256": "35cda412e9f227d2c6f57a39edebb22cf486d4328ac1e8531276a14715848d72",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09MinutesResponseBudgetIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09NativeFixture.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 9810,
+      "sha256": "a18067a871a9b93de5bceab1be31d5b116f53e42a09002e60cff416c4262e21e",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09NativeFixture.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09ObservationCommitAckIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 3134,
+      "sha256": "e04db82e97d86539425271c7eef1b3ede14aec62dea2ddead2ce07ed5fe661d2",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09ObservationCommitAckIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09PinnedRenderIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 7781,
+      "sha256": "4d4e096df6ce7e5678ba2441425c6ac2e2aa9e0b1d1b0d21b2bf3adae0fe2f77",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09PinnedRenderIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09PipelineFixture.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 15229,
+      "sha256": "275a3f33b84602c7463618297bd7254f09669012d0584880bf72165f72e912ee",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09PipelineFixture.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09PipelineGraphIT.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 4877,
+      "sha256": "3330fc20abcab4375ccb9cbbef8aa0ea145a3e2b1a6ccb306077b95444c26094",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09PipelineGraphIT.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09TraceSource.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 2954,
+      "sha256": "05eb4f74ff6a147389db5b4225630359777aeeceb1dc4e30b2570a567e747840",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/storage/Task09TraceSource.java"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/worker/Task09SessionAbortTest.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 5652,
+      "sha256": "aa624534d627956bd60d7d3a04e442482e7b2dfca4bd6ee7b8139bf854261e67",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/integration-tests/src/test/java/ama/worker/Task09SessionAbortTest.java"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 9213,
+      "sha256": "4ce3c8cdbea5389281225fc3373a4dad6051654fd33136c6f711619b1bc2c4a2",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 813,
+      "sha256": "a69f14cc53c979d8354208c94fcb11126818dc7feb561c3191f08e26ccfb36a6",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/MinutesGenerationHandler.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1510,
+      "sha256": "e48cdb31c54e66664e42120e3121a957f43c2269f19c45de68a909112ad08c7b",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/worker/src/main/java/ama/worker/MinutesGenerationHandler.java"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/MinutesReconciliationHandler.java",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 1857,
+      "sha256": "9ad648624aba0fd2df9d7812f691afe7a4e3f14188ac021c88c868af6d8ecd30",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/worker/src/main/java/ama/worker/MinutesReconciliationHandler.java"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 2455,
+      "sha256": "52c539accce571414f0c037406cfeed6a64b1430ce52efd3852bf9ba60ee29c7",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 5595,
+      "sha256": "4f6e439d5abbc42569f92f6e052c55d96c5b74b178fd2274c3c4e0e2b4f3ccf7",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java"
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "trackedModified": true,
+      "untracked": false,
+      "bytes": 4390,
+      "sha256": "8bae5c0c8e24690f029ab721bc68f0d14e8933808615bb5214d2cd90b602e0c5",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/contracts/openapi/api.yaml"
+    },
+    {
+      "path": "contracts/openapi/minutes.yaml",
+      "trackedModified": false,
+      "untracked": true,
+      "bytes": 86013,
+      "sha256": "7570dc3959a72d58075c6034519931da55285be071747183c2d53fa4e1daec48",
+      "copy": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source/contracts/openapi/minutes.yaml"
+    }
+  ],
+  "trackedDiffSha256": "e0b98b1daab9b53c79ca4b97f0716e1c71c3ade1e67880e2b9366c26d8349584",
+  "indexEmpty": true
+}

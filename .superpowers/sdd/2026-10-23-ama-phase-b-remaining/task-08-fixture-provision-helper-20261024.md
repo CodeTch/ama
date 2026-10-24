@@ -1,0 +1,20 @@
+# Task 8 owned MySQL fixture helper — prepared only
+
+`task08_prepare_owned_mysql.py` is root coordination tooling. It has not been executed. Importing it does nothing. Do not use it until Task 6 is adopted and root has performed the actual host/resource creation guard. Read the complete script and the [isolated fixture ruling](task-08-isolated-fixture-root-ruling-20261024.md) before use. The old `tools/dev/mysql_fixture.py` must not be run.
+
+The first explicit phase, `plan`, creates only a private `.tools/task08-<UUID>/plan.json` (directory 0700, file 0600). It prints the plan path and SHA-256. The plan records the fresh container name, UUID-specific owner label `ama.test-fixture=task08-<UUID>`, exact pinned image, data and secret mounts, loopback random port request, 768 MiB memory and swap cap, 1 CPU, 256 PID limit, four fresh schema names, and test username. Root reviews this persisted nonsecret plan and actual host availability **before** creation. The script refuses an existing directory, container name, or any previous `state.json`, `data`, or `secrets` path.
+
+Only after Task 6 adoption and the resource guard, root writes a 0600 `host-guard.json` in that planned directory with exactly `{"task6_adopted":true,"host_guard_passed":true,"approved_plan_sha256":"<plan SHA-256>","reviewer":"root"}`. The explicit `apply` command also requires the same plan SHA-256 argument; it rejects changed plan bytes or bounds. Example commands for later root use, from `/home/tanren/ama/.worktrees/phase-b-completion`:
+
+```sh
+python3 .superpowers/sdd/2026-10-23-ama-phase-b-remaining/task08_prepare_owned_mysql.py plan
+# Review the emitted plan.json, host resources, adoption state, and helper source.
+# Write the exact private host-guard.json only after those checks.
+python3 .superpowers/sdd/2026-10-23-ama-phase-b-remaining/task08_prepare_owned_mysql.py apply /home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-<UUID> --approved-plan-sha256 <plan SHA-256>
+```
+
+`apply` requires the pinned image already present locally, uses no image pull, and creates a single new labelled Docker container. It saves generated root and local test passwords only in private files and passes the root value through `docker --env-file`; SQL and root client credentials go through stdin and a mounted 0600 defaults file, never command arguments. Immediately after `docker run`, it checks selected full CID, UUID owner label, image, mount paths and modes, bounds, loopback port, running state, and OOM state. It then uses the returned full CID for every `docker exec`, authenticates over TCP with a 60 second readiness deadline, and repeats the selected inspect guard before schema creation. It creates exactly four empty schemas: `behavior`, `fairheld`, `fairunregistered`, and `overflow`. It grants the new local user only those schemas. Each fixture path and name has its own UUID; the four schemas remain distinct. The overflow schema must never poison the retained shared allocator. Failures retain all owned state and require root inspection; there is no cleanup, reset, stop, drop, retry creation, or recreate command.
+
+The helper does not run Flyway, apply migrations or SQL from the repository, load test data, create models, or touch existing MySQL, S3, private env, or PKI. Root and the later Task 8 author still own frozen DDL, exact shared target ACK, history 14 verification, and separate fresh migration 1 progression. The four new schema names alone do not prove full business fairness or overflow behavior; each scenario needs its own observed progress and evidence. No production capacity or online DDL claim follows from this fixture.
+
+Static preparation history: original helper SHA-256 `e0cbab844066c5acc8d6534f04abc1fa5fb6486d60e7caa4dfc0a0fa4647f68d`; subsequent helper with `--pull=never` SHA-256 `cbc9fe47e71d640dddcf7ec0f85da2c763d39c4aaf7bca62583d220de3b5f1da`; preceding note SHA-256 `b670022605c5c2a6fbd16b31e91cac7949b019e1bcd24530b8fef7a73d34d4c5`. These are source review anchors, not execution receipts. Current revision remains statically parsed only; Docker/MySQL compatibility and actual host guard are unverified.

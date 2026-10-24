@@ -1,0 +1,76 @@
+{
+  "utc": "2026-10-24T18:31:38.341929+00:00",
+  "status": "PREPARED_NO_STOP_OR_RESTART",
+  "pid": 146718,
+  "pgid": 146718,
+  "procStartTicks": "11701853",
+  "arguments": [
+    "/usr/bin/python3",
+    "/home/tanren/ama/.worktrees/phase-b-completion/tools/providers/controlled_knowledge.py",
+    "--config",
+    "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/provider-f2bf0ecb-0e6b-480c-ad86-f5de3e38d375.json"
+  ],
+  "config": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/provider-f2bf0ecb-0e6b-480c-ad86-f5de3e38d375.json",
+  "configSha256": "75055c6f7d7f6f794f5288018d30daa01c5f482a6e36da091707a355aeb5df04",
+  "port": 46287,
+  "store": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/knowledge.sqlite",
+  "identities": {
+    "assertionKeyId": "assertion-d14929352e2b4ee8b1b87fd42b6cd483",
+    "clientId": "task11-client-4eb92c355faf4bc496ac7e538d00f876",
+    "delegationKeyId": "delegation-dcdec1c1d49d45df84c0431caef6d967",
+    "providerId": "CONTROLLED_KNOWLEDGE_V1",
+    "storeInstanceId": "98863bbd-a519-4553-9a09-1246ab221ec9"
+  },
+  "credentialPaths": {
+    "bearerVerifier": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/provider/service-bearer-verifier",
+    "delegationPublic": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/provider/delegation-public.spki",
+    "assertionPrivate": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/provider/assertion-private.pk8"
+  },
+  "oldLoadedSourceEvidence": "artifacts/phase-b/b-remaining/task-11/publication-main-03/source/tools/providers/controlled_knowledge.py",
+  "oldSourceSha256": "6dd1fb77a7800530c476d94eb649453eb4749dfa84e1dddc1e176381a4101a39",
+  "newSource": {
+    "path": "/home/tanren/ama/.worktrees/phase-b-completion/tools/providers/controlled_knowledge.py",
+    "bytes": 26820,
+    "sha256": "cd80e61d6b338fca1627e2dc403acb15280ce504cebfe1286d62968b643efc13"
+  },
+  "privateBeforeImages": [
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/proof-source-restart-before-0a042ac46afd4f4ba9fbb766f1d65424/knowledge.sqlite",
+      "bytes": 4096,
+      "sha256": "e3ba06536f7dbba337dee3c1c5f01b43660ce276abb54c5cee2d5defc5b970aa"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/proof-source-restart-before-0a042ac46afd4f4ba9fbb766f1d65424/knowledge.sqlite-wal",
+      "bytes": 238992,
+      "sha256": "90005a1d6980cdce60abfbc3771c0509e11f44b586016829d2ed8298c3e482af"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/proof-source-restart-before-0a042ac46afd4f4ba9fbb766f1d65424/knowledge.sqlite-shm",
+      "bytes": 32768,
+      "sha256": "0e01b35b6b3ede4994f65d7471c3bdbd0ebe5b5f93f0d4060f929dad5ea2ee0b"
+    }
+  ],
+  "consistentBackup": {
+    "path": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/proof-source-restart-before-0a042ac46afd4f4ba9fbb766f1d65424/consistent-backup.sqlite",
+    "bytes": 90112,
+    "sha256": "a8db6654d0eb58fd87a47fc8b095d6be80d36780f7f21da86643f2652e18cc10"
+  },
+  "sqliteTablesAndCounts": {
+    "document": 2,
+    "execution": 2,
+    "folder": 1,
+    "grant_record": 3,
+    "identity": 1,
+    "library": 1,
+    "publication_slot": 2
+  },
+  "schemaChange": false,
+  "originalUnknownPolicy": "Retain original execution 07327d2f-3b2f-4bc1-ba6d-f9f03246d08a; no GET/observe/send or fabricated closure",
+  "validation": "binding pure8PASS; Java permanent signature verifier4PASS public RFC vectors; actual signed rejection/CAS pending",
+  "nextSteps": [
+    "Root confirm exact source/lifecycle transition",
+    "Recheck original pid/pgid/startticks/argv/config; bounded TERM only exact original PGID with reverified KILL fallback",
+    "Reopen same46287/store/keys via existing Task11KnowledgeFixture without initialize; capture new PID/source before first POST",
+    "One new actual permanent-rejection case; existing successes and UNKNOWN retained; no schema or credentials changes"
+  ]
+}

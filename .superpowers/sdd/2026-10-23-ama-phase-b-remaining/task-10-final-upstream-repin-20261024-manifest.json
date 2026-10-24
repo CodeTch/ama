@@ -1,0 +1,1915 @@
+{
+  "status": "PREPARATION_READY_STAGE_A_ONLY",
+  "createdUtc": "2026-10-24T12:03:53.443977+00:00",
+  "worktree": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "branch": "codex/phase-b-completion-20261023",
+  "head": "97e788fe96744af88513cc33bfed652b204c9972",
+  "task9Source": "591545a4a1a4ce27edea54baa94e9d11666807b7",
+  "sourceToAdoptionProductContractDiff": [],
+  "document": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-final-upstream-repin-20261024.md",
+    "bytes": 19272,
+    "sha256": "88f70093902e96c46623e389fc8e2435ee95118184876974c011919cc5824227",
+    "lines": 66
+  },
+  "authorityInputs": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-activation-author-brief-prepared-20261024.md",
+      "bytes": 12216,
+      "sha256": "62c04f0defe971d49a3eee436185a1b6112290580e63924a9f667b841dbca91b",
+      "lines": 44,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-minutes-editor-review-design.md",
+      "bytes": 51628,
+      "sha256": "fb0ea71f985ed280156ad88ea981c6f70ca5678e79043fef32c4f263e3b3e96f",
+      "lines": 276,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-10-shared-rank-ruling.md",
+      "bytes": 3478,
+      "sha256": "3b10ab12f46f7b4a2f70a91871f20d4f4052662b1cfee2b08700b02188b6bc75",
+      "lines": 13,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-plan-extract.md",
+      "bytes": 499,
+      "sha256": "9fb0ca5478acdc31f74c88e76698381d47fb6491cf3a7d6762f45d24055a89a7",
+      "lines": 3,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-source-alignment-preflight-20261024.md",
+      "bytes": 22443,
+      "sha256": "3724471da16fb362760cb8cf106d853b415c7518b79446c5e93d643307655606",
+      "lines": 117,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-source-alignment-preflight-20261024-source-hashes.json",
+      "bytes": 35132,
+      "sha256": "3a326825439176b31e62499b2255ada71826e1bb0a70b0c063750565de7c314e",
+      "lines": 1151,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-final-upstream-repin-20261024.md",
+      "bytes": 18506,
+      "sha256": "07089205b77d31045e45405aff3f0439b9358e293159cda988644d17949421e4",
+      "lines": 69,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-final-upstream-repin-20261024-manifest.json",
+      "bytes": 63987,
+      "sha256": "f166632240eaaa62c8845823909f2cea827bc5289d1463ba0cef6abe15365d66",
+      "lines": 1348,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-current-interface-prelocation-20261024.md",
+      "bytes": 2400,
+      "sha256": "113778d464cd17fd0c5b8d1a88cae069373d25020de4946fa56d58bccf550a90",
+      "lines": 9,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-current-interface-prelocation-20261024.json",
+      "bytes": 5055,
+      "sha256": "672c66f1bbfbb4133dd62b408cb7c4ef0d25cdbc8930872c66b0714d2a57747b",
+      "lines": 118,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-consumer-activation-root-ack-20261024.json",
+      "bytes": 1428,
+      "sha256": "197fb391e24d540ed200dcb7331d8af674934318097dc623a59c764a1c74c37d",
+      "lines": 21,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-report.md",
+      "bytes": 18799,
+      "sha256": "5324e01fdc4cd932d8cdcbd1cb593fd7b67c0bfecf452b3a5fe6bbc6078f7d3f",
+      "lines": 90,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fix01-independent-review-20261024.md",
+      "bytes": 15343,
+      "sha256": "bcb294ea3565931e5b675e9410ecbeb68112fffb1b380a6d59c5ab14f38908c1",
+      "lines": 80,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-minutes-generation-design-r1.md",
+      "bytes": 70871,
+      "sha256": "b1b3343a1216b9df621c3db560412fdde908499890823c9e75820e620969add2",
+      "lines": 309,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/phase-b-cross-task-closure-map-20261024.md",
+      "bytes": 11491,
+      "sha256": "3176c36db199e1f219e59921f2c7ecbcaa52945a999eab164e56a17a752fcc79",
+      "lines": 62,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-pinned-exclusion-stage-boundary-ruling-20261024.md",
+      "bytes": 2397,
+      "sha256": "dcd3a1644092bf3964b7cdce17a5fde6a2fabd05cf459eeee87528a9eb3a55eb",
+      "lines": 11,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
+      "bytes": 29541,
+      "sha256": "b6f9d904202f7409bc2251d0cc4180b230086550008d4add355efcdfb28cad53",
+      "lines": 391,
+      "inspection": "Read/reused within stated report scope; current-state is an observed mutable coordinator snapshot"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-editor.md",
+      "bytes": 4687,
+      "sha256": "2acdfa520af07d8cbee0a2536a2ee8df44157cc13009d96e6793da49ff92cbb1",
+      "lines": 15,
+      "inspection": "Full normative/adoption read"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-controlled-runtime.md",
+      "bytes": 20733,
+      "sha256": "8bec16ce2935cef50aee5771c4be3ea899db11fed28e4255b2feeb2f7a016b54",
+      "lines": 81,
+      "inspection": "Full normative/adoption read"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-authority-external-protocols.md",
+      "bytes": 4904,
+      "sha256": "8a5781937fd75f88b77154728933481f5009ac772ffcb3297d9eba55cf82130d",
+      "lines": 31,
+      "inspection": "Full normative/adoption read"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-24-ama-phase-b-controlled-envelope.md",
+      "bytes": 2274,
+      "sha256": "8b14e3ce777408dbaa50baf00e5fcad09f59dd8bac0c575de3827cd2e8b370d8",
+      "lines": 9,
+      "inspection": "Full normative/adoption read"
+    },
+    {
+      "path": "docs/acceptance/b/task-B-remaining-09-minutes-generation-adoption-20261024.md",
+      "bytes": 5959,
+      "sha256": "370659cb9ca7be358ca209122e1e9da5269e937045b81af721c882393097c20d",
+      "lines": 36,
+      "inspection": "Full normative/adoption read"
+    }
+  ],
+  "unchangedInherited": [
+    {
+      "path": "backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "bytes": 7759,
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e",
+      "lines": 85,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/db/SchemaMigrator.java",
+      "bytes": 1534,
+      "sha256": "8bdc459ab7516bf8df4268d1a8514317a3c5e470d5460a412737324fc90a2945",
+      "lines": 39,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "8bdc459ab7516bf8df4268d1a8514317a3c5e470d5460a412737324fc90a2945"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java",
+      "bytes": 15682,
+      "sha256": "0b158c87197700310499935b8b6ff7e60d8b4ba971818d02c6caa4f812ab3166",
+      "lines": 194,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "0b158c87197700310499935b8b6ff7e60d8b4ba971818d02c6caa4f812ab3166"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/json/StrictMinutesJsonReader.java",
+      "bytes": 12592,
+      "sha256": "976954647aaa6b8fd5ad5168ac6f6d64532d1d34dfe199e8dd8635bfbaf08593",
+      "lines": 175,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "976954647aaa6b8fd5ad5168ac6f6d64532d1d34dfe199e8dd8635bfbaf08593"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "bytes": 9057,
+      "sha256": "0b3a791e3aa93cc63ef04e117b5f65e3b186c75f4b6a7f6b6f9b8aaab1d2a214",
+      "lines": 214,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "0b3a791e3aa93cc63ef04e117b5f65e3b186c75f4b6a7f6b6f9b8aaab1d2a214"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "bytes": 4805,
+      "sha256": "1082731ac484632f243f5ae6e9b03e7e5f00846de0b38a887653a713af0d8ea8",
+      "lines": 89,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "1082731ac484632f243f5ae6e9b03e7e5f00846de0b38a887653a713af0d8ea8"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/s3/S3Objects.java",
+      "bytes": 7488,
+      "sha256": "3d4df6d7eff8d8cb7c8b37df73dec23eb7508c3f427c808401dcd2ba1a70ce99",
+      "lines": 203,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "3d4df6d7eff8d8cb7c8b37df73dec23eb7508c3f427c808401dcd2ba1a70ce99"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "bytes": 2614,
+      "sha256": "b26bdf44ac6538377d0ea29b5c53de1623b4c39e3b0856b71026521b6603b31b",
+      "lines": 45,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "b26bdf44ac6538377d0ea29b5c53de1623b4c39e3b0856b71026521b6603b31b"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java",
+      "bytes": 8858,
+      "sha256": "84a2ffe1f74978f794a1cac1ddbc44e238bf46520f4e73ea342e2ccdf3bc7f5d",
+      "lines": 98,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "84a2ffe1f74978f794a1cac1ddbc44e238bf46520f4e73ea342e2ccdf3bc7f5d"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/ReconciliationScanBudget.java",
+      "bytes": 392,
+      "sha256": "3293bd3fcaa22223030dd874bf6d38add912ab9e09a660323ac77706ffaa992d",
+      "lines": 9,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "3293bd3fcaa22223030dd874bf6d38add912ab9e09a660323ac77706ffaa992d"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ImportTaskDomainPolicy.java",
+      "bytes": 14273,
+      "sha256": "f1f75c031c0129ee0f3b9d9e5d737d4dca5c7cf0d72e359befa409ab20bab342",
+      "lines": 174,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "f1f75c031c0129ee0f3b9d9e5d737d4dca5c7cf0d72e359befa409ab20bab342"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "bytes": 17372,
+      "sha256": "410331e9d9957440c459a1b3ac6558bbad510c82416fa6b57be75c08393e183a",
+      "lines": 245,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "410331e9d9957440c459a1b3ac6558bbad510c82416fa6b57be75c08393e183a"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscriptReceipts.java",
+      "bytes": 7110,
+      "sha256": "64d03eccbe8c1394a1726473facd649ba9127bd05f767e7e3b0f3a0519514dba",
+      "lines": 62,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "64d03eccbe8c1394a1726473facd649ba9127bd05f767e7e3b0f3a0519514dba"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "bytes": 32920,
+      "sha256": "720a77843bf23829d5ff3da8aae9fbe2ee52855b9eb61fc962475d1024e8f994",
+      "lines": 241,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "720a77843bf23829d5ff3da8aae9fbe2ee52855b9eb61fc962475d1024e8f994"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java",
+      "bytes": 3770,
+      "sha256": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+      "lines": 34,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+      "bytes": 13380,
+      "sha256": "bc393ba23f5c1b618bf00cef44c59e45c937feb598a5a20cc161f415d347147f",
+      "lines": 114,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "bc393ba23f5c1b618bf00cef44c59e45c937feb598a5a20cc161f415d347147f"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "bytes": 35136,
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "lines": 225,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "bytes": 21260,
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "lines": 335,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "bytes": 1817,
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "lines": 34,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "lines": 1,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "bytes": 164,
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+      "lines": 3,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+      "bytes": 20262,
+      "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61",
+      "lines": 200,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/ConfigBindingsTest.java",
+      "bytes": 8480,
+      "sha256": "a7742d7571a060e101592bd0ee316273f1050dc5406e2999828b545afdf123cd",
+      "lines": 75,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "a7742d7571a060e101592bd0ee316273f1050dc5406e2999828b545afdf123cd"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/minutes/json/OutputBudgetBoundaryTest.java",
+      "bytes": 4381,
+      "sha256": "48842e2461c8a9cbf4925a93b85d8dc22181e721f59b9d39f3e7d5d544a40b92",
+      "lines": 42,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "48842e2461c8a9cbf4925a93b85d8dc22181e721f59b9d39f3e7d5d544a40b92"
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/minutes/json/StrictMinutesJsonReaderTest.java",
+      "bytes": 8390,
+      "sha256": "fb5e79d53f56b5c55f692a8fedeb6feb0015168c27ef15e20ef773a536b206f6",
+      "lines": 94,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "fb5e79d53f56b5c55f692a8fedeb6feb0015168c27ef15e20ef773a536b206f6"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/HttpRevisionTokens.java",
+      "bytes": 1778,
+      "sha256": "f81b6e91ccc5e69bda2e97c1198b944cceab66bec401ebba0fd9c55eec8edf06",
+      "lines": 32,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "f81b6e91ccc5e69bda2e97c1198b944cceab66bec401ebba0fd9c55eec8edf06"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MeetingController.java",
+      "bytes": 5095,
+      "sha256": "0329f1afa1f2a2484a0f1c904de593bf298a2f31525f9664f4a7bac63e6c06ea",
+      "lines": 64,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "0329f1afa1f2a2484a0f1c904de593bf298a2f31525f9664f4a7bac63e6c06ea"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/TranscriptConfiguration.java",
+      "bytes": 6803,
+      "sha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+      "lines": 45,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/TranscriptController.java",
+      "bytes": 7667,
+      "sha256": "3e39bf1d96022e5f6859cc5d50d80924b3c5e4b2c5ab24f6314677250d52757b",
+      "lines": 44,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "3e39bf1d96022e5f6859cc5d50d80924b3c5e4b2c5ab24f6314677250d52757b"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "bytes": 37168,
+      "sha256": "2a772b4587298ca39fd92ab5031d5178657828689cc70c4ce9e195ad1d904382",
+      "lines": 354,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "2a772b4587298ca39fd92ab5031d5178657828689cc70c4ce9e195ad1d904382"
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/TranscriptContracts.java",
+      "bytes": 1724,
+      "sha256": "0e8aa4395ee1b4a7354565a374c86da171cf166067c5b9594866df8474c29081",
+      "lines": 18,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "0e8aa4395ee1b4a7354565a374c86da171cf166067c5b9594866df8474c29081"
+    },
+    {
+      "path": "backend/contracts/src/test/java/ama/contract/MinutesFactBudgetTest.java",
+      "bytes": 2265,
+      "sha256": "3ad2c0a8585f348a0a244492a2816f207d9733776a61554b5c90efce67c03827",
+      "lines": 35,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "3ad2c0a8585f348a0a244492a2816f207d9733776a61554b5c90efce67c03827"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "bytes": 1466,
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25",
+      "lines": 22,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "bytes": 741,
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8",
+      "lines": 17,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigSchema.java",
+      "bytes": 10265,
+      "sha256": "20207ac4da3ec1b9566f9ed24f812605a660fe7179dee242990c5bbd6e6badba",
+      "lines": 83,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "20207ac4da3ec1b9566f9ed24f812605a660fe7179dee242990c5bbd6e6badba"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/CreationSupport.java",
+      "bytes": 1505,
+      "sha256": "003b2d0081938c011caaee11748a4b6de46d9388e47f5f9bd6d759b3c4148186",
+      "lines": 23,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "003b2d0081938c011caaee11748a4b6de46d9388e47f5f9bd6d759b3c4148186"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ModelOutputReader.java",
+      "bytes": 819,
+      "sha256": "72b3fa65abb8dee94f1729a0cc5ef8a5aa28e642f2bbab9731729fb5dceb74c1",
+      "lines": 12,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "72b3fa65abb8dee94f1729a0cc5ef8a5aa28e642f2bbab9731729fb5dceb74c1"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OriginChainVerifier.java",
+      "bytes": 2402,
+      "sha256": "7c2022a0ab317829613afe6bd074e48353d825ab36c7ac8a67b2a50cb0a08af0",
+      "lines": 35,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "7c2022a0ab317829613afe6bd074e48353d825ab36c7ac8a67b2a50cb0a08af0"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OutputValidation.java",
+      "bytes": 3752,
+      "sha256": "98df9ea7b45ee5266327b1336adde5f01e82a701fae6f6e73c21b6f0f06e6c06",
+      "lines": 57,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "98df9ea7b45ee5266327b1336adde5f01e82a701fae6f6e73c21b6f0f06e6c06"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+      "bytes": 16170,
+      "sha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8",
+      "lines": 158,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/RowsetProjection.java",
+      "bytes": 4246,
+      "sha256": "c550bc224504152c6eee559a7a5ee99f2709ac4ea2ccb2cd8da1d16baf16f4ec",
+      "lines": 47,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "c550bc224504152c6eee559a7a5ee99f2709ac4ea2ccb2cd8da1d16baf16f4ec"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredFactsIndex.java",
+      "bytes": 7398,
+      "sha256": "d3a1feaa336e7abef93de75ff708e3e0d0aa6de1fdaa60f03ac797db7a9a1f7d",
+      "lines": 79,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "d3a1feaa336e7abef93de75ff708e3e0d0aa6de1fdaa60f03ac797db7a9a1f7d"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+      "bytes": 18512,
+      "sha256": "7a92026a2553e1209544db14d4f3bd6f8879c17bdba6e909a7fca75e39b074a2",
+      "lines": 187,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "7a92026a2553e1209544db14d4f3bd6f8879c17bdba6e909a7fca75e39b074a2"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/TranscriptConfirmationHash.java",
+      "bytes": 6240,
+      "sha256": "82e6093254f1a9c76d3e119bfeaef295de35418c1b466d06958b7891022037bc",
+      "lines": 74,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "82e6093254f1a9c76d3e119bfeaef295de35418c1b466d06958b7891022037bc"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ModelPermitPool.java",
+      "bytes": 985,
+      "sha256": "6f98efa77b700597cf58b2918c3caf1ce8534abb3115fc592dbc221eb5754e46",
+      "lines": 19,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "6f98efa77b700597cf58b2918c3caf1ce8534abb3115fc592dbc221eb5754e46"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+      "bytes": 2647,
+      "sha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620",
+      "lines": 43,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskQueue.java",
+      "bytes": 1353,
+      "sha256": "756036a23b7c101b3a6bf90dd56617b87b7425da1e3b1b76ee72bed87351d4f4",
+      "lines": 27,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "756036a23b7c101b3a6bf90dd56617b87b7425da1e3b1b76ee72bed87351d4f4"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "bytes": 717,
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d",
+      "lines": 14,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java",
+      "bytes": 1283,
+      "sha256": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+      "lines": 10,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/FinalAndCoverageTest.java",
+      "bytes": 3468,
+      "sha256": "a63d4dbbdf62209d132c59cffb2b42bc7c17cd65a84283d3fa1be9de719b48bf",
+      "lines": 45,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "a63d4dbbdf62209d132c59cffb2b42bc7c17cd65a84283d3fa1be9de719b48bf"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/GenerationFingerprintTest.java",
+      "bytes": 2544,
+      "sha256": "542ec403f8b8dd835841ef37c2a0df3763af32d750f6118ba43029df423545cf",
+      "lines": 35,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "542ec403f8b8dd835841ef37c2a0df3763af32d750f6118ba43029df423545cf"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/HashProfilesTest.java",
+      "bytes": 7541,
+      "sha256": "d3084a6dda0e1f910dc3adacc4b71b841a585145797d444ebf0341dfdcd56574",
+      "lines": 88,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "d3084a6dda0e1f910dc3adacc4b71b841a585145797d444ebf0341dfdcd56574"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/SourceAndSupportTest.java",
+      "bytes": 5950,
+      "sha256": "2e0cc389fb909d033bed176175b2097e30ead12bce3706b6e11430b6960f4bc0",
+      "lines": 69,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "2e0cc389fb909d033bed176175b2097e30ead12bce3706b6e11430b6960f4bc0"
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/StoredSourceGraphTest.java",
+      "bytes": 10743,
+      "sha256": "2da3c1eed8202db20afc2d736bd41f1d220556ff600f66b65729b14b363ce9c1",
+      "lines": 117,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "2da3c1eed8202db20afc2d736bd41f1d220556ff600f66b65729b14b363ce9c1"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/db/MinutesSchemaIT.java",
+      "bytes": 37396,
+      "sha256": "414721c6d2d9e24ed5e5793676680051006fee581d1205bc68109445c1deda2b",
+      "lines": 481,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "414721c6d2d9e24ed5e5793676680051006fee581d1205bc68109445c1deda2b"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/identity/IdentityAccessIT.java",
+      "bytes": 17065,
+      "sha256": "c11bb807711682d4cc5fb0d9ca61d45392acafbd48fff1d0dc5e3f9203610c45",
+      "lines": 212,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "c11bb807711682d4cc5fb0d9ca61d45392acafbd48fff1d0dc5e3f9203610c45"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixIntegrityIT.java",
+      "bytes": 3656,
+      "sha256": "f34b8ace2a60d299af3700a64d1f7ccd974214b9d95531906249c0f0278dfca7",
+      "lines": 21,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "f34b8ace2a60d299af3700a64d1f7ccd974214b9d95531906249c0f0278dfca7"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixLocksIT.java",
+      "bytes": 4412,
+      "sha256": "4d72cda0b41cbb55560216ed4f3626a3443b148f9b0feaa6124cd48c3d1acc02",
+      "lines": 19,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "4d72cda0b41cbb55560216ed4f3626a3443b148f9b0feaa6124cd48c3d1acc02"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixProvenanceIT.java",
+      "bytes": 10553,
+      "sha256": "6df8ef0db5def28886d5e36443611b8a51a3eb33265bc70c72d8b722a256c90a",
+      "lines": 44,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "6df8ef0db5def28886d5e36443611b8a51a3eb33265bc70c72d8b722a256c90a"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06IndexedTasksIT.java",
+      "bytes": 10496,
+      "sha256": "e71c48726948e1f90952f65e482fb6d8bbb7a326fec8cad5cb9625dad4306ef4",
+      "lines": 50,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "e71c48726948e1f90952f65e482fb6d8bbb7a326fec8cad5cb9625dad4306ef4"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06SavedGraphIT.java",
+      "bytes": 1115,
+      "sha256": "76803c06622792e7cbf304dbdbd49ed2d5bc85ddbf5f67b4b2cb1e4071987ebc",
+      "lines": 19,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "76803c06622792e7cbf304dbdbd49ed2d5bc85ddbf5f67b4b2cb1e4071987ebc"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06TaskQueryPlanIT.java",
+      "bytes": 1633,
+      "sha256": "ef5e5c9bc43dac3b9136e59ed7ab5e35d2630a209aab5293c0c6a782652fef73",
+      "lines": 5,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "ef5e5c9bc43dac3b9136e59ed7ab5e35d2630a209aab5293c0c6a782652fef73"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/support/MysqlTestDatabase.java",
+      "bytes": 1465,
+      "sha256": "a734c9bc0c30e0e176d28fe1505c4d7d0a2a7dc188a09f31d4c38f79a96c878a",
+      "lines": 31,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "a734c9bc0c30e0e176d28fe1505c4d7d0a2a7dc188a09f31d4c38f79a96c878a"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/ExternalExecutionIT.java",
+      "bytes": 11485,
+      "sha256": "1699ba7e6627ce9eb811aa8b816fa83464c0af26332b90279f8a9c4b5c37dd29",
+      "lines": 45,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "1699ba7e6627ce9eb811aa8b816fa83464c0af26332b90279f8a9c4b5c37dd29"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/ModelPermitIT.java",
+      "bytes": 6598,
+      "sha256": "415b930e8e76a02826eb8be5f29d415f95827d2a71f681f6d1f1fe54efbf0fc8",
+      "lines": 25,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "415b930e8e76a02826eb8be5f29d415f95827d2a71f681f6d1f1fe54efbf0fc8"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/PreparedCompletionIT.java",
+      "bytes": 16868,
+      "sha256": "d3296fd1bcbfbec7d97acfe77044a146535c0ea6384dc1531a42423d66f03c5b",
+      "lines": 239,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "d3296fd1bcbfbec7d97acfe77044a146535c0ea6384dc1531a42423d66f03c5b"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task06InheritedPreparedCompletionIT.java",
+      "bytes": 18131,
+      "sha256": "ae57fdac77552a51c64522fd8c97ad42d470b392657e5067f89f5e86587a6650",
+      "lines": 240,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "ae57fdac77552a51c64522fd8c97ad42d470b392657e5067f89f5e86587a6650"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08BudgetIT.java",
+      "bytes": 3594,
+      "sha256": "051132227d01e0926e4c7c55f7bf2d11c112c1c57dca95ebd7925d7bee11c7b0",
+      "lines": 32,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "051132227d01e0926e4c7c55f7bf2d11c112c1c57dca95ebd7925d7bee11c7b0"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+      "bytes": 17028,
+      "sha256": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07",
+      "lines": 128,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08FairnessIT.java",
+      "bytes": 4555,
+      "sha256": "173f45df252804b4554cc682a714d467680c2cbe2b23d0c84cd04f47a4c9ca0f",
+      "lines": 52,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "173f45df252804b4554cc682a714d467680c2cbe2b23d0c84cd04f47a4c9ca0f"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/TaskFixture.java",
+      "bytes": 5518,
+      "sha256": "032d7842bfaf1f0ff71fecc5a4674bed4dcd5057b555a9f9000e87d60f7dd22d",
+      "lines": 65,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "032d7842bfaf1f0ff71fecc5a4674bed4dcd5057b555a9f9000e87d60f7dd22d"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+      "bytes": 8133,
+      "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3",
+      "lines": 62,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "bytes": 7590,
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9",
+      "lines": 74,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+      "bytes": 16024,
+      "sha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2",
+      "lines": 155,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedFactsReaderIT.java",
+      "bytes": 17167,
+      "sha256": "4cba9f6fc9705e5b2652c146d04cf122db45d47c456031f16783d358d60569c2",
+      "lines": 156,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "4cba9f6fc9705e5b2652c146d04cf122db45d47c456031f16783d358d60569c2"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ExternalOperationHeartbeat.java",
+      "bytes": 2577,
+      "sha256": "f7b331778eb038615d913163f979d65a4c21ac0f78cf31082127a42a3640c065",
+      "lines": 23,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "f7b331778eb038615d913163f979d65a4c21ac0f78cf31082127a42a3640c065"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ReconciliationLoop.java",
+      "bytes": 6525,
+      "sha256": "9bf3a8a230f1d2bdc29a54b1ef1b3e41be9d35df412a59748765bdc5ceeae424",
+      "lines": 111,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "9bf3a8a230f1d2bdc29a54b1ef1b3e41be9d35df412a59748765bdc5ceeae424"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "bytes": 18368,
+      "sha256": "9fa33c9cc2445570880ff0d0e98ae5ce8ec39bfb3005c40b63974303da99ff7a",
+      "lines": 279,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "9fa33c9cc2445570880ff0d0e98ae5ce8ec39bfb3005c40b63974303da99ff7a"
+    },
+    {
+      "path": "contracts/openapi/transcripts.yaml",
+      "bytes": 116651,
+      "sha256": "207cf5409fecfea7a594158fb952780af74a876e84b8e5bba85a553773be3dcc",
+      "lines": 4041,
+      "inspection": "Hash check only; unchanged entries inherit only prior inspected assertions.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "207cf5409fecfea7a594158fb952780af74a876e84b8e5bba85a553773be3dcc"
+    }
+  ],
+  "supersededInherited": [
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "bytes": 15066,
+      "sha256": "6aedff24cc17b98f2d58d8cf5501cbb77901892ca8c5b37d1afdcd73ca4cf6aa",
+      "lines": 167,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "75917561fcd0e91cdf097997189a3c28d7998bbaf28db62c16a8162f6bdb64ec"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "bytes": 40419,
+      "sha256": "e102df73dc59dea6a0ad328dc7a2da490923bb2f253f5fd943130476bc6fa5a5",
+      "lines": 385,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "93b040bba816394cd590869031cd55ec0dd60f011d7bcea2eabc2710ffc12e23"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java",
+      "bytes": 9518,
+      "sha256": "4df075976018effc5269f7e38ba917a39321ff8d1f739e2a17f3cbf88563b332",
+      "lines": 84,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "b3761d814d96be4b95f5c3ce9ec14bb4bd8c1c5388053802e7cbe342c30dad93"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "bytes": 3909,
+      "sha256": "ab71c24bb8b174ad3b9f7a2a4851675f6b11c997a0c92d1a17840c34bd0342d6",
+      "lines": 62,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "68d531b26fd4a669d6e8700f7b757c36320887aaeb74e7776e29d6c1b31569c1"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "bytes": 22099,
+      "sha256": "906f741ca7315633e5555e263093105b5f3b293443552fc5e3e4ea763bc3f93b",
+      "lines": 223,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "e30acee6f87cbdea289bd27dc4b17db9af3a7cb529bf0008e2c1913065a6c61d"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "bytes": 14143,
+      "sha256": "31295fd510a7c4c3f1dd4f2c3a19e68e4cadab89dc84ac040ecec2ba007c520f",
+      "lines": 146,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "5b9ffc7b767c01cdd51c1434318b8eb375fbf2e37a81b96107e8569eb714d39b"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "bytes": 43587,
+      "sha256": "72be6bd00c9713a23d5ee995bf98bd16de042ff924485c73b49d3fcdc10b3f1d",
+      "lines": 424,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java",
+      "bytes": 7441,
+      "sha256": "bc7cf4b53efa45fc8f42ac20763387cf8e126ced69d091ab8fc3c3af3f4afba4",
+      "lines": 84,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "994ea23103299bb4d6c83d3fb313ddc872a5e027278593a30dbb022153d1d968"
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/SessionSecurityFilter.java",
+      "bytes": 4062,
+      "sha256": "f77999f841986f8a82a986bce86358181e32f0f62a189dba032fcb36da161d11",
+      "lines": 61,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "bd92c8e7b18134a2b58f0b1f5203f22800fd79a0d54c54acd857081ff38c0882"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "bytes": 22681,
+      "sha256": "8889269496387fe84e57a5a5cb3dce00d5a11e1c93102ebc065e5f0f70e80fe9",
+      "lines": 192,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "79adef52e2fc6886b0a279d7272ab5e855ee5d6586b66e0dcd629b81035a3c0a"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java",
+      "bytes": 16929,
+      "sha256": "8400c26be2c2e064baa10fb14736814e93d3fdd2f744420496e686c1bce1cfa3",
+      "lines": 142,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "9897d025afebbc9d042b148362d6ca9474099ac0a666856d476cb4d0b83a20a3"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+      "bytes": 2771,
+      "sha256": "e0928b32505492358fcc9a4ed218708913f4e83cc086410b143cf12f9161d873",
+      "lines": 43,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "272a8c13b19747bf404d11d202e0f846b51f4b2ea3b6d3595f80fba645640cc3"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java",
+      "bytes": 866,
+      "sha256": "7be44ed1e7a54223d80802c2e44ad2e4c3bf20ad0ffa54715f0fac94d2500ae1",
+      "lines": 14,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "f42204ddc6fc8951facd8b0bba4138e67efe4ada4cf8375102d1424f90be327c"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/PreparedExternalPolicy.java",
+      "bytes": 1434,
+      "sha256": "eae096920e1879c7acfe7da6d82bfa17f3f0e0325de8e1c621243f8303fc68af",
+      "lines": 18,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "b003efcb2447dc8f65b0911574c0a8dc437c0bd822164d77a4a531dffd7e55ae"
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java",
+      "bytes": 4298,
+      "sha256": "cd232c2cda3a03ae3cd38a9c4542eb133b95df36b95931c07a9d0c6171a7f081",
+      "lines": 48,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java",
+      "bytes": 9213,
+      "sha256": "4ce3c8cdbea5389281225fc3373a4dad6051654fd33136c6f711619b1bc2c4a2",
+      "lines": 101,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "4f7269070813f43024c91467810812b3d700c9274f57dba2049feff1bc8e67c0"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java",
+      "bytes": 813,
+      "sha256": "a69f14cc53c979d8354208c94fcb11126818dc7feb561c3191f08e26ccfb36a6",
+      "lines": 15,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "e51f99af59889c7a51526bf83c11acef5727015944cadefb973582712e0d5f1d"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java",
+      "bytes": 2701,
+      "sha256": "5dc9a571554871d7fbb0f4fc37e55830791fc32fdc9a08f689d0891f4a09dcff",
+      "lines": 29,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "eeb7ba5eb2dbb57606b42ee72a21f7395d53d2355d35a2ad6d0b1a710e086e2e"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "bytes": 5615,
+      "sha256": "78c92e50fc55e74b46164888439744423635f12d47c0a1908fae2e81b453e21a",
+      "lines": 64,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "c9d331c12432222ec0bc93732317cc6f1a87fcde5a65dcd22c87c2a983d99f48"
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "bytes": 4390,
+      "sha256": "8bae5c0c8e24690f029ab721bc68f0d14e8933808615bb5214d2cd90b602e0c5",
+      "lines": 104,
+      "inspection": "Prior mapping superseded by adopted Task9; not a full fresh review.",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "priorSha256": "085fd6c00d84f7d469c327d2316f8aed434bc1e6729a713c5b5573cf57b2af19"
+    }
+  ],
+  "inheritedCounts": {
+    "unique": 99,
+    "unchanged": 79,
+    "superseded": 20
+  },
+  "prelocationRepin": [
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ConfiguredMinutes.java",
+      "bytes": 5875,
+      "sha256": "b305fd9d7212cc32a0e4428477f8e6794c0f65326dcddadd93e077c45c83d265",
+      "lines": 26,
+      "inspection": "Focused Task10 interface repin",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "prelocationSha256": "b305fd9d7212cc32a0e4428477f8e6794c0f65326dcddadd93e077c45c83d265",
+      "changedSincePrelocation": false
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "bytes": 5615,
+      "sha256": "78c92e50fc55e74b46164888439744423635f12d47c0a1908fae2e81b453e21a",
+      "lines": 64,
+      "inspection": "Focused Task10 interface repin",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "prelocationSha256": "78c92e50fc55e74b46164888439744423635f12d47c0a1908fae2e81b453e21a",
+      "changedSincePrelocation": false
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesCandidateWriter.java",
+      "bytes": 9041,
+      "sha256": "9e8869b54bdeb6a0ebed005970559517eae95d4ee625e1862e07b52c3a3b3a6a",
+      "lines": 41,
+      "inspection": "Focused Task10 interface repin",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "prelocationSha256": "9e8869b54bdeb6a0ebed005970559517eae95d4ee625e1862e07b52c3a3b3a6a",
+      "changedSincePrelocation": false
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesFactsReader.java",
+      "bytes": 19382,
+      "sha256": "f64895772eea8aaffa03f8b2ee1a5aa6acc3e70b6e73f7d6776926fde350e5ec",
+      "lines": 107,
+      "inspection": "Focused Task10 interface repin",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "prelocationSha256": "f64895772eea8aaffa03f8b2ee1a5aa6acc3e70b6e73f7d6776926fde350e5ec",
+      "changedSincePrelocation": false
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationPreparation.java",
+      "bytes": 19938,
+      "sha256": "04be6f727f4789f22fe9b9e3c604ca72d6a9e1122221177085146e0beb862d1d",
+      "lines": 87,
+      "inspection": "Focused Task10 interface repin",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "prelocationSha256": "04be6f727f4789f22fe9b9e3c604ca72d6a9e1122221177085146e0beb862d1d",
+      "changedSincePrelocation": false
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationCommands.java",
+      "bytes": 3495,
+      "sha256": "4cf05fd21f45cd7fdc48eeea579019a59da42182b556d7e7bf3f899126091173",
+      "lines": 23,
+      "inspection": "Focused Task10 interface repin",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "prelocationSha256": "4cf05fd21f45cd7fdc48eeea579019a59da42182b556d7e7bf3f899126091173",
+      "changedSincePrelocation": false
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesExternalPreparation.java",
+      "bytes": 13873,
+      "sha256": "e17e03da2901a2c3dc3d3ed7600f5cb1ad842296cdd2985179fccae3bc951c83",
+      "lines": 75,
+      "inspection": "Focused Task10 interface repin",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "prelocationSha256": "3f276f9b3b81fa0cf47c5e8aea6c5c0ffb42de010dfc79cceeb5450d6de5502c",
+      "changedSincePrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesTaskDomainPolicy.java",
+      "bytes": 18425,
+      "sha256": "4fc60465fdf00ac56e5bdb9ef4a61c0db49c6a3f289762ef08204b763cd9b2f9",
+      "lines": 65,
+      "inspection": "Focused Task10 interface repin",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "prelocationSha256": "4fc60465fdf00ac56e5bdb9ef4a61c0db49c6a3f289762ef08204b763cd9b2f9",
+      "changedSincePrelocation": false
+    }
+  ],
+  "focusedSource": [
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesCandidateWriter.java",
+      "bytes": 9041,
+      "sha256": "9e8869b54bdeb6a0ebed005970559517eae95d4ee625e1862e07b52c3a3b3a6a",
+      "lines": 41,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesTaskDomainPolicy.java",
+      "bytes": 18425,
+      "sha256": "4fc60465fdf00ac56e5bdb9ef4a61c0db49c6a3f289762ef08204b763cd9b2f9",
+      "lines": 65,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationCommands.java",
+      "bytes": 3495,
+      "sha256": "4cf05fd21f45cd7fdc48eeea579019a59da42182b556d7e7bf3f899126091173",
+      "lines": 23,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesGraphCapture.java",
+      "bytes": 9523,
+      "sha256": "53b78fd3688553c46bcaa7646149e991dbb672c978886128f6d059f5df4f931a",
+      "lines": 74,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesInitialSettings.java",
+      "bytes": 11690,
+      "sha256": "7c0d04ebda7cbfd2d31be33b508d3c183b124cfd194effca9f12a5288f8b8c21",
+      "lines": 66,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationPreparation.java",
+      "bytes": 19938,
+      "sha256": "04be6f727f4789f22fe9b9e3c604ca72d6a9e1122221177085146e0beb862d1d",
+      "lines": 87,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ConfiguredMinutes.java",
+      "bytes": 5875,
+      "sha256": "b305fd9d7212cc32a0e4428477f8e6794c0f65326dcddadd93e077c45c83d265",
+      "lines": 26,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java",
+      "bytes": 20896,
+      "sha256": "435314fc4dc74d7378c9e1ce3f1ba93f0e754f6670edd2a464de5390b69b1aac",
+      "lines": 164,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesFactsReader.java",
+      "bytes": 19382,
+      "sha256": "f64895772eea8aaffa03f8b2ee1a5aa6acc3e70b6e73f7d6776926fde350e5ec",
+      "lines": 107,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesCandidateGraphPlan.java",
+      "bytes": 14736,
+      "sha256": "672901ce009de0e1175c170442a78d13d9d094289c80d9d524ae365ef805e222",
+      "lines": 63,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesRecordedLookup.java",
+      "bytes": 9330,
+      "sha256": "ff2d0ce291a4d3247e171963c714855060d4c4ab88f3b3432c600aff29329a4f",
+      "lines": 33,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesStoredResults.java",
+      "bytes": 6411,
+      "sha256": "6bd66a3e7815a20a94dd35316c4862b59076b79ec760317a555471f6499456e2",
+      "lines": 26,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "bytes": 3909,
+      "sha256": "ab71c24bb8b174ad3b9f7a2a4851675f6b11c997a0c92d1a17840c34bd0342d6",
+      "lines": 62,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java",
+      "bytes": 9518,
+      "sha256": "4df075976018effc5269f7e38ba917a39321ff8d1f739e2a17f3cbf88563b332",
+      "lines": 84,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java",
+      "bytes": 866,
+      "sha256": "7be44ed1e7a54223d80802c2e44ad2e4c3bf20ad0ffa54715f0fac94d2500ae1",
+      "lines": 14,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java",
+      "bytes": 1283,
+      "sha256": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+      "lines": 10,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesConfiguration.java",
+      "bytes": 2975,
+      "sha256": "2f0e2c139b6e1cafda17ccd62b55a95763e7c1f461720aeac20e7bf787d86f81",
+      "lines": 13,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/TranscriptConfiguration.java",
+      "bytes": 6803,
+      "sha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+      "lines": 45,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "bytes": 5615,
+      "sha256": "78c92e50fc55e74b46164888439744423635f12d47c0a1908fae2e81b453e21a",
+      "lines": 64,
+      "inspection": "Full current file read",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java",
+      "bytes": 15682,
+      "sha256": "0b158c87197700310499935b8b6ff7e60d8b4ba971818d02c6caa4f812ab3166",
+      "lines": 194,
+      "inspection": "61-160; writer search and inherited creation guard map",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java",
+      "bytes": 20136,
+      "sha256": "b5cf7dd3eb1941f2152ceaa8bd4c217369f3cdddf06250d98c87bfed3c15aa61",
+      "lines": 275,
+      "inspection": "80-130; writer search",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "bytes": 32920,
+      "sha256": "720a77843bf23829d5ff3da8aae9fbe2ee52855b9eb61fc962475d1024e8f994",
+      "lines": 241,
+      "inspection": "35-95; transitions/writer search",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+      "bytes": 13380,
+      "sha256": "bc393ba23f5c1b618bf00cef44c59e45c937feb598a5a20cc161f415d347147f",
+      "lines": 114,
+      "inspection": "34-105",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "bytes": 43587,
+      "sha256": "72be6bd00c9713a23d5ee995bf98bd16de042ff924485c73b49d3fcdc10b3f1d",
+      "lines": 424,
+      "inspection": "180-232; scope/claim/registration search",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "bytes": 40419,
+      "sha256": "e102df73dc59dea6a0ad328dc7a2da490923bb2f253f5fd943130476bc6fa5a5",
+      "lines": 385,
+      "inspection": "290-330; actual write/validate/replay/lookup search",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "bytes": 22099,
+      "sha256": "906f741ca7315633e5555e263093105b5f3b293443552fc5e3e4ea763bc3f93b",
+      "lines": 223,
+      "inspection": "installConfined/lockRoots search; inherited map plus Task9 adoption",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "bytes": 14143,
+      "sha256": "31295fd510a7c4c3f1dd4f2c3a19e68e4cadab89dc84ac040ecec2ba007c520f",
+      "lines": 146,
+      "inspection": "actual install registration line35 and delegated lockRoots search",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "bytes": 22681,
+      "sha256": "8889269496387fe84e57a5a5cb3dce00d5a11e1c93102ebc065e5f0f70e80fe9",
+      "lines": 192,
+      "inspection": "178-190 catalog binding accessor search",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesExternalPreparation.java",
+      "bytes": 13873,
+      "sha256": "e17e03da2901a2c3dc3d3ed7600f5cb1ad842296cdd2985179fccae3bc951c83",
+      "lines": 75,
+      "inspection": "full fix1 delta at line50 plus adopted Task9 report",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesWire.java",
+      "bytes": 2123,
+      "sha256": "6fdba038653c081dd30d75d41f787d4afc5bb66e74923bd4272d62d074aa8269",
+      "lines": 7,
+      "inspection": "full fix1 diff",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    }
+  ],
+  "fix1DeltaHashOnly": [
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesProviderStore.java",
+      "bytes": 5930,
+      "sha256": "0342b254b31cac074d95704e5aa0c170bc4d992038f4c6d7862917048733c00d",
+      "lines": 62,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/model/ControlledMinutesStore.java",
+      "bytes": 16978,
+      "sha256": "c6adb193109018e8ea08c58299a3fbac1fd48056dd54d7947ba69a3d8de9cf40",
+      "lines": 187,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesCandidateGraphPlan.java",
+      "bytes": 14736,
+      "sha256": "672901ce009de0e1175c170442a78d13d9d094289c80d9d524ae365ef805e222",
+      "lines": 63,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesExternalPreparation.java",
+      "bytes": 13873,
+      "sha256": "e17e03da2901a2c3dc3d3ed7600f5cb1ad842296cdd2985179fccae3bc951c83",
+      "lines": 75,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesRecordedLookup.java",
+      "bytes": 9330,
+      "sha256": "ff2d0ce291a4d3247e171963c714855060d4c4ab88f3b3432c600aff29329a4f",
+      "lines": 33,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/Task09Fix01ProviderAdmissionTest.java",
+      "bytes": 3773,
+      "sha256": "a4af18973f2969903386d5f7e58f10804e01b892a3216a7d7c2208a119a465cf",
+      "lines": 10,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesWire.java",
+      "bytes": 2123,
+      "sha256": "6fdba038653c081dd30d75d41f787d4afc5bb66e74923bd4272d62d074aa8269",
+      "lines": 7,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/api/src/test/java/ama/api/Task09Fix01WireTest.java",
+      "bytes": 1602,
+      "sha256": "cd361d1955b5636b00b7566558d3134dfef1766735858be33ea9cb355d13f53b",
+      "lines": 9,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09DeniedLookupProcess.java",
+      "bytes": 12335,
+      "sha256": "48f90c4aff802eff95bf53788c2a1c04a519a7921abc39d387aa609f7ae42aef",
+      "lines": 31,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01ActiveLookupIT.java",
+      "bytes": 171,
+      "sha256": "80bab99016f2665019be5a08abb22eb502635ad9cf3ced2268072e1b9a6600a4",
+      "lines": 3,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01DeniedLookupIT.java",
+      "bytes": 167,
+      "sha256": "d8f7984125996988372fd2c1f6168a6f5906348c99f14027f863ed7d29bc0c09",
+      "lines": 3,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01HttpIT.java",
+      "bytes": 158,
+      "sha256": "9aef53e8746e21d6c5a0c23d730375f42c755dd0a29b72c6324f3d678780188c",
+      "lines": 3,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01ParentReplayIT.java",
+      "bytes": 1680,
+      "sha256": "324ece332b88345dbea4e16a5be7ca48d9d6511c4a78e5cd7b7f39f1076725a8",
+      "lines": 5,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01ResponseBudgetIT.java",
+      "bytes": 170,
+      "sha256": "270f25d0d3f39abb63b454c2e1cd929858bef3513fdbb797c776aafdc09586f3",
+      "lines": 3,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09Fix01RootsIT.java",
+      "bytes": 2853,
+      "sha256": "307d240f0593001b2cfcb4bb6f499a677876e1914605dab0e047bb2fe8d8c3be",
+      "lines": 8,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09GenerationPhysicalCancelIT.java",
+      "bytes": 4732,
+      "sha256": "0a5bd57bf1e2c34903fa5f87e6a0e9990290f4d3eaa8d42e75349cc3038609b5",
+      "lines": 17,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesHttpBoundaryIT.java",
+      "bytes": 3496,
+      "sha256": "fc285433ed916795229aa1287c7446f2a44641ed21b0c822e83bd5eae03675c7",
+      "lines": 12,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesHttpIT.java",
+      "bytes": 5704,
+      "sha256": "646fc0fe8552e218135c27e63f0107ba9acb6fbf6a1c6310aa2ae609df21f7e7",
+      "lines": 18,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task09MinutesResponseBudgetIT.java",
+      "bytes": 1232,
+      "sha256": "6ab740ccb623dbdf27f5662d67a8f31d011e5c4c6fbe31ff7ea558a0a39d2f5f",
+      "lines": 6,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/Task09Fix01GraphProbe.java",
+      "bytes": 2368,
+      "sha256": "228281f979c32c85f0d1d385e0d9b3af311c2443d09549e9dad8187fdf6d5a1f",
+      "lines": 10,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/Task09Fix01LookupProbe.java",
+      "bytes": 5135,
+      "sha256": "92fa3449ddd3d4ba87ee03f28f55f294db2f56ed07840dd5f55a587e87961dc3",
+      "lines": 19,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    },
+    {
+      "path": "contracts/openapi/minutes.yaml",
+      "bytes": 91585,
+      "sha256": "57c31dfa9dd8d7e6b29556164d02b0c1bc712e20d3ba9aaae6a85bcbf8b07bf8",
+      "lines": 3561,
+      "inspection": "Hash and adopted fix review lineage only unless listed in focusedSource; no execution",
+      "equalsTask9Source": true,
+      "equalsHead": true
+    }
+  ],
+  "completeSqlPrefix": [
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "bytes": 709,
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+      "lines": 18,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "bytes": 1781,
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+      "lines": 35,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "bytes": 2461,
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+      "lines": 57,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "bytes": 1864,
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+      "lines": 38,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "bytes": 3795,
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+      "lines": 69,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "bytes": 11205,
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+      "lines": 162,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "bytes": 7239,
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+      "lines": 114,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "bytes": 35136,
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "lines": 225,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "bytes": 397,
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713",
+      "lines": 5,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "bytes": 10941,
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+      "lines": 167,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "bytes": 21260,
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "lines": 335,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "bytes": 1817,
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "lines": 34,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "lines": 1,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "bytes": 164,
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+      "lines": 3,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "bytes": 7661,
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+      "lines": 113,
+      "inspection": "Exact immutable SQL byte check; no SQL executed",
+      "equalsTask9Source": true,
+      "equalsHead": true,
+      "equalsPrelocation": true
+    }
+  ],
+  "sqlCount": 15,
+  "latestSql": "013.3",
+  "protectionPointer": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-protected-adopted-inputs-20261024.json",
+    "sha256": "0015f86c5ed558bfcca380dc8caf6f709574b333bb7d3d10932a0badf3ea8cb3",
+    "paths": 123051,
+    "evidence": "Coordinator supplied pointer; no full tree rescan by author"
+  },
+  "execution": {
+    "tests": false,
+    "build": false,
+    "sql": false,
+    "docker": false,
+    "privateEnvironment": false,
+    "fixtureHelper": false,
+    "gitMutation": false,
+    "subagents": false
+  },
+  "writes": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-final-upstream-repin-20261024.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-final-upstream-repin-20261024-manifest.json"
+  ],
+  "stageBGate": "Coordinator fresh fixture helper outcome/readiness plus separate application ACK; no Stage B started",
+  "openBoundaries": [
+    "F5 Minor Task13 explicit disposition",
+    "Task10 real multi-version durable-marker active/denied GET-only same-fact recovery and settlement",
+    "Task10 real current-body-change terminal replay",
+    "Task11 actual publication/readiness and formal combined installation",
+    "Task11/12 full LOCAL+S3 and Task12 browser",
+    "Historical UNKNOWN and permanent qualification limits preserved"
+  ]
+}

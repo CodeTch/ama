@@ -1,0 +1,1348 @@
+{
+  "status": "PREPARATION_READY_STAGE_A_ONLY",
+  "base": "cff858e163ca7dea774dcf05c707ef7551956156",
+  "post6_base": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+  "worktree": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "read_scope": "16 changed production files read fully; focused unchanged hooks and Task8 test source read; 79 unchanged carried blobs verified only to prior inspected assertions; no runtime commands",
+  "document": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-final-upstream-repin-20261024.md",
+    "bytes": 18506,
+    "sha256": "07089205b77d31045e45405aff3f0439b9358e293159cda988644d17949421e4"
+  },
+  "changed_production": [
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "93b040bba816394cd590869031cd55ec0dd60f011d7bcea2eabc2710ffc12e23",
+      "bytes": 37071,
+      "lines": 358,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 358,
+          "sha256": "93b040bba816394cd590869031cd55ec0dd60f011d7bcea2eabc2710ffc12e23",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "b3761d814d96be4b95f5c3ce9ec14bb4bd8c1c5388053802e7cbe342c30dad93",
+      "bytes": 7462,
+      "lines": 72,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 72,
+          "sha256": "b3761d814d96be4b95f5c3ce9ec14bb4bd8c1c5388053802e7cbe342c30dad93",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "84a2ffe1f74978f794a1cac1ddbc44e238bf46520f4e73ea342e2ccdf3bc7f5d",
+      "bytes": 8858,
+      "lines": 98,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 98,
+          "sha256": "84a2ffe1f74978f794a1cac1ddbc44e238bf46520f4e73ea342e2ccdf3bc7f5d",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "68d531b26fd4a669d6e8700f7b757c36320887aaeb74e7776e29d6c1b31569c1",
+      "bytes": 3567,
+      "lines": 58,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 58,
+          "sha256": "68d531b26fd4a669d6e8700f7b757c36320887aaeb74e7776e29d6c1b31569c1",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "e30acee6f87cbdea289bd27dc4b17db9af3a7cb529bf0008e2c1913065a6c61d",
+      "bytes": 21864,
+      "lines": 223,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 223,
+          "sha256": "e30acee6f87cbdea289bd27dc4b17db9af3a7cb529bf0008e2c1913065a6c61d",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/ReconciliationScanBudget.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "3293bd3fcaa22223030dd874bf6d38add912ab9e09a660323ac77706ffaa992d",
+      "bytes": 392,
+      "lines": 9,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 9,
+          "sha256": "3293bd3fcaa22223030dd874bf6d38add912ab9e09a660323ac77706ffaa992d",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+      "bytes": 164,
+      "lines": 3,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 3,
+          "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+          "first_anchor": "ALTER TABLE external_operation",
+          "last_anchor": "ADD UNIQUE INDEX external_reconcile_scan (reconcile_scan_seq);"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "272a8c13b19747bf404d11d202e0f846b51f4b2ea3b6d3595f80fba645640cc3",
+      "bytes": 2600,
+      "lines": 41,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 41,
+          "sha256": "272a8c13b19747bf404d11d202e0f846b51f4b2ea3b6d3595f80fba645640cc3",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/GenerationRetentionPolicy.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "f42204ddc6fc8951facd8b0bba4138e67efe4ada4cf8375102d1424f90be327c",
+      "bytes": 622,
+      "lines": 11,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 11,
+          "sha256": "f42204ddc6fc8951facd8b0bba4138e67efe4ada4cf8375102d1424f90be327c",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ModelPermitPool.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "6f98efa77b700597cf58b2918c3caf1ce8534abb3115fc592dbc221eb5754e46",
+      "bytes": 985,
+      "lines": 19,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 19,
+          "sha256": "6f98efa77b700597cf58b2918c3caf1ce8534abb3115fc592dbc221eb5754e46",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/PreparedExternalPolicy.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "b003efcb2447dc8f65b0911574c0a8dc437c0bd822164d77a4a531dffd7e55ae",
+      "bytes": 1190,
+      "lines": 17,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 17,
+          "sha256": "b003efcb2447dc8f65b0911574c0a8dc437c0bd822164d77a4a531dffd7e55ae",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ExternalExecutionSession.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "4f7269070813f43024c91467810812b3d700c9274f57dba2049feff1bc8e67c0",
+      "bytes": 6727,
+      "lines": 80,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 80,
+          "sha256": "4f7269070813f43024c91467810812b3d700c9274f57dba2049feff1bc8e67c0",
+          "first_anchor": "package ama.worker;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ExternalOperationHeartbeat.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "f7b331778eb038615d913163f979d65a4c21ac0f78cf31082127a42a3640c065",
+      "bytes": 2577,
+      "lines": 23,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 23,
+          "sha256": "f7b331778eb038615d913163f979d65a4c21ac0f78cf31082127a42a3640c065",
+          "first_anchor": "package ama.worker;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ExternalTaskExecution.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "e51f99af59889c7a51526bf83c11acef5727015944cadefb973582712e0d5f1d",
+      "bytes": 597,
+      "lines": 13,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 13,
+          "sha256": "e51f99af59889c7a51526bf83c11acef5727015944cadefb973582712e0d5f1d",
+          "first_anchor": "package ama.worker;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ReconciliationLoop.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "9bf3a8a230f1d2bdc29a54b1ef1b3e41be9d35df412a59748765bdc5ceeae424",
+      "bytes": 6525,
+      "lines": 111,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 111,
+          "sha256": "9bf3a8a230f1d2bdc29a54b1ef1b3e41be9d35df412a59748765bdc5ceeae424",
+          "first_anchor": "package ama.worker;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "9fa33c9cc2445570880ff0d0e98ae5ce8ec39bfb3005c40b63974303da99ff7a",
+      "bytes": 18368,
+      "lines": 279,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 279,
+          "sha256": "9fa33c9cc2445570880ff0d0e98ae5ce8ec39bfb3005c40b63974303da99ff7a",
+          "first_anchor": "package ama.worker;",
+          "last_anchor": "}"
+        }
+      ]
+    }
+  ],
+  "focused_hooks_and_test_source": [
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620",
+      "bytes": 2647,
+      "lines": 43,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 43,
+          "sha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "c9d331c12432222ec0bc93732317cc6f1a87fcde5a65dcd22c87c2a983d99f48",
+      "bytes": 3628,
+      "lines": 50,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 50,
+          "sha256": "c9d331c12432222ec0bc93732317cc6f1a87fcde5a65dcd22c87c2a983d99f48",
+          "first_anchor": "package ama.worker;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "eeb7ba5eb2dbb57606b42ee72a21f7395d53d2355d35a2ad6d0b1a710e086e2e",
+      "bytes": 2319,
+      "lines": 29,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 29,
+          "sha256": "eeb7ba5eb2dbb57606b42ee72a21f7395d53d2355d35a2ad6d0b1a710e086e2e",
+          "first_anchor": "package ama.worker;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/TranscriptConfiguration.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+      "bytes": 6803,
+      "lines": 45,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 45,
+          "sha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+          "first_anchor": "package ama.api;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+      "bytes": 1283,
+      "lines": 10,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 10,
+          "sha256": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+          "first_anchor": "package ama.transcript;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+      "bytes": 40777,
+      "lines": 396,
+      "inspected_ranges": [
+        {
+          "start": 23,
+          "end": 90,
+          "sha256": "23808f0cbc86b1f7689aaf1b636622452be03661234900c56c6d53b9e1fff5a0",
+          "first_anchor": "import static ama.contract.MinutesContracts.*;",
+          "last_anchor": "var members=new ArrayList<BatchFingerprint.Member>();var files=new ArrayList<ContentFile>();long ordinal=1;"
+        },
+        {
+          "start": 195,
+          "end": 242,
+          "sha256": "37427af5f18fdf51fcf05522ecd4f8c9cbca251a8458f6ea9bc2fab1ea78a6d0",
+          "first_anchor": "requireHeld(value,gate,spec);var h=held(value);var prepared=h.reserved.prepared;var draft=prepared.draft;",
+          "last_anchor": "var matches=r.prepared.draft.orderedSources().stream().filter(s->s.file().fileId().equals(file.fileId())).toList();require(matches.size()==1&&matches.getFirst().file().equals(file),FINGERPRINT_MISMATCH);"
+        },
+        {
+          "start": 290,
+          "end": 330,
+          "sha256": "0bb32f45dbfb2408da265bd55d67b4ff95344aa7b34d1742d9634dde4f70f55f",
+          "first_anchor": "else throw new IllegalArgumentException(\"Unknown transcript source selector\");",
+          "last_anchor": "preparation(prepared,meeting,current);if(!file.equals(current.fileId()))throw new IllegalArgumentException(\"Changed current selector\");"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "5b9ffc7b767c01cdd51c1434318b8eb375fbf2e37a81b96107e8569eb714d39b",
+      "bytes": 14078,
+      "lines": 146,
+      "inspected_ranges": [
+        {
+          "start": 15,
+          "end": 56,
+          "sha256": "30027adf72f11ce39fc189b10a5c9a4186f673b0e4283fc56978035ed96b80b7",
+          "first_anchor": "import java.util.*;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/db/SchemaMigrator.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "8bdc459ab7516bf8df4268d1a8514317a3c5e470d5460a412737324fc90a2945",
+      "bytes": 1534,
+      "lines": 39,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 39,
+          "sha256": "8bdc459ab7516bf8df4268d1a8514317a3c5e470d5460a412737324fc90a2945",
+          "first_anchor": "package ama.db;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "bytes": 75,
+      "lines": 1,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 1,
+          "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+          "first_anchor": "CREATE INDEX task_input_lookup ON durable_task (input_kind, input_id, id);",
+          "last_anchor": "CREATE INDEX task_input_lookup ON durable_task (input_kind, input_id, id);"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08FairnessIT.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "173f45df252804b4554cc682a714d467680c2cbe2b23d0c84cd04f47a4c9ca0f",
+      "bytes": 4555,
+      "lines": 52,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 52,
+          "sha256": "173f45df252804b4554cc682a714d467680c2cbe2b23d0c84cd04f47a4c9ca0f",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08BudgetIT.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "051132227d01e0926e4c7c55f7bf2d11c112c1c57dca95ebd7925d7bee11c7b0",
+      "bytes": 3594,
+      "lines": 32,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 32,
+          "sha256": "051132227d01e0926e4c7c55f7bf2d11c112c1c57dca95ebd7925d7bee11c7b0",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07",
+      "bytes": 17028,
+      "lines": 128,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 128,
+          "sha256": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07",
+          "first_anchor": "package ama.task;",
+          "last_anchor": "}"
+        }
+      ]
+    }
+  ],
+  "unchanged_post6_carry": [
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "sha256": "1082731ac484632f243f5ae6e9b03e7e5f00846de0b38a887653a713af0d8ea8",
+      "bytes": 4805,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "sha256": "0b3a791e3aa93cc63ef04e117b5f65e3b186c75f4b6a7f6b6f9b8aaab1d2a214",
+      "bytes": 9057,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "sha256": "b26bdf44ac6538377d0ea29b5c53de1623b4c39e3b0856b71026521b6603b31b",
+      "bytes": 2614,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/s3/S3Objects.java",
+      "sha256": "3d4df6d7eff8d8cb7c8b37df73dec23eb7508c3f427c808401dcd2ba1a70ce99",
+      "bytes": 7488,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "sha256": "5b9ffc7b767c01cdd51c1434318b8eb375fbf2e37a81b96107e8569eb714d39b",
+      "bytes": 14078,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "sha256": "c9d331c12432222ec0bc93732317cc6f1a87fcde5a65dcd22c87c2a983d99f48",
+      "bytes": 3628,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "sha256": "720a77843bf23829d5ff3da8aae9fbe2ee52855b9eb61fc962475d1024e8f994",
+      "bytes": 32920,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscriptReceipts.java",
+      "sha256": "64d03eccbe8c1394a1726473facd649ba9127bd05f767e7e3b0f3a0519514dba",
+      "bytes": 7110,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "sha256": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+      "bytes": 40777,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+      "sha256": "bc393ba23f5c1b618bf00cef44c59e45c937feb598a5a20cc161f415d347147f",
+      "bytes": 13380,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java",
+      "sha256": "994ea23103299bb4d6c83d3fb313ddc872a5e027278593a30dbb022153d1d968",
+      "bytes": 7115,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java",
+      "sha256": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+      "bytes": 3770,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "bytes": 75,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "sha256": "2a772b4587298ca39fd92ab5031d5178657828689cc70c4ce9e195ad1d904382",
+      "bytes": 37168,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/TranscriptContracts.java",
+      "sha256": "0e8aa4395ee1b4a7354565a374c86da171cf166067c5b9594866df8474c29081",
+      "bytes": 1724,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+      "sha256": "7a92026a2553e1209544db14d4f3bd6f8879c17bdba6e909a7fca75e39b074a2",
+      "bytes": 18512,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/TranscriptConfirmationHash.java",
+      "sha256": "82e6093254f1a9c76d3e119bfeaef295de35418c1b466d06958b7891022037bc",
+      "bytes": 6240,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java",
+      "sha256": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076",
+      "bytes": 3762,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java",
+      "sha256": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+      "bytes": 1283,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/TranscriptConfiguration.java",
+      "sha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+      "bytes": 6803,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/TranscriptController.java",
+      "sha256": "3e39bf1d96022e5f6859cc5d50d80924b3c5e4b2c5ab24f6314677250d52757b",
+      "bytes": 7667,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/SessionSecurityFilter.java",
+      "sha256": "bd92c8e7b18134a2b58f0b1f5203f22800fd79a0d54c54acd857081ff38c0882",
+      "bytes": 4054,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06IndexedTasksIT.java",
+      "sha256": "e71c48726948e1f90952f65e482fb6d8bbb7a326fec8cad5cb9625dad4306ef4",
+      "bytes": 10496,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixProvenanceIT.java",
+      "sha256": "6df8ef0db5def28886d5e36443611b8a51a3eb33265bc70c72d8b722a256c90a",
+      "bytes": 10553,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixIntegrityIT.java",
+      "sha256": "f34b8ace2a60d299af3700a64d1f7ccd974214b9d95531906249c0f0278dfca7",
+      "bytes": 3656,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06TaskQueryPlanIT.java",
+      "sha256": "ef5e5c9bc43dac3b9136e59ed7ab5e35d2630a209aab5293c0c6a782652fef73",
+      "bytes": 1633,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixLocksIT.java",
+      "sha256": "4d72cda0b41cbb55560216ed4f3626a3443b148f9b0feaa6124cd48c3d1acc02",
+      "bytes": 4412,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06SavedGraphIT.java",
+      "sha256": "76803c06622792e7cbf304dbdbd49ed2d5bc85ddbf5f67b4b2cb1e4071987ebc",
+      "bytes": 1115,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task06InheritedPreparedCompletionIT.java",
+      "sha256": "ae57fdac77552a51c64522fd8c97ad42d470b392657e5067f89f5e86587a6650",
+      "bytes": 18131,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/Task06InheritedFactsReaderIT.java",
+      "sha256": "4cba9f6fc9705e5b2652c146d04cf122db45d47c456031f16783d358d60569c2",
+      "bytes": 17167,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "sha256": "085fd6c00d84f7d469c327d2316f8aed434bc1e6729a713c5b5573cf57b2af19",
+      "bytes": 3533,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "contracts/openapi/transcripts.yaml",
+      "sha256": "207cf5409fecfea7a594158fb952780af74a876e84b8e5bba85a553773be3dcc",
+      "bytes": 116651,
+      "prior_group": "changed_or_focused_committed",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigBindings.java",
+      "sha256": "79adef52e2fc6886b0a279d7272ab5e855ee5d6586b66e0dcd629b81035a3c0a",
+      "bytes": 21843,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigSchema.java",
+      "sha256": "20207ac4da3ec1b9566f9ed24f812605a660fe7179dee242990c5bbd6e6badba",
+      "bytes": 10265,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigArchiveSource.java",
+      "sha256": "53734a779480b975aabf022d5aa70bdeac999fe163c889ba62517e8310dcf4e8",
+      "bytes": 741,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/config/ConfigArchiveIndex.java",
+      "sha256": "82d7cec3fee2ae2302f00c8e7475d1fca6c532e766830e9ea9971e866ec2de25",
+      "bytes": 1466,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java",
+      "sha256": "9897d025afebbc9d042b148362d6ca9474099ac0a666856d476cb4d0b83a20a3",
+      "bytes": 15846,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OutputValidation.java",
+      "sha256": "98df9ea7b45ee5266327b1336adde5f01e82a701fae6f6e73c21b6f0f06e6c06",
+      "bytes": 3752,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/CreationSupport.java",
+      "sha256": "003b2d0081938c011caaee11748a4b6de46d9388e47f5f9bd6d759b3c4148186",
+      "bytes": 1505,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ModelOutputReader.java",
+      "sha256": "72b3fa65abb8dee94f1729a0cc5ef8a5aa28e642f2bbab9731729fb5dceb74c1",
+      "bytes": 819,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/OriginChainVerifier.java",
+      "sha256": "7c2022a0ab317829613afe6bd074e48353d825ab36c7ac8a67b2a50cb0a08af0",
+      "bytes": 2402,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/RowsetProjection.java",
+      "sha256": "c550bc224504152c6eee559a7a5ee99f2709ac4ea2ccb2cd8da1d16baf16f4ec",
+      "bytes": 4246,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/StoredFactsIndex.java",
+      "sha256": "d3a1feaa336e7abef93de75ff708e3e0d0aa6de1fdaa60f03ac797db7a9a1f7d",
+      "bytes": 7398,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+      "sha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8",
+      "bytes": 16170,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/ProcessingFactsReader.java",
+      "sha256": "8dc82c8cf26e38e900f50b6fa0b6ae02227486cdcb19e7e7ef1e3d8bc8ce154d",
+      "bytes": 717,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+      "sha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620",
+      "bytes": 2647,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskQueue.java",
+      "sha256": "756036a23b7c101b3a6bf90dd56617b87b7425da1e3b1b76ee72bed87351d4f4",
+      "bytes": 1353,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/config/file/ControlledArchiveReleaseWriter.java",
+      "sha256": "b6caf8bc2ce7f9b463dcb61db25f95ba7f1909a3f8553c7d6a378723c800f86e",
+      "bytes": 7759,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/minutes/json/StrictMinutesJsonReader.java",
+      "sha256": "976954647aaa6b8fd5ad5168ac6f6d64532d1d34dfe199e8dd8635bfbaf08593",
+      "bytes": 12592,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java",
+      "sha256": "410331e9d9957440c459a1b3ac6558bbad510c82416fa6b57be75c08393e183a",
+      "bytes": 17372,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ImportTaskDomainPolicy.java",
+      "sha256": "f1f75c031c0129ee0f3b9d9e5d737d4dca5c7cf0d72e359befa409ab20bab342",
+      "bytes": 14273,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java",
+      "sha256": "0b158c87197700310499935b8b6ff7e60d8b4ba971818d02c6caa4f812ab3166",
+      "bytes": 15682,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "sha256": "75917561fcd0e91cdf097997189a3c28d7998bbaf28db62c16a8162f6bdb64ec",
+      "bytes": 10622,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java",
+      "sha256": "eeb7ba5eb2dbb57606b42ee72a21f7395d53d2355d35a2ad6d0b1a710e086e2e",
+      "bytes": 2319,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MeetingController.java",
+      "sha256": "0329f1afa1f2a2484a0f1c904de593bf298a2f31525f9664f4a7bac63e6c06ea",
+      "bytes": 5095,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/HttpRevisionTokens.java",
+      "sha256": "f81b6e91ccc5e69bda2e97c1198b944cceab66bec401ebba0fd9c55eec8edf06",
+      "bytes": 1778,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "bytes": 21260,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "bytes": 35136,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "bytes": 1817,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/TaskFixture.java",
+      "sha256": "032d7842bfaf1f0ff71fecc5a4674bed4dcd5057b555a9f9000e87d60f7dd22d",
+      "bytes": 5518,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ArchiveProcessingFixture.java",
+      "sha256": "d2c7ab3e7f5278674d32321df851efdb9ccb95e86434fa61bac14420f0ff9dd3",
+      "bytes": 8133,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ProcessingFactsReaderIT.java",
+      "sha256": "0caaeab50bfa7caf10dce23a4b8fb93949d3ae3c946b4e1d564015a3a93d52f2",
+      "bytes": 16024,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/transcript/ConfigArchiveRestartIT.java",
+      "sha256": "681cd98b1027300acd8fdaaf8fbdc2f910b9664b2226b036585ebbf764ef7dc9",
+      "bytes": 7590,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/ExternalExecutionIT.java",
+      "sha256": "1699ba7e6627ce9eb811aa8b816fa83464c0af26332b90279f8a9c4b5c37dd29",
+      "bytes": 11485,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/ModelPermitIT.java",
+      "sha256": "415b930e8e76a02826eb8be5f29d415f95827d2a71f681f6d1f1fe54efbf0fc8",
+      "bytes": 6598,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/PreparedCompletionIT.java",
+      "sha256": "d3296fd1bcbfbec7d97acfe77044a146535c0ea6384dc1531a42423d66f03c5b",
+      "bytes": 16868,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/db/MinutesSchemaIT.java",
+      "sha256": "414721c6d2d9e24ed5e5793676680051006fee581d1205bc68109445c1deda2b",
+      "bytes": 37396,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/identity/IdentityAccessIT.java",
+      "sha256": "c11bb807711682d4cc5fb0d9ca61d45392acafbd48fff1d0dc5e3f9203610c45",
+      "bytes": 17065,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/support/MysqlTestDatabase.java",
+      "sha256": "a734c9bc0c30e0e176d28fe1505c4d7d0a2a7dc188a09f31d4c38f79a96c878a",
+      "bytes": 1465,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/GenerationFingerprintTest.java",
+      "sha256": "542ec403f8b8dd835841ef37c2a0df3763af32d750f6118ba43029df423545cf",
+      "bytes": 2544,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/StoredSourceGraphTest.java",
+      "sha256": "2da3c1eed8202db20afc2d736bd41f1d220556ff600f66b65729b14b363ce9c1",
+      "bytes": 10743,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/SourceAndSupportTest.java",
+      "sha256": "2e0cc389fb909d033bed176175b2097e30ead12bce3706b6e11430b6960f4bc0",
+      "bytes": 5950,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/FinalAndCoverageTest.java",
+      "sha256": "a63d4dbbdf62209d132c59cffb2b42bc7c17cd65a84283d3fa1be9de719b48bf",
+      "bytes": 3468,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/core/src/test/java/ama/minutes/contract/HashProfilesTest.java",
+      "sha256": "d3084a6dda0e1f910dc3adacc4b71b841a585145797d444ebf0341dfdcd56574",
+      "bytes": 7541,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/json/ConfigBindingsTest.java",
+      "sha256": "a7742d7571a060e101592bd0ee316273f1050dc5406e2999828b545afdf123cd",
+      "bytes": 8480,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/minutes/json/StrictMinutesJsonReaderTest.java",
+      "sha256": "fb5e79d53f56b5c55f692a8fedeb6feb0015168c27ef15e20ef773a536b206f6",
+      "bytes": 8390,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/minutes/json/OutputBudgetBoundaryTest.java",
+      "sha256": "48842e2461c8a9cbf4925a93b85d8dc22181e721f59b9d39f3e7d5d544a40b92",
+      "bytes": 4381,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/file/ControlledConfigArchiveSourceTest.java",
+      "sha256": "4ff84af51388372c9dcd29c501e3e18bd93fab811c06e11c8d7ac03612e84e61",
+      "bytes": 20262,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    },
+    {
+      "path": "backend/contracts/src/test/java/ama/contract/MinutesFactBudgetTest.java",
+      "sha256": "3ad2c0a8585f348a0a244492a2816f207d9733776a61554b5c90efce67c03827",
+      "bytes": 2265,
+      "prior_group": "preflight_assertions_carried_by_exact_source_equivalence",
+      "prior_assertions": "Only exact previously inspected scopes carry; no newly inferred complete review."
+    }
+  ],
+  "replaced_prior_assertions": [
+    "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+    "backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java",
+    "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+    "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+    "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+    "backend/core/src/main/java/ama/task/ModelPermitPool.java",
+    "backend/worker/src/main/java/ama/worker/WorkerLoop.java"
+  ],
+  "authorities": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-activation-author-brief-20261024.md",
+      "sha256": "fd76a018cebe0ec93a4adf0e4f40341dcc0a617549d1d8e369ea0927834fcc7f",
+      "bytes": 7959,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/runtime-author-common.md",
+      "sha256": "cbb0bf1dc05ecf98b12786d7e49792f24c730ffe6a383412358c9aaaeeedcbac",
+      "bytes": 5072,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-plan-extract.md",
+      "sha256": "9c9ff0259623a2cf4457a66601b1eade01f3829d366b22e2b53f04f264feecb9",
+      "bytes": 539,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-minutes-generation-design-r1.md",
+      "sha256": "b1b3343a1216b9df621c3db560412fdde908499890823c9e75820e620969add2",
+      "bytes": 70871,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-10-shared-rank-ruling.md",
+      "sha256": "3b10ab12f46f7b4a2f70a91871f20d4f4052662b1cfee2b08700b02188b6bc75",
+      "bytes": 3478,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-source-alignment-preflight-20261024.md",
+      "sha256": "f08d955ae205a8b28625fe95a980b3ba06311da21fecdc220e575c454c3746a0",
+      "bytes": 21377,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-source-alignment-preflight-20261024-source-manifest.json",
+      "sha256": "da80db8b992e1ce3bc72fbb2411bba9768730a6ee16f1fe4937ff88458baeeac",
+      "bytes": 30368,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-post6-delta-map-20261024.md",
+      "sha256": "1e14eaa8cd816ef0c1ef620a0aa1428c5b399ad63f56d2a73f4fe1c0b76ed110",
+      "bytes": 11722,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-post6-delta-map-20261024-source-manifest.json",
+      "sha256": "61434b49496030e9d56e75cffa28425862cfe6e69dcac93d14a7e5c4b99339bc",
+      "bytes": 47663,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-consumer-activation-root-ack-20261024.json",
+      "sha256": "24ce0b8a9f15f9a37b43b6b41c62394f87b97d93924473cc08d20165032ab817",
+      "bytes": 1182,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-protocol-design.md",
+      "sha256": "35c1ef41e8764d973814b3cb54b3f25e4b205c19bcebdb420a3196182fdd664d",
+      "bytes": 37680,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-root-review-rulings.md",
+      "sha256": "5ee7b6e9ec9e11cc5d669daac67e8b9f649b8cb6874a4a181b17454d25d81b0c",
+      "bytes": 4491,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-attempt-receipt-clarification.md",
+      "sha256": "2a5ea32975ef486375f8c23656ec2c5bf49f0f58b27f987793307329d4f7626a",
+      "bytes": 1812,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-post6-candidate-version-order-probe-20261024.json",
+      "sha256": "22517b3b22b6ab6b338b5412c28bb67b8f73b5217ce5c9c3deaeb0e2f3f58861",
+      "bytes": 1794,
+      "scope": "full source/reference; prior manifests consumed for exact equivalence"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md",
+      "sha256": "b866ae9303e30ae57a24118c0125e24cc28a871b42246ac688a6263a02890cc6",
+      "scope": "CV04 lines 40-53 only; historical blocker wording superseded by final Task7 adoption"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-controlled-runtime.md",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "8bec16ce2935cef50aee5771c4be3ea899db11fed28e4255b2feeb2f7a016b54",
+      "bytes": 20733,
+      "lines": 81,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 81,
+          "sha256": "8bec16ce2935cef50aee5771c4be3ea899db11fed28e4255b2feeb2f7a016b54",
+          "first_anchor": "# Phase B remaining controlled-runtime design",
+          "last_anchor": "Read `docs/superpowers/specs/2026-10-23-ama-phase-b-authority-external-protocols.md` and its exact adopted design artifacts for Tasks 3 through 11. Its reviewed source-receipt/identity/read-finalization protocols and separate verified permit settlement refine this specification. Task IDs are stable; fairness Task 8 precedes external Task 7 activation. No generic fence, UNKNOWN or company-contract relaxation is granted."
+        }
+      ]
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-authority-external-protocols.md",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "8a5781937fd75f88b77154728933481f5009ac772ffcb3297d9eba55cf82130d",
+      "bytes": 4904,
+      "lines": 31,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 31,
+          "sha256": "8a5781937fd75f88b77154728933481f5009ac772ffcb3297d9eba55cf82130d",
+          "first_anchor": "# Phase B authority and external protocol adoption",
+          "last_anchor": "Read 2026-10-23-ama-phase-b-import-worker.md and exact approved R1/re-review. Its ordinary tick JDBC-outside-monitor plus drain-before-completion/marker protocol supersedes Task7 section9 monitor-over-ordinary-renew shorthand. It preserves selected renewal completion before MARKING, no queued tick after handoff, single owner/no second ordinary completion, independent marker commit/operation tracking and verified permit settlement. Actual Task7 implementation/tests must consume the same barrier, not restore the inversion."
+        }
+      ]
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-minutes-generation.md",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "99746a067ed0386f15817d06c09762feb87d2071387fc50d50d47b6195b109db",
+      "bytes": 4449,
+      "lines": 17,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 17,
+          "sha256": "99746a067ed0386f15817d06c09762feb87d2071387fc50d50d47b6195b109db",
+          "first_anchor": "# Phase B minutes generation design adoption",
+          "last_anchor": "Before runtime activation reconcile actual adopted Task3/6/7 facades, Task10 first-save/adoption/shared PENDING disposition and Task11 publication/readiness freeze. Actual controlled pipeline, durable blocked-transport cancellation, full rollback, permit ambiguity/UNKNOWN, concurrent content/final work and retained-store app/provider restart evidence remain mandatory. No new DDL, company SSO/directory/model/KB, HA/capacity/native-I/O or permanent B01 IMM PARTIAL/B04 Q401 UNKNOWN closure follows."
+        }
+      ]
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-reconciliation-fairness.md",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "8535567be287f8baed0a1bde8f47dbc1f4993f4581dbb4f88ea48bcbcbde0907",
+      "bytes": 3365,
+      "lines": 13,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 13,
+          "sha256": "8535567be287f8baed0a1bde8f47dbc1f4993f4581dbb4f88ea48bcbcbde0907",
+          "first_anchor": "# Phase B reconciliation fairness design adoption",
+          "last_anchor": "Actual >64 held and >64 unregistered cases, arrivals/late commits/gaps, consumed-only success progress, new instance/fresh-JVM recovery, fresh due/fullspec/lock-order/UNKNOWN/commit-ambiguity and corrected SQL trace tests are implementation gates. Task8 runs after6 and before external Task7 activation. Generic fences, initial-send authority, no blind resend and separate Task7 permit recovery remain unchanged."
+        }
+      ]
+    },
+    {
+      "path": "docs/acceptance/b/task-B-remaining-07-prepared-external-adoption-20261024.md",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "11af753c3cbbf3cd50ddb1e0759ef0e8549fde3e2b346c0a4d07209a7d641455",
+      "bytes": 5349,
+      "lines": 34,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 34,
+          "sha256": "11af753c3cbbf3cd50ddb1e0759ef0e8549fde3e2b346c0a4d07209a7d641455",
+          "first_anchor": "# Task7采用：prepared external运行时与旧回执有界恢复",
+          "last_anchor": "[精确镜像清单](../../../artifacts/phase-b/b-remaining/controller-task07-adoption-20261024/manifest.json)，SHA `b1587153fb4f8e0a67e779fc37393ed907b5fac964614dbe83dc366bc9f168ed`。原W、全部原始raw及前像继续保留，用户接续要求优先于技能清理建议。"
+        }
+      ]
+    },
+    {
+      "path": "docs/acceptance/b/task-B-remaining-08-reconciliation-fairness-adoption-20261024.md",
+      "commit": "cff858e163ca7dea774dcf05c707ef7551956156",
+      "sha256": "7d28f201831b045606c36fb94306ab3a871ec499434567cf6f7875df552b2387",
+      "bytes": 5238,
+      "lines": 41,
+      "inspected_ranges": [
+        {
+          "start": 1,
+          "end": 41,
+          "sha256": "7d28f201831b045606c36fb94306ab3a871ec499434567cf6f7875df552b2387",
+          "first_anchor": "# Task 8 采用：有界公平对账扫描",
+          "last_anchor": "[协调证据镜像清单](../../../artifacts/phase-b/b-remaining/controller-task08-adoption-20261024/manifest.json)，SHA `fc6ae32569e620af792ef10dd3835665050cd866b7f0bda9c532f76749791e0a`。原W所有记录保留；镜像逐字节封存审查、旧源恢复、root只读观察及后续只读准备。Task7/9的准备记录本身不构成其激活或验收。"
+        }
+      ]
+    }
+  ],
+  "complete_sql_prefix": [
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "version": "001",
+      "bytes": 709,
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "version": "002",
+      "bytes": 1781,
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "version": "005",
+      "bytes": 2461,
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "version": "006",
+      "bytes": 1864,
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "version": "007",
+      "bytes": 3795,
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "version": "008",
+      "bytes": 11205,
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "version": "009",
+      "bytes": 7239,
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "version": "010",
+      "bytes": 35136,
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "version": "011",
+      "bytes": 10941,
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "version": "011.1",
+      "bytes": 397,
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "version": "012",
+      "bytes": 21260,
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "version": "013",
+      "bytes": 7661,
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "version": "013.1",
+      "bytes": 1817,
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "version": "013.2",
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "version": "013.3",
+      "bytes": 164,
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+      "unchanged_since_post6": false
+    }
+  ],
+  "flyway": {
+    "version": "12.4.0",
+    "jar_path": "/home/tanren/.m2/repository/org/flywaydb/flyway-core/12.4.0/flyway-core-12.4.0.jar",
+    "jar_sha256": "c3f93df1f3e0c9d14652adb5ade97401f2ede503859ac693c2af5c06e2797799",
+    "proof": "existing task-08-post6-candidate-version-order-probe-20261024.json; no probe executed"
+  },
+  "writes": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-final-upstream-repin-20261024.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-final-upstream-repin-20261024-manifest.json"
+  ],
+  "execution": "No tests/build/runtime/DB/Docker/private env/Git mutations. Read-only Python/Git/rg plus these two new documents only.",
+  "stage_b_gate": "Await coordinator exact new Task9 fixture, separate application ACK and protected manifest; formal combined generation installation additionally requires real Task10/11 hooks."
+}

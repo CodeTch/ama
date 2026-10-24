@@ -1,0 +1,29 @@
+--- task-09-fixture-provisioning-prepared-20261024.py
++++ task-09-fixture-provisioning-runtime-fix02-20261024.py
+@@ -225,7 +225,7 @@
+             "adoptionDocumentSha256": ack["adoptionDocumentSha256"]}
+ 
+ 
+-def env_clone(schema, owner, folder):
++def env_clone(schema, owner, folder, parent_selected):
+     source = private_owned(TASK7_ENV, TASK7_OWNER)
+     raw = source.read_text(encoding="utf-8")
+     if "\x00" in raw:
+@@ -250,7 +250,7 @@
+     if set(values) != expected:
+         fail("Task 7 env keys differ from root-created allowlist")
+     if (values["AMA_TEST_DATABASE_URL"] != "jdbc:mysql://127.0.0.1:44727/" + TASK7_SCHEMA
+-            or values["AMA_TEST_CONTAINER"] != CID
++            or values["AMA_TEST_CONTAINER"] not in (CID, parent_selected["name"].removeprefix("/"))
+             or values["AMA_TASK07_OWNER"] != TASK7_OWNER
+             or values["AMA_TEST_DATABASE_USERNAME"] != "ama_t08_848e93aace8b"
+             or not values["AMA_TEST_DATABASE_PASSWORD"]
+@@ -310,7 +310,7 @@
+     before_selected = selected()
+     before_server = server()
+     # Read only into memory, never print, hash, or persist the original env values.
+-    cloned_env = env_clone(schema, owner, folder)
++    cloned_env = env_clone(schema, owner, folder, before_selected)
+     absent = mysql("SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='" + schema + "';\n")
+     if absent != "0":
+         fail("fresh Task 9 schema is not absent")

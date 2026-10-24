@@ -1,0 +1,55 @@
+{
+  "task": "Task 8 input-index model region mapping",
+  "baseline_commit": "80c878f52c7b748efdcdb64e707d50cf410843b4",
+  "files": [
+    {
+      "path": "tools/checks/database_design.py",
+      "sha256": "91493cbb251c99c800bd2aec7861596d50ac76acbf9a159d14c59aaf5b71e6a0",
+      "bytes": 108070,
+      "baseline_equal": true
+    },
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "sha256": "d3094336b4d55d9389b2fd1d852d627b93e0ac0394b9b1801e258a154b0cb445",
+      "bytes": 116623,
+      "baseline_equal": true
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "sha256": "cd6a909abbcd4d20afaf00a3b98ce6329cc633b31e5e941166f16ddbd3177c74",
+      "bytes": 167091,
+      "baseline_equal": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "sha256": "05bfe0fdf1f2c05af67598ef8298c19a1ec138f51948026f44b9ee41c9793f04",
+      "bytes": 117367,
+      "baseline_equal": true
+    }
+  ],
+  "new_cited_ranges": {
+    "tools/checks/database_design.py": [
+      "87-88",
+      "448-485",
+      "487-504"
+    ],
+    "docs/database/ama-schema-draft.sql": [
+      "320-351"
+    ],
+    "docs/database/ama-data-dictionary.md": [
+      "542-581"
+    ],
+    "docs/superpowers/specs/2026-10-21-ama-database-design.md": [
+      "523-545",
+      "1284"
+    ]
+  },
+  "static_counts": {
+    "tables_and_primary_key_definitions": 98,
+    "secondary_index_definitions": 89,
+    "total_existing_including_primary_keys": 187,
+    "after_input_lookup_secondary_index": 90,
+    "after_input_lookup_and_task8_external_operation_unique_index_total_including_primary_keys": 189
+  },
+  "report": "task-08-input-index-model-region-20261024.md"
+}

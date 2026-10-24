@@ -1,0 +1,116 @@
+{
+  "head": "857102b917bbef77c38fae3211e3a65207a98c6c",
+  "base": "35b2325aee8e6c09aa1bdebc880c4f09bd37837b",
+  "clean": true,
+  "source_paths": 51,
+  "evidence_entries": 551,
+  "all_backend_source_seal_paths": 481,
+  "filesystem_and_git_blob_paths": 1033,
+  "protected_unchanged": 4727,
+  "authorized_current_model_unchanged": true,
+  "frozen_additions_unchanged": true,
+  "all_units_source_equal": true,
+  "window_counts": {
+    "final-owned-integration": {
+      "tests": 102,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "final-inherited-upload": {
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "final-pipeline-custody": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "confined-runnable-green": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "final-confined-production": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "final-legacy-prepared": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "final-task-lease": {
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "final-all-units": {
+      "tests": 227,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "distinct_passing_IT_cases": 116,
+  "exact_final_production_IT_cases": 35,
+  "retained_nonpassing": [
+    {
+      "run": "final-owned-integration",
+      "case": "ama.storage.Task05LegacyUploadIT#abortedSessionCannotResurrect"
+    }
+  ],
+  "production_windows": [
+    {
+      "run": "final-owned-integration",
+      "production_diff": [
+        "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java"
+      ]
+    },
+    {
+      "run": "final-inherited-upload",
+      "production_diff": [
+        "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java"
+      ]
+    },
+    {
+      "run": "final-pipeline-custody",
+      "production_diff": [
+        "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java"
+      ]
+    },
+    {
+      "run": "confined-runnable-green",
+      "production_diff": []
+    },
+    {
+      "run": "final-confined-production",
+      "production_diff": []
+    },
+    {
+      "run": "final-legacy-prepared",
+      "production_diff": []
+    },
+    {
+      "run": "final-task-lease",
+      "production_diff": []
+    },
+    {
+      "run": "final-all-units",
+      "production_diff": []
+    }
+  ],
+  "one_conditional_delta_reconstructed_and_hash_verified": true,
+  "matching_previous_guard": [],
+  "full_task5_adoption": false,
+  "resource_cleanup_secret_current_db_custody_pending": true,
+  "exact_delta_custody": "Retained author executed old/new replacement; reverse derived prior SHAbb51773d2d5af8b37604b5da818c023b9c735927709e062e8029a46e54fba57e verified against4prior seals; no separate original byte snapshot claimed."
+}

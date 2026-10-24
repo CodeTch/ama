@@ -1,0 +1,19 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "tools/checks/run.py",
+    "it",
+    "Task11LocalRecoverySecurityIT"
+  ],
+  "canonicalSelector": "ama.storage.Task11LocalRecoverySecurityIT",
+  "reportsBeforeSha256": "e20d68eeefa018591fdf01b72554f167d923ec5c0475515c9fe1c240037b9839",
+  "reportsClearedSha256": "c4475c4a89261a68cc5f7f467dbbc3374c5da4f88aa60cb58047f29ba2654e8d",
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "startedNs": 1792869281891404558,
+  "startedUtc": "2026-10-24T19:14:41.891501+00:00",
+  "heapMiB": 512,
+  "processors": 2,
+  "schema": "ama_t11_9714255c9e2c_behavior",
+  "ackSha256": "dcab31da53de0a4e065aa05914f5143a5afd68ddbd785a87617455db1aa1574d",
+  "sourceManifestSha256": "0789903be294c71307c7ad165ddc3e5e999c86b5617448eb965a0b58f04ed8e2"
+}

@@ -1,0 +1,17 @@
+# Task8 current-model output root ruling — 2026-10-24
+
+Read-only preparation 6814b7dc FULLREAD; unique exactmanifest alias task-08-model-output-ownership-preflight-20261024-source-manifest.json SHA37b69e281b7c199ccb494783c62283d60347a5d5407858491071d8542f27a834 (original generic source-manifest.json retained). Root verified all7inputs/committedreferenceinputs/oldregions; see rootproof.
+
+Correction: initial4728protected-baseline lists currentSQLdraft only, not currentdictionary/design/generator. Never claim latter aremembersof4727. Their broader historicalpreservation and Task6root7935snapshot stillapply; originalbaselineJSON remainsunchanged.
+
+## Ruling and scope
+
+Ruling: adopt minimal existing currentderivedoutput paths ratherthannewparallelcurrentdocs/checkerpathcontract. After Task6adoption verify actualbaseline relevant4files equal80, then preserveexactcommittedgenerator+SQLdraft+dictionary+design bytes under fresh artifacts/phase-b/b-remaining/task-08-current-model-preservation/base-<actualBASE7>/ withmanifest beforefirst Task8write. Iflegitimateupstreamchange exists stoponlydependentedit/reconcileactualbytes, neveroverwrite. Old SQL/history/plans/raw/design-history unchanged. Wrongcost narrowgenerateddocrework, not schemarepair ornewauthority.
+
+Task8mayupdate generator onlyfor signed external_operation.reconcile_scan_seq AUTO_INCREMENT ordinal16 +exactuniqueexternal_reconcile_scan, existingaudit_event.id auto_increment preserved withsharedpredicate forSQLemission/metadataoracle. Relatedoperationmeaning/policy clarify serverallocatedpositiveJava-long/persistedimmutable/noexplicitapplicationdefault; no unsignednum helper. CurrentmodelVERSION selected B00-1.6-reconcile-scan; this is generatedmodelprovenance only, NOTformalFlywayversionassignment. Formalnumber remainsUNASSIGNEDpendingactualpost6history/rootDDLgate.
+
+Narrowcurrentoutputauthorization atactualbaseline: SQLexternal_operation entity old80lines368–389 plusline1modelheader; dictionary old602–632 plusline1modelheader; design oldERexternal_operation556–572 only. Preserveallothergeneratedcontent and exacthumanprefix80lines1–324. Toavoidmisleadingoldcurrent1.5statement whilepreservingexactpriorprefix, Task8mayPREPEND oneconcise current1.6statusblock marking retainedpriorprefixashistory, 98tables/732cols/onecolumn+oneuniqueindex, scopeofactualDDLvalidationandlinknewTask8record. Theentireoldprefixmustremainexactcontiguousbytes afternewblock; do notrewritetheold1.5claims orD01UNASSIGNEDrules. No newERedge/PK orglobaldefaultprose change. Generatorfullfilewrites arenotpermissiontochangeanythingelse: validatebyte/rangediff and outputsame-model mechanicallywithoutcallingoldDBverifier.
+
+Physicalincrementalonecolumn/indexqualifiedoracle mustagree ordinal16/signedbigint/NOTNULL/defaultNULL/nocharcollation/EXTRAauto_increment/visibleBTREEuniquesinglekey, alloldcolumns/indexes/constraints preserved. CurrentfullfuturereviewDDL stillnotdeployedbaseline. Existingold verify()/--metadata-only areNOTread-only, mutateoldraw andbehavioralDB; donotrun. Use actualretainedownedMySQL andnewTask8evidence/read-onlysharedoracle orscopednewchecker, noreset/repair/recreate.
+
+Thisrulingresolvesoutputownership only. NoformalDDLnumber/freeze/separateACK/apply/candidatefairness/runtimeactivation now; Task8startsafterTask6adopted. Frozen13SQL unchanged; rootalonefutureversionallocationandapplicationACK. NoTask6product/HEAD/indexmutation.

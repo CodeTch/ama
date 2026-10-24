@@ -1,0 +1,50 @@
+{
+  "status": "OFFLINE_HELPER_RUNTIME_FIX02_COMPLETE_REVIEW_PENDING_NOT_PROVISIONED",
+  "finding": "H09R2-01",
+  "helperRound": "2/5",
+  "oldHelperSha256": "a868bc63152e65a4ff0b3165811c1f0f5c80e682e922c06fdf66ca8e3f90deac",
+  "files": {
+    "task-09-fixture-provisioning-runtime-fix02-20261024.py": {
+      "bytes": 19588,
+      "sha256": "14c6692710382aab0e2a47448864607f8c5e76f08f0aab9f9f51a2c113edff5f"
+    },
+    "task-09-helper-runtime-fix02-offline-20261024.py": {
+      "bytes": 10494,
+      "sha256": "5cb0d84fe0983052b65dd1ab31280e3daa34a2fa82cefb3718f19a97814ad13c"
+    },
+    "task-09-helper-runtime-fix02-offline-raw-20261024.txt": {
+      "bytes": 4871,
+      "sha256": "142f5f5bf51977f3a2f24fa17fe20f10110c294c82137788d526d3885af89adb"
+    },
+    "task-09-helper-runtime-fix02-report-20261024.md": {
+      "bytes": 9001,
+      "sha256": "8383c72c0e8af2fc1267012220075e7e619fdb90866d82a65432e6a0f8349f0b"
+    }
+  },
+  "focusedResults": [
+    {
+      "helper": "old",
+      "case": "exact-name",
+      "exit": 1,
+      "result": "1 test, expected regression failure at Task 7 env reference/credential guard"
+    },
+    {
+      "helper": "new",
+      "case": "exact-name",
+      "exit": 0,
+      "result": "1 test passed"
+    },
+    {
+      "helper": "new",
+      "case": "all",
+      "exit": 0,
+      "result": "8 tests passed, including parameterized rejection cases"
+    }
+  ],
+  "preservation": "six original/archive pairs verified against pre-runtime-fix02 manifest; exact helper difference is three lines",
+  "actualProvisioningInvocationsByThisAuthor": 0,
+  "priorActualInvocation": "1, failed before SQL/owner; preserve receipt",
+  "futureContinuation": "invocation 2 with SAME owner/schema after independent review and root authorization",
+  "sameOwner": "task09-2d0e28ea775540f8b3525f9344edf5f0",
+  "sameSchema": "ama_t09_2d0e28ea7755_behavior"
+}

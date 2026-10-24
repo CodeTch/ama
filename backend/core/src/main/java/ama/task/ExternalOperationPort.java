@@ -40,4 +40,6 @@ public interface ExternalOperationPort {
     ObservationResult observe(OperationToken token, ExternalObservation observation, Runnable prelockedDomainEffects);
     /** Explicit user retry only: old current execution must be FAILED with complete verified zero-effect proof. */
     String retryAfterZeroEffect(String operationId, long expectedExecutionNo, TaskSpec newTask, ExternalRequest request);
+ default PublicationReplacementPolicy.ReplacementAccepted replaceZeroEffectPublication(PublicationReplacementPolicy.PreparedPublicationReplacement prepared){throw new UnsupportedOperationException("Publication replacement not installed");}
+
 }

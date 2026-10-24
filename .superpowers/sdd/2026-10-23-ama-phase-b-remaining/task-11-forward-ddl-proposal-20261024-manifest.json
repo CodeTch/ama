@@ -1,0 +1,251 @@
+{
+  "status": "UNVERSIONED_PROSPECTIVE_DDL_NOT_FROZEN_OR_APPLIED",
+  "baseline_commit": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+  "migration_script_count": 15,
+  "migration_sources": [
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "bytes": 709,
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+      "lines": 18
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "bytes": 1781,
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+      "lines": 35
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "bytes": 2461,
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+      "lines": 57
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "bytes": 1864,
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+      "lines": 38
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "bytes": 3795,
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+      "lines": 69,
+      "selected_ranges": [
+        {
+          "start_line": 28,
+          "end_line": 41,
+          "bytes": 855,
+          "sha256": "aa7939afd54c26b3e89c8f6ae4ecbabb509f7bfa8c0a4499d3e9a844d7a9b304",
+          "lines": 14
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "bytes": 11205,
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+      "lines": 162,
+      "selected_ranges": [
+        {
+          "start_line": 25,
+          "end_line": 48,
+          "bytes": 1622,
+          "sha256": "67701bdac04d95e8e4318937289505658faf30aaffa78bc8adc3ac5dbf2d9022",
+          "lines": 24
+        },
+        {
+          "start_line": 113,
+          "end_line": 126,
+          "bytes": 848,
+          "sha256": "e99daee61e765e234c92ec7cbe73503b46b7caf3318b329d95b6483be043ea33",
+          "lines": 14
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "bytes": 7239,
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+      "lines": 114
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "bytes": 35136,
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "lines": 225,
+      "selected_ranges": [
+        {
+          "start_line": 69,
+          "end_line": 111,
+          "bytes": 3306,
+          "sha256": "a5ae2d3972beced8c66f34a91146d4a854195b0b53e7893a0e8867a9355c9a7b",
+          "lines": 43
+        },
+        {
+          "start_line": 115,
+          "end_line": 133,
+          "bytes": 1276,
+          "sha256": "2f1748294b5da49afbf5ef009d7955f03a3a3bf8f936414384e89abae8e4d487",
+          "lines": 19
+        },
+        {
+          "start_line": 187,
+          "end_line": 225,
+          "bytes": 3101,
+          "sha256": "9acf03c7439c665ffabe0f4aa7f68d8eb71c7660cddc1643ba18985bf7f89256",
+          "lines": 39
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "bytes": 397,
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713",
+      "lines": 5
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "bytes": 10941,
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+      "lines": 167
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "bytes": 21260,
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "lines": 335,
+      "selected_ranges": [
+        {
+          "start_line": 1,
+          "end_line": 18,
+          "bytes": 811,
+          "sha256": "9902aa183fc15004518aecfa9bdda6d4ad6545df820ee82daed56701ab927f6c",
+          "lines": 18
+        },
+        {
+          "start_line": 71,
+          "end_line": 105,
+          "bytes": 2234,
+          "sha256": "5e39321160c3603c1ed904b573948bef42f8df6147010f2ee68d2a1e6bd8e44a",
+          "lines": 35
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "bytes": 1817,
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "lines": 34,
+      "selected_ranges": [
+        {
+          "start_line": 1,
+          "end_line": 34,
+          "bytes": 1817,
+          "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+          "lines": 34
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "lines": 1,
+      "selected_ranges": [
+        {
+          "start_line": 1,
+          "end_line": 1,
+          "bytes": 75,
+          "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+          "lines": 1
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "bytes": 164,
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+      "lines": 3,
+      "selected_ranges": [
+        {
+          "start_line": 1,
+          "end_line": 3,
+          "bytes": 164,
+          "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+          "lines": 3
+        }
+      ]
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "bytes": 7661,
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+      "lines": 113,
+      "selected_ranges": [
+        {
+          "start_line": 1,
+          "end_line": 113,
+          "bytes": 7661,
+          "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+          "lines": 113
+        }
+      ]
+    }
+  ],
+  "design_sources": [
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1.md",
+      "bytes": 102624,
+      "sha256": "f18ae4734603709284d91345b2909eca9687627c825444fd8cfa06dd49d36ffc",
+      "lines": 405
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1-closure.md",
+      "bytes": 15802,
+      "sha256": "b906213c0ff8af494f54495b3dbd337cbf3283994dfabe2e6798255438808c51",
+      "lines": 93
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1-review.md",
+      "bytes": 11506,
+      "sha256": "247c16e565986ebb61c8b60589240fd0fbd6bf82153826cb57bde72db42d3241",
+      "lines": 65
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-zeroeffect-root-rulings.md",
+      "bytes": 3115,
+      "sha256": "9a4718ece70afbd631affe8464ccb75673d32af9e7b51820cdf2bae211709750",
+      "lines": 11
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-source-alignment-preflight-20261024.md",
+      "bytes": 19931,
+      "sha256": "c0c8a59d94d46c93ac44461401b108ba06915e08064b032de972b96b4d3ca2c9",
+      "lines": 86
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024.sql",
+      "bytes": 3927,
+      "sha256": "e9026197dba789e7cbdbf6acee56065d0f8fa98665595d204bece1afc8eedd43",
+      "lines": 76
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024.md",
+      "bytes": 8903,
+      "sha256": "930eddac25fe68adf832b007c2ffc2a74581bdebd9e6535df01ac19c4933ef1d",
+      "lines": 54
+    }
+  ],
+  "manifest_self_hash": "omitted_to_avoid_recursive_digest",
+  "scope": "Task11 publication_submission only; no formal migration version, resources copy, model edit, DB/test/Git action",
+  "repin_required": [
+    "actual Task7 adopted source and marker/terminal hook",
+    "actual Task9 generated-input closure",
+    "actual Task10 PENDING/read-budget/current model",
+    "actual migration prefix and independent DDL review/version/freeze/application ACK"
+  ]
+}

@@ -42,6 +42,7 @@ public record TranscriptAcquisitionBudget(long utf8,long scalars,long utf16,long
   }
   public void responseOverhead(long size){check();require(size>=0&&size<=limits.responseBytes-response,BUDGET_EXCEEDED);response+=size;}
   public long[] usage(){return new long[]{bytes,points,units,copies,copyUnits,rows,edges,response};}
+  public int taskLimit(){return limits.tasks;}
   public long remainingRows(){return archive.maxFactRows()-rows;}
   public void check(){ama.contract.MinutesContracts.check(cancel);require(System.nanoTime()-deadline<0,BUDGET_EXCEEDED);}
  }

@@ -1,0 +1,73 @@
+{
+  "checkedUtc": "2026-10-24T07:48:25.607387+00:00",
+  "scope": "result/XMLhash/closedinterval only; independent tasksource review remains",
+  "windows": [
+    {
+      "window": "denied-lookup-green-04",
+      "result": {
+        "exit": 0,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "cases": [
+          {
+            "class": "ama.storage.Task09DeniedLookupRecoveryIT",
+            "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+            "failure": false,
+            "error": false,
+            "skipped": false
+          }
+        ]
+      },
+      "xmlCustodyChecked": true
+    },
+    {
+      "window": "deleted-lookup-green-01",
+      "result": {
+        "exit": 0,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "cases": [
+          {
+            "class": "ama.storage.Task09DeletedLookupRecoveryIT",
+            "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+            "failure": false,
+            "error": false,
+            "skipped": false
+          }
+        ]
+      },
+      "xmlCustodyChecked": true
+    },
+    {
+      "window": "lookup-authority-green-01",
+      "result": {
+        "exit": 0,
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "cases": [
+          {
+            "class": "ama.storage.Task09LookupAuthorityIT",
+            "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+            "failure": false,
+            "error": false,
+            "skipped": false
+          }
+        ]
+      },
+      "xmlCustodyChecked": true
+    }
+  ],
+  "faultQualification": "Manifest/requester/root/producer tamper is test-only JDBC read-fault, not persisted corruption; preserve this in finalreport"
+}

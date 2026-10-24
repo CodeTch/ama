@@ -1,0 +1,47 @@
+{
+  "status": "POSTHOC_BOUNDED_CORROBORATION_NOT_PREEXECUTION_CUSTODY",
+  "utc": "2026-10-24T16:49:20.272347+00:00",
+  "sealedXmlSha256": "b22e1a12411b3cb87d83b26e8c852ba9d2c0ce4b084b7fcc37f7ca8aa2e8efc5",
+  "currentOriginalXmlSame": true,
+  "originalMtimeNsObservedNow": 1792860376354438039,
+  "originalMtimeInsideRecordedWindow": true,
+  "canonicalCommand": [
+    "/usr/bin/python3",
+    "tools/checks/run.py",
+    "it",
+    "Task11BootstrapIT"
+  ],
+  "suite": "ama.publication.Task11BootstrapIT",
+  "tests": "1",
+  "failures": "0",
+  "errors": "0",
+  "cases": [
+    {
+      "class": "ama.publication.Task11BootstrapIT",
+      "name": "freshApprovedSchemaNormalSixteenThenZeroPreservesCompleteUtcHistoryAndSubmissionMetadata",
+      "failure": 0,
+      "error": 0
+    }
+  ],
+  "matchingLogLines": [
+    "[INFO] Nothing to compile - all classes are up to date.",
+    "[INFO] Nothing to compile - all classes are up to date.",
+    "[INFO] Nothing to compile - all classes are up to date.",
+    "[INFO] Nothing to compile - all classes are up to date.",
+    "[INFO] Nothing to compile - all classes are up to date.",
+    "[INFO] Nothing to compile - all classes are up to date.",
+    "[INFO] Running ama.publication.Task11BootstrapIT",
+    "00:46:15.883 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Successfully applied 16 migrations to schema `ama_t11_9714255c9e2c_behavior`, now at version v013.4 (execution time 00:29.407s)",
+    "00:46:16.029 [main] INFO org.flywaydb.core.internal.command.DbMigrate -- Schema `ama_t11_9714255c9e2c_behavior` is up to date. No migration necessary.",
+    "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 31.77 s -- in ama.publication.Task11BootstrapIT",
+    "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0",
+    "PASS: executed=1, failures=0; evidence=/home/tanren/ama/.worktrees/phase-b-completion/backend/integration-tests/target/failsafe-reports/TEST-ama.publication.Task11BootstrapIT.xml"
+  ],
+  "sourceManifestSha256": "4606e6d21ca6ff1784fb0563c31f3b6d71dc0d5f05fbcefba0cecb73db32787e",
+  "historySha256": "abe63a5bf739b44404ee1d8d75331444a9be60a098273d727552ad49fa2fc8e2",
+  "limitations": [
+    "Original launcher did not record oldXMLbeforehash or delete evidence, did not enforce uppermtime or XMLSHA/case selection beforecollection.",
+    "This current observation cannot reconstruct missing pre-execution custody; sealed bootstrap02 remains unchanged.",
+    "Actual full16history/source/log/XML support bounded fresh migration qualification. Future businesswindows must inherit fixed Task9/10 collector before run; no repeated migration to erase gap."
+  ]
+}

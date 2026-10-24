@@ -1,0 +1,40 @@
+{
+  "status": "PREPARED_STATIC_FIX01_NOT_EXECUTED",
+  "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+  "scope": "One future Task 9 empty owned schema and scoped grant on the existing Task 8 parent container; root execution waits actual Task 7 adoption and static review.",
+  "files": {
+    "task-09-fixture-provisioning-prepared-20261024.py": {
+      "bytes": 19505,
+      "sha256": "a868bc63152e65a4ff0b3165811c1f0f5c80e682e922c06fdf66ca8e3f90deac"
+    },
+    "task-09-fixture-provisioning-prepared-20261024.md": {
+      "bytes": 6204,
+      "sha256": "1b68e652eb82fca7e8c563a93dc4e62aac834ec2cb8d0dfe8717b528c002eaaf"
+    },
+    "task-09-fixture-helper-fix01-static-20261024.py": {
+      "bytes": 3541,
+      "sha256": "6ec536c7c70931cb63c209e587ed33faefb67546bf619efcb1d789cef8614362"
+    }
+  },
+  "parent": {
+    "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+    "owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+    "loopbackPort": 44727,
+    "serverUuid": "1bdea6eb-cf32-11f1-8fe3-fef4aa4b3a25"
+  },
+  "execution": "No helper/Docker/MySQL/private values/JVM/product source/model/tests/index/Git operation during preparation.",
+  "staticChecks": [
+    "ast.parse without helper import or execution",
+    "fixed public Task 7 machine ACK fields and exact adoption document hash guard",
+    "all intended private input/intermediate owner paths and modes plus pinned Task 5 S3/PKI reference paths",
+    "complete selected Docker mount dictionary equality with frozen guard",
+    "safe SQL mode bound to same GRANT mysql session; partial_revokes=0 guard",
+    "initial owner/state failure says no SQL issued and may leave exact orphan path",
+    "two pure underscore-escape examples; no Docker/DB/private value access"
+  ],
+  "futureGate": "Root verifies actual Task 7 adoption evidence, repins Task 9 source/prefix, reviews exact helper SHA, executes once with fresh scoped names, inspects actual outcome, and separately issues application ACK before normal 15-resource author bootstrap.",
+  "uncertainty": "Actual Task 7 adoption and future root-issued machine ACK, current Task 9 source/prefix, Docker/MySQL/private env compatibility, grant/empty-schema observation, and root application ACK remain future runtime gates.",
+  "fixBaseSnapshot": "task-09-fixture-helper-before-fix01-20261024/snapshot-seal.json",
+  "fixBrief": "task-09-fixture-helper-fix-01-brief-20261024.md",
+  "fixFindings": "task-09-fixture-helper-static-review-20261024.md"
+}

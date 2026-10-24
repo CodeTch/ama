@@ -1,0 +1,19 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "tools/checks/run.py",
+    "it",
+    "Task11ReplacementRollbackIT"
+  ],
+  "canonicalSelector": "ama.storage.Task11ReplacementRollbackIT",
+  "reportsBeforeSha256": "93104a96d1f8a33f1e10b03ae50b81206bc932de2cbbd660baed4f338a5d3482",
+  "reportsClearedSha256": "0ee16eca86fccdeb2dcd654f07036d6ec451e3537fc0dbb8949598b1176e9b2c",
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "startedNs": 1792870695476669980,
+  "startedUtc": "2026-10-24T19:38:15.476763+00:00",
+  "heapMiB": 512,
+  "processors": 2,
+  "schema": "ama_t11_9714255c9e2c_behavior",
+  "ackSha256": "dcab31da53de0a4e065aa05914f5143a5afd68ddbd785a87617455db1aa1574d",
+  "sourceManifestSha256": "796d02e8a58e1d16d88099cae2c8a271e1b93ca023d6ee0c426647f984a8359a"
+}

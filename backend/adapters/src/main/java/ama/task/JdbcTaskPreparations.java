@@ -8,6 +8,7 @@ import static ama.task.TaskDomainPolicy.*;
 
 /** Per-call capabilities only: no transaction cache, ThreadLocal or extra synchronization. */
 public final class JdbcTaskPreparations {
+ public void requireExternalRead(TaskDomainPolicy.PreparedDomain held,ama.contract.TaskContracts.TaskSpec spec){var h=held(held);if(!h.specs.contains(spec))throw new IllegalArgumentException("Undeclared publication execution");}
     private final DataSource source;
     private record Held(JdbcTaskPreparations issuer, DataSource source, Object transaction,
                         Set<TaskSpec> specs, Acquisition purpose, Object value,
@@ -36,6 +37,8 @@ public final class JdbcTaskPreparations {
     public ExternalFacts requireExternal(ama.task.ExternalOperationPort.ExecutionContext execution) {
         var prepared=JdbcExternalOperations.contextPreparation(source,execution);held(prepared);return requireExternal(prepared,execution);
     }
+    public record LocalTerminalFacts(String taskId,TaskSpec spec,String previousState,long attempt,String previousOwner,java.time.Instant previousExpiry,String resultingState,String reason,boolean attemptAlreadyEnded) {}
+    public LocalTerminalFacts requireLocalTerminal(PreparedDomain prepared,PublicationLocalTerminationPolicy.LocalTerminalContext context,PublicationLocalTerminationPolicy.Phase phase){held(prepared);return JdbcTaskQueue.requireLocalContext(source,prepared,context,phase);}
     /** JDBC queue consumption independently enforces its own source/actual-holder boundary. */
     static void requireTransaction(DataSource expected, PreparedDomain prepared) {
         if(!(prepared instanceof Held held)||held.source()!=expected
@@ -59,4 +62,6 @@ public final class JdbcTaskPreparations {
             throw new IllegalStateException("Preparation requires its actual DataSource transaction");
         return TransactionSynchronizationManager.getResource(source);
     }
+ public void requirePublicationReplacement(PreparedDomain prepared,PublicationReplacementPolicy.ReplacementContext context,PublicationReplacementPolicy.PreparedPublicationReplacement carrier){held(prepared);JdbcExternalOperations.requirePublicationReplacement(source,prepared,context,carrier);}
+
 }

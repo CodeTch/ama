@@ -1,0 +1,146 @@
+{
+  "utc": "2026-10-23T20:32:08.010331+00:00",
+  "kind": "root independent retained original archive raw-file rehash and selected-only live resource observation; no DB/test/runtimeactivation",
+  "manifestSha256": "3659226adfb673bbd33b2956e82d4cc4825780c1afb5b888f8dd6c26bd16221f",
+  "sourceWindowSha256": "09dabef2601a7ef1b324c93f9ff89c3b1da4329f343ddffa6d275a28bea65eab",
+  "actualArchiveReadOnlyUnderApprovedRuntimeRoot": true,
+  "actualIndexSha256": "c6e3b29cedbdc5234f368fa6d1f7152442c95f56b0caaf52bc8019bafea13e9d",
+  "indexGeneration": 1,
+  "originals": [
+    {
+      "artifactType": "PROCESSING_CONFIG",
+      "version": "b06.controlled.import-txt.1",
+      "sha256": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e",
+      "bytes": 1016,
+      "utf16": 1016,
+      "scalars": 1016,
+      "actualRetainedFileMatched": true
+    },
+    {
+      "artifactType": "CANONICAL_CODEC",
+      "version": "ama.canonical-value.v1",
+      "sha256": "2b553c99cecc917b12a466cd62859df2ac18533e518476aa1b843279f2eb6e19",
+      "bytes": 223,
+      "utf16": 223,
+      "scalars": 223,
+      "actualRetainedFileMatched": true
+    },
+    {
+      "artifactType": "CONFIRMATION_HASH",
+      "version": "ama.transcript-confirmation.v1",
+      "sha256": "2f94e75e8d53ef37a152a1ccd63b54a61a6853e07508a5c927a4ba8e8209c0aa",
+      "bytes": 419,
+      "utf16": 419,
+      "scalars": 419,
+      "actualRetainedFileMatched": true
+    },
+    {
+      "artifactType": "PARSER_CONFIG",
+      "version": "ama.strict-utf8-lines.v1",
+      "sha256": "7b9f57377ad401fe040287e133f3efa81d9956ea581a5e497ee6c0835051962a",
+      "bytes": 226,
+      "utf16": 226,
+      "scalars": 226,
+      "actualRetainedFileMatched": true
+    }
+  ],
+  "originalTotalBytes": 1884,
+  "rootReadQualifiedSourceSeals": {
+    "backend/api/src/main/java/ama/api/TranscriptConfiguration.java": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java": "b61a0c099a4d2d43355983057a2183c06dd9c1e2ae94fc9a13ade0ec93b7a7d9",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java": "1ee6c5cb70c62237850b2739b46b0e9c548d3f1e594d2e91b53cdcc1b825a9a7",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+    "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076",
+    "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+    "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+    "backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java": "3b5db92905a817ba9336103cb3c65c2b0e25efe1b8e46e9394e8e3cdabe9d09d",
+    "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java": "b02a3d45dbe36495be5bc270a472f41d37cce095fd16d0517e7957901aeb9440",
+    "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java": "1e4a65109e6dbe47ab353ae911f3c35f69c237d107233a85597f0f21a30aafee"
+  },
+  "qualifiedSeamsUnchangedFromProbe03": true,
+  "resources": [
+    {
+      "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "matchesExactFinalTask5SelectedFields": true,
+      "selected": {
+        "id": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+        "name": "/ama-test-b01-ad9f1af29eff",
+        "status": "running",
+        "running": true,
+        "oom": false,
+        "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+        "memory": 805306368,
+        "swap": 805306368,
+        "nano_cpus": 1000000000,
+        "pids": 256,
+        "ports": {
+          "3306/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "46653"
+            }
+          ]
+        },
+        "mounts": [
+          {
+            "Destination": "/var/lib/mysql",
+            "Driver": "local",
+            "Mode": "",
+            "Name": "d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/d4d7cdd41f287635173ca40d449f0056ef220cacf6acf55c04ab21846b665a3b/_data",
+            "Type": "volume"
+          }
+        ],
+        "owner": "remaining-20261023"
+      }
+    },
+    {
+      "id": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+      "matchesExactFinalTask5SelectedFields": true,
+      "selected": {
+        "id": "a91f5946d5f619335d5cfb6bf2295b1df46abbb4a75b2db8feccaf637bcb7d51",
+        "name": "/ama-task05-s3-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
+        "status": "running",
+        "running": true,
+        "oom": false,
+        "image": "rustfs/rustfs@sha256:128220dc9382bac81940a1a9616ee8c274a3f3b8f647eedbeb50df5bb8b49922",
+        "memory": 2147483648,
+        "swap": 2147483648,
+        "nano_cpus": 2000000000,
+        "pids": 256,
+        "ports": {
+          "9000/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "45501"
+            }
+          ]
+        },
+        "mounts": [
+          {
+            "Destination": "/data",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/data",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/logs",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5/s3/logs",
+            "Type": "bind"
+          }
+        ],
+        "owner": "ama-task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5"
+      }
+    }
+  ],
+  "qualificationLimits": "probe boundary evidence is actual passing assertions/outcome records, no separate SQL log; root archive hash independent of metadata; runtime HTTP/concurrency/restart/finalreview pending"
+}

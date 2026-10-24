@@ -1,0 +1,64 @@
+# Task 4 independent source review
+
+## Spec Compliance
+
+- **❌ SPEC: Issues found — changes required.** T4SR-01 leaves accepted-result restoration incompletely bound to the original normalized request and immutable IMPORT shape; T4SR-02 makes ordinary successful discovery responses violate the published schema; T4SR-03 advertises submission after revision exhaustion.
+- **Task quality: Needs fixes.** Three Important findings below block Task 4 adoption. No Critical finding.
+- Scope: original BASE `2ec38c0350f466fc4292d588051c5694cc099cb5` through author HEAD `59c8b0801398123b1c0190ecbfeba8513f645abd`. Reviewed `task-04-review-package.diff`, SHA256 `89fa6f8b6377ddf6a4273aeda14b982cf0b1da0c2ab9d48171d152d00dcde592`, all 32 source/contract paths. The complete audit is `task-04-review-package-audit.diff`; bulk historical evidence and separately owned root design records are outside the bounded source review. Later root-only work does not change this review boundary.
+- This is the explicit successor to interrupted reviewer `/root/b_task04_intake_source_review`. Interrupted notes supplied leads, not verdicts. The findings below were independently checked against the pinned diff and adopted Task 4 R1 requirements.
+- **⚠️ Qualification boundary:** The controller supplied exact source/evidence custody and fresh XML verification: 223 unit + 151 integration = 374 distinct tests, no failures/errors/skips. I reviewed the test implementations and applicable retained reports; I did not rerun or independently regenerate those suites. No Task 5 Worker/RAW writer, Task 6 save, Task 7 external execution, browser, S3 main pipeline, company, HA or capacity qualification follows. `JdbcProcessingDiscovery.java:62–63` correctly reports execution `NOT_INSTALLED` and businessReady false.
+
+## Strengths
+
+- `backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java:51–86,127–138` places independently constructed, freshly authorized accepted lookup before new preparation and retains one bounded winner lookup. `backend/api/src/main/java/ama/api/ProcessingConfiguration.java:30–34,87–97` preserves replay construction with an unavailable new-intake branch and registers the real production queue policy when available.
+- `backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java:99–123` composes genuine reservation, exact source receipt, one bindAll, held verification, root/search/subject revision advance, actual queue enqueue, idempotency, audit and final outbox flush in one transaction. It preserves saved pointers and does not insert fake RAW output. Fault-stage and lost-commit-ack tests exercise real JDBC effects (`backend/integration-tests/src/test/java/ama/storage/ProcessingIntakeHttpIT.java:233,672`).
+- `backend/adapters/src/main/java/ama/transcript/ImportTaskDomainPolicy.java:26–29,77–132` uses its private preparation issuer and actual authority/gate transition; ordinary acquisitions assemble the domain union before source locks and do not mint Worker byte authority. The typed validator checks actual RAW/input/producer provenance and bounded segments (`:138–156`), rather than accepting an arbitrary output UUID. The queue claim/renew and fake-output rejection test is at `ProcessingIntakeHttpIT.java:342–355`.
+- `backend/adapters/src/main/java/ama/transcript/JdbcProcessingDiscovery.java:78–137,181–221,352–368` separates persisted receipts from source eligibility, implements terminal retry versus state-changing action semantics, and uses fresh owner EDIT gates. Real READ_ONLY/DISABLED/publication/epoch behavior is covered at `ProcessingIntakeHttpIT.java:492–548`.
+- `backend/api/src/main/java/ama/api/HttpRevisionTokens.java:8–26` preserves canonical string and integral long semantics before existing meeting digests. Actual HTTP boundary/legacy/token/dual/exhaustion coverage is at `ProcessingIntakeHttpIT.java:202–232`; canonical hashing under actual held roots is observed at `:570–600`.
+
+## Issues
+
+### Critical
+
+None identified in this task-scoped review.
+
+### Important
+
+**T4SR-01 — P2: Bind restored acceptance to the original normalized request and complete immutable IMPORT shape.**
+
+- Evidence: `backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java:127–138,165–175`, especially the restoration join at `:168` and ordinal-only query at `:172`. `lookup` and `restore` receive hashes but no `ImportRequest`. Producer recomputation proves that the selected task has a self-consistent producer identity; it does not prove that this is the acceptance of this request. The restore query also omits the fixed input null/schema/parser constraints that the production policy checks at `ImportTaskDomainPolicy.java:134–136`.
+- Concrete failure: accept command A, then a legitimate later command B for the same meeting; corrupt A's idempotency `result_id` to B's real task while leaving A's scope/request hash intact. Retrying A passes the hash check and all restoration checks and returns B's task/input/batch/revision as A's 202. Likewise, modifying a persisted batch member's file ID/order while keeping continuous ordinals is not detected; an IMPORT input with a non-null source/material/model/prompt or wrong manifest schema can still replay if the currently checked joins hold. These are the corrupt-result cases the adopted R1 explicitly requires to fail safely.
+- Required fix: carry the normalized original request through both independent lookup and final serialized replay. Require original accepted base/business revision to equal expectedRevision + 1; compare the complete bounded original ordinal/file-ID sequence with orderedFileIds and verify the fixed immutable input/batch/profile/producer associations. Validate missing/corrupt association metadata without requiring current source eligibility, current epoch, publication, archive configuration or readiness. Keep pre-root canonical work outside held roots and recheck immutable observations under the original replay transaction. Do not use this correction to rerun current-source preparation before replay.
+- Focused regression: redirected result_id to another valid same-meeting acceptance, changed order/member ID, and corrupted fixed IMPORT columns must return safe503 and create no rows; existing historical/unavailable/max-revision replay must remain successful. The current corrupt-producer test (`ProcessingIntakeHttpIT.java:363–380`) covers a different corruption and cannot catch this omission.
+
+**T4SR-02 — P2: Allow the normal null eligibility reason in OpenAPI.**
+
+- Evidence: `contracts/openapi/processing.yaml:356–369` declares reason as string-or-null but its enum contains only six strings. `backend/adapters/src/main/java/ama/transcript/JdbcProcessingDiscovery.java:347` intentionally emits `{state:"ELIGIBLE",reason:null}` for a valid source.
+- Impact: a normal successful completed-files response, and a completed upload receipt containing that file, violates its schema; generated/validating consumers cannot safely treat the published contract as authoritative. The existing HTTP test at `ProcessingIntakeHttpIT.java:657–670` proves ELIGIBLE behavior but does not validate the response against OpenAPI.
+- Required fix: add JSON null to the enum or express the nullable reason through an equivalent schema union, then validate representative ELIGIBLE and ineligible responses. A focused Draft 2020-12 validation of the exact reason schema against null failed during this review: `None is not one of ['SOURCE_STATE', 'SOURCE_EPOCH', 'SOURCE_PURPOSE', 'SOURCE_ROUTE', 'SOURCE_PROVENANCE', 'READ_ONLY']`. Lint success does not test response conformance.
+
+**T4SR-03 — P2: Suppress canSubmit when the meeting revision is exhausted.**
+
+- Evidence: `backend/adapters/src/main/java/ama/transcript/JdbcProcessingDiscovery.java:58–60,371–373` derives canSubmit solely from owner, publication/lifecycle/governance and deployment availability. It never tests the current revision. `backend/api/src/main/java/ama/api/ProcessingConfiguration.java:51` and `JdbcProcessingIntake.java:100–103` reject every new intake at `9223372036854775806`.
+- Concrete failure: an ACTIVE unpublished owner meeting at the supported maximum with healthy configured storage/archive returns `canSubmit:true` and no readOnlyReason, although every new command deterministically returns409 REVISION_EXHAUSTED. This is a false authoritative capability, not the allowed distinction between accepting a queued task and having an installed Worker.
+- Required fix: derive the fresh capability from the revision's ability to increment as well as the existing checks, returning canSubmit false and an appropriate safe reason at the maximum. Historical accepted replay must remain available. Add an HTTP capability assertion to the existing max/max-minus-one boundary fixture.
+
+### Minor
+
+**T4SR-04 — P3: Out-of-int-range page limits map to unavailable instead of invalid argument.** `backend/api/src/main/java/ama/api/ProcessingDiscoveryController.java:58–59` calls Math.toIntExact after accepting a nonnegative long. For example `limit=2147483648` throws ArithmeticException, which falls into the catch-all503 handler at `ProcessingErrors.java:39–41`, while invalid limits are specified as400. Check the endpoint maximum before narrowing, or translate the overflow to IllegalArgumentException. Add a focused parameter-boundary case.
+
+**T4SR-05 — P3: Discovery's part-size token still carries the revision range description.** `contracts/openapi/processing.yaml:471–474` describes the upload receipt's partSizeToken using the revision ceiling `9223372036854775806`, while the unchanged positive partSize accepts through Long.MAX_VALUE. The original begin response was correctly updated in `contracts/openapi/files.yaml:461–464`; use that same positive-size definition for the receipt. This is a documentation/schema-consistency issue; the implementation serializes the full long exactly.
+
+**T4SR-06 — P3, inherited verification noise:** `artifacts/phase-b/b-remaining/task-04/openapi-size-final-bundle.log:11–44` retains duplicate-name warnings renaming Conflict and Unavailable; the lint/bundle logs also retain the CLI update banner. The command receipts exit0, and the report discloses the warnings. They do not invalidate the tests or require rewriting historical evidence; avoid calling these outputs pristine, and address naming/noise in its appropriate contract/tooling ownership window.
+
+## Review method and focused checks
+
+- Read the prepared review brief, task brief/common custody contract, full implementer report, interrupted notes, adopted R1 design/wrapper/original review/R1 closure and R1 review. Binding exact global constraints in the prepared brief were applied; no source 5/6/7 qualification was inferred.
+- Read all 32 source/contract diffs in one pass. Tool output elided small sections, which were recovered only by their bounded diff slices. No git commands, index/HEAD edits, DB/resource/private-environment actions or subagents were used. The only checkout write is this report.
+- Named cross-cutting risk — whether the ordinary queue policy's delegated graph acquisition actually checks the complete immutable graph and producer before roots: inspected unchanged `backend/adapters/src/main/java/ama/transcript/TranscriptReadGraph.java:27–69`. It checks unique contiguous members, same-meeting file metadata, batch fingerprint and full expected task spec. This resolves that risk for the reviewed policy call; it does not fill the separate replay-reader omission.
+- Named cross-cutting risk — whether readiness's archive load and the existing intake preparer omit schema/source-size validation: inspected `backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java:21–62,77–91` and the `JdbcTranscriptAuthority.prepare` function whose diff starts mid-function (`:82–114`), plus focused matches in unchanged `backend/core/src/main/java/ama/config/ConfigBindings.java:90–94`. The archive opening validates schema/canonical bytes/closure and ConfigBindings enforces parse.maxSourceBytes. No finding was raised alleging these checks are absent.
+- Ran only the focused in-memory JSON Schema reason/null validation described in T4SR-02; no product suites, database tests, broad validation or test-fixture changes. Read the actual final OpenAPI lint/bundle logs and receipts. Root-supplied XML/custody verification remains the suite evidence.
+
+## Assessment
+
+**SPEC: Changes required. Task quality: Needs fixes.** The implementation has real transactional intake, genuine production policy wiring and substantial behavior tests, but accepted-result integrity and two externally visible contract/capability errors remain. Fix T4SR-01 through T4SR-03 and run the targeted regressions with a bounded re-review before adopting Task 4; preserve all existing replay independence, authority, transaction and qualification boundaries.

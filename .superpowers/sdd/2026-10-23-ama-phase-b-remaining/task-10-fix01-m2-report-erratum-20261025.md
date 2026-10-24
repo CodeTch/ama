@@ -1,0 +1,5 @@
+# Task10 fix1 M2 report precision erratum
+
+The sealed fix report d01c0bc777a4a3b91330fa6dc78d3621eea24b5197d09d26af40e13f0a41eb48 and all original windows remain unchanged. Scoped reviewer M2 is addressed by this precision correction, not a product or test change.
+
+The original statement that resource-close errors retain nonordinary classification applies to closes outside the acquisition wrapper only. `ControlledConfigArchiveSource.java:47,58,90` calls `ProtectedArchiveFiles.read` inside acquire; the latter closes its channel in its try-with-resources block at lines75-80. A genuine nested channel-close IOException therefore reaches acquire's catch and is classified ARCHIVE_IO_UNAVAILABLE. SHA/parse/provenance integrity assertions remain nonordinary, and interruption/cancellation retains its separate handling. The independent reviewer found no requirement that genuine channel-close IO itself must be nonordinary and no reopened I1 defect; no product change or extra test is required. Read this erratum with the original sealed report; do not silently rewrite historical evidence.

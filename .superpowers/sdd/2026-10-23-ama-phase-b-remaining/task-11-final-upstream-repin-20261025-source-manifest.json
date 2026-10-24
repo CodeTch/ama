@@ -1,0 +1,871 @@
+{
+  "status": "STAGE_A_FINAL_UPSTREAM_REPIN_ONLY",
+  "utc": "2026-10-24T16:38:53.193637+00:00",
+  "head": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+  "task10Source": "86777940c3f9500b1b89d884deaae2a48740d9a9",
+  "method": "Targeted current raw-byte hashes plus exact adopted HEAD blob equality; 29 fix1 paths verified. Reuses previous preflight, no full 235-file reread or old raw rehash. Semantic reads are targeted facades/changed inputs; hash membership alone does not claim full semantic rereview.",
+  "entries": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-10-shared-rank-ruling.md",
+      "bytes": 3478,
+      "sha256": "3b10ab12f46f7b4a2f70a91871f20d4f4052662b1cfee2b08700b02188b6bc75"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-consumer-activation-root-ack-20261025.json",
+      "bytes": 1544,
+      "sha256": "763c7da6870188b6ac07177391e197df956c121bdea10a9df2afd81d998f5fb3"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-fix01-implementation-report-20261024.md",
+      "bytes": 15180,
+      "sha256": "d01c0bc777a4a3b91330fa6dc78d3621eea24b5197d09d26af40e13f0a41eb48"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-fix01-independent-review-20261025.md",
+      "bytes": 15120,
+      "sha256": "8656c5337eb0af099389f9634ea2542823bec757e9f4b2cb3b0ed7f4207bdaa6"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-fix01-m2-report-erratum-20261025.md",
+      "bytes": 1093,
+      "sha256": "59f60bf6efc0ae8377b0135202f187c8c6da6e5ab2608ad69334231f9df597e0"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-implementation-report-20261024.md",
+      "bytes": 29571,
+      "sha256": "fcc8d968e0345557e2f17c2e65ec614d65ba3d4ef948db7940fdb1fea8f9028c"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-independent-review-20261024.md",
+      "bytes": 20376,
+      "sha256": "d6483b6d15c431b68ba2fa01623358e719cac2a6da8247718ad0751bdc500103"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-mysql-recovery-application-ack-20261024.json",
+      "bytes": 3250,
+      "sha256": "096cbdc38cb350b756c6958a0982d31277e4f0a4bc2f7a10e4f24fd1fc40b767"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-protected-adopted-inputs-20261024.json",
+      "bytes": 33538057,
+      "sha256": "0015f86c5ed558bfcca380dc8caf6f709574b333bb7d3d10932a0badf3ea8cb3"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-activation-author-brief-20261025.md",
+      "bytes": 8764,
+      "sha256": "3a739ec4e42b178bee83a5632a1849336061d498452316b4c9613ee1c7def051"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-candidate-source-resource-repin-20261024.json",
+      "bytes": 98273,
+      "sha256": "6f9ff95f3e5fc7a293d848dd7cce04fc5b194c4bdf658b06a2f8e2f4c79afe1a"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-design-brief-prepared.md",
+      "bytes": 4836,
+      "sha256": "b098720328b80ddc29b5d6dc097d83767b4e63338f463cbb19cb2f47fca90d15"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1-review.md",
+      "bytes": 11506,
+      "sha256": "247c16e565986ebb61c8b60589240fd0fbd6bf82153826cb57bde72db42d3241"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1.md",
+      "bytes": 102624,
+      "sha256": "f18ae4734603709284d91345b2909eca9687627c825444fd8cfa06dd49d36ffc"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-fix01-source-delta-required-20261025.md",
+      "bytes": 3002,
+      "sha256": "c8e166c8632986e98ce9ec9cd47a0899124aa987a4d8e7f45eaf64c2a913a100"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-r1-20261024.sql",
+      "bytes": 4287,
+      "sha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-r1-root-input-check-20261024.json",
+      "bytes": 6955,
+      "sha256": "d739abe4913bac8491e743c322364f7ee558536e9e7f693fbb4510ea73c3693d"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-r1-scoped-review-20261024.md",
+      "bytes": 4261,
+      "sha256": "721a21365a6efad55e1e9ea30e61b3979dcf914236b3149d508cc9223fb5ffd0"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-generation-eligibility-activation-required-20261024.md",
+      "bytes": 2117,
+      "sha256": "3ec564071d0689db231dd0697c3b0c855641344923a3a41c0f25ab2f4eaa8b3a"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-actual-acceptance-20261024.md",
+      "bytes": 2046,
+      "sha256": "95b97483888ec857d00c7f5fe9e383a6e8718f6970214225a6430418f4a40f7e"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-actual-custody-20261024.json",
+      "bytes": 6831,
+      "sha256": "f92d9440310a1c44858ab6bc7093d56909a2b28663099a7803919ebbb425d28a"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-preflight-rootproof-20261024.json",
+      "bytes": 449,
+      "sha256": "eec2bcceb3e33a232486e816387154e05f1fb942518c6dd2e96c2504a5112cb1"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-resource-port-repin-required-20261024.md",
+      "bytes": 1670,
+      "sha256": "fafff92f1d6553be85f08d33c8ffdbb45528a4bcda6fdb735bb7c036501123d4"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-source-alignment-preflight-20261024-source-manifest.json",
+      "bytes": 115224,
+      "sha256": "6803f10f6faebd7ffdb6cd5c81eb193a589bd6d1e7bc6c71a154e6d741a5991e"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-source-alignment-preflight-20261024.md",
+      "bytes": 19931,
+      "sha256": "c0c8a59d94d46c93ac44461401b108ba06915e08064b032de972b96b4d3ca2c9"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-10-fix01/own-source-manifest.json",
+      "bytes": 6188,
+      "sha256": "b1ddb0963b5d0837066420b03cdb296a80b740e78f3a2aa450e95df87f6e53a5",
+      "headBlobSha256": "b1ddb0963b5d0837066420b03cdb296a80b740e78f3a2aa450e95df87f6e53a5",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java",
+      "bytes": 10004,
+      "sha256": "c4a55f31826284ba24252bc2e8661e37badfa6543112e4204d99dc2f43d1122c",
+      "previousCandidateSha256": "7aff267b9ff90b3f68b28a2cd93d8b20b7eb1a6f6e54fdf26a616e1584799e49",
+      "comparisonTo5657": "CHANGED",
+      "headBlobSha256": "c4a55f31826284ba24252bc2e8661e37badfa6543112e4204d99dc2f43d1122c",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+      "bytes": 15066,
+      "sha256": "6aedff24cc17b98f2d58d8cf5501cbb77901892ca8c5b37d1afdcd73ca4cf6aa",
+      "previousCandidateSha256": "6aedff24cc17b98f2d58d8cf5501cbb77901892ca8c5b37d1afdcd73ca4cf6aa",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "6aedff24cc17b98f2d58d8cf5501cbb77901892ca8c5b37d1afdcd73ca4cf6aa",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/meeting/JdbcMeetingRepository.java",
+      "bytes": 17204,
+      "sha256": "4885abd7d4744f2dbc76c79f659edc8ce0cdeaf6a833ca6769fb0680ecce4dcb",
+      "previousCandidateSha256": "4885abd7d4744f2dbc76c79f659edc8ce0cdeaf6a833ca6769fb0680ecce4dcb",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "4885abd7d4744f2dbc76c79f659edc8ce0cdeaf6a833ca6769fb0680ecce4dcb",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/JdbcFileRegistry.java",
+      "bytes": 43143,
+      "sha256": "4131cb9f8b65228788f9eabf5237b0faf61fa917f3d80c697ee3618ed512dd0f",
+      "previousCandidateSha256": "4131cb9f8b65228788f9eabf5237b0faf61fa917f3d80c697ee3618ed512dd0f",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "4131cb9f8b65228788f9eabf5237b0faf61fa917f3d80c697ee3618ed512dd0f",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/JdbcFileUploads.java",
+      "bytes": 25015,
+      "sha256": "cf3c274731272b20233e29f20398ed34ad0ca82712a33b00cd8e8ce415d403f9",
+      "previousCandidateSha256": "cf3c274731272b20233e29f20398ed34ad0ca82712a33b00cd8e8ce415d403f9",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "cf3c274731272b20233e29f20398ed34ad0ca82712a33b00cd8e8ce415d403f9",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "bytes": 40419,
+      "sha256": "e102df73dc59dea6a0ad328dc7a2da490923bb2f253f5fd943130476bc6fa5a5",
+      "previousCandidateSha256": "e102df73dc59dea6a0ad328dc7a2da490923bb2f253f5fd943130476bc6fa5a5",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "e102df73dc59dea6a0ad328dc7a2da490923bb2f253f5fd943130476bc6fa5a5",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcGenerationRetention.java",
+      "bytes": 9518,
+      "sha256": "4df075976018effc5269f7e38ba917a39321ff8d1f739e2a17f3cbf88563b332",
+      "headBlobSha256": "4df075976018effc5269f7e38ba917a39321ff8d1f739e2a17f3cbf88563b332",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcModelPermitPool.java",
+      "bytes": 8858,
+      "sha256": "84a2ffe1f74978f794a1cac1ddbc44e238bf46520f4e73ea342e2ccdf3bc7f5d",
+      "previousCandidateSha256": "84a2ffe1f74978f794a1cac1ddbc44e238bf46520f4e73ea342e2ccdf3bc7f5d",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "84a2ffe1f74978f794a1cac1ddbc44e238bf46520f4e73ea342e2ccdf3bc7f5d",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "bytes": 3909,
+      "sha256": "ab71c24bb8b174ad3b9f7a2a4851675f6b11c997a0c92d1a17840c34bd0342d6",
+      "previousCandidateSha256": "ab71c24bb8b174ad3b9f7a2a4851675f6b11c997a0c92d1a17840c34bd0342d6",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "ab71c24bb8b174ad3b9f7a2a4851675f6b11c997a0c92d1a17840c34bd0342d6",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "bytes": 22099,
+      "sha256": "906f741ca7315633e5555e263093105b5f3b293443552fc5e3e4ea763bc3f93b",
+      "previousCandidateSha256": "906f741ca7315633e5555e263093105b5f3b293443552fc5e3e4ea763bc3f93b",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "906f741ca7315633e5555e263093105b5f3b293443552fc5e3e4ea763bc3f93b",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/ImportTaskDomainPolicy.java",
+      "bytes": 14847,
+      "sha256": "7a3f48522fd4f719ebb728cbf3294ae96e314b7bc68e04031be0b8972edd6052",
+      "previousCandidateSha256": "f1f75c031c0129ee0f3b9d9e5d737d4dca5c7cf0d72e359befa409ab20bab342",
+      "comparisonTo5657": "CHANGED",
+      "headBlobSha256": "7a3f48522fd4f719ebb728cbf3294ae96e314b7bc68e04031be0b8972edd6052",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesDecisions.java",
+      "bytes": 3175,
+      "sha256": "d05c5a41bb68cecd8a419b3171a9401bda80f9891950ff02c79b47683b50e976",
+      "headBlobSha256": "d05c5a41bb68cecd8a419b3171a9401bda80f9891950ff02c79b47683b50e976",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesFactsReader.java",
+      "bytes": 21524,
+      "sha256": "98cf25f9058e3f3fe312d3d85d7a24acbe08a17cca6e7430274f52a63c868dea",
+      "headBlobSha256": "98cf25f9058e3f3fe312d3d85d7a24acbe08a17cca6e7430274f52a63c868dea",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationCommands.java",
+      "bytes": 3518,
+      "sha256": "ed3ccbe13445d3bc986d58e1e5c0d7c338e1c3dec85eb5f846fa68192f0864b7",
+      "headBlobSha256": "ed3ccbe13445d3bc986d58e1e5c0d7c338e1c3dec85eb5f846fa68192f0864b7",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesGenerationPreparation.java",
+      "bytes": 20147,
+      "sha256": "8f5982c7cb6cdf2215d3ce467e736f3e310e43f0ae5643c505fc73610bea3b34",
+      "headBlobSha256": "8f5982c7cb6cdf2215d3ce467e736f3e310e43f0ae5643c505fc73610bea3b34",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesInitialSettings.java",
+      "bytes": 11927,
+      "sha256": "4d8a4851a4a8395f1ae0d49998e312ed48a3ed879949ad92edca34d4463cb74b",
+      "headBlobSha256": "4d8a4851a4a8395f1ae0d49998e312ed48a3ed879949ad92edca34d4463cb74b",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesQueries.java",
+      "bytes": 9742,
+      "sha256": "7d8cccd4db37d4322101721ceba9c1289ff421df8ebfe299bd3c74ade92206aa",
+      "headBlobSha256": "7d8cccd4db37d4322101721ceba9c1289ff421df8ebfe299bd3c74ade92206aa",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesReviews.java",
+      "bytes": 13197,
+      "sha256": "8721febab4f17a280c2aed4cbfaa1f4f43a5e22f6e04ea80134ca8e1e0e93385",
+      "headBlobSha256": "8721febab4f17a280c2aed4cbfaa1f4f43a5e22f6e04ea80134ca8e1e0e93385",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesSavedCommands.java",
+      "bytes": 28429,
+      "sha256": "ebeb87e1c0a5421a9dd8779659d92fbd6432400320027ba59a70718294d30b9a",
+      "headBlobSha256": "ebeb87e1c0a5421a9dd8779659d92fbd6432400320027ba59a70718294d30b9a",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesSavedQueries.java",
+      "bytes": 24684,
+      "sha256": "c61dcdebdbf79e1c196c22e234eaae74da72d72d5a1dd164df73fb5e383a3ce6",
+      "headBlobSha256": "c61dcdebdbf79e1c196c22e234eaae74da72d72d5a1dd164df73fb5e383a3ce6",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcMinutesSettingsCommands.java",
+      "bytes": 12275,
+      "sha256": "745023e4a555c3aeb5b7f49f220dd434a4930d587805aad3ca408c381b6d5a1b",
+      "headBlobSha256": "745023e4a555c3aeb5b7f49f220dd434a4930d587805aad3ca408c381b6d5a1b",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java",
+      "bytes": 20872,
+      "sha256": "7d097d13cde51e7aee3a18d57a4cfe0cbf09d76e70740615caea62c164d1d3a5",
+      "previousCandidateSha256": "5d687b44e97d9ff0353fb592428a71a87298bc9c2ab9eeb611f8e5fc1ab3f6ff",
+      "comparisonTo5657": "CHANGED",
+      "headBlobSha256": "7d097d13cde51e7aee3a18d57a4cfe0cbf09d76e70740615caea62c164d1d3a5",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+      "bytes": 33735,
+      "sha256": "9b27a08cf59ca67d65e95c994966fcf865df2ae77742536992d8daa915b05701",
+      "headBlobSha256": "9b27a08cf59ca67d65e95c994966fcf865df2ae77742536992d8daa915b05701",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+      "bytes": 62567,
+      "sha256": "2ccd114a338a6ffcdb5016b1b699b3973c4fbecd2b19091d517f4236b639e827",
+      "previousCandidateSha256": "c9aae5ad46794cebf68fa143829238e699f1d4214005e603f7c88536c57f476f",
+      "comparisonTo5657": "CHANGED",
+      "headBlobSha256": "2ccd114a338a6ffcdb5016b1b699b3973c4fbecd2b19091d517f4236b639e827",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesDeferredPreparation.java",
+      "bytes": 1206,
+      "sha256": "7b6b76e5b7c7f1ab5f563a63653939df7683d507f2497b4bfb8e16b133dc7ff6",
+      "headBlobSha256": "7b6b76e5b7c7f1ab5f563a63653939df7683d507f2497b4bfb8e16b133dc7ff6",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesDomainCapacity.java",
+      "bytes": 4863,
+      "sha256": "cbaf99a889e1809e7d331d888e97704e4f1e0033d9670b9962766526f752510b",
+      "headBlobSha256": "cbaf99a889e1809e7d331d888e97704e4f1e0033d9670b9962766526f752510b",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesEditorRuntime.java",
+      "bytes": 1990,
+      "sha256": "b43ee916bd6c8ab8d6668465f7b5424486e6542d3040d3df2438b2109c71dce0",
+      "headBlobSha256": "b43ee916bd6c8ab8d6668465f7b5424486e6542d3040d3df2438b2109c71dce0",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesGraphCapture.java",
+      "bytes": 10352,
+      "sha256": "9b329d24fe10409920403dd1d46016d24beed3b233f27833e0215bdec2c4a7dc",
+      "headBlobSha256": "9b329d24fe10409920403dd1d46016d24beed3b233f27833e0215bdec2c4a7dc",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java",
+      "bytes": 24216,
+      "sha256": "40e880738c50134eb557ddc3092bcfada424c66f1e73561aa26365603f4f5327",
+      "headBlobSha256": "40e880738c50134eb557ddc3092bcfada424c66f1e73561aa26365603f4f5327",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesPendingDiscovery.java",
+      "bytes": 10527,
+      "sha256": "0b7c5e73826aadf7bc8bf0ee186e5667ee9153f8d7a759c5c25620c332feb5a4",
+      "headBlobSha256": "0b7c5e73826aadf7bc8bf0ee186e5667ee9153f8d7a759c5c25620c332feb5a4",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesSourceRows.java",
+      "bytes": 2300,
+      "sha256": "6e32230b86306b50683580d2710e2576058d44ff8a4bc1b329d88b0fb47d2f0c",
+      "headBlobSha256": "6e32230b86306b50683580d2710e2576058d44ff8a4bc1b329d88b0fb47d2f0c",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesStoredFinals.java",
+      "bytes": 2767,
+      "sha256": "064efc81e9315f2fb71269d01755de469a4559e4c03b97ad063fa46ec5ce27cf",
+      "headBlobSha256": "064efc81e9315f2fb71269d01755de469a4559e4c03b97ad063fa46ec5ce27cf",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/MinutesTaskDomainPolicy.java",
+      "bytes": 19147,
+      "sha256": "47a0ee6cf6b1b5721fc13ad5c04dfa3717bca87b9d7b907159a76880e224795d",
+      "headBlobSha256": "47a0ee6cf6b1b5721fc13ad5c04dfa3717bca87b9d7b907159a76880e224795d",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "bytes": 709,
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+      "previousCandidateSha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "bytes": 1781,
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+      "previousCandidateSha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "bytes": 2461,
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+      "previousCandidateSha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "bytes": 1864,
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+      "previousCandidateSha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "bytes": 3795,
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+      "previousCandidateSha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "bytes": 11205,
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+      "previousCandidateSha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "bytes": 7239,
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+      "previousCandidateSha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "bytes": 35136,
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "previousCandidateSha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "bytes": 397,
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713",
+      "previousCandidateSha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "bytes": 10941,
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+      "previousCandidateSha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "bytes": 21260,
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "previousCandidateSha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "bytes": 1817,
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "previousCandidateSha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "headBlobSha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "bytes": 164,
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+      "headBlobSha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "bytes": 7661,
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+      "previousCandidateSha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/config/file/Task10Fix01ArchiveTest.java",
+      "bytes": 99,
+      "sha256": "ea3bb8fd92b651673b8c16143de4bdae469fd52a4d3c699a5804a41421bd1504",
+      "headBlobSha256": "ea3bb8fd92b651673b8c16143de4bdae469fd52a4d3c699a5804a41421bd1504",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/transcript/Task10Fix01DeferredTest.java",
+      "bytes": 1983,
+      "sha256": "30cb626590e1dfd9e07a67de3debac6e75c0b01411be667874faa4cbbc51e375",
+      "headBlobSha256": "30cb626590e1dfd9e07a67de3debac6e75c0b01411be667874faa4cbbc51e375",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/adapters/src/test/java/ama/transcript/Task10Fix01DomainCapacityTest.java",
+      "bytes": 3737,
+      "sha256": "8e8e0eb5ad4f8fd4bf7be56a83b117d9d347a51973c2e9b02c4e6c2f5904df3d",
+      "headBlobSha256": "8e8e0eb5ad4f8fd4bf7be56a83b117d9d347a51973c2e9b02c4e6c2f5904df3d",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesConfiguration.java",
+      "bytes": 3574,
+      "sha256": "d557654e4f6480ce231916ef9f802ca4d205f35cacf613883d24fb3a27a6e722",
+      "headBlobSha256": "d557654e4f6480ce231916ef9f802ca4d205f35cacf613883d24fb3a27a6e722",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesController.java",
+      "bytes": 6047,
+      "sha256": "8cd9170dd7265df5bd125d82ddae2e174a09af700611e3f93533d4443f5f6240",
+      "headBlobSha256": "8cd9170dd7265df5bd125d82ddae2e174a09af700611e3f93533d4443f5f6240",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/MinutesSavedController.java",
+      "bytes": 8912,
+      "sha256": "4321ffa8fffd78437f4eb222d01d5c084357dcaea7cfad716e5e656cc9f8e887",
+      "headBlobSha256": "4321ffa8fffd78437f4eb222d01d5c084357dcaea7cfad716e5e656cc9f8e887",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/ProcessingConfiguration.java",
+      "bytes": 8384,
+      "sha256": "ed895ba2e6e514e28bb687dc62497fa166f86c5961516afa1a9ec892754d9001",
+      "previousCandidateSha256": "ed895ba2e6e514e28bb687dc62497fa166f86c5961516afa1a9ec892754d9001",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "ed895ba2e6e514e28bb687dc62497fa166f86c5961516afa1a9ec892754d9001",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/api/src/main/java/ama/api/TranscriptConfiguration.java",
+      "bytes": 6803,
+      "sha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+      "headBlobSha256": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/contracts/src/main/java/ama/contract/MinutesContracts.java",
+      "bytes": 37192,
+      "sha256": "948efab3513238e4479bc5e4de494b934ffd9f56e2c5ee34448c4455dd449415",
+      "previousCandidateSha256": "2a772b4587298ca39fd92ab5031d5178657828689cc70c4ce9e195ad1d904382",
+      "comparisonTo5657": "CHANGED",
+      "headBlobSha256": "948efab3513238e4479bc5e4de494b934ffd9f56e2c5ee34448c4455dd449415",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+      "bytes": 16170,
+      "sha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8",
+      "previousCandidateSha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "a1ce71d4470a9a41bf02176e32467fa57920382610825f5ed1f626edb48e90a8",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/minutes/contract/ReviewCoverageEvaluator.java",
+      "bytes": 2457,
+      "sha256": "990f5ad5fd5adee6fc7f9ed221994baafc71538228798fb5dc304243ebb665fe",
+      "previousCandidateSha256": "990f5ad5fd5adee6fc7f9ed221994baafc71538228798fb5dc304243ebb665fe",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "990f5ad5fd5adee6fc7f9ed221994baafc71538228798fb5dc304243ebb665fe",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/ExternalOperationPort.java",
+      "bytes": 2771,
+      "sha256": "e0928b32505492358fcc9a4ed218708913f4e83cc086410b143cf12f9161d873",
+      "previousCandidateSha256": "e0928b32505492358fcc9a4ed218708913f4e83cc086410b143cf12f9161d873",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "e0928b32505492358fcc9a4ed218708913f4e83cc086410b143cf12f9161d873",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/task/TaskDomainPolicy.java",
+      "bytes": 2647,
+      "sha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620",
+      "previousCandidateSha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "acea5e5690597cb03163ba82217ae3a390b7b279ed511d316b0890500f08e620",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java",
+      "bytes": 1675,
+      "sha256": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+      "headBlobSha256": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java",
+      "bytes": 1485,
+      "sha256": "17c595728a0b82e189d5cac649aed0681404cb8fba9c992e21f8de34dc8561f1",
+      "headBlobSha256": "17c595728a0b82e189d5cac649aed0681404cb8fba9c992e21f8de34dc8561f1",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01CapacityIT.java",
+      "bytes": 4239,
+      "sha256": "32c63507fa03134c60e1e17b2deacdd616863f80466887f37edaab5a1b55a48c",
+      "headBlobSha256": "32c63507fa03134c60e1e17b2deacdd616863f80466887f37edaab5a1b55a48c",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01DecisionIT.java",
+      "bytes": 727,
+      "sha256": "23cc3aff27a9c7cc3c5422d3cb43d08240bddf7336ac04a84132b35307b4bed2",
+      "headBlobSha256": "23cc3aff27a9c7cc3c5422d3cb43d08240bddf7336ac04a84132b35307b4bed2",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01IntakeIT.java",
+      "bytes": 3464,
+      "sha256": "09bb4a30db7a275e16b1e3dacb951a30c0004d86af2344b30f1a9442a1b6d31d",
+      "headBlobSha256": "09bb4a30db7a275e16b1e3dacb951a30c0004d86af2344b30f1a9442a1b6d31d",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01LegacyIoIT.java",
+      "bytes": 6642,
+      "sha256": "c9aaac9123828c6e8a537efbbf3bcbffbccbfcef3c44797ead5ffeb7dd4d7e66",
+      "headBlobSha256": "c9aaac9123828c6e8a537efbbf3bcbffbccbfcef3c44797ead5ffeb7dd4d7e66",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01RegressionB03IT.java",
+      "bytes": 87,
+      "sha256": "c13ed57c5a4eec2e1f271062381536cc77274b273e624fd25c5269d7241c406e",
+      "headBlobSha256": "c13ed57c5a4eec2e1f271062381536cc77274b273e624fd25c5269d7241c406e",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01RegressionSourceIT.java",
+      "bytes": 93,
+      "sha256": "e4666fb303d107a8e73c8381a7dc9defadc94afbf773225890cc969ea81dc44c",
+      "headBlobSha256": "e4666fb303d107a8e73c8381a7dc9defadc94afbf773225890cc969ea81dc44c",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task10Fix01ReplayIT.java",
+      "bytes": 5091,
+      "sha256": "5b6934c00ae503bd592c45e03d3f33e3d7258dae04ae0372b36e26ebc11b551c",
+      "headBlobSha256": "5b6934c00ae503bd592c45e03d3f33e3d7258dae04ae0372b36e26ebc11b551c",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/MinutesGenerationHandler.java",
+      "bytes": 1532,
+      "sha256": "3cc879a6d767e662d9fbb0e6cd5a228766269770b0d3fcad83bffc0148325f29",
+      "headBlobSha256": "3cc879a6d767e662d9fbb0e6cd5a228766269770b0d3fcad83bffc0148325f29",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/MinutesReconciliationHandler.java",
+      "bytes": 1879,
+      "sha256": "54b33ff5644e0c68adf1384c006c6a440b05760643124c0dd47f2faed9cac498",
+      "headBlobSha256": "54b33ff5644e0c68adf1384c006c6a440b05760643124c0dd47f2faed9cac498",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/ReconciliationLoop.java",
+      "bytes": 6525,
+      "sha256": "9bf3a8a230f1d2bdc29a54b1ef1b3e41be9d35df412a59748765bdc5ceeae424",
+      "previousCandidateSha256": "9bf3a8a230f1d2bdc29a54b1ef1b3e41be9d35df412a59748765bdc5ceeae424",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "9bf3a8a230f1d2bdc29a54b1ef1b3e41be9d35df412a59748765bdc5ceeae424",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "bytes": 5615,
+      "sha256": "78c92e50fc55e74b46164888439744423635f12d47c0a1908fae2e81b453e21a",
+      "previousCandidateSha256": "78c92e50fc55e74b46164888439744423635f12d47c0a1908fae2e81b453e21a",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "78c92e50fc55e74b46164888439744423635f12d47c0a1908fae2e81b453e21a",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "bytes": 18368,
+      "sha256": "9fa33c9cc2445570880ff0d0e98ae5ce8ec39bfb3005c40b63974303da99ff7a",
+      "previousCandidateSha256": "9fa33c9cc2445570880ff0d0e98ae5ce8ec39bfb3005c40b63974303da99ff7a",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "9fa33c9cc2445570880ff0d0e98ae5ce8ec39bfb3005c40b63974303da99ff7a",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "bytes": 7080,
+      "sha256": "be6b4c6d8685de23fe35e52840bfcd76380bf31bdf2c1431c681052f8c6e171b",
+      "previousCandidateSha256": "be6b4c6d8685de23fe35e52840bfcd76380bf31bdf2c1431c681052f8c6e171b",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "be6b4c6d8685de23fe35e52840bfcd76380bf31bdf2c1431c681052f8c6e171b",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "contracts/openapi/minutes.yaml",
+      "bytes": 302362,
+      "sha256": "ee3b2b9aee6f4ab60b3e1de36d8ca77b3a4853c895be86876be54fe279a605a7",
+      "headBlobSha256": "ee3b2b9aee6f4ab60b3e1de36d8ca77b3a4853c895be86876be54fe279a605a7",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "docs/acceptance/b/task-B-remaining-10-minutes-editor-adoption-20261025.md",
+      "bytes": 6054,
+      "sha256": "fb0675d88e44c0c93119eeea620a170a71829b4b36b72e514fad23e441577d27",
+      "headBlobSha256": "fb0675d88e44c0c93119eeea620a170a71829b4b36b72e514fad23e441577d27",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "docs/database/ama-data-dictionary.md",
+      "bytes": 167707,
+      "sha256": "536de7d001bae555744c44fa7cd7f5062cdcf782feda9004a1ceec987b1bfe87",
+      "headBlobSha256": "536de7d001bae555744c44fa7cd7f5062cdcf782feda9004a1ceec987b1bfe87",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "bytes": 116789,
+      "sha256": "0beb9eace26afd5c45ade81a2f990583c0d5a58ffda963c15d17836a1fa3af68",
+      "headBlobSha256": "0beb9eace26afd5c45ade81a2f990583c0d5a58ffda963c15d17836a1fa3af68",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-21-ama-database-design.md",
+      "bytes": 117821,
+      "sha256": "61a9d0cd8f0f2cdb1429b411a71383accc35000078e759dee7432f670cd0350e",
+      "headBlobSha256": "61a9d0cd8f0f2cdb1429b411a71383accc35000078e759dee7432f670cd0350e",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-23-ama-phase-b-final-publication.md",
+      "bytes": 7707,
+      "sha256": "2bff74ecdf96accb22483418a358992b875481d131075fcf2f4088c89d63f6a6",
+      "previousCandidateSha256": "2bff74ecdf96accb22483418a358992b875481d131075fcf2f4088c89d63f6a6",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "2bff74ecdf96accb22483418a358992b875481d131075fcf2f4088c89d63f6a6",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": "tools/checks/database_design.py",
+      "bytes": 108787,
+      "sha256": "e1139ccd51a54d151267fed9d33675c3ef40880f1fe8f4211006aa2331843b11",
+      "previousCandidateSha256": "e1139ccd51a54d151267fed9d33675c3ef40880f1fe8f4211006aa2331843b11",
+      "comparisonTo5657": "IDENTICAL",
+      "headBlobSha256": "e1139ccd51a54d151267fed9d33675c3ef40880f1fe8f4211006aa2331843b11",
+      "headBytesEqualWorking": true
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-formal-migration-freeze-20261025.json",
+      "bytes": 4895,
+      "sha256": "83665f7f6a2443addc1a39b7faa5efc91e0d7f82ad49a2fa6aa6ded69c422a43"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-formal-migration-frozen-20261025.sql",
+      "bytes": 4332,
+      "sha256": "4709fc7a81fa0d3c252b2f2de165a6722d2197d7187f1ec066f1feebb9e42559"
+    }
+  ],
+  "migrationPrefix": {
+    "count": 15,
+    "allExactlyEqualR1RootInputCheck": true,
+    "paths": [
+      "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "backend/adapters/src/main/resources/db/migration/V013__publications.sql"
+    ]
+  },
+  "r1Sql": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-r1-20261024.sql",
+    "bytes": 4287,
+    "sha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2",
+    "createBodyBytes": 3978,
+    "createBodySha256": "2a440122c9dfab25c47b0187155b5c14128c34e87392e3764c5cbf099d9f4645",
+    "proposedFormalName": "V013_4__publication_submission.sql",
+    "formalVersionNotAllocatedByAuthor": true,
+    "formalBytesNotInstalledOrApplied": true
+  },
+  "resourceReadOnlyObservation": {
+    "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+    "status": "running",
+    "oomKilledCurrent": false,
+    "host": "127.0.0.1",
+    "port": 46151,
+    "memory": 805306368,
+    "nanoCpus": 1000000000,
+    "pidsLimit": 256,
+    "imageId": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "method": "docker inspect exact scalar projection only; no Config.Env, credentials or secret hashes; no DB queries"
+  },
+  "protection": {
+    "priorManifest": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-protected-adopted-inputs-20261024.json",
+    "priorPathCount": 123051,
+    "oldPayloadRehashRepeated": false,
+    "oldTask10AndFixEvidence": "Preserve all existing artifacts/phase-b/b-remaining/task-10/ and task-10-fix01/ at this HEAD; extend public path/OID protection before StageB new output. Historical SQL/models retain their old evidence. Current model synchronization requires explicit formal-DDL ACK exception.",
+    "newStageBScope": "New artifacts/phase-b/b-remaining/task-11/ only, explicitly owned source/test/contracts paths and formal migration/current model after ACK. W coordinator/rulings/mechanical artifacts excluded from author product commit."
+  },
+  "prohibitedActionsPerformed": [],
+  "report": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-upstream-repin-20261025.md",
+    "bytes": 17558,
+    "sha256": "aec409f925423e037660ceef5aebc4f9ccee7d0415c3cc519e5cf26d90106d73"
+  },
+  "formalFreeze": {
+    "record": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-formal-migration-freeze-20261025.json",
+    "frozenFile": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-formal-migration-frozen-20261025.sql",
+    "bytes": 4332,
+    "sha256": "4709fc7a81fa0d3c252b2f2de165a6722d2197d7187f1ec066f1feebb9e42559",
+    "createBodyMatchesR1": true,
+    "applicationAckPending": true,
+    "productFileAbsent": true
+  }
+}

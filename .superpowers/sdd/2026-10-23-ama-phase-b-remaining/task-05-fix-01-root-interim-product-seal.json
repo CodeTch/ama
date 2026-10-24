@@ -1,0 +1,42 @@
+{
+  "utc": "2026-10-23T18:45:47.050896+00:00",
+  "head": "f98980543415ba17f0102a9c85f49452c5611527",
+  "meaning": "interim working bytes; root read all production delta hunks and 2 new full files, not final-source adoption or independent review",
+  "paths": [
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/LocalFileClient.java",
+      "bytes": 9057,
+      "sha256": "0b3a791e3aa93cc63ef04e117b5f65e3b186c75f4b6a7f6b6f9b8aaab1d2a214"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/SourceReadLifetime.java",
+      "bytes": 3689,
+      "sha256": "485d06532408502828926683bd819bf9960376304d3ec103416e13db253e39ba"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/s3/S3FileStorage.java",
+      "bytes": 9682,
+      "sha256": "20197e0ae0771f84d7253e6c5e91cb7de3a73367f9a556054b9c09e9d1ad7683"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/storage/s3/ScopedS3HttpClient.java",
+      "bytes": 2614,
+      "sha256": "b26bdf44ac6538377d0ea29b5c53de1623b4c39e3b0856b71026521b6603b31b"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java",
+      "bytes": 14078,
+      "sha256": "5b9ffc7b767c01cdd51c1434318b8eb375fbf2e37a81b96107e8569eb714d39b"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java",
+      "bytes": 3628,
+      "sha256": "c9d331c12432222ec0bc93732317cc6f1a87fcde5a65dcd22c87c2a983d99f48"
+    },
+    {
+      "path": "backend/worker/src/main/java/ama/worker/WorkerLoop.java",
+      "bytes": 14374,
+      "sha256": "2bf351bc9625a0ba4491bdaf752da7c1499193cd9f96cabe0747e9d8b88529cf"
+    }
+  ]
+}

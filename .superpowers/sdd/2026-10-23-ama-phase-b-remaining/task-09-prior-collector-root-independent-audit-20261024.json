@@ -1,0 +1,36 @@
+{
+  "status": "ACCEPTED_RETROSPECTIVE_SUITE_LEVEL_CUSTODY_WITH_EXCLUSION",
+  "auditor": "/root independent readonly audit; coordinator records received facts",
+  "authorAuditSha256": "41a828e1afed65eeeee6e5552942d73bb2fdf2e8030283e2815dabc247d99a3b",
+  "scope": {
+    "completedCommandResultWindows": 28,
+    "omittedWindows": 0,
+    "copiedXml": 69,
+    "matchedOwnLogSuitesAndCounts": 68,
+    "unqualifiedCopiedXml": 1
+  },
+  "excluded": {
+    "window": "graph-controls-green-01",
+    "report": "integration-tests-TEST-ama.minutes.Task09GraphDiscoveryIT.xml",
+    "copiedCases": 6,
+    "copiedFailures": 2,
+    "actualTestsExecuted": 0,
+    "reason": "comma selector rejected before canonical runner report deletion; own log zero matching tests"
+  },
+  "checks": [
+    "all28 ownlog suite/class/tests/failures/errors/skipped match authoraudit; exits agree",
+    "command source-manifest hashes agree",
+    "all28 captured canonical run.py same source bytes, observed SHA prefixa3ece9cd",
+    "canonical valid selector path deletes old corresponding report-kind XML before execute; invalid comma selector returns before deletion",
+    "graph-capture-red-01 and protocol-green-01 compile failures with0XML, not businessRED",
+    "graph-controls-green-02 actual wildcard10PASS includes capture4 already in capture-green-02; do not sumunique"
+  ],
+  "limits": [
+    "oldcollector lacks before-hash plus closed nanosecond interval",
+    "XML lacks timestamp and log does not list each successful case",
+    "retrospective ownlog+canonical deletion path+XML suite/count/identity cross-evidence is not contemporaneous per-case generation-time or continuous-file-identity custody",
+    "current before+interval collector source read, execution qualification not yet claimed"
+  ],
+  "auditProcessNote": "Root first regex missed -- in/failure markers; corrected against actual logs before conclusion, no initial judgment persisted/adopted. No writes/tests/DB by root auditor.",
+  "ruling": "Accept unaffected retrospective suite-level windows with honest stated limits and exclude all6stale copiedcase counts. No broadrerun; later actual finalsource windows and newcollector checks still required. Final independent review/custody receives this record."
+}

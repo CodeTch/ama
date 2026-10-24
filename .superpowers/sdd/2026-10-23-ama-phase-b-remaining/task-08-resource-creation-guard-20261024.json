@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-23T22:35:41.268443+00:00",
+  "status": "ROOT_NEW_RESOURCE_CREATION_GUARD_BEFORE_CREATE",
+  "task6Adoption": "12ca5436b2278e5cb08d60f4d8f41c1528a0e3a6",
+  "helperSha256": "2ee558e19d0b57ccd8f6d97036d7245720d9d5a159e765dee74ca9f426844d94",
+  "plan": {
+    "data_dir": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/data",
+    "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+    "memory_bytes": 805306368,
+    "memory_swap_bytes": 805306368,
+    "name": "ama-test-task08-848e93aace8b4f0fa34fc548267f3dc5",
+    "nano_cpus": 1000000000,
+    "owner_label": "ama.test-fixture=task08-848e93aace8b4f0fa34fc548267f3dc5",
+    "pids_limit": 256,
+    "publish": "127.0.0.1::3306",
+    "schemas": {
+      "behavior": "ama_t08_848e93aace8b_behavior",
+      "fairheld": "ama_t08_848e93aace8b_fairheld",
+      "fairunregistered": "ama_t08_848e93aace8b_fairunregistered",
+      "overflow": "ama_t08_848e93aace8b_overflow"
+    },
+    "secret_dir": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/secrets",
+    "test_user": "ama_t08_848e93aace8b",
+    "uuid": "848e93aace8b4f0fa34fc548267f3dc5",
+    "version": 1
+  },
+  "planPath": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task08-848e93aace8b4f0fa34fc548267f3dc5/plan.json",
+  "planSha256": "9865af447be73cf7816570f2d1da92411cc27fdef64d91186f10a8ece569520c",
+  "hostGuard": {
+    "memAvailableBytes": 19836981248,
+    "minimumAvailableBytes": 2147483648,
+    "workspaceDiskFreeBytes": 835253846016,
+    "minimumDiskFreeBytes": 4294967296
+  },
+  "localPinnedImageId": "sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+  "scope": "OnefreshownedboundedMySQL/4freshschemas only. No oldresource/env/PKI changes; no migration/newTask8DDL applicationACK yet. Plan+privateguard createdonly, apply next.",
+  "qualification": "Hostavailabilitychecknotcapacity/HAclaim; actualCID/image/mount/port/limits/readiness aftercreate mustmatch."
+}

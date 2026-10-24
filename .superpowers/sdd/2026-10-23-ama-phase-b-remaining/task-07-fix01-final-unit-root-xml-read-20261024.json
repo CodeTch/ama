@@ -1,0 +1,1288 @@
+{
+  "scope": "Actualcanonicalunit254uniquePASS; no rootrerun; sourceclosure/custody/reviewpending",
+  "receipt": {
+    "command": [
+      "python3",
+      "tools/checks/run.py",
+      "unit",
+      "*"
+    ],
+    "exit": 0,
+    "reports": [
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.DraftConfirmationHashTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.FileBackendDefinitionsTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.transcript.MeasuredTextTranscriptParserTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.DeadlineInputStreamTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.task.TaskMetadataTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.SavedTranscriptAdmissionTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.transcript.TranscriptImportProducerTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.IdentityContractsTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.HttpRevisionTokensTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.TranscriptWireTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.FileConfigurationTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/worker-TEST-ama.worker.WorkerShutdownTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/worker-TEST-ama.worker.WorkerLoopTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/integration-tests-TEST-ama.storage.ContractFixtureTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/integration-tests-TEST-ama.support.ContractClientTest.xml",
+      "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/final-unit/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml"
+    ],
+    "elapsedSeconds": 38.95831918716431,
+    "counts": {
+      "tests": 254,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "mavenConfig": null
+  },
+  "caseKeys": [
+    [
+      "ama.config.file.ControlledArchiveFix1Test",
+      "startupReleaseCapacityRefusesBeforeAnyObjectAcquisition"
+    ],
+    [
+      "ama.config.file.ControlledArchiveFix1Test",
+      "publicationReservesEntireIndexChainAndReopensAtExactBoundary"
+    ],
+    [
+      "ama.config.file.ControlledArchiveFix1Test",
+      "publisherImpossibleReleaseBudgetPrecedesCallerPayloadInterpretation"
+    ],
+    [
+      "ama.config.file.ControlledArchiveFix1Test",
+      "namedPipePublishingLockFailsUnavailableInBoundedOwnedChild"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "startupValidatesAllObjectsIncludingUnselectedHistory"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "everyLoadRechecksLengthEofHashAndMissingObjects"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "nonregularFilesAndUnsupportedSecureFilesystemFailUnavailable"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "cancellationAndInterruptFailClosedWithoutPayloadDiagnostics"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "publisherRejectsRemapDuplicateMissingClosureAndCancellationWithoutChangingOldRelease"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "closureBudgetsReserveManifestBeforeAnyTransportAllocation"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "publisherCreatesLiteralReleasesAndPreservesPriorBytes"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "indexEntryOrderUniquenessAndSizeAreStrict"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "releaseObjectsCannotContainUnindexedFiles"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "heldPublishingLockAndLockSymlinkRejectSecondPublisher"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "controlledLiteralClosureRemainsAcceptableToUnchangedS1"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "versionsUseUnsignedUtf8OrderingRatherThanUtf16Ordering"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "noLatestOrMissingHistoryFallback"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "boundedStartupSharesTokenScalarAndByteBudgets"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "publisherWritesSameIsolatedBytesEvenWhenCallerMutatesTransportAfterValidation"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "historyRemapDropAndGenerationGapFailClosed"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "missingDependencyCycleAndWrongHeaderAreNeverPublishable"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "manifestDiscoveryReturnsHistoricalRefsAndNeverRepairsMalformedBytes"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "cancellationAtDirectoryAcquisitionBoundariesClosesEveryHandle"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "cancellationAfterPartialStagingLeavesPreviousReleaseIntact"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "pinnedHistoryLoadsExactOldClosureWithFreshTransportArrays"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "strictIndexRejectsUnknownDuplicateNoncanonicalAndInvalidUtf8"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "initialPublicationCannotResetAnExistingReleaseHistory"
+    ],
+    [
+      "ama.config.file.ControlledConfigArchiveSourceTest",
+      "symlinkRootAncestorObjectDirectoryAndReplacementAreRejected"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "independentExactCumulativeBudgetAcceptsAllFiveRawDocuments"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[1]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[2]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[3]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[4]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[5]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[6]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[7]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[8]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[9]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[10]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[11]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[12]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[13]"
+    ],
+    [
+      "ama.config.json.ArchiveBudgetTest",
+      "eachCumulativeBoundRejectsOneMoreThanItsLimit()[14]"
+    ],
+    [
+      "ama.config.json.ConfigBindingsTest",
+      "storedVerifyRequiresActualDigestTaskAndProducerChain"
+    ],
+    [
+      "ama.config.json.ConfigBindingsTest",
+      "injectedParsedDtoCannotAttestRawArchiveAndCancellationNeverMintsSuccess"
+    ],
+    [
+      "ama.config.json.ConfigBindingsTest",
+      "fileMeetingSizeHashAndSavedTaskFencesAreRequiredFacts"
+    ],
+    [
+      "ama.config.json.ConfigBindingsTest",
+      "invalidRawOrIncompleteArchiveClosureCannotMintBinding"
+    ],
+    [
+      "ama.config.json.ConfigBindingsTest",
+      "draftComputeNeedsNoOwnStoredFingerprintTaskOrOutputRevision"
+    ],
+    [
+      "ama.config.json.ConfigBindingsTest",
+      "originalParseBudgetSurvivesCompleteClosure"
+    ],
+    [
+      "ama.config.json.ConfigBindingsTest",
+      "matchingArchiveIdentityCannotSubstituteDifferentRawDefinitionOrExtraNodes"
+    ],
+    [
+      "ama.config.json.ConfigWireReaderTest",
+      "transportRejectsDuplicateUnknownNoncanonicalAndBadUnicode"
+    ],
+    [
+      "ama.config.json.ConfigWireReaderTest",
+      "rawArraysAreIsolatedAfterBoundCheckAndCumulativeBytesCannotReset"
+    ],
+    [
+      "ama.config.json.ConfigWireReaderTest",
+      "canonicalControlEscapesAndSupplementaryConfigTextArePreserved"
+    ],
+    [
+      "ama.config.json.ConfigWireReaderTest",
+      "unknownProcessingKindIsNotARecognizedFutureCapability"
+    ],
+    [
+      "ama.config.json.ConfigWireReaderTest",
+      "recognizedFutureProcessingAndPinnedMaterialsNeverFallBackToImport"
+    ],
+    [
+      "ama.config.json.ConfigWireReaderTest",
+      "adoptedRawVectorsReadTheirExactIdentitiesAndHashes"
+    ],
+    [
+      "ama.config.json.DraftConfirmationHashTest",
+      "completeMarksAndPermutationMatchIndependentManualGolden"
+    ],
+    [
+      "ama.config.json.DraftConfirmationHashTest",
+      "missingOrCorruptOriginalAndCancellationNeverProduceDraftHash"
+    ],
+    [
+      "ama.config.json.DraftConfirmationHashTest",
+      "persistedWorkingWithoutConfirmationUsesOriginalArchiveGolden"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1RawBackedCycleAndCancellationCannotReturnBusinessDigest"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "storedTaskIdentityFactsCanSupplyCompleteHistoricalGenerationFence"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ValidNestedIntrinsicChainSucceedsAcrossAllBusinessEntryPoints"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1SharedLeafDepthUsesEveryPathInEitherOriginOrdering"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "pinnedCanonicalBudgetAlsoProtectsTemplateRowsetBeforeItsDigestIsHidden"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "presentContradictorySuggestionNeverFallsBackToIntrinsicTranscript"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "pinnedSetResolvesAllActualHistoricalOriginsAndMatchesIndependentBytes"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ReviewRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "newExclusionRevisionComputesIndependentlyAndAppliedOriginRequiresExactBodyInput"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1FinalRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1OriginNodeBudgetIsUniqueAndCumulativeAcrossSharedBranches"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "exactReviewArchiveClosureAndIntrinsicConfirmationProduceIndependentHashes"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "rawFullGenerationComputesBeforeOwnRowTaskAndOutputExist"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "actualBodyActionDetectionBackgroundAndIntrinsicMatrixMatchesFullIndependentFinal"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "unrelatedCurrentConfigFactsAndQueryOrderCannotChangeHistoricalFinalHash"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "completeStoredGenerationAndFinalReloadHashesUseRawOriginalArchives"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ContextArtifactsReuseTheSameIsolatedBoundedOriginal"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "confirmationRawChainReloadRetainsOriginalProfileAndActualContent"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "selectedReviewUsesSavedScopeAndExactFrozenMemberships"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1OuterDraftRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "savedManualChildUsesExactBodyMarksAndInheritedOriginalProcessingProfile"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1SharedHistoricalArchiveAcquisitionUsesOneCumulativeByteBudget"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1DirectStoredVerifyRejectsCorruptedNestedIntrinsicConfirmation"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1ReusedNonleafDiamondDepthUsesCachedSubtreeHeight"
+    ],
+    [
+      "ama.config.json.RawHashChainTest",
+      "fix1DeepRawBackedOriginsMeetExactDepthAndRejectOneMore"
+    ],
+    [
+      "ama.config.json.SavedTranscriptAdmissionTest",
+      "originalCanonicalMinimaConstrainLedgerBeforeTransfer"
+    ],
+    [
+      "ama.config.json.SavedTranscriptAdmissionTest",
+      "smallerRuntimeStillRestrictsOriginal"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "exactEveryScalarTokenNameDepthAndWireBoundaryAccepts"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "exactAllDirectoryAndMembershipCountsAccept"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachContainerLimitIsCumulativeAndFailsAtOneOver()[1]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachContainerLimitIsCumulativeAndFailsAtOneOver()[2]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachContainerLimitIsCumulativeAndFailsAtOneOver()[3]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachContainerLimitIsCumulativeAndFailsAtOneOver()[4]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachContainerLimitIsCumulativeAndFailsAtOneOver()[5]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachContainerLimitIsCumulativeAndFailsAtOneOver()[6]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachBoundaryPlusOneFailsWithoutPartialResult()[1]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachBoundaryPlusOneFailsWithoutPartialResult()[2]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachBoundaryPlusOneFailsWithoutPartialResult()[3]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachBoundaryPlusOneFailsWithoutPartialResult()[4]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachBoundaryPlusOneFailsWithoutPartialResult()[5]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachBoundaryPlusOneFailsWithoutPartialResult()[6]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachBoundaryPlusOneFailsWithoutPartialResult()[7]"
+    ],
+    [
+      "ama.minutes.json.OutputBudgetBoundaryTest",
+      "eachBoundaryPlusOneFailsWithoutPartialResult()[8]"
+    ],
+    [
+      "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "perFactoryTokenNameStringDepthAndMembershipLimits"
+    ],
+    [
+      "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "exactWireBoundaryPlusOneSentinelAndNoCloseOnEveryOutcome"
+    ],
+    [
+      "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "cancellationReadFailuresAndInterruptedIoAreRedactedAndPreserveOwnership"
+    ],
+    [
+      "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "strictSchemaUnknownEscapedDuplicateMissingAndEof"
+    ],
+    [
+      "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "allSevenKindsEmptyDirectoriesTitleAndNonBmpBody"
+    ],
+    [
+      "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "rawActionSuggestionsStrictNumbersDatesAndScalarOffsets"
+    ],
+    [
+      "ama.minutes.json.StrictMinutesJsonReaderTest",
+      "utf8DecoderRejectsMalformedSuffixBomOtherEncodingsAndEscapedSurrogates"
+    ],
+    [
+      "ama.storage.DeadlineInputStreamTest",
+      "normalEofCloseAndWatchdogReleaseExactlyOnce"
+    ],
+    [
+      "ama.storage.FileBackendDefinitionsTest",
+      "allBackendsAreAttemptedWithBoundedSuppressionAndInterruptedFailurePreserved"
+    ],
+    [
+      "ama.storage.FileBackendDefinitionsTest",
+      "errorFromFirstBackendCannotSkipSecondBackend"
+    ],
+    [
+      "ama.storage.ManagedBackendIdentityTest",
+      "ambiguousOriginsAndMalformedUnicodeFailClosed"
+    ],
+    [
+      "ama.storage.ManagedBackendIdentityTest",
+      "physicalChangesCannotReuseManagedIdentity"
+    ],
+    [
+      "ama.storage.ManagedBackendIdentityTest",
+      "credentialAndTimeoutRotationDoNotChangePhysicalId"
+    ],
+    [
+      "ama.storage.ManagedBackendIdentityTest",
+      "fieldCountAndUtf8LengthsMatchIndependentPythonBytes"
+    ],
+    [
+      "ama.storage.SourceReadLifetimeTest",
+      "alreadyLostScopeImmediatelyAbortsRacingNewRequestExactlyOnce"
+    ],
+    [
+      "ama.storage.SourceReadLifetimeTest",
+      "knownLossWakesActualAdmissionWithoutInterruptingReusableThread"
+    ],
+    [
+      "ama.storage.SourceReadLifetimeTest",
+      "cancellationWinningImmediatelyAfterActualAcquireReturnsExactlyThatPermit"
+    ],
+    [
+      "ama.storage.SourceReadLifetimeTest",
+      "deadlineAbortsRealRegisteredWorkWithoutCancellingTheOriginalSignal"
+    ],
+    [
+      "ama.storage.SourceReadLifetimeTest",
+      "saturatedAdmissionDeadlineCannotReleaseAnUnownedPermit"
+    ],
+    [
+      "ama.storage.SourceReadLifetimeTest",
+      "failedAbortStillReleasesOtherOwnedRequestsAndRepeatedCloseIsSafe"
+    ],
+    [
+      "ama.storage.SourceReadLifetimeTest",
+      "completedTransportDetachesAndClosingScopeDoesNotCancelOriginalCarrierSignal"
+    ],
+    [
+      "ama.storage.StorageRouterTest",
+      "callerCannotReplaceBackendDefinitionAfterConstruction"
+    ],
+    [
+      "ama.storage.StorageRouterTest",
+      "defaultChangePreservesHistoricalKeysAndActiveUploads"
+    ],
+    [
+      "ama.storage.StorageRouterTest",
+      "uploadAndMetadataCannotCarryMissingIdentityOrReceipt"
+    ],
+    [
+      "ama.storage.StorageRouterTest",
+      "everyOperationUsesExplicitBackendAndPreservesArguments"
+    ],
+    [
+      "ama.storage.StorageRouterTest",
+      "unsafeLogicalKeysAreRejectedBeforeRouting"
+    ],
+    [
+      "ama.storage.StorageRouterTest",
+      "metadataRejectsFalseHashesAndNegativeSizes"
+    ],
+    [
+      "ama.storage.StorageRouterTest",
+      "blobPageCannotBeChangedByCaller"
+    ],
+    [
+      "ama.storage.StorageRouterTest",
+      "missingHistoricalBackendFailsClosedWithoutFallback"
+    ],
+    [
+      "ama.storage.s3.S3LayoutV3Test",
+      "escapesAndShallowSegmentationPreserveExactOrderAndPrefix"
+    ],
+    [
+      "ama.storage.s3.S3LayoutV3Test",
+      "everyControlTemplateIsShallowAndInvalidPhysicalNamesFailBeforeTransport"
+    ],
+    [
+      "ama.storage.s3.S3LayoutV3Test",
+      "canonicalDecodingRejectsAlternateChunkingsAndEscapeSpellings"
+    ],
+    [
+      "ama.storage.s3.S3LayoutV3Test",
+      "ordinary512AndExactBudgetHaveBoundedPhysicalSegments"
+    ],
+    [
+      "ama.storage.s3.S3LayoutV3Test",
+      "credentialAndTimeoutRotationRetainsFullPhysicalScopeIdentity"
+    ],
+    [
+      "ama.storage.s3.S3ProtocolTest",
+      "keyEncodingPreservesCodeUnitsPrefixesAndOrderWithoutNormalizing"
+    ],
+    [
+      "ama.storage.s3.S3ProtocolTest",
+      "nativePlannerUsesOverflowSafeCeilingAndNeverLogicalPartNumbers"
+    ],
+    [
+      "ama.storage.s3.S3ProtocolTest",
+      "admissionOneIsRejectedBeforeClientConstruction"
+    ],
+    [
+      "ama.storage.s3.S3ProtocolTest",
+      "canonicalRecordsRejectTrailingTruncatedUnknownSchemaAndNoncanonicalNumbers"
+    ],
+    [
+      "ama.task.TaskMetadataTest",
+      "unsafeProtocolCodesAreRejectedBeforePersistence"
+    ],
+    [
+      "ama.task.TaskMetadataTest",
+      "vendorIdentifiersKeepTheirBinaryIdentity"
+    ],
+    [
+      "ama.transcript.MeasuredTextTranscriptParserTest",
+      "reportsAllDecodedUnitsAndBytesWithoutChangingLegacyResult"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "nulFailsExplicitlyWithoutDroppingIt"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "rejectsWrongHashIncludingChangedBomOrLineSeparators"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "cancellationBeforeReadingDoesNotTouchCallerStream"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "interruptedReadRestoresInterruptFlagWithoutExposingSourceDetails"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "readFailuresAreTypedSafeAndDoNotCloseCallerStream"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "streamRemainsCallerOwnedAfterSuccessAndHashFailure"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "byteBudgetReadsAtMostOneOverflowSentinel"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "cancellationAfterReadStopsBeforeAnotherReadAndNeverReturnsPartial"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "threadInterruptionIsPreservedAndPreventsRead"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "stableIdsRepeatButChangeWithFileOrExactSourceBytes"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "invalidArgumentsFailBeforeAnyIo"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "rejectsMalformedTruncatedAndLegacyUtf8WithoutPartialSuccess"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "delimitersAcrossBufferBoundariesDoNotRenumberBlankLines"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "matchingBytesWithoutConfirmedEofStillFailOnReadError"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "explicitBudgetsAcceptExactBoundaryAndFailOneOverWithoutTruncation"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "linesBeyondOneReadBufferRetainExactUnicodeWithoutSourceBuffering"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "preservesUnicodeSpacesAndPhysicalLinesWithoutInferringPeopleOrTimes"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "emptyAndJavaWhitespaceOnlyAreNoText"
+    ],
+    [
+      "ama.transcript.TextTranscriptParserTest",
+      "splitMultibyteCharactersAndMixedDelimitersWorkWithSingleByteReads"
+    ],
+    [
+      "ama.api.DeploymentConfigTest",
+      "allFourDatabaseStorageCombinationsAreIndependent"
+    ],
+    [
+      "ama.api.DeploymentConfigTest",
+      "localStartsWithoutS3Credentials"
+    ],
+    [
+      "ama.api.DeploymentConfigTest",
+      "invalidConfigurationRejectedWithoutEchoingSecrets"
+    ],
+    [
+      "ama.api.DeploymentConfigTest",
+      "readinessFailsWhenDatabaseUnavailable"
+    ],
+    [
+      "ama.api.DeploymentConfigTest",
+      "untrustedNetworkCannotReadHealthAndForwardedHeadersAreIgnored"
+    ],
+    [
+      "ama.api.DeploymentConfigTest",
+      "readinessRecoversFromRealDatabaseOutage"
+    ],
+    [
+      "ama.api.DeploymentConfigTest",
+      "s3RejectsEachMissingRequiredFieldAndMalformedEndpoint"
+    ],
+    [
+      "ama.api.DeploymentConfigTest",
+      "healthIsNotExposedOnPublicListener"
+    ],
+    [
+      "ama.api.DeploymentConfigTest",
+      "s3MissingEndpointRejected"
+    ],
+    [
+      "ama.api.FileConfigurationTest",
+      "productionAssemblyRejectsHttpEvenWithValidManagedIdentity"
+    ],
+    [
+      "ama.api.HttpRevisionTokensTest",
+      "tokenOnlyRosterCommandPreservesEveryLongBit"
+    ],
+    [
+      "ama.api.IdentityContractsTest",
+      "invalidActorCannotEnterAuthorizationBoundary"
+    ],
+    [
+      "ama.api.IdentityContractsTest",
+      "sessionTimestampsTruncateInsteadOfRound"
+    ],
+    [
+      "ama.api.IdentityContractsTest",
+      "actorCannotCarryMutablePrivileges"
+    ],
+    [
+      "ama.api.IdentitySecurityTest",
+      "cookieUsesHostBoundaryAndNeverExposesCsrf"
+    ],
+    [
+      "ama.api.IdentitySecurityTest",
+      "productionIssuerCannotIssueEvenWithValidLocalIdentity"
+    ],
+    [
+      "ama.api.IdentitySecurityTest",
+      "sessionDiagnosticsRedactSecretsAndTruncateIssuedExpiry"
+    ],
+    [
+      "ama.api.IdentitySecurityTest",
+      "opaqueOrNonOriginConfigurationIsRejected"
+    ],
+    [
+      "ama.api.IdentitySecurityTest",
+      "databaseFailureProducesSafeUnavailableBusinessError"
+    ],
+    [
+      "ama.api.IdentitySecurityTest",
+      "testModeConfigurationCannotStartProductionAssembly"
+    ],
+    [
+      "ama.api.TranscriptWireTest",
+      "escapedResponseAcceptsExactBytesAndRejectsOneLess"
+    ],
+    [
+      "ama.api.TranscriptWireTest",
+      "exactUnicodeAndLongTokenWithNormalizedMarks"
+    ],
+    [
+      "ama.api.TranscriptWireTest",
+      "duplicateUnknownTrailingScalarAndInvalidTokenRejected"
+    ],
+    [
+      "ama.api.TranscriptWireTest",
+      "unknownLengthStopsAtSingleOverflowSentinelAndDeclaredExcessDoesNotRead"
+    ],
+    [
+      "ama.contract.MinutesFactBudgetTest",
+      "artifactCaptureRefusesSmallMaximumAndRemainingBeforeOwnedBytesExist"
+    ],
+    [
+      "ama.contract.MinutesFactBudgetTest",
+      "catalogSnapshotAlsoChecksItsBoundBeforeDefensiveCopy"
+    ],
+    [
+      "ama.contract.MinutesFactBudgetTest",
+      "factBagChecksCallerLimitBeforeAnyLargeDefensiveCopy"
+    ],
+    [
+      "ama.contract.MinutesFactBudgetTest",
+      "artifactReusesBoundedIsolatedCaptureWithoutExposingMutableArray"
+    ],
+    [
+      "ama.canonical.CanonicalValueCodecTest",
+      "literalPrimitiveVectors"
+    ],
+    [
+      "ama.canonical.CanonicalValueCodecTest",
+      "cancellationDuringScanSortAndHashNeverReturnsSuccess"
+    ],
+    [
+      "ama.canonical.CanonicalValueCodecTest",
+      "unsignedUtf8SortPreservesListOrderAndExactControls"
+    ],
+    [
+      "ama.canonical.CanonicalValueCodecTest",
+      "everyCanonicalBudgetBoundaryAndPlusOne"
+    ],
+    [
+      "ama.canonical.CanonicalValueCodecTest",
+      "frozenEntriesRejectDuplicateBeforeConversionAndRejectLoneSurrogates"
+    ],
+    [
+      "ama.minutes.contract.FinalAndCoverageTest",
+      "newTargetOrHashInvalidatesReviewAndMissingFinalInputFails"
+    ],
+    [
+      "ama.minutes.contract.FinalAndCoverageTest",
+      "latestContraryExactScopeWinsAndPartialReviewsNeverGiveWholeCredit"
+    ],
+    [
+      "ama.minutes.contract.FinalAndCoverageTest",
+      "independentFullFinalProjectionAndFrozenMembershipIgnoresLaterReview"
+    ],
+    [
+      "ama.minutes.contract.GenerationFingerprintTest",
+      "fixedFenceChangesDigestAndRowBaseMustMatch"
+    ],
+    [
+      "ama.minutes.contract.GenerationFingerprintTest",
+      "completeIndependentEmptyGenerationVector"
+    ],
+    [
+      "ama.minutes.contract.GenerationFingerprintTest",
+      "taskVerificationRejectsCrossInputAndMissingOrConflictingHistoricalFences"
+    ],
+    [
+      "ama.minutes.contract.GenerationFingerprintTest",
+      "computeCannotPretendUninterpretedArchiveFactsAreValidated"
+    ],
+    [
+      "ama.minutes.contract.HashProfilesTest",
+      "completeIndependentConfirmationVectorAndFourMarkSetOrder"
+    ],
+    [
+      "ama.minutes.contract.HashProfilesTest",
+      "confirmationCannotClaimRawProfileChainWithoutConfiguredArchiveReader"
+    ],
+    [
+      "ama.minutes.contract.HashProfilesTest",
+      "eachSavedMarkAdditionAndRemovalChangesWholeConfirmationDomain"
+    ],
+    [
+      "ama.minutes.contract.HashProfilesTest",
+      "reviewSourcesRejectsSupportiveSubsetAndFullContentChangesTargetHash"
+    ],
+    [
+      "ama.minutes.contract.HashProfilesTest",
+      "materialReviewCannotBypassOwningRawArchiveChain"
+    ],
+    [
+      "ama.minutes.contract.HashProfilesTest",
+      "completeIndependentReviewTargetAndSourcesVectors"
+    ],
+    [
+      "ama.minutes.contract.SourceAndSupportTest",
+      "aliasesAndFullTargetsValidatedWithoutInferringTruth"
+    ],
+    [
+      "ama.minutes.contract.SourceAndSupportTest",
+      "deterministicAliasesTranscriptFirstAndExactDedup"
+    ],
+    [
+      "ama.minutes.contract.SourceAndSupportTest",
+      "scalarAnchorHashesWholeTextAndFormatsCanonicalAscii"
+    ],
+    [
+      "ama.minutes.contract.SourceAndSupportTest",
+      "backgroundOnlyActionsStayUnsupportedAndSuggestionsNeverAcceptIdentity"
+    ],
+    [
+      "ama.minutes.contract.SourceAndSupportTest",
+      "unitMembershipUsesSavedPhysicalParagraphGapsAndVersion"
+    ],
+    [
+      "ama.minutes.contract.SourceAndSupportTest",
+      "syntheticAudioVersionHasNullMaterialAndParserFields"
+    ],
+    [
+      "ama.minutes.contract.SourceAndSupportTest",
+      "danglingDuplicateRangeAndPartialScopeNeverSucceed"
+    ],
+    [
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "completeIndependentOccurrenceGraphPreservesBothLabelsAndEitherParserHash"
+    ],
+    [
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "cycleBudgetAndCancellationApplyAcrossAllOrigins"
+    ],
+    [
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "suppliedMembershipMustBeExactBijection"
+    ],
+    [
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "artifactFactBudgetCountsUniqueAcquisitionAndRefusesWholeSnapshotExcess"
+    ],
+    [
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "onePhysicalLocatorKeepsBothActualNoteInputsAndParserContexts"
+    ],
+    [
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "orphanStoredMembershipCannotBeIgnoredAsAnUnrelatedUsage"
+    ],
+    [
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "ordinaryCopiedLocalElementNeverAcceptsAttractiveHistoricalInput"
+    ],
+    [
+      "ama.minutes.contract.StoredSourceGraphTest",
+      "ambiguousPinnedParserSelectionRejectsInsteadOfChoosingOrder"
+    ],
+    [
+      "ama.transcript.BatchFingerprintTest",
+      "verifyComparesActualBatchFingerprintAndReturnsComputedValue"
+    ],
+    [
+      "ama.transcript.BatchFingerprintTest",
+      "literalVectorMatchesIndependentBytes"
+    ],
+    [
+      "ama.transcript.BatchFingerprintTest",
+      "orderAndEveryIdentityFieldAffectDigest"
+    ],
+    [
+      "ama.transcript.BatchFingerprintTest",
+      "canonicalBudgetsAndCancellationNeverReturnSuccess"
+    ],
+    [
+      "ama.transcript.BatchFingerprintTest",
+      "verifyRejectsMissingExtraDuplicateForeignAndContradictoryMetadata"
+    ],
+    [
+      "ama.transcript.BatchFingerprintTest",
+      "invalidOrIncompleteMembersFailClosed"
+    ],
+    [
+      "ama.transcript.SavedTranscriptBudgetTest",
+      "explicitDisabledDeclarationIsNotAnInstalledZeroPendingReader"
+    ],
+    [
+      "ama.transcript.SavedTranscriptBudgetTest",
+      "canonicalEncodedNodesAndContainersRejectBeforeRowOrTextAllocation"
+    ],
+    [
+      "ama.transcript.SavedTranscriptBudgetTest",
+      "supplementaryUtf16AccumulatesAcrossAcquisitionsBeforeTransfer"
+    ],
+    [
+      "ama.transcript.SavedTranscriptBudgetTest",
+      "futureDomainsCannotBecomeInstalledThroughAnEmptyNoOp"
+    ],
+    [
+      "ama.transcript.SavedTranscriptBudgetTest",
+      "copyAndEscapedResponseReservationsPrecedeAllocation"
+    ],
+    [
+      "ama.transcript.TranscriptImportProducerTest",
+      "independentProducerGoldenPreservesLongBitsAndEverySemanticField"
+    ],
+    [
+      "ama.storage.ContractFixtureTest",
+      "unknownBackendSelectorCannotSilentlyRunLocalInstead"
+    ],
+    [
+      "ama.support.ContractClientTest",
+      "preservesStatusAndJsonBodyAcrossRealHttp"
+    ],
+    [
+      "ama.support.ContractClientTest",
+      "rejectsCrossOriginRequestsBeforeSendingHeaders"
+    ],
+    [
+      "ama.worker.PreparedWorkerLoopTest",
+      "selectedRenewalDrainsBeforeCompletionEntry"
+    ],
+    [
+      "ama.worker.PreparedWorkerLoopTest",
+      "ordinaryCompletionFailureNeverStartsSecondCompletion"
+    ],
+    [
+      "ama.worker.PreparedWorkerLoopTest",
+      "closeWhileCompletionWaitsSuppressesCallback"
+    ],
+    [
+      "ama.worker.PreparedWorkerLoopTest",
+      "preparationFinishesBeforeSingleQueueOwnedCallback"
+    ],
+    [
+      "ama.worker.PreparedWorkerLoopTest",
+      "nullPreparedCallbackHasOneQuarantineCompletion"
+    ],
+    [
+      "ama.worker.PreparedWorkerLoopTest",
+      "preparationFailureHasOneQuarantineCompletion"
+    ],
+    [
+      "ama.worker.PreparedWorkerLoopTest",
+      "lostHeartbeatSuppressesPreparedCallback"
+    ],
+    [
+      "ama.worker.PreparedWorkerLoopTest",
+      "otherQueueImplementationsRejectAtomicEffectsWithoutRunningThem"
+    ],
+    [
+      "ama.worker.PreparedWorkerLoopTest",
+      "preparedCompletionFailureNeverStartsSecondCompletion"
+    ],
+    [
+      "ama.worker.WorkerLoopTest",
+      "independentHeartbeatRunsDuringBlockedHandler"
+    ],
+    [
+      "ama.worker.WorkerLoopTest",
+      "boundedPoolStartsSecondHandlerOnlyAfterFirstReturns"
+    ],
+    [
+      "ama.worker.WorkerLoopTest",
+      "blockedCpuHandlerDoesNotConsumeIoCapacity"
+    ],
+    [
+      "ama.worker.WorkerShutdownTest",
+      "firstBackendFailureStillClosesSecondBackendOnce"
+    ],
+    [
+      "ama.worker.WorkerShutdownTest",
+      "interruptedFirstBackendFailureStillClosesSecondBackendOnce"
+    ],
+    [
+      "ama.worker.WorkerShutdownTest",
+      "failedAbortStillCancelsAllExecutionsAndClosesBackendOnce"
+    ],
+    [
+      "ama.worker.WorkerShutdownTest",
+      "interruptedCloseStillCleansUpAndPreservesInterruption"
+    ]
+  ],
+  "XMLSeals": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "bytes": 17634,
+      "sha256": "acd0c55c9a024aaccb3f99d83b95aa22691afc1eb05a50bf482af40046b62961"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "bytes": 20489,
+      "sha256": "8a00fd65558147230e9d1811738a8676461bca66bf5957b7bb59d4bffc003e0c"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "bytes": 18802,
+      "sha256": "3faee0422d16893771bd7a5f014fdd671912c7a6a20bed11f20d1d299f686213"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.ConfigBindingsTest.xml",
+      "bytes": 17803,
+      "sha256": "ce74ee49c18ae2296f99fb9d80d82fd3b0b51ba6c30438cf7f5f4280d8f0fafa"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "bytes": 17681,
+      "sha256": "6d261620d0f78b03e135838d916994305caa4bca93213ba98795be3956d8b1d4"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.DraftConfirmationHashTest.xml",
+      "bytes": 17275,
+      "sha256": "6fc9cbe94aabf00ee9d00f240efbf98d76c0e7c5390a2c6dfd24e8aecc971359"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.RawHashChainTest.xml",
+      "bytes": 20394,
+      "sha256": "3f1bc291f8ae1893180b423dbbaed0a5345d81468c78215918c7309f8c5201a7"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.config.json.SavedTranscriptAdmissionTest.xml",
+      "bytes": 17108,
+      "sha256": "7e86a7620e1ea765a88a7f5ca5f15aedfed8915f0819d4df09210268a3da52fe"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "bytes": 19054,
+      "sha256": "11fd1b5bf1499eb1d6e21abdd9468cb98f10ef3e81347724fe79297c2b7a3683"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "bytes": 17875,
+      "sha256": "54b86a24b1d369e01a3a598bdbeb15e981c615c8e9c09092472861084508de54"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.DeadlineInputStreamTest.xml",
+      "bytes": 16953,
+      "sha256": "85372384b6987845f5f33ad5adb34a8a7a3d03951ad556457faa167ba0cc0581"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.FileBackendDefinitionsTest.xml",
+      "bytes": 17121,
+      "sha256": "4e134703b72a11421573e7384250756c85d3d120d0b68502fefe3c2a37caa8b2"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "bytes": 17358,
+      "sha256": "8d355a6821eac23b48edaf444b0fde06f1321b846251f757b4987bc1decfff6d"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.SourceReadLifetimeTest.xml",
+      "bytes": 17853,
+      "sha256": "48e6610fbb7e0fde4be57d46bec297563fdb0aed7846a77de50b8beb5b51f6b5"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.StorageRouterTest.xml",
+      "bytes": 17810,
+      "sha256": "fe113ee4670eeb0026c95a355e4e725cdae696ee5e3e77f586173a7a47a72dc5"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "bytes": 17505,
+      "sha256": "07ead8e07c1e0e22a587aea28c8c4b509d162e458ed20efb37a112d307ab44e2"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "bytes": 17374,
+      "sha256": "49d88610a0730d12f8b81b4dd3b33ead8b5fa3956e8416d4368719ad9f7230b6"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.task.TaskMetadataTest.xml",
+      "bytes": 17049,
+      "sha256": "342443084ea642793b894fe50270f39d1c723e3e36490ca6bbfdaebdf899c924"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.transcript.MeasuredTextTranscriptParserTest.xml",
+      "bytes": 16991,
+      "sha256": "12b63a27c4e3421da40a849fd08af36edbe70783149e5add04f925f3b6567d0f"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/adapters-TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "bytes": 19474,
+      "sha256": "a0aefd287c5aca9f408e69d440c315a735d8f8c6dcf1251ee39e5b10dc20502a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.DeploymentConfigTest.xml",
+      "bytes": 34210,
+      "sha256": "28027d520485dbe27982ca475942e979450fa71a1a797b4ac6e4ee859ebfea10"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.FileConfigurationTest.xml",
+      "bytes": 33285,
+      "sha256": "dd92617576c0b60540ddc4be6bf9f0637053ceeba54140947621a93cc85cd7cf"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.HttpRevisionTokensTest.xml",
+      "bytes": 34095,
+      "sha256": "e8944f105a4c66824ddb311d3eee2fbfce1b1f705940813185f2465d3ccd162c"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.IdentityContractsTest.xml",
+      "bytes": 33498,
+      "sha256": "f1bd8da7d68f7a6033bee5613d7a9725fc8d54e6cc3439d0f7f4a4aadf2512aa"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.IdentitySecurityTest.xml",
+      "bytes": 33894,
+      "sha256": "59373235bf6be3a2ef59987b8e00d1266584826503c349623f84ec9a796380ab"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/api-TEST-ama.api.TranscriptWireTest.xml",
+      "bytes": 33659,
+      "sha256": "4222acfa7df4814cacf197a5091df94083834024c82b353cbf61f6d438bbe571"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/contracts-TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "bytes": 7916,
+      "sha256": "253d6c033664922092b895acfe3513f1c563ee04f98aac4e2e269d4bd7043a4c"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "bytes": 8128,
+      "sha256": "c9bfdd6f05d0c98657aebfd235b59124035a3c0701e1dab776287e3f60a49c35"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "bytes": 7932,
+      "sha256": "99f4ef9c65f01fcfde088212165d805460834237d41250840ad60fb934a54d18"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "bytes": 8069,
+      "sha256": "71bb33db55c449b4b66614c6706bad5085acbcf3896625d72eccfe767930a72b"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "bytes": 8330,
+      "sha256": "d93c521f2f08f72579ecca2c7fb141959c36250f7e4787d1da89beaa1cf11bbe"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "bytes": 8473,
+      "sha256": "61a800d1a1b3a88d2caaddb00c83a73bf2a5bb6854d4cc869d8b72d4e8cd2e2f"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "bytes": 8661,
+      "sha256": "32910154a6ab35adeed44e7f820752679602982d5091fde0380205c876559d4c"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.transcript.BatchFingerprintTest.xml",
+      "bytes": 8251,
+      "sha256": "3b20c472299755201d7ea21349717e106423b6bffe100d5e41d8e9c9df2a2e2c"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.transcript.SavedTranscriptBudgetTest.xml",
+      "bytes": 8205,
+      "sha256": "ab3eeaeb39a27618490668daab8742d7862917b05ee186a9edfce26d03338980"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/core-TEST-ama.transcript.TranscriptImportProducerTest.xml",
+      "bytes": 7632,
+      "sha256": "f9988b6dd41b5cf3d104f8236a5920cc422a7a4b81e2d4470ed5fd8c86cb75c1"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/integration-tests-TEST-ama.storage.ContractFixtureTest.xml",
+      "bytes": 33214,
+      "sha256": "b25a93e6bc5902707c36874434990085a0f0f842f150fd87d99af2042a56bb9e"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/integration-tests-TEST-ama.support.ContractClientTest.xml",
+      "bytes": 33384,
+      "sha256": "705db124a4ee7391485a7e366a380ca224f30e2fc961cec1aef9daaa7d5f54c5"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/worker-TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "bytes": 18699,
+      "sha256": "c971e9bbc0cde78c1687040ac0ebde1ab77b35da6488a68edeafdeada1679369"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/worker-TEST-ama.worker.WorkerLoopTest.xml",
+      "bytes": 17375,
+      "sha256": "08f8080d55231a11bbb7ad865a2d442adeac953c70aac217d96f311c492ecd63"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/fix01/final-unit/worker-TEST-ama.worker.WorkerShutdownTest.xml",
+      "bytes": 18686,
+      "sha256": "9c6239673f4c2cfe808399afd022f8714bd4116bc1d7f36ed79e5e6483649eb1"
+    }
+  ]
+}

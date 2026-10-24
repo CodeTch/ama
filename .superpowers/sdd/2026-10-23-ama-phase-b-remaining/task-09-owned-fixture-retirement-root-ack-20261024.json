@@ -1,0 +1,42 @@
+{
+  "status": "AUTHORIZED_ONCE_BOUNDED_OWN_FIXTURE_RETIREMENT",
+  "issuer": "/root/b_controlled_coordinator delegated root authority",
+  "author": "/root/b_controlled_coordinator/b09_minutes_generation",
+  "schema": "ama_t09_2d0e28ea7755_behavior",
+  "owner": "task09-2d0e28ea775540f8b3525f9344edf5f0",
+  "purpose": "Retire own unfinished test rows polluting real TRANSCRIPT_IMPORT pool before continuing actual source pipeline",
+  "allowedMutation": "durable_task.state READY to CANCELLED only, all other fields/rows preserved",
+  "syntheticConjunction": [
+    "exact captured finite task IDs",
+    "meeting owner task09-graph-*",
+    "producer_key equals task UUID without hyphens repeated twice",
+    "input_fingerprint equals a repeated64",
+    "input config_manifest exact {}",
+    "actual original complete spec and READY state unchanged"
+  ],
+  "realPipelineSeparateScope": [
+    "only exact task IDs from pipeline-source-red-01 captured original case identity",
+    "separate complete original real task/meeting/input predicate; not synthetic selector"
+  ],
+  "preconditions": [
+    "capture all full original task states/specs and exact finite IDs before mutation",
+    "prove no active attempts/external marker/permit for every affected task",
+    "own case workers/backend stopped; no concurrent heavy tests",
+    "bounded membership/count; abort on drift or unexpected active work"
+  ],
+  "execution": [
+    "one bounded transaction with per-row fullidentity/state CAS",
+    "exact rowcounts and after-state only allowed field changed",
+    "append-only newartifact before/after/command/result proof; no original raw rewrite"
+  ],
+  "prohibited": [
+    "no oldTask7/8/sharedschema",
+    "no reset/reseed/delete/drop/DDL",
+    "no task spec edits",
+    "no production queue relaxation",
+    "no generic zeroeffect/success claims"
+  ],
+  "futureFixtureFix": "new synthetic metadata fixtures use TASK09_METADATA pool/type; preserve old source snapshots and pipeline failure",
+  "qualification": "pipeline-source-red-01 original1FAIL setup/isolation issue remains, not businessRED or product failure proof; corrected actual pipeline still must run",
+  "rulingCostIfWrong": "bounded own test-work retirement with preserved preimages requires controlled fixture repair; no adopted or production data involved"
+}

@@ -1,3 +1,19 @@
+# 最新权威状态：用户暂停 — 2026-10-25 06:35:07 Asia/Shanghai
+
+用户要求停止开发并精准交接，当前开发已暂停。先读[最新暂停与接续文档](/home/tanren/ama/.worktrees/phase-b-completion/docs/acceptance/development-pause-b-remaining-2026-10-25.md)，再读产品树W/current-state.json。当前HEAD `ba48f35e7ef97c1e162a2d373453bd1e9689529c`，Task1–10已采用，Task11 replacement fix round1未完成/未复审，独立gate 0C/5I/0M、SEND DENY；原READY/PREPARED no2禁止claim/send。新隔离库16迁移已通过，不重跑。首接续先定位generic-external回归1FAIL，然后补fix01真实隔离边界和同reviewer复审，继续全部Task11→12→13。Task12仅静态准备，Task13未完成；旧ACTIVE/迁移待跑/早期RED仅历史。主树仅文档发现入口，不merge/push，不进C/D/E/F。
+
+文档校验补充：state旧pause_*、next_steps、44727及B00-1.6字段已规范化；generic失败窗源码与当前源码不同，尚无当前GREEN。详见最新暂停文档“文档校验补充”，开发继续暂停。
+
+---
+
+# CURRENT Task11 StageB activated 2026-10-25
+
+Actual fixture ACK task-11-root-fixture-application-ack-20261025.json; owner task11-9714255c9e2c4861a2795cfaaec8e97f/schema ama_t11_9714255c9e2c_behavior/46151. New author b11_final_publication installs frozen V013_4 exact bytes, normal full16/rerun0/currentmodels then complete R1; oldprobe29PASS reused. SourceBASEba48/Task10source8677. No oldschema mutation; all oldUNKNOWN and finalobligations remain.
+
+# ACTIVE current node: Task11 StageA final repin
+
+Task10adoptedba48f35e7ef97c1e162a2d373453bd1e9689529c/source8677794; actualconsumerACK task-10-consumer-activation-root-ack-20261025.json issued. Newsoleauthor b11_final_publication startsStageAonly under task-11-activation-author-brief-20261025.md. ReuseadoptedR1/design/preflight/exactSQLprobe29PASS; finalsource/resource/15prefixrepin thencontrollerfreshfixture/formalversionfreeze/applicationACK beforeStageB. NoDDL/helper/test/product now. Currentownedport46151, old44727history. M1Task11/F5Task13/legacyintegrityrisk/twoUNKNOWNremainexplicit. Finish11→12→13thenstopB.
+
 # ACTIVE current node: Task10 fix1 scoped review
 
 FixHEAD86777940c3f9500b1b89d884deaae2a48740d9a9/BASE5657. SameuniqueAstra b10_independent_review reviewsI1/I2+directregression only; sameSol finalcommit/OIDdelta. Noextra tests/fullTask10review. Awaitgates→minimaladoption/consumerACK→Task11 preparedactivation; iffindingssameauthorfixloop. M1/F5/legacyintegrityrisk/twoUNKNOWNOPEN. Currentoverlay46151.

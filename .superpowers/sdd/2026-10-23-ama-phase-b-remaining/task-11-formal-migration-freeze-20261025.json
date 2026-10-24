@@ -1,0 +1,103 @@
+{
+  "status": "FORMAL_VERSION_ALLOCATED_EXACT_BYTES_FROZEN_APPLICATION_PENDING",
+  "issuedUtc": "2026-10-24T16:38:22.275172+00:00",
+  "issuedBy": "/root/b_continuation_coordinator under explicit root delegation",
+  "base": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+  "migrationVersion": "013.4",
+  "destination": "backend/adapters/src/main/resources/db/migration/V013_4__publication_submission.sql",
+  "frozenFile": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-formal-migration-frozen-20261025.sql",
+  "frozenBytes": 4332,
+  "frozenSha256": "4709fc7a81fa0d3c252b2f2de165a6722d2197d7187f1ec066f1feebb9e42559",
+  "originalR1Sha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2",
+  "createBodySha256": "2a440122c9dfab25c47b0187155b5c14128c34e87392e3764c5cbf099d9f4645",
+  "createBodyByteIdentical": true,
+  "changeOnly": "Replaced prospective historical comments with formal migration comments; CREATE body exact. No product file or DB mutation.",
+  "staticReviewSha256": "721a21365a6efad55e1e9ea30e61b3979dcf914236b3149d508cc9223fb5ffd0",
+  "probeAcceptance": "task-11-isolated-probe-actual-acceptance-20261024.md",
+  "probeActualCustodySha256": "f92d9440310a1c44858ab6bc7093d56909a2b28663099a7803919ebbb425d28a",
+  "probeQualification": "Existing exact R1 engine probe 29 checks PASS reused, not repeated; five distinct parent tables/six FKs.",
+  "prefix": [
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "bytes": 709,
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "bytes": 1781,
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "bytes": 2461,
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "bytes": 1864,
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "bytes": 3795,
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "bytes": 11205,
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "bytes": 7239,
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "bytes": 35136,
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "bytes": 10941,
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "bytes": 397,
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "bytes": 21260,
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "bytes": 7661,
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "bytes": 1817,
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "bytes": 164,
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee"
+    }
+  ],
+  "pending": [
+    "StageA final manifest seal",
+    "independent helper narrow review and fresh Task11 empty-schema application receipt",
+    "separate final application/StageB ACK",
+    "sole author exact-byte migration install and current model synchronization",
+    "normal full16 migration then rerun0/history complete UTC fields"
+  ]
+}

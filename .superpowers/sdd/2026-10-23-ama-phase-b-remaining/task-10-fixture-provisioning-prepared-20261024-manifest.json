@@ -1,0 +1,43 @@
+{
+  "status": "PREPARED_UNUSED",
+  "task": 10,
+  "runtimeExecuted": false,
+  "privateInputsReadOrStatted": false,
+  "sourceHelper": {
+    "path": "task-09-fixture-provisioning-runtime-fix02-20261024.py",
+    "sha256": "14c6692710382aab0e2a47448864607f8c5e76f08f0aab9f9f51a2c113edff5f"
+  },
+  "offlineTests": {
+    "methods": 4,
+    "exit": 0
+  },
+  "files": [
+    {
+      "path": "task-10-fixture-provisioning-prepared-20261024.py",
+      "bytes": 19813,
+      "sha256": "c624807461392d0844a299ff73ef1cea64cb76aa39cc43846a973c068c86fa18"
+    },
+    {
+      "path": "task-10-fixture-helper-offline-20261024.py",
+      "bytes": 11251,
+      "sha256": "021f03d18304fde6b2428f91c07082c8d058f871f9164cf1e3d958d4c2b35cd7"
+    },
+    {
+      "path": "task-10-fixture-helper-offline-20261024.raw.txt",
+      "bytes": 571,
+      "sha256": "16c69363e5164d8e7cb2385ceefe44932bf75599c62ddc1c80870a99a78e0417"
+    },
+    {
+      "path": "task-10-fixture-provisioning-prepared-20261024.md",
+      "bytes": 9056,
+      "sha256": "1510ba8e103e5af574ef6c0cef6874da73c4ccca70a34745e09cc4c5a6cca08e"
+    }
+  ],
+  "futureGates": [
+    "actual Task9 adoption and fixed public adoption ACK",
+    "actual source/full prefix repin",
+    "independent exact helper review",
+    "one root helper invocation",
+    "separate Task10 application ACK before author bootstrap"
+  ]
+}

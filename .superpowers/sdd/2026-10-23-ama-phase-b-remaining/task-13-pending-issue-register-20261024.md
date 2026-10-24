@@ -114,3 +114,17 @@ Task13 newindependent source-risk input `task-13-mixed-profile-replay-risk-20261
 B-FINAL-REPLAY-INTEGRITY-01 OPEN mandatoryTask13: currentfix1 source SavedTranscripts53/59/92-93 (integrityorigins185/187), InitialSettings64, GenerationCommands22, ProcessingIntake76; initialacceptedmiss→realPROFILEintegrityfailure→concurrentsamekeywinner canbeallowedbyinheritedordinaryclassifiers. Directcodesetsread, percalleractualreachability/severitypendingfinalreview. Exactnote task-13-mixed-profile-replay-risk-20261025.md, separateF5.
 
 Task10 accepted source86777940c3f9500b1b89d884deaae2a48740d9a9: originalreview0C2I1M thenfix1same-reviewerI1/I2ADDRESSED/scopedSPEC PASS/qualityApproved,0newC/I. M2reportwording correctedonlyby task-10-fix01-m2-report-erratum-20261025.md; sealedoriginalunchanged. M1Task11staticeligibility,Task9F5, B-FINAL-REPLAY-INTEGRITY-01 andtwoUNKNOWNs remainexplicitOPEN. SameSol finaldelta0mechanicalissueswithscopelimits. Minimaladoptionrecords/consumerACKnext→Task11StageA; notfinalB/combinedruntime.
+
+## Task11 original marked cancellation — OPEN, 2026-10-25
+
+Original publication `efeb66ad-3275-4b31-aaaf-0e17af967000`, task `f4d7a0f7-5a78-45c6-918d-9cfa6d7d09dd`, execution `07327d2f-3b2f-4bc1-ba6d-f9f03246d08a`, operation `4e24a34b-af73-4910-8c34-ccd3f8b086a1`, original window `publication-original-main-02`. Genuine accepted task/Task7 marker, then fixture treated RECONCILING as done and closed worker (CANCELLED). Original provider PID=PGID142211/127.0.0.1:46287/storeInstanceId98863bbd-a519-4553-9a09-1246ab221ec9 and original Task11 runtime/knowledge.sqlite/keys retained. SQLite execution/document/slot currently0 is scoped observation, never NOT_SENT/NO_EFFECT. Exact authenticated original GET/product observation pending; no resend/newexecution/cleanup. Root requires complete narrow waiting/timeout/worker-provider shutdown review plus purestate sequences before any newbusiness. Originalfailure and originalrequest evidence remain, laterfreshcase cannot close this fact.
+
+Task11 originalmarked fact nowhonestlyUNKNOWN/APPLIED by publication-original-get-02 actual1PASS; taskstillRECONCILING/noeffectfieldsNULL. RemainsOPENmanual, separateTask10twoUNKNOWN. ExactIDs/custody/sourceonly-no-transportcounterlimit in task-11-original-publication-unknown-disposition-20261025.md. NewPOSThold pendingcompleteintegration+waiter narrowreview; laterfreshhappycase cannotcloseoriginal.
+
+
+## User pause 2026-10-25T06:35:07.851091+08:00
+
+Task11 fix01 generic external regression OPEN: replacement-fix01-generic-external 1FAIL expected0/actual2, cause undiagnosed. Independent I1–I5 0C5I0M still open until scoped review. Isolated normal16 bootstrap completed1PASS; do not reprovision. See docs/acceptance/development-pause-b-remaining-2026-10-25.md / current-state pause. User stop overrides old ACTIVE markers.
+
+
+Document audit: generic regression original test source6c241fe9 differs current89ccd38d (8paths changed by bootstrap); original cause undiagnosed/no currentGREEN. Explicit carry-forward table in latestpause includes T7CV04/T4SR04-06/T6SR03/T11PROBEM1/T8HIST/Q01Q02/optional and all priorUNKNOWN. No closures by documentation.

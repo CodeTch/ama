@@ -1,0 +1,14 @@
+package ama.storage;
+import java.nio.file.*;import java.util.*;import org.junit.jupiter.api.*;import static org.junit.jupiter.api.Assertions.*;
+/** Real grant revocation after signed destination authorization, before exact authenticated POST. */
+class Task11ZeroEffectIT extends Task11FinalPublicationIT {
+ Task11ResponseLossFixture revocation;
+ @AfterEach void closeRevocation()throws Exception {if(revocation!=null)revocation.close();}
+ @Override Task11KnowledgeFixture knowledgeFixture()throws Exception {var fixture=new Task11KnowledgeFixture(receipt,owner);revocation=new Task11ResponseLossFixture(fixture,receipt,"REVOKE_BEFORE_PUBLISH",owner);return fixture;}
+ @Override int knowledgeClientPort(){return revocation.port;}
+ @Override Task11PublicationWaiter.Decision expectedPublicationDecision(){return Task11PublicationWaiter.Decision.TERMINAL_FAILURE;}
+ @Override void runPublication(Map<String,Object> accepted)throws Exception {
+  super.runPublication(accepted);String task=(String)accepted.get("taskId"),publication=(String)accepted.get("publicationId");var actual=revocation.read();assertEquals(1,actual.get("postPublication").asInt());assertEquals(0,actual.get("get").asInt());assertEquals(0,actual.get("failures").asInt());assertEquals("FAILED",actual.get("receipt").get("state").asText());assertEquals("DEFINITIVE_REJECTION",actual.get("receipt").get("noEffectBasis").asText());assertTrue(actual.get("receipt").get("permanentRejection").asText().contains("."));var execution=j.queryForMap("SELECT id,operation_id,execution_no,state,no_effect_basis,no_effect_evidence,no_effect_verified_at FROM external_execution WHERE task_id=?",task);assertEquals("FAILED",execution.get("state"));assertEquals("DEFINITIVE_REJECTION",execution.get("no_effect_basis"));assertTrue(((String)execution.get("no_effect_evidence")).startsWith("knowledge:"));assertNotNull(execution.get("no_effect_verified_at"));assertEquals(execution.get("id"),actual.get("receipt").get("executionId").asText());assertEquals("FAILED",j.queryForObject("SELECT state FROM publication WHERE id=?",String.class,publication));assertEquals("PUBLISH_FAILED",j.queryForObject("SELECT stage FROM meeting WHERE id=?",String.class,meeting));assertEquals(0,j.queryForObject("SELECT ever_published FROM meeting WHERE id=?",Integer.class,meeting));assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM external_document_mapping WHERE publication_id=?",Integer.class,publication));assertEquals("FAILED",j.queryForObject("SELECT outcome FROM publication_attempt WHERE publication_id=?",String.class,publication));revocation.settled=true;
+  Files.writeString(receipt.resolve("actual-permanent-rejection.json"),json.writeValueAsString(Map.of("accepted",accepted,"execution",execution,"provider",actual,"traffic",ama.api.Task11RuntimeProbe.publication(app).traffic(),"qualification","actual authenticated signed durable rejection; no inferred absence/timeout/HTTP error proof")));
+ }
+}

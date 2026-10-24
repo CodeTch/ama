@@ -1,10 +1,10 @@
 {
   "schema_version": 2,
-  "updated_utc": "2026-10-24T16:25:32.999112+00:00",
+  "updated_utc": "2026-10-24T23:20:53.460481+00:00",
   "objective": "Complete all remaining local controlled Phase B tasks with subagents/tests/independent review/records, then deliver. Do not stop after a slice.",
-  "latest_user_instruction": "superpowers:using-superpowers 继续任务 — resumed full remaining B; stop after B, no C/D/E/F.",
-  "pause_request_active": false,
-  "status_precedence": "Latestuser continuation ACTIVE. Task9adopted97e788fe. Task10running aftersameCID OOMrecovery, effectiveport46151/recoveryoverlay+ACK supersedeold44727runtime assumptions; oldpause/Task9RED/oldports arehistory.",
+  "latest_user_instruction": "将代码合并main、提交并推送GitHub；仅Git整合，功能开发仍暂停。",
+  "pause_request_active": true,
+  "status_precedence": "Explicit user Git merge/push authorization supersedes old no-main/no-push wording; feature work remains PAUSED. See integration record and live Git HEAD; old pause_head fields describe pre-integration snapshot.",
   "historical_state_archive": {
     "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-normalization-20261024.json",
     "sha256": "599708de6497fe18816d9e1b34d636858e883b127e7c869dfa3c1dbc7a9c159b",
@@ -14,72 +14,161 @@
   "branch": "codex/phase-b-completion-20261023",
   "canonical_plan": "docs/superpowers/plans/2026-10-23-ama-phase-b-remaining.md",
   "ledger": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
-  "active_context": "resume-20261024-active-context.md (latest ACTIVE continuation header authoritative)",
-  "last_root_commit": "97e788fe96744af88513cc33bfed652b204c9972",
+  "active_context": "resume-20261024-active-context.md (latest user-pause header; canonical entry is pause_handoff)",
+  "last_root_commit": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
   "task6_base": "80c878f52c7b748efdcdb64e707d50cf410843b4",
   "primary_main_last_observed_head": "c71a44adb679a78d4c28dde7a4223aad1a23b40f",
   "primary_scope": "Only exact discovery handoff/resume docs uncommitted; product/mainmerge/push not authorized in this continuation; verify actual main before later precise doc update.",
-  "execution_status": "ACTIVE_TASK10_ADOPTION_RECORD_COMMIT",
+  "execution_status": "PAUSED_USER_REQUEST_TASK11_REPLACEMENT_FIX01",
   "active_implementation": {
-    "task": 10,
-    "status": "COMPLETE_SOURCE_ACCEPTED_RECORD_COMMIT_PENDING",
+    "task": 11,
+    "status": "PAUSED_USER_REQUEST_FIX01",
     "productActivated": true,
-    "agent": "/root/b_continuation_coordinator/b10_minutes_editor",
-    "brief": "task-10-activation-author-brief-prepared-20261024.md",
-    "base": "97e788fe96744af88513cc33bfed652b204c9972",
-    "sourceTask9": "591545a4a1a4ce27edea54baa94e9d11666807b7",
-    "stage": "B full adopted Task10 implementation",
-    "current_milestone": "I1/I2independentscopedPASS/Approved; M2erratumwritten, finalmechanical0issues. MinimalTask10adoptionrecords/exactprivate stageproof/commit thenactualconsumerACK→newTask11StageA.",
-    "resumeFirst": "Await same-reviewer scopedverdict andmechanicalfinaldelta; ifpass minimalTask10adoption/consumerACK thenTask11. No extra tests/fullreview. PreserveM1/F5/newlegacyintegrityrisk/twoUNKNOWN.",
-    "fixtureAck": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-root-fixture-application-ack-20261024.json",
-    "fixtureAckSha256": "808a552c4afbfdb77e9663979ba44f6068f11b6af7611adb633af4bbd2991df3",
-    "privateEnv": ".tools/task10-1e48b41fc5c84a98af3a14b51b17884f/mysql-recovery-20261024/env.sh",
-    "protected": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-protected-adopted-inputs-20261024.json",
-    "bootstrapEvidence": "artifacts/phase-b/b-remaining/task-10/bootstrap-01",
-    "bootstrapControllerProof": "task-10-bootstrap-controller-check-20261024.json",
-    "writerCoverage": "task-10-implementation-report-20261024.md Actual shared PENDING writer coverage (author maintains only actual states)",
-    "reviewContext": "task-10-review-context-live-20261024.md",
-    "originalPrivateEnv": ".tools/task10-1e48b41fc5c84a98af3a14b51b17884f/env.sh",
-    "recoveryAck": "task-10-mysql-recovery-application-ack-20261024.json",
-    "recoveryAckSha256": "096cbdc38cb350b756c6958a0982d31277e4f0a4bc2f7a10e4f24fd1fc40b767",
-    "pendingF2Facts": {
-      "window": "artifacts/phase-b/b-remaining/task-10/f2-behavior-02",
-      "active": {
-        "task": "e81686bc-dbf6-4102-80ee-07ffa1eff6c6",
-        "execution": "7154f2fd-e931-4218-a87c-94dfc6d6ba68",
-        "operation": "447bc5a3-9953-4ba5-8768-646f9e8041c1",
-        "permit": "622be833-7e7c-4cff-8bda-2951145e9a08",
-        "source": "pipeline-7042c9fb-7637-43d5-b1da-856331cca13f/f2-real-multiversion-marker.json",
-        "observed": "Original GET terminal identity proof plus same original permit product-settled in f2-original-settlement-01 exit0/1PASS; composed evidence, original FAIL preserved",
-        "cause": "Original finite scanner assertion cause UNKNOWN; rank11/total34 rules out beyond64 guess"
+    "agent": "/root/b_continuation_coordinator/b11_final_publication",
+    "brief": "task-11-activation-author-brief-20261025.md",
+    "base": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+    "sourceTask10": "86777940c3f9500b1b89d884deaae2a48740d9a9",
+    "stage": "B normal16migration/currentmodels then R1implementation",
+    "current_milestone": "PAUSED. Fix01 partial tests qualified; generic-external 1FAIL unresolved. Isolated bootstrap16/rerun0 actually PASS. I1-I5 not independently closed; primary no2 unclaimed/unsent.",
+    "resumeFirst": "Diagnose sealed generic-external 1FAIL; isolated bootstrap already 1PASS; continue fix01 actual isolated marker/contradiction/fullbudget/currentSources then same-reviewer incremental review.",
+    "formal_migration_freeze": "task-11-formal-migration-freeze-20261025.json",
+    "fixture_ack": "task-11-root-fixture-application-ack-20261025.json",
+    "owner": "task11-9714255c9e2c4861a2795cfaaec8e97f",
+    "schema": "ama_t11_9714255c9e2c_behavior",
+    "privateEnv": ".tools/task11-9714255c9e2c4861a2795cfaaec8e97f/env.sh",
+    "bootstrap_controller_check": "task-11-bootstrap-controller-check-20261025.json",
+    "bootstrap_custody_limit": "Canonical run.py already supplied selectedXMLdelete/selector; missingwrapperbeforehash/closedinterval/log/SHA/cases only. Originalwindow unchanged; controllerposthoc+canonicalprecision documents retained, no reconstructedprestate.",
+    "collector_source_sha256": "633e3749f7fc931aaad73dc417f75784c9bb0c78e207c8fedd03ef92405afb08",
+    "knowledge_credential_ack": "task-11-knowledge-credential-root-ack-20261025.json",
+    "knowledge_credential_ack_sha256": "3f465b3e881be207cad18514682d7fb6c1082b0ec2797cf37d57db93b2575055",
+    "knowledge_first_initialization_ack": "task-11-knowledge-first-initialization-continuation-ack-20261025.json",
+    "knowledge_endpoint": "127.0.0.1:46287",
+    "knowledge_store": ".tools/task11-9714255c9e2c4861a2795cfaaec8e97f/knowledge-fixture-20261025/runtime/knowledge.sqlite",
+    "original_publication_fact": {
+      "publication": "efeb66ad-3275-4b31-aaaf-0e17af967000",
+      "task": "f4d7a0f7-5a78-45c6-918d-9cfa6d7d09dd",
+      "execution": "07327d2f-3b2f-4bc1-ba6d-f9f03246d08a",
+      "operation": "4e24a34b-af73-4910-8c34-ccd3f8b086a1",
+      "window": "publication-original-main-02",
+      "status": "UNKNOWN/APPLIED; taskRECONCILING/noeffectfieldsNULL; manualOPEN; originalGETstopped",
+      "providerPidPgid": 142211,
+      "port": 46287
+    },
+    "original_unknown_disposition": "task-11-original-publication-unknown-disposition-20261025.md",
+    "narrow_review_r3": "task-11-integration-narrow-review-r3-20261025.md",
+    "knowledge_source_restart_ack": "task-11-knowledge-source-restart-controller-ack-20261025.json",
+    "knowledge_live_provider": {
+      "pid": 231675,
+      "pgid": 231675,
+      "port": 46287,
+      "initialize": false,
+      "sourceSha256": "cd80e61d6b338fca1627e2dc403acb15280ce504cebfe1286d62968b643efc13",
+      "store": "same original knowledge.sqlite/storeInstanceId98863bbd-a519-4553-9a09-1246ab221ec9"
+    },
+    "successful_publication_main03": {
+      "publication": "7255d632-1a01-4e55-9080-7dc173bcb499",
+      "task": "6901bb4b-d25e-4955-a8dd-6433d2ef0f69",
+      "operation": "303920e5-5718-487e-a777-18cd6a51ae30",
+      "execution": "3b2920bc-0f3e-42fd-9719-a2ee311bae28",
+      "result": "artifacts/phase-b/b-remaining/task-11/publication-main-03/result.json",
+      "qualification": "Happy publication+durable document mapping validated; exact terminal GET separately validated. Different execution lost-response same-JVM context recovery separately validated; fresh-JVM/combined runtime pending."
+    },
+    "fair_claim_unknown_ruling": "Root reaffirmed existingTask10permission: bounded realfairclaim may touch oldUNKNOWN onlysession.close with exact lease/owner/time changes recorded; noGET/observe/send/businessstate rewrite and no rowsbyteidentical claim. Target recovery only actual newoperation.",
+    "lost_response_recovery": {
+      "window": "publication-lost-response-01",
+      "publication": "646b1ec7-b388-4ee5-852b-66c5c55176f4",
+      "task": "7fa4bfa9-2224-4498-8b34-367a2a144a22",
+      "operation": "61e1611b-855c-4eea-a21f-7c4d209eece7",
+      "execution": "5753af07-070e-4ab6-b844-29d2403400b9",
+      "qualification": "Actual remote durable success/lost response/production GET recovery after same-JVM context restart; not fresh-JVM/combinedruntime qualification"
+    },
+    "knowledge_proof_source_restart_ack": "task-11-knowledge-proof-source-restart-controller-ack-20261025.json",
+    "rejected_publication_original": {
+      "publication": "368767a5-c477-40fc-8e27-13705667c5a0",
+      "execution": "0a360254-6710-442e-8c54-a07a913e2362",
+      "operation": "ccad27fc-5cf1-432b-83f8-a71341efcff5",
+      "creationWindow": "publication-zero-effect-01 entireERROR",
+      "readbackWindow": "publication-rejection-get-01 1PASS GETonly",
+      "qualification": "Real durable signed rejection and exact readback; same-publication no2 replacement acceptance only later validated, still held READY/PREPARED/no-send. No live replacement-send qualification."
+    },
+    "local_terminal_interface_ruling": "task-11-local-terminal-private-extension-ruling-20261025.md",
+    "local_hook_source_review": "task-11-local-hook-structural-read-20261025.json",
+    "replacement_source_gate": {
+      "status": "PAUSED_FIX_ROUND_1_SEND_DENY",
+      "path": "task-11-replacement-independent-source-gate-20261025.md",
+      "implementationAndOfflineTransactionValidation": "AUTHORIZED",
+      "reviewer": "/root/b_continuation_coordinator/b11_independent_review",
+      "manifest": "task-11-replacement-review-source-r1-20261025.json",
+      "manifestSha256": "b8012cc81f0e8de43f74e3cf6c4107da8f01029f8863c3cda52e02180af47109",
+      "package": "task-11-replacement-review-package-r1-20261025.diff.md",
+      "packageSha256": "3312f9fe9b262d765ae32acc119d3cbff6ebaebdb8b2f096d9b4d32e4d643421",
+      "brief": "task-11-replacement-independent-review-brief-r1-20261025.md",
+      "reviewReport": "task-11-replacement-independent-source-review-r1-20261025.md",
+      "coverage": "task-11-replacement-independent-source-coverage-r1-20261025.json",
+      "reviewReportSha256": "d8eea4beeb90ea9470d2f114a425e28d80b6440cdedfb42c87a361eecbf2f595",
+      "coverageSha256": "a3a232e267119b0c278eaa652c0c90eab6793db3040ff753292dc4308d3fca21",
+      "findings": {
+        "Critical": 0,
+        "Important": 5,
+        "Minor": 0
       },
-      "denied_initial_generation": {
-        "businessActor": "task09-e5cd2e28-8c15-479e-bc51-bea8fcb6af50",
-        "meeting": "12b75348-7f08-4396-b31d-469b51d0fb14",
-        "task": "506ac2f2-e7b9-40a4-a50e-e857cdb11c87",
-        "execution": "fd323464-54c7-4d80-ae93-ac0cd7925663",
-        "operation": "b1644b39-94d9-486a-b802-1c419972798e",
-        "input": "656bd552-ec77-42c2-aad9-1ea49c85faf7",
-        "observed": "MARKED/RECONCILING, no reservation, output/externalResult NULL; original exact endpoint/store association absent; attributable GET unavailable",
-        "status": "UNKNOWN_MANUAL_UNRESOLVED",
-        "ruling": "task-10-f2-original-unknown-custody-ruling-20261024.md"
+      "fixRound": 1,
+      "fixBrief": "task-11-replacement-fix01-author-brief-20261025.md",
+      "fixReport": "task-11-replacement-fix01-report-20261025.md",
+      "fixReportStatus": "MISSING_NOT_YET_WRITTEN"
+    },
+    "replacement_accepted_held_no_send": {
+      "publication": "368767a5-c477-40fc-8e27-13705667c5a0",
+      "task": "1a8dc6bb-2076-44d2-8ff0-aa1b5f630e27",
+      "operation": "ccad27fc-5cf1-432b-83f8-a71341efcff5",
+      "execution": "427e9751-2bca-483b-8d91-cb1711ae127c",
+      "executionNo": 2,
+      "taskState": "READY",
+      "executionState": "PREPARED",
+      "markedAt": null,
+      "taskAttempt": null,
+      "window": "publication-replacement-accept-04",
+      "sendAuthority": "DENY: gate FAIL; fixround1 and same-reviewer scoped PASS still required. No claim permitted."
+    },
+    "fix01_isolated_fixture": {
+      "status": "BOOTSTRAP_16_RERUN_0_PASS_NOT_EMPTY",
+      "owner": "task11fix1-49609b94161e4c90b6438ba683bfa3b1",
+      "schema": "ama_t11fix1_49609b94161e_behavior",
+      "port": 46151,
+      "fixtureName": "task11-fix01-isolated",
+      "ack": "task-11-fix01-root-fixture-application-ack-20261025.json",
+      "ackSha256": "35e262369af28a4d4ac70604538da152df5372ef5c286c566ebc40694650c027",
+      "privateEnv": ".tools/task11fix1-49609b94161e4c90b6438ba683bfa3b1/env.sh",
+      "helperInvocations": 1,
+      "originalHelperExit": 1,
+      "postinspectionRuling": "task-11-fix01-fixture-postinspection-ruling-20261025.json",
+      "additionalDdlInvocations": 0,
+      "migrationsAppliedAtAck": 0,
+      "providerOwner": "task11-9714255c9e2c4861a2795cfaaec8e97f",
+      "providerEndpoint": "127.0.0.1:46287",
+      "result": "artifacts/phase-b/b-remaining/task-11/replacement-fix01-isolated-bootstrap/result.json",
+      "historyProof": {
+        "path": "artifacts/phase-b/b-remaining/task-11/replacement-fix01-isolated-bootstrap/full-sixteen-history-metadata.json",
+        "initialMigrations": 16,
+        "rerunMigrations": 0,
+        "rowsBefore": 16,
+        "rowsAfter": 16,
+        "tenFieldHistoryEqual": true
       }
     },
-    "mechanicalIndex": "task-10-mechanical-sealed-window-index-20261024.json",
-    "closing02Facts": {
-      "disposition": "task-10-closing02-original-facts-disposition-20261024.md",
-      "settledTask": "5371fac5-6674-499f-9187-4505749e93f1",
-      "settledPermit": "a6c59c78-774b-42e0-b707-75c3147575b8",
-      "unknownTask": "fc5cc42c-d03d-4363-8b4d-8d4e5e87d638",
-      "unknownExecution": "0469c111-f07f-4428-acb8-3447ec0894ad",
-      "unknownOperation": "f23905a5-922b-45a0-85f5-c633f738033c",
-      "status": "AUTHENTIC_GET_UNKNOWN_MANUAL_OPEN"
-    },
-    "head": "5657d24a4a58916dfca14a29e352ad361dda3319",
-    "fixRound": 1,
-    "fixBase": "5657d24a4a58916dfca14a29e352ad361dda3319",
-    "fixBrief": "task-10-fix01-author-brief-20261024.md",
-    "fixHead": "86777940c3f9500b1b89d884deaae2a48740d9a9"
+    "unresolved_generic_regression": {
+      "window": "replacement-fix01-generic-external",
+      "totals": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "assertion": "expected0/actual2",
+      "cause": "UNKNOWN_UNDIAGNOSED",
+      "sourceWindowAudit": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-document-audit-20261025/generic-failure-source-window-comparison.json",
+      "currentSourceStatus": "CHANGED_AFTER_FAILED_WINDOW_NO_GREEN"
+    }
   },
   "completed_implementation_tasks": {
     "1": {
@@ -170,8 +259,9 @@
       "adoption_doc": "docs/acceptance/b/task-B-remaining-10-minutes-editor-adoption-20261025.md",
       "root_mirror_manifest": "artifacts/phase-b/b-remaining/controller-task10-adoption-20261025/manifest.json",
       "root_mirror_sha256": "7848254f83bebc31bc9bbd03f237155daa515e9d2089d4dc40e3f423343de782",
-      "adoption": "PENDING_ACTUAL_RECORD_COMMIT_ACK",
-      "qualifications": "ComposedF2/F3/rollback/CAS exactsources, noallgreenpretence; M1Task11,F5Task13,legacyintegrityrisk,2UNKNOWNOPEN; formalTask11missingfailclosed"
+      "adoption": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+      "qualifications": "ComposedF2/F3/rollback/CAS exactsources, noallgreenpretence; M1Task11,F5Task13,legacyintegrityrisk,2UNKNOWNOPEN; formalTask11missingfailclosed",
+      "consumer_ack": "task-10-consumer-activation-root-ack-20261025.json"
     }
   },
   "source_tasks_remaining": [
@@ -179,7 +269,7 @@
     12,
     13
   ],
-  "next_steps": "Commit exactTask10adoption records andissue actualconsumerACK → freshTask11StageA actualfinalsource/resource/15prefix repin (reuseR1probe29PASS) → formalDDLfreeze/applicationACK andimplementation →12→13/finalbranch→stopB.",
+  "next_steps": "PAUSED. On explicit 继续任务: verify pause source/resource identities read-only, diagnose generic regression at its original source vs changed current source (not green), then continue Task11 fix01 isolated boundaries/ledger/currentSources and independent scoped review before any replacement SEND; finishTask11→12→13 thenstopB. Do not repeat adoptedTasks1–10/provision/bootstrap.",
   "writer_policy": "One product writer, serialized heavy tests; coordinator bookkeeping/DDL gates only. Preserve all historical evidence/W.",
   "root_owned_dirty_paths": [
     ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
@@ -196,9 +286,9 @@
     "6": "COMPLETE12ca; onlyminorT6SR03Task12.",
     "7": "COMPLETE_ADOPTEDcff858e/sourcebdf/review22818db8; onlyCV04futureconsumers/Q01Q02historicalUNKNOWNcarry.",
     "8": "COMPLETEde1611a/sourceDA/reviewf718/custody58+6acea; FUPfairness/modelsyncclosed. MinorT8SR-M1Task13/historicalOptionalunknown retained.",
-    "10": "Adopted 875047cdbcd6ddd17f5c267f8998b7a5a4378b6c exactrawdesign/review/sharedrank; independentAstra SPEC PASS/designAPPROVED zero findings. Source/runtime gates remain.",
+    "10": "COMPLETE_ADOPTED ba48f35e/source8677794; I1I2scopedPassApproved,M2erratum; M1Task11 andotherretainedrisksexplicit",
     "9": "COMPLETE_ADOPTED source591545a4/adoption97e788fe; scopedPASS0Important, originalF5MinorTask13OPEN; laterrealworkflowobligationsremain.",
-    "11": "Adopted exactR1/original/closure/reviews/manifest at f176382618924d9a00fd5fbabf93bbc30c78dd71; dualPASS2closed0new. Logical-only schema, source/runtime gates pending.",
+    "11": "Adopted R1 design/preflight/29probe reused. FormalV013_4/currentmodel and normal16/rerun0 already executed on two ownedschemas. Implementation incomplete; replacement source gate0C5I0M/fix1 pending scoped review/SEND DENY; fullTask11review not complete.",
     "12": "Adopted exactR1/original/closure/reviews/diff/manifest at 8e7a82e237a9552ace2d7491adadbf08416feaee; T12DR01closeddualPASS0new; source/runtime pending."
   },
   "parallel_preparation": {
@@ -254,9 +344,9 @@
     "current_ports": {
       "shared_mysql": 46653,
       "owned_s3": 45501,
-      "task8_owned_mysql": 44727
+      "task8_owned_mysql": 46151
     },
-    "private_env": ".tools/phase-b-remaining/env.sh",
+    "private_env": ".tools/task11-9714255c9e2c4861a2795cfaaec8e97f/env.sh",
     ".tools_root": ".tools/task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5",
     "selected_only": "Selected exact CID/owner/image/mount/limits fields only; never full inspect/Config.Env. Reuse retained shared MySQL/S3/env/PKI. Task8 new bounded owned MySQL already provisioned under explicit rootguard, no recreate/reset. Activationbrief controls target-specific migration access.",
     "limits": "Test/Worker512MiB2CPU; native/probe64MiB2CPU; Task5scoped3preparations/admission2proofcompleted no needrepeat",
@@ -265,12 +355,20 @@
     "task8_owned_mysql": {
       "id": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
       "owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
-      "port": 44727,
+      "port": 46151,
       "limits": "768MiB memory=swap/1CPU/256PID",
       "private_env": ".tools/task08-848e93aace8b4f0fa34fc548267f3dc5/env.sh",
       "ready_proof": "task-08-owned-resource-ready-20261024.json SHA334d4f881e2b658eb9f5c21217bea7fa3d029dbcbf33f7e9a05e546a1235eec3",
       "initial_targets": "4 fresh schemas behavior/fairheld/fairunregistered/overflow, empty at ready observation; actual author bootstrap/migration report pending",
-      "historical_target_addition": "SameexistingCID/rootselectedguard5d55bd4e/newemptyama_t08_848e93aace8b_historical010/testusergrant/ready8.4.6;no newcontainer/credentials. PrivateenvappendedAMA_TASK08_HISTORICAL010_DATABASE_URL exactoldprefix/0600backupretained. SeparateACKbe461cd4 target010only/new8frozenoldscripts/rerun0; no13.3orreset."
+      "historical_target_addition": "SameexistingCID/rootselectedguard5d55bd4e/newemptyama_t08_848e93aace8b_historical010/testusergrant/ready8.4.6;no newcontainer/credentials. PrivateenvappendedAMA_TASK08_HISTORICAL010_DATABASE_URL exactoldprefix/0600backupretained. SeparateACKbe461cd4 target010only/new8frozenoldscripts/rerun0; no13.3orreset.",
+      "historicalProvisionPort": 44727,
+      "envQualification": "private_env is historical provisioning env and may contain old44727; current Task11 consumers must use their exact ACK/env46151, never rewrite/reconsume old env as current."
+    },
+    "historical_shared_env": ".tools/phase-b-remaining/env.sh",
+    "current_task11_consumers": {
+      "primary": ".tools/task11-9714255c9e2c4861a2795cfaaec8e97f/env.sh",
+      "isolated": ".tools/task11fix1-49609b94161e4c90b6438ba683bfa3b1/env.sh",
+      "qualification": "Select fixed fixture+ACK through tools/task11_window.py; do not run selector with an implicit schema/env."
     }
   },
   "schema_protection": {
@@ -284,13 +382,19 @@
   "schema_history": "Root fresh SELECT-only16c60cfe confirms exact15 through013.3 checksum-385117638 on all5acknowledgedtargets, full15historyfields +selectedordinal/indexparts match completedrerun; old14historyprefix preserved by0f5f6e89. OldSQLimmutable,013.3full164B023fe875. Nextversions014..027reserved,integer028; laterTask11DDLunallocated.",
   "current_generated_model": {
     "path": "docs/database/ama-schema-draft.sql",
-    "sha256": "0beb9eace26afd5c45ade81a2f990583c0d5a58ffda963c15d17836a1fa3af68",
-    "version": "B00-1.6-reconcile-scan",
+    "sha256": "82edd2eb76373613502e7a5608de78415584e3c49c12ecaeecb5990065623a80",
+    "version": "B00-1.7-publication-submission",
     "initial_protection_fact": "Initial4728 lists currentSQLdraft only; currentdictionary/design notmembersofthatJSON. Preserve historicalconstraints andnewTask6snapshot independently. Originalprotectedbaselineunchanged.",
     "task8_ownership_ruling": "Original task-08-model-output-root-ruling-20261024.md PLUS task-08-model-output-input-index-amendment-20261024.md; exact4baseblobpreservationbeforewrite; durable_taskindexgenerator87-88/SQL320-351/dict542-581; noERindexchange; Operationregions+headers/statusprefixsame; combined98tables732cols189indexes/B00-1.6. ActualTask8activationafter6adoption.",
     "task8_ddl_status": "COMPLETE accepted013.3/fiveforward15/old8historicalseparate; static+rootfreeze+ACK+normal1-rerun0+fullpreservation+reviewaccepted.",
-    "task11_ddl_status": "ExactR1 isolated engine probe already completed (29 PASS); formal version/freeze/separate ACK/model/runtime work pending actual7/9/10/full-prefix repin. Do not repeat isolated probe.",
-    "counts": "98tables732columns189explicitindexes116checks208FK; deployed65/492distinct"
+    "task11_ddl_status": "V013_4 installed via normal16/rerun0 in primaryTask11 and fix01isolated schemas. Migration/current-model acceptance bounded to exact evidence; do not repeat probe/bootstrap or apply review SQL.",
+    "counts": "Current review SQL99CREATE TABLE statements/B00-1.7; publication_submission19cols. No fullreview-model deployed claim.",
+    "historical_task8_version_counts": {
+      "version": "B00-1.6-reconcile-scan",
+      "counts": "98tables732columns189explicitindexes116checks208FK; deployed65/492distinct",
+      "sha256": "0beb9eace26afd5c45ade81a2f990583c0d5a58ffda963c15d17836a1fa3af68",
+      "task11_ddl_status": "ExactR1 isolated engine probe already completed (29 PASS); formal version/freeze/separate ACK/model/runtime work pending actual7/9/10/full-prefix repin. Do not repeat isolated probe."
+    }
   },
   "binding_cross_task_rulings": {
     "task9_ruling": "enqueue currentr/e no contentadvance, retainactualdebt; complete same-root outstanding generation tasks/input readiness gates final/publish, enqueue actualinprogresspubguard; exact indexedboundedclosure andconcurrencyproof required.",
@@ -303,7 +407,7 @@
     "task9_terminal_replay_source_check": "AtTask9actualTask7adoptionrepin inspectpreparedpolicyverifyReplaydefaultfalse; realTask9consumerneedsowncomplete exactstoredgraph validation fornormalSUCCESS, invalidlocalFAILED/null andretainedSTALE/null terminalreplay underauthenticcontext, no newwriters/resend onreplay. Currentauthorreportscontrolledproofonly; awaitTask7independentreview beforeproductadoption.",
     "task7_CV04_consumer_qualification": "Independent Task7 review91a257d8 CV04: Tasks9/10/11 remain mandatory real-consumer gates: full archived producer/input closure; bounded strict provider payload/result identity across restart; full stored graph equivalence/adoption; zero/positive/missing editor guards; all version-writer PENDING disposition; readiness before final advancement; publication read/application projection. Fixture private object identity/T07_FIXED/WORKING graph does not qualify real provider/full consumer. Actual final Task7 source must be repinned after fixes before installation; preserve failclosed registrations."
   },
-  "pending_issue_register": "task-13-pending-issue-register-20261024.md; Task9 responsebudget413 andF1–F4 closed/adopted97e788fe. F5MinorTask13OPEN. Task10active fullbusiness-chain obligations; Task11/12formal/fullLOCAL+S3, Task12minors, Task13historicalUNKNOWN/limitations retained.",
+  "pending_issue_register": "task-13-pending-issue-register-20261024.md",
   "final_review_lower_bound": "34cb226aefe99c67d3681af68d748b0aeea4e073",
   "final_review_base_ruling": "InitialallworkBASE evenifmainindependentlyintegratedTasks1–4; notfreshmainmergebase",
   "open_optional_followups": [
@@ -389,11 +493,11 @@
   },
   "stop_after_phase_b": true,
   "phase_b_exit_contract": "Afterall13tasks/finalreview/recordsclose: stopexecution, preserveexactcommits/evidence/handoffs andcompleted/open/pendingboundary index; next继续任务 mustreadcanonicalhandoff beforework and startONLY firstunfinishedpostBnode, notredoB.",
-  "pause_handoff": "docs/acceptance/development-pause-b-remaining-2026-10-24-1613.md",
-  "pause_source_head": "cff858e163ca7dea774dcf05c707ef7551956156",
-  "pause_records_commit": "NONE; noTask9commit/adoption; indexempty; uncommittedproductandpause docsretained",
-  "pause_before_record_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records",
-  "pause_record_index": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-record-index.json",
+  "pause_handoff": "docs/acceptance/development-pause-b-remaining-2026-10-25.md",
+  "pause_source_head": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+  "pause_records_commit": "NONE; pause/audit documents uncommitted, index empty; Task1-10 adopted, Task11 uncommitted/incomplete.",
+  "pause_before_record_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261025-063507/before",
+  "pause_record_index": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261025-063507-record-index.json",
   "delegated_coordinator": "/root/b_continuation_coordinator",
   "delegated_root_ack_authority": "Explicit root delegation for normal coordination and controlled DDL applications within existing plan.",
   "resume_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024T095746Z-before-records/manifest.json",
@@ -413,17 +517,12 @@
     "applicationAckSha256": "6f926c62b9710dab9c889eee104543b3250bfd5e33fc23d67fb655677e4c7e5d"
   },
   "active_review": {
-    "task": 10,
-    "round": 1,
-    "agent": "/root/b_continuation_coordinator/b10_independent_review",
-    "status": "COMPLETE_SCOPED_PASS_APPROVED_I1_I2_ADDRESSED_M2_ERRATUM",
-    "base": "5657d24a4a58916dfca14a29e352ad361dda3319",
-    "head": "86777940c3f9500b1b89d884deaae2a48740d9a9",
-    "diff": "task-10-fix01-source-review-package-20261025.diff",
-    "diffSha256": "edda47cfa08a650061f54d83d1fd502eb914ee3c6364e9e997e12116e8285e4a",
-    "manifest": "task-10-fix01-review-package-manifest-20261025.json",
-    "report": "task-10-fix01-independent-review-20261025.md",
-    "reportSha256": "8656c5337eb0af099389f9634ea2542823bec757e9f4b2cb3b0ed7f4207bdaa6"
+    "task": 11,
+    "status": "PAUSED_AWAIT_FIX01_SCOPED_REVIEW",
+    "agent": "/root/b_continuation_coordinator/b11_independent_review",
+    "report": "task-11-replacement-independent-source-review-r1-20261025.md",
+    "priorVerdict": "SPEC Fail / Quality Needs fixes; 0C/5I/0M",
+    "preservedPreviousActiveReview": "See exact pre-pause current-state archive for completed Task10 historical review"
   },
   "task9_envelope_supplement": {
     "status": "COMPLETE_ADOPTED inTask9 source591545a4/adoption97e788fe; exact originalruntime startup pre-fix retained, fullformal newbusiness chain stillTask10/11/12.",
@@ -431,10 +530,10 @@
     "reviewSha256": "2269ba7eec235042b0c21cc86d0614e70ae583be06c4bcf160e5f70ab6864c68",
     "wrapper": "docs/superpowers/specs/2026-10-24-ama-phase-b-controlled-envelope.md"
   },
-  "pause_current_source_manifest": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261024-1613-before-records/current-public-source-manifest.json",
-  "pause_author_handoff": "task-09-author-pause-handoff-20261024.md",
-  "pause_runtime_observation": "lastsession13914 exited1; scopedreadonlyprocesssnapshots noownedmatchingprocess; no pause-timeSQL/allDBzero claim; no knownoutstandingoriginalfact basedsavedreceipts",
-  "pause_finalization_preimage": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-record-finalization-before-20261024T083119Z/manifest.json",
+  "pause_current_source_manifest": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261025-063507/current-public-source-manifest.json",
+  "pause_author_handoff": "docs/acceptance/development-pause-b-remaining-2026-10-25.md",
+  "pause_runtime_observation": "Latest pause redacted snapshot retained KB231675; no Task11/Maven runner observed, unrelated services preserved; three original UNKNOWN remain OPEN; no pause-time SQL or all-schema zero-debt assertion.",
+  "pause_finalization_preimage": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261025-063507/preimage-index.json",
   "active_mechanical_custody": {
     "task": 10,
     "agent": "/root/b_continuation_coordinator/b09_mechanical_custody",
@@ -498,5 +597,50 @@
     "task11Activation": "Repin actualsameCID/port46151 andnewcurrentACK atactivation; prepared44727 assumptions historical, oldhelper cannotrerun unchanged.",
     "firstRecoveredTargetWindow": "artifacts/phase-b/b-remaining/task-10/edits-behavior-01",
     "firstRecoveredTargetResult": "1PASS; cgroupbefore478187520/after525840384/peak622501888/max805306368 max/oom/oom_kill0"
+  },
+  "task12_static_preparation": {
+    "status": "PREPARED_ONLY_NOT_ACTIVATED",
+    "path": "task-12-static-entry-index-prepared-20261025.json",
+    "head": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+    "scope": "44activefiles;21of22webunchangedvsdesignbaseline exceptgeneratedtypes;Task11interfacesawaitfinaladoptionrepin"
+  },
+  "pause": {
+    "requested": true,
+    "localTime": "2026-10-25T06:35:07.851091+08:00",
+    "handoff": "docs/acceptance/development-pause-b-remaining-2026-10-25.md",
+    "recordDirectory": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261025-063507",
+    "head": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+    "branch": "codex/phase-b-completion-20261023",
+    "productChangesCommitted": false,
+    "activeAgentsObserved": [
+      "/root"
+    ],
+    "agentFailure": "Previous coordinator usage limit; old child handles not live at pause. Preserve role context; do not loop respawn.",
+    "firstResume": "Diagnose sealed generic-external 1FAIL; isolated bootstrap already 1PASS; continue fix01 actual isolated marker/contradiction/fullbudget/currentSources then same-reviewer incremental review.",
+    "noTaskOrProviderRestartByPause": true,
+    "audit": {
+      "status": "DOCUMENT_CORRECTIONS_ONLY_DEVELOPMENT_REMAINS_PAUSED",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-document-audit-20261025",
+      "utc": "2026-10-24T23:03:09.774822+00:00"
+    }
+  },
+  "pending_issue_summary": "Task11 I1-I5 and generic regression OPEN; T10-M1Task11, T4SR04/05/06 andT6SR03Task12, F5/replay-integrity/T8SRM1/oldqualificationsTask13, three originalUNKNOWN OPEN. See latest pause explicit carry-forward table.",
+  "historical_pause_fields_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-document-audit-20261025/legacy-pause-fields-before-normalization.json",
+  "delegated_coordinator_status": "NOT_LIVE at user pause; previous coordinator usage-limit failure. Role identity historical; future author/reviewer continuation needs actual available handle, not a running-agent assumption.",
+  "skill_runtime_current_note": "Original Superpowers7.0.1 workflow is historical authority; original SKILL.md is absent at audit and not in current available catalog. No replacement installed. Future continuation recheck available workflow; preserve single writer/serial tests/private authority/source-review gates and explicit role settings. Do not silently bypass gates or substitute reviewer model because an old handle/plugin is unavailable.",
+  "integration": {
+    "status": "PREPARED_USER_AUTHORIZED_MAIN_MERGE_PUSH",
+    "record": "docs/acceptance/integration-main-snapshot-2026-10-25.md",
+    "remote": "https://github.com/CodeTch/ama.git",
+    "sourceBranch": "codex/phase-b-completion-20261023",
+    "sourceParent": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+    "originalMain": "c71a44adb679a78d4c28dde7a4223aad1a23b40f",
+    "task11Adopted": false,
+    "findingsClosedByMerge": false,
+    "runtimeSendAuthority": "DENY_UNCHANGED",
+    "developmentPaused": true,
+    "lastCompileManifestFilesRehashed": 901,
+    "mismatches": 0,
+    "qualification": "No new test run; lastisolatedbootstrap1PASS; generic regression no currentGREEN. Historicalpause HEAD is not a postmerge currentHEAD constraint."
   }
 }

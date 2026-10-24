@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-23T20:15:56.749920+00:00",
+  "status": "WORKING_SOURCE_READ_PREPARATION_ONLY_NO_QUALIFICATION_VERDICT",
+  "purpose": "Full budget/correction helper and3focusedtests read before candidate; actual configuredcaller/inventory/originalminima pending. At candidatecomparehash andrereadonlychangedbytes; no assumption ofadoption.",
+  "sources": [
+    {
+      "path": "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java",
+      "bytes": 2827,
+      "lines": 34,
+      "sha256": "b343d2fbe1307383eeee0aad2df18d56350c103360ca1e70ab9882911c4fde6f",
+      "fullReadSha256": "b343d2fbe1307383eeee0aad2df18d56350c103360ca1e70ab9882911c4fde6f",
+      "currentEqualsFullReadAtSeal": true
+    },
+    {
+      "path": "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java",
+      "bytes": 1675,
+      "lines": 21,
+      "sha256": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+      "fullReadSha256": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+      "currentEqualsFullReadAtSeal": true
+    },
+    {
+      "path": "backend/core/src/test/java/ama/transcript/SavedTranscriptBudgetTest.java",
+      "bytes": 2141,
+      "lines": 31,
+      "sha256": "5810403928fcb7127844a923c43921fbf55f83d85369b298f0148432f2b90aad",
+      "fullReadSha256": "5810403928fcb7127844a923c43921fbf55f83d85369b298f0148432f2b90aad",
+      "currentEqualsFullReadAtSeal": true
+    }
+  ]
+}

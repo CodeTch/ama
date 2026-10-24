@@ -1,0 +1,53 @@
+{
+  "status": "REVIEWED_ONE_INVOCATION_AUTHORIZED_NOT_YET_APPLIED",
+  "issuedUtc": "2026-10-24T20:24:40.889070+00:00",
+  "reviewer": "/root/b_continuation_coordinator",
+  "helper": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-fix01-isolated-fixture-prepared-20261025.py",
+  "helperSha256": "ee25bbc05b81981ca25f682d058e5979d50ff10ee87f306ecdea757306d780be",
+  "owner": "task11fix1-49609b94161e4c90b6438ba683bfa3b1",
+  "schema": "ama_t11fix1_49609b94161e_behavior",
+  "review": [
+    "Full helper source read including inherited identity/canonical-path/permissions/one-shot guards",
+    "Fixed Task10 adoption, originalTask11 ACK/guard and all16 migration sources checked before first write",
+    "Only absent new schema CREATE and escaped exact GRANT; no reset/drop/migration/provider access",
+    "Exactly8 literal env keys, only new DB URL/owner/run-root; no private values or their hashes",
+    "Partial outcome preserved, no retry; guarded new public output paths",
+    "Heavy windows exited confirmed by sole author before invocation"
+  ],
+  "protectedPublicInputs": [
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-root-fixture-application-ack-20261025.json",
+      "bytes": 3164,
+      "sha256": "dcab31da53de0a4e065aa05914f5143a5afd68ddbd785a87617455db1aa1574d"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-fixture-creation-guard-20261025.json",
+      "bytes": 5312,
+      "sha256": "93d8afa8809ccdcf7ae811af258f2de12b443c032017f2aee16dbad44abb20a3"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-formal-migration-freeze-20261025.json",
+      "bytes": 4895,
+      "sha256": "83665f7f6a2443addc1a39b7faa5efc91e0d7f82ad49a2fa6aa6ded69c422a43"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-10-consumer-activation-root-ack-20261025.json",
+      "bytes": 1544,
+      "sha256": "763c7da6870188b6ac07177391e197df956c121bdea10a9df2afd81d998f5fb3"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-replacement-review-source-r1-20261025.json",
+      "bytes": 16083,
+      "sha256": "b8012cc81f0e8de43f74e3cf6c4107da8f01029f8863c3cda52e02180af47109"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-replacement-independent-source-review-r1-20261025.md",
+      "bytes": 21411,
+      "sha256": "d8eea4beeb90ea9470d2f114a425e28d80b6440cdedfb42c87a361eecbf2f595"
+    }
+  ],
+  "primaryNo2": "427e9751-2bca-483b-8d91-cb1711ae127c",
+  "primaryNo2ClaimSend": "DENY",
+  "provider": "Original owner/store/keys/46287 unchanged",
+  "authorization": "Root explicit isolated fixture delegation; current reviewer/source gate remains SEND DENY"
+}

@@ -1,0 +1,182 @@
+{
+  "scope": "ActualXML/receipts10PASSand5PASS separateexecutions; twoIR01samecaseidentities strengthenedreplaced, NOT15distinct. Source/CVsemantics/finalcodequalificationpendingindependentreview. No rootrerun",
+  "windows": [
+    {
+      "window": "framework-matrix",
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07ReceiptRecoveryIT#*,Task07AdmissionWindowsIT#*,Task07PreparedMatrixIT#*"
+        ],
+        "exit": 0,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/integration-tests-TEST-ama.task.Task07PreparedMatrixIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/integration-tests-TEST-ama.task.Task07AdmissionWindowsIT.xml"
+        ],
+        "elapsedSeconds": 41.78147625923157,
+        "counts": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "seals": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/receipt.json",
+          "bytes": 935,
+          "sha256": "7a0590e5ec3f6fa92cb127b4bc36da44d532ae9d43bb005ed0cf713dd4f6e461"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/source.json",
+          "bytes": 67341,
+          "sha256": "5aa677baa1555389f5209e449eb6bf0be6fb64f7aaf7afa13805d6f399d955ab"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/integration-tests-TEST-ama.task.Task07AdmissionWindowsIT.xml",
+          "bytes": 33473,
+          "sha256": "609902bdc9704616f9410b553ecf1a4f2c38fa2f2ff98e55ba2c508fb035e895"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml",
+          "bytes": 33004,
+          "sha256": "a55608d64018f922c54105b131f6aaa56877b5ef2ef53db87ad69cb1866b97b1"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/framework-matrix/integration-tests-TEST-ama.task.Task07PreparedMatrixIT.xml",
+          "bytes": 33484,
+          "sha256": "feca1675ed4fd35ee66f3a42b52b314bb909ceecc079f393084bb5b640b51d8a"
+        }
+      ],
+      "cases": [
+        {
+          "class": "ama.task.Task07AdmissionWindowsIT",
+          "name": "permitCommitBeforeLostAcknowledgementRetainsDebtWithoutSend",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07AdmissionWindowsIT",
+          "name": "closeWhileMarkerIsCommittingDoesNotAdmitSend",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07AdmissionWindowsIT",
+          "name": "closeWhilePermitAdmissionIsCommittingKeepsExactReservationAndSendsNothing",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07ReceiptRecoveryIT",
+          "name": "capacityOneReconcilerRecoversExpiredPendingReceiptThenProcessesUnrelatedWork",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07ReceiptRecoveryIT",
+          "name": "oldWorkerSlotRetiresAfterFreshReconcilerCommitsSameExecution",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07PreparedMatrixIT",
+          "name": "unavailablePreparationRetainsSameReceiptForLaterAtomicCompletion",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07PreparedMatrixIT",
+          "name": "deniedPreparedAuthorityRecordsOnlyExactTerminalFactAndExcludesUnknown(String)[1]",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07PreparedMatrixIT",
+          "name": "deniedPreparedAuthorityRecordsOnlyExactTerminalFactAndExcludesUnknown(String)[2]",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07PreparedMatrixIT",
+          "name": "deniedPreparedAuthorityRecordsOnlyExactTerminalFactAndExcludesUnknown(String)[3]",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07PreparedMatrixIT",
+          "name": "fourActualPreparedDiscoveryRestartsPreserveReceiptThenQuarantineOriginalExecution",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "window": "crash-settlement-and-capacity",
+      "receipt": {
+        "command": [
+          "python3",
+          "tools/checks/run.py",
+          "it",
+          "Task07SettlementWindowsIT#*,Task07ReceiptRecoveryIT#*"
+        ],
+        "exit": 0,
+        "reports": [
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/crash-settlement-and-capacity/integration-tests-TEST-ama.task.Task07SettlementWindowsIT.xml",
+          "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/phase-b/b-remaining/task-07/fix01/crash-settlement-and-capacity/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml"
+        ],
+        "elapsedSeconds": 55.02136301994324,
+        "counts": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "mavenConfig": "-Dtest=__Task07OnlyIntegration -Dsurefire.failIfNoSpecifiedTests=false"
+      },
+      "seals": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/crash-settlement-and-capacity/receipt.json",
+          "bytes": 763,
+          "sha256": "9fbeaec05f0d7bd739b39d94f4ed689ef5d3c6059bfdfd0e3b768d75afa57f3c"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/crash-settlement-and-capacity/source.json",
+          "bytes": 67646,
+          "sha256": "ccd784c62a5c7277ca9097842d73d5598ebf2fe5e923112f0237ac53ecea61f4"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/crash-settlement-and-capacity/integration-tests-TEST-ama.task.Task07SettlementWindowsIT.xml",
+          "bytes": 33099,
+          "sha256": "9bb8d70963aefa1a0fbbad222bc515c57c01a74abc24258e7ae3948c1bd9ee4d"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/crash-settlement-and-capacity/integration-tests-TEST-ama.task.Task07ReceiptRecoveryIT.xml",
+          "bytes": 32978,
+          "sha256": "b11db6060fa977ae5dca9db8a5fe243b4a5a38f1607b6d5822dbeab3b50fa90f"
+        }
+      ],
+      "cases": [
+        {
+          "class": "ama.task.Task07SettlementWindowsIT",
+          "name": "childKilledAfterTerminalCommitBeforeSettlementRecoversExactDurableDebt",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07SettlementWindowsIT",
+          "name": "concurrentExactSettlementMutatesReservationOnce",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07SettlementWindowsIT",
+          "name": "settlementCommitBeforeLostAcknowledgementIsIdempotent",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07ReceiptRecoveryIT",
+          "name": "capacityOneReconcilerRecoversExpiredPendingReceiptThenProcessesUnrelatedWork",
+          "result": "PASS"
+        },
+        {
+          "class": "ama.task.Task07ReceiptRecoveryIT",
+          "name": "oldWorkerSlotRetiresAfterFreshReconcilerCommitsSameExecution",
+          "result": "PASS"
+        }
+      ]
+    }
+  ]
+}

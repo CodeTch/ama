@@ -1,0 +1,91 @@
+{
+  "timestampUtc": "2026-10-24T00:34:33.458863+00:00",
+  "scope": "Rootreadonlyselectedreceiptcounts/commands, notyetfullXML/sourcecustody. 254units predatenewspecialterminalRED2; no finalsourceadoption. No tests/DB/source/Git.",
+  "windows": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/final-owned-integration/receipt.json",
+      "sha256": "64c564b2703087524560bb77469bac04d4da4d90a6885cc8b0bcd76284f37f43",
+      "exit": 1,
+      "counts": {
+        "tests": 116,
+        "failures": 1,
+        "errors": 1,
+        "skipped": 0
+      },
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07*IT"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/final-affected-fixtures-corrected/receipt.json",
+      "sha256": "898efaf8b6bd19cd4153f02e38d7fca807ea92e4f0fb7bf089bae5143ad0299a",
+      "exit": 0,
+      "counts": {
+        "tests": 38,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#*,Task07GenerationRetentionIT#*,Task07ExternalWorkerIT#*"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/final-recovery-boundaries/receipt.json",
+      "sha256": "4ceecd405ac81a71cc09ef52d24275fd535e86771ed9fd69374b717f3dcb7b04",
+      "exit": 0,
+      "counts": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07RecoveryBoundsIT"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/final-unit/receipt.json",
+      "sha256": "9438d7df7407e85c22b9b80e7a6bb727f3e513d8238956b14a0de9f8f4d90af1",
+      "exit": 0,
+      "counts": {
+        "tests": 254,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "unit",
+        "*"
+      ]
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/terminal-special-replay-red/receipt.json",
+      "sha256": "dad0c4ef6bc4e6d23ea5d3e46ca6d5f952ae6193d72a76039d41ffdfc24c3070",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "it",
+        "Task07PreparedExternalIT#invalidTerminalReceiptReplaysWithoutCandidateOrSecondWriter,Task07GenerationRetentionIT#retainedTerminalReceiptReplaysWithoutDuplicatingImmutableGraph"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "timestampUtc": "2026-10-24T00:15:50.218375+00:00",
+  "scope": "Root readonly privateenvKEYNAMES/publicschemaref shape only andexactparentmysql2publicsystemvariables; no env values/digests/privatecontent/Dockerfullinspect/businessrows/mutations. Task9helper NOTexecuted.",
+  "parentCid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+  "task8EnvKeys": [
+    "AMA_TASK08_ROOT",
+    "AMA_TEST_DATABASE_URL",
+    "AMA_TEST_DATABASE_USERNAME",
+    "AMA_TEST_DATABASE_PASSWORD",
+    "AMA_TASK08_SHARED_ENV",
+    "AMA_TASK08_BEHAVIOR_DATABASE_URL",
+    "AMA_TASK08_FAIRHELD_DATABASE_URL",
+    "AMA_TASK08_FAIRUNREGISTERED_DATABASE_URL",
+    "AMA_TASK08_OVERFLOW_DATABASE_URL",
+    "AMA_TASK08_HISTORICAL010_DATABASE_URL"
+  ],
+  "task7EnvKeys": [
+    "AMA_TEST_DATABASE_URL",
+    "AMA_TEST_DATABASE_USERNAME",
+    "AMA_TEST_DATABASE_PASSWORD",
+    "AMA_TEST_CONTAINER",
+    "AMA_TASK07_OWNER",
+    "AMA_TASK07_RUN_ROOT",
+    "AMA_TASK07_S3_ENV",
+    "AMA_TASK07_PKI_ROOT"
+  ],
+  "bothEnvModes": "0600",
+  "task7OnlyPublicSchemaRef": "ama_t07_0cea85a0e472_behavior",
+  "parentQuery": "SELECT @@global.partial_revokes, @@session.sql_mode;",
+  "partialRevokes": 0,
+  "sqlMode": "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION",
+  "rulings": [
+    "Task9helper must construct whitelistenv fromactualTask7keys; nowholeTask8envclone/crossschemaURLs; reuseexistingDBcredentials+S3/PKIrefs only.",
+    "Task9literalnewdatabaseGRANT must escapeunderscore undercapturedpartial_revokes0 semantics; CREATE usesunescapedschemaname. Oldresources/grantsunchanged. No claimofglobalprivilegeaudit/restriction."
+  ],
+  "officialGrantSemantics": "https://dev.mysql.com/doc/refman/8.4/en/grant.html",
+  "earlyPreparationCustody": "Authorinitialmessage13310B/3fe44790 differedfromrootread13480B whileauthorstillactive. Notexecuted/committed/accepted; authorinstructedfinalseal+freeze andhonestearlierlimitation, no fabricatedoldcapture."
+}

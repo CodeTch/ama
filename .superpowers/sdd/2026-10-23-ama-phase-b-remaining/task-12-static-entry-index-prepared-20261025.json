@@ -1,0 +1,830 @@
+{
+  "kind": "task12_static_entry_index_prepared",
+  "status": "PREPARED_STATIC_ONLY",
+  "captured_utc": "2026-10-24T19:05:06.128385+00:00",
+  "worktree": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "head": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
+  "counts": {
+    "web_tracked": 22,
+    "openapi_inputs": 8,
+    "test_dispatcher": 1,
+    "prototype_index_source_assets": 13,
+    "distinct_files": 44
+  },
+  "selected_paths_clean_against_head": true,
+  "files": [
+    {
+      "path": "web/.gitignore",
+      "bytes": 20,
+      "sha256": "790e3169bc19b046fe55ba1da6d13b976c28363c8c00462a2195fe5faf260910",
+      "line_count": 2,
+      "anchor_lines_1_based": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "web/README.md",
+      "bytes": 3158,
+      "sha256": "e27ca25a3c70cb148a3c4072a120dda0b02eded0c99a28fb69905c54357fd7ca",
+      "line_count": 39,
+      "anchor_lines_1_based": [
+        19,
+        21,
+        29,
+        31,
+        35,
+        39
+      ]
+    },
+    {
+      "path": "web/index.html",
+      "bytes": 256,
+      "sha256": "f08cbf5cb5635c562952814b058f4f14b6569f587abff81abf168f6b956097c1",
+      "line_count": 1,
+      "anchor_lines_1_based": [
+        1,
+        1
+      ]
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 66457,
+      "sha256": "014719188e81bc9fa242f1c179a611cc6d000bee0fd1ef44762f0e3117d11935",
+      "line_count": 1971,
+      "anchor_lines_1_based": [
+        1,
+        1971
+      ]
+    },
+    {
+      "path": "web/package.json",
+      "bytes": 975,
+      "sha256": "0c6e3334e70a699d95bbfc6c43ccb9b087341883588db994b3126cf9152c034d",
+      "line_count": 38,
+      "anchor_lines_1_based": [
+        11,
+        19
+      ]
+    },
+    {
+      "path": "web/playwright.config.ts",
+      "bytes": 1126,
+      "sha256": "8ce8bb2fcffeb5856d61d123cf43a60b081148832dd673c3f20eec03e79eaaa0",
+      "line_count": 13,
+      "anchor_lines_1_based": [
+        3,
+        12
+      ]
+    },
+    {
+      "path": "web/scripts/capture-prototype.mjs",
+      "bytes": 3784,
+      "sha256": "03c1ced7a6b2b3634ffa36348ac63a64e121b39bb88e6b4c65573c7d08bbe6e6",
+      "line_count": 36,
+      "anchor_lines_1_based": [
+        6,
+        8,
+        13,
+        36
+      ]
+    },
+    {
+      "path": "web/scripts/check-api.mjs",
+      "bytes": 873,
+      "sha256": "7da55705dee56f2b0a56d0eba811ae7529696c6c727b9db9b03c13088368f72e",
+      "line_count": 13,
+      "anchor_lines_1_based": [
+        5,
+        13
+      ]
+    },
+    {
+      "path": "web/src/App.vue",
+      "bytes": 3399,
+      "sha256": "5733fd9e053df499062f136a281ca2d4b32796e52fac408ac59a596ccc384070",
+      "line_count": 34,
+      "anchor_lines_1_based": [
+        1,
+        14,
+        15,
+        34
+      ]
+    },
+    {
+      "path": "web/src/main.ts",
+      "bytes": 554,
+      "sha256": "53b773f2eaa16a007f75ffa39167d59c435d3ed030b3c686a9e305ecda86ad42",
+      "line_count": 9,
+      "anchor_lines_1_based": [
+        5,
+        9
+      ]
+    },
+    {
+      "path": "web/src/shared/Icon.vue",
+      "bytes": 832,
+      "sha256": "100f4545fb2e7f9e181c28abe1acb0c30412b093760c1103d35bd91b7d5bb2e1",
+      "line_count": 9,
+      "anchor_lines_1_based": [
+        1,
+        9
+      ]
+    },
+    {
+      "path": "web/src/shared/api/client.ts",
+      "bytes": 1350,
+      "sha256": "cf52d1293d4e7eba0befcea34b4e2934984cf56fdffd707af42375eeaf68f4e0",
+      "line_count": 21,
+      "anchor_lines_1_based": [
+        1,
+        21
+      ]
+    },
+    {
+      "path": "web/src/shared/api/generated.ts",
+      "bytes": 193702,
+      "sha256": "c3c509727b2a0ae527db4c58a3751a0c394e9c62ccbaf3a08fbb4b9c061ca234",
+      "line_count": 4572,
+      "anchor_lines_1_based": [
+        1,
+        6,
+        1194,
+        1206,
+        1290,
+        1301,
+        1308,
+        1314,
+        1316,
+        1322,
+        3123,
+        3586,
+        3934,
+        4170,
+        4572
+      ]
+    },
+    {
+      "path": "web/src/shared/styles/tokens.css",
+      "bytes": 4959,
+      "sha256": "eea2b502844695c07b694f2bd3005ccd5d21beab5a627c57bbd476cfd0e4b9f3",
+      "line_count": 46,
+      "anchor_lines_1_based": [
+        1,
+        46
+      ]
+    },
+    {
+      "path": "web/tests/e2e/shell.spec.ts",
+      "bytes": 2926,
+      "sha256": "3a3d30f9b4423c5f0365c9c196fff6617a6340359491d2d26d58d074ace78eda",
+      "line_count": 42,
+      "anchor_lines_1_based": [
+        2,
+        42
+      ]
+    },
+    {
+      "path": "web/tests/unit/client.test.ts",
+      "bytes": 3219,
+      "sha256": "c8381fba8d92d894f92825298803f26e53e94a19c13fe1b7b870b12bff4ae943",
+      "line_count": 43,
+      "anchor_lines_1_based": [
+        16,
+        43
+      ]
+    },
+    {
+      "path": "web/tests/visual/baselines/1024x768/meeting-shell.png",
+      "bytes": 29798,
+      "sha256": "9d5b1cb3a82d460822ac30422dbc6e2d72f415965547a576b7cb65ccdc8c42dd",
+      "line_count": null,
+      "anchor_lines_1_based": []
+    },
+    {
+      "path": "web/tests/visual/baselines/1440x900/meeting-shell.png",
+      "bytes": 30462,
+      "sha256": "87081b938477031e9b52459645cff03bc65e57d805dde41ec300c8a8756ba9c9",
+      "line_count": null,
+      "anchor_lines_1_based": []
+    },
+    {
+      "path": "web/tests/visual/shared-regions.css",
+      "bytes": 138,
+      "sha256": "3b05d8bc63e0fc2260fa6bb9d5dad8568285d1b1fc4449e9e77ab70cc29cf87a",
+      "line_count": 2,
+      "anchor_lines_1_based": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "web/tests/visual/shell.spec.ts",
+      "bytes": 663,
+      "sha256": "26adafd5152c0d6802bde8ccdbd294066dc85161fd81359b82a26a95173c9d9a",
+      "line_count": 12,
+      "anchor_lines_1_based": [
+        3,
+        12
+      ]
+    },
+    {
+      "path": "web/tsconfig.json",
+      "bytes": 392,
+      "sha256": "a46f8e412122504d2b05331644a10412344c0cb63bdc2ad75badab500c5e3307",
+      "line_count": 24,
+      "anchor_lines_1_based": [
+        1,
+        24
+      ]
+    },
+    {
+      "path": "web/vite.config.ts",
+      "bytes": 126,
+      "sha256": "97133045dcb8a0a89896b48e2d6b3902573aa6ac879ee99dc8e0511e063f44e5",
+      "line_count": 3,
+      "anchor_lines_1_based": [
+        1,
+        3
+      ]
+    },
+    {
+      "path": "contracts/openapi/api.yaml",
+      "bytes": 7080,
+      "sha256": "be6b4c6d8685de23fe35e52840bfcd76380bf31bdf2c1431c681052f8c6e171b",
+      "line_count": 156,
+      "anchor_lines_1_based": [
+        1,
+        9,
+        10,
+        149,
+        150,
+        156
+      ]
+    },
+    {
+      "path": "contracts/openapi/health.yaml",
+      "bytes": 2152,
+      "sha256": "7d974df23943713b31e672a70997ed94ac765fa20f3bf984a202b9358150e776",
+      "line_count": 68,
+      "anchor_lines_1_based": [
+        1,
+        68
+      ],
+      "referenced_from_api_yaml_lines_1_based": [
+        11,
+        13
+      ]
+    },
+    {
+      "path": "contracts/openapi/identity.yaml",
+      "bytes": 6133,
+      "sha256": "25a23f5c9aecb7d4e7e688e2c72b287b05a2ff71b1fe0b85924bad55860c999e",
+      "line_count": 224,
+      "anchor_lines_1_based": [
+        1,
+        224
+      ],
+      "referenced_from_api_yaml_lines_1_based": [
+        15,
+        17,
+        19,
+        21
+      ]
+    },
+    {
+      "path": "contracts/openapi/meetings.yaml",
+      "bytes": 10136,
+      "sha256": "87335ee4a182dcaf47b8fc86f53a782c82ab349e44eb879830840ea88681d74b",
+      "line_count": 304,
+      "anchor_lines_1_based": [
+        1,
+        304
+      ],
+      "referenced_from_api_yaml_lines_1_based": [
+        23,
+        25,
+        27,
+        29
+      ]
+    },
+    {
+      "path": "contracts/openapi/files.yaml",
+      "bytes": 13140,
+      "sha256": "3326e098f97a5f6b3c2fa10b95ef1c877de799b9ea4e7b088947007e4422f77b",
+      "line_count": 555,
+      "anchor_lines_1_based": [
+        1,
+        555
+      ],
+      "referenced_from_api_yaml_lines_1_based": [
+        31,
+        33,
+        35,
+        37,
+        39
+      ]
+    },
+    {
+      "path": "contracts/openapi/processing.yaml",
+      "bytes": 59297,
+      "sha256": "34b5bb977997f6c94b895fc5ecb37ba3b51671e5c1532be30cd69d423beb86a1",
+      "line_count": 2309,
+      "anchor_lines_1_based": [
+        1,
+        2309
+      ],
+      "referenced_from_api_yaml_lines_1_based": [
+        41,
+        43,
+        45,
+        47,
+        49,
+        51,
+        53,
+        55,
+        57
+      ]
+    },
+    {
+      "path": "contracts/openapi/transcripts.yaml",
+      "bytes": 116651,
+      "sha256": "207cf5409fecfea7a594158fb952780af74a876e84b8e5bba85a553773be3dcc",
+      "line_count": 4041,
+      "anchor_lines_1_based": [
+        1,
+        4041
+      ],
+      "referenced_from_api_yaml_lines_1_based": [
+        59,
+        61,
+        63,
+        65,
+        67,
+        69,
+        71,
+        73,
+        75,
+        77,
+        79
+      ]
+    },
+    {
+      "path": "contracts/openapi/minutes.yaml",
+      "bytes": 302362,
+      "sha256": "ee3b2b9aee6f4ab60b3e1de36d8ca77b3a4853c895be86876be54fe279a605a7",
+      "line_count": 11599,
+      "anchor_lines_1_based": [
+        1,
+        11599
+      ],
+      "referenced_from_api_yaml_lines_1_based": [
+        81,
+        83,
+        85,
+        87,
+        89,
+        91,
+        93,
+        95,
+        97,
+        99,
+        101,
+        103,
+        105,
+        107,
+        109,
+        111,
+        113,
+        115,
+        117,
+        119,
+        121,
+        123,
+        125,
+        127,
+        129,
+        131,
+        133,
+        135,
+        137,
+        139,
+        141,
+        143,
+        145,
+        147,
+        149
+      ]
+    },
+    {
+      "path": "tools/checks/run.py",
+      "bytes": 9743,
+      "sha256": "a3ece9cd0c1249fcbe51982fe9b2f30d330b4418406e4d00b8dc39a6cb8b3217",
+      "line_count": 176,
+      "anchor_lines_1_based": [
+        87,
+        105,
+        147,
+        168
+      ]
+    },
+    {
+      "path": "docs/acceptance/a/prototype-index.md",
+      "bytes": 5623,
+      "sha256": "bd2b84ea4a4d6270b24cb381625a982c90c0a6ce572c59100044d86a5e2cc218",
+      "line_count": 36,
+      "anchor_lines_1_based": [
+        3,
+        9,
+        16,
+        20,
+        28,
+        30,
+        36
+      ]
+    },
+    {
+      "path": "designDocs/智能会议助手1021版.html",
+      "bytes": 697671,
+      "sha256": "ab21d0b73f4e48bbf701ee8bca5e958940b61f6e6f680d4ced02de0ce4bab867",
+      "line_count": 3182,
+      "anchor_lines_1_based": [
+        373,
+        375,
+        387,
+        390,
+        392,
+        400,
+        402,
+        2846,
+        2857,
+        2884,
+        2885,
+        2997,
+        3042,
+        3057,
+        3095,
+        3102,
+        3104,
+        3114,
+        3115,
+        3122,
+        3137,
+        3139,
+        3147,
+        3158,
+        3160,
+        3167,
+        3179
+      ]
+    },
+    {
+      "path": "docs/acceptance/a/prototype/provenance.json",
+      "bytes": 715,
+      "sha256": "bb2ef5a5f828b9481ed470211023ca6e51e330f41e6b9fb0288e83b837d2f013",
+      "line_count": 16,
+      "anchor_lines_1_based": [
+        1,
+        16
+      ]
+    },
+    {
+      "path": "docs/acceptance/a/prototype/1440x900/original-meetings.png",
+      "bytes": 332391,
+      "sha256": "e8ee75e89d8bb913376f0a8cecbd54a28f306888caf7430f48d7dec4ad19c3c3",
+      "line_count": null,
+      "anchor_lines_1_based": []
+    },
+    {
+      "path": "docs/acceptance/a/prototype/1440x900/original-import-modal.png",
+      "bytes": 222004,
+      "sha256": "66e48cb473495062a0d7f4898f50bccc8cdc1537e1511628cd11568d1b1bb76a",
+      "line_count": null,
+      "anchor_lines_1_based": []
+    },
+    {
+      "path": "docs/acceptance/a/prototype/1440x900/original-transcript-page.png",
+      "bytes": 224861,
+      "sha256": "5693b64832af3ccd3ef47d34356e7fbc5c90c6913af74649289e62583d233d49",
+      "line_count": null,
+      "anchor_lines_1_based": []
+    },
+    {
+      "path": "docs/acceptance/a/prototype/1440x900/original-info-drawer.png",
+      "bytes": 244834,
+      "sha256": "458e9320635beba0df7a81b1924ec1d57487cc1f55b5dc7fc6ca1fbe1d9cba74",
+      "line_count": null,
+      "anchor_lines_1_based": []
+    },
+    {
+      "path": "docs/acceptance/a/prototype/1440x900/rendered-shell.json",
+      "bytes": 12526,
+      "sha256": "cf7fe332604f9de2df4e6d75b52ed087247417fb9b8d2642d6f37fafa12a6b16",
+      "line_count": 271,
+      "anchor_lines_1_based": [
+        1,
+        271
+      ]
+    },
+    {
+      "path": "docs/acceptance/a/prototype/1024x768/original-meetings.png",
+      "bytes": 286768,
+      "sha256": "88c6bbb6a3bc8cbfa7b70d83e669574c3cca028319f74c5807c8f82c2362b0c1",
+      "line_count": null,
+      "anchor_lines_1_based": []
+    },
+    {
+      "path": "docs/acceptance/a/prototype/1024x768/original-import-modal.png",
+      "bytes": 101444,
+      "sha256": "43f8408dad7caac00a2e4fb7178cdf03325a67203d0b603c5799fd8203eb85bc",
+      "line_count": null,
+      "anchor_lines_1_based": []
+    },
+    {
+      "path": "docs/acceptance/a/prototype/1024x768/original-transcript-page.png",
+      "bytes": 173540,
+      "sha256": "ba6e56e1b371b37057c1dadc18ac5252141b65c8218e0ec6f538571ef972483e",
+      "line_count": null,
+      "anchor_lines_1_based": []
+    },
+    {
+      "path": "docs/acceptance/a/prototype/1024x768/original-info-drawer.png",
+      "bytes": 150700,
+      "sha256": "7ca086e0db88ef391484454408739e4857e3fb08b4465f2049cccecaa2d35e2e",
+      "line_count": null,
+      "anchor_lines_1_based": []
+    },
+    {
+      "path": "docs/acceptance/a/prototype/1024x768/rendered-shell.json",
+      "bytes": 12510,
+      "sha256": "0107fe14966f18239bfc208b200c312e775deda396a5a48b651076ab8a967719",
+      "line_count": 271,
+      "anchor_lines_1_based": [
+        1,
+        271
+      ]
+    }
+  ],
+  "reviewed_w_documents": [
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-web-preflight.md",
+      "bytes": 3783,
+      "sha256": "1f4c1b1b7bcedf7d18917980ba8552bad0556acd0d03c9737a05beb8cc0af717"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-web-business-loop-design-r1.md",
+      "bytes": 69418,
+      "sha256": "12602bdfaeda0672478c6bb08bf92fa844746990eda08fcd67b20b0ceb14ed9c"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-web-business-loop-design-r1-closure.md",
+      "bytes": 9409,
+      "sha256": "eaed15994de0e03ecd1592b8ccbd393da481a510a26ff05553e7d780292a54b2"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-plan-extract.md",
+      "bytes": 491,
+      "sha256": "e2f61ef3c9ceefd69042d5c8a911b64566cc69a22094b1e5a9fcefb7116672b0"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-deferred-boundary-map-20261024.md",
+      "bytes": 14217,
+      "sha256": "154de68991632899889ecb655dd63830e22f346b105019349eb4dd1f584c2ed8"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-transcript-request-type-followup-20261024.md",
+      "bytes": 9803,
+      "sha256": "9548950310b12aaa492583d7e889f43f9cee539a2daacb786629fc206c762776"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-deferred-boundary-map-20261024-manifest.json",
+      "bytes": 12787,
+      "sha256": "15872104d15c63e6a0cf47d5c62d34be68bb9d74e3f6dafba4a937877d47b2ba"
+    },
+    {
+      "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-12-transcript-request-type-followup-20261024-manifest.json",
+      "bytes": 5100,
+      "sha256": "507f2fa939c0e447e5944f4c056a38d1d0fedf7164b29bdb26b53a17a0781382"
+    }
+  ],
+  "current_web": {
+    "routes": [
+      {
+        "path": "/",
+        "source": "web/src/main.ts:6",
+        "role": "redirect /meetings"
+      },
+      {
+        "path": "/meetings",
+        "source": "web/src/main.ts:6",
+        "role": "Phase A shell"
+      },
+      {
+        "path": "/:pathMatch(.*)*",
+        "source": "web/src/main.ts:7",
+        "role": "unavailable return"
+      }
+    ],
+    "components": [
+      "web/src/App.vue:1-34",
+      "web/src/shared/Icon.vue:1-9",
+      "web/src/shared/styles/tokens.css:1-46"
+    ],
+    "client": "web/src/shared/api/client.ts:1-21 generic cookie JSON request; no business facade",
+    "generation": {
+      "root": "contracts/openapi/api.yaml:1-156",
+      "ref_files": [
+        "files.yaml",
+        "health.yaml",
+        "identity.yaml",
+        "meetings.yaml",
+        "minutes.yaml",
+        "processing.yaml",
+        "transcripts.yaml"
+      ],
+      "script": "web/package.json:17",
+      "checker": "web/scripts/check-api.mjs:5-13",
+      "output": "web/src/shared/api/generated.ts",
+      "output_sha256": "c3c509727b2a0ae527db4c58a3751a0c394e9c62ccbaf3a08fbb4b9c061ca234",
+      "unknown_request_union_lines": [
+        1206,
+        1301,
+        1314,
+        1322
+      ],
+      "matches_existing_followup_manifest": true
+    },
+    "test_script_entries": [
+      "web/package.json:11-19",
+      "tools/checks/run.py:87-105,147-168",
+      "web/playwright.config.ts:3-12",
+      "web/tests/unit/client.test.ts:16-43",
+      "web/tests/e2e/shell.spec.ts:2-42",
+      "web/tests/visual/shell.spec.ts:3-12",
+      "web/tests/visual/shared-regions.css:1-2",
+      "web/scripts/capture-prototype.mjs:6-36"
+    ]
+  },
+  "prototype": {
+    "index": "docs/acceptance/a/prototype-index.md:9-16",
+    "original_html": "designDocs/智能会议助手1021版.html",
+    "html_sha256": "ab21d0b73f4e48bbf701ee8bca5e958940b61f6e6f680d4ced02de0ce4bab867",
+    "existing_entries": [
+      {
+        "id": "meeting_list",
+        "entry": "#/meetings",
+        "prototype_index_line": 13,
+        "html_final_lines": [
+          373,
+          375,
+          3179
+        ],
+        "capture_script_lines": [
+          15,
+          18
+        ],
+        "reference_paths": [
+          "docs/acceptance/a/prototype/1440x900/original-meetings.png",
+          "docs/acceptance/a/prototype/1024x768/original-meetings.png"
+        ],
+        "qualification": "original viewport reference, not business runtime"
+      },
+      {
+        "id": "import_dialog",
+        "entry": "list to import",
+        "prototype_index_line": 14,
+        "html_final_lines": [
+          373,
+          375,
+          392,
+          2884,
+          2885
+        ],
+        "capture_script_lines": [
+          22,
+          24
+        ],
+        "reference_paths": [
+          "docs/acceptance/a/prototype/1440x900/original-import-modal.png",
+          "docs/acceptance/a/prototype/1024x768/original-import-modal.png"
+        ],
+        "qualification": "original viewport reference, not business runtime"
+      },
+      {
+        "id": "transcript_workbench",
+        "entry": "#/meeting/DEMO-TRANSCRIPT-LONG-20261020/transcript",
+        "prototype_index_line": 15,
+        "html_final_lines": [
+          400,
+          402,
+          2997,
+          3042
+        ],
+        "capture_script_lines": [
+          25,
+          29
+        ],
+        "reference_paths": [
+          "docs/acceptance/a/prototype/1440x900/original-transcript-page.png",
+          "docs/acceptance/a/prototype/1024x768/original-transcript-page.png"
+        ],
+        "qualification": "original viewport reference, not business runtime"
+      },
+      {
+        "id": "meeting_info_drawer",
+        "entry": "workbench information drawer",
+        "prototype_index_line": 16,
+        "html_final_lines": [
+          387,
+          390,
+          2846,
+          2857
+        ],
+        "capture_script_lines": [
+          31,
+          32
+        ],
+        "reference_paths": [
+          "docs/acceptance/a/prototype/1440x900/original-info-drawer.png",
+          "docs/acceptance/a/prototype/1024x768/original-info-drawer.png"
+        ],
+        "qualification": "original viewport reference, not business runtime"
+      }
+    ],
+    "approved_design_anchor": "task-12-web-business-loop-design-r1.md:145",
+    "additional_final_html_anchors_without_indexed_png": [
+      {
+        "id": "minutes_candidate",
+        "lines": [
+          3057,
+          3095,
+          3102,
+          3103,
+          3104,
+          3114,
+          3115,
+          3122
+        ]
+      },
+      {
+        "id": "dock",
+        "lines": [
+          3137,
+          3139
+        ]
+      },
+      {
+        "id": "destination",
+        "lines": [
+          3147,
+          3158
+        ]
+      },
+      {
+        "id": "success_read_only",
+        "lines": [
+          3160,
+          3167
+        ]
+      }
+    ],
+    "final_render_line": 3179,
+    "existing_shell_baselines": [
+      "web/tests/visual/baselines/1440x900/meeting-shell.png",
+      "web/tests/visual/baselines/1024x768/meeting-shell.png"
+    ],
+    "shell_region": "top 204px only"
+  },
+  "comparison": {
+    "design_baseline_commit": "875047cd",
+    "unchanged_web_count": 21,
+    "changed_web_count": 1,
+    "changed_web": [
+      {
+        "path": "web/src/shared/api/generated.ts",
+        "old_bytes": 42002,
+        "old_sha256": "9fbc1f6b829333be0095f86f14b4c6bf5489c8d06be86a756547e6eb699df983",
+        "current_bytes": 193702,
+        "current_sha256": "c3c509727b2a0ae527db4c58a3751a0c394e9c62ccbaf3a08fbb4b9c061ca234"
+      }
+    ],
+    "intermediate_deferred_map_generated": {
+      "bytes": 100250,
+      "sha256": "2adec56dc7b80074642499a6c520e5d35a6d2634f7e0ebe504d20cbff1625a37"
+    },
+    "prototype_index_and_html_same_as_design_baseline": true,
+    "preflight_phase_a_shell_and_tool_entry_still_applies": true,
+    "readme_health_only_generated_description_stale": true
+  },
+  "pending": [
+    "Task11 publication/local/retry final adopted source repin before contract binding",
+    "Task12 endpoint-schema-controller-consumer ledger and regenerated type check after adoption",
+    "Four transcript request aliases retain unknown unions; this is not a repair"
+  ],
+  "limits": [
+    "Static inventory only; no tests, browser, capture, generator, runtime, DB, private data or backend live source",
+    "Original references and shell baselines do not qualify new business pages",
+    "Prospective detail routes are absent now",
+    "No independent review, activation, implementation or completion qualification"
+  ]
+}

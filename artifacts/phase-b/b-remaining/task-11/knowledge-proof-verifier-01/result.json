@@ -1,0 +1,72 @@
+{
+  "exitCode": 0,
+  "processExitCode": 0,
+  "startedNs": 1792866587439477043,
+  "finishedNs": 1792866604101198001,
+  "suites": [
+    {
+      "path": "junit/backend/adapters/target/surefire-reports/TEST-ama.transcript.Task11KnowledgeProofTest.xml",
+      "suite": "ama.transcript.Task11KnowledgeProofTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.transcript.Task11KnowledgeProofTest",
+      "reportSha256": "c916fa13af92811f6bb1eac8a218acd22872ddd841d80a028c6bcd1d45fde2fd",
+      "reportMtimeNs": 1792866596369657570,
+      "startedNs": 1792866587439477043,
+      "endedNs": 1792866604101198001,
+      "class": "ama.transcript.Task11KnowledgeProofTest",
+      "name": "forgedSignatureRejected",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.transcript.Task11KnowledgeProofTest",
+      "reportSha256": "c916fa13af92811f6bb1eac8a218acd22872ddd841d80a028c6bcd1d45fde2fd",
+      "reportMtimeNs": 1792866596369657570,
+      "startedNs": 1792866587439477043,
+      "endedNs": 1792866604101198001,
+      "class": "ama.transcript.Task11KnowledgeProofTest",
+      "name": "permanentHistoricalSignatureRemainsVerifiable",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.transcript.Task11KnowledgeProofTest",
+      "reportSha256": "c916fa13af92811f6bb1eac8a218acd22872ddd841d80a028c6bcd1d45fde2fd",
+      "reportMtimeNs": 1792866596369657570,
+      "startedNs": 1792866587439477043,
+      "endedNs": 1792866604101198001,
+      "class": "ama.transcript.Task11KnowledgeProofTest",
+      "name": "crossStoreRejected",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.transcript.Task11KnowledgeProofTest",
+      "reportSha256": "c916fa13af92811f6bb1eac8a218acd22872ddd841d80a028c6bcd1d45fde2fd",
+      "reportMtimeNs": 1792866596369657570,
+      "startedNs": 1792866587439477043,
+      "endedNs": 1792866604101198001,
+      "class": "ama.transcript.Task11KnowledgeProofTest",
+      "name": "signedInvalidClaimsAndNoncanonicalBytesRejected",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

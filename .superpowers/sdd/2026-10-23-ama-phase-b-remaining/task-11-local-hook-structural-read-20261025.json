@@ -1,0 +1,43 @@
+{
+  "utc": "2026-10-24T18:49:30.991788+00:00",
+  "windowInProgress": "publication-local-terminal-01",
+  "scope": "Interface and local-hook segments actually read; PublicationGraph lock/order selected lines, not complete Task11 source review",
+  "files": [
+    {
+      "path": "backend/core/src/main/java/ama/task/PublicationLocalTerminationPolicy.java",
+      "sha256": "2b9366b784bf0d1bc2871e61a49042f62a2f9f0b2d1d1d7580bfde973054286d"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "sha256": "c5bf799054448b0eac3ed96f875bd29d89ebbc713331b2b653703a57df3516bb"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+      "sha256": "205999f702d5a571f230531328709a54bf410a93a8ff05af53d46232b2fa8bda"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/PublicationTaskDomainPolicy.java",
+      "sha256": "6af25efc0dfe2d3565a9912636c8e82f0e766667cd0d84451cd567d9ec626cde"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/PublicationLocalDecision.java",
+      "sha256": "070d42dcf073e3ef296ef436490ca5dac99f37ab321880f16bdf2598cbbf5963"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/transcript/PublicationGraph.java",
+      "sha256": "dfda32a8139b40af5173d441727df499aa431f1d07f872fb0266b320123ec19b"
+    }
+  ],
+  "observed": [
+    "Private queue LocalTerminal constructor/type; holder/source/prepared identity/registeredpolicy/row family/scope membership/phase checked; facts are readonly data not capability.",
+    "Actual context only built within finishLocal from claim scope or ValidatedLease; closes in finally; policy retains exact context for seal then clears.",
+    "validate before queue/attempt/PREPARED transitions; seal verifies actual terminal task/ended attempts, then submission/projection/audit; shared queue work supplies flush/transaction.",
+    "Full existing graph union prelocks task/attempt/operation/execution before terminal revisits; no new public exact claim API.",
+    "Public ordinary finish used by external observation remains unchanged; fixed publication local policy extends RecordedFactRecoveryPolicy."
+  ],
+  "limitations": [
+    "No current test result yet.",
+    "This narrow structural review does not qualify all original manifest/proof/history binding, explicit recovery/live lease exclusion, revoked real fairclaim, restart or full R1.",
+    "Full Task11 independent review and affected oldfamily/observe/retry regression evidence remain required."
+  ]
+}

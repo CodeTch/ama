@@ -1,0 +1,37 @@
+{
+  "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+  "protected": {
+    "entries": 9777,
+    "unchanged": 9777,
+    "exceptions": []
+  },
+  "ownedSourceAndEvidenceFiles": 8705,
+  "privateScan": {
+    "distinctKnownValues": 6,
+    "matches": 0,
+    "pemMatches": 0,
+    "trackedDiffMatches": 0,
+    "valuesOrDigestsEmitted": false
+  },
+  "selectedResourceGuardUnchanged": true,
+  "recordedOwnedChildPids": [
+    {
+      "pid": 1277931,
+      "gone": true
+    }
+  ],
+  "all15HistoryFieldsUnchanged": true,
+  "normalBootstrap": 15,
+  "normalReruns": [
+    0,
+    0,
+    0
+  ],
+  "rootTrackedPathsExcluded": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261024-active-context.md",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md"
+  ],
+  "scope": "Only exact Task7 schema, recorded child processes and actual selected parent MySQL resource. No global active0, old fixture rewrite, S3/PKI activity, company or HA claim."
+}

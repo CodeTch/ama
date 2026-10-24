@@ -1,0 +1,16 @@
+{
+  "protected_original_paths": 4728,
+  "unchanged_original_paths": 4727,
+  "authorized_current_model_changes": [
+    {
+      "path": "docs/database/ama-schema-draft.sql",
+      "original_sha256": "4c6bd89301ca6316f4469e99db333bc5440fa8dd330a907cfc685d79ff656a33",
+      "current_sha256": "d3094336b4d55d9389b2fd1d852d627b93e0ac0394b9b1801e258a154b0cb445",
+      "classification": "Explicit Task2 current generated model ownership, not immutable formal SQL or historical copy",
+      "old_exact_copy": "prior-current-schema-draft.sql.txt"
+    }
+  ],
+  "new_frozen_sql_paths": 1,
+  "frozen_sql_unchanged": true,
+  "source_head": "efcbf78f1dcff6b708df4cd2d423885dcf23de91"
+}

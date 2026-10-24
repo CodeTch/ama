@@ -1,0 +1,147 @@
+{
+  "timestampUtc": "2026-10-24T00:07:25.268420+00:00",
+  "scope": "Root read R1 report11168B/SQL4287B/staticcheckcommand+output and exact SQLpatch, fullmanifestmechanical27entries/ranges verified; originalthreebytes retained; combinedold→R1diff regeneratedexact. No DB/test/Git/product edits. Cannot claimactualengineacceptance.",
+  "entries": [
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee"
+    },
+    {
+      "section": "migration_sources",
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c"
+    },
+    {
+      "section": "design_sources",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1.md",
+      "sha256": "f18ae4734603709284d91345b2909eca9687627c825444fd8cfa06dd49d36ffc"
+    },
+    {
+      "section": "design_sources",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1-closure.md",
+      "sha256": "b906213c0ff8af494f54495b3dbd337cbf3283994dfabe2e6798255438808c51"
+    },
+    {
+      "section": "design_sources",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-final-publication-design-r1-review.md",
+      "sha256": "247c16e565986ebb61c8b60589240fd0fbd6bf82153826cb57bde72db42d3241"
+    },
+    {
+      "section": "design_sources",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-zeroeffect-root-rulings.md",
+      "sha256": "9a4718ece70afbd631affe8464ccb75673d32af9e7b51820cdf2bae211709750"
+    },
+    {
+      "section": "design_sources",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-source-alignment-preflight-20261024.md",
+      "sha256": "c0c8a59d94d46c93ac44461401b108ba06915e08064b032de972b96b4d3ca2c9"
+    },
+    {
+      "section": "outputs",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-r1-20261024.sql",
+      "sha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2"
+    },
+    {
+      "section": "outputs",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-r1-20261024.md",
+      "sha256": "243146dffb571181103d8ed052ac5feb5ecc79c9057f77c950c6e203edcba46e"
+    },
+    {
+      "section": "original_artifacts",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024.sql",
+      "sha256": "e9026197dba789e7cbdbf6acee56065d0f8fa98665595d204bece1afc8eedd43"
+    },
+    {
+      "section": "original_artifacts",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024.md",
+      "sha256": "930eddac25fe68adf832b007c2ffc2a74581bdebd9e6535df01ac19c4933ef1d"
+    },
+    {
+      "section": "original_artifacts",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-20261024-manifest.json",
+      "sha256": "ca422802295e79892b014357a1b7d682ff70eb17fd306b89aeefe81f63724bf6"
+    },
+    {
+      "section": "fix_inputs",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-fix-01-brief-20261024.md",
+      "sha256": "a404f7826b39bb5183cefc82c3a22360a88bea808846758db3293436af08e3f6"
+    },
+    {
+      "section": "fix_inputs",
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-static-review-20261024.md",
+      "sha256": "3c0ee2c8b4b1768ffc3832149bf83197a8a537548fa5ca1de0eea01f5353cfdc"
+    }
+  ],
+  "diff": {
+    "bytes": 16723,
+    "sha256": "ad0cec798423aab7b70655bbd9601af2d48e6d800908f3874ce552e85f554e21"
+  },
+  "manifestSha256": "db9459d72123908c3a9ace6eec95cc9d1939ff6982bdbf7cc5c6b3b09e955eab",
+  "staticCheckSha256": "033573096137dfa653c8ca02436fe73c6b62d0c4e5b8c390401bd38ecd80dbbb"
+}

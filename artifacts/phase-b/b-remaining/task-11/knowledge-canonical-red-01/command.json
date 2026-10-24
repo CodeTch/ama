@@ -1,0 +1,19 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "tools/checks/run.py",
+    "unit",
+    "Task11KnowledgeCanonicalTest"
+  ],
+  "canonicalSelector": "ama.transcript.Task11KnowledgeCanonicalTest",
+  "reportsBeforeSha256": "5781bd93a60c0d99cf546e4a36fe2bc4d101e5864743976d4e4ed8b317e54d38",
+  "reportsClearedSha256": "ef2da4a902acef11f614a898359a5e01d5af33ff97f97bedaf20be14776c8b0a",
+  "cwd": "/home/tanren/ama/.worktrees/phase-b-completion",
+  "startedNs": 1792864795802048624,
+  "startedUtc": "2026-10-24T17:59:55.802163+00:00",
+  "heapMiB": 512,
+  "processors": 2,
+  "schema": "ama_t11_9714255c9e2c_behavior",
+  "ackSha256": "dcab31da53de0a4e065aa05914f5143a5afd68ddbd785a87617455db1aa1574d",
+  "sourceManifestSha256": "35b977281946e32a06de5a815fcf3a8aa91c33b66a578c68660d17a51de180bc"
+}

@@ -1,0 +1,634 @@
+1ce4a2e fix(processing): bind accepted replay to original import request
+f176382 docs: adopt reviewed final confirmation and publication design
+c71a44a chore: integrate latest phase B snapshot and sync API types
+46aad17 docs: checkpoint paused phase B remaining work for exact resume
+
+SOURCE SCOPE: exact four fix sources; all four pre-fix blobs at f176382 equal prior review59c8; independent intervening docs and generated API integration retained in full audit.
+ .../ama/transcript/JdbcProcessingDiscovery.java    |   5 +-
+ .../java/ama/transcript/JdbcProcessingIntake.java  | 126 +++++++++++++-----
+ .../java/ama/storage/ProcessingIntakeHttpIT.java   | 146 ++++++++++++++++++++-
+ contracts/openapi/processing.yaml                  |   3 +-
+ 4 files changed, 241 insertions(+), 39 deletions(-)
+
+diff --git a/backend/adapters/src/main/java/ama/transcript/JdbcProcessingDiscovery.java b/backend/adapters/src/main/java/ama/transcript/JdbcProcessingDiscovery.java
+index 133ef41..93bfdfc 100644
+--- a/backend/adapters/src/main/java/ama/transcript/JdbcProcessingDiscovery.java
++++ b/backend/adapters/src/main/java/ama/transcript/JdbcProcessingDiscovery.java
+@@ -49,22 +49,23 @@ public final class JdbcProcessingDiscovery {
+         ama.contract.OutboxContracts.uuid(meeting);
+         var result=tx.required(()-> {
+             var held=access.lock(actor,meeting);
+             access.require(held,MeetingAccess.Action.READ);
+             var root=root(meeting);
+             boolean owner=Objects.equals(root.get("owner_id"),actor.enterpriseId());
+             return map("revision",number(root,"revision"),"revisionToken",Long.toString(number(root,"revision")),"accessRevision",number(root,"access_revision"),"accessRevisionToken",Long.toString(number(root,"access_revision")),"canSubmit",false,"readOnlyReason",owner?null:"OWNER_REQUIRED","owner",owner,"writable",writable(root));
+         });
+         boolean owner=(Boolean)result.remove("owner"),writable=(Boolean)result.remove("writable");
+         boolean ready=owner&&available.getAsBoolean();
+-        result.put("canSubmit",owner&&writable&&ready);
+-        if(owner)result.put("readOnlyReason",!writable?"READ_ONLY":ready?null:"PROCESSING_UNAVAILABLE");
++        boolean exhausted=((Number)result.get("revision")).longValue()>=Long.MAX_VALUE-1;
++        result.put("canSubmit",owner&&writable&&ready&&!exhausted);
++        if(owner)result.put("readOnlyReason",!writable?"READ_ONLY":exhausted?"REVISION_EXHAUSTED":ready?null:"PROCESSING_UNAVAILABLE");
+         result.put("intake",ready?"AVAILABLE":"UNAVAILABLE");
+         result.put("execution","NOT_INSTALLED");
+         result.put("businessReady",false);
+         result.put("formats",List.of("TXT"));
+         result.put("purpose","TRANSCRIPT_INPUT");
+         result.put("materialMode","EMPTY");
+         result.put("budgets",budgets);
+         return result;
+     }
+     public Page uploads(Actor actor,String meeting,int limit,String after) {
+diff --git a/backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java b/backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java
+index 374d208..7ede87b 100644
+--- a/backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java
++++ b/backend/adapters/src/main/java/ama/transcript/JdbcProcessingIntake.java
+@@ -1,38 +1,44 @@
+ package ama.transcript;
+ import ama.access.MeetingAccess;
+ import ama.audit.AuditPort;
+ import ama.contract.AuditContracts.AuditEvent;
+ import ama.contract.IdentityContracts.Actor;
+ import ama.contract.OutboxContracts.*;
+ import ama.contract.ProcessingContracts.*;
+ import ama.db.TransactionRunner;
++import static ama.config.WireValues.*;
+ import ama.storage.*;
+ import ama.task.*;
+ import java.io.*;
+ import java.nio.charset.*;
+ import java.security.*;
+ import java.time.Instant;
+ import java.util.*;
+ import javax.sql.DataSource;
+ import org.springframework.jdbc.core.JdbcTemplate;
+ import org.springframework.transaction.support.TransactionSynchronizationManager;
+ import static ama.contract.ProcessingContracts.*;
+ /** One transaction for actual input, handoff, CAS and enqueue. Historical replay needs no intake configuration. */
+ public final class JdbcProcessingIntake {
+     @FunctionalInterface public interface NewIntake {
+         JdbcTranscriptAuthority.PreparedIntake prepare(Actor actor,String meeting,ImportRequest request);
+     }
+     private record Replay(String scope,String task,int status,boolean matches) {
+     }
+-    private record ReplayProof(ama.contract.TaskContracts.TaskSpec spec,String producer) {
++    private record ReplayGraph(Map<String,Object> input,Map<String,Object> batch,Map<String,Object> profile,
++                               List<Map<String,Object>> members) {
+     }
++    private record ReplayProof(ama.contract.TaskContracts.TaskSpec spec,String producer,ReplayGraph graph) {
++    }
++    private static final ama.contract.ConfigArchiveContracts.ArchiveReadBudget REPLAY_READ=new ama.contract.ConfigArchiveContracts.ArchiveReadBudget(65536,262144,16,32,8,4096,8,255,65536,65536,262144,65536,64,4096,32768);
++    private static final ama.contract.MinutesContracts.CanonicalBudget REPLAY_CANONICAL_BUDGET=new ama.contract.MinutesContracts.CanonicalBudget(262144,16,8192,65536,4096);
+     private static final ama.contract.MinutesContracts.CanonicalBudget REPLAY_PRODUCER_BUDGET=new ama.contract.MinutesContracts.CanonicalBudget(65536,8,128,1024,4096);
+     private final JdbcTemplate j;
+     private final TransactionRunner tx;
+     private final MeetingAccess access;
+     private final JdbcTranscriptAuthority.Components components;
+     private final SubjectFencePort fences;
+     private final TaskQueue queue;
+     private final OutboxPort outbox;
+     private final AuditPort audit;
+     private final NewIntake preparer;
+@@ -50,57 +56,57 @@ public final class JdbcProcessingIntake {
+     }
+     public ImportAccepted accept(Actor actor,String meeting,String key,ImportRequest request,String trace) {
+         independent();
+         ama.contract.OutboxContracts.uuid(meeting);
+         key(key);
+         String scope=digest(actor.enterpriseId(),meeting,"PROCESSING_IMPORT",key),keyHash=digest(key);
+         var fields=new ArrayList<String>();
+         Collections.addAll(fields,"transcript-import-request-v1",Long.toString(request.expectedRevision()),Integer.toString(request.orderedFileIds().size()));
+         fields.addAll(request.orderedFileIds());
+         String body=digest(fields.toArray(String[]::new));
+-        var replay=lookup(actor,meeting,scope,keyHash,body);
++        var replay=lookup(actor,meeting,scope,keyHash,body,request);
+         if(replay.isPresent())return replay.orElseThrow();
+         JdbcTranscriptAuthority.PreparedIntake prepared;
+         try {
+             prepared=preparer.prepare(actor,meeting,request);
+         }
+         catch(ama.contract.MinutesContracts.Failure failure) {
+             // Cancellation is not an ordinary preparation failure and must never become an acceptance.
+             if(Thread.currentThread().isInterrupted()||!Set.of(ama.contract.MinutesContracts.FailureCode.PROFILE_UNAVAILABLE,ama.contract.MinutesContracts.FailureCode.CAPABILITY_UNAVAILABLE,ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED,ama.contract.MinutesContracts.FailureCode.READ_FAILED,ama.contract.MinutesContracts.FailureCode.PROVENANCE_UNAVAILABLE).contains(failure.code()))throw failure;
+-            var winner=lookup(actor,meeting,scope,keyHash,body);
++            var winner=lookup(actor,meeting,scope,keyHash,body,request);
+             if(winner.isPresent())return winner.orElseThrow();
+             throw unavailable();
+         }
+         catch(ama.contract.FileContracts.NotFound|ama.contract.FileContracts.Conflict failure) {
+-            var winner=lookup(actor,meeting,scope,keyHash,body);
++            var winner=lookup(actor,meeting,scope,keyHash,body,request);
+             if(winner.isPresent())return winner.orElseThrow();
+             throw conflict();
+         }
+         catch(ama.contract.FileContracts.Unavailable failure) {
+-            var winner=lookup(actor,meeting,scope,keyHash,body);
++            var winner=lookup(actor,meeting,scope,keyHash,body,request);
+             if(winner.isPresent())return winner.orElseThrow();
+             throw unavailable();
+         }
+         catch(Failure failure) {
+             if(failure.status()!=409&&failure.status()!=503&&failure.status()!=413)throw failure;
+-            var winner=lookup(actor,meeting,scope,keyHash,body);
++            var winner=lookup(actor,meeting,scope,keyHash,body,request);
+             if(winner.isPresent())return winner.orElseThrow();
+             throw failure;
+         }
+         return tx.required(()-> {
+             j.update("INSERT INTO idempotency_record(scope_hash,actor_id,resource_id,operation,key_hash,request_hash,state,http_status,created_at) VALUES (?,?,?,'PROCESSING_IMPORT',?,?,'SUCCEEDED',0,UTC_TIMESTAMP(6)) ON DUPLICATE KEY UPDATE scope_hash=idempotency_record.scope_hash",scope,actor.enterpriseId(),meeting,keyHash,body);
+             var claimed=record(actor,meeting,scope,keyHash,body).orElseThrow(ama.contract.ProcessingContracts::unavailable);
+             if(claimed.task()!=null) {
+-                var proof=observe(claimed);
++                var proof=observe(meeting,claimed,request);
+                 access.require(access.lock(actor,meeting),MeetingAccess.Action.EDIT);
+                 match(claimed);
+-                return restore(meeting,claimed,proof);
++                return restore(meeting,claimed,proof,request);
+             }
+             var c=Objects.requireNonNull(components);
+             var registry=c.registry();
+             var gate=registry.lock(actor,meeting,MeetingAccess.Action.EDIT);
+             match(claimed);
+             long expected=request.expectedRevision();
+             if(expected==Long.MAX_VALUE-1)throw new Failure(409,"REVISION_EXHAUSTED");
+             if(prepared.spec().businessVersion()!=expected+1)throw conflict();
+             var subject=fences.lock(prepared.spec().subject(),false).orElseThrow(ama.contract.ProcessingContracts::unavailable);
+             if(subject.businessVersion()!=expected||subject.cancelEpoch()!=prepared.spec().cancelEpoch()||subject.deleted())throw conflict();
+@@ -117,69 +123,129 @@ public final class JdbcProcessingIntake {
+             fences.advance(subject,expected+1,prepared.spec().cancelEpoch(),false);
+             String task=queue.enqueue(prepared.spec(),authority.adoptCreated(gate,held,prepared.spec()));
+             if(j.update("UPDATE idempotency_record SET result_id=?,http_status=202 WHERE scope_hash=? AND result_id IS NULL",task,scope)!=1)throw unavailable();
+             var result=new ImportAccepted(meeting,prepared.batchId(),prepared.inputId(),task,expected+1,Long.toString(expected+1),prepared.spec().inputFingerprint());
+             audit.append(new AuditEvent(actor.enterpriseId(),"TRANSCRIPT_IMPORT_ACCEPTED",meeting,expected+1,"SUCCEEDED",trace,Instant.now()));
+             outbox.append(new EventDraft("TRANSCRIPT_IMPORT_ACCEPTED",task,prepared.spec().subject(),expected+1,new Reference("TRANSCRIPTION_INPUT",prepared.inputId())));
+             outbox.flush();
+             return result;
+         });
+     }
+-    private Optional<ImportAccepted> lookup(Actor actor,String meeting,String scope,String keyHash,String hash) {
++    private Optional<ImportAccepted> lookup(Actor actor,String meeting,String scope,String keyHash,String hash,ImportRequest request) {
+         return tx.required(()-> {
+             var existing=record(actor,meeting,scope,keyHash,hash);
+-            var proof=existing.isPresent()?observe(existing.orElseThrow()):null;
++            var proof=existing.isPresent()?observe(meeting,existing.orElseThrow(),request):null;
+             access.require(access.lock(actor,meeting),MeetingAccess.Action.EDIT);
+             if(existing.isEmpty())return Optional.empty();
+             var replay=existing.orElseThrow();
+             match(replay);
+             if(replay.task()==null)throw unavailable();
+-            return Optional.of(restore(meeting,replay,proof));
++            return Optional.of(restore(meeting,replay,proof,request));
+         });
+     }
+     private Optional<Replay> record(Actor actor,String meeting,String scope,String keyHash,String hash) {
+         return j.query("SELECT actor_id,resource_id,operation,key_hash,request_hash,result_id,http_status,state FROM idempotency_record WHERE scope_hash=? FOR UPDATE",(r,n)->new Replay(scope,r.getString(6),r.getInt(7),actor.enterpriseId().equals(r.getString(1))&&meeting.equals(r.getString(2))&&"PROCESSING_IMPORT".equals(r.getString(3))&&keyHash.equals(r.getString(4))&&hash.equals(r.getString(5))&&"SUCCEEDED".equals(r.getString(8))),scope).stream().findFirst();
+     }
+     private static void match(Replay replay) {
+         if(!replay.matches())throw conflict();
+     }
+-    private ReplayProof observe(Replay replay) {
++    private ReplayProof observe(String meeting,Replay replay,ImportRequest request) {
+         if(!replay.matches()||replay.task()==null)return null;
+         try {
+-            var specs=taskSpec(replay.task());
++            var specs=taskSpec(replay.task(),false);
+             if(specs.size()!=1)return null;
+             var spec=specs.getFirst();
+-            String producer=TranscriptImportProducer.compute(spec.subject().id(),spec.input().id(),spec.inputFingerprint(),spec.businessVersion(),spec.cancelEpoch(),REPLAY_PRODUCER_BUDGET,()->false);
+-            return new ReplayProof(spec,producer);
++            if(request.expectedRevision()==Long.MAX_VALUE-1||spec.businessVersion()!=request.expectedRevision()+1
++                ||!"TRANSCRIPT_IMPORT_V1".equals(spec.type())||!"TRANSCRIPT_IMPORT".equals(spec.pool())
++                ||!"MEETING".equals(spec.subject().kind())||!meeting.equals(spec.subject().id())
++                ||!"TRANSCRIPTION_INPUT".equals(spec.input().kind())||spec.priority()!=0||spec.maxAttempts()!=3)return null;
++            var graph=replayGraph(spec,false);
++            var input=graph.input();var batch=graph.batch();
++            if(!meeting.equals(input.get("meeting_id"))||!"IMPORT".equals(input.get("kind"))||!"EMPTY".equals(input.get("material_mode"))
++                ||input.get("source_revision_id")!=null||input.get("material_snapshot_id")!=null
++                ||input.get("model_config_version")!=null||input.get("prompt_version")!=null
++                ||input.get("processing_config_version")==null||input.get("parser_version")==null
++                ||TranscriptReadGraph.number(input,"manifest_schema_version")!=1
++                ||TranscriptReadGraph.number(input,"base_revision")!=spec.businessVersion()
++                ||TranscriptReadGraph.number(input,"cancel_epoch")!=spec.cancelEpoch()||!spec.inputFingerprint().equals(input.get("input_fingerprint"))
++                ||!meeting.equals(batch.get("meeting_id"))||!"TRANSCRIPT".equals(batch.get("kind"))
++                ||TranscriptReadGraph.number(batch,"base_revision")!=spec.businessVersion()
++                ||!BatchFingerprint.PROFILE.equals(graph.profile().get("profile"))
++                ||graph.members().size()!=request.orderedFileIds().size())return null;
++            // The original bounded manifest supplies immutable size/hash metadata; replay never queries current files or archives.
++            var state=new ama.config.ArchiveReadState(REPLAY_READ,()->false);
++            var manifest=new ama.config.json.StrictProcessingManifestReader().read(state.capture(encode(TranscriptReadGraph.text(input,"config_manifest")),true),state);
++            var manifestFields=fields(manifest,"schemaVersion","profile","meetingId","inputId","kind","batch","sourceRevisionId","materials","configs","base","steps");
++            var manifestBatch=fields(manifestFields.get("batch"),"id","kind","files");
++            var base=fields(manifestFields.get("base"),"meetingRevision","subjectBusinessVersion","cancelEpoch");
++            var configs=fields(manifestFields.get("configs"),"processing","parser","model","prompt","profiles");
++            if(!meeting.equals(text(manifestFields.get("meetingId")))||!spec.input().id().equals(text(manifestFields.get("inputId")))
++                ||!batch.get("id").equals(text(manifestBatch.get("id")))
++                ||number(base.get("meetingRevision"))!=spec.businessVersion()||number(base.get("subjectBusinessVersion"))!=spec.businessVersion()
++                ||number(base.get("cancelEpoch"))!=spec.cancelEpoch()
++                ||!input.get("processing_config_version").equals(ref(configs.get("processing")).version())
++                ||!input.get("parser_version").equals(ref(configs.get("parser")).version()))return null;
++            var manifestFiles=array(manifestBatch.get("files"));
++            if(manifestFiles.size()!=graph.members().size())return null;
++            var members=new ArrayList<BatchFingerprint.Member>();
++            for(int n=0;n<graph.members().size();n++) {
++                var member=graph.members().get(n);String file=request.orderedFileIds().get(n);
++                var metadata=fields(manifestFiles.get(n),"ordinal","fileId","sha256","sizeBytes");
++                if(TranscriptReadGraph.number(member,"ordinal")!=n+1L||!file.equals(member.get("file_id"))
++                    ||!file.equals(text(metadata.get("fileId")))||!Objects.equals(member.get("sha256"),text(metadata.get("sha256"))))return null;
++                members.add(new BatchFingerprint.Member(n+1L,file,TranscriptReadGraph.text(member,"sha256"),number(metadata.get("sizeBytes"))));
++            }
++            String batchHash=new BatchFingerprint().compute(meeting,TranscriptReadGraph.text(batch,"id"),"TRANSCRIPT",spec.businessVersion(),members,REPLAY_CANONICAL_BUDGET,()->false);
++            if(!batchHash.equals(batch.get("input_fingerprint")))return null;
++            String inputHash=new ama.canonical.CanonicalValueCodec().sha256(ama.minutes.contract.ContractValues.envelope("ama.transcription-input.v1","TRANSCRIPTION_INPUT",manifest),REPLAY_CANONICAL_BUDGET,()->false);
++            if(!inputHash.equals(spec.inputFingerprint()))return null;
++            String producer=TranscriptImportProducer.compute(meeting,spec.input().id(),spec.inputFingerprint(),spec.businessVersion(),spec.cancelEpoch(),REPLAY_PRODUCER_BUDGET,()->false);
++            return new ReplayProof(spec,producer,graph);
+         }
+         catch(ama.contract.MinutesContracts.Failure failure) {
+             if(failure.code()==ama.contract.MinutesContracts.FailureCode.CANCELLED)throw failure;
+             return null;
+         }
+-        catch(IllegalArgumentException corrupt) {
++        catch(IllegalArgumentException|ama.contract.FileContracts.NotFound|Failure corrupt) {
+             return null;
+         }
+     }
+-    private List<ama.contract.TaskContracts.TaskSpec> taskSpec(String task) {
+-        return j.query("SELECT task_type,pool,subject_kind,subject_id,producer_key,input_kind,input_id,input_fingerprint,business_version,priority,cancel_epoch,max_attempts FROM durable_task WHERE id=?",(r,n)->new ama.contract.TaskContracts.TaskSpec(r.getString(1),r.getString(2),new ama.contract.TaskContracts.SubjectRef(r.getString(3),r.getString(4)),r.getString(5),new ama.contract.TaskContracts.TypedRef(r.getString(6),r.getString(7)),r.getString(8),r.getLong(9),r.getInt(10),r.getLong(11),r.getInt(12)),task);
+-    }
+-    private ImportAccepted restore(String meeting,Replay replay,ReplayProof proof) {
+-        if(proof==null||!proof.producer().equals(proof.spec().producerKey())||!taskSpec(replay.task()).equals(List.of(proof.spec())))throw unavailable();
+-        if(replay.status()!=202)throw unavailable();
+-        var results=j.query("SELECT t.id,i.id,i.batch_id,i.base_revision,i.input_fingerprint FROM durable_task t JOIN transcription_input i ON i.id=t.input_id JOIN input_batch b ON b.id=i.batch_id JOIN input_batch_fingerprint_profile p ON p.batch_id=b.id WHERE t.id=? AND t.task_type='TRANSCRIPT_IMPORT_V1' AND t.pool='TRANSCRIPT_IMPORT' AND t.subject_kind='MEETING' AND t.subject_id=? AND t.input_kind='TRANSCRIPTION_INPUT' AND i.meeting_id=t.subject_id AND b.meeting_id=i.meeting_id AND b.kind='TRANSCRIPT' AND i.kind='IMPORT' AND i.material_mode='EMPTY' AND b.base_revision=i.base_revision AND t.business_version=i.base_revision AND t.cancel_epoch=i.cancel_epoch AND t.input_fingerprint=i.input_fingerprint AND t.priority=0 AND t.max_attempts=3 AND p.profile='ama.input-batch.v1'",(r,n)->new ImportAccepted(meeting,r.getString(3),r.getString(2),r.getString(1),r.getLong(4),r.getString(4),r.getString(5)),replay.task(),meeting);
+-        if(results.size()!=1)throw unavailable();
+-        var accepted=results.getFirst();
+-        if(j.queryForObject("SELECT COUNT(*) FROM durable_task WHERE input_kind='TRANSCRIPTION_INPUT' AND input_id=?",Long.class,accepted.inputId())!=1)throw unavailable();
+-        var rows=j.queryForList("SELECT ordinal FROM input_batch_file WHERE batch_id=? ORDER BY ordinal LIMIT 65",Long.class,accepted.batchId());
+-        if(rows.isEmpty()||rows.size()>64)throw unavailable();
+-        for(int n=0;n<rows.size();n++)if(rows.get(n)!=n+1L)throw unavailable();
+-        return accepted;
++    private ReplayGraph replayGraph(ama.contract.TaskContracts.TaskSpec spec,boolean locked) {
++        var read=new BoundedTranscriptMetadata(j,REPLAY_READ,locked);
++        var input=read.one("transcription_input",BoundedTranscriptMetadata.INPUT+" config_manifest",spec.input().id());
++        String batchId=TranscriptReadGraph.text(input,"batch_id");
++        var batch=read.one("input_batch",BoundedTranscriptMetadata.BATCH,batchId);
++        var profiles=read.select("input_batch_fingerprint_profile","batch_id profile","batch_id=?","batch_id",1,batchId);
++        if(profiles.size()!=1)throw unavailable();
++        var members=read.select("input_batch_file",BoundedTranscriptMetadata.MEMBER,"batch_id=?","ordinal",64,batchId);
++        return new ReplayGraph(input,batch,profiles.getFirst(),members);
++    }
++    private List<ama.contract.TaskContracts.TaskSpec> taskSpec(String task,boolean locked) {
++        return j.query("SELECT task_type,pool,subject_kind,subject_id,producer_key,input_kind,input_id,input_fingerprint,business_version,priority,cancel_epoch,max_attempts FROM durable_task WHERE id=?"+(locked?" FOR UPDATE":""),(r,n)->new ama.contract.TaskContracts.TaskSpec(r.getString(1),r.getString(2),new ama.contract.TaskContracts.SubjectRef(r.getString(3),r.getString(4)),r.getString(5),new ama.contract.TaskContracts.TypedRef(r.getString(6),r.getString(7)),r.getString(8),r.getLong(9),r.getInt(10),r.getLong(11),r.getInt(12)),task);
++    }
++    private ImportAccepted restore(String meeting,Replay replay,ReplayProof proof,ImportRequest request) {
++        if(proof==null||replay.status()!=202||!proof.producer().equals(proof.spec().producerKey())
++            ||proof.spec().businessVersion()!=request.expectedRevision()+1)throw unavailable();
++        try {
++            // Recheck exact pre-root observations with current locked reads, without hashing or archive/source preparation.
++            if(!replayGraph(proof.spec(),true).equals(proof.graph())||!taskSpec(replay.task(),true).equals(List.of(proof.spec())))throw unavailable();
++        }
++        catch(ama.contract.MinutesContracts.Failure failure) {
++            if(failure.code()==ama.contract.MinutesContracts.FailureCode.CANCELLED)throw failure;
++            throw unavailable();
++        }
++        catch(IllegalArgumentException|ama.contract.FileContracts.NotFound corrupt) {
++            throw unavailable();
++        }
++        if(j.queryForObject("SELECT COUNT(*) FROM durable_task WHERE input_kind='TRANSCRIPTION_INPUT' AND input_id=?",Long.class,proof.spec().input().id())!=1)throw unavailable();
++        long revision=proof.spec().businessVersion();
++        return new ImportAccepted(meeting,TranscriptReadGraph.text(proof.graph().batch(),"id"),proof.spec().input().id(),replay.task(),revision,Long.toString(revision),proof.spec().inputFingerprint());
+     }
+     public static void key(String key) {
+         if(key==null||key.isBlank()||encode(key).length>256)throw new IllegalArgumentException("Invalid idempotency key");
+     }
+     private static byte[] encode(String value) {
+         try {
+             var buffer=StandardCharsets.UTF_8.newEncoder().onMalformedInput(CodingErrorAction.REPORT).encode(java.nio.CharBuffer.wrap(value));
+             var bytes=new byte[buffer.remaining()];
+             buffer.get(bytes);
+             return bytes;
+diff --git a/backend/integration-tests/src/test/java/ama/storage/ProcessingIntakeHttpIT.java b/backend/integration-tests/src/test/java/ama/storage/ProcessingIntakeHttpIT.java
+index 6d0bae7..3caf121 100644
+--- a/backend/integration-tests/src/test/java/ama/storage/ProcessingIntakeHttpIT.java
++++ b/backend/integration-tests/src/test/java/ama/storage/ProcessingIntakeHttpIT.java
+@@ -37,21 +37,21 @@ class ProcessingIntakeHttpIT {
+         assertEquals("TRANSCRIPT_IMPORT_V1",spec.get("task_type"));
+         assertEquals("READY",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,task));
+         assertFalse(acceptedSpecs.containsKey(task));
+         acceptedSpecs.put(task,Map.copyOf(spec));
+         ownedTasks.add(task);
+     }
+     volatile java.util.function.UnaryOperator<ama.transcript.JdbcProcessingIntake.NewIntake> preparationDecorator=java.util.function.UnaryOperator.identity();
+     Path archive;
+     String pin;
+     Ref processing;
+-    @BeforeEach void start() throws Exception {
++    @BeforeEach void start(TestInfo test) throws Exception {
+         source=new Task04ProbeSource(MysqlTestDatabase.dataSource());
+         j=new JdbcTemplate(source);
+         Path parent=Path.of("target/registry-fixtures").toAbsolutePath().normalize();
+         Files.createDirectories(parent);
+         Path root=parent.resolve("task04-"+UUID.randomUUID());
+         assertTrue(root.startsWith(parent));
+         assertFalse(Files.exists(root));
+         Files.createDirectory(root);
+         Task04Pki.create();
+         storage=new ManagedRegistryFixture(root);
+@@ -97,54 +97,69 @@ class ProcessingIntakeHttpIT {
+                 return (a,m,r)->preparationDecorator.apply(actual).prepare(a,m,r);
+             },definition->definition.setPrimary(true));
+             c.registerBean("task04DataSource",javax.sql.DataSource.class,()->source);
+             c.registerBean("task04Purpose",FilePurposePolicy.class,()->(a,m,p)-> {
+                 if(!purposeEnabled)throw new FilePurposePolicy.Unavailable();
+                 new TranscriptFilePurposePolicy().require(a,m,p);
+             });
+             c.registerBean("task04Backends",FileBackendDefinitions.class,()->new FileBackendDefinitions(List.of(storage.backend(observed)),storage.binding.id()));
+         }).run("--server.address=127.0.0.1","--server.port=0","--management.server.port=0","--logging.level.root=ERROR", "--identity.allowed-origin="+origin,"--processing.enabled=true","--processing.archive-root="+archive,"--processing.index-sha="+pin, "--processing.config-version="+processing.version(),"--processing.config-sha="+processing.sha256(),"--processing.max-total-source-bytes=1048576");
+         owner="task04-"+UUID.randomUUID();
+-        token=identity(owner);
++        token=identity(owner,Set.of("redirectedAcceptedResultCannotAcknowledgeAnotherRequest","changedAcceptedBatchSequenceOrFingerprintIsUnavailable","corruptFixedImportColumnsAreUnavailable","finalSerializedReplayRejectsCorruptAcceptedGraph").contains(test.getTestMethod().orElseThrow().getName()));
+         var created=call("POST","/meetings","{}","create");
+         assertEquals(201,created.statusCode(),created.body());
+         meeting=body(created).get("id").asText();
+     }
+     String identity(String id) throws Exception {
++        return identity(id,false);
++    }
++    String identity(String id,boolean alreadyIssued) throws Exception {
+         String value=Base64.getUrlEncoder().withoutPadding().encodeToString(java.security.SecureRandom.getSeed(32));
+         j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",id,id);
+-        j.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (?,?,0,?,UTC_TIMESTAMP(6),UTC_TIMESTAMP(6)+INTERVAL 1 HOUR)",hash(value),id,csrf);
++        // Only the new positive integrity fixtures use a recent already-issued session after the observed backward clock step.
++        String issued=alreadyIssued?"UTC_TIMESTAMP(6)-INTERVAL 1 MINUTE":"UTC_TIMESTAMP(6)";
++        j.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (?,?,0,?,"+issued+",UTC_TIMESTAMP(6)+INTERVAL 1 HOUR)",hash(value),id,csrf);
+         return value;
+     }
+     static String hash(String value) throws Exception {
+         return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8)));
+     }
+     JsonNode body(HttpResponse<String> response) throws Exception {
+         return json.readTree(response.body());
+     }
+     HttpResponse<String> call(String method,String path,String payload,String key) throws Exception {
+         var request=HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+app.getEnvironment().getProperty("local.server.port")+"/api/v1"+path)).header("Cookie","__Host-AMA_SESSION="+token).header("Origin",origin).header("X-CSRF-Token",csrf).header("Content-Type","application/json");
+         if(key!=null)request.header("Idempotency-Key",key);
+-        return HttpClient.newHttpClient().send(request.method(method,HttpRequest.BodyPublishers.ofString(payload)).build(),HttpResponse.BodyHandlers.ofString());
++        var built=request.method(method,HttpRequest.BodyPublishers.ofString(payload)).build();
++        var response=HttpClient.newHttpClient().send(built,HttpResponse.BodyHandlers.ofString());
++        if(response.statusCode()==401)authDiagnostic(method+" "+path,built);
++        return response;
++    }
++    void authDiagnostic(String operation,HttpRequest request) throws Exception {
++        var session=j.queryForMap("SELECT i.status,i.session_generation identity_generation,s.session_generation session_generation,s.issued_at,s.expires_at,s.revoked_at,UTC_TIMESTAMP(6) database_now FROM identity_session s JOIN enterprise_identity i ON i.enterprise_id=s.enterprise_id WHERE s.token_hash=?",hash(token));
++        Path diagnostic=Path.of("target/task04-custody");Files.createDirectories(diagnostic);
++        Files.writeString(diagnostic.resolve(meeting+"-auth-diagnostic.txt"),"owner="+owner+" meeting="+meeting+" operation="+operation+" session="+session+" tokenCanonical="+token.matches("[A-Za-z0-9_-]{43}")+" cookieCount="+request.headers().allValues("Cookie").size()+" cookieExact="+request.headers().firstValue("Cookie").orElse("").equals("__Host-AMA_SESSION="+token)+" freshResolution="+app.getBean(ama.identity.SessionPort.class).resolve(token).isPresent()+"\n",StandardOpenOption.CREATE,StandardOpenOption.APPEND);
+     }
+     String open(String value) throws Exception {
+         String checksum=hash(value);
+         var begin=call("POST","/meetings/"+meeting+"/uploads",json.writeValueAsString(Map.of("purpose","TRANSCRIPT_INPUT","name","original😀.txt","size",value.getBytes(StandardCharsets.UTF_8).length,"sha256",checksum)),UUID.randomUUID().toString());
+         assertEquals(201,begin.statusCode(),begin.body());
+         String upload=body(begin).get("uploadId").asText();
+         var part=part(upload,value);
+         assertEquals(204,part.statusCode(),part.body());
+         return upload;
+     }
+     HttpResponse<String> part(String upload,String value) throws Exception {
+         var req=HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+app.getEnvironment().getProperty("local.server.port")+"/api/v1/uploads/"+upload+"/parts/1")).header("Cookie","__Host-AMA_SESSION="+token).header("Origin",origin).header("X-CSRF-Token",csrf).header("Content-Type","application/octet-stream").header("X-Checksum-SHA256",hash(value)).PUT(HttpRequest.BodyPublishers.ofString(value)).build();
+-        return HttpClient.newHttpClient().send(req,HttpResponse.BodyHandlers.ofString());
++        var response=HttpClient.newHttpClient().send(req,HttpResponse.BodyHandlers.ofString());
++        if(response.statusCode()==401)authDiagnostic("PART "+upload,req);
++        return response;
+     }
+     HttpResponse<String> complete(String upload,String value) throws Exception {
+         return call("POST","/uploads/"+upload+"/completion",json.writeValueAsString(Map.of("parts",List.of(Map.of("part",1,"sha256",hash(value))),"sha256",hash(value))),null);
+     }
+     String upload(String value) throws Exception {
+         var completed=complete(open(value),value);
+         assertEquals(200,completed.statusCode(),completed.body());
+         return body(completed).get("fileId").asText();
+     }
+     void restartRoute(long revision,String status,boolean defaultEnabled) {
+@@ -201,33 +216,45 @@ class ProcessingIntakeHttpIT {
+     }
+     @Test void httpRevisionBoundariesAndExhaustionPreserveReplayForEveryMutation() throws Exception {
+         for(String route:List.of("info","roster-confirmations","transcript-imports"))for(long revision:new long[] {
+             9007199254740991L,9007199254740992L,9007199254740993L,9223372036854775805L,9223372036854775806L
+         }) {
+             var created=call("POST","/meetings","{}",UUID.randomUUID().toString());
+             meeting=body(created).get("id").asText();
+             j.update("UPDATE meeting SET revision=? WHERE id=?",revision,meeting);
+             j.update("UPDATE task_subject SET business_version=? WHERE subject_kind='MEETING' AND subject_id=?",revision,meeting);
+             j.update("UPDATE meeting_search_projection SET meeting_revision=? WHERE meeting_id=?",revision,meeting);
++            if(route.equals("transcript-imports")&&revision>=9223372036854775805L) {
++                var cap=body(call("GET","/meetings/"+meeting+"/processing-capabilities","",null));
++                assertEquals(revision<9223372036854775806L,cap.get("canSubmit").asBoolean(),cap.toString());
++                if(revision==9223372036854775806L)assertEquals("REVISION_EXHAUSTED",cap.get("readOnlyReason").asText());
++            }
+             var request=new LinkedHashMap<String,Object>();
+             request.put("expectedRevisionToken",Long.toString(revision));
+             if(route.equals("info"))request.put("rosterDraftIds",List.of());
+             if(route.equals("transcript-imports"))request.put("orderedFileIds",List.of(upload("boundary\n")));
+             String payload=json.writeValueAsString(request),key=UUID.randomUUID().toString(),path="/meetings/"+meeting+"/"+route,method=route.equals("info")?"PUT":"POST";
+             var first=call(method,path,payload,key);
+             if(revision==9223372036854775806L) {
+                 assertEquals(409,first.statusCode(),route+" "+first.body());
+                 continue;
+             }
+             assertEquals(route.equals("transcript-imports")?202:200,first.statusCode(),route+" "+first.body());
+             assertEquals(Long.toString(revision+1),body(first).get("revisionToken").asText());
+-            if(route.equals("transcript-imports"))track(body(first).get("taskId").asText());
++            if(route.equals("transcript-imports")) {
++                track(body(first).get("taskId").asText());
++                if(revision==9223372036854775805L) {
++                    var cap=body(call("GET","/meetings/"+meeting+"/processing-capabilities","",null));
++                    assertFalse(cap.get("canSubmit").asBoolean(),cap.toString());
++                    assertEquals("REVISION_EXHAUSTED",cap.get("readOnlyReason").asText());
++                }
++            }
+             assertEquals(body(first),body(call(method,path,payload,key)));
+             request.remove("expectedRevisionToken");
+             request.put("expectedRevision",revision);
+             assertEquals(body(first),body(call(method,path,json.writeValueAsString(request),key)));
+             request.put("expectedRevisionToken",Long.toString(revision));
+             assertEquals(body(first),body(call(method,path,json.writeValueAsString(request),key)));
+             assertEquals(409,call(method,path,payload,UUID.randomUUID().toString()).statusCode());
+         }
+     }
+     @Test void rollbackEveryWriteStageRestoresSourcesFencesDebtAndIdempotency() throws Exception {
+@@ -370,20 +397,119 @@ class ProcessingIntakeHttpIT {
+         try {
+             j.update("UPDATE durable_task SET producer_key=? WHERE id=?","e".repeat(64),task);
+             assertEquals(503,call("POST","/meetings/"+meeting+"/transcript-imports",payload,"producer").statusCode());
+             assertEquals(503,call("GET","/meetings/"+meeting+"/processing-tasks/"+task,"",null).statusCode());
+             assertEquals(503,call("GET","/meetings/"+meeting+"/processing-inputs/"+body(accepted).get("inputId").asText(),"",null).statusCode());
+         }
+         finally {
+             j.update("UPDATE durable_task SET producer_key=? WHERE id=?",original,task);
+         }
+     }
++    @Test void redirectedAcceptedResultCannotAcknowledgeAnotherRequest() throws Exception {
++        String file=upload("redirect first\n");
++        String firstPayload=json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(file)));
++        var first=call("POST","/meetings/"+meeting+"/transcript-imports",firstPayload,"redirect-first");
++        assertEquals(202,first.statusCode(),first.body());
++        String firstTask=body(first).get("taskId").asText();track(firstTask);
++        String secondFile=upload("redirect second\n");
++        var second=call("POST","/meetings/"+meeting+"/transcript-imports",json.writeValueAsString(Map.of("expectedRevisionToken","1","orderedFileIds",List.of(secondFile))),"redirect-second");
++        assertEquals(202,second.statusCode(),second.body());
++        String secondTask=body(second).get("taskId").asText();track(secondTask);
++        String scope=j.queryForObject("SELECT scope_hash FROM idempotency_record WHERE operation='PROCESSING_IMPORT' AND result_id=?",String.class,firstTask);
++        var before=replayCounts();
++        try {
++            assertEquals(1,j.update("UPDATE idempotency_record SET result_id=? WHERE scope_hash=?",secondTask,scope));
++            assertUnavailableReplay(firstPayload,"redirect-first",before);
++        } finally {assertEquals(1,j.update("UPDATE idempotency_record SET result_id=? WHERE scope_hash=?",firstTask,scope));}
++        assertEquals(body(first),body(call("POST","/meetings/"+meeting+"/transcript-imports",firstPayload,"redirect-first")));
++    }
++    @Test void changedAcceptedBatchSequenceOrFingerprintIsUnavailable() throws Exception {
++        String first=upload("sequence first\n"),second=upload("sequence second\n"),other=upload("sequence other\n");
++        String payload=json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(first,second)));
++        var response=call("POST","/meetings/"+meeting+"/transcript-imports",payload,"sequence");
++        assertEquals(202,response.statusCode(),response.body());var accepted=body(response);track(accepted.get("taskId").asText());
++        String batch=accepted.get("batchId").asText();var before=replayCounts();
++        String originalHash=j.queryForObject("SELECT sha256 FROM input_batch_file WHERE batch_id=? AND ordinal=1",String.class,batch);
++        try {
++            j.update("UPDATE input_batch_file SET file_id=?,sha256=? WHERE batch_id=? AND ordinal=1",other,hash("sequence other\n"),batch);
++            assertUnavailableReplay(payload,"sequence",before);
++        } finally {j.update("UPDATE input_batch_file SET file_id=?,sha256=? WHERE batch_id=? AND ordinal=1",first,originalHash,batch);}
++        try {
++            j.update("UPDATE input_batch_file SET ordinal=3 WHERE batch_id=? AND ordinal=1",batch);
++            j.update("UPDATE input_batch_file SET ordinal=1 WHERE batch_id=? AND ordinal=2",batch);
++            j.update("UPDATE input_batch_file SET ordinal=2 WHERE batch_id=? AND ordinal=3",batch);
++            assertUnavailableReplay(payload,"sequence",before);
++        } finally {
++            // Two-step temporary ordinals avoid primary-key collisions and preserve each exact member.
++            j.update("UPDATE input_batch_file SET ordinal=ordinal+2 WHERE batch_id=?",batch);
++            j.update("UPDATE input_batch_file SET ordinal=5-ordinal WHERE batch_id=?",batch);
++        }
++        String profile=j.queryForObject("SELECT profile FROM input_batch_fingerprint_profile WHERE batch_id=?",String.class,batch);
++        try {
++            j.update("DELETE FROM input_batch_fingerprint_profile WHERE batch_id=?",batch);
++            assertUnavailableReplay(payload,"sequence",before);
++        } finally {j.update("INSERT INTO input_batch_fingerprint_profile(batch_id,profile) VALUES (?,?)",batch,profile);}
++        String fingerprint=j.queryForObject("SELECT input_fingerprint FROM input_batch WHERE id=?",String.class,batch);
++        try {j.update("UPDATE input_batch SET input_fingerprint=? WHERE id=?","e".repeat(64),batch);assertUnavailableReplay(payload,"sequence",before);}
++        finally {j.update("UPDATE input_batch SET input_fingerprint=? WHERE id=?",fingerprint,batch);}
++        assertEquals(accepted,body(call("POST","/meetings/"+meeting+"/transcript-imports",payload,"sequence")));
++    }
++    @Test void corruptFixedImportColumnsAreUnavailable() throws Exception {
++        String file=upload("shape\n"),payload=json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(file)));
++        var response=call("POST","/meetings/"+meeting+"/transcript-imports",payload,"shape");
++        assertEquals(202,response.statusCode(),response.body());var accepted=body(response);track(accepted.get("taskId").asText());
++        String input=accepted.get("inputId").asText();var before=replayCounts();
++        for(String column:List.of("model_config_version","prompt_version","manifest_schema_version","material_mode","parser_version","processing_config_version","config_manifest")) {
++            var original=j.queryForMap("SELECT "+column+",material_snapshot_id FROM transcription_input WHERE id=?",input);
++            try {
++                if(column.equals("material_mode"))j.update("UPDATE transcription_input SET material_mode='PINNED',material_snapshot_id=? WHERE id=?",UUID.randomUUID().toString(),input);
++                else j.update("UPDATE transcription_input SET "+column+"=? WHERE id=?",column.equals("manifest_schema_version")?2:"unexpected",input);
++                assertUnavailableReplay(payload,"shape",before);
++            } finally {j.update("UPDATE transcription_input SET "+column+"=?,material_snapshot_id=? WHERE id=?",original.get(column),original.get("material_snapshot_id"),input);}
++        }
++        assertEquals(accepted,body(call("POST","/meetings/"+meeting+"/transcript-imports",payload,"shape")));
++    }
++    @Test void finalSerializedReplayRejectsCorruptAcceptedGraph() throws Exception {
++        String file=upload("final replay\n"),payload=json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(file)));
++        var first=new java.util.concurrent.atomic.AtomicBoolean(true);
++        var winner=new java.util.concurrent.atomic.AtomicReference<JsonNode>();
++        var before=new java.util.concurrent.atomic.AtomicReference<Map<String,Object>>();
++        preparationDecorator=actual->(a,m,r)-> {
++            var prepared=actual.prepare(a,m,r);
++            if(first.getAndSet(false))try {
++                var accepted=call("POST","/meetings/"+meeting+"/transcript-imports",payload,"final-corrupt");
++                assertEquals(202,accepted.statusCode(),accepted.body());var result=body(accepted);winner.set(result);track(result.get("taskId").asText());
++                before.set(replayCounts());
++                j.update("UPDATE transcription_input SET model_config_version='unexpected' WHERE id=?",result.get("inputId").asText());
++            } catch(Exception failure) {throw new IllegalStateException(failure);}
++            return prepared;
++        };
++        try {
++            var response=call("POST","/meetings/"+meeting+"/transcript-imports",payload,"final-corrupt");
++            assertNotNull(winner.get());assertEquals(503,response.statusCode(),response.body());
++            assertEquals(before.get(),replayCounts());
++        }
++        finally {
++            if(winner.get()!=null)j.update("UPDATE transcription_input SET model_config_version=NULL WHERE id=?",winner.get().get("inputId").asText());
++            preparationDecorator=java.util.function.UnaryOperator.identity();
++        }
++        assertEquals(winner.get(),body(call("POST","/meetings/"+meeting+"/transcript-imports",payload,"final-corrupt")));
++    }
++    Map<String,Object> replayCounts() {
++        return j.queryForMap("SELECT (SELECT COUNT(*) FROM input_batch WHERE meeting_id=?) batches,(SELECT COUNT(*) FROM transcription_input WHERE meeting_id=?) inputs,(SELECT COUNT(*) FROM durable_task WHERE subject_id=?) tasks,(SELECT COUNT(*) FROM idempotency_record WHERE resource_id=?) idempotency,(SELECT COUNT(*) FROM audit_event WHERE resource_id=?) audits,(SELECT COUNT(*) FROM task_outbox WHERE subject_id=?) events",meeting,meeting,meeting,meeting,meeting,meeting);
++    }
++    void assertUnavailableReplay(String payload,String key,Map<String,Object> before) throws Exception {
++        var result=call("POST","/meetings/"+meeting+"/transcript-imports",payload,key);
++        assertEquals(503,result.statusCode(),result.body());
++        assertEquals("PROCESSING_UNAVAILABLE",body(result).get("error").get("code").asText());
++        assertEquals(before,replayCounts());
++    }
+     @Test void originalUploadBeginEmitsOpaquePartSizeToken() throws Exception {
+         var begin=call("POST","/meetings/"+meeting+"/uploads",json.writeValueAsString(Map.of("purpose","TRANSCRIPT_INPUT","name","token.txt","size",1,"sha256",hash("x"))),UUID.randomUUID().toString());
+         assertEquals(201,begin.statusCode(),begin.body());
+         assertTrue(body(begin).has("partSizeToken"),begin.body());
+         assertEquals(body(begin).get("partSize").asText(),body(begin).get("partSizeToken").asText());
+     }
+     @Test void recoveryRacesNeverAdoptDifferentRevokedUncommittedOrAbsentResults() throws Exception {
+         for(String mode:List.of("DIFFERENT","ROLLBACK","REVOKED","UNCOMMITTED","LATE","DB_FAILURE","FINAL_CLAIM")) {
+             preparationDecorator=java.util.function.UnaryOperator.identity();
+             meeting=body(call("POST","/meetings","{}",UUID.randomUUID().toString())).get("id").asText();
+@@ -657,20 +783,28 @@ class ProcessingIntakeHttpIT {
+     }
+     @Test void ineligibleCompletedNeighborDoesNotMislabelAValidSource() throws Exception {
+         String valid=upload("valid\n"),invalid=upload("cleanup\n");
+         j.update("UPDATE file_object SET state='DELETE_PENDING' WHERE id=?",invalid);
+         var response=call("GET","/meetings/"+meeting+"/completed-files","",null);
+         assertEquals(200,response.statusCode(),response.body());
+         var byId=new HashMap<String,JsonNode>();
+         for(var item:body(response).get("items"))byId.put(item.get("fileId").asText(),item);
+         assertEquals("ELIGIBLE",byId.get(valid).get("intakeEligibility").get("state").asText());
+         assertEquals("SOURCE_STATE",byId.get(invalid).get("intakeEligibility").get("reason").asText());
++        var receipts=new ArrayList<JsonNode>();
++        for(String file:List.of(valid,invalid)) {
++            var receipt=call("GET","/meetings/"+meeting+"/uploads/"+byId.get(file).get("uploadId").asText(),"",null);
++            assertEquals(200,receipt.statusCode(),receipt.body());receipts.add(body(receipt));
++        }
++        Path responseEvidence=Path.of("target/task04-custody");Files.createDirectories(responseEvidence);
++        Files.writeString(responseEvidence.resolve(meeting+"-schema-http.json"),json.writeValueAsString(Map.of("completedFiles",body(response),"receipts",receipts)));
++
+         var accepted=call("POST","/meetings/"+meeting+"/transcript-imports",json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(valid))),"valid-neighbor");
+         assertEquals(202,accepted.statusCode(),accepted.body());
+         track(body(accepted).get("taskId").asText());
+         assertEquals(409,call("POST","/meetings/"+meeting+"/transcript-imports",json.writeValueAsString(Map.of("expectedRevisionToken","1","orderedFileIds",List.of(invalid))),"invalid-neighbor").statusCode());
+     }
+     @Test void lostCommitAcknowledgmentRecoversTheActualCommittedAcceptance() throws Exception {
+         String file=upload("lost acknowledgment\n");
+         String payload=json.writeValueAsString(Map.of("expectedRevisionToken","0","orderedFileIds",List.of(file)));
+         source.lostAckOn.set("INSERT INTO durable_task");
+         var uncertain=call("POST","/meetings/"+meeting+"/transcript-imports",payload,"lost-ack");
+diff --git a/contracts/openapi/processing.yaml b/contracts/openapi/processing.yaml
+index 1ff3220..7a560d4 100644
+--- a/contracts/openapi/processing.yaml
++++ b/contracts/openapi/processing.yaml
+@@ -357,21 +357,22 @@
+             "type": [
+               "string",
+               "null"
+             ],
+             "enum": [
+               "SOURCE_STATE",
+               "SOURCE_EPOCH",
+               "SOURCE_PURPOSE",
+               "SOURCE_ROUTE",
+               "SOURCE_PROVENANCE",
+-              "READ_ONLY"
++              "READ_ONLY",
++              null
+             ]
+           }
+         }
+       },
+       "businessReadEligibility": {
+         "type": "string",
+         "enum": [
+           "NOT_EVALUATED"
+         ]
+       }

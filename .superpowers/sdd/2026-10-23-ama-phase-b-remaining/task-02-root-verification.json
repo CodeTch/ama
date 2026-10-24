@@ -1,0 +1,38 @@
+{
+  "base": "a3b2933ef83035e858d2d3336decba4617f22a1f",
+  "head": "66e70fdeef286a38592395ce94bdfbb1a93bce4a",
+  "source_paths_verified": 10,
+  "evidence_paths_verified": 134,
+  "junit": {
+    "final-meeting-regression": {
+      "suites": 4,
+      "counts": [
+        45,
+        0,
+        0,
+        0
+      ]
+    },
+    "final-all-units": {
+      "suites": 30,
+      "counts": [
+        221,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "credential_scan": "own fixture values absent",
+  "audit": {
+    "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-02-review-package-audit.diff",
+    "bytes": 14843932,
+    "sha256": "5a08e3e380b1028bccad0ece4855e47e7efff4f8dfc37cf8efc42aa31a5cb924"
+  },
+  "bounded_review": {
+    "path": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-02-review-package.diff",
+    "bytes": 120935,
+    "sha256": "3ca0da9e4b04ddf45f2984c9f5c1a0e46433fb79ca9f219e6b99a1cb8b23ce96"
+  },
+  "ruling": "Complete audit contains all DB snapshots; review view includes every source/doc/test change, owned executable evidence and manifest-backed evidence references. Reviewer may programmatically verify snapshots without dumping rows."
+}

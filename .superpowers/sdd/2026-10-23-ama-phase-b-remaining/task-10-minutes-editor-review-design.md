@@ -1,0 +1,276 @@
+# Task 10 — saved minutes, editor intent, full graph copies and exact reviews
+
+2026-10-23. DESIGN ONLY; ready for independent SPEC/design review, not adopted or implemented. This dispatch activates the prepared brief's design scope. Only this report is written; no source/tests/Git/index/HEAD/DB/Docker/private-environment mutation or helper execution, no runtime/phase/company qualification, no subagent dispatch. No whole implementation plan was read.
+
+W=/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining. Changing Task3-owned source was inspected only with read-only git show at 3e393dbc9485b187b89bfc03abd88821a0aabddb. Invocation-local safe.directory followed an ownership refusal; no Git configuration was changed. Task3 author commit aa0b5f08 is awaiting independent review and is NOT adopted authority. Task9 coordination is an aligned proposal, not adopted design/source. During this task root adopted Task5 original+R1 through the import-worker wrapper; its source remains unimplemented.
+
+## 1. Authority and actual source
+
+Read task-10-design-brief-prepared.md first, exact task-10-plan-extract, controlled-runtime full Normative R1 and authority-external refinement; adopted minutes UX/contract/config-wire wrappers, original contract mappings and fix1; S1/fix1 handbooks/adoption; b07-b08 preflight; Task3 authority/pre-gate R2, Task6 R1 saved-transcript, Task7 root rulings, Task8 fairness and Task5 import-worker wrappers. Read actual MinutesContracts, ResultHashProfiles, ReviewCoverageEvaluator, StoredSourceGraph, RowsetProjection, CreationSupport, OutputValidation, ArchivedProfileResolver/ConfigBindings, V008/V012/V013/V013.1 and frozen meeting/task/processing reader sources. Adoption wrappers govern over historical pending headers. Task9 brief/messages are alignment context only.
+
+| Input | Raw SHA256 |
+|---|---|
+| task-10-design-brief-prepared.md | fe8da75fbdeab26668aa6ec4b89ac69e122d7d2d98667aabe28811e146ad7065 |
+| task-10-plan-extract.md | 9fb0ca5478acdc31f74c88e76698381d47fb6491cf3a7d6762f45d24055a89a7 |
+| controlled-runtime.md | 8bec16ce2935cef50aee5771c4be3ea899db11fed28e4255b2feeb2f7a016b54 |
+| minutes-contract.md | a9772119da8be0899ca67fabcf94933cb778a000fd23ab0e035bc7f510c3e825 |
+| minutes-ux-decisions.md | 41341d06506c1eb352d1654b93100995a4bfbc6bbebcb3fe5774d38a3ed18413 |
+
+Choose normative immutable full graph copy. Pointer adoption would need additional independent approval and is not selected; in-place target editing destroys review/version identity. Supported basis remains IMPORT/TXT/EMPTY/FULL, generation/review/final v2 and canonical/rowset v1. No general rebind, nonempty material, v3, parser/profile conversion, partial regeneration or null-origin handwritten-body support.
+
+Actual source constraints:
+
+* FullRow/Table fixes all exact physical projections. StoredProvenanceFacts bounds supplied facts but cannot prove query completeness/authenticity. ArchiveBytes must be bounded before capture/copy.
+* ResultHashProfiles.target binds actual target ID, body revision or set ID/revision, entire content and exact anchor; ACTION_FIELDS also binds actual accepted nullable tuple. sources selects every intersecting evidence row, all evidence for ACTION_FIELDS, and verifies original source/profile chains. targetData/sourcesData are inspection only.
+* ReviewCoverageEvaluator selects greatest exact review_no for target/kind/anchor/target+source hashes and supported profile. Whole support needs exact [0,scalarCount(body)); it does not choose required business reviews or establish human intent.
+* StoredSourceGraph uses body.generation_input_id, ACTION action_suggestion.input_id, ordinary transcript element's unique intrinsic confirmation, and each directory's own input_id. Contradictory suggestion cannot fall back. No element origin-input column exists.
+* CreationSupport produces PARTIAL/UNSUPPORTED and null accepted action fields. Review never overwrites creation support_state.
+* V012 has independent body/set history indexes and unique candidate_task; no immutable saved body-to-set history pair. V013 final freezes a real pair. V013.1 already provides guard with supported range0..9223372036854775806. No DDL proposed.
+* Frozen JdbcMeetingRepository inserts guard0 only on genuine creation. Its business writes need the shared disposition/publication integration below. Frozen JdbcProcessingFactsReader metadata-before-manifest is a pattern, not complete minutes authority.
+
+## 2. Ownership, seams and final alignment gate
+
+Task9 owns initial first-only settings initialization (root ruling), generation input/enqueue, complete actual minutes/source graph reader, model/strict output and initial candidate graph/external policy, generation/input/task/candidate GETs. Task10 owns subsequent settings edits, intent, saved copies/edits/action acceptance/reviews/readiness, saved/history/source/review GETs, and shared PENDING disposition. Task11 owns final/publication/frozen history and publication freeze. Task12 owns reviewed-API browser handshake/draft behavior.
+
+Task9 and Task10 align proposed data/write seams:
+
+```
+PreparedMinutesGraph = bounded complete rows/keys/observations/original archives
+prepareCopy(selection,purpose,request,bounds,cancelled) -> CandidateGraphPlan
+copyComplete(private HeldMinutesMutation invocation, plan) -> WrittenMinutesGraph
+completeCurrent(private generation invocation, validatedCandidate) -> disposition
+```
+
+Names describe future seams, not existing APIs. Preparation runs outside roots and grants no authority. copyComplete is a confined DB-only writer invoked by private registered command/task composition after genuine prelocks/exact comparison. Invocation binds exact installation/issuer, DS identity, active unsuspended holder, B03/B04 gate, purpose, full graph/specs, plan identity, command or task+attempt/execution and one-use phase. It expires on return/rollback/commit. DTO, caller flag, public interface/Supplier or same-DS ambient transaction cannot mint it. Task5 AfterTask/confined actual-output validation and Task7 registered observation remain sole completion owners; no second complete, recursive source read, scheduler or detached eligibility authority.
+
+Use one non-Spring shared adapter factory, consumed by API configuration and worker main: actual DS/transaction/access/fences/outbox/source registry/Task3 issuer -> immutable domain contributors/confined policies -> validated assembled services. Publish nothing before complete construction. Contributors depend on existing genuine gate verification/JDBC; repositories/policies depend on coordinator. Contributors never call services/queue to reacquire roots. No bean cycle/public setter/ThreadLocal last-plan/alternate ACL/issuer/optional no-op installation.
+
+FINAL-UPSTREAM-FACADE-ALIGNMENT before source dispatch: pin adopted Task3/4/5/6/7/8/9 exact source/design SHA; map private holder/gate verification, after-task hooks and all table ranks to real APIs; review any minimal required extension. Task3 author commit alone does not pass it. If authentic verification is unavailable, fail CAPABILITY_UNAVAILABLE and report precise contradiction to root, never invent replacement authority. Candidate/publication activation also requires all registered writers integrated/tested, not merely a class present.
+
+## 3. Common transactions, bounds and replay
+
+Follow adopted Task6 S->A->F, one genuine gate per transaction. DB-only summaries/receipts use one D transaction and make no archive-readiness claim.
+
+1. Bound/normalize wire and exact counters; semantic digest outside roots. Mandatory accepted-result lookup under current owner EDIT precedes current config/readiness/CAS/exhaustion/new-branch availability. No placeholder on miss; mismatched body conflicts; invalid durable result is corruption, never miss; wait boundedly for committed result.
+2. Discover finite IDs/edges/identities outside locks. TX-S acquires one gate and complete declared domain/source/task union; metadata locks/reservations precede text transfer. Commit detached snapshot, no held authority escapes.
+3. A loads exact original archive closure, parses anchors/config, validates graph/producer and computes all hashes/proposed rows outside roots. Current defaults never repair history. Each public pure entry receives its exact raw closure; target-only review hash may need REVIEW_HASH+codec while sources needs original generation/processing chains. Share acquisition budgeting/dedup; extra gratuitous archives cannot be hidden from exact-closure checks.
+4. TX-F uses existing serialized idempotency claim+fresh gate, replay/mismatch first. New command locks complete declared union, checks authority/fences/lifecycle/publication and exact rows/keys/text/profile/source/task observations against A without hash/parse/I/O. Changed discovery aborts to outside preparation. Write, bounded exact actual readback, receipt/audit/outbox, single flush last; commit before ACK.
+5. Named ordinary preflight failure after miss permits one fresh accepted-result lookup for concurrent winner after closing preparation transaction. No catch-all recovery for auth denial/cancellation/corruption/programming errors. Replay controller remains usable with current config unavailable or smaller new-command limits; stable finite wire bounds remain.
+
+Proposed rank extension to align with adopted upstream: all identities -> subject+meeting/grants -> guard and complete candidate/publication-domain headers -> selected body/set/review/directory/evidence/locator domain parents/children in topological fixed table/PK order -> all transcript/processing/input/batch/sidecar/member domain rows in Task3/6 order -> all sessions -> all files -> ALL tasks -> ALL attempts -> operations/executions -> audit/outbox. Predeclared publication operation IDs are not permission to lock external rows early. Same table/PK has one rank across contributors. No discovery/new parent/source/candidate lock after task/external acquisition; no nested gate. Explicit global rank reconciliation is part of facade gate.
+
+Before every LONGTEXT SELECT (body/title/anchor/mention/display/background/template/exclusion/config), retain metadata-only X row/parent locks, establish exact complete PK sets and reserve per-field/aggregate UTF8/scalar/UTF16/row/edge/response budgets. Root writer discipline plus actual FK parent and child locks protects inserts and explicit empty collections; do not assume gap locks. Transfer only those protected keys; repeat in F/readback. JDBC streaming is secondary, not proof against oversized driver transfer. Compare precomputed exact bounded fields rather than hash inside F. Storage-byte permission remains separate from retained text inspection.
+
+Proposed local bounds for root qualification: request8MiB, encoded response32MiB, per text4MiB UTF8/4Mi UTF16; aggregate16MiB UTF8/16Mi scalars/16Mi UTF16;100000 facts/500000 edges, origin depth128/nodes256,256 PENDING headers,4096 relevant generation-task/input metadata entries, page20/max50. Minima with actual archives/canonical/Task3 limits, checked arithmetic/cancellation/deadlines, LIMIT remaining+1 overflow before allocation. No successful truncation/unbounded task scan/node budget reset. These are proposed deployment limits, not capacity evidence.
+
+## 4. Durable sticky editor intent
+
+Genuine meeting creation is the sole guard0 initializer. Historical absence is UNKNOWN. First intent on absent guard inserts1; otherwise increment, never beyond9223372036854775806. No reset/decrement/expiry/close action. Exhaustion rejects atomically. Intent does not advance meeting/subject businessVersion/cancel epoch, clear final/debt or dispose candidates.
+
+POST intent semantic body is normalized expectedRevision. Under current ACTIVE owner EDIT/lifecycle/publication policy, root+guard lock, exact r, commit increment and idempotency ACK together. idempotency result_id uses existing meeting UUID and EDIT_INTENT operation; no invented accepted epoch/revision column/table. Same key/body reauthorizes without increment and returns CURRENT committed positive guard projection. If expected r is now stale, return409/current authorized projection and preserve draft; this explicit intent rule supersedes normal old-mutation replay. Missing/nonpositive guard on accepted replay is corruption/unavailable, never insert0 or silently recreate1. Different tab keys serialize increments.
+
+Task12 keeps edit-capable controls disabled until actual committed ACK or original same-key retry proves the exact intended handshake. This precedes typing, IME/composition, paste/drop/accessibility input, restored drafts, editable form hydration and autosave. Positive GET or another tab's broadcast is not this tab's ACK. Refresh/new tab/restoration obtains its own authenticated handshake; uncertain prior request retries same key/body. Failed/lost ACK retains local draft disabled. Actual stale conflict preserves draft and obtains a deliberate new intent at fresh r before edit entry. Abandoned intent remains positive forever, requiring manual adoption. Server saved-edit commands also require actual positive guard plus owner/CAS, not a browser assertion.
+
+Race: completion winning root on0 can save before editor becomes enabled; intent then observes changed r/conflicts. Intent winning permanently prevents auto-save; same-fence candidate becomes PENDING. Two editors never restore0. No actual autosave claim until server guard and browser handshake are integrated/tested.
+
+## 5. Completion, guarded first save and debt
+
+Task9 persists/validates complete immutable candidate graph through genuine prepared queue/external invocation. Candidate title_origin=AI records original output. Task10 completeCurrent runs inside same invocation after actual readback; no nested transaction/detached eligible flag.
+
+| Fresh state under same root | Atomic disposition |
+|---|---|
+| Original business/input/cancel current, actual guard0, no effective body, ACTIVE owner EDIT, valid lifecycle/no publication freeze | Copy complete graph to saved IDs; candidate ADOPTED/decided_at; current body/set/fingerprint update, clear proven current generation debt/final pointer, advance meeting+subject once r+1. Typed task output remains candidate identity; separate read reveals adoption. |
+| Same fence, no body, positive/UNKNOWN guard | PENDING; no automatic copy/r advance; retain draft. |
+| Same fence, existing body | PENDING regeneration, preserving effective graph/HUMAN title; no automatic r advance/adoption. |
+| Business changed with authentic Task7 dedicated retention, current actor/same cancel/lifecycle/no publication freeze | STALE original input/task/base/fingerprint; no root/pointer/r/debt/final mutation. Task remains STALE/BUSINESS_FENCED/no output, candidate discoverable via authentic task relation. |
+| Changed cancel, revoked/inactive/closed/deleting/governed/published/in-progress publication, wrong holder/task/execution/unverified receipt | No domain save/candidate effect; only Task7 permitted fact-only/quarantine semantics, no restored permission. |
+
+Current FULL success may clear debt only after complete candidate validation and exact current source/settings/input proof; PENDING still blocks final. STALE never clears debt. Root ruling: enqueue freezes current r/e without advance and retains real debt, respects publication freeze. Human edit/review does not rebase original generation input/fingerprint. No claimed success from queue state alone.
+
+Entire candidate+saved graph/task+attempt/external rows/receipts/events rolls back on any validation/flush/commit failure. Task7 permit settlement is separate verified postcommit transaction/recovery; UNKNOWN never releases/resends. Adopted Task5 renewal drain/admission and Task7 ownership/close rules remain; no ordinary completion after external handoff.
+
+## 6. Full graph copy and immutable edits
+
+### 6.1 IDs, history and complete mapping
+
+Server preallocates UUIDs for copied owner rows. Under root, history numbers for minutes_revision and element_set use independent actual unique indexes, greatest revision+1 (empty starts1), signed supported-range guard. They cannot use meeting r: several candidates may share r. Seek ORDER BY revision DESC LIMIT1 metadata; no history table scan. Snapshot proposed maxima must match F, otherwise outside reprepare; never silently relabel prehashed targets. Task9/10 use one allocator. Adoption body parent_id=previous saved body; edit/restore parent_id=selected source body. Exact source generation_input_id preserved; parent does not fabricate a missing candidate-origin edge.
+
+| Rows | Copy/remap |
+|---|---|
+| minutes_revision | New UUID/history/actual actor/time, exact input/body/title except explicit edit or HUMAN protection; body evidence targets new UUID. |
+| element_set/minutes_element | New set UUID/history and UUID for EVERY element including unchanged siblings. Preserve category/ordinal/body/creation classification except narrow edit. Project all seven categories with explicit empty arrays; no fake NOT_EXTRACTED rows. |
+| evidence_link | New UUID for every occurrence; exactly one remapped target FK, preserved source/creation classification, exact validated anchor or explicit complete reanchor. |
+| source_locator | Total old->new/reused map. Reuse only actual same-meeting full typed/nullable byte equality; otherwise server UUID exact typed copy. Shared physical locator remains one within copied closure. Underlying transcript/file/confirmation IDs unchanged. Every evidence/join uses map, no hash-only dedup. |
+| action_item | New ACTION owner ID, exact accepted enterprise/display/date tuple including independent nulls. Initial candidate tuple all null. Explicit accepted-field change replaces only new tuple. |
+| action_suggestion | New ACTION owner ID, original input_id/raw owner_mention/due_on preserved including nulls. Never replace suggestion with accepted values. |
+| sensitive_detection/background_note | New directory UUID/set owner; preserve original input_id/category/ordinal/body; both sensitive labels remain distinct. |
+| directory joins | Complete remapped directory+locator PK sets, no missing/extra joins; required nonempty memberships. |
+| input/exclusion/template/transcript/config/tasks | Preserve original immutable selected references/complete closure; no input fingerprint rebase/source clone/current-default repair. |
+| reviews/final memberships | Never copy review credit or rows to new targets. Old immutable result_review/evidence/final memberships persist. |
+
+Validate total bijections/full children/all nullable values/ownership before insert. No old target-owned FK survives copied graph; original input/source references intentionally remain. Exact bounded DB readback compares every new row. Unsupported graph member aborts all effects.
+
+### 6.2 Editing operations
+
+Body save requires current saved source ID. New immutable body inherits exact generation_input/profile; set/directories unchanged unless explicitly versioned by another supported command. Client sends complete existing body evidence reanchor map by evidenceId and scalar start/end. Server derives canonical anchor and targetTextSha256 outside roots; original source/locator/classification stays fixed. Missing/extra/duplicate IDs, arbitrary new source or invalid/empty ranges fail. Zero-evidence body can stay zero-evidence; saved body must be nonblank valid scalar text. No parser rerun/NFC/trim/newline normalization or similarity-based reanchor.
+
+Element edit requires current set and exact element, preserving category. New complete set remaps every element/child. Changed target gets complete validated reanchors; unchanged targets preserve exact anchors/text/source. No arbitrary add/delete/reorder/source membership extension. Body pointer stays fixed. New IDs invalidate ALL copied target review credit, even unchanged siblings; UI exposes this consequence.
+
+Action field save takes all explicit members `{ownerEnterpriseId:null|string,ownerDisplay:null|string,dueOn:null|YYYY-MM-DD}`. Null is explicit unknown/unassigned. Preserve text/date exactly; nonnull enterprise identity must exist and be permitted by genuine existing identity selection, included in identity predeclaration before roots. Never infer it from mention, grant READ/change roster, or silently normalize display. If no qualified identity selector exists, capability exposes display/null-enterprise support honestly. Copy whole set and unchanged original suggestions/evidence/directories. Review is separate over actual accepted tuple.
+
+Explicit CONCLUSION/ACTION -> OPEN_QUESTION only: copy complete set, preserve evidence-source membership/original transcript locators and text or explicit validated reanchors. New non-ACTION row has no action_item/action_suggestion; old immutable ACTION keeps both. Require ordinary intrinsic unique confirmation to resolve SAME original confirmed transcript/source content as old action's fixed suggestion/input, verified before new suggestion omission. Missing/ambiguous/different proof/material/unrepresentable context fails CAPABILITY_UNAVAILABLE atomically. No unauthorized source_context/new source/latest confirmation. Empty evidence yields no invented origin/support; body/directories/input closure remains. New set deterministically reindexes source/destination category ordinals while preserving relative order of other targets; plan/readback match exactly.
+
+Restore supports separately selected saved body OR saved set under owner CAS/positive guard/current new-business source eligibility. No fabricated historic body+set pair; candidate graphs require adoption, not restore bypass. Same full copy/provenance/no-review rules. Arbitrary rebind/nonempty material/mixed-v3/null generation input/unrecoverable conversion fails atomically and preserves draft.
+
+Every genuine saved edit/restore/adopt advances r once, unchanged cancel epoch, clears current final and uses shared disposition/search revision. Preserve independent generation debt; human text/review does not falsely clear it. Content-only edit preserving actual current source/settings can remain saved without forced model rerun. Actual source/settings changes retain required upstream debt/invalidation.
+
+HUMAN title: existing current HUMAN title is copied to adopted saved body and remains HUMAN instead of AI candidate title. Explicit owner title edit sets HUMAN even equal text. Non-HUMAN title may accept validated candidate AI title. Candidate original title remains immutable. Model does not update meeting metadata name. LINKED/title-profile behavior must align exactly at facade gate; no implicit relink or HUMAN replacement.
+
+## 7. Later settings edits, adoption and explicit dispositions
+
+Root assigns first-only real settings initialization to Task9: create/select real immutable template revision plus actual empty exclusion revision, strict owner/idempotent CAS and no legacy backfill. Task10 does not duplicate initialization. Later settings commands require initialized actual pointers. Template selection names an actual accessible immutable template_revision (approved default or owner's template); no latest substitution. Selection creates no synthetic template row. Template definition creation/editing, when exposed, must reuse Task9's frozen real producer/themes encoding/name uniqueness contract; this design introduces no second serializer or unsupported arbitrary definition write.
+
+Exclusion replacement supplies COMPLETE intended `{locatorId,category,reason:null|string}` set and current source exclusion revision. Selected location/category must be a genuine supported current sensitivity-detection source pair in the authoritative graph; preserve both categories at same location. Empty explicit set creates real empty revision. Selecting/unselecting detection expands its whole original source/category set without deleting source/evidence/ACL. Server validates exact memberships, duplicates and category vocabulary, original readable source chain and bounds; arbitrary material/foreign locator fails. New exclusion revision UUID/history and all members commit together. Version allocation uses own meeting/revision index, original applied exclusions never overwritten.
+
+Template/exclusion change is new-business owner CAS, r+1/unchanged e, needs_generation=1, clears current final, preserves old saved body/set/input and transcript confirmation, updates selected pointer and shared PENDING disposal. Old saved result is visibly settings-stale until valid generation/adoption; never patch body's original input/exclusion to pass final hashing. No fabricated transcript invalidation solely from template change. New-key identical selection may acknowledge existing actual target without advance ONLY if final reviewed contract explicitly defines no-op; default here is explicit versioned selection r+1, true same-key replay alone avoids effects. All settings writes use publication freeze and exact replay-first. Setting helper is installed into Task9 first-init r writer before candidate coexistence.
+
+Adopt requires owner EDIT/current CAS, actual PENDING same-meeting candidate, exact original input/task/fingerprint/base matching current fence, current cancel/lifecycle/no publication freeze, complete supported graph/original configuration and current source/settings readiness. Prove authentic completed generation/result relation, not detached output. No original editorEpoch zero/equality requirement. Never recompute fingerprint at current r to refresh stale input. Copy whole graph, set ADOPTED/decided_at, move saved body/set, clear final, r+1, dispose other obsolete PENDING. Clear debt only via completed-current-input proof. Two adopts same r: one wins, other409 except exact replay.
+
+Reject PENDING->REJECTED; dispose STALE->REJECTED while original stale base/input remain and projection reports originalFenceStillCurrent=false. Both explicit owner CAS/r+1 decisions clear final/dispose superseded PENDING, preserve saved graph and independent debt. They need bounded actual candidate identity/provenance headers, not current model availability or byte-open permission merely to remove blocker; they cannot adopt content. ADOPTED cannot be rejected/disposed; already REJECTED different-key conflicts. No delete/resurrection/rebase; STALE is forever non-adoptable even when subsequently disposed into REJECTED.
+
+Durable receipt IDs: body save/restore=new minutes UUID; set/action/convert=new set UUID; review=review UUID; settings=selected template/new exclusion UUID with operation; adoption/reject/dispose=candidate UUID. Adoption replay returns candidate decision association; do not invent a durable saved-copy mapping absent schema. Fresh observation separately returns current graph, which may have changed since adoption. No invented acceptedRevision. Normal replay freshly authorizes but skips new CAS/current-config/effects; published historical acknowledgment never reattaches pointers. Intent uses its explicit stale-replay rule instead.
+
+## 8. Shared PENDING prelock/disposition and publication integration
+
+Task10 provides one actual `MinutesPendingDisposition` domain contribution via immutable shared `MeetingMutationDomains` coordinator. Proposed package-confined seams:
+
+```
+discover(meeting,bounds) -> data-only CandidateDomainDeclaration
+prelock(existing genuine gate,complete declaration) -> private HeldPendingDomain
+requireComplete(held,gate,purpose,exact declaration)
+afterBusinessAdvance(held,oldR,newR,explicitDecisionCandidate?)
+```
+
+Prelock happens after common root BEFORE sources/tasks/operations. Authoritatively enumerate ALL PENDING headers via candidate_pending fixed index order, LIMIT bound+1, lock headers/required input/disposition metadata in global rank, compare complete declaration. Root writer discipline prevents concurrent insert/state mutation; existing rows/actual FK parents protect zero set without gap-lock assumptions. Overflow aborts BEFORE effects, never truncates cleanup. Newly discovered parent/task/input ID aborts/reprepares outside; no chasing later. Disposition alone needs headers not full bodies; adoption separately declares full graph. No optional no-op may claim installed.
+
+After actual r->r+1, all remaining PENDING with immutable base !=newR becomes STALE/actual decided_at, preserving original input/body/set/fingerprint. Selected already ADOPTED/REJECTED is not overwritten. Supported PENDING starts at oldR, so unselected candidates become stale; inconsistent future base/missing metadata fails closed. Pure intent/replay/unchanged no-version confirmation acknowledgment does not dispose. Stale result retention never advances root.
+
+| Required writer | Integration |
+|---|---|
+| B03 info/roster business writes/confirmation | Complete candidate contribution before sources/tasks; actual r advance atomically stales superseded PENDING. No invented advance on replay/no-op. |
+| Task4 intake | Same helper before sources/tasks, original r+1/debt/invalidation retained. |
+| Task6 save/marks/restore/new or reattached confirmation | Same helper on actual advance; unchanged acknowledgment/replay no disposal. |
+| Task9 first settings initialization | Same shared version contribution if candidates coexist; strict first-only cannot be used as reset. |
+| Task9 completion via Task10 | Prelocked contribution in authentic invocation; first save advances/disposes; PENDING-only completion/enqueue no advance. |
+| Task10 saves/settings/reviews/adopt/reject/dispose | Same helper, no duplicate private policy. |
+| Task11 final | FIRST check readiness at expected r including all current PENDING and outstanding generation tasks/inputs. Only then freeze final/reviews and r+1/helper. Never advance to erase blockers. |
+| Later source/template/material/governance/cancel writers | Register compatible contribution before enabling coexistence; no ignored bypass. |
+
+Root ruling: final AND publish gates include complete outstanding generation tasks/inputs under same root, not just needs_generation or candidate count. Task9 supplies bounded metadata discovery/closure; Task11 predeclares every input/task/operation then locks at existing global rank. Unknown/in-flight result still capable of applying blocks. Final-first makes later permitted retention STALE only; enqueue-first blocks until authentic terminal outcome/disposition. PENDING cleanup never clears unrelated generation debt.
+
+Task11 publication contribution denies all content changes/intent/current candidate application/retention during publication READY/RUNNING/RECONCILING or unresolved execution, permanently after ever_published. V008 has no PUBLISHING stage; do not invent it. Exact authoritative publication/attempt/execution representation comes from Task11; stage or ever_published=false alone insufficient. Include B03/Task4/6/9 enqueue+completion/10 settings+reviews and source/reference direct writes before activation. Publication's own verified transition uses its special genuine capability only. Missing/contradictory installed guard denies effects; stored reads/true old acknowledgment remain separately authorized.
+
+## 9. Exact reviews and readiness
+
+Only CURRENT saved body ID or member of current saved element set is reviewable for effective credit. Candidate cannot gain it. Request target/kind/scope/outcome/expected r; server chooses exact complete evidence/source/profile, actor/time/sequence/hashes. WHOLE SOURCE_SUPPORT maps to [0,scalarCount(body)); optional SPAN is exact half-open scalar range. Empty body cannot have valid support anchor. No UTF16/NFC conversion or chosen favorable subset.
+
+Outside roots compute target/sources via configured ResultHashProfiles and original REVIEW_HASH/codec/source closure. SOURCE_SUPPORT includes ALL intersecting persisted evidence, including partial/unsupported/background; ACTION_FIELDS ALL evidence of exact ACTION. Actual complete query precedes selection; caller list cannot prove completeness. Store canonical target_anchor, target_hash/source_set_hash/hash_profile, complete result_review_evidence, genuine active reviewer/UTC microsecond time and root-serialized review_no=max+1/overflow guard. Creation support_state stays immutable.
+
+SUPPORTED requires explicit human owner attestation, nonempty relevant readable evidence and MEETING support for CONCLUSION/ACTION. Structural source validity alone is not attestation. ACTION_FIELDS=CONFIRMED separately binds actual accepted nullable enterprise/display/date tuple, never suggestions; null owner/date permitted, no ACL grant. No automatic review on save/adopt/field save. Partial scopes may be retained but never aggregated into whole.
+
+F compares exact current target/set/body/version, evidence/source membership/content/profiles, authority/r/publication and prepared hash inputs using bounded field equality; no in-lock rehash. Insert review/memberships, r+1, clear final, dispose PENDING, actual readback, receipt/audit/outbox atomically. Same-key replay no new sequence/r/event; no debt cleared merely by review. Failure rolls everything back.
+
+Required readiness, deterministic by category/ordinal/ID then kind/scope:
+
+* Each current CONCLUSION/ACTION: latest matching exact WHOLE SOURCE_SUPPORT=SUPPORTED with complete nonempty evidence and MEETING support.
+* Each current ACTION: exact ACTION_FIELDS=CONFIRMED for actual accepted tuple and complete evidence.
+* OPEN_QUESTION/other categories/whole BODY have no blanket support gate. Optional valid body/other reviews explicitly selected are separate from required IDs.
+* Saved graph/current transcript-source/settings, name/category/confirmed roster, no real generation debt/material change/sensitivity conflict, actual correction capability readiness, complete no-PENDING/no-outstanding-generation gates remain independent business requirements.
+
+Use ReviewCoverageEvaluator over complete actual relevant rows: greatest exact review_no wins; later same-scope PARTIAL/UNSUPPORTED defeats SUPPORTED. Partial scopes cannot supplement/replace WHOLE. Changed target ID/content/source/evidence/accepted tuple/profile gets no copied credit. Ambient r advance from a review does not alter immutable target hash, so reviews of different saved targets can accumulate; target version binds credit. Set copy invalidates all copied element IDs.
+
+Task11 takes exact required plus explicitly selected valid optional review IDs/full memberships, fresh rechecks and freezes final_result_review in final transaction. History uses those IDs/original archives, never later latest reviews. ResultHashProfiles.finalSources expects real final row; Task11 requires explicit same-algorithm prospective-final entry, no dummy stored-success/hash placeholder. Later defaults/reviews cannot rewrite original final.
+
+## 10. Producer-owned routes/OpenAPI/discovery
+
+Task10 owns saved/settings/edit/review/readiness sections of contracts/openapi/minutes.yaml. Task9 owns generation/input/task/candidate sections; one designated contract author merges/api.yaml integrates, then Task12 regenerates clients. The following are proposed exact routes, prefix `/api/v1/meetings/{meetingId}`, not implemented endpoint claims. All POST/PUT mutations require Idempotency-Key and normalized expectedRevision or expectedRevisionToken. Bodies reject unknown/inapplicable members.
+
+| Method/path | Request/read projection |
+|---|---|
+| GET `/minutes` | READ effective current saved body/set/evidence/all categories/directories or saved:null, fresh tokens/capabilities. Member excludes private candidate/history/raw/producer navigation; no candidate fallback. |
+| GET `/minutes/editor-intent` | Owner EDIT, actual KNOWN/UNKNOWN and nullable intentEpochToken; positive observation alone not tab handshake. |
+| POST `/minutes/editor-intents` | `{expectedRevision...}` -> actual intent receipt/current positive guard; special stale replay409. |
+| GET `/minutes/history?limit=&beforeRevisionToken=` | Owner EDIT saved-body metadata descending independent body revision; exclude candidate-owned body IDs; default20/max50,nextCursor/hasMore. |
+| GET `/minutes/revisions/{revisionId}` | Owner EDIT exact saved body/evidence/original provenance; no implied historic set pair. |
+| GET `/minutes/element-sets?limit=&beforeRevisionToken=` | Owner EDIT saved-set metadata, exclude candidate-owned sets; independent set history. |
+| GET `/minutes/element-sets/{setId}` | Owner EDIT complete saved set/all seven categories/empty arrays/directories/accepted and suggested tuples. |
+| GET `/minutes/sources/{locatorId}?targetKind=BODY|ELEMENT&targetId=` | READ only actual evidence membership of current saved target; exact bounded stored transcript passage/marks/locator/source version. |
+| GET `/minutes/revisions/{revisionId}/sources/{locatorId}` or `/minutes/element-sets/{setId}/sources/{locatorId}` | Owner EDIT exact saved-history membership; original-byte eligibility separate. Byte download delegates Task3/6 actual source protocol, never public pin/direct open. |
+| PUT `/minutes/body` | `{expectedRevision...,sourceRevisionId,title,body,evidenceAnchors:[{evidenceId,startToken,endToken}]}` complete existing body evidence map. Explicit title makes HUMAN. |
+| PUT `/minutes/elements/{elementId}` | `{expectedRevision...,sourceSetId,body,evidenceAnchors:[...]}` complete changed-target map, whole set copy. |
+| PUT `/minutes/elements/{elementId}/action-fields` | `{expectedRevision...,sourceSetId,ownerEnterpriseId,ownerDisplay,dueOn}` all nullable tuple members required. |
+| POST `/minutes/elements/{elementId}/open-question` | `{expectedRevision...,sourceSetId,body,evidenceAnchors:[...]}` supported exact conversion. |
+| POST `/minutes/body-restorations` or `/minutes/element-set-restorations` | `{expectedRevision...,sourceRevisionId}` or `{expectedRevision...,sourceSetId}`, separate saved history selection. |
+| GET `/minutes/settings` | Owner EDIT actual selected template/exclusion IDs and complete current settings/source-pair projection, initialized state/current debt. Initializer route owned by Task9. |
+| PUT `/minutes/settings/template` | `{expectedRevision...,templateRevisionId}` real accessible immutable selection. |
+| PUT `/minutes/settings/exclusions` | `{expectedRevision...,sourceExclusionRevisionId,items:[{locatorId,category,reason}]}` full replacement including explicit empty list. |
+| POST `/minutes/candidates/{candidateId}/adoptions` | `{expectedRevision...,inputId,inputFingerprint}` exact private candidate comparison; no editorEpoch-equality requirement. |
+| POST `/minutes/candidates/{candidateId}/rejections` or `/disposals` | `{expectedRevision...}` PENDING rejection or STALE disposal; no deletion. |
+| POST `/minutes/reviews` | `{expectedRevision...,target:{kind,id},reviewKind,scope,outcome,startToken?,endToken?}` SOURCE_SUPPORT scope WHOLE or SPAN, allowed support outcomes; SPAN alone has offsets. ACTION_FIELDS scope=null, CONFIRMED, no offsets. |
+| GET `/minutes/reviews?targetKind=&targetId=&limit=&beforeReviewNoToken=` | Owner EDIT bounded exact-saved-target history/metadata; latest exact coverage separately labeled. |
+| GET `/minutes/reviews/{reviewId}` | Owner EDIT exact immutable review/scope/frozen evidence/original profile, full authorization. |
+| GET `/minutes/readiness` | Owner EDIT deterministic required target/scope/status/current selected review IDs and optional valid IDs, blockers, current body/set/input, pending/task summaries and fresh observation. |
+| POST `/minutes/command-discovery` | Read-only owner EDIT `{operation,key}` bounded actual committed operation/result/status or NOT_FOUND, fresh observation; keys not placed in/logged from URL. Not a mutation/authority shortcut. |
+
+Task9 exclusively provides generation/current-input/task/candidate list/detail with private comparison/disposition/eligibility; it consumes Task10 policy projections. Complete graph reader is shared; no competing route owners. Current combined body/set is actual root; only Task11 frozen-final route proves historical pair. History cannot infer pair by equal revision/time or latest set.
+
+Read-only command discovery proves accepted key association, not semantic equality of a different body. To resolve edit intent uncertainty and enable editor, retry original POST same key/body and receive current positive projection under intent-specific expected-r rule. Other exact replays use original semantic request. Every record/content read uses S/A/F when original profile/source verification is part of contract. DB-only history summaries/receipts use D without claiming new readiness. Owner stored inspection retains valid historical text if only original byte route/epoch fails, while missing/corrupt retained provenance/archive fails; new adoption/restore/source-byte/current-member paths retain their separate current predicates.
+
+Response envelope: acknowledgment `{operation,resultKind,resultId,httpStatus,replayed}` from actual durable result, separately `observation:{revision,revisionToken,accessRevisionToken,lifecycle,readOnlyReason,currentBodyId,currentSetId,...}` fresh. No fabricated acceptedRevision or old saved-copy identity. Current observation/readiness unavailable cannot turn successful committed ACK into apparent failed mutation; expose safe availability and allow discovery. Reads/member DTOs are genuinely distinct, no owner DTO with UI-hidden fields. Outsider/admin-only has no content bypass.
+
+Reuse Task4 lossless helper: legacy exact integer expectedRevision OR canonical decimal expectedRevisionToken; equal dual forms allowed, unequal reject. Normalize to same integer BEFORE semantic digest; no double or2^53 DB cap. All browser-used counters/history/review/intent/offset fields have opaque tokens with ASCII `0|[1-9][0-9]*`, range0..9223372036854775806, no sign/space/leading zero/exponent/decimal. Browser sends token-only; scalar evidence offsets are not JS UTF16 offsets. Complete membership lists normalize only defined set order before digest; text is never normalized.
+
+Every success/error private,no-store, no304 bypass. Actual Secure HttpOnly host-only session cookie, same-origin HTTPS/Origin/CSRF apply, including read-only POST discovery. Strict bounded streaming request, duplicate/unknown/trailing JSON and malformed Unicode reject; response budget includes JSON escaping. Safe statuses401 session,403 ACL,404 authorized missing,400 syntax,409 CAS/digest/disposition with safe authorized current projection,413 transport budget,422 unsupported command/content,503 profile/provenance/capability unavailable. Missing capabilities distinct from legitimate zero evidence. No raw archive/config/provider credential/object route/key/private path/SQL/cause leakage.
+
+## 11. Future evidence matrix — none executed
+
+1. Real Task4 native+S3 upload -> Task5 actual Worker RAW -> Task6 WORKING/confirmation -> Task9 actual queue/permit/marker/controlled HTTP/strict output -> Task10 saved graph/review pipeline. SQL-seeded structural cases/mocked business responses/direct harness complete do not substitute. Guard0/no-body first save, UNKNOWN/positive/body suppression, actual stale retention, member saved-only discovery.
+2. Task12 actual browser intent before typing/IME/paste/autosave/restoration in two windows, lost ACK/retry/stale r/refresh/abandoned edit, root-order barriers and draft retention. Missing/zero/max guard, monotonic distinct keys, replay no increment/r/e effect, rollover denial and rollback.
+3. Every category including empty; full UUID map/nullable fields/evidence/shared locator multiplicity/both labels/directories+alljoins; accepted versus suggestion values; no old copied owner FK/review credit; body-only/set-only behavior; exact supported category conversion and preserved old original history. Rebind/material/v3/ambiguous intrinsic context fails with zero writes.
+4. Source/body/anchor/action edits invalidate exact reviews; whole vs multiple spans, empty evidence, background-only meeting claim, stale target/profile, latest same-scope PARTIAL/UNSUPPORTED, nullable accepted tuple and wrong suggestion review. No ACL grant. Frozen membership/original archives survive later reviews/defaults/fresh JVM.
+5. All B03/4/6/9-init/10/11 real business writers use same prelocked candidate helper. Overflow/drift/new-child abort before effects; SQL trace catches late candidate query/second gate/hash under root. Pure intent/replay/no-version confirmation no disposal. Settings change stales candidates/requires generation without altering original saved input. No forever-PENDING old-fence final block.
+6. Actual MySQL metadata-transfer instrumentation on S/F/readback and concurrent parent/child insert/update including empty evidence/joins/reviews. Oversize body/anchor/mention fails before content-bearing SELECT; do not mistake getCharacterStream for this proof. Cumulative UTF8/scalar/UTF16/rows/edges/archive/depth and cancellation/overflow.
+7. Owner disable/revoke/roster/cancel/closed/deleting/governance/ever-published/in-progress publication between S/A/F; wrong issuer/DS/holder/gate/spec/task/attempt/execution, suspended/expired/closed/reused invocation, no domain effects or second completion. Fact-only external outcome remains separate.
+8. Two editors/adopts/saves at same r; intent/completion both orders; saved body during generation; final vs enqueue/result; publish vs enqueue/content mutation; disposition vs arrival. Complete outstanding generation gates block final/publish even if needs_generation=false and no candidate yet. STALE retention never changes frozen final/debt.
+9. Inject failure at every graph row/readback/decision/review membership/receipt/audit/outbox/flush/commit stage: all rows/pointers/reviews/intent/idempotency/events rollback. Lost committed ACK discovered without reapply; Task7 post-observation permit recovery separate.
+10. Real HTTP four identities/actual routes/OpenAPI/no-store/CSRF/Origin; exact counters9007199254740991/2/3 and9223372036854775806, invalid grammar/dual disagreement/normalized replay. Current config/limits unavailable cannot hide accepted replay, revoked owner denied, old acknowledgment never attaches old body. Fresh JVM recovers real saved graph/reviews/decision and original profiles after defaults change.
+
+Preserve relevant pure golden/config/source/hash/coverage, B03 concurrency, B04 registry/source receipt, B05 task/external/worker regressions. At implementation run focused meaningful checks plus exact-source independent review. New fixtures only under root guard/allocation; no old fixture reset/teardown/secrets/company calls. No B01 IMM/B04 Q401/company/HA/capacity qualification.
+
+## 12. Concrete gaps and status
+
+1. Final adopted Task3 facade/ranks and real Task4 token/preparer/Task5 confined writer/Task6 saved sources/Task7 observation/Task8 fairness/Task9 graph+task reader remain source-dispatch alignment gates. Task5 is now design-adopted through wrapper, source unimplemented; Task9 unadopted. Task3 aa0b5f08 independent review is still pending. No alternate issuer/no-op solves missing real APIs.
+2. Inspected baseline has no complete saved-minutes/review production reader/writer/controller. Task9 supplies authoritative complete closure/terminal provenance; pure helpers only verify supplied consistency. Body and set histories independent; current root/final frozen pair only.
+3. Real PENDING integration into every enumerated writer and Task11 authoritative publication freeze/outstanding-generation input/task gates must precede runtime activation. Current simple meeting published check insufficient for READY/RUNNING/RECONCILING/UNKNOWN. Explicit overflow must fail closed.
+4. Final prospective same-algorithm draft helper belongs Task11; no fabricated final row. Exact original review/source closure and current settings proof must remain outside-root hash with final complete equality.
+5. Root qualifies positive effective bounds/correction DISABLED_NOT_INSTALLED/identity selection permissions and final model title-LINKED/theme producer compatibility. Proposed limits are not evidence. No new SQL requested.
+
+Delivery: complete read-only Task10 architecture proposal for independent review; no implementation/runtime/phase qualification. Report SHA delivered externally. A first oversized shell write was rejected by Windows process command-length limit before process creation and wrote no file; the report was then written in bounded chunks to this sole allowed artifact.
+
+## 13. Concrete source ownership for later dispatch
+
+These are proposed file assignments, not edits or claims that the classes exist. Shared files have one author at a time after root schedules the dependency boundary.
+
+| Proposed file/area | Owner and seam |
+|---|---|
+| core/minutes/MinutesEditorService.java, MinutesSavedService.java, ResultReviewService.java, MinutesReadiness.java | Task10 standalone orchestration; intent/save/adopt/settings/review protocols and deterministic business requirements. |
+| contracts/MinutesEditorContracts.java (or separately named additive minutes request/read DTO file) | Task10 bounded data-only wire/receipt/projection types; preserve existing MinutesContracts FullRow/profile meaning. |
+| adapters/minutes/JdbcMinutesSavedRepository.java, JdbcMinutesReviewRepository.java, MinutesCommandDigests.java, MinutesEventReferences.java | Task10 atomic command/replay/results, exact row readback/events; genuine authority supplied by final upstream facade, no public mint. |
+| adapters/minutes/MinutesGraphCopyPlan.java and private graph writer composition | Task10 copy/edit maps; Task9 owns initial candidate writer and shared actual graph reader. Reuse exact table/locator mapping primitives, no duplicated source derivation/hash implementation. |
+| shared adapters MeetingMutationDomains/MinutesPendingDisposition plus actual runtime factory | Task10 owns common candidate contribution/immutable registration; Task11 supplies publication policy. Final package placement preserves access to authentic private gate verification without exposing authority. |
+| existing JdbcMeetingRepository and Task4/6/9/11 writer composition | Task10 integration owner coordinates minimal declared-domain/disposition hook additions with each sole source author; no concurrent file authoring. |
+| api/MinutesEditorController.java, MinutesSavedController.java, ResultReviewController.java, MinutesErrors.java and shared configuration | Task10 routes/secure projections/replay-independent construction; Task9 controller sections remain separate. |
+| contracts/openapi/minutes.yaml and api.yaml integration | Single root-designated contract author integrates Task9+10 exact nonoverlapping routes before Task12 regeneration. |
+| focused integration tests EditorIntentIT, MinutesSavedGraphIT, MinutesReviewIT, MinutesPendingDispositionIT and existing HTTP/pipeline fixtures | Task10 implementation evidence only after actual upstream installation; root guarded new fixture resources. |
+
+Candidate producer admission and shared disposition must use one qualified complete-domain budget: Task9 enqueue checks current PENDING plus outstanding still-producing generation work under root so normal production cannot create a pending set the mandatory business writer cannot prelock. Actual final completion still rechecks capacity and fails atomically on overflow. Existing unknown/legacy overflow denies activation/mutation until separately reviewed recovery; never truncate, silently discard a candidate or install a no-op. The proposed numeric limits in section3 are alignment inputs, not an authorization to change upstream budgets without review.

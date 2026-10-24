@@ -1,0 +1,130 @@
+{
+  "utc": "2026-10-24T02:57:50.276934+00:00",
+  "base": "cff858e163ca7dea774dcf05c707ef7551956156",
+  "reportFullRead": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-final-upstream-repin-20261024.md",
+    "bytes": 18506,
+    "sha256": "07089205b77d31045e45405aff3f0439b9358e293159cda988644d17949421e4"
+  },
+  "manifestSha256": "f166632240eaaa62c8845823909f2cea827bc5289d1463ba0cef6abe15365d66",
+  "actualVerifiedCounts": {
+    "changed_production": 16,
+    "focused_hooks_and_test_source": 12,
+    "unchanged_post6_carry": 79,
+    "authorities": 21,
+    "complete_sql_prefix": 15
+  },
+  "explicitLengthChecks": 142,
+  "rangeSeals": 36,
+  "completePrefix": [
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "version": "001",
+      "bytes": 709,
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "version": "002",
+      "bytes": 1781,
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "version": "005",
+      "bytes": 2461,
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "version": "006",
+      "bytes": 1864,
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "version": "007",
+      "bytes": 3795,
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "version": "008",
+      "bytes": 11205,
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "version": "009",
+      "bytes": 7239,
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "version": "010",
+      "bytes": 35136,
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "version": "011",
+      "bytes": 10941,
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "version": "011.1",
+      "bytes": 397,
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "version": "012",
+      "bytes": 21260,
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "version": "013",
+      "bytes": 7661,
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "version": "013.1",
+      "bytes": 1817,
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "version": "013.2",
+      "bytes": 75,
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "unchanged_since_post6": true
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_3__external_reconcile_scan.sql",
+      "version": "013.3",
+      "bytes": 164,
+      "sha256": "023fe875efd2be0bbd9d59b2d22a9b6429ea88eb6fc7a7b30d8541a53c0d46ee",
+      "unchanged_since_post6": false
+    }
+  ],
+  "flywayJarActualSha256": "c3f93df1f3e0c9d14652adb5ade97401f2ede503859ac693c2af5c06e2797799",
+  "runtimeExecution": false,
+  "checkerCorrection": "FirstreadonlypassraisedKeyErrorbecauseoneauthorityentryhasSHA/scopebutnobytes; correctedoptional-lengthhandlingwhileSHA remainsmandatoryforall. No prior success/write/runtime.",
+  "ruling": "Acceptnarrowactualupstreamrepin; concreteTask9sharedregistry/publicationcontrolrank/boundedexecutionmanifestread adaptations followexistingR1 authority/budgetspec, no newdesign orwaiver. Keep ordinarylegacy fences/sourcecompatibility, addproportionate regressions; realTask10/11formalinstallgate remains."
+}

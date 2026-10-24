@@ -1,0 +1,57 @@
+{
+  "scope": "ROOT actual twoXML/receipt read, no suite rerun; source semantics/final delta custody pending",
+  "windows": [
+    {
+      "window": "ir03-red",
+      "xmlCounts": {
+        "tests": "3",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "seals": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir03-red/receipt.json",
+          "bytes": 533,
+          "sha256": "03b2ad10fa8b4fa154bcb35c491da65b7e9f0c6caec7a70d759197c7da490826"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir03-red/source.json",
+          "bytes": 66888,
+          "sha256": "13410b1f889f4fd38a8bc77f19c2cbc67c131b413956d98335cf17cfedb59768"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir03-red/integration-tests-TEST-ama.task.Task07PreparedContradictionIT.xml",
+          "bytes": 34080,
+          "sha256": "946b51f5826ac4d78ce2b52912577e072545d4a0b46f30a2df2130d34373cb1f"
+        }
+      ]
+    },
+    {
+      "window": "ir03-green",
+      "xmlCounts": {
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "seals": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir03-green/receipt.json",
+          "bytes": 537,
+          "sha256": "6dbbd2b2e662996e729bdf8e6c804bedc1ccd2204ea56f80b8c99e041c3703a3"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir03-green/source.json",
+          "bytes": 66888,
+          "sha256": "d6fbce9542343ba83ae95bc8cb33c6e2ae7845acbd3fd2e78395a9360b70ad21"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-07/fix01/ir03-green/integration-tests-TEST-ama.task.Task07PreparedContradictionIT.xml",
+          "bytes": 33112,
+          "sha256": "e68e066f358b3a70bc85b79cb6c9a9b62695c7a796a462a630669c902e18090e"
+        }
+      ]
+    }
+  ]
+}

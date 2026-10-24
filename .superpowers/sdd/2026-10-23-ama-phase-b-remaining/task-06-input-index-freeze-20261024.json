@@ -1,0 +1,298 @@
+{
+  "utc": "2026-10-23T21:49:28.440785+00:00",
+  "status": "ROOT_ALLOCATED_FULL_BYTES_FROZEN_NOT_YET_ACKED_OR_APPLIED",
+  "task": "6fix01 CV02 prerequisite",
+  "versionLiteral": "013.2",
+  "formalResourcePath": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+  "fullSql": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-frozen-013_2-20261024.sql",
+    "bytes": 75,
+    "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f"
+  },
+  "exactReviewedBody": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-proposal-20261024.sql",
+    "bytes": 75,
+    "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f"
+  },
+  "review": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-design-review-20261024.md",
+    "bytes": 14661,
+    "sha256": "8e8bdfd7be35fd7f527de1acbce086f76cfddb0841f168a9cdca7a56aa2a66dd"
+  },
+  "inputCustody": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-index-design-input-custody-20261024.json",
+    "bytes": 18829,
+    "sha256": "bdcbe663a8308941af1f0b8f6eebe47026c19c77f7325e8650103ba674aebcac"
+  },
+  "preallocationFacts": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-input-index-root-preallocation-facts-20261024.json",
+    "bytes": 12313,
+    "sha256": "ca08e945eb463b7bebfd23452b3f8e24bff171f17ea6186559726fcec78c721d"
+  },
+  "resolvedJars": [
+    {
+      "artifact": "flyway-core",
+      "path": "/home/tanren/.m2/repository/org/flywaydb/flyway-core/12.4.0/flyway-core-12.4.0.jar",
+      "bytes": 767940,
+      "sha256": "c3f93df1f3e0c9d14652adb5ade97401f2ede503859ac693c2af5c06e2797799",
+      "resolvedVersion": "12.4.0"
+    },
+    {
+      "artifact": "flyway-mysql",
+      "path": "/home/tanren/.m2/repository/org/flywaydb/flyway-mysql/12.4.0/flyway-mysql-12.4.0.jar",
+      "bytes": 29694,
+      "sha256": "de0eac641b3d0104e4ebe3d6340fb25f49cbd154a636b4d2d13b98115f60b055",
+      "resolvedVersion": "12.4.0"
+    },
+    {
+      "artifact": "mysql-connector-j",
+      "path": "/home/tanren/.m2/repository/com/mysql/mysql-connector-j/9.7.0/mysql-connector-j-9.7.0.jar",
+      "bytes": 2607237,
+      "sha256": "0353648eaa1c91e0f4020c959abf756bc866ffd583df22ae6b6f6e0cbd43eb44",
+      "resolvedVersion": "9.7.0"
+    }
+  ],
+  "historyPrefix": [
+    {
+      "kind": "history",
+      "rank": 1,
+      "type": "SQL",
+      "script": "V001__foundation.sql",
+      "success": 1,
+      "version": "001",
+      "checksum": 1201435595,
+      "description": "foundation",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:33:47.000000",
+      "executionTime": 99
+    },
+    {
+      "kind": "history",
+      "rank": 2,
+      "type": "SQL",
+      "script": "V002__identity_acl.sql",
+      "success": 1,
+      "version": "002",
+      "checksum": 1757300424,
+      "description": "identity acl",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:33:48.000000",
+      "executionTime": 217
+    },
+    {
+      "kind": "history",
+      "rank": 3,
+      "type": "SQL",
+      "script": "V005__tasks_outbox.sql",
+      "success": 1,
+      "version": "005",
+      "checksum": -1999355348,
+      "description": "tasks outbox",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:33:48.000000",
+      "executionTime": 441
+    },
+    {
+      "kind": "history",
+      "rank": 4,
+      "type": "SQL",
+      "script": "V006__audit_metadata.sql",
+      "success": 1,
+      "version": "006",
+      "checksum": -1744360556,
+      "description": "audit metadata",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:33:48.000000",
+      "executionTime": 175
+    },
+    {
+      "kind": "history",
+      "rank": 5,
+      "type": "SQL",
+      "script": "V007__identity_sessions.sql",
+      "success": 1,
+      "version": "007",
+      "checksum": 157746768,
+      "description": "identity sessions",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:33:49.000000",
+      "executionTime": 627
+    },
+    {
+      "kind": "history",
+      "rank": 6,
+      "type": "SQL",
+      "script": "V008__meeting_schema.sql",
+      "success": 1,
+      "version": "008",
+      "checksum": -1747387036,
+      "description": "meeting schema",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:33:52.000000",
+      "executionTime": 2773
+    },
+    {
+      "kind": "history",
+      "rank": 7,
+      "type": "SQL",
+      "script": "V009__file_schema.sql",
+      "success": 1,
+      "version": "009",
+      "checksum": -287948759,
+      "description": "file schema",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:33:54.000000",
+      "executionTime": 2082
+    },
+    {
+      "kind": "history",
+      "rank": 8,
+      "type": "SQL",
+      "script": "V010__reliable_execution.sql",
+      "success": 1,
+      "version": "010",
+      "checksum": -1187397378,
+      "description": "reliable execution",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:33:57.000000",
+      "executionTime": 2629
+    },
+    {
+      "kind": "history",
+      "rank": 9,
+      "type": "SQL",
+      "script": "V011__transcript_schema.sql",
+      "success": 1,
+      "version": "011",
+      "checksum": -286330771,
+      "description": "transcript schema",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:34:01.000000",
+      "executionTime": 3914
+    },
+    {
+      "kind": "history",
+      "rank": 10,
+      "type": "SQL",
+      "script": "V011_1__transcript_material_index.sql",
+      "success": 1,
+      "version": "011.1",
+      "checksum": -570494170,
+      "description": "transcript material index",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:34:01.000000",
+      "executionTime": 47
+    },
+    {
+      "kind": "history",
+      "rank": 11,
+      "type": "SQL",
+      "script": "V012__minutes_evidence.sql",
+      "success": 1,
+      "version": "012",
+      "checksum": 2101765957,
+      "description": "minutes evidence",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:34:10.000000",
+      "executionTime": 8761
+    },
+    {
+      "kind": "history",
+      "rank": 12,
+      "type": "SQL",
+      "script": "V013__publications.sql",
+      "success": 1,
+      "version": "013",
+      "checksum": -847352333,
+      "description": "publications",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T03:34:16.000000",
+      "executionTime": 3747
+    },
+    {
+      "kind": "history",
+      "rank": 13,
+      "type": "SQL",
+      "script": "V013_1__b_runtime_metadata.sql",
+      "success": 1,
+      "version": "013.1",
+      "checksum": -1898004857,
+      "description": "b runtime metadata",
+      "installedBy": "ama_test",
+      "installedOn": "2026-10-23T04:10:47.000000",
+      "executionTime": 498
+    }
+  ],
+  "immutable13SQL": [
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V001__foundation.sql",
+      "bytes": 709,
+      "sha256": "1726d9db3eb45d0fe86314dd41ad52d5f2332e3f16995cc246f3c3c532208335"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V002__identity_acl.sql",
+      "bytes": 1781,
+      "sha256": "68b0d478504a554344cb12dfa8ef79c62da5c6e3455317791762fca25e70f7d0"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V005__tasks_outbox.sql",
+      "bytes": 2461,
+      "sha256": "55cfdc4aabf169c82f30303ac4d03dce7f24b3c6af5b4cc3ebd0089ae7e7dda7"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V006__audit_metadata.sql",
+      "bytes": 1864,
+      "sha256": "f36b7ab2e8d32cf5de6eadcd86524ab269dce98f7906b808eff1a0e39325178f"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V007__identity_sessions.sql",
+      "bytes": 3795,
+      "sha256": "859970b83fc5623b18340c2de793ea35429cc3c0da5cbd1365b4763a5a64780d"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V008__meeting_schema.sql",
+      "bytes": 11205,
+      "sha256": "fa44424aa1ff32e049929d45865fe7133c2548fc9ea451f3350cd8984c118ce3"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V009__file_schema.sql",
+      "bytes": 7239,
+      "sha256": "79f048987282c82fd7a56d697a02e88c93fa45b3349bd4d43e840dca23ba437d"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V010__reliable_execution.sql",
+      "bytes": 35136,
+      "sha256": "03e89cc8bd58d5a6aa0d4ab031b8fc05a4f7d2450623df147cd84d05b68977db"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011_1__transcript_material_index.sql",
+      "bytes": 397,
+      "sha256": "9efc688e49ce4afc52f383929b91d70970905f04b4e7836bdb0533eac50a9713"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V011__transcript_schema.sql",
+      "bytes": 10941,
+      "sha256": "a926c8b5d9806082d248f38bc7c7dd2bdbc46dd319d34b787e02f86132096ccb"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V012__minutes_evidence.sql",
+      "bytes": 21260,
+      "sha256": "10742ca2075fa3430dedf692853e1c106bd4464eaed46d8c8c1aa07859878fb7"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_1__b_runtime_metadata.sql",
+      "bytes": 1817,
+      "sha256": "9280baea017014f3322af901373a7f8d69dfaa396fdd49f3c5d872535c43a520"
+    },
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013__publications.sql",
+      "bytes": 7661,
+      "sha256": "1de37066869617723a11f05d7423584143a64e0c9ddf8879c7b4fd107de08e3c"
+    }
+  ],
+  "allocationRuling": "013.2 now allocated to Task6 typed-input lookup. Task8 previous candidate was UNASSIGNED; allocate Task8 from actual post6 history. Existing pure actualFlyway12.4.0/c3f parser order013.1<013.2<014 carried unchanged; integers014..027 remain reserved.",
+  "applicationProtocol": "Separate fresh exact-target ACK required before migration resource copy/build/apply. Quiesce owned live writers/current transactions; complete physical/schema+all old table hashes/counts before apply; normalFlyway migration1, old13 full prefix same+exactnewindex+allolddata/schema same; normalrerun0/fullstable. Session lock_wait_timeout=5 seconds. On any partialfailure preserve state, forward-only root ruling; no repair/reset/clean/outOfOrder.",
+  "soleAuthor": "/root/b06_saved_transcript",
+  "rootHeadIndexPolicy": "HEAD remainsaa490afc, root doesnotstage/commit; author stagesexactown deliverypaths excludingroot records.",
+  "modelPending": "Task8 next must sync exactly task_input_lookup plus its own Operationcolumn/index; current fourmodelblobs preserved before Task8 writes, ownership amendment required."
+}

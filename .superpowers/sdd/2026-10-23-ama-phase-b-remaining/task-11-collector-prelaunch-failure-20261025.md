@@ -1,0 +1,1 @@
+Collector launch failed before private env read, window creation, source collection or test process: local variable stat shadowed imported stat module. Renamed local report stat binding. No database/provider/business operation occurred. This is not a business RED.

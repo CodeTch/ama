@@ -11,11 +11,15 @@ import static ama.contract.OutboxContracts.protocolCode;
 public final class ReconciliationLoop implements WorkerRuntime {
     @FunctionalInterface public interface PreparedHandler { void reconcile(ExternalTaskExecution session) throws Exception; }
     public static ReconciliationLoop prepared(ExternalOperationPort operations,ama.task.ModelPermitPool permits,int capacity,PreparedHandler handler,String owner){
-        return new ReconciliationLoop(operations,capacity,null,Objects.requireNonNull(handler),Objects.requireNonNull(permits),owner);
+        return new ReconciliationLoop(operations,capacity,null,Objects.requireNonNull(handler),Objects.requireNonNull(permits),owner,null);
+    }
+    public static ReconciliationLoop preparedWithPublicationMaintenance(ExternalOperationPort operations,ama.task.ModelPermitPool permits,int capacity,PreparedHandler handler,String owner,ama.transcript.JdbcPublicationLocalRecovery local){
+        return new ReconciliationLoop(operations,capacity,null,Objects.requireNonNull(handler),Objects.requireNonNull(permits),owner,Objects.requireNonNull(local));
     }
     @FunctionalInterface public interface Handler { void reconcile(OperationToken token) throws Exception; }
     private static final System.Logger LOG = System.getLogger(ReconciliationLoop.class.getName());
     private final ExternalOperationPort operations;
+    private final ama.transcript.JdbcPublicationLocalRecovery localPublications;
     private final Handler handler;private final PreparedHandler preparedHandler;private final ama.task.ModelPermitPool permits;
     private final java.util.Set<ExternalExecutionSession> sessions=ConcurrentHashMap.newKeySet();
     private final java.util.Set<ExternalExecutionSession> pending=ConcurrentHashMap.newKeySet();
@@ -29,11 +33,11 @@ public final class ReconciliationLoop implements WorkerRuntime {
     private final AtomicBoolean scanning = new AtomicBoolean();
 
     public ReconciliationLoop(ExternalOperationPort operations, int capacity, Handler handler, String owner) {
-        this(operations,capacity,Objects.requireNonNull(handler),null,null,owner);
+        this(operations,capacity,Objects.requireNonNull(handler),null,null,owner,null);
     }
-    private ReconciliationLoop(ExternalOperationPort operations,int capacity,Handler handler,PreparedHandler preparedHandler,ama.task.ModelPermitPool permits,String owner){
+    private ReconciliationLoop(ExternalOperationPort operations,int capacity,Handler handler,PreparedHandler preparedHandler,ama.task.ModelPermitPool permits,String owner,ama.transcript.JdbcPublicationLocalRecovery localPublications){
         if (capacity < 1) throw new IllegalArgumentException("Explicit positive reconciliation capacity required");
-        this.operations = Objects.requireNonNull(operations);
+        this.operations = Objects.requireNonNull(operations);this.localPublications=localPublications;
         this.handler = handler;this.preparedHandler=preparedHandler;this.permits=permits;
         protocolCode(owner);
         this.owner = owner;
@@ -54,6 +58,7 @@ public final class ReconciliationLoop implements WorkerRuntime {
         try {
             // Maintenance precedes capacity/claim checks, including an entirely saturated worker.
             if(permits!=null)permits.recoverSettlements(8);
+            if(localPublications!=null)try{localPublications.maintainLocalFailures();}catch(RuntimeException unavailable){LOG.log(System.Logger.Level.WARNING,"Publication local maintenance unavailable: "+unavailable.getClass().getSimpleName());}
             for(var session:pending){session.retry();if(!session.pending()&&pending.remove(session)){session.close();sessions.remove(session);slots.release();}}
             while (!closed.get() && slots.tryAcquire()) {
                 boolean submitted = false;

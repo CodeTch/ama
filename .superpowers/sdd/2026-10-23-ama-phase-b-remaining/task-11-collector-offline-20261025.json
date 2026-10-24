@@ -1,0 +1,16 @@
+{
+  "source": "tools/task11_window.py",
+  "sha256": "9eb15bfe065b8c00de8cce4c30522b28a365e89beb207e5a4a8fe4de27dfa9d2",
+  "basis": "adapted accepted artifacts/phase-b/b-remaining/task-10-fix01/run-window.py collector",
+  "checks": {
+    "canonicalSingleClass": true,
+    "fresh": true,
+    "oldRejected": true,
+    "futureRejected": true,
+    "unchangedRejected": true,
+    "noLogRejected": true,
+    "wrongSuiteRejected": true,
+    "compileFailureNoFreshReports": true
+  },
+  "scope": "offline bounded selector and custody predicates; no process, DB or fixture execution"
+}

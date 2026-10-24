@@ -31,6 +31,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
  private void requireLiveLookup(OperationToken token){independent();requireLookup(token);var o=operation(token.operationId(),false,false).orElseThrow();var e=execution(o.id(),token.executionNo(),false,false).orElseThrow();if(!valid(o,e,token))throw new IllegalArgumentException("Stale recorded lookup claim");}
  public RecordedLookup recordedLookup(OperationToken token){requireLiveLookup(token);return new RecordedLookup(this,token);}
  @Override public synchronized void releaseRecordedLookup(OperationToken token){lookupAuthorities.removeIf(r->r.get()==null||r.get()==token);}
+ private static final String OP_COLUMNS="id,operation_kind,business_key,request_hash,state,subject_kind,subject_id,current_execution_no,reconcile_epoch,reconcile_owner,reconcile_expires_at";
  record Operation(String id,String kind,String key,String hash,String state,SubjectRef subject,long execution,long epoch,String owner,Instant expiry){}
  record Execution(String id,String operation,long number,String task,String state,String hash,String manifest,String basis,String evidence,Instant verified){}
  private final ReconciliationScanBudget scanBudget;
@@ -44,11 +45,12 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
  public JdbcExternalOperations(JdbcTaskQueue queue,ReconciliationScanBudget budget){q=Objects.requireNonNull(queue);j=queue.jdbc;scanBudget=Objects.requireNonNull(budget);}
  private static Operation op(ResultSet r,int n)throws SQLException{return new Operation(r.getString("id"),r.getString("operation_kind"),r.getString("business_key"),r.getString("request_hash"),r.getString("state"),new SubjectRef(r.getString("subject_kind"),r.getString("subject_id")),r.getLong("current_execution_no"),r.getLong("reconcile_epoch"),r.getString("reconcile_owner"),instant(r,"reconcile_expires_at"));}
  private static Execution ex(ResultSet r,int n)throws SQLException{return new Execution(r.getString("id"),r.getString("operation_id"),r.getLong("execution_no"),r.getString("task_id"),r.getString("state"),r.getString("request_hash"),r.getString("request_manifest"),r.getString("no_effect_basis"),r.getString("no_effect_evidence"),instant(r,"no_effect_verified_at"));}
- Optional<Operation> operation(String id,boolean lock,boolean skip){return j.query("SELECT * FROM external_operation WHERE id=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::op,id).stream().findFirst();}
+ Optional<Operation> operation(String id,boolean lock,boolean skip){return j.query("SELECT "+OP_COLUMNS+" FROM external_operation WHERE id=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::op,id).stream().findFirst();}
  Optional<Execution> execution(String operation,long n,boolean lock,boolean skip){
   // Metadata only before any Task9 manifest transfer, including pre-domain discovery.
   var sizes=j.queryForList("SELECT e.id,e.task_id,t.task_type,OCTET_LENGTH(e.request_manifest) AS manifest_bytes FROM external_execution e JOIN durable_task t ON t.id=e.task_id WHERE e.operation_id=? AND e.execution_no=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),operation,n);
   if(sizes.isEmpty())return Optional.empty();if(sizes.size()!=1)throw new DomainPreparationUnavailableException();var size=sizes.getFirst();
+  if("KNOWLEDGE_PUBLISH_V1".equals(size.get("task_type")))return j.query("SELECT id,operation_id,execution_no,task_id,state,request_hash,NULL AS request_manifest,no_effect_basis,NULL AS no_effect_evidence,no_effect_verified_at FROM external_execution WHERE operation_id=? AND execution_no=? AND id=? AND task_id=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::ex,operation,n,size.get("id"),size.get("task_id")).stream().findFirst();
   if("MINUTES_GENERATE_V1".equals(size.get("task_type"))){
    if(!(size.get("manifest_bytes") instanceof Number bytes)||bytes.longValue()<1||bytes.longValue()>65536)throw new DomainPreparationUnavailableException();
    // Repeat the size and identity predicate in the actual content query to close growth/rebinding races.
@@ -56,13 +58,14 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   }
   return j.query("SELECT * FROM external_execution WHERE operation_id=? AND execution_no=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::ex,operation,n).stream().findFirst();
  }
+ private Execution publicationContent(Execution e,JdbcTaskQueue.DomainScope scope,Row task){if(!task.spec().type().equals("KNOWLEDGE_PUBLISH_V1"))return e;if(!(scope.policy() instanceof PublicationReplacementPolicy policy))throw new DomainPreparationUnavailableException();var content=policy.readPublicationExecution(scope.prepared(),task.spec(),task.id(),e.operation(),e.id(),e.number());return new Execution(e.id(),e.operation(),e.number(),e.task(),e.state(),e.hash(),content.manifest(),e.basis(),content.evidence(),e.verified());}
  boolean valid(Operation o,Execution e,OperationToken t){return o.subject().equals(t.subject())&&o.id().equals(t.operationId())&&o.execution()==t.executionNo()&&e.id().equals(t.executionId())&&e.number()==t.executionNo()&&o.epoch()==t.reconcileEpoch()&&Objects.equals(o.owner(),t.owner())&&o.expiry()!=null&&o.expiry().isAfter(q.now())&&(o.state().equals("MARKED")||o.state().equals("UNKNOWN"))&&(e.state().equals("MARKED")||e.state().equals("UNKNOWN"));}
  OperationToken token(Operation o,Execution e){return new OperationToken(o.id(),e.id(),o.execution(),o.epoch(),o.owner(),o.expiry(),o.subject());}
  private final class Context implements ExecutionContext {
   final Object holder;final JdbcTaskQueue.DomainScope scope;final Row task;final Operation operation;final Execution execution;
   boolean open=true,retaining;
   private Context(JdbcTaskQueue.DomainScope scope,Row task,Operation operation,Execution execution){
-   this.scope=scope;this.task=task;this.operation=operation;this.execution=execution;
+   this.scope=scope;this.task=task;this.operation=operation;this.execution=publicationContent(execution,scope,task);
    holder=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(q.source);
   }
   JdbcExternalOperations issuer(){return JdbcExternalOperations.this;}
@@ -98,11 +101,11 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   independent();
   // Exceptions from commit (including lost ACK) escape: no token and no send authority is returned.
   Optional<OperationToken> committed=q.work(()->{
-   var valid=q.validatedLease(lease);if(valid.isEmpty())return Optional.empty();var validated=valid.orElseThrow();var task=validated.task();
+   TaskDomainPolicy.PreparedDomain supplied=prepared!=null&&q.policy(lease.spec()) instanceof PublicationReplacementPolicy policy?policy.preparePublicationRequest(lease.spec(),prepared).orElseThrow(DomainPreparationUnavailableException::new):null;var valid=q.validatedLease(lease,supplied);if(valid.isEmpty())return Optional.empty();var validated=valid.orElseThrow();var task=validated.task();
    if(prepared==null&&q.policy(task.spec()) instanceof PreparedExternalPolicy)throw new IllegalArgumentException("Prepared request required");
    var request=prepared==null?legacy:Objects.requireNonNull(preparedPolicy(task.spec()).requireRequest(task.spec(),prepared));
    q.policy(task.spec()).validateExternalRequest(task.spec(),request);
-   var found=j.query("SELECT * FROM external_operation WHERE operation_kind=? AND business_key=? FOR UPDATE",JdbcExternalOperations::op,request.operationKind(),request.businessKey());
+   var found=j.query("SELECT "+OP_COLUMNS+" FROM external_operation WHERE operation_kind=? AND business_key=? FOR UPDATE",JdbcExternalOperations::op,request.operationKind(),request.businessKey());
    String oid,eid;long number,epoch;Instant now=q.now(),expiry=now.plusSeconds(20);
    if(found.isEmpty()){
     oid=UUID.randomUUID().toString();eid=UUID.randomUUID().toString();number=1;epoch=1;
@@ -110,7 +113,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
     j.update("INSERT INTO external_execution(id,operation_id,execution_no,task_id,task_attempt,state,request_hash,request_manifest,created_at,marked_at) VALUES (?,?,1,?,?,'MARKED',?,?,?,?)",eid,oid,task.id(),lease.attempt(),request.executionRequestHash(),request.requestManifest(),sqlTime(now),sqlTime(now));
    }else{
     var o=found.getFirst();if(!o.subject().equals(task.spec().subject())||!o.hash().equals(request.logicalRequestHash()))throw new IllegalArgumentException("External logical key conflict");
-    var e=execution(o.id(),o.execution(),true,false).orElseThrow();
+    var e=publicationContent(execution(o.id(),o.execution(),true,false).orElseThrow(),validated.domain(),task);
     if(!o.state().equals("RETRY_QUEUED")||!e.state().equals("PREPARED")||!e.task().equals(task.id()))return Optional.empty();
     if(!e.hash().equals(request.executionRequestHash())||!e.manifest().equals(request.requestManifest()))throw new IllegalArgumentException("Execution request changed");
     oid=o.id();eid=e.id();number=o.execution();epoch=o.epoch()+1;
@@ -171,7 +174,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   } finally {scanLock.unlock();}
  }
  private Optional<ScanOperation> scanOperation(String id,boolean lock){
-  return j.query("SELECT *, (next_check_at<=UTC_TIMESTAMP(6) AND reconcile_expires_at<=UTC_TIMESTAMP(6)) AS scan_due FROM external_operation WHERE id=?"+(lock?" FOR UPDATE SKIP LOCKED":""),
+  return j.query("SELECT "+OP_COLUMNS+",reconcile_scan_seq,next_check_at, (next_check_at<=UTC_TIMESTAMP(6) AND reconcile_expires_at<=UTC_TIMESTAMP(6)) AS scan_due FROM external_operation WHERE id=?"+(lock?" FOR UPDATE SKIP LOCKED":""),
     (r,n)->new ScanOperation(op(r,n),r.getLong("reconcile_scan_seq"),instant(r,"next_check_at"),r.getBoolean("scan_due")),id).stream().findFirst();
  }
  private static boolean observable(String state){return state.equals("MARKED")||state.equals("UNKNOWN");}
@@ -231,7 +234,8 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   if(old.isEmpty()||!old.orElseThrow().id().equals(token.executionId())||!current.subject().equals(token.subject()))return ObservationResult.STALE_TOKEN;
   var currentEx=execution(current.id(),current.execution(),false,false).orElseThrow();
   var currentTask=q.row(currentEx.task(),false,false).orElseThrow();var oldTask=q.row(old.orElseThrow().task(),false,false).orElseThrow();
-  var scope=q.prepareDomain(List.of(currentTask.spec(),oldTask.spec()),TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION,false,null)
+  var observationSpecs=List.of(currentTask.spec(),oldTask.spec());TaskDomainPolicy.PreparedDomain observedDomain=prepared!=null&&q.policy(oldTask.spec()) instanceof PublicationReplacementPolicy?preparedPolicy(oldTask.spec()).prepareObservation(observationSpecs,prepared,false).orElseThrow(DomainPreparationUnavailableException::new):null;
+  var scope=q.prepareDomain(observationSpecs,TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION,false,observedDomain)
     .orElseThrow(DomainPreparationUnavailableException::new);
   var domain=q.lockDomain(scope,currentTask.spec(),false).orElseThrow(DomainPreparationUnavailableException::new);
   var heldTasks=new HashMap<String,JdbcTaskQueue.Row>();
@@ -244,7 +248,8 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   var heldExecutions=new HashMap<Long,Execution>();
   for(long number:new TreeSet<>(List.of(o.execution(),token.executionNo())))
    heldExecutions.put(number,execution(o.id(),number,true,false).orElseThrow());
-  var e=heldExecutions.get(o.execution());var tokenExecution=heldExecutions.get(token.executionNo());
+  var e=heldExecutions.get(o.execution());var tokenExecution=publicationContent(heldExecutions.get(token.executionNo()),scope,oldTask);
+  if(o.execution()==token.executionNo())e=tokenExecution;
   if(!e.task().equals(currentTask.id())||!tokenExecution.task().equals(oldTask.id()))throw new RediscoverObservation();
   if(!tokenExecution.id().equals(token.executionId())||!o.subject().equals(token.subject()))return ObservationResult.STALE_TOKEN;
   if(prepared==null&&scope.policy() instanceof PreparedExternalPolicy)throw new IllegalArgumentException("Prepared observation required");
@@ -273,7 +278,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   if(prepared!=null&&terminalFact&&o.execution()==token.executionNo()&&(recovery||o.epoch()==token.reconcileEpoch()&&Objects.equals(o.owner(),token.owner()))
     &&e.id().equals(token.executionId())&&(o.state().equals("SUCCEEDED")||o.state().equals("FAILED"))&&o.state().equals(e.state())){
    var proof=observation.noEffectProof();
-   boolean same=observation.outcome()==ExternalOutcome.SUCCEEDED?o.state().equals("SUCCEEDED")&&Objects.equals(observation.externalResultId(),j.queryForObject("SELECT external_result_id FROM external_operation WHERE id=?",String.class,o.id())):
+   boolean same=observation.outcome()==ExternalOutcome.SUCCEEDED?o.state().equals("SUCCEEDED")&&j.queryForObject("SELECT COUNT(*) FROM external_operation WHERE id=? AND BINARY external_result_id=BINARY ?",Long.class,o.id(),observation.externalResultId())==1:
       o.state().equals("FAILED")&&proof!=null&&Objects.equals(e.basis(),proof.basis().name())&&Objects.equals(e.evidence(),proof.safeEvidenceReference())&&Objects.equals(e.verified(),proof.verifiedAt());
    if(!same)return ObservationResult.STALE_TOKEN;
    var stored=j.queryForMap("SELECT state,last_error,output_kind,output_id FROM durable_task WHERE id=?",currentTask.id());
@@ -353,6 +358,25 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   if(!preparedPolicy(oldTask.spec()).verifyReplay(scope.prepared(),context,prepared,result))return ObservationResult.STALE_TOKEN;
   context.require();return result.state().equals("STALE")?ObservationResult.RECORDED_FENCED:ObservationResult.APPLIED;
  }
+ private static final class PublicationReplacementContext implements PublicationReplacementPolicy.ReplacementContext {
+  final JdbcExternalOperations issuer;final Object holder;final TaskDomainPolicy.PreparedDomain domain;final PublicationReplacementPolicy.PreparedPublicationReplacement carrier;final PublicationReplacementPolicy policy;boolean closed;
+  private PublicationReplacementContext(JdbcExternalOperations issuer,TaskDomainPolicy.PreparedDomain domain,PublicationReplacementPolicy.PreparedPublicationReplacement carrier,PublicationReplacementPolicy policy){this.issuer=issuer;this.domain=domain;this.carrier=carrier;this.policy=policy;holder=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(issuer.q.source);}
+  void require(javax.sql.DataSource source,TaskDomainPolicy.PreparedDomain domain,PublicationReplacementPolicy.PreparedPublicationReplacement carrier){if(closed||issuer.q.source!=source||this.domain!=domain||this.carrier!=carrier||holder==null||holder!=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(source)||!org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive()||issuer.q.policy(carrier.spec())!=policy)throw new IllegalArgumentException("Foreign or expired replacement context");}
+ }
+ static void requirePublicationReplacement(javax.sql.DataSource source,TaskDomainPolicy.PreparedDomain domain,PublicationReplacementPolicy.ReplacementContext context,PublicationReplacementPolicy.PreparedPublicationReplacement carrier){if(!(context instanceof PublicationReplacementContext actual))throw new IllegalArgumentException("Genuine engine replacement context required");actual.require(source,domain,carrier);}
+ /** One atomic acceptance only. No marker or send authority is returned by this method. */
+ public PublicationReplacementPolicy.ReplacementAccepted replaceZeroEffectPublication(PublicationReplacementPolicy.PreparedPublicationReplacement carrier){return q.work(()->{
+  var next=carrier.spec();if(!next.type().equals("KNOWLEDGE_PUBLISH_V1")||!(q.policy(next) instanceof PublicationReplacementPolicy policy))throw new IllegalArgumentException("Fixed publication replacement required");var binding=policy.requireReplacement(carrier);if(!binding.next().equals(next)||!binding.specs().contains(next)||binding.oldTasks().containsKey(binding.taskId()))throw new IllegalArgumentException("Invalid full replacement declaration");
+  var scope=q.prepareDomain(binding.specs(),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,binding.prepared()).orElseThrow();var locked=q.lockDomain(scope,next,false).orElseThrow();if(!q.current(locked,next))throw new IllegalStateException("Replacement current fence denied");
+  var ids=new TreeSet<>(binding.oldTasks().keySet());ids.add(binding.taskId());for(String id:ids){if(id.equals(binding.taskId()))q.insertNew(next,id);else{var actual=q.row(id,true,false).orElseThrow();if(!actual.spec().equals(binding.oldTasks().get(id)))throw new IllegalStateException("Replacement task inventory changed");}}
+  var context=new PublicationReplacementContext(this,binding.prepared(),carrier,policy);try{policy.lockReplacementRemainder(binding.prepared(),context,carrier);}finally{context.closed=true;}
+  var request=binding.request();if(!request.operationKind().equals("KNOWLEDGE_PUBLISH")||!request.logicalRequestHash().equals(next.inputFingerprint()))throw new IllegalArgumentException("Replacement request mismatch");
+  if(binding.operationId()==null){if(binding.executionId()!=null||binding.expectedExecutionNo()!=0)throw new IllegalArgumentException("New key has no premature operation");return new PublicationReplacementPolicy.ReplacementAccepted(binding.taskId(),null,null,null);}
+  if(binding.expectedExecutionNo()<1||binding.expectedExecutionNo()>=Long.MAX_VALUE-1||binding.executionId()==null)throw new IllegalArgumentException("Invalid next execution");long number=binding.expectedExecutionNo()+1;
+  if(j.update("UPDATE external_operation SET request_hash=?,state='RETRY_QUEUED',current_execution_no=?,reconcile_epoch=reconcile_epoch+1,reconcile_owner=NULL,reconcile_expires_at=NULL,last_error=NULL WHERE id=? AND operation_kind='KNOWLEDGE_PUBLISH' AND business_key=? AND subject_kind='MEETING' AND subject_id=? AND request_hash=? AND current_execution_no=? AND state='FAILED' AND reconcile_epoch<9223372036854775806",request.logicalRequestHash(),number,binding.operationId(),request.businessKey(),next.subject().id(),binding.previousLogicalHash(),binding.expectedExecutionNo())!=1)throw new IllegalStateException("Replacement operation CAS failed");
+  if(j.update("INSERT INTO external_execution(id,operation_id,execution_no,task_id,state,request_hash,request_manifest,created_at) VALUES (?,?,?,?,'PREPARED',?,?,UTC_TIMESTAMP(6))",binding.executionId(),binding.operationId(),number,binding.taskId(),request.executionRequestHash(),request.requestManifest())!=1)throw new IllegalStateException("Replacement execution insert failed");
+  return new PublicationReplacementPolicy.ReplacementAccepted(binding.taskId(),binding.operationId(),binding.executionId(),number);
+ });}
  @Override public String retryAfterZeroEffect(String id,long expected,TaskSpec next,ExternalRequest request){return q.work(()->{
   // Discover the COMPLETE immutable old/new spec set before identities, subject, roots or tasks.
   var seen=operation(id,false,false).orElseThrow();

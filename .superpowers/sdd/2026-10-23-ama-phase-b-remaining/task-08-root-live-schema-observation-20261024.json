@@ -1,0 +1,1305 @@
+{
+  "timestampUtc": "2026-10-23T22:55:51.812153+00:00",
+  "scope": "Root fresh SELECT-only observation of exact5 acknowledged targets; selected2CID fields guard. No business rows/allocators read or modified, no migration/reset/DDL/fullinspect/Config.Env. Comparison is full15history and selectedordinal/input-index physicalfields, not wholedata/runtime qualification.",
+  "selectedResourceGuards": [
+    {
+      "cid": "eefdd9a984ee00fe6ca886168b29a6ce4f3b405467b8d3204240d4e1a8dc7502",
+      "running": true,
+      "oomKilled": false,
+      "selectedOwnerKey": "ama.remaining.owner",
+      "selectedOwnerValue": "remaining-20261023",
+      "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+      "memory": 805306368,
+      "memorySwap": 805306368,
+      "nanoCpus": 1000000000,
+      "pidsLimit": 256
+    },
+    {
+      "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+      "running": true,
+      "oomKilled": false,
+      "selectedOwnerKey": "ama.test-fixture",
+      "selectedOwnerValue": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+      "image": "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9",
+      "memory": 805306368,
+      "memorySwap": 805306368,
+      "nanoCpus": 1000000000,
+      "pidsLimit": 256
+    }
+  ],
+  "targets": {
+    "shared": {
+      "engine": [
+        {
+          "version": "8.4.6",
+          "timeZone": "+00:00"
+        }
+      ],
+      "history": [
+        {
+          "type": "SQL",
+          "script": "V001__foundation.sql",
+          "success": 1,
+          "version": "001",
+          "checksum": 1201435595,
+          "description": "foundation",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:33:47.000000",
+          "execution_time": 99,
+          "installed_rank": 1
+        },
+        {
+          "type": "SQL",
+          "script": "V002__identity_acl.sql",
+          "success": 1,
+          "version": "002",
+          "checksum": 1757300424,
+          "description": "identity acl",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:33:48.000000",
+          "execution_time": 217,
+          "installed_rank": 2
+        },
+        {
+          "type": "SQL",
+          "script": "V005__tasks_outbox.sql",
+          "success": 1,
+          "version": "005",
+          "checksum": -1999355348,
+          "description": "tasks outbox",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:33:48.000000",
+          "execution_time": 441,
+          "installed_rank": 3
+        },
+        {
+          "type": "SQL",
+          "script": "V006__audit_metadata.sql",
+          "success": 1,
+          "version": "006",
+          "checksum": -1744360556,
+          "description": "audit metadata",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:33:48.000000",
+          "execution_time": 175,
+          "installed_rank": 4
+        },
+        {
+          "type": "SQL",
+          "script": "V007__identity_sessions.sql",
+          "success": 1,
+          "version": "007",
+          "checksum": 157746768,
+          "description": "identity sessions",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:33:49.000000",
+          "execution_time": 627,
+          "installed_rank": 5
+        },
+        {
+          "type": "SQL",
+          "script": "V008__meeting_schema.sql",
+          "success": 1,
+          "version": "008",
+          "checksum": -1747387036,
+          "description": "meeting schema",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:33:52.000000",
+          "execution_time": 2773,
+          "installed_rank": 6
+        },
+        {
+          "type": "SQL",
+          "script": "V009__file_schema.sql",
+          "success": 1,
+          "version": "009",
+          "checksum": -287948759,
+          "description": "file schema",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:33:54.000000",
+          "execution_time": 2082,
+          "installed_rank": 7
+        },
+        {
+          "type": "SQL",
+          "script": "V010__reliable_execution.sql",
+          "success": 1,
+          "version": "010",
+          "checksum": -1187397378,
+          "description": "reliable execution",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:33:57.000000",
+          "execution_time": 2629,
+          "installed_rank": 8
+        },
+        {
+          "type": "SQL",
+          "script": "V011__transcript_schema.sql",
+          "success": 1,
+          "version": "011",
+          "checksum": -286330771,
+          "description": "transcript schema",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:34:01.000000",
+          "execution_time": 3914,
+          "installed_rank": 9
+        },
+        {
+          "type": "SQL",
+          "script": "V011_1__transcript_material_index.sql",
+          "success": 1,
+          "version": "011.1",
+          "checksum": -570494170,
+          "description": "transcript material index",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:34:01.000000",
+          "execution_time": 47,
+          "installed_rank": 10
+        },
+        {
+          "type": "SQL",
+          "script": "V012__minutes_evidence.sql",
+          "success": 1,
+          "version": "012",
+          "checksum": 2101765957,
+          "description": "minutes evidence",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:34:10.000000",
+          "execution_time": 8761,
+          "installed_rank": 11
+        },
+        {
+          "type": "SQL",
+          "script": "V013__publications.sql",
+          "success": 1,
+          "version": "013",
+          "checksum": -847352333,
+          "description": "publications",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 03:34:16.000000",
+          "execution_time": 3747,
+          "installed_rank": 12
+        },
+        {
+          "type": "SQL",
+          "script": "V013_1__b_runtime_metadata.sql",
+          "success": 1,
+          "version": "013.1",
+          "checksum": -1898004857,
+          "description": "b runtime metadata",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 04:10:47.000000",
+          "execution_time": 498,
+          "installed_rank": 13
+        },
+        {
+          "type": "SQL",
+          "script": "V013_2__task_input_lookup.sql",
+          "success": 1,
+          "version": "013.2",
+          "checksum": -1098175378,
+          "description": "task input lookup",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 21:53:39.000000",
+          "execution_time": 135,
+          "installed_rank": 14
+        },
+        {
+          "type": "SQL",
+          "script": "V013_3__external_reconcile_scan.sql",
+          "success": 1,
+          "version": "013.3",
+          "checksum": -385117638,
+          "description": "external reconcile scan",
+          "installed_by": "ama_test",
+          "installed_on": "2026-10-23 22:47:59.000000",
+          "execution_time": 242,
+          "installed_rank": 15
+        }
+      ],
+      "column": [
+        {
+          "EXTRA": "auto_increment",
+          "DATA_TYPE": "bigint",
+          "TABLE_NAME": "external_operation",
+          "COLUMN_NAME": "reconcile_scan_seq",
+          "COLUMN_TYPE": "bigint",
+          "IS_NULLABLE": "NO",
+          "COLLATION_NAME": null,
+          "COLUMN_DEFAULT": null,
+          "ORDINAL_POSITION": 16,
+          "CHARACTER_SET_NAME": null
+        }
+      ],
+      "index": [
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "input_kind",
+          "SEQ_IN_INDEX": 1
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "input_id",
+          "SEQ_IN_INDEX": 2
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "id",
+          "SEQ_IN_INDEX": 3
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "external_reconcile_scan",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 0,
+          "TABLE_NAME": "external_operation",
+          "COLUMN_NAME": "reconcile_scan_seq",
+          "SEQ_IN_INDEX": 1
+        }
+      ],
+      "schema": "ama_b01_fixture",
+      "all15HistoryFieldsSameAsCompletedRerun": true,
+      "selectedColumnAnd4IndexPartsSameAsCompletedRerun": true
+    },
+    "behavior": {
+      "engine": [
+        {
+          "version": "8.4.6",
+          "timeZone": "+00:00"
+        }
+      ],
+      "history": [
+        {
+          "type": "SQL",
+          "script": "V001__foundation.sql",
+          "success": 1,
+          "version": "001",
+          "checksum": 1201435595,
+          "description": "foundation",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:43:55.000000",
+          "execution_time": 93,
+          "installed_rank": 1
+        },
+        {
+          "type": "SQL",
+          "script": "V002__identity_acl.sql",
+          "success": 1,
+          "version": "002",
+          "checksum": 1757300424,
+          "description": "identity acl",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:43:55.000000",
+          "execution_time": 211,
+          "installed_rank": 2
+        },
+        {
+          "type": "SQL",
+          "script": "V005__tasks_outbox.sql",
+          "success": 1,
+          "version": "005",
+          "checksum": -1999355348,
+          "description": "tasks outbox",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:43:56.000000",
+          "execution_time": 447,
+          "installed_rank": 3
+        },
+        {
+          "type": "SQL",
+          "script": "V006__audit_metadata.sql",
+          "success": 1,
+          "version": "006",
+          "checksum": -1744360556,
+          "description": "audit metadata",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:43:56.000000",
+          "execution_time": 181,
+          "installed_rank": 4
+        },
+        {
+          "type": "SQL",
+          "script": "V007__identity_sessions.sql",
+          "success": 1,
+          "version": "007",
+          "checksum": 157746768,
+          "description": "identity sessions",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:43:57.000000",
+          "execution_time": 669,
+          "installed_rank": 5
+        },
+        {
+          "type": "SQL",
+          "script": "V008__meeting_schema.sql",
+          "success": 1,
+          "version": "008",
+          "checksum": -1747387036,
+          "description": "meeting schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:00.000000",
+          "execution_time": 3061,
+          "installed_rank": 6
+        },
+        {
+          "type": "SQL",
+          "script": "V009__file_schema.sql",
+          "success": 1,
+          "version": "009",
+          "checksum": -287948759,
+          "description": "file schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:02.000000",
+          "execution_time": 2148,
+          "installed_rank": 7
+        },
+        {
+          "type": "SQL",
+          "script": "V010__reliable_execution.sql",
+          "success": 1,
+          "version": "010",
+          "checksum": -1187397378,
+          "description": "reliable execution",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:05.000000",
+          "execution_time": 2857,
+          "installed_rank": 8
+        },
+        {
+          "type": "SQL",
+          "script": "V011__transcript_schema.sql",
+          "success": 1,
+          "version": "011",
+          "checksum": -286330771,
+          "description": "transcript schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:10.000000",
+          "execution_time": 4846,
+          "installed_rank": 9
+        },
+        {
+          "type": "SQL",
+          "script": "V011_1__transcript_material_index.sql",
+          "success": 1,
+          "version": "011.1",
+          "checksum": -570494170,
+          "description": "transcript material index",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:10.000000",
+          "execution_time": 49,
+          "installed_rank": 10
+        },
+        {
+          "type": "SQL",
+          "script": "V012__minutes_evidence.sql",
+          "success": 1,
+          "version": "012",
+          "checksum": 2101765957,
+          "description": "minutes evidence",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:19.000000",
+          "execution_time": 9311,
+          "installed_rank": 11
+        },
+        {
+          "type": "SQL",
+          "script": "V013__publications.sql",
+          "success": 1,
+          "version": "013",
+          "checksum": -847352333,
+          "description": "publications",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:23.000000",
+          "execution_time": 4189,
+          "installed_rank": 12
+        },
+        {
+          "type": "SQL",
+          "script": "V013_1__b_runtime_metadata.sql",
+          "success": 1,
+          "version": "013.1",
+          "checksum": -1898004857,
+          "description": "b runtime metadata",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:24.000000",
+          "execution_time": 394,
+          "installed_rank": 13
+        },
+        {
+          "type": "SQL",
+          "script": "V013_2__task_input_lookup.sql",
+          "success": 1,
+          "version": "013.2",
+          "checksum": -1098175378,
+          "description": "task input lookup",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:24.000000",
+          "execution_time": 52,
+          "installed_rank": 14
+        },
+        {
+          "type": "SQL",
+          "script": "V013_3__external_reconcile_scan.sql",
+          "success": 1,
+          "version": "013.3",
+          "checksum": -385117638,
+          "description": "external reconcile scan",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:47:50.000000",
+          "execution_time": 218,
+          "installed_rank": 15
+        }
+      ],
+      "column": [
+        {
+          "EXTRA": "auto_increment",
+          "DATA_TYPE": "bigint",
+          "TABLE_NAME": "external_operation",
+          "COLUMN_NAME": "reconcile_scan_seq",
+          "COLUMN_TYPE": "bigint",
+          "IS_NULLABLE": "NO",
+          "COLLATION_NAME": null,
+          "COLUMN_DEFAULT": null,
+          "ORDINAL_POSITION": 16,
+          "CHARACTER_SET_NAME": null
+        }
+      ],
+      "index": [
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "input_kind",
+          "SEQ_IN_INDEX": 1
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "input_id",
+          "SEQ_IN_INDEX": 2
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "id",
+          "SEQ_IN_INDEX": 3
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "external_reconcile_scan",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 0,
+          "TABLE_NAME": "external_operation",
+          "COLUMN_NAME": "reconcile_scan_seq",
+          "SEQ_IN_INDEX": 1
+        }
+      ],
+      "schema": "ama_t08_848e93aace8b_behavior",
+      "all15HistoryFieldsSameAsCompletedRerun": true,
+      "selectedColumnAnd4IndexPartsSameAsCompletedRerun": true
+    },
+    "fairheld": {
+      "engine": [
+        {
+          "version": "8.4.6",
+          "timeZone": "+00:00"
+        }
+      ],
+      "history": [
+        {
+          "type": "SQL",
+          "script": "V001__foundation.sql",
+          "success": 1,
+          "version": "001",
+          "checksum": 1201435595,
+          "description": "foundation",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:26.000000",
+          "execution_time": 98,
+          "installed_rank": 1
+        },
+        {
+          "type": "SQL",
+          "script": "V002__identity_acl.sql",
+          "success": 1,
+          "version": "002",
+          "checksum": 1757300424,
+          "description": "identity acl",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:26.000000",
+          "execution_time": 226,
+          "installed_rank": 2
+        },
+        {
+          "type": "SQL",
+          "script": "V005__tasks_outbox.sql",
+          "success": 1,
+          "version": "005",
+          "checksum": -1999355348,
+          "description": "tasks outbox",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:27.000000",
+          "execution_time": 529,
+          "installed_rank": 3
+        },
+        {
+          "type": "SQL",
+          "script": "V006__audit_metadata.sql",
+          "success": 1,
+          "version": "006",
+          "checksum": -1744360556,
+          "description": "audit metadata",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:27.000000",
+          "execution_time": 177,
+          "installed_rank": 4
+        },
+        {
+          "type": "SQL",
+          "script": "V007__identity_sessions.sql",
+          "success": 1,
+          "version": "007",
+          "checksum": 157746768,
+          "description": "identity sessions",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:28.000000",
+          "execution_time": 659,
+          "installed_rank": 5
+        },
+        {
+          "type": "SQL",
+          "script": "V008__meeting_schema.sql",
+          "success": 1,
+          "version": "008",
+          "checksum": -1747387036,
+          "description": "meeting schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:31.000000",
+          "execution_time": 3146,
+          "installed_rank": 6
+        },
+        {
+          "type": "SQL",
+          "script": "V009__file_schema.sql",
+          "success": 1,
+          "version": "009",
+          "checksum": -287948759,
+          "description": "file schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:33.000000",
+          "execution_time": 2126,
+          "installed_rank": 7
+        },
+        {
+          "type": "SQL",
+          "script": "V010__reliable_execution.sql",
+          "success": 1,
+          "version": "010",
+          "checksum": -1187397378,
+          "description": "reliable execution",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:36.000000",
+          "execution_time": 2934,
+          "installed_rank": 8
+        },
+        {
+          "type": "SQL",
+          "script": "V011__transcript_schema.sql",
+          "success": 1,
+          "version": "011",
+          "checksum": -286330771,
+          "description": "transcript schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:41.000000",
+          "execution_time": 4955,
+          "installed_rank": 9
+        },
+        {
+          "type": "SQL",
+          "script": "V011_1__transcript_material_index.sql",
+          "success": 1,
+          "version": "011.1",
+          "checksum": -570494170,
+          "description": "transcript material index",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:41.000000",
+          "execution_time": 52,
+          "installed_rank": 10
+        },
+        {
+          "type": "SQL",
+          "script": "V012__minutes_evidence.sql",
+          "success": 1,
+          "version": "012",
+          "checksum": 2101765957,
+          "description": "minutes evidence",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:51.000000",
+          "execution_time": 9516,
+          "installed_rank": 11
+        },
+        {
+          "type": "SQL",
+          "script": "V013__publications.sql",
+          "success": 1,
+          "version": "013",
+          "checksum": -847352333,
+          "description": "publications",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:55.000000",
+          "execution_time": 4002,
+          "installed_rank": 12
+        },
+        {
+          "type": "SQL",
+          "script": "V013_1__b_runtime_metadata.sql",
+          "success": 1,
+          "version": "013.1",
+          "checksum": -1898004857,
+          "description": "b runtime metadata",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:55.000000",
+          "execution_time": 399,
+          "installed_rank": 13
+        },
+        {
+          "type": "SQL",
+          "script": "V013_2__task_input_lookup.sql",
+          "success": 1,
+          "version": "013.2",
+          "checksum": -1098175378,
+          "description": "task input lookup",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:55.000000",
+          "execution_time": 72,
+          "installed_rank": 14
+        },
+        {
+          "type": "SQL",
+          "script": "V013_3__external_reconcile_scan.sql",
+          "success": 1,
+          "version": "013.3",
+          "checksum": -385117638,
+          "description": "external reconcile scan",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:47:52.000000",
+          "execution_time": 204,
+          "installed_rank": 15
+        }
+      ],
+      "column": [
+        {
+          "EXTRA": "auto_increment",
+          "DATA_TYPE": "bigint",
+          "TABLE_NAME": "external_operation",
+          "COLUMN_NAME": "reconcile_scan_seq",
+          "COLUMN_TYPE": "bigint",
+          "IS_NULLABLE": "NO",
+          "COLLATION_NAME": null,
+          "COLUMN_DEFAULT": null,
+          "ORDINAL_POSITION": 16,
+          "CHARACTER_SET_NAME": null
+        }
+      ],
+      "index": [
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "input_kind",
+          "SEQ_IN_INDEX": 1
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "input_id",
+          "SEQ_IN_INDEX": 2
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "id",
+          "SEQ_IN_INDEX": 3
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "external_reconcile_scan",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 0,
+          "TABLE_NAME": "external_operation",
+          "COLUMN_NAME": "reconcile_scan_seq",
+          "SEQ_IN_INDEX": 1
+        }
+      ],
+      "schema": "ama_t08_848e93aace8b_fairheld",
+      "all15HistoryFieldsSameAsCompletedRerun": true,
+      "selectedColumnAnd4IndexPartsSameAsCompletedRerun": true
+    },
+    "fairunregistered": {
+      "engine": [
+        {
+          "version": "8.4.6",
+          "timeZone": "+00:00"
+        }
+      ],
+      "history": [
+        {
+          "type": "SQL",
+          "script": "V001__foundation.sql",
+          "success": 1,
+          "version": "001",
+          "checksum": 1201435595,
+          "description": "foundation",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:58.000000",
+          "execution_time": 110,
+          "installed_rank": 1
+        },
+        {
+          "type": "SQL",
+          "script": "V002__identity_acl.sql",
+          "success": 1,
+          "version": "002",
+          "checksum": 1757300424,
+          "description": "identity acl",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:58.000000",
+          "execution_time": 239,
+          "installed_rank": 2
+        },
+        {
+          "type": "SQL",
+          "script": "V005__tasks_outbox.sql",
+          "success": 1,
+          "version": "005",
+          "checksum": -1999355348,
+          "description": "tasks outbox",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:59.000000",
+          "execution_time": 412,
+          "installed_rank": 3
+        },
+        {
+          "type": "SQL",
+          "script": "V006__audit_metadata.sql",
+          "success": 1,
+          "version": "006",
+          "checksum": -1744360556,
+          "description": "audit metadata",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:44:59.000000",
+          "execution_time": 190,
+          "installed_rank": 4
+        },
+        {
+          "type": "SQL",
+          "script": "V007__identity_sessions.sql",
+          "success": 1,
+          "version": "007",
+          "checksum": 157746768,
+          "description": "identity sessions",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:00.000000",
+          "execution_time": 728,
+          "installed_rank": 5
+        },
+        {
+          "type": "SQL",
+          "script": "V008__meeting_schema.sql",
+          "success": 1,
+          "version": "008",
+          "checksum": -1747387036,
+          "description": "meeting schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:03.000000",
+          "execution_time": 3421,
+          "installed_rank": 6
+        },
+        {
+          "type": "SQL",
+          "script": "V009__file_schema.sql",
+          "success": 1,
+          "version": "009",
+          "checksum": -287948759,
+          "description": "file schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:05.000000",
+          "execution_time": 2147,
+          "installed_rank": 7
+        },
+        {
+          "type": "SQL",
+          "script": "V010__reliable_execution.sql",
+          "success": 1,
+          "version": "010",
+          "checksum": -1187397378,
+          "description": "reliable execution",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:08.000000",
+          "execution_time": 3065,
+          "installed_rank": 8
+        },
+        {
+          "type": "SQL",
+          "script": "V011__transcript_schema.sql",
+          "success": 1,
+          "version": "011",
+          "checksum": -286330771,
+          "description": "transcript schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:14.000000",
+          "execution_time": 5269,
+          "installed_rank": 9
+        },
+        {
+          "type": "SQL",
+          "script": "V011_1__transcript_material_index.sql",
+          "success": 1,
+          "version": "011.1",
+          "checksum": -570494170,
+          "description": "transcript material index",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:14.000000",
+          "execution_time": 44,
+          "installed_rank": 10
+        },
+        {
+          "type": "SQL",
+          "script": "V012__minutes_evidence.sql",
+          "success": 1,
+          "version": "012",
+          "checksum": 2101765957,
+          "description": "minutes evidence",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:23.000000",
+          "execution_time": 9645,
+          "installed_rank": 11
+        },
+        {
+          "type": "SQL",
+          "script": "V013__publications.sql",
+          "success": 1,
+          "version": "013",
+          "checksum": -847352333,
+          "description": "publications",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:27.000000",
+          "execution_time": 4128,
+          "installed_rank": 12
+        },
+        {
+          "type": "SQL",
+          "script": "V013_1__b_runtime_metadata.sql",
+          "success": 1,
+          "version": "013.1",
+          "checksum": -1898004857,
+          "description": "b runtime metadata",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:28.000000",
+          "execution_time": 451,
+          "installed_rank": 13
+        },
+        {
+          "type": "SQL",
+          "script": "V013_2__task_input_lookup.sql",
+          "success": 1,
+          "version": "013.2",
+          "checksum": -1098175378,
+          "description": "task input lookup",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:28.000000",
+          "execution_time": 56,
+          "installed_rank": 14
+        },
+        {
+          "type": "SQL",
+          "script": "V013_3__external_reconcile_scan.sql",
+          "success": 1,
+          "version": "013.3",
+          "checksum": -385117638,
+          "description": "external reconcile scan",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:47:54.000000",
+          "execution_time": 178,
+          "installed_rank": 15
+        }
+      ],
+      "column": [
+        {
+          "EXTRA": "auto_increment",
+          "DATA_TYPE": "bigint",
+          "TABLE_NAME": "external_operation",
+          "COLUMN_NAME": "reconcile_scan_seq",
+          "COLUMN_TYPE": "bigint",
+          "IS_NULLABLE": "NO",
+          "COLLATION_NAME": null,
+          "COLUMN_DEFAULT": null,
+          "ORDINAL_POSITION": 16,
+          "CHARACTER_SET_NAME": null
+        }
+      ],
+      "index": [
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "input_kind",
+          "SEQ_IN_INDEX": 1
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "input_id",
+          "SEQ_IN_INDEX": 2
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "id",
+          "SEQ_IN_INDEX": 3
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "external_reconcile_scan",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 0,
+          "TABLE_NAME": "external_operation",
+          "COLUMN_NAME": "reconcile_scan_seq",
+          "SEQ_IN_INDEX": 1
+        }
+      ],
+      "schema": "ama_t08_848e93aace8b_fairunregistered",
+      "all15HistoryFieldsSameAsCompletedRerun": true,
+      "selectedColumnAnd4IndexPartsSameAsCompletedRerun": true
+    },
+    "overflow": {
+      "engine": [
+        {
+          "version": "8.4.6",
+          "timeZone": "+00:00"
+        }
+      ],
+      "history": [
+        {
+          "type": "SQL",
+          "script": "V001__foundation.sql",
+          "success": 1,
+          "version": "001",
+          "checksum": 1201435595,
+          "description": "foundation",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:30.000000",
+          "execution_time": 114,
+          "installed_rank": 1
+        },
+        {
+          "type": "SQL",
+          "script": "V002__identity_acl.sql",
+          "success": 1,
+          "version": "002",
+          "checksum": 1757300424,
+          "description": "identity acl",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:30.000000",
+          "execution_time": 237,
+          "installed_rank": 2
+        },
+        {
+          "type": "SQL",
+          "script": "V005__tasks_outbox.sql",
+          "success": 1,
+          "version": "005",
+          "checksum": -1999355348,
+          "description": "tasks outbox",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:31.000000",
+          "execution_time": 500,
+          "installed_rank": 3
+        },
+        {
+          "type": "SQL",
+          "script": "V006__audit_metadata.sql",
+          "success": 1,
+          "version": "006",
+          "checksum": -1744360556,
+          "description": "audit metadata",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:31.000000",
+          "execution_time": 195,
+          "installed_rank": 4
+        },
+        {
+          "type": "SQL",
+          "script": "V007__identity_sessions.sql",
+          "success": 1,
+          "version": "007",
+          "checksum": 157746768,
+          "description": "identity sessions",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:32.000000",
+          "execution_time": 678,
+          "installed_rank": 5
+        },
+        {
+          "type": "SQL",
+          "script": "V008__meeting_schema.sql",
+          "success": 1,
+          "version": "008",
+          "checksum": -1747387036,
+          "description": "meeting schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:36.000000",
+          "execution_time": 3535,
+          "installed_rank": 6
+        },
+        {
+          "type": "SQL",
+          "script": "V009__file_schema.sql",
+          "success": 1,
+          "version": "009",
+          "checksum": -287948759,
+          "description": "file schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:38.000000",
+          "execution_time": 2326,
+          "installed_rank": 7
+        },
+        {
+          "type": "SQL",
+          "script": "V010__reliable_execution.sql",
+          "success": 1,
+          "version": "010",
+          "checksum": -1187397378,
+          "description": "reliable execution",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:41.000000",
+          "execution_time": 3051,
+          "installed_rank": 8
+        },
+        {
+          "type": "SQL",
+          "script": "V011__transcript_schema.sql",
+          "success": 1,
+          "version": "011",
+          "checksum": -286330771,
+          "description": "transcript schema",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:46.000000",
+          "execution_time": 5314,
+          "installed_rank": 9
+        },
+        {
+          "type": "SQL",
+          "script": "V011_1__transcript_material_index.sql",
+          "success": 1,
+          "version": "011.1",
+          "checksum": -570494170,
+          "description": "transcript material index",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:46.000000",
+          "execution_time": 52,
+          "installed_rank": 10
+        },
+        {
+          "type": "SQL",
+          "script": "V012__minutes_evidence.sql",
+          "success": 1,
+          "version": "012",
+          "checksum": 2101765957,
+          "description": "minutes evidence",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:45:57.000000",
+          "execution_time": 10008,
+          "installed_rank": 11
+        },
+        {
+          "type": "SQL",
+          "script": "V013__publications.sql",
+          "success": 1,
+          "version": "013",
+          "checksum": -847352333,
+          "description": "publications",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:46:01.000000",
+          "execution_time": 4211,
+          "installed_rank": 12
+        },
+        {
+          "type": "SQL",
+          "script": "V013_1__b_runtime_metadata.sql",
+          "success": 1,
+          "version": "013.1",
+          "checksum": -1898004857,
+          "description": "b runtime metadata",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:46:01.000000",
+          "execution_time": 396,
+          "installed_rank": 13
+        },
+        {
+          "type": "SQL",
+          "script": "V013_2__task_input_lookup.sql",
+          "success": 1,
+          "version": "013.2",
+          "checksum": -1098175378,
+          "description": "task input lookup",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:46:01.000000",
+          "execution_time": 58,
+          "installed_rank": 14
+        },
+        {
+          "type": "SQL",
+          "script": "V013_3__external_reconcile_scan.sql",
+          "success": 1,
+          "version": "013.3",
+          "checksum": -385117638,
+          "description": "external reconcile scan",
+          "installed_by": "ama_t08_848e93aace8b",
+          "installed_on": "2026-10-23 22:47:56.000000",
+          "execution_time": 181,
+          "installed_rank": 15
+        }
+      ],
+      "column": [
+        {
+          "EXTRA": "auto_increment",
+          "DATA_TYPE": "bigint",
+          "TABLE_NAME": "external_operation",
+          "COLUMN_NAME": "reconcile_scan_seq",
+          "COLUMN_TYPE": "bigint",
+          "IS_NULLABLE": "NO",
+          "COLLATION_NAME": null,
+          "COLUMN_DEFAULT": null,
+          "ORDINAL_POSITION": 16,
+          "CHARACTER_SET_NAME": null
+        }
+      ],
+      "index": [
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "input_kind",
+          "SEQ_IN_INDEX": 1
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "input_id",
+          "SEQ_IN_INDEX": 2
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "task_input_lookup",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 1,
+          "TABLE_NAME": "durable_task",
+          "COLUMN_NAME": "id",
+          "SEQ_IN_INDEX": 3
+        },
+        {
+          "SUB_PART": null,
+          "EXPRESSION": null,
+          "INDEX_NAME": "external_reconcile_scan",
+          "INDEX_TYPE": "BTREE",
+          "IS_VISIBLE": "YES",
+          "NON_UNIQUE": 0,
+          "TABLE_NAME": "external_operation",
+          "COLUMN_NAME": "reconcile_scan_seq",
+          "SEQ_IN_INDEX": 1
+        }
+      ],
+      "schema": "ama_t08_848e93aace8b_overflow",
+      "all15HistoryFieldsSameAsCompletedRerun": true,
+      "selectedColumnAnd4IndexPartsSameAsCompletedRerun": true
+    }
+  },
+  "query": "SET SESSION time_zone='+00:00';\nSELECT JSON_OBJECT('kind','engine','row',JSON_OBJECT('version',VERSION(),'timeZone',@@session.time_zone));\nSELECT JSON_OBJECT('kind','history','row',JSON_OBJECT('installed_rank',installed_rank,'version',version,'description',description,'type',type,'script',script,'checksum',checksum,'installed_by',installed_by,'installed_on',installed_on,'execution_time',execution_time,'success',success)) FROM flyway_schema_history ORDER BY installed_rank;\nSELECT JSON_OBJECT('kind','column','row',JSON_OBJECT('TABLE_NAME',TABLE_NAME,'COLUMN_NAME',COLUMN_NAME,'ORDINAL_POSITION',ORDINAL_POSITION,'COLUMN_DEFAULT',COLUMN_DEFAULT,'IS_NULLABLE',IS_NULLABLE,'DATA_TYPE',DATA_TYPE,'COLUMN_TYPE',COLUMN_TYPE,'EXTRA',EXTRA,'CHARACTER_SET_NAME',CHARACTER_SET_NAME,'COLLATION_NAME',COLLATION_NAME)) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='external_operation' AND COLUMN_NAME='reconcile_scan_seq';\nSELECT JSON_OBJECT('kind','index','row',JSON_OBJECT('TABLE_NAME',TABLE_NAME,'INDEX_NAME',INDEX_NAME,'NON_UNIQUE',NON_UNIQUE,'SEQ_IN_INDEX',SEQ_IN_INDEX,'COLUMN_NAME',COLUMN_NAME,'SUB_PART',SUB_PART,'INDEX_TYPE',INDEX_TYPE,'IS_VISIBLE',IS_VISIBLE,'EXPRESSION',EXPRESSION)) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND ((TABLE_NAME='external_operation' AND INDEX_NAME='external_reconcile_scan') OR (TABLE_NAME='durable_task' AND INDEX_NAME='task_input_lookup')) ORDER BY TABLE_NAME,INDEX_NAME,SEQ_IN_INDEX;\n",
+  "priorRawRerunSeals": {
+    "shared": "5bddc4e49d7802c8de0762e450b08b1ee089045409b9b8d948a09ba5fe496b56",
+    "behavior": "59f0ce5c97a62a636eb695d051f8012c648bc58202dc7e8397af1ce2be6c4f05",
+    "fairheld": "477a271e28a9bbfa86cc78148f419e8c6e4652af0842a4c494a73dda9c91a403",
+    "fairunregistered": "ec7c6c65ae9fb16aaf6601a5294394584b4b5680d5197af36f9d2d42d699037b",
+    "overflow": "2099063202e8ae0d68e0e3b35b4244530eeb03fa405d3287228092466de21645"
+  }
+}

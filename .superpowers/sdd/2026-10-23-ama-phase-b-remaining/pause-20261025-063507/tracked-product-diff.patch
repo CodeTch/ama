@@ -1,0 +1,822 @@
+diff --git a/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java b/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java
+index fafe16a..f5af4dc 100644
+--- a/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java
++++ b/backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java
+@@ -31,6 +31,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+  private void requireLiveLookup(OperationToken token){independent();requireLookup(token);var o=operation(token.operationId(),false,false).orElseThrow();var e=execution(o.id(),token.executionNo(),false,false).orElseThrow();if(!valid(o,e,token))throw new IllegalArgumentException("Stale recorded lookup claim");}
+  public RecordedLookup recordedLookup(OperationToken token){requireLiveLookup(token);return new RecordedLookup(this,token);}
+  @Override public synchronized void releaseRecordedLookup(OperationToken token){lookupAuthorities.removeIf(r->r.get()==null||r.get()==token);}
++ private static final String OP_COLUMNS="id,operation_kind,business_key,request_hash,state,subject_kind,subject_id,current_execution_no,reconcile_epoch,reconcile_owner,reconcile_expires_at";
+  record Operation(String id,String kind,String key,String hash,String state,SubjectRef subject,long execution,long epoch,String owner,Instant expiry){}
+  record Execution(String id,String operation,long number,String task,String state,String hash,String manifest,String basis,String evidence,Instant verified){}
+  private final ReconciliationScanBudget scanBudget;
+@@ -44,11 +45,12 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+  public JdbcExternalOperations(JdbcTaskQueue queue,ReconciliationScanBudget budget){q=Objects.requireNonNull(queue);j=queue.jdbc;scanBudget=Objects.requireNonNull(budget);}
+  private static Operation op(ResultSet r,int n)throws SQLException{return new Operation(r.getString("id"),r.getString("operation_kind"),r.getString("business_key"),r.getString("request_hash"),r.getString("state"),new SubjectRef(r.getString("subject_kind"),r.getString("subject_id")),r.getLong("current_execution_no"),r.getLong("reconcile_epoch"),r.getString("reconcile_owner"),instant(r,"reconcile_expires_at"));}
+  private static Execution ex(ResultSet r,int n)throws SQLException{return new Execution(r.getString("id"),r.getString("operation_id"),r.getLong("execution_no"),r.getString("task_id"),r.getString("state"),r.getString("request_hash"),r.getString("request_manifest"),r.getString("no_effect_basis"),r.getString("no_effect_evidence"),instant(r,"no_effect_verified_at"));}
+- Optional<Operation> operation(String id,boolean lock,boolean skip){return j.query("SELECT * FROM external_operation WHERE id=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::op,id).stream().findFirst();}
++ Optional<Operation> operation(String id,boolean lock,boolean skip){return j.query("SELECT "+OP_COLUMNS+" FROM external_operation WHERE id=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::op,id).stream().findFirst();}
+  Optional<Execution> execution(String operation,long n,boolean lock,boolean skip){
+   // Metadata only before any Task9 manifest transfer, including pre-domain discovery.
+   var sizes=j.queryForList("SELECT e.id,e.task_id,t.task_type,OCTET_LENGTH(e.request_manifest) AS manifest_bytes FROM external_execution e JOIN durable_task t ON t.id=e.task_id WHERE e.operation_id=? AND e.execution_no=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),operation,n);
+   if(sizes.isEmpty())return Optional.empty();if(sizes.size()!=1)throw new DomainPreparationUnavailableException();var size=sizes.getFirst();
++  if("KNOWLEDGE_PUBLISH_V1".equals(size.get("task_type")))return j.query("SELECT id,operation_id,execution_no,task_id,state,request_hash,NULL AS request_manifest,no_effect_basis,NULL AS no_effect_evidence,no_effect_verified_at FROM external_execution WHERE operation_id=? AND execution_no=? AND id=? AND task_id=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::ex,operation,n,size.get("id"),size.get("task_id")).stream().findFirst();
+   if("MINUTES_GENERATE_V1".equals(size.get("task_type"))){
+    if(!(size.get("manifest_bytes") instanceof Number bytes)||bytes.longValue()<1||bytes.longValue()>65536)throw new DomainPreparationUnavailableException();
+    // Repeat the size and identity predicate in the actual content query to close growth/rebinding races.
+@@ -56,13 +58,14 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+   }
+   return j.query("SELECT * FROM external_execution WHERE operation_id=? AND execution_no=?"+(lock?" FOR UPDATE"+(skip?" SKIP LOCKED":""):""),JdbcExternalOperations::ex,operation,n).stream().findFirst();
+  }
++ private Execution publicationContent(Execution e,JdbcTaskQueue.DomainScope scope,Row task){if(!task.spec().type().equals("KNOWLEDGE_PUBLISH_V1"))return e;if(!(scope.policy() instanceof PublicationReplacementPolicy policy))throw new DomainPreparationUnavailableException();var content=policy.readPublicationExecution(scope.prepared(),task.spec(),task.id(),e.operation(),e.id(),e.number());return new Execution(e.id(),e.operation(),e.number(),e.task(),e.state(),e.hash(),content.manifest(),e.basis(),content.evidence(),e.verified());}
+  boolean valid(Operation o,Execution e,OperationToken t){return o.subject().equals(t.subject())&&o.id().equals(t.operationId())&&o.execution()==t.executionNo()&&e.id().equals(t.executionId())&&e.number()==t.executionNo()&&o.epoch()==t.reconcileEpoch()&&Objects.equals(o.owner(),t.owner())&&o.expiry()!=null&&o.expiry().isAfter(q.now())&&(o.state().equals("MARKED")||o.state().equals("UNKNOWN"))&&(e.state().equals("MARKED")||e.state().equals("UNKNOWN"));}
+  OperationToken token(Operation o,Execution e){return new OperationToken(o.id(),e.id(),o.execution(),o.epoch(),o.owner(),o.expiry(),o.subject());}
+  private final class Context implements ExecutionContext {
+   final Object holder;final JdbcTaskQueue.DomainScope scope;final Row task;final Operation operation;final Execution execution;
+   boolean open=true,retaining;
+   private Context(JdbcTaskQueue.DomainScope scope,Row task,Operation operation,Execution execution){
+-   this.scope=scope;this.task=task;this.operation=operation;this.execution=execution;
++   this.scope=scope;this.task=task;this.operation=operation;this.execution=publicationContent(execution,scope,task);
+    holder=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(q.source);
+   }
+   JdbcExternalOperations issuer(){return JdbcExternalOperations.this;}
+@@ -98,11 +101,11 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+   independent();
+   // Exceptions from commit (including lost ACK) escape: no token and no send authority is returned.
+   Optional<OperationToken> committed=q.work(()->{
+-   var valid=q.validatedLease(lease);if(valid.isEmpty())return Optional.empty();var validated=valid.orElseThrow();var task=validated.task();
++   TaskDomainPolicy.PreparedDomain supplied=prepared!=null&&q.policy(lease.spec()) instanceof PublicationReplacementPolicy policy?policy.preparePublicationRequest(lease.spec(),prepared).orElseThrow(DomainPreparationUnavailableException::new):null;var valid=q.validatedLease(lease,supplied);if(valid.isEmpty())return Optional.empty();var validated=valid.orElseThrow();var task=validated.task();
+    if(prepared==null&&q.policy(task.spec()) instanceof PreparedExternalPolicy)throw new IllegalArgumentException("Prepared request required");
+    var request=prepared==null?legacy:Objects.requireNonNull(preparedPolicy(task.spec()).requireRequest(task.spec(),prepared));
+    q.policy(task.spec()).validateExternalRequest(task.spec(),request);
+-   var found=j.query("SELECT * FROM external_operation WHERE operation_kind=? AND business_key=? FOR UPDATE",JdbcExternalOperations::op,request.operationKind(),request.businessKey());
++   var found=j.query("SELECT "+OP_COLUMNS+" FROM external_operation WHERE operation_kind=? AND business_key=? FOR UPDATE",JdbcExternalOperations::op,request.operationKind(),request.businessKey());
+    String oid,eid;long number,epoch;Instant now=q.now(),expiry=now.plusSeconds(20);
+    if(found.isEmpty()){
+     oid=UUID.randomUUID().toString();eid=UUID.randomUUID().toString();number=1;epoch=1;
+@@ -110,7 +113,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+     j.update("INSERT INTO external_execution(id,operation_id,execution_no,task_id,task_attempt,state,request_hash,request_manifest,created_at,marked_at) VALUES (?,?,1,?,?,'MARKED',?,?,?,?)",eid,oid,task.id(),lease.attempt(),request.executionRequestHash(),request.requestManifest(),sqlTime(now),sqlTime(now));
+    }else{
+     var o=found.getFirst();if(!o.subject().equals(task.spec().subject())||!o.hash().equals(request.logicalRequestHash()))throw new IllegalArgumentException("External logical key conflict");
+-    var e=execution(o.id(),o.execution(),true,false).orElseThrow();
++    var e=publicationContent(execution(o.id(),o.execution(),true,false).orElseThrow(),validated.domain(),task);
+     if(!o.state().equals("RETRY_QUEUED")||!e.state().equals("PREPARED")||!e.task().equals(task.id()))return Optional.empty();
+     if(!e.hash().equals(request.executionRequestHash())||!e.manifest().equals(request.requestManifest()))throw new IllegalArgumentException("Execution request changed");
+     oid=o.id();eid=e.id();number=o.execution();epoch=o.epoch()+1;
+@@ -171,7 +174,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+   } finally {scanLock.unlock();}
+  }
+  private Optional<ScanOperation> scanOperation(String id,boolean lock){
+-  return j.query("SELECT *, (next_check_at<=UTC_TIMESTAMP(6) AND reconcile_expires_at<=UTC_TIMESTAMP(6)) AS scan_due FROM external_operation WHERE id=?"+(lock?" FOR UPDATE SKIP LOCKED":""),
++  return j.query("SELECT "+OP_COLUMNS+",reconcile_scan_seq,next_check_at, (next_check_at<=UTC_TIMESTAMP(6) AND reconcile_expires_at<=UTC_TIMESTAMP(6)) AS scan_due FROM external_operation WHERE id=?"+(lock?" FOR UPDATE SKIP LOCKED":""),
+     (r,n)->new ScanOperation(op(r,n),r.getLong("reconcile_scan_seq"),instant(r,"next_check_at"),r.getBoolean("scan_due")),id).stream().findFirst();
+  }
+  private static boolean observable(String state){return state.equals("MARKED")||state.equals("UNKNOWN");}
+@@ -231,7 +234,8 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+   if(old.isEmpty()||!old.orElseThrow().id().equals(token.executionId())||!current.subject().equals(token.subject()))return ObservationResult.STALE_TOKEN;
+   var currentEx=execution(current.id(),current.execution(),false,false).orElseThrow();
+   var currentTask=q.row(currentEx.task(),false,false).orElseThrow();var oldTask=q.row(old.orElseThrow().task(),false,false).orElseThrow();
+-  var scope=q.prepareDomain(List.of(currentTask.spec(),oldTask.spec()),TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION,false,null)
++  var observationSpecs=List.of(currentTask.spec(),oldTask.spec());TaskDomainPolicy.PreparedDomain observedDomain=prepared!=null&&q.policy(oldTask.spec()) instanceof PublicationReplacementPolicy?preparedPolicy(oldTask.spec()).prepareObservation(observationSpecs,prepared,false).orElseThrow(DomainPreparationUnavailableException::new):null;
++  var scope=q.prepareDomain(observationSpecs,TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION,false,observedDomain)
+     .orElseThrow(DomainPreparationUnavailableException::new);
+   var domain=q.lockDomain(scope,currentTask.spec(),false).orElseThrow(DomainPreparationUnavailableException::new);
+   var heldTasks=new HashMap<String,JdbcTaskQueue.Row>();
+@@ -244,7 +248,8 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+   var heldExecutions=new HashMap<Long,Execution>();
+   for(long number:new TreeSet<>(List.of(o.execution(),token.executionNo())))
+    heldExecutions.put(number,execution(o.id(),number,true,false).orElseThrow());
+-  var e=heldExecutions.get(o.execution());var tokenExecution=heldExecutions.get(token.executionNo());
++  var e=heldExecutions.get(o.execution());var tokenExecution=publicationContent(heldExecutions.get(token.executionNo()),scope,oldTask);
++  if(o.execution()==token.executionNo())e=tokenExecution;
+   if(!e.task().equals(currentTask.id())||!tokenExecution.task().equals(oldTask.id()))throw new RediscoverObservation();
+   if(!tokenExecution.id().equals(token.executionId())||!o.subject().equals(token.subject()))return ObservationResult.STALE_TOKEN;
+   if(prepared==null&&scope.policy() instanceof PreparedExternalPolicy)throw new IllegalArgumentException("Prepared observation required");
+@@ -273,7 +278,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+   if(prepared!=null&&terminalFact&&o.execution()==token.executionNo()&&(recovery||o.epoch()==token.reconcileEpoch()&&Objects.equals(o.owner(),token.owner()))
+     &&e.id().equals(token.executionId())&&(o.state().equals("SUCCEEDED")||o.state().equals("FAILED"))&&o.state().equals(e.state())){
+    var proof=observation.noEffectProof();
+-   boolean same=observation.outcome()==ExternalOutcome.SUCCEEDED?o.state().equals("SUCCEEDED")&&Objects.equals(observation.externalResultId(),j.queryForObject("SELECT external_result_id FROM external_operation WHERE id=?",String.class,o.id())):
++   boolean same=observation.outcome()==ExternalOutcome.SUCCEEDED?o.state().equals("SUCCEEDED")&&j.queryForObject("SELECT COUNT(*) FROM external_operation WHERE id=? AND BINARY external_result_id=BINARY ?",Long.class,o.id(),observation.externalResultId())==1:
+       o.state().equals("FAILED")&&proof!=null&&Objects.equals(e.basis(),proof.basis().name())&&Objects.equals(e.evidence(),proof.safeEvidenceReference())&&Objects.equals(e.verified(),proof.verifiedAt());
+    if(!same)return ObservationResult.STALE_TOKEN;
+    var stored=j.queryForMap("SELECT state,last_error,output_kind,output_id FROM durable_task WHERE id=?",currentTask.id());
+@@ -353,6 +358,25 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
+   if(!preparedPolicy(oldTask.spec()).verifyReplay(scope.prepared(),context,prepared,result))return ObservationResult.STALE_TOKEN;
+   context.require();return result.state().equals("STALE")?ObservationResult.RECORDED_FENCED:ObservationResult.APPLIED;
+  }
++ private static final class PublicationReplacementContext implements PublicationReplacementPolicy.ReplacementContext {
++  final JdbcExternalOperations issuer;final Object holder;final TaskDomainPolicy.PreparedDomain domain;final PublicationReplacementPolicy.PreparedPublicationReplacement carrier;final PublicationReplacementPolicy policy;boolean closed;
++  private PublicationReplacementContext(JdbcExternalOperations issuer,TaskDomainPolicy.PreparedDomain domain,PublicationReplacementPolicy.PreparedPublicationReplacement carrier,PublicationReplacementPolicy policy){this.issuer=issuer;this.domain=domain;this.carrier=carrier;this.policy=policy;holder=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(issuer.q.source);}
++  void require(javax.sql.DataSource source,TaskDomainPolicy.PreparedDomain domain,PublicationReplacementPolicy.PreparedPublicationReplacement carrier){if(closed||issuer.q.source!=source||this.domain!=domain||this.carrier!=carrier||holder==null||holder!=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(source)||!org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive()||issuer.q.policy(carrier.spec())!=policy)throw new IllegalArgumentException("Foreign or expired replacement context");}
++ }
++ static void requirePublicationReplacement(javax.sql.DataSource source,TaskDomainPolicy.PreparedDomain domain,PublicationReplacementPolicy.ReplacementContext context,PublicationReplacementPolicy.PreparedPublicationReplacement carrier){if(!(context instanceof PublicationReplacementContext actual))throw new IllegalArgumentException("Genuine engine replacement context required");actual.require(source,domain,carrier);}
++ /** One atomic acceptance only. No marker or send authority is returned by this method. */
++ public PublicationReplacementPolicy.ReplacementAccepted replaceZeroEffectPublication(PublicationReplacementPolicy.PreparedPublicationReplacement carrier){return q.work(()->{
++  var next=carrier.spec();if(!next.type().equals("KNOWLEDGE_PUBLISH_V1")||!(q.policy(next) instanceof PublicationReplacementPolicy policy))throw new IllegalArgumentException("Fixed publication replacement required");var binding=policy.requireReplacement(carrier);if(!binding.next().equals(next)||!binding.specs().contains(next)||binding.oldTasks().containsKey(binding.taskId()))throw new IllegalArgumentException("Invalid full replacement declaration");
++  var scope=q.prepareDomain(binding.specs(),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,binding.prepared()).orElseThrow();var locked=q.lockDomain(scope,next,false).orElseThrow();if(!q.current(locked,next))throw new IllegalStateException("Replacement current fence denied");
++  var ids=new TreeSet<>(binding.oldTasks().keySet());ids.add(binding.taskId());for(String id:ids){if(id.equals(binding.taskId()))q.insertNew(next,id);else{var actual=q.row(id,true,false).orElseThrow();if(!actual.spec().equals(binding.oldTasks().get(id)))throw new IllegalStateException("Replacement task inventory changed");}}
++  var context=new PublicationReplacementContext(this,binding.prepared(),carrier,policy);try{policy.lockReplacementRemainder(binding.prepared(),context,carrier);}finally{context.closed=true;}
++  var request=binding.request();if(!request.operationKind().equals("KNOWLEDGE_PUBLISH")||!request.logicalRequestHash().equals(next.inputFingerprint()))throw new IllegalArgumentException("Replacement request mismatch");
++  if(binding.operationId()==null){if(binding.executionId()!=null||binding.expectedExecutionNo()!=0)throw new IllegalArgumentException("New key has no premature operation");return new PublicationReplacementPolicy.ReplacementAccepted(binding.taskId(),null,null,null);}
++  if(binding.expectedExecutionNo()<1||binding.expectedExecutionNo()>=Long.MAX_VALUE-1||binding.executionId()==null)throw new IllegalArgumentException("Invalid next execution");long number=binding.expectedExecutionNo()+1;
++  if(j.update("UPDATE external_operation SET request_hash=?,state='RETRY_QUEUED',current_execution_no=?,reconcile_epoch=reconcile_epoch+1,reconcile_owner=NULL,reconcile_expires_at=NULL,last_error=NULL WHERE id=? AND operation_kind='KNOWLEDGE_PUBLISH' AND business_key=? AND subject_kind='MEETING' AND subject_id=? AND request_hash=? AND current_execution_no=? AND state='FAILED' AND reconcile_epoch<9223372036854775806",request.logicalRequestHash(),number,binding.operationId(),request.businessKey(),next.subject().id(),binding.previousLogicalHash(),binding.expectedExecutionNo())!=1)throw new IllegalStateException("Replacement operation CAS failed");
++  if(j.update("INSERT INTO external_execution(id,operation_id,execution_no,task_id,state,request_hash,request_manifest,created_at) VALUES (?,?,?,?,'PREPARED',?,?,UTC_TIMESTAMP(6))",binding.executionId(),binding.operationId(),number,binding.taskId(),request.executionRequestHash(),request.requestManifest())!=1)throw new IllegalStateException("Replacement execution insert failed");
++  return new PublicationReplacementPolicy.ReplacementAccepted(binding.taskId(),binding.operationId(),binding.executionId(),number);
++ });}
+  @Override public String retryAfterZeroEffect(String id,long expected,TaskSpec next,ExternalRequest request){return q.work(()->{
+   // Discover the COMPLETE immutable old/new spec set before identities, subject, roots or tasks.
+   var seen=operation(id,false,false).orElseThrow();
+diff --git a/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java b/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java
+index d886b68..f70ecbc 100644
+--- a/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java
++++ b/backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java
+@@ -8,6 +8,7 @@ import static ama.task.TaskDomainPolicy.*;
+ 
+ /** Per-call capabilities only: no transaction cache, ThreadLocal or extra synchronization. */
+ public final class JdbcTaskPreparations {
++ public void requireExternalRead(TaskDomainPolicy.PreparedDomain held,ama.contract.TaskContracts.TaskSpec spec){var h=held(held);if(!h.specs.contains(spec))throw new IllegalArgumentException("Undeclared publication execution");}
+     private final DataSource source;
+     private record Held(JdbcTaskPreparations issuer, DataSource source, Object transaction,
+                         Set<TaskSpec> specs, Acquisition purpose, Object value,
+@@ -36,6 +37,8 @@ public final class JdbcTaskPreparations {
+     public ExternalFacts requireExternal(ama.task.ExternalOperationPort.ExecutionContext execution) {
+         var prepared=JdbcExternalOperations.contextPreparation(source,execution);held(prepared);return requireExternal(prepared,execution);
+     }
++    public record LocalTerminalFacts(String taskId,TaskSpec spec,String previousState,long attempt,String previousOwner,java.time.Instant previousExpiry,String resultingState,String reason,boolean attemptAlreadyEnded) {}
++    public LocalTerminalFacts requireLocalTerminal(PreparedDomain prepared,PublicationLocalTerminationPolicy.LocalTerminalContext context,PublicationLocalTerminationPolicy.Phase phase){held(prepared);return JdbcTaskQueue.requireLocalContext(source,prepared,context,phase);}
+     /** JDBC queue consumption independently enforces its own source/actual-holder boundary. */
+     static void requireTransaction(DataSource expected, PreparedDomain prepared) {
+         if(!(prepared instanceof Held held)||held.source()!=expected
+@@ -59,4 +62,6 @@ public final class JdbcTaskPreparations {
+             throw new IllegalStateException("Preparation requires its actual DataSource transaction");
+         return TransactionSynchronizationManager.getResource(source);
+     }
++ public void requirePublicationReplacement(PreparedDomain prepared,PublicationReplacementPolicy.ReplacementContext context,PublicationReplacementPolicy.PreparedPublicationReplacement carrier){held(prepared);JdbcExternalOperations.requirePublicationReplacement(source,prepared,context,carrier);}
++
+ }
+diff --git a/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java b/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java
+index a12d8db..43fd0ea 100644
+--- a/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java
++++ b/backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java
+@@ -110,15 +110,15 @@ public final class JdbcTaskQueue implements TaskQueue {
+  }
+  private Optional<TaskLease> claimOne(Row candidate,String worker){
+   if(!policies.containsKey(candidate.spec().type()))return Optional.empty();
+-  var domain=lockDomain(candidate.spec(),true);if(domain.isEmpty())return Optional.empty();
++  var preparation=prepareDomain(List.of(candidate.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,true,null);if(preparation.isEmpty())return Optional.empty();var scope=preparation.orElseThrow();var domain=lockDomain(scope,candidate.spec(),true);if(domain.isEmpty())return Optional.empty();
+   var locked=row(candidate.id(),true,true);if(locked.isEmpty())return Optional.empty();var r=locked.orElseThrow();Instant now=now();
+   if(!r.spec().equals(candidate.spec()))return Optional.empty();
+   if(!(r.state().equals("READY")&&!r.available().isAfter(now)||r.state().equals("RUNNING")&&!r.expiry().isAfter(now)))return Optional.empty();
+   if(r.state().equals("RUNNING")&&unfinishedAttempt(r).isEmpty())return Optional.empty();
+-  if(!current(domain.orElseThrow(),r.spec())){finish(r,domain.orElseThrow().deleted()||domain.orElseThrow().cancelEpoch()!=r.spec().cancelEpoch()?"CANCELLED":"STALE","SUBJECT_CHANGED",null);return Optional.empty();}
++  if(!current(domain.orElseThrow(),r.spec())){finishLocal(scope,r,domain.orElseThrow().deleted()||domain.orElseThrow().cancelEpoch()!=r.spec().cancelEpoch()?"CANCELLED":"STALE","SUBJECT_CHANGED",null,true,false);return Optional.empty();}
+   policy(r.spec()).validateInput(r.spec());
+   if(r.state().equals("RUNNING"))endAttempt(r,"EXPIRED","LEASE_EXPIRED");
+-  if(r.attempt()>=r.spec().maxAttempts()){terminateUnmarkedExecution(r);finish(r,"FAILED","ATTEMPT_LIMIT",null,false);return Optional.empty();}
++  if(r.attempt()>=r.spec().maxAttempts()){finishLocal(scope,r,"FAILED","ATTEMPT_LIMIT",null,false,true);return Optional.empty();}
+   now=now();long attempt=r.attempt()+1;Instant expiry=now.plusSeconds(20);
+   jdbc.update("UPDATE durable_task SET state='RUNNING',attempt=?,lease_owner=?,expires_at=? WHERE id=?",attempt,worker,sqlTime(expiry),r.id());
+   jdbc.update("INSERT INTO task_attempt(task_id,attempt,owner,started_at) VALUES (?,?,?,?)",r.id(),attempt,worker,sqlTime(now));
+@@ -130,8 +130,9 @@ public final class JdbcTaskQueue implements TaskQueue {
+   var rows=jdbc.query("SELECT attempt,owner,ended_at FROM task_attempt WHERE task_id=? AND attempt=? FOR UPDATE",(r,n)->r.getObject("ended_at")==null&&Objects.equals(task.owner(),r.getString("owner"))?new LockedAttempt(r.getLong("attempt"),r.getString("owner")):null,task.id(),task.attempt());
+   return rows.size()==1?Optional.ofNullable(rows.getFirst()):Optional.empty();
+  }
+- Optional<ValidatedLease> validatedLease(TaskLease lease){
+-  var prepared=prepareDomain(List.of(lease.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,null);
++ Optional<ValidatedLease> validatedLease(TaskLease lease){return validatedLease(lease,null);}
++ Optional<ValidatedLease> validatedLease(TaskLease lease,TaskDomainPolicy.PreparedDomain supplied){
++  var prepared=prepareDomain(List.of(lease.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,supplied);
+   if(prepared.isEmpty())return Optional.empty();var scope=prepared.orElseThrow();
+   var domain=lockDomain(scope,lease.spec(),false);if(domain.isEmpty())return Optional.empty();
+   var locked=row(lease.taskId(),true,false);if(locked.isEmpty())return Optional.empty();var r=locked.orElseThrow();
+@@ -166,9 +167,9 @@ public final class JdbcTaskQueue implements TaskQueue {
+  @Override public boolean renew(TaskLease lease){return work(()->{if(validLease(lease).isEmpty())return false;jdbc.update("UPDATE durable_task SET expires_at=UTC_TIMESTAMP(6)+INTERVAL 20 SECOND WHERE id=?",lease.taskId());return true;});}
+  @Override public boolean complete(TaskLease lease,TaskResult result){return completeWithEffects(lease,result,()->{});}
+  @Override public boolean completeWithEffects(TaskLease lease,TaskResult result,Runnable effects){return work(()->{
+-  var valid=validLease(lease);if(valid.isEmpty())return false;var r=valid.orElseThrow();if(policy(r.spec()) instanceof ConfinedTaskCompletionPolicy)throw new IllegalStateException("Confined carrier required");policy(r.spec()).validateOutput(r.spec(),result);
++  var valid=validatedLease(lease);if(valid.isEmpty())return false;var validated=valid.orElseThrow();var r=validated.task();if(policy(r.spec()) instanceof ConfinedTaskCompletionPolicy)throw new IllegalStateException("Confined carrier required");policy(r.spec()).validateOutput(r.spec(),result);
+   effects.run();
+-  completeValidated(r,result);return true;
++  completeValidated(validated,result);return true;
+  });}
+  @Override public boolean completeWithEffects(TaskLease lease,Supplier<TaskResult> effects){
+   Objects.requireNonNull(lease,"lease");Objects.requireNonNull(effects,"effects");
+@@ -184,20 +185,57 @@ public final class JdbcTaskQueue implements TaskQueue {
+      if(envelope!=null)envelope.admit();
+      scope.phase=CompletionPhase.WRITING;scope.result=Objects.requireNonNull(scope.invocation.write(),"Prepared completion result");scope.phase=CompletionPhase.WRITTEN;
+      scope.phase=CompletionPhase.VALIDATING;scope.invocation.validateActual(scope.result);scope.phase=CompletionPhase.VALIDATED;
+-     completeValidated(r,scope.result);scope.phase=CompletionPhase.SETTLED;return true;
++     completeValidated(validated,scope.result);scope.phase=CompletionPhase.SETTLED;return true;
+     } finally {scope.phase=CompletionPhase.CLOSED;}
+    }
+    if(effects instanceof PreparedCompletionEnvelope)throw new IllegalArgumentException("Confined completion not installed");
+    var result=Objects.requireNonNull(effects.get(),"Prepared completion result");
+    policy(r.spec()).validateOutput(r.spec(),result);
+-   completeValidated(r,result);return true;
++   completeValidated(validated,result);return true;
+   });
+  }
+- private void completeValidated(Row r,TaskResult result){
++ private void completeValidated(ValidatedLease validated,TaskResult result){
++  var r=validated.task();
+   if(result.outcome()==Outcome.RETRYABLE && r.attempt()<r.spec().maxAttempts()){
+    long delay=Math.min(40,5L << Math.min(3,r.attempt()-1));long millis=ThreadLocalRandom.current().nextLong(1001);
+    jdbc.update("UPDATE durable_task SET state='READY',lease_owner=NULL,expires_at=NULL,available_at=?,last_error=? WHERE id=?",sqlTime(now().plusMillis(delay*1000+millis)),result.errorCode(),r.id());endAttempt(r,"RETRYABLE",result.errorCode());event("TASK_RETRY",r);
+-  }else finish(r,result.outcome()==Outcome.RETRYABLE?"FAILED":result.outcome().name(),result.errorCode(),result.output());
++  }else finishLocal(validated.domain(),r,result.outcome()==Outcome.RETRYABLE?"FAILED":result.outcome().name(),result.errorCode(),result.output(),true,false);
++ }
++ private static final class LocalTerminal implements PublicationLocalTerminationPolicy.LocalTerminalContext {
++  final JdbcTaskQueue queue;final DomainScope scope;final Row row;final Object holder;final String state,reason;final boolean ended;PublicationLocalTerminationPolicy.Phase phase=PublicationLocalTerminationPolicy.Phase.VALIDATING;boolean closed;
++  private LocalTerminal(JdbcTaskQueue queue,DomainScope scope,Row row,String state,String reason,boolean ended){this.queue=queue;this.scope=scope;this.row=row;this.state=state;this.reason=reason;this.ended=ended;holder=TransactionSynchronizationManager.getResource(queue.source);}
++  void require(DataSource source,TaskDomainPolicy.PreparedDomain prepared,PublicationLocalTerminationPolicy.Phase wanted){
++   if(closed||phase!=wanted||queue.source!=source||holder==null||holder!=TransactionSynchronizationManager.getResource(source)||!TransactionSynchronizationManager.isActualTransactionActive()||scope.prepared()!=prepared||scope.locked==null||scope.purpose()!=TaskDomainPolicy.Acquisition.TASK_MUTATION||scope.policy()!=queue.policy(row.spec())||!(scope.policy() instanceof PublicationLocalTerminationPolicy)||!row.spec().type().equals("KNOWLEDGE_PUBLISH_V1")||!row.spec().input().kind().equals("PUBLICATION")||!scope.specs().contains(row.spec()))throw new IllegalArgumentException("Foreign or expired local termination context");
++   JdbcTaskPreparations.requireTransaction(source,prepared);scope.policy().requirePrepared(scope.specs(),scope.purpose(),prepared);
++  }
++ }
++ static JdbcTaskPreparations.LocalTerminalFacts requireLocalContext(DataSource source,TaskDomainPolicy.PreparedDomain prepared,PublicationLocalTerminationPolicy.LocalTerminalContext value,PublicationLocalTerminationPolicy.Phase phase){
++  if(!(value instanceof LocalTerminal c))throw new IllegalArgumentException("Genuine queue local termination context required");c.require(source,prepared,phase);return new JdbcTaskPreparations.LocalTerminalFacts(c.row.id(),c.row.spec(),c.row.state(),c.row.attempt(),c.row.owner(),c.row.expiry(),c.state,c.reason,c.ended);
++ }
++ private void finishLocal(DomainScope scope,Row row,String state,String code,TypedRef output,boolean endCurrent,boolean terminatePrepared){finishLocal(scope,row,state,code,output,endCurrent,terminatePrepared,false,false);}
++ private void finishLocal(DomainScope scope,Row row,String state,String code,TypedRef output,boolean endCurrent,boolean terminatePrepared,boolean requireEligible,boolean preserveTerminal){
++  if(!(scope.policy() instanceof PublicationLocalTerminationPolicy policy)||!row.spec().type().equals("KNOWLEDGE_PUBLISH_V1")||!Set.of("FAILED","CANCELLED","STALE").contains(state)||output!=null){if(requireEligible)throw new IllegalArgumentException("Fixed publication recovery required");if(terminatePrepared)terminateUnmarkedExecution(row);finish(row,state,code,output,endCurrent);return;}
++  var context=new LocalTerminal(this,scope,row,state,code,!endCurrent&&row.state().equals("RUNNING"));
++  try{context.require(source,scope.prepared(),PublicationLocalTerminationPolicy.Phase.VALIDATING);boolean eligible=policy.validateLocalTerminal(scope.prepared(),context);if(requireEligible&&!eligible)throw new PublicationLocalRecoveryUnavailable("Publication local recovery ineligible");
++   if(eligible)terminateLocalPrepared(context);else if(terminatePrepared)terminateUnmarkedExecution(row);
++   if(!preserveTerminal){boolean end=endCurrent;if(eligible&&row.state().equals("RECONCILING")){endLocalReconciliationAttempt(context);end=false;}finish(row,state,code,output,end);}
++   if(eligible){context.phase=PublicationLocalTerminationPolicy.Phase.SEALING;policy.sealLocalTerminal(scope.prepared(),context);context.require(source,scope.prepared(),PublicationLocalTerminationPolicy.Phase.SEALING);}
++  }finally{context.closed=true;}
++ }
++ /** Private purpose carrier only; a lease, ordinary completion token or caller callback is insufficient. */
++ public String recoverPublicationLocal(PublicationLocalTerminationPolicy.PreparedLocalRecovery recovery){Objects.requireNonNull(recovery);return work(()->{
++  var spec=recovery.spec();if(!spec.type().equals("KNOWLEDGE_PUBLISH_V1")||!(policy(spec) instanceof PublicationLocalTerminationPolicy p))throw new IllegalArgumentException("Fixed publication recovery required");var binding=p.requireLocalRecovery(recovery);if(!binding.spec().equals(spec))throw new IllegalArgumentException("Recovery spec mismatch");var prepared=prepareDomain(List.of(spec),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,binding.prepared()).orElseThrow();lockDomain(prepared,spec,false).orElseThrow();var row=row(binding.taskId(),true,false).orElseThrow();if(!row.spec().equals(spec))throw new IllegalArgumentException("Actual recovery task mismatch");policy(spec).validateInput(spec);
++  boolean terminal=Set.of("FAILED","CANCELLED","STALE").contains(row.state());if(!terminal&&!Set.of("READY","RUNNING","RECONCILING").contains(row.state()))throw new PublicationLocalRecoveryUnavailable("Task cannot recover locally");if((row.state().equals("RUNNING")||row.state().equals("RECONCILING"))&&row.owner()!=null&&(row.expiry()==null||row.expiry().isAfter(now())))throw new PublicationLocalRecoveryUnavailable("Live ordinary owner excludes recovery");
++  finishLocal(prepared,row,terminal?row.state():"FAILED",terminal?"TERMINAL_UNMARKED_FAILURE":"EXPIRED_UNMARKED_ABANDONED",null,true,false,true,terminal);return row.id();
++ });}
++ private void endLocalReconciliationAttempt(LocalTerminal context){context.require(source,context.scope.prepared(),PublicationLocalTerminationPolicy.Phase.VALIDATING);var r=context.row;if(!r.state().equals("RECONCILING"))throw new IllegalStateException("Actual reconciliation state required");var unfinished=jdbc.queryForList("SELECT attempt,owner FROM task_attempt WHERE task_id=? AND ended_at IS NULL ORDER BY attempt FOR UPDATE",r.id());if(unfinished.isEmpty())return;if(unfinished.size()!=1||((Number)unfinished.getFirst().get("attempt")).longValue()!=r.attempt()||!Objects.equals(unfinished.getFirst().get("owner"),r.owner()))throw new IllegalStateException("Exact actual unfinished attempt required");if(jdbc.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome='FAILED',error_code='LOCAL_NEVER_MARKED' WHERE task_id=? AND attempt=? AND owner=? AND ended_at IS NULL",r.id(),r.attempt(),r.owner())!=1)throw new IllegalStateException("Local attempt must end exactly once");}
++ private void terminateLocalPrepared(LocalTerminal context){
++  context.require(source,context.scope.prepared(),PublicationLocalTerminationPolicy.Phase.VALIDATING);var task=context.row;
++  var rows=jdbc.queryForList("SELECT id,operation_id,execution_no,state,marked_at,task_attempt,no_effect_basis,no_effect_verified_at FROM external_execution WHERE task_id=? ORDER BY operation_id,execution_no FOR UPDATE",task.id());if(rows.isEmpty())return;if(rows.size()!=1)throw new IllegalStateException("Local closure requires exact execution set");var e=rows.getFirst();if(e.get("marked_at")!=null||e.get("task_attempt")!=null)throw new IllegalStateException("Committed marker excludes local closure");
++  if(e.get("state").equals("FAILED")&&"NOT_SENT".equals(e.get("no_effect_basis"))&&e.get("no_effect_verified_at")!=null)return;
++  var op=jdbc.queryForMap("SELECT state,current_execution_no FROM external_operation WHERE id=? FOR UPDATE",e.get("operation_id"));if(!e.get("state").equals("PREPARED")||!op.get("state").equals("RETRY_QUEUED")||((Number)op.get("current_execution_no")).longValue()!=((Number)e.get("execution_no")).longValue())throw new IllegalStateException("Exact unmarked prepared execution required");
++  if(jdbc.update("UPDATE external_execution SET state='FAILED',finished_at=UTC_TIMESTAMP(6),no_effect_basis='NOT_SENT',no_effect_evidence=?,no_effect_verified_at=UTC_TIMESTAMP(6) WHERE id=? AND state='PREPARED' AND marked_at IS NULL AND task_attempt IS NULL","publication-local:"+task.id(),e.get("id"))!=1)throw new IllegalStateException("Local prepared transition lost");
++  if(jdbc.update("UPDATE external_operation SET state='FAILED',last_error='LOCAL_NEVER_MARKED',reconcile_epoch=reconcile_epoch+1,reconcile_owner=NULL,reconcile_expires_at=NULL WHERE id=? AND state='RETRY_QUEUED' AND current_execution_no=?",e.get("operation_id"),e.get("execution_no"))!=1)throw new IllegalStateException("Local operation transition lost");
+  }
+  void endAttempt(Row r,String outcome,String code){
+   if(r.attempt()>0&&"RUNNING".equals(r.state())){
+diff --git a/backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java b/backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java
+index 4cea012..6a1bbd2 100644
+--- a/backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java
++++ b/backend/adapters/src/main/java/ama/task/TranscriptImportRuntime.java
+@@ -32,7 +32,7 @@ public final class TranscriptImportRuntime {
+  }
+  public static JdbcTaskQueue install(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,JdbcTranscriptAuthority.Components components) {
+   components.authority().requireImportSource(source);
+-  return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components),"MINUTES_GENERATE_V1",components.authority().minutesTaskPolicy()));
++  return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components),"MINUTES_GENERATE_V1",components.authority().minutesTaskPolicy(),"KNOWLEDGE_PUBLISH_V1",components.authority().publicationTaskPolicy()));
+  }
+  public static Supplier<TaskResult> prepare(JdbcTaskQueue queue,TaskLease lease,Settings settings,PreparationCancellation cancellation) throws Exception {
+   if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Import preparation requires independent reads");
+diff --git a/backend/adapters/src/main/java/ama/transcript/JdbcMinutesCommandReceipts.java b/backend/adapters/src/main/java/ama/transcript/JdbcMinutesCommandReceipts.java
+index 6737d15..d15c04a 100644
+--- a/backend/adapters/src/main/java/ama/transcript/JdbcMinutesCommandReceipts.java
++++ b/backend/adapters/src/main/java/ama/transcript/JdbcMinutesCommandReceipts.java
+@@ -2,7 +2,7 @@ package ama.transcript;
+ import ama.access.MeetingAccess;import ama.contract.IdentityContracts.Actor;import ama.contract.TranscriptContracts.Failure;import ama.db.TransactionRunner;import javax.sql.DataSource;import java.util.*;import org.springframework.jdbc.core.JdbcTemplate;
+ /** Independently constructible authenticated receipts: no current config/readiness/CAS on true replay. */
+ public final class JdbcMinutesCommandReceipts {
+- private static final Map<String,String> KINDS=Map.ofEntries(Map.entry("MINUTES_ADOPT","GENERATION_CANDIDATE"),Map.entry("MINUTES_REJECT","GENERATION_CANDIDATE"),Map.entry("MINUTES_DISPOSE","GENERATION_CANDIDATE"),Map.entry("MINUTES_BODY_SAVE","MINUTES_REVISION"),Map.entry("MINUTES_BODY_RESTORE","MINUTES_REVISION"),Map.entry("MINUTES_ELEMENT_EDIT","ELEMENT_SET"),Map.entry("MINUTES_ACTION_FIELDS","ELEMENT_SET"),Map.entry("MINUTES_OPEN_QUESTION","ELEMENT_SET"),Map.entry("MINUTES_SET_RESTORE","ELEMENT_SET"),Map.entry("MINUTES_TEMPLATE","TEMPLATE_REVISION"),Map.entry("MINUTES_EXCLUSIONS","EXCLUSION_REVISION"),Map.entry("MINUTES_REVIEW","RESULT_REVIEW"));
++ private static final Map<String,String> KINDS=Map.ofEntries(Map.entry("MINUTES_ADOPT","GENERATION_CANDIDATE"),Map.entry("MINUTES_REJECT","GENERATION_CANDIDATE"),Map.entry("MINUTES_DISPOSE","GENERATION_CANDIDATE"),Map.entry("MINUTES_BODY_SAVE","MINUTES_REVISION"),Map.entry("MINUTES_BODY_RESTORE","MINUTES_REVISION"),Map.entry("MINUTES_ELEMENT_EDIT","ELEMENT_SET"),Map.entry("MINUTES_ACTION_FIELDS","ELEMENT_SET"),Map.entry("MINUTES_OPEN_QUESTION","ELEMENT_SET"),Map.entry("MINUTES_SET_RESTORE","ELEMENT_SET"),Map.entry("MINUTES_TEMPLATE","TEMPLATE_REVISION"),Map.entry("MINUTES_EXCLUSIONS","EXCLUSION_REVISION"),Map.entry("MINUTES_REVIEW","RESULT_REVIEW"),Map.entry("FINAL_CONFIRM","FINAL_CONFIRMATION"));
+  private final JdbcTemplate j;private final TransactionRunner tx;private final MeetingAccess access;
+  public JdbcMinutesCommandReceipts(DataSource source,TransactionRunner tx,MeetingAccess access){j=new JdbcTemplate(source);j.setQueryTimeout(2);this.tx=tx;this.access=access;}
+  record Identity(String operation,String scope,String key,String request){}record Stored(String result,int status,boolean matches){}
+diff --git a/backend/adapters/src/main/java/ama/transcript/JdbcMinutesSavedQueries.java b/backend/adapters/src/main/java/ama/transcript/JdbcMinutesSavedQueries.java
+index bb6a14f..da85f26 100644
+--- a/backend/adapters/src/main/java/ama/transcript/JdbcMinutesSavedQueries.java
++++ b/backend/adapters/src/main/java/ama/transcript/JdbcMinutesSavedQueries.java
+@@ -12,10 +12,13 @@ public final class JdbcMinutesSavedQueries {
+  public Map<String,Object> review(Actor actor,String meeting,String id){uuid(id);var snapshot=reader.readOwner(actor,meeting,"REVIEW_ID",id);var review=one(snapshot,Table.RESULT_REVIEW,id);saved(snapshot,review.nullableString("element_id")==null?review.string("minutes_revision_id"):one(snapshot,Table.MINUTES_ELEMENT,review.string("element_id")).string("set_id"),review.nullableString("element_id")==null);var memberships=rows(snapshot,Table.RESULT_REVIEW_EVIDENCE).stream().filter(row->id.equals(row.string("review_id"))).map(row->row.string("evidence_id")).toList();return map("review",project(review),"evidence",rows(snapshot,Table.EVIDENCE_LINK).stream().filter(row->memberships.contains(row.string("id"))).map(JdbcMinutesSavedQueries::project).toList(),"provenanceVerified",true,"observation",observation(snapshot));}
+  public Map<String,Object> reviews(Actor actor,String meeting,String kind,String target,int limit,String before){uuid(target);if(!Set.of("BODY","ELEMENT").contains(kind)||limit<1||limit>50)throw new IllegalArgumentException("Invalid review page");Long cursor=before==null?null:counter(before);var snapshot=reader.readOwner(actor,meeting,kind.equals("BODY")?"REVIEW_BODY":"REVIEW_ELEMENT",target);saved(snapshot,kind.equals("BODY")?target:one(snapshot,Table.MINUTES_ELEMENT,target).string("set_id"),kind.equals("BODY"));String column=kind.equals("BODY")?"minutes_revision_id":"element_id";var selected=rows(snapshot,Table.RESULT_REVIEW).stream().filter(row->target.equals(row.nullableString(column))&&(cursor==null||row.number("review_no")<cursor)).sorted(Comparator.comparingLong((FullRow row)->row.number("review_no")).reversed()).toList();boolean more=selected.size()>limit;if(more)selected=selected.subList(0,limit);return map("items",selected.stream().map(JdbcMinutesSavedQueries::project).toList(),"nextBeforeReviewNoToken",more?Long.toString(selected.getLast().number("review_no")):null,"hasMore",more,"observation",observation(snapshot));}
+  public Map<String,Object> source(Actor actor,String meeting,String locator,String kind,String target,String historicalBody,String historicalSet){uuid(locator);boolean history=historicalBody!=null||historicalSet!=null;JdbcMinutesFactsReader.Snapshot snapshot;if(history){String selected=historicalBody!=null?historicalBody:historicalSet;uuid(selected);snapshot=reader.readOwner(actor,meeting,historicalBody!=null?"OWNER_REVISION":"OWNER_SET",selected);saved(snapshot,selected,historicalBody!=null);kind=historicalBody!=null?"BODY":"SET";target=selected;}else{if(!Set.of("BODY","ELEMENT").contains(kind))throw new IllegalArgumentException("Target required");uuid(target);snapshot=reader.readCurrent(actor,meeting);if(kind.equals("BODY")){if(!target.equals(snapshot.observation().get("minutes_revision_id")))throw absent();}else if(!one(snapshot,Table.MINUTES_ELEMENT,target).string("set_id").equals(snapshot.observation().get("element_set_id")))throw absent();}if(targetEvidence(snapshot,kind,target).stream().noneMatch(row->locator.equals(row.string("locator_id")))&&!(kind.equals("SET")&&directoryLocators(snapshot,target).contains(locator)))throw absent();var selected=one(snapshot,Table.SOURCE_LOCATOR,locator);require("TRANSCRIPT".equals(selected.string("kind")),CAPABILITY_UNAVAILABLE);var segments=rows(snapshot,Table.TRANSCRIPT_SEGMENT).stream().filter(row->selected.string("transcript_revision_id").equals(row.string("revision_id"))&&selected.string("segment_id").equals(row.string("segment_id"))).toList();require(segments.size()==1,PROVENANCE_UNAVAILABLE);var segment=segments.getFirst();var marks=rows(snapshot,Table.TRANSCRIPT_SEGMENT_MARK).stream().filter(row->selected.string("transcript_revision_id").equals(row.string("revision_id"))&&selected.string("segment_id").equals(row.string("segment_id"))).map(row->row.string("mark")).sorted().toList();String route="/api/v1/meetings/"+meeting+"/transcript/"+(history?"revisions/"+selected.string("transcript_revision_id")+"/":"")+"sources/"+segment.string("source_file_id");return map("locator",project(selected),"text",segment.string("body"),"marks",marks,"sourceVersion",selected.string("transcript_revision_id"),"historical",history,"originalBytes",map("route",route,"eligibility","RECHECK_REQUIRED"),"observation",observation(snapshot));}
+- public Map<String,Object> readiness(Actor actor,String meeting){var snapshot=reader.readOwner(actor,meeting,"READINESS",null);var root=snapshot.observation();var blockers=new LinkedHashSet<String>();var installation=transcripts==null?null:transcripts.correctionFor(authority);var correction=installation==null?new CorrectionInstallation.Projection("UNAVAILABLE","UNAVAILABLE",null):installation.projection();boolean correctionReady="NOT_APPLICABLE".equals(correction.readiness());if(!correctionReady)blockers.add("CORRECTION_UNAVAILABLE");String body=(String)root.get("minutes_revision_id"),set=(String)root.get("element_set_id");if(body==null)blockers.add("BODY_REQUIRED");if(set==null)blockers.add("ELEMENT_SET_REQUIRED");if(((Number)root.get("needs_generation")).intValue()!=0)blockers.add("GENERATION_REQUIRED");if(root.get("material_snapshot_id")!=null||((Number)root.get("materials_pending")).intValue()!=0)blockers.add("MATERIALS_UNAVAILABLE");if(root.get("transcript_confirmation_id")==null)blockers.add("TRANSCRIPT_CONFIRMATION_REQUIRED");if(root.get("template_revision_id")==null||root.get("exclusion_revision_id")==null)blockers.add("SETTINGS_REQUIRED");if(((Number)root.get("ever_published")).intValue()!=0)blockers.add("PUBLISHED");if(!snapshot.graph().auxiliary().getOrDefault("publication",List.of()).isEmpty())blockers.add("PUBLICATION_BUSY");var infos=snapshot.graph().auxiliary().getOrDefault("meeting_info_revision",List.of()).stream().filter(r->Objects.equals(r.get("id"),root.get("info_revision_id"))).toList();if(infos.size()!=1||!(infos.getFirst().get("name") instanceof String name)||name.isBlank()||infos.getFirst().get("category_id")==null)blockers.add("MEETING_INFO_REQUIRED");var roster=snapshot.graph().auxiliary().getOrDefault("roster_revision",List.of()).stream().filter(r->Objects.equals(r.get("id"),root.get("roster_revision_id"))).toList();if(roster.size()!=1||!"CONFIRMED".equals(roster.getFirst().get("state")))blockers.add("ROSTER_CONFIRMATION_REQUIRED");
++ public Map<String,Object> readiness(Actor actor,String meeting){var snapshot=reader.readOwner(actor,meeting,"READINESS",null);var result=readiness(snapshot,false);var installation=transcripts==null?null:transcripts.correctionFor(authority);reader.recheck(actor,meeting,snapshot,transcripts,installation,installation!=null&&"NOT_APPLICABLE".equals(installation.projection().readiness()));return result;}
++ Map<String,Object> readiness(JdbcMinutesFactsReader.Snapshot snapshot,boolean finalInstalled){return readiness(snapshot,finalInstalled,null);}
++ Map<String,Object> replacementReadiness(JdbcMinutesFactsReader.Snapshot snapshot,String publication){var existing=snapshot.graph().auxiliary().getOrDefault("publication",List.of());require(existing.size()==1&&publication.equals(existing.getFirst().get("id"))&&"FAILED".equals(existing.getFirst().get("state")),PROVENANCE_UNAVAILABLE);return readiness(snapshot,true,publication);}
++ private Map<String,Object> readiness(JdbcMinutesFactsReader.Snapshot snapshot,boolean finalInstalled,String replacementPublication){var root=snapshot.observation();var blockers=new LinkedHashSet<String>();var installation=transcripts==null?null:transcripts.correctionFor(authority);var correction=installation==null?new CorrectionInstallation.Projection("UNAVAILABLE","UNAVAILABLE",null):installation.projection();boolean correctionReady="NOT_APPLICABLE".equals(correction.readiness());if(!correctionReady)blockers.add("CORRECTION_UNAVAILABLE");String body=(String)root.get("minutes_revision_id"),set=(String)root.get("element_set_id");if(body==null)blockers.add("BODY_REQUIRED");if(set==null)blockers.add("ELEMENT_SET_REQUIRED");if(((Number)root.get("needs_generation")).intValue()!=0)blockers.add("GENERATION_REQUIRED");if(root.get("material_snapshot_id")!=null||((Number)root.get("materials_pending")).intValue()!=0)blockers.add("MATERIALS_UNAVAILABLE");if(root.get("transcript_confirmation_id")==null)blockers.add("TRANSCRIPT_CONFIRMATION_REQUIRED");if(root.get("template_revision_id")==null||root.get("exclusion_revision_id")==null)blockers.add("SETTINGS_REQUIRED");if(((Number)root.get("ever_published")).intValue()!=0)blockers.add("PUBLISHED");if(replacementPublication==null&&!snapshot.graph().auxiliary().getOrDefault("publication",List.of()).isEmpty())blockers.add("PUBLICATION_BUSY");var infos=snapshot.graph().auxiliary().getOrDefault("meeting_info_revision",List.of()).stream().filter(r->Objects.equals(r.get("id"),root.get("info_revision_id"))).toList();if(infos.size()!=1||!(infos.getFirst().get("name") instanceof String name)||name.isBlank()||infos.getFirst().get("category_id")==null)blockers.add("MEETING_INFO_REQUIRED");var roster=snapshot.graph().auxiliary().getOrDefault("roster_revision",List.of()).stream().filter(r->Objects.equals(r.get("id"),root.get("roster_revision_id"))).toList();if(roster.size()!=1||!"CONFIRMED".equals(roster.getFirst().get("state")))blockers.add("ROSTER_CONFIRMATION_REQUIRED");
+   if(body!=null){saved(snapshot,body,true);var input=one(snapshot,Table.GENERATION_INPUT,one(snapshot,Table.MINUTES_REVISION,body).string("generation_input_id"));for(String field:List.of("transcript_confirmation_id","template_revision_id","exclusion_revision_id"))if(!Objects.equals(input.nullableString(field),root.get(field)))blockers.add("SAVED_SOURCE_OR_SETTINGS_STALE");}
+-  var required=new ArrayList<Map<String,Object>>();var ids=new ArrayList<String>();if(set!=null){saved(snapshot,set,false);for(var element:rows(snapshot,Table.MINUTES_ELEMENT).stream().filter(r->set.equals(r.string("set_id"))&&Set.of("CONCLUSION","ACTION").contains(r.string("category"))).sorted(Comparator.comparing((FullRow row)->Category.valueOf(row.string("category")).ordinal()).thenComparingLong(row->row.number("ordinal")).thenComparing(row->row.string("id"))).toList()){var kinds=element.string("category").equals("ACTION")?List.of(ReviewKind.SOURCE_SUPPORT,ReviewKind.ACTION_FIELDS):List.of(ReviewKind.SOURCE_SUPPORT);for(var kind:kinds){var coverage=coverage(snapshot,element,kind);required.add(coverage);if(Boolean.TRUE.equals(coverage.get("satisfied")))ids.add((String)coverage.get("reviewId"));else blockers.add("REVIEW_REQUIRED");}}var exclusion=(String)root.get("exclusion_revision_id");var excluded=new HashSet<List<Object>>();for(var row:rows(snapshot,Table.SENSITIVE_EXCLUSION))if(exclusion!=null&&exclusion.equals(row.string("revision_id")))excluded.add(physicalExclusion(snapshot,row.string("locator_id"),row.string("category")));for(var detection:rows(snapshot,Table.SENSITIVE_DETECTION))if(set.equals(detection.string("set_id")))for(var member:rows(snapshot,Table.SENSITIVE_DETECTION_SOURCE))if(detection.string("id").equals(member.string("detection_id"))&&!excluded.contains(physicalExclusion(snapshot,member.string("locator_id"),detection.string("category"))))blockers.add("SENSITIVITY_UNRESOLVED");}
+-  var pending=snapshot.graph().discovery().pending();require(pending!=null,PROVENANCE_UNAVAILABLE);var candidates=pending.rows().get("generation_candidate");if(!candidates.isEmpty())blockers.add("PENDING_CANDIDATE");var outstanding=pending.rows().get("durable_task").stream().filter(row->Set.of("READY","RUNNING","RECONCILING").contains(row.get("state"))).map(row->row.get("id")).toList();if(!outstanding.isEmpty())blockers.add("OUTSTANDING_GENERATION");if(pending.rows().get("external_operation").stream().anyMatch(row->!Set.of("SUCCEEDED","FAILED","STALE").contains(row.get("state"))))blockers.add("OUTSTANDING_GENERATION");var latestOptional=new TreeMap<String,FullRow>();var currentElements=rows(snapshot,Table.MINUTES_ELEMENT).stream().filter(row->set!=null&&set.equals(row.string("set_id"))).map(row->row.string("id")).toList();for(var review:rows(snapshot,Table.RESULT_REVIEW)){if(!(body!=null&&body.equals(review.nullableString("minutes_revision_id"))||currentElements.contains(review.nullableString("element_id"))))continue;String group=review.string("review_kind")+"/"+review.nullableString("minutes_revision_id")+"/"+review.nullableString("element_id")+"/"+review.nullableString("target_anchor");var previous=latestOptional.get(group);if(previous==null||previous.number("review_no")<review.number("review_no"))latestOptional.put(group,review);}var optional=latestOptional.values().stream().map(row->row.string("id")).filter(id->!ids.contains(id)).toList();reader.recheck(actor,meeting,snapshot,transcripts,installation,correctionReady);boolean businessReady=blockers.isEmpty();blockers.add("TASK11_NOT_INSTALLED");return map("ready",false,"businessReady",businessReady,"correction",map("mode",correction.mode(),"readiness",correction.readiness(),"qualificationId",correction.qualificationId()),"required",required,"requiredReviewIds",ids,"optionalReviewIds",optional,"blockers",List.copyOf(blockers),"pendingCandidateIds",candidates.stream().map(row->row.get("id")).toList(),"outstandingTaskIds",outstanding,"observation",observation(snapshot));}
++  var required=new ArrayList<Map<String,Object>>();var ids=new ArrayList<String>();if(set!=null){saved(snapshot,set,false);for(var element:rows(snapshot,Table.MINUTES_ELEMENT).stream().filter(r->set.equals(r.string("set_id"))&&Set.of("CONCLUSION","ACTION").contains(r.string("category"))).sorted(Comparator.comparing((FullRow row)->Category.valueOf(row.string("category")).ordinal()).thenComparingLong(row->row.number("ordinal")).thenComparing(row->row.string("id"))).toList()){var kinds=element.string("category").equals("ACTION")?List.of(ReviewKind.SOURCE_SUPPORT,ReviewKind.ACTION_FIELDS):List.of(ReviewKind.SOURCE_SUPPORT);for(var kind:kinds){var coverage=coverage(snapshot,element,kind);required.add(coverage);if(Boolean.TRUE.equals(coverage.get("satisfied")))ids.add((String)coverage.get("reviewId"));else blockers.add("REVIEW_REQUIRED");}}var exclusion=(String)root.get("exclusion_revision_id");var excluded=new HashSet<List<Object>>();for(var row:rows(snapshot,Table.SENSITIVE_EXCLUSION))if(exclusion!=null&&exclusion.equals(row.string("revision_id")))excluded.add(physicalExclusion(snapshot,row.string("locator_id"),row.string("category")));for(var detection:rows(snapshot,Table.SENSITIVE_DETECTION))if(set.equals(detection.string("set_id")))for(var member:rows(snapshot,Table.SENSITIVE_DETECTION_SOURCE))if(detection.string("id").equals(member.string("detection_id"))&&!finalInstalled&&!excluded.contains(physicalExclusion(snapshot,member.string("locator_id"),detection.string("category"))))blockers.add("SENSITIVITY_UNRESOLVED");if(finalInstalled){var used=new HashSet<List<Object>>();for(var e:effectiveEvidence(snapshot,body,set))used.add(physicalExclusion(snapshot,e.string("locator_id"),""));var notes=rows(snapshot,Table.BACKGROUND_NOTE).stream().filter(n->set.equals(n.string("set_id"))).map(n->n.string("id")).toList();for(var source:rows(snapshot,Table.BACKGROUND_NOTE_SOURCE))if(notes.contains(source.string("note_id")))used.add(physicalExclusion(snapshot,source.string("locator_id"),""));for(var e:rows(snapshot,Table.SENSITIVE_EXCLUSION))if(exclusion!=null&&exclusion.equals(e.string("revision_id"))&&used.contains(physicalExclusion(snapshot,e.string("locator_id"),"")))blockers.add("EXCLUDED_SOURCE_USED");}}
++  var pending=snapshot.graph().discovery().pending();require(pending!=null,PROVENANCE_UNAVAILABLE);var candidates=pending.rows().get("generation_candidate");if(!candidates.isEmpty())blockers.add("PENDING_CANDIDATE");var outstanding=pending.rows().get("durable_task").stream().filter(row->Set.of("READY","RUNNING","RECONCILING").contains(row.get("state"))).map(row->row.get("id")).toList();if(!outstanding.isEmpty())blockers.add("OUTSTANDING_GENERATION");if(pending.rows().get("external_operation").stream().anyMatch(row->!Set.of("SUCCEEDED","FAILED","STALE").contains(row.get("state"))))blockers.add("OUTSTANDING_GENERATION");var latestOptional=new TreeMap<String,FullRow>();var currentElements=rows(snapshot,Table.MINUTES_ELEMENT).stream().filter(row->set!=null&&set.equals(row.string("set_id"))).map(row->row.string("id")).toList();for(var review:rows(snapshot,Table.RESULT_REVIEW)){if(!(body!=null&&body.equals(review.nullableString("minutes_revision_id"))||currentElements.contains(review.nullableString("element_id"))))continue;String group=review.string("review_kind")+"/"+review.nullableString("minutes_revision_id")+"/"+review.nullableString("element_id")+"/"+review.nullableString("target_anchor");var previous=latestOptional.get(group);if(previous==null||previous.number("review_no")<review.number("review_no"))latestOptional.put(group,review);}var optional=latestOptional.values().stream().filter(row->!finalInstalled||("SOURCE_SUPPORT".equals(row.string("review_kind"))?"SUPPORTED".equals(row.string("outcome")):"CONFIRMED".equals(row.string("outcome")))).map(row->row.string("id")).filter(id->!ids.contains(id)).toList();boolean businessReady=blockers.isEmpty();if(!finalInstalled)blockers.add("TASK11_NOT_INSTALLED");return map("ready",finalInstalled&&businessReady,"businessReady",businessReady,"correction",map("mode",correction.mode(),"readiness",correction.readiness(),"qualificationId",correction.qualificationId()),"required",required,"requiredReviewIds",ids,"optionalReviewIds",optional,"blockers",List.copyOf(blockers),"pendingCandidateIds",candidates.stream().map(row->row.get("id")).toList(),"outstandingTaskIds",outstanding,"observation",observation(snapshot));}
+  private Map<String,Object> coverage(JdbcMinutesFactsReader.Snapshot snapshot,FullRow target,ReviewKind kind){var facts=snapshot.facts();String id=target.string("id");Anchor anchor=kind==ReviewKind.ACTION_FIELDS?null:OutputValidation.anchor(target.string("body"),0,OutputValidation.scalarCount(target.string("body"),()->false),()->false);var evidence=rows(snapshot,Table.EVIDENCE_LINK).stream().filter(row->id.equals(row.nullableString("element_id"))).map(row->row.string("id")).sorted().toList();var scope=new ReviewFacts(snapshot.graph().discovery().meeting(),kind,id,null,anchor,evidence,facts);var profiles=facts.configurations().stream().map(c->c.profiles().definition(ProfileKind.REVIEW_HASH)).distinct().toList();require(profiles.size()==1,PROFILE_UNAVAILABLE);var profile=profiles.getFirst();var archive=archives.get();require(pin.equals(archive.indexSha256()),PROFILE_UNAVAILABLE);var gb=new GraphBudget(authority.canonicalBudget(),limits.revisionDepth(),limits.revisionNodes(),authority.readBudget().maxFactRows());var refs=new GenerationArchiveRefs(facts,archive.index(),new StrictProcessingManifestReader(),authority.readBudget(),gb,()->false).review(scope,profile.version());var raw=MinutesStoredReviews.load(archive,refs,authority.readBudget(),snapshot.budget());var targetRaw=MinutesStoredReviews.load(archive,refs.stream().filter(ref->ref.artifactType()==ama.contract.ConfigArchiveContracts.ArtifactType.REVIEW_HASH).toList(),authority.readBudget(),snapshot.budget());var bindings=new ConfigBindings(new StrictConfigArchiveReader(),new StrictProcessingManifestReader());String th=new ResultHashProfiles(bindings,targetRaw,authority.readBudget()).target(scope,profile,gb,()->false),sh=new ResultHashProfiles(bindings,raw,authority.readBudget()).sources(scope,profile,gb,()->false);var credit=new ReviewCoverageEvaluator().evaluate(scope,th,sh,rows(snapshot,Table.RESULT_REVIEW),()->false);boolean meetingEvidence=rows(snapshot,Table.EVIDENCE_LINK).stream().filter(row->evidence.contains(row.string("id"))).anyMatch(row->"TRANSCRIPT".equals(one(snapshot,Table.SOURCE_LOCATOR,row.string("locator_id")).string("kind")));boolean satisfied=kind==ReviewKind.ACTION_FIELDS?"CONFIRMED".equals(credit.outcome()):credit.wholeTargetSupported()&&!evidence.isEmpty()&&meetingEvidence;return map("targetKind","ELEMENT","targetId",id,"reviewKind",kind.name(),"scope",kind==ReviewKind.SOURCE_SUPPORT?"WHOLE":null,"reviewId",credit.reviewId(),"outcome",credit.outcome(),"satisfied",satisfied);}
+  private static List<Object> physicalExclusion(JdbcMinutesFactsReader.Snapshot snapshot,String locator,String category){var row=one(snapshot,Table.SOURCE_LOCATOR,locator);var value=new ArrayList<Object>();value.add(category);for(var column:Table.SOURCE_LOCATOR.columns())if(!Set.of("id","meeting_id").contains(column.name()))value.add(row.value(column.name()));return List.copyOf(value);}
+  private static List<FullRow> effectiveEvidence(JdbcMinutesFactsReader.Snapshot snapshot,String body,String set){var values=new TreeMap<String,FullRow>();if(body!=null)for(var row:targetEvidence(snapshot,"BODY",body))values.put(row.string("id"),row);if(set!=null)for(var row:targetEvidence(snapshot,"SET",set))values.put(row.string("id"),row);return List.copyOf(values.values());}
+diff --git a/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java b/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java
+index e545efd..eee6ca8 100644
+--- a/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java
++++ b/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java
+@@ -31,7 +31,7 @@ public final class JdbcTranscriptAuthority {
+  private FileRegistry registry;
+  private FileBackendCatalog savedBackends;
+  private FilePurposePolicy purposes;
+- private final ImportTaskDomainPolicy taskPolicy;private final MinutesTaskDomainPolicy minutesTaskPolicy;
++ private final ImportTaskDomainPolicy taskPolicy;private final MinutesTaskDomainPolicy minutesTaskPolicy;private final PublicationTaskDomainPolicy publicationTaskPolicy;
+  private final InputBatchFileReferencePolicy policy;
+  private static final DateTimeFormatter TIME=DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+  public interface ReservedIntake extends FileRegistry.ReferenceContext {}
+@@ -59,7 +59,7 @@ public final class JdbcTranscriptAuthority {
+  }
+  public record Components(FileRegistry registry,JdbcTranscriptAuthority authority,ProcessingIntakeFacts intake,ProcessingSourceReader sources) {}
+  private JdbcTranscriptAuthority(DataSource source,TransactionRunner tx,MeetingAccess access,ArchiveReadBudget budget,CanonicalBudget canonical){
+-  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);minutesTaskPolicy=new MinutesTaskDomainPolicy(this,source);
++  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);minutesTaskPolicy=new MinutesTaskDomainPolicy(this,source);publicationTaskPolicy=new PublicationTaskDomainPolicy(this,source);
+  }
+  MeetingAccess savedAccess(){return access;}
+  public static Components create(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,
+@@ -188,6 +188,8 @@ public final class JdbcTranscriptAuthority {
+  }
+  public ama.task.TaskDomainPolicy taskPolicy(){return taskPolicy;}
+  public ama.task.TaskDomainPolicy minutesTaskPolicy(){return minutesTaskPolicy;}
++ public ama.task.TaskDomainPolicy publicationTaskPolicy(){return publicationTaskPolicy;}
++ PublicationTaskDomainPolicy publicationDomain(){return publicationTaskPolicy;}
+  MinutesTaskDomainPolicy minutesDomain(){return minutesTaskPolicy;}
+  public ama.task.TaskDomainPolicy.PreparedDomain adoptCreated(FileRegistry.LockedMeeting gate,HeldProcessingFacts held,TaskSpec spec){return taskPolicy.adopt(gate,held,spec);}
+  public List<FileRegistry.CompletedSource> originals(PreparedIntake prepared){
+@@ -290,7 +292,7 @@ public final class JdbcTranscriptAuthority {
+  }
+ 
+  /** Minutes capture shares this exact issuer, DataSource holder and genuine B03/B04 gate. */
+- enum MinutesWritePurpose { INITIAL_SETTINGS, GENERATION_INPUT, GENERATION_COMPLETION, STALE_RETENTION, ADOPT, REJECT, DISPOSE, EDIT, REVIEW, SETTINGS }
++ enum MinutesWritePurpose { INITIAL_SETTINGS, GENERATION_INPUT, GENERATION_COMPLETION, STALE_RETENTION, ADOPT, REJECT, DISPOSE, EDIT, REVIEW, SETTINGS, FINAL_CONFIRM, PUBLICATION_SUBMIT }
+  private final class MinutesScope {
+   final Object holder=transaction();final FileRegistry.LockedMeeting gate;final Actor actor;final String meeting;final MeetingAccess.Action action;
+   MinutesGraphCapture.Graph graph;TransitionScope transition;MinutesWritePurpose writePurpose;Object preparedWrite;String decidedCandidate;boolean writing;
+@@ -314,7 +316,7 @@ public final class JdbcTranscriptAuthority {
+  }
+  void claimMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph,MinutesWritePurpose purpose,Object prepared){claimMinutesWrite(value,gate,actor,graph,purpose,prepared,null);}
+  void claimMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph,MinutesWritePurpose purpose,Object prepared,String selected){
+-  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||!scope.meeting.equals(graph.discovery().meeting())||scope.graph!=graph||scope.writing||scope.action!=MeetingAccess.Action.EDIT)throw new IllegalArgumentException("Foreign, expired or reused minutes write invocation");registry.access(gate);Objects.requireNonNull(purpose);Objects.requireNonNull(prepared);String kind=graph.discovery().kind();boolean valid=switch(purpose){case INITIAL_SETTINGS->kind.equals("INITIAL_SETTINGS");case GENERATION_INPUT->kind.equals("CURRENT_GENERATION");case GENERATION_COMPLETION,STALE_RETENTION->kind.equals("STORED_INPUT");case ADOPT->kind.equals("ADOPT");case SETTINGS->Set.of("SETTINGS_TEMPLATE","SETTINGS_EXCLUSIONS").contains(kind);case REVIEW->Set.of("REVIEW_BODY","REVIEW_ELEMENT").contains(kind);case EDIT->Set.of("BODY_EDIT","BODY_RESTORE","SET_EDIT","SET_RESTORE").contains(kind);default->false;};if(!valid)throw new IllegalArgumentException("Wrong minutes invocation purpose");if(selected!=null&&!Set.of(MinutesWritePurpose.ADOPT,MinutesWritePurpose.REJECT,MinutesWritePurpose.DISPOSE).contains(purpose))throw new IllegalArgumentException("Unexpected candidate decision");if(selected!=null&&graph.auxiliary().getOrDefault("generation_candidate",List.of()).stream().filter(row->selected.equals(row.get("id"))).count()!=1)throw new IllegalArgumentException("Undeclared candidate decision");scope.writePurpose=purpose;scope.preparedWrite=prepared;scope.decidedCandidate=selected;scope.writing=true;
++  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||!scope.meeting.equals(graph.discovery().meeting())||scope.graph!=graph||scope.writing||scope.action!=MeetingAccess.Action.EDIT)throw new IllegalArgumentException("Foreign, expired or reused minutes write invocation");registry.access(gate);Objects.requireNonNull(purpose);Objects.requireNonNull(prepared);String kind=graph.discovery().kind();boolean valid=switch(purpose){case INITIAL_SETTINGS->kind.equals("INITIAL_SETTINGS");case GENERATION_INPUT->kind.equals("CURRENT_GENERATION");case GENERATION_COMPLETION,STALE_RETENTION->kind.equals("STORED_INPUT");case ADOPT->kind.equals("ADOPT");case SETTINGS->Set.of("SETTINGS_TEMPLATE","SETTINGS_EXCLUSIONS").contains(kind);case REVIEW->Set.of("REVIEW_BODY","REVIEW_ELEMENT").contains(kind);case FINAL_CONFIRM->kind.equals("READINESS");case PUBLICATION_SUBMIT->kind.equals("FINAL");case EDIT->Set.of("BODY_EDIT","BODY_RESTORE","SET_EDIT","SET_RESTORE").contains(kind);default->false;};if(!valid)throw new IllegalArgumentException("Wrong minutes invocation purpose");if(selected!=null&&!Set.of(MinutesWritePurpose.ADOPT,MinutesWritePurpose.REJECT,MinutesWritePurpose.DISPOSE).contains(purpose))throw new IllegalArgumentException("Unexpected candidate decision");if(selected!=null&&graph.auxiliary().getOrDefault("generation_candidate",List.of()).stream().filter(row->selected.equals(row.get("id"))).count()!=1)throw new IllegalArgumentException("Undeclared candidate decision");scope.writePurpose=purpose;scope.preparedWrite=prepared;scope.decidedCandidate=selected;scope.writing=true;
+  }
+  void requireMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph){
+   if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||scope.graph!=graph||!scope.writing)throw new IllegalArgumentException("Foreign or inactive minutes write scope");registry.access(gate);
+diff --git a/backend/adapters/src/main/java/ama/transcript/MinutesEventReferences.java b/backend/adapters/src/main/java/ama/transcript/MinutesEventReferences.java
+index 0395b50..3e3e1bf 100644
+--- a/backend/adapters/src/main/java/ama/transcript/MinutesEventReferences.java
++++ b/backend/adapters/src/main/java/ama/transcript/MinutesEventReferences.java
+@@ -7,7 +7,15 @@ import java.util.Map;import java.util.Set;
+ public final class MinutesEventReferences {
+  private final JdbcTemplate j;
+  public MinutesEventReferences(DataSource source){j=new JdbcTemplate(source);j.setQueryTimeout(2);}
+- public Map<String,OutboxReferenceValidator> validators(){return Map.of("GENERATION_CANDIDATE",this::decision,"TEMPLATE_REVISION",this::template,"ELEMENT_SET",this::elements,"RESULT_REVIEW",this::review,"MINUTES_REVISION",this::saved,"GENERATION_INPUT",this::generation,"EXCLUSION_REVISION",event->{if("MINUTES_EXCLUSIONS_SAVED".equals(event.eventType())){exclusion(event);return;}if(event.taskId()!=null||!"MINUTES_SETTINGS_INITIALIZED".equals(event.eventType())||!"MEETING".equals(event.subject().kind()))throw new IllegalArgumentException("Invalid initial minutes event");var found=j.queryForList("SELECT x.id FROM exclusion_revision x JOIN meeting m ON m.id=x.meeting_id JOIN template_revision t ON t.id=m.template_revision_id JOIN task_subject s ON s.subject_kind='MEETING' AND s.subject_id=m.id WHERE x.id=? AND m.id=? AND m.revision=? AND m.exclusion_revision_id=x.id AND x.revision=1 AND s.business_version=m.revision AND s.cancel_epoch=m.cancel_epoch AND s.deleted=0 AND m.needs_generation=1 AND t.owner_id IS NULL AND NOT EXISTS(SELECT 1 FROM sensitive_exclusion e WHERE e.revision_id=x.id)",String.class,event.reference().id(),event.subject().id(),event.subjectRevision());if(found.size()!=1)throw new IllegalArgumentException("Invalid initial minutes reference");});}
++ public Map<String,OutboxReferenceValidator> validators(){return Map.of("PUBLICATION",this::publication,"FINAL_CONFIRMATION",this::finalConfirmation,"GENERATION_CANDIDATE",this::decision,"TEMPLATE_REVISION",this::template,"ELEMENT_SET",this::elements,"RESULT_REVIEW",this::review,"MINUTES_REVISION",this::saved,"GENERATION_INPUT",this::generation,"EXCLUSION_REVISION",event->{if("MINUTES_EXCLUSIONS_SAVED".equals(event.eventType())){exclusion(event);return;}if(event.taskId()!=null||!"MINUTES_SETTINGS_INITIALIZED".equals(event.eventType())||!"MEETING".equals(event.subject().kind()))throw new IllegalArgumentException("Invalid initial minutes event");var found=j.queryForList("SELECT x.id FROM exclusion_revision x JOIN meeting m ON m.id=x.meeting_id JOIN template_revision t ON t.id=m.template_revision_id JOIN task_subject s ON s.subject_kind='MEETING' AND s.subject_id=m.id WHERE x.id=? AND m.id=? AND m.revision=? AND m.exclusion_revision_id=x.id AND x.revision=1 AND s.business_version=m.revision AND s.cancel_epoch=m.cancel_epoch AND s.deleted=0 AND m.needs_generation=1 AND t.owner_id IS NULL AND NOT EXISTS(SELECT 1 FROM sensitive_exclusion e WHERE e.revision_id=x.id)",String.class,event.reference().id(),event.subject().id(),event.subjectRevision());if(found.size()!=1)throw new IllegalArgumentException("Invalid initial minutes reference");});}
++ private void publication(ama.contract.OutboxContracts.EventDraft event){
++  if(event.taskId()==null||!"MEETING".equals(event.subject().kind())||!Set.of("TASK_ENQUEUED","PUBLICATION_ACCEPTED","PUBLICATION_LOCAL_RECOVERED","TASK_RETRY","TASK_SUCCEEDED","TASK_FAILED","TASK_CANCELLED","TASK_STALE","TASK_RECONCILING","EXTERNAL_MARKED","EXTERNAL_UNKNOWN","EXTERNAL_CONTRADICTION").contains(event.eventType()))throw new IllegalArgumentException("Invalid publication event");
++  var found=j.queryForList("SELECT t.id FROM durable_task t JOIN publication p ON p.id=t.input_id WHERE t.id=? AND p.id=? AND p.meeting_id=? AND t.subject_kind='MEETING' AND t.subject_id=p.meeting_id AND t.task_type='KNOWLEDGE_PUBLISH_V1' AND t.pool='KNOWLEDGE_PUBLISH' AND t.input_kind='PUBLICATION' AND t.business_version=? AND t.priority=0 AND t.max_attempts=3",String.class,event.taskId(),event.reference().id(),event.subject().id(),event.subjectRevision());if(found.size()!=1)throw new IllegalArgumentException("Invalid publication reference");if("PUBLICATION_LOCAL_RECOVERED".equals(event.eventType())&&j.queryForObject("SELECT COUNT(*) FROM publication_submission WHERE task_id=? AND publication_id=? AND local_state='NEVER_MARKED' AND local_decided_at IS NOT NULL",Long.class,event.taskId(),event.reference().id())!=1)throw new IllegalArgumentException("Actual local decision required");
++ }
++ private void finalConfirmation(ama.contract.OutboxContracts.EventDraft event){
++  if(event.taskId()!=null||!"MEETING".equals(event.subject().kind())||!"FINAL_CONFIRMED".equals(event.eventType()))throw new IllegalArgumentException("Invalid final event");
++  var found=j.queryForList("SELECT f.id FROM final_confirmation f JOIN meeting m ON m.id=f.meeting_id JOIN task_subject s ON s.subject_kind='MEETING' AND s.subject_id=m.id WHERE f.id=? AND m.id=? AND m.revision=? AND m.final_confirmation_id=f.id AND f.meeting_revision=m.revision AND s.business_version=m.revision AND s.cancel_epoch=m.cancel_epoch AND s.deleted=0",String.class,event.reference().id(),event.subject().id(),event.subjectRevision());if(found.size()!=1)throw new IllegalArgumentException("Invalid final reference");
++ }
+  private void decision(ama.contract.OutboxContracts.EventDraft event){if(event.taskId()!=null||!"MEETING".equals(event.subject().kind())||!Set.of("MINUTES_CANDIDATE_REJECTED","MINUTES_CANDIDATE_DISPOSED").contains(event.eventType()))throw new IllegalArgumentException("Invalid candidate decision event");var found=j.queryForList("SELECT c.id FROM generation_candidate c JOIN meeting m ON m.id=c.meeting_id JOIN task_subject s ON s.subject_kind='MEETING' AND s.subject_id=m.id WHERE c.id=? AND m.id=? AND m.revision=? AND c.state='REJECTED' AND c.decided_at IS NOT NULL AND s.business_version=m.revision AND s.cancel_epoch=m.cancel_epoch AND s.deleted=0",String.class,event.reference().id(),event.subject().id(),event.subjectRevision());if(found.size()!=1)throw new IllegalArgumentException("Invalid candidate decision reference");}
+  private void template(ama.contract.OutboxContracts.EventDraft event){settings(event,"MINUTES_TEMPLATE_SELECTED","template_revision_id");}
+  private void exclusion(ama.contract.OutboxContracts.EventDraft event){settings(event,"MINUTES_EXCLUSIONS_SAVED","exclusion_revision_id");}
+diff --git a/backend/adapters/src/main/java/ama/transcript/MinutesGraphCapture.java b/backend/adapters/src/main/java/ama/transcript/MinutesGraphCapture.java
+index 92400bf..8d0763b 100644
+--- a/backend/adapters/src/main/java/ama/transcript/MinutesGraphCapture.java
++++ b/backend/adapters/src/main/java/ama/transcript/MinutesGraphCapture.java
+@@ -22,7 +22,12 @@ final class MinutesGraphCapture {
+  }
+  static Graph captureCurrent(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget){return captureMode(authority,scope,gate,actor,expected,budget,true,null);}
+  static Graph captureTask(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,Runnable publication){return captureMode(authority,scope,gate,actor,expected,budget,currentSources,publication);}
+- private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,Runnable publication){
++ static Graph capturePublication(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Runnable controls,Runnable tasks){return captureMode(authority,scope,gate,actor,expected,budget,false,null,controls,tasks);}
++ static Graph capturePublicationCurrent(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Runnable controls,Runnable tasks){return captureMode(authority,scope,gate,actor,expected,budget,true,null,controls,tasks);}
++ private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,Runnable publication){return captureMode(authority,scope,gate,actor,expected,budget,currentSources,publication,null,null);}
++ static Graph captureReplacement(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,String publication,Runnable controls,Runnable tasks){return captureMode(authority,scope,gate,actor,expected,budget,true,null,controls,tasks,publication);}
++ private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,Runnable publication,Runnable publicationControls,Runnable publicationTasks){return captureMode(authority,scope,gate,actor,expected,budget,currentSources,publication,publicationControls,publicationTasks,null);}
++ private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,Runnable publication,Runnable publicationControls,Runnable publicationTasks,String replacementPublication){
+   authority.requireMinutesScope(scope,gate,actor,expected.meeting());budget.check();
+   MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,"meeting",budget);
+   var j=new JdbcTemplate(authority.dataSource());j.setQueryTimeout(2);var read=new SavedTranscriptRows(j,budget,authority.readBudget().maxManifestBytes());
+@@ -35,11 +40,12 @@ final class MinutesGraphCapture {
+    for(var row:expected.tables().getOrDefault(name,List.of()))auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(read.deferRead(control,String.join(" AND ",control.keys().stream().map(k->k+"=?").toList()),String.join(",",control.keys()),1,false,control.keys().stream().map(row::get).toArray()));
+   }
+   auxiliary.put("publication",read.read(metadata("publication","id","id meeting_id confirmation_id state revision#"),"meeting_id=?","id",1,false,expected.meeting()));
+-  if(expected.pending()!=null){require(auxiliary.get("publication").equals(expected.pending().rows().get("publication")),PROVENANCE_UNAVAILABLE);if(!expected.kind().equals("READINESS"))require(auxiliary.get("publication").isEmpty(),CAPABILITY_UNAVAILABLE);}
++  if(expected.pending()!=null){require(auxiliary.get("publication").equals(expected.pending().rows().get("publication")),PROVENANCE_UNAVAILABLE);if(replacementPublication!=null){var existing=auxiliary.get("publication");require(existing.size()==1&&replacementPublication.equals(existing.getFirst().get("id"))&&"FAILED".equals(existing.getFirst().get("state")),CAPABILITY_UNAVAILABLE);}else if(!expected.kind().equals("READINESS"))require(auxiliary.get("publication").isEmpty(),CAPABILITY_UNAVAILABLE);}
+   if(publication!=null)publication.run();
+   var finalIds=new TreeSet<String>();if(expected.root().get("final_confirmation_id") instanceof String id)finalIds.add(id);for(var row:expected.tables().getOrDefault("final_confirmation",List.of()))finalIds.add((String)row.get("id"));
+   MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,"final_confirmation",budget);
+   for(String id:finalIds){if(expected.kind().equals("FINAL")&&id.equals(expected.selected()))transfers.add(read.deferRows(Table.FINAL_CONFIRMATION,"id=?","id",1,false,id));else auxiliaryTransfers.computeIfAbsent("final_control",k->new ArrayList<>()).add(read.deferRead(shape(Table.FINAL_CONFIRMATION),"id=?","id",1,false,id));}
++  if(publicationControls!=null)publicationControls.run();
+   var byName=new HashMap<String,Table>();for(Table t:Table.values())byName.put(t.sqlName(),t);
+   for(String name:DOMAIN_RANK){
+    if(name.equals("minutes_revision")||name.equals("element_set")||name.equals("exclusion_revision")){
+@@ -58,6 +64,7 @@ final class MinutesGraphCapture {
+    }
+   }
+   for(String name:MinutesSourceRows.RANK){
++   if(name.equals("durable_task")&&publicationTasks!=null)publicationTasks.run();
+    MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,name,budget);
+    Shape shape=MinutesSourceRows.SHAPES.get(name);var declared=new ArrayList<>(expected.tables().getOrDefault(name,List.of()));
+    if(name.equals("external_execution"))declared.sort(Comparator.comparing((Map<String,Object> r)->(String)r.get("operation_id")).thenComparingLong(r->(Long)r.get("execution_no")));
+diff --git a/backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java b/backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java
+index 60bbd5b..9689b87 100644
+--- a/backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java
++++ b/backend/adapters/src/main/java/ama/transcript/MinutesGraphDiscovery.java
+@@ -25,12 +25,14 @@ final class MinutesGraphDiscovery {
+  private final Map<String,List<List<Object>>> memberships=new TreeMap<>();
+  private final Map<String,Selector> selectors=new TreeMap<>();
+  private final Set<String> queried=new HashSet<>(),identities=new TreeSet<>();
+- private long scanned,bytes;private final long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(30);
++ private boolean publicationHistory;private long scanned,bytes;private final long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(30);
+  private MinutesGraphDiscovery(DataSource source,String meeting,String kind,String selected,int maximum){
+   uuid(meeting);require(maximum>0&&maximum<=100000,INVALID_ARGUMENT);this.j=new JdbcTemplate(source);j.setQueryTimeout(2);this.meeting=meeting;this.kind=kind;this.selected=selected;this.maximum=maximum;
+  }
+  static Discovery discover(DataSource source,String meeting,String kind,String selected,int maximum){return new MinutesGraphDiscovery(source,meeting,kind,selected,maximum).run();}
+  static Discovery discover(DataSource source,String meeting,String kind,String selected,TranscriptAcquisitionBudget limits,ama.contract.ConfigArchiveContracts.ArchiveReadBudget read){var value=new MinutesGraphDiscovery(source,meeting,kind,selected,(int)Math.min(100000,read.maxFactRows()));value.taskMaximum=Math.min(256,limits.tasks());value.fileMaximum=Math.min(64,read.maxBatchFiles());value.revisionMaximum=Math.min(256,limits.revisionNodes());value.depthMaximum=Math.min(128,limits.revisionDepth());value.byteMaximum=Math.min(16777216,Math.min(limits.copyBytes(),Math.min(limits.utf8(),read.maxTotalBytes())));return value.run();}
++ static Discovery publicationHistory(DataSource source,String meeting,String confirmation,TranscriptAcquisitionBudget limits,ama.contract.ConfigArchiveContracts.ArchiveReadBudget read){var value=new MinutesGraphDiscovery(source,meeting,"FINAL",confirmation,(int)Math.min(100000,read.maxFactRows()));value.taskMaximum=Math.min(256,limits.tasks());value.fileMaximum=Math.min(64,read.maxBatchFiles());value.revisionMaximum=Math.min(256,limits.revisionNodes());value.depthMaximum=Math.min(128,limits.revisionDepth());value.byteMaximum=Math.min(16777216,Math.min(limits.copyBytes(),Math.min(limits.utf8(),read.maxTotalBytes())));value.publicationHistory=true;return value.run();}
++ static Discovery identities(Discovery d,Collection<String> additional){var ids=new TreeSet<>(d.identities());ids.addAll(additional);return new Discovery(d.meeting(),d.kind(),d.selected(),d.root(),d.tables(),d.memberships(),Set.copyOf(ids),d.selectors(),d.pending());}
+  static Discovery withPending(DataSource source,Discovery d,int taskLimit){var pending=MinutesPendingDiscovery.discover(source,d.meeting(),d.tables().getOrDefault("durable_task",List.of()).stream().map(r->(String)r.get("id")).toList());MinutesDomainCapacity.reserve(MinutesDomainCapacity.merge(d.tables(),pending.rows()),taskLimit,256,null);return new Discovery(d.meeting(),d.kind(),d.selected(),d.root(),d.tables(),d.memberships(),d.identities(),d.selectors(),pending);}
+  static List<String> metadataColumns(String table){return DEFINITIONS.get(table).columns();}
+  private Discovery run(){
+@@ -55,6 +57,7 @@ final class MinutesGraphDiscovery {
+    case "FINAL"->parent("final_confirmation",requiredSelection(),1);
+    default->throw fail(INVALID_ARGUMENT);
+   }
++  if(publicationHistory)children("final_confirmation","meeting_id",meeting,1);
+   while(!pending.isEmpty()){
+    check();Query query=pending.removeFirst();require(query.depth()<=depthMaximum,BUDGET_EXCEEDED);String queryKey=query.table()+"|"+query.column()+"|"+query.value()+query.qualifier();
+    if(!queried.add(queryKey)){if(query.required())require(!memberships.get(queryKey).isEmpty(),PROVENANCE_UNAVAILABLE);continue;}
+diff --git a/backend/api/src/main/java/ama/api/MinutesConfiguration.java b/backend/api/src/main/java/ama/api/MinutesConfiguration.java
+index 499c5d9..cc4abef 100644
+--- a/backend/api/src/main/java/ama/api/MinutesConfiguration.java
++++ b/backend/api/src/main/java/ama/api/MinutesConfiguration.java
+@@ -2,14 +2,15 @@ package ama.api;
+ import ama.access.MeetingAccess;import ama.config.*;import ama.config.file.*;import ama.contract.ConfigArchiveContracts.*;import ama.db.TransactionRunner;import ama.task.*;import ama.transcript.*;import java.util.*;import java.nio.file.Path;import javax.sql.DataSource;import org.springframework.context.annotation.*;import org.springframework.core.env.Environment;
+ @Configuration(proxyBeanMethods=false) class MinutesConfiguration {
+  /** Controlled Task10 source is present; formal new effects await the Task11 publication installation. */
+- record Runtime(MinutesEditorRuntime editor,JdbcMinutesSavedQueries saved,JdbcMinutesQueries queries,JdbcMinutesInitialSettings initial,JdbcMinutesGenerationCommands generation,long responseBytes){void requireNewInitial(){throw new ama.contract.TranscriptContracts.Failure(503,"TASK11_NOT_INSTALLED");}void requireNewGeneration(){throw new ama.contract.TranscriptContracts.Failure(503,"MINUTES_COMBINED_NOT_INSTALLED");}}
++ record Runtime(MinutesEditorRuntime editor,JdbcMinutesSavedQueries saved,JdbcMinutesQueries queries,JdbcMinutesInitialSettings initial,JdbcMinutesGenerationCommands generation,JdbcFinalConfirmations finals,JdbcPublicationService publications,JdbcPublicationLocalRecovery localPublications,long responseBytes){void requireNewInitial(){throw new ama.contract.TranscriptContracts.Failure(503,"TASK11_NOT_INSTALLED");}void requireNewGeneration(){throw new ama.contract.TranscriptContracts.Failure(503,"MINUTES_COMBINED_NOT_INSTALLED");}}
+  @Bean JdbcMinutesCommandReceipts minutesCommandReceipts(DataSource source,TransactionRunner tx,MeetingAccess access){return new JdbcMinutesCommandReceipts(source,tx,access);}
+  @Bean JdbcMinutesIntentReceipts minutesIntentReceipts(DataSource source,TransactionRunner tx,MeetingAccess access){return new JdbcMinutesIntentReceipts(source,tx,access);}
+  @Bean JdbcMinutesSettingsReceipts minutesSettingsReceipts(DataSource source,TransactionRunner tx,MeetingAccess access){return new JdbcMinutesSettingsReceipts(source,tx,access);}
+  @Bean JdbcMinutesGenerationReceipts minutesGenerationReceipts(DataSource source,TransactionRunner tx,MeetingAccess access){return new JdbcMinutesGenerationReceipts(source,tx,access);}
+- @Bean Runtime minutesRuntime(ProcessingConfiguration.Runtime processing,TranscriptConfiguration.Runtime transcript,Environment env,JdbcTaskQueue queue,JdbcOutbox outbox,DataSource source){
+-  if(!env.getProperty("minutes.enabled",Boolean.class,false))return new Runtime(null,null,null,null,null,33554432);
+-  try{if(processing.components()==null||!"CONTROLLED_INSTALLATION".equals(env.getRequiredProperty("minutes.mode")))throw new IllegalArgumentException("Explicit minutes installation required");var authority=processing.components().authority();var bounds=ConfiguredMinutes.acquisition(env);var read=ConfiguredMinutes.archiveBudget(env);String pin=env.getRequiredProperty("minutes.index-sha");Path root=Path.of(env.getRequiredProperty("minutes.archive-root"));java.util.function.Supplier<ConfigArchiveSource.Snapshot> archives=()->new ControlledConfigArchiveSource().open(root,pin,ConfiguredMinutes.indexBudget(env),read,()->false);var prompt=new Ref(ArtifactType.PROMPT_CONFIG,env.getRequiredProperty("minutes.prompt-version"),env.getRequiredProperty("minutes.prompt-sha"));var model=new Ref(ArtifactType.MODEL_CONFIG,env.getRequiredProperty("minutes.model-version"),env.getRequiredProperty("minutes.model-sha"));var prep=new JdbcMinutesGenerationPreparation(authority,archives,pin,prompt,model,bounds);var editor=MinutesEditorRuntime.compose(authority,archives,pin,prompt,model,bounds,transcript.service());return new Runtime(editor,editor.queries(),new JdbcMinutesQueries(authority,archives,pin,prompt,model,bounds),new JdbcMinutesInitialSettings(authority,archives,prompt,model),new JdbcMinutesGenerationCommands(authority,prep,queue,outbox,new ama.audit.JdbcAuditAdapter(source)),bounds.responseBytes());}
+-  catch(IllegalArgumentException|IllegalStateException|ama.contract.MinutesContracts.Failure unavailable){return new Runtime(null,null,null,null,null,33554432);}
++ @Bean Runtime minutesRuntime(ProcessingConfiguration.Runtime processing,TranscriptConfiguration.Runtime transcript,Environment env,JdbcTaskQueue queue,JdbcOutbox outbox,DataSource source,org.springframework.beans.factory.ObjectProvider<ControlledKnowledgeClient> knowledge){
++  if(!env.getProperty("minutes.enabled",Boolean.class,false))return new Runtime(null,null,null,null,null,null,null,null,33554432);
++  JdbcPublicationLocalRecovery local=null;
++  try{if(processing.components()==null||!"CONTROLLED_INSTALLATION".equals(env.getRequiredProperty("minutes.mode")))throw new IllegalArgumentException("Explicit minutes installation required");var authority=processing.components().authority();var bounds=ConfiguredMinutes.acquisition(env);local=new JdbcPublicationLocalRecovery(authority,bounds,queue,outbox);var read=ConfiguredMinutes.archiveBudget(env);String pin=env.getRequiredProperty("minutes.index-sha");Path root=Path.of(env.getRequiredProperty("minutes.archive-root"));java.util.function.Supplier<ConfigArchiveSource.Snapshot> archives=()->new ControlledConfigArchiveSource().open(root,pin,ConfiguredMinutes.indexBudget(env),read,()->false);var prompt=new Ref(ArtifactType.PROMPT_CONFIG,env.getRequiredProperty("minutes.prompt-version"),env.getRequiredProperty("minutes.prompt-sha"));var model=new Ref(ArtifactType.MODEL_CONFIG,env.getRequiredProperty("minutes.model-version"),env.getRequiredProperty("minutes.model-sha"));var prep=new JdbcMinutesGenerationPreparation(authority,archives,pin,prompt,model,bounds);var editor=MinutesEditorRuntime.compose(authority,archives,pin,prompt,model,bounds,transcript.service());return new Runtime(editor,editor.queries(),new JdbcMinutesQueries(authority,archives,pin,prompt,model,bounds),new JdbcMinutesInitialSettings(authority,archives,prompt,model),new JdbcMinutesGenerationCommands(authority,prep,queue,outbox,new ama.audit.JdbcAuditAdapter(source)),env.getProperty("publication.enabled",Boolean.class,false)?new JdbcFinalConfirmations(authority,archives,pin,bounds,transcript.service()):null,knowledge.getIfAvailable()==null?null:new JdbcPublicationService(authority,archives,pin,bounds,transcript.service(),queue,outbox,knowledge.getIfAvailable()),local,bounds.responseBytes());}
++  catch(IllegalArgumentException|IllegalStateException|ama.contract.MinutesContracts.Failure unavailable){return new Runtime(null,null,null,null,null,null,null,local,33554432);}
+  }
+ }
+diff --git a/backend/contracts/src/main/java/ama/contract/MinutesContracts.java b/backend/contracts/src/main/java/ama/contract/MinutesContracts.java
+index 6833fd3..09198db 100644
+--- a/backend/contracts/src/main/java/ama/contract/MinutesContracts.java
++++ b/backend/contracts/src/main/java/ama/contract/MinutesContracts.java
+@@ -335,6 +335,18 @@ public final class MinutesContracts {
+     public record ReviewFacts(String meetingId,ReviewKind kind,String elementId,String minutesRevisionId,Anchor anchor,List<String> selectedEvidenceIds,StoredProvenanceFacts stored) {
+         public ReviewFacts {uuid(meetingId);require(kind!=null&&(elementId==null)!=(minutesRevisionId==null),FailureCode.INPUT_INVALID);if(elementId!=null)uuid(elementId);if(minutesRevisionId!=null)uuid(minutesRevisionId);require((kind==ReviewKind.SOURCE_SUPPORT)==(anchor!=null),FailureCode.TARGET_INVALID);selectedEvidenceIds=List.copyOf(selectedEvidenceIds);require(stored!=null,FailureCode.INVALID_ARGUMENT);}
+     }
++    /** Prospective final identity over actual saved facts; deliberately has no source hash or persisted row. */
++    public record FinalDraft(String confirmationId,String meetingId,long meetingRevision,String infoRevisionId,String rosterRevisionId,
++                             String transcriptConfirmationId,String minutesRevisionId,String materialSnapshotId,String elementSetId,
++                             String templateRevisionId,String exclusionRevisionId,String inputFingerprint,String confirmedBy,String confirmedAt,
++                             List<String> reviewIds,StoredProvenanceFacts stored) {
++        public FinalDraft {
++            for(String id:List.of(confirmationId,meetingId,infoRevisionId,rosterRevisionId,transcriptConfirmationId,minutesRevisionId,elementSetId,templateRevisionId,exclusionRevisionId))uuid(id);
++            if(materialSnapshotId!=null)uuid(materialSnapshotId);positive(meetingRevision);hash(inputFingerprint);
++            require(confirmedBy!=null&&!confirmedBy.isBlank()&&confirmedAt!=null&&stored!=null,FailureCode.INVALID_ARGUMENT);
++            reviewIds=List.copyOf(reviewIds);var unique=new HashSet<String>();for(String id:reviewIds){uuid(id);require(unique.add(id),FailureCode.SOURCE_MEMBERSHIP_MISMATCH);}
++        }
++    }
+     public record FinalFacts(String confirmationId,StoredProvenanceFacts stored) {public FinalFacts {uuid(confirmationId);require(stored!=null,FailureCode.INVALID_ARGUMENT);}}
+ 
+     public record GraphBudget(CanonicalBudget canonical,int maxOriginDepth,long maxOriginNodes,long maxAggregateFacts) {
+diff --git a/backend/core/src/main/java/ama/minutes/contract/GenerationArchiveRefs.java b/backend/core/src/main/java/ama/minutes/contract/GenerationArchiveRefs.java
+index 5b9b0a2..78a168f 100644
+--- a/backend/core/src/main/java/ama/minutes/contract/GenerationArchiveRefs.java
++++ b/backend/core/src/main/java/ama/minutes/contract/GenerationArchiveRefs.java
+@@ -18,6 +18,11 @@ public final class GenerationArchiveRefs {
+  public List<Ref> draft(GenerationDraft draft){add(find(ArtifactType.PROMPT_CONFIG,draft.promptVersion()));add(find(ArtifactType.MODEL_CONFIG,draft.modelVersion()));confirmation(draft.transcriptConfirmationId());set(draft.elementSetId(),draft.meetingId());return sorted();}
+  public List<Ref> review(ReviewFacts review,String profile){add(find(ArtifactType.REVIEW_HASH,profile));String set=review.elementId()==null?null:facts.one(Table.MINUTES_ELEMENT,review.elementId(),PROVENANCE_UNAVAILABLE).string("set_id");var graph=facts.sources.graph(new GraphSelection(review.meetingId(),review.minutesRevisionId(),set,null,null),new HashSet<>(review.selectedEvidenceIds()));walk(graph,review.meetingId());return sorted();}
+  public List<Ref> finalSources(String id){var row=facts.one(Table.FINAL_CONFIRMATION,id,PROVENANCE_UNAVAILABLE);var body=facts.one(Table.MINUTES_REVISION,row.string("minutes_revision_id"),PROVENANCE_UNAVAILABLE);String input=body.string("generation_input_id");generation(facts.one(Table.GENERATION_INPUT,input,PROVENANCE_UNAVAILABLE));for(var member:facts.matching(Table.FINAL_RESULT_REVIEW,"confirmation_id",id))add(find(ArtifactType.REVIEW_HASH,facts.one(Table.RESULT_REVIEW,member.string("review_id"),PROVENANCE_UNAVAILABLE).string("hash_profile")));var graph=facts.sources.graph(new GraphSelection(row.string("meeting_id"),body.string("id"),row.string("element_set_id"),row.string("exclusion_revision_id"),input),null);facts.sources.walkInputs(List.of(input),row.string("meeting_id"));walk(graph,row.string("meeting_id"));return sorted();}
++ public List<Ref> finalSources(FinalDraft draft){
++  var body=facts.one(Table.MINUTES_REVISION,draft.minutesRevisionId(),PROVENANCE_UNAVAILABLE);String input=body.string("generation_input_id");generation(facts.one(Table.GENERATION_INPUT,input,PROVENANCE_UNAVAILABLE));
++  for(String id:draft.reviewIds())add(find(ArtifactType.REVIEW_HASH,facts.one(Table.RESULT_REVIEW,id,PROVENANCE_UNAVAILABLE).string("hash_profile")));
++  var graph=facts.sources.graph(new GraphSelection(draft.meetingId(),body.string("id"),draft.elementSetId(),draft.exclusionRevisionId(),input),null);facts.sources.walkInputs(List.of(input),draft.meetingId());walk(graph,draft.meetingId());return sorted();
++ }
+  private void set(String set,String meeting){if(set!=null)walk(facts.sources.graph(new GraphSelection(meeting,null,set,null,null),null),meeting);}
+  private void walk(SourceGraph graph,String meeting){facts.sources.walk(graph.sourceUsages(),meeting);usages(graph);for(var entry:facts.sources.inputGraphs.entrySet()){generation(facts.one(Table.GENERATION_INPUT,entry.getKey(),PROVENANCE_UNAVAILABLE));usages(entry.getValue());}}
+  private void usages(SourceGraph graph){for(var usage:graph.sourceUsages()){check(state.cancelled);if(usage.sourceVersion() instanceof TranscriptVersion t)confirmation(t.confirmationId());}}
+diff --git a/backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java b/backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java
+index 5f66c99..0c5eb33 100644
+--- a/backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java
++++ b/backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java
+@@ -106,23 +106,36 @@ public final class ResultHashProfiles {
+  public CanonicalValue finalData(FinalFacts facts,GraphBudget budget,BooleanSupplier cancelled){
+   return finalData(facts,new StoredFactsIndex(facts.stored(),budget,cancelled));
+  }
+- private CanonicalValue finalData(FinalFacts facts,StoredFactsIndex index){
+-  var budget=index.budget;var cancelled=index.cancelled;var finalRow=index.one(Table.FINAL_CONFIRMATION,facts.confirmationId(),PROVENANCE_UNAVAILABLE);String meeting=finalRow.string("meeting_id");
+-  var body=index.one(Table.MINUTES_REVISION,finalRow.string("minutes_revision_id"),PROVENANCE_UNAVAILABLE);index.meeting(body,meeting);
++ private CanonicalValue finalData(FinalFacts facts,StoredFactsIndex index){return finalData(selection(facts,index),index);}
++ public CanonicalValue finalData(FinalDraft draft,GraphBudget budget,BooleanSupplier cancelled){return finalData(draft,new StoredFactsIndex(draft.stored(),budget,cancelled));}
++ private static FinalDraft selection(FinalFacts facts,StoredFactsIndex index){
++  var row=index.one(Table.FINAL_CONFIRMATION,facts.confirmationId(),PROVENANCE_UNAVAILABLE);
++  return new FinalDraft(row.string("id"),row.string("meeting_id"),row.number("meeting_revision"),row.string("info_revision_id"),row.string("roster_revision_id"),row.string("transcript_confirmation_id"),row.string("minutes_revision_id"),row.nullableString("material_snapshot_id"),row.string("element_set_id"),row.string("template_revision_id"),row.string("exclusion_revision_id"),row.string("input_fingerprint"),row.string("confirmed_by"),row.string("confirmed_at"),index.matching(Table.FINAL_RESULT_REVIEW,"confirmation_id",row.string("id")).stream().map(r->r.string("review_id")).toList(),facts.stored());
++ }
++ private static String selected(FinalDraft draft,String field){return switch(field){
++  case "id"->draft.confirmationId();case "meeting_id"->draft.meetingId();case "minutes_revision_id"->draft.minutesRevisionId();case "element_set_id"->draft.elementSetId();case "transcript_confirmation_id"->draft.transcriptConfirmationId();case "material_snapshot_id"->draft.materialSnapshotId();case "template_revision_id"->draft.templateRevisionId();case "exclusion_revision_id"->draft.exclusionRevisionId();case "input_fingerprint"->draft.inputFingerprint();default->throw fail(INVALID_ARGUMENT);
++ };}
++ private static CanonicalValue finalMembership(FinalDraft draft,BooleanSupplier cancelled){
++  var ids=new ArrayList<>(draft.reviewIds());ids.sort((a,b)->CanonicalValueCodec.compareUtf8(a,b,cancelled));var rows=new ArrayList<CanonicalValue>();
++  for(String id:ids){check(cancelled);rows.add(object(field("confirmation_id",string(draft.confirmationId())),field("review_id",string(id))));}return new CanonicalValue.Sequence(rows);
++ }
++ private CanonicalValue finalData(FinalDraft draft,StoredFactsIndex index){
++  var budget=index.budget;var cancelled=index.cancelled;String meeting=draft.meetingId();
++  var body=index.one(Table.MINUTES_REVISION,selected(draft,"minutes_revision_id"),PROVENANCE_UNAVAILABLE);index.meeting(body,meeting);
+   String inputId=body.nullableString("generation_input_id");require(inputId!=null,PROFILE_UNAVAILABLE);var input=index.one(Table.GENERATION_INPUT,inputId,PROFILE_UNAVAILABLE);index.meeting(input,meeting);
+-  for(var column:List.of("transcript_confirmation_id","material_snapshot_id","template_revision_id","exclusion_revision_id"))require(Objects.equals(input.nullableString(column),finalRow.nullableString(column)),SOURCE_MEMBERSHIP_MISMATCH);
+-  require(input.string("input_fingerprint").equals(finalRow.string("input_fingerprint")),FINGERPRINT_MISMATCH);
+-  var session=index.sources;var graph=session.graph(new GraphSelection(meeting,body.string("id"),finalRow.string("element_set_id"),finalRow.string("exclusion_revision_id"),inputId),null);session.walk(graph.sourceUsages(),meeting);
++  for(var column:List.of("transcript_confirmation_id","material_snapshot_id","template_revision_id","exclusion_revision_id"))require(Objects.equals(input.nullableString(column),selected(draft,column)),SOURCE_MEMBERSHIP_MISMATCH);
++  require(input.string("input_fingerprint").equals(selected(draft,"input_fingerprint")),FINGERPRINT_MISMATCH);
++  var session=index.sources;var graph=session.graph(new GraphSelection(meeting,body.string("id"),selected(draft,"element_set_id"),selected(draft,"exclusion_revision_id"),inputId),null);session.walk(graph.sourceUsages(),meeting);
+   var evidenceIds=new HashSet<String>();for(var usage:graph.sourceUsages())if(usage.usage() instanceof EvidenceUsage e)evidenceIds.add(e.evidenceId());
+   var evidenceRows=new ArrayList<FullRow>();for(var row:index.rows(Table.EVIDENCE_LINK))if(evidenceIds.contains(row.string("id")))evidenceRows.add(row);
+-  var setRows=RowsetProjection.elements(index,meeting,finalRow.string("element_set_id"));
++  var setRows=RowsetProjection.elements(index,meeting,selected(draft,"element_set_id"));
+   var directoryRows=new ArrayList<FullRow>();var elementIds=new HashSet<String>();
+   for(var row:setRows){check(cancelled);if(RowsetProjection.DIRECTORY_TABLES.contains(row.table()))directoryRows.add(row);if(row.table()==Table.MINUTES_ELEMENT)elementIds.add(row.string("id"));}
+-  var exclusionRows=RowsetProjection.exclusions(index,meeting,finalRow.string("exclusion_revision_id"));
+-  var reviewRows=new ArrayList<FullRow>();var reviewEvidence=new ArrayList<FullRow>();var finalReviews=index.matching(Table.FINAL_RESULT_REVIEW,"confirmation_id",finalRow.string("id"));
++  var exclusionRows=RowsetProjection.exclusions(index,meeting,selected(draft,"exclusion_revision_id"));
++  var reviewRows=new ArrayList<FullRow>();var reviewEvidence=new ArrayList<FullRow>();var finalReviews=draft.reviewIds();
+   var reviewNumbers=new HashSet<Long>();
+   for(var member:finalReviews){
+-   check(cancelled);var review=index.one(Table.RESULT_REVIEW,member.string("review_id"),PROVENANCE_UNAVAILABLE);index.meeting(review,meeting);positive(review.number("review_no"));require(reviewNumbers.add(review.number("review_no")),SOURCE_MEMBERSHIP_MISMATCH);
++   check(cancelled);var review=index.one(Table.RESULT_REVIEW,member,PROVENANCE_UNAVAILABLE);index.meeting(review,meeting);positive(review.number("review_no"));require(reviewNumbers.add(review.number("review_no")),SOURCE_MEMBERSHIP_MISMATCH);
+    require(review.nullableString("element_id")!=null&&elementIds.contains(review.string("element_id"))||body.string("id").equals(review.nullableString("minutes_revision_id")),SOURCE_MEMBERSHIP_MISMATCH);
+    require(review.string("hash_profile").equals(REVIEW_PROFILE),PROFILE_UNAVAILABLE);
+    var reviewFacts=storedReview(review,index);var target=targetData(reviewFacts,index);
+@@ -132,27 +145,31 @@ public final class ResultHashProfiles {
+    reviewRows.add(review);reviewEvidence.addAll(index.matching(Table.RESULT_REVIEW_EVIDENCE,"review_id",review.string("id")));
+   }
+   check(cancelled);
+-  return object(field("meetingId",string(meeting)),field("confirmationId",string(finalRow.string("id"))),field("minutesRevisionId",string(body.string("id"))),field("elementSetId",string(finalRow.string("element_set_id"))),
+-   field("transcriptConfirmationId",string(finalRow.string("transcript_confirmation_id"))),field("materialSnapshotId",ContractValues.nullable(finalRow.nullableString("material_snapshot_id"))),field("templateRevisionId",string(finalRow.string("template_revision_id"))),field("exclusionRevisionId",string(finalRow.string("exclusion_revision_id"))),field("inputFingerprint",string(input.string("input_fingerprint"))),
++  return object(field("meetingId",string(meeting)),field("confirmationId",string(selected(draft,"id"))),field("minutesRevisionId",string(body.string("id"))),field("elementSetId",string(selected(draft,"element_set_id"))),
++   field("transcriptConfirmationId",string(selected(draft,"transcript_confirmation_id"))),field("materialSnapshotId",ContractValues.nullable(selected(draft,"material_snapshot_id"))),field("templateRevisionId",string(selected(draft,"template_revision_id"))),field("exclusionRevisionId",string(selected(draft,"exclusion_revision_id"))),field("inputFingerprint",string(input.string("input_fingerprint"))),
+    field("locatorRows",RowValues.rows(graph.locatorRows(),cancelled)),field("sourceUsages",RowValues.usages(graph.sourceUsages(),cancelled)),field("evidenceRows",RowValues.rows(evidenceRows,cancelled)),
+    field("directoryRows",RowsetProjection.tableArray(directoryRows,RowsetProjection.DIRECTORY_TABLES,index)),field("exclusionRows",RowsetProjection.tableArray(exclusionRows,EnumSet.of(Table.EXCLUSION_REVISION,Table.SENSITIVE_EXCLUSION),index)),
+-   field("reviewRows",RowValues.rows(reviewRows,cancelled)),field("reviewEvidenceRows",RowValues.rows(reviewEvidence,cancelled)),field("finalReviewRows",RowValues.rows(finalReviews,cancelled)));
++   field("reviewRows",RowValues.rows(reviewRows,cancelled)),field("reviewEvidenceRows",RowValues.rows(reviewEvidence,cancelled)),field("finalReviewRows",finalMembership(draft,cancelled)));
+  }
+  public String finalSources(FinalFacts facts,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
+   var operation=resolver.open(facts.stored(),cancelled);String result=new ResultHashProfiles(operation.resolver()).finalSourcesBound(facts,profile,budget,cancelled);operation.finish();check(cancelled);return result;
+  }
+- private String finalSourcesBound(FinalFacts facts,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
+-  var index=new StoredFactsIndex(facts.stored(),budget,cancelled);var f=index.one(Table.FINAL_CONFIRMATION,facts.confirmationId(),PROVENANCE_UNAVAILABLE);var body=index.one(Table.MINUTES_REVISION,f.string("minutes_revision_id"),PROVENANCE_UNAVAILABLE);
++ public String finalSources(FinalDraft draft,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
++  var operation=resolver.open(draft.stored(),cancelled);String result=new ResultHashProfiles(operation.resolver()).finalSourcesBound(draft,profile,budget,cancelled);operation.finish();check(cancelled);return result;
++ }
++ private String finalSourcesBound(FinalFacts facts,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){return finalSourcesBound(selection(facts,new StoredFactsIndex(facts.stored(),budget,cancelled)),profile,budget,cancelled);}
++ private String finalSourcesBound(FinalDraft draft,Artifact profile,GraphBudget budget,BooleanSupplier cancelled){
++  var index=new StoredFactsIndex(draft.stored(),budget,cancelled);var body=index.one(Table.MINUTES_REVISION,draft.minutesRevisionId(),PROVENANCE_UNAVAILABLE);
+   String inputId=body.nullableString("generation_input_id");require(inputId!=null,PROFILE_UNAVAILABLE);var input=index.one(Table.GENERATION_INPUT,inputId,PROFILE_UNAVAILABLE);
+-  var bound=resolver.generation(input,facts.stored(),budget,cancelled);require(bound.equals(index.config(input))&&bound.profiles().definition(ProfileKind.FINAL_SOURCES).equals(profile),PROFILE_UNAVAILABLE);
+-  GenerationFingerprint.historicalFence(input,facts.stored(),cancelled);
+-  for(var member:index.matching(Table.FINAL_RESULT_REVIEW,"confirmation_id",f.string("id"))){
+-   check(cancelled);var review=index.one(Table.RESULT_REVIEW,member.string("review_id"),PROVENANCE_UNAVAILABLE);var reviewFacts=storedReview(review,index);
+-   require(review.string("hash_profile").equals(REVIEW_PROFILE),PROFILE_UNAVAILABLE);var reviewProfile=resolver.review(review,facts.stored(),budget,cancelled);
++  var bound=resolver.generation(input,draft.stored(),budget,cancelled);require(bound.equals(index.config(input))&&bound.profiles().definition(ProfileKind.FINAL_SOURCES).equals(profile),PROFILE_UNAVAILABLE);
++  GenerationFingerprint.historicalFence(input,draft.stored(),cancelled);
++  for(var member:draft.reviewIds()){
++   check(cancelled);var review=index.one(Table.RESULT_REVIEW,member,PROVENANCE_UNAVAILABLE);var reviewFacts=storedReview(review,index);
++   require(review.string("hash_profile").equals(REVIEW_PROFILE),PROFILE_UNAVAILABLE);var reviewProfile=resolver.review(review,draft.stored(),budget,cancelled);
+    require(targetBound(reviewFacts,reviewProfile,index).equals(review.string("target_hash"))&&sourcesBound(reviewFacts,reviewProfile,index).equals(review.string("source_set_hash")),FINGERPRINT_MISMATCH);
+   }
+-  var session=index.sources;var graph=session.graph(new GraphSelection(f.string("meeting_id"),body.string("id"),f.string("element_set_id"),f.string("exclusion_revision_id"),inputId),null);
+-  session.walkInputs(List.of(inputId),f.string("meeting_id"));OriginChainVerifier.verify(index,session,graph,resolver);
+-  return DomainHash.hash(profile,FINAL_PROFILE,"FINAL_SOURCES",finalData(facts,index),TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled)),cancelled);
++  var session=index.sources;var graph=session.graph(new GraphSelection(selected(draft,"meeting_id"),body.string("id"),selected(draft,"element_set_id"),selected(draft,"exclusion_revision_id"),inputId),null);
++  session.walkInputs(List.of(inputId),selected(draft,"meeting_id"));OriginChainVerifier.verify(index,session,graph,resolver);
++  return DomainHash.hash(profile,FINAL_PROFILE,"FINAL_SOURCES",finalData(draft,index),TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled)),cancelled);
+  }
+ }
+diff --git a/backend/core/src/main/java/ama/task/ExternalOperationPort.java b/backend/core/src/main/java/ama/task/ExternalOperationPort.java
+index 7403270..f53b347 100644
+--- a/backend/core/src/main/java/ama/task/ExternalOperationPort.java
++++ b/backend/core/src/main/java/ama/task/ExternalOperationPort.java
+@@ -40,4 +40,6 @@ public interface ExternalOperationPort {
+     ObservationResult observe(OperationToken token, ExternalObservation observation, Runnable prelockedDomainEffects);
+     /** Explicit user retry only: old current execution must be FAILED with complete verified zero-effect proof. */
+     String retryAfterZeroEffect(String operationId, long expectedExecutionNo, TaskSpec newTask, ExternalRequest request);
++ default PublicationReplacementPolicy.ReplacementAccepted replaceZeroEffectPublication(PublicationReplacementPolicy.PreparedPublicationReplacement prepared){throw new UnsupportedOperationException("Publication replacement not installed");}
++
+ }
+diff --git a/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java b/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java
+index 84b14ed..ac5182f 100644
+--- a/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java
++++ b/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java
+@@ -42,6 +42,7 @@ public record TranscriptAcquisitionBudget(long utf8,long scalars,long utf16,long
+   }
+   public void responseOverhead(long size){check();require(size>=0&&size<=limits.responseBytes-response,BUDGET_EXCEEDED);response+=size;}
+   public long[] usage(){return new long[]{bytes,points,units,copies,copyUnits,rows,edges,response};}
++  public int taskLimit(){return limits.tasks;}
+   public long remainingRows(){return archive.maxFactRows()-rows;}
+   public void check(){ama.contract.MinutesContracts.check(cancel);require(System.nanoTime()-deadline<0,BUDGET_EXCEEDED);}
+  }
+diff --git a/backend/worker/src/main/java/ama/worker/ReconciliationLoop.java b/backend/worker/src/main/java/ama/worker/ReconciliationLoop.java
+index 2709859..e5f011c 100644
+--- a/backend/worker/src/main/java/ama/worker/ReconciliationLoop.java
++++ b/backend/worker/src/main/java/ama/worker/ReconciliationLoop.java
+@@ -11,11 +11,15 @@ import static ama.contract.OutboxContracts.protocolCode;
+ public final class ReconciliationLoop implements WorkerRuntime {
+     @FunctionalInterface public interface PreparedHandler { void reconcile(ExternalTaskExecution session) throws Exception; }
+     public static ReconciliationLoop prepared(ExternalOperationPort operations,ama.task.ModelPermitPool permits,int capacity,PreparedHandler handler,String owner){
+-        return new ReconciliationLoop(operations,capacity,null,Objects.requireNonNull(handler),Objects.requireNonNull(permits),owner);
++        return new ReconciliationLoop(operations,capacity,null,Objects.requireNonNull(handler),Objects.requireNonNull(permits),owner,null);
++    }
++    public static ReconciliationLoop preparedWithPublicationMaintenance(ExternalOperationPort operations,ama.task.ModelPermitPool permits,int capacity,PreparedHandler handler,String owner,ama.transcript.JdbcPublicationLocalRecovery local){
++        return new ReconciliationLoop(operations,capacity,null,Objects.requireNonNull(handler),Objects.requireNonNull(permits),owner,Objects.requireNonNull(local));
+     }
+     @FunctionalInterface public interface Handler { void reconcile(OperationToken token) throws Exception; }
+     private static final System.Logger LOG = System.getLogger(ReconciliationLoop.class.getName());
+     private final ExternalOperationPort operations;
++    private final ama.transcript.JdbcPublicationLocalRecovery localPublications;
+     private final Handler handler;private final PreparedHandler preparedHandler;private final ama.task.ModelPermitPool permits;
+     private final java.util.Set<ExternalExecutionSession> sessions=ConcurrentHashMap.newKeySet();
+     private final java.util.Set<ExternalExecutionSession> pending=ConcurrentHashMap.newKeySet();
+@@ -29,11 +33,11 @@ public final class ReconciliationLoop implements WorkerRuntime {
+     private final AtomicBoolean scanning = new AtomicBoolean();
+ 
+     public ReconciliationLoop(ExternalOperationPort operations, int capacity, Handler handler, String owner) {
+-        this(operations,capacity,Objects.requireNonNull(handler),null,null,owner);
++        this(operations,capacity,Objects.requireNonNull(handler),null,null,owner,null);
+     }
+-    private ReconciliationLoop(ExternalOperationPort operations,int capacity,Handler handler,PreparedHandler preparedHandler,ama.task.ModelPermitPool permits,String owner){
++    private ReconciliationLoop(ExternalOperationPort operations,int capacity,Handler handler,PreparedHandler preparedHandler,ama.task.ModelPermitPool permits,String owner,ama.transcript.JdbcPublicationLocalRecovery localPublications){
+         if (capacity < 1) throw new IllegalArgumentException("Explicit positive reconciliation capacity required");
+-        this.operations = Objects.requireNonNull(operations);
++        this.operations = Objects.requireNonNull(operations);this.localPublications=localPublications;
+         this.handler = handler;this.preparedHandler=preparedHandler;this.permits=permits;
+         protocolCode(owner);
+         this.owner = owner;
+@@ -54,6 +58,7 @@ public final class ReconciliationLoop implements WorkerRuntime {
+         try {
+             // Maintenance precedes capacity/claim checks, including an entirely saturated worker.
+             if(permits!=null)permits.recoverSettlements(8);
++            if(localPublications!=null)try{localPublications.maintainLocalFailures();}catch(RuntimeException unavailable){LOG.log(System.Logger.Level.WARNING,"Publication local maintenance unavailable: "+unavailable.getClass().getSimpleName());}
+             for(var session:pending){session.retry();if(!session.pending()&&pending.remove(session)){session.close();sessions.remove(session);slots.release();}}
+             while (!closed.get() && slots.tryAcquire()) {
+                 boolean submitted = false;
+diff --git a/backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java b/backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java
+index 1a4f36c..283eaa0 100644
+--- a/backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java
++++ b/backend/worker/src/main/java/ama/worker/TranscriptWorkerMain.java
+@@ -17,7 +17,7 @@ public final class TranscriptWorkerMain {
+   var env=new StandardEnvironment();env.getPropertySources().addFirst(new PropertiesPropertySource("worker",properties));
+   javax.sql.DataSource source=env.getProperty("minutes.enabled",Boolean.class,false)?ama.minutes.ControlledMinutesDataSource.create(env.getRequiredProperty("database.url"),env.getRequiredProperty("database.user"),env.getRequiredProperty("database.password")):new DriverManagerDataSource(env.getRequiredProperty("database.url"),env.getRequiredProperty("database.user"),env.getRequiredProperty("database.password"));
+   var settings=ConfiguredProcessing.read(env);var definitions=ConfiguredBackends.read(env);
+-  var provider=new TranscriptWorkerRuntimeProvider(source,definitions,settings.read(),settings.canonical(),settings.preparation(),env.getRequiredProperty("worker.id"),env.getRequiredProperty("worker.capacity",Integer.class),env.getProperty("minutes.enabled",Boolean.class,false)?ama.transcript.ConfiguredMinutes.read(env,settings.read(),settings.index()):null);
++  var provider=new TranscriptWorkerRuntimeProvider(source,definitions,settings.read(),settings.canonical(),settings.preparation(),env.getRequiredProperty("worker.id"),env.getRequiredProperty("worker.capacity",Integer.class),env.getProperty("minutes.enabled",Boolean.class,false)?ama.transcript.ConfiguredMinutes.read(env,settings.read(),settings.index()):null,env.getProperty("publication.enabled",Boolean.class,false)?ama.transcript.ConfiguredPublication.read(env,settings.read(),settings.index()):null);
+   var runtime=(TranscriptWorkerRuntimeProvider.Runtime)provider.create();
+   try(runtime){
+   var tls=ServiceTls.context(Path.of(env.getRequiredProperty("worker.health.key-store")),env.getRequiredProperty("worker.health.key-store-password").toCharArray(),Path.of(env.getRequiredProperty("worker.health.trust-store")),env.getRequiredProperty("worker.health.trust-store-password").toCharArray());
+diff --git a/backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java b/backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java
+index 6e515e2..57b490f 100644
+--- a/backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java
++++ b/backend/worker/src/main/java/ama/worker/TranscriptWorkerRuntimeProvider.java
+@@ -12,21 +12,24 @@ import java.util.*;
+ /** Explicit TXT-only provider. Every graph collaborator in this process shares the one assembly. */
+ public final class TranscriptWorkerRuntimeProvider implements WorkerRuntimeProvider {
+  private final DataSource source;private final FileBackendDefinitions definitions;private final ArchiveReadBudget budget;private final CanonicalBudget canonical;
+- private final TranscriptImportRuntime.Settings settings;private final String worker;private final int capacity;private final ConfiguredMinutes minutes;
++ private final TranscriptImportRuntime.Settings settings;private final String worker;private final int capacity;private final ConfiguredMinutes minutes;private final ConfiguredPublication publication;
+  public TranscriptWorkerRuntimeProvider(DataSource source,FileBackendDefinitions definitions,ArchiveReadBudget budget,CanonicalBudget canonical,TranscriptImportRuntime.Settings settings,String worker,int capacity){
+   this(source,definitions,budget,canonical,settings,worker,capacity,null);
+  }
+  public TranscriptWorkerRuntimeProvider(DataSource source,FileBackendDefinitions definitions,ArchiveReadBudget budget,CanonicalBudget canonical,TranscriptImportRuntime.Settings settings,String worker,int capacity,ConfiguredMinutes minutes){
+-  this.minutes=minutes;
++  this(source,definitions,budget,canonical,settings,worker,capacity,minutes,null);
++ }
++ public TranscriptWorkerRuntimeProvider(DataSource source,FileBackendDefinitions definitions,ArchiveReadBudget budget,CanonicalBudget canonical,TranscriptImportRuntime.Settings settings,String worker,int capacity,ConfiguredMinutes minutes,ConfiguredPublication publication){
++  this.minutes=minutes;this.publication=publication;
+   this.source=Objects.requireNonNull(source);this.definitions=Objects.requireNonNull(definitions);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);this.settings=Objects.requireNonNull(settings);this.worker=worker;this.capacity=capacity;
+   if(capacity<1||capacity>64)throw new IllegalArgumentException("Bounded worker capacity required");
+  }
+  @Override public WorkerRuntime create(){
+-  ama.model.ControlledMinutesClient minutesClient=null;
++  ama.model.ControlledMinutesClient minutesClient=null;ControlledKnowledgeClient knowledgeClient=null;WorkerLoop loop=null,external=null;ReconciliationLoop reconciliation=null;
+   try{
+    // Validate retained archive index before any poll, independent of the current processing default.
+    settings.archives().get();
+-   var tx=new TransactionRunner(source,minutes==null?-1:30);var fences=new JdbcSubjectFences(source,Set.of("MEETING"));var access=new JdbcMeetingAccess(source,tx,fences);
++   var tx=new TransactionRunner(source,minutes==null&&publication==null?-1:30);var fences=new JdbcSubjectFences(source,Set.of("MEETING"));var access=new JdbcMeetingAccess(source,tx,fences);
+    var catalog=new FileBackendCatalog(source,definitions.backends(),definitions.defaultId());catalog.configure();
+    var validators=new HashMap<String,OutboxReferenceValidator>(new MeetingEventReferences(source).validators());
+    new TranscriptEventReferences(source).validators().forEach((k,v)->{if(validators.putIfAbsent(k,v)!=null)throw new IllegalArgumentException("Duplicate outbox validator");});
+@@ -34,27 +37,33 @@ public final class TranscriptWorkerRuntimeProvider implements WorkerRuntimeProvi
+    var outbox=new JdbcOutbox(source,validators);
+    var components=JdbcTranscriptAuthority.create(source,tx,access,new TranscriptFilePurposePolicy(),catalog,Map.of(),budget,canonical);
+    var queue=TranscriptImportRuntime.install(source,fences,outbox,components);
+-   var loop=WorkerLoop.contextual(queue,Map.of("TRANSCRIPT_IMPORT",capacity),Map.of("TRANSCRIPT_IMPORT_V1",(lease,cancel)->TranscriptImportRuntime.prepare(queue,lease,settings,cancel)),worker);
+-   ReconciliationLoop reconciliation=null;
+-   if(minutes!=null){
+-    minutes.archives().get();minutesClient=minutes.client();var operations=new JdbcExternalOperations(queue);var permits=new JdbcModelPermitPool(operations,Map.of(ama.model.ControlledMinutesProtocol.MODEL,minutes.modelConfiguration()),(t,m,d)->{throw new IllegalStateException("No controlled cutoff proof");});
+-    var preparation=new MinutesExternalPreparation(components.authority(),minutes.preparation(components.authority()),minutesClient);
+-    reconciliation=ReconciliationLoop.prepared(operations,permits,minutes.reconciliationCapacity(),new MinutesReconciliationHandler(preparation,minutesClient,operations,permits),worker);
++   loop=WorkerLoop.contextual(queue,Map.of("TRANSCRIPT_IMPORT",capacity),Map.of("TRANSCRIPT_IMPORT_V1",(lease,cancel)->TranscriptImportRuntime.prepare(queue,lease,settings,cancel)),worker);
++   if(minutes!=null||publication!=null){
++    var operations=new JdbcExternalOperations(queue);var permits=new JdbcModelPermitPool(operations,minutes==null?Map.of():Map.of(ama.model.ControlledMinutesProtocol.MODEL,minutes.modelConfiguration()),(t,m,d)->{throw new IllegalStateException("No controlled cutoff proof");});
++    var handlers=new HashMap<String,WorkerLoop.ExternalHandler>();var pools=new HashMap<String,Integer>();var models=new HashMap<String,String>();MinutesReconciliationHandler minutesRecovery=null;KnowledgeReconciliationHandler knowledgeRecovery=null;
++    if(minutes!=null){minutes.archives().get();minutesClient=minutes.client();var preparation=new MinutesExternalPreparation(components.authority(),minutes.preparation(components.authority()),minutesClient);minutesRecovery=new MinutesReconciliationHandler(preparation,minutesClient,operations,permits);if(publication!=null){handlers.put("MINUTES_GENERATE_V1",new MinutesGenerationHandler(preparation,minutesClient,operations,permits));pools.put("MINUTES_GENERATE",capacity);models.put("MINUTES_GENERATE_V1",ama.model.ControlledMinutesProtocol.MODEL);}}
++    if(publication!=null){publication.archives().get();knowledgeClient=publication.client();var service=new JdbcPublicationService(components.authority(),publication.archives(),publication.pin(),publication.bounds(),null,queue,outbox,knowledgeClient);handlers.put("KNOWLEDGE_PUBLISH_V1",new KnowledgePublicationHandler(service,operations,permits));pools.put("KNOWLEDGE_PUBLISH",publication.capacity());knowledgeRecovery=new KnowledgeReconciliationHandler(service,operations,permits);}
++    if(!handlers.isEmpty())external=WorkerLoop.external(queue,operations,permits,pools,handlers,models,worker);
++    final var minutesHandler=minutesRecovery;final var knowledgeHandler=knowledgeRecovery;var jdbc=new org.springframework.jdbc.core.JdbcTemplate(source);jdbc.setQueryTimeout(2);
++    ReconciliationLoop.PreparedHandler dispatcher=session->{var actual=(ExternalExecutionSession)session;var token=actual.token();String kind=jdbc.queryForObject("SELECT o.operation_kind FROM external_operation o JOIN external_execution e ON e.operation_id=o.id WHERE o.id=? AND e.id=? AND e.execution_no=?",String.class,token.operationId(),token.executionId(),token.executionNo());if("KNOWLEDGE_PUBLISH".equals(kind)&&knowledgeHandler!=null)knowledgeHandler.reconcile(session);else if("MINUTES_GENERATE".equals(kind)&&minutesHandler!=null)minutesHandler.reconcile(session);else throw new IllegalStateException("No installed recovery handler for recorded operation");};
++    int recoveryCapacity=publication==null?minutes.reconciliationCapacity():publication.reconciliationCapacity();reconciliation=publication==null?ReconciliationLoop.prepared(operations,permits,recoveryCapacity,dispatcher,worker):ReconciliationLoop.preparedWithPublicationMaintenance(operations,permits,recoveryCapacity,dispatcher,worker,new JdbcPublicationLocalRecovery(components.authority(),publication.bounds(),queue,outbox));
+    }
+-   return new Runtime(loop,reconciliation,minutesClient,definitions);
+-  }catch(RuntimeException failure){if(minutesClient!=null)minutesClient.close();try{definitions.close();}catch(Exception ignored){}throw failure;}
++   return new Runtime(loop,external,reconciliation,minutesClient,knowledgeClient,definitions);
++  }catch(RuntimeException|Error failure){for(AutoCloseable resource:Arrays.asList(external,reconciliation,loop)){if(resource!=null)try{resource.close();}catch(Exception|Error close){if(close!=failure)failure.addSuppressed(close);}}if(minutesClient!=null)minutesClient.close();if(knowledgeClient!=null)knowledgeClient.close();try{definitions.close();}catch(Exception ignored){}throw failure;}
+  }
+  public static final class Runtime implements WorkerRuntime {
+-  private final WorkerLoop loop;private final ReconciliationLoop reconciliation;private final ama.model.ControlledMinutesClient client;private final FileBackendDefinitions definitions;private boolean closed;
+-  private Runtime(WorkerLoop loop,ReconciliationLoop reconciliation,ama.model.ControlledMinutesClient client,FileBackendDefinitions definitions){this.loop=loop;this.reconciliation=reconciliation;this.client=client;this.definitions=definitions;}
+-  public void start(){loop.start();if(reconciliation!=null)reconciliation.start();}
++  private final WorkerLoop loop,external;private final ControlledKnowledgeClient knowledgeClient;private final ReconciliationLoop reconciliation;private final ama.model.ControlledMinutesClient client;private final FileBackendDefinitions definitions;private boolean closed;
++  private Runtime(WorkerLoop loop,WorkerLoop external,ReconciliationLoop reconciliation,ama.model.ControlledMinutesClient client,ControlledKnowledgeClient knowledgeClient,FileBackendDefinitions definitions){this.loop=loop;this.external=external;this.reconciliation=reconciliation;this.client=client;this.knowledgeClient=knowledgeClient;this.definitions=definitions;}
++  public void start(){loop.start();if(external!=null)external.start();if(reconciliation!=null)reconciliation.start();}
+   public WorkerLoop.Observation observation(){return loop.observation();}
+   public synchronized void close(){
+    if(closed)return;closed=true;
+    Throwable failure=null;
+-   try{loop.close();}catch(RuntimeException|Error error){failure=error;}
++   try{if(external!=null)external.close();}catch(RuntimeException|Error error){failure=error;}
++   try{loop.close();}catch(RuntimeException|Error error){if(failure==null)failure=error;else failure.addSuppressed(error);}
+    try{if(reconciliation!=null)reconciliation.close();}catch(RuntimeException|Error error){if(failure==null)failure=error;else failure.addSuppressed(error);}
+    try{if(client!=null)client.close();}catch(RuntimeException|Error error){if(failure==null)failure=error;else failure.addSuppressed(error);}
++   try{if(knowledgeClient!=null)knowledgeClient.close();}catch(RuntimeException|Error error){if(failure==null)failure=error;else failure.addSuppressed(error);}
+    try{definitions.close();}catch(Exception|Error error){if(failure==null)failure=error;else if(failure!=error)failure.addSuppressed(error);}
+    if(failure instanceof RuntimeException error)throw error;
+    if(failure instanceof Error error)throw error;
+diff --git a/tools/checks/database_design.py b/tools/checks/database_design.py
+index 4184f7f..8f7568e 100644
+--- a/tools/checks/database_design.py
++++ b/tools/checks/database_design.py
+@@ -11,7 +11,7 @@ import re
+ import subprocess
+ 
+ ROOT = pathlib.Path(__file__).resolve().parents[2]
+-VERSION = 'B00-1.6-reconcile-scan'
++VERSION = 'B00-1.7-publication-submission'
+ PROVENANCE_ROOT_RULE = 'R1上下文根：所有纳入minutes_element.source_context_id无论证据数量均为basis根，与域内精确usage上下文取并集。ROWSET v2/PINNED用已保存输入要素集全部basis及set证据/目录，排除body/applied exclusion；REVIEW_SOURCES仅选定复核要素basis及精确相交证据（正文复核无要素basis）；FINAL用全部冻结纳入要素basis及既有body/set证据、目录、applied exclusion。各根完整context/selection/profile按实际完整PK去重及unsigned UTF8排序，缺失/额外行拒绝；无usage的basis同样验证并保留依赖。basis不伪造EVIDENCE、不增加usage数、不授予支持信用；草稿仍无自身fingerprint/TaskSpec，祖先按图依赖判断。'
+ TABLES = []
+ ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
+@@ -444,8 +444,20 @@ table('meeting_minutes_editor_guard','B-03/B-07/runtime Task2','V013.1','持久
+     policy='新建会议原事务插入0；真正授权编辑意图在根锁下由未知写1或严格递增，无减少/重置/超时/删除。上限前条件增量且一行，否则关闭失败；无默认。创建重放和旧行读取不补零；缺TABLE为schema unavailable。逻辑删除保留，只有永久删除父时协调清理；epoch不授予权限')
+ 
+ 
++# Task11 formally frozen V013.4; immutable acceptance plus one-way local decision.
++table('publication_submission','B-08/runtime Task11','V013.4','真实受理任务的不可变发布绑定与未标记本地终结',[
++    ref('task_id','真实受理任务；无执行时也存在'),ref('publication_id','唯一发布根'),num('submission_no','每发布根正数序号；上限9223372036854775806'),ref('confirmation_id','本次固定最终确认'),code('provider_id','显式配置提供方'),col('business_key',KEY,'publicationId:confirmationId'),col('library_id',KEY,'真实库ID'),col('folder_id',KEY,'真实目录ID'),col('requester_id',KEY,'原真实负责人'),fingerprint('logical_request_hash','固定逻辑请求SHA256'),fingerprint('execution_request_hash','固定执行请求SHA256'),text('request_manifest','无正文/秘密的严格绑定清单；最多65536 UTF8 bytes及65536 UTF16 units'),ts('created_at','真实受理UTC时间'),col('local_state','varchar(32) CHARACTER SET ascii COLLATE ascii_bin','UNDECIDED或NEVER_MARKED'),ts('local_decided_at','本地原子终结UTC时间',True),code('local_reason','精确白名单本地原因',True),col('local_decided_by',KEY,'真实fresh授权负责人；不是虚构人工点击',True),num('local_attempt_no','真实队列attempt；未领取允许0',nullable=True),ref('local_execution_id','真实未标记执行；无执行时NULL',True)],
++    pk='task_id',indexes=[idx('publication_submission_number','publication_id,submission_no','完整历史及单调序号',True),idx('publication_submission_undecided','local_state,created_at,task_id','有界恢复扫描'),idx('publication_submission_confirmation','confirmation_id','固定最终确认'),idx('publication_submission_requester','requester_id','原受理人'),idx('publication_submission_decider','local_decided_by','本地授权人'),idx('publication_submission_execution','local_execution_id','真实未标记执行')],
++    fks=[fk('task_id','durable_task'),fk('publication_id','publication'),fk('confirmation_id','final_confirmation'),fk('requester_id','enterprise_identity','enterprise_id'),fk('local_decided_by','enterprise_identity','enterprise_id','MySQL CHECK引用列省略显式action；InnoDB立即NO ACTION等同RESTRICT'),fk('local_execution_id','external_execution',note='MySQL CHECK引用列省略显式action；InnoDB立即NO ACTION等同RESTRICT')],
++    checks=['submission_no BETWEEN 1 AND 9223372036854775806',"(local_state = 'UNDECIDED' AND OCTET_LENGTH(local_state) = 9) OR (local_state = 'NEVER_MARKED' AND OCTET_LENGTH(local_state) = 12)",'OCTET_LENGTH(request_manifest) <= 65536',"(local_state = 'UNDECIDED' AND local_decided_at IS NULL AND local_reason IS NULL AND local_decided_by IS NULL AND local_attempt_no IS NULL AND local_execution_id IS NULL) OR (local_state = 'NEVER_MARKED' AND local_decided_at IS NOT NULL AND local_reason IS NOT NULL AND ((local_reason = 'PREPARATION_EXHAUSTED' AND OCTET_LENGTH(local_reason) = 21) OR (local_reason = 'TERMINAL_UNMARKED_FAILURE' AND OCTET_LENGTH(local_reason) = 25) OR (local_reason = 'EXPIRED_UNMARKED_ABANDONED' AND OCTET_LENGTH(local_reason) = 26)) AND local_decided_by IS NOT NULL AND local_attempt_no IS NOT NULL)"],
++    policy='固定绑定永不更新；只允许真实完整锁定证明下UNDECIDED一次CAS到NEVER_MARKED，重放原time/reason/actor/attempt，禁止回退/补造历史。FK不证明同会议/spec/marker；领域原子校验完整历史。无执行不造operation/attempt或provider proof；所有旧未决轮仍冻结。manifest内容与UTF16由运行时先界定；无自动清理')
++submission=next(t for t in TABLES if t['name']=='publication_submission')
++for f,name in zip(submission['fks'],('task','publication','confirmation','requester','decider','execution')):
++    f['constraint_name']='fk_publication_submission_'+name
++    if name in ('decider','execution'): f['implicit_restrict']=True
++
+ def cname(t, n): return f"ck_{t['name']}_{n}"
+-def fname(t, n): return f"fk_{t['name']}_{n}"
++def fname(t, n): return t['fks'][n].get('constraint_name', f"fk_{t['name']}_{n}")
+ def auto_increment(t, c):
+     return (t['name'], c['name']) in {('audit_event', 'id'), ('external_operation', 'reconcile_scan_seq')}
+ 
+@@ -468,14 +480,14 @@ def sql():
+         result.append('CREATE TABLE '+t['name']+' (\n'+',\n'.join(lines)+'\n) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;')
+     for t in TABLES:
+         for n,f in enumerate(t['fks']):
+-            result.append(f"ALTER TABLE {t['name']} ADD CONSTRAINT {fname(t,n)} FOREIGN KEY ({','.join(f['cols'])}) REFERENCES {f['target']} ({','.join(f['remote'])}) ON UPDATE RESTRICT ON DELETE RESTRICT;")
++            result.append(f"ALTER TABLE {t['name']} ADD CONSTRAINT {fname(t,n)} FOREIGN KEY ({','.join(f['cols'])}) REFERENCES {f['target']} ({','.join(f['remote'])}){'' if f.get('implicit_restrict') else ' ON UPDATE RESTRICT ON DELETE RESTRICT'};")
+     result.append('INSERT INTO task_outbox_sequence(id,next_id) VALUES(1,1);')
+     return '\n\n'.join(result)+'\n'
+ 
+ def dictionary():
+     out=[f'# AMA 数据字典 — {VERSION}', '', '生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。', '',
+          '全表 InnoDB / utf8mb4_0900_ai_ci；稳定标识使用 utf8mb4_0900_bin（NO PAD），UUID/协议码/哈希用 ascii_bin。每字段的类型中明确覆盖排序规则。DATETIME(6) 一律 UTC；DATE 为 Asia/Shanghai 业务日。默认值 `无` 意味必须由应用明确赋值（可空字段默认 NULL）。主键唯一性的业务依据为稳定实体标识或明确复合业务键；UUID 不承载顺序。LONGTEXT 的物理容量不是产品字数限制。', '',
+-         '全部 FK 均 ON UPDATE RESTRICT / ON DELETE RESTRICT，根与历史不级联；拥有任务负责在同事务验证同会议/同所有者、状态及快照成员关系。字典中无 FK 的 typed ID 和循环当前指针见设计文档“逻辑关系与删除”，不可按裸 ID 绕过鉴权。', '',
++         '全部 FK 立即限制父更新/删除；CHECK引用的publication_submission两个可空FK使用InnoDB默认NO ACTION（等同RESTRICT），其余显式RESTRICT；根与历史不级联；拥有任务负责在同事务验证同会议/同所有者、状态及快照成员关系。字典中无 FK 的 typed ID 和循环当前指针见设计文档“逻辑关系与删除”，不可按裸 ID 绕过鉴权。', '',
+          PROVENANCE_ROOT_RULE, '', '## 表清单与分期', '', '|表|任务|计划迁移|用途|','|---|---|---|---|']
+     for t in TABLES: out.append(f"|{t['name']}|{t['task']}|{t['migration']}|{t['purpose']}|")
+     for t in TABLES:

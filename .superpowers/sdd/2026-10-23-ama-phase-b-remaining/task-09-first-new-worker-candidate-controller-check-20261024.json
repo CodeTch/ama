@@ -1,0 +1,43 @@
+{
+  "checkedUtc": "2026-10-24T05:42:06.392788+00:00",
+  "scope": "Read complete scenario test source, result, sealed XML/custody interval, actual candidate receipt; no test/DB execution",
+  "window": "artifacts/phase-b/b-remaining/task-09/generation-external-green-03",
+  "result": "1 PASS",
+  "candidate": {
+    "task": "ccd1ed0e-db90-4c56-a209-5eed4f09bdda",
+    "realWorker": true,
+    "candidate": "88520952-a88d-49ad-8e04-431c93c9d87a",
+    "state": "PENDING",
+    "provider": "CONTROLLED_HTTP_V1",
+    "rootUnchanged": true
+  },
+  "sourceAssertions": "Real Worker external path using same actual queue/operations/permits identity; actual configured model capacity, controlled HTTP provider/client, real import/confirm/init/enqueue, candidate PENDING/input binding, unchanged full meeting root, AI revision+set, execution SUCCEEDED, ended successful attempt, no result review",
+  "limits": "Isolated source-first composition; seven element categories empty here. Rich graph and negative/rollback/STALE and formal Task10/11 installation remain. This is one source window, not full Task9 acceptance.",
+  "files": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/generation-external-green-03/result.json",
+      "sha256": "3d4106ca6973a57e009c07b68df174e792deb25bd1c7c6cbdb7257ad721cc7ca",
+      "bytes": 344
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/generation-external-green-03/report-custody.json",
+      "sha256": "1b5153909ee80e055633e2eb894c47cca56f99ce00f4377209378e59fe985d21",
+      "bytes": 390
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/generation-external-green-03/integration-tests-TEST-ama.storage.Task09GenerationExternalIT.xml",
+      "sha256": "6cda194bc207a7fffd3c55c0ab50a0ed7d4d60894ac2d8b1f6380eef9fb14896",
+      "bytes": 33363
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/generation-external-green-03/source/backend/integration-tests/src/test/java/ama/storage/Task09GenerationExternalIT.java",
+      "sha256": "b5f87f400b1317b923f5c2ca8fbd43c8e3b056b876f607321523408521425430",
+      "bytes": 5444
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/generation-external-green-03/pipeline-5c962224-a68e-4868-87ca-84fa5a748a69/actual-external-candidate.json",
+      "sha256": "4157f66023f5ba21bfcfb36cb4d2d0f08ca118274728cdf7458f72bb505d4822",
+      "bytes": 187
+    }
+  ]
+}

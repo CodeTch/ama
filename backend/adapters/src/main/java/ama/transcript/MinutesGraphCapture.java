@@ -22,7 +22,12 @@ final class MinutesGraphCapture {
  }
  static Graph captureCurrent(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget){return captureMode(authority,scope,gate,actor,expected,budget,true,null);}
  static Graph captureTask(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,Runnable publication){return captureMode(authority,scope,gate,actor,expected,budget,currentSources,publication);}
- private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,Runnable publication){
+ static Graph capturePublication(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Runnable controls,Runnable tasks){return captureMode(authority,scope,gate,actor,expected,budget,false,null,controls,tasks);}
+ static Graph capturePublicationCurrent(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Runnable controls,Runnable tasks){return captureMode(authority,scope,gate,actor,expected,budget,true,null,controls,tasks);}
+ private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,Runnable publication){return captureMode(authority,scope,gate,actor,expected,budget,currentSources,publication,null,null);}
+ static Graph captureReplacement(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,String publication,Runnable controls,Runnable tasks){return captureMode(authority,scope,gate,actor,expected,budget,true,null,controls,tasks,publication);}
+ private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,Runnable publication,Runnable publicationControls,Runnable publicationTasks){return captureMode(authority,scope,gate,actor,expected,budget,currentSources,publication,publicationControls,publicationTasks,null);}
+ private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,Runnable publication,Runnable publicationControls,Runnable publicationTasks,String replacementPublication){
   authority.requireMinutesScope(scope,gate,actor,expected.meeting());budget.check();
   MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,"meeting",budget);
   var j=new JdbcTemplate(authority.dataSource());j.setQueryTimeout(2);var read=new SavedTranscriptRows(j,budget,authority.readBudget().maxManifestBytes());
@@ -35,11 +40,12 @@ final class MinutesGraphCapture {
    for(var row:expected.tables().getOrDefault(name,List.of()))auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(read.deferRead(control,String.join(" AND ",control.keys().stream().map(k->k+"=?").toList()),String.join(",",control.keys()),1,false,control.keys().stream().map(row::get).toArray()));
   }
   auxiliary.put("publication",read.read(metadata("publication","id","id meeting_id confirmation_id state revision#"),"meeting_id=?","id",1,false,expected.meeting()));
-  if(expected.pending()!=null){require(auxiliary.get("publication").equals(expected.pending().rows().get("publication")),PROVENANCE_UNAVAILABLE);if(!expected.kind().equals("READINESS"))require(auxiliary.get("publication").isEmpty(),CAPABILITY_UNAVAILABLE);}
+  if(expected.pending()!=null){require(auxiliary.get("publication").equals(expected.pending().rows().get("publication")),PROVENANCE_UNAVAILABLE);if(replacementPublication!=null){var existing=auxiliary.get("publication");require(existing.size()==1&&replacementPublication.equals(existing.getFirst().get("id"))&&"FAILED".equals(existing.getFirst().get("state")),CAPABILITY_UNAVAILABLE);}else if(!expected.kind().equals("READINESS"))require(auxiliary.get("publication").isEmpty(),CAPABILITY_UNAVAILABLE);}
   if(publication!=null)publication.run();
   var finalIds=new TreeSet<String>();if(expected.root().get("final_confirmation_id") instanceof String id)finalIds.add(id);for(var row:expected.tables().getOrDefault("final_confirmation",List.of()))finalIds.add((String)row.get("id"));
   MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,"final_confirmation",budget);
   for(String id:finalIds){if(expected.kind().equals("FINAL")&&id.equals(expected.selected()))transfers.add(read.deferRows(Table.FINAL_CONFIRMATION,"id=?","id",1,false,id));else auxiliaryTransfers.computeIfAbsent("final_control",k->new ArrayList<>()).add(read.deferRead(shape(Table.FINAL_CONFIRMATION),"id=?","id",1,false,id));}
+  if(publicationControls!=null)publicationControls.run();
   var byName=new HashMap<String,Table>();for(Table t:Table.values())byName.put(t.sqlName(),t);
   for(String name:DOMAIN_RANK){
    if(name.equals("minutes_revision")||name.equals("element_set")||name.equals("exclusion_revision")){
@@ -58,6 +64,7 @@ final class MinutesGraphCapture {
    }
   }
   for(String name:MinutesSourceRows.RANK){
+   if(name.equals("durable_task")&&publicationTasks!=null)publicationTasks.run();
    MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,name,budget);
    Shape shape=MinutesSourceRows.SHAPES.get(name);var declared=new ArrayList<>(expected.tables().getOrDefault(name,List.of()));
    if(name.equals("external_execution"))declared.sort(Comparator.comparing((Map<String,Object> r)->(String)r.get("operation_id")).thenComparingLong(r->(Long)r.get("execution_no")));

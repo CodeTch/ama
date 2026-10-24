@@ -1,0 +1,60 @@
+{
+  "status": "APPLIED_CONTROLLED_ADMIN_INSTALLATION",
+  "checkedUtc": "2026-10-24T06:52:11.718256+00:00",
+  "issuer": "/root/b_controlled_coordinator under delegated root authority",
+  "invocations": 2,
+  "actualJavaAdminInvocations": 1,
+  "firstPreJavaFailure": "task-09-admin-invocation01-prejava-failure-20261024.json",
+  "secondAuthorization": "task-09-admin-invocation02-root-ack-20261024.json",
+  "executedHelperSha256": "07ac9f72bd90b13c9a9be8fdd115ad0115ff2a1bccbc046f4fcf217969c765c5",
+  "evidence": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/execution-01",
+  "result": {
+    "exit": 0,
+    "envUnchanged": true,
+    "providerStarted": false,
+    "newGenerationEnabled": false
+  },
+  "installation": {
+    "inputSha": "357c37d7f6668c9b964901fc881aaa76f441950c3650a9cc5a3284388e54f8c3",
+    "indexSha": "111a10855e0de56049bb8d9004f4b5ef43e2fa5cb888d024bde9b3f409d1e21c",
+    "templateId": "067313c0-bb33-4b83-8674-47058c6e9a6d",
+    "revisionId": "0f7d6a2b-214e-4bff-ac66-5823755c0718",
+    "promptVersion": "task09.controlled.20261024.prompt",
+    "promptSha": "202f09e192a9d74c0299e2c2dd5311f7e287a3645eaef59c26328cba5171f583",
+    "modelVersion": "task09.controlled.20261024.model",
+    "modelSha": "ba945835cf11621d747c8a3cd27c15ec762384e9467b9485f791317246c085ab",
+    "processingVersion": "b06.controlled.import-txt.1",
+    "processingSha": "2efd9361bb610198a2a59c3fb7256870229a14a1aeb72751dd8f3f4155c13f8e"
+  },
+  "checks": [
+    "privateowner0700 andfiles0600",
+    "providersecret onlyinmemory checkednotinpubliclogs; no value/digestpersisted",
+    "generatedprovider-store empty, provider.readyabsent, no providerstarted",
+    "publicinstallationreceipt exactprivatecopy",
+    "source explicitly validates insertedtemplate/revision/readback, immutablearchive andexistingpermitconfigure transaction before successreceipt",
+    "existing8keyenvunchanged peractualhelper"
+  ],
+  "runtimeBoundary": "Author may resume serialized tests and OAS/source work. This ACK installs controlledtemplate/archive/providersecret+launchconfig/modelcapacity; later exactruntimewindow must use theseactualIDs/pin/config and boundedstartup. Formalnewinitial/newgeneration remainfailclosed pendingreal10/11.",
+  "files": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/execution-01/command.json",
+      "sha256": "adf7cbe2df24a7458d4f6ffc5a1a04578e331bf102914b7ddb34b6e9998edbd5"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/execution-01/result.json",
+      "sha256": "de2db812a4aadc13c3fc917ffe3edb4bf4fde0cd9adfbee4357c770d88a3731e"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/execution-01/installation.json",
+      "sha256": "942089cebaf58b237f316e013f8e60be039e5b4ccf2bf59bda7b1944b47831b9"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/execution-01/stdout.log",
+      "sha256": "942089cebaf58b237f316e013f8e60be039e5b4ccf2bf59bda7b1944b47831b9"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-09/admin-bundle-01/execution-01/stderr.log",
+      "sha256": "3736b6135e3166eb963eec12a66a035a6a3605fa01d339c241b2c05afaf96dfc"
+    }
+  ]
+}

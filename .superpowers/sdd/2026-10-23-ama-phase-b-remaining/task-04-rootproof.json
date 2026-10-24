@@ -1,0 +1,216 @@
+{
+  "base": "2ec38c0350f466fc4292d588051c5694cc099cb5",
+  "head": "59c8b0801398123b1c0190ecbfeba8513f645abd",
+  "author_paths_verified": 623,
+  "source_paths": 32,
+  "java_paths": 28,
+  "evidence_manifest_entries": 589,
+  "committed_blobs_exact": true,
+  "final_java_hashes_identical_across_three_windows": true,
+  "actual_XML_counts": {
+    "final-regressions": {
+      "unit": 0,
+      "IT": 150,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "suites": [
+        {
+          "name": "ama.meeting.MeetingConcurrencyIT",
+          "tests": 5
+        },
+        {
+          "name": "ama.meeting.MeetingRevisionIT",
+          "tests": 30
+        },
+        {
+          "name": "ama.storage.FileRegistryUploadIT",
+          "tests": 39
+        },
+        {
+          "name": "ama.storage.ProcessingIntakeHttpIT",
+          "tests": 20
+        },
+        {
+          "name": "ama.storage.TranscriptAuthorityIT",
+          "tests": 22
+        },
+        {
+          "name": "ama.storage.TranscriptAuthorityReviewIT",
+          "tests": 4
+        },
+        {
+          "name": "ama.task.B06QueueSeamsIT",
+          "tests": 18
+        },
+        {
+          "name": "ama.transcript.ProcessingFactsReaderIT",
+          "tests": 12
+        }
+      ]
+    },
+    "config-restart-final": {
+      "unit": 0,
+      "IT": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "suites": [
+        {
+          "name": "ama.transcript.ConfigArchiveRestartIT",
+          "tests": 1
+        }
+      ]
+    },
+    "all-unit-final-resumed": {
+      "unit": 223,
+      "IT": 0,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "suites": [
+        {
+          "name": "ama.config.file.ControlledArchiveFix1Test",
+          "tests": 4
+        },
+        {
+          "name": "ama.config.file.ControlledConfigArchiveSourceTest",
+          "tests": 24
+        },
+        {
+          "name": "ama.config.json.ArchiveBudgetTest",
+          "tests": 15
+        },
+        {
+          "name": "ama.config.json.ConfigBindingsTest",
+          "tests": 6
+        },
+        {
+          "name": "ama.config.json.ConfigWireReaderTest",
+          "tests": 6
+        },
+        {
+          "name": "ama.config.json.RawHashChainTest",
+          "tests": 25
+        },
+        {
+          "name": "ama.minutes.json.OutputBudgetBoundaryTest",
+          "tests": 16
+        },
+        {
+          "name": "ama.minutes.json.StrictMinutesJsonReaderTest",
+          "tests": 7
+        },
+        {
+          "name": "ama.storage.ManagedBackendIdentityTest",
+          "tests": 4
+        },
+        {
+          "name": "ama.storage.StorageRouterTest",
+          "tests": 8
+        },
+        {
+          "name": "ama.storage.s3.S3LayoutV3Test",
+          "tests": 5
+        },
+        {
+          "name": "ama.storage.s3.S3ProtocolTest",
+          "tests": 4
+        },
+        {
+          "name": "ama.task.TaskMetadataTest",
+          "tests": 2
+        },
+        {
+          "name": "ama.transcript.TextTranscriptParserTest",
+          "tests": 19
+        },
+        {
+          "name": "ama.api.DeploymentConfigTest",
+          "tests": 9
+        },
+        {
+          "name": "ama.api.FileConfigurationTest",
+          "tests": 1
+        },
+        {
+          "name": "ama.api.HttpRevisionTokensTest",
+          "tests": 1
+        },
+        {
+          "name": "ama.api.IdentityContractsTest",
+          "tests": 3
+        },
+        {
+          "name": "ama.api.IdentitySecurityTest",
+          "tests": 6
+        },
+        {
+          "name": "ama.contract.MinutesFactBudgetTest",
+          "tests": 4
+        },
+        {
+          "name": "ama.canonical.CanonicalValueCodecTest",
+          "tests": 5
+        },
+        {
+          "name": "ama.minutes.contract.FinalAndCoverageTest",
+          "tests": 3
+        },
+        {
+          "name": "ama.minutes.contract.GenerationFingerprintTest",
+          "tests": 4
+        },
+        {
+          "name": "ama.minutes.contract.HashProfilesTest",
+          "tests": 6
+        },
+        {
+          "name": "ama.minutes.contract.SourceAndSupportTest",
+          "tests": 7
+        },
+        {
+          "name": "ama.minutes.contract.StoredSourceGraphTest",
+          "tests": 8
+        },
+        {
+          "name": "ama.transcript.BatchFingerprintTest",
+          "tests": 6
+        },
+        {
+          "name": "ama.transcript.TranscriptImportProducerTest",
+          "tests": 1
+        },
+        {
+          "name": "ama.storage.ContractFixtureTest",
+          "tests": 1
+        },
+        {
+          "name": "ama.support.ContractClientTest",
+          "tests": 2
+        },
+        {
+          "name": "ama.worker.PreparedWorkerLoopTest",
+          "tests": 8
+        },
+        {
+          "name": "ama.worker.WorkerLoopTest",
+          "tests": 3
+        }
+      ]
+    }
+  },
+  "distinct_tests": 374,
+  "errors_failures_skips": 0,
+  "protected_unchanged": 4727,
+  "mutable_current_model_exception": "onlypreservedTask2authorizedoutput,d309...",
+  "frozen13_1_unchanged": true,
+  "own_SQL_secret_values_scanned": 2,
+  "own_SQL_secret_hits": 0,
+  "audit_bytes": 6976531,
+  "audit_sha256": "0f10b2f7ab24d4f6f25329695c5ae400881e20a680643bf1cb457cf0097ba668",
+  "review_bytes": 401913,
+  "review_sha256": "89fa6f8b6377ddf6a4273aeda14b982cf0b1da0c2ab9d48171d152d00dcde592",
+  "selected_view_paths": 52,
+  "limits": "FinaltestsboundJava28; finalOpenAPI-onlysize-rangeupdate separatelylint/bundle; postinterruptionownedcontaineroperationalrestore58062->45157notDBrestartqualification; Task5executionNOT_INSTALLED."
+}

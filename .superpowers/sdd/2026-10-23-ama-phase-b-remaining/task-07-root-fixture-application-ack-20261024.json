@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-23T23:50:38.088963+00:00",
+  "status": "ROOT_EXACT_TASK7_FRESH_FIXTURE_APPLICATION_ACK",
+  "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+  "creationGuard": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-fixture-creation-guard-20261024.json",
+  "creationGuardSha256": "d685ad277da7f56979c11dc735e8c0a19fd90d2aa101c1cb0091f470196914e6",
+  "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+  "parentResourceOwner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+  "task7Owner": "task07-0cea85a0e4724e78bd7aa6aabfc243bc",
+  "port": 44727,
+  "schema": "ama_t07_0cea85a0e472_behavior",
+  "url": "jdbc:mysql://127.0.0.1:44727/ama_t07_0cea85a0e472_behavior",
+  "ready": {
+    "aio": 0,
+    "schema": "ama_t07_0cea85a0e472_behavior",
+    "tables": 0,
+    "version": "8.4.6",
+    "serverUuid": "1bdea6eb-cf32-11f1-8fe3-fef4aa4b3a25"
+  },
+  "privateEnv": ".tools/task07-0cea85a0e4724e78bd7aa6aabfc243bc/env.sh",
+  "frozenSQLCount": 15,
+  "authorization": "Task7soleauthor maynormalbootstrapall15exactadoptedresources onthisNEWemptytarget, expect15initial thennormalrerun0/fullown15historyidentical. Captureactualprefix/checksums/script/successagainstshared15 (newinstalledby/timesdiffer), oldsourceimmutable. Onlyexistingtestuser, root.cnfnotforbusiness. No oldfixturecreator/reset/drop/clean/repair/outOfOrder/newSQL/versionallocation/container/credential/PKI. Extraownedtable/schemaonlyrootrulingafteractualgap.",
+  "resourceLimits": "SameexistingownedMySQL768MiBmemory=swap/1CPU256PID; Test/WorkerJVM512MiB2CPU, standalone/native64MiB2CPU. ExistingS3/PKIexactreuse, onlyfreshUUIDcasebuckets/runtime/nativedescendants.",
+  "scopeRuling": "Task7terminalpermitmaintenanceandglobaloutbox tests mustnotoperateonoldshared/Task8rows. DedicatedNEWschema reusedsamecontrolledparentcontainer grants ownershipofallnewfixturedata; guardhonestactualcontainername, neverfakeoldMysqlTestDatabasenamepattern. Shared46653/Task8schemasread-onlyoutsideoldacceptedDDLobservations; overflowMAXneverreuse.",
+  "noNewCredentialValuesOrDigestsEmitted": true
+}

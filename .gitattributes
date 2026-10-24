@@ -21,3 +21,7 @@ artifacts/phase-b/b00-provenance-design-fix1/original-review/task-D-01-provenanc
 # B06.1 separately sealed raw prerequisite evidence.
 /artifacts/phase-b/b06-queue-seams/** -text -whitespace
 /artifacts/phase-b/b06-queue-seams-fix/** -text -whitespace
+
+# Preserve the exact bytes of paused source/review and Task11 evidence snapshots.
+/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/** -text
+/artifacts/phase-b/b-remaining/task-11/** -text

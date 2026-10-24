@@ -1,0 +1,16 @@
+{
+  "command": [
+    "./mvnw",
+    "-B",
+    "-ntp",
+    "-pl",
+    "backend/integration-tests",
+    "-am",
+    "-DskipTests",
+    "test-compile"
+  ],
+  "testsExecuted": 0,
+  "databaseAccess": false,
+  "providerStarts": 0,
+  "startedNs": 1792864174442875941
+}

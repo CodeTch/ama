@@ -1,0 +1,192 @@
+{
+  "status": "PASS_EXACT_ISOLATED_R1_SQL_PROBE_CUSTODY_ONLY",
+  "scope": "Independent read-only custody of one completed exact R1 isolated MySQL 8.4.6 probe; no rerun or database contact.",
+  "owner": "task11-probe-fc2e1fdaf6ad4f88b40a4baf410340d1",
+  "schema": "ama_t11_fc2e1fdaf6ad_probe",
+  "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+  "inputSeals": {
+    "brief": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-actual-custody-brief-20261024.md",
+      "sha256": "8846a82e53f3be511cac87bcd327f43b1dbc30625b9614774b21424f8457a1c2"
+    },
+    "acceptance": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-probe-helper-preparation-acceptance-20261024.md",
+      "sha256": "89cf774863bba0c9283744b05fafd53c20b2c7542b7b26fdae7fbc5171a1108c"
+    },
+    "helper": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024.py",
+      "sha256": "ba481d2e00272b8ce7acbf86da57dbed5fda5a4e3cd1d54d73d28fdd8f8d79a7"
+    },
+    "preparedReport": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-isolated-ddl-probe-prepared-20261024.md",
+      "sha256": "fc6a8e80be818d5d85655944b706c312ba59d79f5844f53ec2819288e95f07c8"
+    },
+    "r1Sql": {
+      "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-11-forward-ddl-proposal-r1-20261024.sql",
+      "sha256": "195bec3b2b85908b708027774a2551bc25e2deda766d2802e3b3f3234befd3c2"
+    },
+    "publicManifest": {
+      "path": "artifacts/phase-b/b-remaining/controller-task11-sql-probe-20261024/manifest.json",
+      "sha256": "8f280464533b807b875839c4176d7e421cf6f1eaca193716776f8c3c461faabb"
+    },
+    "rootAck": {
+      "path": "artifacts/phase-b/b-remaining/controller-task11-sql-probe-20261024/root-application-ack.json",
+      "sha256": "3bf88ca50d3c65e9cff1c18dbbc02cd494b94c3c20ef3f36b5d908af90e60a2f"
+    }
+  },
+  "publicArtifacts": {
+    "all-append-state-seals.json": {
+      "bytes": 75771,
+      "sha256": "2c2e21b4a5f49fb4ff93d99e9b1a027d38851b7182e83b3de8fa8dc885f74d2d"
+    },
+    "execution-receipt.json": {
+      "bytes": 655,
+      "sha256": "ca99377d4ea93b912ca45970ceec70c8d88552645df44773ffca5b9016849c64"
+    },
+    "final-complete-command-case-ledger.json": {
+      "bytes": 756260,
+      "sha256": "2dc47418a340a4e91e064514a49a1dbcfd996f0b2b1b2ce6b68552bfc96daf9d"
+    },
+    "initial-intent.json": {
+      "bytes": 633,
+      "sha256": "fa9688d475a4586254cf5c33ac141111e3f39670fbfa0958cd7f7bfe190b5723"
+    },
+    "manifest.json": {
+      "bytes": 2099,
+      "sha256": "8f280464533b807b875839c4176d7e421cf6f1eaca193716776f8c3c461faabb"
+    },
+    "root-application-ack.json": {
+      "bytes": 671,
+      "sha256": "3bf88ca50d3c65e9cff1c18dbbc02cd494b94c3c20ef3f36b5d908af90e60a2f"
+    }
+  },
+  "checks": {
+    "seal_brief": {
+      "pass": true
+    },
+    "seal_acceptance": {
+      "pass": true
+    },
+    "seal_helper": {
+      "pass": true
+    },
+    "seal_preparedReport": {
+      "pass": true
+    },
+    "seal_r1Sql": {
+      "pass": true,
+      "detail": "Verified actual file hash equals public ACK and final ledger R1 seal."
+    },
+    "seal_publicManifest": {
+      "pass": true
+    },
+    "seal_rootAck": {
+      "pass": true
+    },
+    "manifest_scope": {
+      "pass": true
+    },
+    "public_copies_exact": {
+      "pass": true
+    },
+    "ack_binding": {
+      "pass": true
+    },
+    "root_execution_receipt": {
+      "pass": true
+    },
+    "initial_and_final_binding": {
+      "pass": true
+    },
+    "all_369_seals_and_retention": {
+      "pass": true,
+      "detail": {
+        "states": 369,
+        "bytes": 159570091
+      }
+    },
+    "monotonic_append_prefix_and_final": {
+      "pass": true,
+      "detail": {
+        "transitions": {
+          "(1, 0, 0)": 1,
+          "(0, 0, 0)": 9,
+          "(1, 0, 1)": 231,
+          "(0, 1, 0)": 127
+        }
+      }
+    },
+    "command_and_case_counts": {
+      "pass": true
+    },
+    "selected_resource_fields": {
+      "pass": true
+    },
+    "server_and_schema_absence": {
+      "pass": true
+    },
+    "bounded_confined_command_inputs": {
+      "pass": true,
+      "detail": "All 231 MySQL argv and session guards checked; parent metadata queries use explicit TABLE_SCHEMA, and the exact R1 payload contains a Flyway caution comment but no Flyway command."
+    },
+    "exact_r1_create_bytes": {
+      "pass": true,
+      "detail": "The 4,287 source bytes occur exactly once at byte offset 298 after USE of the owned schema; one SQL separator newline follows."
+    },
+    "effective_parent_keys": {
+      "pass": true
+    },
+    "metadata_19_4_6_6": {
+      "pass": true
+    },
+    "fk_targets_and_rules": {
+      "pass": true
+    },
+    "lob_octet_fixtures": {
+      "pass": true
+    },
+    "outcome_classes": {
+      "pass": true
+    },
+    "positive_accepted_and_rolled_back": {
+      "pass": true
+    },
+    "negative_errors_controls_rollback_residual": {
+      "pass": true,
+      "detail": {
+        "negativeCases": 55,
+        "parentMutationCases": 12
+      }
+    },
+    "negative_error_families": {
+      "pass": true
+    },
+    "no_persisted_submission_after_cases": {
+      "pass": true
+    },
+    "root_secret_scan_record": {
+      "pass": true
+    }
+  },
+  "issues": [],
+  "observed": {
+    "retainedAppendStates": 369,
+    "retainedBytes": 159570091,
+    "allCommands": 232,
+    "mysqlCommands": 231,
+    "caseOutcomes": 127,
+    "directPositives": 17,
+    "validControls": 55,
+    "negatives": 55,
+    "parentMutationNegatives": 12,
+    "rootExecutionExitCode": 0
+  },
+  "limits": [
+    "This establishes exact isolated R1 CREATE, metadata, CHECK, and FK behavior against minimal parent key stubs on the selected MySQL 8.4.6 fixture only.",
+    "It does not qualify the future full 15-file migration prefix, formal version or Flyway history, temporal binding or application writer behavior, replay, privileges, current model synchronization, or Task11 runtime.",
+    "Task7 independent review remains active; Task9 activation has not occurred. Future Task7/9/10 source and prefix repin, formal version freeze, separate application ACK, model and private writer, and publication protocol gates remain open.",
+    "The root private scan record covers six known secret values and PEM patterns; it is not a universal secret scan.",
+    "The prepared report sentence saying four Git blobs is a retained minor wording error; the actual sealed baseline contains five."
+  ],
+  "auditPredicateCorrection": "Initial audit predicates incorrectly required USE in parent information_schema queries, rejected the R1 comment word Flyway, and required the R1 payload at the absolute end despite one separator newline. Source seal independently rechecked against public ACK and final ledger."
+}

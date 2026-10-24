@@ -1,0 +1,22 @@
+{
+  "full16HistoryRerunIdentical": true,
+  "original15VersionDescriptionScriptChecksumSuccessMatchHistoricalTask10": true,
+  "freshInstallationTimesNotComparedToOldSchema": true,
+  "actual19ColumnDefinitionsAnd4CheckAstsMatchCurrentModel": true,
+  "currentGeneratedDDLDictionaryERExact": true,
+  "original15SqlBytesUnchanged": true,
+  "newSqlExactFrozen": true,
+  "newMigration": {
+    "installed_rank": "16",
+    "version": "013.4",
+    "description": "publication submission",
+    "type": "SQL",
+    "script": "V013_4__publication_submission.sql",
+    "checksum": "-1508929526",
+    "installed_by": "ama_t08_848e93aace8b",
+    "installed_on": "2026-10-24T16:46:15",
+    "execution_time": "142",
+    "success": "true"
+  },
+  "qualified": "Fresh normal16+rerun0, structural metadata only; existing isolated29PASS reused, no new row/proof/immutability qualification"
+}

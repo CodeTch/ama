@@ -1,0 +1,18 @@
+{
+  "sources": {
+    "tools/providers/controlled_knowledge.py": {
+      "sha256": "f8b6ec49d177e1a7cb63160fe297e6b98e602b403ba297d2af3c65cf4de047f8",
+      "bytes": 27409
+    },
+    "tools/providers/test_knowledge_transition.py": {
+      "sha256": "d32b2407a6560079d281661f89c9754a6c68a6f1639db24260a19633ba57ba17",
+      "bytes": 3970
+    },
+    "tools/providers/test_knowledge_binding.py": {
+      "sha256": "df9ce0a99d38b5b3c2c02050daaa2258726b1de019e956bc3dfac5d518173a26",
+      "bytes": 2533
+    }
+  },
+  "startNs": 1792870647000354534,
+  "qualification": "pure function/public RFC8032 vectors; no actual credentials/store/network/provider start"
+}

@@ -335,6 +335,18 @@ public final class MinutesContracts {
     public record ReviewFacts(String meetingId,ReviewKind kind,String elementId,String minutesRevisionId,Anchor anchor,List<String> selectedEvidenceIds,StoredProvenanceFacts stored) {
         public ReviewFacts {uuid(meetingId);require(kind!=null&&(elementId==null)!=(minutesRevisionId==null),FailureCode.INPUT_INVALID);if(elementId!=null)uuid(elementId);if(minutesRevisionId!=null)uuid(minutesRevisionId);require((kind==ReviewKind.SOURCE_SUPPORT)==(anchor!=null),FailureCode.TARGET_INVALID);selectedEvidenceIds=List.copyOf(selectedEvidenceIds);require(stored!=null,FailureCode.INVALID_ARGUMENT);}
     }
+    /** Prospective final identity over actual saved facts; deliberately has no source hash or persisted row. */
+    public record FinalDraft(String confirmationId,String meetingId,long meetingRevision,String infoRevisionId,String rosterRevisionId,
+                             String transcriptConfirmationId,String minutesRevisionId,String materialSnapshotId,String elementSetId,
+                             String templateRevisionId,String exclusionRevisionId,String inputFingerprint,String confirmedBy,String confirmedAt,
+                             List<String> reviewIds,StoredProvenanceFacts stored) {
+        public FinalDraft {
+            for(String id:List.of(confirmationId,meetingId,infoRevisionId,rosterRevisionId,transcriptConfirmationId,minutesRevisionId,elementSetId,templateRevisionId,exclusionRevisionId))uuid(id);
+            if(materialSnapshotId!=null)uuid(materialSnapshotId);positive(meetingRevision);hash(inputFingerprint);
+            require(confirmedBy!=null&&!confirmedBy.isBlank()&&confirmedAt!=null&&stored!=null,FailureCode.INVALID_ARGUMENT);
+            reviewIds=List.copyOf(reviewIds);var unique=new HashSet<String>();for(String id:reviewIds){uuid(id);require(unique.add(id),FailureCode.SOURCE_MEMBERSHIP_MISMATCH);}
+        }
+    }
     public record FinalFacts(String confirmationId,StoredProvenanceFacts stored) {public FinalFacts {uuid(confirmationId);require(stored!=null,FailureCode.INVALID_ARGUMENT);}}
 
     public record GraphBudget(CanonicalBudget canonical,int maxOriginDepth,long maxOriginNodes,long maxAggregateFacts) {

@@ -1,0 +1,274 @@
+{
+  "status": "PASS_EXACT_RECOVERY_AND_SELECTED_DEPENDENCY_CLOSURE",
+  "createdUtc": "2026-10-23T23:40:23.707485+00:00",
+  "commit": "da15415524f4727c2504cd3f5cba978f1a5adb76",
+  "originalPublicManifestSha256": "4532bc29de3e81c6cfee85b184be3d4a0aeaf1a37329af4a847ff7ec40d15f03",
+  "original275DeliveredFilesUnchanged": true,
+  "noProductTestSourceChanges": true,
+  "noTestsDatabaseDockerPrivateEnvironmentOrGitMutation": true,
+  "records": [
+    {
+      "label": "fixture-fairness-green",
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+      "method": "retrospective reconstruction",
+      "provenance": "Generated after execution for review. Retrospective files are NOT original captured raw bytes; historical identity is established only by exact SHA256 equality with the original sealed source.json. Existing-backup versions are read from the retained DA Git object, not claimed historical capture copies.",
+      "recoveredFile": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/fixture-fairness-green.java",
+      "recoveredHash": "8b98d53cf0b0954154d1ee0dc176d719edc78372e15917ccd6b31c486b6588fa",
+      "bytes": 9327,
+      "committedHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+      "patchToCommittedDA": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/fixture-fairness-green-to-DA.diff",
+      "patchSha256": "abd262fd1417d34acd7b12458581cc7a581233bdb513752dc27cf782000e2381",
+      "matchingSelectedWindows": [
+        {
+          "window": "fairness-green",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/fairness-green/source.json",
+          "sourceManifestSha256": "d515ea5491a0931761f13149a8fb5fca0948584dcdb51ace4b42611889e2cb4a",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+          "oldHash": "8b98d53cf0b0954154d1ee0dc176d719edc78372e15917ccd6b31c486b6588fa",
+          "recoveredHash": "8b98d53cf0b0954154d1ee0dc176d719edc78372e15917ccd6b31c486b6588fa"
+        }
+      ]
+    },
+    {
+      "label": "fixture-committed",
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+      "method": "existing backup: exact DA committed blob",
+      "provenance": "Generated after execution for review. Retrospective files are NOT original captured raw bytes; historical identity is established only by exact SHA256 equality with the original sealed source.json. Existing-backup versions are read from the retained DA Git object, not claimed historical capture copies.",
+      "recoveredFile": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/fixture-committed.java",
+      "recoveredHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+      "bytes": 9718,
+      "committedHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+      "patchToCommittedDA": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/fixture-committed-to-DA.diff",
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matchingSelectedWindows": [
+        {
+          "window": "inherited-forward-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/source.json",
+          "sourceManifestSha256": "0f809a5a8bbb8ee4b027deff34c28f18f8cc4c9676fb46a9b69ee456cd735693",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+          "oldHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+          "recoveredHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+        },
+        {
+          "window": "cursor-schema-budget-restart-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/source.json",
+          "sourceManifestSha256": "adb5f658ee2258102c86ee2a7d326c2229bcaa01dca07138f711b491bfc58de8",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+          "oldHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+          "recoveredHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+        },
+        {
+          "window": "cursor-mixed-restart-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/source.json",
+          "sourceManifestSha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+          "oldHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+          "recoveredHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+        },
+        {
+          "window": "historical010-oracle-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/historical010-oracle-final/source.json",
+          "sourceManifestSha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+          "oldHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+          "recoveredHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+        },
+        {
+          "window": "overflow-resume-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/overflow-resume-final/source.json",
+          "sourceManifestSha256": "7388ba2393cf88d0060f4cedcbbb9274986b9d2049d3815f5d64f735f9c68dfd",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+          "oldHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+          "recoveredHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+        },
+        {
+          "window": "overflow-max-complete-atomicity-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/overflow-max-complete-atomicity-final/source.json",
+          "sourceManifestSha256": "cdea0e82283818be5d6e76fca4999d9b8fdcac6fb52f524ab573a9d8b0e8b33b",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+          "oldHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21",
+          "recoveredHash": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+        }
+      ]
+    },
+    {
+      "label": "probe-before-null-fix",
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+      "method": "retrospective reconstruction",
+      "provenance": "Generated after execution for review. Retrospective files are NOT original captured raw bytes; historical identity is established only by exact SHA256 equality with the original sealed source.json. Existing-backup versions are read from the retained DA Git object, not claimed historical capture copies.",
+      "recoveredFile": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/probe-before-null-fix.java",
+      "recoveredHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037",
+      "bytes": 2797,
+      "committedHash": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+      "patchToCommittedDA": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/probe-before-null-fix-to-DA.diff",
+      "patchSha256": "862b1a5f44354563d68f94b24876568c96920af9cd7d73f0662cd1f386165f46",
+      "matchingSelectedWindows": [
+        {
+          "window": "fairness-green",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/fairness-green/source.json",
+          "sourceManifestSha256": "d515ea5491a0931761f13149a8fb5fca0948584dcdb51ace4b42611889e2cb4a",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+          "oldHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037",
+          "recoveredHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037"
+        },
+        {
+          "window": "inherited-forward-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/inherited-forward-final/source.json",
+          "sourceManifestSha256": "0f809a5a8bbb8ee4b027deff34c28f18f8cc4c9676fb46a9b69ee456cd735693",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+          "oldHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037",
+          "recoveredHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037"
+        },
+        {
+          "window": "cursor-schema-budget-restart-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/source.json",
+          "sourceManifestSha256": "adb5f658ee2258102c86ee2a7d326c2229bcaa01dca07138f711b491bfc58de8",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+          "oldHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037",
+          "recoveredHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037"
+        },
+        {
+          "window": "cursor-mixed-restart-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/source.json",
+          "sourceManifestSha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+          "oldHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037",
+          "recoveredHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037"
+        },
+        {
+          "window": "historical010-oracle-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/historical010-oracle-final/source.json",
+          "sourceManifestSha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+          "oldHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037",
+          "recoveredHash": "f2119c65807109042e550981fc7a843f37e585a09c1e2688a4a97e2276016037"
+        }
+      ]
+    },
+    {
+      "label": "probe-committed",
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+      "method": "existing backup: exact DA committed blob",
+      "provenance": "Generated after execution for review. Retrospective files are NOT original captured raw bytes; historical identity is established only by exact SHA256 equality with the original sealed source.json. Existing-backup versions are read from the retained DA Git object, not claimed historical capture copies.",
+      "recoveredFile": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/probe-committed.java",
+      "recoveredHash": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+      "bytes": 2829,
+      "committedHash": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+      "patchToCommittedDA": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/probe-committed-to-DA.diff",
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matchingSelectedWindows": [
+        {
+          "window": "overflow-resume-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/overflow-resume-final/source.json",
+          "sourceManifestSha256": "7388ba2393cf88d0060f4cedcbbb9274986b9d2049d3815f5d64f735f9c68dfd",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+          "oldHash": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+          "recoveredHash": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17"
+        },
+        {
+          "window": "overflow-max-complete-atomicity-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/overflow-max-complete-atomicity-final/source.json",
+          "sourceManifestSha256": "cdea0e82283818be5d6e76fca4999d9b8fdcac6fb52f524ab573a9d8b0e8b33b",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+          "oldHash": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17",
+          "recoveredHash": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17"
+        }
+      ]
+    },
+    {
+      "label": "cursor-schema-window",
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+      "method": "retrospective reconstruction",
+      "provenance": "Generated after execution for review. Retrospective files are NOT original captured raw bytes; historical identity is established only by exact SHA256 equality with the original sealed source.json. Existing-backup versions are read from the retained DA Git object, not claimed historical capture copies.",
+      "recoveredFile": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/cursor-schema-window.java",
+      "recoveredHash": "726ddd7d2ccd81586def3fda0bee9d9336fd9268c893c46beda878f7a2765f69",
+      "bytes": 16775,
+      "committedHash": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07",
+      "patchToCommittedDA": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/cursor-schema-window-to-DA.diff",
+      "patchSha256": "f48061c91a5c88a76671ade4df6b72e0d64a0bc548cd21c68fef62ee4570f349",
+      "matchingSelectedWindows": [
+        {
+          "window": "cursor-schema-budget-restart-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/cursor-schema-budget-restart-final/source.json",
+          "sourceManifestSha256": "adb5f658ee2258102c86ee2a7d326c2229bcaa01dca07138f711b491bfc58de8",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+          "oldHash": "726ddd7d2ccd81586def3fda0bee9d9336fd9268c893c46beda878f7a2765f69",
+          "recoveredHash": "726ddd7d2ccd81586def3fda0bee9d9336fd9268c893c46beda878f7a2765f69"
+        }
+      ]
+    },
+    {
+      "label": "cursor-passing-window",
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+      "method": "retrospective reconstruction",
+      "provenance": "Generated after execution for review. Retrospective files are NOT original captured raw bytes; historical identity is established only by exact SHA256 equality with the original sealed source.json. Existing-backup versions are read from the retained DA Git object, not claimed historical capture copies.",
+      "recoveredFile": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/cursor-passing-window.java",
+      "recoveredHash": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5",
+      "bytes": 17029,
+      "committedHash": "680de7ef83aeb18635c8848d21904efefa736cb9fb3fe7e67652f953ade2ce07",
+      "patchToCommittedDA": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/cursor-passing-window-to-DA.diff",
+      "patchSha256": "080531ed447d62043dd9d34149097276fa8a09bd2615696ecdca5953eb927245",
+      "matchingSelectedWindows": [
+        {
+          "window": "cursor-mixed-restart-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/cursor-mixed-restart-final/source.json",
+          "sourceManifestSha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+          "oldHash": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5",
+          "recoveredHash": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5"
+        },
+        {
+          "window": "historical010-oracle-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/historical010-oracle-final/source.json",
+          "sourceManifestSha256": "04f75f3bd322541dde397a4ea950462fbefc69fc8f65a2247903b2ef6fbf0aa0",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+          "oldHash": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5",
+          "recoveredHash": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5"
+        },
+        {
+          "window": "overflow-resume-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/overflow-resume-final/source.json",
+          "sourceManifestSha256": "7388ba2393cf88d0060f4cedcbbb9274986b9d2049d3815f5d64f735f9c68dfd",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+          "oldHash": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5",
+          "recoveredHash": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5"
+        },
+        {
+          "window": "overflow-max-complete-atomicity-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/overflow-max-complete-atomicity-final/source.json",
+          "sourceManifestSha256": "cdea0e82283818be5d6e76fca4999d9b8fdcac6fb52f524ab573a9d8b0e8b33b",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08CursorIT.java",
+          "oldHash": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5",
+          "recoveredHash": "66f8b9bcf3a98a26305dd2cd4240649731bff5f0ec7a0d416a47f0870c1312e5"
+        }
+      ]
+    },
+    {
+      "label": "overflow-restore-window",
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08ZOverflowIT.java",
+      "method": "retrospective reconstruction",
+      "provenance": "Generated after execution for review. Retrospective files are NOT original captured raw bytes; historical identity is established only by exact SHA256 equality with the original sealed source.json. Existing-backup versions are read from the retained DA Git object, not claimed historical capture copies.",
+      "recoveredFile": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/sources/overflow-restore-window.java",
+      "recoveredHash": "9f092d0644cf756ebb3af4a9d24c1d21a0d4f75be15eaffbc1e21015574284a6",
+      "bytes": 6238,
+      "committedHash": "3c4f631bd17775e542ebdc6531cf643da9f158d72c56f6be5dd8c43dfed9fd63",
+      "patchToCommittedDA": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/patches/overflow-restore-window-to-DA.diff",
+      "patchSha256": "86aeecbf5d83f153449c0d9e851414b7559a16e61df03eec5aa9a10362a510cb",
+      "matchingSelectedWindows": [
+        {
+          "window": "overflow-resume-final",
+          "originalSourceManifest": "artifacts/phase-b/b-remaining/task-08/overflow-resume-final/source.json",
+          "sourceManifestSha256": "7388ba2393cf88d0060f4cedcbbb9274986b9d2049d3815f5d64f735f9c68dfd",
+          "path": "backend/integration-tests/src/test/java/ama/task/Task08ZOverflowIT.java",
+          "oldHash": "9f092d0644cf756ebb3af4a9d24c1d21a0d4f75be15eaffbc1e21015574284a6",
+          "recoveredHash": "9f092d0644cf756ebb3af4a9d24c1d21a0d4f75be15eaffbc1e21015574284a6"
+        }
+      ]
+    }
+  ],
+  "dependencyClosure": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-test-helper-source-custody-recovery-20261024/dependency-closure.json",
+    "sha256": "97ae4ca0853343c3d3d9ab407b450c19199f122491676b302253a657474b0e1c"
+  },
+  "unrecoveredSelectedHelperVersions": []
+}

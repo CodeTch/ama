@@ -1,0 +1,11 @@
+package ama.transcript;
+import java.util.*;import org.springframework.jdbc.core.JdbcTemplate;import ama.task.PublicationReplacementPolicy.StoredPublicationExecution;
+import static ama.contract.MinutesContracts.*;import static ama.contract.MinutesContracts.FailureCode.*;
+/** Called only after the actual policy has retained its complete root/parent/task union. */
+final class PublicationExecutionRead {
+ static StoredPublicationExecution read(JdbcTemplate j,TranscriptAcquisitionBudget.Ledger budget,long max,String task,String operation,String execution,long number){
+  budget.row(8);var rows=j.queryForList("SELECT OCTET_LENGTH(request_manifest) mb,CHAR_LENGTH(request_manifest) ms,OCTET_LENGTH(CONVERT(request_manifest USING utf16))/2 mu,COALESCE(OCTET_LENGTH(no_effect_evidence),0) eb,COALESCE(CHAR_LENGTH(no_effect_evidence),0) es,COALESCE(OCTET_LENGTH(CONVERT(no_effect_evidence USING utf16))/2,0) eu FROM external_execution WHERE id=? AND task_id=? AND operation_id=? AND execution_no=? FOR UPDATE",execution,task,operation,number);require(rows.size()==1,PROVENANCE_UNAVAILABLE);var r=rows.getFirst();long mb=n(r,"mb"),ms=n(r,"ms"),mu=n(r,"mu"),eb=n(r,"eb"),es=n(r,"es"),eu=n(r,"eu");require(mb>0&&mb<=Math.min(65536,max)&&eb<=Math.min(65536,max),BUDGET_EXCEEDED);budget.text(mb,ms,mu,2,false);if(eb>0)budget.text(eb,es,eu,2,false);
+  var actual=j.queryForList("SELECT request_manifest,no_effect_evidence FROM external_execution WHERE id=? AND task_id=? AND operation_id=? AND execution_no=? AND OCTET_LENGTH(request_manifest)=? AND CHAR_LENGTH(request_manifest)=? AND OCTET_LENGTH(CONVERT(request_manifest USING utf16))/2=? AND COALESCE(OCTET_LENGTH(no_effect_evidence),0)=? AND COALESCE(CHAR_LENGTH(no_effect_evidence),0)=? AND COALESCE(OCTET_LENGTH(CONVERT(no_effect_evidence USING utf16))/2,0)=?",execution,task,operation,number,mb,ms,mu,eb,es,eu);require(actual.size()==1,PROVENANCE_UNAVAILABLE);return new StoredPublicationExecution((String)actual.getFirst().get("request_manifest"),(String)actual.getFirst().get("no_effect_evidence"));
+ }
+ private static long n(Map<String,Object> r,String k){require(r.get(k) instanceof Number,BUDGET_EXCEEDED);return ((Number)r.get(k)).longValue();}
+}

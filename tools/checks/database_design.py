@@ -11,7 +11,7 @@ import re
 import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VERSION = 'B00-1.6-reconcile-scan'
+VERSION = 'B00-1.7-publication-submission'
 PROVENANCE_ROOT_RULE = 'R1上下文根：所有纳入minutes_element.source_context_id无论证据数量均为basis根，与域内精确usage上下文取并集。ROWSET v2/PINNED用已保存输入要素集全部basis及set证据/目录，排除body/applied exclusion；REVIEW_SOURCES仅选定复核要素basis及精确相交证据（正文复核无要素basis）；FINAL用全部冻结纳入要素basis及既有body/set证据、目录、applied exclusion。各根完整context/selection/profile按实际完整PK去重及unsigned UTF8排序，缺失/额外行拒绝；无usage的basis同样验证并保留依赖。basis不伪造EVIDENCE、不增加usage数、不授予支持信用；草稿仍无自身fingerprint/TaskSpec，祖先按图依赖判断。'
 TABLES = []
 ID = 'char(36) CHARACTER SET ascii COLLATE ascii_bin'
@@ -444,8 +444,20 @@ table('meeting_minutes_editor_guard','B-03/B-07/runtime Task2','V013.1','持久�
     policy='新建会议原事务插入0；真正授权编辑意图在根锁下由未知写1或严格递增，无减少/重置/超时/删除。上限前条件增量且一行，否则关闭失败；无默认。创建重放和旧行读取不补零；缺TABLE为schema unavailable。逻辑删除保留，只有永久删除父时协调清理；epoch不授予权限')
 
 
+# Task11 formally frozen V013.4; immutable acceptance plus one-way local decision.
+table('publication_submission','B-08/runtime Task11','V013.4','真实受理任务的不可变发布绑定与未标记本地终结',[
+    ref('task_id','真实受理任务；无执行时也存在'),ref('publication_id','唯一发布根'),num('submission_no','每发布根正数序号；上限9223372036854775806'),ref('confirmation_id','本次固定最终确认'),code('provider_id','显式配置提供方'),col('business_key',KEY,'publicationId:confirmationId'),col('library_id',KEY,'真实库ID'),col('folder_id',KEY,'真实目录ID'),col('requester_id',KEY,'原真实负责人'),fingerprint('logical_request_hash','固定逻辑请求SHA256'),fingerprint('execution_request_hash','固定执行请求SHA256'),text('request_manifest','无正文/秘密的严格绑定清单；最多65536 UTF8 bytes及65536 UTF16 units'),ts('created_at','真实受理UTC时间'),col('local_state','varchar(32) CHARACTER SET ascii COLLATE ascii_bin','UNDECIDED或NEVER_MARKED'),ts('local_decided_at','本地原子终结UTC时间',True),code('local_reason','精确白名单本地原因',True),col('local_decided_by',KEY,'真实fresh授权负责人；不是虚构人工点击',True),num('local_attempt_no','真实队列attempt；未领取允许0',nullable=True),ref('local_execution_id','真实未标记执行；无执行时NULL',True)],
+    pk='task_id',indexes=[idx('publication_submission_number','publication_id,submission_no','完整历史及单调序号',True),idx('publication_submission_undecided','local_state,created_at,task_id','有界恢复扫描'),idx('publication_submission_confirmation','confirmation_id','固定最终确认'),idx('publication_submission_requester','requester_id','原受理人'),idx('publication_submission_decider','local_decided_by','本地授权人'),idx('publication_submission_execution','local_execution_id','真实未标记执行')],
+    fks=[fk('task_id','durable_task'),fk('publication_id','publication'),fk('confirmation_id','final_confirmation'),fk('requester_id','enterprise_identity','enterprise_id'),fk('local_decided_by','enterprise_identity','enterprise_id','MySQL CHECK引用列省略显式action；InnoDB立即NO ACTION等同RESTRICT'),fk('local_execution_id','external_execution',note='MySQL CHECK引用列省略显式action；InnoDB立即NO ACTION等同RESTRICT')],
+    checks=['submission_no BETWEEN 1 AND 9223372036854775806',"(local_state = 'UNDECIDED' AND OCTET_LENGTH(local_state) = 9) OR (local_state = 'NEVER_MARKED' AND OCTET_LENGTH(local_state) = 12)",'OCTET_LENGTH(request_manifest) <= 65536',"(local_state = 'UNDECIDED' AND local_decided_at IS NULL AND local_reason IS NULL AND local_decided_by IS NULL AND local_attempt_no IS NULL AND local_execution_id IS NULL) OR (local_state = 'NEVER_MARKED' AND local_decided_at IS NOT NULL AND local_reason IS NOT NULL AND ((local_reason = 'PREPARATION_EXHAUSTED' AND OCTET_LENGTH(local_reason) = 21) OR (local_reason = 'TERMINAL_UNMARKED_FAILURE' AND OCTET_LENGTH(local_reason) = 25) OR (local_reason = 'EXPIRED_UNMARKED_ABANDONED' AND OCTET_LENGTH(local_reason) = 26)) AND local_decided_by IS NOT NULL AND local_attempt_no IS NOT NULL)"],
+    policy='固定绑定永不更新；只允许真实完整锁定证明下UNDECIDED一次CAS到NEVER_MARKED，重放原time/reason/actor/attempt，禁止回退/补造历史。FK不证明同会议/spec/marker；领域原子校验完整历史。无执行不造operation/attempt或provider proof；所有旧未决轮仍冻结。manifest内容与UTF16由运行时先界定；无自动清理')
+submission=next(t for t in TABLES if t['name']=='publication_submission')
+for f,name in zip(submission['fks'],('task','publication','confirmation','requester','decider','execution')):
+    f['constraint_name']='fk_publication_submission_'+name
+    if name in ('decider','execution'): f['implicit_restrict']=True
+
 def cname(t, n): return f"ck_{t['name']}_{n}"
-def fname(t, n): return f"fk_{t['name']}_{n}"
+def fname(t, n): return t['fks'][n].get('constraint_name', f"fk_{t['name']}_{n}")
 def auto_increment(t, c):
     return (t['name'], c['name']) in {('audit_event', 'id'), ('external_operation', 'reconcile_scan_seq')}
 
@@ -468,14 +480,14 @@ def sql():
         result.append('CREATE TABLE '+t['name']+' (\n'+',\n'.join(lines)+'\n) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;')
     for t in TABLES:
         for n,f in enumerate(t['fks']):
-            result.append(f"ALTER TABLE {t['name']} ADD CONSTRAINT {fname(t,n)} FOREIGN KEY ({','.join(f['cols'])}) REFERENCES {f['target']} ({','.join(f['remote'])}) ON UPDATE RESTRICT ON DELETE RESTRICT;")
+            result.append(f"ALTER TABLE {t['name']} ADD CONSTRAINT {fname(t,n)} FOREIGN KEY ({','.join(f['cols'])}) REFERENCES {f['target']} ({','.join(f['remote'])}){'' if f.get('implicit_restrict') else ' ON UPDATE RESTRICT ON DELETE RESTRICT'};")
     result.append('INSERT INTO task_outbox_sequence(id,next_id) VALUES(1,1);')
     return '\n\n'.join(result)+'\n'
 
 def dictionary():
     out=[f'# AMA 数据字典 — {VERSION}', '', '生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。', '',
          '全表 InnoDB / utf8mb4_0900_ai_ci；稳定标识使用 utf8mb4_0900_bin（NO PAD），UUID/协议码/哈希用 ascii_bin。每字段的类型中明确覆盖排序规则。DATETIME(6) 一律 UTC；DATE 为 Asia/Shanghai 业务日。默认值 `无` 意味必须由应用明确赋值（可空字段默认 NULL）。主键唯一性的业务依据为稳定实体标识或明确复合业务键；UUID 不承载顺序。LONGTEXT 的物理容量不是产品字数限制。', '',
-         '全部 FK 均 ON UPDATE RESTRICT / ON DELETE RESTRICT，根与历史不级联；拥有任务负责在同事务验证同会议/同所有者、状态及快照成员关系。字典中无 FK 的 typed ID 和循环当前指针见设计文档“逻辑关系与删除”，不可按裸 ID 绕过鉴权。', '',
+         '全部 FK 立即限制父更新/删除；CHECK引用的publication_submission两个可空FK使用InnoDB默认NO ACTION（等同RESTRICT），其余显式RESTRICT；根与历史不级联；拥有任务负责在同事务验证同会议/同所有者、状态及快照成员关系。字典中无 FK 的 typed ID 和循环当前指针见设计文档“逻辑关系与删除”，不可按裸 ID 绕过鉴权。', '',
          PROVENANCE_ROOT_RULE, '', '## 表清单与分期', '', '|表|任务|计划迁移|用途|','|---|---|---|---|']
     for t in TABLES: out.append(f"|{t['name']}|{t['task']}|{t['migration']}|{t['purpose']}|")
     for t in TABLES:

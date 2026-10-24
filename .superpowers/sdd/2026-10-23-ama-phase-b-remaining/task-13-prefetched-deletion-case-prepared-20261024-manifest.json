@@ -1,0 +1,69 @@
+{
+  "artifact": "Task 13 prefetched-deletion case preparation",
+  "status": "prepared only; T8SR-M1 OPEN",
+  "source_base_commit": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+  "new_report": {
+    "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-prefetched-deletion-case-prepared-20261024.md",
+    "bytes": 8423,
+    "sha256": "e2b8687e771c4604b769fdf60e873ab1bd444eff26e1bd8b2e50fee89986d673"
+  },
+  "pinned_source": [
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08SchemaIT.java",
+      "ranges": [
+        "31-40"
+      ],
+      "sha256": "b57dcf6ccf26d9f3921134eabae7221f6c445d61b22ed91307a578df59aaaec0"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08Fixture.java",
+      "ranges": [
+        "21-35",
+        "62-71"
+      ],
+      "sha256": "d3f491f439f0eefade56e1d80a4c89b432afe33a7f4b8286a34926788308ee21"
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/task/Task08ProbeSource.java",
+      "ranges": [
+        "12-45"
+      ],
+      "sha256": "859caa9936027143e4cbc5e8f584aaa89294efacc45d818a5a743049bf8c1c17"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+      "ranges": [
+        "24-32",
+        "75-115"
+      ],
+      "sha256": "65908b5abf03625922bb739474e20ae545a84d0f2eccc9c7db84cacc44ded6d5"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java",
+      "ranges": [
+        "20-35"
+      ],
+      "sha256": "05d9965f0d448d37295680288aeb46c79d3908fc943edb6955c10d0fec94bc64"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/JdbcOutbox.java",
+      "ranges": [
+        "19-48"
+      ],
+      "sha256": "a97cf78ab2585e33159027716f1c2e8078af276a97cfacfa3603ee59af272909"
+    },
+    {
+      "path": "backend/adapters/src/main/java/ama/task/TaskTransactionContext.java",
+      "ranges": [
+        "19-23"
+      ],
+      "sha256": "111780076f9b7fd49fc8bc86df24bf25d8e499a4bcc0a2fae12ed811b4214b19"
+    }
+  ],
+  "inputs": [
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-08-independent-review-20261024.md:77-79",
+    ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-13-pending-issue-register-20261024.md:24"
+  ],
+  "execution": "none: no tests/builds/DB/Docker/network/source/Git mutation",
+  "follow_up": "Task 13 implementation, scoped tests, independent review; upstream 7/9/10/11 repin"
+}

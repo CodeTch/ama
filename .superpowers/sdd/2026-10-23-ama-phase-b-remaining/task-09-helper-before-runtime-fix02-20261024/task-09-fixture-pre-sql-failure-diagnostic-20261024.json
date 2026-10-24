@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-24T02:59:07.424517+00:00",
+  "owner": "task09-2d0e28ea775540f8b3525f9344edf5f0",
+  "schema": "ama_t09_2d0e28ea7755_behavior",
+  "booleansOnlyNoPrivateValuesOrValueDigests": {
+    "urlMatchesTask7": true,
+    "containerMatchesCID": false,
+    "ownerMatches": true,
+    "usernameMatchesHelper": true,
+    "passwordNonempty": true,
+    "s3RefMatches": true,
+    "pkiRefMatches": true,
+    "sameAttemptOwnerPathAbsent": true,
+    "sameAttemptSchemaAbsentActualReadOnly": true,
+    "failedBeforeAnyMutatingStatement": true
+  },
+  "statement": "SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='ama_t09_2d0e28ea7755_behavior';",
+  "queryExit": 0,
+  "schemaCount": 0,
+  "helperPosition": "env_clone before schema absence read, owner mkdir, preSQL intent, CREATE or GRANT",
+  "containerRepresentationDiagnosis": {
+    "exactSelectedNameWithoutSlash": true,
+    "exactSelectedNameWithSlash": false,
+    "legacyArbitraryRefAccepted": false
+  }
+}

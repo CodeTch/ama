@@ -1,0 +1,7 @@
+# Task9 requestManifest schema-name interpretation
+
+Ruling: adopted R1 section6.1 explicitly says the safe execution manifest has exactly protocolVersion,providerId,modelIdentity,taskId,inputId,inputFingerprint,requesterId,logicalBusinessKey,payloadSha256,archiveIndexSha256,roots,base. Preserve that exact root field set; do not add schemaVersion merely because the preceding prose names schema ama.minutes-model-execution.v1. That name identifies the fixed registered Task9 parser/codec/producer format and its supported protocolVersion semantics, not an unlisted JSON member. OperationKind remains MINUTES_GENERATE.
+
+The actual ExternalOperationPort PreparedRequest is opaque and imposes no common serialized schemaVersion field. No existing typed canonical request hashing or controlled-envelope supplement is changed. If an actual additional adopted interface requires an explicit member, reconcile that concrete contract separately rather than silently adding one; no such requirement was shown for this question.
+
+Reason: the exact enumerated fields are the more specific normative representation. Cost if wrong: a narrow format correction before source adoption; adding an unreviewed extra root member now would instead contradict the exact schema. This interpretation adds no approval layer, runtime capability, DDL or company protocol. Final Task9 source review receives it with the R1 and envelope supplement.

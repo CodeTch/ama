@@ -1,0 +1,11 @@
+# Task8 selected helper source custody recovery
+
+PASS. Exact historical bytes were recovered for every selected Fixture/ProbeSource version. The earlier Fixture8b98d53c and ProbeSourcef2119c65 are retrospective reconstructions from known edits; each full file matches its original source.json SHA256 exactly. They are expressly **not original captured raw bytes**. Later Fixtured3f491f4/ProbeSource859caa99 are exact retained DA committed blobs and match their window seals.
+
+The proof also reconstructs exact Cursor726ddd7d (Schema/Budget window), Cursor66f8b9bc (passing Cursor window), and Overflow9f092d06 (selected restore window). Full files and precise patches to DA are retained. Cursor cursor/position/active helper lines are byte-identical across recovered windows and DA; the selected Overflow restore method is byte-identical to DA. Thus unrelated Cursor/Overflow test edits are excluded by the concrete selected dependency closure, not by whole-class semantic-equivalence assertions. The seven windows still contribute104 selected cases; this recovery executes none.
+
+Fixture's precise delta is marker setup diagnostics. ProbeSource's precise delta is Map.copyOf(params) to immutable TreeMap snapshot, permitting actual null parameter values; no claim that these implementations are equivalent for all inputs is made. Dependency closure shows inherited tests use only Fixture.dataSource (unchanged bytes), their own nested proxy, and no Task08ProbeSource; historical010 uses its own source class. The interrupted Schema/Budget window uses only the recovered Cursor static helpers, not changed Cursor tests. The selected restore method does not call Cursor at all; final MAX calls only the byte-identical static helpers. No unit Test source references Task08.
+
+All275 original DA delivery files, original reports and original manifest remain unchanged. No product/test source edits, reruns, DB/Docker/private-environment access, Git stage or commit occurred. New proof is confined to task-08-test-helper-source-custody-recovery-20261024/ and this report. No selected helper source version remains unrecovered.
+
+Manifest: `task-08-test-helper-source-custody-recovery-20261024/manifest.json`; SHA256 `455cae7279dc611f06722a219a95e5602efc2d6968f28614d8f6606f6f773621`.

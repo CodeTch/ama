@@ -1,0 +1,36 @@
+{
+  "exitCode": 0,
+  "processExitCode": 0,
+  "startedNs": 1792873118560529885,
+  "finishedNs": 1792873141006556117,
+  "suites": [
+    {
+      "path": "junit/backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task11PublicationReadTraceIT.xml",
+      "suite": "ama.storage.Task11PublicationReadTraceIT",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task11PublicationReadTraceIT",
+      "reportSha256": "f4193c70c6e1f6c9ec73f139ce531700de06e6e9a13e58739787d0e1eeca417b",
+      "reportMtimeNs": 1792873140568369805,
+      "startedNs": 1792873118560529885,
+      "endedNs": 1792873141006556117,
+      "class": "ama.storage.Task11PublicationReadTraceIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

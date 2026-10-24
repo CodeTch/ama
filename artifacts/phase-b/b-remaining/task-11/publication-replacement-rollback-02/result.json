@@ -1,0 +1,36 @@
+{
+  "exitCode": 0,
+  "processExitCode": 0,
+  "startedNs": 1792870789056589156,
+  "finishedNs": 1792870815667193834,
+  "suites": [
+    {
+      "path": "junit/backend/integration-tests/target/failsafe-reports/TEST-ama.storage.Task11ReplacementRollbackIT.xml",
+      "suite": "ama.storage.Task11ReplacementRollbackIT",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.storage.Task11ReplacementRollbackIT",
+      "reportSha256": "ab01cc664fe78cb0ffc065760626a5b639ec013bfe76a80bdbc07fd41129f63a",
+      "reportMtimeNs": 1792870815226499325,
+      "startedNs": 1792870789056589156,
+      "endedNs": 1792870815667193834,
+      "class": "ama.storage.Task11ReplacementRollbackIT",
+      "name": "genuineWorkerMarkerPermitHttpReceiptWritesCompletePrivateCandidate",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

@@ -31,7 +31,7 @@ public final class JdbcTranscriptAuthority {
  private FileRegistry registry;
  private FileBackendCatalog savedBackends;
  private FilePurposePolicy purposes;
- private final ImportTaskDomainPolicy taskPolicy;private final MinutesTaskDomainPolicy minutesTaskPolicy;
+ private final ImportTaskDomainPolicy taskPolicy;private final MinutesTaskDomainPolicy minutesTaskPolicy;private final PublicationTaskDomainPolicy publicationTaskPolicy;
  private final InputBatchFileReferencePolicy policy;
  private static final DateTimeFormatter TIME=DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
  public interface ReservedIntake extends FileRegistry.ReferenceContext {}
@@ -59,7 +59,7 @@ public final class JdbcTranscriptAuthority {
  }
  public record Components(FileRegistry registry,JdbcTranscriptAuthority authority,ProcessingIntakeFacts intake,ProcessingSourceReader sources) {}
  private JdbcTranscriptAuthority(DataSource source,TransactionRunner tx,MeetingAccess access,ArchiveReadBudget budget,CanonicalBudget canonical){
-  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);minutesTaskPolicy=new MinutesTaskDomainPolicy(this,source);
+  this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);minutesTaskPolicy=new MinutesTaskDomainPolicy(this,source);publicationTaskPolicy=new PublicationTaskDomainPolicy(this,source);
  }
  MeetingAccess savedAccess(){return access;}
  public static Components create(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,
@@ -188,6 +188,8 @@ public final class JdbcTranscriptAuthority {
  }
  public ama.task.TaskDomainPolicy taskPolicy(){return taskPolicy;}
  public ama.task.TaskDomainPolicy minutesTaskPolicy(){return minutesTaskPolicy;}
+ public ama.task.TaskDomainPolicy publicationTaskPolicy(){return publicationTaskPolicy;}
+ PublicationTaskDomainPolicy publicationDomain(){return publicationTaskPolicy;}
  MinutesTaskDomainPolicy minutesDomain(){return minutesTaskPolicy;}
  public ama.task.TaskDomainPolicy.PreparedDomain adoptCreated(FileRegistry.LockedMeeting gate,HeldProcessingFacts held,TaskSpec spec){return taskPolicy.adopt(gate,held,spec);}
  public List<FileRegistry.CompletedSource> originals(PreparedIntake prepared){
@@ -290,7 +292,7 @@ public final class JdbcTranscriptAuthority {
  }
 
  /** Minutes capture shares this exact issuer, DataSource holder and genuine B03/B04 gate. */
- enum MinutesWritePurpose { INITIAL_SETTINGS, GENERATION_INPUT, GENERATION_COMPLETION, STALE_RETENTION, ADOPT, REJECT, DISPOSE, EDIT, REVIEW, SETTINGS }
+ enum MinutesWritePurpose { INITIAL_SETTINGS, GENERATION_INPUT, GENERATION_COMPLETION, STALE_RETENTION, ADOPT, REJECT, DISPOSE, EDIT, REVIEW, SETTINGS, FINAL_CONFIRM, PUBLICATION_SUBMIT }
  private final class MinutesScope {
   final Object holder=transaction();final FileRegistry.LockedMeeting gate;final Actor actor;final String meeting;final MeetingAccess.Action action;
   MinutesGraphCapture.Graph graph;TransitionScope transition;MinutesWritePurpose writePurpose;Object preparedWrite;String decidedCandidate;boolean writing;
@@ -314,7 +316,7 @@ public final class JdbcTranscriptAuthority {
  }
  void claimMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph,MinutesWritePurpose purpose,Object prepared){claimMinutesWrite(value,gate,actor,graph,purpose,prepared,null);}
  void claimMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph,MinutesWritePurpose purpose,Object prepared,String selected){
-  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||!scope.meeting.equals(graph.discovery().meeting())||scope.graph!=graph||scope.writing||scope.action!=MeetingAccess.Action.EDIT)throw new IllegalArgumentException("Foreign, expired or reused minutes write invocation");registry.access(gate);Objects.requireNonNull(purpose);Objects.requireNonNull(prepared);String kind=graph.discovery().kind();boolean valid=switch(purpose){case INITIAL_SETTINGS->kind.equals("INITIAL_SETTINGS");case GENERATION_INPUT->kind.equals("CURRENT_GENERATION");case GENERATION_COMPLETION,STALE_RETENTION->kind.equals("STORED_INPUT");case ADOPT->kind.equals("ADOPT");case SETTINGS->Set.of("SETTINGS_TEMPLATE","SETTINGS_EXCLUSIONS").contains(kind);case REVIEW->Set.of("REVIEW_BODY","REVIEW_ELEMENT").contains(kind);case EDIT->Set.of("BODY_EDIT","BODY_RESTORE","SET_EDIT","SET_RESTORE").contains(kind);default->false;};if(!valid)throw new IllegalArgumentException("Wrong minutes invocation purpose");if(selected!=null&&!Set.of(MinutesWritePurpose.ADOPT,MinutesWritePurpose.REJECT,MinutesWritePurpose.DISPOSE).contains(purpose))throw new IllegalArgumentException("Unexpected candidate decision");if(selected!=null&&graph.auxiliary().getOrDefault("generation_candidate",List.of()).stream().filter(row->selected.equals(row.get("id"))).count()!=1)throw new IllegalArgumentException("Undeclared candidate decision");scope.writePurpose=purpose;scope.preparedWrite=prepared;scope.decidedCandidate=selected;scope.writing=true;
+  if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||!scope.meeting.equals(graph.discovery().meeting())||scope.graph!=graph||scope.writing||scope.action!=MeetingAccess.Action.EDIT)throw new IllegalArgumentException("Foreign, expired or reused minutes write invocation");registry.access(gate);Objects.requireNonNull(purpose);Objects.requireNonNull(prepared);String kind=graph.discovery().kind();boolean valid=switch(purpose){case INITIAL_SETTINGS->kind.equals("INITIAL_SETTINGS");case GENERATION_INPUT->kind.equals("CURRENT_GENERATION");case GENERATION_COMPLETION,STALE_RETENTION->kind.equals("STORED_INPUT");case ADOPT->kind.equals("ADOPT");case SETTINGS->Set.of("SETTINGS_TEMPLATE","SETTINGS_EXCLUSIONS").contains(kind);case REVIEW->Set.of("REVIEW_BODY","REVIEW_ELEMENT").contains(kind);case FINAL_CONFIRM->kind.equals("READINESS");case PUBLICATION_SUBMIT->kind.equals("FINAL");case EDIT->Set.of("BODY_EDIT","BODY_RESTORE","SET_EDIT","SET_RESTORE").contains(kind);default->false;};if(!valid)throw new IllegalArgumentException("Wrong minutes invocation purpose");if(selected!=null&&!Set.of(MinutesWritePurpose.ADOPT,MinutesWritePurpose.REJECT,MinutesWritePurpose.DISPOSE).contains(purpose))throw new IllegalArgumentException("Unexpected candidate decision");if(selected!=null&&graph.auxiliary().getOrDefault("generation_candidate",List.of()).stream().filter(row->selected.equals(row.get("id"))).count()!=1)throw new IllegalArgumentException("Undeclared candidate decision");scope.writePurpose=purpose;scope.preparedWrite=prepared;scope.decidedCandidate=selected;scope.writing=true;
  }
  void requireMinutesWrite(Object value,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphCapture.Graph graph){
   if(!(value instanceof JdbcTranscriptAuthority.MinutesScope scope)||scope.issuer()!=this||scope.holder!=transaction()||scope.gate!=gate||!scope.actor.equals(actor)||scope.graph!=graph||!scope.writing)throw new IllegalArgumentException("Foreign or inactive minutes write scope");registry.access(gate);

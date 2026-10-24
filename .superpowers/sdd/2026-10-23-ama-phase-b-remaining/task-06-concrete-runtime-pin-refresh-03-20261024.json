@@ -1,0 +1,84 @@
+{
+  "status": "ADDITIVE_REFRESH_PINNED_CONTROLLED_FUNCTIONAL_TESTS_ONLY",
+  "utc": "2026-10-23T22:06:29.183876+00:00",
+  "priorPin": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-concrete-runtime-pin-refresh-02-20261024.json",
+  "priorPinSha256": "e70e5726e30293ce5d72fec5f0fb515ce0d3b2648b0b92fe2d0ea93c97dd7cc3",
+  "rootProof": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-06-indexed-qualification-rootproof-20261024.json",
+  "rootProofSha256": "2f6beacbe244fae0c449ae999f53f4c656f4318c9d9524beab96e52615974bb0",
+  "candidateProof": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/proof.json",
+  "candidateProofSha256": "eeb54063c3b1872b994f4269af20390249a0bda0b76281345bd3c3f22ad81919",
+  "qualifiedCurrentSourceSeals": {
+    "backend/api/src/main/java/ama/api/TranscriptConfiguration.java": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java": "720a77843bf23829d5ff3da8aae9fbe2ee52855b9eb61fc962475d1024e8f994",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java": "994ea23103299bb4d6c83d3fb313ddc872a5e027278593a30dbb022153d1d968",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java": "bc393ba23f5c1b618bf00cef44c59e45c937feb598a5a20cc161f415d347147f",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+    "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076",
+    "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+    "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+    "backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java": "3b5db92905a817ba9336103cb3c65c2b0e25efe1b8e46e9394e8e3cdabe9d09d",
+    "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java": "7f9d75c0df4fc01fbf16df3cf63edab01fe6eb867c6556998fcfe58b5149caef",
+    "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java": "f53c6ce798e4232a947bcf94662dbf78f630e7959475ba112bafa10a8a2889d9"
+  },
+  "qualifiedByteCopies": {
+    "backend/api/src/main/java/ama/api/TranscriptConfiguration.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/api/src/main/java/ama/api/TranscriptConfiguration.java",
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java",
+    "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java",
+    "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/core/src/main/java/ama/transcript/CorrectionInstallation.java",
+    "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java",
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java",
+    "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java",
+    "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java"
+  },
+  "additionalSourceSeals": [
+    {
+      "path": "backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/adapters/src/main/resources/db/migration/V013_2__task_input_lookup.sql",
+      "sha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+      "bytes": 75
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06IndexedTasksIT.java",
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06IndexedTasksIT.java",
+      "sha256": "e71c48726948e1f90952f65e482fb6d8bbb7a326fec8cad5cb9625dad4306ef4",
+      "bytes": 10496
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixProvenanceIT.java",
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06FixProvenanceIT.java",
+      "sha256": "6df8ef0db5def28886d5e36443611b8a51a3eb33265bc70c72d8b722a256c90a",
+      "bytes": 10553
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06FixFixture.java",
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06FixFixture.java",
+      "sha256": "b21410866e33fde3bc4d030e4c78dce2bf41c5c56da5c2cb4e2f9ce90989b6ef",
+      "bytes": 3119
+    },
+    {
+      "path": "backend/integration-tests/src/test/java/ama/storage/Task06ProbeSource.java",
+      "snapshot": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-indexed/source/backend/integration-tests/src/test/java/ama/storage/Task06ProbeSource.java",
+      "sha256": "650bd7be8d9833841e8a1fcfb2f46f5dde632aa47e15c77ba6134d5c5d280047",
+      "bytes": 5947
+    }
+  ],
+  "rootRead": "FULLREAD candidate19598B, exact5233Bpatch +SavedTranscriptRows7115B +SavedTranscriptGraph13380B +IndexedTasksIT10496B+ProvenanceIT10553B+actualEXPLAIN1348B. New ID-onlyFORCEINDEX reserves65UUID/rows/4copies beforequery; actualproducer union/sort/exactPK+input/subject/state/output checks; surplus/65sentinelbeforetasklocks/body; complete same-holderSFrechecks, postgateview/sourcewriterproof retained. Fixtureexactdiffonly13->14.",
+  "schema": {
+    "actualHistory": 14,
+    "newVersion": "013.2",
+    "newSqlSha256": "11adae7d1d6b46bc7918692593abfbedf84c57a1d79dbe61f46a2c345d68878f",
+    "migrationProof": "1c36d5ee2328d0545b071c0350e1307fbf37490ce1e555694a049e22f1a9192d",
+    "independentPreservation": "2aa97698d0f412fe7bf8b7fb8ffd686e625d0b1c201719842c61228cfd902672",
+    "freshRootHistoryIndexObservation": "bbb322fd9592f002d6be22a274145a099ae4b78b0a888cae6d04f4f7183d4b36"
+  },
+  "observedDirected": "ActualassertionRED1 ->latestGREEN4+1distinctPASS0fail/error/skip/exit0; bothGREENall12qualifiedseamscurrent;15evidenceseals+21observationseals/eightrestorationreceipts262freshIDsverified. ProvenanceGREEN unrelatedIndexedTasksIT olderhash explicitlyretained, notrun/claimedinthatwindow.",
+  "numericQualification": "Original configured16Mi/effectiveUTF8+scalars1Mi, originalcomponentminima/rawrefs/declarations/inventories carried by exactunchanged config/admission/budget/correction/transitions/authority andfixtureonlyhistoryguard13->14. No newindependentperbootrawtuple observation claimed. New indexedcasebounds/SQLbehavioractualdirectedproof only.",
+  "scope": "Continue finalcurrentTask6+namedforwardinheritedcohortonce (Task06*IT if actualclassinventory matches intent), then finalallunitsonce underqualifiedsource/current14schema. Actualinstalledwholepath stilltoobserve. Same2retainedresources/PKI/privateenv/bounds, no browser/company/HA/capacity/fullB/Task6adoption.",
+  "sourceWindowRule": "If only independent testaddition/receipt capture afterthis pin, bind actualwindows accurately; affectedproduction/recipechanges require proportionalrefresh. No perboot/publicapproval/Git-dependent runtime. Keep all oldpins/raw/prefixes unchanged.",
+  "reviewRemaining": "OriginalT6SR01/02+CV01–04 notformallyclosed until sameauthorreport/owncommit and independent scopedSPEC+qualityreview/custody/rootadoption. GlobalOR3edd intermediate neverpinned."
+}

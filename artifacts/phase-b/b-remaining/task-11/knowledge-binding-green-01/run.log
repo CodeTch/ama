@@ -1,0 +1,20 @@
+.E......
+======================================================================
+ERROR: test_original_actual_java_payload (__main__.Binding.test_original_actual_java_payload)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tanren/ama/.worktrees/phase-b-completion/tools/providers/test_knowledge_binding.py", line 9, in test_original_actual_java_payload
+    def test_original_actual_java_payload(self):self.assertEqual(kb.canonical(self.request['payload']),kb.validate_publication_binding(self.request))
+                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tanren/ama/.worktrees/phase-b-completion/tools/providers/controlled_knowledge.py", line 63, in validate_publication_binding
+    value=r['payload'];exact(value,'schemaVersion meeting minutes provenance sections')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tanren/ama/.worktrees/phase-b-completion/tools/providers/controlled_knowledge.py", line 50, in exact
+    if not isinstance(value,dict) or set(value)!=set(keys.split()):raise Denied(400,'INVALID_PROVIDER_RECEIPT')
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+kb.Denied: (400, 'INVALID_PROVIDER_RECEIPT')
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.003s
+
+FAILED (errors=1)

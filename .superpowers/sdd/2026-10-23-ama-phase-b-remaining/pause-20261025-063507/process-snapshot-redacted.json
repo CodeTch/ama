@@ -1,0 +1,57 @@
+{
+  "utc": "2026-10-24T22:35:07.851091+00:00",
+  "rawArgvOrEnvRecorded": false,
+  "processes": [
+    {
+      "pid": 231675,
+      "comm": "python3",
+      "ppid": 230132,
+      "pgid": 231675,
+      "startTicks": "11857780",
+      "repoMention": true,
+      "task11OrMavenMention": true,
+      "classification": "retained controlled KB provider"
+    },
+    {
+      "pid": 249165,
+      "comm": "java",
+      "ppid": 249152,
+      "pgid": 249165,
+      "startTicks": "545708",
+      "repoMention": false,
+      "task11OrMavenMention": false,
+      "classification": "not terminated: no ownership-based stop authorized from this snapshot"
+    },
+    {
+      "pid": 249275,
+      "comm": "node",
+      "ppid": 249274,
+      "pgid": 249262,
+      "startTicks": "546521",
+      "repoMention": true,
+      "task11OrMavenMention": false,
+      "classification": "not terminated: no ownership-based stop authorized from this snapshot"
+    },
+    {
+      "pid": 249796,
+      "comm": "node",
+      "ppid": 249785,
+      "pgid": 249784,
+      "startTicks": "572368",
+      "repoMention": false,
+      "task11OrMavenMention": false,
+      "classification": "not terminated: no ownership-based stop authorized from this snapshot"
+    },
+    {
+      "pid": 582703,
+      "comm": "python3",
+      "ppid": 582701,
+      "pgid": 582703,
+      "startTicks": "13332050",
+      "repoMention": false,
+      "task11OrMavenMention": false,
+      "classification": "not terminated: no ownership-based stop authorized from this snapshot"
+    }
+  ],
+  "limitation": "Limited process snapshot, no DB query/no all-schema zero-debt claim; unrelated existing services preserved."
+}

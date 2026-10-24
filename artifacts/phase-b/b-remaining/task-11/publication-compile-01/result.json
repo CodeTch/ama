@@ -1,0 +1,84 @@
+{
+  "exitCode": 1,
+  "processExitCode": 1,
+  "startedNs": 1792862484355116336,
+  "finishedNs": 1792862498333146191,
+  "suites": [
+    {
+      "path": "junit/backend/core/target/surefire-reports/TEST-ama.minutes.contract.Task11FinalDraftTest.xml",
+      "suite": "ama.minutes.contract.Task11FinalDraftTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "suite": "ama.minutes.contract.Task11FinalDraftTest",
+      "reportSha256": "9eb3597204cab24bcd29bebd8cc9ec4d29198f84cb08442cdcae1920ae546fb2",
+      "reportMtimeNs": 1792862493625518759,
+      "startedNs": 1792862484355116336,
+      "endedNs": 1792862498333146191,
+      "class": "ama.minutes.contract.Task11FinalDraftTest",
+      "name": "newTargetOrHashInvalidatesReviewAndMissingFinalInputFails",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.minutes.contract.Task11FinalDraftTest",
+      "reportSha256": "9eb3597204cab24bcd29bebd8cc9ec4d29198f84cb08442cdcae1920ae546fb2",
+      "reportMtimeNs": 1792862493625518759,
+      "startedNs": 1792862484355116336,
+      "endedNs": 1792862498333146191,
+      "class": "ama.minutes.contract.Task11FinalDraftTest",
+      "name": "latestContraryExactScopeWinsAndPartialReviewsNeverGiveWholeCredit",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.minutes.contract.Task11FinalDraftTest",
+      "reportSha256": "9eb3597204cab24bcd29bebd8cc9ec4d29198f84cb08442cdcae1920ae546fb2",
+      "reportMtimeNs": 1792862493625518759,
+      "startedNs": 1792862484355116336,
+      "endedNs": 1792862498333146191,
+      "class": "ama.minutes.contract.Task11FinalDraftTest",
+      "name": "independentFullFinalProjectionAndFrozenMembershipIgnoresLaterReview",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.minutes.contract.Task11FinalDraftTest",
+      "reportSha256": "9eb3597204cab24bcd29bebd8cc9ec4d29198f84cb08442cdcae1920ae546fb2",
+      "reportMtimeNs": 1792862493625518759,
+      "startedNs": 1792862484355116336,
+      "endedNs": 1792862498333146191,
+      "class": "ama.minutes.contract.Task11FinalDraftTest",
+      "name": "prospectiveMembershipCannotInventOrDuplicateStoredReview",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    },
+    {
+      "suite": "ama.minutes.contract.Task11FinalDraftTest",
+      "reportSha256": "9eb3597204cab24bcd29bebd8cc9ec4d29198f84cb08442cdcae1920ae546fb2",
+      "reportMtimeNs": 1792862493625518759,
+      "startedNs": 1792862484355116336,
+      "endedNs": 1792862498333146191,
+      "class": "ama.minutes.contract.Task11FinalDraftTest",
+      "name": "draftWithoutFinalRowsEqualsOriginalPersistedGoldenProjection",
+      "failure": false,
+      "error": false,
+      "skipped": false
+    }
+  ]
+}

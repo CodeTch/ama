@@ -1,0 +1,74 @@
+{
+  "utc": "2026-10-24T18:09:22.066881+00:00",
+  "qualification": "Post-window readback only for newly successful publication; no original UNKNOWN query or alteration",
+  "local": {
+    "final": "7c0e08bd-94b5-42fe-804b-dc83ac871fca",
+    "stage": "PUBLISHED",
+    "state": "SUCCEEDED",
+    "meeting": "3da9a407-a1f6-42a1-852a-c2b013a8628f",
+    "revision": 3,
+    "execution": "3b2920bc-0f3e-42fd-9719-a2ee311bae28",
+    "operation": "303920e5-5718-487e-a777-18cd6a51ae30",
+    "publication": "7255d632-1a01-4e55-9080-7dc173bcb499",
+    "everPublished": 1,
+    "attemptOutcome": "SUCCESS",
+    "mappingDocument": "doc-b2b635fc3fcaaf513f82637092e92638",
+    "meetingRevision": 13,
+    "mappingAuthority": "ACTIVE"
+  },
+  "remote": {
+    "document": {
+      "id": "doc-b2b635fc3fcaaf513f82637092e92638",
+      "publication": "7255d632-1a01-4e55-9080-7dc173bcb499",
+      "client": "task11-client-4eb92c355faf4bc496ac7e538d00f876",
+      "actor": "task09-0e80f92d-c641-44b1-93b7-5c475ca91f7a",
+      "library": "controlled-library",
+      "folder": "controlled-root",
+      "payload_hash": "2b5004567dbff51891cee4ef18893e31c2c103b83af5e464305302d593febf0e",
+      "result_id": "result-5a7910348168b4e456b36a824644e666"
+    },
+    "documentBytes": 2298,
+    "execution": {
+      "id": "3b2920bc-0f3e-42fd-9719-a2ee311bae28",
+      "publication": "7255d632-1a01-4e55-9080-7dc173bcb499",
+      "key": "7255d632-1a01-4e55-9080-7dc173bcb499:7c0e08bd-94b5-42fe-804b-dc83ac871fca",
+      "number": 1,
+      "client": "task11-client-4eb92c355faf4bc496ac7e538d00f876",
+      "actor": "task09-0e80f92d-c641-44b1-93b7-5c475ca91f7a",
+      "logical_hash": "8766530972adfbc6c13da3d01abce3c02226c0b8b209879ff1e6d474adea00e4",
+      "request_hash": "c944b161fdfd3a2cdbf615c198775d3d157517bba800286eb19bf1a7fa946878",
+      "payload_hash": "2b5004567dbff51891cee4ef18893e31c2c103b83af5e464305302d593febf0e"
+    },
+    "receipt": {
+      "actorId": "task09-0e80f92d-c641-44b1-93b7-5c475ca91f7a",
+      "businessKey": "7255d632-1a01-4e55-9080-7dc173bcb499:7c0e08bd-94b5-42fe-804b-dc83ac871fca",
+      "clientId": "task11-client-4eb92c355faf4bc496ac7e538d00f876",
+      "confirmationId": "7c0e08bd-94b5-42fe-804b-dc83ac871fca",
+      "documentId": "doc-b2b635fc3fcaaf513f82637092e92638",
+      "executionId": "3b2920bc-0f3e-42fd-9719-a2ee311bae28",
+      "executionNo": 1,
+      "executionRequestHash": "c944b161fdfd3a2cdbf615c198775d3d157517bba800286eb19bf1a7fa946878",
+      "folderId": "controlled-root",
+      "libraryId": "controlled-library",
+      "logicalRequestHash": "8766530972adfbc6c13da3d01abce3c02226c0b8b209879ff1e6d474adea00e4",
+      "payloadSha256": "2b5004567dbff51891cee4ef18893e31c2c103b83af5e464305302d593febf0e",
+      "protocol": "ama.controlled-knowledge-receipt.v1",
+      "providerId": "CONTROLLED_KNOWLEDGE_V1",
+      "publicationId": "7255d632-1a01-4e55-9080-7dc173bcb499",
+      "receiptId": "receipt-4255463a836c814d2074724b682bf6c5",
+      "resultId": "result-5a7910348168b4e456b36a824644e666",
+      "state": "SUCCESS",
+      "storeInstanceId": "98863bbd-a519-4553-9a09-1246ab221ec9",
+      "verifiedAt": 1792865297
+    },
+    "slot": {
+      "publication": "7255d632-1a01-4e55-9080-7dc173bcb499",
+      "generation": 1,
+      "key": "7255d632-1a01-4e55-9080-7dc173bcb499:7c0e08bd-94b5-42fe-804b-dc83ac871fca",
+      "logical_hash": "8766530972adfbc6c13da3d01abce3c02226c0b8b209879ff1e6d474adea00e4",
+      "document": "doc-b2b635fc3fcaaf513f82637092e92638"
+    },
+    "documentCountForPublication": 1,
+    "payloadHashVerifiedFromActualStoredBytes": true
+  }
+}

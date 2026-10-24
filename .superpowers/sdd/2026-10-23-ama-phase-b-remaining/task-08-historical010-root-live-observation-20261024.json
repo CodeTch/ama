@@ -1,0 +1,121 @@
+{
+  "timestampUtc": "2026-10-23T23:20:21.000079+00:00",
+  "scope": "Fresh root SELECT-only exacthistorical010schema, selectedownedCIDbounds/owner guard. No migration/reset/DDL/test/businessrow read or mutation. Not originalunmodifiedB05class executionclaim.",
+  "ackSha256": "be461cd4b3a304ef2d92d94d76546ad66f380f643245399f3078d376a33a18d4",
+  "selectedGuard": {
+    "cid": "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad",
+    "running": true,
+    "oom": false,
+    "owner": "task08-848e93aace8b4f0fa34fc548267f3dc5",
+    "memory": 805306368,
+    "memorySwap": 805306368,
+    "nanoCpus": 1000000000,
+    "pidsLimit": 256
+  },
+  "fullHistory": [
+    {
+      "type": "SQL",
+      "script": "V001__foundation.sql",
+      "success": 1,
+      "version": "001",
+      "checksum": 1201435595,
+      "description": "foundation",
+      "installed_by": "ama_t08_848e93aace8b",
+      "installed_on": "2026-10-23 23:15:23.000000",
+      "execution_time": 103,
+      "installed_rank": 1
+    },
+    {
+      "type": "SQL",
+      "script": "V002__identity_acl.sql",
+      "success": 1,
+      "version": "002",
+      "checksum": 1757300424,
+      "description": "identity acl",
+      "installed_by": "ama_t08_848e93aace8b",
+      "installed_on": "2026-10-23 23:15:23.000000",
+      "execution_time": 235,
+      "installed_rank": 2
+    },
+    {
+      "type": "SQL",
+      "script": "V005__tasks_outbox.sql",
+      "success": 1,
+      "version": "005",
+      "checksum": -1999355348,
+      "description": "tasks outbox",
+      "installed_by": "ama_t08_848e93aace8b",
+      "installed_on": "2026-10-23 23:15:24.000000",
+      "execution_time": 471,
+      "installed_rank": 3
+    },
+    {
+      "type": "SQL",
+      "script": "V006__audit_metadata.sql",
+      "success": 1,
+      "version": "006",
+      "checksum": -1744360556,
+      "description": "audit metadata",
+      "installed_by": "ama_t08_848e93aace8b",
+      "installed_on": "2026-10-23 23:15:24.000000",
+      "execution_time": 189,
+      "installed_rank": 4
+    },
+    {
+      "type": "SQL",
+      "script": "V007__identity_sessions.sql",
+      "success": 1,
+      "version": "007",
+      "checksum": 157746768,
+      "description": "identity sessions",
+      "installed_by": "ama_t08_848e93aace8b",
+      "installed_on": "2026-10-23 23:15:25.000000",
+      "execution_time": 756,
+      "installed_rank": 5
+    },
+    {
+      "type": "SQL",
+      "script": "V008__meeting_schema.sql",
+      "success": 1,
+      "version": "008",
+      "checksum": -1747387036,
+      "description": "meeting schema",
+      "installed_by": "ama_t08_848e93aace8b",
+      "installed_on": "2026-10-23 23:15:28.000000",
+      "execution_time": 3374,
+      "installed_rank": 6
+    },
+    {
+      "type": "SQL",
+      "script": "V009__file_schema.sql",
+      "success": 1,
+      "version": "009",
+      "checksum": -287948759,
+      "description": "file schema",
+      "installed_by": "ama_t08_848e93aace8b",
+      "installed_on": "2026-10-23 23:15:31.000000",
+      "execution_time": 3090,
+      "installed_rank": 7
+    },
+    {
+      "type": "SQL",
+      "script": "V010__reliable_execution.sql",
+      "success": 1,
+      "version": "010",
+      "checksum": -1187397378,
+      "description": "reliable execution",
+      "installed_by": "ama_t08_848e93aace8b",
+      "installed_on": "2026-10-23 23:15:35.000000",
+      "execution_time": 3383,
+      "installed_rank": 8
+    }
+  ],
+  "schema": {
+    "version": "8.4.6",
+    "database": "ama_t08_848e93aace8b_historical010",
+    "task6IndexParts": 0,
+    "newOrdinalColumns": 0,
+    "newScanIndexParts": 0
+  },
+  "query": "SET SESSION time_zone='+00:00';\nSELECT JSON_OBJECT('kind','history','row',JSON_OBJECT('installed_rank',installed_rank,'version',version,'description',description,'type',type,'script',script,'checksum',checksum,'installed_by',installed_by,'installed_on',installed_on,'execution_time',execution_time,'success',success)) FROM flyway_schema_history ORDER BY installed_rank;\nSELECT JSON_OBJECT('kind','schema','row',JSON_OBJECT('database',DATABASE(),'version',VERSION(),'newOrdinalColumns',(SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='external_operation' AND COLUMN_NAME='reconcile_scan_seq'),'newScanIndexParts',(SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='external_operation' AND INDEX_NAME='external_reconcile_scan'),'task6IndexParts',(SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='durable_task' AND INDEX_NAME='task_input_lookup')));\n"
+}

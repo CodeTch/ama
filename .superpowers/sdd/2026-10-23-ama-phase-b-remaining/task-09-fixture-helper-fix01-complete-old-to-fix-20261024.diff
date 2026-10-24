@@ -1,0 +1,325 @@
+--- before-fix01/task-09-fixture-provisioning-prepared-20261024.py
++++ fix01/task-09-fixture-provisioning-prepared-20261024.py
+@@ -23,12 +23,17 @@
+ TASK7_OWNER = "task07-0cea85a0e4724e78bd7aa6aabfc243bc"
+ TASK7_SCHEMA = "ama_t07_0cea85a0e472_behavior"
+ TASK7_ENV = TOOLS / TASK7_OWNER / "env.sh"
++TASK5_OWNER = "task05-5237a2db-e8d5-4cbe-b357-b35df5cfcba5"
++TASK5_ENV = TOOLS / TASK5_OWNER / "client.env"
++TASK5_PKI = TOOLS / TASK5_OWNER / "pki"
+ CID = "11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad"
+ IMAGE = "mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9"
+ SERVER_UUID = "1bdea6eb-cf32-11f1-8fe3-fef4aa4b3a25"
+ PORT = 44727
+ PARENT_GUARD = W / "task-07-fixture-creation-guard-20261024.json"
+ PARENT_ACK = W / "task-07-root-fixture-application-ack-20261024.json"
++ADOPTION_ACK = W / "task-07-consumer-activation-root-ack-20261024.json"
++ADOPTION_DOCUMENT = "docs/acceptance/b/task-B-remaining-07-prepared-external-adoption-20261024.md"
+ OWNER_RE = re.compile(r"task09-([0-9a-f]{32})\Z")
+ SCHEMA_RE = re.compile(r"ama_t09_([0-9a-f]{12})_behavior\Z")
+ ASSIGN_RE = re.compile(r"(?:export )?([A-Z][A-Z0-9_]*)=(.*)\Z")
+@@ -40,12 +45,6 @@
+ 
+ def sha(data):
+     return hashlib.sha256(data).hexdigest()
+-
+-
+-def private_file(path):
+-    if path.is_symlink() or not path.is_file() or path.stat().st_mode & 0o077:
+-        fail("private file mode/path guard failed: " + path.name)
+-    return path
+ 
+ 
+ def inside_tools(path, *, existing):
+@@ -60,6 +59,45 @@
+             fail("existing private path resolves outside .tools")
+     elif path.exists() or path.is_symlink():
+         fail("fresh owner path already exists; inspect prior outcome, never retry")
++
++
++def private_owned(path, owner, *, directory=False):
++    root = TOOLS / owner
++    inside_tools(root, existing=True)
++    if (root.is_symlink() or not root.is_dir() or root.stat().st_mode & 0o777 != 0o700
++            or root.resolve(strict=True) != TOOLS.resolve(strict=True) / owner
++            or not path.is_relative_to(root)):
++        fail("private owner root guard failed: " + owner)
++    current = root
++    for part in path.relative_to(root).parts:
++        current = current / part
++        if current.is_symlink() or not current.exists():
++            fail("private path component guard failed: " + current.name)
++        if not current.resolve(strict=True).is_relative_to(root.resolve(strict=True)):
++            fail("private path escapes owner: " + current.name)
++        if current != path and (not current.is_dir() or current.stat().st_mode & 0o077):
++            fail("private intermediate directory guard failed: " + current.name)
++    if directory:
++        if not path.is_dir() or path.stat().st_mode & 0o777 != 0o700:
++            fail("private directory mode/type guard failed: " + path.name)
++    elif not path.is_file() or path.stat().st_mode & 0o777 != 0o600:
++        fail("private file mode/type guard failed: " + path.name)
++    return path
++
++
++def public_file(path):
++    if not path.is_relative_to(TREE) or TREE.is_symlink() or not TREE.is_dir():
++        fail("public evidence tree guard failed")
++    current = TREE
++    for part in path.relative_to(TREE).parts:
++        current = current / part
++        if current.is_symlink() or not current.exists():
++            fail("public evidence symlink/missing guard failed")
++    if not path.is_file() or path.resolve(strict=True) != TREE.resolve(strict=True) / path.relative_to(TREE):
++        fail("public evidence canonical file guard failed")
++    if path.is_relative_to(TOOLS):
++        fail("private path is forbidden as public evidence")
++    return path
+ 
+ 
+ def run(argv, *, sql=None, timeout=20):
+@@ -104,12 +142,10 @@
+     if ports != [{"HostIp": "127.0.0.1", "HostPort": str(PORT)}]:
+         fail("selected parent loopback port guard mismatch")
+     mounts = value.get("mounts")
+-    if not isinstance(mounts, list) or len(mounts) != 2:
++    if not isinstance(mounts, list) or len(mounts) != 2 or not all(isinstance(m, dict) for m in mounts):
+         fail("selected parent mount guard mismatch")
+-    actual_mounts = {(m.get("Source"), m.get("Destination"), m.get("RW")) for m in mounts}
+-    expected_mounts = {(m["Source"], m["Destination"], m["RW"])
+-                       for m in parent["mounts"]}
+-    if actual_mounts != expected_mounts:
++    if sorted(mounts, key=lambda m: m.get("Destination", "")) != sorted(
++            parent["mounts"], key=lambda m: m.get("Destination", "")):
+         fail("selected parent mount guard mismatch")
+     return value
+ 
+@@ -131,6 +167,7 @@
+                    "@@global.partial_revokes, @@global.sql_mode;\n").split("\t")
+     engine = mysql("SELECT SUPPORT FROM information_schema.ENGINES WHERE ENGINE='InnoDB';\n")
+     if (len(fields) != 5 or fields[:4] != ["8.4.6", SERVER_UUID, "0", "0"]
++            or not re.fullmatch(r"[A-Z0-9_,]*", fields[4])
+             or "NO_BACKSLASH_ESCAPES" in fields[4].split(",") or engine != "DEFAULT"):
+         fail("selected MySQL version/AIO/engine/server UUID/grant-mode mismatch")
+     return {"version": fields[0], "serverUuid": fields[1], "aio": 0,
+@@ -153,11 +190,43 @@
+     return {"guardSha256": sha(guard_bytes), "ackSha256": sha(PARENT_ACK.read_bytes())}
+ 
+ 
++def check_adoption(args):
++    # This exact public machine ACK is issued by root only after real Task 7 adoption.
++    if Path(args.task7_adoption_evidence) != ADOPTION_ACK:
++        fail("Task 7 evidence must be the fixed public root ACK")
++    public_file(ADOPTION_ACK)
++    raw = ADOPTION_ACK.read_bytes()
++    if not re.fullmatch(r"[0-9a-f]{64}", args.task7_adoption_sha256) or sha(raw) != args.task7_adoption_sha256:
++        fail("fixed Task 7 root ACK SHA-256 mismatch")
++    try:
++        ack = json.loads(raw)
++    except ValueError:
++        fail("fixed Task 7 root ACK is invalid JSON")
++    if (type(ack) is not dict or type(ack.get("task")) is not int or ack["task"] != 7
++            or ack.get("status") != "COMPLETE_ADOPTED"
++            or ack.get("base") != "de1611a67ba483afe21f3b29bb69c2d32028efef"
++            or type(ack.get("sourceCommit")) is not str
++            or not re.fullmatch(r"[0-9a-f]{40}", ack["sourceCommit"])
++            or type(ack.get("adoptionCommit")) is not str
++            or not re.fullmatch(r"[0-9a-f]{40}", ack["adoptionCommit"])
++            or ack.get("reviewSpec") != "PASS" or ack.get("reviewQuality") != "Approved"
++            or type(ack.get("openCriticalImportant")) is not int
++            or ack["openCriticalImportant"] != 0
++            or ack.get("adoptionDocument") != ADOPTION_DOCUMENT
++            or type(ack.get("adoptionDocumentSha256")) is not str
++            or not re.fullmatch(r"[0-9a-f]{64}", ack["adoptionDocumentSha256"])):
++        fail("fixed Task 7 root ACK completion fields mismatch")
++    document = public_file(TREE / ADOPTION_DOCUMENT)
++    if sha(document.read_bytes()) != ack["adoptionDocumentSha256"]:
++        fail("fixed Task 7 adoption document SHA-256 mismatch")
++    return {"path": str(ADOPTION_ACK), "sha256": sha(raw),
++            "sourceCommit": ack["sourceCommit"], "adoptionCommit": ack["adoptionCommit"],
++            "adoptionDocument": ADOPTION_DOCUMENT,
++            "adoptionDocumentSha256": ack["adoptionDocumentSha256"]}
++
++
+ def env_clone(schema, owner, folder):
+-    inside_tools(TASK7_ENV, existing=True)
+-    if TASK7_ENV.parent.is_symlink() or TASK7_ENV.parent.stat().st_mode & 0o077:
+-        fail("Task 7 owner env directory is not private")
+-    source = private_file(TASK7_ENV)
++    source = private_owned(TASK7_ENV, TASK7_OWNER)
+     raw = source.read_text(encoding="utf-8")
+     if "\x00" in raw:
+         fail("Task 7 env has invalid bytes")
+@@ -187,6 +256,12 @@
+             or not values["AMA_TEST_DATABASE_PASSWORD"]
+             or not values["AMA_TASK07_S3_ENV"] or not values["AMA_TASK07_PKI_ROOT"]):
+         fail("Task 7 env reference/credential guard failed")
++    if (values["AMA_TASK07_S3_ENV"] != str(TASK5_ENV)
++            or values["AMA_TASK07_PKI_ROOT"] != str(TASK5_PKI)):
++        fail("Task 7 S3/PKI references differ from pinned Task 5 owner paths")
++    private_owned(TASK5_ENV, TASK5_OWNER)
++    private_owned(TASK5_PKI, TASK5_OWNER, directory=True)
++    private_owned(TASK5_PKI / "keystore-password", TASK5_OWNER)
+     new_values = {
+         "AMA_TEST_DATABASE_URL": "jdbc:mysql://127.0.0.1:44727/" + schema,
+         "AMA_TEST_DATABASE_USERNAME": values["AMA_TEST_DATABASE_USERNAME"],
+@@ -220,22 +295,17 @@
+         fail("explicit --execute-reviewed-task9-provisioning flag required")
+     if sha(Path(__file__).read_bytes()) != args.approved_helper_sha256:
+         fail("approved helper source SHA-256 mismatch")
+-    evidence = Path(args.task7_adoption_evidence)
+-    if not evidence.is_file() or evidence.is_symlink() or not evidence.resolve().is_relative_to(TREE.resolve()):
+-        fail("Task 7 adoption evidence path guard failed")
+-    if sha(evidence.read_bytes()) != args.task7_adoption_sha256:
+-        fail("Task 7 adoption evidence SHA-256 mismatch")
++    adoption = check_adoption(args)
+     owner_match, schema_match = OWNER_RE.fullmatch(args.owner), SCHEMA_RE.fullmatch(args.schema)
+     if not owner_match or not schema_match or owner_match.group(1)[:12] != schema_match.group(1):
+         fail("fresh Task 9 owner/schema names must share the exact UUID prefix")
+     owner, schema = args.owner, args.schema
+     folder = TOOLS / owner
+     inside_tools(folder, existing=False)
+-    inside_tools(PARENT, existing=True)
+-    if not PARENT.is_dir() or PARENT.stat().st_mode & 0o077:
+-        fail("parent owner directory is not private")
++    private_owned(PARENT, PARENT_OWNER, directory=True)
++    private_owned(PARENT / "secrets", PARENT_OWNER, directory=True)
+     for name in ("root.cnf", "test.cnf"):
+-        private_file(PARENT / "secrets" / name)
++        private_owned(PARENT / "secrets" / name, PARENT_OWNER)
+     records = check_records()
+     before_selected = selected()
+     before_server = server()
+@@ -248,23 +318,30 @@
+     create_sql = "CREATE SCHEMA `" + schema + "` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
+     grant_pattern = schema.replace("_", "\\_")
+     grant_sql = "GRANT ALL PRIVILEGES ON `" + grant_pattern + "`.* TO '" + test_user + "'@'%';"
+-    folder.mkdir(mode=0o700, exist_ok=False)
+-    os.chmod(folder, 0o700)
++    grant_session_sql = ("SET SESSION sql_mode='" + before_server["sqlMode"] + "';\n"
++                         + grant_sql + "\nSELECT @@session.sql_mode;\n")
+     state = {"status": "ATTEMPT_RECORDED_BEFORE_SQL", "owner": owner, "schema": schema,
+              "parentOwner": PARENT_OWNER, "containerId": CID, "port": PORT,
+-             "task7AdoptionEvidence": str(evidence.resolve()),
+-             "task7AdoptionSha256": args.task7_adoption_sha256,
++             "task7Adoption": adoption,
+              "recordHashes": records, "selectedBefore": before_selected,
+              "serverBefore": before_server, "schemaAbsentBefore": True,
+-             "creationSqlWithoutSecrets": [create_sql, grant_sql],
++             "creationSqlWithoutSecrets": [create_sql, grant_session_sql],
+              "privateEnvPath": str(folder / "env.sh"), "privateEnvMode": "0600",
+              "cleanup": "forbidden", "retryProvisioning": "forbidden"}
+-    save_state(folder, state)
++    try:
++        folder.mkdir(mode=0o700, exist_ok=False)
++        os.chmod(folder, 0o700)
++        save_state(folder, state)
++    except BaseException:
++        print("Pre-SQL owner/state creation failed; no SQL was issued. Owner path may exist without state; inspect exact path and do not retry with a new UUID.", file=sys.stderr)
++        raise
+     try:
+         mysql(create_sql + "\n")
+         state["status"] = "SCHEMA_CREATE_RETURNED_GRANT_PENDING"
+         save_state(folder, state)
+-        mysql(grant_sql + "\n")
++        effective_grant_mode = mysql(grant_session_sql)
++        if effective_grant_mode != before_server["sqlMode"]:
++            fail("grant session SQL mode differed after scoped grant; inspect partial outcome")
+         state["status"] = "GRANT_RETURNED_VERIFY_PENDING"
+         save_state(folder, state)
+         after_selected = selected()
+@@ -284,7 +361,8 @@
+         state.update(status="READY_EMPTY_SCHEMA_ROOT_APPLICATION_ACK_PENDING",
+                      selectedAfter=after_selected, serverAfter=after_server,
+                      ready={"schema": schema, "tables": 0, "testPrincipal": test_user + "@%",
+-                            "serverUuid": SERVER_UUID, "engine": "InnoDB", "aio": 0})
++                            "serverUuid": SERVER_UUID, "engine": "InnoDB", "aio": 0,
++                            "grantSessionSqlMode": effective_grant_mode})
+         save_state(folder, state)
+         print("Task 9 empty schema ready; root must issue separate application ACK.")
+         print("State:", folder / "state.json")
+--- before-fix01/task-09-fixture-provisioning-prepared-20261024.md
++++ fix01/task-09-fixture-provisioning-prepared-20261024.md
+@@ -2,22 +2,22 @@
+ 
+ This is root coordination preparation only. The adjacent Python helper has not been executed, and no Task 9 schema, private env, grant, migration, test, model, or product change was made by this preparation. Task 7 remains the sole product author. Root must wait for actual Task 7 adoption, repin the Task 9 source and migration prefix, review the exact helper bytes and this note, and only then decide whether to run the helper. Root separately issues an application ACK after observing the created empty schema; the Task 9 author then performs its normal 15-resource bootstrap.
+ 
+-The helper uses the existing bounded Task 8 MySQL container only: full CID `11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad`, honest name `/ama-test-task08-848e93aace8b4f0fa34fc548267f3dc5`, owner label `task08-848e93aace8b4f0fa34fc548267f3dc5`, pinned MySQL 8.4.6 image, loopback port 44727, InnoDB/AIO 0, server UUID `1bdea6eb-cf32-11f1-8fe3-fef4aa4b3a25`, 768 MiB memory and swap, 1 CPU, 256 PIDs. It verifies selected Docker fields and both before and after SQL server identity against the recorded parent guard and Task 7 root ACK. It does not request another container, network, credential, PKI, or S3 resource. It never uses the older shared 46653 fixture or a fake legacy container name.
++The helper uses the existing bounded Task 8 MySQL container only: full CID `11009a6b34fef0416e651100fbde05a07067dbcbd973f1ba731c08b2281140ad`, honest name `/ama-test-task08-848e93aace8b4f0fa34fc548267f3dc5`, owner label `task08-848e93aace8b4f0fa34fc548267f3dc5`, pinned MySQL 8.4.6 image, loopback port 44727, InnoDB/AIO 0, server UUID `1bdea6eb-cf32-11f1-8fe3-fef4aa4b3a25`, 768 MiB memory and swap, 1 CPU, 256 PIDs. It compares the full selected mount records, including type, source, destination, mode, read/write state, and propagation, with the frozen Task 7 guard. It verifies both before and after SQL server identity against that guard and the Task 7 root fixture ACK. It does not request another container, network, credential, PKI, or S3 resource. It never uses the older shared 46653 fixture or a fake legacy container name.
+ 
+-At future execution, root chooses **one** fresh UUID and passes `task09-<32 lowercase hex>` plus `ama_t09_<first 12 hex>_behavior`. The helper refuses an existing owner path or schema. It verifies the private `.tools` paths, uses the existing Task 8 mounted `root.cnf` and `test.cnf`, and makes only the new empty schema and its grant to the existing Task 8 test principal. It parses the root-created Task 7 env as literal assignments with `shlex`, without sourcing or evaluating it. It accepts only the known Task 7 keys, then writes a Task 9 allowlist env: `AMA_TEST_DATABASE_{URL,USERNAME,PASSWORD}`, exact `AMA_TEST_CONTAINER`, and `AMA_TASK09_{OWNER,RUN_ROOT,S3_ENV,PKI_ROOT}`. The URL points only to the new Task 9 schema; the existing test username/password and S3/PKI reference values are carried unchanged in memory. No Task 7 or Task 8 schema URL is copied. The new env is `0600` in the fresh `0700` owner directory. It never prints, hashes, or places secret values in command arguments or records. The only SQL mutations are the recorded `CREATE SCHEMA` and scoped `GRANT`; no migration, business write, reset, `DROP`, `clean`, `repair`, or `outOfOrder` operation is present.
++At future execution, root chooses **one** fresh UUID and passes `task09-<32 lowercase hex>` plus `ama_t09_<first 12 hex>_behavior`. The helper refuses an existing owner path or schema. It verifies each private input and intermediate directory resolves within its exact `.tools` owner, with Task 8 secrets directory `0700`, cnf files `0600`, Task 7 env `0600`, and the pinned Task 5 `client.env` `0600` and `pki` directory `0700` (plus keystore-password metadata only). It uses the existing Task 8 mounted `root.cnf` and `test.cnf`, and makes only the new empty schema and its grant to the existing Task 8 test principal. It parses the root-created Task 7 env as literal assignments with `shlex`, without sourcing or evaluating it. It accepts only the known Task 7 keys and exact Task 5 S3/PKI references, then writes a Task 9 allowlist env: `AMA_TEST_DATABASE_{URL,USERNAME,PASSWORD}`, exact `AMA_TEST_CONTAINER`, and `AMA_TASK09_{OWNER,RUN_ROOT,S3_ENV,PKI_ROOT}`. The URL points only to the new Task 9 schema; the existing test username/password and S3/PKI reference values are carried unchanged in memory. No Task 7 or Task 8 schema URL is copied. The new env is `0600` in the fresh `0700` owner directory. It never prints, hashes, or places secret values in command arguments or records. The only SQL mutations are the recorded `CREATE SCHEMA` and scoped `GRANT`; no migration, business write, reset, `DROP`, `clean`, `repair`, or `outOfOrder` operation is present.
+ 
+-The explicit execution flag, approved helper SHA-256, Task 7 adoption evidence path and SHA-256, and scoped names are all required. Root should use the exact helper hash from the adjacent manifest after independent static review. The adoption evidence argument is a rooted, hash-checked handoff reference; root must verify that it is an actual completed adoption record, because the helper cannot infer adoption semantics from an arbitrary file. An illustrative future command shape, with values supplied only after those checks, is:
++The explicit execution flag, approved helper SHA-256, exact Task 7 public machine ACK path and SHA-256, and scoped names are all required. The ACK does **not** exist at preparation time. Root must issue `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-consumer-activation-root-ack-20261024.json` only after actual Task 7 adoption. The helper rejects any other evidence path before reading or hashing, checks every path component for symlinks, and requires `task=7`, `status=COMPLETE_ADOPTED`, baseline `de1611a67ba483afe21f3b29bb69c2d32028efef`, 40-character lowercase `sourceCommit` and `adoptionCommit`, `reviewSpec=PASS`, `reviewQuality=Approved`, `openCriticalImportant=0`, and `adoptionDocument=docs/acceptance/b/task-B-remaining-07-prepared-external-adoption-20261024.md` with a matching 64-character SHA-256 of that exact public document. This receipt binds the helper's gate; root still verifies the actual commits, reviews, and readiness when issuing it. Root should use the exact helper hash from the adjacent manifest after independent static review. An illustrative future command shape, with values supplied only after those checks, is:
+ 
+ ```sh
+ python3 .superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-prepared-20261024.py \
+   --execute-reviewed-task9-provisioning \
+   --approved-helper-sha256 '<reviewed helper SHA-256>' \
+-  --task7-adoption-evidence '<actual Task 7 adoption record within tree>' \
+-  --task7-adoption-sha256 '<that record SHA-256>' \
++  --task7-adoption-evidence '/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-consumer-activation-root-ack-20261024.json' \
++  --task7-adoption-sha256 '<exact public root ACK SHA-256>' \
+   --owner 'task09-<fresh 32 lowercase hex>' \
+   --schema 'ama_t09_<same first 12 hex>_behavior'
+ ```
+ 
+-The helper records selected-before fields, server/version/AIO/engine/UUID, `partial_revokes=0`, SQL mode without `NO_BACKSLASH_ESCAPES`, schema absence, and the exact nonsecret creation SQL in private `state.json` **before** issuing SQL. The `CREATE SCHEMA` identifier is the literal new name; the database-level `GRANT` pattern escapes every underscore so it grants that exact schema under MySQL 8.4's [GRANT pattern rules](https://dev.mysql.com/doc/refman/8.4/en/grant.html). For example, `ama_t09_0123456789ab_behavior` grants on `` `ama\_t09\_0123456789ab\_behavior`.* ``. It records phases after schema creation and grant, then verifies selected-after fields and zero tables and writes the private env. Any failure preserves the owner path and an honest partial/unknown status; root must inspect state and actual database outcome. Do not rerun with another UUID to hide an uncertain first attempt, and never drop or clean the partial result. A successful helper result still requires root's separate application ACK before author bootstrap.
++The helper records selected-before fields, server/version/AIO/engine/UUID, `partial_revokes=0`, SQL mode without `NO_BACKSLASH_ESCAPES`, schema absence, and the exact nonsecret creation SQL in private `state.json` **before** issuing SQL. The `CREATE SCHEMA` identifier is the literal new name; the database-level `GRANT` pattern escapes every underscore so it grants that exact schema under MySQL 8.4's [GRANT pattern rules](https://dev.mysql.com/doc/refman/8.4/en/grant.html). For example, `ama_t09_0123456789ab_behavior` grants on `` `ama\_t09\_0123456789ab\_behavior`.* ``. The GRANT invocation first sets the captured safe SQL mode in that same MySQL session, then confirms its effective session mode; it changes no global setting. It records phases after schema creation and grant, then verifies selected-after fields and zero tables and writes the private env. A failure after state creation preserves the owner path and an honest partial/unknown status. If initial owner/state creation fails, the helper explicitly says **no SQL was issued** and the owner path may exist without `state.json`; root inspects that exact path. Do not rerun with another UUID to hide an uncertain first attempt, and never drop or clean the partial result. A successful helper result still requires root's separate application ACK before author bootstrap.
+ 
+ Static preparation here used only source reading, AST parse, and structural checks. Docker, MySQL, private file values, JVM, product source, tests, index, and Git state were not touched.
+--- before-fix01/task-09-fixture-provisioning-prepared-20261024-manifest.json
++++ fix01/task-09-fixture-provisioning-prepared-20261024-manifest.json
+@@ -1,15 +1,19 @@
+ {
+-  "status": "PREPARED_AST_STATIC_ONLY_NOT_EXECUTED",
++  "status": "PREPARED_STATIC_FIX01_NOT_EXECUTED",
+   "base": "de1611a67ba483afe21f3b29bb69c2d32028efef",
+   "scope": "One future Task 9 empty owned schema and scoped grant on the existing Task 8 parent container; root execution waits actual Task 7 adoption and static review.",
+   "files": {
+     "task-09-fixture-provisioning-prepared-20261024.py": {
+-      "bytes": 15021,
+-      "sha256": "bcbcea4a99a370077665d97f3fa3d21e5338eb124d1e0f1f041af0b6040a6208"
++      "bytes": 19505,
++      "sha256": "a868bc63152e65a4ff0b3165811c1f0f5c80e682e922c06fdf66ca8e3f90deac"
+     },
+     "task-09-fixture-provisioning-prepared-20261024.md": {
+-      "bytes": 4764,
+-      "sha256": "6dbed8976efcca6bc10a70b9aa02a234b4694a3f81b9d880f719cc5a8b046b29"
++      "bytes": 6204,
++      "sha256": "1b68e652eb82fca7e8c563a93dc4e62aac834ec2cb8d0dfe8717b528c002eaaf"
++    },
++    "task-09-fixture-helper-fix01-static-20261024.py": {
++      "bytes": 3541,
++      "sha256": "6ec536c7c70931cb63c209e587ed33faefb67546bf619efcb1d789cef8614362"
+     }
+   },
+   "parent": {
+@@ -20,16 +24,17 @@
+   },
+   "execution": "No helper/Docker/MySQL/private values/JVM/product source/model/tests/index/Git operation during preparation.",
+   "staticChecks": [
+-    "ast.parse passed",
+-    "TREE parents[3] resolves to exact phase-b-completion worktree",
+-    "one CREATE SCHEMA and one scoped GRANT SQL construction",
+-    "static example grant pattern ama\\_t09\\_0123456789ab\\_behavior",
+-    "partial_revokes=0 and no NO_BACKSLASH_ESCAPES guard",
+-    "no DROP/CREATE USER/Config.Env/full inspect path",
+-    "explicit execution and approved source hash arguments",
+-    "partial-outcome state retained",
+-    "Task 7 literal env allowlist via shlex; new Task 9 keys only; S3/PKI values preserved in memory"
++    "ast.parse without helper import or execution",
++    "fixed public Task 7 machine ACK fields and exact adoption document hash guard",
++    "all intended private input/intermediate owner paths and modes plus pinned Task 5 S3/PKI reference paths",
++    "complete selected Docker mount dictionary equality with frozen guard",
++    "safe SQL mode bound to same GRANT mysql session; partial_revokes=0 guard",
++    "initial owner/state failure says no SQL issued and may leave exact orphan path",
++    "two pure underscore-escape examples; no Docker/DB/private value access"
+   ],
+   "futureGate": "Root verifies actual Task 7 adoption evidence, repins Task 9 source/prefix, reviews exact helper SHA, executes once with fresh scoped names, inspects actual outcome, and separately issues application ACK before normal 15-resource author bootstrap.",
+-  "uncertainty": "Actual Docker/MySQL/Task 7 private env literal compatibility and Task 7 adoption are intentionally unverified at preparation time; helper fails closed and preserves partial state."
++  "uncertainty": "Actual Task 7 adoption and future root-issued machine ACK, current Task 9 source/prefix, Docker/MySQL/private env compatibility, grant/empty-schema observation, and root application ACK remain future runtime gates.",
++  "fixBaseSnapshot": "task-09-fixture-helper-before-fix01-20261024/snapshot-seal.json",
++  "fixBrief": "task-09-fixture-helper-fix-01-brief-20261024.md",
++  "fixFindings": "task-09-fixture-helper-static-review-20261024.md"
+ }

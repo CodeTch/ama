@@ -25,12 +25,14 @@ final class MinutesGraphDiscovery {
  private final Map<String,List<List<Object>>> memberships=new TreeMap<>();
  private final Map<String,Selector> selectors=new TreeMap<>();
  private final Set<String> queried=new HashSet<>(),identities=new TreeSet<>();
- private long scanned,bytes;private final long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(30);
+ private boolean publicationHistory;private long scanned,bytes;private final long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(30);
  private MinutesGraphDiscovery(DataSource source,String meeting,String kind,String selected,int maximum){
   uuid(meeting);require(maximum>0&&maximum<=100000,INVALID_ARGUMENT);this.j=new JdbcTemplate(source);j.setQueryTimeout(2);this.meeting=meeting;this.kind=kind;this.selected=selected;this.maximum=maximum;
  }
  static Discovery discover(DataSource source,String meeting,String kind,String selected,int maximum){return new MinutesGraphDiscovery(source,meeting,kind,selected,maximum).run();}
  static Discovery discover(DataSource source,String meeting,String kind,String selected,TranscriptAcquisitionBudget limits,ama.contract.ConfigArchiveContracts.ArchiveReadBudget read){var value=new MinutesGraphDiscovery(source,meeting,kind,selected,(int)Math.min(100000,read.maxFactRows()));value.taskMaximum=Math.min(256,limits.tasks());value.fileMaximum=Math.min(64,read.maxBatchFiles());value.revisionMaximum=Math.min(256,limits.revisionNodes());value.depthMaximum=Math.min(128,limits.revisionDepth());value.byteMaximum=Math.min(16777216,Math.min(limits.copyBytes(),Math.min(limits.utf8(),read.maxTotalBytes())));return value.run();}
+ static Discovery publicationHistory(DataSource source,String meeting,String confirmation,TranscriptAcquisitionBudget limits,ama.contract.ConfigArchiveContracts.ArchiveReadBudget read){var value=new MinutesGraphDiscovery(source,meeting,"FINAL",confirmation,(int)Math.min(100000,read.maxFactRows()));value.taskMaximum=Math.min(256,limits.tasks());value.fileMaximum=Math.min(64,read.maxBatchFiles());value.revisionMaximum=Math.min(256,limits.revisionNodes());value.depthMaximum=Math.min(128,limits.revisionDepth());value.byteMaximum=Math.min(16777216,Math.min(limits.copyBytes(),Math.min(limits.utf8(),read.maxTotalBytes())));value.publicationHistory=true;return value.run();}
+ static Discovery identities(Discovery d,Collection<String> additional){var ids=new TreeSet<>(d.identities());ids.addAll(additional);return new Discovery(d.meeting(),d.kind(),d.selected(),d.root(),d.tables(),d.memberships(),Set.copyOf(ids),d.selectors(),d.pending());}
  static Discovery withPending(DataSource source,Discovery d,int taskLimit){var pending=MinutesPendingDiscovery.discover(source,d.meeting(),d.tables().getOrDefault("durable_task",List.of()).stream().map(r->(String)r.get("id")).toList());MinutesDomainCapacity.reserve(MinutesDomainCapacity.merge(d.tables(),pending.rows()),taskLimit,256,null);return new Discovery(d.meeting(),d.kind(),d.selected(),d.root(),d.tables(),d.memberships(),d.identities(),d.selectors(),pending);}
  static List<String> metadataColumns(String table){return DEFINITIONS.get(table).columns();}
  private Discovery run(){
@@ -55,6 +57,7 @@ final class MinutesGraphDiscovery {
    case "FINAL"->parent("final_confirmation",requiredSelection(),1);
    default->throw fail(INVALID_ARGUMENT);
   }
+  if(publicationHistory)children("final_confirmation","meeting_id",meeting,1);
   while(!pending.isEmpty()){
    check();Query query=pending.removeFirst();require(query.depth()<=depthMaximum,BUDGET_EXCEEDED);String queryKey=query.table()+"|"+query.column()+"|"+query.value()+query.qualifier();
    if(!queried.add(queryKey)){if(query.required())require(!memberships.get(queryKey).isEmpty(),PROVENANCE_UNAVAILABLE);continue;}

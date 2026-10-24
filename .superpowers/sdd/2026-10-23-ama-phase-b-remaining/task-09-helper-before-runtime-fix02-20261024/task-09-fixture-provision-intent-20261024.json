@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-24T02:58:17.538755+00:00",
+  "issuedBy": "/root/b_controlled_coordinator underrootdelegation",
+  "base": "cff858e163ca7dea774dcf05c707ef7551956156",
+  "owner": "task09-2d0e28ea775540f8b3525f9344edf5f0",
+  "schema": "ama_t09_2d0e28ea7755_behavior",
+  "helperSha256": "a868bc63152e65a4ff0b3165811c1f0f5c80e682e922c06fdf66ca8e3f90deac",
+  "consumerAckSha256": "24ce0b8a9f15f9a37b43b6b41c62394f87b97d93924473cc08d20165032ab817",
+  "repinCheckSha256": "e82f0b9e671da2a3d33c16c795042f2430bdced60daebe89e5dc37ca2bb250c6",
+  "command": [
+    "python3",
+    "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-09-fixture-provisioning-prepared-20261024.py",
+    "--execute-reviewed-task9-provisioning",
+    "--approved-helper-sha256",
+    "a868bc63152e65a4ff0b3165811c1f0f5c80e682e922c06fdf66ca8e3f90deac",
+    "--task7-adoption-evidence",
+    "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/task-07-consumer-activation-root-ack-20261024.json",
+    "--task7-adoption-sha256",
+    "24ce0b8a9f15f9a37b43b6b41c62394f87b97d93924473cc08d20165032ab817",
+    "--owner",
+    "task09-2d0e28ea775540f8b3525f9344edf5f0",
+    "--schema",
+    "ama_t09_2d0e28ea7755_behavior"
+  ],
+  "authorization": "ONEattemptnewemptyTask9schema+exactgrantusingexistingownedparent/credentials; no bootstrap/businesswrite untilseparateapplicationACK; no alternateUUID/reset/drop/retry."
+}

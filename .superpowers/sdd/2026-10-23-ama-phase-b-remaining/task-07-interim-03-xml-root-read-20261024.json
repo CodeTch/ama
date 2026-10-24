@@ -1,0 +1,324 @@
+{
+  "timestampUtc": "2026-10-24T00:18:47.855152+00:00",
+  "scope": "OnlynewinterimXML beyondfirst11, source/finaladoptionunqualified. Retention10/1ERROR actual unresolvedwindow preserved. No tests/DB/Git/source actions andneveraggregateoverlappingwindows.",
+  "windows": [
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/maintenance-green/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "3d25e6052be39e8d81d0e09bacc8c6b0137882743a439ae04d8954e99dbddeed",
+      "counts": {
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "reconciliationMaintenanceSettlesTerminalDebtWithNoClaimableTasks",
+          "failures": [],
+          "errors": []
+        }
+      ],
+      "receipt.jsonSha256": "a4dd2f13a01146d4790bac3de882d5a5ef60ff3e315fb14dd7eecc5b1708b3de",
+      "source.jsonSha256": "4b80ad347b76a3c0b419b9d4a14cd32156d4e7e0ec0661622e5d731e137dbb8a"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/maintenance-red/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "ab0db23253c50703f03c665de000c9417684d0ef28f5969413dc409c093b77c1",
+      "counts": {
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "reconciliationMaintenanceSettlesTerminalDebtWithNoClaimableTasks",
+          "failures": [
+            "org.opentest4j.AssertionFailedError"
+          ],
+          "errors": []
+        }
+      ],
+      "receipt.jsonSha256": "e128d1eeb80277d0b5185a0b91854671973fd5dcc3db267054d019c96e94d7e7",
+      "source.jsonSha256": "08c0d16eaf1342d8e6404e992b68e1c9eef7122d2b7e26c22cbde74d8e32fb9e"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/prepared-adversarial/integration-tests-TEST-ama.task.Task07PreparedExternalIT.xml",
+      "sha256": "7e6b2ed837aaef2dcf11eb09d80ce618f79768f5bc639d4ba051b88325b2c413",
+      "counts": {
+        "tests": "17",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "receiptOnlyRunsNoDomainWriterEvenWithCurrentAuthority",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "expiredAndCopiedLeaseCannotMark",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "activeOldEpochRemainsStaleAndCannotWrite",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "preparedOutputIsCreatedBeforeValidationAndAttemptEndsAtomically",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "invalidLocalOutputPreservesRemoteSuccessAndReleasesOnlyVerifiedTerminalPermit",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "markerCommitAcknowledgementLossNeverReturnsCallAuthority",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "foreignPreparedRequestAndObservationCannotInvokeWriters",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "terminalCommitAcknowledgementLossReplaysWithoutSecondWriter",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "reconciliationMaintenanceSettlesTerminalDebtWithNoClaimableTasks",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "outputValidationRollbackPreservesMarkerThenSameReceiptWritesOnceDurably",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "privateExecutionContextExpiresAndCannotBeReconstructedOrCrossSource",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "registeredPreparedPolicyCannotBypassMarkerWithLegacyRequest",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "auditRollbackPreservesOutputTaskAttemptAndRemoteState",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "samePreparedFactAfterTerminalAcknowledgementLossReplaysWithoutAnotherWriter",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "actualWorkerOwnsMarkerTransportAndCompletionExactlyOnce",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "flushRollbackPreservesOutputTaskAttemptAndRemoteState",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07PreparedExternalIT",
+          "name": "terminalDebtRecoversWithoutCallerPermitWhileUnknownCapacityRemainsHeld",
+          "failures": [],
+          "errors": []
+        }
+      ],
+      "receipt.jsonSha256": "e18d2da8288992195850614ce1791beb99962a2180101404c80d4bcdb14788c8",
+      "source.jsonSha256": "f32e5461370d495fa87956e34e18617e214ffa6d6732e7634e61343e0b8a0cbe"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/retention-adversarial-green/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "sha256": "9da762cb31ea9c8cd700f2a703904b6045a7251e1a64541c49681d546e2744d0",
+      "counts": {
+        "tests": "10",
+        "failures": "0",
+        "errors": "1",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "receiptOnlyCannotRetainEvenBusinessOnlyStale",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "publicationFreezeDeniesRetention",
+          "failures": [],
+          "errors": [
+            "org.springframework.jdbc.UncategorizedSQLException"
+          ]
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "revokedOwnerNeverWritesCandidate",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "everPublishedDeniesRetention",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "rootRaceBeforeObservationProducesOnlyStaleImmutableGraph",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "cancellationDoesNotBecomeRetentionAuthority",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "businessOnlyStaleRetainsCompletePrivateGraphWithoutChangingRoot",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "fabricatedRetentionCannotInvokeTheRegisteredWriterDirectly",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "currentCompleteCandidateIsPendingAndTaskSuccessIsNotAdoption",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "changedOwnerNeverReattributesTheOriginalGeneration",
+          "failures": [],
+          "errors": []
+        }
+      ],
+      "receipt.jsonSha256": "b4213b62fc9db68e31f1e79e1e4faeecb745e74bd9f3df144bfeb10752aa3cee",
+      "source.jsonSha256": "205ddff0e12d18ee82522579d52a3abb64391d492efb88d105c091bedd3747eb"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/retention-forgery-red/integration-tests-TEST-ama.task.Task07GenerationRetentionIT.xml",
+      "sha256": "9cd756303fb3e3e5830f896e9e37d501325df4fb1e5eaa42da2ffe399f35a369",
+      "counts": {
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07GenerationRetentionIT",
+          "name": "fabricatedRetentionCannotInvokeTheRegisteredWriterDirectly",
+          "failures": [
+            "org.opentest4j.AssertionFailedError"
+          ],
+          "errors": []
+        }
+      ],
+      "receipt.jsonSha256": "d5c410cfd90923c51384fcde7c493a736f44d45ad09a4846099735494108df5f",
+      "source.jsonSha256": "77effcd0b066db5e9c2821aa05b1599df9287d770689ad08b92e029220223ed4"
+    },
+    {
+      "path": "artifacts/phase-b/b-remaining/task-07/worker-races/integration-tests-TEST-ama.task.Task07ExternalWorkerIT.xml",
+      "sha256": "3da12012b03be67532abfc0d1ab3cce583d6567391f3772d2b33507599322814",
+      "counts": {
+        "tests": "8",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "cases": [
+        {
+          "class": "ama.task.Task07ExternalWorkerIT",
+          "name": "closeDuringTransportRetainsLateReceiptWithoutBusinessEffects",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07ExternalWorkerIT",
+          "name": "ordinaryRenewDrainsBeforeMarkerAndQueuedTickCannotCrossHandoff",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07ExternalWorkerIT",
+          "name": "markerAcknowledgementLossSendsNothingAndNeverOrdinaryCompletes",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07ExternalWorkerIT",
+          "name": "schedulerRejectionAfterCommittedMarkerNeverSends",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07ExternalWorkerIT",
+          "name": "settlementWaitsForSelectedOperationRenewalAndLossWins",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07ExternalWorkerIT",
+          "name": "saturatedReconcilerStillMaintainsTerminalReservations",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07ExternalWorkerIT",
+          "name": "operationHeartbeatLossBeforeResponseIsStickyReceiptOnly",
+          "failures": [],
+          "errors": []
+        },
+        {
+          "class": "ama.task.Task07ExternalWorkerIT",
+          "name": "terminalAcknowledgementLossRetriesSameFactAndSettlesWithoutSecondSend",
+          "failures": [],
+          "errors": []
+        }
+      ],
+      "receipt.jsonSha256": "3193105df5b9843e55b59f71b84afbdc3e62b4e1773004c32b3cefe40cc083e6",
+      "source.jsonSha256": "b27c840362f8bea45acbac6410e44d05b35b74e77a53aeb465572f173de664b1"
+    }
+  ]
+}

@@ -1260,6 +1260,27 @@ erDiagram
         char_36_ meeting_id PK,FK
         bigint intent_epoch
     }
+    publication_submission {
+        char_36_ task_id PK,FK
+        char_36_ publication_id FK
+        bigint submission_no
+        char_36_ confirmation_id FK
+        varchar_64_ provider_id
+        varchar_255_ business_key
+        varchar_255_ library_id
+        varchar_255_ folder_id
+        varchar_255_ requester_id FK
+        char_64_ logical_request_hash
+        char_64_ execution_request_hash
+        longtext request_manifest
+        datetime_6_ created_at
+        varchar_32_ local_state
+        datetime_6_ local_decided_at
+        varchar_64_ local_reason
+        varchar_255_ local_decided_by FK
+        bigint local_attempt_no
+        char_36_ local_execution_id FK
+    }
     department o|--o{ department : fk_department_0
     department o|--o{ enterprise_identity : fk_enterprise_identity_0
     enterprise_identity ||--o{ role_assignment : fk_role_assignment_0
@@ -1468,4 +1489,10 @@ erDiagram
     parsed_document ||--o| parsed_document_profile : fk_parsed_document_profile_0
     input_batch ||--o| input_batch_fingerprint_profile : fk_input_batch_fingerprint_profile_0
     meeting ||--o| meeting_minutes_editor_guard : fk_meeting_minutes_editor_guard_0
+    durable_task ||--o| publication_submission : fk_publication_submission_task
+    publication ||--o{ publication_submission : fk_publication_submission_publication
+    final_confirmation ||--o{ publication_submission : fk_publication_submission_confirmation
+    enterprise_identity ||--o{ publication_submission : fk_publication_submission_requester
+    enterprise_identity o|--o{ publication_submission : fk_publication_submission_decider
+    external_execution o|--o{ publication_submission : fk_publication_submission_execution
 ```

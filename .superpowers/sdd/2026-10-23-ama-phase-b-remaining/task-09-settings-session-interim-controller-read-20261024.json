@@ -1,0 +1,147 @@
+{
+  "status": "INTERIM_XML_RECEIPT_CUSTODY_READ",
+  "windows": [
+    {
+      "window": "initial-settings-red-01",
+      "exit": 1,
+      "counts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-red-01/command.json",
+          "sha256": "edaed20a87fc0dda895ea47240037565dbd81ea52e538ae4e1bacc3c430d7e41"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-red-01/result.json",
+          "sha256": "bb40e515184b40b24ad49c0b97e96bcad6f5a46f9df293c7a906dd80de0f3ce2"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-red-01/report-custody.json",
+          "sha256": "8cbcd460764f568c42c60eda9bbfa468e76d37773c1ad76123d57470c0dac602"
+        }
+      ]
+    },
+    {
+      "window": "initial-settings-red-02",
+      "exit": 1,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-red-02/command.json",
+          "sha256": "1601989e2778856a172d6436e0e84127532aa4910efd5ea5963cf161cde37484"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-red-02/result.json",
+          "sha256": "73f3b5dc169327dba60be9663002dcf30da6c08b39fef0d4ace4ae79555bc602"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-red-02/report-custody.json",
+          "sha256": "7a47b8f1bc6760491173296595ae65f4b6bed792439dbbf7e0b86540b9800256"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-red-02/integration-tests-TEST-ama.storage.Task09InitialSettingsIT.xml",
+          "sha256": "409bb91ad0eadc59c3db533448c07d5220f09c459d5a08823c6c34d2c381a52e"
+        }
+      ]
+    },
+    {
+      "window": "initial-settings-green-01",
+      "exit": 0,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-green-01/command.json",
+          "sha256": "661c9261cf51850dc59a061cae0ff2c5785eb9f9b748397921dbcffef9e12b9d"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-green-01/result.json",
+          "sha256": "74f6b57d6bd82223cc5b64b9a064fad044148455775a4d9a09e36f80c30fc102"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-green-01/report-custody.json",
+          "sha256": "1dd2b01ddaf9fd3f1f1f186139ae01e9e117cce0516db652efd98e562a444c8b"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/initial-settings-green-01/integration-tests-TEST-ama.storage.Task09InitialSettingsIT.xml",
+          "sha256": "bc4970e1102d445d51f709b260081708fc6933ebda6e19827ce6b2468c542fb2"
+        }
+      ]
+    },
+    {
+      "window": "session-abort-red-01",
+      "exit": 1,
+      "counts": {
+        "tests": 3,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/session-abort-red-01/command.json",
+          "sha256": "3c4a59538ef273e8d08507264f4a6931e46d6b19724d227433037d8a2d181129"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/session-abort-red-01/result.json",
+          "sha256": "49bf6b7bc340ddd6fd59ffb1ada4bdac264e4b4f2229144626f4dea28eb43942"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/session-abort-red-01/report-custody.json",
+          "sha256": "812cc463470ca4646eb852d4ddfb2a4b6570e4db66d421e716cb32f702d4a8b5"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/session-abort-red-01/integration-tests-TEST-ama.worker.Task09SessionAbortTest.xml",
+          "sha256": "24152579063cb4dabc5cb72d79f29f16bdbb9a6ec0ec44912686212baad21872"
+        }
+      ]
+    },
+    {
+      "window": "session-abort-green-01",
+      "exit": 0,
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "files": [
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/session-abort-green-01/command.json",
+          "sha256": "ec254d0be28fe5a636bf9fd66bbf4af8e8613d69e059906efbe9ad69e1da81d3"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/session-abort-green-01/result.json",
+          "sha256": "5d3aecd93eee028f4e9990a88005b1de30bdcc6fa53fc33a9f33fd7a3072a816"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/session-abort-green-01/report-custody.json",
+          "sha256": "4bb93536942caa89344964f51cff7191ec4e6664cb6ca1d01b1dacdd36ac3217"
+        },
+        {
+          "path": "artifacts/phase-b/b-remaining/task-09/session-abort-green-01/integration-tests-TEST-ama.worker.Task09SessionAbortTest.xml",
+          "sha256": "9f70c400142bb1e6379d13e2f6393dbfb5c61c97cfa031f05151d43f673a39fc"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "initialsettingsRED01 noexecutedtests; RED02 actual2assertfail",
+    "isolatedsource-firstcommands notformalTask10/11installation",
+    "sessionabort component notfullgenuineDBsend/candidatequeuecompletion",
+    "finalsourceclosure/semanticsreviewpending"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "kind": "BOUNDED_PREEXECUTION_AUTHORIZATION_NOT_APPLICATION_ACK",
+  "utc": "2026-10-24T14:54:26.424263+00:00",
+  "coordinator": "/root/b_continuation_coordinator",
+  "sourceCustody": "artifacts/phase-b/b-remaining/task-10/closing02-original-facts/custody.json",
+  "sourceCustodySha256": "924f4da739355b2b0d3827b855727fd1c78b127c2caeb658ed79c5f642f09696",
+  "readbackSha256": "088a0e6b16f02b655bdb76907c5e8b5a1b7fdd0579f9f5a5ca0c28634fdbe209",
+  "allowed": [
+    {
+      "task": "5371fac5-6674-499f-9187-4505749e93f1",
+      "input": "ea22c355-a2f3-4f2b-a203-f56ea4e88d85",
+      "archivePin": "3291ea1f00bd17327ccde6acb71a12f855a9c7f68ef432a2a4d1c7f132ea2370",
+      "providerPort": 46469,
+      "store": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task10-1e48b41fc5c84a98af3a14b51b17884f/provider-test-7700524380455929794",
+      "pipeline": "artifacts/phase-b/b-remaining/task-10/closing-cas-retained-02/pipeline-256c8f8a-870b-478b-99b3-33b0309f880e"
+    },
+    {
+      "task": "fc5cc42c-d03d-4363-8b4d-8d4e5e87d638",
+      "input": "aa59a414-729d-4e55-8df0-670bff82d66f",
+      "archivePin": "6f92a4d5dfad3c6ba2676a4eaeeb7a695b73f78cdaf4320802adf2b6afd20c2f",
+      "providerPort": 45487,
+      "store": "/home/tanren/ama/.worktrees/phase-b-completion/.tools/task10-1e48b41fc5c84a98af3a14b51b17884f/provider-test-13598115174239746984",
+      "pipeline": "artifacts/phase-b/b-remaining/task-10/closing-cas-retained-02/pipeline-5c51bec0-4fbc-4b37-abf0-9d6ca65bda10"
+    }
+  ],
+  "order": "first task5371fac5 recover and actual same-permit settlement, then taskfc5cc42c exact authenticated GET; honest UNKNOWN if absent",
+  "constraints": [
+    "Only exact original HTTP bearer value/store/port. Since original fixture had no bearer file, new sameowner0600 file may contain exact original fixed test bearer. Never replace provider.secret/internal identity.",
+    "Sequential java -Xmx64m -XX:ActiveProcessorCount=2 ama.model.ControlledMinutesProvider, existing legitimate classpath",
+    "Record actual argv/config path permissions/original-auth linkage without private values or secret hashes",
+    "Only genuine ReconciliationLoop/MinutesReconciliationHandler GET-only, noPOST/resend/reset/newcase",
+    "Original terminal provider files before/after exacthashes; actualGET/POST counts; exact task/execution/op/permit identities",
+    "One provider child at a time, bounded window, exact owned PID cleanup only",
+    "No automatic inference of NOT_SENT/NO_EFFECT from absent store/reservation; second unresolved fact remains UNKNOWN/manual if genuine GET absent",
+    "Normal pending metadata shape restored exactly; decisionCandidate-only bounded result scalar; no content read/late lock expansion"
+  ],
+  "applicationStatus": "NOT_EXECUTED_AT_ACK; author actual startup/recovery evidence required",
+  "authCustodyCorrection": {
+    "originalMode": "IN_PROCESS_512MiB_2CPU",
+    "actualOriginalHttpAuth": "Fixed test bearer constant supplied by Task10GenerationFixture constructor; no original bearer file existed",
+    "allowedExactDerivation": "Write exactly SAME original test bearer value into new sameowner0600 auth file for64Mi child; no new credential value",
+    "prohibited": "Do not use store/provider.secret as HTTP bearer; internal durable provider identity bytes unchanged; no printing bearer values/hashes",
+    "evidenceRequired": "Source path/constructor location and new file path+permissions; exact value comparison in memory only, no secret digest",
+    "status": "Original auth-file prerequisite corrected before any startup; no failedstartup hidden"
+  }
+}

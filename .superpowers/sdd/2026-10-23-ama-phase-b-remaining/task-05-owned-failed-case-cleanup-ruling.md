@@ -1,0 +1,19 @@
+# Task5 exact failed-case fixture cleanup ruling
+
+Author found config2 READY tasks retained after one restart case tore down its temporary native route. Generic same-pool claims later encounter those missing routes. Preserve this real setup contamination and failures; no production claim weakening. Task8 fairness is external_operation selection and is not ordinary queue qualification.
+
+Ruling: within existing controlled own-test repair scope, only finite enumerated Task5 failed-case IDs established by retained current-run owner/intake/task receipts may be cancelled as explicit fixture maintenance. Stop/join only their own Workers first. Lock/recheck full immutable specs, subject/input, current state/attempt/owner, no typed output/RAW, no external operation/reservation. In one transaction end only exact unfinished attempts, then mark only READY/RUNNING tasks CANCELLED with fixture-cleanup diagnostic and null lease/output. Skip terminal/unexpected rows; no pool-wide/prefix UPDATE or domain/fence/history/schema change. Preserve exact executed code, before/after snapshots, affected counts and original failures. This grants no success/cancellation business-flow qualification.
+
+Fix new test lifetime by awaiting every accepted original and new-default task terminal before tearing down its route. Direct fixture cleanup cannot substitute for any passing pipeline/restart assertion. No old fixture/old task/PKI/container/credential touched.
+
+Why: new isolated test case owns its temporary route and stranded tasks; removing cross-case admission interference permits valid subsequent tests without changing production authority. Cost if ownership guard is wrong: unintended fixture data mutation, so actual row-level receipt review is mandatory before adoption.
+
+## Actual subsequent timeline
+
+Author round1 cancelled7 exactREADY/attempt0 rows; root independently compared full before/after maps,1taskroweach/0attemptrows/noothercolumnchanges and read executed maintenancecode5138B SHA01503d3f. Round2 authorreported10additional exactREADY0 rows applied before later stricter case-artifact-link message arrived. Selection used finite active diagnostic+ownedroutes and ownerprefixguard; full original accepted-case artifactjoin for olderS3 task5bd2f32b-6ff6-4ef5-8b5e-c3a35f2cc34d was not yet complete. Preserve this temporal limitation; no retrospective prior-guard claim. Actual later readonly linkage for all17 to actualHTTPacceptance/input/meetingowner/resources and actual stopped/joinedWorker/testprocess custody is required before final adoption. No further prefix-only cleanup expansion; any laterplan must carry exact finite linkage before mutation. Original scope only genuinely owned currentTask5cases remains binding.
+
+## Later owned-case teardown
+
+Round3 authorreports finite2task plan joined beforemutation to persistedactualintake/upload/input/subject/exactowner andretainedcaseresource; actual/proc noTask05Worker/TranscriptWorkerMain andpreviousJVMexit retained. Existingrulingcoversonlytheselinkedrows, finalreceiptinspectionpending.
+
+Ruling: new Task5 negative/rollback cases intentionally retaining READY/RUNNING must first complete/assert real behavior and capture original state, then may perform exact finite prelinked current-case fixturemaintenance using same locks/nooutput/noRAW/noexternal guards before temporaryroutecloses. Positivepipeline/restart cases requireactualgenuine terminal assertions; maintenancecannotmake them PASS. No broaderpool/prefixmutation, no oldtasks/domainfences/history or externaloperation cleanup. Why: complete isolatedfixture lifetime avoids repeatedcross-case missingroute interference. Costifwrong: alteredtestqualification, so precleanupassertions/sourcebinding+exactrowreceiptsmustremain distinguishable from runtime business outcome.

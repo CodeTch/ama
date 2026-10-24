@@ -1,0 +1,372 @@
+{
+  "source_paths_verified": 6,
+  "raw_paths_verified": 40,
+  "suites": 40,
+  "unit": 221,
+  "integration": 84,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "reports": [
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.config.file.ControlledArchiveFix1Test.xml",
+      "sha256": "393124c1da7b7d91635dfe0ad0988dfd7b210bfdf882e7fc737396981985a576",
+      "unit": true,
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.config.file.ControlledConfigArchiveSourceTest.xml",
+      "sha256": "ff16252d90f829829fab3bf17f7e5fa13c8e8092c6383361e54743818637f045",
+      "unit": true,
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.config.json.ArchiveBudgetTest.xml",
+      "sha256": "8acbfea16006038a509edd79cbdf88cd236b9d747e79c671b0a935bfce152d08",
+      "unit": true,
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.config.json.ConfigBindingsTest.xml",
+      "sha256": "5d23a5cf2a53bcbc50823c9ade580dfe5066697b29fd3a5e514944752983e9d8",
+      "unit": true,
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.config.json.ConfigWireReaderTest.xml",
+      "sha256": "bfcccc68bc26fcb5ae4d83c010dcb84adbb896dfd7b818a46b235a8e42baa2b7",
+      "unit": true,
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.config.json.RawHashChainTest.xml",
+      "sha256": "e78036e8bdd7ab0d17892c722e2da8b4f699136b95dcf4e9be0bb4811886f231",
+      "unit": true,
+      "tests": 25,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.minutes.json.OutputBudgetBoundaryTest.xml",
+      "sha256": "5c2e4369144f50bb39587326852991051250e6e7c5eb0477f5abd4ec9f29f154",
+      "unit": true,
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.minutes.json.StrictMinutesJsonReaderTest.xml",
+      "sha256": "aad47b34bdc4ba562fb36fa0b0123cdb4e1c2702099e9b3bd86b982c0dcf8187",
+      "unit": true,
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.storage.ManagedBackendIdentityTest.xml",
+      "sha256": "06c825aa65c01fe518f3d050fdacb412ad1a3135d86f5c1bfb1085ffa753b11c",
+      "unit": true,
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.storage.StorageRouterTest.xml",
+      "sha256": "fde757249c8d5ea7f6ae90471da602ebe059497dd4b60f26b39c3a65dfea72f2",
+      "unit": true,
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.storage.s3.S3LayoutV3Test.xml",
+      "sha256": "ba24808e5c2f9ee60cd6404daa1a049694724d17a55a351c442a452bc890f926",
+      "unit": true,
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.storage.s3.S3ProtocolTest.xml",
+      "sha256": "ebab055ded210380ff0b19c02bf968f4cc039f3c8f6740ed051a9689937ed69f",
+      "unit": true,
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.task.TaskMetadataTest.xml",
+      "sha256": "fda229c7cd928cfe03d1c3363f52a8cd056635ae0b99bfa664d9cc31a3387720",
+      "unit": true,
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/adapters/target/surefire-reports/TEST-ama.transcript.TextTranscriptParserTest.xml",
+      "sha256": "a1251f0a60feaf0989384505258470ab64873cb6766735ac2c31b4d8e5050e3b",
+      "unit": true,
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/api/target/surefire-reports/TEST-ama.api.DeploymentConfigTest.xml",
+      "sha256": "f5dec2c9d61b16e142d1fdbf05774bb947954912fdd6deca34bdc1a16c4b9bda",
+      "unit": true,
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/api/target/surefire-reports/TEST-ama.api.FileConfigurationTest.xml",
+      "sha256": "c70b71a4a65a7902d3ec88e65f6f3aac245f362d329de58222122aac8c81b0a6",
+      "unit": true,
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/api/target/surefire-reports/TEST-ama.api.IdentityContractsTest.xml",
+      "sha256": "4d9a873da736b062f339e0fbac9d77812c1bee5522d648ccf21886251a2fdfef",
+      "unit": true,
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/api/target/surefire-reports/TEST-ama.api.IdentitySecurityTest.xml",
+      "sha256": "ad31c1d01926ac37a07aa0cb60e83c793586b575e3ecbc899cb9fa4c197ca54c",
+      "unit": true,
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/contracts/target/surefire-reports/TEST-ama.contract.MinutesFactBudgetTest.xml",
+      "sha256": "b7cad647d706c801dbcf8cd601c1c0974e74ba375e5c9fe630ed20e3f99b4f0c",
+      "unit": true,
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/core/target/surefire-reports/TEST-ama.canonical.CanonicalValueCodecTest.xml",
+      "sha256": "1bf1a2f5b661eb340f19b6ddfa8307fd246f80a9edbea30c24994aa8a1e8d6f1",
+      "unit": true,
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/core/target/surefire-reports/TEST-ama.minutes.contract.FinalAndCoverageTest.xml",
+      "sha256": "cace012540fc381e661d7bf7bf57733b4a8921f6c3825933a4c52a882798ba4a",
+      "unit": true,
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/core/target/surefire-reports/TEST-ama.minutes.contract.GenerationFingerprintTest.xml",
+      "sha256": "8c6089d8b816fee127913e795c77b4313d641d33c4d97c36af41c21e169f249e",
+      "unit": true,
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/core/target/surefire-reports/TEST-ama.minutes.contract.HashProfilesTest.xml",
+      "sha256": "414464b4408f2962147cd0b9bbc5b0f68dd5de025368862e16adfb6a17809d8f",
+      "unit": true,
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/core/target/surefire-reports/TEST-ama.minutes.contract.SourceAndSupportTest.xml",
+      "sha256": "bcdb6a207ad50ef47b97035c8b8f23ced6892a2cd58456a2307f965b276916ee",
+      "unit": true,
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/core/target/surefire-reports/TEST-ama.minutes.contract.StoredSourceGraphTest.xml",
+      "sha256": "e432b2e2551b8a6b4c1b16a99982e46f5557d84761ed6ce33c6963706b6d2bfa",
+      "unit": true,
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/core/target/surefire-reports/TEST-ama.transcript.BatchFingerprintTest.xml",
+      "sha256": "48aef5fb1decad58e0cef19de7e942f62459951bc50d03fc4eb0b86f4ac733d5",
+      "unit": true,
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.task.B06QueueSeamsIT.xml",
+      "sha256": "fb0b13127e8f9bba45193cd278b104d1d4a6742033c0c4a673d5786d19d8c697",
+      "unit": false,
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.task.ExternalExecutionIT.xml",
+      "sha256": "6b3bc6d113560140a706f9806429f74790b830c73d2440351115efa60a501fe2",
+      "unit": false,
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.task.ModelPermitIT.xml",
+      "sha256": "cdbcefe709532d7d933e6d6eb3aeb3d698627689a29974e72d4f850554c04c50",
+      "unit": false,
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.task.OutboxConsumerIT.xml",
+      "sha256": "dab75bc98e42a29214103d07e6e35ff0cbd272620f87297f17d69a26fb60eb6f",
+      "unit": false,
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.task.OutboxFenceIT.xml",
+      "sha256": "86d0fe53838742753e7452094d1b8694f8648e089d38c43ffec6a98b35b704be",
+      "unit": false,
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.task.PreparedCompletionIT.xml",
+      "sha256": "9ffbf2944499ce40bb6f7cc705daec5f601044d27b50fd48f3411cbe71685119",
+      "unit": false,
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.task.ReconciliationWorkerIT.xml",
+      "sha256": "bd1cca79bdb3e07e1242fd972413ce7ad87f33744fb4494ba28a7d2d18175382",
+      "unit": false,
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.task.ReviewConcurrencyIT.xml",
+      "sha256": "79fb79412668d0d9c832e119e3e42061e96acb69a1b7ced5bb3a4402285b4d0b",
+      "unit": false,
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.task.TaskLeaseIT.xml",
+      "sha256": "633db2ffa023816cd08099dc56eaf36bbb092dbb2693495bf2617d394620cff3",
+      "unit": false,
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/failsafe-reports/TEST-ama.task.WorkerProcessIT.xml",
+      "sha256": "7ac061d9e367a54ba8260798ee0f28c013ff42b63ef6db197b0099a0774d550f",
+      "unit": false,
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/surefire-reports/TEST-ama.storage.ContractFixtureTest.xml",
+      "sha256": "31d4ea9dab6dd42b10b79f4d02fb8dcbbebbdc1c8b02029f09b7d224d16b7aed",
+      "unit": true,
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/integration-tests/target/surefire-reports/TEST-ama.support.ContractClientTest.xml",
+      "sha256": "c3f327accab88c78a3379a730f3c0d76b1d812590f613fda1b1f92a76d6df280",
+      "unit": true,
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/worker/target/surefire-reports/TEST-ama.worker.PreparedWorkerLoopTest.xml",
+      "sha256": "f6cd0cc3ff71aa905caee92b54e0cd230197790920258ced6ee23cbcfea40256",
+      "unit": true,
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "backend/worker/target/surefire-reports/TEST-ama.worker.WorkerLoopTest.xml",
+      "sha256": "e5ce7910489c3a808f0c3e14e785d574e200774f4e7dcc9d37e95211501a5291",
+      "unit": true,
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "status": "ADDITIVE_REFRESH_PINNED_CONTROLLED_FUNCTIONAL_TESTS_ONLY",
+  "utc": "2026-10-23T21:27:51.314239+00:00",
+  "priorPin": "task-06-concrete-runtime-pin-refresh-01-20261024.json",
+  "priorPinSha256": "23221a61c7bebb7d57be2d4855b1a6d86ffa57edc7b944d6ff4a2eb86c604f8a",
+  "rootProof": "task-06-fix-01-qualification-rootproof-20261024.json",
+  "rootProofSha256": "71be2eff6e90f7db19b886ae543707fa56c1543a6d069de754dbe5843dcde8b2",
+  "candidateProof": "artifacts/phase-b/b-remaining/task-06/fix-01/qualification-refresh/proof.json",
+  "candidateProofSha256": "af31d1027dd6e6c1daf136f720a97873fe0b65a0e35985bb06043e68f321950f",
+  "qualifiedCurrentSourceSeals": {
+    "backend/api/src/main/java/ama/api/TranscriptConfiguration.java": "a8ca653337aca2fae8e9dccf43383812661e9a87a6a1c5082e5ff318fa1f70f4",
+    "backend/adapters/src/main/java/ama/transcript/JdbcSavedTranscripts.java": "720a77843bf23829d5ff3da8aae9fbe2ee52855b9eb61fc962475d1024e8f994",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptRows.java": "cf43ec766aeb9e86766106c88870e4ce08a56f595d9e3c5269e76309f2374877",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptGraph.java": "8f224298d87acb5d771e7f65d112e9bd53de9c7b4209cbd959b9e25f0adaca7b",
+    "backend/adapters/src/main/java/ama/transcript/SavedTranscriptAdmission.java": "47aecdbcfa203cd8786daeb1981bf8b6edb157961b3d32291f4582eb68143650",
+    "backend/core/src/main/java/ama/transcript/TranscriptAcquisitionBudget.java": "d5afc6ea9ac08af34940b87cd3d680bdd096c7b78def9bce35a641b4f576d076",
+    "backend/core/src/main/java/ama/transcript/CorrectionInstallation.java": "46ebbcebc5faeae18a4f2a9d963b186a48a072f2b75d4a079e861df092822c6e",
+    "backend/core/src/main/java/ama/transcript/SavedTranscriptTransitions.java": "aade0451942a3d49bdfe80d680848ec4253523f6679c59eada1288bc81b64d49",
+    "backend/adapters/src/main/java/ama/transcript/JdbcTranscriptAuthority.java": "1b2a8518543e99aa01e8e50a70a7de87956e03eade69a991252fa87dc11c5941",
+    "backend/integration-tests/src/test/java/ama/storage/Task06CompositionIT.java": "3b5db92905a817ba9336103cb3c65c2b0e25efe1b8e46e9394e8e3cdabe9d09d",
+    "backend/integration-tests/src/test/java/ama/api/Task06RuntimeProbe.java": "7f9d75c0df4fc01fbf16df3cf63edab01fe6eb867c6556998fcfe58b5149caef",
+    "backend/integration-tests/src/test/java/ama/storage/Task06Fixture.java": "42b00923d6ce71410acf21a83fa25cbd21b206bef830616c5932ff0d4acfd8d4"
+  },
+  "scope": "Same retainedresources/PKI/numeric recipe; prospective chain and CURRENTpointer fixes + fresh-output/transportfixture; continue mandatoryCV02\u201304 newownedtests; no browser/company/fullB/Task6adoption",
+  "numericQualification": "Carried by exact unchanged config/admission/budget/correction/transitions/originalrefs/minima sources + fixture diff contains no bound/declaration change; new HTTPS actual installed GREEN uses unchanged tuple. No new independent perboot raw composition tuple claimed.",
+  "refreshRule": "Retainoldpins/sourcebytecopies; further affectedchanges get proportionalproof. No approvalon everyboot/Git-dependent/publicapproval API. Not reviewclosure."
+}

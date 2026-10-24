@@ -1,3 +1,21 @@
+# 最新 Git 操作：按用户要求准备合并 main 并推送（2026-10-25）
+
+本轮只做已授权Git快照整合，开发修复仍暂停。先读 `docs/acceptance/integration-main-snapshot-2026-10-25.md`。Task11为未验收WIP、5Important未复审、SEND DENY；原no2不得claim/send，UNKNOWN不关闭。下方旧no-main/no-push限制由本轮明确Git授权覆盖；下方HEADba48f35e只是集成前的历史快照，不代表集成后的实际HEAD。
+
+---
+
+# 最新权威状态：用户暂停 — 2026-10-25 06:35:07 Asia/Shanghai
+
+用户要求停止开发并精准交接，当前开发已暂停。先读[最新暂停与接续文档](/home/tanren/ama/.worktrees/phase-b-completion/docs/acceptance/development-pause-b-remaining-2026-10-25.md)，再读产品树W/current-state.json。当前HEAD `ba48f35e7ef97c1e162a2d373453bd1e9689529c`，Task1–10已采用，Task11 replacement fix round1未完成/未复审，独立gate 0C/5I/0M、SEND DENY；原READY/PREPARED no2禁止claim/send。新隔离库16迁移已通过，不重跑。首接续先定位generic-external回归1FAIL，然后补fix01真实隔离边界和同reviewer复审，继续全部Task11→12→13。Task12仅静态准备，Task13未完成；旧ACTIVE/迁移待跑/早期RED仅历史。主树仅文档发现入口，不merge/push，不进C/D/E/F。
+
+文档校验补充：state旧pause_*、next_steps、44727及B00-1.6字段已规范化；generic失败窗源码与当前源码不同，尚无当前GREEN。详见最新暂停文档“文档校验补充”，开发继续暂停。
+
+---
+
+# 当前实际节点：Task11 StageB 实现中（2026-10-25）
+
+Task10 已采用 `ba48f35e7ef97c1e162a2d373453bd1e9689529c`（source86777940）。Task11唯一作者 `/root/b_continuation_coordinator/b11_final_publication`，fresh schema `ama_t11_9714255c9e2c_behavior`/46151，actual ACK `task-11-root-fixture-application-ack-20261025.json`。V013_4 exact R1 CREATE 已冻结安装，currentmodel同步、正常16迁移/rerun0/完整UTC历史通过；旧29PASS probe复用。首真实final RED已到完整业务链+5reviews/businessReady，缺final路由403而非201，正在实现typed FinalDraft和原子final命令。原generation已settled。bootstrap02 collector缺原before记录的后验限定与canonical清理更正已留档，新业务窗使用修复collector。Task11尚未完成/审查/采用；M1、F5、完整性风险、两UNKNOWN及最终B义务保留。动态权威见唯一产品树W/current-state.json；继续11→12→13全B后停。
+
 # 最新节点：Task10 已通过限定采用门禁，接续 Task11 StageA（2026-10-25）
 
 Task10 source86777940、唯一复审I1/I2 ADDRESSED/scoped Pass/Approved，M2仅独立报告erratum。采用记录commit及actualconsumerACK正在封存；随后新Task11作者只做最终upstream/resource/15prefix最小repin，旧R1SQL probe29PASS复用，未授权提前DDL应用。当前连接权威是Task10 recovery overlay46151，旧44727历史不改。M1旧资格投影、F5、B-FINAL-REPLAY-INTEGRITY-01与两UNKNOWN逐项OPEN。动态状态只看产品树W/current-state.json；继续11→12→13全B后停，不入C/D/E/F。

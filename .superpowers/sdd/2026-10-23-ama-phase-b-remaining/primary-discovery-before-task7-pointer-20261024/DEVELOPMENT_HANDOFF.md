@@ -1,0 +1,61 @@
+## 当前接续：Tasks 1–6 已采用，Task 8 正在实施（2026-10-24）
+
+先读[本次精准接续记录](docs/acceptance/development-resume-b-remaining-2026-10-24.md)，再进入 `/home/tanren/ama/.worktrees/phase-b-completion`，读取 `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json`、`resume-20261024-active-context.md`、`progress.md` 和待处理问题登记。用户要求使用子代理持续完成全部剩余任务；当前没有暂停，也无需等例行澄清。
+
+Tasks 1–6 已采用，不重做。Task 6 最终源码 `d54b2e88`，限定复审 `b71b6a02` 双 PASS，采用提交 `12ca5436`。当前唯一产品作者 `/root/b08_reconciliation_fairness` 从该 BASE 实施 Task 8；公平性两项定向测试已从真实断言失败转为通过，扩展边界/回归/模型/最终测试及独立审查仍待完成，不能据此判定 Task 8 完成。剩余顺序 **8→7→9→10→11→12→13**；完成阶段验收后继续下一项。
+
+Task 8 的正式 `013.3` 迁移已在五个精确受控目标正常执行 1 次、重复执行 0 次；旧 14 条历史、旧数据摘要和结构保留经独立核对，新鲜只读核查为 15 条历史。迁移保留资格不代替运行时公平性验收。Task 7/9 的 Task 5/6 差异补充已完成，后续仍需重钉实际 Task 8/7 接口。所有待处理项继续登记，不遗漏 Task 12 类型/边界修复或 Task 13 最终门禁及整支审查。
+
+本主目录 HEAD 仍 `c71a44a`，仅精确更新发现入口和恢复记录，产品开发继续留在 completion 树；未合并、推送、发布或发送外部消息。以下旧“当前”“暂停”和未完成描述均为历史，最新状态以本节和 completion 树 W 为准。
+
+---
+
+## 当前接续：Task5 已采用，Task6 实施接续（2026-10-24）
+
+先读[精准接续记录](docs/acceptance/development-resume-b-remaining-2026-10-24.md)及 completion 工作树 W/current-state.json、progress.md。Task1–5 已采用；Task5 最终源码 c943d15 经第二轮独立限定复审双PASS，T5SR01/02、CV1闭环。当前下一项 Task6；其6/8/7/13准备及9/10/11只读预检均已完成，不重做。剩余顺序6→8→7→9→10→11→12→13。所有旧暂停/未完成描述为历史；未完成源码、实际资格和遗留问题按最新W推进。main仍c71a44a，未新合并或推送。
+
+## 当前执行入口：已恢复（2026-10-24，Task5fix02）
+
+用户已明确要求按照接续文档、使用子代理持续推进；本节替代下方旧暂停状态。先读[本次恢复及阶段记录](docs/acceptance/development-resume-b-remaining-2026-10-24.md)，再进入 `/home/tanren/ama/.worktrees/phase-b-completion`，读取本计划 W/current-state.json 和 progress.md 最新记录。W 为 `.superpowers/sdd/2026-10-23-ama-phase-b-remaining`。
+
+Task1–4 已采用，不重做。Task5fix01提交11eb540已核对233units/16IT和源码证据，但限定复审仍有S3许可等待取消、多后端关闭错误两项原缺陷残留；CV1已关闭。当前同一接续作者在fix round2/5，正式 `W/task-05-fix-02-brief.md`，FIX_BASE11eb540；不要重做原Task5或已关闭CV1，也不要恢复旧fix01暂停起点。Task9/10原未完成只读预检已补齐并独立核对；Task6/8/7/13旧准备保留，Task11只读预检新启动。完整剩余顺序5→6→8→7→9→10→11→12→13。
+
+本主目录仅更新精确发现入口与本次恢复记录副本，不修改产品或HEAD；所有开发在completion树，不新合并或推送。具体当前脏文件/未提交作者工作必须按W和最新handoff核对，不能reset/clean。下方各旧暂停/ACTIVE段落保持历史。
+
+## 当前状态：用户暂停（2026-10-23 21:45，Task5fix01）
+
+下次收到“继续任务”先读[最新精准接续记录](docs/acceptance/development-pause-b-remaining-2026-10-23-2145.md)，然后到 `/home/tanren/ama/.worktrees/phase-b-completion`。该树最新纯记录 checkpoint `f98980543415ba17f0102a9c85f49452c5611527`，产品源码857102b（Task5尚未采用）；从同一作者fix01交接继续。Task1–4已采用，不重做；Task6/8/7/13准备已完成，Task9/10只读预检未完成。剩余顺序5修复/复核/采用→6→8→7→9→10→11→12→13。用户暂停有效，不能自动继续。
+
+本主目录仅保存未提交的本入口和新暂停记录副本，main HEAD仍c71a44a；完整原件/归档已在completion分支提交，无main合并或push。后续如需处理这两项，先确认completion中的记录完整，只处理精确文档路径，不能reset/clean整树。下方ACTIVE和旧暂停状态均为历史。
+
+## 当前 Git 集成入口（2026-10-23）
+
+用户已明确要求合并并推送最新开发快照，范围包含 completion 分支 Task4 与暂停记录。主目录现位于 `main`，已纳入快照 `46aad17bca8466192249d59912885563d94d19de`，并同步前端生成 API 类型。验证、整合审查和未完成边界见[本次 main 集成记录](docs/acceptance/main-branch-integration-2026-10-23.md)。
+
+本次仅保存开发进度：Task4 正式复审仍待完成，后续业务实现未启动，B 阶段未验收。原 completion 工作树和暂停证据保留。后续继续开发时先核对当前 main 与该工作树，再按[精准接续说明](docs/acceptance/development-pause-b-remaining-2026-10-23.md)从 Task4 复审接续；不要用旧分支覆盖本次类型同步。下方“main 不变／无 push/main merge”等文字均为暂停时历史状态，本节更新其 Git 集成位置。
+
+## 当前暂停入口（2026-10-23 18:20）
+
+用户已要求暂停。下次“继续任务”请先读[精准接续说明](docs/acceptance/development-pause-b-remaining-2026-10-23.md)，切换 `.worktrees/phase-b-completion`，从 Task4 中断的独立审查继续；旧段落仅为历史。Task1–3 已采用；Task4 源码59c8b080已提交/测试374通过，但复审未完成；Task5后续源码未启动。主目录产品 HEAD34cb226a、main 不变。
+
+# 会议助手开发接续入口
+
+2026-10-23，用户明确要求“使用子代理，按接续说明继续开发”，功能开发已恢复。当前协调分支为 `codex/phase-b-resume-20261023`，从 main `0676a21311f2b2193f73a5e096f4a5605ee9b41f` 接续；阶段 B 尚未验收，不提前合入 main。
+
+当前进展及证据见[本次恢复记录](docs/acceptance/development-resume-2026-10-23.md)：
+
+- B07 纯 S1 的 F1（P1）、F2/F3（P2）已修复，独立限定复审双 PASS，精确采用；该纯组件已开放给 B06，不代表完整 B07 完成。
+- D01 来源设计 R1（P2）已修正，独立限定复审双 PASS，设计采用；正式增量迁移尚未分配或应用，材料运行时未实现。
+- B04 公开协调采用记录及独立文档审查已补齐；B04-Q401 保持 UNKNOWN。
+- B06.1 共享身份准备协议已完成：先保留真实 MySQL RED，经技术 ACK 修正全部队列/外部事实路径，独立 SPEC/quality 双 PASS、零问题，已精确采用。见[采用记录](docs/acceptance/b/task-B-06-seams-adoption.md)及[消费者契约](docs/acceptance/b/task-B-06-seams-integration.md)。
+- B06.1 历史验证：18 项 seam、26 个精选回归方法/28 次调用及 26 套 179 项 Java units 全通过；179 已包含既有 S1，不与本轮重复执行累加。
+- B06.2 已完成受控不可变档案、batch v1 和 processing-only 有界真实事实读取，真实 enqueue/commit ACK 后跨 JVM 恢复通过；整项独立 SPEC/quality 双 PASS、零问题。运行时采用终点 `821daaa05a4c4faffb924ae4c00b72cabdd62347`，详见[完整采用记录](docs/acceptance/b/task-B-06-archives-adoption.md)与[消费者契约](docs/acceptance/b/task-B-06-archives-integration.md)。
+- 本轮新鲜全量 Java units 为 29 套 213 项；事实读端 12 IT，重启 1 IT（5 个子 JVM，含三失败副本），全部 0 failures/errors/skips。旧 179 和各轮重跑不累加。原[B06.2 准备书](docs/acceptance/b/task-B-06-archives-prepared-brief.md)保留历史 PREPARED 原件，实际激活与执行取舍见[激活快照](docs/acceptance/b/task-B-06-archives-activation.md)。
+- 完整 B06 仍未完成。下一交付先准备并审查 B06.3：首次真实文件引用的原 upload UUID/purpose、完成 session、AVAILABLE/route/epoch、current/history 资格，以及未提交批次/held-capability 的窄事实接口。input_batch 缺 profile/version，不自动重解释旧 hash。导入/Worker 原子输出、保存/编辑/marks/确认和完整 API 仍待实施。所有原树和封存保留，下一任务从协调分支最终 clean HEAD 明确精确 BASE。
+- 既有外部对账 LIMIT 64 候选公平性缺口已登记 [FUP-B05-CANDIDATE-01](docs/acceptance/b/task-B-05-reconciliation-candidate-followup.md)，当前只读识别、未修复，不将 B06.1 的窗口内 skip 当全局公平性资格。
+
+原作者工作树、原始失败/成功证据、所有已应用 SQL、历史设计和两份用户计划均保留。B01-IMM-01 永久 PARTIAL、B04-Q401、企业接口、HA/fencing、真实容量等边界继续有效。
+
+历史顺序和保护规则见[2026-10-22暂停接续说明](docs/acceptance/development-handoff-2026-10-22.md)及[main归并记录](docs/acceptance/main-branch-integration-2026-10-22.md)。其中暂停状态、旧分支位置及当时待修问题属于历史快照；当前恢复及已关闭评审以本入口与本次恢复记录为准。
+
+后续从当前接续分支和 B06 已采用证据继续，不重做已完成任务，不以纯组件、设计、接缝或受控档案恢复采用替代完整运行时或阶段验收，不重置旧夹具、不改旧迁移、不向外部平台发送真实消息或发布。

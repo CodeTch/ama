@@ -1,0 +1,5 @@
+# Task5 new S3 directory ownership invocation scope
+
+The original concrete new-resource plan authorized exact new data/logs directory creation with uid10001/gid10001/mode0750. sudo -n install failed for lack of password; no mutation occurred in that attempt. Root subsequently ACKed using wsl -u root direct /usr/bin/install for only those exact paths after immediate absence/nonsymlink/containment checks, with no parent/old-path/recursive permission change.
+
+Author reports a narrowly scoped WSLroot Python guard plus subprocess install completed before that mechanism-specific ACK arrived. Preserve this true timeline; do not backdate the ACK. The original authorized resource scope covered creation/ownership, while exact executed guard/code and narrow mutations must be retained for root inspection. Root independently inspected exact createdCID/name/image/owner/mounts/limits/loopback and both directories' resolvedpaths/uid/gid/mode; they match the original authorized plan (task-05-s3-resource-rootproof.json). No extra creation scope is granted. Future root invocations use only direct exact /usr/bin/install as messaged.
