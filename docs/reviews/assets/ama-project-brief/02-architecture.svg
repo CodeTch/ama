@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="1470" viewBox="0 0 2000 1470">
+<rect width="2000" height="1470" fill="#F7F9FC"/>
+<rect x="80" y="55" width="88" height="62" rx="14" fill="#14243D" stroke="#14243D" stroke-width="2"/>
+<text x="124" y="98.7" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">02</text>
+<text x="192" y="101.1" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="49" font-weight="700" text-anchor="start" fill="#14243D">系统整体架构</text>
+<text x="80" y="167.3" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="31" font-weight="400" text-anchor="start" fill="#63758B">模块化业务后端 + 独立实时接入 + 后台Worker；目标架构示意</text>
+<rect x="80" y="220" width="1320" height="150" rx="22" fill="#EDF4FF" stroke="#D7E1EE" stroke-width="2"/>
+<text x="740" y="279.2" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="40" font-weight="700" text-anchor="middle" fill="#14243D">展示与接入层</text>
+<text x="740" y="341.0" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="33" font-weight="400" text-anchor="middle" fill="#31445D">Web工作台  ·  HTTPS / WSS统一入口</text>
+<polyline points="740,370 740,440" fill="none" stroke="#2563EB" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="740.0,440.0 749.0,423.0 731.0,423.0" fill="#2563EB"/>
+<text x="80" y="416.9" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="26" font-weight="400" text-anchor="start" fill="#2563EB">WSS直连实时接入</text>
+<polyline points="80,295 26,295 26,855 80,855" fill="none" stroke="#2563EB" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="80.0,855.0 63.0,846.0 63.0,864.0" fill="#2563EB"/>
+<rect x="80" y="440" width="1320" height="230" rx="22" fill="white" stroke="#D7E1EE" stroke-width="2"/>
+<text x="110" y="501.4" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="38" font-weight="700" text-anchor="start" fill="#14243D">业务服务层  |  API</text>
+<rect x="110" y="535" width="398" height="51" rx="12" fill="#EDF4FF" stroke="#EDF4FF" stroke-width="2"/>
+<text x="309" y="568.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="700" text-anchor="middle" fill="#2563EB">会议与授权</text>
+<rect x="533" y="535" width="398" height="51" rx="12" fill="#EDF4FF" stroke="#EDF4FF" stroke-width="2"/>
+<text x="732" y="568.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="700" text-anchor="middle" fill="#2563EB">文件与材料</text>
+<rect x="956" y="535" width="398" height="51" rx="12" fill="#EDF4FF" stroke="#EDF4FF" stroke-width="2"/>
+<text x="1155" y="568.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="700" text-anchor="middle" fill="#2563EB">转写与核对</text>
+<rect x="110" y="600" width="398" height="51" rx="12" fill="#EDF4FF" stroke="#EDF4FF" stroke-width="2"/>
+<text x="309" y="633.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="700" text-anchor="middle" fill="#2563EB">要素与纪要</text>
+<rect x="533" y="600" width="398" height="51" rx="12" fill="#EDF4FF" stroke="#EDF4FF" stroke-width="2"/>
+<text x="732" y="633.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="700" text-anchor="middle" fill="#2563EB">确认与发布</text>
+<rect x="956" y="600" width="398" height="51" rx="12" fill="#EDF4FF" stroke="#EDF4FF" stroke-width="2"/>
+<text x="1155" y="633.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="700" text-anchor="middle" fill="#2563EB">回看与导出</text>
+<polyline points="285,670 285,755" fill="none" stroke="#2563EB" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="285.0,755.0 294.0,738.0 276.0,738.0" fill="#2563EB"/>
+<polyline points="735,670 735,755" fill="none" stroke="#2563EB" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="735.0,755.0 744.0,738.0 726.0,738.0" fill="#2563EB"/>
+<polyline points="1190,670 1190,755" fill="none" stroke="#2563EB" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1190.0,755.0 1199.0,738.0 1181.0,738.0" fill="#2563EB"/>
+<rect x="80" y="755" width="410" height="215" rx="22" fill="#EDF4FF" stroke="#D7E1EE" stroke-width="2"/>
+<rect x="106" y="785" width="7" height="42" rx="3" fill="#2563EB" stroke="#2563EB" stroke-width="2"/>
+<text x="131" y="817.6" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="37" font-weight="700" text-anchor="start" fill="#14243D">实时接入</text>
+<text x="111" y="884.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" text-anchor="start" fill="#31445D">录音分片 / 实时转写</text>
+<text x="111" y="937.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" text-anchor="start" fill="#31445D">会话恢复 / 状态推送</text>
+<rect x="530" y="755" width="410" height="215" rx="22" fill="#E9F7F3" stroke="#D7E1EE" stroke-width="2"/>
+<rect x="556" y="785" width="7" height="42" rx="3" fill="#0D9488" stroke="#0D9488" stroke-width="2"/>
+<text x="581" y="817.6" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="37" font-weight="700" text-anchor="start" fill="#14243D">后台Worker</text>
+<text x="561" y="884.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" text-anchor="start" fill="#31445D">解析 / 增强 / 纪要</text>
+<text x="561" y="937.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" text-anchor="start" fill="#31445D">发布 / 导出 / 重试</text>
+<rect x="980" y="755" width="420" height="215" rx="22" fill="#EDF4FF" stroke="#D7E1EE" stroke-width="2"/>
+<rect x="1006" y="785" width="7" height="42" rx="3" fill="#2563EB" stroke="#2563EB" stroke-width="2"/>
+<text x="1031" y="817.6" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="37" font-weight="700" text-anchor="start" fill="#14243D">处理适配能力</text>
+<text x="1011" y="884.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" text-anchor="start" fill="#31445D">模型 / 媒体 / 文档</text>
+<text x="1011" y="937.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" text-anchor="start" fill="#31445D">受控文件读取与写入</text>
+<polyline points="285,970 285,1010 1190,1010 1190,970" fill="none" stroke="#63758B" stroke-width="4" stroke-linejoin="round"/>
+<polyline points="735,970 735,1010" fill="none" stroke="#63758B" stroke-width="4" stroke-linejoin="round"/>
+<polyline points="80,555 51,555 51,1010 285,1010" fill="none" stroke="#63758B" stroke-width="4" stroke-linejoin="round"/>
+<polyline points="410,1010 410,1080" fill="none" stroke="#63758B" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="410.0,1080.0 419.0,1063.0 401.0,1063.0" fill="#63758B"/>
+<polyline points="1095,1010 1095,1080" fill="none" stroke="#63758B" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1095.0,1080.0 1104.0,1063.0 1086.0,1063.0" fill="#63758B"/>
+<rect x="80" y="1080" width="640" height="160" rx="22" fill="#EDF4FF" stroke="#D7E1EE" stroke-width="2"/>
+<text x="400" y="1140.1" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="41" font-weight="700" text-anchor="middle" fill="#14243D">MySQL</text>
+<text x="400" y="1196.4" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="30" font-weight="400" text-anchor="middle" fill="#31445D">业务状态 / 版本 / 任务 / 审计</text>
+<rect x="770" y="1080" width="630" height="160" rx="22" fill="#E9F7F3" stroke="#D7E1EE" stroke-width="2"/>
+<text x="1085" y="1138.3" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="39" font-weight="700" text-anchor="middle" fill="#14243D">统一文件存储接口</text>
+<text x="1085" y="1198.2" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="32" font-weight="400" text-anchor="middle" fill="#31445D">本地文件系统  或  S3</text>
+<rect x="80" y="1315" width="1320" height="90" rx="22" fill="#14243D" stroke="#14243D" stroke-width="2"/>
+<text x="740" y="1367.4" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="30" font-weight="700" text-anchor="middle" fill="white">贯穿各层：权限校验  ·  版本控制  ·  任务恢复  ·  审计观测</text>
+<rect x="1460" y="220" width="460" height="1185" rx="22" fill="#EEF2F7" stroke="#D7E1EE" stroke-width="2"/>
+<text x="1690" y="283.4" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="38" font-weight="700" text-anchor="middle" fill="#14243D">企业能力接入</text>
+<text x="1690" y="334.5" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" text-anchor="middle" fill="#63758B">经统一适配接口对接</text>
+<rect x="1490" y="400" width="400" height="140" rx="22" fill="white" stroke="#D7E1EE" stroke-width="2"/>
+<text x="1690" y="456.7" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#14243D">统一登录</text>
+<text x="1690" y="508.8" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="27" font-weight="400" text-anchor="middle" fill="#63758B">用户身份与会话</text>
+<rect x="1490" y="583" width="400" height="140" rx="22" fill="white" stroke="#D7E1EE" stroke-width="2"/>
+<text x="1690" y="639.7" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#14243D">人员目录</text>
+<text x="1690" y="691.8" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="27" font-weight="400" text-anchor="middle" fill="#63758B">账号与组织信息</text>
+<rect x="1490" y="766" width="400" height="140" rx="22" fill="white" stroke="#D7E1EE" stroke-width="2"/>
+<text x="1690" y="822.7" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#14243D">公司模型</text>
+<text x="1690" y="874.8" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="27" font-weight="400" text-anchor="middle" fill="#63758B">转写 / 说话人 / 纪要</text>
+<rect x="1490" y="949" width="400" height="140" rx="22" fill="white" stroke="#D7E1EE" stroke-width="2"/>
+<text x="1690" y="1005.7" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#14243D">企业知识库</text>
+<text x="1690" y="1057.8" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="27" font-weight="400" text-anchor="middle" fill="#63758B">材料引用与成果发布</text>
+<rect x="1490" y="1132" width="400" height="140" rx="22" fill="white" stroke="#D7E1EE" stroke-width="2"/>
+<text x="1690" y="1188.7" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#14243D">公司邮件</text>
+<text x="1690" y="1240.8" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="27" font-weight="400" text-anchor="middle" fill="#63758B">受控成果链接分享</text>
+<polyline points="1400,555 1460,555" fill="none" stroke="#0D9488" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1460.0,555.0 1443.0,546.0 1443.0,564.0" fill="#0D9488"/>
+<polyline points="1400,850 1460,850" fill="none" stroke="#0D9488" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1460.0,850.0 1443.0,841.0 1443.0,859.0" fill="#0D9488"/>
+</svg>

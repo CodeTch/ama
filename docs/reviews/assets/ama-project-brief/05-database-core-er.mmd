@@ -1,0 +1,60 @@
+erDiagram
+    enterprise_identity {
+        string enterprise_id PK
+        string department_id FK
+    }
+    meeting {
+        string id PK
+        string owner_id FK
+    }
+    roster_revision {
+        string id PK
+        string meeting_id FK
+    }
+    input_batch {
+        string id PK
+        string meeting_id FK
+    }
+    transcript_revision {
+        string id PK
+        string batch_id FK
+    }
+    transcript_confirmation {
+        string id PK
+        string revision_id FK
+    }
+    generation_input {
+        string id PK
+        string transcript_confirmation_id FK
+    }
+    minutes_revision {
+        string id PK
+        string generation_input_id FK
+    }
+    final_confirmation {
+        string id PK
+        string minutes_revision_id FK
+    }
+    generation_candidate {
+        string id PK
+        string input_id FK
+    }
+    publication {
+        string id PK
+        string confirmation_id FK
+    }
+    external_document_mapping {
+        string publication_id PK, FK
+    }
+    enterprise_identity ||--o{ meeting : "owner_id"
+    meeting ||--o{ roster_revision : "meeting_id"
+    meeting ||--o{ input_batch : "meeting_id"
+    meeting ||--o{ transcript_revision : "meeting_id"
+    input_batch ||--o{ transcript_revision : "batch_id"
+    transcript_revision ||--o| transcript_confirmation : "revision_id"
+    transcript_confirmation ||--o{ generation_input : "transcript_confirmation_id"
+    generation_input o|--o{ minutes_revision : "generation_input_id"
+    minutes_revision ||--o{ final_confirmation : "minutes_revision_id"
+    generation_input ||--o{ generation_candidate : "input_id"
+    final_confirmation ||--o| publication : "confirmation_id"
+    publication ||--o| external_document_mapping : "publication_id"

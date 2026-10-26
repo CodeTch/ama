@@ -1,0 +1,47 @@
+erDiagram
+    material_reference {
+        string id PK
+        string meeting_id FK
+    }
+    material_revision {
+        string id PK
+        string reference_id FK
+    }
+    parsed_document {
+        string id PK
+        string material_revision_id FK
+    }
+    material_snapshot {
+        string id PK
+        string meeting_id FK
+    }
+    material_snapshot_item {
+        string snapshot_id PK
+        string material_revision_id PK, FK
+    }
+    source_locator {
+        string id PK
+        string material_revision_id FK
+    }
+    source_context {
+        string id PK
+        string material_snapshot_id FK
+    }
+    source_context_material {
+        string context_id PK
+        string material_revision_id PK
+        string parsed_document_id FK
+    }
+    evidence_link {
+        string id PK
+        string locator_id FK
+    }
+    material_reference ||--o{ material_revision : "reference_id"
+    material_revision ||--o{ parsed_document : "material_revision_id"
+    material_revision ||--o{ material_snapshot_item : "material_revision_id"
+    material_snapshot ||--o{ material_snapshot_item : "snapshot_id"
+    material_snapshot o|--o{ source_context : "material_snapshot_id"
+    source_context ||--o{ source_context_material : "context_id"
+    parsed_document ||--o{ source_context_material : "parsed_document_id"
+    source_locator ||--o{ evidence_link : "locator_id"
+    source_context o|--o{ evidence_link : "source_context_id"
