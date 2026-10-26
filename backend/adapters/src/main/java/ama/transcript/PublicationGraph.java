@@ -25,9 +25,9 @@ final class PublicationGraph {
    long count=j.queryForObject("SELECT COUNT(*) FROM (SELECT 1"+from+tail+") publication_count",Long.class,args.toArray());if(count==0)break;require(count<=cap-all.size()&&count<=budget.remainingRows(),BUDGET_EXCEEDED);
    // All projected strings are bounded metadata (schema maximum VARCHAR(512)); the
    // conservative transient reservation includes a concurrent extra row before transfer.
-   long cells=Math.multiplyExact(Math.min(limit,count+1),q.columns().size());budget.admitCapture(cells*2048,cells*512,cells*1024,2);
-   for(long n=0;n<Math.min(limit,count+1);n++)budget.row(q.columns().size());
-   var page=j.queryForList("SELECT "+String.join(",",q.columns())+from+tail+(lock?" FOR UPDATE":""),args.toArray());require(page.size()==count,PROVENANCE_UNAVAILABLE);
+   long admitted=Math.min(limit,count+1);long cells=Math.multiplyExact(admitted,q.columns().size());budget.admitCapture(cells*2048,cells*512,cells*1024,2);
+   for(long n=0;n<admitted;n++)budget.row(q.columns().size());
+   var page=j.queryForList("SELECT "+String.join(",",q.columns())+from+" ORDER BY "+String.join(",",order)+" LIMIT "+admitted+(lock?" FOR UPDATE":""),args.toArray());require(page.size()==count,PROVENANCE_UNAVAILABLE);
    for(var raw:page){var normalized=new LinkedHashMap<String,Object>();for(var cell:raw.entrySet()){Object v=cell.getValue();if(v instanceof Number number)v=new java.math.BigDecimal(number.toString()).longValueExact();else if(v instanceof java.sql.Timestamp timestamp)v=timestamp.toLocalDateTime().toString();else if(v instanceof java.sql.Date date)v=date.toLocalDate().toString();if(v instanceof String text){require(text.codePointCount(0,text.length())<=512,BUDGET_EXCEEDED);budget.capture(text.getBytes(java.nio.charset.StandardCharsets.UTF_8).length,text.codePointCount(0,text.length()),text.length(),3);}normalized.put(cell.getKey(),v);}all.add(Collections.unmodifiableMap(normalized));}
    if(page.size()<limit)break;var row=page.getLast();last=order.stream().map(row::get).toList();
   }all.sort((a,b)->{for(String key:q.keys()){Object x=a.get(key),y=b.get(key);int comparison=x instanceof Number&&y instanceof Number?Long.compare(((Number)x).longValue(),((Number)y).longValue()):((String)x).compareTo((String)y);if(comparison!=0)return comparison;}return 0;});return List.copyOf(all);

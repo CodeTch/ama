@@ -1,4 +1,6 @@
-"""Owned test relay: one durable provider success response is withheld; never generates receipts."""
+"""Owned test relay: loss/revocation and explicit exact-binding contradiction declarations.
+Contradiction mode never changes the provider store or represents a real document effect.
+"""
 import argparse,concurrent.futures,hashlib,json,os,pathlib,resource,socket,threading,time,subprocess
 
 def atomic(path,value):
@@ -11,11 +13,11 @@ def main():
  parser=argparse.ArgumentParser();parser.add_argument('--config',required=True);args=parser.parse_args();p=pathlib.Path(args.config)
  if p.is_symlink() or p.stat().st_mode&0o777!=0o600:raise RuntimeError('Private owned config required')
  cfg=json.loads(p.read_text());threading.stack_size(262144);resource.setrlimit(resource.RLIMIT_AS,(67108864,67108864));cpus=sorted(os.sched_getaffinity(0));os.sched_setaffinity(0,set(cpus[:2]))
- state={'pid':os.getpid(),'pgid':os.getpgrp(),'port':cfg['port'],'upstream':cfg['upstream'],'postPublication':0,'postAuthorization':0,'get':0,'withheld':False,'failures':0};lock=threading.Lock()
+ state={'pid':os.getpid(),'pgid':os.getpgrp(),'port':cfg['port'],'upstream':cfg['upstream'],'postPublication':0,'blockedPublicationAttempts':0,'postAuthorization':0,'get':0,'withheld':False,'failures':0};lock=threading.Lock()
  def serve(incoming):
   try:
-   with incoming,socket.create_connection(('127.0.0.1',cfg['upstream']),timeout=5) as target:
-    incoming.settimeout(5);target.settimeout(5);head=bytearray()
+   with incoming:
+    incoming.settimeout(5);head=bytearray()
     while not head.endswith(b'\r\n\r\n'):
      v=incoming.recv(1)
      if not v or len(head)>=16384:raise RuntimeError('Bounded header')
@@ -29,16 +31,33 @@ def main():
      part=incoming.recv(min(65536,length-len(body)))
      if not part:raise RuntimeError('Short body')
      body.extend(part)
+    if cfg.get('mode')=='CONTRADICT_OLD_SUCCESS' and method=='POST' and path=='/v1/knowledge/publications':
+     with lock:state['blockedPublicationAttempts']+=1;atomic(cfg['state'],state)
+     incoming.sendall(b'HTTP/1.1 409 Conflict\r\nContent-Type: application/json\r\nContent-Length: 2\r\nConnection: close\r\n\r\n{}');return
     if cfg.get('mode','LOSS')=='REVOKE_BEFORE_PUBLISH' and method=='POST' and path=='/v1/knowledge/publications':
      # Operator fixture transition happens before the real POST, never inside application code.
      result=subprocess.run(['/usr/bin/python3',cfg['providerScript'],'--config',cfg['providerConfig'],'--grant-actor',cfg['actor'],'--grant-read'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=10)
      if result.returncode!=0:raise RuntimeError('Actual grant revocation failed')
-    forwarded=bytes(head).replace(('Host: 127.0.0.1:'+str(cfg['port'])).encode(),('Host: 127.0.0.1:'+str(cfg['upstream'])).encode());target.sendall(forwarded);target.sendall(body);response=bytearray()
-    while True:
-     part=target.recv(65536)
-     if not part:break
-     response.extend(part)
-     if len(response)>8486912:raise RuntimeError('Bounded response')
+    with socket.create_connection(('127.0.0.1',cfg['upstream']),timeout=5) as target:
+     target.settimeout(5)
+     forwarded=bytes(head).replace(('Host: 127.0.0.1:'+str(cfg['port'])).encode(),('Host: 127.0.0.1:'+str(cfg['upstream'])).encode());target.sendall(forwarded);target.sendall(body);response=bytearray()
+     while True:
+      part=target.recv(65536)
+      if not part:break
+      response.extend(part)
+      if len(response)>8486912:raise RuntimeError('Bounded response')
+    if cfg.get('mode')=='CONTRADICT_OLD_SUCCESS' and method=='GET' and path.endswith('/executions/'+cfg['execution']) and pathlib.Path(cfg['armFile']).is_file():
+     if pathlib.Path(cfg['armFile']).read_text()!=cfg['execution']:raise RuntimeError('Exact armed execution required')
+     h,raw=bytes(response).split(b'\r\n\r\n',1);original=json.loads(raw)
+     if h.split(b' ')[1]!=b'200' or original.get('state')!='FAILED' or original.get('executionId')!=cfg['execution'] or not original.get('permanentRejection'):raise RuntimeError('Exact actual permanent rejection required')
+     declaration=dict(original);declaration['state']='SUCCESS'
+     for name in ('permanentRejection','noEffectBasis','errorCode'):declaration.pop(name,None)
+     declaration['documentId']='doc-'+hashlib.sha256(('declaration-document:'+cfg['execution']).encode()).hexdigest()[:32]
+     declaration['resultId']='result-'+hashlib.sha256(('declaration-result:'+cfg['execution']).encode()).hexdigest()[:32]
+     encoded=json.dumps(declaration,sort_keys=True,separators=(',',':')).encode()
+     response=b'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: '+str(len(encoded)).encode()+b'\r\nConnection: close\r\n\r\n'+encoded
+     with lock:
+      state['upstreamReceiptSha256']=hashlib.sha256(raw).hexdigest();state['declarationSha256']=hashlib.sha256(encoded).hexdigest();state['declaration']=declaration;state['realDocumentEffect']=False
     with lock:
      if method=='POST' and path=='/v1/knowledge/publications':
       state['postPublication']+=1

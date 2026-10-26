@@ -1,0 +1,49 @@
+package ama.storage;
+
+import com.fasterxml.jackson.databind.*;import java.nio.file.*;import java.time.Duration;import java.util.*;import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;import static ama.storage.Task11B2ExactRetryOracle.*;
+
+/** Standalone actual B3 window; no inheritance from acceptance/readback and no automatic grants/sends/native. */
+class Task11B3PreparedLocalIT {
+ final Task11B3PreparedFixture f=new Task11B3PreparedFixture();
+ @Test void preparedReadyZeroLocalDecisionRollbacksMaintenanceAckAndIndependentJvm()throws Exception {
+  Throwable primary=null;
+  try{
+   f.open();f.startContext();f.createSessions();f.maintenance(2,"INITIAL_AND_NEXT_SCHEDULED_CADENCE");f.closeContext();f.startContext();f.maintenance(1,"NEW_INSTANCE_FRESH_PASS");assertEquals(3,f.fault.maintenanceQueries.size());f.permissionNegatives();f.rollbackMatrix();
+   f.loseDecisionAck();var closed=f.rows();f.save("business-after-decision.json",closed,true);f.record("FULL_PREPARED_LOCAL_DECISION_ORACLE",Task11B3LocalOracle.verify(f.initial,closed,f.primaryKeys,f.meeting,f.publication,f.task,f.execution,f.operation,f.actor("owner"),Task11B3PreparedFixture.KEY));
+   equal(f.decision,Task11B3LocalDecision.fromSealedRow(f.json.valueToTree(canonical(Task11B3LocalOracle.row(closed,"publication_submission","task_id",f.task))),f.binding));
+   var replay=f.call("same-key-local-decision-replay","owner",f.localPath(),f.localBody,Task11B3PreparedFixture.KEY,200);assertTrue(replay.path("replayed").asBoolean());equal(f.decision,Task11B3LocalDecision.normalize(replay,f.binding));equal(closed,f.rows());f.oldAck();equal(closed,f.rows());
+   String newKey="task11-b3-prepared-local-sealed-ack-01";var acknowledgment=f.call("new-key-sealed-ack","owner",f.localPath(),f.localBody,newKey,200);equal(f.decision,Task11B3LocalDecision.normalize(acknowledgment,f.binding));var afterAck=f.rows();verifyAcknowledgment(closed,afterAck,newKey);f.save("business-after-sealed-ack.json",afterAck,true);assertEquals(19,f.calls);
+   f.close();equal(afterAck,f.rows());f.record("PARENT_CONTEXTS_SESSIONS_CLOSED_BEFORE_CHILD",Map.of("contextsCreated",f.contexts,"sessionLifecycles",f.sessions.stream().map(Task11B3PreparedFixture.Session::custody).toList()));freshJvm(afterAck);
+   equal(afterAck,f.rows());f.assertClosed();f.identitiesAndCounters("FINAL");f.save("business-final.json",f.rows(),true);
+   for(var session:f.sessions)try(var paths=Files.walk(f.inputs.evidence())){for(Path path:paths.filter(Files::isRegularFile).toList())assertFalse(new String(Files.readAllBytes(path),java.nio.charset.StandardCharsets.ISO_8859_1).contains(session.token),"Session token must remain memory-only");}
+   f.complete=true;f.record("COMPLETE_PREPARED_READY0_NEVER_MARKED_NO_CLAIM_SEND",Map.ofEntries(Map.entry("parentRequests",19),Map.entry("childRequests",3),Map.entry("combinedRequests",22),Map.entry("localDecisions",1),Map.entry("newSealedAcknowledgments",1),Map.entry("maintenanceScheduledPasses",3),Map.entry("claims",0),Map.entry("sqliteObservations",0),Map.entry("nativeStarts",0),Map.entry("providerGetIncrements",0),Map.entry("destinationPostIncrements",0),Map.entry("publicationPostIncrements",0)));
+  }catch(Throwable t){primary=t;f.result.put("safeFailureType",t.getClass().getName());if(t instanceof InterruptedException)Thread.currentThread().interrupt();throw t;}
+  finally{
+   Throwable cleanup=null;try{f.close();}catch(Throwable t){cleanup=t;}
+   try{f.result.put("status",f.complete&&primary==null&&cleanup==null?"PASS":"PARTIAL_UNQUALIFIED");if(cleanup!=null)f.result.put("cleanupFailureType",cleanup.getClass().getName());if(f.inputs!=null)f.record("FINAL_CUSTODY",Map.of("noWindowRerun",true,"originalReadbackWindowPreserved",true,"noClaimOrSend",true));}catch(Throwable t){cleanup=Task11B3PreparedFixture.add(cleanup,t);}
+   if(cleanup!=null){if(primary!=null)primary.addSuppressed(cleanup);else Task11B3PreparedFixture.rethrow(cleanup);}
+  }
+ }
+ void verifyAcknowledgment(Map<String,List<Map<String,Object>>> before,Map<String,List<Map<String,Object>>> after,String key)throws Exception {
+  for(String table:before.keySet())if(!table.equals("idempotency_record"))equal(before.get(table),after.get(table));
+  var old=before.get("idempotency_record");var now=after.get("idempotency_record");assertEquals(old.size()+1,now.size());var oldScopes=new HashSet<String>();for(var row:old){oldScopes.add((String)row.get("scope_hash"));var found=now.stream().filter(r->row.get("scope_hash").equals(r.get("scope_hash"))).toList();assertEquals(1,found.size());equal(row,found.getFirst());}
+  var added=now.stream().filter(r->!oldScopes.contains(r.get("scope_hash"))).toList();assertEquals(1,added.size());var r=added.getFirst();assertEquals("PUBLICATION_LOCAL_RECOVERY",r.get("operation"));assertEquals(f.actor("owner"),r.get("actor_id"));assertEquals(f.meeting,r.get("resource_id"));assertEquals(f.task,r.get("result_id"));assertEquals(java.math.BigInteger.valueOf(200),integer(r.get("http_status")));assertEquals("SUCCEEDED",r.get("state"));assertEquals(Task11B3LocalOracle.digest(key),r.get("key_hash"));assertEquals(Task11B3LocalOracle.digest(f.actor("owner"),f.meeting,"PUBLICATION_LOCAL_RECOVERY",key),r.get("scope_hash"));assertEquals(Task11B3LocalOracle.digest(f.publication,f.task,"13","6"),r.get("request_hash"));assertNotNull(r.get("created_at"));f.record("NEW_KEY_ONLY_ADDS_SEALED_ACK_RECEIPT",Map.of("receipt",r,"immutableDecision",f.decision));
+ }
+ void freshJvm(Map<String,List<Map<String,Object>>> before)throws Exception {
+  assertEquals(0,f.children);Path input=f.inputs.evidence().resolve("b3-local-receipt-child-input.json"),log=f.inputs.evidence().resolve("b3-local-receipt-child.log");var spec=new LinkedHashMap<String,Object>();spec.put("purpose","B3_PREPARED_LOCAL_RECEIPT_REPLAY");spec.put("parentPid",ProcessHandle.current().pid());spec.put("meetingId",f.meeting);spec.put("publicationId",f.publication);spec.put("taskId",f.task);spec.put("localKey",Task11B3PreparedFixture.KEY);spec.put("localBody",f.localBody);spec.put("decision",f.decision);spec.put("businessBeforeSha256",Task11B2RuntimeFixture.digest(f.json.writeValueAsBytes(canonical(before))));f.save(input.getFileName().toString(),spec,true);Files.createFile(log);
+  String cp=System.getProperty("surefire.test.class.path",System.getProperty("java.class.path"));assertFalse(cp.isBlank());var command=List.of(Path.of(System.getProperty("java.home"),"bin/java").toString(),"-Xmx256m","-XX:ActiveProcessorCount=2","-cp",cp,"ama.storage.Task11B3LocalReceiptApi",input.toString());f.record("BEFORE_ONLY_INDEPENDENT_RECEIPT_JVM",Map.of("command",command,"inputSha256",Task11B2RuntimeFixture.digest(Files.readAllBytes(input)),"heapMiB",256));
+  var launch=new ProcessBuilder(command).directory(f.inputs.root().toFile()).redirectErrorStream(true).redirectOutput(log.toFile());var env=launch.environment();env.keySet().removeIf(k->k.startsWith("AMA_")||Set.of("JAVA_TOOL_OPTIONS","JDK_JAVA_OPTIONS","_JAVA_OPTIONS","MAVEN_OPTS","MAVEN_CONFIG","JAVA_OPTS").contains(k));for(String key:List.of("AMA_TEST_DATABASE_URL","AMA_TEST_DATABASE_USERNAME","AMA_TEST_DATABASE_PASSWORD","AMA_TASK11_FIXTURE","AMA_TASK11_REPOSITORY_ROOT","AMA_TASK11_EVIDENCE_WINDOW","AMA_TASK11_OWNER","AMA_TASK11_RUN_ROOT"))env.put(key,Objects.requireNonNull(System.getenv(key)));
+  Throwable primary=null;boolean[] interrupted={Thread.interrupted()};var custody=new LinkedHashMap<String,Object>();
+  try{
+   if(interrupted[0])throw new InterruptedException("Interrupted before child start");f.child=launch.start();f.children++;custody.put("pid",f.child.pid());custody.put("startInstant",f.child.info().startInstant().map(Object::toString).orElse("unavailable"));f.record("RECEIPT_CHILD_OWNED",custody);assertTrue(f.child.waitFor(90,TimeUnit.SECONDS),"Bounded independent JVM wait");assertEquals(0,f.child.exitValue());Path file=f.inputs.evidence().resolve("b3-local-receipt-child-result.json");assertFalse(Files.isSymbolicLink(file));assertTrue(Files.size(file)<=1048576);var result=f.json.readTree(Files.readAllBytes(file));assertEquals("PASS",result.path("status").asText());assertEquals(f.child.pid(),result.path("pid").asLong());assertEquals(3,result.path("calls").asInt());assertEquals(2,result.path("sessions").size());for(JsonNode session:result.path("sessions")){assertTrue(session.path("inserted").asBoolean()&&session.path("deleteAttempted").asBoolean());assertEquals(1,session.path("deleted").asInt());}assertTrue(result.path("appCloseReturned").asBoolean()&&result.path("clientJoined").asBoolean());assertEquals(result.path("businessBeforeSha256"),result.path("businessAfterSha256"));equal(before,f.rows());f.record("INDEPENDENT_JVM_THREE_RECEIPTS_PROVEN",Map.of("childResult",result,"childResultSha256",Task11B2RuntimeFixture.digest(Files.readAllBytes(file))));
+  }catch(Throwable t){primary=t;if(t instanceof InterruptedException)interrupted[0]=true;throw t;}
+  finally{
+   Throwable cleanup=null;
+   if(f.child!=null){try{if(f.child.isAlive())Task11ResponseLossFixture.stopOwned(f.child,interrupted);}catch(Throwable t){cleanup=t;}finally{custody.put("alive",f.child.isAlive());custody.put("exitCode",f.child.isAlive()?-999:f.child.exitValue());f.result.put("child",custody);}
+    try{f.save("b3-local-receipt-child-exit.json",custody,true);f.record("RECEIPT_CHILD_EXIT_CUSTODY",custody);assertFalse(f.child.isAlive());}catch(Throwable t){cleanup=Task11B3PreparedFixture.add(cleanup,t);}
+   }
+   if(interrupted[0])Thread.currentThread().interrupt();if(cleanup!=null){if(primary!=null)primary.addSuppressed(cleanup);else Task11B3PreparedFixture.rethrow(cleanup);}
+  }
+ }
+}

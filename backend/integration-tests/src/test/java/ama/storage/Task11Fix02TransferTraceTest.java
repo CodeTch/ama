@@ -1,0 +1,6 @@
+package ama.storage;
+import java.util.*;import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;
+class Task11Fix02TransferTraceTest {
+ @Test void sameCallUsesReferenceIdentityThenBoundaryReleasesStrongKeysWithMonotonicSerial(){var t=new Task11Fix02TransferTrace();Object a=new Object(),b=new Object();int first=t.identity(a),second=t.identity(b);assertEquals(first,t.identity(a));assertNotEquals(first,second);assertEquals(2,t.identities.size());var released=t.releaseCompletedCall();assertEquals(2,released.get("releasedStrongIdentities"));assertTrue(t.identities.isEmpty());int again=t.identity(a);assertTrue(again>second);assertEquals(again,t.identity(a));}
+ @Test void liveTransactionOrUnpersistedRowsCannotReleaseIdentities(){var t=new Task11Fix02TransferTrace();t.identity(new Object());org.springframework.transaction.support.TransactionSynchronizationManager.setActualTransactionActive(true);try{assertThrows(AssertionError.class,t::releaseCompletedCall);assertEquals(1,t.identities.size());}finally{org.springframework.transaction.support.TransactionSynchronizationManager.setActualTransactionActive(false);}t.rows.add(Map.of("sql","captured"));assertThrows(AssertionError.class,t::releaseCompletedCall);assertEquals(1,t.identities.size());t.rows.clear();t.releaseCompletedCall();assertTrue(t.identities.isEmpty());}
+}

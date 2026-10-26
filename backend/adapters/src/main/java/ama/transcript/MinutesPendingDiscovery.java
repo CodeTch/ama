@@ -28,6 +28,7 @@ final class MinutesPendingDiscovery {
   return new Plan(meeting,Collections.unmodifiableMap(rows),List.copyOf(queries),decisionCandidate);
  }
  static void lock(DataSource source,Plan plan,List<String> tables){var j=new JdbcTemplate(source);j.setQueryTimeout(2);for(String table:tables){var q=plan.queries().stream().filter(x->x.table().equals(table)).findFirst().orElseThrow();if(!read(j,q,true).equals(plan.rows().get(table)))throw unavailable();}}
+ static void compareHeld(DataSource source,Plan plan,List<String> tables){var j=new JdbcTemplate(source);j.setQueryTimeout(2);for(String table:tables){var q=plan.queries().stream().filter(x->x.table().equals(table)).findFirst().orElseThrow();if(!read(j,q,false).equals(plan.rows().get(table)))throw unavailable();}}
  static void validate(Plan plan,long revision){
   MinutesDomainCapacity.reserve(plan.rows(),256,256,null);
   var inputs=index(plan.rows().get("generation_input"));var tasks=index(plan.rows().get("durable_task"));

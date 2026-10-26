@@ -18,6 +18,11 @@ class FileErrors {
         BusinessErrors.write(response, 503, "FILE_PURPOSE_UNAVAILABLE", "File purpose unavailable");
     }
 
+    @ExceptionHandler(ama.contract.MinutesContracts.Failure.class)
+    void publication(ama.contract.MinutesContracts.Failure failure,HttpServletResponse response) throws IOException {
+        if(failure.code()==ama.contract.MinutesContracts.FailureCode.CAPABILITY_UNAVAILABLE)conflict(response);
+        else unavailable(response);
+    }
     @ExceptionHandler(Conflict.class)
     void conflict(HttpServletResponse r) throws IOException {
         BusinessErrors.write(r, 409, "FILE_CONFLICT", "File request conflicts");

@@ -121,6 +121,19 @@ COMMIT;""")
    self.db.execute('INSERT INTO folder VALUES(?,?,NULL,?,1)',('controlled-root','controlled-library','Controlled root'))
   actual=self.db.execute('SELECT pins FROM identity WHERE singleton=1').fetchone()
   if not actual or bytes(actual[0])!=canonical(pins):raise RuntimeError('Pinned store/key identity mismatch')
+ def create_child_folder(self,folder):
+  if not re.fullmatch(r'[a-z][a-z0-9-]{0,127}',folder) or folder=='controlled-root':raise RuntimeError('Bounded new child destination required')
+  expected=(folder,'controlled-library','controlled-root',folder,0)
+  with self.lock:
+   self.db.execute('BEGIN IMMEDIATE')
+   try:
+    if not self.db.execute("SELECT 1 FROM folder WHERE id='controlled-root' AND library='controlled-library' AND parent IS NULL AND is_root=1").fetchone():raise RuntimeError('Original controlled root required')
+    actual=self.db.execute('SELECT id,library,parent,name,is_root FROM folder WHERE id=?',(folder,)).fetchone()
+    if actual is None:self.db.execute('INSERT INTO folder VALUES(?,?,?,?,?)',expected)
+    elif tuple(actual)!=expected:raise RuntimeError('Existing destination differs')
+    self.db.execute('COMMIT')
+   except BaseException:
+    self.db.execute('ROLLBACK');raise
  def administer(self,actor,library,folder,publish,read):
   with self.lock:
    if not self.db.execute('SELECT 1 FROM folder WHERE id=? AND library=?',(folder,library)).fetchone():raise RuntimeError('Actual destination required')
@@ -164,17 +177,31 @@ COMMIT;""")
     assertion={'schema':'ama.controlled-kb-destination.v1',**self.ids,'actorId':actor,'libraryId':body['libraryId'],'folderId':body['folderId'],'context':body['context'],'authVersion':grant['version'],'issuedAt':now,'expiresAt':now+30}
     return {'providerId':self.ids['providerId'],'storeInstanceId':self.ids['storeInstanceId'],'assertion':self.sign(assertion)}
    if method=='GET' and path.startswith('/v1/knowledge/libraries'):
-    parsed=urllib.parse.urlsplit(path);query=urllib.parse.parse_qs(parsed.query,strict_parsing=True);limit=int(query.get('limit',['20'])[0]);cursor=query.get('cursor',[''])[0]
-    if not 1<=limit<=50 or any(len(v)!=1 for v in query.values()):raise Denied(400)
-    parts=parsed.path.split('/')
-    if parsed.path=='/v1/knowledge/libraries':
-     if set(query)-{'limit','cursor'}:raise Denied(400)
-     rows=self.db.execute('SELECT DISTINCT l.id,l.name,l.root rootFolderId FROM library l JOIN grant_record g ON g.library=l.id WHERE g.actor=? AND g.can_publish=1 AND l.id>? ORDER BY l.id LIMIT ?',(actor,cursor,limit+1)).fetchall()
-    elif len(parts)==6 and parts[5]=='folders':
-     if set(query)-{'limit','cursor','parentFolderId'}:raise Denied(400)
-     parent=query.get('parentFolderId',[None])[0];library=parts[4]
-     rows=self.db.execute('SELECT f.id,f.library libraryId,f.parent parentFolderId,f.is_root isRoot,f.name FROM folder f JOIN grant_record g ON g.library=f.library AND g.folder=f.id WHERE g.actor=? AND g.can_publish=1 AND f.library=? AND (? IS NULL AND f.is_root=1 OR f.parent=?) AND f.id>? ORDER BY f.id LIMIT ?',(actor,library,parent,parent,cursor,limit+1)).fetchall()
-    else:raise Denied(404)
+    if len(path)>2048 or re.search(r'%(?![0-9A-Fa-f]{2})',path):raise Denied(400)
+    try:
+     parsed=urllib.parse.urlsplit(path)
+     if parsed.fragment or parsed.scheme or parsed.netloc:raise Denied(400)
+     query=urllib.parse.parse_qs(parsed.query,strict_parsing=True,keep_blank_values=True,encoding='utf-8',errors='strict')
+     if any(len(v)!=1 or not v[0] for v in query.values()):raise Denied(400)
+     count=query.get('limit',['20'])[0]
+     if not re.fullmatch(r'[1-9][0-9]?',count):raise Denied(400)
+     limit=int(count)
+     if limit>50:raise Denied(400)
+     def identifier(value):
+      if not 1<=len(value)<=255 or not value.strip() or value in ('.','..') or any(ord(c)<32 or 127<=ord(c)<=159 or c in '/\\' for c in value) or re.search(r'%(2f|5c)',value,re.I):raise Denied(400)
+      value.encode('utf-8','strict');return value
+     cursor=identifier(query['cursor'][0]) if 'cursor' in query else ''
+     parts=parsed.path.split('/')
+     if parsed.path=='/v1/knowledge/libraries':
+      if set(query)-{'limit','cursor'}:raise Denied(400)
+      rows=self.db.execute('SELECT DISTINCT l.id,l.name,l.root rootFolderId FROM library l JOIN grant_record g ON g.library=l.id WHERE g.actor=? AND g.can_publish=1 AND l.id>? ORDER BY l.id LIMIT ?',(actor,cursor,limit+1)).fetchall()
+     elif len(parts)==6 and parts[1:4]==['v1','knowledge','libraries'] and parts[5]=='folders':
+      if set(query)-{'limit','cursor','parentFolderId'}:raise Denied(400)
+      parent=identifier(query['parentFolderId'][0]) if 'parentFolderId' in query else None
+      library=identifier(urllib.parse.unquote(parts[4],encoding='utf-8',errors='strict'))
+      rows=self.db.execute('SELECT f.id,f.library libraryId,f.parent parentFolderId,f.is_root isRoot,f.name FROM folder f JOIN grant_record g ON g.library=f.library AND g.folder=f.id WHERE g.actor=? AND g.can_publish=1 AND f.library=? AND (? IS NULL AND f.is_root=1 OR f.parent=?) AND f.id>? ORDER BY f.id LIMIT ?',(actor,library,parent,parent,cursor,limit+1)).fetchall()
+     else:raise Denied(404)
+    except (ValueError,UnicodeError):raise Denied(400)
     more=len(rows)>limit;items=[dict(r) for r in rows[:limit]];return {'providerId':self.ids['providerId'],'storeInstanceId':self.ids['storeInstanceId'],'items':items,'cursor':items[-1]['id'] if more else None}
    if method=='POST' and path=='/v1/knowledge/publications':return self.publish(body,actor)
    if method=='GET' and '/executions/' in path:
@@ -306,15 +333,18 @@ class Server(http.server.ThreadingHTTPServer):
   finally:self.capacity.release()
 
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--config',required=True);parser.add_argument('--initialize',action='store_true');parser.add_argument('--grant-actor');parser.add_argument('--grant-read',action='store_true');parser.add_argument('--grant-publish',action='store_true');args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--config',required=True);parser.add_argument('--initialize',action='store_true');parser.add_argument('--grant-actor');parser.add_argument('--grant-folder',default='controlled-root');parser.add_argument('--create-folder');parser.add_argument('--grant-read',action='store_true');parser.add_argument('--grant-publish',action='store_true');args=parser.parse_args()
  config=strict(private(args.config),8192)
  if config['mode']!='ISOLATED_LOOPBACK_TEST' or config['bind']!='127.0.0.1':raise RuntimeError('Explicit isolated loopback test profile required')
  threading.stack_size(262144)
  os.sched_setaffinity(0,sorted(os.sched_getaffinity(0))[:2])
  resource.setrlimit(resource.RLIMIT_AS,(67108864,67108864))
+ if args.create_folder and (args.initialize or args.grant_actor):raise RuntimeError('Separate exact destination administration required')
  provider=Provider(config,args.initialize)
+ if args.create_folder:
+  provider.create_child_folder(args.create_folder);provider.db.close();return
  if args.grant_actor:
-  provider.administer(args.grant_actor,'controlled-library','controlled-root',args.grant_publish,args.grant_read);provider.db.close();return
+  provider.administer(args.grant_actor,'controlled-library',args.grant_folder,args.grant_publish,args.grant_read);provider.db.close();return
  server=Server(('127.0.0.1',int(config['port'])),provider)
  ready=pathlib.Path(config['readyFile']);ready.write_bytes(canonical({'port':server.server_port,'identities':provider.ids,'store':str(provider.path),'pid':os.getpid(),'pgid':os.getpgid(0)}));os.chmod(ready,0o600)
  try:server.serve_forever(poll_interval=.2)

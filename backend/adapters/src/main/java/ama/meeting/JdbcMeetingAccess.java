@@ -47,6 +47,11 @@ public final class JdbcMeetingAccess implements MeetingAccess {
         if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Use the prelocked access capability inside caller transactions");
         tx.required(()->{require(lock(actor,id),action);return null;});
     }
+    /** Detached publication preparation may not parse or hash after this holder acquired a root. */
+    public void requireBeforeRootAcquisition(){
+        Object holder=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(source);
+        if(holder!=null&&rootsStarted.containsKey(holder))throw new IllegalStateException("Publication preparation cannot follow a root");
+    }
     @Override public Locked lock(Actor actor,String id){return lockPrepared(captureIdentities(actor,List.of(),false,false,false).orElseThrow(AccessDeniedException::new),id,false).orElseThrow(AccessDeniedException::new);}
     Identities lockIdentities(Actor actor,Collection<String> affected){
         return (Identities)captureIdentities(actor,affected,false,false,true).orElseThrow(AccessDeniedException::new);

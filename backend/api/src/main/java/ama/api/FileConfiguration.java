@@ -63,7 +63,7 @@ class FileConfiguration {
             FilePurposePolicy purposes,
             FileBackendCatalog backends,
             JdbcOutbox outbox,
-            Environment env) {
+            Environment env,ProcessingConfiguration.Runtime processing) {
         return new JdbcFileUploads(
                 source,
                 tx,
@@ -72,7 +72,7 @@ class FileConfiguration {
                 backends,
                 new JdbcAuditAdapter(source),
                 outbox,
-                env.getProperty("files.part-size", Long.class, 8L * 1024 * 1024));
+                env.getProperty("files.part-size", Long.class, 8L * 1024 * 1024),processing.components()==null?null:processing.components().authority().publicationWriteGuard());
     }
 
     @Bean

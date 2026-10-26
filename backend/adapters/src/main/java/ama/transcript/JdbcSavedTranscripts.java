@@ -26,11 +26,15 @@ public final class JdbcSavedTranscripts {
  }
  public JdbcSavedTranscripts(JdbcTranscriptAuthority authority,Supplier<ConfigArchiveSource.Snapshot> archives,TranscriptAcquisitionBudget limits,CorrectionInstallation correction,ama.task.SubjectFencePort fences,ama.task.OutboxPort outbox,ama.audit.AuditPort audit,SavedTranscriptTransitions transitions){
   this.authority=Objects.requireNonNull(authority);this.archives=Objects.requireNonNull(archives);this.limits=Objects.requireNonNull(limits);this.correction=Objects.requireNonNull(correction);j=new JdbcTemplate(authority.dataSource());j.setQueryTimeout(5);admission=SavedTranscriptAdmission.capture(archives.get(),authority.readBudget(),authority.canonicalBudget());
-  this.transitions=Objects.requireNonNull(transitions);this.fences=Objects.requireNonNull(fences);this.outbox=Objects.requireNonNull(outbox);this.audit=Objects.requireNonNull(audit);receipts=new JdbcSavedTranscriptReceipts(authority.dataSource(),authority.transactionRunner(),authority.savedAccess());
+  authority.configurePublicationLimits(limits);this.transitions=Objects.requireNonNull(transitions);this.fences=Objects.requireNonNull(fences);this.outbox=Objects.requireNonNull(outbox);this.audit=Objects.requireNonNull(audit);receipts=new JdbcSavedTranscriptReceipts(authority.dataSource(),authority.transactionRunner(),authority.savedAccess());
  }
  private final SavedTranscriptTransitions transitions;
  private final ama.task.SubjectFencePort fences;private final ama.task.OutboxPort outbox;private final ama.audit.AuditPort audit;private final JdbcSavedTranscriptReceipts receipts;
  public SavedTranscriptAdmission admission(){return admission;}
+ private void requireTransitions(){transitions.requireControlledPublication();authority.requireSharedPublicationGuard();}
+ void requireCombinedAuthority(JdbcTranscriptAuthority expected){if(authority!=expected)throw fail(CAPABILITY_UNAVAILABLE);requireTransitions();}
+ public Map<String,Object> transitionInstallation(){requireTransitions();return Map.of("declaration",transitions.observation(),"actualCandidateContribution","AUTHORITY_CONTROLLED","actualPublicationContribution","COMPLETE_HISTORY_GUARD","actualInstallationVersion","2");}
+
  private record Prepared(SavedTranscriptGraph graph,String hash,Artifact profile) {}
  private record Selection(SavedTranscriptGraph.Discovery discovered,RuntimeException failure) {}
  private Selection discover(String meeting,String revision,TranscriptAcquisitionBudget.Ledger budget){
@@ -52,7 +56,7 @@ public final class JdbcSavedTranscripts {
   try{snapshot=acquire(actor,meeting,selection,JdbcTranscriptAuthority.SavedPurpose.MUTATION,budget);}
   catch(RuntimeException failure){cancellation(failure);if(!ordinaryPreparationFailure(failure))throw failure;var winner=receipts.lookup(actor,meeting,identity,command);if(winner.isPresent())return winner.orElseThrow();throw failure;}
   Write write=null;RuntimeException error=null;JdbcTranscriptAuthority.PreparedMinutesTransition pending=null;
-  try{transitions.requireControlledPublication();writable(snapshot,command);write=plan(actor,prepare(snapshot,budget),command,budget);pending=authority.prepareMinutesTransition(actor,meeting,selection.discovered().ancestry().values().stream().map(row->row.get(4)).filter(Objects::nonNull).toList());}catch(RuntimeException failure){cancellation(failure);error=failure;}
+  try{requireTransitions();writable(snapshot,command);write=plan(actor,prepare(snapshot,budget),command,budget);pending=authority.prepareMinutesTransition(actor,meeting,selection.discovered().ancestry().values().stream().map(row->row.get(4)).filter(Objects::nonNull).toList(),budget);}catch(RuntimeException failure){cancellation(failure);error=failure;}
   final var expected=write;final var failed=error;final var contribution=pending;
   return authority.transactionRunner().required(()->{
    var stored=receipts.claim(actor,meeting,identity);var gate=authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);JdbcSavedTranscriptReceipts.match(stored);
@@ -63,7 +67,7 @@ public final class JdbcSavedTranscripts {
    var transition=authority.beginMinutesTransition(contribution,actor,meeting,gate);
    var fresh=SavedTranscriptGraph.acquire(authority,j,gate,scope,actor,meeting,JdbcTranscriptAuthority.SavedPurpose.MUTATION,selection.discovered(),limits,budget,transition);
    writable(fresh,command);require(fresh.equals(expected.prepared().graph()),PROVENANCE_UNAVAILABLE);
-   var held=authority.sealSavedGraph(scope,gate,actor,meeting,fresh);authority.requireSavedHeld(held,gate,actor,meeting);transitions.requireControlledPublication();
+   var held=authority.sealSavedGraph(scope,gate,actor,meeting,fresh);authority.requireSavedHeld(held,gate,actor,meeting);requireTransitions();
    boolean confirming=command.operation()==ama.contract.TranscriptContracts.Operation.CONFIRM;
    if(confirming){correction.requireSame(expected.installation());correction.requireReady();}
    boolean advance=!confirming||!expected.resultId().equals(fresh.root().get("transcript_confirmation_id"));long revision=command.expectedRevision();
@@ -219,7 +223,7 @@ public final class JdbcSavedTranscripts {
  private Map<String,Object> projection(Prepared p,boolean owner){
   var g=p.graph();var out=new LinkedHashMap<String,Object>();out.put("meetingId",g.meeting());out.put("observation",observation(g.root()));out.put("storedInspection","AVAILABLE");
   out.put("selected",g.selected()==null?null:detail(g,owner));out.put("sourceBytes",g.sourceBytes());out.put("correction",correction.projection());
-  boolean transitionsReady;try{transitions.requireControlledPublication();transitionsReady=true;}catch(Failure unavailable){transitionsReady=false;}
+  boolean transitionsReady;try{requireTransitions();transitionsReady=true;}catch(Failure unavailable){transitionsReady=false;}
   boolean writable=transitionsReady&&owner&&SavedTranscriptGraph.num(g.root(),"ever_published")==0&&"ACTIVE".equals(g.root().get("lifecycle"))&&"ACTIVE".equals(g.root().get("governance_state"))&&!"PUBLISHED".equals(g.root().get("stage"))&&SavedTranscriptGraph.num(g.root(),"revision")<Long.MAX_VALUE-1;
   boolean bytes=g.selected()!=null&&g.sourceBytes().stream().allMatch(s->"ELIGIBLE".equals(s.get("eligibility")));boolean current=g.selected()!=null&&g.selected().equals(g.root().get("transcript_revision_id"));
   out.put("capabilities",Map.of("canReadHistory",owner,"canSave",writable&&bytes&&canAppend(g)&&(current||g.selectedRow().string("kind").equals("RAW")),"canRestore",writable&&bytes&&canAppend(g),"canReadSources",bytes,"canConfirm",writable&&bytes&&current&&g.selectedRow().string("kind").equals("WORKING")&&"NOT_APPLICABLE".equals(correction.projection().readiness())));

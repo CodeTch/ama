@@ -27,6 +27,7 @@ public final class JdbcFileRegistry implements FileRegistry {
     private final FilePurposePolicy purposes;
     private final FileBackendCatalog backends;
     private final Map<String, FileReferencePolicy> policies;
+    private ama.transcript.PublicationWriteGuard publicationWrites;
     private final Map<Object, java.lang.ref.WeakReference<Gate>> gates =
             Collections.synchronizedMap(new WeakHashMap<>());
 
@@ -36,6 +37,7 @@ public final class JdbcFileRegistry implements FileRegistry {
         final String meeting;
         final MeetingAccess.Locked access;
         boolean filesStarted;
+        ama.transcript.PublicationWriteGuard.Held publication;
 
         Gate(Actor actor, String meeting, MeetingAccess.Locked access) {
             this.transaction = new java.lang.ref.WeakReference<>(transaction());
@@ -115,6 +117,23 @@ public final class JdbcFileRegistry implements FileRegistry {
         this.policies = Map.copyOf(copy);
     }
 
+    public synchronized void installPublicationGuard(ama.transcript.PublicationWriteGuard guard){
+        if(publicationWrites!=null)throw new IllegalStateException("Publication registry guard already installed");guard.requireInstallation(this,source,access);publicationWrites=guard;
+    }
+    public void requirePublicationGuard(ama.transcript.PublicationWriteGuard guard){
+        if(guard==null||guard!=publicationWrites)throw new IllegalArgumentException("Shared publication guard not installed");guard.requireInstallation(this,source,access);
+    }
+    public void acceptPublicationGuard(ama.transcript.PublicationWriteGuard guard,MeetingAccess.Locked accessGate,ama.transcript.PublicationWriteGuard.Held held){
+        if(guard!=publicationWrites)throw new IllegalArgumentException("Foreign registry publication issuer");guard.requireRegistration(held,accessGate);
+        var reference=gates.get(transaction());Gate gate=reference==null?null:reference.get();if(gate==null)return;
+        if(gate.access!=accessGate||gate.publication!=null)throw new IllegalArgumentException("Foreign or duplicate registry publication scope");gate.publication=held;
+    }
+    @Override public WritePreparation prepareWrite(Actor actor,String meeting){if(publicationWrites==null)throw new Unavailable();return publicationWrites.prepare(actor,meeting);}
+    @Override public LockedMeeting lockWrite(Actor actor,String meeting,WritePreparation prepared){
+        if(publicationWrites==null||!(prepared instanceof ama.transcript.PublicationWriteGuard.Prepared plan))throw new Unavailable();var gate=(Gate)lock(actor,meeting,MeetingAccess.Action.EDIT);publicationWrites.controls(plan,actor,meeting,gate.access);return gate;
+    }
+    private void claimPublication(Gate gate){if(publicationWrites==null||gate.publication==null)throw new Unavailable();publicationWrites.claimAfterSources(gate.publication,gate.access);}
+
     @Override
     public LockedMeeting lock(Actor actor, String meeting, MeetingAccess.Action action) {
         uuid(meeting);
@@ -165,6 +184,9 @@ public final class JdbcFileRegistry implements FileRegistry {
 
     @Override
     public void bindAll(List<Binding> bindings) {
+        tx.required(()->{bindAllInTransaction(bindings);return null;});
+    }
+    private void bindAllInTransaction(List<Binding> bindings) {
         if (bindings == null || bindings.isEmpty())
             throw new IllegalArgumentException("Bindings required");
         var proofs = bindings.stream().map(b -> proof(b.reference())).toList();
@@ -192,6 +214,7 @@ public final class JdbcFileRegistry implements FileRegistry {
         gate.filesStarted = true;
         var files = new TreeMap<String, FileRecord>();
         for (String id : originals.keySet()) files.put(id, file(id, true));
+        claimPublication(gate);
         for (int i = 0; i < bindings.size(); i++)
             bind(
                     proofs.get(i),
@@ -408,7 +431,7 @@ public final class JdbcFileRegistry implements FileRegistry {
                 if(proofs.stream().anyMatch(p->p.gate!=gate))throw new IllegalArgumentException("Different source gate");
                 acquired=checkedSources(gate,held,proofs.stream().map(p->p.file).toList());
                 acquired.phase=SourcePhase.BINDING;
-                access.require(gate.access,MeetingAccess.Action.EDIT);writable(gate);
+                access.require(gate.access,MeetingAccess.Action.EDIT);writable(gate);claimPublication(gate);
                 for(int i=0;i<proofs.size();i++){
                     var p=proofs.get(i);bind(p,bindings.get(i),acquired.originals.get(p.file),acquired.files.get(p.file));
                 }
@@ -680,6 +703,7 @@ public final class JdbcFileRegistry implements FileRegistry {
     }
 
     private void writable(Gate gate) {
+        if(publicationWrites==null||gate.publication==null)throw new Unavailable();
         var row =
                 j.queryForMap("SELECT ever_published,stage FROM meeting WHERE id=?", gate.meeting);
         if (((Number) row.get("ever_published")).intValue() != 0

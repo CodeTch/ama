@@ -17,10 +17,11 @@ public final class JdbcGenerationRetention {
  /** Issued only during the domain-lock phase, before any task or external row lock. */
  static final class PublicationFacts implements GenerationRetentionPolicy.PublicationPreparation {
   private final DataSource source;private final Object holder;private final PreparedDomain domain;private final String meeting;private final boolean frozen;private List<PublicationRow> rows;
+  private ama.transcript.PublicationWriteGuard guard;private ama.transcript.PublicationWriteGuard.Held held;private MeetingAccess.Locked gate;
   private PublicationFacts(DataSource source,PreparedDomain domain,String meeting,boolean frozen){this.source=source;this.domain=domain;this.meeting=meeting;this.frozen=frozen;holder=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(source);}
   boolean frozen(DataSource source,PreparedDomain domain,String meeting){
    if(this.source!=source||this.domain!=domain||!this.meeting.equals(meeting)||holder==null||holder!=org.springframework.transaction.support.TransactionSynchronizationManager.getResource(source))throw new IllegalArgumentException("Foreign publication facts");
-   JdbcTaskPreparations.requireTransaction(source,domain);return frozen;
+   JdbcTaskPreparations.requireTransaction(source,domain);return guard==null?frozen:!guard.permitsRetention(held,gate,source,meeting);
   }
  }
  static PublicationFacts capturePublication(DataSource source,PreparedDomain domain,String meeting){
@@ -29,13 +30,20 @@ public final class JdbcGenerationRetention {
   return new PublicationFacts(source,domain,meeting,states.stream().anyMatch(Set.of("READY","RUNNING","RECONCILING")::contains));
  }
  private record PublicationRow(String id,String state) {}
+ /** Complete-history production path. The guard has already acquired the full control/task union. */
+ public static GenerationRetentionPolicy.PublicationPreparation completePublication(DataSource source,PreparedDomain domain,String meeting,ama.transcript.PublicationWriteGuard guard,ama.transcript.PublicationWriteGuard.Held held,MeetingAccess.Locked gate){
+  JdbcTaskPreparations.requireTransaction(source,domain);Objects.requireNonNull(guard).permitsRetention(held,gate,source,meeting);
+  var facts=new PublicationFacts(source,domain,meeting,true);facts.guard=guard;facts.held=held;facts.gate=gate;return facts;
+ }
+
  /** Registered policy calls this at its actual control rank, before domain/task/external locks. */
  public static GenerationRetentionPolicy.PublicationPreparation prelockPublication(DataSource source,PreparedDomain domain,String meeting){
   JdbcTaskPreparations.requireTransaction(source,domain);var jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(2);var rows=jdbc.query("SELECT id,state FROM publication WHERE meeting_id=? ORDER BY id LIMIT 2 FOR UPDATE",(r,n)->new PublicationRow(r.getString(1),r.getString(2)),meeting);if(rows.size()>1)throw new DomainPreparationUnavailableException();var facts=new PublicationFacts(source,domain,meeting,rows.stream().anyMatch(r->Set.of("READY","RUNNING","RECONCILING").contains(r.state())));facts.rows=List.copyOf(rows);return facts;
  }
  /** Later framework phase revisits only exact PKs already acquired; it never discovers new members. */
  static PublicationFacts revisitPublication(DataSource source,PreparedDomain domain,String meeting,GenerationRetentionPolicy.PublicationPreparation prepared){
-  if(!(prepared instanceof PublicationFacts facts)||facts.rows==null)throw new IllegalArgumentException("Foreign publication preparation");facts.frozen(source,domain,meeting);var jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(2);for(var row:facts.rows){var states=jdbc.queryForList("SELECT state FROM publication WHERE id=? FOR UPDATE",String.class,row.id());if(!states.equals(List.of(row.state())))throw new DomainPreparationUnavailableException();}return facts;
+  if(!(prepared instanceof PublicationFacts facts))throw new IllegalArgumentException("Foreign publication preparation");
+  if(facts.guard!=null){facts.frozen(source,domain,meeting);return facts;}if(facts.rows==null)throw new IllegalArgumentException("Missing prelocked publication rows");facts.frozen(source,domain,meeting);var jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(2);for(var row:facts.rows){var states=jdbc.queryForList("SELECT state FROM publication WHERE id=? FOR UPDATE",String.class,row.id());if(!states.equals(List.of(row.state())))throw new DomainPreparationUnavailableException();}return facts;
  }
  public record Invocation(JdbcTaskPreparations.ExternalFacts facts,PreparedDomain domain,ExecutionContext context) {}
  /** Read-only view of an already consumed same-call retention invocation. */

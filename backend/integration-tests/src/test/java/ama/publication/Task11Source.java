@@ -1,6 +1,6 @@
 package ama.publication;
 import javax.sql.DataSource;import static org.junit.jupiter.api.Assertions.*;
 public final class Task11Source {
- public static String schema(){String fixture=System.getenv("AMA_TASK11_FIXTURE");if("task11-fix01-isolated".equals(fixture))return "ama_t11fix1_49609b94161e_behavior";assertTrue(fixture==null||"task11-primary".equals(fixture));return "ama_t11_9714255c9e2c_behavior";}
- public static DataSource open(){String url=System.getenv("AMA_TEST_DATABASE_URL");assertEquals("jdbc:mysql://127.0.0.1:46151/"+schema(),url);return ama.minutes.ControlledMinutesDataSource.create(url,System.getenv("AMA_TEST_DATABASE_USERNAME"),System.getenv("AMA_TEST_DATABASE_PASSWORD"));}
+ public static String schema(){String fixture=System.getenv("AMA_TASK11_FIXTURE");if("task11-b2-exact-isolated".equals(fixture))return "ama_t11b2_d9e2fdcc611e_behavior";if("task11-b2-bootstrap-isolated".equals(fixture))return "ama_t11b2_d9e2fdcc611e_behavior";if("task11-fix02-isolated".equals(fixture))return "ama_t11fix2_075249f8161d_behavior";if("task11-fix01-isolated".equals(fixture))return "ama_t11fix1_49609b94161e_behavior";assertTrue(fixture==null||"task11-primary".equals(fixture));return "ama_t11_9714255c9e2c_behavior";}
+ public static DataSource open(){String url=System.getenv("AMA_TEST_DATABASE_URL");assertEquals("jdbc:mysql://127.0.0.1:46151/"+schema(),url);if("task11-b2-bootstrap-isolated".equals(System.getenv("AMA_TASK11_FIXTURE"))||"task11-b2-exact-isolated".equals(System.getenv("AMA_TASK11_FIXTURE")))assertEquals("t11b2_d9e2fdcc611e",System.getenv("AMA_TEST_DATABASE_USERNAME"));return ama.minutes.ControlledMinutesDataSource.create(url,System.getenv("AMA_TEST_DATABASE_USERNAME"),System.getenv("AMA_TEST_DATABASE_PASSWORD"));}
 }

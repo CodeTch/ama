@@ -11,6 +11,10 @@ import java.io.InputStream;
  */
 public interface FileRegistry {
     interface LockedMeeting {}
+    interface WritePreparation {}
+    /** Direct business binding callers declare publication history before obtaining their root. */
+    default WritePreparation prepareWrite(Actor actor,String meetingId){throw new ama.contract.FileContracts.Unavailable();}
+    default LockedMeeting lockWrite(Actor actor,String meetingId,WritePreparation prepared){throw new ama.contract.FileContracts.Unavailable();}
 
     interface LockedReference {}
     interface LockedSources {}

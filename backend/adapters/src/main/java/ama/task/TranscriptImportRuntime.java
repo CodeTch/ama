@@ -34,6 +34,11 @@ public final class TranscriptImportRuntime {
   components.authority().requireImportSource(source);
   return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components),"MINUTES_GENERATE_V1",components.authority().minutesTaskPolicy(),"KNOWLEDGE_PUBLISH_V1",components.authority().publicationTaskPolicy()));
  }
+ /** Verify the genuine immutable per-process registrations; does not claim a worker is running. */
+ public static void requireCombined(JdbcTaskQueue queue,JdbcTranscriptAuthority authority){
+  Objects.requireNonNull(queue);Objects.requireNonNull(authority);authority.requireImportSource(queue.source);
+  if(!(queue.policies.get("TRANSCRIPT_IMPORT_V1") instanceof ImportPolicy p)||p.queue!=queue||p.components.authority()!=authority||queue.policies.get("MINUTES_GENERATE_V1")!=authority.minutesTaskPolicy()||queue.policies.get("KNOWLEDGE_PUBLISH_V1")!=authority.publicationTaskPolicy())throw new IllegalArgumentException("Genuine combined task registrations required");
+ }
  public static Supplier<TaskResult> prepare(JdbcTaskQueue queue,TaskLease lease,Settings settings,PreparationCancellation cancellation) throws Exception {
   if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Import preparation requires independent reads");
   if(!(queue.policy(lease.spec()) instanceof ImportPolicy policy)||policy.queue!=queue)throw new IllegalArgumentException("Production import not installed");

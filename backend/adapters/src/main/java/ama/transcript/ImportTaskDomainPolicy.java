@@ -16,7 +16,8 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
     private static final class Prepared {
         final Actor owner;final MeetingAccess.LockedIdentities identities;final List<TranscriptReadGraph> graphs;final MinutesPendingDiscovery.Plan pending;
         FileRegistry.LockedMeeting completionGate;
-        Prepared(Actor owner,MeetingAccess.LockedIdentities identities,List<TranscriptReadGraph> graphs,MinutesPendingDiscovery.Plan pending){this.owner=owner;this.identities=identities;this.graphs=graphs;this.pending=pending;}
+        final PublicationWriteGuard.Prepared publication;PublicationWriteGuard.Held publicationHeld;MeetingAccess.Locked access;
+        Prepared(Actor owner,MeetingAccess.LockedIdentities identities,List<TranscriptReadGraph> graphs,MinutesPendingDiscovery.Plan pending,PublicationWriteGuard.Prepared publication){this.owner=owner;this.identities=identities;this.graphs=graphs;this.pending=pending;this.publication=publication;}
         Actor owner(){return owner;}MeetingAccess.LockedIdentities identities(){return identities;}List<TranscriptReadGraph> graphs(){return graphs;}
     }
     private record Adopted(JdbcTranscriptAuthority.HeldProcessingFacts held,FileRegistry.LockedMeeting gate,TaskSpec spec) {
@@ -53,9 +54,11 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         }
         var pending=MinutesPendingDiscovery.discover(authority.dataSource(),first.subject().id());
         var actor=new Actor(owner,Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
+        var publication=authority.publicationWriteGuard().prepare(actor,first.subject().id(),authority.publicationBudget());
+        authority.publicationWriteGuard().covers(publication,pending.rows());
         var identities=authority.meetingAccess().tryLockIdentities(actor,List.of(owner),skip);
         if(identities.isEmpty())return Optional.empty();
-        return Optional.of(issuer.issue(specs,purpose,new Prepared(actor,identities.orElseThrow(),List.copyOf(graphs),pending),true));
+        return Optional.of(issuer.issue(specs,purpose,new Prepared(actor,identities.orElseThrow(),List.copyOf(graphs),pending,publication),true));
     }
     public void requirePrepared(List<TaskSpec> specs,Acquisition purpose,PreparedDomain prepared) {
         issuer.require(specs,purpose,prepared);
@@ -93,6 +96,7 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         var gate=authority.fileRegistry().adopt(p.owner(),specs.getFirst().subject().id(),root.orElseThrow(),MeetingAccess.Action.EDIT);
         var reader=new BoundedTranscriptMetadata(j,authority.readBudget(),true,skip);
         for(var graph:p.graphs())require(reader.one("meeting",BoundedTranscriptMetadata.ROOT,text(graph.root,"id")).equals(graph.root),PROVENANCE_UNAVAILABLE);
+        p.access=root.orElseThrow();p.publicationHeld=authority.publicationWriteGuard().controls(p.publication,p.owner(),specs.getFirst().subject().id(),p.access);
         // Whole input/batch/profile/member union precedes every source session/file, across all specs.
         var inputs=new TreeMap<String,TranscriptReadGraph>();
         var batches=new TreeMap<String,TranscriptReadGraph>();
@@ -136,16 +140,17 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
             }
         }
         capacity(p);
+        authority.publicationWriteGuard().claim(p.publicationHeld,p.access);
         if(current.size()==p.graphs().size())p.completionGate=gate;
         return true;
     }
-    private void capacity(Prepared p){MinutesPendingDiscovery.lock(authority.dataSource(),p.pending,MinutesPendingDiscovery.TASKS);MinutesDomainCapacity.reserve(p.pending.rows(),authority.minutesDomain().taskLimit(),256,null);}
+    private void capacity(Prepared p){authority.publicationWriteGuard().tasks(p.publicationHeld,p.access);MinutesPendingDiscovery.compareHeld(authority.dataSource(),p.pending,MinutesPendingDiscovery.TASKS);authority.publicationWriteGuard().reserve(p.publication,null);MinutesDomainCapacity.reserve(p.pending.rows(),authority.minutesDomain().taskLimit(),256,null);}
     void requireCompletion(List<TaskSpec> specs,PreparedDomain prepared){
         issuer.require(specs,Acquisition.TASK_MUTATION,prepared);
         if(!(issuer.value(prepared) instanceof Prepared p)||p.completionGate==null||!issuer.permitsEffects(prepared))throw new DomainPreparationUnavailableException();
         // EDIT was established before this gate was retained, after the complete current graph.
         // Registry access checks issuer/holder only; re-running requirePrepared would refresh roots late.
-        authority.fileRegistry().access(p.completionGate);
+        authority.publicationWriteGuard().requireClaimed(p.publicationHeld,authority.fileRegistry().access(p.completionGate));
         require(p.graphs().stream().map(g->g.expected).toList().equals(specs),PROVENANCE_UNAVAILABLE);
     }
     public void validateInput(TaskSpec spec) {

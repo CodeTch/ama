@@ -1,0 +1,69 @@
+package ama.transcript;
+import java.util.*;import java.lang.reflect.*;import ama.contract.TaskContracts.*;import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;
+class Task11ReplayBindingTest {
+ static final String PUB="12345678-1234-4234-8234-123456789abc",FINAL="12345678-1234-4234-8234-123456789abd",TASK="12345678-1234-4234-8234-123456789abe";
+ Object identity(String operation,String... semantics)throws Exception {var c=assertDoesNotThrow(()->Class.forName("ama.transcript.PublicationReplayIdentity"),"Replay must retain normalized original request identity");var m=c.getDeclaredMethod("parse",String.class,String[].class);m.setAccessible(true);return m.invoke(null,operation,semantics);}
+ void verify(Object identity,Map<String,Object> submission,Map<String,Object> manifest,List<Map<String,Object>> executions)throws Exception {var m=identity.getClass().getDeclaredMethod("verify",Map.class,TaskSpec.class,Map.class,List.class);m.setAccessible(true);var spec=new TaskSpec("KNOWLEDGE_PUBLISH_V1","KNOWLEDGE_PUBLISH",new SubjectRef("MEETING",PUB),"a".repeat(64),new TypedRef("PUBLICATION",PUB),"b".repeat(64),13,0,0,3);m.invoke(identity,submission,spec,manifest,executions);}
+ Map<String,Object> submission(){return Map.of("publication_id",PUB,"task_id",TASK,"confirmation_id",FINAL,"provider_id","provider","library_id","library","folder_id","folder","submission_no",1L);}
+ @Test void legitimateOriginalRequestAllowsRealNullPremarkerAssociation()throws Exception {verify(identity("PUBLICATION_SUBMIT","13",FINAL,"provider","library","folder"),submission(),Map.of("executionNo",1L),List.of());}
+ @Test void differentValidSameMeetingSubmissionCannotAcknowledgeOriginalRequest()throws Exception {var i=identity("PUBLICATION_SUBMIT","13",FINAL,"provider","library","folder");var other=new HashMap<>(submission());other.put("confirmation_id",PUB);var error=assertThrows(InvocationTargetException.class,()->verify(i,other,Map.of("executionNo",1L),List.of()));assertTrue(error.getCause() instanceof ama.contract.MinutesContracts.Failure);}
+ @Test void replacementMatchesOriginalPublicationDestinationAndAcceptedRevision()throws Exception {var i=identity("PUBLICATION_RESUBMIT",PUB,"12","4",FINAL,"provider","library","folder");assertThrows(InvocationTargetException.class,()->verify(i,submission(),Map.of("executionNo",1L),List.of()));var changed=new HashMap<>(submission());changed.put("folder_id","other");assertThrows(InvocationTargetException.class,()->verify(identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder"),changed,Map.of("executionNo",1L),List.of()));}
+ @Test void recoveryCannotReturnAnotherLegitimateNeverMarkedTask()throws Exception {assertThrows(InvocationTargetException.class,()->verify(identity("PUBLICATION_LOCAL_RECOVERY",PUB,FINAL,"99","4"),submission(),Map.of("executionNo",1L),List.of()));verify(identity("PUBLICATION_LOCAL_RECOVERY",PUB,TASK,"99","4"),submission(),Map.of("executionNo",1L),List.of());}
+ @Test void initialSubmitCannotReturnSameInputLaterSubmission()throws Exception {var other=new HashMap<>(submission());other.put("submission_no",2L);assertThrows(InvocationTargetException.class,()->verify(identity("PUBLICATION_SUBMIT","13",FINAL,"provider","library","folder"),other,Map.of("executionNo",1L),List.of()));}
+ @Test void actualExecutionOrdinalMustEqualImmutableManifestOrdinal()throws Exception {var i=identity("PUBLICATION_SUBMIT","13",FINAL,"provider","library","folder");assertThrows(InvocationTargetException.class,()->verify(i,submission(),Map.of("executionNo",1L),List.of(Map.of("execution_no",2L))));verify(i,submission(),Map.of("executionNo",1L),List.of(Map.of("execution_no",1L)));}
+ void command(Object identity,Map<String,Object> manifest,List<Map<String,Object>> compatible)throws Exception {command(identity,replacement(TASK,2L),manifest,compatible);}
+ Map<String,Object> replacement(String task,long ordinal){var s=new HashMap<>(submission());s.put("task_id",task);s.put("submission_no",ordinal);return s;}
+ void command(Object identity,Map<String,Object> selected,Map<String,Object> manifest,List<Map<String,Object>> compatible)throws Exception {var m=identity.getClass().getDeclaredMethod("verifyCommand",String.class,String.class,Map.class,Map.class,List.class);m.setAccessible(true);m.invoke(identity,"a".repeat(64),"b".repeat(64),selected,manifest,compatible);}
+ void unavailable(InvocationTargetException error){assertInstanceOf(ama.contract.MinutesContracts.Failure.class,error.getCause());assertEquals(ama.contract.MinutesContracts.FailureCode.PROVENANCE_UNAVAILABLE,((ama.contract.MinutesContracts.Failure)error.getCause()).code());}
+ @Test void matchingResubmitCannotAcknowledgeInitialWhenOneLaterCandidateExists()throws Exception {
+  var i=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");var later=replacement(FINAL,2L);
+  assertTrue(((PublicationReplayIdentity)i).compatible(later,Map.of("business_version",13L)));
+  assertFalse(((PublicationReplayIdentity)i).compatible(submission(),Map.of("business_version",13L)));
+  var error=assertThrows(InvocationTargetException.class,()->{verify(i,submission(),Map.of("executionNo",1L),List.of());command(i,submission(),Map.of(),List.of(later));});unavailable(error);
+ }
+ @Test void uniqueLegacyCandidateMustBeSelectedTask()throws Exception {
+  var i=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");var selected=replacement(TASK,2L);var other=replacement(FINAL,2L);
+  verify(i,selected,Map.of("executionNo",1L),List.of());assertTrue(((PublicationReplayIdentity)i).compatible(other,Map.of("business_version",13L)));
+  unavailable(assertThrows(InvocationTargetException.class,()->command(i,selected,Map.of(),List.of(other))));command(i,selected,Map.of(),List.of(selected));
+ }
+ @Test void uniqueLegacyCandidateMustBeSelectedPublicationAndOrdinal()throws Exception {
+  var i=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");var selected=replacement(TASK,2L);
+  unavailable(assertThrows(InvocationTargetException.class,()->command(i,selected,Map.of(),List.of(replacement(TASK,3L)))));
+  var other=new HashMap<>(selected);other.put("publication_id",FINAL);unavailable(assertThrows(InvocationTargetException.class,()->command(i,selected,Map.of(),List.of(other))));
+ }
+ Map<String,Object> rawOrdinal(Object ordinal){var row=replacement(TASK,2L);row.put("submission_no",ordinal);return row;}
+ Map<String,Object> normalizedCandidate(Map<String,Object> raw){var candidate=new HashMap<String,Object>();raw.forEach((field,value)->candidate.put(field,JdbcPublicationQueries.normalizeMetadata(value)));return candidate;}
+ @Test void rawJdbcOrdinalTwoMatchesProductionNormalizedLegacyCandidate()throws Exception {
+  var i=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");var selected=rawOrdinal(java.math.BigInteger.valueOf(2));var candidate=normalizedCandidate(selected);
+  assertInstanceOf(Long.class,candidate.get("submission_no"));assertEquals(2L,candidate.get("submission_no"));
+  verify(i,selected,Map.of("executionNo",1L),List.of());assertTrue(((PublicationReplayIdentity)i).compatible(candidate,Map.of("business_version",13L)));
+  assertDoesNotThrow(()->command(i,selected,Map.of(),List.of(candidate)));
+ }
+ @Test void maximumSupportedRawJdbcOrdinalMatchesProductionNormalizedCandidate()throws Exception {
+  var i=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");var selected=rawOrdinal(new java.math.BigInteger("9223372036854775806"));var candidate=normalizedCandidate(selected);
+  assertEquals(9223372036854775806L,candidate.get("submission_no"));verify(i,selected,Map.of("executionNo",1L),List.of());
+  assertDoesNotThrow(()->command(i,selected,Map.of(),List.of(candidate)));
+ }
+ @Test void malformedOrDisallowedLegacyOrdinalsFailClosedWithoutTruncation()throws Exception {
+  var i=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");
+  for(Object bad:Arrays.asList(null,"2",true,0L,1L,-1L,new java.math.BigDecimal("2.5"),Double.NaN,Double.POSITIVE_INFINITY,new java.math.BigInteger("9223372036854775807"),new java.math.BigInteger("9223372036854775808"),new java.math.BigInteger("18446744073709551618"))){
+   var invalid=rawOrdinal(bad);var valid=normalizedCandidate(rawOrdinal(java.math.BigInteger.valueOf(2)));
+   assertAll("invalid ordinal: "+bad,
+    ()->unavailable(assertThrows(InvocationTargetException.class,()->command(i,invalid,Map.of(),List.of(valid)))),
+    ()->unavailable(assertThrows(InvocationTargetException.class,()->command(i,valid,Map.of(),List.of(invalid)))),
+    ()->unavailable(assertThrows(InvocationTargetException.class,()->command(i,invalid,Map.of(),List.of(invalid)))));
+  }
+ }
+ @Test void rawJdbcOrdinalStillRequiresExactTaskPublicationAndOrdinal()throws Exception {
+  var i=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");var selected=rawOrdinal(java.math.BigInteger.valueOf(2));
+  for(String field:List.of("task_id","publication_id","submission_no")){var candidate=normalizedCandidate(selected);candidate.put(field,field.equals("submission_no")?3L:FINAL);unavailable(assertThrows(InvocationTargetException.class,()->command(i,selected,Map.of(),List.of(candidate))));}
+ }
+ @Test void boundAcknowledgmentSkipsUnrelatedLegacyInventory()throws Exception {var identity=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");var m=assertDoesNotThrow(()->identity.getClass().getDeclaredMethod("requiresLegacyInventory",Map.class));m.setAccessible(true);assertEquals(true,m.invoke(identity,Map.of()));assertEquals(false,m.invoke(identity,Map.of("acceptanceBinding",Map.of("schema","ama.publication-command-acceptance.v1"))));}
+ @Test void legacyUniquenessExcludesVerifiedOtherBoundReceiptScope()throws Exception {var identity=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");assertDoesNotThrow(()->command(identity,Map.of(),List.of(replacement(TASK,2L),Map.of("acceptanceBinding",Map.of("operation","PUBLICATION_RESUBMIT","receiptScopeHash","c".repeat(64),"requestHash","b".repeat(64))))));}
+ @Test void legacyDuplicateCompatibleReplacementIsUnavailable()throws Exception {var identity=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");assertThrows(InvocationTargetException.class,()->command(identity,Map.of(),List.of(replacement(TASK,2L),replacement(TASK,2L))));command(identity,Map.of(),List.of(replacement(TASK,2L)));}
+ @Test void newAcceptanceBindingMustMatchAuthenticatedReceiptScopeAndRequest()throws Exception {var identity=identity("PUBLICATION_RESUBMIT",PUB,"13","4",FINAL,"provider","library","folder");var binding=new HashMap<String,Object>(Map.of("schema","ama.publication-command-acceptance.v1","operation","PUBLICATION_RESUBMIT","receiptScopeHash","a".repeat(64),"requestHash","b".repeat(64)));command(identity,Map.of("acceptanceBinding",binding),List.of(replacement(TASK,2L),replacement(TASK,2L)));binding.put("receiptScopeHash","c".repeat(64));assertThrows(InvocationTargetException.class,()->command(identity,Map.of("acceptanceBinding",binding),List.of(replacement(TASK,2L))));}
+ @Test void storedMalformedResultIsUnavailableWhileRequestMalformedRemainsInvalid()throws Exception {var m=assertDoesNotThrow(()->JdbcPublicationQueries.class.getDeclaredMethod("storedTaskId",String.class));m.setAccessible(true);var error=assertThrows(InvocationTargetException.class,()->m.invoke(null,"not-uuid"));assertTrue(error.getCause() instanceof ama.contract.MinutesContracts.Failure);assertEquals(ama.contract.MinutesContracts.FailureCode.PROVENANCE_UNAVAILABLE,((ama.contract.MinutesContracts.Failure)error.getCause()).code());}
+ @Test void exactRetryOriginalIdentityBindsPredecessorAndActualCreatedExecution()throws Exception {var i=assertDoesNotThrow(()->identity("PUBLICATION_ZERO_EFFECT_RETRY",PUB,"13","4","1"));var selected=replacement(TASK,2L);var manifest=Map.<String,Object>of("executionNo",2L);var execution=new HashMap<String,Object>(Map.of("execution_no",2L,"task_id",TASK,"operation_id",FINAL));verify(i,selected,manifest,List.of(execution));for(String field:List.of("execution_no","task_id","operation_id")){var bad=new HashMap<>(execution);bad.put(field,field.equals("execution_no")?3L:field.equals("task_id")?FINAL:"not-uuid");unavailable(assertThrows(InvocationTargetException.class,()->verify(i,selected,manifest,List.of(bad))));}unavailable(assertThrows(InvocationTargetException.class,()->verify(i,selected,manifest,List.of())));}
+ @Test void newRetryAcknowledgmentRequiresItsOriginalBindingWithoutLegacyFallback()throws Exception {var i=assertDoesNotThrow(()->identity("PUBLICATION_ZERO_EFFECT_RETRY",PUB,"13","4","1"));assertFalse(((PublicationReplayIdentity)i).requiresLegacyInventory(Map.of()));unavailable(assertThrows(InvocationTargetException.class,()->command(i,Map.of(),List.of(replacement(TASK,2L)))));var binding=Map.of("schema","ama.publication-command-acceptance.v1","operation","PUBLICATION_ZERO_EFFECT_RETRY","receiptScopeHash","a".repeat(64),"requestHash","b".repeat(64));command(i,Map.of("acceptanceBinding",binding),List.of());var other=new HashMap<String,Object>(binding);other.put("operation","PUBLICATION_RESUBMIT");unavailable(assertThrows(InvocationTargetException.class,()->command(i,Map.of("acceptanceBinding",other),List.of())));}
+ @Test void retryPredecessorMustBePositiveAndOriginalSpecRevisionMustMatch()throws Exception {assertThrows(Exception.class,()->identity("PUBLICATION_ZERO_EFFECT_RETRY",PUB,"13","4","0"));var i=assertDoesNotThrow(()->identity("PUBLICATION_ZERO_EFFECT_RETRY",PUB,"14","4","1"));unavailable(assertThrows(InvocationTargetException.class,()->verify(i,replacement(TASK,2L),Map.of("executionNo",2L),List.of(Map.of("execution_no",2L,"task_id",TASK,"operation_id",FINAL)))));}
+}

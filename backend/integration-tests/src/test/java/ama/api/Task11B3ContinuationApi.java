@@ -1,0 +1,7 @@
+package ama.api;
+import ama.storage.*;import javax.sql.DataSource;import java.util.*;import org.springframework.boot.builder.SpringApplicationBuilder;import org.springframework.context.support.GenericApplicationContext;import org.springframework.context.ConfigurableApplicationContext;
+/** New finite O5/O6 acceptance profile; product defaults remain unchanged. */
+public final class Task11B3ContinuationApi {
+ public static Map<String,Object> properties(Task11B3LifecycleApi.Settings settings){var p=new HashMap<String,Object>(Task11B3LifecycleApi.properties(settings));p.put("processing.bounds.archive-total-bytes",2097152L);return p;}
+ public static ConfigurableApplicationContext start(DataSource source,FileBackendDefinitions definitions,Task11B3LifecycleApi.Settings settings){return new SpringApplicationBuilder(Task11B3LifecycleApi.Server.class).properties(properties(settings)).initializers(context->Task11B3LifecycleApi.infrastructure((GenericApplicationContext)context,source,definitions)).run("--server.address=127.0.0.1","--server.port=0","--management.server.address=127.0.0.1","--management.server.port=0","--management.endpoint.health.group.ready.include=ping","--spring.flyway.enabled=false","--spring.sql.init.mode=never","--logging.level.root=ERROR","--logging.level.ama.transcript.JdbcPublicationReplacement=WARN","--identity.allowed-origin=https://task11-b2.example.invalid");}
+}

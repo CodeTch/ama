@@ -1,0 +1,5614 @@
+{
+  "CounterToken": {
+    "type": "string",
+    "pattern": "^(0|[1-9][0-9]{0,18})$",
+    "description": "Canonical ASCII decimal0..9223372036854775806, no leading zero/sign/space/exponent. Browser preserves string digits; never coerce to Number."
+  },
+  "Uuid": {
+    "type": "string",
+    "format": "uuid",
+    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+  },
+  "Timestamp": {
+    "type": "string",
+    "description": "UTC stored timestamp in ISO-8601 representation; no locale formatting."
+  },
+  "Error": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "error": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "traceId"
+        ]
+      }
+    },
+    "required": [
+      "error"
+    ]
+  },
+  "FinalHeader": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "confirmationId": {
+        "$ref": "#/Uuid"
+      },
+      "meetingRevisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "confirmedBy": {
+        "type": "string"
+      },
+      "confirmedAt": {
+        "$ref": "#/Timestamp"
+      },
+      "minutesRevisionId": {
+        "$ref": "#/Uuid"
+      },
+      "elementSetId": {
+        "$ref": "#/Uuid"
+      },
+      "transcriptConfirmationId": {
+        "$ref": "#/Uuid"
+      }
+    },
+    "required": [
+      "confirmationId",
+      "meetingRevisionToken",
+      "confirmedBy",
+      "confirmedAt",
+      "minutesRevisionId",
+      "elementSetId",
+      "transcriptConfirmationId"
+    ]
+  },
+  "FrozenFinal": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "$ref": "#/Uuid"
+      },
+      "meeting_id": {
+        "$ref": "#/Uuid"
+      },
+      "meeting_revisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "confirmed_by": {
+        "type": "string"
+      },
+      "confirmed_at": {
+        "$ref": "#/Timestamp"
+      },
+      "source_manifest_hash": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "input_fingerprint": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "info_revision_id": {
+        "$ref": "#/Uuid"
+      },
+      "roster_revision_id": {
+        "$ref": "#/Uuid"
+      },
+      "transcript_confirmation_id": {
+        "$ref": "#/Uuid"
+      },
+      "minutes_revision_id": {
+        "$ref": "#/Uuid"
+      },
+      "element_set_id": {
+        "$ref": "#/Uuid"
+      },
+      "template_revision_id": {
+        "$ref": "#/Uuid"
+      },
+      "exclusion_revision_id": {
+        "$ref": "#/Uuid"
+      },
+      "material_snapshot_id": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "meeting_id",
+      "meeting_revisionToken",
+      "confirmed_by",
+      "confirmed_at",
+      "source_manifest_hash",
+      "input_fingerprint",
+      "info_revision_id",
+      "roster_revision_id",
+      "transcript_confirmation_id",
+      "minutes_revision_id",
+      "element_set_id",
+      "template_revision_id",
+      "exclusion_revision_id",
+      "material_snapshot_id"
+    ]
+  },
+  "FrozenBody": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "$ref": "#/Uuid"
+      },
+      "meeting_id": {
+        "$ref": "#/Uuid"
+      },
+      "revisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "generation_input_id": {
+        "$ref": "#/Uuid"
+      },
+      "parent_id": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "title": {
+        "type": "string"
+      },
+      "body": {
+        "type": "string"
+      },
+      "created_by": {
+        "type": "string"
+      },
+      "created_at": {
+        "$ref": "#/Timestamp"
+      },
+      "title_origin": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "meeting_id",
+      "revisionToken",
+      "generation_input_id",
+      "parent_id",
+      "title",
+      "body",
+      "created_by",
+      "created_at",
+      "title_origin"
+    ]
+  },
+  "FinalDetail": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "confirmation": {
+        "oneOf": [
+          {
+            "$ref": "#/FrozenFinal"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "body": {
+        "$ref": "#/FrozenBody"
+      },
+      "reviewIds": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Uuid"
+        },
+        "maxItems": 100000
+      },
+      "provenanceVerified": {
+        "const": true
+      },
+      "observation": {
+        "$ref": "./minutes.yaml#/SavedReadObservation"
+      },
+      "set": {
+        "$ref": "#/FrozenSet"
+      },
+      "elements": {
+        "$ref": "#/FrozenElements"
+      },
+      "reviews": {
+        "type": "array",
+        "items": {
+          "$ref": "#/FrozenReview"
+        },
+        "maxItems": 100000
+      },
+      "profiles": {
+        "type": "array",
+        "items": {
+          "$ref": "#/OriginalProfiles"
+        },
+        "maxItems": 256
+      }
+    },
+    "required": [
+      "confirmation"
+    ],
+    "description": "Exact verified frozen body/set/elements/accepted action tuple and original review/profile identities. Member detail requires the current effective final at both protected captures; owner may read frozen history. No current/default substitution or raw manifests."
+  },
+  "FinalHistory": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/FinalHeader"
+        },
+        "maxItems": 50
+      },
+      "hasMore": {
+        "type": "boolean"
+      },
+      "nextCursor": {
+        "oneOf": [
+          {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "items",
+      "hasMore",
+      "nextCursor"
+    ]
+  },
+  "ReviewRequirement": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "targetKind": {
+        "type": "string"
+      },
+      "targetId": {
+        "$ref": "#/Uuid"
+      },
+      "reviewKind": {
+        "enum": [
+          "SOURCE_SUPPORT",
+          "ACTION_FIELDS"
+        ]
+      },
+      "scope": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "reviewId": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "outcome": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "satisfied": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "targetKind",
+      "targetId",
+      "reviewKind",
+      "scope",
+      "reviewId",
+      "outcome",
+      "satisfied"
+    ]
+  },
+  "FinalReadiness": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "ready": {
+        "type": "boolean"
+      },
+      "businessReady": {
+        "type": "boolean"
+      },
+      "correction": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "mode": {
+            "type": "string"
+          },
+          "readiness": {
+            "type": "string"
+          },
+          "qualificationId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "mode",
+          "readiness",
+          "qualificationId"
+        ]
+      },
+      "required": {
+        "type": "array",
+        "items": {
+          "$ref": "#/ReviewRequirement"
+        },
+        "maxItems": 100000
+      },
+      "requiredReviewIds": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Uuid"
+        },
+        "maxItems": 100000
+      },
+      "optionalReviewIds": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Uuid"
+        },
+        "maxItems": 100000
+      },
+      "blockers": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "maxItems": 100000
+      },
+      "pendingCandidateIds": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Uuid"
+        },
+        "maxItems": 100000
+      },
+      "outstandingTaskIds": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Uuid"
+        },
+        "maxItems": 100000
+      },
+      "observation": {
+        "$ref": "./minutes.yaml#/SavedReadObservation"
+      }
+    },
+    "required": [
+      "ready",
+      "businessReady",
+      "correction",
+      "required",
+      "requiredReviewIds",
+      "optionalReviewIds",
+      "blockers",
+      "pendingCandidateIds",
+      "outstandingTaskIds",
+      "observation"
+    ]
+  },
+  "PublicationStatus": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "publicationId": {
+        "$ref": "#/Uuid"
+      },
+      "confirmationId": {
+        "$ref": "#/Uuid"
+      },
+      "rawState": {
+        "enum": [
+          "READY",
+          "RUNNING",
+          "RECONCILING",
+          "FAILED",
+          "SUCCEEDED"
+        ]
+      },
+      "remoteOutcome": {
+        "enum": [
+          "SUCCESS",
+          "FAILED",
+          "UNKNOWN",
+          "NOT_OBSERVED"
+        ]
+      },
+      "applicationOutcome": {
+        "enum": [
+          "APPLIED",
+          "FENCED_MANUAL",
+          "PENDING_LOOKUP",
+          "PENDING"
+        ]
+      },
+      "manualLocked": {
+        "type": "boolean"
+      },
+      "lookupPending": {
+        "type": "boolean"
+      },
+      "officialDocumentUrl": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^/api/v1/meetings/[0-9a-f-]{36}/publications/[0-9a-f-]{36}/document$"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "Exact same-origin document entry for a complete ACTIVE applied-success association. Each document request separately checks current application READ and provider DOCUMENT_READ; availability does not cache authorization."
+      },
+      "documentViewAvailability": {
+        "enum": [
+          "READY",
+          "UNAVAILABLE"
+        ]
+      },
+      "allowedActions": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "VIEW_FROZEN",
+            "REFRESH_STATUS",
+            "VIEW_ATTEMPTS"
+          ]
+        },
+        "maxItems": 16
+      },
+      "readOnlyReason": {
+        "enum": [
+          "PUBLICATION_MANUAL",
+          "PUBLISHED",
+          "PUBLICATION_FROZEN"
+        ]
+      },
+      "eligibilityAvailability": {
+        "const": "RECHECK_REQUIRED"
+      },
+      "publicationRevisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "currentFinalId": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "meetingRevisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "currentTaskId": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "executionId": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "executionNoToken": {
+        "oneOf": [
+          {
+            "$ref": "#/CounterToken"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "operationId": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "publicationId",
+      "confirmationId",
+      "rawState",
+      "remoteOutcome",
+      "applicationOutcome",
+      "manualLocked",
+      "lookupPending",
+      "officialDocumentUrl",
+      "documentViewAvailability",
+      "allowedActions",
+      "readOnlyReason",
+      "eligibilityAvailability"
+    ],
+    "description": "Fresh complete-history joined projection. Owner-only revision/current-final fields are absent for member. RemoteSUCCESS plus unapplied rawPENDING is terminal FENCED_MANUAL, lookupPending=false; no resend/reconciliation promise. B1 omits new-effect actions until full guarded eligibility is rechecked."
+  },
+  "PublicationCurrent": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "publication": {
+        "oneOf": [
+          {
+            "$ref": "#/PublicationStatus"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "publication"
+    ]
+  },
+  "LocalDecision": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "decidedAt": {
+        "$ref": "#/Timestamp"
+      },
+      "decidedBy": {
+        "type": "string"
+      },
+      "attemptNoToken": {
+        "$ref": "#/CounterToken"
+      },
+      "executionId": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "decidedAt",
+      "decidedBy",
+      "attemptNoToken",
+      "executionId"
+    ]
+  },
+  "PublicationSubmission": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "taskId": {
+        "$ref": "#/Uuid"
+      },
+      "publicationId": {
+        "$ref": "#/Uuid"
+      },
+      "submissionNoToken": {
+        "$ref": "#/CounterToken"
+      },
+      "confirmationId": {
+        "$ref": "#/Uuid"
+      },
+      "providerId": {
+        "type": "string",
+        "maxLength": 64
+      },
+      "libraryId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "folderId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "localState": {
+        "enum": [
+          "UNDECIDED",
+          "NEVER_MARKED"
+        ]
+      },
+      "localReason": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "executionId": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "executionNoToken": {
+        "oneOf": [
+          {
+            "$ref": "#/CounterToken"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "localDecision": {
+        "oneOf": [
+          {
+            "$ref": "#/LocalDecision"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "taskId",
+      "publicationId",
+      "submissionNoToken",
+      "confirmationId",
+      "providerId",
+      "libraryId",
+      "folderId",
+      "localState",
+      "localReason",
+      "executionId",
+      "executionNoToken",
+      "localDecision"
+    ],
+    "description": "Original immutable accepted binding, never reconstructed from current publication. Execution association stays null until real marker/actual stored PREPARED execution. No manifests/proofs/credentials."
+  },
+  "PublicationAttempt": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "attemptId": {
+        "$ref": "#/Uuid"
+      },
+      "confirmationId": {
+        "$ref": "#/Uuid"
+      },
+      "operationId": {
+        "$ref": "#/Uuid"
+      },
+      "executionId": {
+        "$ref": "#/Uuid"
+      },
+      "kind": {
+        "enum": [
+          "PUBLISH",
+          "RECONCILE",
+          "WITHDRAW",
+          "OBSOLETE"
+        ]
+      },
+      "rawOutcome": {
+        "enum": [
+          "PENDING",
+          "SUCCESS",
+          "FAILED",
+          "UNKNOWN"
+        ]
+      },
+      "remoteOutcome": {
+        "enum": [
+          "SUCCESS",
+          "FAILED",
+          "UNKNOWN",
+          "NOT_OBSERVED"
+        ]
+      },
+      "createdAt": {
+        "$ref": "#/Timestamp"
+      },
+      "finishedAt": {
+        "oneOf": [
+          {
+            "$ref": "#/Timestamp"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "applicationOutcome": {
+        "enum": [
+          "APPLIED",
+          "FENCED_MANUAL",
+          "PENDING_LOOKUP",
+          "PENDING"
+        ]
+      },
+      "manualLocked": {
+        "type": "boolean"
+      },
+      "lookupPending": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "attemptId",
+      "confirmationId",
+      "operationId",
+      "executionId",
+      "kind",
+      "rawOutcome",
+      "remoteOutcome",
+      "createdAt",
+      "finishedAt",
+      "applicationOutcome",
+      "manualLocked",
+      "lookupPending"
+    ]
+  },
+  "SubmissionPage": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/PublicationSubmission"
+        },
+        "maxItems": 50
+      },
+      "hasMore": {
+        "type": "boolean"
+      },
+      "nextCursor": {
+        "oneOf": [
+          {
+            "type": "string",
+            "maxLength": 256
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "observation": {
+        "$ref": "#/PublicationStatus"
+      }
+    },
+    "required": [
+      "items",
+      "hasMore",
+      "nextCursor",
+      "observation"
+    ]
+  },
+  "AttemptPage": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/PublicationAttempt"
+        },
+        "maxItems": 50
+      },
+      "hasMore": {
+        "type": "boolean"
+      },
+      "nextCursor": {
+        "oneOf": [
+          {
+            "type": "string",
+            "maxLength": 256
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "observation": {
+        "$ref": "#/PublicationStatus"
+      }
+    },
+    "required": [
+      "items",
+      "hasMore",
+      "nextCursor",
+      "observation"
+    ]
+  },
+  "PublicationAcknowledgment": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "taskId": {
+        "$ref": "#/Uuid"
+      },
+      "publicationId": {
+        "$ref": "#/Uuid"
+      },
+      "submissionNoToken": {
+        "$ref": "#/CounterToken"
+      },
+      "confirmationId": {
+        "$ref": "#/Uuid"
+      },
+      "providerId": {
+        "type": "string",
+        "maxLength": 64
+      },
+      "libraryId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "folderId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "localState": {
+        "enum": [
+          "UNDECIDED",
+          "NEVER_MARKED"
+        ]
+      },
+      "localReason": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "executionId": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "executionNoToken": {
+        "oneOf": [
+          {
+            "$ref": "#/CounterToken"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "localDecision": {
+        "oneOf": [
+          {
+            "$ref": "#/LocalDecision"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "operation": {
+        "type": "string"
+      },
+      "resultKind": {
+        "const": "TASK"
+      },
+      "resultId": {
+        "$ref": "#/Uuid"
+      },
+      "httpStatus": {
+        "enum": [
+          200,
+          202
+        ]
+      },
+      "replayed": {
+        "type": "boolean"
+      },
+      "confirmation": {
+        "$ref": "#/FinalHeader"
+      },
+      "decision": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "observation": {
+        "oneOf": [
+          {
+            "$ref": "#/PublicationCurrent"
+          },
+          {
+            "$ref": "./minutes.yaml#/SavedCommandObservation"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "availability": {
+                "const": "UNAVAILABLE"
+              },
+              "safeCode": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "availability",
+              "safeCode"
+            ]
+          }
+        ]
+      }
+    },
+    "required": [
+      "taskId",
+      "httpStatus",
+      "replayed",
+      "observation"
+    ],
+    "description": "Original task/submission/final/destination acknowledgment plus separately fresh observation. New submission/retry/resubmission keeps actual nullable execution fields; local recovery references original task and sealed decision. Existing stored digests remain unchanged. Valid historical acknowledgment survives unavailable new-command factory/provider/archive; mismatched digest409, missing/corrupt durable result503, trueMISS writes no placeholder."
+  },
+  "FinalAcknowledgment": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "operation": {
+        "const": "FINAL_CONFIRM"
+      },
+      "resultKind": {
+        "const": "FINAL_CONFIRMATION"
+      },
+      "resultId": {
+        "$ref": "#/Uuid"
+      },
+      "httpStatus": {
+        "const": 200
+      },
+      "replayed": {
+        "type": "boolean"
+      },
+      "confirmation": {
+        "$ref": "#/FinalHeader"
+      },
+      "observation": {
+        "$ref": "#/FinalObservation"
+      }
+    },
+    "required": [
+      "operation",
+      "resultKind",
+      "resultId",
+      "httpStatus",
+      "replayed",
+      "observation",
+      "confirmation"
+    ]
+  },
+  "FinalCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "expectedRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "expectedRevisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "optionalReviewIds": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Uuid"
+        },
+        "uniqueItems": true,
+        "maxItems": 256
+      }
+    },
+    "required": [
+      "optionalReviewIds"
+    ],
+    "allOf": [
+      {
+        "anyOf": [
+          {
+            "required": [
+              "expectedRevision"
+            ]
+          },
+          {
+            "required": [
+              "expectedRevisionToken"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header."
+  },
+  "SubmitCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "expectedRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "expectedRevisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "confirmationId": {
+        "$ref": "#/Uuid"
+      },
+      "providerId": {
+        "type": "string",
+        "maxLength": 64
+      },
+      "libraryId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "folderId": {
+        "type": "string",
+        "maxLength": 255
+      }
+    },
+    "required": [
+      "confirmationId",
+      "providerId",
+      "libraryId",
+      "folderId"
+    ],
+    "allOf": [
+      {
+        "anyOf": [
+          {
+            "required": [
+              "expectedRevision"
+            ]
+          },
+          {
+            "required": [
+              "expectedRevisionToken"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header."
+  },
+  "ResubmitCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "expectedRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "expectedRevisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "confirmationId": {
+        "$ref": "#/Uuid"
+      },
+      "providerId": {
+        "type": "string",
+        "maxLength": 64
+      },
+      "libraryId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "folderId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "expectedPublicationRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "expectedPublicationRevisionToken": {
+        "$ref": "#/CounterToken"
+      }
+    },
+    "required": [
+      "confirmationId",
+      "providerId",
+      "libraryId",
+      "folderId"
+    ],
+    "allOf": [
+      {
+        "anyOf": [
+          {
+            "required": [
+              "expectedRevision"
+            ]
+          },
+          {
+            "required": [
+              "expectedRevisionToken"
+            ]
+          }
+        ]
+      },
+      {
+        "anyOf": [
+          {
+            "required": [
+              "expectedPublicationRevision"
+            ]
+          },
+          {
+            "required": [
+              "expectedPublicationRevisionToken"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header."
+  },
+  "LocalRecoveryCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "expectedRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "expectedRevisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "taskId": {
+        "$ref": "#/Uuid"
+      },
+      "expectedPublicationRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "expectedPublicationRevisionToken": {
+        "$ref": "#/CounterToken"
+      }
+    },
+    "required": [
+      "taskId"
+    ],
+    "allOf": [
+      {
+        "anyOf": [
+          {
+            "required": [
+              "expectedRevision"
+            ]
+          },
+          {
+            "required": [
+              "expectedRevisionToken"
+            ]
+          }
+        ]
+      },
+      {
+        "anyOf": [
+          {
+            "required": [
+              "expectedPublicationRevision"
+            ]
+          },
+          {
+            "required": [
+              "expectedPublicationRevisionToken"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header."
+  },
+  "finals": {
+    "get": {
+      "operationId": "listFinalConfirmations",
+      "summary": "Owner immutable final metadata history",
+      "description": "Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 20
+          },
+          "description": "Bounded page size."
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "description": "Canonical unpadded base64url v1 cursor bound to this exact route, meeting and publication when applicable. Final/submission keys use descending lossless revision/submission ordinals; attempts use descending UTC-local microsecond timestamp and canonical lowercase UUID. Server rejects cross-resource/route, alternative time spellings or noncanonical encodings. Separate SQL keyset page; complete history authority is captured independently."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/FinalHistory"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "operationId": "confirmFinal",
+      "summary": "Confirm exact reviewed saved result",
+      "description": "Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "Origin",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Exactly one configured allowed Origin."
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Exactly one current session-bound CSRF token."
+        },
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "description": "Exactly one nonblank well-formed UTF8 value, at most256encoded bytes."
+        }
+      ],
+      "responses": {
+        "201": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/FinalAcknowledgment"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/FinalAcknowledgment"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/FinalCommand"
+            }
+          }
+        }
+      }
+    }
+  },
+  "finalReadiness": {
+    "get": {
+      "operationId": "finalConfirmationReadiness",
+      "summary": "Fresh complete final readiness",
+      "description": "Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/FinalReadiness"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "finalCurrent": {
+    "get": {
+      "operationId": "currentFinalConfirmation",
+      "summary": "Current effective final or null",
+      "description": "Fresh current owner or effective confirmed enterprise-member READ; owner-only metadata is sanitized for member. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/FinalDetail"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "finalDetail": {
+    "get": {
+      "operationId": "finalConfirmationDetail",
+      "summary": "Exact frozen final graph and original review IDs",
+      "description": "Fresh current owner or effective confirmed enterprise-member READ; owner-only metadata is sanitized for member. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "confirmationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Owner frozen history; member only exact current effective final."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/FinalDetail"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "publications": {
+    "post": {
+      "operationId": "submitPublication",
+      "summary": "First controlled publication submission",
+      "description": "Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths. Independent acknowledgment validates immutable original command/result binding. Legacy replacement receipts whose compatible original acceptance is ambiguous return503 without writes or retry; no reconstruction from current fields.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "Origin",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Exactly one configured allowed Origin."
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Exactly one current session-bound CSRF token."
+        },
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "description": "Exactly one nonblank well-formed UTF8 value, at most256encoded bytes."
+        }
+      ],
+      "responses": {
+        "202": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/PublicationAcknowledgment"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/SubmitCommand"
+            }
+          }
+        }
+      }
+    }
+  },
+  "publicationCurrent": {
+    "get": {
+      "operationId": "currentPublication",
+      "summary": "Current one-root publication status or null",
+      "description": "Fresh current owner or effective confirmed enterprise-member READ; owner-only metadata is sanitized for member. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/PublicationCurrent"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "publicationDetail": {
+    "get": {
+      "operationId": "publicationDetail",
+      "summary": "Fresh joined publication status",
+      "description": "Fresh current owner or effective confirmed enterprise-member READ; owner-only metadata is sanitized for member. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "publicationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Must belong to the requested meeting; ID possession grants no permission."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/PublicationCurrent"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "submissions": {
+    "get": {
+      "operationId": "publicationSubmissionHistory",
+      "summary": "Owner original accepted submission history",
+      "description": "Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "publicationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Must belong to the requested meeting; ID possession grants no permission."
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 20
+          },
+          "description": "Bounded page size."
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "description": "Canonical unpadded base64url v1 cursor bound to this exact route, meeting and publication when applicable. Final/submission keys use descending lossless revision/submission ordinals; attempts use descending UTC-local microsecond timestamp and canonical lowercase UUID. Server rejects cross-resource/route, alternative time spellings or noncanonical encodings. Separate SQL keyset page; complete history authority is captured independently."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/SubmissionPage"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "attempts": {
+    "get": {
+      "operationId": "publicationAttemptHistory",
+      "summary": "Owner exact operation/execution attempt history",
+      "description": "Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "publicationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Must belong to the requested meeting; ID possession grants no permission."
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 20
+          },
+          "description": "Bounded page size."
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "description": "Canonical unpadded base64url v1 cursor bound to this exact route, meeting and publication when applicable. Final/submission keys use descending lossless revision/submission ordinals; attempts use descending UTC-local microsecond timestamp and canonical lowercase UUID. Server rejects cross-resource/route, alternative time spellings or noncanonical encodings. Separate SQL keyset page; complete history authority is captured independently."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/AttemptPage"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "localRecoveries": {
+    "post": {
+      "operationId": "recoverLocalPublicationFailure",
+      "summary": "Explicit genuine never-marked local recovery",
+      "description": "Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths. Independent acknowledgment validates immutable original command/result binding. Legacy replacement receipts whose compatible original acceptance is ambiguous return503 without writes or retry; no reconstruction from current fields.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "publicationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Must belong to the requested meeting; ID possession grants no permission."
+        },
+        {
+          "name": "Origin",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Exactly one configured allowed Origin."
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Exactly one current session-bound CSRF token."
+        },
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "description": "Exactly one nonblank well-formed UTF8 value, at most256encoded bytes."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/PublicationAcknowledgment"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/LocalRecoveryCommand"
+            }
+          }
+        }
+      }
+    }
+  },
+  "resubmissions": {
+    "post": {
+      "operationId": "resubmitPublication",
+      "summary": "Proof-gated same-publication resubmission",
+      "description": "Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths. Independent acknowledgment validates immutable original command/result binding. Legacy replacement receipts whose compatible original acceptance is ambiguous return503 without writes or retry; no reconstruction from current fields.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "publicationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Must belong to the requested meeting; ID possession grants no permission."
+        },
+        {
+          "name": "Origin",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Exactly one configured allowed Origin."
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Exactly one current session-bound CSRF token."
+        },
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "description": "Exactly one nonblank well-formed UTF8 value, at most256encoded bytes."
+        }
+      ],
+      "responses": {
+        "202": {
+          "description": "Actual durable acknowledgment or fresh bounded read.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/PublicationAcknowledgment"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/idempotency/final readiness or explicit local recovery conflict.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Optional review or semantic request rejected.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/ResubmitCommand"
+            }
+          }
+        }
+      }
+    }
+  },
+  "FinalObservation": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "revision",
+      "revisionToken",
+      "accessRevision",
+      "accessRevisionToken",
+      "lifecycle",
+      "currentBodyId",
+      "currentSetId",
+      "currentConfirmationId",
+      "templateRevisionId",
+      "exclusionRevisionId",
+      "needsGeneration",
+      "readOnlyReason",
+      "currentFinalId"
+    ],
+    "properties": {
+      "revision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+      },
+      "accessRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "accessRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+      },
+      "lifecycle": {
+        "type": "string"
+      },
+      "currentBodyId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "currentSetId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "currentConfirmationId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "templateRevisionId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "exclusionRevisionId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "needsGeneration": {
+        "type": "boolean"
+      },
+      "readOnlyReason": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "currentFinalId": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "FrozenSet": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "$ref": "#/Uuid"
+      },
+      "meeting_id": {
+        "$ref": "#/Uuid"
+      },
+      "revisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "created_at": {
+        "$ref": "#/Timestamp"
+      }
+    },
+    "required": [
+      "id",
+      "meeting_id",
+      "revisionToken",
+      "created_at"
+    ]
+  },
+  "FrozenAction": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "element_id": {
+        "$ref": "#/Uuid"
+      },
+      "owner_enterprise_id": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "owner_display": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "due_on": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "element_id",
+      "owner_enterprise_id",
+      "owner_display",
+      "due_on"
+    ]
+  },
+  "FrozenElement": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "$ref": "#/Uuid"
+      },
+      "body": {
+        "type": "string"
+      },
+      "ordinalToken": {
+        "$ref": "#/CounterToken"
+      },
+      "supportState": {
+        "enum": [
+          "SUPPORTED",
+          "PARTIAL",
+          "UNSUPPORTED",
+          "NOT_EXTRACTED"
+        ]
+      },
+      "action": {
+        "oneOf": [
+          {
+            "$ref": "#/FrozenAction"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "body",
+      "ordinalToken",
+      "supportState",
+      "action"
+    ]
+  },
+  "FrozenElements": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "OVERVIEW": {
+        "type": "array",
+        "items": {
+          "$ref": "#/FrozenElement"
+        },
+        "maxItems": 100000
+      },
+      "DISCUSSION": {
+        "type": "array",
+        "items": {
+          "$ref": "#/FrozenElement"
+        },
+        "maxItems": 100000
+      },
+      "CONCLUSION": {
+        "type": "array",
+        "items": {
+          "$ref": "#/FrozenElement"
+        },
+        "maxItems": 100000
+      },
+      "ACTION": {
+        "type": "array",
+        "items": {
+          "$ref": "#/FrozenElement"
+        },
+        "maxItems": 100000
+      },
+      "RISK": {
+        "type": "array",
+        "items": {
+          "$ref": "#/FrozenElement"
+        },
+        "maxItems": 100000
+      },
+      "OPEN_QUESTION": {
+        "type": "array",
+        "items": {
+          "$ref": "#/FrozenElement"
+        },
+        "maxItems": 100000
+      },
+      "DISAGREEMENT": {
+        "type": "array",
+        "items": {
+          "$ref": "#/FrozenElement"
+        },
+        "maxItems": 100000
+      }
+    },
+    "required": [
+      "OVERVIEW",
+      "DISCUSSION",
+      "CONCLUSION",
+      "ACTION",
+      "RISK",
+      "OPEN_QUESTION",
+      "DISAGREEMENT"
+    ]
+  },
+  "FrozenReview": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "$ref": "#/Uuid"
+      },
+      "meeting_id": {
+        "$ref": "#/Uuid"
+      },
+      "review_noToken": {
+        "$ref": "#/CounterToken"
+      },
+      "review_kind": {
+        "enum": [
+          "SOURCE_SUPPORT",
+          "ACTION_FIELDS"
+        ]
+      },
+      "element_id": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "minutes_revision_id": {
+        "oneOf": [
+          {
+            "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "target_anchor": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "target_hash": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "source_set_hash": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "hash_profile": {
+        "type": "string"
+      },
+      "outcome": {
+        "type": "string"
+      },
+      "reviewed_by": {
+        "type": "string"
+      },
+      "reviewed_at": {
+        "$ref": "#/Timestamp"
+      }
+    },
+    "required": [
+      "id",
+      "meeting_id",
+      "review_noToken",
+      "review_kind",
+      "element_id",
+      "minutes_revision_id",
+      "target_anchor",
+      "target_hash",
+      "source_set_hash",
+      "hash_profile",
+      "outcome",
+      "reviewed_by",
+      "reviewed_at"
+    ]
+  },
+  "OriginalArtifactIdentity": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "version": {
+        "type": "string"
+      },
+      "sha256": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "required": [
+      "version",
+      "sha256"
+    ]
+  },
+  "OriginalProfiles": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "generationInputId": {
+        "$ref": "#/Uuid"
+      },
+      "prompt": {
+        "$ref": "#/OriginalArtifactIdentity"
+      },
+      "model": {
+        "$ref": "#/OriginalArtifactIdentity"
+      },
+      "definitions": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "CANONICAL_CODEC": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "CONFIRMATION_HASH": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "GENERATION_HASH": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "ROWSET_HASH": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "ANCHOR": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "REVIEW_HASH": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "FINAL_SOURCES": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "OUTPUT_SCHEMA": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "VALIDATION_BUDGET": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "CATALOG": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "RENDER": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "EXCLUSION": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "SUPPORT": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "TITLE": {
+            "$ref": "#/OriginalArtifactIdentity"
+          },
+          "CHUNK_PLAN": {
+            "$ref": "#/OriginalArtifactIdentity"
+          }
+        },
+        "required": [
+          "CANONICAL_CODEC",
+          "CONFIRMATION_HASH",
+          "GENERATION_HASH",
+          "ROWSET_HASH",
+          "ANCHOR",
+          "REVIEW_HASH",
+          "FINAL_SOURCES",
+          "OUTPUT_SCHEMA",
+          "VALIDATION_BUDGET",
+          "CATALOG",
+          "RENDER",
+          "EXCLUSION",
+          "SUPPORT",
+          "TITLE",
+          "CHUNK_PLAN"
+        ]
+      }
+    },
+    "required": [
+      "generationInputId",
+      "prompt",
+      "model",
+      "definitions"
+    ]
+  },
+  "RetryCounterToken": {
+    "type": "string",
+    "pattern": "^(?:0|[1-9][0-9]{0,17}|[1-8][0-9]{18}|9[0-1][0-9]{17}|92[0-1][0-9]{16}|922[0-2][0-9]{15}|9223[0-2][0-9]{14}|92233[0-6][0-9]{13}|922337[0-1][0-9]{12}|92233720[0-2][0-9]{10}|922337203[0-5][0-9]{9}|9223372036[0-7][0-9]{8}|92233720368[0-4][0-9]{7}|922337203685[0-3][0-9]{6}|9223372036854[0-6][0-9]{5}|92233720368547[0-6][0-9]{4}|922337203685477[0-4][0-9]{3}|9223372036854775[0-7][0-9]{2}|922337203685477580[0-5]|9223372036854775806)$",
+    "maxLength": 19,
+    "description": "Canonical ASCII decimal 0..9223372036854775806; exact upper range, no leading zero/sign/space. Browser sends string tokens without Number conversion."
+  },
+  "RetryExecutionToken": {
+    "allOf": [
+      {
+        "$ref": "#/RetryCounterToken"
+      },
+      {
+        "not": {
+          "const": "0"
+        }
+      }
+    ],
+    "description": "Positive selected predecessor execution number, 1..9223372036854775806. An exhausted successor is a409 after original acknowledgment lookup."
+  },
+  "ZeroEffectRetryCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "expectedRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "expectedRevisionToken": {
+        "$ref": "#/RetryCounterToken"
+      },
+      "expectedPublicationRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "expectedPublicationRevisionToken": {
+        "$ref": "#/RetryCounterToken"
+      },
+      "expectedExecutionNo": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 9223372036854775806
+      },
+      "expectedExecutionNoToken": {
+        "$ref": "#/RetryExecutionToken"
+      }
+    },
+    "allOf": [
+      {
+        "anyOf": [
+          {
+            "required": [
+              "expectedRevision"
+            ]
+          },
+          {
+            "required": [
+              "expectedRevisionToken"
+            ]
+          }
+        ]
+      },
+      {
+        "anyOf": [
+          {
+            "required": [
+              "expectedPublicationRevision"
+            ]
+          },
+          {
+            "required": [
+              "expectedPublicationRevisionToken"
+            ]
+          }
+        ]
+      },
+      {
+        "anyOf": [
+          {
+            "required": [
+              "expectedExecutionNo"
+            ]
+          },
+          {
+            "required": [
+              "expectedExecutionNoToken"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "Strict object <=65536 UTF8 bytes, exactly three counter pairs. Integer/token/equal dual normalize before digest(publicationId,expectedRevision,expectedPublicationRevision,expectedExecutionNo); unequal dual400. Duplicate/unknown/inapplicable fields, malformed Unicode, trailing data, exponent/fraction/negative/noncanonical token rejected. Browser token-only; no 2^53 limit. No final/provider/destination/task/force flags. New acceptance never sends."
+  },
+  "ZeroEffectRetryAcknowledgment": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "taskId": {
+        "$ref": "#/Uuid"
+      },
+      "publicationId": {
+        "$ref": "#/Uuid"
+      },
+      "submissionNoToken": {
+        "$ref": "#/CounterToken"
+      },
+      "confirmationId": {
+        "$ref": "#/Uuid"
+      },
+      "providerId": {
+        "type": "string",
+        "maxLength": 64
+      },
+      "libraryId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "folderId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "localState": {
+        "enum": [
+          "UNDECIDED",
+          "NEVER_MARKED"
+        ]
+      },
+      "localReason": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "executionId": {
+        "$ref": "#/Uuid"
+      },
+      "executionNoToken": {
+        "$ref": "#/RetryAcceptedExecutionToken"
+      },
+      "localDecision": {
+        "oneOf": [
+          {
+            "$ref": "#/LocalDecision"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "operation": {
+        "const": "PUBLICATION_ZERO_EFFECT_RETRY"
+      },
+      "resultKind": {
+        "const": "TASK"
+      },
+      "resultId": {
+        "$ref": "#/Uuid"
+      },
+      "httpStatus": {
+        "const": 202
+      },
+      "replayed": {
+        "type": "boolean"
+      },
+      "confirmation": {
+        "$ref": "#/FinalHeader"
+      },
+      "decision": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "observation": {
+        "oneOf": [
+          {
+            "$ref": "#/PublicationCurrent"
+          },
+          {
+            "$ref": "./minutes.yaml#/SavedCommandObservation"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "availability": {
+                "const": "UNAVAILABLE"
+              },
+              "safeCode": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "availability",
+              "safeCode"
+            ]
+          }
+        ]
+      }
+    },
+    "required": [
+      "taskId",
+      "httpStatus",
+      "replayed",
+      "observation",
+      "publicationId",
+      "submissionNoToken",
+      "confirmationId",
+      "providerId",
+      "libraryId",
+      "folderId",
+      "executionId",
+      "executionNoToken",
+      "operation",
+      "resultKind",
+      "resultId",
+      "confirmation"
+    ],
+    "description": "Original immutable accepted task/submission/final/destination and actual existing-created execution (selected predecessor+1). Submission ordinal is independent of execution ordinal; earlier sealed local-only submissions have no execution. Fresh observation is separate and may be UNAVAILABLE. Binding is mandatory; missing/corrupt original503, semantic conflict409; valid replay does not depend on current CAS/exhaustion/provider/archive."
+  },
+  "zeroEffectRetries": {
+    "post": {
+      "operationId": "retryPublicationAfterZeroEffect",
+      "summary": "Request one new execution of the exact unchanged publication effect",
+      "description": "Current ACTIVE owner EDIT, session/Origin/CSRF and one Idempotency-Key. Replay-first independent immutable acknowledgment. MISS requires current selected operation/execution FAILED, marked authenticated definitive remote zero effect, latest accepted submission, complete closed history, same fixed r/e/input/fingerprint/final/provider/store/destination/logical/render/payload/source. Local NEVER_MARKED/NOT_SENT alone, UNKNOWN/manual/live/success/mapping cannot authorize. One atomic same-operation PREPARED successor/task/submission and publication revision; no publication attempt or send. Old bytes and generic retry semantics unchanged.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "publicationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Must belong to the requested meeting; ID possession grants no permission."
+        },
+        {
+          "name": "Origin",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Exactly one configured allowed Origin."
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Exactly one current session-bound CSRF token."
+        },
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "description": "Exactly one nonblank well-formed UTF8 value, at most256encoded bytes."
+        }
+      ],
+      "responses": {
+        "202": {
+          "description": "Original accepted202 or new atomic acceptance with actual persisted task and predecessor+1 execution association; private/no-store.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/ZeroEffectRetryAcknowledgment"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Stale meeting/publication/selected execution, successor or revision exhaustion, fixed-input change, or idempotency conflict; no partial acceptance.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Missing/corrupt original binding/provenance or unavailable guarded runtime; no local-only or inferred-zero-effect fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/ZeroEffectRetryCommand"
+            }
+          }
+        }
+      }
+    }
+  },
+  "RetryAcceptedExecutionToken": {
+    "allOf": [
+      {
+        "$ref": "#/RetryExecutionToken"
+      },
+      {
+        "not": {
+          "const": "1"
+        }
+      }
+    ],
+    "description": "Actual created successor execution number; at least2 and equal to selected predecessor+1."
+  },
+  "DestinationLibrary": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255,
+        "description": "Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity."
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "rootFolderId": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255,
+        "description": "Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity."
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "rootFolderId"
+    ]
+  },
+  "DestinationFolder": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255,
+        "description": "Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity."
+      },
+      "libraryId": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255,
+        "description": "Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity."
+      },
+      "parentFolderId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "isRoot": {
+        "type": "boolean"
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      }
+    },
+    "required": [
+      "id",
+      "libraryId",
+      "parentFolderId",
+      "isRoot",
+      "name"
+    ]
+  },
+  "DestinationLibraryPage": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "providerId": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_.-]{1,64}$"
+      },
+      "items": {
+        "type": "array",
+        "maxItems": 50,
+        "items": {
+          "$ref": "#/DestinationLibrary"
+        }
+      },
+      "hasMore": {
+        "type": "boolean"
+      },
+      "nextCursor": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "providerId",
+      "items",
+      "hasMore",
+      "nextCursor"
+    ]
+  },
+  "DestinationFolderPage": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "providerId": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_.-]{1,64}$"
+      },
+      "items": {
+        "type": "array",
+        "maxItems": 50,
+        "items": {
+          "$ref": "#/DestinationFolder"
+        }
+      },
+      "hasMore": {
+        "type": "boolean"
+      },
+      "nextCursor": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "providerId",
+      "items",
+      "hasMore",
+      "nextCursor"
+    ]
+  },
+  "destinationLibraries": {
+    "get": {
+      "operationId": "destinationLibraries",
+      "summary": "List current owner publication libraries",
+      "description": "Fresh ACTIVE owner EDIT at snapshot and final phases. Fixed provider DESTINATION_READ uses the real session actor outside all database transactions. Current provider grants decide items; member READ or administrator role does not grant discovery. Response at most256KiB, default20/max50, request timeout30s; two simultaneous reads per API process and no queued work. Every response is private,no-store; no credential, provider URL or caller-selected actor/purpose is exposed.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 20
+          },
+          "description": "Exactly one canonical decimal value. Unknown, duplicate, blank or malformed query parameters fail before provider access."
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "description": "Opaque canonical continuation bound to this meeting, route, library and parent. Use exactly the returned nextCursor."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Bounded grant-filtered destination page; cursor is null exactly when no continuation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/DestinationLibraryPage"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "destinationFolders": {
+    "get": {
+      "operationId": "destinationFolders",
+      "summary": "List current owner publication folders",
+      "description": "Fresh ACTIVE owner EDIT at snapshot and final phases. Fixed provider DESTINATION_READ uses the real session actor outside all database transactions. Current provider grants decide items; member READ or administrator role does not grant discovery. Response at most256KiB, default20/max50, request timeout30s; two simultaneous reads per API process and no queued work. Every response is private,no-store; no credential, provider URL or caller-selected actor/purpose is exposed.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "libraryId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity."
+          }
+        },
+        {
+          "name": "parentFolderId",
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity."
+          },
+          "description": "Omit for actual provider root folders; no invented root ID."
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 20
+          },
+          "description": "Exactly one canonical decimal value. Unknown, duplicate, blank or malformed query parameters fail before provider access."
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "description": "Opaque canonical continuation bound to this meeting, route, library and parent. Use exactly the returned nextCursor."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Bounded grant-filtered destination page; cursor is null exactly when no continuation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/DestinationFolderPage"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "officialDocument": {
+    "get": {
+      "operationId": "officialPublicationDocument",
+      "summary": "View the immutable official publication document",
+      "description": "Requires fresh current application READ, an exact ACTIVE mapping with compatible successful publication/attempt/execution/submission/final/original manifest, and current provider DOCUMENT_READ for this viewer. No query parameters are accepted. Metadata bounds precede original LONGTEXT transfer. Network, strict parsing, canonical hashing and static escaping happen outside database roots. Fresh final READ and identical lifecycle/mapping precede any buffered response. Payload8MiB/output32MiB ceilings and lower configured cumulative limits apply; no active HTML, Markdown links or remote resources. Cancellation, errors and timeouts abort the registered provider socket and stop further phases. Timeout30s; two simultaneous reads per process, no queue. Missing composition/provider access fails safely without receipt-capability fallback.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "publicationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Must belong to the requested meeting; ID possession grants no permission."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Fully validated immutable document, buffered until final authorization.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            },
+            "Content-Security-Policy": {
+              "schema": {
+                "type": "string",
+                "const": "default-src 'none'; frame-ancestors 'self'"
+              }
+            },
+            "X-Content-Type-Options": {
+              "schema": {
+                "type": "string",
+                "const": "nosniff"
+              }
+            }
+          },
+          "content": {
+            "text/html": {
+              "schema": {
+                "type": "string",
+                "maxLength": 33554432
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current application READ or current provider document READ denied; no document content.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+package ama.storage;
+import java.util.*;import org.junit.jupiter.api.*;import static org.junit.jupiter.api.Assertions.*;
+class Task11B3LifecycleOracleTest {
+ Map<String,List<Map<String,Object>>> before,after;Map<String,List<String>> keys=new HashMap<>();
+ @BeforeEach void setup(){before=new TreeMap<>();for(String table:Task11B3PreparedFixture.BUSINESS){keys.put(table,List.of("id"));before.put(table,new ArrayList<>());}put("meeting",Map.of("id","m","revision",13,"stage","PUBLISH_FAILED"));put("publication",Map.of("id","p","state","FAILED","revision",7,"meeting_id","m"));put("external_operation",Map.of("id","o","state","FAILED","request_hash","bound"));put("durable_task",Map.of("id","old","state","FAILED"));put("external_execution",Map.of("id","ex-old","state","FAILED"));put("audit_event",Map.of("id",1,"action","OLD"));after=copy(before);}
+ void put(String table,Map<String,Object> row){before.get(table).add(row);}
+ static Map<String,List<Map<String,Object>>> copy(Map<String,List<Map<String,Object>>> source){var out=new TreeMap<String,List<Map<String,Object>>>();source.forEach((table,rows)->{var copied=new ArrayList<Map<String,Object>>();rows.forEach(r->copied.add(new HashMap<>(r)));out.put(table,copied);});return out;}
+ void verify(){Task11B3LifecycleOracle.preserved(before,after,keys,"m","p","o",Set.of("new"),Set.of("ex-new"));}
+ @Test void acceptsExactUnchangedAndOwnedAppend(){verify();after.get("durable_task").add(new HashMap<>(Map.of("id","new","state","READY")));after.get("external_execution").add(new HashMap<>(Map.of("id","ex-new","task_id","new","state","PREPARED")));verify();}
+ @Test void rejectsProtectedHistoryMutation(){after.get("audit_event").getFirst().put("action","REWRITTEN");assertThrows(AssertionError.class,this::verify);}
+ @Test void rejectsOldTaskAndOldExecutionMutation(){after.get("durable_task").getFirst().put("state","READY");assertThrows(AssertionError.class,this::verify);after=copy(before);after.get("external_execution").getFirst().put("state","MARKED");assertThrows(AssertionError.class,this::verify);}
+ @Test void rejectsMissingAndForeignAddedRows(){after.get("meeting").clear();assertThrows(AssertionError.class,this::verify);after=copy(before);after.get("durable_task").add(Map.of("id","foreign","state","READY"));assertThrows(AssertionError.class,this::verify);}
+ @Test void mutableRootStillPreservesBusinessAndSourceIdentity(){after.get("meeting").getFirst().put("revision",14);assertThrows(AssertionError.class,this::verify);after=copy(before);after.get("external_operation").getFirst().put("request_hash","changed");assertThrows(AssertionError.class,this::verify);}
+ @Test void permitsOnlyNamedMutableRootFields(){after.get("publication").getFirst().put("revision",8);after.get("publication").getFirst().put("state","READY");after.get("external_operation").getFirst().put("state","RETRY_QUEUED");verify();}
+}
