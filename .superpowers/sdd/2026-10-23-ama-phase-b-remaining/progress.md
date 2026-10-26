@@ -1,3 +1,9 @@
+# PAUSED BY USER — B5 PARTIAL SOURCE SAVED, NOT REVIEWED / NO RUNTIME
+
+最新用户要求完成当前批次后停止；本条覆盖下方所有 ACTIVE/连续执行条目。权威暂停记录：`docs/acceptance/development-pause-b5-partial-2026-10-26.md`，SHA256 `17a054f578cfdc6bf82c6c0e3dc2b44bbfb6449422d1e181ff2c075be7210951`。只有明确“继续任务”后恢复。
+
+部分checkpoint `task-11-b5-partial-pause-source-checkpoint-20261026.json` SHA256 `f6e1fc7aceb837f2e26d88af210801f7f4c2a76c940bf30d6bc9770e5184113f`；1189源码/46路径相对B4变化/277证据。最终53Java全通过、增量compile0且同源码映射。B5未完成、未整体审查，无release/window。下一步按暂停记录第4节：全mutator矩阵/共享预算核对/真实组合三GET/特殊publication路径/相关回归后完整B5同一审查者；不是重做B2/B3。保留O6 UNKNOWN、SQLite3/3与全部旧consumed窗口。主唯一writer，SAME reviewer空闲，不新增Agent。
+
 # SDD ledger — plan: docs/superpowers/plans/2026-10-23-ama-phase-b-remaining.md
 
 User explicitly activated remainingPhaseB implementation/testing/independentreview and records/delivery, no redoingB06.1/B06.2. InitialBASE 34cb226aefe99c67d3681af68d748b0aeea4e073; branchcodex/phase-b-resume-20261023; main0676a21311f2b2193f73a5e096f4a5605ee9b41f preserved.
@@ -1052,3 +1058,491 @@ Git integration only; Task11WIP/5Important/SENDDENY and featurepause preserved. 
 
 ## Main merge/push actual completion 2026-10-24T23:31:32.235085+00:00
 SourceWIP 0df61e2e20f8083b3e2ba04de151ee5121b2bbb8; mainmerge 095b678bf09cfcf95194ab84f928c91506d5aa42; remote main actualverifiedsame. Codeaftermergeequal/privateignored/notdeployed. Finalmetadata commit+push andcompletionbranch fastforward follow; future continuation unchangedTask11fix1/SENDDENY.
+
+
+## Resume 2026-10-25T06:34:46.308141+00:00
+User explicitly continues all remaining B. Existing linked worktree/head739193d verified; no old author live, one followup failed then same-round continuation author assigned. Tasks1–10 preserved; Task11 fix01/I1–I5/SEND DENY unchanged. Existing setup reused; no broad baseline rerun because known failing selector is the exact resumed diagnostic target. Source/resource revalidation delegated before tests. Todo11 in progress,12/13 pending. No cleanup of evidence workspace; preservation requirement overrides default skill cleanup. Before records: .superpowers/sdd/2026-10-23-ama-phase-b-remaining/resume-20261025T063446Z
+
+
+## T11-GENERIC-ATTEMPT-FINALIZATION — OPEN 2026-10-25T06:36:22.850028+00:00
+Author traced original expected0/actual2 FAIL to generic beginExternal setting RECONCILING followed by unprepared observe q.finish whose endAttempt only handles RUNNING. Path reportedly already exists at adopted ba48; root awaits exact source/evidence report. Current test removed zero-open-attempt assertion; any new PASS covers remaining assertions only and does not close this defect. Preserve original FAIL and both source versions. Task13 independent review must assess real terminal attempt lifecycle consequences and fix/rule explicitly; no silent waiver by preexistence. If load-bearing for fix01, escalate immediately.
+
+Root read exact custody/diagnosis reports and sealed generic-current-01 result: exit0/1PASS/0FAIL/0ERROR, retained assertions only. Original unfinished-attempt defect remains OPEN forTask13. Provider disk f8b6ec49 differs last loaded cd80e61d; no current-source provider qualification.
+
+Task11 fix01 isolated-history-01 actual sealed exit0/1PASS; newpublication d4d712e5, successor e633ba0b READY/PREPARED/attempt0. Initial signed rejectionPOST1, same-logical replacement acceptance/oldACK APPLIED, replacementPOST0. Isolated pool now also has held no2; forbid incidental full-pool worker. Primary held no2 unchanged per author; not fullI1/I2 closure.
+
+Task11: Ruling: include minimal final-readiness prerequisite for I2 cross-operation verification; R1§5 permits only complete proven closed histories. See task-11-fix01-final-readiness-scope-ruling-20261025.md. Cost: improper reopening, protected by full graph/race tests and independent review.
+
+Task11 fix01 I5 history-seal RED01 harnessERROR, RED02 genuine assertionFAIL, GREEN01 1PASS. Local-gap01 sealed1PASS: exact isolated no2 genuine claim/prepare/renew/localcomplete FAILED/NEVER_MARKED/NOT_SENT, no marker/publicationPOST; primary no2 remains forbidden. Narrow finalreadiness prerequisite ruling recorded.
+
+
+## T11-FINAL-ERROR-MAPPING — OPEN
+Actual final-readiness RED01 (author report, sealed window) returned readiness GET200/readyfalse/PUBLICATION_BUSY, then confirm service FINAL_NOT_READY followed by missing advice and /error deny causing HTTP403. Distinguish genuine readiness defect from HTTP error mapping. Task11 final API completion must provide narrow correct mapping and actual authenticated route test; no global catch-all/security relaxation. Not closed by future happy-final success.
+
+Task11 fix01 changed-destination02 business reached actual no3 accepted and locally closed, old1ACK/mixedgap valid; entirewindowFAIL at trace holder0 instrumentation. No business replay; read-only trace correction planned. FinalreadinessGREEN author reports actual readiness200 true/finalPOST201 after complete closed history rev13→14. Source/negative/fresh-F proof remains independentreview obligation; no sourcegate closure.
+
+Task11 fix01 actualsealed cross-operation01 1PASS, bound-read-trace01 1PASS, finalreadiness RED01 1FAIL→GREEN01 1PASS verified. Cross operation old1 contradiction DECLARATION_ONLY leads real MANUAL_REQUIRED, live renew true before/after, exact CAPABILITY_UNAVAILABLE rollback on newkey marker/noexecution/noPOST. No4 RUNNING uncertainty preserved. I3/I4 further negatives cannot rely on preexistingmanual barrier masking; no mutation repair. I1-I5 await independentreview.
+
+Task11 transfer-faults01 + marker-source01 sealed1PASS each root-read. Same bound rollbackOnly negative proves oversized manifest/evidence pretransfer denial and source provenance failure, restored exact fields. Actual marker with live attempt2 PROVENANCE_UNAVAILABLE vs samelease restored CAPABILITY_UNAVAILABLE confirms currentSources reached. No4 originalattempt1 naturallyEXPIRED/attempt2RUNNING preserved. I4 actual history/spec canonical ledger omission discovered; focusedTDD correction underway, no independent gate closure.
+
+Old reviewer actual followup_task failed live agent path not found. Ruling: exact-role scoped reviewer continuation on Astra high after frozen fix report/diff, carrying original R1/coverage/FIX_BASE; same fix01 round, no author self-review. Cost: recovered reviewer context from sealed reports rather than live memory.
+
+Task11 fix01 frozen983sources/52changedpaths, authorreport0a475156, rootpackagece4975fd/rootallhash0mismatch. Unique independent reviewer /root/b11_fix01_independent_review Astra high dispatched with exact original findings+globalconstraints+limits. Author stoppedproductwrites. No Task11completion/sourcegate/SEND release. Remaining explicit evidence limits submitted unprejudged.
+
+Task11: fix round 1/5 (0closed/5originalopen forclosure; I1/I2source repaired butrequiredverificationincomplete; residualI3/I4/I5+newF1,0C4I0M source). Frozen65b03c0f reviewbc5ad482; SPECFAIL/QualityNEEDSFIXES/SENDDENY. Root confirmed concrete source mechanisms. Sameauthorfix02 exactbrief; rootowns staged test/send routing and cannot infer SEND frommissingproof.
+
+Task11 fix02 initial pureTDD exactresults rootread: transferRED3tests2FAIL0ERROR→GREEN3PASS; manifestRED7tests1FAIL0ERROR→GREEN7PASS, includes distinctunique-unsortedcase. Sourcefield/minSQLlimit andcommoncanonicalwire changes; not liveallpathqualification. F1 inprogress; newownedfixture proposed because oldisolatedno4pool must remainprotected; noprovisionyet.
+
+Task11 fix02 newfixture assigned preparationonly owner task11fix2-075249f8161d4ad68373955ff0333384/schema ama_t11fix2_075249f8161d_behavior, sameownedMySQL46151. Sequence B→C→A approvedplanningdirection, no execution/SEND permission. Rootread oldhelper; authorprepares minimalnewpaths+sortedmountidentity fix; no newtestprincipal/credential needed. Oneowner/noUUIDretry onpartialoutcome.
+
+Root executed exact reviewedfix02helper once exit0, CREATE+GRANT1, empty0tables/testprincipal/sameCID+mounts+port+server verified, newenv0600/owner0700. Fixedmountsorting prevents priororderfalsefailure. New ACK task-11-fix02-root-fixture-application-ack-20261025.json issued onlynew16bootstrap/rerun0, nooldschema/run/send.
+
+
+## Root fix02 controlled evidence continuation — 2026-10-25T08:24:29.719313+00:00
+
+New fixture task11fix2-075249f8161d4ad68373955ff0333384/schema ama_t11fix2_075249f8161d_behavior was created/granted exactly once by reviewed helper (exit0). Bootstrap actual initial0/normal16/rerun0, complete16x10-field history equality, metadata19columns/7indexes/6FK/4checks and frozen migration hashes verified; no original schema/bootstrap touched.
+
+F1 baseline remote genuine SUCCESS/lost response with exactly1POST created execution e0b18776-67a8-45db-8397-bc2f4ce023ad, operation299c3b35-83b8-4df9-aaa6-66a09052f639. Same-baseline genuine handler RED1FAIL/0ERROR specifically source-purpose PROVENANCE before GET; rollback source restored/domain equal/UNKNOWN retained. Narrow typed source eligibility fix reviewed against corrected exact RED delta. GREEN1PASS same execution GET1POST0, actualtaskSTALE/execution+operationSUCCEEDED, source restored/full domain unchanged. Controller checks and exact ACKs are retained. Initial malformed all-addition diff preserved; corrected delta uses RED manifest-matching original bytes, not missing snapshot treated as absence.
+
+I4 real JDBC growth1PASS uses production PublicationGraph.read and two distinct connections on exact test-only table fix02_publication_metadata_growth, COUNT1 then insert3, admitted2/SQL LIMIT2/transferred2 and specific changed-inventory PROVENANCE. Table/four rows intentionally retained; not full business concurrency qualification.
+
+C0 actual1PASS: publication d629b199-2b36-4ca8-aa4d-7fee86ecdf95, oldtask56e64b59-b894-4564-b5f3-2900f77112b3/executiond2c20bfe-d325-47d8-80c5-993ffbf03418 genuine signed rejection (initialPOST1). Same-logical no2 taskaf4da8fa-589e-4274-b12a-71d6fab60e7d READY/PREPARED/attempt0 unclaimed/unsent; immutable old ACK APPLIED. Do not repeat C0. Same original provider PID/PGID231675/startTicks11857780/46287 remains, no restart yet.
+
+Staged full991 frozen manifest3f07a074b0b824b036a628d87e73e8b2cc35c619474ee72921bc402526000c2e/root snapshot+current0mismatch. Same reviewer /root/b11_fix01_independent_review active source-only narrow assessment; not final findings closure. Replacement SEND remains DENY pending sealed assessment and exact root combined C1+C2/provider custody ACK. Author may prepare tests but product core frozen. C1+C2 planned within one genuine worker session; ordinary/external renewal and drain must remain actual. Failed session.begin is sticky MARKER_UNKNOWN: updated-source real marker negative moved last, never reset session to continue. C2 real rejection legitimately writes FAILED/PUBLISH_FAILED; no-effect means no remote document/mapping/published success. F1/C4 require fact-only no domain writes.
+
+All original primary held no2, fix01 no4, and three original uncertain obligations remain protected. No main merge/push. FullTask11, Task12, Task13 pending.
+
+
+Root exact provider reload 2026-10-25T08:28:54.703189+00:00: reviewed v2 helper invoked exactly once exit0; private online/side backups preserved; oldPID231675 replaced by newPID/PGID1555480/startTicks17005861, same46287/originalstore/keys/identities, logical fullstate unchanged, reviewedCAS source6141572ab7f9376760261894f233f8bf3a24c23e366ca8d4091fd300c8c6a658 loaded,64Mi2CPU. No business requests. Exact ACK d5718e7043997c8d4fc1f99360935321da579478be24ec61c9b13f99e9a64150; result c35133456bff28701bdab72e4f20aa035e7ddbaf47f5bdc3dcac698c5acfe4d1. Never rerun helper. C1/C2 SEND remains awaiting selector+sequence conditions.
+
+
+C1/C2 worker01 sealed 1FAIL/0ERROR at first worker-wire-noncanonical-order: test demanded exception stack but MinutesContracts.Failure deliberately disables stack. No I5 coverage credited. Root requested stack evidence without checking this exception contract; replace test proof with strict canonical semantic variants + actual SQL boundary, not product exception change. Actual no2 taskRUNNING attempt1 naturally expired/attemptendedNULL; executionPREPARED/unmarked/taskAttemptNULL, opRETRY_QUEUED; unchanged original manifest pair; relay1556472/46415 GET/authPOST/publicationPOST0, still owned. No automatic repeat/state repair. Next real fairclaim attempt2 only after reviewed harness and new exact continuation ACK. Originalprovider1555480 unchanged.
+
+
+C1/C2 continuation02 sealed1FAIL/0ERROR. Genuineattempt2 continued samebusiness after naturalexpiry1. First10workerwire variants actualdelivered/restored/PROV/live passed inside failedwindow; case11transition-generation was PROV before faultinjection, lastsourceSQL PublicationGraph durable_taskCOUNT+SELECTLIMIT5FORUPDATE; 6ordinaryrenewalupdates recorded. No marker or SEND branch reached. Attribution to exactexpiry-only renewal race remains to be proven with safe actualmetadata values; do not swallowgenericPROV. No attempt3 authorization. Fourworkerlimits shiftedC3 per independentbudgetorderingaddendum93586a...; finalverification unchanged.
+
+
+C2 finalattempt03 actual1PASS/0FAIL/0ERROR. Realattempt3, remainingworkertransition-generation + sourceprepare + actualMySQL1205/two rollback writer + ordinaryrenew2/externalrenew1; exactly1no2POST genuine signedDEFINITIVE_REJECTION/slotGeneration2. Terminal11 correctedwire actualdelivered/restored/GET0/noacceptedfact. No runtimeexpiry-only fresh retry observed; pureguard does not implyruntimeproof. Earlierworker01/continuation02 FAIL windows/attempts retained, first10workerwirecases only attributed to continuation02. Relay1560314 settled+closed; originalknowledge1555480 retained. Controllercheck task-11-fix02-C2-final-attempt-root-check-20261025.json. NextC3 two-distinct-predecessor composition andnewkey/workerbudgets; no C0/C2 replay.
+
+### Root C3a exact execution ACK
+Verified plan v3 and seven source hashes; 321 frozen product/provider paths unchanged, provider1555480 start17005861, target window absent. Authorized full-chain bounded rollback budgets then only on eight targets passing one real final/new-key acceptance HOLD; no claim/marker/publication POST. ACK task-11-fix02-C3a-root-ack-20261025.json SHA256 fe5daef24cb575293a1120d51a8aff4e96aacb056b204b5810ceeb400d22ab58.
+
+### C3a-01 preserved harness ERROR
+Root read qualified result:1test/0fail/1error, XML6eb850cf55a2d7083c34fbc71ae7536cde839ba10ea782fe10a007f1a841edbb. Failure in first snapshot serialization of JDBC LocalDateTime before guard/runtime/resubmit; no new final/no3. Relay1562609 port45609 retained state events[]/all HTTP counters0. Author may close this exact unused relay after identity/counter checks; source test codec repair/offline controls authorized, no automatic business rerun.
+
+### Root C3a typed-snapshot continuation ACK
+Reviewed typed codec and3PASS offline controls plus unchanged321 product/provider files. Prior unusedrelay1562609 closed; same1555480 live. Exact continuation02 authorized, no repeatgrant, no final/no3 until eightbudgettargets+normalcontrols+preimages pass. task-11-fix02-C3a-continuation-root-ack-20261025.json SHA256 4917f3144075a9841d7fb52d83e704856af6e6d5550924f4d3a4a8e583da02cb.
+
+### C3a continuation ACK superseded before execution
+Shared response budget also includes projected SQL; prior HTTP-body-sum target invalid. Test now requires actual F BUDGET_EXCEEDED after both receipts/auth, three completeHTTP200 for response. Response binary bound26, others12,total119calls/362HTTP including accept/ACKs. HTTPbody-specific transport negative remains OPEN. Only probe changed; no product. task-11-fix02-C3a-continuation-root-ack-v2-20261025.json SHA256 604954010855dabec641d81bd80aad4eb5429e64e05752700e7af0692b7c389b.
+
+### C3a-continuation02 fork OOM preserved
+Root read result exit1/tests0/noqualifiedXML and log Java heap space.36calls persisted; utf8/scalars/utf16/copyBytes each targetnegative+restorednormal, copyUtf16-6 FINAL_GATE last. Entirewindow NOTPASS; nofinal/no3 path reached. Author diagnoses under512Mi and checks afterstate/custody. Root identified strong-reference trace.identities map as candidate, not proven rootcause. Avoid whole long-window rerun; bounded fresh-JVM dimensions suggested pending diagnosis.
+
+### OOM retention diagnosis and continuation direction
+Author evidence task-11-fix02-C3a02-memory-diagnosis-20261025.json SHA256 70d80294d44ba4e101103333fe696caaf661a096ba6f3f5473e2833c04f56ea6: 8056 physical connection/347holder strongrefs over36calls. Exact allocationfailure MySQL TLS; noheapdump unique-byteclaim. readonly originalC no1/no2 only. Author may close exactunused-for-business relay1563347/start17563358/46025 after102completeevents GET69/auth33/pub0 recheck. Prepare call-boundaryreferenceclear plus8freshJVM dims, first4 directknownthreshold controls forqualifiedXML; noautomaticaccept.
+
+### Root eight-window budget batch ACK
+Read/reviewed20frozen test/provider sources, dispatcher,2PASS trace-release unit and response addendum.321existing product/provider paths unchanged; provider1555480 correct; oldrelay1563347gone. Exact8serialfresh-JVM windows, max82calls/246HTTP, firsterrorstop; nofinal/accept/claim/marker/POST. task-11-fix02-budget-batch-root-ack-20261025.json SHA256 98963c88dcbd21179bd676f6500bb5429ae25d2b034bda9ba917754287408f1f.
+
+### Budget batch fivePASS then factRowsFAIL
+Exactserialbatch produced fivequalified1PASS windows utf8/scalars/utf16/copyBytes/copyUtf16. factRows-01 qualified1FAIL XML6d19bea31da1fa2be5ab16bbbd368b1a2e66d09354d46ec0cbfef825fed76499: telemetry failurecounter1; lastpersisted10calls incl488 preF BUDGET, noqualifyingfactRowsnegative. factEdges/response未启动。relay1580410/46419GET20/auth9/pub0/blocked0/fail1; exactboundedclose permitted after identity/state checks, causeUNKNOWN preserved. Sameauthor diagnoses safe stage telemetry. Nofirst5/wholebatchrerun.
+
+### Root remaining budget windows ACK
+Reviewed14sources/dispatcher/newphase telemetry/offline4PASS;321stagedsources unchanged, prior5qualified1PASS verified, provider1555480correct, failedrelay1580410gone. Exact3windows serial firsterrorstop; nofinal/accept/claim/marker/POST. OldfailurecauseUNKNOWN remains. task-11-fix02-budget-remaining-root-ack-20261025.json SHA256 05b1a048f262f05349b051aa78449e37c34162fd8bfb9dbc58a00f66b012cd8e.
+
+### Eight budget dimensions qualified and root checked
+Root independently verified8XML/custody/result/source identities,54actualcalls,14tablepreimages equal across all, uniqueFnegative andnormalcontrols per dim, HTTPcomplete/elapsed/traceclear, allrelaysclosed. task-11-fix02-eight-budget-root-check-20261025.json SHAd2f4a8e990ee74c91aa2a0064471d21a52a1d4e3a5dc2feeb35d98788362348f. NooverallTask11closure, nofinal/no3 yet. Next separateacceptHOLD; do notrerun budgets.
+
+### Root new final/new-key acceptance HOLD ACK
+Reviewednewselector exactdiff frompriorrevieweddraft and9pins/plan;321frozenproduct/provider paths unchanged;1555480correct andfreshwindowabsent. Exact8gate/currentpreimage→sameownerHTTPfinal→one no3newkeyaccept→two oldACK, no claim/marker/POST. Any partialcommit preserved withoutwholewindowrerun. task-11-fix02-new-key-root-ack-20261025.json SHA256 527e1066b5e11ffbad1307e2b2bf02f60a9661caafc10a5cd73efdc0c2e09da8.
+
+### New final/new-key no3 accepted HOLD
+Root verifiedqualified1PASS/result/source/XML/actualcompletion/HTTP201andreadiness200/relayGET4auth1pub0closed. Newfinal75c65c92-5dc1-487b-9b99-2aa9f1569afa revision14; no3task4810fb84-dd75-47d5-8b79-34f7346f1fba READY0/noexecution. task-11-fix02-new-key-root-check-20261025.json SHA256 f079fc309db1b0a41ae31869ebcbfe3ffb3556476691794dfdbaa409394e7af6. No worker/SENDauthority; C3b fielddimensions next.
+
+### Root C3b first real no3 worker and one LOSS POST ACK
+Readselector/prefix/parentstrictprepareguard/plan, verified11pins/4PASS/321frozen/provider1555480/freshwindow. Soleactualno3attempt1 thennormal+4lower2729 exactprefix/body0/livefacts+freshnormal; productiondrain/marker/externalrenewal thenone genuineSUCCESSLOSSPOST. ActualUNKNOWN preserved forC4. task-11-fix02-C3b-root-ack-20261025.json SHA256 ac72f8cb251dd0efeb33d146fa3232739294f86ae64507c111574ea6641173f9.
+
+### C3b realworker fourfield limits and actualSUCCESSloss passed
+Rootchecked qualified1PASS, fourtarget681SQLprefix/2capture/body0/livepreimage, actualmarker/newoperation andoneSUCCESSLOSS. Runtimeexpiry-onlyretry nowobserved 1 here; earlierC2none remains. task-11-fix02-C3b-root-check-20261025.json SHA256 7aa38b067b4fb00dfb2f5a399c064c4415f4293b5b97495aa04153854381c825. CurrentUNKNOWN preservedforC4, noGETauthority.
+
+### Root C4 exact oldquarantine/currentfactGET ACK
+Reviewednewselector+plan/7pins/321frozen/provider/freshwindow. Exactold d2c declaration-onlycontradiction then realfairclaimcurrent476b/4592SUCCESSGET withfourfulldomainpreimagesunchanged; GET2/pub0, noordinaryclaim. task-11-fix02-C4-root-ack-20261025.json SHA256 a91fa2732d926ea3174fba3399ffbcf11b9eb89c37b902cbeb4675b4216869b8.
+
+### C4 currentrealSUCCESS factonly after oldmanual PASS
+Rootverifiedqualified1PASS/XML, realcurrentclaim epoch2/statesSTALE+SUCCEEDED+SUCCEEDED, fourfulldomainpreimagesunchanged, GET2/auth0/pub0/olddeclarationnoeffect/relayclosed. task-11-fix02-C4-root-check-20261025.json SHA256 4306b81b2ffc7c37ba049bd6633fb7e17167cd7dd600df83761d005902c681ea. RealC3remote docretainedunmapped, oldoperationMANUAL, notpublicationdomaincompletion. A-last preparationnext, nobusinessACKyet.
+
+### Readiness independent-state evidence plan ruling
+C composite manual+success-unapplied doesnotprove independentUNKNOWN/mapping. Author mayprepare minimalownedM onceinitialSUCCESSLOSS, trueUNKNOWN readiness/typedfinaldeny, sameopnormalGETtomapping thenmappingdeny. NoM SENDACKyet; original3UNKNOWNuntouched. OrderM→A0→A1→A2 toavoidheldA fairness. Bexistingfactonly/noMANUAL/nomapping reuse forsuccess-unapplied. KnownFinalHTTP403 mapping defect remainsOPEN; no409claimorproductchange in frozenfix02.
+
+### Root M independentUNKNOWN/mapped readiness ACK
+Readselector/safetyguard andactualconfirm/receiptcode; checked8pins/321frozen/provider/freshwindow. Onefreshrealbaseline/initialSUCCESSLOSS thenUNKNOWNGET+typedfinalnegative; sameopfairGET→realmapping thenmappedpublishednegative,12tablepreimagerestore. NooldUNKNOWNuse/noHTTP409claim. task-11-fix02-M-root-ack-20261025.json SHA256 7df2e0e5ac8d96b158e7f9ddda6d3f46082de06beb2471ca443cde1a9810c6d8.
+
+### M initialwindow FAIL after actualSUCCESS apply
+Qualified1FAIL XML1944f7224cf524e168bff4b34f5781dbd0d74878ec6b0fe96c1c0782f0310831 testexpectedPUBLISHED actualSUCCEEDED. Root readUNKNOWNnegative JSON typedFINAL_NOT_READY/12preimages equal, reachedwithinfailedwindowonly. ActualMIDs recordedcurrentstate, relay2385699 closedGET1/pub1. Do notrerun baseline/POST/GET; mapped-only exactcontinuationnext.
+
+### Root mapped-only M continuation ACK
+Readnewselector/plan, sixsourcepins/321frozen/provider/freshwindow verified. No newremote traffic orrelay; exactalreadySUCCEEDEDmappedM actuallocalreadiness+typedfinalCAPABILITY/no12tablepartialwrites. OriginalM1FAIL/UNKNOWNpartialqualification preserved. task-11-fix02-M-continuation-root-ack-20261025.json SHA256 87eb8cd4da8a074afa24cca1e89872a0a9da61eb5c3507164c9325e44d091012.
+
+### M mapped-onlyPASS and A0 exactbaseline ACK
+RootMcontinuationcheck SHA5bc6d5971276082cb36d875a772e0c72c20d8fc1f8d1a1247ed9ef0ab2690af7 verifies1PASS/mappedtypednegative12tables/provider0; originalMFAILqualificationretained. ReadA0/ZeroEffectsource+plan,5pins/321frozen/provider/freshwindow. Onefreshinitialpermanentreject+sameactorregrantonly, no no2. task-11-fix02-A0-root-ack-20261025.json SHA256 368488a9d563084aeb41c5fb8422dda9843750e3e274f054704851d2f1a61c77.
+
+### A0 lastactualinitialreject baselinePASS
+Root verifiedqualified1PASS/actualpermanentreject/sameactorregrant/relayinitialPOST1GET0closed, actualAIDs inrootcheck/currentstate. task-11-fix02-A0-root-check-20261025.json SHA256 208ae6ef1b8fe814dc760ec6d1c272addffd0a3c861ead1b0db3b17f21e2b473. Nono2yet; exactA1historyraceplan next.
+
+### Root A1 real S/F history race ACK
+Readrace/barrier/plan,9pins/321frozen/provider/freshwindow verified. GenuinefinalFzeroSQLpause withrollbackSafety, realconcurrentno2accept, actualSFAILED/FREADYmetadata/PROV/noextra12tablewrites, oldACK/liveNegative, no2HOLD. task-11-fix02-A1-root-ack-20261025.json SHA256 84160f7f2427b3bc48b2f7829ef31f83fb3e4741e00d2e5b6ebebb20b96f35d9.
+
+### Root B local success-unapplied readiness ACK
+Readplan/selector/inheritedlocalharness/sourcepins,321frozen/provider/Bretainedmetadata/freshwindow. ExactBnoMANUAL/nomapping factSUCCESS readiness/typedfinalnegativeonly,12tablepreimages/provider0; serialafterA1finished. task-11-fix02-B-readiness-root-ack-20261025.json SHA256 d0d6b9808b862d5f3583e5fccd8c03f4e1cf0469f66b28a0aae57ae5b7cc611b.
+
+### A1 genuinefinalhistoryrace andlive readiness PASS
+Rootverifiedqualified1PASS/actualfinalthreadSFAILED→FREADY/zeroFSQLrollbackbarrier/PROV+12afteracceptpreimages equal/liveFINAL_NOT_READY/relayGET2auth1pub0closed. ActualA no2f91d8573-7f2b-4d37-963d-cee87b48c923 READY0/PREPARED HOLD. task-11-fix02-A1-root-check-20261025.json SHA256 89f93280ce018fd4107612e0ac40d913fed6152a472017a3720b264fb9f07cd2. BpurelocalnegativeACKserialnext, A2notauthorizedyet.
+
+### B success-unapplied localnegative PASS
+Rootverifiedqualified1PASS XMLfbffc8fe2a372d06399421427b5d254cbc456e32b8fc596cb227e5658089feb8, actualBnoMANUAL/nomapping factSUCCESS typedFINAL_NOT_READY/readinessfalse/12preimages/provider0. task-11-fix02-B-readiness-root-check-20261025.json SHA256 85936cb6b38d5c16a36b29d1003c29c9d359b75f8ed8ff14e84bac12f2a25d7f. A2stillpreparation, no claimyet.
+
+### Root A2 source-marker-before-oldmanual ACK
+Reviewedselector+sourcefault+plan,10pins/321frozen/provider/freshwindow verified. OneA no2fairclaim1; realbegin exactrollbacksourcefaultPROV, stickyneverbeginagain, restoredprepareonly, thenoldexactdeclaredSUCCESS sameopquarantine preservingfullnewer/domain/reservationfacts; noPOST. task-11-fix02-A2-root-ack-20261025.json SHA256 b9eefc0c3d21c85df930abeed15127861c5a899f63edae76b79cdf318c1b14b2.
+
+### A2 collector closed-interval edge preserved
+BusinessJSONcompleted/sourcePROVrestore/sticky/sameopmanualnewerpreserved andMavenlog1PASS/process0; originalrunnerexit1/tests0 becauseXMLmtime exceeded recorded child end. Exactdelta53488479ns (53.488479ms) afterrecordedchildend. Root savedrawXMLSHA9b8a6884605854ae415a19939c509a1c002347b4fd5043bff022985597a0b869/statstable innewcustodyappendix, nooriginaltimes/resultschange. Sameindependentreviewerrequestednarrowqualification. NoA2rerun/newclaim; holdfutureXML-clearingwindowsuntilreviewerreads.
+
+### A2 supplemental business qualification accepted
+Sameindependentreviewer addendumSHA4f5eb2f0c58af8ce6666eeef46e969a93ef884987c0755b2b97c1ae913630c04 accepts limitedsupplementalchain, notoriginalcollectorPASS. Rootactualsource/sticky/preservednewer/domain/relaychecks task-11-fix02-A2-root-supplemental-check-20261025.json SHA256 b4599a24c034342ea35d84c2c4a12e28089ef9ce439578ef783cb230a2d46118. Postcloseno2RUNNING1/PREPAREDexec1afb5f06.../opMANUAL. Nextminimalcollectorfix+offline6cases+narrowreview beforelast2local/3pure; noA2rerun.
+
+### 2026-10-25T11:46:27.045967+00:00 — future collector reviewed; final five exact batch
+Independent toolreview d44e072d PASS, offline6PASS; A2 originalFAIL unchanged. Root verified15pins/321frozen product-provider paths, provider1555480/start17005861 and five targetpaths absent. Issued task-11-fix02-final-five-root-ack-20261025.json for one compile then 2local+3pure serial, firstfailurestop. No providerbusiness or claim, no source gate generalization.
+
+### 2026-10-25T11:50:21.822062+00:00 — final batch stopped on URL01
+Compile0, manual01 qualified1PASS XMLb71673a3. URL01 qualified1FAIL XMLf7ff6463 expected Minutes Failure but none; fault injection/SQL not finallysaved, no claimed product cause. Threepure notstarted. Root verified newcollector custody/hash; author testonly diagnostic delta pending, oldfailure untouched.
+
+### 2026-10-25T11:51:24.980086+00:00 — URL01 attribution correction
+Prior rootcheck phrase first URL case was unsupported: line10 serves bothcases, no finallysaved trace. Whole1FAIL unchanged; exactcase/injection UNKNOWN. Author static finding finalreadiness publicationop projection readsresultpresence only; sourcegenerationop fullresult metadata is separate actualpath, exactPK readonlyvalidation underway. No productcause or productfix claimed.
+
+### 2026-10-25T11:54:09.567109+00:00 — URL02 exact local continuation
+Reviewed two test-only diagnostic/source-target changes; normal exactPK target required before injection, unconditional outcome/restoration evidence. Source generation6ffdda35 realbinding readonly; publicationop remains unchanged/presence-only. 321frozen/15pins/provider checked. final-four-root-ack permits URL02+3pure serial, firstfailurestop; prior artifacts retained.
+
+### 2026-10-25T11:56:43.986641+00:00 — final continuation allPASS
+URL02 qualified1PASS actualURL consistencyPROV/sourcegenerationresultBUDGET; each injected exactbound target/body0/12preimages equal/valuesrestored/provider0. Threepure transfer3/manifest7/errors1 PASS (distinctselectors, no repeatcount). Root hashes/sourcecustody verified. Wholefix02 scopedassessment pending; oldURL01FAIL preserved and manual01 actualleaseexpired accurately qualified.
+
+### 2026-10-25T12:02:25.860572+00:00 — USER PAUSE, precise resume saved
+User explicitly instructed stop after current call. Current1040snapshot verification finished; author in-flight finalreportwrite finished then stopped. Report e7879df6, source4808d1f3, changed69 d396525d, window46 246ee0f8 verified. No finalfix02 review/diff/brief dispatched. Sessions ended; originalprovider retained. Latest pause doc docs/acceptance/development-pause-b-fix02-review-pending-2026-10-25.md and both discovery entries updated; allpriorbytes backedup. Resume ONLY explicitcontinue at fullfix02 scopedreview package, not historical reruns; full11→12→13 still pending.
+
+### 2026-10-25T14:12:51.026917+00:00 — Explicit user resume; fix02 final scoped package
+Verified immutable983 + current/snapshot1040, sealed report/source/changed69/window46 hashes and unchanged HEAD. Generated 69-path scoped diff and review brief. No tests/business rerun. Old agent handles absent in current list; replacement independent reviewer inherits all prior reports and round2/5.
+
+### 2026-10-25T14:23:04.227332+00:00 — fix02 scoped gate adopted; next B1 released
+Task11: fix round2/5 (F1/I1-I5 addressed,0open scoped; immutable fix01→fix02, unchangedHEAD739193d). Independent SPEC PASS with explicit qualifications/qualityPASS, reviewf8e2b2e coveragec88f7885. Root reverified1040 current source before release. WholeTask11/B incomplete, SEND remains DENY. Ruling: B1 owns advice/provider-independent receipts/status/history/member-effective reads plus publications.yaml/api.yaml; exact retry separateB2. Same author /root/b11_continuation_author sole writer; source-only/TDD first, runtime bounded new case plan before execution. No user permission stall.
+
+### 2026-10-25T14:33:30.387925+00:00 — B1 implementation checkpoint
+Final advice RED1FAIL→GREEN2PASS, status projection RED3FAIL→GREEN3PASS per sealed/author evidence. Independent DB receipts/status/history in progress, member effective-final pending. No B1 DB/HTTP execution yet. Root exact resource guard/ACK85c0fba4 saved, dedicated runtime harness readback required. No fullB1/fullTask11 completion.
+
+### 2026-10-25T15:18:11.444523+00:00 — B1 member02 generation succeeded, test expectation failure retained
+Actual window02 overall1FAIL line32 expectedGET0/actual1 after awaitSUCCEEDED and POST1. New meetinga6e5a40e-6314-4ef9-9e57-d4fcb4982e5e, generationtaskd674179a-2986-4411-b4d3-d07cba9589ea/modelstore7b58de06 persisted. Ruling: original GET0 plan/test expectation was wrong; ControlledMinutesClient.receive line51 fetches successful result body viaGET, a required part of one real generation. No redo generation. Actual relay count alone does not record URI; source+state inference only. Keep originalFAIL; author will pin exact candidate/reservation and prepare same-phase adoption/reviews/final continuation with no new enqueue/POST.
+
+### 2026-10-25T15:34:55.874589+00:00 — B1 genuine member final/old-history matrix PASS
+postgeneration03 qualified1PASS after preserved01compileERROR/02CREATEassociationFAIL. Real candidateadopt+5reviews+final201;9readresponses include owner/membercurrent/details200, memberhistory403/outsider403; legaledit clearsfinal, memberold404/ownerhistory200/currentnull.3sessionsclean/native2618385closedexit143/originalBMAequal. Prior member02 truegeneration succeeded butGET0badassertFAIL remains; terminalfacts01 qualified1PASS. No model/KB repeated. B1 contract/readack completion+wholebatchreview pending.
+
+
+## 2026-10-25T16:03:56.878939+00:00 — B1 sealed, independent review dispatched
+Root verified immutablefix02 1040 files, current/snapshot1052 files, exact22paths and142indexed artifacts across35canonical windows; no hash mismatch. Independent reviewer reads sealed source; author only prepares B2 in W. No Task11 adoption, stateful rerun, commit or new send authority. See task-11-continuation-b1-root-custody-20261026.json and review brief.
+
+
+Task11 fix round3/5 DISPATCHED: B1 independent5e54f0d8 SPEC/QUALITYFAIL C0/I4/M0; B1-I1 original-request/result binding, B1-I2 strictSQLkeyset/cursors, B1-I3 frozen structuredset/profiles, B1-I4 actualmember/freshauthority evidence. Root read full report; findings match normativeR1 and originalB1scope, no waiver. FIX_BASE immutable2fee1234; same writer, exact brief task-11-continuation-b1-fix03-author-brief-20261026.md. B2 only prepared125d173f, no source/runtime. No reset of earlier rounds.
+
+Task11 round3 Ruling B1-I1: same reviewer confirms absent legacy receipt→same-input RESUBMIT discriminator. Author may add prospective strict versioned immutable acceptance binding and producer identity in existing manifest, preserving legacy bytes/algorithms/digests. Legacy unambiguous replay preserved; ambiguous503/no writes, not currentrevision inference. LOCAL_RECOVERY later r/actor must not falsely equal old task acceptance. Exact ruling task-11-b1-i1-acceptance-binding-ruling-20261026.md.
+
+Task11 fix3 member01 qualified1ERROR preserved: newfinal8e5ac094 and5reviews committed; directSAF4barriers assertions reached/8tablesequal. Root fixturepublicmetadata missing role caused clientstartupfailure beforepublication. Root metadata-only amendment preserved original privatefiles and allcredentialbytes/IDs/store/endpoint; newprovider46343store retained, processesclosed/admin+3sessionsclean. Dedicatednextphase must skip reviews/final/providerinit, no blindrerun.
+
+Task11 fix3 memberreadonly01 qualified1PASS:23GET plus boundoriginalPOST202 withfactoryabsent,17tablesequal,4directserviceSAFprobes,2actualfinalpages,crossIDs404. Rootreadback saved; admin+3sessionsclean/native2631734closed. CanonicalPASS retains childExitwall1792947208119015810>collectionClose1792947207802171361, XMLwithininterval; no inferredcause/collectorchange/relabeling. No provider/nativebusinesswrites/claim. FinaltargetedSQL/contract/freeze and scopedreview pending.
+
+Task11 fixround3/5 sealed and scopedre-review dispatch:1066sourcefiles/23delta/29windows; rootcustody1052base+1066current/snapshot+3981artifacts+29XMLzero mismatch. Same reviewer judgesB1I1-I4 andnewfixbreakage; sourcefreeze3c7cb2f0/diff597bd458/report87de3be7. No adoption/wholeTask11completion.
+
+Task11: fix round3/5 (B1I2/I3/I4 addressed, B1I1 open with2Important residuals—FIX03-I1A uniquelegacycandidate not selectedresult; FIX03-I1B nullstoredoperation uncaughtNPE; immutable2fee1234..3c7cb2f0, unchangedHEAD739193d). Review579c8709/coverage6fabb671 rootFULLREAD. Escalate round4/5 to freshgpt-6-astra high perSDDfixloop; exactverbatimbrief, originalauthor W-onlyB2prep. No sourcefix byroot/no reopeningaddressedgates.
+
+Task11 fixround4/5 authorDONEsealed00572e7e:5paths/7newwindows/finalpure27PASS; compile0testfailure preserved. RootFULLREADappendreporta152af54 +custodyboth1066/current/4950artifacts/35XML0mismatch. Same reviewer narrowFIX03I1A/I1B plusnewdiffbreakage; no broadreaudit or adoption.
+
+B2fixturehelper staticreview8126b669 C0/I1/M1: existingmode readinessusesdifferentcredential, Minorlexicalpublicpath containment. RootRuling dedicated-only newlogin/schema9privileges; removeunexecutedexistingbranch. Helperfixround1 W-onlyoriginalauthor, M1trackedminor correctedpracticallywithsameguardamendment/no loopextension. No provision/application/B1adoption. Productfix4review separate.
+
+Task 11: fix round 4/5 (2 addressed, 1 open — new FIX04-I1: raw JDBC BigInteger versus normalized Long exact tuple comparison rejects valid unique legacy RESUBMIT; immutable source3c7cb2f0..00572e7e, no new commit). Full reviewer report d9d01d0e and coverage26abcafb read; B1-I2/I3/I4 remain qualified ADDRESSED. Dispatch fresh Astra high sole writer for round5 focused numeric correction; no runtime release.
+
+B2 fixture preparation: fix01 helper778a0764/noteeafd1ba0/manifest11556a54/diff9ada7741 prepared and dispatched same reviewer for I1 plus M1 delta. Root selects new B2 native PKI instead of B1 key reuse; original author W-only concrete runtime preparation, including prospective acceptanceBinding integration omitted by older preflight. No provisioning or product expansion.
+
+B2 fixture helper correction round1/5: I1 removed by dedicated-only ruling; bundled Minor M1 corrected. Same reviewer bdbe46d2/coverage00b03fa2 SPEC PASS/quality approved preparation C0/I0/M0, full report read and hashes verified. No provision/bootstrap/runtime authorization yet; awaiting B1 product fix05 verdict before exact root release.
+
+Task 11: fix round 5/5 (1 addressed, 0 open — FIX04-I1 lossless numeric equality; source00572e7e..6c0119b5, no new commit). Same reviewer bcedfaf1/coverage4fef009c SPEC/QUALITY PASS C0/I0/M0. All four original B1 findings closed, scoped root adoption issued with all inherited qualifications. Full Task11/B and general SEND remain unadopted. B2 reviewed helper778a0764 exact one-shot provisioning release issued; no bootstrap/runtime yet.
+
+B2 dedicated fixture: reviewed helper invoked ONCE exit0; exact schema/user/grant created, same resource/server before=after, tables0 and new credential actual readiness verified, private0700/0600/export match. Root applicationACK 8031f7bcebfb962e1a8b1ca773e57afe49c3dcfaf0fb436dd090e422455de074 authorizes only fresh bootstrap after reviewed minimal binding/compile. No migrations/business/provider/queue yet; no helper rerun.
+
+B2 bootstrap b2-bootstrap-01 actual qualified1PASS: root141artifact hashes/XML/16full10fieldrows equal/16normal+0rerun/final013.4/UTC verified. Retain nonmonotonic installed_on qualification; no cause inference. Fresh-empty selector consumed. Exactretry source/pure stage released per preparedbrief; future native/KB helper under independent static review, no runtime or queue release.
+
+B2 credentials/nativePKI: helper71275f82 independent7348528c preparationPASS C0/I0/M0 fullsource/report read; writer confirmed no concurrentbuild/test. Exact release3544b688; helper invokedONCE exit0. CreatedACK 4806b9997a5ca32f40eb70601535b1df7b538343a7bf5b165101c58a7a6389b4 matches allocatedpaths/identities, serializedkeypair/trust/roles/modes checks passed. New privatekeys/passwords only, no publicsecret values/hashes. No providerstore/nativecatalog/env/runtime; writer resumed source/puretests.
+
+B2 private runtime overlay/model authorization created once with exclusive0600 files under existing0700owner/runtime; overlayACK ebf850f0 links actualcredentials4806b999 and allocationd876e9d3. No native/model/provider stores/catalog/archive or runtime/SQLbusiness effect. Existing sourceauthor continues pureTDD. Independent W-only B3preflight assigned to derive legal reuse of futureB2graph for localrecovery/positive maintenance, never oldheld obligations.
+
+Task11 B2 root ruling: PublicationManifest.numeric representation off-by-one (<max806) conflicts with R1 inclusive max806 and unchanged bridge predecessor805→next806. Minimal <=max806 authorized with causal parser upperbound/overflow negatives, immutablebytegoldens and eligibility/budgets preserved. Not a broad generic retry or sixth B1fix loop.
+
+Task11 rootplanningruling after independentB3preflight3cb90c7d: selected initiallocal-only1→remote2/execution1→exactretry3/execution2 same genuinepipeline. R1local64/16/cursor/restart distinguishedfromTask8>64; noauthenticprehookfullpublicationversion found, so actuallegacyterminalpositive remainsUNQUALIFIED and visible towholeTask11/13review. Genuine sharedpositive + realblockedloop + optionalexactCTEcomponent evidence planned, noSQLbusinessseeds/64remotePOSTs/sourcewaiver. ExternalWorker preparefailure notautomaticordinaryquarantine; directgenuinequeueAPI evidence mustbe separatelylabeled. Runtime stillunreleased.
+
+B4 W-onlypreflight f6419b44 fullread: providerdiscovery/document endpoints exist, app2discoveryGET+memberfreshREAD sameoriginrelay absent; currentownerEDITfactory cannotbe relaxedglobally. Typedbinding/cancel/cumulativeescape budgets/privateerrors/projection route required. Future B2confirmed MEMBER and separatelyauthorized legitimateSUCCESS+ACTIVEmapping permitreuse, PREPAREDtasknotdocumentfixture. No B4source/runtime activation.
+
+2026-10-25T18:27:12.494802+00:00 — B2 SOURCE_READY root custody PASS:1068sources/15paths,2839canonical+10contract+3compile entries;20XML. Independent source review dispatched with exactpins. Source frozen/runtime unreleased. B1 loop5/5 retained; no reset.
+
+2026-10-25T18:32:19.086528+00:00 — Root read B2 harness plan f142bfcb; inert public fixture binding prepared with exactschema/cid/port and ACK graph. Operational ACK follows independent source disposition; per-stage execution release separately pins actual harness source to avoid circularhash. No resource/private/runtime action.
+
+2026-10-25T18:33:34.650771+00:00 — Task12 current gap map4b29b1f2 root read; existing22webfiles unchanged, generated six request unions need producer repair; protectedB03/sourcebudgets remain Task12-owned. Combined/freshintent/T10-M1 and B4 are Task11 prerequisites. No activation/test/runtime.
+
+2026-10-25T18:36:00.127158+00:00 — B2 source gate SPEC/QUALITY PASS C0I0M0 e90fb415 root adopted qualified; fullTask11/runtime pending. ConfigurationACK b0e4c66e3eaf570e40182a000f43af924ad4699ad7f906f4232043c80b16c204 issued; minimal harness source+compile only released, no test/runtime/SEND.
+
+2026-10-25T18:42:42.955441+00:00 — B5 nodes7/8 preflight f381c4f1 root fullread. Existing graph/localdecision/held transition reuse; uniform completehistory guard genuinely missing acrossmutators. Guard must precede combined activation/T10-M1 threeprojections. ACK/read/fence/factsettlement separate. No source/runtime activation.
+
+2026-10-25T18:46:31.171101+00:00 — B6 preflight8806741e root read; ruling: prefer newB2failed receipt transport before retry; isolatedHTTP permitted now but controlledHTTPS/TLS positive still required later; separate bounded protocol fixture for durable CAS, explicitly not genuineapp authority. FreshJVM not samecontext restart. No activation/resource/send.
+
+2026-10-25T18:52:13.534607+00:00 — Root verifies1068base/4harnesspaths + finalcompile; one readonly preflight released with actualCID/port/limits/cgroup. No business effects/child services. Release 84899754db12de4b205e8e62484d1fe28eb4ec5e945ff9906d098fb3f20a50ce
+
+2026-10-25T18:57:06.430091+00:00 — Readonlypreflight root verified145artifacts/1003source/1PASS16history/12zero/10absent. Pipeline configuration acdd3252b97f82637faf54d5fcf75299e83ec9a541a2aca3f09d11e9a4a2d69a and SOURCE-only release issued to solewriter; no actualruntime/business.
+
+2026-10-25T19:05:27.067121+00:00 — Ruling: pipeline minutes restart may set publication.enabled=true to install actual JdbcFinalConfirmations (MinutesConfiguration14); KnowledgeConfiguration client gated independently by publication.client-identities, which remains absent with origin/mode. Assert actual Runtime.publications null (not merely noSpringservicebean), noControlledKnowledgeClient/automaticWorker/ReconciliationLoop. No KBstore/grant/request; source-only currentrelease, future actualruntime stillgated. No productchange.
+
+2026-10-25T19:17:41.768746+00:00 — Root1070→1071/3paths+finalcompile/source readbackPASS. Exact newpipeline tofinal releasedONCE deb3b113cc80a08d3e78653e09f962564b792e04b44e98aba063b15e90c6ed43, actualresourcebounds unchanged. ModelPOST1/resultGET1; noKBpublication. Preserve all partialfacts/unknowns; no wholepipeline replay.
+
+2026-10-25T19:22:08.861030+00:00 — Genuinepipeline1PASS rootverified221artifacts/1004canonical/1071broader, actualfinalr13/memberREAD. Localacceptance SOURCE-only release 6d0fcd899d2ab252cd3d1a18d19663229ad9985c072e2bfd1b9c8bfdc5a87861 issued; config 5d2a74f2be5ac910c3cc84f59113b5678e4a39c71caf4fcdadb3cf9c5d38e279. Samegraph only, no newgeneration; no KB/runtime yet.
+
+2026-10-25T19:26:16.423547+00:00 — Localacceptance source ruling: natural JDBC faults17-table exactpreimages; actual rollback before simulatedcommit failure labeled PRE_COMMIT_FAILURE only. Distinct actualoneforward fixedroute loopback HTTP relay captures upstream200 then drops downstreamACK; manualsocket noautoretry, no secretheaders/logs. FreshJVM genuine receipt/controller/security with neweffectfactories absent. No productchange/runtime authority.
+
+2026-10-25T19:30:43.648326+00:00 — Pipeline independent evidence review04deda7d fullread: SPEC/QUALITY/EVIDENCE PASS C0I0M0; root scoped adoption through final/member only. No new runtime/SEND or full Task11 claim. Sole-author local acceptance source+compile continues.
+
+2026-10-25T19:44:39.664164+00:00 — Localacceptance1076source/snapshot sweep clean; root source read found report§7 overclaims publication/receipt immutability assertions (actual task/submission checked). Soleauthor narrow harness amendment r1 required before runtime: actual publicationFAILED/revision+1/otherfields unchanged and original SUBMITreceipt equality. Original checkpoint2580acf1 retained, no product change/B1 cap reset/runtime.
+
+2026-10-25T19:45:13.835783+00:00 — Correction after exact frozen snapshot read: original checkpoint DOES compare non-state/revision publication fields and containsAll preclosure receipts. Root earlier comment reflected older pre-seal read for those two claims. Real remaining gap is direct FAILED/revision+1 assertion; r1 also makes SUBMITreceipt unique exact equality explicit. Narrow harness amendment unchanged, no runtime.
+
+2026-10-25T19:46:50.052532+00:00 — Local r1 source1076current/snapshot +compile04 rootverified; direct publication/receipt assertions complete. One exact localacceptance runtime released 85523765f6a0402d89c897d518efd851c1c99436d6f2559ed8a5850b7dc74814, parent29+child5 appHTTP, KBdestinationPOST1/publicationPOST0; exact retainedgraph/newKB only. Source frozen; no broad rerun.
+
+2026-10-25T19:50:37.908302+00:00 — Local01 actual1ERROR setup beforeSUBMIT; root168artifacts/1009canonicalmanifest/1076broader verified. NewKB init+grant1 retained port45709; native/providerdead/4sessionsdeleted. ReceiptApi nullsource during initial mainscan diagnosed from actual log; independent harness review pending incl childownership edge. No runtime replay or product fix. First rootchecker assumed fullcanonical source capture, corrected to manifest/current plus separatefullsnapshot; no evidence changed.
+
+2026-10-25T19:55:12.412914+00:00 — Independent localharness review7bfdf386 fullread SPEC/QUALITY NOTAPPROVED C0I2M0. Ruling: retainTask11/B1cap5/5; route minimalnewharness scanisolation/childownership defects into planned dedicated continuation, no newfive-roundloop/sixthB1fix. Sourcebrief be53276e525bf6c7500a5c6a20657216da1f88359dab5368b6ad31c83fe036cb issued, existingKB45709/grant1 only; runtime denied.
+
+2026-10-25T20:05:11.553569+00:00 — Continuation source13273562 full1077hash+compile verified; review403b32f7 fullread I1/I2 ADDRESSED IN SOURCE C0I0M0, runtimeclosure pending. Exactone-shot successor released 17e73f14f5a90788fec94a568e6753b2d6429afc6d6a32ba16789009248dbb4a; existingKB45709/grant1 noinit/regrant, originalERROR retained. Cap5/5 unchanged.
+
+2026-10-25T20:10:05.372192+00:00 — Local continuation1PASS root208artifacts/1010canonicalmanifest/1077broader verified. Actualsubmission1 NEVER_MARKED task0b9fa9a6/publication142a236c FAILEDrev2;10actual500rollback/17rows equal; ACK0/1/200; parent+distinctJVM replay;6sessionsdeleted. Childself/parentstart2s discrepancy preserved withoutcause. Exact closedgraph held for plannedRESUBMIT2/rejection1; source/evidence qualifications and5/5cap retained.
+
+2026-10-25T20:11:55.164921+00:00 — SamefinalRESUBMIT2/rejectionexecution1 plannedstage SOURCE-only released 22558eb5aa43e2ebd5b996d69bc5b19ea0d09a1685365bb77353a5a262138425; config45c793ed0d72b3c2cdf79d9c6b1e4fe6595629a99cdc6da6ded5f946b66e1ffb. Existingclosedsubmission1/finalr13/KB45709 retained. No runtime/SEND/regrant; exact effectbudget/lifecycle required in checkpoint. Localactualindependentreview separate.
+
+2026-10-25T20:13:06.824720+00:00 — Localactualindependentreview9d3b59e1 fullread SPEC/QUALITY/EVIDENCE QUALIFIEDPASS C0I0M0 rootadopted onlySUBMIT1/localclosure/replay. I1actualclosed/I2source+normalexit, per-negative/fourthKBobs/2sclock qualifications retained. Nextrejection sourcecontinues; genericattemptopen remainsTask13, preparedexternalpath endsactualattempt at JdbcExternalOperations332–334.
+
+2026-10-25T20:15:05.325882+00:00 — Rejection SOURCE lifecycle ruling: minimal opt-in testhelper retainForReadback defaultfalse preserves historicalclose; terminalsettled=true plus explicitretained/alive provider+relay for B6 sameorigin. Prospectivebudgets2appHTTP/destinationPOST1/publicationPOST1/proofGET0/revokeCLI1 READpreserved/PUBLISH0grantversion2/3readonlystoreobservations/owner1session. App/native/worker stop, idle retainedservices no unsolicitedrequests. All-exit setupcustody required; no actualruntime/SEND release.
+
+2026-10-25T20:17:56.904947+00:00 — Rejection providerstate clarification, root checked controlled_knowledge.py251–269: actual first signed rejection commits publication_slot generation1/documentNULL and executionFAILED, before any document write. Prospective expected docs0/slot1/execution1 and READ1/PUBLISH0/grantversion2, exactbusiness binding required. Do not carry localacceptance slot0 into rejection; no extra budget/source/runtime authority.
+
+2026-10-25T20:30:43.059190+00:00 B2 rejection source: rootverified1079current/snapshot and exact7path delta fa30bb5a; compile02 PASS448sources metadata3707db48. Independent focused source review running; no runtime/SEND yet. Source/report/diff and priorcompile01ERROR retained. Cap5/5 unchanged.
+
+2026-10-25T20:33:15.323027+00:00 Task11 Ruling: rejection destination budget is3, not1, from actual RESUBMIT/prepare/execute calls. Independent Important load-bearing finding accepted; minimum dedicated assertion/report correction routed to dependent runtime preparation. Cap5/5 unchanged; no runtime/SEND. Ruling 3f77cf45550c885997de72a00e6568547d7d331c80e32a42db38744737308786.
+
+2026-10-25T20:37:10.093542+00:00 B2 rejection r1 review215359ea/rootfullread SOURCE APPROVED; B2-REJ-I1 ADDRESSED. Root release 1ec75502aa83272709121846e674c5fe1d54660435351216609017677ae27147 authorizes one exact b2-rejection-01: app2/destination3/publication1/GET0/revoke1/store≤3/session1; same graph; retain provider+relay. No general SEND or repeat.
+
+2026-10-25T20:41:20.808704+00:00 B2 genuine rejection actual1PASS rootverified187artifacts/1012canonical/1079fullsource. PubFAILEDrev5/newtaskf0f17320/exec0ef15c54FAILED1, actualtaskattemptendedFAILED. Dest3/pub1/GET0/doc0/slot1; exactprovider+relay retained. Rootverification e99d41f0a56b07338f7805ca0e7f03ef10dca674b8d6416a771bacff7e1c3106; fullTask11 remainsOPEN.
+
+2026-10-25T20:42:48.939690+00:00 B6 rejected-receipt transport source-only released c70e40232efbbe90161ace7b10d472273a5e9cb1b5bcde8e229e692e681e7e96; immutable actualrejection evidence review separate. Newfront relay may wrap exactretained45519, POSTforbidden, actualregistered readonly authority only. No runtime/GET/sourceproduct edits or grant/exactretry.
+
+2026-10-25T20:43:39.857377+00:00 B2 rejection independentreviewd9c8b2a1 SPEC/QUALITY/EVIDENCE QUALIFIEDPASS C0I0M0; rootfullread/adoptionc35bfab630846aada7110e0797ba405249416e741a9893d415efc27f3728d836. Correctedbudget actualverified, genericTask13 remainsOPEN; no broaderTask11claim. B6source authorcontinuing separately.
+
+2026-10-25T20:58:42.532237+00:00 B6transport source2531deee rootverified1082current/snapshot/5delta/compile04PASS; focused independent review running.26case/24GETprospective, no runtimeyet; qualifications explicit in43b002e6. Rootreadback61f022bd9916959bc88538b44134fb668d8da26518e992dbeb2ca54321d29b37.
+
+2026-10-25T21:02:52.839316+00:00 Task11 Ruling: B6 transport explicitproviderbaseline and harnessfailure separation are real/load-bearing. Minimal IT/probe corrections routed to dependent runtime-preparation under 8d20140cd01aa13ce5ff65587e809ea9b3afeec41e473bf91ba9218f2c5fb438; cap5/5 unchanged, no runtime. Formalreviewsealing against2531deee.
+
+2026-10-25T21:10:33.928471+00:00 B6r1reviewc21cfe2f fullread SOURCEAPPROVED, I1/I2addressed. One readonlyruntime release9e721fba342469198123ab1e2bfed23dec86d36387496c80938df648ae41e4f4 onsourcea52bfb43:26cases/24GET/noPOST, exactretainedorigin, newfrontonly. No broadTask11claim or injectedcleanupfailureproof.
+
+2026-10-25T21:14:21.798841+00:00 B6window consumed1ERROR INVALID_ID beforeNORMALprobeconstruction/GET. Rootverified161artifacts/1015canonical/1082broader. ExactfirstproviderbaselinePASS/frontrequests0/stopped/sinkjoined; noafterimage/noPASS. Source-derived invalidnever-open hash diagnosis; no productdefect inferred. Rootverificationad5b64f49e877ca3f80e4878fe31a799818a6fd2297a20cb646fd704719541bf.
+
+2026-10-25T21:15:36.164843+00:00 Task11 Ruling: B6 constructorINVALID_ID from literalnever-open failing64hex hash check; exactgenuinepin plus dedicatedretained continuation source released 9a25818f7e1e0f2b6feccb805eeba1303e01b5718d7a27e039141ceada61370b. No GET attained/oldwindowconsumed; cap5/5 unchanged. Newentry must compare saved17tablebeforeimage; originalorigin untouched.
+
+Ruling: 2026-10-25T21:25:55.479971+00:00 — root full-read continuation review4aa77481 C0/I0/M0 and rehashed1083 current source files. Release one dedicated readonly continuation on23cfa6b8: task-11-b2-rejected-transport-continuation-root-release-20261026.json SHA256 863dccc733afee42b81e63dacbc80c30a7b1af063daa843d1c1e7dae93e4c45c. Original1ERROR/zeroGET immutable; currentpreimage/oldfrontabsence guards mandatory;26cases/24GET/POST0, no grant/SEND. Task11/B1cap5/5 unchanged. Actual evidence/review required before adoption.
+
+2026-10-25T21:29:40.146965+00:00 — Continuation consumed1FAIL/GET0. Root verified162artifacts/1016canonical/1083broader; fullreportread. Rootverification 5f67bff3da16023cc411d762165083a6162929b2ca15fdfe83072290a5252f18. NORMAL MinutesFailure type only; GETcount assertion maskedcode. Exactnewfront stopped; initial17table/provider guards passed; noafterimages. Deterministic acceptanceBinding secondarywhitelist mismatch under independent diagnosis. No runtime/retry/source changes released.
+
+Ruling: 2026-10-25T21:32:29.587430+00:00 — B6-DIAG-I1 productmanifest mismatch andI2 diagnosticloss are load-bearing for dependent B6/exactretry. Root fullyread4d624b79; cap5/5unchanged. Minimum source/pure correction released by task-11-b2-rejected-transport-manifest-root-ruling-20261026.md SHA24efa7c4043c5fe23b4ef98a8afeb6717420fbd4c65fdcf4b8a137d021979604; no runtime. Immutable existingmanifests/producer/authority retained.
+
+Ruling: 2026-10-25T21:37:49.874847+00:00 — Manifest01 raw7PASS has unqualified wallinterval; preserve, no retroactivepromotion or cause. One pure Manifest02 repeat allowed under task-11-b2-recorded-manifest-custody-ruling-20261026.json SHA6bc722a08e36d80d1f80c7a1c289fbb425bf0be5ad204d2d4cddf0f3dcf8157c. No collector/clock/source adjustment.
+
+Ruling: 2026-10-25T21:44:30.312720+00:00 — Root fullread5e01553f sourceAPPROVED C0I0M0/twofindingsaddressed;40purePASS. Source124a4e4d reverified1085. Releaseexact one b2-rejected-transport-manifest-01 via task-11-b2-rejected-transport-manifest-root-release-20261026.json SHAba77eeff66921283e7d7e293315beec40794425d676876040eab290c7ee521c0. Budget26/24GET/POST0; bothconsumedzeroGETwindows preserved. Runtime actual/review stillrequired.
+
+## User pause 2026-10-26T05:52:36.163919+08:00 — current scheduledbatch finished
+
+Author sealed actualmanifest1FAIL/1GET/1forward; root164/1018/1085verified3e61016a. IndependentHostdiagnosis76bc9280 fullyread: B6-HOST-I1/I2 remainOPEN/unfixed. Bothagentscompletedandstopped. No newfix/test/runtime dispatched. Exacthandoff docs/acceptance/development-pause-b6-host-continuation-2026-10-26.md; source124a4e4d and40purePASS/sourceapproval retained. CurrentoriginalrelayGETtotalUNSAMPLED, not0/1assumed. Pausepreimages/diff saved in pause-20261026-b6-host-continuation. Resume only onhuman继续任务; beginHostcorrection/capaware ruling, thenseparatecurrentcounterpreflight/newwindow; preserveallconsumedwindows/oldheldUNKNOWN. No commit/merge/push, no resourcesrestarted/stoppedbypause.
+
+## 2026-10-26 Host continuation resumed
+User explicitly resumed. Baseline 124a4e4d81c7c13b9b7f1ef3ec1a2a3cf132ae263343f4d0e53c2189e6056a0b verified 1085 current source files, zero mismatch; existing worktree retained. Prior agents unavailable in this tree; precise replacement brief required.
+Ruling: Task11/B1 cap remains 5/5. B6-HOST-I1/I2 are diagnosed load-bearing front-harness defects; authorize only minimum Host transformation, safe diagnostics, import lifecycle isolation and offline regressions under the existing cap breaker. Wrong ruling costs scoped source rework; no retained runtime, DB or provider side effects authorized. Tasks11→12→13 remain objective; stop before CDEF.
+Root source adoption: Host checkpoint cd6cc0bc, independent source review162a8f5a fully read SPEC/QUALITY PASS C0/I0/M0, root1086current/snapshot +15offline evidence hashes match, final10purePASS. Cap5/5 unchanged; runtime pending.
+Root exact read-only preflight release: execute W/host-retained-preflight-root.py SHAac226af521bd6f6221eea507e198d0f93c250d8996d1dcc65a64d740e1974e99 once; reviewed static corrections accepted. Read exact /proc identities/config/counters, one bounded readonly provider SQLite observation and selected existing Docker inspect only. Output new W/task-11-b6-host-retained-preflight-20261026.json. No HTTP, process restart/kill, writes to DB, grant or counters reset. No Java matrix authority follows;17table business gate still pending. Failure preserves output and requires evidence-based disposition.
+
+Root retained preflight be3bff5b PASS exact identities/config/provider baseline/MySQL; actual cumulative GET1, destPOST3/pubPOST1, noHTTP/SQLwrites. OldUNSAMPLED retained as historical. Root source release: five harness paths in runtime preparatione9909897; inert Host preflight/matrix ACKs bind GET1→25 delta24. Permit bounded serial compile512MiB/2CPU and offline checking only; no Java preflight/matrix execution until independent source review and separate exact releases. Future matrix release pins actual successful business preflight evidence without circular source hash.
+
+Root adopted runtime-harness source47baaca5/1088 after fullreviewa2357068 SPEC/QUALITY PASS, root1088current/snapshot+24evidence match. Exact DB-only preflight released once;37applicationSELECTs/noHTTP/front/writes. Matrix remains unreleased.
+
+DBpreflight actual1PASS root162artifacts/1020canonical/1088broader verified; all17tables equal all3consumedpreimages, noHTTP/front/writes. Root adopts scopedpreflight. Exactmatrix newwindow released once on frozen47baaca5, source reviewa2357068:26cases/24GETincrements, cumulative1→25,POST0; no grants or other effects.
+`nHost matrix actual1JUnitPASS/26cases/7constructornegatives, GET1→25 delta24/POST0; root166artifacts/1020canonical/1088current verified. Raw17table/providerbeforeafter equal; all24upstream200; front4141477/ticks23230425/47143,sink45281 stoppedexit0/joined. Source remains frozen; author sealingpublicevidence; independentactualreview pending. Exactretry/grant not released.
+
+Root fullread actualevidence reviewc1f292d7 SPEC/QUALITY/EVIDENCE PASS C0I0M0; adopts Hostmatrix scoped1JUnit/26cases/7constructors,GET25,POSTdelta0,invariance/cleanup verified. Historicfailedwindows remain; fullTask11/B6 notcomplete. Sameauthor W-only exactretry preparation active, no grant/runtime.
+
+Root exactretry source-only ruling: preparation8d56bb8e accepted as concrete harness scope/budget, fivepaths only; sameoperation successor remains held. One futuregrant/native reopen and43servlet/14GET/14destinationPOST are prospective only; no currentruntime permission. Permit serial offline compile512MiB/2CPU, frozenpackage then independentreview. Preserve allpartial failures; providerIO mapping newly registeredT11-KB-IO-ERROR-MAPPING, distinctfromoldfinal409issue.
+
+Task11: Ruling EXACT-RETRY-I1 real/load-bearing; cap remains 5/5. Minimal dependent exact-stage bounded interrupt-preserving cleanup plus fake-Process RED/GREEN and inert R1 pin migration authorized. Original frozen401455/reviewbc630666 retained; no runtime authority. See task-11-b2-exact-retry-i1-root-ruling-20261026.md.
+
+Task11 exactretry I1 independently addressed, root1091source/20evidence verified. Separate once-only runtime release issued on ad4cdad9:43servlet/14GET/14destinationPOST,1grant,1native reopen,3SQLite readonly observations,1held successor and no claim/SEND. Cap5/5 unchanged; historical windows retained.
+
+Task11 exactretry window b2-exact-retry-01 CONSUMED FAIL1 after36requests/12verifiedrollbackcases/2concurrent202 same task3588aaba-ecfa-4889-8954-46c1454447d4 execution65fa6b21-22da-4a2e-a886-341b16978106.1grant/2SQLite,relay39/17/1. Failure postcommit publicationObjectNode oracleline108, textualvaluesidentical. No7independentreplays/finalSQLite/fullroworacle.4sessionsremoved/native1156860exit143; originalprovider/relayalive. Root182artifact/1023canonical/1091broader custody verified; no rerun/compensation/grant/claim/send. Source remainsfrozen for offline diagnosis.
+
+Task11 exactretry partial evidence qualification: concurrency observation executedWrites/hit/rollbackObserved are cumulative from preceding PRE_COMMIT because race resets only admissions/commits. Use dedicated PHYSICAL_COMMIT_RETURNED events and same202responseIDs for acceptance; do not infer duplicate successor insertions or acceptance rollback from cumulative diagnostic list. Reviewer final report pending.
+
+Task11 exactretry consumed FAIL partial review b60f472e7a4fafdb071184c28a0cde9a3264d097c3e928403c5fc1d7babe310d fully read by root:182 artifacts verified; partial facts supported; fullrow/manifest,7replays,finalprovider unknown. Nullableownedprovider false is not retainedprovider death; helperphase is not testphase. Future read/replay continuation must explicitly include bounded session writes and only one remaining SQLite observation, no grant/newacceptance/native/upstreamPOST/GET/claim/send.
+
+Task11: Ruling EXACT-RETRY-NUMERIC-I1 demonstrated/load-bearing; cap5/5 retained. Six-path strict full oracle plus standalone existing-successor readback source-only authorized. Pure numeric reproduction reviewed. Failed36request window unchanged; future7receipt-only requests/4sessions/one remainingSQLite, no grant/native/newacceptance/providerGETPOST. Inert ACK created; separate source review/runtime release required.
+
+USER STOP BOUNDARY: finish currently scheduled numeric-oracle/readback source batch/offline verification and bounded independent review, then pause and save precise handoff. No readback runtime release/execution or B3 dispatch. Author/reviewer notified.
+
+Current six-path source batch frozen2be86f4d:1094current/snapshot+15evidence rootverified. CausalRED6/3failure→GREEN6PASS; compile-finalexit0/460sources. Author stopped; final bounded independent review dispatched. User pause boundary forbids any follow-on correction or runtime release; record findings as nextresume.
+
+PAUSED BY USER 2026-10-26T10:32:35.299564+08:00: current six-path batch finished. Finalreview 3a4e12162eeea61dfbe875616e0c6ecc4f9fa9ca116ca5d03b792bdf3c1ca4fa:Numeric-I1 ADDRESSED source/offline; overall CHANGES REQUIRED C0/I2/M0. OPEN READBACK-I1 SQLsetupguard and I2 missingrunnerdispatch confirmed byroot. No corrective follow-on dispatch.1094source/15evidence verified,6purePASS/finalcompile0. No readback release/window; retainedruntime not probed. Precisehandoff docs/acceptance/development-pause-b2-exact-retry-readback-2026-10-26.md; nextresume firstfixI1/I2, neverrerun consumedgrant/acceptance/window.
+
+2026-10-26 I1/I2 explicitresume IN PROGRESS: main /root sourcewriter, sole independent /root/readback_subfunction_reviewer gpt-6-astra/xhigh/none. Sourcefreeze33b3ad56,71Java+24PythonPASS/compile0; fullunit432/4error inheritedWorkerShutdown reflection. Reviewer initialcomplete-subfunctionreview pending. Root verified potential negative-test falsepositive using isolated mutant removingcallable/batch/unwrapchecks exit0; wait initialreport then mainfix assertions+individualmutationRED+relatedGREEN+compile+newR1freeze+sameagent targetedrereview. No liveSQL/resourceprobe/release/window.
+
+
+## 2026-10-26 resumed: main implementation + independent complete-subfunction review
+
+User explicitly revoked pause and old author/coordinator policy. /root only sourcewriter; one accepted reviewer /root/readback_subfunction_reviewer gpt-6-astra/xhigh/fork_turns none; no delegation. Task11 cap5/5 unchanged. Ruling: minimum I1/I2 guard/dispatch correction +2 offline tests, no productTransactionRunner change; no SQL/runtime/Host matrix/grant/native/acceptance/claimSEND; preserve oldfreeze/WIP.
+
+I1/I2: complete SOURCE/OFFLINE ONLY, checkpoint0bda13715da92e704c87ce543125144dc5c5c23d27af423f9d686f9bf0a4cb09, reviewa8ec9206bbb3645fff4b515a4468b79587725269bd0c5b4c7f689c4e5d8396a2 SPEC PASS/QUALITY APPROVED. Guard causalRED7/1→GREEN7/0; dispatch8methods/15assertion-subtest failures→GREEN8/0;71relatedJava +24PythonPASS, finalcompile0. Fullunitregression remainsred: inherited WorkerShutdownTest4reflectionerrors, unchanged baseline source; Task13 registered. New1096source/initial173+R124evidence and old1094source/15evidence verified. Current precisecontinuation docs/acceptance/development-continuation-b2-readback-i1-i2-2026-10-26.md. No Task11/PhaseB/runtime completion claimed.
+
+Ruling: preserve immutable oldcheckpoint; future configpromotion must bind versioned newfreeze and be independently reviewed before any once-only runtime release. Cost if wrong: failclosed configuration work; never silently consume an oldwindow or overwrite oldevidence. No runtime release/window currently exists.
+
+2026-10-26 explicit fullBcontinuation: main /root implements every remaining Task11/B3/B4/B5/B6→Task12→Task13; reuse sole /root/readback_subfunction_reviewer; no newAgent. Do not stop after sourcebatch. First immutable ACK/checkpointpromotion + offline causaltests/review, exactretainedidentity/counters, once-onlyreadback, sameagent evidenceadoption; then nextdependencies. All resource/freeze/failedwindow/UNKNOWN/held limitations retained.
+Ruling: existing approved specs/plans are sufficient design authority; this is execution of them, no product scope redesign or reapproval. New promotion ACK names a newcheckpoint and pins final correctedreview/adoption; oldACK48ebb70d/oldfreezes never overwritten. Costifwrong: failclosed configbinding repair, no widenedruntimeeffects.
+
+Readback promotion sourcecomplete: e38e84c337915f11972cc58421616f9a89755b9944c79bf36b84f23e9a82d7d7 /1097files/32evidence,77relatedJava+25PythonPASS/compile0. Same reviewer sourceassignment running. Ruling READBACK-HISTORY-JSON-I1: real330086-byte failedresult contains65537char negativebody; dedicatedhashbound<=1MiBreader COPY only, common65536parserunchanged; realvalidatorcausalRED5/4→GREEN. NoSQL/runtime/window yet. FullB objective ACTIVE; no newagent or stopafterthisslice.
+
+Readback promoted source e38e84c3 independently approved ec35ea05 C0I0M0; root1097current/snapshot+32evidence verified. Freshselectedidentities/countersPASS. Root issued fresh5minute max1 exactreadback release,7calls/4sessions/1remainingSQLite/business0/grant0/native0. Execute once; no reconsume oldwindow.
+
+Actual b2-exact-retry-readback-01 ONCE PASS/process0/JUnit1/0/0/0.7HTTP statuses202x3,409,403x3;4sessionsinsert/delete1each;17tables before/afterequal +fulloracle twicePASS;actual numericInteger/Long/BigInteger;providerfullstate unchanged vs aftergrant;relay39/17/1;SQLiteremaining1 completechildexit0;grant0/native0/claim0/SEND0.174rawfiles indexed/rootverified. Originalb2-exact-retry-01FAIL remainsimmutable. Same reviewer evidenceadoption pending, continueB3onlyafterrootadoption; fullBgoalactive.
+
+B2readback actualevidence independently QUALIFIEDPASS dde5142258fbf609c3fb5bdfc25d79cb2e8f3dfd4829b4e9f374af791eed6db4 C0I0M0; rootfullreportread,174rawhash+1097sourcepins verified and adopted existing successor forB3. OriginalFAILED unchanged. New7calls/four sessioncycles/lastSQLite;43combinedservlets,3/3SQLiteconsumed,relay39/17/1. EnterB3 main-onlyA implementation per complete-subfunctionplan; same reviewer reused. ContinueALL B.
+
+B3 dependency ruling, 2026-10-26: do not consume actualwindow with an already source-known HTTP oracle mismatch. Current PublicationErrors lacked TransactionException and IOException; original noexecution rollback corpus had raw500 responses and pending T11-KB-IO-ERROR-MAPPING already recorded. Main added two actualcontroller/advice tests RED6/2failures, then only typed TransactionException/IOException ->safe503 PUBLICATION_UNAVAILABLE, preserving specificdomain/JSON/400/409 mappings and transaction/retry semantics; GREEN6/0. This is a minimum B3 commit-failure and existing Task13 I/O contract dependency, not another B1wholefix round; cap5/5 unchanged. Provider IOException live-network route remains for laterB4 actualtest, no false runtimeclaim. All rawRED/GREEN retained. NoB3businessruntime yet.
+
+B3 in-progress source tests: delegatedfaults13GREEN after causal12seamRED; added physicalrollbackfailure return-custody test14/1RED, moved observedflag only after realrollbackreturns. Inputs4RED/GREEN, dispatch5/12failedsubassertions RED/finalisolatedmutant +GREEN5, full19tableLocalOracle synthetic2tests/17invariantcorruptions RED2/1→GREEN2. Standalone actualIT/receipt-onlyfixture/freshJVMchild now written, metadata for2parentcontexts+1child,3actualmaintenancepasses,12actualfaultpoints,22HTTPattempts,6ownedsessions,one localdecision+one newsealedACK; no claim/provider/native/SQLite/newtask. Finalrelated/tooling/compile then complete-subfunction sameagent review pending; no operationalrelease created.
+B3 A fullsource frozen488c34223860236d8248c20bb4202bb9efd960cc843853e27ce7001575fe1972/1108files/89evidence; report e3ce1324,103relatedJava+30PythonPASS/finalcompile0. Same reviewer fullsubfunction source review active; no runtime/release. Main read-only tracing future genuine lease/6resubmission composition; no sourcechanges while freeze pendingruntime.
+
+Same B3 reviewer found important AUDIT-ID-SHAPE: real audit id BIGINT UNSIGNED AUTO_INCREMENT but sourceoracle/testsyntheticUUID. Root verified actualDDL/writer/frozenpublicrows. No B3 release/window. Awaitcomplete fullreview then main causalRED/minimalfix/additivefreeze/samereviewer targetrereview. Existingfreeze488c and allofflineevidence immutable.
+
+B3 A R1 fullrepairs frozen76fb8c6b/1111files/56evidence; reporta76a983d, whole16pathpatch17bedd08 actualcheck/applybyteidentical. Causal audit4/3RED→4GREEN; cleanup8/6F2ERED→8GREEN/final10; actualcontrollerdistinctwire4/4RED→4GREEN. Final110Java/40Python/compile0 withstablewholepins. InertR1ACK9b268b5b namesimmutableR1source. Sameagent targetrereview found legalminute-onlyISO LocalDateTime.time boundary; pendingfullreport/mainfix. NoB3release/window. FullBcontinues.
+
+B3 A R2 b3a77eb3/1111source/72evidence frozen and independentlyrootpublichashverified. Final111Java/47Python/compile0 stable. Sameagent targetreview active. RemainingI2 observations/deferredSIGINTTERM/finalreap + M2minuteISO repaired; extraactualpoll/getpgidexit race causalRED/GREEN. All oldfreezes/evidence immutable. NoB3release/window. FullBcontinues; nextfreshresource/release onlyafterapprovedreview.
+
+B3 A source independently approved and root verified, once-only5minute runtime release issued for exact localclosure22calls/6sessions/12faults/3maintenance/1child; SQLite/provider/native/grant/claim/successor/send0. Continue remaining fullB after actual evidence review.
+
+B3 A exactonceb3-prepared-local-01 ACTUALPASS runner/process0/JUnit1/0/0/0 underrelease27a71ced/sourceb3a77eb3/cb57sourceapproval. 1135windowfiles/1111sourcecopiesrootverified,custody7ba5a68c,factsb1ee663e,report84a4a99c. Parent19+child3calls,6sessionsclosed,12physicalrollbacksw/full19equal,1commitACKloss+same/newkey/oldACK/independentJVM,3actualmaintenancepasses/throttle2/restart/ownedjoin,relayunchanged39/17/1. CurrenttaskFAILED0/execFAILEDNOT_SENT/opFAILED/sub3NEVER/pubFAILED7/meetingr13finalunchanged. Actualevidence SAMErevieweractive; no B3Bsourceuntilrootadoption. AllBcontinues.
+
+B3 A actual source+evidence independentlyqualified and rootADOPTED 0a2ebd62540a409962d488bee5d2b185f6f68e97ef47a220f47271bac7abfe9e, sameagentreview7ec2abe87bd240ea0b2195e31d2b3bd3da1da7485cd04ebe87e6e2859d27ed95. 1135files/1111sourcecopies verified,22calls/6sessions/12rollbacks/3maintenance/1decision+ACK/JVM,19tablefulloraclePASS. CurrentpubFAILED7/taskFAILED0/execFAILEDNOT_SENT/sub3NEVER_MARKED. Main continues remainingB3fullsubfunction thenB4/B5/B6/12/13; no newagents/no rerun/no fakehistory.
+
+2026-10-26 B3 remaining lifecycle source/offline complete, same reviewer full-subfunction review requested. Checkpoint a552745f32e9d5e66f4b2dcd28ba825d7671e05909e58150827b07a91642937f (1125source,15delta), report6716ff3a, byte-reconstructible patchaac86900. Final130Java/52Python/compile0; no lifecycle release/window/private SQL. A actualadoption0a2ebd62 and all prior snapshots/resources immutable. Main solewriter; no additionalagents. Full B ACTIVE, runtime and later B3/B4/B5/B6/12/13 not yet complete.
+2026-10-26 B3 lifecycle initial full review b968e006 C0/I4/M0 verified by root. Concentrated I1 full12relay, I2 actuallookup-beforeINSERTlock, I3 fiveclosed full-row histories+append-only actualsnapshot/finalcomplete, I4 logfailure-independent exactsessioncleanup corrected; new causal9/6fail/0error -> GREEN9/0. Separateconnection/interruption added; final140Java/52Python/compile0. R1e994f77b 1128source/11delta/49evidence,report7b2f3a6c,patch4e24f4fe,ACK2a51cae7 pins13. Same reviewer targeted rereview active. No lifecycle release/window/private SQL. Originala552/111evidence/03ACK/b968 and A1135runtime artifacts immutable. Full B ACTIVE.
+2026-10-26 Actual b3-lifecycle-01 consumed once; runner/process1/JUnit1failure at O5resubmit413, partialfactsfdd3b66f/full1151custodybbeda64c. O1–O4 closedsnapshots reached, noO5claim/O6/child;8leases/3workers/3contexts/exactsessioncleanup/metadataHttpClient/groupquiescent. Same reviewer partialevidence audit active. PostfailureSQLfullgraphnotavailable. Exactseparate readonlyrelayfile0SQL/0SQLite/0network observed44GET/23auth/1pub/fail0,proof09eea807 => failedO5 passedproofGET+DESTINATION beforebudget413 (2.4s), Fphase/dimensionundiagnosed becauseROOTERRORsuppressed WARN. No rerun/compensation. Prepare minimum source/offline diagnosis and unused O5/O6 continuation only with newreviewed release; fullBACTIVE.
+2026-10-26 # FULL B ACTIVE — budget diagnosis source complete; SAME reviewer reviewing; NO diagnostic release/window  Latest checkpoint task-11-b3-budget-diagnostic-source-checkpoint-20261026.json SHA1ed592f126698f5d6ef651f2d8abfe36fe1f80199488045a19276535985e6877 /1138sources/10new, report8f139645,96evidence; final-pinned-related157Java/57Python/compile0 all current stable1138maps. Old e994/1128sources unchanged. Inert ACKdc5ebcad selects NEW b3-budget-diagnostic-01 / it / Task11B3BudgetDiagnosticIT / task11-b2-exact-isolated. No actual release/window/private SQL. SAME /root/readback_subfunction_reviewer reviewing complete diagnostic package, no newAgents. Main solewriter.  IMPORTANT correction supersedes old relay interpretation below: old last in-window counter was BEFORE O4workers; postfailure GET44/auth23 supports O5PROOFS but auth+1 cannot exclusively belong toO5. Do NOT claim O5passedDESTINATION or O4zeroauth from cumulative relay alone. Actualbody227UTF8bytes/duration2.413243190s. Old lifecycle01 remains FAILED/PARTIAL consumed,1151files immutable, originalQ1budget/Q2postfailurecurrentDB/Q3exactO4archivecause open. Limited adoption51272484 adopts O1–O3 and O4structurallease/closure/cleanup only, partialreview34db6bbc fullread.  NEXT read same-reviewer complete source review; main verify/fix findings then targeted rereview; fresh root current/snapshot/evidence/13pins/old1151custody/fullrelay44/23/1/process/limits gate; exact NEW max1 diagnosticrelease240s. New diagnostic starts by actualfull19currentbaseline equality toO4beforecontext/provider/write, savesmismatch andabort. Two actualdirectservicecalls ORIGINAL1M vsCONTROL2M differoneisolatedfinitebound, testDSactualrollbackOnlybeforefirstrealFwrite, stopbeforepubsubmissionINSERT/actualrollback, no commit/successor/HTTP/session/worker/lease/marker/child/native/grant/SQLite. Productdefault/guard/txnunchanged; dimensionnotprovenuntilactualevidence/samerevieweradoption. Do NOT enable2Mcontinuationjustfromsource. Roothelper prepare-b3-budget-release-after-review.py PREPARED NOTRUN.  Then implement unusedO5/O6 freshcontinuation/actualcauseobserver/source+review+exactrelease/runtime/samereview. Continue ALL remaining B3cursor/coexistence/B4/B5/B6/Task12/Task13; stopbeforeCDEF. Do not stop afterdiagnosticslice. Earlier entries historical, including RUNNING/HOLD and inaccurateDEST inference.  
+
+# USER PAUSE AFTER CURRENT BATCH — R1 source/offline complete, same-reviewer rereview is the ONLY remaining batch work
+
+用户2026-10-26明确：“完成当批调度之后，就停下，我换个模型”。这覆盖之前持续执行全B的活动指令；只完成本批预算诊断两项Important的修复、离线验证、同一审查者针对性复审和暂停记录。不得创建runtime release、启动diagnostic窗口或进入O5/O6/后续功能。全B目标未完成，暂停后等待用户明确继续。
+
+当前R1 task-11-b3-budget-diagnostic-r1-source-checkpoint-20261026.json SHA513a625433b3a55730e4457f81310579445fe351214645a104dbf42d6b198005，1140sources/8delta/48evidence，report8425d855，patchb329bd95。最终165Java/57Python/compile0，三个最终阶段sourceBefore/After均与1140current一致。初审03003864 C0I2M0已通读，actualfinish最终全19不等进入失败聚合/资格一致；actualreplaceZeroEffectPublication真实CAS7参数guard修复，真实engine离线正负例、7项finalization边界。因果12/3F->13/0，随后扩展边界最终165。R1ACK5c66ea0b/15pins选择R1source，旧initial1ed/96evidence/ACKdc5/初审0300/旧e9941128/原1151失败窗口不变。SAME /root/readback_subfunction_reviewer正在针对性复审，NO新Agents；仅待该复审、root公开哈希核验、权威pause记录后停下。
+
+新diagnostic runtime-release和b3-budget-diagnostic-01窗口均ABSENT。不读私有配置/SQL/SQLite/network，不操作保留资源。本批所有运行准备和取证脚本均未执行；prepare-b3-budget-release-after-review.py增加当前pause_request_active必须false门禁，只能在将来明确resume后讨论新release。实际预算维度、postfailurecurrentDB、O4精确archivecause仍未经验证，2Macceptance未启用，O5/O6未完成。原lifecycle01维持FAILED/PARTIAL、永不重跑，原SQLite3/3已耗尽。
+
+请在本批复审结果与权威pause记录落盘前不要将前文状态误读为已runtime。后续入口以新pause记录和本页最新条目为准；历史旧RUNNING/HOLD/DEST推断均由最新精确记录覆盖。
+
+
+
+# PAUSED AT USER REQUEST — current diagnostic source batch CLOSED; no runtime
+
+用户：“完成当批调度之后，就停下，我换个模型”。本批已闭环并正式停下，等用户明确继续。权威记录：docs/acceptance/development-pause-b3-budget-diagnostic-2026-10-26.md SHA915df2dc8fbb1e60ff2ad304e8972c5881c795eceeaa2b3a384704e48b452ee7。先读该记录，再读本页/current-state；它覆盖下方历史RUNNING/HOLD/继续全B条目。
+
+R1source task-11-b3-budget-diagnostic-r1-source-checkpoint-20261026.json SHA513a625433b3a55730e4457f81310579445fe351214645a104dbf42d6b198005 /1140source/8delta/48evidence；final165Java/57Python/compile0。SAMEreview task-11-b3-budget-diagnostic-r1-independent-source-review-20261026.md SHA30b52734c0e9ac7dab304616196e8a8f5edfaf557b30bcb218e3bfc2afe735fa；rootverificationSHAefe491b08eeabb738d482c10371b2e5ca1ab1d10cf3c905fad5aee31e2ddd6e4，sourceadoptionSHA018426d0b2b1afc9e4ec062c3ed5d528cec22a37e29e7ec4def99c2ee9a4ec7e，仅source/offline。两Important已修复复审；所有旧freeze、e9941128源码、1151失败窗口均保留。主唯一writer，同一审查Agent，无新增Agent。requestedmainmodel未声称实际切换。
+
+NOdiagnostic release/window/privateSQL/SQLite/network/retainedresource操作，2Macceptance未启用，预算实际维度/currentDB/O4exactcause/O5O6仍未验证。原lifecycle01FAILED/PARTIAL永不重跑，SQLite3/3耗尽。准备脚本未执行且releasehelper拒绝pauseactive。下一步仅在明确resume后做新diagnostic freshgate/release/actual/samereview，然后所有remainingB3/B4/B5/B6/Task12/Task13；全B未完成，止于CDEF前。
+
+
+
+# FULL B RESUMED — Astra main, same Astra reviewer; budget diagnostic actual gate next
+
+User explicitly resumed and requests main GPT-6 Astra high / reviewer GPT-6 Astra xhigh. Current developer instruction confirms main modelgpt-6-astra; effort high requested, not separately verified or claimed switched. SAME reviewer /root/readback_subfunction_reviewer accepted configgpt-6-astra/xhigh/fork_turnsnone retained, no newAgents/delegation. Main solewriter. Previous pause revoked by this explicit instruction; historicalpause remains immutable and9mutable/canonical pause-record preimages copied to resume-20261026-astra-budget-diagnostic-preimage before pointers changed.
+
+Resumeproof task-11-b3-budget-diagnostic-astra-resume-20261026.json SHAef8c0c7360456deeceb5b9a711a2e91b7f4a53065790d87fa03984e68438c7e4; current/snapshot1140source and48evidence exactlyR1checkpoint513a6254; same-reviewed30b52734/sourceadoption018426d0 preserved. Git codex/phase-b-completion-20261023/739193dff6dea6c28999260d4d332f99f1a58d12, WIP preserved. No runtime release/window at resume. Next preparedroothelper freshsource/evidence/15pins/old1151/fullrelay44/23/1/proc/limits; only afterpass new b3-budget-diagnostic-01 once240s. Actualinitial19baseline mustmatcholdO4 beforeeffects; 2directrealservicecalls1Mvs2M, rollback-only, zero committedsuccessor/HTTP/session/worker/lease/marker/child/native/grant/SQLite. Same reviewer actualevidence; no2Mcontinuationadoption fromsource.
+
+Continue fullremainingB3/O5O6/B4/B5/B6/12/13 after qualifieddiagnosis; no oldwindowreruns, SQLite3/3consumed, UNKNOWNheldobligations preserved, stopbeforeCDEF. Previouspause/status entries below are historical.
+
+
+
+
+# FULL B ACTIVE — R2 source and diagnostic01 startup failure under SAME reviewer
+
+Current R2 checkpoint9e5b87bc51be45bf61689f4b6d22357e7cfe49df67b16b4e9f03a17b9506c85e,1141sources/7delta; report5f27e1c6,166Java/58Python/compile0, actual start RED->GREEN bothprofiles. SAMEreviewer reviewing full source plus01actualevidence. Main solewriter/no newAgents.
+
+Diagnostic01 was actually consumed and FAILED during Boot health membership validation (missingfileStorage), serviceCalls0,contextattempt1/returned0. Facts c0c72994,1157filecustody84249a84; actualpreflight/before/finalfull19 same94c52cfb/O4. No poststartuprelay observation; no budgetcause/2M/O5O6 qualification. Never rerun01. R2 adds only diagnostic ready.include=ping and actualBoot regression; new02tuple/19pinACK8439e275. NO02release/window. Next same-review approval then freshroot gate and NEWonce02, actualevidence same-review. FullB stillactive, earlier status entries historical.
+
+
+# BUDGET DIAGNOSTIC02 ACTUAL RUNNING — once release consumed
+
+R2review549b5936 C0I0M0 fullread; limited01adoption10db7d73. Freshproof89a53d07 verified1141source/46evidence/19pins/old1151+1157/fullrelay44/23/1/proc/limits. NEW02release979fea3f0f9fd946ddf196063dfbe57f2789041cc84602b1d5c77c8162f3f619 consumed by exact selector, execsession55452. Do not rerun. Wait original process, seal existing public outputs with seal-b3-budget-diagnostic-02-actual.py, SAME reviewer runtime audit. No runtime result yet. FullBactive.
+
+
+# BUDGET02 ACTUAL PASS SEALED — SAME reviewer evidence review pending
+
+Actual once02 runner/process0/JUnit1/0F0E0skip. 1M BUDGET3.684s after2realwrites;2M finalsubmission predelegation seam2.820s after4realwrites; bothrollbackOnly+physicalrollback. Sixfull19same94c52cfb; GET+2/auth+2/pub0 final46/25/1. Context2close/nativeclientjoin/producer2736199groupquiescent. 1161files(1141source+20runtime) custodyf0ef0074b2e916c4c8f1895f13fde751aab914702c973c5318f60aac6129089d, facts54efa3dc9cfc495beda30ad7e9dd6f73ac4565d7966073295c811902f1f59915. SAMEreviewer reviewing actual evidence. No committedsuccessor or2Mcontinuationauthority/O5O6 completion yet. Old01failed/source frozen preserved, neverrerun02. FullBactive.
+
+
+# FULL B ACTIVE — budget02 adopted; main implements unused O5/O6
+
+02reviewa4beeed3 fullread C0I0M0, rootadoption0e555cfbb1f15557f33bafd94429e856ec8fdf1ba7b318cea94747024f88f949. Bounded2MiB future source justified, exactpeak/O4cause unknown; no oldwindowrerun. New b3-lifecycle-continuation-01 source main-written, ACKa84c1d6bf46216197812c5c1992b32777ce1a8932fba465ef9411485abf71b4e/24pins inert; 5HTTP/2leases/1marker/1child query/noPOSTsend. StartupRED1->GREEN1; actualfinalization6/2fail->6pass; oracle9/gate7Python. Fullrelated finalvalidation then checkpoint and SAMEreviewer. NOcontinuationrelease/window. Earlier status historical.
+
+
+# B3 UNUSED O5/O6 SOURCE COMPLETE — SAME reviewer reviewing
+
+Checkpointfd00c11c6188ceb30ee8a526523696996c4af74e9383df000fbed75c30500d62/1152sources/11new/69evidence; report3be8264a; final189Java/65Python/compile0. Allold1141unchanged; old1151/1157/1161windows preserved. SAMEreadback_subfunction_reviewer whole review pending. No newAgents/sourcewriters. NewACKa84c/24pins, no continuationrelease/window. Root prepare-b3-continuation-release-after-review.py and seal-b3-continuation-actual.py prepared syntaxvalid NOTEXECUTED. After review main verify/fix/rereview then freshgate/newonce runtime/same evidence review; fullremainingBactive.
+
+
+# CONTINUATION01 ACTUAL RUNNING ONCE — do not rerun
+
+Sourcefd00c11c/reviewfb1a0091 C0I0M0 fullyread. Freshproof74f08bdfc071677192e3f158c5e7f734d800e55848bb417286bc6c45804b0479 all1152/69/24pins/old1151+1157+1161/fullrelay46/25/1/proc/limits PASS. Releasea3f370f3caf1f7ffea504d020ffc3bd8dcc15361f809f27cda96bdd83fc70594 consumed, exact selector execsession40708. Await originalprocess completion; seal existingpublic outputs with seal-b3-continuation-actual.py then SAME reviewer actualevidence. Failure retainsPARTIAL/no retry. FullBactive.
+
+
+# O5/O6 ACTUAL PASS SEALED — SAME reviewer evidence pending
+
+Newcontinuation01 runner/process0/JUnit1pass,5HTTP[202,200,202,409,202],2claims/leases0renew/worker,1physicalmarkercommitACKloss,parentclosedbeforechild3255159. ActualnewJVMnaturalDue10:20:18.569478Z reached10:20:18.582058760Z;GET1POST0UNKNOWN,childexit0/alljoins. Producer3254197quiescent/noerrors. Full19exactdelta2task2exec2sub2attempt1pubattempt3receipt3audit9outbox,publication19/opcurrent8epoch16UNKNOWN;oldhistory/closedO5preserved;fullrelay49/28/1.1180filescustody58f0c68a66b3a6fa908a1eacc557c0a02d2bdb1d72f9f037f8b295d26c8cda55;factsaa2daeb27575b12fa2272d48c7013240976f6f6eb1b7b06fd9530b33b40c17eb. Same reviewer runtimeaudit pending. No rerun ornewsend;UNKNOWN remainsprotected. Then remainingB3scanner/B4/B5/B6/12/13,fullBactive.
+
+
+# B3 O5/O6 ADOPTED — scanner component qualification review pending
+
+O5/O6actualreview5482b3b8 fullread/rootadoption1bc1cdf82f3e01f94a052b76c9df44cebbd7cd46613b7dfb515ef863e27392e5. Retainedfinal50dfbb6d/133741bytes,pub19/opcurrent8epoch16UNKNOWN/fullrelay49/28/1; noresend/extraSQLite.
+
+Scannercomponent checkpointc4d1526095d1ea6a293dc3388d95fb837e469002cd86c2980994c51e3eede4fa,1153sources/1new/12evidence,4Java/compile0. Actualmaintain+JdbcTemplatefakeSELECTonly,64/16/keyset/throttle/reset/eligibility; noauthenticlegacypositive orrealDB. FirstadaptersMockito compilefailure preserved/nonbusinessRED; movedintegration existingdeps. Initialpatchno-newlineformat failure preserved; correctedpatchbyteidenticalcheck/apply0, exacterrorreproductionde23c9bb supplement. SAMEreviewer component+limitedB3qualification reviewing. Old1152unchanged. No newrelease/window. Next B4discovery/document/B5completeguards beforefreshSUCCESScombinedruntime, thenB6/12/13; fullBactive, notcomplete.
+
+
+# B3 scanner component ADOPTED — B4 implementation active
+
+Same-reviewer f738fc0d fully read C0 I0 M0; root adoption 4cdffefd35a39d8005e3f09b514dca2e67156e8981db3868f09622eb037d94df. Verified 1153 current/snapshot sources and12 evidence. Limited synthetic64/16 component qualification,4 tests and compile0; no new runtime. O6 UNKNOWN protected; authenticlegacypositive,actualsaturatedcoexistence,O4exactcause remain unqualified. B4 source then B5guards before fresh separate SUCCESS chain; B6/12/13 remain. Full B active.
+
+
+# B4 ACTIVE — implementation incomplete, no B4 review or runtime
+
+Progress record task-11-b4-implementation-progress-20261026-1902.json; discovery real S/network/F fake-JDBC and MVC tests pass; provider actualserve fakeDB 2tests passed after9subtestfailures; document view/MVC/complete-success association/staticlocalURL tests pass aftereffective-final pointer regression. Request cancellation shutdown fixed. B4 source not frozen/reviewed, need strictcancellabletransport/actualcapture/Fcallchain/lifecycletests/OpenAPI/fullrelatedtests/compile before SAMEreviewer. All old freezes untouched; no retainedDB/provider/SQLite/native/session access. O6 UNKNOWN preserved. FULL B ACTIVE; B5/B6/12/13 remain.
+
+
+# B4 SOURCE COMPLETE — SAME reviewer full review pending
+
+Checkpoint 9fa4010fbcd77817ea75c430b16cfe36e0151a5ff23cc68d11597279f3e6b753; 1171 current/snapshot sources,29 changed (18 new/11 modified), 222 evidence verified. Final138 Java/3 Python pass; pinned OpenAPI lint/bundle and incremental test-compile exit0. Full B4 report ec505ded96d85eb49f567da4032d724f0d2707a8e574c4d00422b444d2ed8b0f. No B4 runtime release, retained resources untouched, O6 UNKNOWN protected, SQLite3/3 consumed. Main sole sourcewriter; SAME reviewer. B5 preflight/read-only preparation while B4 frozen; B6/12/13 and remaining B3 qualifications remain. Full B active.
+
+
+# B4 SOURCE/OFFLINE ADOPTED — B5 implementation active
+
+SAME reviewer 3e691b304151e2174be6cf128140ab7d13baed1715a7503acec9af0f36e34085 FULL READ, SPEC PASS / QUALITY APPROVED, C0 I0 M0. Root adoption d2cfd8786c3fa0cbef92051776a6053ca9afa0b4ddf12ad02a0060d261da0b83. Reverified1171current/snapshot and222evidence. B4 source freeze released for main-only B5 implementation; original snapshot immutable. Actual dual-ACL/browser not qualified, no runtime release. O6 UNKNOWN protected and SQLite3/3 consumed. B5 full guards/combined initial+generation+intent/T10 projections before fresh lawful separate SUCCESS runtime; remaining B3/B6/12/13 still required. Full B active.
+

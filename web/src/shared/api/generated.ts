@@ -703,6 +703,1076 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/meetings/{meetingId}/minutes/templates": {
+        parameters: {
+            query?: {
+                limit?: components["parameters"]["MinutesLimit"];
+                /** @description Last installed template primary key. */
+                cursor?: components["parameters"]["MinutesTemplateCursor"];
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history. */
+        get: operations["getMinutesTemplates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/initial-settings": {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Nonblank key, at most 256 UTF-8 bytes. */
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+                Origin: string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Replay-first: authenticate, authorize and match the immutable key/body before consulting current preparation or installed contributions. An accepted receipt remains available when current archives/providers are unavailable. New first-settings initialization requires actual Task11 publication freeze; until installed it returns 503. A successful underlying repository initialization advances revision once, creates a real empty exclusion revision and sets the selected real template. */
+        post: operations["postMinutesInitialReceipt"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/generations": {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Nonblank key, at most 256 UTF-8 bytes. */
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+                Origin: string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Replay-first: authenticate, authorize and match the immutable key/body before consulting current preparation or installed contributions. An accepted receipt remains available when current archives/providers are unavailable. New generation requires actual Task10 saved-copy/disposition and Task11 publication predicates; until installed it returns 503. Enqueue freezes current revision/cancel epoch without advancing business content or clearing generation debt. */
+        post: operations["postMinutesGenerationReceipt"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/generation-inputs/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history. */
+        get: operations["getMinutesCurrent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/generation-inputs/{inputId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                inputId: components["parameters"]["MinutesInputId"];
+            };
+            cookie?: never;
+        };
+        /** @description Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history. */
+        get: operations["getMinutesInput"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/generation-tasks": {
+        parameters: {
+            query?: {
+                limit?: components["parameters"]["MinutesLimit"];
+                /** @description Opaque pagination cursor; return unchanged for the same meeting/filter. No offset parameter. */
+                cursor?: components["parameters"]["MinutesCursor"];
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history. */
+        get: operations["getMinutesTasks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/generation-tasks/{taskId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                taskId: components["parameters"]["MinutesTaskId"];
+            };
+            cookie?: never;
+        };
+        /** @description Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history. */
+        get: operations["getMinutesTask"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/candidates": {
+        parameters: {
+            query?: {
+                limit?: components["parameters"]["MinutesLimit"];
+                /** @description Opaque pagination cursor; return unchanged for the same meeting/filter. No offset parameter. */
+                cursor?: components["parameters"]["MinutesCursor"];
+                state?: "PENDING" | "ADOPTED" | "REJECTED" | "STALE" | "ALL";
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history. */
+        get: operations["getMinutesCandidates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                candidateId: components["parameters"]["MinutesCandidateId"];
+            };
+            cookie?: never;
+        };
+        /** @description Fresh owner EDIT; private metadata and stored graph inspection. Current readiness is separate from retained history. */
+        get: operations["getMinutesCandidate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Fresh READ of effective current saved body and set. Member DTO has no private candidate/history/input navigation. No candidate fallback; empty saved selection is explicit. */
+        get: operations["SavedCurrent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/editor-intent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedIntent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/editor-intents": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        post: operations["SavedIntents"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/history": {
+        parameters: {
+            query?: {
+                limit?: number;
+                beforeRevisionToken?: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/element-sets": {
+        parameters: {
+            query?: {
+                limit?: number;
+                beforeRevisionToken?: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedSets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/revisions/{revisionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                revisionId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedRevision"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/element-sets/{setId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                setId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedSet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedSettings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/readiness": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedReadiness"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/sources/{locatorId}": {
+        parameters: {
+            query: {
+                targetKind: "BODY" | "ELEMENT";
+                targetId: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                locatorId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Fresh READ only for evidence of the actual current target. Bounded retained passage; original byte eligibility is separate and never a public pin/direct object open. */
+        get: operations["SavedSource"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/revisions/{revisionId}/sources/{locatorId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                revisionId: string;
+                locatorId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedRevisionSource"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/element-sets/{setId}/sources/{locatorId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                setId: string;
+                locatorId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedSetSource"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedReviews"];
+        put?: never;
+        /** @description Owner EDIT authenticated immutable read. */
+        post: operations["SavedReviewCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/reviews/{reviewId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                reviewId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback. */
+        get: operations["SavedReview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/command-discovery": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Read-only owner EDIT key association discovery; Origin/CSRF still required. Does not prove semantic equivalence or authorize a new effect; keys are never URL parameters. */
+        post: operations["SavedDiscovery"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/body": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        put: operations["SavedBodyWrite"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/elements/{elementId}": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                elementId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        put: operations["SavedElementWrite"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/elements/{elementId}/action-fields": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                elementId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        put: operations["SavedActionWrite"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/elements/{elementId}/open-question": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                elementId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        post: operations["SavedQuestionWrite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/body-restorations": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        post: operations["SavedBodyRestore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/element-set-restorations": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        post: operations["SavedSetRestore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/settings/template": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        put: operations["SavedTemplateWrite"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/settings/exclusions": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        put: operations["SavedExclusionWrite"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}/adoptions": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        post: operations["SavedAdopt"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}/rejections": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        post: operations["SavedReject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}/disposals": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
+        post: operations["SavedDispose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/final-confirmations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Owner immutable final metadata history
+         * @description Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.
+         */
+        get: operations["listFinalConfirmations"];
+        put?: never;
+        /**
+         * Confirm exact reviewed saved result
+         * @description Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.
+         */
+        post: operations["confirmFinal"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/final-confirmations/readiness": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fresh complete final readiness
+         * @description Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.
+         */
+        get: operations["finalConfirmationReadiness"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/final-confirmations/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Current effective final or null
+         * @description Fresh current owner or effective confirmed enterprise-member READ; owner-only metadata is sanitized for member. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.
+         */
+        get: operations["currentFinalConfirmation"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/final-confirmations/{confirmationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Exact frozen final graph and original review IDs
+         * @description Fresh current owner or effective confirmed enterprise-member READ; owner-only metadata is sanitized for member. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.
+         */
+        get: operations["finalConfirmationDetail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * First controlled publication submission
+         * @description Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths. Independent acknowledgment validates immutable original command/result binding. Legacy replacement receipts whose compatible original acceptance is ambiguous return503 without writes or retry; no reconstruction from current fields.
+         */
+        post: operations["submitPublication"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Current one-root publication status or null
+         * @description Fresh current owner or effective confirmed enterprise-member READ; owner-only metadata is sanitized for member. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.
+         */
+        get: operations["currentPublication"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fresh joined publication status
+         * @description Fresh current owner or effective confirmed enterprise-member READ; owner-only metadata is sanitized for member. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.
+         */
+        get: operations["publicationDetail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/submissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Owner original accepted submission history
+         * @description Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.
+         */
+        get: operations["publicationSubmissionHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/attempts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Owner exact operation/execution attempt history
+         * @description Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths.
+         */
+        get: operations["publicationAttemptHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/local-recoveries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Explicit genuine never-marked local recovery
+         * @description Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths. Independent acknowledgment validates immutable original command/result binding. Legacy replacement receipts whose compatible original acceptance is ambiguous return503 without writes or retry; no reconstruction from current fields.
+         */
+        post: operations["recoverLocalPublicationFailure"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/zero-effect-retries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Request one new execution of the exact unchanged publication effect
+         * @description Current ACTIVE owner EDIT, session/Origin/CSRF and one Idempotency-Key. Replay-first independent immutable acknowledgment. MISS requires current selected operation/execution FAILED, marked authenticated definitive remote zero effect, latest accepted submission, complete closed history, same fixed r/e/input/fingerprint/final/provider/store/destination/logical/render/payload/source. Local NEVER_MARKED/NOT_SENT alone, UNKNOWN/manual/live/success/mapping cannot authorize. One atomic same-operation PREPARED successor/task/submission and publication revision; no publication attempt or send. Old bytes and generic retry semantics unchanged.
+         */
+        post: operations["retryPublicationAfterZeroEffect"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/resubmissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Proof-gated same-publication resubmission
+         * @description Current ACTIVE owner EDIT required. All responses bounded/private/no-store; no credentials/proofs/raw manifest/storage paths. Independent acknowledgment validates immutable original command/result binding. Legacy replacement receipts whose compatible original acceptance is ambiguous return503 without writes or retry; no reconstruction from current fields.
+         */
+        post: operations["resubmitPublication"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publication-destinations/libraries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List current owner publication libraries
+         * @description Fresh ACTIVE owner EDIT at snapshot and final phases. Fixed provider DESTINATION_READ uses the real session actor outside all database transactions. Current provider grants decide items; member READ or administrator role does not grant discovery. Response at most256KiB, default20/max50, request timeout30s; two simultaneous reads per API process and no queued work. Every response is private,no-store; no credential, provider URL or caller-selected actor/purpose is exposed.
+         */
+        get: operations["destinationLibraries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publication-destinations/libraries/{libraryId}/folders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List current owner publication folders
+         * @description Fresh ACTIVE owner EDIT at snapshot and final phases. Fixed provider DESTINATION_READ uses the real session actor outside all database transactions. Current provider grants decide items; member READ or administrator role does not grant discovery. Response at most256KiB, default20/max50, request timeout30s; two simultaneous reads per API process and no queued work. Every response is private,no-store; no credential, provider URL or caller-selected actor/purpose is exposed.
+         */
+        get: operations["destinationFolders"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/document": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * View the immutable official publication document
+         * @description Requires fresh current application READ, an exact ACTIVE mapping with compatible successful publication/attempt/execution/submission/final/original manifest, and current provider DOCUMENT_READ for this viewer. No query parameters are accepted. Metadata bounds precede original LONGTEXT transfer. Network, strict parsing, canonical hashing and static escaping happen outside database roots. Fresh final READ and identical lifecycle/mapping precede any buffered response. Payload8MiB/output32MiB ceilings and lower configured cumulative limits apply; no active HTML, Markdown links or remote resources. Cancellation, errors and timeouts abort the registered provider socket and stop further phases. Timeout30s; two simultaneous reads per process, no queue. Missing composition/provider access fails safely without receipt-capability fallback.
+         */
+        get: operations["officialPublicationDocument"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1320,6 +2390,1274 @@ export interface components {
             /** Format: uuid */
             sourceRevisionId: string;
         } | unknown | unknown;
+        MinutesTemplate: {
+            /** Format: uuid */
+            templateId: string;
+            /** Format: uuid */
+            revisionId: string;
+            name: string;
+            themes: ("OVERVIEW" | "DISCUSSION" | "CONCLUSION" | "ACTION" | "RISK" | "OPEN_QUESTION" | "DISAGREEMENT")[];
+            /** @constant */
+            themeCount: 7;
+            selectable: boolean;
+            default: boolean;
+        };
+        MinutesObservation: {
+            /** Format: int64 */
+            revision: number;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            revisionToken: string;
+            /** Format: int64 */
+            accessRevision: number;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            accessRevisionToken: string;
+            currentConfirmationId: string | null;
+            currentMinutesRevisionId: string | null;
+        };
+        MinutesTemplates: {
+            items: components["schemas"]["MinutesTemplate"][];
+            nextCursor: string | null;
+            observation: components["schemas"]["MinutesObservation"];
+        };
+        /** @description Exact object. Duplicate/unknown fields, trailing data, fractions and unequal dual revision representations are rejected. Body transport limit is 1 MiB. */
+        MinutesInitialCommand: {
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            expectedRevisionToken?: string;
+            /** @description Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically. */
+            expectedRevision?: number;
+            /** Format: uuid */
+            templateRevisionId: string;
+        } | unknown | unknown;
+        MinutesInitialReceipt: {
+            result: {
+                /** @constant */
+                kind: "INITIAL_MINUTES_SETTINGS";
+                /** Format: uuid */
+                meetingId: string;
+                /** Format: uuid */
+                templateRevisionId: string;
+                /** Format: uuid */
+                exclusionRevisionId: string;
+            };
+            replayed: boolean;
+            observation: components["schemas"]["MinutesObservation"];
+        };
+        /** @description Exact object. Duplicate/unknown fields, trailing data, fractions and unequal dual revision representations are rejected. Body transport limit is 1 MiB. */
+        MinutesGenerationCommand: {
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            expectedRevisionToken?: string;
+            /** @description Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically. */
+            expectedRevision?: number;
+            /**
+             * @description Required exact FULL scope. Omitting scope is invalid.
+             * @enum {string}
+             */
+            scope: "FULL";
+        } | unknown | unknown;
+        MinutesGenerationReceipt: {
+            result: {
+                /** @constant */
+                kind: "GENERATION_TASK";
+                /** Format: uuid */
+                meetingId: string;
+                /** Format: uuid */
+                inputId: string;
+                /** Format: uuid */
+                taskId: string;
+                inputFingerprint: string;
+            };
+            replayed: boolean;
+            observation: components["schemas"]["MinutesObservation"];
+        };
+        MinutesCurrent: {
+            saved: {
+                transcriptConfirmationId: string | null;
+                templateRevisionId: string | null;
+                exclusionRevisionId: string | null;
+                elementSetId: string | null;
+            };
+            /** @constant */
+            scope: "FULL";
+            /** @constant */
+            materials: "EMPTY";
+            activeTaskIds: string[];
+            eligible: boolean;
+            reasons: string[];
+            observation: components["schemas"]["MinutesObservation"];
+        };
+        MinutesGeneration_input: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meeting_id: string;
+            /** Format: uuid */
+            transcript_confirmation_id: string;
+            material_snapshot_id: string | null;
+            /** Format: uuid */
+            template_revision_id: string;
+            /** Format: uuid */
+            exclusion_revision_id: string;
+            element_set_id: string | null;
+            prompt_version: string;
+            model_config_version: string;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            base_revisionToken: string;
+            input_fingerprint: string;
+            /** @enum {string} */
+            scope: "FULL" | "ELEMENT";
+            target_element_id: string | null;
+        };
+        MinutesProfile: {
+            artifactType: string;
+            version: string;
+            sha256: string;
+        };
+        MinutesReadiness: {
+            eligible: boolean;
+            reasons: string[];
+        };
+        MinutesInput: {
+            input: components["schemas"]["MinutesGeneration_input"];
+            /** @description Normalized original generation manifest; includes complete original profile identities, never credentials. */
+            manifestJson: string;
+            profiles: components["schemas"]["MinutesProfile"][];
+            /** @constant */
+            provenanceVerified: true;
+            currentReadiness: components["schemas"]["MinutesReadiness"];
+            observation: components["schemas"]["MinutesObservation"];
+        };
+        MinutesTaskListMetadata: {
+            /** Format: uuid */
+            taskId: string;
+            /** Format: uuid */
+            inputId: string;
+            inputFingerprint: string;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            businessVersionToken: string;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            cancelEpochToken: string;
+            /** @enum {string} */
+            state: "READY" | "RUNNING" | "RECONCILING" | "SUCCEEDED" | "FAILED" | "STALE" | "CANCELLED";
+            errorCode: string | null;
+            outputKind: string | null;
+            outputId: string | null;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            attemptToken: string;
+            candidateId: string | null;
+            candidateState: ("PENDING" | "ADOPTED" | "REJECTED" | "STALE") | null;
+        };
+        /** @description Bounded metadata inspection. A listed row does not assert a complete archived graph or current generation/adoption readiness. */
+        MinutesTasks: {
+            items: components["schemas"]["MinutesTaskListMetadata"][];
+            nextCursor: string | null;
+            /** @constant */
+            metadataOnly: true;
+        };
+        MinutesTaskMetadata: {
+            /** Format: uuid */
+            taskId: string;
+            /** Format: uuid */
+            inputId: string;
+            inputFingerprint: string;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            businessVersionToken: string;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            cancelEpochToken: string;
+            /** @enum {string} */
+            state: "READY" | "RUNNING" | "RECONCILING" | "SUCCEEDED" | "FAILED" | "STALE" | "CANCELLED";
+            errorCode: string | null;
+            outputKind: string | null;
+            outputId: string | null;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            attemptToken: string;
+        };
+        MinutesTask: {
+            task: components["schemas"]["MinutesTaskMetadata"];
+            attempts: {
+                /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+                attemptToken: string;
+                outcome: string | null;
+                errorCode: string | null;
+                startedAt: string;
+                endedAt: string | null;
+            }[];
+            remoteOutcome: string;
+            localOutcome: string;
+            candidateId: string | null;
+            allowedActions: "INSPECT"[];
+            observation: components["schemas"]["MinutesObservation"];
+        };
+        MinutesCandidateListMetadata: {
+            /** Format: uuid */
+            candidateId: string;
+            /** Format: uuid */
+            inputId: string;
+            /** Format: uuid */
+            taskId: string;
+            /** Format: uuid */
+            minutesRevisionId: string;
+            /** Format: uuid */
+            elementSetId: string;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            baseRevisionToken: string;
+            inputFingerprint: string;
+            /** @enum {string} */
+            state: "PENDING" | "ADOPTED" | "REJECTED" | "STALE";
+            createdAt: string;
+            decidedAt: string | null;
+            eligibility: {
+                canAdopt: boolean;
+                reasons: string[];
+            };
+        };
+        /** @description Bounded metadata inspection. A listed row does not assert a complete archived graph or current generation/adoption readiness. */
+        MinutesCandidates: {
+            items: components["schemas"]["MinutesCandidateListMetadata"][];
+            nextCursor: string | null;
+            /** @constant */
+            metadataOnly: true;
+        };
+        MinutesCandidateMetadata: {
+            /** Format: uuid */
+            candidateId: string;
+            /** Format: uuid */
+            inputId: string;
+            /** Format: uuid */
+            taskId: string;
+            /** Format: uuid */
+            minutesRevisionId: string;
+            /** Format: uuid */
+            elementSetId: string;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            baseRevisionToken: string;
+            inputFingerprint: string;
+            /** @enum {string} */
+            state: "PENDING" | "ADOPTED" | "REJECTED" | "STALE";
+            createdAt: string;
+            decidedAt: string | null;
+        };
+        MinutesMinutes_revision: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meeting_id: string;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            revisionToken: string;
+            parent_id: string | null;
+            title: string;
+            /** @enum {string} */
+            title_origin: "HUMAN" | "LINKED" | "AI";
+            body: string;
+            generation_input_id: string | null;
+            created_by: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        MinutesElement_set: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meeting_id: string;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            revisionToken: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        MinutesMinutes_element: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            set_id: string;
+            /** @enum {string} */
+            category: "OVERVIEW" | "DISCUSSION" | "CONCLUSION" | "ACTION" | "RISK" | "OPEN_QUESTION" | "DISAGREEMENT";
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            ordinalToken: string;
+            body: string;
+            /** @enum {string} */
+            support_state: "SUPPORTED" | "PARTIAL" | "UNSUPPORTED" | "NOT_EXTRACTED";
+        };
+        MinutesAction_item: {
+            /** Format: uuid */
+            element_id: string;
+            owner_enterprise_id: string | null;
+            owner_display: string | null;
+            due_on: string | null;
+        };
+        MinutesAction_suggestion: {
+            /** Format: uuid */
+            element_id: string;
+            /** Format: uuid */
+            input_id: string;
+            owner_mention: string | null;
+            due_on: string | null;
+        };
+        MinutesSensitive_detection: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            set_id: string;
+            /** Format: uuid */
+            input_id: string;
+            /** @enum {string} */
+            category: "INTERNAL_BUSINESS_DATA" | "POLITICAL_SENSITIVE";
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            ordinalToken: string;
+        };
+        MinutesBackground_note: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            set_id: string;
+            /** Format: uuid */
+            input_id: string;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            ordinalToken: string;
+            body: string;
+        };
+        MinutesSource_locator: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meeting_id: string;
+            /** @enum {string} */
+            kind: "TRANSCRIPT" | "AUDIO" | "PDF_PAGE" | "PPT_PAGE" | "WORD_PARAGRAPH" | "TEXT_PARAGRAPH" | "KNOWLEDGE_VERSION";
+            transcript_revision_id: string | null;
+            segment_id: string | null;
+            file_id: string | null;
+            material_revision_id: string | null;
+            page_noToken: string | null;
+            paragraph_noToken: string | null;
+            section_path: string | null;
+            start_msToken: string | null;
+            end_msToken: string | null;
+        };
+        MinutesSensitive_detection_source: {
+            /** Format: uuid */
+            detection_id: string;
+            /** Format: uuid */
+            locator_id: string;
+        };
+        MinutesBackground_note_source: {
+            /** Format: uuid */
+            note_id: string;
+            /** Format: uuid */
+            locator_id: string;
+        };
+        MinutesEvidence_link: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            locator_id: string;
+            element_id: string | null;
+            minutes_revision_id: string | null;
+            /** @enum {string} */
+            support_state: "SUPPORTED" | "PARTIAL" | "UNSUPPORTED";
+            target_anchor: string;
+        };
+        MinutesCandidate: {
+            candidate: components["schemas"]["MinutesCandidateMetadata"];
+            graph: {
+                minutes_revision: components["schemas"]["MinutesMinutes_revision"][];
+                element_set: components["schemas"]["MinutesElement_set"][];
+                minutes_element: components["schemas"]["MinutesMinutes_element"][];
+                action_item: components["schemas"]["MinutesAction_item"][];
+                action_suggestion: components["schemas"]["MinutesAction_suggestion"][];
+                sensitive_detection: components["schemas"]["MinutesSensitive_detection"][];
+                background_note: components["schemas"]["MinutesBackground_note"][];
+                source_locator: components["schemas"]["MinutesSource_locator"][];
+                sensitive_detection_source: components["schemas"]["MinutesSensitive_detection_source"][];
+                background_note_source: components["schemas"]["MinutesBackground_note_source"][];
+                evidence_link: components["schemas"]["MinutesEvidence_link"][];
+            };
+            /** @constant */
+            provenanceVerified: true;
+            eligibility: {
+                canAdopt: boolean;
+                reasons: string[];
+            };
+            observation: components["schemas"]["MinutesObservation"];
+        };
+        SavedBody: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            body: string;
+            /** @enum {string} */
+            titleOrigin: "HUMAN" | "LINKED" | "AI";
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            revisionToken: string;
+        };
+        SavedMemberElement: {
+            /** Format: uuid */
+            id: string;
+            body: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            ordinalToken: string;
+            action: components["schemas"]["MinutesAction_item"] | null;
+            suggestion: null;
+        };
+        SavedMemberElements: {
+            OVERVIEW: components["schemas"]["SavedMemberElement"][];
+            DISCUSSION: components["schemas"]["SavedMemberElement"][];
+            CONCLUSION: components["schemas"]["SavedMemberElement"][];
+            ACTION: components["schemas"]["SavedMemberElement"][];
+            RISK: components["schemas"]["SavedMemberElement"][];
+            OPEN_QUESTION: components["schemas"]["SavedMemberElement"][];
+            DISAGREEMENT: components["schemas"]["SavedMemberElement"][];
+        };
+        SavedReadObservation: {
+            /** Format: int64 */
+            revision: number;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            revisionToken: string;
+            /** Format: int64 */
+            accessRevision: number;
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            accessRevisionToken: string;
+            currentConfirmationId: string | null;
+            currentMinutesRevisionId: string | null;
+            lifecycle?: string;
+            currentBodyId?: string | null;
+            currentSetId?: string | null;
+            templateRevisionId?: string | null;
+            exclusionRevisionId?: string | null;
+            needsGeneration?: boolean;
+            readOnlyReason?: string | null;
+        };
+        SavedSensitiveDirectory: {
+            /** Format: uuid */
+            id: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            ordinalToken: string;
+            /** @enum {unknown} */
+            category: "POLITICAL_SENSITIVE" | "INTERNAL_BUSINESS_DATA";
+            locatorIds: string[];
+        };
+        SavedBackgroundDirectory: {
+            /** Format: uuid */
+            id: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            ordinalToken: string;
+            body: string;
+            locatorIds: string[];
+        };
+        SavedCurrent: {
+            body: components["schemas"]["SavedBody"] | null;
+            setId: string | null;
+            elements: components["schemas"]["SavedMemberElements"];
+            observation: components["schemas"]["SavedReadObservation"];
+            sensitive: components["schemas"]["SavedSensitiveDirectory"][];
+            background: components["schemas"]["SavedBackgroundDirectory"][];
+            evidence: components["schemas"]["MinutesEvidence_link"][];
+        };
+        SavedIntentProjection: {
+            /** Format: uuid */
+            meetingId: string;
+            /** @enum {string} */
+            state: "KNOWN" | "UNKNOWN";
+            intentEpochToken: string | null;
+            observation: components["schemas"]["MinutesObservation"];
+        };
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
+        SavedIntentCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+        } | unknown | unknown;
+        SavedIntentAck: {
+            result: {
+                /** @constant */
+                kind: "EDIT_INTENT";
+                /** Format: uuid */
+                meetingId: string;
+            };
+            replayed: boolean;
+            current: components["schemas"]["SavedIntentProjection"];
+        };
+        SavedBodyHistoryItem: {
+            /** Format: uuid */
+            id: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            revisionToken: string;
+            createdAt: string;
+            titleOrigin: ("HUMAN" | "LINKED" | "AI") | null;
+        };
+        SavedCommandObservation: {
+            revision: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            revisionToken: string;
+            accessRevision: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            accessRevisionToken: string;
+            lifecycle: string;
+            currentBodyId: string | null;
+            currentSetId: string | null;
+            currentConfirmationId: string | null;
+            templateRevisionId: string | null;
+            exclusionRevisionId: string | null;
+            needsGeneration: boolean;
+            readOnlyReason: string | null;
+        };
+        SavedHistory: {
+            items: components["schemas"]["SavedBodyHistoryItem"][];
+            nextBeforeRevisionToken: string | null;
+            observation: components["schemas"]["SavedCommandObservation"];
+            hasMore: boolean;
+        };
+        SavedOwnerBody: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            body: string;
+            /** @enum {string} */
+            titleOrigin: "HUMAN" | "LINKED" | "AI";
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            revisionToken: string;
+            generationInputId: string | null;
+            parentId: string | null;
+        };
+        SavedBodyDetail: {
+            body: components["schemas"]["SavedOwnerBody"];
+            elements: null;
+            evidence: components["schemas"]["MinutesEvidence_link"][];
+            observation: components["schemas"]["SavedReadObservation"];
+            sensitive: components["schemas"]["SavedSensitiveDirectory"][];
+            background: components["schemas"]["SavedBackgroundDirectory"][];
+        };
+        SavedOwnerElement: {
+            /** Format: uuid */
+            id: string;
+            body: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            ordinalToken: string;
+            action: components["schemas"]["MinutesAction_item"] | null;
+            suggestion: components["schemas"]["MinutesAction_suggestion"] | null;
+        };
+        SavedOwnerElements: {
+            OVERVIEW: components["schemas"]["SavedOwnerElement"][];
+            DISCUSSION: components["schemas"]["SavedOwnerElement"][];
+            CONCLUSION: components["schemas"]["SavedOwnerElement"][];
+            ACTION: components["schemas"]["SavedOwnerElement"][];
+            RISK: components["schemas"]["SavedOwnerElement"][];
+            OPEN_QUESTION: components["schemas"]["SavedOwnerElement"][];
+            DISAGREEMENT: components["schemas"]["SavedOwnerElement"][];
+        };
+        SavedSetDetail: {
+            set: components["schemas"]["MinutesElement_set"];
+            elements: components["schemas"]["SavedOwnerElements"];
+            evidence: components["schemas"]["MinutesEvidence_link"][];
+            observation: components["schemas"]["SavedReadObservation"];
+            sensitive: components["schemas"]["SavedSensitiveDirectory"][];
+            background: components["schemas"]["SavedBackgroundDirectory"][];
+        };
+        SavedTemplateRow: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            template_id: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            revisionToken: string;
+            owner_id: string | null;
+            name: string;
+            themes: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            theme_countToken: string;
+            created_at: string;
+        };
+        SavedExclusionRow: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meeting_id: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            revisionToken: string;
+            created_at: string;
+        };
+        SavedExclusionMember: {
+            /** Format: uuid */
+            revision_id: string;
+            /** Format: uuid */
+            locator_id: string;
+            category: string;
+            reason: string | null;
+        };
+        SavedSettings: {
+            template: components["schemas"]["SavedTemplateRow"] | null;
+            exclusionRevision: components["schemas"]["SavedExclusionRow"] | null;
+            items: components["schemas"]["SavedExclusionMember"][];
+            observation: components["schemas"]["SavedReadObservation"];
+        };
+        SavedRequiredReview: {
+            /** @constant */
+            targetKind: "ELEMENT";
+            /** Format: uuid */
+            targetId: string;
+            /** @enum {string} */
+            reviewKind: "SOURCE_SUPPORT" | "ACTION_FIELDS";
+            scope: "WHOLE" | null;
+            reviewId: string | null;
+            outcome: ("SUPPORTED" | "PARTIAL" | "UNSUPPORTED" | "CONFIRMED") | null;
+            satisfied: boolean;
+        };
+        SavedCorrectionQualification: {
+            /** @enum {unknown} */
+            mode: "DISABLED_NOT_INSTALLED" | "UNAVAILABLE";
+            /** @enum {unknown} */
+            readiness: "NOT_APPLICABLE" | "UNAVAILABLE";
+            qualificationId: string | null;
+        };
+        /** @description Current business assessment is separate from formal activation. ready remains false while Task11 is absent. Required scopes are exact latest WHOLE support and accepted nullable ACTION_FIELDS; SPANs never combine. Historical reviews do not imply current credit. Correction qualification is consumed from the exact actual saved-transcript component and same private boot identity rechecked in F; these projection strings confer no authority. */
+        SavedReadiness: {
+            /** @constant */
+            ready: false;
+            businessReady: boolean;
+            required: components["schemas"]["SavedRequiredReview"][];
+            requiredReviewIds: string[];
+            optionalReviewIds: string[];
+            blockers: string[];
+            pendingCandidateIds: string[];
+            outstandingTaskIds: string[];
+            observation: components["schemas"]["SavedReadObservation"];
+            correction: components["schemas"]["SavedCorrectionQualification"];
+        };
+        SavedSource: {
+            locator: components["schemas"]["MinutesSource_locator"];
+            text: string;
+            historical: boolean;
+            observation: components["schemas"]["SavedReadObservation"];
+            marks: ("KEY" | "CONCLUSION" | "DISPUTE" | "GENERATION_FOCUS")[];
+            /** Format: uuid */
+            sourceVersion: string;
+            originalBytes: {
+                route: string;
+                /** @constant */
+                eligibility: "RECHECK_REQUIRED";
+            };
+        };
+        SavedReviewRow: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meeting_id: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            review_noToken: string;
+            review_kind: string;
+            element_id: string | null;
+            minutes_revision_id: string | null;
+            target_anchor: string | null;
+            target_hash: string;
+            source_set_hash: string;
+            hash_profile: string;
+            outcome: string;
+            reviewed_by: string;
+            reviewed_at: string;
+        };
+        SavedReviewHistory: {
+            items: components["schemas"]["SavedReviewRow"][];
+            nextBeforeReviewNoToken: string | null;
+            observation: components["schemas"]["SavedReadObservation"];
+            hasMore: boolean;
+        };
+        SavedReviewCommand: ({
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            target: {
+                /** @enum {string} */
+                kind: "BODY" | "ELEMENT";
+                /** Format: uuid */
+                id: string;
+            };
+            /** @constant */
+            reviewKind: "SOURCE_SUPPORT";
+            /** @constant */
+            scope: "WHOLE";
+            /** @enum {string} */
+            outcome: "SUPPORTED" | "PARTIAL" | "UNSUPPORTED";
+        } | unknown | unknown) | ({
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            target: {
+                /** @enum {string} */
+                kind: "BODY" | "ELEMENT";
+                /** Format: uuid */
+                id: string;
+            };
+            /** @constant */
+            reviewKind: "SOURCE_SUPPORT";
+            /** @constant */
+            scope: "SPAN";
+            /** @enum {string} */
+            outcome: "SUPPORTED" | "PARTIAL" | "UNSUPPORTED";
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            startToken: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            endToken: string;
+        } | unknown | unknown) | ({
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            target: {
+                /** @constant */
+                kind: "ELEMENT";
+                /** Format: uuid */
+                id: string;
+            };
+            /** @constant */
+            reviewKind: "ACTION_FIELDS";
+            scope: null;
+            /** @constant */
+            outcome: "CONFIRMED";
+        } | unknown | unknown);
+        SavedCommandAck: {
+            /** @enum {string} */
+            operation: "MINUTES_ADOPT" | "MINUTES_REJECT" | "MINUTES_DISPOSE" | "MINUTES_BODY_SAVE" | "MINUTES_BODY_RESTORE" | "MINUTES_ELEMENT_EDIT" | "MINUTES_ACTION_FIELDS" | "MINUTES_OPEN_QUESTION" | "MINUTES_SET_RESTORE" | "MINUTES_TEMPLATE" | "MINUTES_EXCLUSIONS" | "MINUTES_REVIEW";
+            /** @enum {string} */
+            resultKind: "GENERATION_CANDIDATE" | "MINUTES_REVISION" | "ELEMENT_SET" | "TEMPLATE_REVISION" | "EXCLUSION_REVISION" | "RESULT_REVIEW";
+            /** Format: uuid */
+            resultId: string;
+            /** @constant */
+            httpStatus: 200;
+            replayed: boolean;
+            observation: components["schemas"]["SavedCommandObservation"];
+        };
+        SavedReviewDetail: {
+            review: components["schemas"]["SavedReviewRow"];
+            evidence: components["schemas"]["MinutesEvidence_link"][];
+            /** @constant */
+            provenanceVerified: true;
+            observation: components["schemas"]["SavedReadObservation"];
+        };
+        SavedDiscoveryCommand: {
+            /** @enum {string} */
+            operation: "MINUTES_ADOPT" | "MINUTES_REJECT" | "MINUTES_DISPOSE" | "MINUTES_BODY_SAVE" | "MINUTES_BODY_RESTORE" | "MINUTES_ELEMENT_EDIT" | "MINUTES_ACTION_FIELDS" | "MINUTES_OPEN_QUESTION" | "MINUTES_SET_RESTORE" | "MINUTES_TEMPLATE" | "MINUTES_EXCLUSIONS" | "MINUTES_REVIEW";
+            key: string;
+        };
+        SavedDiscoveryResult: components["schemas"]["SavedCommandAck"] | {
+            /** @constant */
+            status: "NOT_FOUND";
+            /** @enum {string} */
+            operation: "MINUTES_ADOPT" | "MINUTES_REJECT" | "MINUTES_DISPOSE" | "MINUTES_BODY_SAVE" | "MINUTES_BODY_RESTORE" | "MINUTES_ELEMENT_EDIT" | "MINUTES_ACTION_FIELDS" | "MINUTES_OPEN_QUESTION" | "MINUTES_SET_RESTORE" | "MINUTES_TEMPLATE" | "MINUTES_EXCLUSIONS" | "MINUTES_REVIEW";
+            observation: components["schemas"]["SavedCommandObservation"];
+        };
+        SavedEvidenceAnchor: {
+            /** Format: uuid */
+            evidenceId: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            startToken: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            endToken: string;
+        };
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
+        SavedBodyCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            title: string;
+            body: string;
+            evidenceAnchors: components["schemas"]["SavedEvidenceAnchor"][];
+        } | unknown | unknown;
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
+        SavedElementCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            sourceSetId: string;
+            body: string;
+            evidenceAnchors: components["schemas"]["SavedEvidenceAnchor"][];
+        } | unknown | unknown;
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. All nullable accepted tuple members are required. Non-null enterprise selection remains unavailable until a qualified identity selector is installed; suggestions never substitute for accepted values. */
+        SavedActionCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            sourceSetId: string;
+            ownerEnterpriseId: string | null;
+            ownerDisplay: string | null;
+            dueOn: string | null;
+        } | unknown | unknown;
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
+        SavedBodyRestoreCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+        } | unknown | unknown;
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
+        SavedSetRestoreCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            sourceSetId: string;
+        } | unknown | unknown;
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
+        SavedTemplateCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            templateRevisionId: string;
+        } | unknown | unknown;
+        SavedExclusionItem: {
+            /** Format: uuid */
+            locatorId: string;
+            /** @enum {string} */
+            category: "POLITICAL_SENSITIVE" | "INTERNAL_BUSINESS_DATA";
+            reason: string | null;
+        };
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
+        SavedExclusionsCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            sourceExclusionRevisionId: string;
+            items: components["schemas"]["SavedExclusionItem"][];
+        } | unknown | unknown;
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
+        SavedAdoptCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            inputId: string;
+            inputFingerprint: string;
+        } | unknown | unknown;
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
+        SavedDecisionCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+        } | unknown | unknown;
+        /** Format: uuid */
+        Uuid: string;
+        /** @description Canonical ASCII decimal0..9223372036854775806, no leading zero/sign/space/exponent. Browser preserves string digits; never coerce to Number. */
+        CounterToken: string;
+        /** @description UTC stored timestamp in ISO-8601 representation; no locale formatting. */
+        Timestamp: string;
+        FinalHeader: {
+            confirmationId: components["schemas"]["Uuid"];
+            meetingRevisionToken: components["schemas"]["CounterToken"];
+            confirmedBy: string;
+            confirmedAt: components["schemas"]["Timestamp"];
+            minutesRevisionId: components["schemas"]["Uuid"];
+            elementSetId: components["schemas"]["Uuid"];
+            transcriptConfirmationId: components["schemas"]["Uuid"];
+        };
+        FinalHistory: {
+            items: components["schemas"]["FinalHeader"][];
+            hasMore: boolean;
+            nextCursor: string | null;
+        };
+        Error: {
+            error: {
+                code: string;
+                message: string;
+                /** Format: uuid */
+                traceId: string;
+            };
+        };
+        /** @description Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header. */
+        FinalCommand: {
+            expectedRevision?: number;
+            expectedRevisionToken?: components["schemas"]["CounterToken"];
+            optionalReviewIds: components["schemas"]["Uuid"][];
+        } & (unknown | unknown);
+        FinalObservation: {
+            revision: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            revisionToken: string;
+            accessRevision: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            accessRevisionToken: string;
+            lifecycle: string;
+            currentBodyId: string | null;
+            currentSetId: string | null;
+            currentConfirmationId: string | null;
+            templateRevisionId: string | null;
+            exclusionRevisionId: string | null;
+            needsGeneration: boolean;
+            readOnlyReason: string | null;
+            currentFinalId: components["schemas"]["Uuid"] | null;
+        };
+        FinalAcknowledgment: {
+            /** @constant */
+            operation: "FINAL_CONFIRM";
+            /** @constant */
+            resultKind: "FINAL_CONFIRMATION";
+            resultId: components["schemas"]["Uuid"];
+            /** @constant */
+            httpStatus: 200;
+            replayed: boolean;
+            confirmation: components["schemas"]["FinalHeader"];
+            observation: components["schemas"]["FinalObservation"];
+        };
+        ReviewRequirement: {
+            targetKind: string;
+            targetId: components["schemas"]["Uuid"];
+            /** @enum {unknown} */
+            reviewKind: "SOURCE_SUPPORT" | "ACTION_FIELDS";
+            scope: string | null;
+            reviewId: components["schemas"]["Uuid"] | null;
+            outcome: string | null;
+            satisfied: boolean;
+        };
+        FinalReadiness: {
+            ready: boolean;
+            businessReady: boolean;
+            correction: {
+                mode: string;
+                readiness: string;
+                qualificationId: string | null;
+            };
+            required: components["schemas"]["ReviewRequirement"][];
+            requiredReviewIds: components["schemas"]["Uuid"][];
+            optionalReviewIds: components["schemas"]["Uuid"][];
+            blockers: string[];
+            pendingCandidateIds: components["schemas"]["Uuid"][];
+            outstandingTaskIds: components["schemas"]["Uuid"][];
+            observation: components["schemas"]["SavedReadObservation"];
+        };
+        FrozenFinal: {
+            id: components["schemas"]["Uuid"];
+            meeting_id: components["schemas"]["Uuid"];
+            meeting_revisionToken: components["schemas"]["CounterToken"];
+            confirmed_by: string;
+            confirmed_at: components["schemas"]["Timestamp"];
+            source_manifest_hash: string;
+            input_fingerprint: string;
+            info_revision_id: components["schemas"]["Uuid"];
+            roster_revision_id: components["schemas"]["Uuid"];
+            transcript_confirmation_id: components["schemas"]["Uuid"];
+            minutes_revision_id: components["schemas"]["Uuid"];
+            element_set_id: components["schemas"]["Uuid"];
+            template_revision_id: components["schemas"]["Uuid"];
+            exclusion_revision_id: components["schemas"]["Uuid"];
+            material_snapshot_id: components["schemas"]["Uuid"] | null;
+        };
+        FrozenBody: {
+            id: components["schemas"]["Uuid"];
+            meeting_id: components["schemas"]["Uuid"];
+            revisionToken: components["schemas"]["CounterToken"];
+            generation_input_id: components["schemas"]["Uuid"];
+            parent_id: components["schemas"]["Uuid"] | null;
+            title: string;
+            body: string;
+            created_by: string;
+            created_at: components["schemas"]["Timestamp"];
+            title_origin: string;
+        };
+        FrozenSet: {
+            id: components["schemas"]["Uuid"];
+            meeting_id: components["schemas"]["Uuid"];
+            revisionToken: components["schemas"]["CounterToken"];
+            created_at: components["schemas"]["Timestamp"];
+        };
+        FrozenAction: {
+            element_id: components["schemas"]["Uuid"];
+            owner_enterprise_id: string | null;
+            owner_display: string | null;
+            due_on: string | null;
+        };
+        FrozenElement: {
+            id: components["schemas"]["Uuid"];
+            body: string;
+            ordinalToken: components["schemas"]["CounterToken"];
+            /** @enum {unknown} */
+            supportState: "SUPPORTED" | "PARTIAL" | "UNSUPPORTED" | "NOT_EXTRACTED";
+            action: components["schemas"]["FrozenAction"] | null;
+        };
+        FrozenElements: {
+            OVERVIEW: components["schemas"]["FrozenElement"][];
+            DISCUSSION: components["schemas"]["FrozenElement"][];
+            CONCLUSION: components["schemas"]["FrozenElement"][];
+            ACTION: components["schemas"]["FrozenElement"][];
+            RISK: components["schemas"]["FrozenElement"][];
+            OPEN_QUESTION: components["schemas"]["FrozenElement"][];
+            DISAGREEMENT: components["schemas"]["FrozenElement"][];
+        };
+        FrozenReview: {
+            id: components["schemas"]["Uuid"];
+            meeting_id: components["schemas"]["Uuid"];
+            review_noToken: components["schemas"]["CounterToken"];
+            /** @enum {unknown} */
+            review_kind: "SOURCE_SUPPORT" | "ACTION_FIELDS";
+            element_id: components["schemas"]["Uuid"] | null;
+            minutes_revision_id: components["schemas"]["Uuid"] | null;
+            target_anchor: string | null;
+            target_hash: string;
+            source_set_hash: string;
+            hash_profile: string;
+            outcome: string;
+            reviewed_by: string;
+            reviewed_at: components["schemas"]["Timestamp"];
+        };
+        OriginalArtifactIdentity: {
+            version: string;
+            sha256: string;
+        };
+        OriginalProfiles: {
+            generationInputId: components["schemas"]["Uuid"];
+            prompt: components["schemas"]["OriginalArtifactIdentity"];
+            model: components["schemas"]["OriginalArtifactIdentity"];
+            definitions: {
+                CANONICAL_CODEC: components["schemas"]["OriginalArtifactIdentity"];
+                CONFIRMATION_HASH: components["schemas"]["OriginalArtifactIdentity"];
+                GENERATION_HASH: components["schemas"]["OriginalArtifactIdentity"];
+                ROWSET_HASH: components["schemas"]["OriginalArtifactIdentity"];
+                ANCHOR: components["schemas"]["OriginalArtifactIdentity"];
+                REVIEW_HASH: components["schemas"]["OriginalArtifactIdentity"];
+                FINAL_SOURCES: components["schemas"]["OriginalArtifactIdentity"];
+                OUTPUT_SCHEMA: components["schemas"]["OriginalArtifactIdentity"];
+                VALIDATION_BUDGET: components["schemas"]["OriginalArtifactIdentity"];
+                CATALOG: components["schemas"]["OriginalArtifactIdentity"];
+                RENDER: components["schemas"]["OriginalArtifactIdentity"];
+                EXCLUSION: components["schemas"]["OriginalArtifactIdentity"];
+                SUPPORT: components["schemas"]["OriginalArtifactIdentity"];
+                TITLE: components["schemas"]["OriginalArtifactIdentity"];
+                CHUNK_PLAN: components["schemas"]["OriginalArtifactIdentity"];
+            };
+        };
+        /** @description Exact verified frozen body/set/elements/accepted action tuple and original review/profile identities. Member detail requires the current effective final at both protected captures; owner may read frozen history. No current/default substitution or raw manifests. */
+        FinalDetail: {
+            confirmation: components["schemas"]["FrozenFinal"] | null;
+            body?: components["schemas"]["FrozenBody"];
+            reviewIds?: components["schemas"]["Uuid"][];
+            /** @constant */
+            provenanceVerified?: true;
+            observation?: components["schemas"]["SavedReadObservation"];
+            set?: components["schemas"]["FrozenSet"];
+            elements?: components["schemas"]["FrozenElements"];
+            reviews?: components["schemas"]["FrozenReview"][];
+            profiles?: components["schemas"]["OriginalProfiles"][];
+        };
+        /** @description Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header. */
+        SubmitCommand: {
+            expectedRevision?: number;
+            expectedRevisionToken?: components["schemas"]["CounterToken"];
+            confirmationId: components["schemas"]["Uuid"];
+            providerId: string;
+            libraryId: string;
+            folderId: string;
+        } & (unknown | unknown);
+        LocalDecision: {
+            decidedAt: components["schemas"]["Timestamp"];
+            decidedBy: string;
+            attemptNoToken: components["schemas"]["CounterToken"];
+            executionId: components["schemas"]["Uuid"] | null;
+        };
+        /** @description Fresh complete-history joined projection. Owner-only revision/current-final fields are absent for member. RemoteSUCCESS plus unapplied rawPENDING is terminal FENCED_MANUAL, lookupPending=false; no resend/reconciliation promise. B1 omits new-effect actions until full guarded eligibility is rechecked. */
+        PublicationStatus: {
+            publicationId: components["schemas"]["Uuid"];
+            confirmationId: components["schemas"]["Uuid"];
+            /** @enum {unknown} */
+            rawState: "READY" | "RUNNING" | "RECONCILING" | "FAILED" | "SUCCEEDED";
+            /** @enum {unknown} */
+            remoteOutcome: "SUCCESS" | "FAILED" | "UNKNOWN" | "NOT_OBSERVED";
+            /** @enum {unknown} */
+            applicationOutcome: "APPLIED" | "FENCED_MANUAL" | "PENDING_LOOKUP" | "PENDING";
+            manualLocked: boolean;
+            lookupPending: boolean;
+            /** @description Exact same-origin document entry for a complete ACTIVE applied-success association. Each document request separately checks current application READ and provider DOCUMENT_READ; availability does not cache authorization. */
+            officialDocumentUrl: string | null;
+            /** @enum {unknown} */
+            documentViewAvailability: "READY" | "UNAVAILABLE";
+            allowedActions: ("VIEW_FROZEN" | "REFRESH_STATUS" | "VIEW_ATTEMPTS")[];
+            /** @enum {unknown} */
+            readOnlyReason: "PUBLICATION_MANUAL" | "PUBLISHED" | "PUBLICATION_FROZEN";
+            /** @constant */
+            eligibilityAvailability: "RECHECK_REQUIRED";
+            publicationRevisionToken?: components["schemas"]["CounterToken"];
+            currentFinalId?: components["schemas"]["Uuid"] | null;
+            meetingRevisionToken?: components["schemas"]["CounterToken"];
+            currentTaskId?: components["schemas"]["Uuid"] | null;
+            executionId?: components["schemas"]["Uuid"] | null;
+            executionNoToken?: components["schemas"]["CounterToken"] | null;
+            operationId?: components["schemas"]["Uuid"] | null;
+        };
+        PublicationCurrent: {
+            publication: components["schemas"]["PublicationStatus"] | null;
+        };
+        /** @description Original task/submission/final/destination acknowledgment plus separately fresh observation. New submission/retry/resubmission keeps actual nullable execution fields; local recovery references original task and sealed decision. Existing stored digests remain unchanged. Valid historical acknowledgment survives unavailable new-command factory/provider/archive; mismatched digest409, missing/corrupt durable result503, trueMISS writes no placeholder. */
+        PublicationAcknowledgment: {
+            taskId: components["schemas"]["Uuid"];
+            publicationId?: components["schemas"]["Uuid"];
+            submissionNoToken?: components["schemas"]["CounterToken"];
+            confirmationId?: components["schemas"]["Uuid"];
+            providerId?: string;
+            libraryId?: string;
+            folderId?: string;
+            /** @enum {unknown} */
+            localState?: "UNDECIDED" | "NEVER_MARKED";
+            localReason?: string | null;
+            executionId?: components["schemas"]["Uuid"] | null;
+            executionNoToken?: components["schemas"]["CounterToken"] | null;
+            localDecision?: components["schemas"]["LocalDecision"] | null;
+            operation?: string;
+            /** @constant */
+            resultKind?: "TASK";
+            resultId?: components["schemas"]["Uuid"];
+            /** @enum {unknown} */
+            httpStatus: 200 | 202;
+            replayed: boolean;
+            confirmation?: components["schemas"]["FinalHeader"];
+            decision?: {
+                [key: string]: unknown;
+            };
+            observation: components["schemas"]["PublicationCurrent"] | components["schemas"]["SavedCommandObservation"] | {
+                /** @constant */
+                availability: "UNAVAILABLE";
+                safeCode: string;
+            };
+        };
+        /** @description Original immutable accepted binding, never reconstructed from current publication. Execution association stays null until real marker/actual stored PREPARED execution. No manifests/proofs/credentials. */
+        PublicationSubmission: {
+            taskId: components["schemas"]["Uuid"];
+            publicationId: components["schemas"]["Uuid"];
+            submissionNoToken: components["schemas"]["CounterToken"];
+            confirmationId: components["schemas"]["Uuid"];
+            providerId: string;
+            libraryId: string;
+            folderId: string;
+            /** @enum {unknown} */
+            localState: "UNDECIDED" | "NEVER_MARKED";
+            localReason: string | null;
+            executionId: components["schemas"]["Uuid"] | null;
+            executionNoToken: components["schemas"]["CounterToken"] | null;
+            localDecision: components["schemas"]["LocalDecision"] | null;
+        };
+        SubmissionPage: {
+            items: components["schemas"]["PublicationSubmission"][];
+            hasMore: boolean;
+            nextCursor: string | null;
+            observation: components["schemas"]["PublicationStatus"];
+        };
+        PublicationAttempt: {
+            attemptId: components["schemas"]["Uuid"];
+            confirmationId: components["schemas"]["Uuid"];
+            operationId: components["schemas"]["Uuid"];
+            executionId: components["schemas"]["Uuid"];
+            /** @enum {unknown} */
+            kind: "PUBLISH" | "RECONCILE" | "WITHDRAW" | "OBSOLETE";
+            /** @enum {unknown} */
+            rawOutcome: "PENDING" | "SUCCESS" | "FAILED" | "UNKNOWN";
+            /** @enum {unknown} */
+            remoteOutcome: "SUCCESS" | "FAILED" | "UNKNOWN" | "NOT_OBSERVED";
+            createdAt: components["schemas"]["Timestamp"];
+            finishedAt: components["schemas"]["Timestamp"] | null;
+            /** @enum {unknown} */
+            applicationOutcome: "APPLIED" | "FENCED_MANUAL" | "PENDING_LOOKUP" | "PENDING";
+            manualLocked: boolean;
+            lookupPending: boolean;
+        };
+        AttemptPage: {
+            items: components["schemas"]["PublicationAttempt"][];
+            hasMore: boolean;
+            nextCursor: string | null;
+            observation: components["schemas"]["PublicationStatus"];
+        };
+        /** @description Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header. */
+        LocalRecoveryCommand: {
+            expectedRevision?: number;
+            expectedRevisionToken?: components["schemas"]["CounterToken"];
+            taskId: components["schemas"]["Uuid"];
+            expectedPublicationRevision?: number;
+            expectedPublicationRevisionToken?: components["schemas"]["CounterToken"];
+        } & ((unknown | unknown) & (unknown | unknown));
+        /** @description Canonical ASCII decimal 0..9223372036854775806; exact upper range, no leading zero/sign/space. Browser sends string tokens without Number conversion. */
+        RetryCounterToken: string;
+        /** @description Positive selected predecessor execution number, 1..9223372036854775806. An exhausted successor is a409 after original acknowledgment lookup. */
+        RetryExecutionToken: components["schemas"]["RetryCounterToken"] & unknown;
+        /** @description Strict object <=65536 UTF8 bytes, exactly three counter pairs. Integer/token/equal dual normalize before digest(publicationId,expectedRevision,expectedPublicationRevision,expectedExecutionNo); unequal dual400. Duplicate/unknown/inapplicable fields, malformed Unicode, trailing data, exponent/fraction/negative/noncanonical token rejected. Browser token-only; no 2^53 limit. No final/provider/destination/task/force flags. New acceptance never sends. */
+        ZeroEffectRetryCommand: {
+            expectedRevision?: number;
+            expectedRevisionToken?: components["schemas"]["RetryCounterToken"];
+            expectedPublicationRevision?: number;
+            expectedPublicationRevisionToken?: components["schemas"]["RetryCounterToken"];
+            expectedExecutionNo?: number;
+            expectedExecutionNoToken?: components["schemas"]["RetryExecutionToken"];
+        } & ((unknown | unknown) & (unknown | unknown) & (unknown | unknown));
+        /** @description Actual created successor execution number; at least2 and equal to selected predecessor+1. */
+        RetryAcceptedExecutionToken: components["schemas"]["RetryExecutionToken"] & unknown;
+        /** @description Original immutable accepted task/submission/final/destination and actual existing-created execution (selected predecessor+1). Submission ordinal is independent of execution ordinal; earlier sealed local-only submissions have no execution. Fresh observation is separate and may be UNAVAILABLE. Binding is mandatory; missing/corrupt original503, semantic conflict409; valid replay does not depend on current CAS/exhaustion/provider/archive. */
+        ZeroEffectRetryAcknowledgment: {
+            taskId: components["schemas"]["Uuid"];
+            publicationId: components["schemas"]["Uuid"];
+            submissionNoToken: components["schemas"]["CounterToken"];
+            confirmationId: components["schemas"]["Uuid"];
+            providerId: string;
+            libraryId: string;
+            folderId: string;
+            /** @enum {unknown} */
+            localState?: "UNDECIDED" | "NEVER_MARKED";
+            localReason?: string | null;
+            executionId: components["schemas"]["Uuid"];
+            executionNoToken: components["schemas"]["RetryAcceptedExecutionToken"];
+            localDecision?: components["schemas"]["LocalDecision"] | null;
+            /** @constant */
+            operation: "PUBLICATION_ZERO_EFFECT_RETRY";
+            /** @constant */
+            resultKind: "TASK";
+            resultId: components["schemas"]["Uuid"];
+            /** @constant */
+            httpStatus: 202;
+            replayed: boolean;
+            confirmation: components["schemas"]["FinalHeader"];
+            decision?: {
+                [key: string]: unknown;
+            };
+            observation: components["schemas"]["PublicationCurrent"] | components["schemas"]["SavedCommandObservation"] | {
+                /** @constant */
+                availability: "UNAVAILABLE";
+                safeCode: string;
+            };
+        };
+        /** @description Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header. */
+        ResubmitCommand: {
+            expectedRevision?: number;
+            expectedRevisionToken?: components["schemas"]["CounterToken"];
+            confirmationId: components["schemas"]["Uuid"];
+            providerId: string;
+            libraryId: string;
+            folderId: string;
+            expectedPublicationRevision?: number;
+            expectedPublicationRevisionToken?: components["schemas"]["CounterToken"];
+        } & ((unknown | unknown) & (unknown | unknown));
+        DestinationLibrary: {
+            /** @description Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity. */
+            id: string;
+            name: string;
+            /** @description Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity. */
+            rootFolderId: string;
+        };
+        DestinationLibraryPage: {
+            providerId: string;
+            items: components["schemas"]["DestinationLibrary"][];
+            hasMore: boolean;
+            nextCursor: string | null;
+        };
+        DestinationFolder: {
+            /** @description Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity. */
+            id: string;
+            /** @description Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity. */
+            libraryId: string;
+            parentFolderId: string | null;
+            isRoot: boolean;
+            name: string;
+        };
+        DestinationFolderPage: {
+            providerId: string;
+            items: components["schemas"]["DestinationFolder"][];
+            hasMore: boolean;
+            nextCursor: string | null;
+        };
     };
     responses: {
         /** @description Source network or listener is not authorized */
@@ -1460,6 +3798,15 @@ export interface components {
         revisionId: string;
         confirmationId: string;
         fileId: string;
+        MinutesMeetingId: string;
+        MinutesLimit: number;
+        /** @description Last installed template primary key. */
+        MinutesTemplateCursor: string;
+        MinutesInputId: string;
+        /** @description Opaque pagination cursor; return unchanged for the same meeting/filter. No offset parameter. */
+        MinutesCursor: string;
+        MinutesTaskId: string;
+        MinutesCandidateId: string;
     };
     requestBodies: never;
     headers: never;
@@ -4565,6 +6912,5640 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    getMinutesTemplates: {
+        parameters: {
+            query?: {
+                limit?: components["parameters"]["MinutesLimit"];
+                /** @description Last installed template primary key. */
+                cursor?: components["parameters"]["MinutesTemplateCursor"];
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded owner-private response. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesTemplates"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    postMinutesInitialReceipt: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Nonblank key, at most 256 UTF-8 bytes. */
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+                Origin: string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MinutesInitialCommand"];
+            };
+        };
+        responses: {
+            /** @description Accepted immutable receipt with a fresh observation. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesInitialReceipt"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    postMinutesGenerationReceipt: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Nonblank key, at most 256 UTF-8 bytes. */
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+                Origin: string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MinutesGenerationCommand"];
+            };
+        };
+        responses: {
+            /** @description Accepted immutable receipt with a fresh observation. */
+            202: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesGenerationReceipt"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    getMinutesCurrent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded owner-private response. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesCurrent"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    getMinutesInput: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                inputId: components["parameters"]["MinutesInputId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded owner-private response. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesInput"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    getMinutesTasks: {
+        parameters: {
+            query?: {
+                limit?: components["parameters"]["MinutesLimit"];
+                /** @description Opaque pagination cursor; return unchanged for the same meeting/filter. No offset parameter. */
+                cursor?: components["parameters"]["MinutesCursor"];
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded owner-private response. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesTasks"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    getMinutesTask: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                taskId: components["parameters"]["MinutesTaskId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded owner-private response. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesTask"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    getMinutesCandidates: {
+        parameters: {
+            query?: {
+                limit?: components["parameters"]["MinutesLimit"];
+                /** @description Opaque pagination cursor; return unchanged for the same meeting/filter. No offset parameter. */
+                cursor?: components["parameters"]["MinutesCursor"];
+                state?: "PENDING" | "ADOPTED" | "REJECTED" | "STALE" | "ALL";
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded owner-private response. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesCandidates"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    getMinutesCandidate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                candidateId: components["parameters"]["MinutesCandidateId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded owner-private response. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesCandidate"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedCurrent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCurrent"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedIntent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedIntentProjection"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedIntents: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedIntentCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedIntentAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedHistory: {
+        parameters: {
+            query?: {
+                limit?: number;
+                beforeRevisionToken?: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedHistory"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedSets: {
+        parameters: {
+            query?: {
+                limit?: number;
+                beforeRevisionToken?: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedHistory"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedRevision: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                revisionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedBodyDetail"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedSet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                setId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedSetDetail"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedSettings"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedReadiness: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReadiness"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedSource: {
+        parameters: {
+            query: {
+                targetKind: "BODY" | "ELEMENT";
+                targetId: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                locatorId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedSource"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedRevisionSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                revisionId: string;
+                locatorId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedSource"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedSetSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                setId: string;
+                locatorId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedSource"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedReviews: {
+        parameters: {
+            query: {
+                targetKind: "BODY" | "ELEMENT";
+                targetId: string;
+                limit?: number;
+                beforeReviewNoToken?: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReviewHistory"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedReviewCreate: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedReviewCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                reviewId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReviewDetail"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedDiscovery: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedDiscoveryCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedDiscoveryResult"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedBodyWrite: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedBodyCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedElementWrite: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                elementId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedElementCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedActionWrite: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                elementId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedActionCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedQuestionWrite: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                elementId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedElementCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedBodyRestore: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedBodyRestoreCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedSetRestore: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedSetRestoreCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedTemplateWrite: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedTemplateCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedExclusionWrite: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedExclusionsCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedAdopt: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedAdoptCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedReject: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedDecisionCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedDispose: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedDecisionCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    listFinalConfirmations: {
+        parameters: {
+            query?: {
+                /** @description Bounded page size. */
+                limit?: number;
+                /** @description Canonical unpadded base64url v1 cursor bound to this exact route, meeting and publication when applicable. Final/submission keys use descending lossless revision/submission ordinals; attempts use descending UTC-local microsecond timestamp and canonical lowercase UUID. Server rejects cross-resource/route, alternative time spellings or noncanonical encodings. Separate SQL keyset page; complete history authority is captured independently. */
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FinalHistory"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    confirmFinal: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one configured allowed Origin. */
+                Origin: string;
+                /** @description Exactly one current session-bound CSRF token. */
+                "X-CSRF-Token": string;
+                /** @description Exactly one nonblank well-formed UTF8 value, at most256encoded bytes. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FinalCommand"];
+            };
+        };
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FinalAcknowledgment"];
+                };
+            };
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            201: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FinalAcknowledgment"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    finalConfirmationReadiness: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FinalReadiness"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    currentFinalConfirmation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FinalDetail"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    finalConfirmationDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+                /** @description Owner frozen history; member only exact current effective final. */
+                confirmationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FinalDetail"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    submitPublication: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one configured allowed Origin. */
+                Origin: string;
+                /** @description Exactly one current session-bound CSRF token. */
+                "X-CSRF-Token": string;
+                /** @description Exactly one nonblank well-formed UTF8 value, at most256encoded bytes. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitCommand"];
+            };
+        };
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            202: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicationAcknowledgment"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    currentPublication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicationCurrent"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    publicationDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+                /** @description Must belong to the requested meeting; ID possession grants no permission. */
+                publicationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicationCurrent"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    publicationSubmissionHistory: {
+        parameters: {
+            query?: {
+                /** @description Bounded page size. */
+                limit?: number;
+                /** @description Canonical unpadded base64url v1 cursor bound to this exact route, meeting and publication when applicable. Final/submission keys use descending lossless revision/submission ordinals; attempts use descending UTC-local microsecond timestamp and canonical lowercase UUID. Server rejects cross-resource/route, alternative time spellings or noncanonical encodings. Separate SQL keyset page; complete history authority is captured independently. */
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+                /** @description Must belong to the requested meeting; ID possession grants no permission. */
+                publicationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmissionPage"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    publicationAttemptHistory: {
+        parameters: {
+            query?: {
+                /** @description Bounded page size. */
+                limit?: number;
+                /** @description Canonical unpadded base64url v1 cursor bound to this exact route, meeting and publication when applicable. Final/submission keys use descending lossless revision/submission ordinals; attempts use descending UTC-local microsecond timestamp and canonical lowercase UUID. Server rejects cross-resource/route, alternative time spellings or noncanonical encodings. Separate SQL keyset page; complete history authority is captured independently. */
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+                /** @description Must belong to the requested meeting; ID possession grants no permission. */
+                publicationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AttemptPage"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    recoverLocalPublicationFailure: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one configured allowed Origin. */
+                Origin: string;
+                /** @description Exactly one current session-bound CSRF token. */
+                "X-CSRF-Token": string;
+                /** @description Exactly one nonblank well-formed UTF8 value, at most256encoded bytes. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+                /** @description Must belong to the requested meeting; ID possession grants no permission. */
+                publicationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LocalRecoveryCommand"];
+            };
+        };
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicationAcknowledgment"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    retryPublicationAfterZeroEffect: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one configured allowed Origin. */
+                Origin: string;
+                /** @description Exactly one current session-bound CSRF token. */
+                "X-CSRF-Token": string;
+                /** @description Exactly one nonblank well-formed UTF8 value, at most256encoded bytes. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+                /** @description Must belong to the requested meeting; ID possession grants no permission. */
+                publicationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ZeroEffectRetryCommand"];
+            };
+        };
+        responses: {
+            /** @description Original accepted202 or new atomic acceptance with actual persisted task and predecessor+1 execution association; private/no-store. */
+            202: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ZeroEffectRetryAcknowledgment"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Stale meeting/publication/selected execution, successor or revision exhaustion, fixed-input change, or idempotency conflict; no partial acceptance. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Missing/corrupt original binding/provenance or unavailable guarded runtime; no local-only or inferred-zero-effect fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    resubmitPublication: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one configured allowed Origin. */
+                Origin: string;
+                /** @description Exactly one current session-bound CSRF token. */
+                "X-CSRF-Token": string;
+                /** @description Exactly one nonblank well-formed UTF8 value, at most256encoded bytes. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+                /** @description Must belong to the requested meeting; ID possession grants no permission. */
+                publicationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResubmitCommand"];
+            };
+        };
+        responses: {
+            /** @description Actual durable acknowledgment or fresh bounded read. */
+            202: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicationAcknowledgment"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description CAS/idempotency/final readiness or explicit local recovery conflict. */
+            409: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Optional review or semantic request rejected. */
+            422: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    destinationLibraries: {
+        parameters: {
+            query?: {
+                /** @description Exactly one canonical decimal value. Unknown, duplicate, blank or malformed query parameters fail before provider access. */
+                limit?: number;
+                /** @description Opaque canonical continuation bound to this meeting, route, library and parent. Use exactly the returned nextCursor. */
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Bounded grant-filtered destination page; cursor is null exactly when no continuation. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DestinationLibraryPage"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    destinationFolders: {
+        parameters: {
+            query?: {
+                /** @description Omit for actual provider root folders; no invented root ID. */
+                parentFolderId?: string;
+                /** @description Exactly one canonical decimal value. Unknown, duplicate, blank or malformed query parameters fail before provider access. */
+                limit?: number;
+                /** @description Opaque canonical continuation bound to this meeting, route, library and parent. Use exactly the returned nextCursor. */
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+                libraryId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Bounded grant-filtered destination page; cursor is null exactly when no continuation. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DestinationFolderPage"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current B03 relation/lifecycle or Origin/CSRF denied; role-only admin gains no relation. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    officialPublicationDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+                /** @description Must belong to the requested meeting; ID possession grants no permission. */
+                publicationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fully validated immutable document, buffered until final authorization. */
+            200: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    "Content-Security-Policy"?: "default-src 'none'; frame-ancestors 'self'";
+                    "X-Content-Type-Options"?: "nosniff";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/html": string;
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current application READ or current provider document READ denied; no document content. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
                 };
             };
         };

@@ -35,8 +35,11 @@ public final class JdbcFileUploads implements FileUploads {
     private final AuditPort audit;
     private final OutboxPort outbox;
     private final long partSize;
+    private final ama.transcript.PublicationWriteGuard publicationWrites;
 
-    private record Root(long epoch, long revision, boolean published) {}
+    private record Root(long epoch,long revision,boolean published,MeetingAccess.Locked gate,
+                        ama.transcript.PublicationWriteGuard.Held publication,RuntimeException guardFailure) {}
+    private record PartStart(Session session,boolean replay) {}
 
     private record Session(
             String id,
@@ -69,7 +72,11 @@ public final class JdbcFileUploads implements FileUploads {
             FileBackendCatalog backends,
             AuditPort audit,
             OutboxPort outbox,
-            long partSize) {
+            long partSize) {this(source,tx,access,purposes,backends,audit,outbox,partSize,null);}
+    public JdbcFileUploads(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,
+            FileBackendCatalog backends,AuditPort audit,OutboxPort outbox,long partSize,
+            ama.transcript.PublicationWriteGuard publicationWrites) {
+        if(publicationWrites!=null)publicationWrites.requireStorageSource(source,access);this.publicationWrites=publicationWrites;
         j = new JdbcTemplate(source);
         this.tx = tx;
         this.access = access;
@@ -96,11 +103,17 @@ public final class JdbcFileUploads implements FileUploads {
                                 request.name(),
                                 Long.toString(request.size()),
                                 request.sha256());
+        Accepted acknowledged=tx.required(()->{
+            var old=replay(scope,false);Root root=authorize(actor,meeting);purposes.require(actor,meeting,request.purpose());
+            if(old==null)return null;var session=acceptedReplay(old,actor,meeting,request,requestHash);if(root.epoch()!=session.epoch())throw new Conflict();return new Accepted(session.id(),partSize);
+        });
+        if(acknowledged!=null)return acknowledged;
+        var publication=preparePublication(actor,meeting);
         Prepared prepared =
                 tx.required(
                         () -> {
                             var replay = replay(scope, false);
-                            Root root = authorize(actor, meeting);
+                            Root root = authorize(actor, meeting,publication);
                             purposes.require(actor, meeting, request.purpose());
                             if (replay != null) {
                                 Session old =
@@ -141,7 +154,7 @@ public final class JdbcFileUploads implements FileUploads {
                             digest(key),
                             requestHash);
                     var replay = replay(scope, true);
-                    Root root = authorize(actor, meeting);
+                    Root root = authorize(actor, meeting,publication);
                     purposes.require(actor, meeting, request.purpose());
                     if (replay.get("result_id") != null) {
                         var old = acceptedReplay(replay, actor, meeting, request, requestHash);
@@ -193,20 +206,19 @@ public final class JdbcFileUploads implements FileUploads {
             throw new IllegalArgumentException("Invalid part");
         String sum = hash(checksum);
         String meeting = discover(id);
-        Session before =
-                tx.required(
-                        () -> {
-                            Root root = authorize(actor, meeting);
-                            Session s = session(id);
-                            mutable(actor, root, s);
-                            requireState(s, "OPEN");
-                            var existing = part(id, number);
-                            if (existing != null
-                                    && (existing.size() != size || !existing.sha256().equals(sum)))
-                                throw new Conflict();
-                            backends.require(s.key().backendId(), true);
-                            return s;
-                        });
+        boolean acknowledged=tx.required(()->{
+            Root root=authorize(actor,meeting);Session session=session(id);if(root.epoch()!=session.epoch())throw new Conflict();purposes.require(actor,meeting,session.purpose());
+            var old=part(id,number);if(old==null)return false;if(old.size()!=size||!old.sha256().equals(sum))throw new Conflict();return true;
+        });
+        if(acknowledged)return;
+        var publication=preparePublication(actor,meeting);
+        PartStart started=tx.required(()->{
+            Root root=authorize(actor,meeting,publication);Session s=session(id);
+            if(root.epoch()!=s.epoch())throw new Conflict();purposes.require(actor,meeting,s.purpose());
+            var existing=part(id,number);if(existing!=null){if(existing.size()!=size||!existing.sha256().equals(sum))throw new Conflict();return new PartStart(s,true);}
+            writable(root);requireState(s,"OPEN");backends.require(s.key().backendId(),true);return new PartStart(s,false);
+        });
+        if(started.replay())return;Session before=started.session();
         PartReceipt receipt =
                 backends.require(before.key().backendId(), true)
                         .storage()
@@ -215,18 +227,16 @@ public final class JdbcFileUploads implements FileUploads {
             throw new Unavailable();
         tx.required(
                 () -> {
-                    Root root = authorize(actor, meeting);
+                    Root root = authorize(actor, meeting,publication);
                     Session s = session(id);
-                    mutable(actor, root, s);
-                    requireState(s, "OPEN");
-                    sameSession(before, s);
-                    backends.require(s.key().backendId(), true);
+                    if(root.epoch()!=s.epoch())throw new Conflict();purposes.require(actor,meeting,s.purpose());
                     PartReceipt old = part(id, number);
                     if (old != null) {
                         if (old.size() != receipt.size() || !old.sha256().equals(receipt.sha256()))
                             throw new Conflict();
                         return null;
                     }
+                    writable(root);requireState(s,"OPEN");sameSession(before,s);backends.require(s.key().backendId(),true);
                     j.update(
                             "INSERT INTO"
                                 + " upload_part(upload_id,part_no,size_bytes,sha256,provider_token)"
@@ -246,10 +256,16 @@ public final class JdbcFileUploads implements FileUploads {
         independent();
         uuid(id);
         String meeting = discover(id);
+        Completed acknowledged=tx.required(()->{
+            Root root=authorize(actor,meeting);Session session=session(id);if(root.epoch()!=session.epoch())throw new Conflict();purposes.require(actor,meeting,session.purpose());
+            var stored=receipts(id);manifest(session,stored,request);return session.state().equals("COMPLETED")?new Completed(session.file()):null;
+        });
+        if(acknowledged!=null)return acknowledged;
+        var publication=preparePublication(actor,meeting);
         Frozen frozen =
                 tx.required(
                         () -> {
-                            Root root = authorize(actor, meeting);
+                            Root root = authorize(actor, meeting,publication);
                             Session s = session(id);
                             purposes.require(actor, meeting, s.purpose());
                             if (root.epoch() != s.epoch()) throw new Conflict();
@@ -292,7 +308,7 @@ public final class JdbcFileUploads implements FileUploads {
                 || !blob.sha256().equals(selected.hash())) throw new Unavailable();
         return tx.required(
                 () -> {
-                    Root root = authorize(actor, meeting);
+                    Root root = authorize(actor, meeting,publication);
                     Session s = session(id);
                     purposes.require(actor, meeting, s.purpose());
                     if (root.epoch() != s.epoch()) throw new Conflict();
@@ -353,7 +369,6 @@ public final class JdbcFileUploads implements FileUploads {
                             if (root.epoch() != found.epoch()) throw new Conflict();
                             if (found.state().equals("COMPLETED")
                                     || found.state().equals("ABORTED")) return found;
-                            writable(root);
                             requireState(found, "OPEN");
                             j.update(
                                     "UPDATE upload_session SET"
@@ -367,27 +382,20 @@ public final class JdbcFileUploads implements FileUploads {
             backends.require(s.key().backendId(), false).storage().abort(s.uploadToken());
     }
 
-    private Root authorize(Actor actor, String meeting) {
-        var gate = access.lock(actor, meeting);
-        access.require(gate, MeetingAccess.Action.EDIT);
-        return j.queryForObject(
-                "SELECT cancel_epoch,revision,ever_published,stage FROM meeting WHERE id=?",
-                (r, n) ->
-                        new Root(
-                                r.getLong(1),
-                                r.getLong(2),
-                                r.getBoolean(3) || r.getString(4).equals("PUBLISHED")),
-                meeting);
+    private ama.transcript.PublicationWriteGuard.Prepared preparePublication(Actor actor,String meeting){return publicationWrites==null?null:publicationWrites.prepare(actor,meeting);}
+    private Root authorize(Actor actor,String meeting){return authorize(actor,meeting,null);}
+    private Root authorize(Actor actor,String meeting,ama.transcript.PublicationWriteGuard.Prepared prepared){
+        var gate=access.lock(actor,meeting);access.require(gate,MeetingAccess.Action.EDIT);
+        ama.transcript.PublicationWriteGuard.Held contribution=null;RuntimeException failure=null;
+        try{if(publicationWrites==null||prepared==null)throw new Unavailable();contribution=publicationWrites.controls(prepared,actor,meeting,gate);}
+        catch(MeetingAccess.AccessDeniedException denied){throw denied;}
+        catch(RuntimeException unavailable){failure=unavailable;}
+        final var held=contribution;final var rejected=failure;
+        return j.queryForObject("SELECT cancel_epoch,revision,ever_published,stage FROM meeting WHERE id=? FOR UPDATE",(r,n)->new Root(r.getLong(1),r.getLong(2),r.getBoolean(3)||r.getString(4).equals("PUBLISHED"),gate,held,rejected),meeting);
     }
-
-    private void mutable(Actor actor, Root root, Session session) {
-        writable(root);
-        if (root.epoch() != session.epoch()) throw new Conflict();
-        purposes.require(actor, session.meeting(), session.purpose());
-    }
-
-    private static void writable(Root root) {
-        if (root.published()) throw new Conflict();
+    private void writable(Root root){
+        if(root.published())throw new Conflict();if(root.guardFailure()!=null)throw root.guardFailure();
+        if(publicationWrites==null||root.publication()==null)throw new Unavailable();publicationWrites.tasks(root.publication(),root.gate());publicationWrites.claim(root.publication(),root.gate());
     }
 
     private String discover(String id) {

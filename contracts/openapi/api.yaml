@@ -147,6 +147,36 @@ paths:
     $ref: './minutes.yaml#/savedReject'
   /api/v1/meetings/{meetingId}/minutes/candidates/{candidateId}/disposals:
     $ref: './minutes.yaml#/savedDispose'
+  /api/v1/meetings/{meetingId}/final-confirmations:
+    $ref: './publications.yaml#/finals'
+  /api/v1/meetings/{meetingId}/final-confirmations/readiness:
+    $ref: './publications.yaml#/finalReadiness'
+  /api/v1/meetings/{meetingId}/final-confirmations/current:
+    $ref: './publications.yaml#/finalCurrent'
+  /api/v1/meetings/{meetingId}/final-confirmations/{confirmationId}:
+    $ref: './publications.yaml#/finalDetail'
+  /api/v1/meetings/{meetingId}/publications:
+    $ref: './publications.yaml#/publications'
+  /api/v1/meetings/{meetingId}/publications/current:
+    $ref: './publications.yaml#/publicationCurrent'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}:
+    $ref: './publications.yaml#/publicationDetail'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/submissions:
+    $ref: './publications.yaml#/submissions'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/attempts:
+    $ref: './publications.yaml#/attempts'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/local-recoveries:
+    $ref: './publications.yaml#/localRecoveries'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/zero-effect-retries:
+    $ref: './publications.yaml#/zeroEffectRetries'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/resubmissions:
+    $ref: './publications.yaml#/resubmissions'
+  /api/v1/meetings/{meetingId}/publication-destinations/libraries:
+    $ref: './publications.yaml#/destinationLibraries'
+  /api/v1/meetings/{meetingId}/publication-destinations/libraries/{libraryId}/folders:
+    $ref: './publications.yaml#/destinationFolders'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/document:
+    $ref: './publications.yaml#/officialDocument'
 components:
   securitySchemes:
     enterpriseSession:

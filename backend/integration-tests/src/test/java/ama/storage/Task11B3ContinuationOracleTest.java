@@ -1,0 +1,33 @@
+package ama.storage;
+import java.util.*;import org.junit.jupiter.api.*;import static org.junit.jupiter.api.Assertions.*;import static ama.storage.Task11B2ExactRetryOracle.*;
+/** Synthetic oracle tests: they validate evidence rejection, never supply runtime business authority. */
+class Task11B3ContinuationOracleTest {
+ Map<String,List<Map<String,Object>>> before,after;Map<String,List<String>> keys;List<Task11B3LifecycleOracle.Sealed> sealed;
+ static Map<String,Object> row(Object... pairs){var r=new HashMap<String,Object>();for(int i=0;i<pairs.length;i+=2)r.put((String)pairs[i],pairs[i+1]);return r;}
+ void add(String table,Map<String,Object> r){after.get(table).add(r);}
+ @BeforeEach void data()throws Exception {
+  before=new TreeMap<>();keys=new HashMap<>();for(String t:Task11B3PreparedFixture.BUSINESS){before.put(t,new ArrayList<>());keys.put(t,List.of("id"));}
+  keys.put("publication_submission",List.of("task_id"));keys.put("task_attempt",List.of("task_id","attempt"));
+  before.get("meeting").add(row("id","m","revision",13,"stage","PUBLISH_FAILED","ever_published",0,"current_final_confirmation_id","final"));before.get("publication").add(row("id","p","revision",15,"state","FAILED"));before.get("external_operation").add(row("id","o","state","FAILED","current_execution_no",6,"reconcile_epoch",11,"request_hash","logical"));before.get("task_outbox_sequence").add(row("id",1,"next_id",100));
+  after=Task11B3LifecycleOracleTest.copy(before);after.get("publication").getFirst().putAll(row("revision",19,"state","RUNNING"));after.get("external_operation").getFirst().putAll(row("state","UNKNOWN","current_execution_no",8,"reconcile_epoch",16));after.get("task_outbox_sequence").getFirst().put("next_id",109);
+  for(int n=1;n<=2;n++){
+   String t="t"+n,e="e"+n;add("durable_task",row("id",t,"state",n==1?"FAILED":"RECONCILING","attempt",1,"lease_owner",null,"expires_at",null));add("external_execution",row("id",e,"task_id",t,"operation_id","o","execution_no",n+6,"state",n==1?"FAILED":"UNKNOWN","request_manifest","manifest"+n,"request_hash","hash"+n,"marked_at",n==1?null:"now","task_attempt",n==1?null:1,"no_effect_basis",n==1?"NOT_SENT":null));add("publication_submission",row("task_id",t,"publication_id","p","submission_no",n+7,"local_state",n==1?"NEVER_MARKED":"UNDECIDED","requester_id","owner","request_manifest","manifest"+n,"execution_request_hash","hash"+n,"local_reason",n==1?"EXPIRED_UNMARKED_ABANDONED":null,"local_decided_by",n==1?"owner":null,"local_execution_id",n==1?e:null,"local_attempt_no",n==1?1:null,"local_decided_at",n==1?"now":null,"confirmation_id","final","provider_id","provider","library_id","library","folder_id","folder"));add("task_attempt",row("task_id",t,"attempt",1,"ended_at",n==1?"now":null));
+   receipt("r"+n,"PUBLICATION_RESUBMIT",t,"task11-b3-continuation-resubmit-"+n,202,Task11B3LocalOracle.digest("p","13",Integer.toString(13+2*n),"final","provider","library","folder"));
+  }
+  receipt("r3","PUBLICATION_LOCAL_RECOVERY","t1","task11-b3-continuation-local-1",200,Task11B3LocalOracle.digest("p","t1","13","16"));add("publication_attempt",row("id","pa","execution_id","e2","operation_id","o","publication_id","p","outcome","PENDING","kind","PUBLISH"));
+  for(int n=1;n<=3;n++)add("audit_event",row("id",n,"actor_id","owner","resource_id","m","result","SUCCEEDED","revision",13,"action",n==3?"PUBLICATION_LOCAL_NEVER_MARKED":"PUBLICATION_RESUBMITTED"));
+  String[] events={"TASK_ENQUEUED","PUBLICATION_ACCEPTED","TASK_RECONCILING","TASK_FAILED","PUBLICATION_LOCAL_RECOVERED","TASK_ENQUEUED","PUBLICATION_ACCEPTED","EXTERNAL_MARKED","EXTERNAL_UNKNOWN"};for(int n=0;n<events.length;n++)add("task_outbox",row("id",n+1,"sequence_id",100+n,"event_type",events[n],"task_id",n<5?"t1":"t2","subject_id","m","subject_kind","MEETING","reference_kind","PUBLICATION","reference_id","p"));
+  sealed=List.of(Task11B3LifecycleOracle.seal(after,keys,"t1","e1"));
+ }
+ void receipt(String id,String operation,String task,String key,int status,String hash)throws Exception {add("idempotency_record",row("id",id,"actor_id","owner","resource_id","m","result_id",task,"operation",operation,"state","SUCCEEDED","http_status",status,"key_hash",Task11B3LocalOracle.digest(key),"scope_hash",Task11B3LocalOracle.digest("owner","m",operation,key),"request_hash",hash,"created_at","now"));}
+ void verify()throws Exception {Task11B3ContinuationOracle.complete(before,after,keys,"m","p","o","owner",List.of("t1","t2"),List.of("e1","e2"),sealed);}
+ @Test void exactTwoOutcomeGraphIsAccepted()throws Exception {verify();}
+ @Test void everyTableRejectsAnExtraRow()throws Exception {for(String table:before.keySet()){var saved=Task11B3LifecycleOracleTest.copy(after);after.get(table).add(row("id","foreign","task_id","foreign","attempt",1));assertThrows(AssertionError.class,this::verify,table);after=saved;}}
+ @Test void everyActualRowCannotDisappear()throws Exception {for(String table:after.keySet())if(!after.get(table).isEmpty()){var saved=Task11B3LifecycleOracleTest.copy(after);after.get(table).removeFirst();assertThrows(AssertionError.class,this::verify,table);after=saved;}}
+ @Test void finalAndPublicationBusinessIdentityRemainProtected()throws Exception {after.get("meeting").getFirst().put("revision",14);assertThrows(AssertionError.class,this::verify);}
+ @Test void exactOperationEpochAndExecutionNumberRequired()throws Exception {after.get("external_operation").getFirst().put("reconcile_epoch",17);assertThrows(AssertionError.class,this::verify);after.get("external_operation").getFirst().put("reconcile_epoch",16);after.get("external_operation").getFirst().put("current_execution_no",9);assertThrows(AssertionError.class,this::verify);}
+ @Test void receiptAndAuditBindingCannotDrift()throws Exception {after.get("idempotency_record").get(1).put("request_hash","wrong");assertThrows(AssertionError.class,this::verify);}
+ @Test void o5SealedAttemptCannotReopen()throws Exception {after.get("task_attempt").getFirst().put("ended_at",null);assertThrows(AssertionError.class,this::verify);}
+ @Test void o6MarkedUnknownCannotBecomeSuccessOrNoEffect()throws Exception {after.get("external_execution").get(1).put("state","SUCCEEDED");assertThrows(AssertionError.class,this::verify);after.get("external_execution").get(1).put("state","UNKNOWN");after.get("external_execution").get(1).put("no_effect_basis","NOT_SENT");assertThrows(AssertionError.class,this::verify);}
+ @Test void exactOutboxSequenceAndEventKindsRequired()throws Exception {after.get("task_outbox").getLast().put("event_type","EXTERNAL_SUCCEEDED");assertThrows(AssertionError.class,this::verify);}
+}

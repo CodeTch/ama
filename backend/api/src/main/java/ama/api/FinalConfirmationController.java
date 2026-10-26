@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController @RequestMapping("/api/v1/meetings/{meetingId}/final-confirmations")
 final class FinalConfirmationController {
- private final MinutesConfiguration.Runtime runtime;private final JdbcMinutesCommandReceipts receipts;private final TransactionRunner tx;private final MeetingAccess access;
+ private final MinutesConfiguration.Runtime runtime;private final JdbcMinutesCommandReceipts receipts;private final TransactionRunner tx;private final MeetingAccess access;private final JdbcPublicationQueries queries;
  private static final ObjectMapper JSON=new ObjectMapper(JsonFactory.builder().enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION).streamReadConstraints(StreamReadConstraints.builder().maxNestingDepth(4).maxStringLength(1024).maxNumberLength(19).build()).build()).enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
- FinalConfirmationController(MinutesConfiguration.Runtime runtime,JdbcMinutesCommandReceipts receipts,TransactionRunner tx,MeetingAccess access){this.runtime=runtime;this.receipts=receipts;this.tx=tx;this.access=access;}
+ FinalConfirmationController(MinutesConfiguration.Runtime runtime,JdbcMinutesCommandReceipts receipts,TransactionRunner tx,MeetingAccess access){this(runtime,receipts,tx,access,null);}
+ @org.springframework.beans.factory.annotation.Autowired FinalConfirmationController(MinutesConfiguration.Runtime runtime,JdbcMinutesCommandReceipts receipts,TransactionRunner tx,MeetingAccess access,JdbcPublicationQueries queries){this.runtime=runtime;this.receipts=receipts;this.tx=tx;this.access=access;this.queries=queries;}
+ @GetMapping ResponseEntity<byte[]> history(@PathVariable String meetingId,@RequestParam(defaultValue="20") int limit,@RequestParam(required=false) String cursor,HttpServletRequest request)throws IOException{if(queries==null)throw new ama.contract.TranscriptContracts.Failure(503,"PUBLICATION_READ_UNAVAILABLE");return json(queries.finalHistory(actor(request),meetingId,limit,cursor),200);}
  @GetMapping("/readiness") ResponseEntity<byte[]> readiness(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return json(require(request,meetingId).readiness(actor(request),meetingId),200);}
  @GetMapping("/current") ResponseEntity<byte[]> current(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return json(require(request,meetingId).current(actor(request),meetingId),200);}
  @GetMapping("/{confirmationId}") ResponseEntity<byte[]> detail(@PathVariable String meetingId,@PathVariable String confirmationId,HttpServletRequest request)throws IOException{return json(require(request,meetingId).detail(actor(request),meetingId,confirmationId),200);}

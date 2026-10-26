@@ -1,3 +1,9 @@
+# PAUSED BY USER — B5 PARTIAL SOURCE SAVED, NOT REVIEWED / NO RUNTIME
+
+最新用户要求完成当前批次后停止；本条覆盖下方所有 ACTIVE/连续执行条目。权威暂停记录：`docs/acceptance/development-pause-b5-partial-2026-10-26.md`，SHA256 `17a054f578cfdc6bf82c6c0e3dc2b44bbfb6449422d1e181ff2c075be7210951`。只有明确“继续任务”后恢复。
+
+部分checkpoint `task-11-b5-partial-pause-source-checkpoint-20261026.json` SHA256 `f6e1fc7aceb837f2e26d88af210801f7f4c2a76c940bf30d6bc9770e5184113f`；1189源码/46路径相对B4变化/277证据。最终53Java全通过、增量compile0且同源码映射。B5未完成、未整体审查，无release/window。下一步按暂停记录第4节：全mutator矩阵/共享预算核对/真实组合三GET/特殊publication路径/相关回归后完整B5同一审查者；不是重做B2/B3。保留O6 UNKNOWN、SQLite3/3与全部旧consumed窗口。主唯一writer，SAME reviewer空闲，不新增Agent。
+
 # Phase B remaining implementation plan
 
 > Execute continuously with subagents under the user's explicit activation. Do not stop at preparation or after an individual slice.

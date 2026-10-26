@@ -1,3 +1,15 @@
+# Git 集成快照 — 2026-10-26
+
+按用户最新指令，将所有分支与当前未提交代码汇入 main 并推送 GitHub。此次保存包含尚未完成验收的 B5 部分实现；开发状态仍以 `docs/acceptance/development-pause-b5-partial-2026-10-26.md`、W/current-state.json 与 W/RESUME_LATEST.md 为准。Git 保存不代表 B5/Task11/Phase B 验收通过，也不恢复旧运行窗口。下方“不提交/不合并/不推送”均是历史状态，已由此次 Git 操作请求覆盖。测试与分支核验结果见 main 上 `docs/acceptance/integration-main-all-branches-2026-10-26.md`。
+
+---
+
+# 当前：B2 readback I1/I2 已修复并独立采用，仅源码/离线（2026-10-26）
+
+用户已明确继续，旧暂停解除。唯一产品树 `/home/tanren/ama/.worktrees/phase-b-completion`。先读[当前精准接续记录](/home/tanren/ama/.worktrees/phase-b-completion/docs/acceptance/development-continuation-b2-readback-i1-i2-2026-10-26.md)、W/current-state.json和W/RESUME_LATEST.md。I1精确事务SET/I2runner release分派均独立通过，71相关Java+24PythonPASS、编译0；全量unit仍有4个既有WorkerShutdown反射错误，Task13登记。新freeze0bda1371保留旧2be86f4d包。没有回读release/窗口/SQL/保留资源探测，旧失败窗口不重跑；下一步单独配置推广绑定新freeze再复审、准确资源核验和一次readback门禁。主Agent唯一实现者，一个gpt-6-astra/xhigh/none独立审查者。完整Task11→12→13后止于B，不进CDEF；无commit/merge/push/reset。下方均历史。
+
+---
+
 # 已暂停：Task11 精确重试回读，先修两项源码审查问题（2026-10-26）
 
 2026-10-26T10:32:35.299564+08:00按用户要求完成当前批次后停止。唯一产品树 `/home/tanren/ama/.worktrees/phase-b-completion`。下次“继续任务”先读[精准接续记录](/home/tanren/ama/.worktrees/phase-b-completion/docs/acceptance/development-pause-b2-exact-retry-readback-2026-10-26.md)、该树W/current-state.json与W/RESUME_LATEST.md。源码2be86f4d：6纯测试通过/离线编译通过/1094文件已封存；最终审查3a4e1216留OPEN READBACK-I1事务SET误拦截、I2runner漏调用releasevalidator，必须先修复与复审。未发回读release、未运行新窗口。原exactretry已提交同一后继但窗口FAIL，授权已恢复、36请求/2SQLite已消耗；禁止重跑grant/acceptance/native/旧窗口。完整Task11→12→13后止于B，不进CDEF；无commit/merge/push。下方均为历史，不能覆盖本段。
@@ -53,6 +65,14 @@
 用户明确“继续任务”，历史暂停已撤销。唯一产品工作树仍为 `/home/tanren/ama/.worktrees/phase-b-completion`。实时权威状态是该树 `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json`，完整记录在同目录 `progress.md`。按既定目标继续全部剩余B，完成后停止，不进入C/D/E/F。
 
 本入口只负责定位，不替代实时状态。继续前读取当前state及其中active review/author/next_steps；不从下方旧暂停或旧HEAD重新开始。当前已有Task11 fix01源码/证据冻结和独立复审记录，Task1–10不重做；原主库待审no2与历史UNKNOWN限制仍按实时状态执行。本轮尚未合并或推送。
+
+---
+
+# 当前已恢复 — 2026-10-25T14:34:46.308141+08:00
+
+用户明确“继续任务”，此前暂停已撤销。唯一产品树 `/home/tanren/ama/.worktrees/phase-b-completion`，实际接续 HEAD `739193dff6dea6c28999260d4d332f99f1a58d12`。Tasks1–10已采用；Task11 replacement fix01仍未完成，5项Important未复审，SEND DENY。原作者句柄实际恢复失败，由 `/root/b11_fix01_continuation` 接续同一轮，根协调者 `/root`。
+
+先诊断sealed generic-external失败与当前源码差异，再完成fix01和独立复审，然后继续Task11→12→13，完整B后停止，不进入C/D/E/F。原主库READY/PREPARED no2禁止claim/send；隔离库16迁移已完成不重复。历史UNKNOWN、原始证据与资源全部保留。精确要求沿用 `docs/acceptance/development-pause-b-remaining-2026-10-25.md`，动态状态以W/current-state.json为准。无需重复已采用工作或重新设计。
 
 ---
 

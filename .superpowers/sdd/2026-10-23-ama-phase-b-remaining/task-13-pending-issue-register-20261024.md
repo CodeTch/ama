@@ -128,3 +128,35 @@ Task11 fix01 generic external regression OPEN: replacement-fix01-generic-externa
 
 
 Document audit: generic regression original test source6c241fe9 differs current89ccd38d (8paths changed by bootstrap); original cause undiagnosed/no currentGREEN. Explicit carry-forward table in latestpause includes T7CV04/T4SR04-06/T6SR03/T11PROBEM1/T8HIST/Q01Q02/optional and all priorUNKNOWN. No closures by documentation.
+
+
+## T11-GENERIC-ATTEMPT-FINALIZATION — OPEN 2026-10-25T06:36:22.850028+00:00
+Author traced original expected0/actual2 FAIL to generic beginExternal setting RECONCILING followed by unprepared observe q.finish whose endAttempt only handles RUNNING. Path reportedly already exists at adopted ba48; root awaits exact source/evidence report. Current test removed zero-open-attempt assertion; any new PASS covers remaining assertions only and does not close this defect. Preserve original FAIL and both source versions. Task13 independent review must assess real terminal attempt lifecycle consequences and fix/rule explicitly; no silent waiver by preexistence. If load-bearing for fix01, escalate immediately.
+
+
+## T11-FINAL-ERROR-MAPPING — OPEN
+Actual final-readiness RED01 (author report, sealed window) returned readiness GET200/readyfalse/PUBLICATION_BUSY, then confirm service FINAL_NOT_READY followed by missing advice and /error deny causing HTTP403. Distinguish genuine readiness defect from HTTP error mapping. Task11 final API completion must provide narrow correct mapping and actual authenticated route test; no global catch-all/security relaxation. Not closed by future happy-final success.
+
+
+### T11-GENERIC-ATTEMPT-FINALIZATION — prepared-path distinction, 2026-10-25T20:45:05.564992+00:00
+
+B2 genuine rejection window b2-rejection-01 now independently QUALIFIEDPASS (reviewd9c8b2a19f542c36025947eb81d3e46c8cf10dbe50396e4b3e2cf305eea5934c, rootadoptionc35bfab630846aada7110e0797ba405249416e741a9893d415efc27f3728d836). Real prepared publication taskf0f17320-130e-46b9-908c-c143a02e10f8 has attempt1/outcomeFAILED/ended_at2026-10-25T20:38:00.848085. JdbcExternalOperations prepared observation path explicitly closes its task_attempt. This supports only the prepared publication path; it neither repairs nor disproves the earlier generic unprepared RECONCILING→finish defect above. No generic source changed, original FAIL/removed assertion history retained. Task13 issue remains OPEN.
+
+
+### T11-FINAL-ERROR-MAPPING — existing B1 evidence cross-reference, 2026-10-25T20:49:29.063617+00:00
+
+The older OPEN entry above predates B1. Current sealed B1 report task-11-continuation-b1-report-20261025.md SHAa74afd7724dd4d5a325fc06985cb78def1603eb7f360764f2a0915d541a7f7de records scoped FinalConfirmationController advice and actual b1-final-http-01 / Task11B1FinalFailureIT qualified1PASS: readiness200/false then finalPOST409/FINAL_NOT_READY through servlet session/Origin/CSRF, natural receipt rollback and17table equality. It also retains the preceding RED. This is a pointer to already collected/adopted B1 evidence, not a new test or broader final-readiness acceptance. Task13 final register reconciliation must inspect that original indexed window/review before repeating work or carrying the old mapping defect as unresolved by default. No fixture or test was rerun for this note.
+
+## T11-KB-IO-ERROR-MAPPING — OPEN SOURCE OBSERVATION (2026-10-26)
+During exact-retry preparation the author observed that ControlledKnowledgeClient.ProviderFailure extends IOException, while PublicationErrors has no IOException handler. Root inspected scoped/global advice (PublicationErrors, ProcessingErrors, MinutesErrors, TranscriptErrors, MeetingErrors, IdentityErrorHandler); other scoped catch-all handlers do not cover PublicationController, and package-wide handlers do not handle this KB IOException. No new denial request was run; actual HTTP status/body/error-dispatch behavior is UNQUALIFIED, not an observed500. This is distinct from historical T11-FINAL-ERROR-MAPPING already covered by B1's actual FINAL_NOT_READY409 evidence. Carry this source-derived gap into B4/provider failure integration or final Task11/13 disposition; do not silently close based on happy exact retry or impose a broad handler without scoped tests. Current exactretry preparation omits redundant pre-grant denial as a scope choice, not a waiver of the public error contract.
+
+## 2026-10-26 pause: exact-retry readback source blockers
+
+Final source review `task-11-b2-exact-retry-readback-source-independent-review-20261026.md` SHA `3a4e12162eeea61dfbe875616e0c6ecc4f9fa9ca116ca5d03b792bdf3c1ca4fa`: C0/I2/M0, both OPEN. EXACT-RETRY-READBACK-I1: guard rejects TransactionRunner exact SET NAMES/time_zone, firstreceipt wouldfail. EXACT-RETRY-READBACK-I2: runner never dispatches its readback release validator before target/launch. Root verified both; next explicit continue firstfix with offline guard/dispatchregressions and scopedreview. No runtime/nextfix was dispatched after userpause. Numeric-I1 is addressed source/offline only; full live oracle+7replays+finalSQLite remain. Preserve this disposition in Task13 wholebranchreview.
+
+
+## 2026-10-26 readback correction disposition and inherited unit regression
+
+EXACT-RETRY-READBACK-I1/I2: ADDRESSED SOURCE/OFFLINE, reviewa8ec9206bbb3645fff4b515a4468b79587725269bd0c5b4c7f689c4e5d8396a2 SPEC PASS/QUALITY APPROVED, checkpoint0bda13715da92e704c87ce543125144dc5c5c23d27af423f9d686f9bf0a4cb09.71relatedJava+24PythonPASS/compile0. Previous OPENpause entry is historical. Actualreadback remainsUNQUALIFIED; immutable oldcheckpoint promotion gate remains before freshrelease.
+
+T11-WORKER-SHUTDOWN-REFLECTION — OPEN inherited test/runtime-contract mismatch. Bare Maven unitregression configured with a freshsynthetic evidence directory reaches432tests/4errors: WorkerShutdownTest.failedAbortStillCancelsAllExecutionsAndClosesBackendOnce, firstBackendFailureStillClosesSecondBackendOnce, interruptedCloseStillCleansUpAndPreservesInterruption, interruptedFirstBackendFailureStillClosesSecondBackendOnce all throw NoSuchMethodException. Testline56 reflects Runtime(WorkerLoop,ReconciliationLoop,ControlledMinutesClient,FileBackendDefinitions); Runtime source defines sixarguments including external WorkerLoop and ControlledKnowledgeClient. Both sourcefiles match old2be86f4d freeze; no implementation change here. Evidence task-11-b2-readback-i1-i2-evidence-20261026/unit-regression-configured.json+log/XML; verification-summary.json contains both baseline/current sourcehashes. Must reconcile and rerun meaningful shutdown contracts before finalwholebranch acceptance; do not infer this is a new runtime cleanup regression or hide fullsuite RED. Initial canonical2outputNPEs were fixtureconfiguration errors resolved by synthetic outputdir, not productfixes.

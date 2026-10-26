@@ -1,0 +1,222 @@
+{
+  "date": "2026-10-26",
+  "sourceCommit": "647a3a20",
+  "java": {
+    "exitCode": 0,
+    "command": [
+      "./mvnw",
+      "-B",
+      "-ntp",
+      "-o",
+      "-Dtest=*Test",
+      "-Dsurefire.failIfNoSpecifiedTests=false",
+      "-Dmaven.test.failure.ignore=true",
+      "test"
+    ],
+    "counts": {
+      "tests": 692,
+      "failures": 0,
+      "errors": 6,
+      "skipped": 0
+    },
+    "failures": [
+      {
+        "class": "ama.worker.WorkerShutdownTest",
+        "test": "firstBackendFailureStillClosesSecondBackendOnce",
+        "message": "ama.worker.TranscriptWorkerRuntimeProvider$Runtime.<init>(ama.worker.WorkerLoop,ama.worker.ReconciliationLoop,ama.model.ControlledMinutesClient,ama.storage.FileBackendDefinitions)",
+        "trace": "java.lang.NoSuchMethodException: ama.worker.TranscriptWorkerRuntimeProvider$Runtime.<init>(ama.worker.WorkerLoop,ama.worker.ReconciliationLoop,ama.model.ControlledMinutesClient,ama.storage.FileBackendDefinitions)\n\tat java.base/java.lang.Class.getConstructor0(Class.java:3763)\n\tat java.base/java.lang.Class.getDeclaredConstructor(Class.java:2932)\n\tat ama.worker.WorkerShutdownTest.failedAbortCleanup(WorkerShutdownTest.java:56)\n\tat ama.worker.WorkerShutdownTest.firstBackendFailureStillClosesSecondBackendOnce(WorkerShutdownTest.java:21)"
+      },
+      {
+        "class": "ama.worker.WorkerShutdownTest",
+        "test": "interruptedFirstBackendFailureStillClosesSecondBackendOnce",
+        "message": "ama.worker.TranscriptWorkerRuntimeProvider$Runtime.<init>(ama.worker.WorkerLoop,ama.worker.ReconciliationLoop,ama.model.ControlledMinutesClient,ama.storage.FileBackendDefinitions)",
+        "trace": "java.lang.NoSuchMethodException: ama.worker.TranscriptWorkerRuntimeProvider$Runtime.<init>(ama.worker.WorkerLoop,ama.worker.ReconciliationLoop,ama.model.ControlledMinutesClient,ama.storage.FileBackendDefinitions)\n\tat java.base/java.lang.Class.getConstructor0(Class.java:3763)\n\tat java.base/java.lang.Class.getDeclaredConstructor(Class.java:2932)\n\tat ama.worker.WorkerShutdownTest.failedAbortCleanup(WorkerShutdownTest.java:56)\n\tat ama.worker.WorkerShutdownTest.interruptedFirstBackendFailureStillClosesSecondBackendOnce(WorkerShutdownTest.java:22)"
+      },
+      {
+        "class": "ama.worker.WorkerShutdownTest",
+        "test": "failedAbortStillCancelsAllExecutionsAndClosesBackendOnce",
+        "message": "ama.worker.TranscriptWorkerRuntimeProvider$Runtime.<init>(ama.worker.WorkerLoop,ama.worker.ReconciliationLoop,ama.model.ControlledMinutesClient,ama.storage.FileBackendDefinitions)",
+        "trace": "java.lang.NoSuchMethodException: ama.worker.TranscriptWorkerRuntimeProvider$Runtime.<init>(ama.worker.WorkerLoop,ama.worker.ReconciliationLoop,ama.model.ControlledMinutesClient,ama.storage.FileBackendDefinitions)\n\tat java.base/java.lang.Class.getConstructor0(Class.java:3763)\n\tat java.base/java.lang.Class.getDeclaredConstructor(Class.java:2932)\n\tat ama.worker.WorkerShutdownTest.failedAbortCleanup(WorkerShutdownTest.java:56)\n\tat ama.worker.WorkerShutdownTest.failedAbortStillCancelsAllExecutionsAndClosesBackendOnce(WorkerShutdownTest.java:14)"
+      },
+      {
+        "class": "ama.worker.WorkerShutdownTest",
+        "test": "interruptedCloseStillCleansUpAndPreservesInterruption",
+        "message": "ama.worker.TranscriptWorkerRuntimeProvider$Runtime.<init>(ama.worker.WorkerLoop,ama.worker.ReconciliationLoop,ama.model.ControlledMinutesClient,ama.storage.FileBackendDefinitions)",
+        "trace": "java.lang.NoSuchMethodException: ama.worker.TranscriptWorkerRuntimeProvider$Runtime.<init>(ama.worker.WorkerLoop,ama.worker.ReconciliationLoop,ama.model.ControlledMinutesClient,ama.storage.FileBackendDefinitions)\n\tat java.base/java.lang.Class.getConstructor0(Class.java:3763)\n\tat java.base/java.lang.Class.getDeclaredConstructor(Class.java:2932)\n\tat ama.worker.WorkerShutdownTest.failedAbortCleanup(WorkerShutdownTest.java:56)\n\tat ama.worker.WorkerShutdownTest.interruptedCloseStillCleansUpAndPreservesInterruption(WorkerShutdownTest.java:18)"
+      },
+      {
+        "class": "ama.worker.Task09SessionAbortTest",
+        "test": "closePhysicallyAbortsHeldHeadersAndBodyWithoutSettlingUnknownPermit",
+        "message": "releaseRecordedLookup",
+        "trace": "java.lang.UnsupportedOperationException: releaseRecordedLookup\n\tat ama.worker.Task09SessionAbortTest$Session.lambda$new$0(Task09SessionAbortTest.java:21)\n\tat jdk.proxy2/jdk.proxy2.$Proxy172.releaseRecordedLookup(Unknown Source)\n\tat ama.worker.ExternalExecutionSession.close(ExternalExecutionSession.java:100)\n\tat ama.worker.Task09SessionAbortTest.physical(Task09SessionAbortTest.java:36)\n\tat ama.worker.Task09SessionAbortTest.closePhysicallyAbortsHeldHeadersAndBodyWithoutSettlingUnknownPermit(Task09SessionAbortTest.java:39)\n\tSuppressed: java.lang.UnsupportedOperationException: releaseRecordedLookup"
+      },
+      {
+        "class": "ama.worker.Task09SessionAbortTest",
+        "test": "renewalLossPhysicallyAbortsHeldHeadersAndBodyWithoutRegainingSend",
+        "message": "releaseRecordedLookup",
+        "trace": "java.lang.UnsupportedOperationException: releaseRecordedLookup\n\tat ama.worker.Task09SessionAbortTest$Session.lambda$new$0(Task09SessionAbortTest.java:21)\n\tat jdk.proxy2/jdk.proxy2.$Proxy172.releaseRecordedLookup(Unknown Source)\n\tat ama.worker.ExternalExecutionSession.renew(ExternalExecutionSession.java:66)\n\tat ama.worker.Task09SessionAbortTest.physical(Task09SessionAbortTest.java:36)\n\tat ama.worker.Task09SessionAbortTest.renewalLossPhysicallyAbortsHeldHeadersAndBodyWithoutRegainingSend(Task09SessionAbortTest.java:40)\n\tSuppressed: java.lang.UnsupportedOperationException: releaseRecordedLookup"
+      }
+    ]
+  },
+  "compileExitCode": 0,
+  "pythonMain": [
+    {
+      "directory": "tools/checks/tests",
+      "exitCode": 0,
+      "counts": {
+        "discovered": 35,
+        "executed": 35,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "directory": "tools/dev/tests",
+      "exitCode": 0,
+      "counts": {
+        "discovered": 6,
+        "executed": 6,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "directory": "tools/probes/tests",
+      "exitCode": 0,
+      "counts": {
+        "discovered": 52,
+        "executed": 52,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "directory": "tools/providers",
+      "exitCode": 0,
+      "counts": {
+        "discovered": 18,
+        "executed": 18,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "directory": "tools/providers/tests",
+      "exitCode": 0,
+      "counts": {
+        "discovered": 4,
+        "executed": 4,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "directory": "tools/tests",
+      "exitCode": 1,
+      "counts": {
+        "discovered": 68,
+        "executed": 68,
+        "failed": 32,
+        "skipped": 0
+      }
+    }
+  ],
+  "pythonOriginalEvidenceWorktree": {
+    "discovered": 68,
+    "executed": 68,
+    "failed": 0,
+    "skipped": 0
+  },
+  "web": [
+    {
+      "check": "generate-api",
+      "exitCode": 0
+    },
+    {
+      "check": "web-api-final",
+      "exitCode": 0
+    },
+    {
+      "check": "web-typecheck-final",
+      "exitCode": 0
+    },
+    {
+      "check": "web-build-final",
+      "exitCode": 0
+    },
+    {
+      "check": "web-unit-final",
+      "exitCode": 0
+    }
+  ],
+  "openApiExitCode": 0,
+  "branchMerges": [
+    {
+      "branch": "codex/b06-archive-index-20261023",
+      "sha": "38a321a5bd11d56b8071dc03965fe413c71bd78e",
+      "conflicts": [
+        "backend/adapters/src/main/java/ama/config/file/ControlledConfigArchiveSource.java"
+      ],
+      "allBranchCodeBlobsPreviouslyInMain": true
+    },
+    {
+      "branch": "codex/b06-archive-restart-20261023",
+      "sha": "41a41e1d7d345fd3b6d46e0a7bc01757298abb3c",
+      "conflicts": [],
+      "allBranchCodeBlobsPreviouslyInMain": true
+    },
+    {
+      "branch": "codex/b06-batch-20261023",
+      "sha": "0b65a68f100beed8172c3c3f270a19c5e1cf8523",
+      "conflicts": [],
+      "allBranchCodeBlobsPreviouslyInMain": true
+    },
+    {
+      "branch": "codex/b06-processing-facts-20261023",
+      "sha": "76a50c72006835a567ff200d231bf78420d67f3a",
+      "conflicts": [
+        "backend/adapters/src/main/java/ama/transcript/JdbcProcessingFactsReader.java"
+      ],
+      "allBranchCodeBlobsPreviouslyInMain": true
+    },
+    {
+      "branch": "codex/phase-b-minutes-pure",
+      "sha": "13b8f1d16f85787c12626faa41c7e511403f16f9",
+      "conflicts": [
+        ".gitattributes",
+        "backend/core/src/main/java/ama/minutes/contract/GenerationFingerprint.java",
+        "backend/core/src/main/java/ama/minutes/contract/ResultHashProfiles.java",
+        "backend/core/src/main/java/ama/minutes/contract/StoredSourceGraph.java",
+        "backend/core/src/main/java/ama/minutes/contract/TranscriptConfirmationHash.java"
+      ],
+      "allBranchCodeBlobsPreviouslyInMain": true
+    },
+    {
+      "branch": "codex/phase-b-provenance-design",
+      "sha": "212c794b497631b13b395c4d1436cbe306208fd4",
+      "conflicts": [
+        ".gitattributes",
+        "tools/checks/database_design.py"
+      ],
+      "allBranchCodeBlobsPreviouslyInMain": true
+    },
+    {
+      "branch": "codex/phase-b-transcript-runtime",
+      "sha": "4dcdc6b5102c7d99b043385349b4a87c98b52e80",
+      "conflicts": [
+        ".gitattributes",
+        "backend/adapters/src/main/java/ama/meeting/JdbcMeetingAccess.java",
+        "backend/adapters/src/main/java/ama/task/JdbcExternalOperations.java",
+        "backend/adapters/src/main/java/ama/task/JdbcTaskPreparations.java",
+        "backend/adapters/src/main/java/ama/task/JdbcTaskQueue.java"
+      ],
+      "allBranchCodeBlobsPreviouslyInMain": true
+    }
+  ],
+  "qualifications": [
+    "Java command used maven.test.failure.ignore=true solely to collect all module results; JUnit counts include six errors, so the suite is NOT passing.",
+    "Java fixture roots point to original phase-b-completion workspace for archived evidence only. No integration *IT suites or retained business windows were run.",
+    "Python tools/tests has 32 missing-evidence errors on main; identical 68 tests pass in original workspace with local ignored evidence.",
+    "Earlier aggregate scan of historical snapshots was terminated. Earlier incomplete test environment attempts are not final qualification."
+  ]
+}
