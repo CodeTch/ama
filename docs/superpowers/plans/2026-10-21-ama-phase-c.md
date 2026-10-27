@@ -1,3 +1,7 @@
+> **2026-10-27 流程更新（AMA-WORKFLOW-20261027）**：按[执行补充](2026-10-27-ama-development-workflow.md)分层验证、合并相关批次、定向回归。接收 DEFER-LOAD：100 路实时协议验证仍由 C-07 完成，不能在 C 验收时跳过。 本次不启动本阶段。
+
+---
+
 # C：音视频处理与实时录音 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

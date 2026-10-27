@@ -1,3 +1,7 @@
+> **2026-10-27 流程更新（AMA-WORKFLOW-20261027）**：按[执行补充](2026-10-27-ama-development-workflow.md)分层验证、合并相关批次、定向回归。接收 DEFER-DEPLOY/HA/RESTORE/LOAD：F-01/02/03/04 仍分别完成部署组合、真实故障、备份恢复和生产容量资格；F-05 核验平台集成，F-06 发布条件不降低。 本次不启动本阶段。
+
+---
+
 # F：生产部署、性能、恢复与上线交接 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

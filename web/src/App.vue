@@ -8,6 +8,7 @@ import MeetingList from './features/meetings/MeetingList.vue';
 import {ApiError} from './shared/api/client';
 import Icon from './shared/Icon.vue';
 const {session,list,create,createDiscovery}=useApplication(),router=useRouter(),createOpen=ref(false);
+const localDevelopment=import.meta.env.DEV&&import.meta.env.VITE_LOCAL_DEV_LOGIN==='1';
 const createFlow=useMeetingCreateFlow(create,()=>session.current.value?.actor.enterpriseId??null,async id=>{const path=`/meeting/${id}`;const failure=await router.push(path);return !failure&&router.currentRoute.value.path===path;});
 const createMessage=computed(()=>createFlow.error.value?(createFlow.error.value instanceof ApiError?createFlow.error.value.message:'操作暂未完成，请保留原请求并重试。'):null);
 onUnmounted(createFlow.dispose);
@@ -28,7 +29,7 @@ function show(title:string,body:string) {notice.value={title,body};dialog.value?
 </script>
 <template>
  <div class="layout"><div class="main">
-  <header class="topbar"><nav class="topbar-heading" aria-label="主导航"><RouterLink to="/meetings" class="topbar-home" aria-current="page"><Icon name="list"/> 我的会议</RouterLink></nav><div class="topbar-right"><span class="session-state">{{session.status.value==='LOADING'?'正在检查登录':session.current.value?session.current.value.actor.enterpriseId:'企业登录暂不可用'}}</span></div></header>
+  <header class="topbar"><nav class="topbar-heading" aria-label="主导航"><RouterLink to="/meetings" class="topbar-home" aria-current="page"><Icon name="list"/> 我的会议</RouterLink></nav><div class="topbar-right"><span v-if="localDevelopment">本地开发环境</span><span class="session-state">{{session.status.value==='LOADING'?'正在检查登录':session.current.value?session.current.value.actor.enterpriseId:localDevelopment?'尚未登录':'企业登录暂不可用'}}</span><a v-if="localDevelopment" class="btn sm" href="/api/dev/login">{{session.current.value?'切换开发账号':'开发账号登录'}}</a></div></header>
   <main class="content m19-page">
    <div class="page-head"><div><h1 class="page-title">我的会议</h1><div class="page-desc">集中管理你负责和参与的会议，从录音采集、AI增强转写到纪要生成与发布，让会议内容可核对、结论可追溯、成果随时回看。</div></div><div class="page-actions">
     <button class="btn primary" @click="show('录音服务尚未接入','录音将在后续阶段提供；未访问麦克风或创建会议。')"><Icon name="mic" :size="14"/> 开始录音</button>
@@ -40,7 +41,7 @@ function show(title:string,body:string) {notice.value={title,body};dialog.value?
     <button id="joined-tab" class="tab" :tabindex="scope==='joined'?0:-1" :class="{active:scope==='joined'}" role="tab" :aria-selected="scope==='joined'" aria-controls="meeting-panel" @click="scope='joined'">我参与的</button>
    </div><div v-if="scope==='owned'" class="m19-view"><button class="btn sm navy" aria-label="列表" aria-pressed="true"><Icon name="list"/></button><button class="btn sm" aria-label="专题分组" @click="show('专题服务尚未接入','接入真实会议数据后提供专题分组。')"><Icon name="layers"/></button></div></div>
    <section id="meeting-panel" class="card" role="tabpanel" :aria-labelledby="scope==='owned'?'owned-tab':'joined-tab'" :aria-busy="loading">
-    <div v-if="!session.current.value" class="empty"><Icon name="list" :size="36"/><h2>{{session.status.value==='LOADING'?'正在检查登录':'企业登录暂不可用'}}</h2><p>请通过企业登录恢复会话后查看你{{scope==='owned'?'负责':'参与'}}的会议。</p><button v-if="session.status.value!=='LOADING'" class="btn" @click="reloadSession">重新检查登录</button></div>
+    <div v-if="!session.current.value" class="empty"><Icon name="list" :size="36"/><h2>{{session.status.value==='LOADING'?'正在检查登录':localDevelopment?'请登录本地开发账号':'企业登录暂不可用'}}</h2><p>{{localDevelopment?'使用开发账号查看本地数据库中的示例和已保存会议。':`请通过企业登录恢复会话后查看你${scope==='owned'?'负责':'参与'}的会议。`}}</p><a v-if="localDevelopment" class="btn primary" href="/api/dev/login">登录本地环境</a><button v-else-if="session.status.value!=='LOADING'" class="btn" @click="reloadSession">重新检查登录</button></div>
     <template v-else>
      <div v-if="list.error.value" class="list-feedback" role="alert"><p>{{listError}}</p><button class="btn sm" @click="list.reload">重试当前页</button><button class="btn sm" @click="list.first">返回第一页</button></div>
      <p v-if="loading" class="list-feedback" role="status">正在加载会议…</p>

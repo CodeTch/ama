@@ -1,3 +1,17 @@
+# 当前执行入口 — 2026-10-27 流程已更新，开发仍暂停
+
+执行规则：**AMA-WORKFLOW-20261027**，见[后续开发流程与分阶段验证补充计划](docs/superpowers/plans/2026-10-27-ama-development-workflow.md)。这是用户已批准的后续执行方式，优先于以下旧流程和历史状态。
+
+- 实际开发树：`/home/tanren/ama/.worktrees/phase-b-completion`。
+- 动态状态：该树 `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json`；简短入口为同目录 `RESUME_LATEST.md`。
+- 下次“继续”先完成 **B-L1 信息持久化＋真实信息表单＋单独名单确认**，复用已采纳模块，再依次完成 B-L2～B-L5。
+- 完整功能批次集中审查、定向回归；后移项目和条件见补充计划。保留同一 reviewer、核心可靠性、旧资源限制，完成 B 后停止。
+- 本次只更新文档/接续状态，不启动开发，不新发运行授权，不提交/合并/推送。下文历史 HEAD/未提交数量只表示当时快照，下次以现场 Git 为准。
+
+下方均为历史交接记录，不能恢复旧调度或覆盖上述入口。
+
+---
+
 # Git 集成快照 — 2026-10-26
 
 按用户最新指令，将所有分支与当前未提交代码汇入 main 并推送 GitHub。此次保存包含尚未完成验收的 B5 部分实现；开发状态仍以 `docs/acceptance/development-pause-b5-partial-2026-10-26.md`、W/current-state.json 与 W/RESUME_LATEST.md 为准。Git 保存不代表 B5/Task11/Phase B 验收通过，也不恢复旧运行窗口。下方“不提交/不合并/不推送”均是历史状态，已由此次 Git 操作请求覆盖。测试与分支核验结果见 main 上 `docs/acceptance/integration-main-all-branches-2026-10-26.md`。

@@ -1,10 +1,12 @@
 # 企业智能语音会议助手
 
-按已批准的[架构 v0.2](docs/superpowers/specs/2026-10-21-ama-architecture-design.md)与[分阶段计划](docs/superpowers/plans/2026-10-21-ama-delivery-plan.md)开发。当前交付阶段 A：可启动后端、原型页面外壳和关键验证工具。业务闭环在后续阶段实现，公司接口及运维证据继续作为相应联调/部署前置条件。
+按已批准的[架构 v0.2](docs/superpowers/specs/2026-10-21-ama-architecture-design.md)与[分阶段计划](docs/superpowers/plans/2026-10-21-ama-delivery-plan.md)开发。截至 2026-10-27，阶段 A 本地工程已交付，阶段 B 正在完成首个业务闭环，尚未整体验收。已实现会议列表、创建、部分详情与任务界面及多项后端能力；完整编辑、上传与纪要发布前端仍待接续。公司真实联调与生产资格单独记录。后续按[已批准的简化开发流程](docs/superpowers/plans/2026-10-27-ama-development-workflow.md)执行；当前状态与下次“继续”入口见 [DEVELOPMENT_HANDOFF.md](DEVELOPMENT_HANDOFF.md)。
 
 完整结果、测试数量、审查修复、待验证项和 B 阶段入口见[阶段 A 验收报告](docs/acceptance/a/summary.md)。
 
 ## 本地开发
+
+需要可登录、可读写会议数据的本地环境时，在本工作树根目录执行 `python3 tools/dev/local_app.py start`，然后打开 `http://127.0.0.1:5173/meetings`。启动器使用独立持久化 MySQL、开发账号和示例会议；账号、密码文件、代理配置及停止/重启方法见[本地开发说明](docs/development/local-development.md)。
 
 在 Linux/WSL x86_64 的仓库根目录执行。工具链安装在忽略的 `.tools/`，不会替换系统 Java/Node。
 
@@ -24,7 +26,7 @@ python3 tools/checks/run.py all
 npm --prefix web run dev
 ```
 
-后端启动见 [backend/README.md](backend/README.md)；前端/视觉工具见 [web/README.md](web/README.md)。未配置数据库时存活检查可用、就绪检查返回 503；前端显示企业登录与会议服务未接入。当前不创建会议、不访问麦克风、不调用公司模型或发布知识库内容。
+后端启动见 [backend/README.md](backend/README.md)；前端/视觉工具见 [web/README.md](web/README.md)。未配置数据库时存活检查可用、就绪检查返回 503；业务可用性取决于已配置的身份、数据库和适配器；已接入页面可创建空会议并查看部分保存信息和任务，不能据此认定完整 B 闭环已交付。实时录音、公司模型/知识库真实集成和生产资格仍以各阶段记录为准。
 
 ## 验证边界
 

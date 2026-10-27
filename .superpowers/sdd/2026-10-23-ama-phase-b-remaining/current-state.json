@@ -1,10 +1,10 @@
 {
   "schema_version": 2,
-  "updated_utc": "2026-10-27T11:10:33.545143+00:00",
-  "objective": "Complete remaining Phase B under approved plan using main sole implementer and same independent reviewer; currently paused by explicit user request after the completed information-editor batch.",
-  "latest_user_instruction": "完成当前批次调度之后，就停下，记录好详细接续文档，以便下次通过“继续”指令就可接续完成后续开发任务",
-  "pause_request_active": true,
-  "status_precedence": "2026-10-27 latest explicit user pause overrides earlier FULL_B_ACTIVE. Finish only current information-editor review batch, then stop; next 继续 resumes remaining B.",
+  "updated_utc": "2026-10-27T17:16:28.161994+00:00",
+  "objective": "Complete approved Phase B B-L1..B-L5 only; source adopted, actual local/S3 API proof obtained, remaining qualification gaps open.",
+  "latest_user_instruction": "B-L5合并验证窗口改为最多3小时；沿用原始起点，截止2026-10-27T18:42:33.450158Z。",
+  "pause_request_active": false,
+  "status_precedence": "Top status and execution_20261027_bl5 are current. Prior dated pause/status fields are historical only. Do not replay consumed windows.",
   "historical_state_archive": {
     "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-normalization-20261024.json",
     "sha256": "599708de6497fe18816d9e1b34d636858e883b127e7c869dfa3c1dbc7a9c159b",
@@ -19,21 +19,16 @@
   "task6_base": "80c878f52c7b748efdcdb64e707d50cf410843b4",
   "primary_main_last_observed_head": "095b678bf09cfcf95194ab84f928c91506d5aa42",
   "primary_scope": "Only exact discovery handoff/resume docs uncommitted; product/mainmerge/push not authorized in this continuation; verify actual main before later precise doc update.",
-  "execution_status": "PAUSED_BY_USER",
+  "execution_status": "B_INCOMPLETE_LIMITED_API_EVIDENCE_ADOPTED_BATCH_SETTLED",
   "active_implementation": {
-    "task": 11,
+    "task": 12,
     "agent": "/root",
     "reviewer": "/root/phase_b_independent_review",
-    "status": "ACTIVE_B5_MAIN_IMPLEMENTATION",
-    "baselineCheckpoint": "task-11-b4-source-checkpoint-20261026.json",
-    "baselineCheckpointSha256": "9fa4010fbcd77817ea75c430b16cfe36e0151a5ff23cc68d11597279f3e6b753",
-    "stage": "Resume verified 1189 current +1189 snapshot +277 evidence; finish B5 from precise pause section4.",
+    "status": "PAUSED_NO_BATCH_RUNNING",
+    "next_batch": "B-L1",
+    "stage": "Information persistence, actual form and roster confirmation as one functional batch",
     "noRuntimeAuthority": true,
-    "noWindowRerun": true,
-    "dependencyInventory": "task-11-b5-root-dependency-inventory-20261026.json",
-    "implementationNotes": "task-11-b5-root-implementation-notes-20261026.md",
-    "partialCheckpoint": "task-11-b5-partial-pause-source-checkpoint-20261026.json",
-    "partialCheckpointSha256": "f6e1fc7aceb837f2e26d88af210801f7f4c2a76c940bf30d6bc9770e5184113f"
+    "noWindowRerun": true
   },
   "completed_implementation_tasks": {
     "1": {
@@ -135,15 +130,11 @@
     13
   ],
   "next_steps": [
-    "Sole reviewer actual adoption frozen-history01 and source/resource review upload-freeze01",
-    "After exact source/resource approval issue fresh one-use upload release; run and audit without rerunning consumed windows",
-    "Complete B5 intermediate-state representative qualification and same-reviewer whole B5 close",
-    "B3 lawful legacy distinction / Task8 coexistence and O4 cause; B4 member/browser/ACL races",
-    "B6 genuine app TLS / hard crash recovery / native+S3 full flows",
-    "Task12 approved backend projections and full web business loop, actual browser acceptance",
-    "Task13 final audits and checks, same reviewer whole branch against34cb226a, acceptance docs/handoff"
+    "B-L1 exact-source adopted (bl1-source-adoption-20261027.md); runtime remains pending. Continue complete B-L2.",
+    "Complete B-L2 upload queue lifecycle/global cleanup, original import command journal and UI; consolidate review.",
+    "Continue B-L3/B-L4 source and B-L5 actual core validation using fresh authorized resources only. Stop after B."
   ],
-  "writer_policy": "One product writer, serialized heavy tests; coordinator bookkeeping/DDL gates only. Preserve all historical evidence/W.",
+  "writer_policy": "Main sole writer, same sole independent reviewer; complete feature batches, affected checks, consolidated review and incremental evidence under AMA-WORKFLOW-20261027.",
   "root_owned_dirty_paths": [
     ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json",
     ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
@@ -391,8 +382,9 @@
   },
   "active_review": {
     "agent": "/root/phase_b_independent_review",
-    "status": "WHOLE_B5_REVIEW_COMPLETE_P1_OPEN",
-    "findings": "task-11-b5-whole-review-findings-20261027.md"
+    "status": "IDLE_NO_PENDING_CURRENT_BATCH_REVIEW",
+    "latest_adoption": "task-12-info-editor-adoption-20261027.md",
+    "next_review_unit": "B-L1 complete feature batch; early review if high risk"
   },
   "task9_envelope_supplement": {
     "status": "COMPLETE_ADOPTED inTask9 source591545a4/adoption97e788fe; exact originalruntime startup pre-fix retained, fullformal newbusiness chain stillTask10/11/12.",
@@ -487,19 +479,12 @@
     }
   },
   "pause": {
-    "requested": true,
-    "utc": "2026-10-26T13:59:45.966891+00:00",
-    "handoff": "docs/acceptance/development-pause-b5-partial-2026-10-26.md",
-    "recordDirectory": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261026-b5-partial",
-    "head": "739193dff6dea6c28999260d4d332f99f1a58d12",
-    "branch": "codex/phase-b-completion-20261023",
-    "productChangesCommitted": false,
+    "requested": false,
+    "handoff": "docs/development/phase-b-pause-2026-10-27.md",
     "batchFinished": true,
-    "qualification": "Current partial source calls/53tests/compile/documentation closed; full B5 remains incomplete/unreviewed.",
-    "retainedResourceQualification": "No new runtime probes; historical qualified facts only.",
+    "qualification": "Information-editor R3 source adopted; persistence/UI and Phase B incomplete.",
     "noTaskOrProviderRestartByPause": true,
-    "sourceCheckpointSha256": "f6e1fc7aceb837f2e26d88af210801f7f4c2a76c940bf30d6bc9770e5184113f",
-    "firstResume": "Read latest B5 pause record and verify its partial checkpoint; continue remaining B5 list, never old B2/B3 consumed windows."
+    "firstResume": "Read workflow_policy/next_steps; start B-L1 after continue. Historical HEAD/routing are not current instructions."
   },
   "pending_issue_summary": "Current info editor batch closed. Remaining B: information persistence/UI/roster, uploads begin journal/queue/UI, full workspace union/private IDs, full business-flow consumers, remaining actual validation and Task13 final integrated/whole-branch review. See detailed pause handoff; older open-register entries require latest adoption reconciliation.",
   "historical_pause_fields_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-document-audit-20261025/legacy-pause-fields-before-normalization.json",
@@ -532,13 +517,14 @@
   "active_task": "NONE_PAUSED",
   "active_author": "/root",
   "resume_current": {
-    "status": "FULL_B_ACTIVE_TASK11_TLS_SOURCE_IMPLEMENTATION",
-    "reviewer": "/root/phase_b_independent_review",
-    "firstSave04": "ADOPTED_PARTIAL_4ca4a5bc_1_0_0_0",
-    "closed03Cont01": "ADOPTED_PARTIAL_73866c15_1_0_0_0",
-    "active": "B6 controlled TLS client/server + deterministic close-admission source regressions, no old runtime resource access",
-    "pending": "B5 fullmutator/state/RAW/file/retention/race/rollback; B3 remainder; B4 member/browser/races; B6 transport/CAS/crash/S3; Task12/13",
-    "reservationBoundary": "firstsave04 preclose settled_at null; no afterclose observation, do not infer current settlement"
+    "status": "ACTIVE",
+    "next_batch": "B-L1",
+    "policy": "docs/superpowers/plans/2026-10-27-ama-development-workflow.md",
+    "state_owner": "current-state.json",
+    "historical_routing": "workflow-routing-history-20261027.json",
+    "current_batch": "B-L2",
+    "resumed_utc": "2026-10-27T12:02:47.122384+00:00",
+    "checkpoint": "active-20261027-bl1-bl2.md"
   },
   "parallel_preparation_current": {
     "status": "B3_AND_B4_PREFLIGHTS_READY",
@@ -1153,17 +1139,7 @@
   "pause_boundary": "Task12 information-editor R3 source/quality adopted; all current batch review findings closed. No next batch scheduled. Phase B incomplete.",
   "pause_completed_utc": "2026-10-27T11:10:33.545143+00:00",
   "resume_steps": [
-    "Explicit user continue required; read latest B5 pause record first, then RESUME_LATEST/current-state/checkpoint.",
-    "Verify1189current/snapshot and277evidence, preserveWIP; no oldwindow/test rerun by default.",
-    "B5 whole-source implementation remains incomplete and unreviewed. Finish the all-mutator call-site ledger and ordinary/closed/frozen actual-entry matrix: B03 info/roster, intake, saved transcript variants, initial settings, generation enqueue/current/retained output, intent, saved minutes edits/settings/reviews/adopt/reject/dispose/restore; preserve immutable history and rollback/fence behavior.",
-    "Investigate operation-wide acquisition accounting: RAW TranscriptReadGraph metadata still uses its prior reader budget separately from the publication ledger; intent still reads MinutesIntentControl four-query metadata outside the shared ledger and retains an unused legacy requireControlled method. These are identified static review concerns, not proven/fixed findings. Do not remove checks without equivalent coverage.",
-    "Complete genuine S/A/F eligibility and assembly validation. Current three projection tests substitute provenance and readiness seams; assembly test substitutes archive admission/JDBC. Need actual combined HTTP permitted/blocked cases for exactly generation-inputs/current, generation-inputs/{inputId}, candidates/{candidateId}, including owner/source/final/publication/current candidate fences. Query must never claim, enqueue or adopt.",
-    "Initial settings now uses selected discovery limits and lockGraph identity union, but full positive/negative S/A/F runtime evidence remains. Generation fact-only preparation and normal fenced replay now have causal offline tests; external-context bridge is a substitute, not actual external-engine/runtime proof. Verify current/retained writers and ordinary generic Task7 fixed-input fallback.",
-    "Converge special final/replacement/private-publication capability checks with ordinary guard declarations; do not make the ordinary freeze block a genuine authorized publication marker/writer. Run related inherited regressions/OpenAPI lint+bundle and final compile after remaining changes. Current pause gate is 53 focused Java tests plus incremental compile only; not whole suite.",
-    "After complete B5 implementation and necessary validation, create a NEW complete source checkpoint/report and submit ONE full review to SAME /root/readback_subfunction_reviewer. Main verifies/fixes findings, SAME reviewer targeted rereview. Current partial checkpoint is never a B5 adoption or runtime release.",
-    "Only after appropriate source review and fresh separately reviewed bounded resource plan may genuine combined HTTP/worker/MySQL and lawful independent SUCCESS/B4 dual-ACL/browser acceptance run. Never reuse O6 UNKNOWN, old consumed windows/releases, or add SQLite observations (3/3 exhausted). No retained-runtime qualification was refreshed during this pause.",
-    "Remaining B3 qualifications: authentic legacy positive, actual saturated Task8 coexistence and exact O4 historical cause remain unqualified. O5/O6 actual evidence and limited scanner component are adopted; do not repeat them. B4 source/offline adopted but actual dual ACL/browser not qualified.",
-    "Continue remaining B6 transport/CAS/restart native+S3, whole Task11 adoption, Task12 web/browser, Task13 final integration including inherited WorkerShutdownTest four constructor-reflection errors and generic unfinished-attempt behavior, then final whole-branch review from lower bound 34cb226aefe99c67d3681af68d748b0aeea4e073. Stop before C/D/E/F."
+    "Read workflow_policy and next_steps here; execute AMA-WORKFLOW-20261027 from B-L1 after continue, not archived B5 routing."
   ],
   "paused_source_review": {
     "historicalPauseRevokedByExplicitContinue": true,
@@ -1843,7 +1819,7 @@
       "typecheckExit": 0,
       "sourcePinsStable": true
     },
-    "nextContinue": "Read RESUME_LATEST + handoff + current-state first, resume same reviewer, continue information draft persistence/UI/roster before remaining approved Task12/13. Do not redo adopted slices.",
+    "nextContinue": "Read AMA-WORKFLOW-20261027 + RESUME_LATEST + current-state; complete B-L1 with same reviewer, then B-L2..B-L5. No redo of adopted slices or consumed windows.",
     "infoEditorR3Manifest": "task-12-info-editor-review-r3-20261027/manifest.json",
     "infoEditorR3SHA256": "5c0c8a54e35536b4a9f3f80848bbc7d230ca3c6b5f7fdd9f3d381b117b7f8af5",
     "review": "SOURCE_QUALITY_ADOPTED_TWO_P1_ONE_P2_CLOSED",
@@ -1853,5 +1829,132 @@
     "pendingExecSessions": [],
     "pendingReview": false,
     "reviewerStatus": "finished_idle"
+  },
+  "workflow_policy": {
+    "id": "AMA-WORKFLOW-20261027",
+    "approved_local_date": "2026-10-27",
+    "timezone": "Asia/Shanghai",
+    "plan": "docs/superpowers/plans/2026-10-27-ama-development-workflow.md",
+    "approved_by": "Explicit user instruction in current conversation",
+    "scope": "Future workflow and documents only; no product behavior changes",
+    "status": "ACTIVE",
+    "current_batch": "B-L4",
+    "deferred_register": "docs/superpowers/plans/2026-10-27-ama-development-workflow.md#6-后移台账",
+    "preserve_core_reliability": true,
+    "runtime_authorization_granted": false,
+    "git_write_authorization_granted": false,
+    "historical_routing": "workflow-routing-history-20261027.json"
+  },
+  "execution_20261027_bl1": {
+    "status": "SOURCE_ADOPTED_RUNTIME_PENDING",
+    "base": "3d9d197703d90daf58813ff6c0432ffb94bdacf4",
+    "soleWriter": "/root",
+    "originalReviewerRestore": "live agent path not found",
+    "replacementReviewer": "/root/phase_b_review_replacement",
+    "runtimeAuthorized": false,
+    "latestManifest": "bl1-review-r5-20261027/manifest.json",
+    "latestWebTests": 187,
+    "latestTypecheck": "bl1-type06.json",
+    "sourceAdopted": true,
+    "adoption": "bl1-source-adoption-20261027.md"
+  },
+  "status": "B_INCOMPLETE_LIMITED_API_EVIDENCE_ADOPTED_BATCH_SETTLED",
+  "execution_20261027_bl2": {
+    "status": "SOURCE_ADOPTED_RUNTIME_PENDING",
+    "adopted": true,
+    "manifest": "bl2-review-r2-20261027/manifest.json",
+    "adoption": "bl2-source-adoption-20261027.md"
+  },
+  "execution_20261027_bl3": {
+    "status": "SOURCE_ADOPTED_RUNTIME_PENDING",
+    "next": "B-L4 implementation",
+    "reviewer": "/root/phase_b_review_replacement",
+    "runtime": "NOT_AUTHORIZED_NOT_RUN",
+    "manifest": "bl3-combined-review-20261027/manifest.json",
+    "evidence": [
+      "bl3-combined-web01:219 PASS",
+      "bl3-workspace-combined02:48 offline Java PASS",
+      "bl3-combined-type01",
+      "bl3-combined-build01",
+      "bl3-contract-check01"
+    ],
+    "frontendFindings": [
+      "409 reload does not expose conflict",
+      "current503 blocks original transcript command recovery",
+      "clean historical ACK may leave sourceRevisionId stale"
+    ],
+    "backendWip": [
+      "JdbcWorkspaceOverview",
+      "WorkspaceTaskRelations merged declarations",
+      "WorkspaceTaskScan.captureExact",
+      "JdbcMeetingAccess.workspaceStatus",
+      "WorkspaceNavigationController runtime composition"
+    ],
+    "backendEvidence": [
+      "bl3-workspace-combined01:45 offline Java tests PASS"
+    ],
+    "adoption": "bl3-source-adoption-20261027.md"
+  },
+  "execution_20261027_bl4": {
+    "status": "SOURCE_ADOPTED_RUNTIME_PENDING",
+    "runtime": "B_L5_AUTHORIZED_MAX_3H_NOT_STARTED",
+    "manifest": "bl4-fixes-review-20261027/manifest.json",
+    "evidence": [
+      "bl4-fixes-web02:241 PASS",
+      "bl4-fixes-type02",
+      "bl4-fixes-build01",
+      "schema-check:69",
+      "independent scoped18+6 PASS"
+    ],
+    "adoption": "bl4-source-adoption-20261027.md",
+    "reviewSha256": "9d1fbbe3c0f33d6453ee7a8cd4278cb688cb5a1279e4e3b13aa4c23e17e0a73e"
+  },
+  "execution_20261027_bl5": {
+    "status": "LIMITED_ACTUAL_API_EVIDENCE_ADOPTED_PHASE_B_INCOMPLETE",
+    "humanAuthorization": "bl5-human-authorization-20261027.json",
+    "plan": "bl5-resource-plan-20261027.json",
+    "runtimeStarted": true,
+    "sourceHarnessReviewPending": false,
+    "manifest": "bl5-s3-lifetime-review-20261028/manifest.json",
+    "invalidatedBuild": "bl5-harness-build05/invalidated.json",
+    "businessServicesStarted": false,
+    "clockStartedUtc": "2026-10-27T15:42:33.450158+00:00",
+    "deadlineUtc": "2026-10-27T18:42:33.450158Z",
+    "containersStarted": false,
+    "preparationFailure": "Original local26tables/noFlywayhistory; s3empty; preservepartiallocal",
+    "localOrigin": "https://127.0.0.1:47555",
+    "flyway": "16 successful each local2 and s3",
+    "browser": "UNQUALIFIED: human certificate handoff not completed; temporary tab closed after service stop",
+    "localRuntimeResults": "bl5-local-runtime-results-20261028.md",
+    "localStopped": true,
+    "s3FirstStartupFailed": "Initial Spring context closed owned S3 client before combined context reused it",
+    "s3Retry": "Completed actual fullAPI chain + scoped supplemental boundaries; browser/crash/restart/preciseSQLphase incomplete",
+    "s3Origin": "https://127.0.0.1:47457",
+    "manifestSha256": "826db245ea59b30ce21ad9b6f9ce008f4a8d0aed2f73e19fd06e75a8e5f0e331",
+    "finalIntegrationReviewPending": false,
+    "finalReviewPackage": "bl5-final-integration-review-20261028/manifest.json",
+    "finalReviewManifestSha256": "f5b436a81354f970f23b95feb3f299fa41b597ce9e8d42422b210277701b3ba9",
+    "qualificationMatrix": "bl5-final-qualification-matrix-20261028.md",
+    "s3RuntimeResults": "bl5-s3-runtime-results-20261028.md",
+    "resourceCounts": {
+      "schemas": 4,
+      "buckets": 4,
+      "processRecords": 16
+    },
+    "chargedCounters": {
+      "pipelines": 5,
+      "model": 12,
+      "publication": 4,
+      "http": 1487
+    },
+    "watchdogExited": true,
+    "windowSettled": true,
+    "elapsedSecondsAtFinalCheck": 5272.683344589997,
+    "stopEvidence": "bl5-runtime-20261027/final-stop-verification.json",
+    "noRestartCurrentBatch": true,
+    "finalIntegrationReview": "bl5-final-integration-review-20261028/review.md",
+    "finalReviewSha256": "10c1d9208b5aee4aa634a7d32d27a53357e8f9602db22648c63d2b77fbf84366",
+    "adoption": "bl5-final-limited-adoption-20261028.json",
+    "phaseBAccepted": false
   }
 }

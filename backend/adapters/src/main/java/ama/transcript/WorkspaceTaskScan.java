@@ -42,6 +42,12 @@ final class WorkspaceTaskScan {
    }return List.copyOf(result);
   },q.args().toArray());budget.check();return rows;
  }
+ Metadata captureExact(String meeting,String id,WorkspaceReadBudget budget){
+  uuid(meeting);uuid(id);budget.reserve(1,4,4096,2048,2048,4,false);
+  String columns=query(meeting,1,null).sql().split(" FROM ")[0];
+  var row=jdbc.query(columns+" FROM durable_task WHERE id=?",rs->{if(!rs.next())throw new WorkspaceReadBudget.Unavailable();var value=readRow(rs);if(rs.next())throw new WorkspaceReadBudget.Unavailable();return value;},id);
+  budget.check();if(!meeting.equals(row.spec().subject().id()))throw new WorkspaceReadBudget.Unavailable();return row;
+ }
  Metadata lockExact(Metadata expected,WorkspaceReadBudget budget){
   budget.reserve(1,4,4096,2048,2048,4,false);
   String columns=query(expected.spec().subject().id(),1,null).sql().split(" FROM ")[0];

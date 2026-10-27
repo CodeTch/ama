@@ -264,6 +264,41 @@ WorkspaceSavedReferences:
     transcriptConfirmationId: {type: [string, 'null'], format: uuid}
     minutesRevisionId: {type: [string, 'null'], format: uuid}
     elementSetId: {type: [string, 'null'], format: uuid}
+WorkspaceCandidateReference:
+  type: object
+  additionalProperties: false
+  required: [id, inputId, taskId, state]
+  properties:
+    id: {type: string, format: uuid}
+    inputId: {type: string, format: uuid}
+    taskId: {type: string, format: uuid}
+    state: {type: string, const: PENDING}
+WorkspaceCandidatePage:
+  type: object
+  additionalProperties: false
+  required: [items, hasMore, detailPath]
+  properties:
+    items:
+      type: array
+      maxItems: 20
+      items: {$ref: '#/WorkspaceCandidateReference'}
+    hasMore: {type: boolean}
+    detailPath: {type: string, description: Same-meeting candidate producer list route. This partial page does not confer final readiness.}
+WorkspacePrivateSections:
+  type: object
+  additionalProperties: false
+  required: [savedProcessingInputId, savedGenerationInputId, templateRevisionId, exclusionRevisionId, finalConfirmationId, publicationId, publicationState, tasks, candidates, verification]
+  properties:
+    savedProcessingInputId: {type: [string, 'null'], format: uuid}
+    savedGenerationInputId: {type: [string, 'null'], format: uuid}
+    templateRevisionId: {type: [string, 'null'], format: uuid}
+    exclusionRevisionId: {type: [string, 'null'], format: uuid}
+    finalConfirmationId: {type: [string, 'null'], format: uuid}
+    publicationId: {type: [string, 'null'], format: uuid}
+    publicationState: {type: [string, 'null'], enum: [READY, RUNNING, RECONCILING, FAILED, SUCCEEDED, null]}
+    tasks: {$ref: '#/WorkspaceTaskPage'}
+    candidates: {$ref: '#/WorkspaceCandidatePage'}
+    verification: {type: string, const: PERSISTED_REFERENCES_RECHECK_PRODUCER}
 WorkspaceNavigation:
   type: object
   additionalProperties: false
@@ -280,11 +315,19 @@ WorkspaceNavigation:
       description: MEMBER has MEMBER_READ_ONLY. OWNER has PUBLISHED_READ_ONLY or CHECK_PRODUCER. Neither owner state grants mutation permission.
     contentEligibility: {type: string, const: RECHECK_REQUIRED}
     saved: {$ref: '#/WorkspaceSavedReferences'}
+    lifecycle: {type: string, const: ACTIVE}
+    governanceState: {type: string, const: ACTIVE}
+    privateSectionsState:
+      type: string
+      enum: [AVAILABLE, UNAVAILABLE]
+      description: Owner only. AVAILABLE requires privateSections; UNAVAILABLE requires privateSectionsReason and omits privateSections. Members never receive these fields.
+    privateSectionsReason: {type: string, const: PROCESSING_RUNTIME_UNAVAILABLE}
+    privateSections: {$ref: '#/WorkspacePrivateSections'}
 workspace:
   get:
     operationId: readWorkspaceNavigation
     summary: Read authorized current saved navigation references
-    description: Fresh real meeting READ gate and one bounded DB-only acquisition. Returns current saved IDs, actor relation and exact string tokens, without contents, readiness, command ACK or write permission. Saved transcript must be WORKING; candidate objects cannot become saved references. Members receive only the same effective saved references. This revision supplies saved navigation only; private input, candidate, final and publication composition is not represented, and missing sections never prove absence. Producer reads require fresh authorization and may observe later changes. No query parameters are accepted.
+    description: One genuine READ gate and cumulative bounded metadata budget. Installed combined runtime supplies distinct owner-only saved input, current settings/final/publication references, first task page and pending candidate page. All declared control/domain parents lock before any tasks. Members receive only effective saved references, never privateSections fields. If combined runtime is absent, saved navigation is returned with explicit owner privateSectionsState UNAVAILABLE; absence never proves no work. No contents, readiness, command ACK or write authority. Producer reads remain separately authorized and may observe later changes. No query parameters.
     security:
       - enterpriseSession: []
     parameters:

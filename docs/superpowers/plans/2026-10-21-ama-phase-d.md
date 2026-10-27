@@ -1,3 +1,7 @@
+> **2026-10-27 流程更新（AMA-WORKFLOW-20261027）**：按[执行补充](2026-10-27-ama-development-workflow.md)分层验证、合并相关批次、定向回归。接收 DEFER-VIS：B 的共享壳零像素与三视口全面视觉收口在 D-08 完成；原基准及最终原型交付要求保留。DEFER-EXPAND 中 D 功能仍按本计划交付。 本次不启动本阶段。
+
+---
+
 # D：完整业务规则与原型页面 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

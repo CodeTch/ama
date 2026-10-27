@@ -1,0 +1,53 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {useUploadQueue} from '../../src/features/import/useUploadQueue.js';
+import type {CommandSnapshot} from '../../src/shared/composables/useCommand.js';
+import {shallowRef,watch} from 'vue';
+import type {UploadReceipt} from '../../src/shared/api/uploads.js';
+import type {ProcessingCapabilities} from '../../src/shared/api/transcript-import.js';
+import {ApiError} from '../../src/shared/api/client.js';
+const meeting='00000000-0000-4000-8000-000000000001';
+function context(){const data=new Map<string,string>();return {storage:{getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>{data.set(k,v);},removeItem:(k:string)=>{data.delete(k);}},tab:'upload-tab',recovery:'RESUME_NAMESPACE' as const};}
+function ports(begin:(c:CommandSnapshot)=>Promise<never>){return {begin,receipt:async()=>{throw new Error('unexpected receipt');},parts:async()=>{throw new Error('unexpected parts');},part:async()=>{throw new Error('unexpected part');},complete:async()=>{throw new Error('unexpected complete');},abort:async()=>{throw new Error('unexpected abort');}};}
+test('upload initialization survives refresh with exact original key/body; a different file is rejected before retry',async()=>{
+ const journals=context(),seen:CommandSnapshot[]=[],api=ports(async c=>{seen.push(c);throw new Error('lost begin');});
+ const first=useUploadQueue(api,async()=>{},()=> 'owner',()=>meeting,()=>true,journals);await first.open();await first.add([new File(['first'],'original.txt')]);assert.equal(first.items.value.length,1);const key=first.items.value[0]!.key;first.dispose();
+ const second=useUploadQueue(api,async()=>{},()=> 'owner',()=>meeting,()=>true,journals);assert.equal(second.items.value.length,0);await second.open();await second.retry(key,new File(['other'],'original.txt'));assert.equal(seen.length,1);await second.retry(key,new File(['first'],'renamed.txt'));assert.equal(seen.length,2);assert.deepEqual(seen[1],seen[0]);second.dispose();
+});
+test('queue allows two simultaneous files and never starts a third before a slot is released',async()=>{
+ let active=0,peak=0,calls=0;const releases:Array<()=>void>=[];
+ const api=ports(async()=>{calls++;active++;peak=Math.max(peak,active);await new Promise<void>(resolve=>releases.push(resolve));active--;throw new Error('lost begin');});
+ const queue=useUploadQueue(api,async()=>{},()=> 'owner',()=>meeting,()=>true,context());await queue.open();const work=queue.add([new File(['a'],'a.txt'),new File(['b'],'b.txt'),new File(['c'],'c.txt')]);
+ for(let i=0;i<100&&calls<2;i++)await new Promise(r=>setTimeout(r,2));assert.equal(calls,2);assert.equal(peak,2);releases.shift()!();for(let i=0;i<100&&calls<3;i++)await new Promise(r=>setTimeout(r,2));assert.equal(calls,3);for(const release of releases)release();await work;assert.equal(peak,2);queue.dispose();
+});
+test('unavailable recovery prevents creation and does not replace unknown prior uploads',async()=>{
+ let calls=0;const journals={...context(),storage:{getItem:()=>{throw new Error('denied');},setItem:()=>{throw new Error('must not write');},removeItem:()=>{throw new Error('must not remove');}}};
+ const queue=useUploadQueue(ports(async()=>{calls++;throw new Error('lost');}),async()=>{},()=> 'owner',()=>meeting,()=>true,journals);await queue.open();await assert.rejects(queue.add([new File(['a'],'a.txt')]));assert.equal(calls,0);assert.equal(queue.blocked.value,true);queue.dispose();
+});
+test('an application-owned queue clears old account records even before its view is opened',async()=>{
+ const journals=context(),api=ports(async()=>{throw new Error('lost');});const first=useUploadQueue(api,async()=>{},()=> 'A',()=>meeting,()=>true,journals);await first.open();await first.add([new File(['private'],'private.txt')]);first.dispose();
+ const actor=shallowRef<string|null>(null),globalQueue=useUploadQueue(api,async()=>{},()=>actor.value,()=>meeting,()=>true,journals);actor.value='B';actor.value='A';await globalQueue.open();assert.equal(globalQueue.items.value.length,0);globalQueue.dispose();
+});
+test('account change during initial row publication cannot reveal later selected files in the replacement scope',async()=>{
+ const actor=shallowRef('A'),queue=useUploadQueue(ports(async()=>{throw new Error('lost');}),async()=>{},()=>actor.value,()=>meeting,()=>true,context());await queue.open();let changed=false;
+ const stop=watch(queue.items,items=>{if(items.length&&!changed){changed=true;actor.value='B';}},{flush:'sync'});await queue.add([new File(['a'],'private-a.txt'),new File(['b'],'private-b.txt')]).catch(()=>{});assert.equal(queue.items.value.length,0);assert.equal(queue.ready.value,false);stop();queue.dispose();
+});
+test('denied upload discovery hides all private queue rows until fresh authorized recovery',async()=>{
+ const queue=useUploadQueue(ports(async()=>{throw new Error('lost');}),async()=>{},()=> 'A',()=>meeting,()=>true,context());await queue.open();await queue.add([new File(['a'],'private.txt')]);await queue.discover(queue.items.value[0]!.key,async()=>{throw new ApiError('http',403,'denied');});assert.equal(queue.items.value.length,0);assert.equal(queue.ready.value,false);assert.equal(queue.blocked.value,true);queue.dispose();
+});
+test('pre-import ordering is persisted; unsent invalid selections can be removed but unknown uploads cannot',async()=>{
+ const journals=context(),api=ports(async()=>{throw new Error('lost');}),queue=useUploadQueue(api,async()=>{},()=> 'A',()=>meeting,()=>true,journals);await queue.open();await queue.add([new File(['a'],'a.txt'),new File(['b'],'b.txt')]);const [a,b]=queue.items.value;queue.move(b!.key,-1);assert.deepEqual(queue.items.value.map(i=>i.name),['b.txt','a.txt']);assert.throws(()=>queue.remove(a!.key));await queue.add([new File(['bad'],'bad.pdf')]);queue.remove(queue.items.value[2]!.key);queue.dispose();
+ const recovered=useUploadQueue(api,async()=>{},()=> 'A',()=>meeting,()=>true,journals);await recovered.open();assert.deepEqual(recovered.items.value.map(i=>i.name),['b.txt','a.txt']);recovered.dispose();
+});
+test('an interrupted OPEN upload is freshly checked before abort and only then removable',async()=>{
+ const upload='00000000-0000-4000-8000-000000000002';let sha='',aborted=false,aborts=0;
+ const api={...ports(async()=>{throw new Error('unused');}),begin:async(c:CommandSnapshot)=>{sha=JSON.parse(c.body).sha256;return {uploadId:upload,partSize:8,partSizeToken:'8'};},receipt:async():Promise<UploadReceipt>=>({uploadId:upload,purpose:'TRANSCRIPT_INPUT',displayName:'a.txt',state:aborted?'ABORTED':'OPEN',expectedSize:1,expectedSizeToken:'1',expectedSha256:sha,createdAt:'2026-10-27T00:00:00Z',updatedAt:'2026-10-27T00:00:00Z',completedFileId:null,accepted:{uploadId:upload,partSize:8,partSizeToken:'8'},allowedActions:aborted?[]:['UPLOAD_PARTS','COMPLETE','ABORT'],idempotentRetries:aborted?['ABORT']:[],blockedReason:null,completed:null}),parts:async()=>({items:[],nextCursor:null}),part:async()=>{throw new Error('network interrupted');},abort:async()=>{aborts++;aborted=true;}};
+ const queue=useUploadQueue(api,async()=>{},()=> 'A',()=>meeting,()=>true,context());await queue.open();await queue.add([new File(['a'],'a.txt')]);const key=queue.items.value[0]!.key;assert.throws(()=>queue.remove(key));await queue.abort(key);assert.equal(aborts,1);assert.equal(queue.items.value[0]!.status,'ABORTED');queue.remove(key);assert.equal(queue.items.value.length,0);queue.dispose();
+});
+test('import retries original accepted-first request after refresh even if new intake is unavailable',async()=>{
+ const journals=context(),upload='00000000-0000-4000-8000-000000000002',file='00000000-0000-4000-8000-000000000003',seen:CommandSnapshot[]=[];let begin:Record<string,unknown>={};
+ const api={...ports(async()=>{throw new Error('unused');}),begin:async(c:CommandSnapshot)=>{begin=JSON.parse(c.body);return {uploadId:upload,partSize:8,partSizeToken:'8'};},receipt:async():Promise<UploadReceipt>=>({uploadId:upload,purpose:'TRANSCRIPT_INPUT',displayName:String(begin.name),state:'COMPLETED',expectedSize:1,expectedSizeToken:'1',expectedSha256:String(begin.sha256),createdAt:'2026-10-27T00:00:00Z',updatedAt:'2026-10-27T00:00:00Z',completedFileId:file,accepted:{uploadId:upload,partSize:8,partSizeToken:'8'},allowedActions:[],idempotentRetries:['COMPLETE','ABORT'],blockedReason:null,completed:{fileId:file,uploadId:upload,displayName:String(begin.name),sizeBytes:1,sizeBytesToken:'1',sha256:String(begin.sha256),fileState:'AVAILABLE',originalPurpose:'TRANSCRIPT_INPUT',intakeEligibility:{state:'ELIGIBLE',reason:null},businessReadEligibility:'NOT_EVALUATED'}})};
+ const capabilities:ProcessingCapabilities={revision:1,revisionToken:'1',accessRevision:0,accessRevisionToken:'0',canSubmit:true,businessReady:true,readOnlyReason:null,intake:'AVAILABLE',execution:'INSTALLED',formats:['TXT'],purpose:'TRANSCRIPT_INPUT',materialMode:'EMPTY',budgets:{maxFiles:4}};
+ let lost=true;const intake={capabilities:async()=>capabilities,send:async(c:CommandSnapshot)=>{seen.push(c);if(lost)throw new Error('lost import response');return {meetingId:meeting,batchId:meeting,inputId:meeting,taskId:meeting,revision:2,revisionToken:'2',inputFingerprint:'b'.repeat(64)};}};
+ const first=useUploadQueue(api,async()=>{},()=> 'A',()=>meeting,()=>true,journals,intake);await first.open();await first.add([new File(['a'],'a.txt')]);assert.equal(first.items.value[0]!.fileId,file);await first.submitImport();assert.equal(seen.length,1);assert.deepEqual(JSON.parse(seen[0]!.body),{expectedRevisionToken:'1',orderedFileIds:[file]});await assert.rejects(first.add([new File(['b'],'extra.txt')]));first.dispose();
+ const second=useUploadQueue(api,async()=>{},()=> 'A',()=>meeting,()=>true,journals,{...intake,capabilities:async()=>{throw new Error('new intake unavailable');}});await second.open();assert.equal(second.importCommand.state.value,'UNCERTAIN');await second.submitImport();assert.deepEqual(seen[1],seen[0]);lost=false;await second.submitImport();assert.equal(second.importCommand.state.value,'ACKNOWLEDGED');await assert.rejects(second.add([new File(['b'],'extra.txt')]));second.newBatch();assert.equal(second.items.value.length,0);assert.equal(second.importCommand.state.value,'EMPTY');await second.add([new File(['b'],'next.txt')]);await second.submitImport();assert.equal(seen.length,3);assert.match(second.error.value??'',/new intake unavailable/);second.dispose();
+});

@@ -1,3 +1,7 @@
+> **2026-10-27 用户批准的执行补充（AMA-WORKFLOW-20261027）**：后续按[流程与分阶段验证补充计划](2026-10-27-ama-development-workflow.md)执行。完整功能批次集中审查、分层验证、增量证据与后移台账优先于下文冲突的旧流程条款；功能和核心可靠性要求保持。当前开发仍暂停，下次“继续”从 B-L1 信息持久化/真实表单/名单确认开始。下方旧状态段仅为历史，具体技术任务继续有效。
+
+---
+
 # 智能会议助手分阶段交付 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

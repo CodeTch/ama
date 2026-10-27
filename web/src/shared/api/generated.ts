@@ -150,7 +150,7 @@ export interface paths {
         };
         /**
          * Read authorized current saved navigation references
-         * @description Fresh real meeting READ gate and one bounded DB-only acquisition. Returns current saved IDs, actor relation and exact string tokens, without contents, readiness, command ACK or write permission. Saved transcript must be WORKING; candidate objects cannot become saved references. Members receive only the same effective saved references. This revision supplies saved navigation only; private input, candidate, final and publication composition is not represented, and missing sections never prove absence. Producer reads require fresh authorization and may observe later changes. No query parameters are accepted.
+         * @description One genuine READ gate and cumulative bounded metadata budget. Installed combined runtime supplies distinct owner-only saved input, current settings/final/publication references, first task page and pending candidate page. All declared control/domain parents lock before any tasks. Members receive only effective saved references, never privateSections fields. If combined runtime is absent, saved navigation is returned with explicit owner privateSectionsState UNAVAILABLE; absence never proves no work. No contents, readiness, command ACK or write authority. Producer reads remain separately authorized and may observe later changes. No query parameters.
          */
         get: operations["readWorkspaceNavigation"];
         put?: never;
@@ -1947,24 +1947,6 @@ export interface components {
             /** Format: uuid */
             elementSetId: string | null;
         };
-        WorkspaceNavigation: {
-            /** Format: uuid */
-            meetingId: string;
-            revisionToken: components["schemas"]["ExpectedRevisionToken"];
-            accessRevisionToken: components["schemas"]["ExpectedRevisionToken"];
-            /** @enum {string} */
-            stage: "ENTRY" | "TRANSCRIPT_PENDING" | "TRANSCRIPT_FAILED" | "MINUTES_PENDING" | "MINUTES_FAILED" | "READY_TO_PUBLISH" | "PUBLISH_FAILED" | "PUBLISHED";
-            /** @enum {string} */
-            relation: "OWNER" | "MEMBER";
-            /**
-             * @description MEMBER has MEMBER_READ_ONLY. OWNER has PUBLISHED_READ_ONLY or CHECK_PRODUCER. Neither owner state grants mutation permission.
-             * @enum {string}
-             */
-            navigationState: "MEMBER_READ_ONLY" | "PUBLISHED_READ_ONLY" | "CHECK_PRODUCER";
-            /** @constant */
-            contentEligibility: "RECHECK_REQUIRED";
-            saved: components["schemas"]["WorkspaceSavedReferences"];
-        };
         WorkspaceTaskItem: {
             /** Format: uuid */
             taskId: string;
@@ -1988,6 +1970,72 @@ export interface components {
              * @constant
              */
             verification: "PERSISTED_RELATION";
+        };
+        WorkspaceCandidateReference: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            inputId: string;
+            /** Format: uuid */
+            taskId: string;
+            /** @constant */
+            state: "PENDING";
+        };
+        WorkspaceCandidatePage: {
+            items: components["schemas"]["WorkspaceCandidateReference"][];
+            hasMore: boolean;
+            /** @description Same-meeting candidate producer list route. This partial page does not confer final readiness. */
+            detailPath: string;
+        };
+        WorkspacePrivateSections: {
+            /** Format: uuid */
+            savedProcessingInputId: string | null;
+            /** Format: uuid */
+            savedGenerationInputId: string | null;
+            /** Format: uuid */
+            templateRevisionId: string | null;
+            /** Format: uuid */
+            exclusionRevisionId: string | null;
+            /** Format: uuid */
+            finalConfirmationId: string | null;
+            /** Format: uuid */
+            publicationId: string | null;
+            /** @enum {string|null} */
+            publicationState: "READY" | "RUNNING" | "RECONCILING" | "FAILED" | "SUCCEEDED" | null;
+            tasks: components["schemas"]["WorkspaceTaskPage"];
+            candidates: components["schemas"]["WorkspaceCandidatePage"];
+            /** @constant */
+            verification: "PERSISTED_REFERENCES_RECHECK_PRODUCER";
+        };
+        WorkspaceNavigation: {
+            /** Format: uuid */
+            meetingId: string;
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+            accessRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+            /** @enum {string} */
+            stage: "ENTRY" | "TRANSCRIPT_PENDING" | "TRANSCRIPT_FAILED" | "MINUTES_PENDING" | "MINUTES_FAILED" | "READY_TO_PUBLISH" | "PUBLISH_FAILED" | "PUBLISHED";
+            /** @enum {string} */
+            relation: "OWNER" | "MEMBER";
+            /**
+             * @description MEMBER has MEMBER_READ_ONLY. OWNER has PUBLISHED_READ_ONLY or CHECK_PRODUCER. Neither owner state grants mutation permission.
+             * @enum {string}
+             */
+            navigationState: "MEMBER_READ_ONLY" | "PUBLISHED_READ_ONLY" | "CHECK_PRODUCER";
+            /** @constant */
+            contentEligibility: "RECHECK_REQUIRED";
+            saved: components["schemas"]["WorkspaceSavedReferences"];
+            /** @constant */
+            lifecycle?: "ACTIVE";
+            /** @constant */
+            governanceState?: "ACTIVE";
+            /**
+             * @description Owner only. AVAILABLE requires privateSections; UNAVAILABLE requires privateSectionsReason and omits privateSections. Members never receive these fields.
+             * @enum {string}
+             */
+            privateSectionsState?: "AVAILABLE" | "UNAVAILABLE";
+            /** @constant */
+            privateSectionsReason?: "PROCESSING_RUNTIME_UNAVAILABLE";
+            privateSections?: components["schemas"]["WorkspacePrivateSections"];
         };
         CategoryItem: {
             id: string;

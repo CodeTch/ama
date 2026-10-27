@@ -26,6 +26,11 @@ final class Task11KnowledgeFixture implements AutoCloseable {
  static Task11KnowledgeFixture reopenTls(Path evidence,String actor,Path root,int port,Map<String,Object> identities,TlsOptions tls,boolean grantActor)throws Exception {
   requireReopen(root,port,identities);return new Task11KnowledgeFixture(evidence,actor,root,grantActor,false,Objects.requireNonNull(tls));
  }
+ /** Fresh B-L5 TLS startup: missing endpoint/store is required, so no retained fallback is reachable. */
+ static Task11KnowledgeFixture createFreshTls(Path evidence,String actor,Path root,TlsOptions tls)throws Exception {
+  if(Files.exists(root.resolve("runtime/endpoint.json"))||Files.exists(root.resolve("runtime/knowledge.sqlite")))throw new IllegalStateException("Fresh TLS provider root required");
+  return new Task11KnowledgeFixture(evidence,actor,root,true,true,Objects.requireNonNull(tls));
+ }
  private Task11KnowledgeFixture(Path evidence,String actor,Path ownedProviderRoot,boolean grantActor,boolean allowInitialize)throws Exception {this(evidence,actor,ownedProviderRoot,grantActor,allowInitialize,null);}
  private Task11KnowledgeFixture(Path evidence,String actor,Path ownedProviderRoot,boolean grantActor,boolean allowInitialize,TlsOptions tls)throws Exception {
   this.evidence=evidence;root=ownedProviderRoot;applicationIdentities=tls==null?root.resolve("application/publicidentities.json"):tls.applicationIdentities();var identities=json.readTree(Files.readAllBytes(root.resolve("provider/publicidentities.json")));var ids=new TreeMap<String,Object>();for(String k:List.of("providerId","storeInstanceId","clientId","delegationKeyId","assertionKeyId"))ids.put(k,identities.get(k).asText());var paths=identities.get("paths");
