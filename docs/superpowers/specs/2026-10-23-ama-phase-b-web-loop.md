@@ -1,3 +1,7 @@
+> **2026-10-27 已批准的流程覆盖（AMA-WORKFLOW-20261027）**：[执行补充](../plans/2026-10-27-ama-development-workflow.md)调整下文 upstream pin/冻结维护、浏览器组合分工和视觉验收时点：完整功能批次增量审查；两后端各真实主流程、共同异常分层覆盖、差异分别验证；零像素/三视口全面收口移 D-08。技术安全、真实 MySQL 预算/并发、四身份服务端保护、必要浏览器与恢复要求不减。下文 2026-10-23 设计采纳事实和原始封存件保留历史原义，不以本补充改写旧验收结论。
+
+---
+
 # Phase B web business-loop design adoption
 
 2026-10-23. Adopt the exact full-replacement Task12 R1 design under `artifacts/phase-b/b-remaining/task-12-design/`. R1 raw SHA256 `12602bdfaeda0672478c6bb08bf92fa844746990eda08fcd67b20b0ceb14ed9c` (69,418 bytes / 196 lines); scoped independent R1 review `679d6d54b660f8a0d652787b3992ece3bf4db3a29c70e65f394332044a87f5cf` gives SPEC PASS / design APPROVED for this fix scope, T12DR-01 ADDRESSED and zero new findings. Root has read the complete actual R1 delta, closure and final scoped review. Exact original/R1, closure, both reviews, both actual review diffs, design/fix briefs, plan extract and web preflight are preserved with raw manifest and nested `* -text` protection. The original NEEDS FIXES review remains historical evidence. Design adoption supplies no source correctness, test pass, browser/runtime activation or Phase B qualification.

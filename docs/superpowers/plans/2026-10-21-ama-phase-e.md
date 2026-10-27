@@ -1,3 +1,7 @@
+> **2026-10-27 流程更新（AMA-WORKFLOW-20261027）**：按[执行补充](2026-10-27-ama-development-workflow.md)分层验证、合并相关批次、定向回归。DEFER-EXPAND 中治理、声纹、评测、邮件等新增范围仍按 E 交付，不提前并入 B；相关真实接口联调在生产使用前完成。 本次不启动本阶段。
+
+---
+
 # E：运营治理与纪要邮件 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

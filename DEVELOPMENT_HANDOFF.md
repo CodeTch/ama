@@ -1,3 +1,17 @@
+# 当前执行入口 — 2026-10-27 流程已更新，开发仍暂停
+
+执行规则：**AMA-WORKFLOW-20261027**，见[后续开发流程与分阶段验证补充计划](docs/superpowers/plans/2026-10-27-ama-development-workflow.md)。这是用户已批准的后续执行方式，优先于以下旧流程和历史状态。
+
+- 实际开发树：`/home/tanren/ama/.worktrees/phase-b-completion`。
+- 动态状态：该树 `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json`；简短入口为同目录 `RESUME_LATEST.md`。
+- 下次“继续”先完成 **B-L1 信息持久化＋真实信息表单＋单独名单确认**，复用已采纳模块，再依次完成 B-L2～B-L5。
+- 完整功能批次集中审查、定向回归；后移项目和条件见补充计划。保留同一 reviewer、核心可靠性、旧资源限制，完成 B 后停止。
+- 本次只更新文档/接续状态，不启动开发，不新发运行授权，不提交/合并/推送。下文历史 HEAD/未提交数量只表示当时快照，下次以现场 Git 为准。
+
+下方均为历史交接记录，不能恢复旧调度或覆盖上述入口。
+
+---
+
 > **2026-10-27 最新 Git 集成入口**：用户已授权将暂停中的 Phase B 开发快照提交并合入 main、推送 GitHub。代码快照 `3d9d1977`；B 阶段仍未完成，功能开发继续保持暂停。详情见 [本次集成与验证](docs/development/integration-main-2026-10-27.md) 和 [最新暂停接续记录](docs/development/phase-b-pause-2026-10-27.md)。以下更早 HEAD/未提交说明按历史保留。
 
 # Git 集成快照 — 2026-10-26

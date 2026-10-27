@@ -1,6 +1,6 @@
 # 企业智能语音会议助手
 
-按已批准的[架构 v0.2](docs/superpowers/specs/2026-10-21-ama-architecture-design.md)与[分阶段计划](docs/superpowers/plans/2026-10-21-ama-delivery-plan.md)开发。当前交付阶段 A：可启动后端、原型页面外壳和关键验证工具。业务闭环在后续阶段实现，公司接口及运维证据继续作为相应联调/部署前置条件。
+按已批准的[架构 v0.2](docs/superpowers/specs/2026-10-21-ama-architecture-design.md)与[分阶段计划](docs/superpowers/plans/2026-10-21-ama-delivery-plan.md)开发。截至 2026-10-27，阶段 A 本地工程已交付，阶段 B 正在完成首个业务闭环，尚未整体验收。已实现会议列表、创建、部分详情与任务界面及多项后端能力；完整编辑、上传与纪要发布前端仍待接续。公司真实联调与生产资格单独记录。后续按[已批准的简化开发流程](docs/superpowers/plans/2026-10-27-ama-development-workflow.md)执行；当前状态与下次“继续”入口见 [DEVELOPMENT_HANDOFF.md](DEVELOPMENT_HANDOFF.md)。
 
 完整结果、测试数量、审查修复、待验证项和 B 阶段入口见[阶段 A 验收报告](docs/acceptance/a/summary.md)。
 
@@ -24,7 +24,7 @@ python3 tools/checks/run.py all
 npm --prefix web run dev
 ```
 
-后端启动见 [backend/README.md](backend/README.md)；前端/视觉工具见 [web/README.md](web/README.md)。未配置数据库时存活检查可用、就绪检查返回 503；前端显示企业登录与会议服务未接入。当前不创建会议、不访问麦克风、不调用公司模型或发布知识库内容。
+后端启动见 [backend/README.md](backend/README.md)；前端/视觉工具见 [web/README.md](web/README.md)。未配置数据库时存活检查可用、就绪检查返回 503；业务可用性取决于已配置的身份、数据库和适配器；已接入页面可创建空会议并查看部分保存信息和任务，不能据此认定完整 B 闭环已交付。实时录音、公司模型/知识库真实集成和生产资格仍以各阶段记录为准。
 
 ## 验证边界
 
