@@ -1,0 +1,2 @@
+/** Non-allocating strict UTF8 bound, including malformed UTF16 rejection. */
+export function fitsUtf8(text:string,maximum:number){if(text.length>maximum)return false;let total=0;for(let i=0;i<text.length;i++){const c=text.charCodeAt(i);if(c>=0xd800&&c<=0xdbff){const low=text.charCodeAt(++i);if(!(low>=0xdc00&&low<=0xdfff))return false;total+=4;}else if(c>=0xdc00&&c<=0xdfff)return false;else total+=c<128?1:c<2048?2:3;if(total>maximum)return false;}return true;}

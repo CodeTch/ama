@@ -899,15 +899,33 @@
       }
     },
     "description": "At least one exact expected revision representation; equal dual values normalize identically. Complete ordered segment set; immutable source IDs/order/metadata. Strict duplicate/unknown/trailing/scalar JSON, 8388608-byte streaming envelope, no trim/NFC. Current operational admission applies after accepted-result lookup.",
-    "anyOf": [
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "$ref": "./meetings.yaml#/ExpectedRevision"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806."
+              }
+            }
+          }
         ]
       }
     ]
@@ -969,15 +987,33 @@
       }
     },
     "description": "At least one exact expected revision representation; equal dual values normalize identically. Complete ordered segment set; immutable source IDs/order/metadata. Strict duplicate/unknown/trailing/scalar JSON, 8388608-byte streaming envelope, no trim/NFC. Current operational admission applies after accepted-result lookup.",
-    "anyOf": [
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "$ref": "./meetings.yaml#/ExpectedRevision"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806."
+              }
+            }
+          }
         ]
       }
     ]
@@ -1004,15 +1040,33 @@
       }
     },
     "description": "At least one exact expected revision representation; equal dual values normalize identically. Complete ordered segment set; immutable source IDs/order/metadata. Strict duplicate/unknown/trailing/scalar JSON, 8388608-byte streaming envelope, no trim/NFC. Current operational admission applies after accepted-result lookup.",
-    "anyOf": [
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "$ref": "./meetings.yaml#/ExpectedRevision"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806."
+              }
+            }
+          }
         ]
       }
     ]
@@ -1039,15 +1093,33 @@
       }
     },
     "description": "At least one exact expected revision representation; equal dual values normalize identically. Complete ordered segment set; immutable source IDs/order/metadata. Strict duplicate/unknown/trailing/scalar JSON, 8388608-byte streaming envelope, no trim/NFC. Current operational admission applies after accepted-result lookup.",
-    "anyOf": [
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "$ref": "./meetings.yaml#/ExpectedRevision"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806."
+              }
+            }
+          }
         ]
       }
     ]

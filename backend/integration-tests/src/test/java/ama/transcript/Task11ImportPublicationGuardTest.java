@@ -34,6 +34,7 @@ class Task11ImportPublicationGuardTest {
    if(sql.contains(" FROM file_reference "))return List.of(row("count",1L));
    var matcher=java.util.regex.Pattern.compile(" FROM (meeting|transcription_input|input_batch_fingerprint_profile|input_batch_file|input_batch|file_object|durable_task|publication|final_confirmation|generation_input|generation_candidate|task_attempt|external_operation|external_execution|publication_submission|publication_attempt|external_document_mapping)(?: |\\b)").matcher(sql);
    if(!matcher.find())throw new AssertionError("Unexpected test SQL: "+sql);String table=matcher.group(1);var raw=tables.get(table);
+   if(sql.endsWith(") metadata_budget"))return List.of(row("budget_rows",raw==null?0L:1L,"budget_bytes",raw==null?0L:512L,"budget_points",raw==null?0L:512L,"budget_units",raw==null?0L:512L));
    if(sql.startsWith("SELECT COUNT(*)"))return List.of(row("count",raw==null?0L:1L));if(raw==null)return List.of();var result=new LinkedHashMap<String,Object>();
    if(sql.contains(" AS __admitted")){var columns=java.util.regex.Pattern.compile("END AS ([a-z_0-9]+)").matcher(sql);while(columns.find())result.put(columns.group(1),raw.get(columns.group(1)));result.put("__admitted",true);result.put("__row_bytes",512L);result.put("__row_points",512L);}
    else{String selected=sql.substring(7,sql.indexOf(" FROM "));for(String column:selected.split(","))result.put(column.replace("f.",""),raw.get(column.replace("f.","")));}
@@ -44,4 +45,24 @@ class Task11ImportPublicationGuardTest {
  @Test void pendingPublicationDeniesRealRawCompletion()throws Exception{var c=new Case(true,false);assertThrows(RuntimeException.class,()->c.f.tx.required(()->{var p=c.acquire();c.policy.requireCompletion(List.of(c.spec),p);return null;}));}
  @Test void noPublicationAllowsActualCompletionCapabilityWithoutLateSql()throws Exception{var c=new Case(false,false);c.f.tx.required(()->{var p=c.acquire();int before=c.f.sql.size();c.policy.requireCompletion(List.of(c.spec),p);assertEquals(before,c.f.sql.size());return null;});}
  @Test void staleTaskCanBeAcquiredForRetirementButCannotWriteRaw()throws Exception{var c=new Case(true,true);c.f.tx.required(()->{var p=c.acquire();assertThrows(RuntimeException.class,()->c.policy.requireCompletion(List.of(c.spec),p));verify(c.registry,never()).prelockSources(any(),anyList(),anyBoolean());return null;});}
+
+ @Test void rawGraphMustUseSharedOperationBudgetBeforeTextTransfer()throws Exception{
+  var c=new Case(false,false);var archive=c.f.authority.readBudget();var canonical=c.f.authority.canonicalBudget();doAnswer(x->{var budget=new TranscriptAcquisitionBudget(16777216,16777216,16777216,268435456,134217728,33554432,128,256,256).ledger(archive,canonical,()->false);budget.capture(16777200,0,0,1);return budget;}).when(c.f.authority).publicationBudget();
+  assertThrows(ama.contract.MinutesContracts.Failure.class,()->c.f.tx.required(()->c.policy.prepare(List.of(c.spec),TaskDomainPolicy.Acquisition.TASK_MUTATION,false)));
+  assertTrue(c.f.sql.stream().noneMatch(sql->sql.contains(" AS __admitted")),"exhausted shared budget must reject RAW graph before text projection");
+ }
+
+ @Test void separateRawReadersCannotResetTheSharedAcquisitionBudget()throws Exception{
+  var c=new Case(false,false);var budget=new TranscriptAcquisitionBudget(900,2000,2000,20000,20000,10000,128,256,256).ledger(c.f.authority.readBudget(),c.f.authority.canonicalBudget(),()->false);var j=new org.springframework.jdbc.core.JdbcTemplate(c.f.ds);
+  assertEquals(M,new BoundedTranscriptMetadata(j,c.f.authority.readBudget(),false,false,budget).one("meeting",BoundedTranscriptMetadata.ROOT,M).get("id"));
+  long before=c.f.sql.stream().filter(sql->sql.contains(" AS __admitted")).count();
+  var failure=assertThrows(ama.contract.MinutesContracts.Failure.class,()->new BoundedTranscriptMetadata(j,c.f.authority.readBudget(),true,false,budget).one("meeting",BoundedTranscriptMetadata.ROOT,M));
+  assertEquals(ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED,failure.code());assertEquals(before,c.f.sql.stream().filter(sql->sql.contains(" AS __admitted")).count());
+ }
+ @Test void rawConcurrentGrowthMaskedBySqlCannotBecomeReadableMetadata()throws Exception{
+  var c=new Case(false,false);var budget=new TranscriptAcquisitionBudget(10000,10000,10000,100000,100000,10000,128,256,256).ledger(c.f.authority.readBudget(),c.f.authority.canonicalBudget(),()->false);
+  c.f.responder=sql->sql.contains(" AS __admitted")?List.of(row("__admitted",false)):c.query(sql);
+  var failure=assertThrows(ama.contract.MinutesContracts.Failure.class,()->new BoundedTranscriptMetadata(new org.springframework.jdbc.core.JdbcTemplate(c.f.ds),c.f.authority.readBudget(),false,false,budget).one("meeting",BoundedTranscriptMetadata.ROOT,M));
+  assertEquals(ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED,failure.code());assertTrue(c.f.updates.isEmpty());
+ }
 }

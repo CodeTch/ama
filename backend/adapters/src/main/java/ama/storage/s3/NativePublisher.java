@@ -29,6 +29,7 @@ final class NativePublisher {
     }
 
     StoredBlob existing(StorageKey key, long size, String hash) {
+        RetiredUploads.live(io,layout,key);
         BlobStat actual;
         try {
             actual = io.stat(layout.data(key));
@@ -36,6 +37,7 @@ final class NativePublisher {
             if (e.code() == ErrorCode.NOT_FOUND) return null;
             throw e;
         }
+        RetiredUploads.live(io,layout,key);
         if (actual.size() != size || !actual.sha256().equals(hash))
             throw new StorageException(ErrorCode.CONFLICT);
         return new StoredBlob(key, size, hash, actual.providerVersionId());
@@ -43,6 +45,7 @@ final class NativePublisher {
 
     StoredBlob publish(
             StorageKey key, long size, String hash, String owner, PublicationSource source) {
+        RetiredUploads.live(io,layout,key);
         long step = interval(size);
         source.verify(step, size, hash, io.config.nativeMaxParts());
         io.binding(layout, key, true);

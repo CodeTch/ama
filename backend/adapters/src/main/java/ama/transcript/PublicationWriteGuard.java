@@ -46,7 +46,7 @@ public final class PublicationWriteGuard {
  public Prepared prepare(Actor actor,String meeting,TranscriptAcquisitionBudget.Ledger budget){
   Objects.requireNonNull(actor);uuid(meeting);Objects.requireNonNull(budget);
   if(!(authority.savedAccess() instanceof JdbcMeetingAccess access))throw new IllegalStateException("Actual JDBC root tracker required");
-  access.requireBeforeRootAcquisition();
+  access.requireBeforeIdentityAcquisition();
   var plan=new Plan(actor,meeting,budget);
   try{
    plan.root=root(meeting,budget,false);plan.publications=publications(meeting,budget,false);plan.finals=finals(meeting,budget,false);
@@ -54,10 +54,26 @@ public final class PublicationWriteGuard {
    // Freeze admission precedes original text transfer; unknown/live state is never a reason to parse more.
    writable(plan.root);require(plan.publications.size()<=1,PROVENANCE_UNAVAILABLE);
    if(!plan.publications.isEmpty()){require("FAILED".equals(plan.publications.getFirst().get("state")),CAPABILITY_UNAVAILABLE);PublicationLocalDecision.requireClosed(plan.graph,(String)plan.publications.getFirst().get("id"));}
-   plan.originals=submissionOriginals(plan,false);plan.executions=executionOriginals(plan,false);
+   if(!plan.graph.rows().get("publication_submission").isEmpty())captureOriginals(plan,access);
    PublicationWriteHistory.verify(plan.root,plan.publications,plan.finals,plan.graph,plan.originals,plan.executions);
   }catch(RuntimeException failure){plan.failure=failure;}
   return plan;
+ }
+
+ /** S owns a separate transaction even during worker discovery. The outer holder has no
+  * identity/root locks; releasing S precedes every parse/hash, including on failure. */
+ private void captureOriginals(Plan plan,JdbcMeetingAccess access){
+  var capture=new org.springframework.transaction.support.TransactionTemplate(new org.springframework.jdbc.datasource.DataSourceTransactionManager(source));
+  capture.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW);capture.setTimeout(2);
+  capture.execute(status->{
+   j.execute("SET NAMES utf8mb4");j.execute("SET time_zone = '+00:00'");
+   var gate=access.lock(plan.actor,plan.meeting);access.require(gate,MeetingAccess.Action.EDIT);
+   var current=root(plan.meeting,plan.budget,true);writable(current);require(current.equals(plan.root),PROVENANCE_UNAVAILABLE);
+   require(publications(plan.meeting,plan.budget,true).equals(plan.publications)&&finals(plan.meeting,plan.budget,true).equals(plan.finals),PROVENANCE_UNAVAILABLE);
+   PublicationGraph.lock(source,plan.graph,true);PublicationGraph.lock(source,plan.graph,false);
+   plan.originals=submissionOriginals(plan,true);plan.executions=executionOriginals(plan,true);
+   return null;
+  });
  }
 
  /** The caller supplies its authentic already-held owner gate, never asks this guard for a new root. */

@@ -1,3 +1,5 @@
+> **2026-10-27 最新 Git 集成入口**：用户已授权将暂停中的 Phase B 开发快照提交并合入 main、推送 GitHub。代码快照 `3d9d1977`；B 阶段仍未完成，功能开发继续保持暂停。详情见 [本次集成与验证](docs/development/integration-main-2026-10-27.md) 和 [最新暂停接续记录](docs/development/phase-b-pause-2026-10-27.md)。以下更早 HEAD/未提交说明按历史保留。
+
 # Git 集成快照 — 2026-10-26
 
 按用户最新指令，将所有分支与当前未提交代码汇入 main 并推送 GitHub。此次保存包含尚未完成验收的 B5 部分实现；开发状态仍以 `docs/acceptance/development-pause-b5-partial-2026-10-26.md`、W/current-state.json 与 W/RESUME_LATEST.md 为准。Git 保存不代表 B5/Task11/Phase B 验收通过，也不恢复旧运行窗口。下方“不提交/不合并/不推送”均是历史状态，已由此次 Git 操作请求覆盖。测试与分支核验结果见 main 上 `docs/acceptance/integration-main-all-branches-2026-10-26.md`。

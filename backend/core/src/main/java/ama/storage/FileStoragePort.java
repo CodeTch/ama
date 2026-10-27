@@ -37,5 +37,12 @@ public interface FileStoragePort {
      */
     StoredBlob complete(UploadToken token, List<PartReceipt> parts, String sha256);
     void abort(UploadToken token);
+    /** Permanently retires an unreferenced, exclusively owned session/key. Unlike abort,
+     * this fences completion/replay at storage and removes its current data from use.
+     * S3 retains a permanent entity sentinel; historical versions, staging and control
+     * evidence are not claimed erased. The key is never reusable.
+     * Callers must commit their no-attachment tombstone before invoking it. */
+    default void discardUpload(UploadToken token, StorageKey key) {throw new StorageException(ErrorCode.STORAGE_UNAVAILABLE);}
+
     BlobPage list(String backendId, String namespace, String prefix, String cursor, int limit);
 }

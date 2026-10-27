@@ -1,6 +1,6 @@
 """Explicit isolated controlled knowledge provider. Durable SQLite effects; no inferred no-effect."""
 import resource
-import argparse,base64,hashlib,hmac,http.server,json,os,pathlib,re,secrets,socket,sqlite3,threading,time,urllib.parse
+import argparse,base64,hashlib,hmac,http.server,json,os,pathlib,re,secrets,socket,ssl,sqlite3,threading,time,urllib.parse
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey,Ed25519PublicKey
 MAX_PAYLOAD=8*1024*1024
@@ -322,20 +322,70 @@ class Handler(http.server.BaseHTTPRequestHandler):
   self.connection.close()
  def respond(self,status,body):
   self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(body)));self.send_header('Cache-Control','no-store');self.send_header('Connection','close');self.end_headers();self.wfile.write(body)
+def transport_context(config):
+ if config.get('bind')!='127.0.0.1' or config.get('mode') not in ('ISOLATED_LOOPBACK_TEST','CONTROLLED_TLS'):raise RuntimeError('Explicit pinned loopback transport profile required')
+ if config['mode']=='ISOLATED_LOOPBACK_TEST':return None
+ # Dedicated operator-provided key pair; never system trust or an inferred endpoint.
+ certificate=config['tlsCertificate'];key=config['tlsPrivateKey'];private(certificate,16384);private(key,16384)
+ context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);context.minimum_version=ssl.TLSVersion.TLSv1_2;context.load_cert_chain(certificate,key);return context
+
+def close_socket(connection):
+ try:connection.shutdown(socket.SHUT_RDWR)
+ except OSError:pass
+ connection.close()
+
 class Server(http.server.ThreadingHTTPServer):
  daemon_threads=True;request_queue_size=4
- def __init__(self,bind,provider):super().__init__(bind,Handler);self.provider=provider;self.capacity=threading.BoundedSemaphore(2)
+ def __init__(self,bind,provider,tls=None):
+  self.tls=tls;self.capacity=threading.BoundedSemaphore(2);self.connections=threading.Condition();self.active={};self.closing=False
+  super().__init__(bind,Handler);self.provider=provider
+ def active_connections(self):
+  with self.connections:return tuple(self.active.values())
  def process_request(self,request,address):
   if not self.capacity.acquire(False):request.close();return
-  super().process_request(request,address)
- def process_request_thread(self,*args):
-  try:super().process_request_thread(*args)
-  finally:self.capacity.release()
+  with self.connections:
+   if self.closing:request.close();self.capacity.release();return
+   self.active[request]=request
+  try:super().process_request(request,address)
+  except BaseException:
+   close_socket(request)
+   with self.connections:self.active.pop(request,None);self.connections.notify_all()
+   self.capacity.release();raise
+ def process_request_thread(self,request,address):
+  current=request;timer=None
+  try:
+   expired=threading.Event()
+   def expire():expired.set();close_socket(current)
+   timer=threading.Timer(15,expire);timer.daemon=True;timer.start()
+   request.settimeout(5)
+   if self.tls is not None:
+    secured=self.tls.wrap_socket(request,server_side=True,do_handshake_on_connect=False);current=secured
+    with self.connections:
+     self.active[request]=secured
+     if self.closing or expired.is_set():close_socket(secured);return
+    secured.settimeout(5);secured.do_handshake()
+   self.finish_request(current,address)
+  except (ssl.SSLError,OSError,ValueError):pass
+  except Exception:self.handle_error(current,address)
+  finally:
+   try:
+    if timer is not None:timer.cancel()
+   finally:
+    try:close_socket(current)
+    finally:
+     with self.connections:self.active.pop(request,None);self.connections.notify_all()
+     self.capacity.release()
+ def server_close(self):
+  with self.connections:self.closing=True;active=tuple(self.active.values())
+  for connection in active:close_socket(connection)
+  super().server_close()
+  with self.connections:
+   if not self.connections.wait_for(lambda:not self.active,timeout=5):raise TimeoutError('Controlled connection drain exceeded bound')
 
 def main():
  parser=argparse.ArgumentParser();parser.add_argument('--config',required=True);parser.add_argument('--initialize',action='store_true');parser.add_argument('--grant-actor');parser.add_argument('--grant-folder',default='controlled-root');parser.add_argument('--create-folder');parser.add_argument('--grant-read',action='store_true');parser.add_argument('--grant-publish',action='store_true');args=parser.parse_args()
  config=strict(private(args.config),8192)
- if config['mode']!='ISOLATED_LOOPBACK_TEST' or config['bind']!='127.0.0.1':raise RuntimeError('Explicit isolated loopback test profile required')
+ tls=transport_context(config)
  threading.stack_size(262144)
  os.sched_setaffinity(0,sorted(os.sched_getaffinity(0))[:2])
  resource.setrlimit(resource.RLIMIT_AS,(67108864,67108864))
@@ -345,7 +395,7 @@ def main():
   provider.create_child_folder(args.create_folder);provider.db.close();return
  if args.grant_actor:
   provider.administer(args.grant_actor,'controlled-library',args.grant_folder,args.grant_publish,args.grant_read);provider.db.close();return
- server=Server(('127.0.0.1',int(config['port'])),provider)
+ server=Server(('127.0.0.1',int(config['port'])),provider,tls=tls)
  ready=pathlib.Path(config['readyFile']);ready.write_bytes(canonical({'port':server.server_port,'identities':provider.ids,'store':str(provider.path),'pid':os.getpid(),'pgid':os.getpgid(0)}));os.chmod(ready,0o600)
  try:server.serve_forever(poll_interval=.2)
  finally:server.server_close();provider.db.close()

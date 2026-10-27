@@ -25,6 +25,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
     private final OutboxPort outbox;
     private final AuditPort audit;
     private final CategoryDictionary categories;
+    private final JdbcMeetingReadProjection readProjection;
     private final ama.transcript.JdbcTranscriptAuthority minutes;
     private record Replay(String scope,String result,int status,boolean matches) {}
     private record Roster(String id,long revision,String state) {}
@@ -32,8 +33,9 @@ public final class JdbcMeetingRepository implements MeetingRepository {
                                  OutboxPort outbox,AuditPort audit,CategoryDictionary categories){
         this(source,tx,access,fences,outbox,audit,categories,null);
     }
-    public JdbcMeetingRepository(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,SubjectFencePort fences,OutboxPort outbox,AuditPort audit,CategoryDictionary categories,ama.transcript.JdbcTranscriptAuthority minutes){
-        j=new JdbcTemplate(source);this.tx=tx;this.access=access;this.fences=fences;this.outbox=outbox;this.audit=audit;this.categories=categories;this.minutes=minutes;
+    public JdbcMeetingRepository(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,SubjectFencePort fences,OutboxPort outbox,AuditPort audit,CategoryDictionary categories,ama.transcript.JdbcTranscriptAuthority minutes){this(source,tx,access,fences,outbox,audit,categories,minutes,WorkspaceReadBudget.DEFAULT);}
+    public JdbcMeetingRepository(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,SubjectFencePort fences,OutboxPort outbox,AuditPort audit,CategoryDictionary categories,ama.transcript.JdbcTranscriptAuthority minutes,WorkspaceReadBudget.Limits limits){
+        j=new JdbcTemplate(source);readProjection=new JdbcMeetingReadProjection(source,tx,access,limits);this.tx=tx;this.access=access;this.fences=fences;this.outbox=outbox;this.audit=audit;this.categories=categories;this.minutes=minutes;
     }
     @Override public Created create(Actor actor,String key,String trace){
         independent();
@@ -137,19 +139,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             return new Mutation(id,version);
         });
     }
-    @Override public Saved read(Actor actor,String id){
-        independent();return tx.required(()->{
-            var held=(JdbcMeetingAccess.Held)access.lock(actor,id);access.require(held,Action.READ);
-            var root=held.root;
-            var infos=j.queryForList("SELECT * FROM meeting_info_revision WHERE id=? AND meeting_id=? FOR UPDATE",root.infoId(),id);
-            if(infos.size()!=1)throw new IllegalStateException("Invalid current info pointer");var info=infos.getFirst();
-            List<Member> confirmed=root.rosterId()==null?List.of():confirmedMembers(root.rosterId(),id);
-            Roster draft=null;List<Member> draftMembers=null;
-            if(root.owner().equals(actor.enterpriseId())){var latest=latest(id);if(latest!=null&&latest.state().equals("DRAFT")){draft=latest;draftMembers=members(draft.id());}}
-            var date=info.get("actual_meeting_date");
-            return new Saved(id,root.revision(),root.accessRevision(),root.stage(),(String)info.get("name"),(String)info.get("category_id"),(String)info.get("summary"),date==null?null:((java.sql.Date)date).toLocalDate(),root.rosterId(),confirmed,draft==null?null:draft.id(),draftMembers);
-        });
-    }
+    @Override public Saved read(Actor actor,String id){return readProjection.saved(actor,id);}
     private record Pending(ama.transcript.JdbcTranscriptAuthority.PreparedMinutesTransition value,RuntimeException failure) {}
     private Pending prepareMinutes(Actor actor,String id){try{return new Pending(minutes==null?null:minutes.prepareMinutesTransition(actor,id),null);}catch(RuntimeException unavailable){return new Pending(null,unavailable);}}
     private Replay claim(Actor actor,String resource,String operation,String key,String requestHash){

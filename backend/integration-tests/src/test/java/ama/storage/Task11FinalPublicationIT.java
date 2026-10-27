@@ -34,7 +34,9 @@ class Task11FinalPublicationIT extends Task10AdoptIT {
  }
  long revision(){return j.queryForObject("SELECT revision FROM meeting WHERE id=?",Long.class,meeting);}
  @Override void afterCandidate(Map<String,Object> candidate,JdbcMinutesFactsReader.Snapshot facts)throws Exception {
-  super.afterCandidate(candidate,facts);
+  super.afterCandidate(candidate,facts);finishFinalPublication(candidate);
+ }
+ void finishFinalPublication(Map<String,Object> candidate)throws Exception {
   var authority=ama.api.Task09RuntimeProbe.components(app).authority();
   var limits=new TranscriptAcquisitionBudget(16777216,16777216,16777216,268435456,134217728,8388608,128,256,256);
   var runtime=MinutesEditorRuntime.compose(authority,this::snapshot,pin,prompt,model,limits,isolated());
@@ -53,6 +55,7 @@ class Task11FinalPublicationIT extends Task10AdoptIT {
   Files.writeString(receipt.resolve("task11-final-precondition.json"),json.writeValueAsString(Map.of("meeting",meeting,"revision",revision(),"readiness",readiness,"actualGenerationTask",candidate.get("task_id"))));
   knowledge=knowledgeFixture();
   restartForFinal();
+  beforeFinalSubmission();
   var response=call("POST","/meetings/"+meeting+"/final-confirmations",json.writeValueAsString(Map.of("expectedRevisionToken",Long.toString(revision()),"optionalReviewIds",List.of())),"task11-actual-final");
   Files.writeString(receipt.resolve("task11-final-response.json"),json.writeValueAsString(Map.of("status",response.statusCode(),"body",response.body())));
   assertEquals(201,response.statusCode(),response.body());
@@ -64,6 +67,7 @@ class Task11FinalPublicationIT extends Task10AdoptIT {
 
 
  }
+ void beforeFinalSubmission()throws Exception {}
  Task11PublicationWaiter.State publicationState(String task,boolean done,boolean failed){var t=j.queryForMap("SELECT state FROM durable_task WHERE id=?",task);var e=j.queryForList("SELECT e.state execution_state,o.state operation_state FROM external_execution e JOIN external_operation o ON o.id=e.operation_id WHERE e.task_id=? ORDER BY e.execution_no DESC LIMIT 1",task);return new Task11PublicationWaiter.State((String)t.get("state"),e.isEmpty()?null:(String)e.getFirst().get("operation_state"),e.isEmpty()?null:(String)e.getFirst().get("execution_state"),done,failed);}
  void runPublication(Map<String,Object> accepted)throws Exception {
   String task=(String)accepted.get("taskId");var queue=app.getBean(JdbcTaskQueue.class);var operations=new JdbcExternalOperations(queue);var permits=new JdbcModelPermitPool(operations,Map.of(),(t,m,d)->{throw new IllegalStateException("No publication model reservation");});var service=ama.api.Task11RuntimeProbe.publication(app);var handler=new ama.worker.KnowledgePublicationHandler(service,operations,permits);var failure=new java.util.concurrent.atomic.AtomicReference<Throwable>();var done=new java.util.concurrent.atomic.AtomicBoolean();

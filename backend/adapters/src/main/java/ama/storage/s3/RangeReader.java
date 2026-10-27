@@ -20,6 +20,7 @@ final class RangeReader {
     InputStream read(StorageKey key, long offset, long length) {
         if (offset < 0 || length < 0 || offset > Long.MAX_VALUE - length)
             throw new StorageException(ErrorCode.INVALID_RANGE);
+        RetiredUploads.live(io,layout,key);
         String physical = layout.data(key);
         io.binding(layout, key, false);
         var head =
@@ -30,6 +31,8 @@ final class RangeReader {
                                                 .bucket(io.config.dataBucket())
                                                 .key(physical)
                                                 .build()));
+        RetiredUploads.live(io,layout,key);
+        if(head.metadata().containsKey("ama-retired-v1"))throw new StorageException(ErrorCode.NOT_FOUND);
         long size = S3Objects.contentLength(head.contentLength());
         if (offset > size || length > size - offset)
             throw new StorageException(ErrorCode.INVALID_RANGE);

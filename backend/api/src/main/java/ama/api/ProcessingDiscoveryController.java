@@ -56,7 +56,9 @@ import org.springframework.web.bind.annotation.*;
         });
     }
     private static int limit(HttpServletRequest r,int fallback) {
-        return Math.toIntExact(decimal(r.getParameter("limit"),fallback));
+        long value=decimal(r.getParameter("limit"),fallback);
+        if(value>Integer.MAX_VALUE)throw new IllegalArgumentException("Invalid page limit");
+        return (int)value;
     }
     private static long decimal(String value,long fallback) {
         if(value==null)return fallback;

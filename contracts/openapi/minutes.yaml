@@ -168,19 +168,40 @@
         "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
       }
     },
-    "anyOf": [
+    "description": "Exact object. Duplicate/unknown fields, trailing data, fractions and unequal dual revision representations are rejected. Body transport limit is 1 MiB.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevisionToken"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevision"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806,
+                "description": "Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Exact object. Duplicate/unknown fields, trailing data, fractions and unequal dual revision representations are rejected. Body transport limit is 1 MiB."
+    ]
   },
   "MinutesGenerationCommand": {
     "type": "object",
@@ -208,19 +229,40 @@
         "description": "Required exact FULL scope. Omitting scope is invalid."
       }
     },
-    "anyOf": [
+    "description": "Exact object. Duplicate/unknown fields, trailing data, fractions and unequal dual revision representations are rejected. Body transport limit is 1 MiB.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevisionToken"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevision"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806,
+                "description": "Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Exact object. Duplicate/unknown fields, trailing data, fractions and unequal dual revision representations are rejected. Body transport limit is 1 MiB."
+    ]
   },
   "MinutesInitialReceipt": {
     "type": "object",
@@ -3948,19 +3990,39 @@
         "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
       }
     },
-    "anyOf": [
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+    ]
   },
   "SavedEvidenceAnchor": {
     "type": "object",
@@ -4027,19 +4089,39 @@
         }
       }
     },
-    "anyOf": [
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+    ]
   },
   "SavedElementCommand": {
     "type": "object",
@@ -4076,19 +4158,39 @@
         }
       }
     },
-    "anyOf": [
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+    ]
   },
   "SavedActionCommand": {
     "type": "object",
@@ -4147,19 +4249,39 @@
         ]
       }
     },
-    "anyOf": [
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. All nullable accepted tuple members are required. Non-null enterprise selection remains unavailable until a qualified identity selector is installed; suggestions never substitute for accepted values.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. All nullable accepted tuple members are required. Non-null enterprise selection remains unavailable until a qualified identity selector is installed; suggestions never substitute for accepted values."
+    ]
   },
   "SavedBodyRestoreCommand": {
     "type": "object",
@@ -4184,19 +4306,39 @@
         "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
       }
     },
-    "anyOf": [
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+    ]
   },
   "SavedSetRestoreCommand": {
     "type": "object",
@@ -4221,19 +4363,39 @@
         "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
       }
     },
-    "anyOf": [
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+    ]
   },
   "SavedTemplateCommand": {
     "type": "object",
@@ -4258,19 +4420,39 @@
         "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
       }
     },
-    "anyOf": [
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+    ]
   },
   "SavedExclusionItem": {
     "type": "object",
@@ -4336,19 +4518,39 @@
         }
       }
     },
-    "anyOf": [
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+    ]
   },
   "SavedAdoptCommand": {
     "type": "object",
@@ -4378,19 +4580,39 @@
         "pattern": "^[0-9a-f]{64}$"
       }
     },
-    "anyOf": [
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+    ]
   },
   "SavedDecisionCommand": {
     "type": "object",
@@ -4408,19 +4630,39 @@
         "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
       }
     },
-    "anyOf": [
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+    ]
   },
   "SavedReviewCommand": {
     "oneOf": [
@@ -4481,19 +4723,39 @@
             ]
           }
         },
-        "anyOf": [
+        "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+        "allOf": [
           {
-            "required": [
-              "expectedRevision"
-            ]
-          },
-          {
-            "required": [
-              "expectedRevisionToken"
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "expectedRevision"
+                ],
+                "properties": {
+                  "expectedRevision": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9223372036854775806
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "expectedRevisionToken"
+                ],
+                "properties": {
+                  "expectedRevisionToken": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,18})$",
+                    "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+                  }
+                }
+              }
             ]
           }
-        ],
-        "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+        ]
       },
       {
         "type": "object",
@@ -4564,19 +4826,39 @@
             "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
           }
         },
-        "anyOf": [
+        "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+        "allOf": [
           {
-            "required": [
-              "expectedRevision"
-            ]
-          },
-          {
-            "required": [
-              "expectedRevisionToken"
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "expectedRevision"
+                ],
+                "properties": {
+                  "expectedRevision": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9223372036854775806
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "expectedRevisionToken"
+                ],
+                "properties": {
+                  "expectedRevisionToken": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,18})$",
+                    "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+                  }
+                }
+              }
             ]
           }
-        ],
-        "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+        ]
       },
       {
         "type": "object",
@@ -4626,19 +4908,39 @@
             "const": "CONFIRMED"
           }
         },
-        "anyOf": [
+        "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+        "allOf": [
           {
-            "required": [
-              "expectedRevision"
-            ]
-          },
-          {
-            "required": [
-              "expectedRevisionToken"
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "expectedRevision"
+                ],
+                "properties": {
+                  "expectedRevision": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9223372036854775806
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "expectedRevisionToken"
+                ],
+                "properties": {
+                  "expectedRevisionToken": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,18})$",
+                    "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+                  }
+                }
+              }
             ]
           }
-        ],
-        "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized."
+        ]
       }
     ]
   },
@@ -6290,7 +6592,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "oneOf": [
+                  {
+                    "$ref": "./identity.yaml#/BusinessError"
+                  },
+                  {
+                    "$ref": "#/SavedIntentConflict"
+                  }
+                ]
               }
             }
           }
@@ -11593,6 +11902,32 @@
             "type": "null"
           }
         ]
+      }
+    }
+  },
+  "SavedIntentConflict": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "error",
+      "current"
+    ],
+    "properties": {
+      "error": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "const": "REVISION_CONFLICT"
+          }
+        }
+      },
+      "current": {
+        "$ref": "#/SavedIntentProjection"
       }
     }
   }

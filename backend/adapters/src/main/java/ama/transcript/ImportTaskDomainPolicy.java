@@ -16,8 +16,8 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
     private static final class Prepared {
         final Actor owner;final MeetingAccess.LockedIdentities identities;final List<TranscriptReadGraph> graphs;final MinutesPendingDiscovery.Plan pending;
         FileRegistry.LockedMeeting completionGate;
-        final PublicationWriteGuard.Prepared publication;PublicationWriteGuard.Held publicationHeld;MeetingAccess.Locked access;
-        Prepared(Actor owner,MeetingAccess.LockedIdentities identities,List<TranscriptReadGraph> graphs,MinutesPendingDiscovery.Plan pending,PublicationWriteGuard.Prepared publication){this.owner=owner;this.identities=identities;this.graphs=graphs;this.pending=pending;this.publication=publication;}
+        final TranscriptAcquisitionBudget.Ledger budget;final PublicationWriteGuard.Prepared publication;PublicationWriteGuard.Held publicationHeld;MeetingAccess.Locked access;
+        Prepared(Actor owner,MeetingAccess.LockedIdentities identities,List<TranscriptReadGraph> graphs,MinutesPendingDiscovery.Plan pending,PublicationWriteGuard.Prepared publication,TranscriptAcquisitionBudget.Ledger budget){this.budget=budget;this.owner=owner;this.identities=identities;this.graphs=graphs;this.pending=pending;this.publication=publication;}
         Actor owner(){return owner;}MeetingAccess.LockedIdentities identities(){return identities;}List<TranscriptReadGraph> graphs(){return graphs;}
     }
     private record Adopted(JdbcTranscriptAuthority.HeldProcessingFacts held,FileRegistry.LockedMeeting gate,TaskSpec spec) {
@@ -35,7 +35,7 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
     public Optional<PreparedDomain> prepare(List<TaskSpec> specs,Acquisition purpose,boolean skip) {
         if(purpose!=Acquisition.TASK_MUTATION||specs==null||specs.isEmpty())throw new DomainPreparationUnavailableException();
         var first=specs.getFirst();
-        var graphs=new ArrayList<TranscriptReadGraph>();
+        var graphs=new ArrayList<TranscriptReadGraph>();var budget=authority.publicationBudget();
         String owner=null;
         require(specs.size()<=authority.readBudget().maxBatchFiles(),BUDGET_EXCEEDED);
         for(var spec:specs) {
@@ -45,20 +45,20 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
             require(ids.size()==1,PROVENANCE_UNAVAILABLE);
             var members=j.queryForList("SELECT f.file_id FROM input_batch_file f JOIN transcription_input i ON i.batch_id=f.batch_id WHERE i.id=? ORDER BY f.ordinal LIMIT 1",String.class,spec.input().id());
             require(members.size()==1,PROVENANCE_UNAVAILABLE);
-            var graph=TranscriptReadGraph.discover(j,authority.readBudget(),authority.canonicalBudget(),spec.subject().id(),null,spec.input().id(),ids.getFirst(),members.getFirst(),row->authority.producerBeforeRoots(spec.subject().id(),text(row,"id"),text(row,"input_fingerprint"),number(row,"base_revision"),number(row,"cancel_epoch")));
+            var graph=TranscriptReadGraph.discover(j,authority.readBudget(),authority.canonicalBudget(),spec.subject().id(),null,spec.input().id(),ids.getFirst(),members.getFirst(),row->authority.producerBeforeRoots(spec.subject().id(),text(row,"id"),text(row,"input_fingerprint"),number(row,"base_revision"),number(row,"cancel_epoch")),budget);
             require(graph.expected.equals(spec),PROVENANCE_UNAVAILABLE);
             String actual=text(graph.root,"owner_id");
             if(owner==null)owner=actual;
             require(owner.equals(actual),PROVENANCE_UNAVAILABLE);
             graphs.add(graph);
         }
-        var pending=MinutesPendingDiscovery.discover(authority.dataSource(),first.subject().id());
+        var pending=MinutesPendingDiscovery.discover(authority.dataSource(),first.subject().id(),budget);
         var actor=new Actor(owner,Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
-        var publication=authority.publicationWriteGuard().prepare(actor,first.subject().id(),authority.publicationBudget());
+        var publication=authority.publicationWriteGuard().prepare(actor,first.subject().id(),budget);
         authority.publicationWriteGuard().covers(publication,pending.rows());
         var identities=authority.meetingAccess().tryLockIdentities(actor,List.of(owner),skip);
         if(identities.isEmpty())return Optional.empty();
-        return Optional.of(issuer.issue(specs,purpose,new Prepared(actor,identities.orElseThrow(),List.copyOf(graphs),pending,publication),true));
+        return Optional.of(issuer.issue(specs,purpose,new Prepared(actor,identities.orElseThrow(),List.copyOf(graphs),pending,publication,budget),true));
     }
     public void requirePrepared(List<TaskSpec> specs,Acquisition purpose,PreparedDomain prepared) {
         issuer.require(specs,purpose,prepared);
@@ -94,7 +94,7 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         if(root.isEmpty())return false;
         authority.meetingAccess().requirePrepared(root.orElseThrow(),p.owner(),specs.getFirst().subject().id(),List.of(p.owner().enterpriseId()),MeetingAccess.Action.EDIT);
         var gate=authority.fileRegistry().adopt(p.owner(),specs.getFirst().subject().id(),root.orElseThrow(),MeetingAccess.Action.EDIT);
-        var reader=new BoundedTranscriptMetadata(j,authority.readBudget(),true,skip);
+        var reader=new BoundedTranscriptMetadata(j,authority.readBudget(),true,skip,p.budget);
         for(var graph:p.graphs())require(reader.one("meeting",BoundedTranscriptMetadata.ROOT,text(graph.root,"id")).equals(graph.root),PROVENANCE_UNAVAILABLE);
         p.access=root.orElseThrow();p.publicationHeld=authority.publicationWriteGuard().controls(p.publication,p.owner(),specs.getFirst().subject().id(),p.access);
         // Whole input/batch/profile/member union precedes every source session/file, across all specs.
@@ -109,7 +109,7 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         for(var entry:batches.entrySet())require(reader.select("input_batch_fingerprint_profile","batch_id profile","batch_id=?","batch_id",2,entry.getKey()).equals(List.of(entry.getValue().profile)),PROFILE_UNAVAILABLE);
         for(var entry:batches.entrySet())require(reader.select("input_batch_file",BoundedTranscriptMetadata.MEMBER,"batch_id=?","ordinal",authority.readBudget().maxBatchFiles(),entry.getKey()).equals(entry.getValue().members),PROVENANCE_UNAVAILABLE);
         for(var graph:p.graphs()) {
-            var tasks=new BoundedTranscriptMetadata(j,authority.readBudget()).select("durable_task",BoundedTranscriptMetadata.TASK,"input_kind='TRANSCRIPTION_INPUT' AND input_id=?","id",2,text(graph.input,"id"));
+            var tasks=new BoundedTranscriptMetadata(j,authority.readBudget(),false,false,p.budget).select("durable_task",BoundedTranscriptMetadata.TASK,"input_kind='TRANSCRIPTION_INPUT' AND input_id=?","id",2,text(graph.input,"id"));
             require(tasks.equals(List.copyOf(graph.tasks.values())),PROVENANCE_UNAVAILABLE);
         }
         MinutesPendingDiscovery.lock(authority.dataSource(),p.pending,MinutesPendingDiscovery.DOMAIN);

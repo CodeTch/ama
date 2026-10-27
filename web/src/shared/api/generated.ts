@@ -121,7 +121,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/meetings": {
+    "/api/v1/meetings/command-discovery": {
         parameters: {
             query?: never;
             header?: never;
@@ -129,6 +129,90 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
+        put?: never;
+        /**
+         * Locate the durable association of an exact original meeting command key
+         * @description Bounded read-only lookup with current ACTIVE identity and owner authorization. CREATE uses resource meetings; other operations require the canonical meeting UUID. Keys appear only in the body. FOUND reports the historical result association plus a separately labeled current observation; it is not an original command ACK, payload-equality proof, editor permission or readiness. Retry the original producer command with its original key and exact body for authoritative replay. ABSENT is an observation and never permits replacing an uncertain command key/body. No receipt is written, no content/provider token/digest is returned. Unknown queries, duplicate/unknown fields and bodies exceeding 16384 bytes are rejected. Key has a strict 4096 UTF-8 byte acquisition bound.
+         */
+        post: operations["discoverMeetingCommand"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/workspace": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read authorized current saved navigation references
+         * @description Fresh real meeting READ gate and one bounded DB-only acquisition. Returns current saved IDs, actor relation and exact string tokens, without contents, readiness, command ACK or write permission. Saved transcript must be WORKING; candidate objects cannot become saved references. Members receive only the same effective saved references. This revision supplies saved navigation only; private input, candidate, final and publication composition is not represented, and missing sections never prove absence. Producer reads require fresh authorization and may observe later changes. No query parameters are accepted.
+         */
+        get: operations["readWorkspaceNavigation"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read bounded owner-only cross-family task navigation
+         * @description Fresh active owner gate, including published meeting history. Scans at most limit plus one task records using subject history keyset, validates all scanned families and exact persisted parents, then filters kind. An empty page may have a continuation. The opaque cursor binds actor, meeting and kind, expires after five minutes and requires restart after process restart. Unknown families, missing original publication submissions, changed declarations or exhausted cumulative budget fail unavailable. No task bodies, manifests, output contents, raw errors or readiness computation are returned. Unknown or repeated query keys are invalid. A registered family does not prove a running worker or available detail capability.
+         */
+        get: operations["listWorkspaceTasks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read the installed meeting category validation dictionary
+         * @description Fresh ACTIVE identity required on every page. Uses the same immutable dictionary as meeting category validation. Default company dictionary remains unavailable. Returns private no-store data; unknown or repeated query keys are invalid. No external directory or fabricated fallback list.
+         */
+        get: operations["listMeetingCategories"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List independently authorized saved meeting metadata
+         * @description Uses bounded indexed updated-time/id candidates. Each emitted row has fresh authorization. Joined means confirmed enterprise participant, including an owner only when confirmed. No summary or roster labels are read. Unknown/repeated queries fail; changed discovery or exhausted shared budget fails the whole response. No counts/search/snapshot or mutation permission is implied.
+         */
+        get: operations["listMeetings"];
         put?: never;
         /**
          * Create an empty meeting owned by the current active identity
@@ -1798,7 +1882,7 @@ export interface components {
         BusinessError: {
             error: {
                 /** @enum {string} */
-                code: "UNAUTHENTICATED" | "FORBIDDEN" | "INVALID_ARGUMENT" | "IDENTITY_UNAVAILABLE" | "IDENTITY_PROVIDER_UNAVAILABLE" | "MEETING_FORBIDDEN" | "MEETING_CONFLICT" | "CATEGORY_DICTIONARY_UNAVAILABLE" | "REQUEST_TOO_LARGE" | "FILE_PURPOSE_UNAVAILABLE" | "FILE_CONFLICT" | "FILE_NOT_FOUND" | "FILE_STORAGE_UNAVAILABLE" | "FILE_INVALID_RANGE";
+                code: "UNAUTHENTICATED" | "FORBIDDEN" | "INVALID_ARGUMENT" | "IDENTITY_UNAVAILABLE" | "IDENTITY_PROVIDER_UNAVAILABLE" | "MEETING_FORBIDDEN" | "MEETING_CONFLICT" | "MEETING_UNAVAILABLE" | "CATEGORY_DICTIONARY_UNAVAILABLE" | "REQUEST_TOO_LARGE" | "FILE_PURPOSE_UNAVAILABLE" | "FILE_CONFLICT" | "FILE_NOT_FOUND" | "FILE_STORAGE_UNAVAILABLE" | "FILE_INVALID_RANGE";
                 message: string;
                 /** Format: uuid */
                 traceId: string;
@@ -1814,8 +1898,135 @@ export interface components {
             items: components["schemas"]["Person"][];
             nextCursor: string | null;
         };
+        CommandAssociation: {
+            /** @enum {string} */
+            operation: "CREATE" | "SAVE_INFO" | "CONFIRM_ROSTER" | "UPLOAD_BEGIN";
+            /** Format: uuid */
+            meetingId: string;
+            /** @enum {string} */
+            resultKind: "INFO_REVISION" | "ROSTER_REVISION" | "UPLOAD_SESSION";
+            /** Format: uuid */
+            resultId: string;
+            /** @description Original info or confirmed roster revision. Null for upload association; never substitute current revision. */
+            acceptedRevisionToken: string | null;
+            /** @enum {integer} */
+            originalHttpStatus: 200 | 201;
+        };
         /** @description Opaque canonical decimal revision, 0..9223372036854775806. Preserve the string exactly. Dual representations must agree. */
         ExpectedRevisionToken: string;
+        CommandObservation: {
+            /** Format: uuid */
+            meetingId: string;
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+            accessRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+            /** @enum {string} */
+            stage: "ENTRY" | "TRANSCRIPT_PENDING" | "TRANSCRIPT_FAILED" | "MINUTES_PENDING" | "MINUTES_FAILED" | "READY_TO_PUBLISH" | "PUBLISH_FAILED" | "PUBLISHED";
+        };
+        CommandLookup: {
+            /** @constant */
+            status: "FOUND";
+            association: components["schemas"]["CommandAssociation"];
+            current: components["schemas"]["CommandObservation"];
+        } | {
+            /** @constant */
+            status: "ABSENT";
+            association: null;
+            current: components["schemas"]["CommandObservation"] | null;
+        };
+        WorkspaceSavedReferences: {
+            /** Format: uuid */
+            infoRevisionId: string;
+            /** Format: uuid */
+            rosterRevisionId: string | null;
+            /** Format: uuid */
+            transcriptRevisionId: string | null;
+            /** Format: uuid */
+            transcriptConfirmationId: string | null;
+            /** Format: uuid */
+            minutesRevisionId: string | null;
+            /** Format: uuid */
+            elementSetId: string | null;
+        };
+        WorkspaceNavigation: {
+            /** Format: uuid */
+            meetingId: string;
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+            accessRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+            /** @enum {string} */
+            stage: "ENTRY" | "TRANSCRIPT_PENDING" | "TRANSCRIPT_FAILED" | "MINUTES_PENDING" | "MINUTES_FAILED" | "READY_TO_PUBLISH" | "PUBLISH_FAILED" | "PUBLISHED";
+            /** @enum {string} */
+            relation: "OWNER" | "MEMBER";
+            /**
+             * @description MEMBER has MEMBER_READ_ONLY. OWNER has PUBLISHED_READ_ONLY or CHECK_PRODUCER. Neither owner state grants mutation permission.
+             * @enum {string}
+             */
+            navigationState: "MEMBER_READ_ONLY" | "PUBLISHED_READ_ONLY" | "CHECK_PRODUCER";
+            /** @constant */
+            contentEligibility: "RECHECK_REQUIRED";
+            saved: components["schemas"]["WorkspaceSavedReferences"];
+        };
+        WorkspaceTaskItem: {
+            /** Format: uuid */
+            taskId: string;
+            /** @enum {string} */
+            kind: "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1";
+            /** @enum {string} */
+            state: "READY" | "RUNNING" | "RECONCILING" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "STALE";
+            attemptToken: string;
+            businessRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+            /** Format: uuid */
+            inputId: string;
+            /** @description Actual producer detail route. Publication links address the publication root; original task identity remains taskId. */
+            detailPath: string;
+        };
+        WorkspaceTaskPage: {
+            items: components["schemas"]["WorkspaceTaskItem"][];
+            nextCursor: string | null;
+            hasMore: boolean;
+            /**
+             * @description Registered task family and exact persisted parent relation only. Does not verify canonical producer hashes, content provenance, command ACK, final readiness, or complete absence.
+             * @constant
+             */
+            verification: "PERSISTED_RELATION";
+        };
+        CategoryItem: {
+            id: string;
+            label: string;
+        };
+        CategoryPage: {
+            items: components["schemas"]["CategoryItem"][];
+            /** @description Opaque continuation bound to actor and immutable dictionary. Expires after five minutes; application restart requires a new first page. */
+            nextCursor: string | null;
+            hasMore: boolean;
+        };
+        MeetingItem: {
+            /** Format: uuid */
+            id: string;
+            name: string | null;
+            category: string | null;
+            /** Format: date */
+            occurredOn: string | null;
+            /** @enum {string} */
+            stage: "ENTRY" | "TRANSCRIPT_PENDING" | "TRANSCRIPT_FAILED" | "MINUTES_PENDING" | "MINUTES_FAILED" | "READY_TO_PUBLISH" | "PUBLISH_FAILED" | "PUBLISHED";
+            /** @constant */
+            lifecycle: "ACTIVE";
+            /** @enum {string} */
+            relation: "OWNER" | "MEMBER";
+            /**
+             * @description List navigation never grants edit permission or evaluates producer readiness. Owner must open workspace for fresh producer state.
+             * @enum {string}
+             */
+            writeState: "MEMBER_READ_ONLY" | "PUBLISHED_READ_ONLY" | "CHECK_WORKSPACE";
+            revisionToken: string;
+            accessRevisionToken: string;
+        };
+        MeetingPage: {
+            items: components["schemas"]["MeetingItem"][];
+            /** @description Encrypted actor/scope-bound continuation over scanned candidates. Expires after five minutes. */
+            nextCursor: string | null;
+            /** @description Further bounded candidates may exist. Empty items with hasMore true is valid; denied rows are not disclosed. No total-count or snapshot claim. */
+            hasMore: boolean;
+        };
         Mutation: {
             /** Format: uuid */
             id: string;
@@ -1861,7 +2072,11 @@ export interface components {
             occurredOn?: string | null;
             rosterDraftIds: string[];
             externalRosterNames?: string[] | null;
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: components["schemas"]["ExpectedRevision"];
+        } | {
+            expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+        });
         UploadSummary: {
             /** Format: uuid */
             uploadId: string;
@@ -1947,7 +2162,12 @@ export interface components {
             /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
             expectedRevisionToken?: string;
             orderedFileIds: string[];
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: components["schemas"]["ExpectedRevision"];
+        } | {
+            /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
+            expectedRevisionToken: string;
+        });
         ImportAccepted: {
             /** Format: uuid */
             meetingId: string;
@@ -1963,6 +2183,13 @@ export interface components {
             revisionToken: string;
             inputFingerprint: string;
         };
+        /**
+         * Format: int64
+         * @description Technical suggestion only; restart never re-slices accepted receipts.
+         */
+        partSize: number;
+        /** @description Opaque canonical decimal representation of the unchanged positive partSize value, 1..9223372036854775807. Preserve this string exactly. */
+        partSizeToken: string;
         CompletedFileSummary: {
             /** Format: uuid */
             fileId: string;
@@ -2008,10 +2235,8 @@ export interface components {
             accepted: {
                 /** Format: uuid */
                 uploadId: string;
-                /** Format: int64 */
-                partSize: number;
-                /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
-                partSizeToken: string;
+                partSize: components["schemas"]["partSize"];
+                partSizeToken: components["schemas"]["partSizeToken"];
             };
             allowedActions: ("UPLOAD_PARTS" | "COMPLETE" | "ABORT")[];
             idempotentRetries: ("COMPLETE" | "ABORT")[];
@@ -2273,7 +2498,12 @@ export interface components {
                 body: string;
                 marks: ("KEY" | "CONCLUSION" | "DISPUTE" | "GENERATION_FOCUS")[];
             }[];
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: components["schemas"]["ExpectedRevision"];
+        } | {
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            expectedRevisionToken: string;
+        });
         SavedResult: {
             /** @constant */
             kind: "SAVED_REVISION";
@@ -2368,7 +2598,12 @@ export interface components {
                 segmentId: string;
                 marks: ("KEY" | "CONCLUSION" | "DISPUTE" | "GENERATION_FOCUS")[];
             }[];
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: components["schemas"]["ExpectedRevision"];
+        } | {
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            expectedRevisionToken: string;
+        });
         CurrentConfirmation: {
             confirmation: components["schemas"]["Confirmation"] | null;
             observation: components["schemas"]["Observation"];
@@ -2381,7 +2616,12 @@ export interface components {
             expectedRevisionToken?: string;
             /** Format: uuid */
             savedRevisionId: string;
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: components["schemas"]["ExpectedRevision"];
+        } | {
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            expectedRevisionToken: string;
+        });
         /** @description At least one exact expected revision representation; equal dual values normalize identically. Complete ordered segment set; immutable source IDs/order/metadata. Strict duplicate/unknown/trailing/scalar JSON, 8388608-byte streaming envelope, no trim/NFC. Current operational admission applies after accepted-result lookup. */
         RestoreRequest: {
             expectedRevision?: components["schemas"]["ExpectedRevision"];
@@ -2389,7 +2629,12 @@ export interface components {
             expectedRevisionToken?: string;
             /** Format: uuid */
             sourceRevisionId: string;
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: components["schemas"]["ExpectedRevision"];
+        } | {
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            expectedRevisionToken: string;
+        });
         MinutesTemplate: {
             /** Format: uuid */
             templateId: string;
@@ -2427,7 +2672,13 @@ export interface components {
             expectedRevision?: number;
             /** Format: uuid */
             templateRevisionId: string;
-        } | unknown | unknown;
+        } & ({
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            expectedRevisionToken: string;
+        } | {
+            /** @description Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically. */
+            expectedRevision: number;
+        });
         MinutesInitialReceipt: {
             result: {
                 /** @constant */
@@ -2453,7 +2704,13 @@ export interface components {
              * @enum {string}
              */
             scope: "FULL";
-        } | unknown | unknown;
+        } & ({
+            /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
+            expectedRevisionToken: string;
+        } | {
+            /** @description Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically. */
+            expectedRevision: number;
+        });
         MinutesGenerationReceipt: {
             result: {
                 /** @constant */
@@ -2863,7 +3120,12 @@ export interface components {
             expectedRevision?: number;
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
             expectedRevisionToken?: string;
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         SavedIntentAck: {
             result: {
                 /** @constant */
@@ -2872,6 +3134,13 @@ export interface components {
                 meetingId: string;
             };
             replayed: boolean;
+            current: components["schemas"]["SavedIntentProjection"];
+        };
+        SavedIntentConflict: {
+            error: {
+                /** @constant */
+                code: "REVISION_CONFLICT";
+            };
             current: components["schemas"]["SavedIntentProjection"];
         };
         SavedBodyHistoryItem: {
@@ -3074,7 +3343,12 @@ export interface components {
             scope: "WHOLE";
             /** @enum {string} */
             outcome: "SUPPORTED" | "PARTIAL" | "UNSUPPORTED";
-        } | unknown | unknown) | ({
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        })) | ({
             expectedRevision?: number;
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
             expectedRevisionToken?: string;
@@ -3094,7 +3368,12 @@ export interface components {
             startToken: string;
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
             endToken: string;
-        } | unknown | unknown) | ({
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        })) | ({
             expectedRevision?: number;
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
             expectedRevisionToken?: string;
@@ -3109,7 +3388,12 @@ export interface components {
             scope: null;
             /** @constant */
             outcome: "CONFIRMED";
-        } | unknown | unknown);
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        }));
         SavedCommandAck: {
             /** @enum {string} */
             operation: "MINUTES_ADOPT" | "MINUTES_REJECT" | "MINUTES_DISPOSE" | "MINUTES_BODY_SAVE" | "MINUTES_BODY_RESTORE" | "MINUTES_ELEMENT_EDIT" | "MINUTES_ACTION_FIELDS" | "MINUTES_OPEN_QUESTION" | "MINUTES_SET_RESTORE" | "MINUTES_TEMPLATE" | "MINUTES_EXCLUSIONS" | "MINUTES_REVIEW";
@@ -3159,7 +3443,12 @@ export interface components {
             title: string;
             body: string;
             evidenceAnchors: components["schemas"]["SavedEvidenceAnchor"][];
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
         SavedElementCommand: {
             expectedRevision?: number;
@@ -3169,7 +3458,12 @@ export interface components {
             sourceSetId: string;
             body: string;
             evidenceAnchors: components["schemas"]["SavedEvidenceAnchor"][];
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. All nullable accepted tuple members are required. Non-null enterprise selection remains unavailable until a qualified identity selector is installed; suggestions never substitute for accepted values. */
         SavedActionCommand: {
             expectedRevision?: number;
@@ -3180,7 +3474,12 @@ export interface components {
             ownerEnterpriseId: string | null;
             ownerDisplay: string | null;
             dueOn: string | null;
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
         SavedBodyRestoreCommand: {
             expectedRevision?: number;
@@ -3188,7 +3487,12 @@ export interface components {
             expectedRevisionToken?: string;
             /** Format: uuid */
             sourceRevisionId: string;
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
         SavedSetRestoreCommand: {
             expectedRevision?: number;
@@ -3196,7 +3500,12 @@ export interface components {
             expectedRevisionToken?: string;
             /** Format: uuid */
             sourceSetId: string;
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
         SavedTemplateCommand: {
             expectedRevision?: number;
@@ -3204,7 +3513,12 @@ export interface components {
             expectedRevisionToken?: string;
             /** Format: uuid */
             templateRevisionId: string;
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         SavedExclusionItem: {
             /** Format: uuid */
             locatorId: string;
@@ -3220,7 +3534,12 @@ export interface components {
             /** Format: uuid */
             sourceExclusionRevisionId: string;
             items: components["schemas"]["SavedExclusionItem"][];
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
         SavedAdoptCommand: {
             expectedRevision?: number;
@@ -3229,13 +3548,23 @@ export interface components {
             /** Format: uuid */
             inputId: string;
             inputFingerprint: string;
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
         SavedDecisionCommand: {
             expectedRevision?: number;
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
             expectedRevisionToken?: string;
-        } | unknown | unknown;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         /** Format: uuid */
         Uuid: string;
         /** @description Canonical ASCII decimal0..9223372036854775806, no leading zero/sign/space/exponent. Browser preserves string digits; never coerce to Number. */
@@ -3269,7 +3598,11 @@ export interface components {
             expectedRevision?: number;
             expectedRevisionToken?: components["schemas"]["CounterToken"];
             optionalReviewIds: components["schemas"]["Uuid"][];
-        } & (unknown | unknown);
+        } & ({
+            expectedRevision: number;
+        } | {
+            expectedRevisionToken: components["schemas"]["CounterToken"];
+        });
         FinalObservation: {
             revision: number;
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
@@ -3446,7 +3779,11 @@ export interface components {
             providerId: string;
             libraryId: string;
             folderId: string;
-        } & (unknown | unknown);
+        } & ({
+            expectedRevision: number;
+        } | {
+            expectedRevisionToken: components["schemas"]["CounterToken"];
+        });
         LocalDecision: {
             decidedAt: components["schemas"]["Timestamp"];
             decidedBy: string;
@@ -3570,7 +3907,15 @@ export interface components {
             taskId: components["schemas"]["Uuid"];
             expectedPublicationRevision?: number;
             expectedPublicationRevisionToken?: components["schemas"]["CounterToken"];
-        } & ((unknown | unknown) & (unknown | unknown));
+        } & (({
+            expectedRevision: number;
+        } | {
+            expectedRevisionToken: components["schemas"]["CounterToken"];
+        }) & ({
+            expectedPublicationRevision: number;
+        } | {
+            expectedPublicationRevisionToken: components["schemas"]["CounterToken"];
+        }));
         /** @description Canonical ASCII decimal 0..9223372036854775806; exact upper range, no leading zero/sign/space. Browser sends string tokens without Number conversion. */
         RetryCounterToken: string;
         /** @description Positive selected predecessor execution number, 1..9223372036854775806. An exhausted successor is a409 after original acknowledgment lookup. */
@@ -3583,7 +3928,19 @@ export interface components {
             expectedPublicationRevisionToken?: components["schemas"]["RetryCounterToken"];
             expectedExecutionNo?: number;
             expectedExecutionNoToken?: components["schemas"]["RetryExecutionToken"];
-        } & ((unknown | unknown) & (unknown | unknown) & (unknown | unknown));
+        } & (({
+            expectedRevision: number;
+        } | {
+            expectedRevisionToken: components["schemas"]["RetryCounterToken"];
+        }) & ({
+            expectedPublicationRevision: number;
+        } | {
+            expectedPublicationRevisionToken: components["schemas"]["RetryCounterToken"];
+        }) & ({
+            expectedExecutionNo: number;
+        } | {
+            expectedExecutionNoToken: components["schemas"]["RetryExecutionToken"];
+        }));
         /** @description Actual created successor execution number; at least2 and equal to selected predecessor+1. */
         RetryAcceptedExecutionToken: components["schemas"]["RetryExecutionToken"] & unknown;
         /** @description Original immutable accepted task/submission/final/destination and actual existing-created execution (selected predecessor+1). Submission ordinal is independent of execution ordinal; earlier sealed local-only submissions have no execution. Fresh observation is separate and may be UNAVAILABLE. Binding is mandatory; missing/corrupt original503, semantic conflict409; valid replay does not depend on current CAS/exhaustion/provider/archive. */
@@ -3629,7 +3986,15 @@ export interface components {
             folderId: string;
             expectedPublicationRevision?: number;
             expectedPublicationRevisionToken?: components["schemas"]["CounterToken"];
-        } & ((unknown | unknown) & (unknown | unknown));
+        } & (({
+            expectedRevision: number;
+        } | {
+            expectedRevisionToken: components["schemas"]["CounterToken"];
+        }) & ({
+            expectedPublicationRevision: number;
+        } | {
+            expectedPublicationRevisionToken: components["schemas"]["CounterToken"];
+        }));
         DestinationLibrary: {
             /** @description Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity. */
             id: string;
@@ -3712,6 +4077,15 @@ export interface components {
                 "application/json": components["schemas"]["BusinessError"];
             };
         };
+        /** @description Shared database, approved category dictionary, or meeting transition preparation unavailable; no fabricated enterprise options. */
+        MeetingUnavailable: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
         /** @description REVISION_EXHAUSTED after authorized replay, same key with different payload, stale expectedRevision, no pending draft, inactive/unknown roster identity, or immutable published state. No partial effects; retain client input. */
         Conflict: {
             headers: {
@@ -3723,15 +4097,6 @@ export interface components {
         };
         /** @description Body exceeds meeting.http.max-request-bytes (default 8388608 bytes). Configurable transport budget, not a product name or summary limit; no truncation. */
         TooLarge: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["BusinessError"];
-            };
-        };
-        /** @description Shared database or approved category dictionary unavailable; no fabricated enterprise options. */
-        MeetingUnavailable: {
             headers: {
                 [name: string]: unknown;
             };
@@ -3980,6 +4345,208 @@ export interface operations {
             503: components["responses"]["Unavailable"];
         };
     };
+    discoverMeetingCommand: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    operation: "CREATE" | "SAVE_INFO" | "CONFIRM_ROSTER" | "UPLOAD_BEGIN";
+                    resource: string;
+                    key: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Read-only durable association and current observation, without command acceptance authority */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommandLookup"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    readWorkspaceNavigation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Bounded saved navigation observation */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceNavigation"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    listWorkspaceTasks: {
+        parameters: {
+            query?: {
+                kind?: "ALL" | "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A bounded navigation page; task state remains a distinct observation from the producer detail read. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceTaskPage"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            /** @description Current identity is not the active owner. Confirmed members and platform administrators have no owner override. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Registered task readers or bounded persisted task relations are unavailable. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    listMeetingCategories: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One bounded category page */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryPage"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            /** @description Current identity does not permit the read */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Category dictionary or meeting data unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    listMeetings: {
+        parameters: {
+            query?: {
+                scope?: "owned" | "joined";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Bounded private meeting page */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeetingPage"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            /** @description Current identity does not permit meeting reads */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Protected projection or bounded discovery unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
     createMeeting: {
         parameters: {
             query?: never;
@@ -4109,7 +4676,11 @@ export interface operations {
                 "application/json": {
                     expectedRevision?: components["schemas"]["ExpectedRevision"];
                     expectedRevisionToken?: components["schemas"]["ExpectedRevisionToken"];
-                } | unknown | unknown;
+                } & ({
+                    expectedRevision: components["schemas"]["ExpectedRevision"];
+                } | {
+                    expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+                });
             };
         };
         responses: {
@@ -8069,7 +8640,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["BusinessError"] | components["schemas"]["SavedIntentConflict"];
                 };
             };
             /** @description Request or complete acquisition/response budget exceeded; no partial graph. */

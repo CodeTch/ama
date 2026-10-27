@@ -1103,14 +1103,28 @@
       {
         "anyOf": [
           {
+            "type": "object",
             "required": [
               "expectedRevision"
-            ]
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
           },
           {
+            "type": "object",
             "required": [
               "expectedRevisionToken"
-            ]
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "$ref": "#/CounterToken"
+              }
+            }
           }
         ]
       }
@@ -1155,14 +1169,28 @@
       {
         "anyOf": [
           {
+            "type": "object",
             "required": [
               "expectedRevision"
-            ]
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
           },
           {
+            "type": "object",
             "required": [
               "expectedRevisionToken"
-            ]
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "$ref": "#/CounterToken"
+              }
+            }
           }
         ]
       }
@@ -1215,28 +1243,56 @@
       {
         "anyOf": [
           {
+            "type": "object",
             "required": [
               "expectedRevision"
-            ]
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
           },
           {
+            "type": "object",
             "required": [
               "expectedRevisionToken"
-            ]
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "$ref": "#/CounterToken"
+              }
+            }
           }
         ]
       },
       {
         "anyOf": [
           {
+            "type": "object",
             "required": [
               "expectedPublicationRevision"
-            ]
+            ],
+            "properties": {
+              "expectedPublicationRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
           },
           {
+            "type": "object",
             "required": [
               "expectedPublicationRevisionToken"
-            ]
+            ],
+            "properties": {
+              "expectedPublicationRevisionToken": {
+                "$ref": "#/CounterToken"
+              }
+            }
           }
         ]
       }
@@ -1274,28 +1330,56 @@
       {
         "anyOf": [
           {
+            "type": "object",
             "required": [
               "expectedRevision"
-            ]
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
           },
           {
+            "type": "object",
             "required": [
               "expectedRevisionToken"
-            ]
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "$ref": "#/CounterToken"
+              }
+            }
           }
         ]
       },
       {
         "anyOf": [
           {
+            "type": "object",
             "required": [
               "expectedPublicationRevision"
-            ]
+            ],
+            "properties": {
+              "expectedPublicationRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
           },
           {
+            "type": "object",
             "required": [
               "expectedPublicationRevisionToken"
-            ]
+            ],
+            "properties": {
+              "expectedPublicationRevisionToken": {
+                "$ref": "#/CounterToken"
+              }
+            }
           }
         ]
       }
@@ -4492,42 +4576,84 @@
       {
         "anyOf": [
           {
+            "type": "object",
             "required": [
               "expectedRevision"
-            ]
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
           },
           {
+            "type": "object",
             "required": [
               "expectedRevisionToken"
-            ]
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "$ref": "#/RetryCounterToken"
+              }
+            }
           }
         ]
       },
       {
         "anyOf": [
           {
+            "type": "object",
             "required": [
               "expectedPublicationRevision"
-            ]
+            ],
+            "properties": {
+              "expectedPublicationRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
           },
           {
+            "type": "object",
             "required": [
               "expectedPublicationRevisionToken"
-            ]
+            ],
+            "properties": {
+              "expectedPublicationRevisionToken": {
+                "$ref": "#/RetryCounterToken"
+              }
+            }
           }
         ]
       },
       {
         "anyOf": [
           {
+            "type": "object",
             "required": [
               "expectedExecutionNo"
-            ]
+            ],
+            "properties": {
+              "expectedExecutionNo": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9223372036854775806
+              }
+            }
           },
           {
+            "type": "object",
             "required": [
               "expectedExecutionNoToken"
-            ]
+            ],
+            "properties": {
+              "expectedExecutionNoToken": {
+                "$ref": "#/RetryExecutionToken"
+              }
+            }
           }
         ]
       }

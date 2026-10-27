@@ -23,7 +23,7 @@ public final class JdbcMinutesInitialSettings {
   JdbcMinutesFactsReader.independent();uuid(trace);var identity=JdbcMinutesSettingsReceipts.identity(actor,meeting,key,expectedRevision,template);var replay=receipts.lookup(actor,meeting,identity,template);if(replay.isPresent())return replay.orElseThrow();
   var budget=limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->false);
   MinutesGraphDiscovery.Discovery discovered=null;RuntimeException discoveryError=null;
-  try{discovered=MinutesGraphDiscovery.withPending(authority.dataSource(),MinutesGraphDiscovery.discover(authority.dataSource(),meeting,"INITIAL_SETTINGS",template,limits,authority.readBudget()),limits.tasks());discovered=MinutesGraphDiscovery.guarded(authority,actor,discovered,budget);JdbcMinutesFactsReader.charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}
+  try{discovered=MinutesGraphDiscovery.withPending(authority.dataSource(),MinutesGraphDiscovery.discover(authority.dataSource(),meeting,"INITIAL_SETTINGS",template,limits,authority.readBudget()),limits.tasks(),budget);discovered=MinutesGraphDiscovery.guarded(authority,actor,discovered,budget);JdbcMinutesFactsReader.charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}
   final var plan=discovered;final var badDiscovery=discoveryError;MinutesGraphCapture.Graph snapshot;
   try{snapshot=authority.transactionRunner().required(()->{var gate=JdbcMinutesFactsReader.lockGraph(authority,actor,meeting,plan);if(badDiscovery!=null)throw badDiscovery;var scope=authority.minutesScope(gate,actor,meeting);var graph=MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);firstOnly(graph,expectedRevision);return graph;});}
   catch(RuntimeException failure){cancellation(failure);if(!ordinary(failure))throw failure;var winner=receipts.lookup(actor,meeting,identity,template);if(winner.isPresent())return winner.orElseThrow();throw failure;}
@@ -62,6 +62,6 @@ public final class JdbcMinutesInitialSettings {
  }
  private static long number(Map<String,Object> row,String name){return ((Number)row.get(name)).longValue();}
  private static ama.contract.TranscriptContracts.Failure conflict(String code){return new ama.contract.TranscriptContracts.Failure(409,code);}
- private static boolean ordinary(RuntimeException failure){return failure instanceof Failure f&&Set.of(ARCHIVE_IO_UNAVAILABLE,PROFILE_UNAVAILABLE,CAPABILITY_UNAVAILABLE,BUDGET_EXCEEDED,READ_FAILED).contains(f.code())||failure instanceof ama.contract.TranscriptContracts.Failure||failure instanceof ama.contract.FileContracts.Unavailable;}
+ private static boolean ordinary(RuntimeException failure){return failure instanceof Failure f&&Set.of(ARCHIVE_IO_UNAVAILABLE,CAPABILITY_UNAVAILABLE,BUDGET_EXCEEDED,READ_FAILED).contains(f.code())||failure instanceof ama.contract.TranscriptContracts.Failure||failure instanceof ama.contract.FileContracts.Unavailable;}
  private static void cancellation(RuntimeException failure){if(failure instanceof Failure f&&f.code()==CANCELLED)throw failure;}
 }

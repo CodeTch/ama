@@ -197,6 +197,11 @@ public final class LocalFileClient implements FileStoragePort {
     }
 
     @Override
+    public void discardUpload(UploadToken token, StorageKey key) {
+        empty("discard-upload", request(key, token, null, null, null, null, null));
+    }
+
+    @Override
     public BlobPage list(
             String backend, String namespace, String prefix, String cursor, int limit) {
         return json(

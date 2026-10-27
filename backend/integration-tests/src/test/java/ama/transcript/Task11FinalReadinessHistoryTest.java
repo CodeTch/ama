@@ -1,0 +1,20 @@
+package ama.transcript;
+import ama.access.MeetingAccess;import ama.config.ConfigArchiveSource;import ama.storage.FileRegistry;import java.util.*;import java.util.concurrent.atomic.AtomicBoolean;import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;import static org.mockito.Mockito.*;
+/** Complete history acquisition is real; current body/archive projection is an explicit substitute. */
+class Task11FinalReadinessHistoryTest {
+ @Test void corruptedOriginalBlocksReadinessWithoutAWriteClaim()throws Exception{run("changed");}
+ @Test void missingOriginalBlocksReadinessWithoutAWriteClaim()throws Exception{run("missing");}
+ @Test void changedRemoteProofBlocksReadinessWithoutAWriteClaim()throws Exception{run("proof");}
+ @Test void intactHistoryRetainsReadinessWithoutAWriteClaim()throws Exception{run("valid");}
+ void run(String variant)throws Exception{
+  var h=new Task11ClosedHistoryFixture.Fixture().remote();if(variant.equals("changed"))h.originals.replaceAll((key,value)->value.replace("owner","ownez"));if(variant.equals("proof")){var e=h.executions.get(Task11ClosedHistoryFixture.EXEC);h.executions.put(Task11ClosedHistoryFixture.EXEC,new PublicationWriteHistory.ExecutionOriginal(e.manifest(),e.noEffectEvidence().replace("knowledge:","knowledgf:")));}var f=Task11ClosedHistoryGuardTest.sql(h,new AtomicBoolean());var original=f.responder;f.responder=q->variant.equals("missing")&&q.startsWith("SELECT request_manifest FROM publication_submission")?List.of():q.startsWith("SELECT owner_id FROM meeting")?List.of(Map.of("owner_id","owner")):original.apply(q);
+  var a=JdbcTranscriptAuthority.create(f.ds,f.tx,f.access,(actor,meeting,purpose)->{},mock(ama.storage.FileBackendCatalog.class),Map.of(),f.authority.readBudget(),f.authority.canonicalBudget()).authority();var actor=Task11PublicationWriteGuardBoundaryTest.ACTOR;String meeting=Task11ClosedHistoryFixture.MEETING;
+  var declaration=new MinutesGraphDiscovery.Discovery(meeting,"READINESS",null,h.root,Map.of(),Map.of(),Set.of("owner"),List.of(),null);var graph=new MinutesGraphCapture.Graph(declaration,List.of(),Map.of());var snapshot=mock(JdbcMinutesFactsReader.Snapshot.class);var transcripts=mock(JdbcSavedTranscripts.class);var correction=CorrectionInstallation.compose(new CorrectionInstallation.Declaration("DISABLED_NOT_INSTALLED","1","offline"),List.of());when(transcripts.correctionFor(a)).thenReturn(correction);
+  try(var discovery=mockStatic(MinutesGraphDiscovery.class,CALLS_REAL_METHODS);var facts=mockStatic(JdbcMinutesFactsReader.class,CALLS_REAL_METHODS);var capture=mockStatic(MinutesGraphCapture.class);var readers=mockConstruction(JdbcMinutesFactsReader.class,(reader,context)->when(reader.prepare(any(),any())).thenReturn(snapshot));var queries=mockConstruction(JdbcMinutesSavedQueries.class,(query,context)->when(query.finalReadiness(any(),any())).thenReturn(Map.of("ready",true,"businessReady",true,"blockers",List.of())))){
+   discovery.when(()->MinutesGraphDiscovery.discover(eq(f.ds),eq(meeting),eq("READINESS"),isNull(),any(TranscriptAcquisitionBudget.class),any())).thenReturn(declaration);discovery.when(()->MinutesGraphDiscovery.withPending(eq(f.ds),eq(declaration),anyInt(),any())).thenReturn(declaration);
+   facts.when(()->JdbcMinutesFactsReader.lockGraph(a,actor,meeting,declaration)).thenAnswer(x->a.fileRegistry().adopt(actor,meeting,f.root,MeetingAccess.Action.EDIT));
+   capture.when(()->MinutesGraphCapture.capturePublicationCurrent(eq(a),any(),any(),eq(actor),eq(declaration),any(),any(),any())).thenAnswer(x->{((Runnable)x.getArgument(6)).run();((Runnable)x.getArgument(7)).run();return graph;});
+   var finals=new JdbcFinalConfirmations(a,()->mock(ConfigArchiveSource.Snapshot.class),"a".repeat(64),Task11CombinedInstallationTest.LIMITS,transcripts);var result=finals.readiness(actor,meeting);assertEquals(variant.equals("valid"),result.get("ready"));assertEquals(!variant.equals("valid"),((List<?>)result.get("blockers")).contains("PUBLICATION_HISTORY_UNAVAILABLE"));assertTrue(f.updates.isEmpty());
+  }
+ }
+}

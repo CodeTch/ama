@@ -1546,3 +1546,35 @@ Checkpoint 9fa4010fbcd77817ea75c430b16cfe36e0151a5ff23cc68d11597279f3e6b753; 117
 
 SAME reviewer 3e691b304151e2174be6cf128140ab7d13baed1715a7503acec9af0f36e34085 FULL READ, SPEC PASS / QUALITY APPROVED, C0 I0 M0. Root adoption d2cfd8786c3fa0cbef92051776a6053ca9afa0b4ddf12ad02a0060d261da0b83. Reverified1171current/snapshot and222evidence. B4 source freeze released for main-only B5 implementation; original snapshot immutable. Actual dual-ACL/browser not qualified, no runtime release. O6 UNKNOWN protected and SQLite3/3 consumed. B5 full guards/combined initial+generation+intent/T10 projections before fresh lawful separate SUCCESS runtime; remaining B3/B6/12/13 still required. Full B active.
 
+
+2026-10-26T15:29:20.613402+00:00 Resume: current1189/snapshot1189/evidence277 hashes verified; B5 main implementation resumes. Original reviewer unavailable; user authorizes exactly one replacement gpt-6-astra/xhigh reviewer, not yet created. No runtime activity.
+
+B5 resumed intent budget: causal RED02 9 tests/1 assertion failure (missing configured admission), GREEN9; extended boundary run {'tests': 12, 'failures': 0, 'errors': 0, 'skipped': 0} via actual authority/guard/transaction with substituted JDBC/access. Shared S/F ledger, pretransfer admission, concurrent-growth deny, one claim and frozen-write rollback verified. No full B5 adoption/runtime review. Removed unused narrower requireControlled helper; all existing actual final-pointer/equality checks retained.
+
+RAW budget first attempted RED was NOT causal: Mockito restubbing nested budget calls attached to canonicalBudget and overflowed stack. Preserve failed evidence; restore only three self-modified production files to verified pause snapshot, fix fixture with pre-captured budgets/doAnswer, repeat causal RED before reinstating proposed fix. Earlier progress wording of reproduced product failure is corrected here.
+
+B5 RAW shared budget: corrected fixture RED02 4tests/1failure on actual text projection before budget denial; GREEN02 16tests pass; expanded related14class regression {'tests': 60, 'failures': 0, 'errors': 0, 'skipped': 0}. Numeric-only SQL measurement precedes shared row/copy/text charge and bounded SQL masks any concurrent increase; S and F readers share ledger with publication. No real MySQL qualification yet. All old freeze/evidence remains.
+
+Sole user-authorized replacement reviewer created /root/phase_b_independent_review, accepted gpt-6-astra/xhigh/none. Context recovery only; no B5 source review requested yet, no implementation delegated. Final-confirm bypass causal RED13/1 -> GREEN, separate private PUBLICATION_SUBMIT purpose preserved; final positive purpose boundary run passed.
+
+## 2026-10-27 current full-unit gate prerequisite
+- B03 real repository/authority matrix: resumed-b03-mutator-matrix-04, 2 JUnit / 8 scenarios pass (ordinary, LOCAL closed, REMOTE closed, UNKNOWN denial for info/roster). Direct bindings: resumed-direct-binding-closed-02, 4 JUnit pass including both overloads and LOCAL/REMOTE histories. Source mappings stable. Neither is runtime qualification.
+- Full unit first setup failed because canonical evidence output env was absent; second run supplied the runner recognized selector. WorkerShutdownTest then failed 4/4 before assertions with obsolete private Runtime constructor reflection. Updating that test assembly is a Task13 verification prerequisite brought forward; no lifecycle behavior weakened and no retained runtime accessed.
+
+- resumed-full-unit-03 passed WorkerShutdownTest, then found 5 integration-module failures: no-fork classpath/Tomcat global factory contamination (2), captured-original-only wire test lacks its historical controlled env (1), outdated dynamic proxy rejects new default releaseRecordedLookup (2). Retain captured-only test as historical-window evidence, exclude it explicitly from general units (no fixture reopening). New general-unit runner uses one bounded fork per module to match ordinary classloader isolation.
+- Additional causal RED resumed-release-abort-red: 5 tests, exactly 2 failures; actual socket stays blocked when releaseRecordedLookup throws on close/renewal loss. Product fix ensures physical abort in finally even when release fails, while preserving exception and permit unknown. This worker cleanup fix belongs to Task13 regression prerequisite and must be included in same independent source review.
+
+- B5 call-site scan found MinutesSavedController still unconditionally disabled fresh commands despite genuine guarded domain ports. 12 distinct operation routes / 13 dispatch scenarios (two review variants). Causal RED resumed-saved-http-red: 16 tests, 14 failures (13 expected 200 became legacy 503, expected service409 became503); 2 replay/missing-installation tests passed. Implemented exact normalized dispatch after replay and real requireCombined, no extra parsing/digest. This completes the missing B5 HTTP activation source seam; runtime matrix remains outstanding.
+- General isolated unit-isolated-01 returned BUILD SUCCESS; no retained controlled fixture used; exact counts and source stability to be collected. Captured-original Task11Fix02WireVariantsTest deliberately excluded and remains historical evidence, not a new pass.
+
+## 2026-10-27 B5 complete production source candidate in SAME review
+- Frozen candidate cf2b45b2490c65e9427084b96440941e14bd0059f14a952fa2ede68d94ea5d24:1192sources/58changes relativeB4; exact-source forked general gate721/0/0/0,130XML hashes, stable mappings. Reviewer independently rechecked all. This is not source adoption/runtime acceptance.
+- Newly authored only: fresh Task11B5Source/CombinedIT/SchemaIT and default-preserving inherited enqueue hook; prepared owner task11b5-d16f8b769a0d4e899f198db77b19fe14, two explicit one-shot create/run helpers and resource plan. No private root/container/PKI/provider/window created. Windows Docker server29.7.2 and existing pinned image read-only available; WSL docker wrapper unavailable, explicit Windows CLI selected for future new owner only.
+- First runtime-suite incremental compile passed; schema compile follows. Allmutator/closed/ACL/race/Worker/LOCAL+S3/browser obligations remain pending and explicitly scoped; no old historical evidence relabeled.
+
+
+## 2026-10-27 用户要求当前批次后暂停 — 最终封口
+
+2026-10-27T11:10:33.545143+00:00: F5 source和create UI均已同一reviewer采纳（对应adoption已记录）。最后info编辑内存状态层R3限定采纳，manifest5c0c8a54e35536b4a9f3f80848bbc7d230ca3c6b5f7fdd9f3d381b117b7f8af5，两P1和一P2关闭。ack-red01=166/1fail→同测试ack-green01=166PASS，ack-type01=0，pins稳定。边界无UI/persistence/真实runtime。正式adoption task-12-info-editor-adoption-20261027.md。
+
+**PAUSED_BY_USER，B未完。** 无本批未结束命令或审查，唯一reviewer结束并idle，不派发下一批，不新增Agent。详细接续 `handoff-paused-20261027.md`、`RESUME_LATEST.md`；下次继续先补info持久化/UI/roster，再其余已批准Task12/13。无commit/merge/push/runtime，218条既有WIP保留。旧ACTIVE/未实现F5/待审create记录皆历史，不再作为当前状态。
