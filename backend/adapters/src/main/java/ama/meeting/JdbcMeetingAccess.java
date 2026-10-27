@@ -167,6 +167,13 @@ public final class JdbcMeetingAccess implements MeetingAccess {
         var members=j.queryForList("SELECT member_id FROM roster_member WHERE roster_id=? AND enterprise_id=? AND member_kind='ENTERPRISE' FOR UPDATE",String.class,root.rosterId(),held.identities.actor);
         if(members.size()!=1)throw new AccessDeniedException();
     }
+    /** Detached metadata only; possession of this record is never an authorization capability. */
+    public record WorkspaceStatus(String id,String revisionToken,String accessRevisionToken,String stage,String lifecycle,String governance,boolean owner,boolean published,String infoId,String rosterId) {}
+    public WorkspaceStatus workspaceStatus(Locked locked,Actor actor,String meeting) {
+        requirePrepared(locked,actor,meeting,List.of(actor.enterpriseId()),Action.READ);
+        var value=((Held)locked).root;
+        return new WorkspaceStatus(value.id(),Long.toString(value.revision()),Long.toString(value.accessRevision()),value.stage(),value.lifecycle(),value.governance(),value.owner().equals(actor.enterpriseId()),value.published(),value.infoId(),value.rosterId());
+    }
     /** Joined lists require confirmed enterprise participation even when actor is also owner. */
     boolean confirmedParticipant(Locked locked,Actor actor,String meetingId) {
         requirePrepared(locked,actor,meetingId,List.of(),Action.READ);

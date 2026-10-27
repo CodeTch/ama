@@ -25,3 +25,13 @@ test('synchronous workspace loading observer cannot send a stale request or clea
  const stop=watch(state.loading,v=>{if(v&&actor.value==='old'){actor.value='new';newer=state.reload();}},{flush:'sync'});
  await state.reload();assert.equal(calls.length,1);assert.equal(state.loading.value,true);calls[0]!(navigation);await newer;assert.equal(state.value.value?.relation,'OWNER');assert.equal(state.loading.value,false);stop();state.dispose();
 });
+
+test('workspace owner sections preserve genuine paged references and never leak into member navigation',async()=>{
+ const old=fetch,api=createWorkspaceApi(createBusinessClient('https://ama.test',()=>session,()=>{}));
+ const privateSections={savedProcessingInputId:null,savedGenerationInputId:null,templateRevisionId:null,exclusionRevisionId:null,finalConfirmationId:null,publicationId:null,publicationState:null,tasks:{items:[],hasMore:false,nextCursor:null,verification:'PERSISTED_RELATION'},candidates:{items:[{id:other,inputId:other,taskId:other,state:'PENDING'}],hasMore:true,detailPath:`/api/v1/meetings/${id}/minutes/candidates`},verification:'PERSISTED_REFERENCES_RECHECK_PRODUCER'};
+ let value:unknown={...navigation,lifecycle:'ACTIVE',governanceState:'ACTIVE',privateSectionsState:'AVAILABLE',privateSections};globalThis.fetch=async()=>Response.json(value);
+ try{const found=await api.navigation(id,new AbortController().signal);assert.equal(found.privateSections?.candidates.hasMore,true);assert.equal(Object.isFrozen(found.privateSections?.candidates.items),true);
+ value={...navigation,privateSectionsState:'UNAVAILABLE',privateSectionsReason:'PROCESSING_RUNTIME_UNAVAILABLE'};assert.equal((await api.navigation(id,new AbortController().signal)).privateSections,undefined);
+ for(const wrong of [{...navigation,relation:'MEMBER',navigationState:'MEMBER_READ_ONLY',privateSectionsState:'AVAILABLE',privateSections},{...navigation,privateSectionsState:'AVAILABLE',privateSections:{...privateSections,candidates:{...privateSections.candidates,detailPath:`/api/v1/meetings/${other}/minutes/candidates`}}},{...navigation,privateSectionsState:'AVAILABLE',privateSections:{...privateSections,publicationId:null,publicationState:'SUCCEEDED'}}]){value=wrong;await assert.rejects(api.navigation(id,new AbortController().signal));}
+ }finally{globalThis.fetch=old;}
+});

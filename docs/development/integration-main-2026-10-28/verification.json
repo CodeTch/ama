@@ -1,0 +1,332 @@
+{
+  "date": "2026-10-28",
+  "repository": "https://github.com/CodeTch/ama",
+  "mainBefore": "797439b1d8ba9257cc6d8238ebe852a8a1b3166d",
+  "workflowCommit": "c71efef8164f6b6f292ff19c698eaedaa503dbb4",
+  "developmentSnapshot": "4b68213dc6b59f9cc850b6acce1a70ed4102235a",
+  "snapshotChangedFiles": 127,
+  "branchHeadsBeforeMergeCommit": [
+    {
+      "branch": "codex/b06-archive-index-20261023",
+      "commit": "38a321a5bd11d56b8071dc03965fe413c71bd78e"
+    },
+    {
+      "branch": "codex/b06-archive-restart-20261023",
+      "commit": "41a41e1d7d345fd3b6d46e0a7bc01757298abb3c"
+    },
+    {
+      "branch": "codex/b06-batch-20261023",
+      "commit": "0b65a68f100beed8172c3c3f270a19c5e1cf8523"
+    },
+    {
+      "branch": "codex/b06-processing-facts-20261023",
+      "commit": "76a50c72006835a567ff200d231bf78420d67f3a"
+    },
+    {
+      "branch": "codex/phase-a-contracts",
+      "commit": "684eafbb6647e3d62bc3595005315fe12c8fdcfd"
+    },
+    {
+      "branch": "codex/phase-a-foundation",
+      "commit": "15b0a6bc4872cbed209c38474c3b1e425397e972"
+    },
+    {
+      "branch": "codex/phase-a-ha",
+      "commit": "6ae6e8c5afcf1ada9e92bc2552d92cb46c1b609c"
+    },
+    {
+      "branch": "codex/phase-a-models",
+      "commit": "acf984bf910f5f5b350203137e3296861c88a177"
+    },
+    {
+      "branch": "codex/phase-a-web",
+      "commit": "96996addd8c34b819bb498a69ad442d60d6c8428"
+    },
+    {
+      "branch": "codex/phase-b-audit-delta",
+      "commit": "0e8f69842be1cb42a294cfbc4b5ffd1954f4a40f"
+    },
+    {
+      "branch": "codex/phase-b-completion-20261023",
+      "commit": "4b68213dc6b59f9cc850b6acce1a70ed4102235a"
+    },
+    {
+      "branch": "codex/phase-b-database-design",
+      "commit": "bd43ca31d6b4c263c5f81da83944998492ef943e"
+    },
+    {
+      "branch": "codex/phase-b-file-registry",
+      "commit": "45dc8ed27449de191400c858b88413a518842f21"
+    },
+    {
+      "branch": "codex/phase-b-file-schema",
+      "commit": "fd3c3d86e1c7998f95ded65704c3453579116d06"
+    },
+    {
+      "branch": "codex/phase-b-fixture-evidence",
+      "commit": "fdcdc92b11474dd6607cea0ee54695e451ded3b5"
+    },
+    {
+      "branch": "codex/phase-b-foundation",
+      "commit": "03790c274003959ddd4b738b0fbb936ad296a9e3"
+    },
+    {
+      "branch": "codex/phase-b-generation-design",
+      "commit": "7fb166b01b6ff45213b973640ff7457c3cf36e56"
+    },
+    {
+      "branch": "codex/phase-b-generation-schema",
+      "commit": "234e6e2be6cfa721d52c804e87e4b71a3b92e8b6"
+    },
+    {
+      "branch": "codex/phase-b-identity",
+      "commit": "39b447d43a91cc0692a5d43ee109fcc82d37d6db"
+    },
+    {
+      "branch": "codex/phase-b-identity-history",
+      "commit": "3c425110f6f4c956427cd90b7327e5e7acf0d983"
+    },
+    {
+      "branch": "codex/phase-b-meeting-domain",
+      "commit": "68aa0957a3fcb69630fee96075055edb3a3cde42"
+    },
+    {
+      "branch": "codex/phase-b-meeting-schema",
+      "commit": "ff22197f5f6231aeb689e035f4435ddbbcbcf114"
+    },
+    {
+      "branch": "codex/phase-b-minutes-pure",
+      "commit": "13b8f1d16f85787c12626faa41c7e511403f16f9"
+    },
+    {
+      "branch": "codex/phase-b-product-decisions",
+      "commit": "43766f3ce817e3a1cc9ecffb0e2d5af28e3e4792"
+    },
+    {
+      "branch": "codex/phase-b-provenance-design",
+      "commit": "212c794b497631b13b395c4d1436cbe306208fd4"
+    },
+    {
+      "branch": "codex/phase-b-publication-schema",
+      "commit": "d9428eeb0c696b6d21c6303ffd1e8ac115ff56ce"
+    },
+    {
+      "branch": "codex/phase-b-resume-20261023",
+      "commit": "34cb226aefe99c67d3681af68d748b0aeea4e073"
+    },
+    {
+      "branch": "codex/phase-b-s3-preflight",
+      "commit": "9a6d4059f80e39853f958749998db07b3d88bc32"
+    },
+    {
+      "branch": "codex/phase-b-s3-rustfs-probe",
+      "commit": "a13e0cddd890b02e66f5189d6036bf7afed8b8e7"
+    },
+    {
+      "branch": "codex/phase-b-storage",
+      "commit": "ba74def4cbe048d6b72a5306c66e3cd3b5a81e02"
+    },
+    {
+      "branch": "codex/phase-b-storage-s3",
+      "commit": "ff7b6efbd3c8d47ca018e57f2e7b8eb633894335"
+    },
+    {
+      "branch": "codex/phase-b-storage-selection",
+      "commit": "b2f933c6256f4c56597b2376823ba3fb205f436c"
+    },
+    {
+      "branch": "codex/phase-b-tasks",
+      "commit": "b126db27e592a563392292fef8551015251dbe50"
+    },
+    {
+      "branch": "codex/phase-b-transcript-parser",
+      "commit": "9ae628058d53ddaff64e14adeeecb64ded653c1c"
+    },
+    {
+      "branch": "codex/phase-b-transcript-runtime",
+      "commit": "4dcdc6b5102c7d99b043385349b4a87c98b52e80"
+    },
+    {
+      "branch": "codex/phase-b-transcript-schema",
+      "commit": "aef885da7a6f5c1245289943e5a5f0b83daaa835"
+    },
+    {
+      "branch": "codex/phase-b-upload-design",
+      "commit": "40cd72717abf079d3373c072eddea19f881a8916"
+    },
+    {
+      "branch": "main",
+      "commit": "c71efef8164f6b6f292ff19c698eaedaa503dbb4"
+    }
+  ],
+  "java": {
+    "command": [
+      "./mvnw",
+      "-B",
+      "-ntp",
+      "-Djdk.httpclient.allowRestrictedHeaders=host",
+      "-Dtest=*Test,!Task11Fix02WireVariantsTest",
+      "-Dsurefire.failIfNoSpecifiedTests=false",
+      "test"
+    ],
+    "exit": 0,
+    "startedEpoch": 1793137769.0103993,
+    "finishedEpoch": 1793137899.6152341,
+    "counts": {
+      "tests": 886,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshReportCount": 162,
+    "evidenceWindow": "/home/tanren/ama/.worktrees/phase-b-completion/artifacts/integration-main-2026-10-28/java-final-evidence",
+    "excluded": "Task11Fix02WireVariantsTest (retained captured original fixture)"
+  },
+  "python": {
+    "executed": 236,
+    "failed": 0,
+    "skipped": 0,
+    "directories": [
+      {
+        "directory": "tools/checks/tests",
+        "exit": 0,
+        "discovered": 42,
+        "executed": 42,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "directory": "tools/dev/tests",
+        "exit": 0,
+        "discovered": 10,
+        "executed": 10,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "directory": "tools/probes/tests",
+        "exit": 0,
+        "discovered": 52,
+        "executed": 52,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "directory": "tools/providers",
+        "exit": 0,
+        "discovered": 27,
+        "executed": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "directory": "tools/providers/tests",
+        "exit": 0,
+        "discovered": 4,
+        "executed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "directory": "tools/tests",
+        "exit": 0,
+        "discovered": 101,
+        "executed": 101,
+        "failed": 0,
+        "skipped": 0
+      }
+    ],
+    "formattingOnlyFollowup": {
+      "discovered": 101,
+      "executed": 101,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "web": {
+    "executed": 241,
+    "failures": 0,
+    "skipped": 0,
+    "developmentAndMainPassed": true
+  },
+  "mainChecks": [
+    {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "web",
+        "--output-root",
+        "artifacts/integration-main-2026-10-28/web"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "check:api"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "contract",
+        "OpenApi",
+        "--output-root",
+        "artifacts/integration-main-2026-10-28/openapi"
+      ],
+      "exit": 0
+    }
+  ],
+  "productSourceMatchesDevelopmentSnapshot": true,
+  "sourceManifestSha256": "4495c1cb4c7f9255aa8c4e60a23dd83b0ba1e272519f9456c738f49c671d82b1",
+  "formattingAdjustment": {
+    "path": "tools/tests/test_bl5_resources.py",
+    "change": "remove extra blank line at EOF; no executable content changed",
+    "before": "d686129c5444912533f1bb09f2bd52455336979b807bf89f3f2b2dd5854a3ae3",
+    "after": "fc907d77fc8e4b914895bc4ba1f6668779227d244f40c9f37019fc4b04791f1e"
+  },
+  "developmentLogSha256": {
+    "java.log": "bc76eddce8c932fd294c7800fdf8008544e3d31bdfa9c4525e0458b6ff6c3586",
+    "java-configured.log": "f0d395599cc1b49a277643cb4f97d2ed5941a5d8f2f504d0cd0516768c198b93",
+    "java-final.log": "50997b5380d9ebf01856486e9e245b9e0864700b50e5c966513fd063ba256669",
+    "python-current.log": "3afd8d605e8f9e6ba44a7801c56c56a2ce5a34a2658a986ce3e0ddb02db0a2f2",
+    "python-tools-final.log": "046a1f777dc5f5912681a8d95e87aefc572a086112a76bb400fe104bdb0abb34",
+    "web-contract.log": "ee5c8c1b7fa299a1d7ac3427682cdb7bc13fd0157c7dea32ac0e78a5c94792d9"
+  },
+  "mainLogSha256": "842fb762e7c4c419b0b01f74104062c6f58f1a7fbc66adf49e55bb8517286bc7",
+  "validationSetupHistory": [
+    "Initial Java run lacked AMA_TASK11_EVIDENCE_WINDOW; two canonical export tests failed before configuring a fresh evidence directory.",
+    "Configured Java run executed 886 tests; 885 passed and Bl5MeterForwardTest required the same jdk.httpclient.allowRestrictedHeaders=host property already used by tools/bl5_launch.py. Final fresh full selected run passed all 886.",
+    "Generic Python discovery included archived .superpowers source checkpoints and was interrupted; the six current tools test directories were explicitly selected and all 236 tests passed."
+  ],
+  "limitations": [
+    "Task11Fix02WireVariantsTest excluded because it requires the retained captured original private fixture.",
+    "Java/Python ran in the original development worktree; some offline tests depend on existing public evidence/plan files there. This is not qualification of an independent clean clone.",
+    "No new database IT, browser qualification, or consumed B-L5 runtime batch was run. Phase B remains INCOMPLETE."
+  ]
+}

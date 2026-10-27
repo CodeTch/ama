@@ -1,0 +1,10 @@
+import {utf16Offset,uniqueAnchor,scalarOffset} from '../../shared/scalar-anchors';
+export type EvidenceAnchor={evidenceId:string;quote:string;startToken:string;endToken:string};
+export async function captureEvidenceAnchors(text:string,evidence:readonly {id:string;target_anchor:string}[]):Promise<readonly EvidenceAnchor[]>{
+ if(evidence.length>10000||new Set(evidence.map(e=>e.id)).size!==evidence.length)throw new Error('来源关联集合无效。');
+ const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),x=>x.toString(16).padStart(2,'0')).join('');
+ return Object.freeze(evidence.map(e=>{const a:unknown=JSON.parse(e.target_anchor);if(typeof a!=='object'||a===null||Array.isArray(a)||Object.keys(a).sort().join(',')!=='end,schemaVersion,start,targetTextSha256,unit')throw new Error('来源位置暂无法确认。');const v=a as Record<string,unknown>;if(v.schemaVersion!=='ama.anchor.v1'||v.unit!=='UNICODE_SCALAR'||v.targetTextSha256!==hash||!Number.isSafeInteger(v.start)||!Number.isSafeInteger(v.end)||Number(v.start)<0||Number(v.end)<=Number(v.start))throw new Error('来源位置与当前正文不一致。');const start=String(v.start),end=String(v.end);return Object.freeze({evidenceId:e.id,quote:text.slice(utf16Offset(text,start),utf16Offset(text,end)),startToken:start,endToken:end});}));
+}
+export function reanchorEvidence(text:string,evidence:readonly EvidenceAnchor[],manual:ReadonlyMap<string,{startToken:string;endToken:string}>=new Map()){
+ scalarOffset(text,text.length);return evidence.map(e=>{const selected=manual.get(e.evidenceId);if(selected){if(BigInt(selected.endToken)<=BigInt(selected.startToken))throw new Error('请选择有效的正文范围。');if(text.slice(utf16Offset(text,selected.startToken),utf16Offset(text,selected.endToken))!==e.quote)throw new Error('来源文字已变化，请重新选择关联文字。');return {evidenceId:e.evidenceId,...selected};}const found=uniqueAnchor(text,e.quote);if(!found)throw new Error('修改后的来源位置不唯一或已删除，请重新选择关联文字。');return {evidenceId:e.evidenceId,startToken:found.start,endToken:found.end};});
+}

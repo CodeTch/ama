@@ -1,3 +1,11 @@
+# 最新 Git 集成与接续入口 — 2026-10-28
+
+用户本次明确授权将所有分支代码及当前未提交开发成果汇入 `main`、提交并推送 GitHub。开发快照为 `4b68213dc6b59f9cc850b6acce1a70ed4102235a`；范围与本次验证见[集成记录](docs/development/integration-main-2026-10-28.md)。以下旧“不提交/不合并/不推送”只表示历史授权状态。
+
+Phase B 仍为 **INCOMPLETE**。B-L1～B-L4 已有源码及限定证据采纳；B-L5 一次性运行批次已关闭，剩余验收缺口见 `docs/acceptance/b/summary.md`。后续从原开发树 `/home/tanren/ama/.worktrees/phase-b-completion` 的 `current-state.json`、`RESUME_LATEST.md` 与 `handoff-bl5-settled-20261028.md` 接续，不按下方旧 B-L1 下一步重新开始。此次 Git 操作不恢复已消费运行窗口，也不启动 C/D/E/F。
+
+---
+
 # 当前执行入口 — 2026-10-27 流程已更新，开发仍暂停
 
 执行规则：**AMA-WORKFLOW-20261027**，见[后续开发流程与分阶段验证补充计划](docs/superpowers/plans/2026-10-27-ama-development-workflow.md)。这是用户已批准的后续执行方式，优先于以下旧流程和历史状态。

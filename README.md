@@ -6,6 +6,8 @@
 
 ## 本地开发
 
+需要可登录、可读写会议数据的本地环境时，在本工作树根目录执行 `python3 tools/dev/local_app.py start`，然后打开 `http://127.0.0.1:5173/meetings`。启动器使用独立持久化 MySQL、开发账号和示例会议；账号、密码文件、代理配置及停止/重启方法见[本地开发说明](docs/development/local-development.md)。
+
 在 Linux/WSL x86_64 的仓库根目录执行。工具链安装在忽略的 `.tools/`，不会替换系统 Java/Node。
 
 ```sh

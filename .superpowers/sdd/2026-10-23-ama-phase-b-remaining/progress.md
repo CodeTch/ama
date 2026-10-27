@@ -1578,3 +1578,14 @@ Sole user-authorized replacement reviewer created /root/phase_b_independent_revi
 2026-10-27T11:10:33.545143+00:00: F5 source和create UI均已同一reviewer采纳（对应adoption已记录）。最后info编辑内存状态层R3限定采纳，manifest5c0c8a54e35536b4a9f3f80848bbc7d230ca3c6b5f7fdd9f3d381b117b7f8af5，两P1和一P2关闭。ack-red01=166/1fail→同测试ack-green01=166PASS，ack-type01=0，pins稳定。边界无UI/persistence/真实runtime。正式adoption task-12-info-editor-adoption-20261027.md。
 
 **PAUSED_BY_USER，B未完。** 无本批未结束命令或审查，唯一reviewer结束并idle，不派发下一批，不新增Agent。详细接续 `handoff-paused-20261027.md`、`RESUME_LATEST.md`；下次继续先补info持久化/UI/roster，再其余已批准Task12/13。无commit/merge/push/runtime，218条既有WIP保留。旧ACTIVE/未实现F5/待审create记录皆历史，不再作为当前状态。
+
+
+## 2026-10-27 用户批准后续流程简化（AMA-WORKFLOW-20261027）
+
+仅更新计划和接续状态，开发仍暂停。稳定规则见产品树 docs/superpowers/plans/2026-10-27-ama-development-workflow.md；当前状态只维护于 current-state.json，入口 RESUME_LATEST.md。下一次继续执行完整功能批次 B-L1，不重做已采纳切片。验证分层/合并、明确后移和触发条件，核心可靠性/原始证据/旧资源限制不变。本次无业务代码修改、业务测试、runtime、commit/merge/push。
+
+## B-L1 resumed 2026-10-27
+Explicit continue restores execution under AMA-WORKFLOW-20261027. Existing worktree HEAD 3d9d1977; prior uncommitted changes are workflow documents. Main sole writer; original reviewer restore returned live agent path not found, one authorized replacement at batch review. No retained runtime access or Git publication. Pre-flight: R3 editor already preserves tickets and immutable commands; persistence must restore tickets from original body before later draft edits, only after fresh authorized saved read. Roster confirmation must remain separate and cannot bypass unresolved information save.
+
+## B-L1 source adopted
+Exact R5 twelve-file manifest verified; sole reviewer SOURCE QUALITY PASS. See bl1-source-adoption-20261027.md. Original failed reviews/tests preserved. Runtime unqualified. Continue B-L2.
