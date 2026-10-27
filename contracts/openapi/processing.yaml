@@ -25,19 +25,37 @@
         "uniqueItems": true
       }
     },
-    "anyOf": [
+    "description": "At least one exact revision representation; dual values must agree before digest. Strict duplicate/unknown fields, Unicode, depth8, token4096 and 65536-byte transport envelope. Current effective intake limits apply only after accepted-result lookup.",
+    "allOf": [
       {
-        "required": [
-          "expectedRevision"
-        ]
-      },
-      {
-        "required": [
-          "expectedRevisionToken"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "$ref": "./meetings.yaml#/ExpectedRevision"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+              }
+            }
+          }
         ]
       }
-    ],
-    "description": "At least one exact revision representation; dual values must agree before digest. Strict duplicate/unknown fields, Unicode, depth8, token4096 and 65536-byte transport envelope. Current effective intake limits apply only after accepted-result lookup."
+    ]
   },
   "ImportAccepted": {
     "type": "object",
@@ -465,14 +483,10 @@
             "format": "uuid"
           },
           "partSize": {
-            "type": "integer",
-            "format": "int64",
-            "minimum": 0
+            "$ref": "./files.yaml#/Accepted/properties/partSize"
           },
           "partSizeToken": {
-            "type": "string",
-            "pattern": "^(0|[1-9][0-9]{0,18})$",
-            "description": "Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806."
+            "$ref": "./files.yaml#/Accepted/properties/partSizeToken"
           }
         }
       },

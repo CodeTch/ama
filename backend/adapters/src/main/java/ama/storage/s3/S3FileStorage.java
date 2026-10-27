@@ -72,7 +72,7 @@ public final class S3FileStorage implements FileStoragePort, AutoCloseable {
     @Override
     public StoredBlob put(StorageKey key, InputStream body, long size, String sha256) {
         if (key == null) throw new StorageException(ErrorCode.INVALID_ARGUMENT);
-        layout.data(key);
+        layout.data(key);RetiredUploads.live(io,layout,key);
         publisher.interval(size);
         String hash = ControlCodec.hashArgument(sha256), owner = ControlCodec.id();
         var candidate = staging.stage(owner, body, size, hash);
@@ -82,8 +82,8 @@ public final class S3FileStorage implements FileStoragePort, AutoCloseable {
 
     @Override
     public BlobStat stat(StorageKey key) {
-        io.binding(layout, key, false);
-        return io.stat(layout.data(key));
+        RetiredUploads.live(io,layout,key);io.binding(layout, key, false);
+        var stat=io.stat(layout.data(key));RetiredUploads.live(io,layout,key);return stat;
     }
 
     @Override
@@ -93,19 +93,22 @@ public final class S3FileStorage implements FileStoragePort, AutoCloseable {
 
     @Override
     public void delete(StorageKey key) {
-        String physical = layout.data(key);
-        if (!io.scope(layout, key.namespace(), false)) return;
-        byte[] binding = io.optional(layout.bindingKey(key));
-        if (binding == null) return;
-        if (!Arrays.equals(binding, layout.binding(key))) throw ControlCodec.unavailable();
-        io.call(
-                () ->
-                        io.client.deleteObject(
-                                DeleteObjectRequest.builder()
-                                        .bucket(io.config.dataBucket())
-                                        .key(physical)
-                                        .build()));
+        String physical=layout.data(key);if(RetiredUploads.retired(io,layout,key))return;
+        if(!io.scope(layout,key.namespace(),false))return;byte[] binding=io.optional(layout.bindingKey(key));if(binding==null)return;
+        if(!Arrays.equals(binding,layout.binding(key)))throw ControlCodec.unavailable();
+        HeadObjectResponse head;
+        try{head=io.call(()->io.client.headObject(HeadObjectRequest.builder().bucket(io.config.dataBucket()).key(physical).build()));}
+        catch(StorageException e){if(e.code()==ErrorCode.NOT_FOUND)return;throw e;}
+        if(head.metadata().containsKey("ama-retired-v1")||RetiredUploads.retired(io,layout,key))return;
+        if(head.eTag()==null||head.eTag().isBlank())throw ControlCodec.unavailable();
+        // Pin to an observed version when available; ETag alone is not a unique generation.
+        // Installed orphan discard never mixes ordinary delete with its exclusive key.
+        var request=DeleteObjectRequest.builder().bucket(io.config.dataBucket()).key(physical).ifMatch(head.eTag());
+        if(head.versionId()!=null&&!head.versionId().equals("null"))request.versionId(head.versionId());
+        io.call(()->io.client.deleteObject(request.build()));
     }
+
+    @Override public void discardUpload(UploadToken token,StorageKey key){sessions.discard(token,key);}
 
     @Override
     public UploadToken beginUpload(UploadSpec spec) {

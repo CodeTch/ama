@@ -35,7 +35,7 @@ final class SessionJournal {
     UploadToken begin(UploadSpec spec) {
         if (spec == null) throw new StorageException(ErrorCode.INVALID_ARGUMENT);
         StorageKey key = new StorageKey(spec.backendId(), spec.namespace(), spec.objectKey());
-        layout.data(key);
+        layout.data(key);RetiredUploads.live(io,layout,key);
         publisher.interval(spec.expectedSize());
         byte[] encoded =
                 ControlCodec.pack(
@@ -124,6 +124,7 @@ final class SessionJournal {
     PartReceipt write(UploadToken token, int part, InputStream body, long size, String hash) {
         hash = ControlCodec.hashArgument(hash);
         Session s = session(token);
+        RetiredUploads.live(io,layout,s.key());
         if (part < 1 || size < 0 || size > s.spec().expectedSize())
             throw new StorageException(ErrorCode.INVALID_ARGUMENT);
         open(s);
@@ -170,6 +171,7 @@ final class SessionJournal {
     StoredBlob complete(UploadToken token, List<PartReceipt> parts, String hash) {
         hash = ControlCodec.hashArgument(hash);
         Session s = session(token);
+        RetiredUploads.live(io,layout,s.key());
         if (parts == null || parts.isEmpty())
             throw new StorageException(ErrorCode.INVALID_ARGUMENT);
         long total = 0;
@@ -227,6 +229,7 @@ final class SessionJournal {
 
     StoredBlob resume(UploadToken token) {
         Session s = session(token);
+        RetiredUploads.live(io,layout,s.key());
         byte[] t = terminal(s);
         if (t == null) throw new StorageException(ErrorCode.INVALID_UPLOAD_STATE);
         return resume(s, t);
@@ -322,6 +325,8 @@ final class SessionJournal {
             throw ControlCodec.unavailable();
         }
     }
+
+    void discard(UploadToken token,StorageKey key){RetiredUploads.discard(io,layout,session(token),key);}
 
     void abort(UploadToken token) {
         Session s;

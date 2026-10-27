@@ -50,4 +50,21 @@ class Task11KnowledgeReadTransportTest {
   for(String prefix:List.of("","HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 100\r\n\r\n{","HTTP/1.1 403 Forbidden\r\nContent-Type: application/json\r\nContent-Length: 100\r\n\r\n{"))try(var h=new Harness((socket,release)->{wire(socket,prefix);assertTrue(release.await(8,TimeUnit.SECONDS));})){var cancel=new Cancel();var thread=new Thread(()->{try{if(h.accepted.await(3,TimeUnit.SECONDS))cancel.stop();}catch(InterruptedException error){Thread.currentThread().interrupt();}},"b4-owned-cancel");thread.start();long start=System.nanoTime();try{assertThrows(Exception.class,()->h.call(cancel));}finally{thread.join(4000);}assertFalse(thread.isAlive());assertTrue(System.nanoTime()-start<TimeUnit.SECONDS.toNanos(4));assertNull(cancel.abort.get());assertEquals(1,h.fixture.roots.get());}
  }
  @Test void stalledHeadersBodyAndErrorBodyHonorExistingSocketTimeout()throws Exception {for(String prefix:List.of("","HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 100\r\n\r\n{","HTTP/1.1 403 Forbidden\r\nContent-Type: application/json\r\nContent-Length: 100\r\n\r\n{"))try(var h=new Harness((socket,release)->{wire(socket,prefix);assertTrue(release.await(9,TimeUnit.SECONDS));})){long start=System.nanoTime();assertThrows(IOException.class,()->h.call(new Cancel()));long duration=System.nanoTime()-start;assertTrue(duration>=TimeUnit.SECONDS.toNanos(4)&&duration<TimeUnit.SECONDS.toNanos(8));assertEquals(1,h.fixture.roots.get());}}
+
+ @Test void closeBetweenInitialCheckAndAdmissionDoesNotLeakSchedulerRejection()throws Exception {
+  try(var h=new Harness((socket,release)->{throw new AssertionError("No network admission expected");})){
+   var client=org.mockito.Mockito.spy(h.client);var fixture=new Task11DiscoveryServiceBoundaryTest.Fixture(client);var issued=new AtomicReference<ControlledKnowledgeClient.Call>();
+   org.mockito.Mockito.doAnswer(invocation->{issued.set(invocation.getArgument(0));throw new IOException("Captured genuine call before exchange");}).when(client).exchange(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.anyInt(),org.mockito.ArgumentMatchers.any());
+   assertThrows(IOException.class,()->fixture.service.destinations(Task11DiscoveryServiceBoundaryTest.ACTOR,Task11DiscoveryServiceBoundaryTest.M,null,Map.of(),new Cancel()));assertNotNull(issued.get());
+   org.mockito.Mockito.doCallRealMethod().when(client).exchange(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.anyInt(),org.mockito.ArgumentMatchers.any());
+   var checks=new AtomicInteger();var closeDuringCheck=new PreparationCancellation(){public boolean cancelled(){checks.incrementAndGet();client.close();return false;}public AutoCloseable register(Runnable abort){throw new AssertionError("Closed transport must not register a socket");}};
+   assertThrows(IOException.class,()->client.exchange(issued.get(),262144,closeDuringCheck));assertEquals(1,checks.get());assertEquals(Map.of("getWriteAttempts",0L,"postWriteAttempts",0L),client.traffic());assertNull(h.request.get());
+  }
+ }
+
+ @Test void slowHeaderProgressCannotExtendWholeRequestDeadline()throws Exception {
+  try(var h=new Harness((socket,release)->{try{while(!release.await(700,TimeUnit.MILLISECONDS)){socket.getOutputStream().write('H');socket.getOutputStream().flush();}}catch(IOException expectedClose){}})){
+   long start=System.nanoTime();assertThrows(IOException.class,()->h.call(new Cancel()));long elapsed=System.nanoTime()-start;assertTrue(elapsed>=TimeUnit.SECONDS.toNanos(14)&&elapsed<TimeUnit.SECONDS.toNanos(18));assertEquals(1,h.client.traffic().get("getWriteAttempts"));assertEquals(1,h.fixture.roots.get());
+  }
+ }
 }

@@ -1,6 +1,6 @@
 package ama.api;
 import com.fasterxml.jackson.core.*;import com.fasterxml.jackson.databind.*;import jakarta.servlet.http.HttpServletRequest;import java.io.*;import java.util.*;
-/** Finite strict command normalization shared by replay lookup and the formal closed new branch. */
+/** Finite strict command normalization shared by replay lookup and the guarded new command dispatch. */
 final class MinutesSavedWire {
  private static final ObjectMapper JSON=new ObjectMapper(JsonFactory.builder().enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION).streamReadConstraints(StreamReadConstraints.builder().maxNestingDepth(8).maxStringLength(4194304).maxNumberLength(19).build()).build()).enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
  record Command(long expected,String[] semantics){}

@@ -15,11 +15,12 @@ final class BoundedTranscriptMetadata {
  static final String MEMBER="batch_id ordinal# file_id sha256";
  static final String FILE="id meeting_id sha256 size_bytes#";
  static final String TASK="id task_type pool subject_kind subject_id producer_key input_kind input_id input_fingerprint business_version# priority# cancel_epoch# max_attempts#";
- private final JdbcTemplate j;private final ArchiveReadBudget budget;private final boolean locked,skipLocked;private long rows,edges,bytes,points;
+ private final JdbcTemplate j;private final ArchiveReadBudget budget;private final boolean locked,skipLocked;private long rows,edges,bytes,points;private final TranscriptAcquisitionBudget.Ledger shared;
  BoundedTranscriptMetadata(JdbcTemplate j,ArchiveReadBudget budget){this(j,budget,false);}
  BoundedTranscriptMetadata(JdbcTemplate j,ArchiveReadBudget budget,boolean locked){this(j,budget,locked,false);}
- BoundedTranscriptMetadata(JdbcTemplate j,ArchiveReadBudget budget,boolean locked,boolean skipLocked){this.j=j;this.budget=budget;this.locked=locked;this.skipLocked=skipLocked;}
- void check(){ama.contract.MinutesContracts.check(()->false);}
+ BoundedTranscriptMetadata(JdbcTemplate j,ArchiveReadBudget budget,boolean locked,boolean skipLocked){this(j,budget,locked,skipLocked,null);}
+ BoundedTranscriptMetadata(JdbcTemplate j,ArchiveReadBudget budget,boolean locked,boolean skipLocked,TranscriptAcquisitionBudget.Ledger shared){this.j=j;this.budget=budget;this.locked=locked;this.skipLocked=skipLocked;this.shared=shared;}
+ void check(){ama.contract.MinutesContracts.check(()->false);if(shared!=null)shared.check();}
  Map<String,Object> one(String table,String shape,String id){var found=select(table,shape,"id=?","id",2,id);if(found.size()!=1)throw new ama.contract.FileContracts.NotFound();return found.getFirst();}
  List<Map<String,Object>> select(String table,String shape,String predicate,String order,int maximum,Object... args){
   check();require(maximum>0,BUDGET_EXCEEDED);var fields=List.of(shape.split(" "));var texts=fields.stream().filter(f->!f.endsWith("#")).toList();
@@ -28,10 +29,21 @@ final class BoundedTranscriptMetadata {
   // UUID/text edges are conservatively charged per projected text field.
   long remainingEdges=(budget.maxFactEdges()-edges)/Math.max(1,texts.size());
   String b=sum(texts,"OCTET_LENGTH"),p=sum(texts,"CHAR_LENGTH"),u=greatest(texts,true),single=greatest(texts,false);
+  String sharedAdmission="";
+  if(shared!=null){
+   String units=sumUtf16(texts);
+   Object[] measuredArgs=Arrays.copyOf(args,args.length+1);measuredArgs[args.length]=limit;
+   var sizes=j.queryForMap("SELECT COUNT(*) AS budget_rows,COALESCE(SUM(b),0) AS budget_bytes,COALESCE(SUM(p),0) AS budget_points,COALESCE(SUM(u),0) AS budget_units FROM (SELECT "+b+" b,"+p+" p,"+units+" u FROM "+table+" WHERE "+predicate+" ORDER BY "+order+" LIMIT ?) metadata_budget",measuredArgs);
+   long count=((Number)sizes.get("budget_rows")).longValue(),size=((Number)sizes.get("budget_bytes")).longValue(),scalars=((Number)sizes.get("budget_points")).longValue(),utf16=((Number)sizes.get("budget_units")).longValue();
+   require(count>=0&&count<=maximum&&count<=remainingRows&&count<=remainingEdges&&size>=0&&size<=remainingBytes&&scalars>=0&&scalars<=remainingPoints&&utf16>=0,BUDGET_EXCEEDED);
+   for(long n=0;n<count;n++)shared.row(fields.size());shared.capture(size,scalars,utf16,3);
+   // Numeric-only measurement is charged before text transfer. A concurrent increase is masked in SQL.
+   sharedAdmission=" AND __rows<="+count+" AND __total_bytes<="+size+" AND __total_points<="+scalars+" AND __total_units<="+utf16;
+  }
   String cols=String.join(",",fields.stream().map(f->f.replace("#","")).toList());
-  String admitted="__rows<="+Math.min(maximum,remainingRows)+" AND __rows<="+remainingEdges+" AND __total_bytes<="+remainingBytes+" AND __total_points<="+remainingPoints+" AND __max_bytes<="+budget.maxStringUtf8Bytes()+" AND __max_units<="+budget.maxStringUtf16();
+  String admitted="__rows<="+Math.min(maximum,remainingRows)+" AND __rows<="+remainingEdges+" AND __total_bytes<="+remainingBytes+" AND __total_points<="+remainingPoints+" AND __max_bytes<="+budget.maxStringUtf8Bytes()+" AND __max_units<="+budget.maxStringUtf16()+sharedAdmission;
   String projected=String.join(",",fields.stream().map(f->{String c=f.replace("#","");return "CASE WHEN "+admitted+" THEN "+c+" ELSE NULL END AS "+c;}).toList());
-  String sql="SELECT "+projected+",("+admitted+") AS __admitted,__row_bytes,__row_points FROM (SELECT a.*,COUNT(*) OVER() AS __rows,SUM(__row_bytes) OVER() AS __total_bytes,SUM(__row_points) OVER() AS __total_points,MAX(__single_bytes) OVER() AS __max_bytes,MAX(__single_units) OVER() AS __max_units FROM (SELECT "+cols+","+b+" AS __row_bytes,"+p+" AS __row_points,"+single+" AS __single_bytes,"+u+" AS __single_units FROM "+table+" WHERE "+predicate+" ORDER BY "+order+" LIMIT ?"+(locked?" FOR UPDATE"+(skipLocked?" SKIP LOCKED":""):"")+") a) admitted ORDER BY "+order;
+  String sql="SELECT "+projected+",("+admitted+") AS __admitted,__row_bytes,__row_points FROM (SELECT a.*,COUNT(*) OVER() AS __rows,SUM(__row_bytes) OVER() AS __total_bytes,SUM(__row_points) OVER() AS __total_points,SUM(__row_units) OVER() AS __total_units,MAX(__single_bytes) OVER() AS __max_bytes,MAX(__single_units) OVER() AS __max_units FROM (SELECT "+cols+","+b+" AS __row_bytes,"+p+" AS __row_points,"+sumUtf16(texts)+" AS __row_units,"+single+" AS __single_bytes,"+u+" AS __single_units FROM "+table+" WHERE "+predicate+" ORDER BY "+order+" LIMIT ?"+(locked?" FOR UPDATE"+(skipLocked?" SKIP LOCKED":""):"")+") a) admitted ORDER BY "+order;
   Object[] parameters=Arrays.copyOf(args,args.length+1);parameters[args.length]=limit;
   return j.query(sql,rs->{
    var result=new ArrayList<Map<String,Object>>();while(rs.next()){
@@ -41,6 +53,7 @@ final class BoundedTranscriptMetadata {
    }check();return List.copyOf(result);
   },parameters);
  }
+ private static String sumUtf16(List<String> fields){return fields.isEmpty()?"0":String.join("+",fields.stream().map(f->"COALESCE(OCTET_LENGTH(CONVERT("+f+" USING utf16)) DIV 2,0)").toList());}
  private static String sum(List<String> fields,String fn){return fields.isEmpty()?"0":String.join("+",fields.stream().map(f->"COALESCE("+fn+"("+f+"),0)").toList());}
  private static String greatest(List<String> fields,boolean units){return "GREATEST(0,"+String.join(",",fields.stream().map(f->units?"COALESCE(OCTET_LENGTH(CONVERT("+f+" USING utf16)) DIV 2,0)":"COALESCE(OCTET_LENGTH("+f+"),0)").toList())+")";}
 }

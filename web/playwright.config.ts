@@ -1,10 +1,13 @@
 import { defineConfig } from '@playwright/test';
+import {fileURLToPath} from 'node:url';
+import {playwrightOutputs} from './scripts/owned-output';
+const outputs=playwrightOutputs(fileURLToPath(new URL('..',import.meta.url)),process.env);
 process.env.NO_PROXY = process.env.no_proxy = 'localhost,127.0.0.1,127.0.0.2';
 export default defineConfig({
  updateSnapshots: 'none',
  testDir: './tests', testMatch: /(?:visual|e2e)\/.*\.spec\.ts/, fullyParallel: false,
- forbidOnly: true, retries: 0, reporter: [['list'], ['junit', { outputFile: process.env.PLAYWRIGHT_JUNIT_OUTPUT_FILE || '../artifacts/web/playwright.xml' }]],
- outputDir: '../artifacts/web/test-results',
+ forbidOnly: true, retries: 0, reporter: [['list'], ['junit', { outputFile: outputs.report }]],
+ outputDir: outputs.artifacts,
  snapshotPathTemplate: '{testDir}/visual/baselines/{projectName}/{arg}{ext}',
  expect: { toHaveScreenshot: { maxDiffPixels: 0, threshold: 0, animations: 'disabled' } },
  use: { baseURL: 'http://127.0.0.2:4275', browserName: 'chromium', locale: 'zh-CN', timezoneId: 'Asia/Shanghai', colorScheme: 'light', deviceScaleFactor: 1, contextOptions: {reducedMotion: 'reduce'} },

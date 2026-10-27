@@ -124,6 +124,7 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
     public StoredBlob put(StorageKey key, InputStream body, long size, String sha256) {
         Objects.requireNonNull(body);
         try (var dir = object(key, true)) {
+            fs.lock(dir);if(fs.exists(dir,"discarded"))throw new StorageException(ErrorCode.INVALID_UPLOAD_STATE);
             files.put(dir, "data", body, size, sha256);
             fs.sync(objects, true);
             fs.sync(root, true);
@@ -137,6 +138,7 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
     public BlobStat stat(StorageKey key) {
         try (var dir = object(key, false);
                 var data = fs.file(dir, "data", false)) {
+            if(fs.exists(dir,"discarded"))throw new StorageException(ErrorCode.NOT_FOUND);
             var digest = files.digest(data);
             check();
             verifyNamed(objects, ImmutableFiles.hash(json(key)), fs.identity(dir));
@@ -158,6 +160,7 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
     /** Size and stream belong to this one no-follow, verified file descriptor. */
     OpenedBlob openRead(StorageKey key) {
         try (var dir = object(key, false)) {
+            if(fs.exists(dir,"discarded"))throw new StorageException(ErrorCode.NOT_FOUND);
             var data = fs.file(dir, "data", false);
             try {
                 long size = fs.identity(data).size();
@@ -197,6 +200,16 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
             check();
         }
     }
+
+    /** The object-directory lock also fences direct/other-session publications of this key. */
+    void retire(StorageKey key) {
+        try(var dir=object(key,true)) {
+            fs.lock(dir);files.bytes(dir,"discarded",new byte[0]);fs.sync(dir,true);
+            fs.unlink(dir,"data");fs.sync(dir,true);fs.sync(objects,true);fs.sync(root,true);
+            check();verifyNamed(objects,ImmutableFiles.hash(json(key)),fs.identity(dir));
+        }
+    }
+    @Override public void discardUpload(UploadToken token, StorageKey key){journal.discard(token,key);}
 
     @Override
     public UploadToken beginUpload(UploadSpec spec) {
@@ -250,7 +263,7 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
                 name -> {
                     if (!name.matches("[0-9a-f]{64}")) throw LinuxFiles.unavailable();
                     try (var dir = fs.directory(objects, name, false)) {
-                        if (!fs.exists(dir, "key") || !fs.exists(dir, "data")) return;
+                        if (!fs.exists(dir, "key") || !fs.exists(dir, "data") || fs.exists(dir,"discarded")) return;
                         StorageKey key = decode(files.bytes(dir, "key", 1048576), StorageKey.class);
                         if (!ImmutableFiles.hash(json(key)).equals(name))
                             throw LinuxFiles.unavailable();

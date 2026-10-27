@@ -329,9 +329,8 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   String localState=canApply?(local==null?state:local.outcome().name()):"STALE";
   String localError=canApply?(local==null?observation.errorCode():local.errorCode()):"BUSINESS_FENCED";
   var localOutput=canApply?(local==null?observation.output():local.output()):null;
-  if(prepared!=null){
-   if(!currentTask.state().equals("RECONCILING")||j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome=?,error_code=? WHERE task_id=? AND attempt=? AND owner=? AND ended_at IS NULL",localState,localError,currentTask.id(),currentTask.attempt(),currentTask.owner())!=1)throw new IllegalStateException("Current external attempt must end exactly once");
-  }
+  // Both generic and prepared observations close the marked attempt in this transaction.
+  if(!currentTask.state().equals("RECONCILING")||j.update("UPDATE task_attempt SET ended_at=UTC_TIMESTAMP(6),outcome=?,error_code=? WHERE task_id=? AND attempt=? AND owner=? AND ended_at IS NULL",localState,localError,currentTask.id(),currentTask.attempt(),currentTask.owner())!=1)throw new IllegalStateException("Current external attempt must end exactly once");
   q.finish(currentTask,localState,localError,localOutput);
   return canApply?ObservationResult.APPLIED:ObservationResult.RECORDED_FENCED;
   } finally {if(context!=null)context.open=false;}

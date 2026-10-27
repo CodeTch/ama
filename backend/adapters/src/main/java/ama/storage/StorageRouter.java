@@ -65,6 +65,11 @@ public final class StorageRouter implements FileStoragePort {
     public void abort(UploadToken token) {
         backend(token.backendId()).abort(token);
     }
+    @Override public void discardUpload(UploadToken token, StorageKey key) {
+        if(!token.backendId().equals(key.backendId()))throw new StorageException(ErrorCode.INVALID_ARGUMENT);
+        backend(token.backendId()).discardUpload(token,key);
+    }
+
     public BlobPage list(String backendId, String namespace, String prefix, String cursor, int limit) {
         return backend(backendId).list(backendId, namespace, prefix, cursor, limit);
     }

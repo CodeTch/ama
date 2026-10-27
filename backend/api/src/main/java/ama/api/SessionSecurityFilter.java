@@ -20,9 +20,12 @@ final class SessionSecurityFilter extends OncePerRequestFilter {
     private final SessionPort sessions;
     private final Environment environment;
     SessionSecurityFilter(SessionPort sessions, Environment environment) { this.sessions = sessions; this.environment = environment; }
+    // Async document/discovery responses re-enter the security chain after REQUEST cleanup.
+    // Resolve the current session again before releasing the buffered response.
+    @Override protected boolean shouldNotFilterAsyncDispatch() { return false; }
     @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String uri=request.getRequestURI();
-        boolean processing=uri.matches("/api/v1/meetings/[^/]+/(processing-capabilities|transcript-imports|transcript|minutes|final-confirmations|publications|publication-destinations|completed-files|processing-inputs|processing-tasks)(/.*)?")
+        boolean processing=uri.equals("/api/v1/meetings")||uri.equals("/api/v1/meetings/categories")||uri.equals("/api/v1/meetings/command-discovery")||uri.matches("/api/v1/meetings/[^/]+/(processing-capabilities|transcript-imports|transcript|minutes|final-confirmations|publications|publication-destinations|completed-files|processing-inputs|processing-tasks|tasks|workspace)(/.*)?")
                 ||request.getMethod().equals("GET")&&uri.matches("/api/v1/meetings/[^/]+/uploads(/.*)?");
         if(processing)response=new HttpServletResponseWrapper(response){
             @Override public void setHeader(String name,String value){super.setHeader(name,name.equalsIgnoreCase("Cache-Control")?"private, no-store":value);}

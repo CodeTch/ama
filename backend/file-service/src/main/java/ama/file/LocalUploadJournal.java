@@ -59,7 +59,7 @@ final class LocalUploadJournal {
     }
 
     private void open(LinuxFiles.Fd dir) {
-        if (fs.exists(dir, "aborted") || fs.exists(dir, "decision"))
+        if (fs.exists(dir, "discarded") || fs.exists(dir, "aborted") || fs.exists(dir, "decision"))
             throw new StorageException(ErrorCode.INVALID_UPLOAD_STATE);
     }
 
@@ -87,7 +87,7 @@ final class LocalUploadJournal {
             throw new StorageException(ErrorCode.INVALID_ARGUMENT);
         Completion plan = new Completion(List.copyOf(parts), hash.toLowerCase(Locale.ROOT));
         try (var dir = session(token)) {
-            if (fs.exists(dir, "aborted"))
+            if (fs.exists(dir, "aborted") || fs.exists(dir,"discarded"))
                 throw new StorageException(ErrorCode.INVALID_UPLOAD_STATE);
             UploadSpec spec = spec(dir);
             long total = 0;
@@ -180,6 +180,17 @@ final class LocalUploadJournal {
                 if (current != null) current.close();
             }
         };
+    }
+
+    void discard(UploadToken token, StorageKey key) {
+        try(var dir=session(token)) {
+            var spec=spec(dir);var expected=new StorageKey(spec.backendId(),spec.namespace(),spec.objectKey());
+            if(!expected.equals(key))throw new StorageException(ErrorCode.INVALID_ARGUMENT);
+            files.bytes(dir,"discarded",new byte[0]);ack(token.sessionId(),dir);
+            store.retire(key);
+            var parts=new ArrayList<String>();fs.visit(dir,n->{if(n.startsWith("part-"))parts.add(n);});
+            for(String part:parts)fs.unlink(dir,part);ack(token.sessionId(),dir);
+        }
     }
 
     void abort(UploadToken token) {

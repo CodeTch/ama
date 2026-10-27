@@ -1,0 +1,11 @@
+# Controlled knowledge transport
+
+Use `publication.mode=CONTROLLED_TLS` and an explicit `publication.origin=https://127.0.0.1:<port>` for the controlled HTTPS provider. The server certificate needs an IP subject alternative name for `127.0.0.1`. The application identity JSON retains its existing signing and bearer paths and adds `paths.providerTlsTrustCertificate`, pointing to one PEM or DER CA certificate. This trust file, like the other credential files, must be a regular non-symlink file with mode0600. The client builds a dedicated trust store from that certificate and verifies the HTTPS peer identity before writing bearer or delegation headers. TLS1.2 and TLS1.3 are supported.
+
+The Python provider configuration uses `mode: CONTROLLED_TLS`, `bind: 127.0.0.1`, and `tlsCertificate` / `tlsPrivateKey` paths. Both files must be regular non-symlink0600 files. The certificate file may contain the server chain. Initialization, grant administration and existing store identities follow the existing provider protocol. Startup fails if the explicit transport configuration or key pair is invalid.
+
+The `ISOLATED_LOOPBACK_TEST` profile explicitly selects HTTP on127.0.0.1. HTTPS cannot silently downgrade to that profile. Origins reject userinfo, non-root paths, query strings and fragments. Publication document metadata uses the installed client's exact scheme, address and port; browser viewing still uses the authenticated same-origin document relay.
+
+The client bounds connect to3s, socket/handshake inactivity to5s and the complete request to15s. Closing or cancellation aborts an admitted socket. Admission and executor shutdown share one synchronization boundary; scheduler rejection cannot leave an admitted socket unowned. Provider TLS handshakes run inside its two-request capacity, with a5s inactivity timeout and15s connection deadline spanning handshake, HTTP headers and request handling. Provider close aborts active sockets and bounds their drain to5s. Expiry stays effective when a plain accepted socket is replaced by an SSL socket.
+
+The transport tests use owned temporary certificates and sockets with explicit database/provider substitutes. They establish transport behavior; genuine durable provider protocol, application publication, restart/CAS/crash and browser acceptance have separate evidence requirements.

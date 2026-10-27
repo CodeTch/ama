@@ -367,9 +367,10 @@ public final class JdbcFileUploads implements FileUploads {
                             Session found = session(id);
                             purposes.require(actor, meeting, found.purpose());
                             if (root.epoch() != found.epoch()) throw new Conflict();
-                            if (found.state().equals("COMPLETED")
-                                    || found.state().equals("ABORTED")) return found;
-                            requireState(found, "OPEN");
+                            if (found.state().equals("COMPLETED")) return found;
+                            if (found.file()!=null) throw new Conflict();
+                            if (found.state().equals("ABORTED")) return found;
+                            if (!Set.of("OPEN","FINALIZING").contains(found.state())) throw new Conflict();
                             j.update(
                                     "UPDATE upload_session SET"
                                         + " state='ABORTED',updated_at=UTC_TIMESTAMP(6) WHERE id=?",
@@ -379,7 +380,7 @@ public final class JdbcFileUploads implements FileUploads {
                             return aborted;
                         });
         if (!s.state().equals("COMPLETED"))
-            backends.require(s.key().backendId(), false).storage().abort(s.uploadToken());
+            backends.require(s.key().backendId(), false).storage().discardUpload(s.uploadToken(),s.key());
     }
 
     private ama.transcript.PublicationWriteGuard.Prepared preparePublication(Actor actor,String meeting){return publicationWrites==null?null:publicationWrites.prepare(actor,meeting);}

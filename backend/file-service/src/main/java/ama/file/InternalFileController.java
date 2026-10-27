@@ -121,6 +121,7 @@ public final class InternalFileController implements AutoCloseable {
                                 "part",
                                 "complete",
                                 "abort",
+                                "discard-upload",
                                 "list",
                                 "health")
                         .contains(route)) {
@@ -177,6 +178,7 @@ public final class InternalFileController implements AutoCloseable {
                                 store.abort(request.token());
                                 yield null;
                             }
+                            case "discard-upload" -> { store.discardUpload(request.token(),request.key()); yield null; }
                             case "list" ->
                                     store.list(
                                             request.backendId(),

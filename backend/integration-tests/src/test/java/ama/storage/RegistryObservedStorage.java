@@ -72,6 +72,8 @@ final class RegistryObservedStorage implements FileStoragePort {
         actual.abort(t);
     }
 
+    public void discardUpload(UploadToken t, StorageKey k) { actual.discardUpload(t,k); }
+
     public BlobPage list(String b, String n, String p, String c, int l) {
         return actual.list(b, n, p, c, l);
     }

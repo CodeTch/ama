@@ -1,0 +1,47 @@
+package ama.meeting;
+
+import ama.access.MeetingAccess;
+import ama.contract.IdentityContracts.Actor;
+import ama.contract.WorkspaceContracts.*;
+import ama.db.TransactionRunner;
+import java.time.*;import java.util.*;import javax.sql.DataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+/** Independently authorized bounded list rows, sharing one cumulative request ledger. */
+public final class JdbcWebMeetingProjectionReader {
+ private final DataSource source;private final TransactionRunner tx;private final JdbcMeetingAccess access;private final JdbcTemplate jdbc;private final WorkspaceCursor cursors;private final WorkspaceReadBudget.Limits limits;
+ public JdbcWebMeetingProjectionReader(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,WorkspaceCursor cursors,WorkspaceReadBudget.Limits limits){access.requireProjectionSource(source);this.source=source;this.tx=tx;this.access=access;this.cursors=cursors;this.limits=limits;jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(5);}
+ public MeetingPage list(Actor actor,String scope,int limit,String cursor) {
+  if(TransactionSynchronizationManager.isActualTransactionActive())throw new WorkspaceReadBudget.Unavailable();
+  if(!Set.of("owned","joined").contains(scope)||limit<1||limit>50)throw new IllegalArgumentException("Invalid list request");
+  var budget=new WorkspaceReadBudget(limits,()->Thread.currentThread().isInterrupted());String cursorScope="meeting-list-v1/"+scope;
+  budget.reserve(2,4,4096,2048,2048,4,true);String decoded=cursor==null?null:cursors.decode(actor.enterpriseId(),cursorScope,cursor);var after=decoded==null?null:MeetingListScan.Position.parse(decoded);
+  try {
+   var candidates=tx.required(()->{budget.check();access.tryLockIdentities(actor,List.of(),false).orElseThrow(MeetingAccess.AccessDeniedException::new);return new MeetingListScan(jdbc).discover(actor,scope,limit,after,budget);});
+   var items=new ArrayList<MeetingItem>();int scanned=Math.min(limit,candidates.size());
+   for(int i=0;i<scanned;i++){
+    var candidate=candidates.get(i);budget.check();
+    try {var item=tx.required(()->row(actor,scope,candidate,budget));if(item!=null)items.add(item);}
+    catch(MeetingAccess.AccessDeniedException denied){/* No denied candidate metadata is emitted. Cursor still advances over it. */}
+   }
+   boolean more=candidates.size()>scanned;String next=more?cursors.encode(actor.enterpriseId(),cursorScope,candidates.get(scanned-1).position().encode()):null;budget.check();return new MeetingPage(items,next,more);
+  }catch(org.springframework.dao.DataAccessException|org.springframework.transaction.TransactionException e){throw new WorkspaceReadBudget.Unavailable(e);}
+ }
+ private MeetingItem row(Actor actor,String scope,MeetingListScan.Candidate candidate,WorkspaceReadBudget budget) {
+  budget.reserve(12,60,6144,2304,2816,4,false);String meeting=candidate.position().id();var held=(JdbcMeetingAccess.Held)access.lock(actor,meeting);access.require(held,MeetingAccess.Action.READ);var root=held.root;
+  if(root.accessRevision()<0||root.accessRevision()==Long.MAX_VALUE)throw new WorkspaceReadBudget.Unavailable();
+  if(scope.equals("owned")&&!root.owner().equals(actor.enterpriseId()))return null;
+  budget.reserve(1,4,256,256,256,4,false);
+  var times=jdbc.queryForList("SELECT updated_at FROM meeting WHERE id=?",LocalDateTime.class,meeting);
+  if(times.size()!=1||!times.getFirst().equals(candidate.position().updated())||root.revision()!=candidate.revision()||!Objects.equals(root.infoId(),candidate.info())||!root.stage().equals(candidate.stage()))throw new WorkspaceReadBudget.Unavailable();
+  if(scope.equals("joined")){budget.reserve(9,36,2560,1536,1792,4,false);if(!access.confirmedParticipant(held,actor,meeting))return null;}
+  if(root.infoId()==null)throw new WorkspaceReadBudget.Unavailable();
+  // Complete response metadata is reserved before selected name/category/date text is fetched.
+  budget.reserve(1,8,512,512,512,4,true);
+  var reader=new BoundedMeetingMetadata(source,access,actor,meeting,held,budget);var selection=reader.capture("meeting_info_revision","name category_id actual_meeting_date","id=? AND meeting_id=?",1,root.infoId(),meeting);
+  if(selection.size()!=1)throw new WorkspaceReadBudget.Unavailable();var value=reader.read(selection).getFirst();boolean owner=root.owner().equals(actor.enterpriseId());String date=(String)value.get("actual_meeting_date");
+  // List does not evaluate producer readiness or confer edit permission; owner opens workspace for that decision.
+  return new MeetingItem(meeting,(String)value.get("name"),(String)value.get("category_id"),date==null?null:LocalDate.parse(date),root.stage(),root.lifecycle(),owner?"OWNER":"MEMBER",!owner?"MEMBER_READ_ONLY":root.published()?"PUBLISHED_READ_ONLY":"CHECK_WORKSPACE",Long.toString(root.revision()),Long.toString(root.accessRevision()));
+ }
+}

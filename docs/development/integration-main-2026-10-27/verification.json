@@ -1,0 +1,147 @@
+{
+  "date": "2026-10-27",
+  "branch": "codex/phase-b-completion-20261023",
+  "base": "647a3a204eefe6c06422a5ed63c73c0532958b8f",
+  "java": {
+    "selector": "*Test,!Task11Fix02WireVariantsTest",
+    "counts": {
+      "tests": 862,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshReportCount": 157,
+    "exitCode": 0,
+    "elapsedSeconds": 110.83237018200452,
+    "sourceUnchanged": true,
+    "logSha256": "ae7941d9af01ae16dd19ad2bfa340535da711af542e9efcf71d27f816eb89dc5"
+  },
+  "web": {
+    "tests": 166,
+    "failures": 0,
+    "exitCode": 0,
+    "sourceUnchanged": true
+  },
+  "typecheck": {
+    "exitCode": 0
+  },
+  "otherChecks": [
+    {
+      "name": "python-checks",
+      "command": [
+        "python3",
+        "tools/checks/python_suite.py",
+        "tools/checks/tests",
+        "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/merge-main-20261027-extra01/checks.json"
+      ],
+      "exitCode": 0,
+      "seconds": 3.71
+    },
+    {
+      "name": "python-dev",
+      "command": [
+        "python3",
+        "tools/checks/python_suite.py",
+        "tools/dev/tests",
+        "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/merge-main-20261027-extra01/dev.json"
+      ],
+      "exitCode": 0,
+      "seconds": 0.22
+    },
+    {
+      "name": "python-probes",
+      "command": [
+        "python3",
+        "tools/checks/python_suite.py",
+        "tools/probes/tests",
+        "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/merge-main-20261027-extra01/probes.json"
+      ],
+      "exitCode": 0,
+      "seconds": 2.73
+    },
+    {
+      "name": "python-providers",
+      "command": [
+        "python3",
+        "tools/checks/python_suite.py",
+        "tools/providers",
+        "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/merge-main-20261027-extra01/providers.json"
+      ],
+      "exitCode": 0,
+      "seconds": 16.65
+    },
+    {
+      "name": "python-providers-tests",
+      "command": [
+        "python3",
+        "tools/checks/python_suite.py",
+        "tools/providers/tests",
+        "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/merge-main-20261027-extra01/providers-tests.json"
+      ],
+      "exitCode": 0,
+      "seconds": 0.08
+    },
+    {
+      "name": "python-tools",
+      "command": [
+        "python3",
+        "tools/checks/python_suite.py",
+        "tools/tests",
+        "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/merge-main-20261027-extra01/tools.json"
+      ],
+      "exitCode": 0,
+      "seconds": 3.39
+    },
+    {
+      "name": "contract",
+      "command": [
+        "python3",
+        "tools/checks/run.py",
+        "contract",
+        "OpenApi",
+        "--output-root",
+        "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/merge-main-20261027-extra01/openapi"
+      ],
+      "exitCode": 0,
+      "seconds": 4.38
+    },
+    {
+      "name": "api",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "check:api"
+      ],
+      "exitCode": 0,
+      "seconds": 1.19
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/merge-main-20261027-extra01/dist"
+      ],
+      "exitCode": 0,
+      "seconds": 2.01
+    }
+  ],
+  "python": {
+    "tests": 200,
+    "failures": 0,
+    "skipped": 0
+  },
+  "limitations": [
+    "Historical Task11Fix02WireVariantsTest exclusion retained.",
+    "No retained database/provider runtime, database IT, real browser E2E or full Phase B acceptance performed.",
+    "Historical evidence-dependent tests execute in the existing development worktree."
+  ],
+  "mergedSourceVerification": "Pending main merge; see integration record."
+}

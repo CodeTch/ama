@@ -63,7 +63,7 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
   OperationToken current;
   synchronized(monitor){if(phase!=Phase.OPERATION||renewing||receiptOnly||!open.getAsBoolean())return;renewing=true;current=token;}
   boolean ok=false;try{ok=operations.renew(current);}catch(RuntimeException unavailable){/* sticky receipt-only */}
-  finally{AbortRegistration aborted=null;synchronized(monitor){renewing=false;if(!ok){receiptOnly=true;aborted=detachAbort();}monitor.notifyAll();}if(!ok&&current!=null)operations.releaseRecordedLookup(current);abort(aborted);}
+  finally{AbortRegistration aborted=null;synchronized(monitor){renewing=false;if(!ok){receiptOnly=true;aborted=detachAbort();}monitor.notifyAll();}try{if(!ok&&current!=null)operations.releaseRecordedLookup(current);}finally{abort(aborted);}}
  }
  public boolean send(Callable<PreparedObservation> transport)throws Exception{
   Objects.requireNonNull(transport);
@@ -97,5 +97,5 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
  }
  boolean pending(){synchronized(monitor){return pending!=null;}}
  void retry(){PreparedObservation observation;synchronized(monitor){observation=pending;}if(observation==null)return;try{observe(observation);}catch(InterruptedException e){Thread.currentThread().interrupt();}catch(RuntimeException unavailable){/* one bounded retry on the existing poll cadence */}}
- public void close(){ExternalOperationHeartbeat.Tracked current;AbortRegistration aborted;OperationToken released;synchronized(monitor){receiptOnly=true;current=tracker;released=token;aborted=detachAbort();monitor.notifyAll();}try{if(released!=null)operations.releaseRecordedLookup(released);abort(aborted);}finally{if(current!=null)current.close();}}
+ public void close(){ExternalOperationHeartbeat.Tracked current;AbortRegistration aborted;OperationToken released;synchronized(monitor){receiptOnly=true;current=tracker;released=token;aborted=detachAbort();monitor.notifyAll();}try{if(released!=null)operations.releaseRecordedLookup(released);}finally{try{abort(aborted);}finally{if(current!=null)current.close();}}}
 }

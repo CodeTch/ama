@@ -19,6 +19,14 @@ paths:
     $ref: './identity.yaml#/logoutAll'
   /api/v1/directory/people:
     $ref: './identity.yaml#/people'
+  /api/v1/meetings/command-discovery:
+    $ref: './workspace.yaml#/commandDiscovery'
+  /api/v1/meetings/{meetingId}/workspace:
+    $ref: './workspace.yaml#/workspace'
+  /api/v1/meetings/{meetingId}/tasks:
+    $ref: './workspace.yaml#/tasks'
+  /api/v1/meetings/categories:
+    $ref: './workspace.yaml#/categories'
   /api/v1/meetings:
     $ref: './meetings.yaml#/collection'
   /api/v1/meetings/{id}:

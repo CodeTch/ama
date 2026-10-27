@@ -26,7 +26,11 @@ final class TranscriptReadGraph {
  }
  static TranscriptReadGraph discover(JdbcTemplate j,ArchiveReadBudget budget,CanonicalBudget canonical,String meeting,
    String revision,String workerInput,String workerTask,String requested,Function<Map<String,Object>,String> producer){
-  var read=new BoundedTranscriptMetadata(j,budget);var root=read.one("meeting",ROOT,meeting);
+  return discover(j,budget,canonical,meeting,revision,workerInput,workerTask,requested,producer,null);
+ }
+ static TranscriptReadGraph discover(JdbcTemplate j,ArchiveReadBudget budget,CanonicalBudget canonical,String meeting,
+   String revision,String workerInput,String workerTask,String requested,Function<Map<String,Object>,String> producer,TranscriptAcquisitionBudget.Ledger shared){
+  var read=new BoundedTranscriptMetadata(j,budget,false,false,shared);var root=read.one("meeting",ROOT,meeting);
   var revisions=new TreeMap<String,Map<String,Object>>();String raw=null,inputId=workerInput;
   if(workerInput==null){
    String next=revision;int depth=0;

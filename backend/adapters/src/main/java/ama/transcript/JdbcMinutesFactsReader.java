@@ -37,11 +37,13 @@ public final class JdbcMinutesFactsReader {
   for(String field:List.of("info_revision_id","roster_revision_id","transcript_confirmation_id","minutes_revision_id","material_snapshot_id","element_set_id","template_revision_id","exclusion_revision_id"))if(!Objects.equals(root.get(field),frozen.get(field)))throw new ama.contract.TranscriptContracts.Failure(404,"FINAL_NOT_FOUND");
  }
  public Snapshot readOwner(Actor actor,String meeting,String selector,String selected){return read(actor,meeting,selector,selected,false);}
- private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member){
+ Snapshot readOwner(Actor actor,String meeting,String selector,String selected,TranscriptAcquisitionBudget.Ledger budget){return read(actor,meeting,selector,selected,false,budget);}
+ private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member){return read(actor,meeting,selector,selected,member,limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->false));}
+ private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget){
   independent();uuid(meeting);require(Set.of("INITIAL_SETTINGS","CURRENT_GENERATION","STORED_INPUT","CANDIDATE","SAVED_EFFECTIVE","OWNER_REVISION","REVIEW_BODY","REVIEW_ELEMENT","FINAL","REUSE_SOURCES","OWNER_SET","REVIEW_ID","READINESS","SETTINGS_READ").contains(selector),INVALID_ARGUMENT);
-  var budget=limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->false);
+  Objects.requireNonNull(budget);
   MinutesGraphDiscovery.Discovery discovered=null;RuntimeException discoveryError=null;
-  try{discovered=MinutesGraphDiscovery.discover(authority.dataSource(),meeting,selector,selected,limits,authority.readBudget());if(selector.equals("READINESS"))discovered=MinutesGraphDiscovery.withPending(authority.dataSource(),discovered,limits.tasks());charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}
+  try{discovered=MinutesGraphDiscovery.discover(authority.dataSource(),meeting,selector,selected,limits,authority.readBudget());if(selector.equals("READINESS"))discovered=MinutesGraphDiscovery.withPending(authority.dataSource(),discovered,limits.tasks(),budget);charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}
   final var plan=discovered;final var failedDiscovery=discoveryError;
   var captured=authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,plan,member?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);if(failedDiscovery!=null)throw failedDiscovery;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);var graph=member&&!selector.equals("FINAL")||selector.equals("READINESS")?MinutesGraphCapture.captureCurrent(authority,scope,gate,actor,plan,budget):MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);if(member&&selector.equals("FINAL"))requireEffectiveFinal(plan.root(),JdbcMinutesSavedQueries.project(one(graph,Table.FINAL_CONFIRMATION,selected)));return graph;});
   Snapshot prepared=null;RuntimeException preparationError=null;

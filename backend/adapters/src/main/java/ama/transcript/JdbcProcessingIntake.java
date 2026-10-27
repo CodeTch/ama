@@ -72,8 +72,8 @@ public final class JdbcProcessingIntake {
             pending=Objects.requireNonNull(components).authority().prepareMinutesIntake(actor,meeting,prepared.spec());
         }
         catch(ama.contract.MinutesContracts.Failure failure) {
-            // Cancellation is not an ordinary preparation failure and must never become an acceptance.
-            if(Thread.currentThread().isInterrupted()||!Set.of(ama.contract.MinutesContracts.FailureCode.ARCHIVE_IO_UNAVAILABLE,ama.contract.MinutesContracts.FailureCode.PROFILE_UNAVAILABLE,ama.contract.MinutesContracts.FailureCode.CAPABILITY_UNAVAILABLE,ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED,ama.contract.MinutesContracts.FailureCode.READ_FAILED,ama.contract.MinutesContracts.FailureCode.PROVENANCE_UNAVAILABLE).contains(failure.code()))throw failure;
+            // Cancellation and ambiguous archive/profile provenance failures must not yield to a raced acceptance.
+            if(Thread.currentThread().isInterrupted()||!Set.of(ama.contract.MinutesContracts.FailureCode.ARCHIVE_IO_UNAVAILABLE,ama.contract.MinutesContracts.FailureCode.CAPABILITY_UNAVAILABLE,ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED,ama.contract.MinutesContracts.FailureCode.READ_FAILED).contains(failure.code()))throw failure;
             var winner=lookup(actor,meeting,scope,keyHash,body,request);
             if(winner.isPresent())return winner.orElseThrow();
             throw unavailable();

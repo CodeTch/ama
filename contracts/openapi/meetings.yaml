@@ -1,4 +1,41 @@
 collection:
+  get:
+    operationId: listMeetings
+    summary: List independently authorized saved meeting metadata
+    description: Uses bounded indexed updated-time/id candidates. Each emitted row has fresh authorization. Joined means confirmed enterprise participant, including an owner only when confirmed. No summary or roster labels are read. Unknown/repeated queries fail; changed discovery or exhausted shared budget fails the whole response. No counts/search/snapshot or mutation permission is implied.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - name: scope
+        in: query
+        schema: {type: string, enum: [owned, joined], default: owned}
+      - name: limit
+        in: query
+        schema: {type: integer, minimum: 1, maximum: 50, default: 20}
+      - name: cursor
+        in: query
+        schema: {type: string, minLength: 1, maxLength: 1536}
+    responses:
+      '200':
+        description: Bounded private meeting page
+        headers:
+          Cache-Control:
+            schema: {type: string, const: 'private, no-store'}
+        content:
+          application/json:
+            schema: {$ref: './workspace.yaml#/MeetingPage'}
+      '400': {$ref: './identity.yaml#/Invalid'}
+      '401': {$ref: './identity.yaml#/Unauthenticated'}
+      '403':
+        description: Current identity does not permit meeting reads
+        content:
+          application/json:
+            schema: {$ref: './identity.yaml#/BusinessError'}
+      '503':
+        description: Protected projection or bounded discovery unavailable
+        content:
+          application/json:
+            schema: {$ref: './identity.yaml#/BusinessError'}
   servers:
     - url: http://127.0.0.1:8080
   post:
@@ -133,9 +170,18 @@ confirmations:
           schema:
             type: object
             additionalProperties: false
-            anyOf:
-              - required: [expectedRevision]
-              - required: [expectedRevisionToken]
+            allOf:
+              - anyOf:
+                  - type: object
+                    required: [expectedRevision]
+                    properties:
+                      expectedRevision:
+                        $ref: '#/ExpectedRevision'
+                  - type: object
+                    required: [expectedRevisionToken]
+                    properties:
+                      expectedRevisionToken:
+                        $ref: '#/ExpectedRevisionToken'
             properties:
               expectedRevision:
                 $ref: '#/ExpectedRevision'
@@ -202,9 +248,18 @@ SaveInfo:
   type: object
   additionalProperties: false
   required: [rosterDraftIds]
-  anyOf:
-    - required: [expectedRevision]
-    - required: [expectedRevisionToken]
+  allOf:
+    - anyOf:
+        - type: object
+          required: [expectedRevision]
+          properties:
+            expectedRevision:
+              $ref: '#/ExpectedRevision'
+        - type: object
+          required: [expectedRevisionToken]
+          properties:
+            expectedRevisionToken:
+              $ref: '#/ExpectedRevisionToken'
   properties:
     expectedRevision:
       $ref: '#/ExpectedRevision'
@@ -297,7 +352,7 @@ TooLarge:
       schema:
         $ref: './identity.yaml#/BusinessError'
 MeetingUnavailable:
-  description: Shared database or approved category dictionary unavailable; no fabricated enterprise options.
+  description: Shared database, approved category dictionary, or meeting transition preparation unavailable; no fabricated enterprise options.
   content:
     application/json:
       schema:

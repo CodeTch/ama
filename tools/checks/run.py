@@ -74,17 +74,46 @@ def java_tests(selector="*", integration=False):
     command += [f"-Dit.test={discovered_selector}", "-Dfailsafe.failIfNoSpecifiedTests=false", "verify"] if integration else [f"-Dtest={discovered_selector}", "-Dsurefire.failIfNoSpecifiedTests=false", "test"]
     return execute(command, ROOT, sorted(reports))
 
-def contracts():
+def owned_output(path, group):
+    """Reserve a never-used directory within this checkout; never delete existing evidence."""
+    root = ROOT.resolve()
+    target = pathlib.Path(path)
+    if not target.is_absolute():
+        target = root / target
+    target = target.resolve()
+    if not target.is_relative_to(root) or target == root:
+        raise ValueError("output root must stay inside this checkout")
+    target.mkdir(parents=True, exist_ok=False)
+    (target / "owned-output.json").write_text(json.dumps({"schema": 1, "repository": str(root), "output": str(target), "group": group}) + "\n")
+    return target
+
+
+def contracts(output=None):
     try:
-        result = subprocess.run(["npm", "run", "check:openapi"], cwd=ROOT, check=False)
+        if output is None:
+            result = subprocess.run(["npm", "run", "check:openapi"], cwd=ROOT, check=False)
+            destination = ROOT / "artifacts/openapi/api.yaml"
+        else:
+            cli = str(ROOT / "node_modules/@redocly/cli/bin/cli.js")
+            destination = output / "api.yaml"
+            for action in ("lint", "bundle"):
+                command = ["node", cli, action, "contracts/openapi/api.yaml", "--config", "redocly.yaml"]
+                if action == "bundle":
+                    command += ["--output", str(destination)]
+                result = subprocess.run(command, cwd=ROOT, check=False)
+                if result.returncode:
+                    return result.returncode if result.returncode > 0 else 1
+        if output is not None and (not destination.is_file() or destination.is_symlink() or destination.stat().st_size == 0):
+            print("FAIL: fresh OpenAPI bundle missing or invalid", file=sys.stderr)
+            return 1
         if result.returncode == 0:
-            print(f"PASS: checks=2 (OpenAPI validation, external-reference merge); evidence={ROOT / 'artifacts/openapi/api.yaml'}", flush=True)
+            print(f"PASS: checks=2 (OpenAPI validation, external-reference merge); evidence={destination}", flush=True)
         return result.returncode
     except OSError as error:
         print(f"FAIL: OpenAPI validator unavailable: {error}", file=sys.stderr)
         return 1
 
-def web_tests(group, selector="*"):
+def web_tests(group, selector="*", output=None):
     """Register delivered web suites, with fresh JUnit counts through execute()."""
     folder = {"web": "unit", "e2e": "e2e", "visual": "visual"}[group]
     suffix = "*.test.ts" if group == "web" else "*.spec.ts"
@@ -93,13 +122,16 @@ def web_tests(group, selector="*"):
     if not matched:
         print(f"FAIL: zero matching {group} tests for {selector!r}", file=sys.stderr)
         return 1
-    report = ROOT / "artifacts/web" / f"{group}.xml"
+    report = (output if output is not None else ROOT / "artifacts/web") / f"{group}.xml"
     report.parent.mkdir(parents=True, exist_ok=True)
     binaries = ROOT / "web/node_modules/.bin"
     if group == "web":
         command = [str(binaries / "tsx"), "--test", "--test-reporter=junit", f"--test-reporter-destination={report}"]
     else:
-        command = ["env", f"PLAYWRIGHT_JUNIT_OUTPUT_FILE={report}", str(binaries / "playwright"), "test"]
+        command = ["env", f"PLAYWRIGHT_JUNIT_OUTPUT_FILE={report}"]
+        if output is not None:
+            command += [f"AMA_CHECK_OUTPUT_ROOT={output}"]
+        command += [str(binaries / "playwright"), "test"]
     command += [str(path.relative_to(ROOT / "web")) for path in matched]
     return execute(command, ROOT / "web", [report])
 
@@ -148,13 +180,24 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("group", choices=["unit", "it", "web", "e2e", "visual", "contract", "load", "ops", "all"])
     parser.add_argument("selector", nargs="?")
+    parser.add_argument("--output-root", help="Never-used output directory inside this checkout (web/e2e/visual/contract only)")
     args = parser.parse_args(argv)
+    output = None
+    if args.output_root is not None:
+        if args.group not in ("web", "e2e", "visual") and not (args.group == "contract" and args.selector == "OpenApi"):
+            print("FAIL: output isolation is only registered for web/e2e/visual/contract OpenApi", file=sys.stderr)
+            return 1
+        try:
+            output = owned_output(args.output_root, args.group)
+        except (OSError, ValueError) as error:
+            print(f"FAIL: cannot reserve fresh output root: {error}", file=sys.stderr)
+            return 1
     if args.group in ("unit", "it"):
         return java_tests(args.selector or "*", args.group == "it")
     if args.group in ("web", "e2e", "visual"):
-        return web_tests(args.group, args.selector or "*")
+        return web_tests(args.group, args.selector or "*", output)
     if args.group == "contract" and args.selector == "OpenApi":
-        return contracts()
+        return contracts(output)
     if args.group != "all":
         print(f"FAIL: {args.group}/{args.selector} is not registered; required test environment or implementation is pending", file=sys.stderr)
         return 1

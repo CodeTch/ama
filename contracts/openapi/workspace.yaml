@@ -1,0 +1,307 @@
+CategoryItem:
+  type: object
+  additionalProperties: false
+  required: [id, label]
+  properties:
+    id: {type: string, minLength: 1, maxLength: 255}
+    label: {type: string, minLength: 1, maxLength: 1024}
+CategoryPage:
+  type: object
+  additionalProperties: false
+  required: [items, nextCursor, hasMore]
+  properties:
+    items:
+      type: array
+      maxItems: 50
+      items: {$ref: '#/CategoryItem'}
+    nextCursor:
+      type: [string, 'null']
+      maxLength: 1536
+      description: Opaque continuation bound to actor and immutable dictionary. Expires after five minutes; application restart requires a new first page.
+    hasMore: {type: boolean}
+categories:
+  get:
+    operationId: listMeetingCategories
+    summary: Read the installed meeting category validation dictionary
+    description: Fresh ACTIVE identity required on every page. Uses the same immutable dictionary as meeting category validation. Default company dictionary remains unavailable. Returns private no-store data; unknown or repeated query keys are invalid. No external directory or fabricated fallback list.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - name: limit
+        in: query
+        schema: {type: integer, minimum: 1, maximum: 50, default: 20}
+      - name: cursor
+        in: query
+        schema: {type: string, minLength: 1, maxLength: 1536}
+    responses:
+      '200':
+        description: One bounded category page
+        headers:
+          Cache-Control:
+            schema: {type: string, const: 'private, no-store'}
+        content:
+          application/json:
+            schema: {$ref: '#/CategoryPage'}
+      '400': {$ref: './identity.yaml#/Invalid'}
+      '401': {$ref: './identity.yaml#/Unauthenticated'}
+      '403':
+        description: Current identity does not permit the read
+        content:
+          application/json:
+            schema: {$ref: './identity.yaml#/BusinessError'}
+      '503':
+        description: Category dictionary or meeting data unavailable
+        content:
+          application/json:
+            schema: {$ref: './identity.yaml#/BusinessError'}
+
+MeetingItem:
+  type: object
+  additionalProperties: false
+  required: [id, name, category, occurredOn, stage, lifecycle, relation, writeState, revisionToken, accessRevisionToken]
+  properties:
+    id: {type: string, format: uuid}
+    name: {type: [string, 'null']}
+    category: {type: [string, 'null']}
+    occurredOn: {type: [string, 'null'], format: date}
+    stage: {type: string, enum: [ENTRY, TRANSCRIPT_PENDING, TRANSCRIPT_FAILED, MINUTES_PENDING, MINUTES_FAILED, READY_TO_PUBLISH, PUBLISH_FAILED, PUBLISHED]}
+    lifecycle: {type: string, const: ACTIVE}
+    relation: {type: string, enum: [OWNER, MEMBER]}
+    writeState:
+      type: string
+      enum: [MEMBER_READ_ONLY, PUBLISHED_READ_ONLY, CHECK_WORKSPACE]
+      description: List navigation never grants edit permission or evaluates producer readiness. Owner must open workspace for fresh producer state.
+    revisionToken: {type: string, pattern: '^(0|[1-9][0-9]{0,18})$'}
+    accessRevisionToken: {type: string, pattern: '^(0|[1-9][0-9]{0,18})$'}
+MeetingPage:
+  type: object
+  additionalProperties: false
+  required: [items, nextCursor, hasMore]
+  properties:
+    items:
+      type: array
+      maxItems: 50
+      items: {$ref: '#/MeetingItem'}
+    nextCursor:
+      type: [string, 'null']
+      maxLength: 1536
+      description: Encrypted actor/scope-bound continuation over scanned candidates. Expires after five minutes.
+    hasMore:
+      type: boolean
+      description: Further bounded candidates may exist. Empty items with hasMore true is valid; denied rows are not disclosed. No total-count or snapshot claim.
+
+CommandAssociation:
+  type: object
+  additionalProperties: false
+  required: [operation, meetingId, resultKind, resultId, acceptedRevisionToken, originalHttpStatus]
+  properties:
+    operation: {type: string, enum: [CREATE, SAVE_INFO, CONFIRM_ROSTER, UPLOAD_BEGIN]}
+    meetingId: {type: string, format: uuid}
+    resultKind: {type: string, enum: [INFO_REVISION, ROSTER_REVISION, UPLOAD_SESSION]}
+    resultId: {type: string, format: uuid}
+    acceptedRevisionToken:
+      type: [string, 'null']
+      pattern: '^(0|[1-9][0-9]{0,18})$'
+      description: Original info or confirmed roster revision. Null for upload association; never substitute current revision.
+    originalHttpStatus: {type: integer, enum: [200, 201]}
+CommandObservation:
+  type: object
+  additionalProperties: false
+  required: [meetingId, revisionToken, accessRevisionToken, stage]
+  properties:
+    meetingId: {type: string, format: uuid}
+    revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+    accessRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+    stage: {type: string, enum: [ENTRY, TRANSCRIPT_PENDING, TRANSCRIPT_FAILED, MINUTES_PENDING, MINUTES_FAILED, READY_TO_PUBLISH, PUBLISH_FAILED, PUBLISHED]}
+CommandLookup:
+  oneOf:
+    - type: object
+      additionalProperties: false
+      required: [status, association, current]
+      properties:
+        status: {type: string, const: FOUND}
+        association: {$ref: '#/CommandAssociation'}
+        current: {$ref: '#/CommandObservation'}
+    - type: object
+      additionalProperties: false
+      required: [status, association, current]
+      properties:
+        status: {type: string, const: ABSENT}
+        association: {type: 'null'}
+        current:
+          oneOf:
+            - {$ref: '#/CommandObservation'}
+            - {type: 'null'}
+commandDiscovery:
+  post:
+    operationId: discoverMeetingCommand
+    summary: Locate the durable association of an exact original meeting command key
+    description: Bounded read-only lookup with current ACTIVE identity and owner authorization. CREATE uses resource meetings; other operations require the canonical meeting UUID. Keys appear only in the body. FOUND reports the historical result association plus a separately labeled current observation; it is not an original command ACK, payload-equality proof, editor permission or readiness. Retry the original producer command with its original key and exact body for authoritative replay. ABSENT is an observation and never permits replacing an uncertain command key/body. No receipt is written, no content/provider token/digest is returned. Unknown queries, duplicate/unknown fields and bodies exceeding 16384 bytes are rejected. Key has a strict 4096 UTF-8 byte acquisition bound.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - {$ref: './identity.yaml#/Origin'}
+      - {$ref: './identity.yaml#/Csrf'}
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [operation, resource, key]
+            properties:
+              operation: {type: string, enum: [CREATE, SAVE_INFO, CONFIRM_ROSTER, UPLOAD_BEGIN]}
+              resource: {type: string, minLength: 1, maxLength: 36}
+              key: {type: string, minLength: 1, maxLength: 4096}
+    responses:
+      '200':
+        description: Read-only durable association and current observation, without command acceptance authority
+        headers:
+          Cache-Control:
+            schema: {type: string, const: 'private, no-store'}
+        content:
+          application/json:
+            schema: {$ref: '#/CommandLookup'}
+      '400': {$ref: './identity.yaml#/Invalid'}
+      '401': {$ref: './identity.yaml#/Unauthenticated'}
+      '403': {$ref: './identity.yaml#/BusinessForbidden'}
+      '503': {$ref: './meetings.yaml#/MeetingUnavailable'}
+
+WorkspaceTaskItem:
+  type: object
+  additionalProperties: false
+  required: [taskId, kind, state, attemptToken, businessRevisionToken, inputId, detailPath]
+  properties:
+    taskId: {type: string, format: uuid}
+    kind:
+      type: string
+      enum: [TRANSCRIPT_IMPORT_V1, MINUTES_GENERATE_V1, KNOWLEDGE_PUBLISH_V1]
+    state:
+      type: string
+      enum: [READY, RUNNING, RECONCILING, SUCCEEDED, FAILED, CANCELLED, STALE]
+    attemptToken:
+      type: string
+      pattern: '^[0-3]$'
+    businessRevisionToken:
+      $ref: './meetings.yaml#/ExpectedRevisionToken'
+    inputId: {type: string, format: uuid}
+    detailPath:
+      type: string
+      maxLength: 256
+      description: Actual producer detail route. Publication links address the publication root; original task identity remains taskId.
+WorkspaceTaskPage:
+  type: object
+  additionalProperties: false
+  required: [items, nextCursor, hasMore, verification]
+  properties:
+    items:
+      type: array
+      maxItems: 50
+      items: {$ref: '#/WorkspaceTaskItem'}
+    nextCursor:
+      type: [string, 'null']
+      maxLength: 1536
+    hasMore: {type: boolean}
+    verification:
+      type: string
+      const: PERSISTED_RELATION
+      description: Registered task family and exact persisted parent relation only. Does not verify canonical producer hashes, content provenance, command ACK, final readiness, or complete absence.
+tasks:
+  get:
+    operationId: listWorkspaceTasks
+    summary: Read bounded owner-only cross-family task navigation
+    description: Fresh active owner gate, including published meeting history. Scans at most limit plus one task records using subject history keyset, validates all scanned families and exact persisted parents, then filters kind. An empty page may have a continuation. The opaque cursor binds actor, meeting and kind, expires after five minutes and requires restart after process restart. Unknown families, missing original publication submissions, changed declarations or exhausted cumulative budget fail unavailable. No task bodies, manifests, output contents, raw errors or readiness computation are returned. Unknown or repeated query keys are invalid. A registered family does not prove a running worker or available detail capability.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - name: meetingId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+      - name: kind
+        in: query
+        schema:
+          type: string
+          default: ALL
+          enum: [ALL, TRANSCRIPT_IMPORT_V1, MINUTES_GENERATE_V1, KNOWLEDGE_PUBLISH_V1]
+      - name: limit
+        in: query
+        schema: {type: integer, minimum: 1, maximum: 50, default: 20}
+      - name: cursor
+        in: query
+        schema: {type: string, minLength: 1, maxLength: 1536}
+    responses:
+      '200':
+        description: A bounded navigation page; task state remains a distinct observation from the producer detail read.
+        headers:
+          Cache-Control:
+            schema: {type: string, const: 'private, no-store'}
+        content:
+          application/json:
+            schema: {$ref: '#/WorkspaceTaskPage'}
+      '400': {$ref: './identity.yaml#/Invalid'}
+      '401': {$ref: './identity.yaml#/Unauthenticated'}
+      '403':
+        description: Current identity is not the active owner. Confirmed members and platform administrators have no owner override.
+        content:
+          application/json:
+            schema: {$ref: './identity.yaml#/BusinessError'}
+      '503':
+        description: Registered task readers or bounded persisted task relations are unavailable.
+        content:
+          application/json:
+            schema: {$ref: './identity.yaml#/BusinessError'}
+
+WorkspaceSavedReferences:
+  type: object
+  additionalProperties: false
+  required: [infoRevisionId, rosterRevisionId, transcriptRevisionId, transcriptConfirmationId, minutesRevisionId, elementSetId]
+  properties:
+    infoRevisionId: {type: string, format: uuid}
+    rosterRevisionId: {type: [string, 'null'], format: uuid}
+    transcriptRevisionId: {type: [string, 'null'], format: uuid}
+    transcriptConfirmationId: {type: [string, 'null'], format: uuid}
+    minutesRevisionId: {type: [string, 'null'], format: uuid}
+    elementSetId: {type: [string, 'null'], format: uuid}
+WorkspaceNavigation:
+  type: object
+  additionalProperties: false
+  required: [meetingId, revisionToken, accessRevisionToken, stage, relation, navigationState, contentEligibility, saved]
+  properties:
+    meetingId: {type: string, format: uuid}
+    revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+    accessRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+    stage: {type: string, enum: [ENTRY, TRANSCRIPT_PENDING, TRANSCRIPT_FAILED, MINUTES_PENDING, MINUTES_FAILED, READY_TO_PUBLISH, PUBLISH_FAILED, PUBLISHED]}
+    relation: {type: string, enum: [OWNER, MEMBER]}
+    navigationState:
+      type: string
+      enum: [MEMBER_READ_ONLY, PUBLISHED_READ_ONLY, CHECK_PRODUCER]
+      description: MEMBER has MEMBER_READ_ONLY. OWNER has PUBLISHED_READ_ONLY or CHECK_PRODUCER. Neither owner state grants mutation permission.
+    contentEligibility: {type: string, const: RECHECK_REQUIRED}
+    saved: {$ref: '#/WorkspaceSavedReferences'}
+workspace:
+  get:
+    operationId: readWorkspaceNavigation
+    summary: Read authorized current saved navigation references
+    description: Fresh real meeting READ gate and one bounded DB-only acquisition. Returns current saved IDs, actor relation and exact string tokens, without contents, readiness, command ACK or write permission. Saved transcript must be WORKING; candidate objects cannot become saved references. Members receive only the same effective saved references. This revision supplies saved navigation only; private input, candidate, final and publication composition is not represented, and missing sections never prove absence. Producer reads require fresh authorization and may observe later changes. No query parameters are accepted.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - name: meetingId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    responses:
+      '200':
+        description: Bounded saved navigation observation
+        headers:
+          Cache-Control:
+            schema: {type: string, const: 'private, no-store'}
+        content:
+          application/json:
+            schema: {$ref: '#/WorkspaceNavigation'}
+      '400': {$ref: './identity.yaml#/Invalid'}
+      '401': {$ref: './identity.yaml#/Unauthenticated'}
+      '403': {$ref: './identity.yaml#/BusinessForbidden'}
+      '503': {$ref: './meetings.yaml#/MeetingUnavailable'}
