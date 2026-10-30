@@ -48,3 +48,12 @@ test('meeting confirmation source keeps readiness blocking and the real final-co
  assert.match(source,/@click="confirmFinal"/);
  assert.match(source,/:disabled="[^"]*canPrepareFinal/);
 });
+
+test('meeting confirmation styles preserve prototype geometry and narrow-screen stacking',async()=>{
+ const source=await readFile(new URL('../../src/features/minutes/PublicationPanel.vue',import.meta.url),'utf8');
+ assert.match(source,/\.ac-confirm-grid\{[^}]*grid-template-columns:minmax\(0,\.9fr\) minmax\(0,1.3fr\);gap:16px/);
+ assert.match(source,/\.ac-confirm-body\{[^}]*line-height:1\.85/);
+ assert.match(source,/\.ac-confirm-check\{[^}]*margin-top:16px/);
+ assert.match(source,/@media\(max-width:760px\)\{[^}]*\.ac-confirm-grid\{grid-template-columns:minmax\(0,1fr\)\}/);
+ assert.equal((source.match(/class="card ac-confirm-info"/g)??[]).length,1);
+});
