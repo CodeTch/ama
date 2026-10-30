@@ -13,6 +13,9 @@ const username = process.env.AMA_CAS_USERNAME ?? 'dev-owner';
 const password = process.env.AMA_CAS_PASSWORD ?? 'dev-password';
 const output = process.env.AMA_IMPORT_CAS_OUTPUT ?? '.tools/local-app/integration-import-cas';
 const callback = `${base}/auth/cas/callback`;
+if (process.env.FIXED_PORTS === '1' && casOrigin !== 'http://127.0.0.1:8792') {
+  throw new Error(`FIXED_PORTS requires the CAS harness at http://127.0.0.1:8792, got ${casOrigin}`);
+}
 const checks = [];
 const requests = [];
 const requestEntries = new Map();
