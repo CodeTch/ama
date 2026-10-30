@@ -5,11 +5,12 @@ import {createServer} from 'vite';
 import {createSSRApp,h,ref,shallowReadonly} from 'vue';
 import {createMemoryHistory,createRouter} from 'vue-router';
 import {renderToString} from 'vue/server-renderer';
+import type {RecordingPart,RecordingSession,PartState} from '../../src/features/recording/recording-types';
 
 type Phase='IDLE'|'RECORDING'|'PAUSED'|'INTERRUPTED'|'FINISHED'|'ERROR';
 const meetingId='00000000-0000-4000-8000-000000000001';
-const emptyRecord=()=>({schema:1 as const,actor:'actor-1',meeting:meetingId,finished:false,parts:[]});
-const part=(state:'RECORDING'|'PAUSED'|'INTERRUPTED'|'SAVED')=>({id:'part-1',index:1,name:'录音片段 01.webm',mime:'audio/webm',state,elapsedMs:9000,savedElapsedMs:9000,bytes:1024,chunks:['chunk-1'],incomplete:false});
+const emptyRecord=():RecordingSession=>({schema:1,actor:'actor-1',meeting:meetingId,finished:false,parts:[]});
+const part=(state:PartState):RecordingPart=>({id:'part-1',index:1,name:'录音片段 01.webm',mime:'audio/webm',state,elapsedMs:9000,savedElapsedMs:9000,bytes:1024,chunks:['chunk-1'],incomplete:false});
 
 async function renderPage(component:unknown,applicationKey:unknown,phase:Phase='IDLE',record=emptyRecord()){
  const router=createRouter({history:createMemoryHistory(),routes:[{path:'/meetings',component:{render:()=>null}},{path:'/recording/:id?',component:{render:()=>null}}]});
