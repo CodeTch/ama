@@ -36,35 +36,35 @@
 - Consumes: existing global CSS tokens, `Icon.vue`, `RouterLink`.
 - Produces: a self-contained page with accessible headings, buttons, lists, dialogs, and local state transitions; no API calls.
 
-- [ ] **Step 1: Write the failing Playwright coverage**
+- [x] **Step 1: Write the failing Playwright coverage**
 
   Add tests for the initial 1440×900 view: `知识库发布` is the active step, meeting title and preview are visible, the release button is disabled until a folder is selected, and no request URL contains `/api/` or `/auth/`. Add interaction assertions for library search, folder selection, preview dialog, publish progress, retry after simulated failure, and success read-only state.
 
-- [ ] **Step 2: Run the focused test to verify it fails**
+- [x] **Step 2: Run the focused test to verify it fails**
 
   Run: `cd web && npx playwright test tests/e2e/knowledge-publish-demo.spec.ts --project=1440x900`
 
   Expected: FAIL because the demo route and component do not exist.
 
-- [ ] **Step 3: Implement the static page shell**
+- [x] **Step 3: Implement the static page shell**
 
   Create `KnowledgePublishDemoPage.vue` with the exact demo meeting content from the prototype: top bar, back link, title/status row, five-step bar with step 5 active, two-column body, fixed footer, and a publish result region. Keep all copy in Chinese and use existing `btn`, `card`, `tag`, `input`, `aci-flow`, `aci-step`, `acf-dock` classes where they match the prototype.
 
-- [ ] **Step 4: Implement local publish state and interactions**
+- [x] **Step 4: Implement local publish state and interactions**
 
   Use local `ref`/`computed` state for libraries, folders, search text, selected destination, document title, preview dialog, publish phase (`idle`, `publishing`, `failed`, `succeeded`) and attempt count. Search filters the visible libraries; selecting a library exposes its folders; selecting a folder updates the orange publish path. The first publish attempt intentionally enters the prototype failure state and the next retry succeeds, with progress text and a success dialog/result card. Keep the selected destination and title across failure.
 
-- [ ] **Step 5: Add the route without touching real guards**
+- [x] **Step 5: Add the route without touching real guards**
 
   Register `{path:'/knowledge-publish-demo',name:'knowledge-publish-demo',component:KnowledgePublishDemoPage}` in `web/src/main.ts` and allow this path through `router.beforeEach` alongside `/login` and `/transcript-correction-demo`. Do not change `/meeting/:id/:stage?` behavior.
 
-- [ ] **Step 6: Run the focused test to verify it passes**
+- [x] **Step 6: Run the focused test to verify it passes**
 
   Run: `cd web && npx playwright test tests/e2e/knowledge-publish-demo.spec.ts --project=1440x900`
 
   Expected: PASS with no product API requests and no horizontal overflow.
 
-- [ ] **Step 7: Commit the self-contained demo**
+- [x] **Step 7: Commit the self-contained demo**
 
   ```bash
   git add web/src/features/minutes/KnowledgePublishDemoPage.vue web/src/main.ts web/tests/e2e/knowledge-publish-demo.spec.ts
@@ -80,7 +80,7 @@
 - Consumes: the completed demo route from Task 1.
 - Produces: verified screenshots and passing type/build checks.
 
-- [ ] **Step 1: Run both viewport projects**
+- [x] **Step 1: Run both viewport projects**
 
   Run: `cd web && npx playwright test tests/e2e/knowledge-publish-demo.spec.ts --project=1440x900 --project=1024x768`
 
@@ -98,8 +98,10 @@
 
   Expected: all existing tests plus the new page coverage pass.
 
-- [ ] **Step 4: Review the diff and verify scope**
+- [x] **Step 4: Review the diff and verify scope**
 
   Run: `git diff --check` and `git status --short`.
 
   Expected: no whitespace errors; only the new demo component, route, tests, and approved design/plan docs are changed.
+
+Verification note: the demo-specific src-only typecheck and production build pass. The full workspace typecheck is blocked by the pre-existing `meetings-api.test.ts`/`createMeetingsApi().remove` mismatch, and the current full unit suite includes unrelated failures from concurrent work on `FuturePanels`, `MeetingList`, and `TranscriptForm`; those files are outside this plan.
