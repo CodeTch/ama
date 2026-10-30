@@ -1,3 +1,17 @@
+# 当前计划与接续入口 — 2026-10-28 Demo 优先 R2
+
+本次按用户建议重构授权更新计划与接续文档，范围仍为文档。执行 [AMA-DEMO-FIRST-20261028 R2](docs/superpowers/plans/2026-10-28-ama-demo-first-adjustment.md)：前期固定**本地 MySQL、本地文件、单机**，按可操作业务片段同步原型复刻、装配和联调；S3、双 MySQL、双活未完适配及专属依赖最后 F，不提前新增相关实现、抽象、配置体系或测试。
+
+- **当前状态**：A 已交付部分、Tasks 1–10、B-L1～4 采纳和 local/S3 限定 API 证据保留；DEMO-01 的 CAS 登录/回调/会话链已接通并用联调辅助项目真实接口验证，M1-Demo 仍待完整验收，B 仍 **INCOMPLETE**。
+- **下一步**：接 DEMO-02 上传/转写 → DEMO-03 生成/审阅 → DEMO-04 发布/正式文档 → DEMO-05 首次完整 Demo → B-QUAL 深度核心证明与正式 M1-B。各片段只补缺口；Demo 达标即可展示，不必等待全部深度验证，但 B 只有正式关卡达标才完成。
+- **验收依据**：调整计划第 4 节的逐页原型矩阵、本地入口及真实 AI 边界；[B 摘要开放义务表](docs/acceptance/b/summary.md#current-open-obligations-r2)记录是否阻塞 Demo、最晚关卡、证据与状态。受控合成纪要不证明真实 AI 质量；公司接口可用即在相关 B 任务联调。
+- **接续入口**：[详细接续记录](docs/development/demo-first-handoff-2026-10-28.md)。原开发树仍为 `/home/tanren/ama/.worktrees/phase-b-completion`，读取 W/`RESUME_LATEST.md` 及 W/`current-state.json.planning_revision_20261028`（revision=R2），W=`.superpowers/sdd/2026-10-23-ama-phase-b-remaining`。不重建树、不重做已采纳功能。
+- **执行边界**：本轮已修改身份业务代码、前端 CAS 入口、本地启动器和联调辅助项目 CAS 白名单/登出校验，并完成受控本地运行验证；没有提交/合并/推送。日常归属环境依实际授权复用，旧 B-L5 一次性窗口及受限资源不可恢复；完成正式本地 B 后停止，不自动进入 C/D/E/F。
+
+下方为历史记录，保留原事实与范围。旧任务编号含义、双后端验收门槛、B-L1 下一步及历史运行授权不覆盖当前 R2；R1→R2 任务对应见调整计划第 4.1 节。
+
+---
+
 # 最新 Git 集成与接续入口 — 2026-10-28
 
 用户本次明确授权将所有分支代码及当前未提交开发成果汇入 `main`、提交并推送 GitHub。开发快照为 `4b68213dc6b59f9cc850b6acce1a70ed4102235a`；范围与本次验证见[集成记录](docs/development/integration-main-2026-10-28.md)。以下旧“不提交/不合并/不推送”只表示历史授权状态。

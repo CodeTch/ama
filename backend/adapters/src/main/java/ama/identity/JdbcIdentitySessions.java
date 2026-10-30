@@ -15,6 +15,7 @@ import static ama.contract.IdentityContracts.stableId;
 
 /** No issuance API. Every resolution is one fresh shared-DB query; no authorization cache. */
 public final class JdbcIdentitySessions implements SessionPort, IdentityLifecyclePort {
+    private static final java.security.SecureRandom RANDOM = new java.security.SecureRandom();
     private final JdbcTemplate jdbc;
     private final TransactionRunner transactions;
     private final JdbcAuditAdapter audit;
@@ -22,6 +23,25 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
         jdbc = new JdbcTemplate(source); transactions = new TransactionRunner(source); audit = new JdbcAuditAdapter(source);
     }
     @Override public Optional<Actor> resolveSession(String token) { return resolve(token).map(ResolvedSession::actor); }
+
+    public IssuedSession issueForVerifiedIdentity(String enterpriseId, Duration lifetime) {
+        stableId(enterpriseId);
+        if (lifetime == null || lifetime.isNegative() || lifetime.isZero() || lifetime.compareTo(Duration.ofDays(30)) > 0)
+            throw new IllegalArgumentException("Invalid session lifetime");
+        String token = randomToken(), csrf = randomToken();
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MICROS);
+        Instant expires = now.plus(lifetime).truncatedTo(ChronoUnit.MICROS);
+        transactions.required(() -> {
+            var identity = lockIdentity(enterpriseId);
+            if (!"ACTIVE".equals(identity.get("status"))) throw new IllegalArgumentException("Identity is inactive");
+            long generation = ((Number) identity.get("session_generation")).longValue();
+            jdbc.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (?,?,?,?,?,?)",
+                    hash(token), enterpriseId, generation, csrf, LocalDateTime.ofInstant(now, ZoneOffset.UTC), LocalDateTime.ofInstant(expires, ZoneOffset.UTC));
+            audit.append(new AuditEvent(enterpriseId, "CAS_LOGIN", enterpriseId, generation, "SUCCESS", UUID.randomUUID().toString(), now));
+            return null;
+        });
+        return new IssuedSession(token, csrf, expires);
+    }
     @Override public Optional<ResolvedSession> resolve(String token) {
         if (token == null || !token.matches("[A-Za-z0-9_-]{43}")) return Optional.empty();
         return jdbc.query("""
@@ -91,5 +111,11 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
     private static String hash(String token) {
         try { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(token.getBytes(StandardCharsets.US_ASCII))); }
         catch (java.security.NoSuchAlgorithmException impossible) { throw new IllegalStateException("SHA-256 unavailable", impossible); }
+    }
+
+    private static String randomToken() {
+        byte[] bytes = new byte[32];
+        RANDOM.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 }

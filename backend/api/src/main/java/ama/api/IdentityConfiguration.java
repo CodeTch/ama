@@ -4,6 +4,8 @@ import ama.identity.*;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import java.net.URI;
+import java.time.Duration;
 
 @Configuration(proxyBeanMethods = false)
 class IdentityConfiguration {
@@ -24,4 +26,13 @@ class IdentityConfiguration {
     @Bean JdbcIdentitySessions sharedIdentitySessions(DataSource source) { return new JdbcIdentitySessions(source); }
     @Bean SessionIssuer companyIdentity() { return new CompanyIdentityAdapter(); }
     @Bean DirectoryPort companyDirectory() { return new CompanyDirectoryAdapter(); }
+    @Bean CasAuthenticationPort casAuthentication(DataSource source, Environment environment) {
+        return new CasAuthenticationAdapter(source,
+                URI.create(environment.getRequiredProperty("cas.origin")),
+                URI.create(environment.getRequiredProperty("cas.service-url")),
+                URI.create(environment.getRequiredProperty("cas.logout-service-url")),
+                URI.create(environment.getRequiredProperty("identity.allowed-origin")),
+                Duration.ofMillis(environment.getProperty("cas.timeout-ms", Long.class, 3000L)),
+                Duration.ofSeconds(environment.getProperty("cas.session-lifetime-seconds", Long.class, 28800L)));
+    }
 }

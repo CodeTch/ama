@@ -23,6 +23,7 @@ OWNER = hashlib.sha256(str(ROOT).encode()).hexdigest()[:12]
 NAME = 'ama-local-dev-' + OWNER
 IMAGE = 'mysql@sha256:869218921e61d6c3c89820955d63cca42971f0e3e6c1e2792247bbd944ebc6e9'
 ORIGIN = 'http://127.0.0.1:5173'
+CAS_ORIGIN = os.getenv('AMA_CAS_ORIGIN', 'http://127.0.0.1:8787').rstrip('/')
 HTTP = build_opener(ProxyHandler({}))
 CHILDREN = {}
 
@@ -182,8 +183,9 @@ def launch(command, env, log):
 
 def status(state):
     print(json.dumps({'frontend': alive(state.get('frontend')), 'backend': alive(state.get('backend')),
-                      'url': ORIGIN + '/meetings', 'login': ORIGIN + '/api/dev/login',
-                      'databaseContainer': NAME, 'passwordRequired': False}, ensure_ascii=False))
+                      'url': ORIGIN + '/meetings', 'login': ORIGIN + '/auth/cas/login',
+                      'cas': CAS_ORIGIN + '/cas/login',
+                      'databaseContainer': NAME, 'passwordRequired': True}, ensure_ascii=False))
 
 
 def start(state):
@@ -208,7 +210,9 @@ def start(state):
                DATABASE_USERNAME='ama_local', DATABASE_PASSWORD=state['databasePassword'],
                AMA_LOCAL_DEV='1', AMA_LOCAL_DEV_INSTANCE=OWNER,
                PORT='8082', INTERNAL_PORT='8083', SERVER_ADDRESS='127.0.0.1',
-               IDENTITY_ALLOWED_ORIGIN=ORIGIN, AMA_API_TARGET='http://127.0.0.1:8082', VITE_LOCAL_DEV_LOGIN='1')
+               IDENTITY_ALLOWED_ORIGIN=ORIGIN, CAS_ORIGIN=CAS_ORIGIN,
+               CAS_SERVICE_URL=ORIGIN + '/auth/cas/callback', CAS_LOGOUT_SERVICE_URL=ORIGIN + '/meetings',
+               AMA_API_TARGET='http://127.0.0.1:8082', VITE_LOCAL_DEV_LOGIN='1')
     classpath = application(java, env)
     print('Applying schema migrations only to the dedicated local database...', flush=True)
     run_logged([java, '-cp', classpath, 'ama.db.MigrationMain'], env, 'migration.log')

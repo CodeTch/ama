@@ -1,10 +1,85 @@
 {
+  "planning_revision_20261028": {
+    "rule_id": "AMA-DEMO-FIRST-20261028",
+    "revised_on": "2026-10-28 Asia/Shanghai",
+    "scope": "Documentation/planning only; no product code, refactor, runtime, commit, merge or push.",
+    "plan": "docs/superpowers/plans/2026-10-28-ama-demo-first-adjustment.md",
+    "handoff": "docs/development/demo-first-handoff-2026-10-28.md",
+    "early_environment": [
+      "one local MySQL instance",
+      "local file storage",
+      "single host"
+    ],
+    "priority": [
+      "prototype reproduction",
+      "core business completion",
+      "frontend/backend integration",
+      "end-to-end Demo",
+      "blocking fixes only"
+    ],
+    "next_sequence": [
+      "DEMO-01 meeting/info and prototype",
+      "DEMO-02 local upload/transcript slice",
+      "DEMO-03 generation/minutes/review slice",
+      "DEMO-04 publication/official-document slice",
+      "DEMO-05 M1-Demo delivery (B still incomplete)",
+      "B-QUAL deep core evidence and formal M1-B; then stop"
+    ],
+    "deferred_to_final_phase_f": [
+      "DEP-S3",
+      "DEP-MYSQL",
+      "DEP-HA",
+      "DEP-MIGRATE",
+      "DEP-MATRIX"
+    ],
+    "preserve": "Completed tasks, B-L1..4 source adoption, existing code and scoped local/S3 results stay unchanged. Demo does not complete B. Deep local core proof remains in B-QUAL, deployment-specific pending work in F; deferred is not complete.",
+    "prohibited_early_work": "No new implementation, abstraction, configuration system, dedicated tests or architecture changes for the three deferred deployment scenarios.",
+    "phase_b_accepted": false,
+    "runtime_authorized_by_this_revision": false,
+    "prior_scheduling_fields": {
+      "objective": "Complete approved Phase B B-L1..B-L5 only; source adopted, actual local/S3 API proof obtained, remaining qualification gaps open.",
+      "latest_user_instruction": "B-L5合并验证窗口改为最多3小时；沿用原始起点，截止2026-10-27T18:42:33.450158Z。",
+      "active_implementation": {
+        "task": 12,
+        "agent": "/root",
+        "reviewer": "/root/phase_b_independent_review",
+        "status": "PAUSED_NO_BATCH_RUNNING",
+        "next_batch": "B-L1",
+        "stage": "Information persistence, actual form and roster confirmation as one functional batch",
+        "noRuntimeAuthority": true,
+        "noWindowRerun": true
+      },
+      "next_steps": [
+        "B-L1 exact-source adopted (bl1-source-adoption-20261027.md); runtime remains pending. Continue complete B-L2.",
+        "Complete B-L2 upload queue lifecycle/global cleanup, original import command journal and UI; consolidate review.",
+        "Continue B-L3/B-L4 source and B-L5 actual core validation using fresh authorized resources only. Stop after B."
+      ],
+      "status_precedence": "Top status and execution_20261027_bl5 are current. Prior dated pause/status fields are historical only. Do not replay consumed windows."
+    },
+    "revision": "R2",
+    "user_followup": "2026-10-28：详细复核计划后，用户要求“按照你的建议重构”；仅重组计划及接续文档，不修改业务代码。",
+    "acceptance_ledger": "docs/acceptance/b/summary.md#current-open-obligations-r2",
+    "demo_milestone": {
+      "id": "M1-Demo",
+      "status": "NOT_YET_ACCEPTED",
+      "accepted": false,
+      "scope": "Real local browser workflow, page-specific prototype fidelity, basic safety and representative persistence/recovery; controlled providers explicitly labelled."
+    },
+    "formal_local_milestone": {
+      "id": "M1-B",
+      "status": "INCOMPLETE",
+      "task": "B-QUAL",
+      "scope": "All applicable original local B core obligations, deep MySQL/HTTP/recovery evidence and final whole-branch review; stop after B."
+    },
+    "platform_qualification": "Separate B-02/B-07/B-08 actual platform and real-model semantic-quality evidence when authorized interfaces are available; not deferred wholesale to F and not proven by controlled synthetic output.",
+    "local_runtime_entry": "Incrementally extend existing tools/dev/local_app.py and tools/dev/java/ama/localdev/LocalApplication.java per slice. The old bl5 launcher remains tied to consumed resources and S3; do not reuse it as the Demo entry."
+  },
   "schema_version": 2,
-  "updated_utc": "2026-10-27T17:16:28.161994+00:00",
-  "objective": "Complete approved Phase B B-L1..B-L5 only; source adopted, actual local/S3 API proof obtained, remaining qualification gaps open.",
-  "latest_user_instruction": "B-L5合并验证窗口改为最多3小时；沿用原始起点，截止2026-10-27T18:42:33.450158Z。",
+  "updated_utc": "2026-10-28T09:45:13.857356+00:00",
+  "objective": "Deliver a quick local MySQL/local-files/single-host prototype-faithful Demo through vertical business slices, then complete formal local B reliability qualification. Preserve all existing work; unfinished S3/dual-MySQL/active-active adaptation is final F. Current turn is documentation only.",
+  "latest_user_instruction": "2026-10-28：用户在详细审查后要求“按照你的建议重构”。本轮仅重构计划及相关文档：分开 M1-Demo/M1-B，按业务片段安排，补逐页原型/可重复本地入口/真实 AI 验收和开放义务最晚关卡；保留所有已有成果和最终质量要求，不修改业务代码或执行代码重构。",
   "pause_request_active": false,
-  "status_precedence": "Top status and execution_20261027_bl5 are current. Prior dated pause/status fields are historical only. Do not replay consumed windows.",
+  "status_precedence": "planning_revision_20261028 revision R2 and next_steps govern scheduling/scope; current B summary governs obligation dispositions. Top status and execution_20261027_bl5 retain actual qualification facts. Historical scheduling, pause and runtime approvals do not supersede R2; consumed windows cannot be replayed.",
   "historical_state_archive": {
     "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-normalization-20261024.json",
     "sha256": "599708de6497fe18816d9e1b34d636858e883b127e7c869dfa3c1dbc7a9c159b",
@@ -24,9 +99,9 @@
     "task": 12,
     "agent": "/root",
     "reviewer": "/root/phase_b_independent_review",
-    "status": "PAUSED_NO_BATCH_RUNNING",
-    "next_batch": "B-L1",
-    "stage": "Information persistence, actual form and roster confirmation as one functional batch",
+    "status": "NOT_RUNNING_DOCUMENTATION_ONLY",
+    "next_batch": "DEMO-01 then DEMO-02/03/04/05; B-QUAL before formal M1-B",
+    "stage": "Documentation-only R2; reuse adopted features, wire and reproduce pages per business slice, deliver Demo before remaining deep B proofs; preserve all final quality gates.",
     "noRuntimeAuthority": true,
     "noWindowRerun": true
   },
@@ -130,9 +205,12 @@
     13
   ],
   "next_steps": [
-    "B-L1 exact-source adopted (bl1-source-adoption-20261027.md); runtime remains pending. Continue complete B-L2.",
-    "Complete B-L2 upload queue lifecycle/global cleanup, original import command journal and UI; consolidate review.",
-    "Continue B-L3/B-L4 source and B-L5 actual core validation using fresh authorized resources only. Stop after B."
+    "On explicit continue, read R2 plan, current handoff and B obligation table; verify tree/HEAD. Do not redo adopted Tasks 1–10 or B-L1..4.",
+    "DEMO-01→02→03→04: meeting/info, upload/transcript, generation/review, publication/document. Wire existing local components and reproduce pages within each slice; preserve all business guards.",
+    "DEMO-05: actual complete browser flow, page matrix, basic permission/version/idempotency/UNKNOWN checks, representative restart and applicable regression. Deliver M1-Demo only; B stays incomplete.",
+    "B-QUAL: close deep local transaction/budget/lock/race/coexistence/crash/component-restart obligations and final review before M1-B. Actual important defects or changed high-risk paths require earlier validation. Stop after formal B.",
+    "Qualify actual model/identity/directory/knowledge providers in corresponding B tasks when authorized interfaces exist; controlled synthetic outputs do not qualify real AI or enterprise integration.",
+    "Keep unfinished S3/dual-MySQL/active-active and exclusive dependencies in final DEP-S3/MYSQL/HA/MIGRATE/MATRIX; do not mark deferred work complete or introduce dedicated early implementation/config/tests. Reuse only actually authorized local resources; old B-L5 remains closed."
   ],
   "writer_policy": "Main sole writer, same sole independent reviewer; complete feature batches, affected checks, consolidated review and incremental evidence under AMA-WORKFLOW-20261027.",
   "root_owned_dirty_paths": [

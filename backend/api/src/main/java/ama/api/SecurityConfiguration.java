@@ -26,4 +26,14 @@ public class SecurityConfiguration {
                         .accessDeniedHandler((request, response, failure) -> BusinessErrors.write(response, 403, "FORBIDDEN", "Access denied")))
                 .build();
     }
+
+    @Bean @Order(2)
+    SecurityFilterChain casSecurity(HttpSecurity http) throws Exception {
+        return http.securityMatcher("/auth/cas/**")
+                .csrf(c -> c.disable())
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .requestCache(c -> c.disable())
+                .authorizeHttpRequests(a -> a.anyRequest().permitAll())
+                .build();
+    }
 }

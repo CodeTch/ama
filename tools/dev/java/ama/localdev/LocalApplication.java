@@ -23,7 +23,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 /** Explicit development classpath only. Never packaged in the production API artifact. */
 @Configuration(proxyBeanMethods=false)
-@Import(LocalLogin.class)
 public class LocalApplication {
     static final Map<String,String> USERS=Map.of("dev-owner","开发负责人","dev-member","开发参会人","dev-viewer","开发访客");
 

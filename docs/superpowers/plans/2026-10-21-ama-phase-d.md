@@ -1,10 +1,10 @@
-> **2026-10-27 流程更新（AMA-WORKFLOW-20261027）**：按[执行补充](2026-10-27-ama-development-workflow.md)分层验证、合并相关批次、定向回归。接收 DEFER-VIS：B 的共享壳零像素与三视口全面视觉收口在 D-08 完成；原基准及最终原型交付要求保留。DEFER-EXPAND 中 D 功能仍按本计划交付。 本次不启动本阶段。
+> **2026-10-28 当前范围（AMA-DEMO-FIRST-20261028 R2）**：按[Demo 优先调整计划](2026-10-28-ama-demo-first-adjustment.md)执行；前期本地 MySQL＋本地文件＋单机，优先原型页面与核心业务联调。已完成/已采纳能力保留，不重做；S3、双 MySQL、双活全部尚未完成的专用实现、配置、测试和依赖归最后 F，前期不新增相关抽象或架构改造。本轮仅调整文档。 D-08 中 Demo 页面的复刻与对照验收拆入 B；D 的其余页面/业务仍按依赖交付，S3 读取/删除/恢复专属部分归 DEP-S3/DEP-MIGRATE。
 
 ---
 
 # D：完整业务规则与原型页面 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** 沿用 AMA-WORKFLOW-20261027 与 Demo 优先 R2 的 executing-plans 内联流程、完整业务批次和集中审查；旧步骤模板不自动触发新代理、重复开发或提交。
 
 **Goal:** 完整交付一期已定义的材料、纪要、来源、确认、发布、回看和个人管理，完成页面视觉与异常交互。
 
@@ -97,7 +97,7 @@
 
 - [ ] 写发布前最新已保存、发布后固定版本、未采用候选不可见、撤权中的流停止；`assertEquals(publishedRevision, exportedRevision); assertTrue(revocationDelayMs <= 5000);`；编辑页只开放原文要求的 Markdown 下载。
 - [ ] 运行 `python3 tools/checks/run.py it ExportAccessIT` 与 `python3 tools/checks/run.py e2e review-export.spec.ts`，确认版本/授权失败。
-- [ ] 实现受控代理、流式 Range、每5秒权限检查和失效终止；PDF/Word 转换在隔离进程，禁止任意网络/本地文件读取，local/s3 使用相同业务 fileId。
+- [ ] 实现受控代理、流式 Range、每5秒权限检查和失效终止；PDF/Word 转换在隔离进程，禁止任意网络/本地文件读取，沿用现有统一业务 fileId，本阶段验 local；未完 S3 读取/导出适配与差异验证归 DEP-S3/F-05。
 - [ ] 重跑测试并渲染导出样本人工核对中文、表格、标题、换页与实际已保存内容；撤回/删除期间的迟到导出不得可下载，已经下载的数据无法远程收回明确记录。
 - [ ] 提交 `feat: add authorized review and version-bound exports`。
 
@@ -109,11 +109,13 @@
 
 - [ ] 写录音/暂停/发布中/未知发布/曾成功发布拒删，清理中立即不可访问，迟到上传/模型/导出不复活；`assertEquals(409, forbiddenDelete.status()); assertFalse(lateResultCommitted);`；知识库原文件仍存在。
 - [ ] 运行 `python3 tools/checks/run.py it MeetingDeletionIT`，确认边界失败。
-- [ ] 实现取消→清单枚举→幂等删除→全部在线业务副本清理确认；local 目录同步、S3 版本/保留策略阻止物理清理时不得虚报完成；备份保留/删除按 A-02 已定规则交给 F-03 恢复抑制清单。
-- [ ] 重跑 local/s3 中断恢复测试：事务失败、删除一半重启、存储临时错误、历史多版本和无业务引用临时产物；保留最小审计不保留要求删除的正文。
+- [ ] 实现取消→清单枚举→幂等删除→全部在线业务副本清理确认；本阶段处理 local 目录同步，S3 版本/保留策略与跨后端清理未完部分归 DEP-MIGRATE/F-03，任何路径均不得虚报物理清理完成；备份保留/删除按 A-02 已定规则交给 F-03 恢复抑制清单。
+- [ ] 对 local 定向运行中断恢复测试；S3 专属及双后端回归归 DEP-S3/DEP-MIGRATE/F：事务失败、删除一半重启、存储临时错误、历史多版本和无业务引用临时产物；保留最小审计不保留要求删除的正文。
 - [ ] 提交 `feat: delete unpublished meetings with recoverable cleanup`。
 
 ## Task D-08：个人专题与全页面视觉/交互收口
+
+**拆分顺序（R2）：** 当前 Demo 页面按[逐页矩阵](2026-10-28-ama-demo-first-adjustment.md)分入 DEMO-01～04，随对应功能一起复刻和联调，05 汇合：1440×900 原型对照、1024×768 关键布局可用；已有 shell 零像素断言保留。原型尚未索引的纪要/审阅/发布状态须先从原件实际补录参考；信息抽屉等关键形态不能以“功能可点”代替。复用已采纳页面及协议，允许必要的模板/CSS/交互呈现调整。个人专题、非关键差异及全产品三视口/像素收口仍在 D-08，前置部分不重新开发。
 
 **Files:** Create `backend/core/src/main/java/ama/topic/TopicService.java`、`backend/adapters/src/main/resources/db/migration/V015__topics.sql`、`backend/integration-tests/src/test/java/ama/topic/TopicAccessIT.java`、`web/src/features/topic/TopicPanel.vue`、`web/tests/e2e/topics.spec.ts`、`web/tests/visual/business-pages.spec.ts`、`docs/acceptance/d/page-matrix.md`。
 
@@ -128,5 +130,5 @@
 ## 阶段验收与移交
 
 - [ ] 一期已定义主业务所有页面和规则已覆盖，D-01…D-18 中尚缺规则明确落实到决定台账或 E 阶段任务。
-- [ ] local/s3 的上传、回听、来源、导出、删除全链路通过；无隐藏 S3 必需依赖。
+- [ ] local 的上传、回听、来源、导出、删除全链路通过；无隐藏 S3/双 MySQL/双活必需依赖。S3 适配与全链路差异验证归最后 F，原始义务保留。
 - [ ] `docs/acceptance/d/summary.md` 包含交互/视觉/权限/异常证据；不能只因截图一致就宣布功能完成。
