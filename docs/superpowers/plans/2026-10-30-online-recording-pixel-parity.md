@@ -38,21 +38,21 @@
 - Consumes: 原型 HTML 的在线录音模板和现有路由入口。
 - Produces: 可由伪数据驱动的原型演示页，以及结构、文案、录音控制、转写空态和保存状态断言。
 
-- [ ] **Step 1: Write the failing SSR assertions**
+- [x] **Step 1: Write the failing SSR assertions**
 
   Render the new prototype-shaped recording view with a minimal injected application/router fixture. Assert the prototype return button, exact prototype copy (`未接入服务端保存`, `模拟识别`, and the full simulation note), no legacy arrow-only head, and the active/paused/interrupted control labels.
 
-- [ ] **Step 2: Run the focused test to verify it fails**
+- [x] **Step 2: Run the focused test to verify it fails**
 
   Run: `npm --prefix web run test:unit -- tests/unit/recording-page-view.test.ts`
 
   Expected: FAIL on the current arrow header and legacy recording/transcript copy.
 
-- [ ] **Step 3: Add only test-local state helpers**
+- [x] **Step 3: Add only test-local state helpers**
 
   Keep fake session/recorder values inside the test file or a test-only helper. During this task the demo page may use a clearly isolated fixture adapter; record its removal as a later cleanup step.
 
-- [ ] **Step 4: Run the focused test again**
+- [x] **Step 4: Run the focused test again**
 
   Run the same command and confirm the assertions still fail for the intended production mismatches rather than fixture errors.
 
@@ -66,21 +66,21 @@
 - Consumes: 原型结构、测试夹具和现有路由/信息/材料入口。
 - Produces: 原型形状的页面、伪数据驱动的录音状态交互，以及可替换回真实状态机的模板边界。
 
-- [ ] **Step 1: Implement the prototype-shaped template and demo interactions**
+- [x] **Step 1: Implement the prototype-shaped template and demo interactions**
 
   Replace the current template with the prototype’s recording page structure and demo interactions: `返回会议列表`, the three recording controls, segment interruption flow, saved-part rows, live transcript empty state and materials/info entries. Keep the existing visual class names and make the demo state explicit and removable.
 
-- [ ] **Step 2: Run the focused test to verify it passes**
+- [x] **Step 2: Run the focused test to verify it passes**
 
   Run: `npm --prefix web run test:unit -- tests/unit/recording-page-view.test.ts`
 
   Expected: PASS with all prototype structure/copy assertions green.
 
-- [ ] **Step 3: Refactor only after green**
+- [x] **Step 3: Refactor only after green**
 
   Remove duplicated computed text or selectors if needed while keeping the demo state isolated from business APIs.
 
-- [ ] **Step 4: Run the focused test again**
+- [x] **Step 4: Run the focused test again**
 
   Confirm the page test remains green after cleanup.
 
@@ -95,21 +95,21 @@
 - Consumes: Task 2 prototype-shaped template and interaction assertions.
 - Produces: a production page that renders only real recorder/session/upload/info state, with no fixed demo data or bypass.
 
-- [ ] **Step 1: Write the failing cleanup assertions**
+- [x] **Step 1: Write the failing cleanup assertions**
 
   Assert that the production source has no demo seed, fake service success, hard-coded meeting, or development-only recording bypass, while the real recorder state still controls the rendered status and buttons.
 
-- [ ] **Step 2: Run the cleanup assertions to verify the intended demo path is still present**
+- [x] **Step 2: Run the cleanup assertions to verify the intended demo path is still present**
 
   Run: `npm --prefix web run test:unit -- tests/unit/recording-page-view.test.ts`
 
   Expected: FAIL on the temporary demo adapter or marker.
 
-- [ ] **Step 3: Remove the demo adapter and reconnect real state**
+- [x] **Step 3: Remove the demo adapter and reconnect real state**
 
   Delete the temporary demo data/entry path, map the existing `useRecorder` state into the prototype template, and keep all interface errors truthful.
 
-- [ ] **Step 4: Run the focused test to verify cleanup passes**
+- [x] **Step 4: Run the focused test to verify cleanup passes**
 
   Run: `npm --prefix web run test:unit -- tests/unit/recording-page-view.test.ts`
 
@@ -125,11 +125,11 @@
 - Consumes: completed Tasks 1–3 and the existing prototype reference capture tooling.
 - Produces: fresh unit, type, build and visual/e2e evidence for the changed page.
 
-- [ ] **Step 1: Run focused and related unit tests**
+- [x] **Step 1: Run focused and related unit tests**
 
   Run: `npm --prefix web run test:unit -- tests/unit/recording-page-view.test.ts tests/unit/recording-store.test.ts tests/unit/application.test.ts`
 
-- [ ] **Step 2: Run typecheck and build**
+- [x] **Step 2: Run typecheck and build**
 
   Run: `npm --prefix web run typecheck && npm --prefix web run build`
 
@@ -139,12 +139,12 @@
 
   If a recording-specific route fixture is available without production bypasses, capture and compare 1440×900 and 1024×768 with reduced motion and zero diff tolerance.
 
-- [ ] **Step 4: Run the complete frontend unit suite**
+- [x] **Step 4: Run the complete frontend unit suite**
 
   Run: `npm --prefix web run test:unit`
 
   Record any pre-existing failures by test name; do not call the task complete without fresh output.
 
-- [ ] **Step 5: Review the diff and verify no fake production path remains**
+- [x] **Step 5: Review the diff and verify no fake production path remains**
 
   Check `git diff -- web/src/features/meetings/RecordingPage.vue web/src/shared/styles/prototype.css web/tests/unit/recording-page-view.test.ts` and confirm all pseudo-data helpers are test-local.
