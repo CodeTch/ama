@@ -35,6 +35,16 @@ paths:
     $ref: './meetings.yaml#/info'
   /api/v1/meetings/{id}/roster-confirmations:
     $ref: './meetings.yaml#/confirmations'
+  /api/v1/topics:
+    $ref: './topics.yaml#/collection'
+  /api/v1/topics/{id}:
+    $ref: './topics.yaml#/item'
+  /api/v1/meetings/{id}/topics:
+    $ref: './topics.yaml#/assignment'
+  /api/v1/meetings/{id}/topics/{topic}:
+    $ref: './topics.yaml#/assignmentItem'
+  /api/v1/feedback:
+    $ref: './feedback.yaml#/collection'
   /api/v1/meetings/{id}/uploads:
     $ref: './files.yaml#/begin'
   /api/v1/uploads/{id}/parts/{part}:

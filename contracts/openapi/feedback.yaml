@@ -1,0 +1,22 @@
+collection:
+  get:
+    operationId: listFeedback
+    security: [{enterpriseSession: []}]
+    responses:
+      '200': {description: Feedback page, content: {application/json: {schema: {type: object, required: [items, nextCursor], properties: {items: {type: array, items: {$ref: '#/Feedback'}}, nextCursor: {type: [string, 'null']}}}}}}
+  post:
+    operationId: createFeedback
+    security: [{enterpriseSession: []}]
+    parameters: [{ $ref: './meetings.yaml#/Key' }]
+    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [meetingId, category, comment], properties: {meetingId: {type: string, format: uuid}, category: {type: string}, comment: {type: string}}}}}}
+    responses: {'201': {description: Created feedback, content: {application/json: {schema: {$ref: '#/Feedback'}}}}}
+Feedback:
+  type: object
+  required: [id, meetingId, category, comment, state, revisionToken]
+  properties:
+    id: {type: string, format: uuid}
+    meetingId: {type: string, format: uuid}
+    category: {type: string}
+    comment: {type: string}
+    state: {type: string, enum: [PENDING, ACCEPTED, REJECTED, NEEDS_MORE]}
+    revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}

@@ -1,0 +1,51 @@
+collection:
+  get:
+    operationId: listTopics
+    security: [{enterpriseSession: []}]
+    responses:
+      '200': {description: Owner topics, content: {application/json: {schema: {type: array, items: {$ref: '#/Topic'}}}}}
+  post:
+    operationId: createTopic
+    security: [{enterpriseSession: []}]
+    parameters: [{ $ref: './meetings.yaml#/Key' }]
+    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [name, description], properties: {name: {type: string}, description: {type: [string, 'null']}}}}}}
+    responses: {'201': {description: Created topic, content: {application/json: {schema: {$ref: '#/Topic'}}}}}
+item:
+  parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
+  put:
+    operationId: updateTopic
+    security: [{enterpriseSession: []}]
+    parameters: [{ $ref: './meetings.yaml#/Key' }]
+    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [expectedRevisionToken, name, description], properties: {expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}, name: {type: string}, description: {type: [string, 'null']}}}}}}
+    responses: {'200': {description: Updated topic, content: {application/json: {schema: {$ref: '#/Topic'}}}}}
+  delete:
+    operationId: deleteTopic
+    security: [{enterpriseSession: []}]
+    parameters: [{ $ref: './meetings.yaml#/Key' }]
+    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [expectedRevisionToken], properties: {expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}}}}}}
+    responses: {'200': {description: Deleted topic, content: {application/json: {schema: {$ref: '#/Topic'}}}}}
+assignment:
+  parameters:
+    - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+  post:
+    operationId: assignMeetingTopic
+    security: [{enterpriseSession: []}]
+    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [topicId, expectedRevisionToken], properties: {topicId: {type: string, format: uuid}, expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}}}}}}
+    responses: {'204': {description: Assigned}}
+assignmentItem:
+  parameters:
+    - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+    - {name: topic, in: path, required: true, schema: {type: string, format: uuid}}
+  delete:
+    operationId: removeMeetingTopic
+    security: [{enterpriseSession: []}]
+    responses: {'204': {description: Removed}}
+Topic:
+  type: object
+  required: [id, name, description, revision, revisionToken]
+  properties:
+    id: {type: string, format: uuid}
+    name: {type: string}
+    description: {type: [string, 'null']}
+    revision: {type: integer, format: int64}
+    revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}

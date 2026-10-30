@@ -41,4 +41,6 @@ class MeetingConfiguration {
     }
     @Bean MeetingService meetings(JdbcMeetingRepository repository){return new MeetingService(repository);}
     @Bean RosterService rosters(JdbcMeetingRepository repository){return new RosterService(repository);}
+    @Bean JdbcTopics topics(DataSource source,TransactionRunner tx,JdbcMeetingAccess access){return new JdbcTopics(source,tx,access);}
+    @Bean JdbcFeedback feedback(DataSource source,TransactionRunner tx,JdbcMeetingAccess access){return new JdbcFeedback(source,tx,access);}
 }
