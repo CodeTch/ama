@@ -21,6 +21,7 @@ function openImport(){if(!session.current.value){goCasLogin();return;}if(importM
 function savedImport(){importOpen.value=false;importMeeting.value=null;void router.replace({path:'/meetings'});void list.reload();}
 function closedImport(){importOpen.value=false;if(importMeeting.value&&router.currentRoute.value.query.import===importMeeting.value){importMeeting.value=null;void router.replace({path:'/meetings'});}}
 function processedImport(){const id=importMeeting.value;importOpen.value=false;importMeeting.value=null;if(id)void router.push(`/meeting/${id}/processing`);}
+async function meetingDeleted(){await list.reload();if(!page.value?.items.length&&list.canPrevious.value)await list.first();}
 watch(()=>session.current.value?.actor.enterpriseId,()=>{importPanel.value?.forceClose();importMeeting.value=null;importOpen.value=false;},{flush:'sync'});
 watch(()=>session.current.value,(current)=>{if(!current&&session.status.value==='UNAVAILABLE'&&router.currentRoute.value.path!=='/login')void router.replace('/login');});
 onBeforeRouteLeave(()=>!importOpen.value||(importPanel.value?.close()??true));
@@ -31,17 +32,13 @@ onUnmounted(createFlow.dispose);
 const scope=computed({get:()=>list.scope.value,set:value=>{groupView.value=false;void list.selectScope(value);}});
 const page=list.page,loading=list.loading;
 const keyword=ref(''),stageFilters=ref<string[]>([]),categoryFilters=ref<string[]>([]),fromDate=ref(''),toDate=ref(''),groupView=ref(false);
-const activeFilterMenu=ref<string|null>(null),homeRenderVersion=ref(0),updatingHomeView=ref(false);let homeFrame=0;
+const activeFilterMenu=ref<string|null>(null);
 function redrawHome(){
- const focused=document.activeElement;
- const keepInput=focused instanceof HTMLInputElement&&!!focused.closest('.m19-filters');
- const keepTab=focused instanceof HTMLButtonElement&&['owned-tab','joined-tab'].includes(focused.id);
- // Preserve native keyboard focus during reads; rebuild other settled views as the prototype does.
- if(!keepInput&&!keepTab){homeRenderVersion.value++;updatingHomeView.value=true;cancelAnimationFrame(homeFrame);homeFrame=requestAnimationFrame(()=>{homeFrame=requestAnimationFrame(()=>{updatingHomeView.value=false;});});}
+ // Keep the page shell mounted while a filter read settles so native controls
+ // retain their focus and the browser does not paint an empty replacement tree.
  void nextTick(()=>fitSelectedTags(document));
 }
 watch(groupView,()=>{activeFilterMenu.value=null;redrawHome();},{flush:'sync'});watch(importOpen,open=>{if(open)redrawHome();});watch(page,redrawHome,{flush:'sync'});
-onUnmounted(()=>cancelAnimationFrame(homeFrame));
 function refreshSelectedTags(){void nextTick(()=>fitSelectedTags(document));}
 function selectedPopover(event:Event){const target=event.target;if(target instanceof Element){const summary=target.closest('.m19-multi-selected>summary');if(summary instanceof HTMLElement)positionSelectedPopover(summary);}}
 watch([stageFilters,categoryFilters],refreshSelectedTags,{deep:true});
@@ -76,7 +73,7 @@ const notice=ref({title:'',body:''});
 function show(title:string,body:string) {notice.value={title,body};dialog.value?.showModal();}
 </script>
 <template>
- <div :key="homeRenderVersion" class="layout" :class="{'home-view-update':updatingHomeView}"><div class="main">
+ <div class="layout"><div class="main">
   <header class="topbar"><nav class="topbar-heading" aria-label="主导航"><RouterLink to="/meetings" class="topbar-home" aria-current="page"><Icon name="list"/> 我的会议</RouterLink><span v-if="importOpen" class="topbar-crumb">/ 会议详情</span></nav><div class="topbar-right">
    <button class="btn sm ghost" @click="router.push('/feedback')"><Icon name="message" :size="15"/> 我的语料反馈</button>
    <button class="btn sm ghost" @click="show('演示引导','可通过“开始录音”采集会议，或通过“导入会议”上传音视频和文档；在下方按会议范围、关键词、状态、类别和日期查看会议。')"><Icon name="guide" :size="15"/> 演示引导</button>
@@ -88,7 +85,7 @@ function show(title:string,body:string) {notice.value={title,body};dialog.value?
     <button class="btn primary" @click="startRecording"><Icon name="mic" :size="14"/> 开始录音</button>
     <button class="btn" @click="openImport"><Icon name="plus" :size="14"/> 导入会议</button>
    </div></div>
-   <MeetingCreatePanel v-if="session.current.value&&!importMeeting&&(createOpen||create.command.state.value!=='EMPTY'||create.recoveryBlocked.value)" :state="create.command.state.value" :busy="createFlow.busy.value" :blocked="create.recoveryBlocked.value" :storage-status="create.storageStatus.value" :cleanup-failed="create.cleanupFailed.value" :message="createMessage" :discovery="createDiscovery.result.value?.status??null" :discovering="createDiscovery.loading.value" :discovery-error="!!createDiscovery.error.value" @submit="createFlow.open" @lookup="createDiscovery.reload" @recover="create.retryRecovery" @session="reloadSession" @close="createOpen=false"/>
+   <MeetingCreatePanel v-if="session.current.value&&!importMeeting&&!importAfterCreate&&(createOpen||create.command.state.value!=='EMPTY'||create.recoveryBlocked.value)" :state="create.command.state.value" :busy="createFlow.busy.value" :blocked="create.recoveryBlocked.value" :storage-status="create.storageStatus.value" :cleanup-failed="create.cleanupFailed.value" :message="createMessage" :discovery="createDiscovery.result.value?.status??null" :discovering="createDiscovery.loading.value" :discovery-error="!!createDiscovery.error.value" @submit="createFlow.open" @lookup="createDiscovery.reload" @recover="create.retryRecovery" @session="reloadSession" @close="createOpen=false"/>
    <div class="m19-scope-row"><div class="tabs" role="tablist" aria-label="会议范围" @keydown="selectScope">
     <button id="owned-tab" class="tab" :tabindex="scope==='owned'?0:-1" :class="{active:scope==='owned'}" role="tab" :aria-selected="scope==='owned'" aria-controls="meeting-panel" @click="scope='owned'">我负责的</button>
     <button id="joined-tab" class="tab" :tabindex="scope==='joined'?0:-1" :class="{active:scope==='joined'}" role="tab" :aria-selected="scope==='joined'" aria-controls="meeting-panel" @click="scope='joined'">我参与的</button>
@@ -99,10 +96,9 @@ function show(title:string,body:string) {notice.value={title,body};dialog.value?
     <div v-if="!session.current.value" class="empty"><Icon name="list" :size="36"/><h2>{{session.status.value==='LOADING'?'正在检查登录':'请登录企业账号'}}</h2><p>请通过企业 CAS 登录恢复会话后查看你{{scope==='owned'?'负责':'参与'}}的会议。</p><RouterLink v-if="session.status.value!=='LOADING'" class="btn primary" to="/login">企业 CAS 登录</RouterLink><button v-else class="btn" disabled>正在检查登录</button></div>
     <template v-else>
      <div v-if="list.error.value" class="list-feedback" role="alert"><p>{{listError}}</p><button class="btn sm" @click="list.reload">重试当前页</button><button class="btn sm" @click="list.first">返回第一页</button></div>
-     <p v-if="loading" class="list-feedback" role="status">正在加载会议…</p>
-     <section v-if="page&&!loading&&!list.error.value&&groupView&&scope==='owned'" class="topic-card m19-group"><div class="topic-head"><div class="icon-tile" style="background:var(--orange-bg);color:var(--orange)"><Icon name="layers" :size="17"/></div><div style="flex:1"><button class="m19-name" @click="groupView=false">未归入专题</button><div class="small muted"> · {{page?.items.length??0}}{{page?.hasMore?'+':''}}场会议</div></div></div><div class="card"><MeetingList :items="page?.items??[]" :owned="true" :categories="Object.fromEntries(categoryOptions.map(c=>[c.id,c.label]))"/></div></section>
-     <MeetingList v-else-if="page&&!loading&&!list.error.value" :items="page.items" :owned="scope==='owned'" :categories="Object.fromEntries(categoryOptions.map(c=>[c.id,c.label]))"/>
-     <div v-if="page&&!loading&&!list.error.value&&(!groupView||scope==='joined')" class="pager">共 {{minimumTotal}}{{page.hasMore?'+':''}} 条 · {{list.pageNumber.value}}/{{page.hasMore?'…':list.pageNumber.value}} 页 <button :disabled="loading||!list.canPrevious.value" aria-label="上一页" @click="list.previous">‹</button><button class="cur" :disabled="loading" :aria-label="'第 '+list.pageNumber.value+' 页'" @click="list.reload">{{list.pageNumber.value}}</button><button :disabled="loading||!page.hasMore" aria-label="下一页" @click="list.next">›</button></div>
+     <section v-if="page&&!list.error.value&&groupView&&scope==='owned'" class="topic-card m19-group"><div class="topic-head"><div class="icon-tile" style="background:var(--orange-bg);color:var(--orange)"><Icon name="layers" :size="17"/></div><div style="flex:1"><button class="m19-name" @click="groupView=false">未归入专题</button><div class="small muted"> · {{page?.items.length??0}}{{page?.hasMore?'+':''}}场会议</div></div></div><div class="card"><MeetingList :items="page?.items??[]" :owned="true" :categories="Object.fromEntries(categoryOptions.map(c=>[c.id,c.label]))" @deleted="meetingDeleted"/></div></section>
+     <MeetingList v-else-if="page&&!list.error.value" :items="page.items" :owned="scope==='owned'" :categories="Object.fromEntries(categoryOptions.map(c=>[c.id,c.label]))" @deleted="meetingDeleted"/>
+     <div v-if="page&&!list.error.value&&(!groupView||scope==='joined')" class="pager">共 {{minimumTotal}}{{page.hasMore?'+':''}} 条 · {{list.pageNumber.value}}/{{page.hasMore?'…':list.pageNumber.value}} 页 <button :disabled="loading||!list.canPrevious.value" aria-label="上一页" @click="list.previous">‹</button><button class="cur" :disabled="loading" :aria-label="'第 '+list.pageNumber.value+' 页'" @click="list.reload">{{list.pageNumber.value}}</button><button :disabled="loading||!page.hasMore" aria-label="下一页" @click="list.next">›</button></div>
     </template>
    </section>
   </div><div v-if="localDevelopment" class="demo-note">当前页面数据均为产品演示用模拟数据，不代表招商基金真实业务信息。<br>当前原型为纯前端交互演示，不连接招商基金真实业务系统。当前原型仅展示会议负责人的相关功能。</div>
@@ -113,7 +109,6 @@ function show(title:string,body:string) {notice.value={title,body};dialog.value?
 </template>
 
 <style scoped>
-.home-view-update .m19-view :deep(.btn){transition:none}
 .m19-filters :deep(summary.select:not(:focus-visible)){transition:none}
 
 
