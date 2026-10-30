@@ -139,11 +139,11 @@
 
   If a recording-specific route fixture is available without production bypasses, capture and compare 1440×900 and 1024×768 with reduced motion and zero diff tolerance.
 
-- [x] **Step 4: Run the complete frontend unit suite**
+- [ ] **Step 4: Run the complete frontend unit suite**
 
   Run: `npm --prefix web run test:unit`
 
-  Record any pre-existing failures by test name; do not call the task complete without fresh output.
+  Latest run: 324/326 passed; `upload-import-view.test.ts` cases 260–261 fail because the concurrently modified `UploadImportView.vue` now omits `DOC`/`PDF`/`PPTX` from its visible format guide. These failures are outside the recording-page diff and remain open in the shared worktree.
 
 - [x] **Step 5: Review the diff and verify no fake production path remains**
 
