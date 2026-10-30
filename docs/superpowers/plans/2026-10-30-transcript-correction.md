@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 将现有会议工作台的“转写校正”阶段对齐用户附件中的空转写状态，保持原型结构、几何和接口逻辑，并用测试伪响应验证页面交互。
+**Goal:** 新增一个独立的“转写校正”演示路由，像素复刻用户附件中的空转写状态，并用隔离伪数据验证页面交互，同时保持真实工作台接口逻辑不变。
 
-**Architecture:** 继续使用 `MeetingDetail.vue` 作为页面壳，复用 `MeetingProgress`、`TranscriptPlayer`、`TranscriptEditor` 和 `TranscriptForm`。不在生产组件中写死业务假数据；伪数据只作为 Playwright 请求拦截 fixture，覆盖会话、会议、工作区、转写空态和选项读取，使视觉与交互可以离线回放。
+**Architecture:** 新建 `TranscriptCorrectionDemoPage.vue` 作为只读演示页面，复用现有全局 token 和图标组件；在 `main.ts` 注册 `/transcript-correction-demo`。真实 `MeetingDetail.vue` 及 transcript API 保持不变，伪数据只存在演示页面和 Playwright 测试中。
 
 **Tech Stack:** Vue 3、Vue Router、TypeScript、Vite、Playwright、现有 CSS token/prototype/parity 样式。
 
@@ -15,7 +15,7 @@
 - 所有开发、测试和验证在 `/home/tanren/ama` 的 `main` 分支进行。
 - 不创建或使用 `.worktrees`，不切换分支。
 - 视觉基准是用户附件和 `docs/acceptance/a/prototype/{1440x900,1024x768}/original-transcript-page.png`。
-- 真实接口逻辑保持默认；伪响应只在测试 fixture 中出现，不写入生产 API client。
+- 真实工作台接口逻辑保持默认；演示页面不调用 API，伪数据不进入 API client。
 - 不增加转写校正之外的新页面设计或未请求的业务能力。
 
 ## Review Focus
@@ -26,45 +26,44 @@
 - 历史折叠：默认只显示摘要，展开后显示“转写历史”内容并保持卡片间距；由交互断言验证。
 - 接口回退：fixture 关闭或 API 返回空态时，页面不渲染任何伪成功文案；由现有单元测试与生产代码审阅验证。
 
-### Task 1: 对齐转写空态工作台结构
+### Task 1: 新增独立转写校正演示路由
 
 **Files:**
-- Modify: `web/src/features/meetings/MeetingDetail.vue`
-- Modify: `web/src/features/transcript/TranscriptPlayer.vue`
-- Modify: `web/src/features/transcript/TranscriptEditor.vue`
-- Modify: `web/src/shared/styles/parity.css`
+- Create: `web/src/features/transcript/TranscriptCorrectionDemoPage.vue`
+- Modify: `web/src/main.ts`
+- Test: `web/tests/e2e/transcript-correction-demo.spec.ts`
 
 **Interfaces:**
-- Consumes: 现有 `WorkspaceNavigation`、`SavedMeeting`、`TranscriptCurrent` 组件输入。
-- Produces: 在 `/meeting/:id/transcript` 下可渲染附件对应的标题、流程条、左右空态和历史入口；不改变 API 方法签名。
+- Consumes: 现有全局样式 token、`Icon.vue`、`RouterLink`。
+- Produces: `/transcript-correction-demo` 独立演示页；真实工作台及 API 方法签名不变。
 
 - [ ] **Step 1: 写空态结构测试**
 
-  在 `web/tests/e2e/transcript-correction.spec.ts` 建立 API route fixture，返回 ACTIVE 会话、未命名会议、`TRANSCRIPT_PENDING` 工作区、空 `transcript.current` 和空媒体源；断言标题、状态、五步条、左右空态、重新读取按钮和历史摘要存在。
+  在 `web/tests/e2e/transcript-correction-demo.spec.ts` 访问新路由，断言标题、状态、五步条、左右空态、重新读取按钮和历史摘要存在，并确认页面没有发出 `/api/v1/` 请求。
 
 - [ ] **Step 2: 运行测试确认当前差异**
 
-  运行 `cd web && npx playwright test tests/e2e/transcript-correction.spec.ts --project=chromium`，记录当前截图/结构差异，不更新 baseline。
+  运行 `cd web && npx playwright test tests/e2e/transcript-correction-demo.spec.ts --project=1440x900`，确认路由不存在或目标页面缺失导致失败。
 
 - [ ] **Step 3: 最小修正组件结构与样式**
 
-  在现有组件边界内修正空态卡片 padding、标题字号、列间距、流程条上下间距、工作区内容高度和历史折叠间距；保持空媒体/空转写的原有真实文案和 API 重读动作。删除会让空态变成假播放/假转写的任何演示文案。
+  实现 `TranscriptCorrectionDemoPage.vue` 的静态空态布局和本地交互；注册路由；保持编辑、保存和更多按钮只展示未接入提示，不写入真实数据。
 
 - [ ] **Step 4: 运行结构测试确认通过**
 
-  重新运行上述 Playwright 测试，期望所有语义断言通过且页面无横向滚动。
+  重新运行上述 Playwright 测试，期望所有语义断言通过且页面无横向滚动、无 API 请求。
 
 - [ ] **Step 5: 提交本任务**
 
   ```bash
-  git add web/src/features/meetings/MeetingDetail.vue web/src/features/transcript/TranscriptPlayer.vue web/src/features/transcript/TranscriptEditor.vue web/src/shared/styles/parity.css web/tests/e2e/transcript-correction.spec.ts
-  git commit -m "fix: align transcript correction empty workspace"
+  git add web/src/features/transcript/TranscriptCorrectionDemoPage.vue web/src/main.ts web/tests/e2e/transcript-correction-demo.spec.ts
+  git commit -m "feat: add transcript correction demo route"
   ```
 
 ### Task 2: 双视口像素与交互回归
 
 **Files:**
-- Modify: `web/tests/e2e/transcript-correction.spec.ts`
+- Modify: `web/tests/e2e/transcript-correction-demo.spec.ts`
 - Create: `web/tests/visual/baselines/{1024x768,1440x900}/transcript-correction-empty.png` only after verifying against the user-provided reference
 
 **Interfaces:**
