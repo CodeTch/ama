@@ -37,13 +37,4 @@ public class SecurityConfiguration {
                 .build();
     }
 
-    @Bean @Order(2)
-    SecurityFilterChain casSecurity(HttpSecurity http) throws Exception {
-        return http.securityMatcher("/auth/cas/**")
-                .csrf(c -> c.disable())
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .requestCache(c -> c.disable())
-                .authorizeHttpRequests(a -> a.anyRequest().permitAll())
-                .build();
-    }
 }
