@@ -7,11 +7,12 @@
 - Web 类型与构建：`npm --prefix web run typecheck`、`npm --prefix web run build`、`npm --prefix web run check:api` 通过。
 - OpenAPI：`npm run check:openapi` lint/bundle 通过；bundler 仅报告既有跨文件 schema 重名 warning。
 - Java：会议删除 wire 1/1、adapter 2/2、TopicFeedback wire 1/1，以及转写/材料/纪要/发布定向套件均通过；backend API/adapters 编译通过。
+- 固定 harness 真实浏览器链：`AMA_LOCAL_URL=http://127.0.0.1:5174 AMA_CAS_ORIGIN=http://127.0.0.1:8792 FIXED_PORTS=1 node tools/dev/import_cas_integration.mjs` 通过 10/10 检查，包含匿名 401、CAS service/ticket、真实创建、TXT 上传/草稿保存、刷新恢复、知识库版本读取、provider 403、导入受理、登出撤销和无页面错误；fixture meeting `67b39f75-f8d3-4b3f-b795-adc73f914625`。
+- 重启本地应用加载 V030 与新控制器后，真实 CAS 会话直接调用的核心 CRUD 链通过：会议创建 `201`、专题创建 `201`、会议归组 `204`、反馈创建 `201`、会议删除 `200`、删除后详情读取 `403`；fixture meeting `ea43e876-5b74-47a3-b0bf-93f1a1fd1a75`。
 
 ## 当前阻塞与未通过项
 
-- 固定 CAS harness（HTTP `8792`、SMTP `2525`）和完整数据库 fixture 未在本次会话同时启动，`tools/dev/import_cas_integration.mjs` 的真实浏览器链未执行；报告不能写成 CAS/数据库端到端通过。
-- 直接运行现有 `shell.spec.ts` 时，本地 API 会将无会话请求重定向到 `/login`，与该测试期望的匿名壳 `/meetings` 不一致，因此 8 个矩阵用例失败；这属于当前本地运行配置/会话状态边界，需要在固定 harness + 本地应用启动链中重跑。
+- 固定 harness 的真实导入链和核心 CRUD 链已通过；独立 Playwright `shell.spec.ts` 若把 Vite `/api` 代理到默认 8080，仍会把匿名页重定向到 `/login`，导致 8 个壳用例失败。使用现有本地应用 5174/8182 和 harness 8792 的真实链后，CAS/导入/核心 CRUD 路径已通过。
 - `python3 tools/checks/run.py all` 当前失败：Python 282 executed、60 failed、4 skipped；尾部失败集中在仓库既有 `.superpowers/sdd/2026-10-23-ama-phase-b-remaining` 缺失历史 ack 文件。它不是本次会议 CRUD 变更引入的回归，但整仓库总门仍未关闭。
 - 会议库仍在 provider 不可用时显示真实不可用；专题当前接通创建/列举/归组最小路径，批量归组、审核状态变更和 provider 聚合需固定 fixture 后继续验证。
 
