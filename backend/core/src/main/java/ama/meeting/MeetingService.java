@@ -12,5 +12,8 @@ public final class MeetingService {
     public Mutation save(Actor actor,String id,String key,SaveInfo request,String traceId) {
         uuid(id); key(key); return repository.save(actor,id,key,request,traceId);
     }
+    public Mutation delete(Actor actor,String id,String key,DeleteMeeting request,String traceId) {
+        uuid(id); key(key); if(request==null)throw new IllegalArgumentException("Delete request required"); return repository.delete(actor,id,key,request,traceId);
+    }
     static void key(String key) { if(key==null || key.isBlank())throw new IllegalArgumentException("Idempotency key required"); }
 }

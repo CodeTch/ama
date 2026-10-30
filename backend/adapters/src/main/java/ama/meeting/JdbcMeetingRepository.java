@@ -150,6 +150,29 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             return new Mutation(id,version);
         });
     }
+    @Override public Mutation delete(Actor actor,String id,String key,DeleteMeeting request,String trace){
+        independent();
+        return tx.required(()->{
+            var replay=claim(actor,id,"DELETE_MEETING",key,MeetingDigests.fields("meeting-delete-v1",request.expectedRevision().toString()));
+            if(replay.result()!=null){requireDeleteReplayAccess(actor,replay.result());checkReplay(replay);return restoreMeeting(replay);}
+            var identities=access.tryLockHistoricalIdentities(actor,List.of(),false).orElseThrow(AccessDeniedException::new);
+            var held=(JdbcMeetingAccess.Held)access.lockPrepared(identities,id,false).orElseThrow(AccessDeniedException::new);
+            access.require(held,Action.EDIT);checkReplay(replay);
+            var root=held.root;
+            if(root.revision()!=request.expectedRevision()||root.lifecycle().equals("DELETED")||root.governance().equals("WITHDRAW_PENDING")||root.governance().equals("WITHDRAWN")||root.governance().equals("OBSOLETE_PENDING")||root.governance().equals("OBSOLETE")||root.published()||root.stage().equals("PUBLISHED"))throw new Conflict();
+            if(j.queryForObject("SELECT COUNT(*) FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? AND state IN ('READY','RUNNING','RECONCILING')",Long.class,id)>0
+                    ||j.queryForObject("SELECT COUNT(*) FROM upload_session WHERE meeting_id=? AND state IN ('OPEN','FINALIZING')",Long.class,id)>0)throw new Conflict();
+            if(root.revision()==Long.MAX_VALUE-1||root.cancelEpoch()==Long.MAX_VALUE-1)throw new RevisionExhausted();
+            long revision=root.revision()+1,epoch=root.cancelEpoch()+1;
+            j.update("UPDATE meeting SET lifecycle='DELETED',revision=?,cancel_epoch=?,updated_at=UTC_TIMESTAMP(6) WHERE id=?",revision,epoch,id);
+            fences.advance(held.subject,revision,epoch,true);
+            complete(replay,id,200);
+            audit.append(new AuditEvent(actor.enterpriseId(),"MEETING_DELETED",id,revision,"SUCCEEDED",trace,Instant.now()));
+            outbox.append(new EventDraft("MEETING_DELETED",null,new SubjectRef("MEETING",id),revision,new Reference("MEETING_LIFECYCLE",id)));
+            outbox.flush();
+            return new Mutation(id,revision);
+        });
+    }
     @Override public Saved read(Actor actor,String id){return readProjection.saved(actor,id);}
     private record Pending(ama.transcript.JdbcTranscriptAuthority.PreparedMinutesTransition value,RuntimeException failure) {}
     private Pending prepareMinutes(Actor actor,String id){try{return new Pending(minutes==null?null:minutes.prepareMinutesTransition(actor,id),null);}catch(RuntimeException unavailable){return new Pending(null,unavailable);}}
@@ -164,6 +187,15 @@ public final class JdbcMeetingRepository implements MeetingRepository {
     private Mutation restore(Replay replay,String table){
         var rows=j.query("SELECT meeting_id,revision FROM "+table+" WHERE id=?",(r,n)->new Mutation(r.getString(1),r.getLong(2)),replay.result());
         if(rows.size()!=1 || (replay.status()!=200&&replay.status()!=201))throw new IllegalStateException("Invalid idempotency result");return rows.getFirst();
+    }
+    private Mutation restoreMeeting(Replay replay){
+        var rows=j.query("SELECT id,revision FROM meeting WHERE id=?",(r,n)->new Mutation(r.getString(1),r.getLong(2)),replay.result());
+        if(rows.size()!=1||replay.status()!=200)throw new IllegalStateException("Invalid deleted meeting receipt");return rows.getFirst();
+    }
+    private void requireDeleteReplayAccess(Actor actor,String meeting){
+        var identities=access.tryLockHistoricalIdentities(actor,List.of(),false).orElseThrow(AccessDeniedException::new);
+        var owner=j.queryForList("SELECT owner_id FROM meeting WHERE id=?",String.class,meeting);
+        if(owner.size()!=1||!owner.getFirst().equals(actor.enterpriseId()))throw new AccessDeniedException();
     }
     private void complete(Replay replay,String reference,int status){j.update("UPDATE idempotency_record SET result_id=?,http_status=? WHERE scope_hash=?",reference,status,replay.scope());}
     private void finish(Actor actor,String id,long revision,String type,String kind,String reference,String trace){

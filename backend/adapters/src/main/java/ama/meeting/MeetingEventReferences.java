@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public final class MeetingEventReferences {
     private final JdbcTemplate j;
     public MeetingEventReferences(DataSource source){j=new JdbcTemplate(source);}
-    public Map<String,OutboxReferenceValidator> validators(){return Map.of("MEETING_INFO",this::info,"MEETING_ROSTER",this::roster);}
+    public Map<String,OutboxReferenceValidator> validators(){return Map.of("MEETING_INFO",this::info,"MEETING_ROSTER",this::roster,"MEETING_LIFECYCLE",this::lifecycle);}
     private void common(EventDraft e){if(!e.subject().kind().equals("MEETING")||e.taskId()!=null)throw new IllegalArgumentException("Invalid domain event");}
     private void info(EventDraft e){
         common(e);
@@ -23,5 +23,11 @@ public final class MeetingEventReferences {
         if(!e.eventType().equals("MEETING_ROSTER_CONFIRMED"))throw new IllegalArgumentException("Wrong roster event meaning");
         var rows=j.queryForList("SELECT r.id FROM roster_revision r JOIN meeting m ON m.id=r.meeting_id WHERE r.id=? AND r.meeting_id=? AND r.revision=? AND r.state='CONFIRMED' AND m.revision=r.revision AND m.roster_revision_id=r.id",String.class,e.reference().id(),e.subject().id(),e.subjectRevision());
         if(rows.size()!=1)throw new IllegalArgumentException("Invalid immutable confirmed-roster provenance");
+    }
+    private void lifecycle(EventDraft e){
+        common(e);
+        if(!e.eventType().equals("MEETING_DELETED")||!e.reference().id().equals(e.subject().id()))throw new IllegalArgumentException("Wrong lifecycle event meaning");
+        var rows=j.queryForList("SELECT id FROM meeting WHERE id=? AND revision=? AND lifecycle='DELETED'",String.class,e.subject().id(),e.subjectRevision());
+        if(rows.size()!=1)throw new IllegalArgumentException("Invalid deleted meeting provenance");
     }
 }

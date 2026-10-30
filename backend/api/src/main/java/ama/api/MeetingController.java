@@ -39,6 +39,10 @@ class MeetingController {
         var command=new SaveInfo(HttpRevisionTokens.expected(body),text(body,"name"),text(body,"category"),text(body,"summary"),occurredOn,strings(body,"rosterDraftIds",false),strings(body,"externalRosterNames",true));
         return meetings.save(actor(request),id,key(request),command,trace());
     }
+    @DeleteMapping("/api/v1/meetings/{id}") Mutation delete(@PathVariable String id,@RequestBody byte[] bytes,HttpServletRequest request){
+        var body=parse(bytes,Set.of("expectedRevision","expectedRevisionToken"));
+        return meetings.delete(actor(request),id,key(request),new DeleteMeeting(HttpRevisionTokens.expected(body)),trace());
+    }
     @PostMapping("/api/v1/meetings/{id}/roster-confirmations") Mutation confirm(@PathVariable String id,@RequestBody byte[] bytes,HttpServletRequest request){
         var body=parse(bytes,Set.of("expectedRevision","expectedRevisionToken"));
         return rosters.confirm(actor(request),id,key(request),new ConfirmRoster(HttpRevisionTokens.expected(body)),trace());

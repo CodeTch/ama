@@ -242,7 +242,11 @@ export interface paths {
         get: operations["getSavedMeeting"];
         put?: never;
         post?: never;
-        delete?: never;
+        /**
+         * Soft-delete an editable meeting owned by the current identity
+         * @description Owner only. Uses revision CAS and an idempotency key. The meeting lifecycle becomes DELETED, the cancel epoch advances, current reads and list projections stop exposing the meeting, and the immutable tombstone remains for late task protection. Published, governed, in-flight or stale meetings are rejected without partial effects. Exact replay returns the original mutation after current owner authorization.
+         */
+        delete: operations["deleteMeeting"];
         options?: never;
         head?: never;
         patch?: never;
@@ -4684,6 +4688,53 @@ export interface operations {
             400: components["responses"]["Invalid"];
             401: components["responses"]["Unauthenticated"];
             403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    deleteMeeting: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
+                id: components["parameters"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevision?: components["schemas"]["ExpectedRevision"];
+                    expectedRevisionToken?: components["schemas"]["ExpectedRevisionToken"];
+                } & ({
+                    expectedRevision: components["schemas"]["ExpectedRevision"];
+                } | {
+                    expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+                });
+            };
+        };
+        responses: {
+            /** @description Original deletion mutation, including exact replay */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mutation"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            409: components["responses"]["Conflict"];
+            413: components["responses"]["TooLarge"];
             503: components["responses"]["MeetingUnavailable"];
         };
     };

@@ -7,6 +7,7 @@ export type MeetingScope='owned'|'joined';
 export type MeetingFilters={q?:string;stages?:string[];categories?:string[];from?:string;to?:string};
 function shape(value:unknown,keys:string):value is Record<string,unknown>{return typeof value==='object'&&value!==null&&!Array.isArray(value)&&Object.keys(value).sort().join(',')===keys;}
 const uuid=(v:unknown)=>typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(v);
+const mutation=(v:unknown):v is components['schemas']['Mutation']=>typeof v==='object'&&v!==null&&!Array.isArray(v)&&Object.keys(v).sort().join(',')==='id,revision,revisionToken'&&uuid((v as any).id)&&typeof (v as any).revision==='number'&&Number.isInteger((v as any).revision)&&revisionToken((v as any).revisionToken);
 const nullableText=(v:unknown)=>v===null||typeof v==='string';
 function date(v:unknown){if(v===null)return true;if(typeof v!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(v))return false;const time=Date.parse(v+'T00:00:00Z');return Number.isFinite(time)&&new Date(time).toISOString().startsWith(v+'T');}
 function item(value:unknown):value is components['schemas']['MeetingItem'] {
@@ -24,5 +25,10 @@ export function createMeetingsApi(client:ReturnType<typeof createBusinessClient>
   if(!['owned','joined'].includes(scope))throw new TypeError('Invalid list scope');const query=new URLSearchParams({scope,limit:'10'});if(cursor!==null)query.set('cursor',cursor);if(filters.q?.trim())query.set('q',filters.q.trim());if(filters.stages?.length)query.set('stages',[...filters.stages].sort().join(','));if(filters.categories?.length)query.set('categories',[...filters.categories].sort().join(','));if(filters.from)query.set('from',filters.from);if(filters.to)query.set('to',filters.to);
   const result=await client.json<unknown>('/api/v1/meetings?'+query,{signal});if(!page(result))throw new ApiError('response',200,'会议列表响应不可用，请重新加载。');
   result.items.forEach(row=>Object.freeze(row));Object.freeze(result.items);return Object.freeze(result);
+ },async remove(id:string,expectedRevisionToken:string,signal:AbortSignal):Promise<components['schemas']['Mutation']>{
+  if(!uuid(id)||!revisionToken(expectedRevisionToken))throw new TypeError('Invalid meeting deletion');
+  const value=await client.json<unknown>(`/api/v1/meetings/${id}`,{method:'DELETE',signal,headers:{'Idempotency-Key':crypto.randomUUID()},body:JSON.stringify({expectedRevisionToken}),expectedStatus:200});
+  if(!mutation(value)||value.id!==id)throw new ApiError('response',200,'删除结果暂无法确认，请重新读取会议。');
+  return Object.freeze(value);
  }};
 }

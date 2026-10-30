@@ -125,6 +125,60 @@ item:
         $ref: './identity.yaml#/BusinessForbidden'
       '503':
         $ref: '#/MeetingUnavailable'
+  delete:
+    operationId: deleteMeeting
+    summary: Soft-delete an editable meeting owned by the current identity
+    description: Owner only. Uses revision CAS and an idempotency key. The meeting lifecycle becomes DELETED, the cancel epoch advances, current reads and list projections stop exposing the meeting, and the immutable tombstone remains for late task protection. Published, governed, in-flight or stale meetings are rejected without partial effects. Exact replay returns the original mutation after current owner authorization.
+    security:
+      - enterpriseSession: []
+    parameters:
+      - $ref: '#/Id'
+      - $ref: '#/Key'
+      - $ref: './identity.yaml#/Origin'
+      - $ref: './identity.yaml#/Csrf'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            allOf:
+              - anyOf:
+                  - type: object
+                    required: [expectedRevision]
+                    properties:
+                      expectedRevision:
+                        $ref: '#/ExpectedRevision'
+                  - type: object
+                    required: [expectedRevisionToken]
+                    properties:
+                      expectedRevisionToken:
+                        $ref: '#/ExpectedRevisionToken'
+            properties:
+              expectedRevision:
+                $ref: '#/ExpectedRevision'
+              expectedRevisionToken:
+                $ref: '#/ExpectedRevisionToken'
+    responses:
+      '200':
+        description: Original deletion mutation, including exact replay
+        content:
+          application/json:
+            schema:
+              $ref: '#/Mutation'
+      '400':
+        $ref: './identity.yaml#/Invalid'
+      '401':
+        $ref: './identity.yaml#/Unauthenticated'
+      '403':
+        $ref: './identity.yaml#/BusinessForbidden'
+      '409':
+        $ref: '#/Conflict'
+      '413':
+        $ref: '#/TooLarge'
+      '503':
+        $ref: '#/MeetingUnavailable'
 info:
   servers:
     - url: http://127.0.0.1:8080

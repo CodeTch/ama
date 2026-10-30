@@ -9,4 +9,5 @@ public interface MeetingRepository {
     Saved read(Actor actor, String id);
     Mutation save(Actor actor, String id, String key, SaveInfo request, String traceId);
     Mutation confirm(Actor actor, String id, String key, ConfirmRoster request, String traceId);
+    Mutation delete(Actor actor, String id, String key, DeleteMeeting request, String traceId);
 }

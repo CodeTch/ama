@@ -22,6 +22,7 @@ public final class MeetingContracts {
         }
     }
     public record ConfirmRoster(Long expectedRevision) { public ConfirmRoster { revision(expectedRevision); } }
+    public record DeleteMeeting(Long expectedRevision) { public DeleteMeeting { revision(expectedRevision); } }
     public record Mutation(String id, long revision) { public String getRevisionToken(){return Long.toString(revision);} }
     public record Created(String id, long revision, String stage) { public String getRevisionToken(){return Long.toString(revision);} }
     public record Member(String memberId, String enterpriseId, String displayName, String memberKind) {}
