@@ -65,4 +65,6 @@ test('meeting confirmation keeps the production state path without a runtime dem
  const confirmTemplate=source.slice(start,end);
  assert.match(confirmTemplate,/@click="confirmFinal"/);
  assert.doesNotMatch(confirmTemplate,/VITE_LOCAL_DEV_LOGIN/);
+ assert.match(confirmTemplate,/footer v-if="owner"/);
+ assert.match(confirmTemplate,/v-if="p\.final\.value\?\.confirmation"[^>]*>继续发布/);
 });
