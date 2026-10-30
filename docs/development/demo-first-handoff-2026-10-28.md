@@ -1,12 +1,18 @@
+> **2026-10-29 用户反馈后重新打开验收：当前界面/功能严格原型一致性未通过。** 先前M1-B结论仅保留后端及受控流程的原限定证据，不代表完整原型交付。正在按原始HTML更新标准、重新测试并修改；以下已通过记录为此前范围的历史，不覆盖本次返工。
+
+# 当前状态 — 2026-10-29 R2 正式本地 B 已完成，停在阶段边界
+
+M1-Demo与正式本地M1-B均已ACCEPTED。原BASE `34cb226aefe99c67d3681af68d748b0aeea4e073` 到 HEAD `4b68213…` 加V2工作树1077实现文件已独立APPROVE，无开放P2+。D失败轮预算、名单LONGTEXT及Unicode ID计量P2均因果修正/独立关闭；holder/全集合/锁序、intake后写rollback、generation真实F竞态、读中撤权、native三切点、组件持久恢复和两类capacity1饱和均已按实际范围采纳。最终545Java/249Web、type/build/API/OpenAPI及lifecycle10/provider2通过，原型HTML与共享shell golden未改。
+
+[正式本地B验收记录](../acceptance/b/formal-local-b-2026-10-29.md)与[B唯一义务表](../acceptance/b/summary.md)为当前结论。PLATFORM-B、最后F、legacy positive UNQUALIFIED、IMM永久PARTIAL及历史UNKNOWN/56.85s claim限定保持。**没有当前B实现待办；不自动进入C/D/E/F，不重复已完成测试或旧B-L5窗口。** 后续新阶段需用户明确提出。
+
+工作树 `/home/tanren/ama/.worktrees/phase-b-completion` 保留可审阅，六服务正常；没有Git提交/合并/推送。W=`.superpowers/sdd/2026-10-23-ama-phase-b-remaining` 的`current-state.json.bqual_final_20261029`与`RESUME_LATEST.md`末尾记录最终采用。下方全部旧阶段/未完成表述作为历史保留，不覆盖此当前状态。
+
+---
+
 # Demo 优先计划调整与接续 — 2026-10-28 R2
 
-## 2026-10-30 接续记录
-
-按本入口继续执行后，DEMO-01 的身份前置已完成：主项目开发/生产共用 CAS 2.0 客户端，浏览器跳转联调辅助项目 `/cas/login`，服务端调用 `/cas/p3/serviceValidate`，同步本地身份并签发会话；本地启动器已移除免密码开发登录，前端 `/auth` 代理和 CAS 登出也已接通。真实浏览器、重启持久化和 CAS Ticket 单次使用均已验证，详见 [DEMO-01 CAS 联调记录](../acceptance/b/demo-01-cas-20261030.md)。联调辅助项目同时修复了登出 service 未注册时的开放重定向。
-
-当前接续点是 DEMO-02 上传/转写；M1-Demo 和 B 仍未完成。
-
-以下段落记录 2026-10-28 R2 文档调整时的基线；2026-10-30 接续已按该基线启动 DEMO-01 代码与联调。生效规则为 [AMA-DEMO-FIRST-20261028 R2](../superpowers/plans/2026-10-28-ama-demo-first-adjustment.md)；先交付 M1-Demo，再以 B-QUAL 完成 M1-B，真实平台和生产资格各自验收。
+本次依据用户“按照你的建议重构”重组计划与接续文档，范围仍是文档：未启动开发、运行资源或部署，未修改业务代码、执行代码重构、提交、合并或推送。生效规则为 [AMA-DEMO-FIRST-20261028 R2](../superpowers/plans/2026-10-28-ama-demo-first-adjustment.md)；先交付 M1-Demo，再以 B-QUAL 完成 M1-B，真实平台和生产资格各自验收。
 
 ## 1. 接续时先读什么
 

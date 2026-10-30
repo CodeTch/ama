@@ -9,7 +9,12 @@ public interface ExternalOperationPort {
     /** Reject ambient transactions. The marker must ACTUALLY commit before this token can authorize any call. */
     Optional<OperationToken> beginExternal(TaskLease lease, ExternalRequest request);
     interface PreparedRequest {}
-    interface PreparedObservation {}
+    interface PreparedObservation {
+        /** Controls only in-memory cache lifetime after a failed local transaction. False acknowledges
+         * nothing: release the session for normal committed reconciliation of the ORIGINAL execution.
+         * Never reset this preparation's budget, repeat the remote effect, or settle a permit here. */
+        default boolean retainForLocalRetry(RuntimeException failure){return true;}
+    }
     interface ExecutionContext {}
     default Optional<OperationToken> beginPrepared(TaskLease lease, PreparedRequest request) {
         throw new IllegalStateException("Prepared external policy not installed");

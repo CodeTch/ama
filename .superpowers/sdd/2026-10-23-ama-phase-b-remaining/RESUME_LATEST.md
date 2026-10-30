@@ -1,15 +1,16 @@
-# Resume latest — Demo first R2, 2026-10-28
+# 当前暂停接续入口：导入会议，2026-10-29
 
-Read [Demo-first R2 plan](../../../docs/superpowers/plans/2026-10-28-ama-demo-first-adjustment.md), [current handoff](../../../docs/development/demo-first-handoff-2026-10-28.md), [B open-obligation disposition](../../../docs/acceptance/b/summary.md#current-open-obligations-r2), and `current-state.json.planning_revision_20261028` (revision=R2). Use one local MySQL, local files and one host. Preserve adopted source, completed tasks, existing S3/database-mode/HA capabilities and scoped evidence; unfinished deployment work and exclusive dependencies remain pending in final F.
+**PAUSED BY USER / PARTIAL / NOT ACCEPTED。** 用户要求收拢当前调度批次后停下。本批已收束并关闭所有实施 agent，未继续下一批。
 
-Next on explicit continue: DEMO-01 meeting/info → 02 upload/transcript → 03 generation/review → 04 publication/document → 05 full M1-Demo delivery → B-QUAL formal local M1-B. Wire existing components and reproduce each page within its business slice. Reuse B-L1..4; do not restart their implementation. First Demo acceptance does not complete B. Basic protection and actual important defects block Demo; deeper core proofs remain required by M1-B.
+用户下一次说“继续任务”时，先读 [统一接续文档](../../../docs/development/import-resume-2026-10-29.md)，然后读其中两个材料检查点、[当前计划](../../../docs/superpowers/plans/2026-10-29-import-functional-completion.md) 与 [当前账本](../2026-10-29-import-pixel-parity/progress.md)。
 
-M1-Demo is NOT YET ACCEPTED; Phase B remains INCOMPLETE. Controlled synthetic minutes prove workflow, not real AI quality. Actual authorized platforms are qualified in the corresponding B tasks when available, separately from deployment. This turn only changes documents, starts no runtime or implementation and grants no new runtime authority.
+- 工作树 `/home/tanren/ama/.worktrees/phase-b-completion`，branch `codex/phase-b-completion-20261023`，HEAD `4b68213dc6b59f9cc850b6acce1a70ed4102235a`，保留所有未提交改动。
+- 当前任务为导入会议的真实功能补全，同时保持原型像素复刻；完成此页后停，不自动扩到其余页面/B整体。
+- 84文件源码快照/哈希：`.tools/local-app/prototype-parity/20261029-import-pause/source-manifest.json`。
+- 原导入18张零差异、文档7组、交互4组与完整Web310是扩展功能之前的历史有限证据，不能当作当前树已验收。
+- 暂停当前检查：typecheck exit0；聚焦测试19项中18通过、1失败（材料revision token边界），不是全绿。
+- 媒体扩展runner代码和实测已有，不要重写；v2注册/后端完整处理仍未集成。材料后端39文件、前端API/状态4文件为半成品；两个材料Vue组件尚不存在；ENHANCE未实现。
+- 新Java/V017/V028未编译/未应用。旧服务健康但新接口尚未加载。先读接续文档，不能直接运行会自动迁移的启动器。
+- 撤销旧“未来功能只做页面”豁免。功能必须真实，整套原型/B仍NOT ACCEPTED。
 
-The prior B-L5 batch is settled and cannot be restarted. Its resources/credentials remain restricted; normally owned local development resources may be reused within actual authorization, without mandatory per-run recreation. Read the old qualification matrix as sealed evidence, with current dispositions in the B summary. Stop after formal B, without automatically starting C/D/E/F.
-
-## Previous entry (historical)
-
-# Resume latest
-
-Read handoff-bl5-settled-20261028.md, current-state.json top status/execution_20261027_bl5, and bl5-final-qualification-matrix-20261028.md. The authorized one-time B-L5 batch is settled; do not restart it. Phase B incomplete. Final reviewer report is in bl5-final-integration-review-20261028/review.md when present. Prior dated pause fields are historical.
+旧 RESUME 内容与状态指针分别保存在 `archives/RESUME_LATEST-before-import-pause-20261029.md`、`archives/20261029-pre-import-pause-pointers.json`，仅供历史核对，不是下一步指令。暂停期间不启动开发、审查、迁移、构建或服务切换；等待用户“继续任务”。

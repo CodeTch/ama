@@ -24,7 +24,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 /** Explicit development classpath only. Never packaged in the production API artifact. */
 @Configuration(proxyBeanMethods=false)
 public class LocalApplication {
-    static final Map<String,String> USERS=Map.of("dev-owner","开发负责人","dev-member","开发参会人","dev-viewer","开发访客");
+    static final Map<String,String> USERS=Map.of("1","测试账号1","dev-owner","开发负责人","dev-member","开发参会人","dev-viewer","开发访客","dev-admin","开发平台管理员");
 
     public static void main(String[] args) {
         requireLocalConfiguration();
@@ -57,7 +57,7 @@ public class LocalApplication {
                 throw new IllegalArgumentException("Invalid development directory query");
             var rows=jdbc.query("""
                 SELECT enterprise_id,display_name FROM enterprise_identity
-                WHERE status='ACTIVE' AND enterprise_id IN ('dev-owner','dev-member','dev-viewer')
+                WHERE status='ACTIVE' AND enterprise_id IN ('1','dev-owner','dev-member','dev-viewer','dev-admin')
                 AND (LOCATE(?,enterprise_id)>0 OR LOCATE(?,display_name)>0) AND enterprise_id>?
                 ORDER BY enterprise_id LIMIT ?
                 """,(r,n)->new Person(r.getString(1),r.getString(2),"本地开发",true),query,query,cursor==null?"":cursor,limit+1);
@@ -75,12 +75,23 @@ public class LocalApplication {
     @Bean ApplicationRunner localSeed(DataSource source,MeetingService meetings,RosterService rosters,Environment env) {
         return args->{
             Path marker=Path.of(env.getRequiredProperty("local-dev.seed-marker"));
-            if(Files.exists(marker))return;
             var jdbc=new JdbcTemplate(source);
+            Path adminMarker=marker.resolveSibling("seeded-admin");
+            if(!Files.exists(adminMarker)){
+                new ama.db.TransactionRunner(source).required(()->{
+                    jdbc.update("INSERT IGNORE INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES ('dev-admin',?,'ACTIVE',UTC_TIMESTAMP(6))",USERS.get("dev-admin"));
+                    var roles=jdbc.queryForList("SELECT role FROM role_assignment WHERE enterprise_id='dev-admin'",String.class);
+                    if(roles.stream().anyMatch(role->!role.equals("PLATFORM_ADMIN")))throw new IllegalStateException("Local admin fixture already has another role");
+                    jdbc.update("INSERT IGNORE INTO role_assignment(enterprise_id,role,assigned_at) VALUES ('dev-admin','PLATFORM_ADMIN',UTC_TIMESTAMP(6))");
+                    return null;
+                });
+                Files.writeString(adminMarker,"Local platform-admin-only fixture initialized\n",StandardOpenOption.CREATE_NEW);
+            }
             for(var user:USERS.entrySet()) {
                 jdbc.update("INSERT IGNORE INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",user.getKey(),user.getValue());
-                jdbc.update("INSERT IGNORE INTO role_assignment(enterprise_id,role,assigned_at) VALUES (?,'USER',UTC_TIMESTAMP(6))",user.getKey());
+                jdbc.update("INSERT IGNORE INTO role_assignment(enterprise_id,role,assigned_at) VALUES (?,?,UTC_TIMESTAMP(6))",user.getKey(),user.getKey().equals("dev-admin")?"PLATFORM_ADMIN":"USER");
             }
+            if(Files.exists(marker))return;
             var day=LocalDate.parse(env.getRequiredProperty("local-dev.seed-date"));
             seed(meetings,rosters,"dev-owner","dev-member","产品周会（本地示例）","project",day);
             seed(meetings,rosters,"dev-member","dev-owner","需求评审（本地示例）","review",day);
@@ -89,7 +100,7 @@ public class LocalApplication {
     }
 
     private static void seed(MeetingService meetings,RosterService rosters,String owner,String member,String title,String category,LocalDate date) {
-        var actor=new Actor(owner,Status.ACTIVE,Set.of(Role.USER));
+        var actor=new Actor(owner,Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
         String key="local-demo-v1-"+owner;
         var meeting=meetings.create(actor,key+"-create",UUID.randomUUID().toString());
         var saved=meetings.save(actor,meeting.id(),key+"-info",new SaveInfo(0L,title,category,

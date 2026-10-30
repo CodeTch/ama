@@ -66,7 +66,7 @@ public final class JdbcTranscriptAuthority {
  public static Components create(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,
          FileBackendCatalog backends,Map<String,FileReferencePolicy> legacy,ArchiveReadBudget budget,CanonicalBudget canonical){
   if(legacy.containsKey(REFERENCE))throw new IllegalArgumentException("Production transcript authority owns its complete policy registration");
-  var authority=new JdbcTranscriptAuthority(source,tx,access,budget,canonical);authority.purposes=Objects.requireNonNull(purposes);authority.savedBackends=Objects.requireNonNull(backends);var policies=new HashMap<>(legacy);policies.put(REFERENCE,authority.policy);
+  var authority=new JdbcTranscriptAuthority(source,tx,access,budget,canonical);authority.purposes=Objects.requireNonNull(purposes);authority.savedBackends=Objects.requireNonNull(backends);var policies=new HashMap<>(legacy);policies.put(REFERENCE,authority.policy);var materials=new MaterialFileReferencePolicy(source);policies.put(MaterialFileReferencePolicy.CONTENT,materials);policies.put(MaterialFileReferencePolicy.TEXT,materials);
   var registry=new JdbcFileRegistry(source,tx,access,purposes,backends,policies,budget);authority.attach(registry);registry.installPublicationGuard(authority.publicationWrites);
   return new Components(registry,authority,new JdbcProcessingIntakeFacts(authority),new JdbcProcessingSourceReader(authority));
  }
@@ -105,7 +105,7 @@ public final class JdbcTranscriptAuthority {
    "batch",obj("id",batch,"kind","TRANSCRIPT","files",new Sequence(ordered)),"sourceRevisionId",null,"materials",obj("mode","EMPTY","items",list()),
    "configs",obj("processing",wire(processing),"parser",wire(parser),"model",null,"prompt",null,"profiles",list(obj("kind","CANONICAL_CODEC","ref",wire(refs.get(ArtifactType.CANONICAL_CODEC))),obj("kind","CONFIRMATION_HASH","ref",wire(refs.get(ArtifactType.CONFIRMATION_HASH))))),
    "base",obj("meetingRevision",target,"subjectBusinessVersion",target,"cancelEpoch",draft.cancelEpoch()),
-   "steps",list(obj("ordinal",1,"kind","IMPORT_TXT","parentInput",null,"priorOutput",null,"source",obj("kind","INPUT_BATCH","id",batch),"config",wire(processing),"parser",wire(parser),"model",null,"prompt",null)));
+   "steps",list(obj("ordinal",1,"kind",parser.version().equals("ama.media-documents.v1")?"IMPORT_MEDIA_DOCUMENT":parser.version().equals("ama.office-documents.v1")?"IMPORT_DOCUMENT":"IMPORT_TXT","parentInput",null,"priorOutput",null,"source",obj("kind","INPUT_BATCH","id",batch),"config",wire(processing),"parser",wire(parser),"model",null,"prompt",null)));
   byte[] bytes=CanonicalJson.encode(manifestValue,budget.maxManifestBytes(),cancelled);String manifest=new String(bytes,StandardCharsets.UTF_8);
   var rows=new ArrayList<FullRow>();rows.add(row(Table.INPUT_BATCH,batch,draft.meetingId(),"TRANSCRIPT",batchHash,target,time));
   for(var m:members)rows.add(row(Table.INPUT_BATCH_FILE,batch,m.ordinal(),m.fileId(),m.sha256()));

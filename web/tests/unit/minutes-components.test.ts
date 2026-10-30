@@ -28,3 +28,12 @@ test('actual evidence pagination reaches and repairs association 101',async()=>{
   const html=await renderToString(createSSRApp({render:()=>h({...component,setup(p:any,c:any){captured=component.setup(p,c);assert.equal(captured.anchorPages.value,2);captured.anchorPage.value++;return captured;}},{editor})}));assert.match(html,/LAST SOURCE NEEDS REPAIR/);assert.match(html,/上一页来源/);assert.equal((html.match(/关联所选文字/g)??[]).length,1);captured.selection.value={startToken:'0',endToken:'5'};captured.anchor('101');assert.equal(corrected,'101');
  }finally{await server.close();}
 });
+
+test('candidate comparison shows only the selected candidate body and set rather than graph ancestry',async()=>{
+ const server=await createServer({server:{middlewareMode:true},appType:'custom'});let captured:any;
+ try{const {applicationKey}=await server.ssrLoadModule('/src/application.ts'),c=(await server.ssrLoadModule('/src/features/minutes/MinutesWorkspace.vue')).default;
+  const app=createSSRApp({render:()=>h({...c,setup(p:any,ctx:any){captured=c.setup(p,ctx);captured.candidate.value={candidate:{candidateId:id,minutesRevisionId:'new-body',elementSetId:'new-set',state:'PENDING'},eligibility:{canAdopt:true,reasons:[]},graph:{minutes_revision:[{id:'old-body',title:'ANCESTOR TITLE',body:'ANCESTOR BODY'},{id:'new-body',title:'SELECTED TITLE',body:'SELECTED BODY'}],minutes_element:[{id:'old-element',set_id:'old-set',category:'OVERVIEW',body:'ANCESTOR ELEMENT'},{id:'new-element',set_id:'new-set',category:'OVERVIEW',body:'SELECTED ELEMENT'}],action_suggestion:[]}};return captured;}},{meetingId:meeting,owner:true})});
+  app.provide(applicationKey,{session:{current:shallowRef({actor:{enterpriseId:'owner'}})},minutesScopeReady:shallowRef(true),workspace:{navigation:async()=>({relation:'OWNER',navigationState:'CHECK_PRODUCER'})},minutesSaved:{current:async()=>{throw Error('unavailable');}},publications:{current:async()=>({publication:null}),final:async()=>({confirmation:null}),readiness:async()=>({ready:false,blockers:[],required:[],pendingCandidateIds:[],outstandingTaskIds:[],optionalReviewIds:[]})}});
+  const html=await renderToString(app);assert.match(html,/SELECTED BODY/);assert.match(html,/SELECTED ELEMENT/);assert.doesNotMatch(html,/ANCESTOR (TITLE|BODY|ELEMENT)/);
+ }finally{captured?.editor.dispose();captured?.actions.dispose();await server.close();}
+});

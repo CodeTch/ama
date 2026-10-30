@@ -32,7 +32,7 @@ public interface TranscriptDocumentParser {
     enum ErrorCode {
         INVALID_ARGUMENT, INVALID_UTF8, INVALID_TEXT, NO_TEXT, SOURCE_HASH_MISMATCH,
         SOURCE_BYTES_EXCEEDED, UTF16_CODE_UNITS_EXCEEDED, SEGMENTS_EXCEEDED,
-        CANCELLED, SOURCE_READ_FAILED
+        CANCELLED, SOURCE_READ_FAILED, ENGINE_UNAVAILABLE, INVALID_MEDIA, AUDIO_REQUIRED, AUDIO_DURATION_EXCEEDED
     }
 
     /** Safe diagnostic only: no source content, path, provider details or partial result. */

@@ -1,0 +1,1223 @@
+{
+  "table_count": 99,
+  "field_count": 751,
+  "explicit_constraint_lines": 431,
+  "pages": 139,
+  "chinese_chars": 59616,
+  "source_dictionary_sha256": "056389328a755a8b82a76064232363ce26e8bdd7a253aed8398ff919ef770b8f",
+  "pdf_sha256": "fe9103ae07a570af7b4762921ef5f1f45933a6926ad8ba715160f9028c27c22e",
+  "tables": [
+    {
+      "name": "audit_event",
+      "fields": 8,
+      "usage_complete": true
+    },
+    {
+      "name": "department",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "enterprise_identity",
+      "fields": 6,
+      "usage_complete": true
+    },
+    {
+      "name": "role_assignment",
+      "fields": 3,
+      "usage_complete": true
+    },
+    {
+      "name": "identity_session",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "meeting",
+      "fields": 25,
+      "usage_complete": true
+    },
+    {
+      "name": "meeting_info_revision",
+      "fields": 9,
+      "usage_complete": true
+    },
+    {
+      "name": "roster_revision",
+      "fields": 6,
+      "usage_complete": true
+    },
+    {
+      "name": "roster_member",
+      "fields": 5,
+      "usage_complete": true
+    },
+    {
+      "name": "meeting_access_grant",
+      "fields": 5,
+      "usage_complete": true
+    },
+    {
+      "name": "idempotency_record",
+      "fields": 10,
+      "usage_complete": true
+    },
+    {
+      "name": "info_suggestion",
+      "fields": 6,
+      "usage_complete": true
+    },
+    {
+      "name": "storage_backend",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "file_object",
+      "fields": 14,
+      "usage_complete": true
+    },
+    {
+      "name": "file_reference",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "upload_session",
+      "fields": 15,
+      "usage_complete": true
+    },
+    {
+      "name": "upload_part",
+      "fields": 5,
+      "usage_complete": true
+    },
+    {
+      "name": "file_cleanup",
+      "fields": 11,
+      "usage_complete": true
+    },
+    {
+      "name": "task_subject",
+      "fields": 5,
+      "usage_complete": true
+    },
+    {
+      "name": "durable_task",
+      "fields": 22,
+      "usage_complete": true
+    },
+    {
+      "name": "task_attempt",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "external_operation",
+      "fields": 16,
+      "usage_complete": true
+    },
+    {
+      "name": "task_outbox_sequence",
+      "fields": 2,
+      "usage_complete": true
+    },
+    {
+      "name": "task_outbox",
+      "fields": 9,
+      "usage_complete": true
+    },
+    {
+      "name": "outbox_consumer",
+      "fields": 5,
+      "usage_complete": true
+    },
+    {
+      "name": "model_capacity",
+      "fields": 5,
+      "usage_complete": true
+    },
+    {
+      "name": "model_reservation",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "input_batch",
+      "fields": 6,
+      "usage_complete": true
+    },
+    {
+      "name": "input_batch_file",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "transcript_revision",
+      "fields": 11,
+      "usage_complete": true
+    },
+    {
+      "name": "transcript_segment",
+      "fields": 9,
+      "usage_complete": true
+    },
+    {
+      "name": "transcript_confirmation",
+      "fields": 6,
+      "usage_complete": true
+    },
+    {
+      "name": "template_revision",
+      "fields": 8,
+      "usage_complete": true
+    },
+    {
+      "name": "generation_input",
+      "fields": 13,
+      "usage_complete": true
+    },
+    {
+      "name": "minutes_revision",
+      "fields": 10,
+      "usage_complete": true
+    },
+    {
+      "name": "element_set",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "minutes_element",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "action_item",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "exclusion_revision",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "sensitive_exclusion",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "generation_candidate",
+      "fields": 11,
+      "usage_complete": true
+    },
+    {
+      "name": "source_locator",
+      "fields": 12,
+      "usage_complete": true
+    },
+    {
+      "name": "evidence_link",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "final_confirmation",
+      "fields": 15,
+      "usage_complete": true
+    },
+    {
+      "name": "publication",
+      "fields": 10,
+      "usage_complete": true
+    },
+    {
+      "name": "publication_attempt",
+      "fields": 9,
+      "usage_complete": true
+    },
+    {
+      "name": "external_document_mapping",
+      "fields": 6,
+      "usage_complete": true
+    },
+    {
+      "name": "publication_governance",
+      "fields": 8,
+      "usage_complete": true
+    },
+    {
+      "name": "external_event_receipt",
+      "fields": 5,
+      "usage_complete": true
+    },
+    {
+      "name": "media_source",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "media_source_span",
+      "fields": 6,
+      "usage_complete": true
+    },
+    {
+      "name": "speaker",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "correction",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "edit_operation",
+      "fields": 8,
+      "usage_complete": true
+    },
+    {
+      "name": "recording_session",
+      "fields": 9,
+      "usage_complete": true
+    },
+    {
+      "name": "recording_part",
+      "fields": 6,
+      "usage_complete": true
+    },
+    {
+      "name": "recording_chunk",
+      "fields": 8,
+      "usage_complete": true
+    },
+    {
+      "name": "subtitle_revision",
+      "fields": 9,
+      "usage_complete": true
+    },
+    {
+      "name": "material_reference",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "material_revision",
+      "fields": 8,
+      "usage_complete": true
+    },
+    {
+      "name": "material_snapshot",
+      "fields": 5,
+      "usage_complete": true
+    },
+    {
+      "name": "material_snapshot_item",
+      "fields": 3,
+      "usage_complete": true
+    },
+    {
+      "name": "parsed_document",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "parsed_unit",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "export_job",
+      "fields": 9,
+      "usage_complete": true
+    },
+    {
+      "name": "meeting_deletion",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "topic",
+      "fields": 8,
+      "usage_complete": true
+    },
+    {
+      "name": "meeting_topic",
+      "fields": 3,
+      "usage_complete": true
+    },
+    {
+      "name": "corpus_feedback",
+      "fields": 12,
+      "usage_complete": true
+    },
+    {
+      "name": "feedback_segment",
+      "fields": 3,
+      "usage_complete": true
+    },
+    {
+      "name": "corpus_revision",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "voiceprint_consent",
+      "fields": 10,
+      "usage_complete": true
+    },
+    {
+      "name": "voiceprint_sample",
+      "fields": 13,
+      "usage_complete": true
+    },
+    {
+      "name": "evaluation_dataset",
+      "fields": 6,
+      "usage_complete": true
+    },
+    {
+      "name": "configuration_revision",
+      "fields": 10,
+      "usage_complete": true
+    },
+    {
+      "name": "evaluation_run",
+      "fields": 10,
+      "usage_complete": true
+    },
+    {
+      "name": "configuration_release",
+      "fields": 8,
+      "usage_complete": true
+    },
+    {
+      "name": "mail_job",
+      "fields": 10,
+      "usage_complete": true
+    },
+    {
+      "name": "mail_recipient",
+      "fields": 6,
+      "usage_complete": true
+    },
+    {
+      "name": "meeting_search_projection",
+      "fields": 7,
+      "usage_complete": true
+    },
+    {
+      "name": "meeting_person_search",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "minutes_template",
+      "fields": 8,
+      "usage_complete": true
+    },
+    {
+      "name": "external_execution",
+      "fields": 14,
+      "usage_complete": true
+    },
+    {
+      "name": "transcription_input",
+      "fields": 17,
+      "usage_complete": true
+    },
+    {
+      "name": "transcript_segment_mark",
+      "fields": 3,
+      "usage_complete": true
+    },
+    {
+      "name": "sensitive_detection",
+      "fields": 5,
+      "usage_complete": true
+    },
+    {
+      "name": "sensitive_detection_source",
+      "fields": 2,
+      "usage_complete": true
+    },
+    {
+      "name": "background_note",
+      "fields": 5,
+      "usage_complete": true
+    },
+    {
+      "name": "background_note_source",
+      "fields": 2,
+      "usage_complete": true
+    },
+    {
+      "name": "action_suggestion",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "result_review",
+      "fields": 13,
+      "usage_complete": true
+    },
+    {
+      "name": "result_review_evidence",
+      "fields": 2,
+      "usage_complete": true
+    },
+    {
+      "name": "final_result_review",
+      "fields": 2,
+      "usage_complete": true
+    },
+    {
+      "name": "source_context",
+      "fields": 9,
+      "usage_complete": true
+    },
+    {
+      "name": "source_context_material",
+      "fields": 3,
+      "usage_complete": true
+    },
+    {
+      "name": "parsed_document_profile",
+      "fields": 4,
+      "usage_complete": true
+    },
+    {
+      "name": "input_batch_fingerprint_profile",
+      "fields": 2,
+      "usage_complete": true
+    },
+    {
+      "name": "meeting_minutes_editor_guard",
+      "fields": 2,
+      "usage_complete": true
+    },
+    {
+      "name": "publication_submission",
+      "fields": 19,
+      "usage_complete": true
+    }
+  ],
+  "headings": [
+    {
+      "title": "1. 先理解这套数据库在保护什么",
+      "page": 8,
+      "level": 0
+    },
+    {
+      "title": "1.1 阅读基线与文档范围",
+      "page": 8,
+      "level": 1
+    },
+    {
+      "title": "1.2 为什么会议助手需要这么多表",
+      "page": 8,
+      "level": 1
+    },
+    {
+      "title": "1.3 八个领域及使用场景",
+      "page": 9,
+      "level": 1
+    },
+    {
+      "title": "1.4 数据与文件如何分工",
+      "page": 9,
+      "level": 1
+    },
+    {
+      "title": "2. 贯穿所有表的设计规则",
+      "page": 10,
+      "level": 0
+    },
+    {
+      "title": "2.1 当前指针、不可变版本和候选",
+      "page": 10,
+      "level": 1
+    },
+    {
+      "title": "2.2 一行存在，不等于业务上有权引用",
+      "page": 10,
+      "level": 1
+    },
+    {
+      "title": "2.3 revision、epoch、hash各自解决什么",
+      "page": 10,
+      "level": 1
+    },
+    {
+      "title": "2.4 身份、时间、排序规则与空值",
+      "page": 10,
+      "level": 1
+    },
+    {
+      "title": "2.5 索引为什么按查询路径组织",
+      "page": 11,
+      "level": 1
+    },
+    {
+      "title": "2.6 事务和锁的职责",
+      "page": 11,
+      "level": 1
+    },
+    {
+      "title": "2.7 删除、历史和迁移",
+      "page": 11,
+      "level": 1
+    },
+    {
+      "title": "3. 表如何串成实际业务流程",
+      "page": 12,
+      "level": 0
+    },
+    {
+      "title": "3.1 新建会议与确认参会人",
+      "page": 12,
+      "level": 1
+    },
+    {
+      "title": "3.2 文件导入、录音保存和正式转写",
+      "page": 12,
+      "level": 1
+    },
+    {
+      "title": "3.3 背景材料、解析与证据定位",
+      "page": 12,
+      "level": 1
+    },
+    {
+      "title": "3.4 生成、编辑、敏感排除和人工复核",
+      "page": 13,
+      "level": 1
+    },
+    {
+      "title": "3.5 最终确认、发布与超时查回",
+      "page": 13,
+      "level": 1
+    },
+    {
+      "title": "3.6 回看、导出、专题、邮件和删除",
+      "page": 13,
+      "level": 1
+    },
+    {
+      "title": "3.7 质量改进和配置发布",
+      "page": 14,
+      "level": 1
+    },
+    {
+      "title": "3.8 可靠任务、事件、额度和审计",
+      "page": 14,
+      "level": 1
+    },
+    {
+      "title": "4. 逐表详解阅读方法",
+      "page": 15,
+      "level": 0
+    },
+    {
+      "title": "5. 身份、会议与访问（12张表）",
+      "page": 16,
+      "level": 0
+    },
+    {
+      "title": "01 department｜企业部门目录",
+      "page": 16,
+      "level": 1
+    },
+    {
+      "title": "02 enterprise_identity｜企业账号身份",
+      "page": 17,
+      "level": 1
+    },
+    {
+      "title": "03 role_assignment｜平台管理角色",
+      "page": 18,
+      "level": 1
+    },
+    {
+      "title": "04 identity_session｜共享登录会话",
+      "page": 19,
+      "level": 1
+    },
+    {
+      "title": "05 meeting｜会议主记录",
+      "page": 20,
+      "level": 1
+    },
+    {
+      "title": "06 meeting_info_revision｜会议信息历史",
+      "page": 23,
+      "level": 1
+    },
+    {
+      "title": "07 roster_revision｜参会名单版本",
+      "page": 24,
+      "level": 1
+    },
+    {
+      "title": "08 roster_member｜名单成员明细",
+      "page": 25,
+      "level": 1
+    },
+    {
+      "title": "09 meeting_access_grant｜有效会议阅读授权",
+      "page": 26,
+      "level": 1
+    },
+    {
+      "title": "10 info_suggestion｜AI会议信息建议",
+      "page": 27,
+      "level": 1
+    },
+    {
+      "title": "11 meeting_search_projection｜会议检索投影",
+      "page": 28,
+      "level": 1
+    },
+    {
+      "title": "12 meeting_person_search｜确认人员检索投影",
+      "page": 29,
+      "level": 1
+    },
+    {
+      "title": "6. 文件、采集与媒体（15张表）",
+      "page": 31,
+      "level": 0
+    },
+    {
+      "title": "13 storage_backend｜文件后端注册",
+      "page": 31,
+      "level": 1
+    },
+    {
+      "title": "14 file_object｜受管文件登记",
+      "page": 32,
+      "level": 1
+    },
+    {
+      "title": "15 file_reference｜文件使用账本",
+      "page": 33,
+      "level": 1
+    },
+    {
+      "title": "16 upload_session｜可恢复上传会话",
+      "page": 34,
+      "level": 1
+    },
+    {
+      "title": "17 upload_part｜上传分片回执",
+      "page": 36,
+      "level": 1
+    },
+    {
+      "title": "18 file_cleanup｜文件清理任务",
+      "page": 37,
+      "level": 1
+    },
+    {
+      "title": "19 input_batch｜正式处理批次",
+      "page": 38,
+      "level": 1
+    },
+    {
+      "title": "20 input_batch_file｜处理批次文件明细",
+      "page": 39,
+      "level": 1
+    },
+    {
+      "title": "21 input_batch_fingerprint_profile｜批次摘要规则绑定",
+      "page": 40,
+      "level": 1
+    },
+    {
+      "title": "22 media_source｜标准化媒体",
+      "page": 41,
+      "level": 1
+    },
+    {
+      "title": "23 media_source_span｜媒体来源时间轴",
+      "page": 42,
+      "level": 1
+    },
+    {
+      "title": "24 recording_session｜在线录音会话",
+      "page": 43,
+      "level": 1
+    },
+    {
+      "title": "25 recording_part｜录音分段",
+      "page": 44,
+      "level": 1
+    },
+    {
+      "title": "26 recording_chunk｜已保存录音片",
+      "page": 45,
+      "level": 1
+    },
+    {
+      "title": "27 subtitle_revision｜实时字幕修订",
+      "page": 46,
+      "level": 1
+    },
+    {
+      "title": "7. 背景材料与来源（11张表）",
+      "page": 48,
+      "level": 0
+    },
+    {
+      "title": "28 material_reference｜材料逻辑关联",
+      "page": 48,
+      "level": 1
+    },
+    {
+      "title": "29 material_revision｜材料源版本",
+      "page": 49,
+      "level": 1
+    },
+    {
+      "title": "30 material_snapshot｜已应用材料集合",
+      "page": 50,
+      "level": 1
+    },
+    {
+      "title": "31 material_snapshot_item｜材料集合成员",
+      "page": 51,
+      "level": 1
+    },
+    {
+      "title": "32 parsed_document｜材料解析结果",
+      "page": 52,
+      "level": 1
+    },
+    {
+      "title": "33 parsed_unit｜解析页段单元",
+      "page": 53,
+      "level": 1
+    },
+    {
+      "title": "34 parsed_document_profile｜解析规则档案",
+      "page": 54,
+      "level": 1
+    },
+    {
+      "title": "35 source_context｜完整来源上下文",
+      "page": 55,
+      "level": 1
+    },
+    {
+      "title": "36 source_context_material｜上下文解析选择",
+      "page": 56,
+      "level": 1
+    },
+    {
+      "title": "37 source_locator｜来源定位",
+      "page": 57,
+      "level": 1
+    },
+    {
+      "title": "38 evidence_link｜成果证据关联",
+      "page": 58,
+      "level": 1
+    },
+    {
+      "title": "8. 转写与人工编辑（8张表）",
+      "page": 60,
+      "level": 0
+    },
+    {
+      "title": "39 transcription_input｜转写处理输入",
+      "page": 60,
+      "level": 1
+    },
+    {
+      "title": "40 transcript_revision｜转写历史版本",
+      "page": 62,
+      "level": 1
+    },
+    {
+      "title": "41 transcript_segment｜转写片段正文",
+      "page": 64,
+      "level": 1
+    },
+    {
+      "title": "42 transcript_confirmation｜转写确认事实",
+      "page": 65,
+      "level": 1
+    },
+    {
+      "title": "43 transcript_segment_mark｜转写片段标记",
+      "page": 66,
+      "level": 1
+    },
+    {
+      "title": "44 speaker｜会议说话人标签",
+      "page": 67,
+      "level": 1
+    },
+    {
+      "title": "45 correction｜转写纠错建议",
+      "page": 68,
+      "level": 1
+    },
+    {
+      "title": "46 edit_operation｜编辑与撤销轨迹",
+      "page": 69,
+      "level": 1
+    },
+    {
+      "title": "9. 纪要、要素与复核（18张表）",
+      "page": 71,
+      "level": 0
+    },
+    {
+      "title": "47 minutes_template｜纪要模板逻辑根",
+      "page": 71,
+      "level": 1
+    },
+    {
+      "title": "48 template_revision｜纪要模板历史",
+      "page": 72,
+      "level": 1
+    },
+    {
+      "title": "49 generation_input｜纪要生成快照",
+      "page": 73,
+      "level": 1
+    },
+    {
+      "title": "50 element_set｜会议要素集合",
+      "page": 74,
+      "level": 1
+    },
+    {
+      "title": "51 minutes_element｜七类会议要素",
+      "page": 75,
+      "level": 1
+    },
+    {
+      "title": "52 action_item｜已接受行动字段",
+      "page": 77,
+      "level": 1
+    },
+    {
+      "title": "53 action_suggestion｜AI行动字段建议",
+      "page": 78,
+      "level": 1
+    },
+    {
+      "title": "54 minutes_revision｜纪要正文版本",
+      "page": 79,
+      "level": 1
+    },
+    {
+      "title": "55 generation_candidate｜待采用生成结果",
+      "page": 80,
+      "level": 1
+    },
+    {
+      "title": "56 exclusion_revision｜敏感排除设置版本",
+      "page": 81,
+      "level": 1
+    },
+    {
+      "title": "57 sensitive_exclusion｜已选择排除明细",
+      "page": 82,
+      "level": 1
+    },
+    {
+      "title": "58 sensitive_detection｜敏感检测目录",
+      "page": 83,
+      "level": 1
+    },
+    {
+      "title": "59 sensitive_detection_source｜检测项来源集合",
+      "page": 84,
+      "level": 1
+    },
+    {
+      "title": "60 background_note｜背景补充说明",
+      "page": 85,
+      "level": 1
+    },
+    {
+      "title": "61 background_note_source｜背景说明出处",
+      "page": 86,
+      "level": 1
+    },
+    {
+      "title": "62 result_review｜人工内容复核断言",
+      "page": 87,
+      "level": 1
+    },
+    {
+      "title": "63 result_review_evidence｜复核使用的证据集合",
+      "page": 89,
+      "level": 1
+    },
+    {
+      "title": "64 meeting_minutes_editor_guard｜纪要编辑意图守护",
+      "page": 90,
+      "level": 1
+    },
+    {
+      "title": "10. 成果发布与资产管理（14张表）",
+      "page": 91,
+      "level": 0
+    },
+    {
+      "title": "65 final_confirmation｜最终成果确认快照",
+      "page": 91,
+      "level": 1
+    },
+    {
+      "title": "66 final_result_review｜最终确认复核成员",
+      "page": 93,
+      "level": 1
+    },
+    {
+      "title": "67 publication｜会议发布根",
+      "page": 94,
+      "level": 1
+    },
+    {
+      "title": "68 publication_submission｜发布受理历史",
+      "page": 95,
+      "level": 1
+    },
+    {
+      "title": "69 publication_attempt｜发布及查回尝试",
+      "page": 98,
+      "level": 1
+    },
+    {
+      "title": "70 external_document_mapping｜外部正式文档映射",
+      "page": 99,
+      "level": 1
+    },
+    {
+      "title": "71 publication_governance｜发布撤回与废止",
+      "page": 100,
+      "level": 1
+    },
+    {
+      "title": "72 external_event_receipt｜外部事件回执",
+      "page": 101,
+      "level": 1
+    },
+    {
+      "title": "73 export_job｜成果导出任务",
+      "page": 102,
+      "level": 1
+    },
+    {
+      "title": "74 meeting_deletion｜会议删除进度",
+      "page": 103,
+      "level": 1
+    },
+    {
+      "title": "75 topic｜个人专题",
+      "page": 104,
+      "level": 1
+    },
+    {
+      "title": "76 meeting_topic｜专题会议归集",
+      "page": 105,
+      "level": 1
+    },
+    {
+      "title": "77 mail_job｜受控邮件任务",
+      "page": 106,
+      "level": 1
+    },
+    {
+      "title": "78 mail_recipient｜逐收件人发送结果",
+      "page": 107,
+      "level": 1
+    },
+    {
+      "title": "11. 运营治理与质量（9张表）",
+      "page": 109,
+      "level": 0
+    },
+    {
+      "title": "79 corpus_feedback｜语料反馈工单",
+      "page": 109,
+      "level": 1
+    },
+    {
+      "title": "80 feedback_segment｜反馈片段范围",
+      "page": 110,
+      "level": 1
+    },
+    {
+      "title": "81 corpus_revision｜审核语料版本",
+      "page": 111,
+      "level": 1
+    },
+    {
+      "title": "82 voiceprint_consent｜声纹用途授权",
+      "page": 112,
+      "level": 1
+    },
+    {
+      "title": "83 voiceprint_sample｜声纹样本",
+      "page": 113,
+      "level": 1
+    },
+    {
+      "title": "84 evaluation_dataset｜评测数据集版本",
+      "page": 115,
+      "level": 1
+    },
+    {
+      "title": "85 evaluation_run｜一次质量评测",
+      "page": 116,
+      "level": 1
+    },
+    {
+      "title": "86 configuration_revision｜配置候选版本",
+      "page": 117,
+      "level": 1
+    },
+    {
+      "title": "87 configuration_release｜配置生效与回滚",
+      "page": 118,
+      "level": 1
+    },
+    {
+      "title": "12. 任务、集成与审计（12张表）",
+      "page": 120,
+      "level": 0
+    },
+    {
+      "title": "88 audit_event｜关键操作审计",
+      "page": 120,
+      "level": 1
+    },
+    {
+      "title": "89 idempotency_record｜业务请求幂等",
+      "page": 121,
+      "level": 1
+    },
+    {
+      "title": "90 task_subject｜业务任务版本边界",
+      "page": 122,
+      "level": 1
+    },
+    {
+      "title": "91 durable_task｜持久后台任务",
+      "page": 123,
+      "level": 1
+    },
+    {
+      "title": "92 task_attempt｜任务领取历史",
+      "page": 125,
+      "level": 1
+    },
+    {
+      "title": "93 external_operation｜外部逻辑操作",
+      "page": 126,
+      "level": 1
+    },
+    {
+      "title": "94 external_execution｜外部执行轮次",
+      "page": 128,
+      "level": 1
+    },
+    {
+      "title": "95 task_outbox_sequence｜事件提交序列",
+      "page": 130,
+      "level": 1
+    },
+    {
+      "title": "96 task_outbox｜持久业务事件",
+      "page": 131,
+      "level": 1
+    },
+    {
+      "title": "97 outbox_consumer｜事件消费进度",
+      "page": 132,
+      "level": 1
+    },
+    {
+      "title": "98 model_capacity｜模型容量配置",
+      "page": 133,
+      "level": 1
+    },
+    {
+      "title": "99 model_reservation｜在途模型占额",
+      "page": 134,
+      "level": 1
+    },
+    {
+      "title": "附录一：最容易混淆的设计问题",
+      "page": 136,
+      "level": 0
+    },
+    {
+      "title": "为什么名单、说话人、行动负责人和授权必须分开？",
+      "page": 136,
+      "level": 1
+    },
+    {
+      "title": "为什么信息版本和meeting还会保存部分同名字段？",
+      "page": 136,
+      "level": 1
+    },
+    {
+      "title": "为什么内容版本之外还要生成输入、候选和复核？",
+      "page": 136,
+      "level": 1
+    },
+    {
+      "title": "为什么来源定位、证据关联和来源上下文三层都需要？",
+      "page": 136,
+      "level": 1
+    },
+    {
+      "title": "唯一键是否已经能避免重复发布？",
+      "page": 136,
+      "level": 1
+    },
+    {
+      "title": "为什么外部操作不直接挂在某一个task下面？",
+      "page": 136,
+      "level": 1
+    },
+    {
+      "title": "为什么不把所有状态都放进一个JSON？",
+      "page": 136,
+      "level": 1
+    },
+    {
+      "title": "为什么不自动级联删除全部关联记录？",
+      "page": 136,
+      "level": 1
+    },
+    {
+      "title": "为什么有些表很小也值得单独保留？",
+      "page": 137,
+      "level": 1
+    },
+    {
+      "title": "99张表是不是过度设计？",
+      "page": 137,
+      "level": 1
+    },
+    {
+      "title": "附录二：设计评审与实现核对清单",
+      "page": 138,
+      "level": 0
+    },
+    {
+      "title": "附录三：资料依据与术语",
+      "page": 139,
+      "level": 0
+    }
+  ]
+}

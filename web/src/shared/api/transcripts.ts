@@ -9,6 +9,7 @@ export type TranscriptDetail=components['schemas']['OwnerDetail'];
 export type TranscriptReceipt=components['schemas']['Receipt'];
 export type TranscriptSegment=components['schemas']['Segment'];
 export type TranscriptHistory=components['schemas']['History'];
+export type TranscriptSource={fileId:string;sha256:string;sizeBytes:number;revisionId:string|null};
 const object=(v:unknown):v is Record<string,unknown>=>typeof v==='object'&&v!==null&&!Array.isArray(v);
 const exact=(v:Record<string,unknown>,keys:string)=>Object.keys(v).sort().join(',')===keys;
 const shape=(v:unknown,keys:string):v is Record<string,unknown>=>object(v)&&exact(v,keys);
@@ -48,6 +49,14 @@ function receipt(v:unknown,meeting:string,confirm:boolean):v is TranscriptReceip
 function freeze<T>(v:T):T{if(v!==null&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
 function invalid():never{throw new ApiError('response',200,'转写响应暂无法确认，请保留草稿并重新读取。');}
 export function createTranscriptsApi(client:ReturnType<typeof createBusinessClient>,actor:()=>string|null){return {
+ async source(meeting:string,source:TranscriptSource,signal:AbortSignal):Promise<{blob:Blob;name:string|null}>{
+  if(!uuid(meeting)||!uuid(source.fileId)||source.revisionId!==null&&!uuid(source.revisionId)||!hash(source.sha256)||!Number.isSafeInteger(source.sizeBytes)||source.sizeBytes<0||source.sizeBytes>32*1024*1024)throw new TypeError('Exact original source required');
+  const who=actor();if(!who)throw new DOMException('Source actor unavailable','AbortError');const path=`/api/v1/meetings/${meeting}/transcript${source.revisionId===null?'':`/revisions/${source.revisionId}`}/sources/${source.fileId}`;
+  const value=await client.bytes(path,{signal,size:source.sizeBytes});const actual=[...new Uint8Array(await crypto.subtle.digest('SHA-256',value.bytes))].map(x=>x.toString(16).padStart(2,'0')).join('');if(signal.aborted||actor()!==who)throw new DOMException('Source actor changed','AbortError');if(actual!==source.sha256)throw new ApiError('response',200,'原文件校验失败，请重新读取会议。');
+  const p=new Uint8Array(value.bytes),name=value.name?.toLowerCase()??'';let type='application/octet-stream';
+  if(p.length>=12&&String.fromCharCode(...p.subarray(0,4))==='RIFF'&&String.fromCharCode(...p.subarray(8,12))==='WAVE')type='audio/wav';else if(p.length>=3&&String.fromCharCode(...p.subarray(0,3))==='ID3'||p.length>=2&&p[0]===255&&((p[1]??0)&224)===224)type='audio/mpeg';else if(p.length>=8&&String.fromCharCode(...p.subarray(4,8))==='ftyp')type=name.endsWith('.m4a')?'audio/mp4':name.endsWith('.mov')?'video/quicktime':'video/mp4';else if(p.length>=4&&p[0]===26&&p[1]===69&&p[2]===223&&p[3]===163)type=name.endsWith('.mkv')?'video/x-matroska':'audio/webm';
+  return{blob:new Blob([value.bytes],{type}),name:value.name};
+ },
  async current(meeting:string,signal:AbortSignal):Promise<TranscriptCurrent>{if(!uuid(meeting))throw new TypeError('Invalid meeting');const value=await client.json<unknown>(`/api/v1/meetings/${meeting}/transcript`,{signal,expectedStatus:200,maxResponseBytes:8*1024*1024});if(!current(value,meeting))return invalid();return freeze(value);},
  async revision(meeting:string,id:string,signal:AbortSignal):Promise<TranscriptDetail>{if(!uuid(meeting)||!uuid(id))throw new TypeError('Invalid revision');const value=await client.json<unknown>(`/api/v1/meetings/${meeting}/transcript/revisions/${id}`,{signal,expectedStatus:200,maxResponseBytes:8*1024*1024});if(!detail(value,meeting,id))return invalid();return freeze(value);},
  async history(meeting:string,before:string|null,signal:AbortSignal):Promise<TranscriptHistory>{
@@ -63,6 +72,6 @@ export function createTranscriptsApi(client:ReturnType<typeof createBusinessClie
   if(command.operation==='TRANSCRIPT_SAVE'||command.operation==='TRANSCRIPT_MARKS'){
    const keys=command.operation==='TRANSCRIPT_SAVE'?'body,marks,segmentId':'marks,segmentId';if(!exact(body,'expectedRevisionToken,segments,sourceRevisionId')||!uuid(body.sourceRevisionId)||!Array.isArray(body.segments)||body.segments.length>100000||!body.segments.every(s=>shape(s,keys)&&uuid(s.segmentId)&&marks(s.marks)&&(command.operation!=='TRANSCRIPT_SAVE'||text(s.body)))||new Set(body.segments.map(s=>s.segmentId)).size!==body.segments.length)throw new TypeError('Complete transcript segments required');
   }else{const key=command.operation==='TRANSCRIPT_CONFIRM'?'savedRevisionId':'sourceRevisionId';if(!exact(body,`expectedRevisionToken,${key}`)||!uuid(body[key]))throw new TypeError('Invalid selected transcript');}
-  const value=await client.json<unknown>(command.path,{method:operation.method,headers:{'Idempotency-Key':command.key},body:command.body,expectedStatus:200,maxResponseBytes:65536});if(!receipt(value,command.resource,command.operation==='TRANSCRIPT_CONFIRM'))return invalid();return freeze(value);
+  const value=await client.json<unknown>(command.path,{method:operation.method,headers:{'Idempotency-Key':command.key},body:command.body,expectedStatus:200,errorContract:'saved-transcript',maxResponseBytes:65536});if(!receipt(value,command.resource,command.operation==='TRANSCRIPT_CONFIRM'))return invalid();return freeze(value);
  }
 };}

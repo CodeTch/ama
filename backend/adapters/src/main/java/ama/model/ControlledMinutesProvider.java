@@ -80,7 +80,7 @@ public final class ControlledMinutesProvider implements AutoCloseable {
  }
  private static byte[] readBody(InputStream in,int length)throws IOException {byte[] bytes=in.readNBytes(length);if(bytes.length!=length)throw new EOFException("Incomplete controlled body");return bytes;}
  private ControlledMinutesStore.Receipt complete(String id)throws IOException {
-  var request=store.request(id);var payload=fields(request.payloadValue(),"protocolVersion","modelIdentity","parameters","instructionText","inputManifest","transcript","template","pinnedElements","exclusions");
+  var request=store.request(id);var payload=MaterialMinutesWire.payload(request.payloadValue());
   String instruction=text(payload.get("instructionText"));if(instruction.equals("controlled:definitive-rejection"))return store.reject(id,"CONTROLLED_REJECTION");
   if(instruction.equals("controlled:invalid-json"))return store.commitSuccess(id,"{invalid controlled JSON".getBytes(StandardCharsets.UTF_8));
   if(instruction.equals("controlled:rich-output")||instruction.equals("controlled:rich-no-sensitive"))return store.commitSuccess(id,rich(request,payload));

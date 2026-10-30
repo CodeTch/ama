@@ -93,7 +93,11 @@ public final class ExternalExecutionSession implements ExternalTaskExecution,Aut
    synchronized(monitor){if(acknowledged){pending=null;phase=Phase.FINISHED;}else{receiptOnly=true;recoverReceipt=true;phase=Phase.OPERATION;}}
    if(acknowledged){if(tracker!=null)tracker.close();if(permit!=null)try{permits.settled(permit);}catch(RuntimeException unavailable){/* Durable terminal debt is recovered independently. */}}
    return result;
-  }catch(RuntimeException unavailable){synchronized(monitor){phase=Phase.OPERATION;}throw unavailable;}
+  }catch(RuntimeException unavailable){
+   boolean retain=true;try{retain=observation.retainForLocalRetry(unavailable);}catch(RuntimeException lifetimeUnavailable){/* Unknown cache lifetime retains the only receipt. */}
+   synchronized(monitor){if(!retain&&pending==observation){pending=null;receiptOnly=true;}phase=Phase.OPERATION;}
+   throw unavailable;
+  }
  }
  boolean pending(){synchronized(monitor){return pending!=null;}}
  void retry(){PreparedObservation observation;synchronized(monitor){observation=pending;}if(observation==null)return;try{observe(observation);}catch(InterruptedException e){Thread.currentThread().interrupt();}catch(RuntimeException unavailable){/* one bounded retry on the existing poll cadence */}}

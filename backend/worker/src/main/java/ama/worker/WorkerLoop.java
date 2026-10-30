@@ -229,7 +229,7 @@ public final class WorkerLoop implements WorkerRuntime {
             if(!execution.dispatched()&&!execution.cancelled()&&!contextualHandlers.containsKey(lease.spec().type())&&!externalHandlers.containsKey(lease.spec().type())) {
                 try {if(execution.dispatch())queue.complete(lease,new TaskResult(Outcome.RECONCILING,null,"UNKNOWN_HANDLER_FAILURE"));}
                 catch(Exception unavailable){LOG.log(System.Logger.Level.WARNING,"Worker quarantine unavailable: "+unavailable.getClass().getSimpleName());}
-            } else LOG.log(System.Logger.Level.WARNING,"Worker completion unavailable: "+failure.getClass().getSimpleName());
+            } else LOG.log(System.Logger.Level.WARNING,"Worker completion unavailable: "+(failure instanceof ama.contract.MinutesContracts.Failure f?"Failure/"+f.code().name():failure.getClass().getSimpleName())+" task="+lease.taskId()+" attempt="+lease.attempt());
         } finally {
             if(heartbeat!=null)heartbeat.cancel(false);
             if(execution.external!=null&&execution.external.pending()&&!closed.get())pending.put(execution,new Pending(name,pool,execution.external));

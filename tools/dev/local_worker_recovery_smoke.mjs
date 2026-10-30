@@ -1,0 +1,12 @@
+/** Read-only actual session/API observation of ordinary Worker recovery of the original task. */
+import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {resolve} from 'node:path';import {readFile,writeFile} from 'node:fs/promises';
+const {chromium,expect}=createRequire(resolve('web/package.json'))('@playwright/test'),[fixturePath,mode,output]=process.argv.slice(2),fixture=JSON.parse(await readFile(fixturePath,'utf8')),base='http://127.0.0.1:5173';assert(['RAW','CANDIDATE','MAPPING'].includes(mode));
+const browser=await chromium.launch({headless:true});try{const page=await browser.newPage();page.setDefaultTimeout(15000);await page.goto(base+'/api/dev/login');await page.getByLabel('开发账号').selectOption('dev-owner');await page.getByRole('button',{name:'登录本地环境'}).click();await page.waitForURL(base+'/meetings');
+let transientUnavailableReads=0;
+async function read(path){const r=await page.evaluate(async path=>{const r=await fetch(path);return {status:r.status,body:await r.json()};},'/api/v1/meetings/'+fixture.meetingId+'/'+path);if(r.status===503&&['MINUTES_UNAVAILABLE','PUBLICATION_UNAVAILABLE'].includes(r.body?.error?.code)){transientUnavailableReads++;return null;}assert.equal(r.status,200,JSON.stringify(r.body));return r.body;}
+const endpoint=mode==='RAW'?'processing-tasks/':'minutes/generation-tasks/';let task;
+if(mode!=='MAPPING')await expect.poll(async()=>{const value=await read(endpoint+fixture.taskId);if(value===null)return 'TEMPORARILY_UNAVAILABLE';task=value.task??value;assert(!['FAILED','CANCELLED','STALE'].includes(task.state),'Recovery ended unsuccessfully: '+JSON.stringify(task));return task.state;},{timeout:120000,intervals:[1000,2000]}).toBe('SUCCEEDED');
+else await expect.poll(async()=>{const value=await read('publications/current');if(value===null)return 'TEMPORARILY_UNAVAILABLE';task=value.publication;assert.equal(task.currentTaskId,fixture.taskId);return task.rawState;},{timeout:120000,intervals:[1000,2000]}).toBe('SUCCEEDED');
+if(mode==='RAW'){const history=await read('transcript/history');assert.equal(history.items.length,1);assert.equal(history.items[0].kind,'RAW');}
+const report={pass:true,mode,meetingId:fixture.meetingId,taskId:fixture.taskId,originalTaskSucceeded:true,readOnlyObservation:true,transientUnavailableReads};await writeFile(output+'/api-recovery.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report));
+}finally{await browser.close();}

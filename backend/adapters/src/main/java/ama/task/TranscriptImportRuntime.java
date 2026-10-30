@@ -68,6 +68,7 @@ public final class TranscriptImportRuntime {
   Supplier<TaskResult> prepareRaw(TaskLease lease,Settings settings,PreparationCancellation cancellation) throws Exception {
    long deadline=System.nanoTime()+settings.batchDeadline().toNanos();
    BooleanSupplier cancelled=()->cancellation.cancelled()||System.nanoTime()-deadline>=0;
+   String failurePrefix="TXT_";
    try(var sourceLifetime=new ama.storage.SourceReadLifetime(cancellation,deadline)) {
     check(cancelled);
     var facts=components.authority().readWorkerFacts(lease,cancelled);
@@ -79,12 +80,12 @@ public final class TranscriptImportRuntime {
     var configs=fields(fields.get("configs"),"processing","parser","model","prompt","profiles");
     var archives=settings.archives().get().loadClosure(List.of(ref(configs.get("processing"))),settings.archiveBudget(),original.length,cancelled);
     var binding=new ConfigBindings(new StrictConfigArchiveReader(),new StrictProcessingManifestReader()).verifyProcessing(input,facts,archives,settings.archiveBudget(),cancelled);
-    require(binding.parser().version().equals(TextTranscriptParser.PROFILE_VERSION),PROFILE_UNAVAILABLE);
+    require(Set.of(TextTranscriptParser.PROFILE_VERSION,OfficeTranscriptParser.PROFILE_VERSION,MediaTranscriptParser.PROFILE_VERSION).contains(binding.parser().version()),PROFILE_UNAVAILABLE);boolean documents=binding.parser().version().equals(OfficeTranscriptParser.PROFILE_VERSION),media=binding.parser().version().equals(MediaTranscriptParser.PROFILE_VERSION);if(media)failurePrefix="MEDIA_";else if(documents)failurePrefix="DOCUMENT_";
     var members=facts.rows().stream().filter(row->row.table()==Table.INPUT_BATCH_FILE).sorted(Comparator.comparingLong(row->row.number("ordinal"))).toList();
     require(!members.isEmpty()&&members.size()<=settings.archiveBudget().maxBatchFiles(),BUDGET_EXCEEDED);
     var files=new HashMap<String,ContentFile>();for(var file:facts.files())require(files.put(file.id(),file)==null,PROVENANCE_UNAVAILABLE);
     long declared=0;for(var member:members){var file=files.get(member.string("file_id"));require(file!=null&&file.sizeBytes()<=settings.aggregate().maxSourceBytes()-declared,BUDGET_EXCEEDED);declared+=file.sizeBytes();}
-    var parser=new TextTranscriptParser();var segments=new ArrayList<TranscriptDocumentParser.Segment>();long bytes=0,units=0;
+    MeasuredTranscriptDocumentParser parser=media?mediaParser(binding.engineManifestSha256(),binding.parser().version()):documents?new OfficeTranscriptParser():new TextTranscriptParser();var segments=new ArrayList<TranscriptDocumentParser.Segment>();long bytes=0,units=0;
     for(var member:members){
      check(cancelled);var file=files.get(member.string("file_id"));
      long remainingBytes=settings.aggregate().maxSourceBytes()-bytes,remainingUnits=settings.aggregate().maxUtf16CodeUnits()-units;
@@ -94,7 +95,7 @@ public final class TranscriptImportRuntime {
      MeasuredTranscriptDocumentParser.MeasuredResult measured;
      try(var download=components.sources().open(lease,lease.spec().input().id(),file.id())) {
       require(download.file().fileId().equals(file.id())&&download.file().meetingId().equals(file.meetingId())&&download.file().sha256().equals(file.sha256())&&download.file().size()==file.sizeBytes()&&download.offset()==0&&download.length()==file.sizeBytes(),PROVENANCE_UNAVAILABLE);
-      measured=parser.parseMeasured(download.body(),UUID.fromString(file.id()),file.sha256(),budget,cancelled);
+      measured=parser instanceof MediaTranscriptParser m?m.parseMeasured(download.body(),UUID.fromString(file.id()),file.sha256(),budget,cancelled,download.file().displayName()):parser.parseMeasured(download.body(),UUID.fromString(file.id()),file.sha256(),budget,cancelled);
      }
      check(cancelled);require(measured.usage().sourceBytes()==file.sizeBytes()&&measured.usage().segments()==measured.result().segments().size(),PROVENANCE_UNAVAILABLE);
      bytes=Math.addExact(bytes,measured.usage().sourceBytes());units=Math.addExact(units,measured.usage().decodedUtf16CodeUnits());segments.addAll(measured.result().segments());
@@ -102,11 +103,12 @@ public final class TranscriptImportRuntime {
     check(cancelled);String owner=queue.jdbc.queryForObject("SELECT owner_id FROM meeting WHERE id=?",String.class,lease.spec().subject().id());
     return new Carrier(new Raw(lease,UUID.randomUUID().toString(),owner,input.string("batch_id"),Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS),segments,null),cancelled);
    } catch(TranscriptDocumentParser.ParseException failure){
-    check(cancelled);return failed(lease,"TXT_"+failure.code().name(),cancelled);
+    check(cancelled);return failed(lease,failurePrefix+failure.code().name(),cancelled);
    } catch(ama.contract.MinutesContracts.Failure|ama.contract.FileContracts.Unavailable|ama.contract.FileContracts.NotFound|java.io.IOException failure){
     check(cancelled);return failed(lease,"IMPORT_PREPARATION_FAILED",cancelled);
    }
   }
+  private static MeasuredTranscriptDocumentParser mediaParser(String proof,String profile)throws TranscriptDocumentParser.ParseException{try{return new MediaTranscriptParser(MediaTranscriptParser.configured(proof),profile);}catch(IllegalStateException unavailable){throw new TranscriptDocumentParser.ParseException(TranscriptDocumentParser.ErrorCode.ENGINE_UNAVAILABLE);}}
   private Carrier failed(TaskLease lease,String code,BooleanSupplier cancelled){return new Carrier(new Raw(lease,null,null,null,null,List.of(),new TaskResult(Outcome.FAILED,null,code)),cancelled);}
   public CompletionInvocation bindCompletion(JdbcTaskQueue.AfterTask scope,Supplier<TaskResult> carrier){
    if(!(carrier instanceof ImportPolicy.Carrier c)||c.owner!=this)throw new IllegalArgumentException("Foreign import carrier");
@@ -126,7 +128,7 @@ public final class TranscriptImportRuntime {
     require(count==1,PROVENANCE_UNAVAILABLE);long ordinal=1;
     for(var segment:raw.segments()){
      check(carrier.cancelled);
-     require(queue.jdbc.update("INSERT INTO transcript_segment(revision_id,segment_id,ordinal,body,source_file_id,source_paragraph,start_ms,end_ms,speaker_id) VALUES (?,?,?,?,?,?,NULL,NULL,NULL)",raw.id(),segment.stableId().toString(),ordinal++,segment.text(),segment.sourceFileId().toString(),segment.paragraphNo())==1,PROVENANCE_UNAVAILABLE);
+     require(queue.jdbc.update("INSERT INTO transcript_segment(revision_id,segment_id,ordinal,body,source_file_id,source_paragraph,start_ms,end_ms,speaker_id) VALUES (?,?,?,?,?,?,?,?,?)",raw.id(),segment.stableId().toString(),ordinal++,segment.text(),segment.sourceFileId().toString(),segment.paragraphNo(),segment.startMs(),segment.endMs(),segment.speakerId()==null?null:segment.speakerId().toString())==1,PROVENANCE_UNAVAILABLE);
     }
     new JdbcAuditAdapter(queue.source).append(new ama.contract.AuditContracts.AuditEvent(raw.owner(),"TRANSCRIPT_IMPORTED",spec.subject().id(),spec.businessVersion(),"SUCCESS",raw.id(),raw.time()));
     check(carrier.cancelled);return new TaskResult(Outcome.SUCCEEDED,new TypedRef("TRANSCRIPT_REVISION",raw.id()),null);
@@ -142,7 +144,7 @@ public final class TranscriptImportRuntime {
      check(carrier.cancelled);var expected=raw.segments().get(i);var size=sizes.get(i);
      require(expected.stableId().toString().equals(size.get("segment_id"))&&((Number)size.get("ordinal")).longValue()==i+1&&((Number)size.get("units")).longValue()==expected.text().length(),PROVENANCE_UNAVAILABLE);
      var row=queue.jdbc.queryForMap("SELECT body,source_file_id,source_paragraph,start_ms,end_ms,speaker_id FROM transcript_segment WHERE revision_id=? AND segment_id=?",raw.id(),expected.stableId().toString());
-     require(expected.text().equals(row.get("body"))&&expected.sourceFileId().toString().equals(row.get("source_file_id"))&&((Number)row.get("source_paragraph")).longValue()==expected.paragraphNo()&&row.get("start_ms")==null&&row.get("end_ms")==null&&row.get("speaker_id")==null,PROVENANCE_UNAVAILABLE);
+     require(expected.text().equals(row.get("body"))&&expected.sourceFileId().toString().equals(row.get("source_file_id"))&&((Number)row.get("source_paragraph")).longValue()==expected.paragraphNo()&&Objects.equals(expected.startMs(),row.get("start_ms")==null?null:((Number)row.get("start_ms")).longValue())&&Objects.equals(expected.endMs(),row.get("end_ms")==null?null:((Number)row.get("end_ms")).longValue())&&Objects.equals(expected.speakerId()==null?null:expected.speakerId().toString(),row.get("speaker_id")),PROVENANCE_UNAVAILABLE);
     }
     domain.validateOutput(spec,result);check(carrier.cancelled);
    }

@@ -1,3 +1,4 @@
+import {importFormat} from '../document-formats';
 import type {components} from './generated';
 import type {createBusinessClient} from './business-client';
 import type {CommandSnapshot} from '../composables/useCommand';
@@ -43,9 +44,17 @@ export function createUploadsApi(client:ReturnType<typeof createBusinessClient>,
  function requireActor(expected:string){if(!actor()||actor()!==expected)throw new DOMException('Upload actor changed','AbortError');}
  function commandBody(command:CommandSnapshot,operation:string,path:string){requireActor(command.actor);requireId(command.resource);if(command.operation!==operation||command.path!==path||!fitsUtf8(command.body,8*1024*1024))throw new TypeError('Invalid upload command');const value:unknown=JSON.parse(command.body);if(!object(value))throw new TypeError('Object required');return value;}
  return {
+  async input(meeting:string,input:string,task:string,signal:AbortSignal):Promise<components['schemas']['InputDetail']>{
+   requireId(meeting);requireId(input);requireId(task);const value=await client.json<unknown>(`/api/v1/meetings/${meeting}/processing-inputs/${input}`,{signal,expectedStatus:200,maxResponseBytes:262144});
+   if(!object(value)||!exact(value,'baseRevision,batchFingerprint,batchId,batchProfile,cancelEpochToken,createdAt,files,inputFingerprint,inputId,kind,materialMode,revisionToken,taskId')||value.inputId!==input||value.taskId!==task||!uuid(value.batchId)||value.kind!=='IMPORT'||value.materialMode!=='EMPTY'||!numeric(value.baseRevision)||!revisionToken(value.revisionToken)||!revisionToken(value.cancelEpochToken)||value.batchProfile!=='ama.input-batch.v1'||!hash(value.batchFingerprint)||!hash(value.inputFingerprint)||!timestamp(value.createdAt)||!Array.isArray(value.files)||value.files.length<1||value.files.length>16||!value.files.every((f,i)=>object(f)&&exact(f,'fileId,ordinal,sha256,sizeBytes,sizeBytesToken,uploadId')&&f.ordinal===i+1&&uuid(f.fileId)&&uuid(f.uploadId)&&hash(f.sha256)&&typeof f.sizeBytes==='number'&&Number.isSafeInteger(f.sizeBytes)&&f.sizeBytes>=0&&f.sizeBytes<=UPLOAD_FILE_BYTES&&f.sizeBytesToken===String(f.sizeBytes))||new Set(value.files.map(f=>f.fileId)).size!==value.files.length||new Set(value.files.map(f=>f.uploadId)).size!==value.files.length)throw response();return freeze(value as unknown as components['schemas']['InputDetail']);
+  },
+  async completedFiles(meeting:string,after:string|null,signal:AbortSignal):Promise<components['schemas']['CompletedFileSummaryPage']>{
+   requireId(meeting);if(after!==null&&!uuid(after))throw new TypeError('Invalid saved-file cursor');const query=new URLSearchParams({limit:'16'});if(after)query.set('after',after);const value=await client.json<unknown>(`/api/v1/meetings/${meeting}/completed-files?${query}`,{signal,expectedStatus:200,maxResponseBytes:1024*1024});
+   if(!object(value)||!exact(value,'items,nextCursor')||!Array.isArray(value.items)||value.items.length>16||!value.items.every(completed)||new Set(value.items.map(x=>x.fileId)).size!==value.items.length||!(value.nextCursor===null||uuid(value.nextCursor))||value.nextCursor!==null&&value.nextCursor!==value.items.at(-1)?.fileId)throw response();return freeze({items:value.items,nextCursor:value.nextCursor});
+  },
   async begin(command:CommandSnapshot):Promise<UploadAccepted>{
    const path=`/api/v1/meetings/${command.resource}/uploads`,body=commandBody(command,'UPLOAD_BEGIN',path);
-   if(!exact(body,'name,purpose,sha256,size')||body.purpose!=='TRANSCRIPT_INPUT'||typeof body.name!=='string'||!fitsUtf8(body.name,1024*1024)||!body.name.toLowerCase().endsWith('.txt')||!Number.isSafeInteger(body.size)||typeof body.size!=='number'||body.size<0||body.size>UPLOAD_FILE_BYTES||!hash(body.sha256)||!fitsUtf8(command.key,4096)||!command.key.trim()||/[\r\n]/.test(command.key))throw new TypeError('Invalid upload begin');
+   if(!exact(body,'name,purpose,sha256,size')||body.purpose!=='TRANSCRIPT_INPUT'||typeof body.name!=='string'||!fitsUtf8(body.name,1024*1024)||!importFormat(body.name)||!Number.isSafeInteger(body.size)||typeof body.size!=='number'||body.size<0||body.size>UPLOAD_FILE_BYTES||!hash(body.sha256)||!fitsUtf8(command.key,4096)||!command.key.trim()||/[\r\n]/.test(command.key))throw new TypeError('Invalid upload begin');
    const value=await client.json<unknown>(path,{method:'POST',headers:{'Idempotency-Key':command.key},body:command.body,expectedStatus:201,maxResponseBytes:16384});if(!accepted(value))throw response();return freeze(value);
   },
   async part(expectedActor:string,id:string,part:number,body:Blob,sha256:string,signal:AbortSignal):Promise<void>{

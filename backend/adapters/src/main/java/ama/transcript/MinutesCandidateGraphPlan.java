@@ -19,9 +19,9 @@ public final class MinutesCandidateGraphPlan {
   // Internal history slots are not stored facts; rows() replaces both before any persistence.
   rows.add(row(budget,Table.MINUTES_REVISION,body,meeting,1L,parent,value.title(),"AI",value.body(),spec.input().id(),owner,time));rows.add(row(budget,Table.ELEMENT_SET,set,meeting,1L,time));
   var locatorIds=new HashMap<Locator,String>();var aliases=new HashMap<String,String>();for(var ref:value.sourceRefs()){
-   budget.check();var locator=catalog.source(ref.sourceId()).fact().locator();require(locator instanceof TranscriptLocator,CAPABILITY_UNAVAILABLE);String selected=locatorIds.get(locator);
-   if(selected==null){var transcript=(TranscriptLocator)locator;var candidates=existing.stream().filter(r->r.table()==Table.SOURCE_LOCATOR&&meeting.equals(r.string("meeting_id"))&&"TRANSCRIPT".equals(r.string("kind"))&&transcript.transcriptRevisionId().equals(r.nullableString("transcript_revision_id"))&&transcript.segmentId().equals(r.nullableString("segment_id"))).sorted(Comparator.comparing(r->r.string("id"))).toList();
-    if(!candidates.isEmpty()){var old=candidates.getFirst();var exact=row(budget,Table.SOURCE_LOCATOR,old.string("id"),meeting,"TRANSCRIPT",transcript.transcriptRevisionId(),transcript.segmentId(),null,null,null,null,null,null,null);require(old.equals(exact),PROVENANCE_UNAVAILABLE);selected=old.string("id");reused.add(old);}else{selected=id();rows.add(row(budget,Table.SOURCE_LOCATOR,selected,meeting,"TRANSCRIPT",transcript.transcriptRevisionId(),transcript.segmentId(),null,null,null,null,null,null,null));}locatorIds.put(locator,selected);
+   budget.check();var locator=catalog.source(ref.sourceId()).fact().locator();String selected=locatorIds.get(locator);
+   if(selected==null){var candidates=existing.stream().filter(r->r.table()==Table.SOURCE_LOCATOR&&meeting.equals(r.string("meeting_id"))&&MaterialMinutesContext.locator(r).equals(locator)).sorted(Comparator.comparing(r->r.string("id"))).toList();
+    if(!candidates.isEmpty()){selected=candidates.getFirst().string("id");reused.add(candidates.getFirst());}else{selected=id();rows.add(MaterialMinutesContext.row(selected,meeting,locator));}locatorIds.put(locator,selected);
    }require(aliases.put(ref.sourceId(),selected)==null,SOURCE_MEMBERSHIP_MISMATCH);
   }
   var elementIds=new HashMap<String,String>();var support=new HashMap<String,Support>();for(var entry:classification.elements())support.put(entry.key(),entry.support());
@@ -34,6 +34,7 @@ public final class MinutesCandidateGraphPlan {
   for(var anchored:validated.anchors())for(String alias:anchored.evidence().sourceIds().values()){
    var target=anchored.evidence().target();String element=target instanceof ElementTarget t?required(elementIds,t.elementKey()):null;var states=classification.evidence().stream().filter(e->e.target().equals(target)&&e.sourceId().equals(alias)).toList();require(states.size()==1,PROVENANCE_UNAVAILABLE);rows.add(row(budget,Table.EVIDENCE_LINK,id(),required(aliases,alias),element,element==null?body:null,states.getFirst().support().name(),OutputValidation.anchorText(anchored.anchor())));
   }
+  if(catalog.sources().stream().anyMatch(s->s.fact().role()==Role.BACKGROUND)){var contexts=new ArrayList<FullRow>();for(var target:rows)if(target.table()==Table.MINUTES_ELEMENT||target.table()==Table.EVIDENCE_LINK)contexts.add(row(budget,target.table()==Table.MINUTES_ELEMENT?Table.ELEMENT_SOURCE_CONTEXT:Table.EVIDENCE_SOURCE_CONTEXT,target.string("id"),spec.input().id()));rows.addAll(contexts);}
   budget.check();return new MinutesCandidateGraphPlan(candidate,body,set,time,spec,owner,rows,reused,budget);
  }
  /** The same inert graph reconstruction is used for first receipt and existing terminal replay. */

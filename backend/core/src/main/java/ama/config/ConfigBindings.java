@@ -17,16 +17,16 @@ public final class ConfigBindings {
  public ConfigBindings(ConfigArchiveReader archives,ProcessingManifestReader manifests){require(archives!=null&&manifests!=null,INVALID_ARGUMENT);this.archives=archives;this.manifests=manifests;}
  public static final class ValidatedProcessingBinding {
   private final CanonicalValue.ObjectValue manifest;private final String fingerprint;private final Ref codec,confirmation,processing,parser;
-  private final ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget;private final CanonicalBudget canonicalBudget;private final ArchiveBytes rawManifest;private final ValidatedOperation operation;
-  private ValidatedProcessingBinding(CanonicalValue.ObjectValue manifest,String fingerprint,Ref codec,Ref confirmation,Ref processing,Ref parser,CanonicalBudget budget,ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget,ArchiveBytes rawManifest){this(manifest,fingerprint,codec,confirmation,processing,parser,budget,parseBudget,rawManifest,null);}
-  private ValidatedProcessingBinding(CanonicalValue.ObjectValue manifest,String fingerprint,Ref codec,Ref confirmation,Ref processing,Ref parser,CanonicalBudget budget,ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget,ArchiveBytes rawManifest,ValidatedOperation operation){
-   this.manifest=manifest;this.fingerprint=fingerprint;this.codec=codec;this.confirmation=confirmation;this.processing=processing;this.parser=parser;this.canonicalBudget=budget;this.parseBudget=parseBudget;this.rawManifest=rawManifest;this.operation=operation;
+  private final ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget;private final CanonicalBudget canonicalBudget;private final ArchiveBytes rawManifest;private final ValidatedOperation operation;private final String engineManifestSha256;
+  private ValidatedProcessingBinding(CanonicalValue.ObjectValue manifest,String fingerprint,Ref codec,Ref confirmation,Ref processing,Ref parser,CanonicalBudget budget,ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget,ArchiveBytes rawManifest,String engineManifestSha256){this(manifest,fingerprint,codec,confirmation,processing,parser,budget,parseBudget,rawManifest,engineManifestSha256,null);}
+  private ValidatedProcessingBinding(CanonicalValue.ObjectValue manifest,String fingerprint,Ref codec,Ref confirmation,Ref processing,Ref parser,CanonicalBudget budget,ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget,ArchiveBytes rawManifest,String engineManifestSha256,ValidatedOperation operation){
+   this.manifest=manifest;this.fingerprint=fingerprint;this.codec=codec;this.confirmation=confirmation;this.processing=processing;this.parser=parser;this.canonicalBudget=budget;this.parseBudget=parseBudget;this.rawManifest=rawManifest;this.operation=operation;this.engineManifestSha256=engineManifestSha256;
   }
-  private ValidatedProcessingBinding complete(ValidatedOperation operation){return new ValidatedProcessingBinding(manifest,fingerprint,codec,confirmation,processing,parser,canonicalBudget,parseBudget,rawManifest,operation);}
+  private ValidatedProcessingBinding complete(ValidatedOperation operation){return new ValidatedProcessingBinding(manifest,fingerprint,codec,confirmation,processing,parser,canonicalBudget,parseBudget,rawManifest,engineManifestSha256,operation);}
   public String fingerprint(){return fingerprint;}public CanonicalValue.ObjectValue manifest(){return manifest;}
   public Ref codec(){return codec;}public Ref confirmation(){return confirmation;}public Ref processing(){return processing;}public Ref parser(){return parser;}
   public ama.transcript.TranscriptDocumentParser.ParseBudget parseBudget(){return parseBudget;}
-  public CanonicalBudget canonicalBudget(){return canonicalBudget;}
+  public CanonicalBudget canonicalBudget(){return canonicalBudget;}public String engineManifestSha256(){return engineManifestSha256;}
  }
  public static final class ValidatedOperation {
   private final Map<Identity,String> identities;private final List<ArchiveBytes> originals;
@@ -83,7 +83,7 @@ public final class ConfigBindings {
    require(configNode.dependencies.equals(Map.of("CANONICAL_CODEC",codec,"CONFIRMATION_HASH",confirmation,"PARSER_CONFIG",parser)),PROFILE_UNAVAILABLE);
    refMatches(codec);refMatches(confirmation);refMatches(parser);require(node(confirmation.identity()).dependencies.equals(Map.of("CANONICAL_CODEC",codec)),PROFILE_UNAVAILABLE);
    var definition=fields(fields(configNode.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition"),"contract","manifestSchemaVersion","parseBudget","canonicalBudget");
-   var canonical=ConfigSchema.canonicalBudget(definition.get("canonicalBudget"));var parse=ConfigSchema.parseBudget(definition.get("parseBudget"));var fileList=array(batch.get("files"));
+   require(text(definition.get("contract")).equals(parser.version().equals("ama.media-documents.v2")?"ama.import-media-documents.v2":parser.version().equals("ama.media-documents.v1")?"ama.import-media-documents.v1":parser.version().equals("ama.office-documents.v1")?"ama.import-documents.v1":"ama.import-txt.v1"),PROFILE_UNAVAILABLE);var canonical=ConfigSchema.canonicalBudget(definition.get("canonicalBudget"));var parse=ConfigSchema.parseBudget(definition.get("parseBudget"));var fileList=array(batch.get("files"));
    var batchRow=one(Table.INPUT_BATCH,batchId);require(batchRow.string("meeting_id").equals(meeting)&&batchRow.string("kind").equals("TRANSCRIPT"),INPUT_INVALID);
    var members=new ArrayList<FullRow>();for(var row:rows(Table.INPUT_BATCH_FILE))if(row.string("batch_id").equals(batchId))members.add(row);members.sort(Comparator.comparingLong(r->r.number("ordinal")));
    require(members.size()==fileList.size(),INPUT_INVALID);
@@ -115,7 +115,7 @@ public final class ConfigBindings {
      }
     }
    }
-   active();return new ValidatedProcessingBinding(value,digest,codec,confirmation,processing,parser,canonical,parse,raw);
+   String engine=null;if(parser.version().equals("ama.media-documents.v1")||parser.version().equals("ama.media-documents.v2")){var parserWire=fields(node(parser.identity()).parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies");var parserDefinition=fields(parserWire.get("definition"),"contract","formats","engines");engine=text(fields(parserDefinition.get("engines"),"asr",parser.version().equals("ama.media-documents.v2")?"decoder":"pdfbox","modelManifestSha256",parser.version().equals("ama.media-documents.v2")?"subtitles":"poi").get("modelManifestSha256"));}active();return new ValidatedProcessingBinding(value,digest,codec,confirmation,processing,parser,canonical,parse,raw,engine);
   }
   public Artifact artifact(Ref ref){
    refMatches(ref);return new Artifact(ref.version(),ref.sha256(),node(ref.identity()).bytes);
@@ -132,24 +132,28 @@ public final class ConfigBindings {
   }
   public Artifact confirmation(FullRow processing){var binding=processingStored(processing);return artifact(binding.confirmation());}
   public GenerationConfiguration generation(FullRow input){
-   active();require(input.table()==Table.GENERATION_INPUT,INPUT_INVALID);require(input.nullableString("material_snapshot_id")==null,CAPABILITY_UNAVAILABLE);
-   return generation(input.string("id"),input.string("meeting_id"),input.string("transcript_confirmation_id"),input.string("prompt_version"),input.string("model_config_version"));
+   active();require(input.table()==Table.GENERATION_INPUT,INPUT_INVALID);
+   return generation(input.string("id"),input.string("meeting_id"),input.string("transcript_confirmation_id"),input.string("prompt_version"),input.string("model_config_version"),input.nullableString("material_snapshot_id"));
   }
-  public GenerationConfiguration generation(GenerationDraft draft){require(draft.materialSnapshotId()==null,CAPABILITY_UNAVAILABLE);return generation(draft.inputId(),draft.meetingId(),draft.transcriptConfirmationId(),draft.promptVersion(),draft.modelVersion());}
-  private GenerationConfiguration generation(String inputId,String meeting,String confirmationId,String promptVersion,String modelVersion){
+  public GenerationConfiguration generation(GenerationDraft draft){return generation(draft.inputId(),draft.meetingId(),draft.transcriptConfirmationId(),draft.promptVersion(),draft.modelVersion(),draft.materialSnapshotId());}
+  private GenerationConfiguration generation(String inputId,String meeting,String confirmationId,String promptVersion,String modelVersion,String materialSnapshot){
    var prompt=node(new Identity(ArtifactType.PROMPT_CONFIG,promptVersion));var model=node(new Identity(ArtifactType.MODEL_CONFIG,modelVersion));root(reference(prompt));root(reference(model));
    require(prompt.dependencies.equals(model.dependencies)&&prompt.dependencies.keySet().equals(ConfigSchema.profileSlots()),PROFILE_UNAVAILABLE);var codec=prompt.dependencies.get("CANONICAL_CODEC");
    var definitions=new EnumMap<ProfileKind,Artifact>(ProfileKind.class);
    for(var kind:ProfileKind.values()){
     check(state.cancelled);var ref=prompt.dependencies.get(kind.name());refMatches(ref);var node=node(ref.identity());
-    require(kind==ProfileKind.CANONICAL_CODEC?node.dependencies.isEmpty():node.dependencies.equals(Map.of("CANONICAL_CODEC",codec)),PROFILE_UNAVAILABLE);definitions.put(kind,artifact(ref));
+    if(kind==ProfileKind.CATALOG&&ref.version().equals(ama.material.MaterialProfiles.CATALOG)){require(codec.equals(node.dependencies.get("CANONICAL_CODEC")),PROFILE_UNAVAILABLE);for(var dependency:node.dependencies.values())refMatches(dependency);}else require(kind==ProfileKind.CANONICAL_CODEC?node.dependencies.isEmpty():node.dependencies.equals(Map.of("CANONICAL_CODEC",codec)),PROFILE_UNAVAILABLE);definitions.put(kind,artifact(ref));
    }
    var confirmation=one(Table.TRANSCRIPT_CONFIRMATION,confirmationId);require(confirmation.string("meeting_id").equals(meeting),INPUT_INVALID);
    var revision=one(Table.TRANSCRIPT_REVISION,confirmation.string("revision_id"));require(revision.string("meeting_id").equals(meeting),INPUT_INVALID);
    var processing=one(Table.TRANSCRIPTION_INPUT,revision.string("processing_input_id"));var older=processingStored(processing);
    require(older.codec().equals(codec)&&older.confirmation().equals(prompt.dependencies.get("CONFIRMATION_HASH")),PROFILE_UNAVAILABLE);
    var render=node(prompt.dependencies.get("RENDER").identity());var definition=fields(fields(render.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition"),"contract","rendererVersion","defaultTemplateRevisionId");
-   return new GenerationConfiguration(inputId,artifact(reference(prompt)),artifact(reference(model)),new Profiles(definitions),text(definition.get("defaultTemplateRevisionId")),List.of());
+   var selections=ama.material.MaterialBinding.selections(facts,meeting,materialSnapshot,inputId);
+   if(materialSnapshot!=null){var catalog=node(prompt.dependencies.get("CATALOG").identity());require(catalog.parsed.identity().version().equals(ama.material.MaterialProfiles.CATALOG),PROFILE_UNAVAILABLE);var bindings=array(fields(fields(catalog.parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies").get("definition"),"contract","bindings").get("bindings"));
+    for(var selection:selections){var documents=rows(Table.PARSED_DOCUMENT).stream().filter(d->selection.materialRevisionId().equals(d.string("material_revision_id"))&&selection.parserVersion().equals(d.string("parser_version"))).toList();require(documents.size()==1,SOURCE_CONTEXT_AMBIGUOUS);var profile=ama.material.MaterialBinding.one(facts.rows(),Table.PARSED_DOCUMENT_PROFILE,"document_id",documents.getFirst().string("id"));var expected=new Ref(ArtifactType.PARSER_CONFIG,profile.string("parser_config_version"),profile.string("parser_config_sha256"));refMatches(expected);require(bindings.stream().filter(b->{var binding=fields(b,"format","parser");return profile.string("format").equals(text(binding.get("format")))&&expected.equals(ref(binding.get("parser")));}).count()==1,PROFILE_UNAVAILABLE);}
+   }
+   return new GenerationConfiguration(inputId,artifact(reference(prompt)),artifact(reference(model)),new Profiles(definitions),text(definition.get("defaultTemplateRevisionId")),selections);
   }
   public Artifact review(String profile){
    var node=node(new Identity(ArtifactType.REVIEW_HASH,profile));root(reference(node));return artifact(reference(node));

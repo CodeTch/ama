@@ -133,6 +133,8 @@ class FileController {
         }
     }
 
+    static String contentDisposition(String value){return DISPOSITION_PREFIX+encoded(value);}
+
     private static String encoded(String value) {
         int limit = CONTENT_DISPOSITION_BYTES - DISPOSITION_PREFIX.length();
         StringBuilder result = new StringBuilder(limit);

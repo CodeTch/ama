@@ -59,3 +59,7 @@ test('endpoint-specific success status rejects a different 2xx without treating 
  await assert.rejects(request(origin+'/ok',{expectedStatus:201}),(error:unknown)=>error instanceof ApiError&&error.kind==='response'&&error.status===200);
  await assert.rejects(request(origin+'/empty',{expectedStatus:200}),(error:unknown)=>error instanceof ApiError&&error.kind==='response');assert.equal(await request(origin+'/empty',{expectedStatus:204}),undefined);
 });
+
+test('a transcript conflict code does not alter unscoped or unrelated HTTP error classification',async()=>{
+ const old=fetch;let calls=0;try{globalThis.fetch=async()=>{calls++;return Response.json({error:{code:'REVISION_CONFLICT',message:'secret',traceId:'00000000-0000-4000-8000-000000000001'}},{status:409});};await assert.rejects(request('https://ama.test/api/v1/meetings/00000000-0000-4000-8000-000000000001/transcript',{method:'PUT'}),(e:unknown)=>e instanceof ApiError&&e.kind==='response');await assert.rejects(request('https://ama.test/api/v1/meetings/00000000-0000-4000-8000-000000000001/info',{method:'PUT',errorContract:'saved-transcript' as any}),TypeError);assert.equal(calls,1);}finally{globalThis.fetch=old;}
+});

@@ -60,6 +60,26 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
             return Optional.of(new ResolvedSession(new Actor(id, Status.ACTIVE, roles), csrf, expires));
         }, hash(token));
     }
+    public IssuedSession issueForVerifiedIdentity(String enterpriseId, Duration lifetime) {
+        stableId(enterpriseId);
+        if (lifetime == null || lifetime.isZero() || lifetime.isNegative() || lifetime.compareTo(Duration.ofHours(24)) > 0)
+            throw new IllegalArgumentException("Invalid session lifetime");
+        byte[] tokenBytes = new byte[32], csrfBytes = new byte[32];
+        new java.security.SecureRandom().nextBytes(tokenBytes);
+        new java.security.SecureRandom().nextBytes(csrfBytes);
+        String token = Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
+        String csrf = Base64.getUrlEncoder().withoutPadding().encodeToString(csrfBytes);
+        Instant now = Instant.now().truncatedTo(ChronoUnit.MICROS), expires = now.plus(lifetime).truncatedTo(ChronoUnit.MICROS);
+        transactions.required(() -> {
+            var identity = lockIdentity(enterpriseId);
+            if (!"ACTIVE".equals(identity.get("status"))) throw new ProviderUnavailableException();
+            jdbc.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (?,?,?,?,?,?)",
+                    hash(token), enterpriseId, identity.get("session_generation"), csrf, LocalDateTime.ofInstant(now, ZoneOffset.UTC), LocalDateTime.ofInstant(expires, ZoneOffset.UTC));
+            append(enterpriseId, "SESSION_ISSUE_CAS", ((Number) identity.get("session_generation")).longValue(), UUID.randomUUID().toString(), now);
+            return null;
+        });
+        return new IssuedSession(token, csrf, expires);
+    }
     @Override public void revoke(String token, String traceId) {
         if (token == null || !token.matches("[A-Za-z0-9_-]{43}")) return;
         // Read candidate identity without a lock, then respect identity -> session -> audit lock order.

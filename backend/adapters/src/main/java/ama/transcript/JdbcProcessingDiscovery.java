@@ -30,13 +30,20 @@ public final class JdbcProcessingDiscovery {
     private final FileBackendCatalog backends;
     private final FileRegistry registry;
     private final Map<String,Object> budgets;
-    private final BooleanSupplier available;
+    public record Installation(boolean available,List<String> formats){public Installation{formats=List.copyOf(formats);}}
+    private final Supplier<Installation> installation;
     private final Supplier<String> execution;
     public JdbcProcessingDiscovery(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,FileBackendCatalog backends,FileRegistry registry,Map<String,Object> budgets,BooleanSupplier available,long partSize) {
         this(source,tx,access,purposes,backends,registry,budgets,available,partSize,()->"NOT_INSTALLED");
     }
     public JdbcProcessingDiscovery(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,FileBackendCatalog backends,FileRegistry registry,Map<String,Object> budgets,BooleanSupplier available,long partSize,Supplier<String> execution) {
-        this.execution=Objects.requireNonNull(execution);
+        this(source,tx,access,purposes,backends,registry,budgets,available,partSize,execution,()->List.of("TXT"));
+    }
+    public JdbcProcessingDiscovery(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,FileBackendCatalog backends,FileRegistry registry,Map<String,Object> budgets,BooleanSupplier available,long partSize,Supplier<String> execution,Supplier<List<String>> formats) {
+        this(source,tx,access,purposes,backends,registry,budgets,partSize,execution,()->new Installation(available.getAsBoolean(),formats.get()));
+    }
+    public JdbcProcessingDiscovery(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,FileBackendCatalog backends,FileRegistry registry,Map<String,Object> budgets,long partSize,Supplier<String> execution,Supplier<Installation> installation) {
+        this.installation=Objects.requireNonNull(installation);this.execution=Objects.requireNonNull(execution);
         j=new JdbcTemplate(source);
         j.setQueryTimeout(5);
         this.tx=tx;
@@ -45,7 +52,6 @@ public final class JdbcProcessingDiscovery {
         this.backends=backends;
         this.registry=registry;
         this.budgets=Map.copyOf(budgets);
-        this.available=available;
         if(partSize<=0)throw new IllegalArgumentException("Positive part size required");
         this.partSize=partSize;
     }
@@ -60,7 +66,8 @@ public final class JdbcProcessingDiscovery {
             return map("revision",number(root,"revision"),"revisionToken",Long.toString(number(root,"revision")),"accessRevision",number(root,"access_revision"),"accessRevisionToken",Long.toString(number(root,"access_revision")),"canSubmit",false,"readOnlyReason",owner?null:"OWNER_REQUIRED","owner",owner,"writable",writable(root));
         });
         boolean owner=(Boolean)result.remove("owner"),writable=(Boolean)result.remove("writable");
-        boolean ready=owner&&available.getAsBoolean();
+        var installedFormats=owner?installation.get():new Installation(false,List.of());
+        boolean ready=owner&&installedFormats.available();
         boolean exhausted=((Number)result.get("revision")).longValue()>=Long.MAX_VALUE-1;
         result.put("canSubmit",owner&&writable&&ready&&!exhausted);
         if(owner)result.put("readOnlyReason",!writable?"READ_ONLY":exhausted?"REVISION_EXHAUSTED":ready?null:"PROCESSING_UNAVAILABLE");
@@ -68,7 +75,7 @@ public final class JdbcProcessingDiscovery {
         String installed=execution.get();if(!Set.of("INSTALLED","NOT_INSTALLED","UNAVAILABLE").contains(installed))installed="UNAVAILABLE";
         result.put("execution",installed);
         result.put("businessReady",ready&&writable&&!exhausted&&installed.equals("INSTALLED"));
-        result.put("formats",List.of("TXT"));
+        result.put("formats",ready?installedFormats.formats():List.of());
         result.put("purpose","TRANSCRIPT_INPUT");
         result.put("materialMode","EMPTY");
         result.put("budgets",budgets);

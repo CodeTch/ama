@@ -21,7 +21,7 @@ export function createMeetingOptionsApi(client:ReturnType<typeof createBusinessC
  async categories(next:string|null,signal:AbortSignal):Promise<components['schemas']['CategoryPage']>{
   if(!cursor(next))throw new TypeError('Invalid category cursor');const params=new URLSearchParams({limit:'20'});if(next!==null)params.set('cursor',next);
   const value=await client.json<unknown>('/api/v1/meetings/categories?'+params,{signal,expectedStatus:200,maxResponseBytes:1024*1024});
-  if(!shape(value,'hasMore,items,nextCursor')||!Array.isArray(value.items)||value.items.length>50||!value.items.every(category)||new Set(value.items.map(x=>x.id)).size!==value.items.length||!cursor(value.nextCursor)||value.hasMore!==(value.nextCursor!==null))throw new ApiError('response',200,'会议类别响应不可用。');
+  if(!shape(value,'hasMore,items,nextCursor')||!Array.isArray(value.items)||value.items.length>50||!value.items.every(category)||new Set(value.items.map(x=>x.id)).size!==value.items.length||!cursor(value.nextCursor)||value.hasMore!==(value.nextCursor!==null))throw new ApiError('response',200,'会议分类响应不可用。');
   return freeze({items:value.items,nextCursor:value.nextCursor,hasMore:value.nextCursor!==null});
  }
 };}

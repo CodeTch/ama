@@ -6,14 +6,14 @@ export function useWorkspaceNavigation(fetchValue:(meeting:string,signal:AbortSi
  let epoch=0,controller:AbortController|null=null,disposed=false;
  function invalidate(){const generation=++epoch,old=controller;controller=null;old?.abort();if(generation!==epoch)return;value.value=null;if(generation!==epoch)return;error.value=null;if(generation!==epoch)return;loading.value=false;}
  const stop=watch(()=>[actor(),meeting()],invalidate,{flush:'sync'});
- async function reload(){
+ async function read(preserve=false){
   if(disposed)return;const who=actor(),id=meeting();if(!who){invalidate();return;}
   const generation=++epoch,old=controller,current=new AbortController();controller=current;old?.abort();
   const active=()=>!disposed&&generation===epoch&&actor()===who&&meeting()===id&&!current.signal.aborted;
-  try{if(!active())return;value.value=null;if(!active())return;error.value=null;if(!active())return;loading.value=true;if(!active())return;
+  try{if(!active())return;if(!preserve)value.value=null;if(!active())return;error.value=null;if(!active())return;if(!preserve)loading.value=true;if(!active())return;
    const result=await fetchValue(id,current.signal);if(!active())return;value.value=result;
-  }catch(cause){if(active())error.value=cause;}
+  }catch(cause){if(active()){value.value=null;if(active())error.value=cause;}}
   finally{if(active()){controller=null;loading.value=false;}}
  }
- return {value:shallowReadonly(value),loading:shallowReadonly(loading),error:shallowReadonly(error),reload,invalidate,dispose(){disposed=true;stop();invalidate();}};
+ return {value:shallowReadonly(value),loading:shallowReadonly(loading),error:shallowReadonly(error),reload:()=>read(),refresh:()=>read(true),invalidate,dispose(){disposed=true;stop();invalidate();}};
 }

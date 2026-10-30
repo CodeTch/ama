@@ -75,11 +75,11 @@
     "local_runtime_entry": "Incrementally extend existing tools/dev/local_app.py and tools/dev/java/ama/localdev/LocalApplication.java per slice. The old bl5 launcher remains tied to consumed resources and S3; do not reuse it as the Demo entry."
   },
   "schema_version": 2,
-  "updated_utc": "2026-10-28T09:45:13.857356+00:00",
-  "objective": "Deliver a quick local MySQL/local-files/single-host prototype-faithful Demo through vertical business slices, then complete formal local B reliability qualification. Preserve all existing work; unfinished S3/dual-MySQL/active-active adaptation is final F. Current turn is documentation only.",
-  "latest_user_instruction": "2026-10-28：用户在详细审查后要求“按照你的建议重构”。本轮仅重构计划及相关文档：分开 M1-Demo/M1-B，按业务片段安排，补逐页原型/可重复本地入口/真实 AI 验收和开放义务最晚关卡；保留所有已有成果和最终质量要求，不修改业务代码或执行代码重构。",
+  "updated_utc": "2026-10-29T13:56:32Z",
+  "objective": "Deliver a quick local MySQL/local-files/single-host prototype-faithful Demo through vertical business slices, then complete formal local B reliability qualification. Preserve all existing work; unfinished S3/dual-MySQL/active-active adaptation is final F.",
+  "latest_user_instruction": "用户已明确“继续任务”；继续导入会议真实功能补全，完成后停下。",
   "pause_request_active": false,
-  "status_precedence": "planning_revision_20261028 revision R2 and next_steps govern scheduling/scope; current B summary governs obligation dispositions. Top status and execution_20261027_bl5 retain actual qualification facts. Historical scheduling, pause and runtime approvals do not supersede R2; consumed windows cannot be replayed.",
+  "status_precedence": "2026-10-29 latest import pause + docs/development/import-resume-2026-10-29.md govern current scope/scheduling. Explicit user continue revokes pause only; resume unfinished import integration, not old B/demo/home work. Historical scoped acceptance does not accept current working tree.",
   "historical_state_archive": {
     "path": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state-before-normalization-20261024.json",
     "sha256": "599708de6497fe18816d9e1b34d636858e883b127e7c869dfa3c1dbc7a9c159b",
@@ -87,23 +87,17 @@
   },
   "coordination_tree": "/home/tanren/ama/.worktrees/phase-b-completion",
   "branch": "codex/phase-b-completion-20261023",
-  "canonical_plan": "docs/superpowers/plans/2026-10-23-ama-phase-b-remaining.md",
-  "ledger": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/progress.md",
+  "canonical_plan": "docs/superpowers/plans/2026-10-29-import-functional-completion.md",
+  "ledger": ".superpowers/sdd/2026-10-29-import-pixel-parity/progress.md",
   "active_context": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/RESUME_LATEST.md",
   "last_root_commit": "095b678bf09cfcf95194ab84f928c91506d5aa42",
   "task6_base": "80c878f52c7b748efdcdb64e707d50cf410843b4",
   "primary_main_last_observed_head": "095b678bf09cfcf95194ab84f928c91506d5aa42",
-  "primary_scope": "Only exact discovery handoff/resume docs uncommitted; product/mainmerge/push not authorized in this continuation; verify actual main before later precise doc update.",
-  "execution_status": "B_INCOMPLETE_LIMITED_API_EVIDENCE_ADOPTED_BATCH_SETTLED",
+  "primary_scope": "导入会议像素及真实功能补全；本批用户暂停，未完成集成。继续后只完成导入范围并停下，不启动全原型/B其他页面。",
+  "execution_status": "IMPORT_FUNCTIONAL_COMPLETION_ACTIVE",
   "active_implementation": {
-    "task": 12,
-    "agent": "/root",
-    "reviewer": "/root/phase_b_independent_review",
-    "status": "NOT_RUNNING_DOCUMENTATION_ONLY",
-    "next_batch": "DEMO-01 then DEMO-02/03/04/05; B-QUAL before formal M1-B",
-    "stage": "Documentation-only R2; reuse adopted features, wire and reproduce pages per business slice, deliver Demo before remaining deep B proofs; preserve all final quality gates.",
-    "noRuntimeAuthority": true,
-    "noWindowRerun": true
+    "status": "ACTIVE_PROTOTYPE_PARITY_REWORK",
+    "stage": "Reproduce differences from immutable original, strict criteria/design/plan before patches"
   },
   "completed_implementation_tasks": {
     "1": {
@@ -205,12 +199,11 @@
     13
   ],
   "next_steps": [
-    "On explicit continue, read R2 plan, current handoff and B obligation table; verify tree/HEAD. Do not redo adopted Tasks 1–10 or B-L1..4.",
-    "DEMO-01→02→03→04: meeting/info, upload/transcript, generation/review, publication/document. Wire existing local components and reproduce pages within each slice; preserve all business guards.",
-    "DEMO-05: actual complete browser flow, page matrix, basic permission/version/idempotency/UNKNOWN checks, representative restart and applicable regression. Deliver M1-Demo only; B stays incomplete.",
-    "B-QUAL: close deep local transaction/budget/lock/race/coexistence/crash/component-restart obligations and final review before M1-B. Actual important defects or changed high-risk paths require earlier validation. Stop after formal B.",
-    "Qualify actual model/identity/directory/knowledge providers in corresponding B tasks when authorized interfaces exist; controlled synthetic outputs do not qualify real AI or enterprise integration.",
-    "Keep unfinished S3/dual-MySQL/active-active and exclusive dependencies in final DEP-S3/MYSQL/HA/MIGRATE/MATRIX; do not mark deferred work complete or introduce dedicated early implementation/config/tests. Reuse only actually authorized local resources; old B-L5 remains closed."
+    "等待用户明确继续任务；暂停期间不派发或开发下一批",
+    "继续后读取统一接续文档、两份材料检查点与84文件源码manifest，核对未提交现场",
+    "收尾媒体v2注册、材料Java/SQL和token失败；不要重新实现已验证解析器或旧B任务",
+    "再完成材料Vue/真实draft保存放弃/ENHANCE/API契约；串行编译迁移与联调，重新验证当前功能和像素",
+    "导入会议通过后停下；整套原型/B不自动接受或推进"
   ],
   "writer_policy": "Main sole writer, same sole independent reviewer; complete feature batches, affected checks, consolidated review and incremental evidence under AMA-WORKFLOW-20261027.",
   "root_owned_dirty_paths": [
@@ -435,7 +428,7 @@
   },
   "stop_after_phase_b": true,
   "phase_b_exit_contract": "Afterall13tasks/finalreview/recordsclose: stopexecution, preserveexactcommits/evidence/handoffs andcompleted/open/pendingboundary index; next继续任务 mustreadcanonicalhandoff beforework and startONLY firstunfinishedpostBnode, notredoB.",
-  "pause_handoff": "/home/tanren/ama/.worktrees/phase-b-completion/.superpowers/sdd/2026-10-23-ama-phase-b-remaining/handoff-paused-20261027.md",
+  "pause_handoff": "docs/development/import-resume-2026-10-29.md",
   "pause_source_head": "647a3a204eefe6c06422a5ed63c73c0532958b8f",
   "pause_records_commit": "0df61e2e20f8083b3e2ba04de151ee5121b2bbb8 (paused Task11 WIP snapshot plus handoff; not Task11 adoption)",
   "pause_before_record_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-20261025-063507/before",
@@ -459,10 +452,8 @@
     "applicationAckSha256": "6f926c62b9710dab9c889eee104543b3250bfd5e33fc23d67fb655677e4c7e5d"
   },
   "active_review": {
-    "agent": "/root/phase_b_independent_review",
-    "status": "IDLE_NO_PENDING_CURRENT_BATCH_REVIEW",
-    "latest_adoption": "task-12-info-editor-adoption-20261027.md",
-    "next_review_unit": "B-L1 complete feature batch; early review if high risk"
+    "status": "NONE_PAUSED",
+    "note": "First bounded review returned P1/P2 findings; source fixes and partial tests exist, full native closure still pending. All task agents closed."
   },
   "task9_envelope_supplement": {
     "status": "COMPLETE_ADOPTED inTask9 source591545a4/adoption97e788fe; exact originalruntime startup pre-fix retained, fullformal newbusiness chain stillTask10/11/12.",
@@ -557,14 +548,14 @@
     }
   },
   "pause": {
-    "requested": false,
-    "handoff": "docs/development/phase-b-pause-2026-10-27.md",
+    "requested": true,
+    "handoff": "docs/development/import-resume-2026-10-29.md",
     "batchFinished": true,
-    "qualification": "Information-editor R3 source adopted; persistence/UI and Phase B incomplete.",
+    "qualification": "Saved partial code checkpoints; functional integration and acceptance incomplete.",
     "noTaskOrProviderRestartByPause": true,
-    "firstResume": "Read workflow_policy/next_steps; start B-L1 after continue. Historical HEAD/routing are not current instructions."
+    "firstResume": "Only after user says 继续任务; read current handoff section8."
   },
-  "pending_issue_summary": "Current info editor batch closed. Remaining B: information persistence/UI/roster, uploads begin journal/queue/UI, full workspace union/private IDs, full business-flow consumers, remaining actual validation and Task13 final integrated/whole-branch review. See detailed pause handoff; older open-register entries require latest adoption reconciliation.",
+  "pending_issue_summary": "Import PARTIAL: v2 format/runtime registration; material backend39 uncompiled files and V017 DDL/source-context risks; front material API/state with1 token test failure and2 missing Vue components; server draft/discard not native tested; ENHANCE missing; OpenAPI/generated, global recovery and full current candidate verification pending. See current handoff for exhaustive ordered list.",
   "historical_pause_fields_archive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/pause-document-audit-20261025/legacy-pause-fields-before-normalization.json",
   "delegated_coordinator_status": "PAUSED_BY_USER",
   "skill_runtime_current_note": "Superpowers7.0.1 available/read at C:/Users/LING/.codex/plugins/cache/openai-curated-remote/superpowers/7.0.1/skills; SDD resume/fix-loop/worktree rules applied. Existing single writer, serial tests, independent review and source/send gates preserved.",
@@ -592,17 +583,12 @@
     "completionCheckout": "Existing completion branch will fast-forward to final main metadata commit; no reset or fixture change."
   },
   "last_adopted_task_commit": "ba48f35e7ef97c1e162a2d373453bd1e9689529c",
-  "active_task": "NONE_PAUSED",
+  "active_task": "FULL_PROTOTYPE_SCOPE_INVENTORY_AND_GENUINE_MULTIFORMAT_IMPORT",
   "active_author": "/root",
   "resume_current": {
-    "status": "ACTIVE",
-    "next_batch": "B-L1",
-    "policy": "docs/superpowers/plans/2026-10-27-ama-development-workflow.md",
-    "state_owner": "current-state.json",
-    "historical_routing": "workflow-routing-history-20261027.json",
-    "current_batch": "B-L2",
-    "resumed_utc": "2026-10-27T12:02:47.122384+00:00",
-    "checkpoint": "active-20261027-bl1-bl2.md"
+    "resumed_utc": "2026-10-29T13:56:32Z",
+    "scope": "import meeting functional completion only",
+    "next": "validate migrations, backend integration, draft/material/browser recovery, then fresh pixel evidence"
   },
   "parallel_preparation_current": {
     "status": "B3_AND_B4_PREFLIGHTS_READY",
@@ -1214,10 +1200,10 @@
     "concurrencyDiagnosticQualification": "executedWrites/hit/rollbackObserved cumulative from PRE_COMMIT; rely on dedicated commit events and response IDs",
     "independentPartialReviewSha256": "b60f472e7a4fafdb071184c28a0cde9a3264d097c3e928403c5fc1d7babe310d"
   },
-  "pause_boundary": "Task12 information-editor R3 source/quality adopted; all current batch review findings closed. No next batch scheduled. Phase B incomplete.",
-  "pause_completed_utc": "2026-10-27T11:10:33.545143+00:00",
+  "pause_boundary": "All three dispatched implementation agents returned checkpoints and were closed. Current frontend typecheck passed, focused19 had18pass/1fail. Java/migrations/runtime integration incomplete; no next batch.",
+  "pause_completed_utc": "2026-10-29T10:54:16.378520+00:00",
   "resume_steps": [
-    "Read workflow_policy and next_steps here; execute AMA-WORKFLOW-20261027 from B-L1 after continue, not archived B5 routing."
+    "Read docs/development/import-resume-2026-10-29.md first; follow section8 only after explicit continue. Preserve prior accepted scoped evidence; finish existing partial implementations, do not repeat or omit."
   ],
   "paused_source_review": {
     "historicalPauseRevokedByExplicitContinue": true,
@@ -1936,7 +1922,48 @@
     "sourceAdopted": true,
     "adoption": "bl1-source-adoption-20261027.md"
   },
-  "status": "B_INCOMPLETE_LIMITED_API_EVIDENCE_ADOPTED_BATCH_SETTLED",
+  "demo_current_20261028": {
+    "status": "DEMO_01_TO_04_FUNCTIONAL_LOCAL_EVIDENCE_PROTOTYPE_PARTIAL",
+    "slice": "DEMO-01/02/03/04",
+    "change": "Owner meeting information opens the adopted MeetingInfoEditor inside an accessible right-side drawer; persistence and roster confirmation contracts unchanged.",
+    "source": [
+      "web/src/features/meetings/MeetingInfoDrawer.vue",
+      "web/src/features/meetings/MeetingDetail.vue",
+      "web/tests/unit/meeting-info-drawer-view.test.ts"
+    ],
+    "verification": {
+      "typecheck": "PASS",
+      "unit": "242/242 PASS",
+      "build": "PASS",
+      "api": "PASS",
+      "localLoginSmoke": "PASS",
+      "localAppSmoke": "PASS",
+      "localAppTests": "7/7 PASS",
+      "browser1024": "PASS drawer/readback/Escape/no-errors",
+      "browser1440": "PASS create/directory/roster-save/roster-confirm/MySQL-readback/no-errors",
+      "visual": "2/2 existing original-derived shared shell zero-pixel PASS",
+      "shellE2E": "8/8 PASS",
+      "txt": "list import, two-file ordered upload, genuine Worker, RAW→WORKING, save/KEY/confirm/refresh PASS",
+      "badInput": "Invalid second file FAILED, no partial RAW PASS",
+      "restart": "all6services+MySQL stop/start; same2sessions and full JSON business values, identical official HTML sha256 PASS",
+      "providers": "six genuine owned services running",
+      "pythonDevTests": "15/15 (launcher7 + provider2 + historical fixture guards6)",
+      "minutes": "first auto-adopt, pending regeneration inspect/adopt, body/action edits, source drills/reviews PASS",
+      "final": "PARTIAL blocks; scripted controlled SUPPORTED opens final; frozen5required reviews",
+      "publication": "actual signed Worker publication SUCCEEDED attempt2; first45s timeout retained for diagnosis",
+      "documentACL": "owner/member200; provider-revoked member403; provider-authorized meeting-outsider403; membergeneration403"
+    },
+    "runtimeAuthorized": true,
+    "createdMeetingForEvidence": "6b6269d3-0999-4b57-9fb4-3d682d8e548d",
+    "next": "DEMO-05 prototype matrix, IME/conflict/recovery, full-chain evidence, publication attempt-2 diagnosis; then B-QUAL",
+    "independent_review": {
+      "reviewer": "01a18325-bf0d-72d0-906a-590ac85fff5d",
+      "report": "demo02-independent-review-20261028.md",
+      "initial": "3 P2 Important",
+      "disposition": "All 3 fixed; causal cache/preparation regressions RED→GREEN 7/7, browser accessibility RED→GREEN; no overall Demo/B claim"
+    }
+  },
+  "status": "IMPORT_FUNCTIONAL_COMPLETION_ACTIVE",
   "execution_20261027_bl2": {
     "status": "SOURCE_ADOPTED_RUNTIME_PENDING",
     "adopted": true,
@@ -2034,5 +2061,375 @@
     "finalReviewSha256": "10c1d9208b5aee4aa634a7d32d27a53357e8f9602db22648c63d2b77fbf84366",
     "adoption": "bl5-final-limited-adoption-20261028.json",
     "phaseBAccepted": false
+  },
+  "runtime_authorization_20261028": {
+    "status": "AUTHORIZED_BY_USER",
+    "scope": "Current local Demo work: one local MySQL, local files, single host, browser and reversible validation; no settled B-L5 resource restart.",
+    "authorizedAt": "2026-10-28 Asia/Shanghai",
+    "source": "User message: 授权; 后续需要授权的操作，我都给你授权了，无需停下问我",
+    "activeEnvironment": {
+      "frontend": true,
+      "backend": true,
+      "url": "http://127.0.0.1:5173/meetings",
+      "databaseContainer": "ama-local-dev-5c92c4c3a416"
+    }
+  },
+  "demo03_current_20261029": {
+    "status": "FUNCTIONAL_EVIDENCE_ONLY",
+    "evidence": "docs/acceptance/b/demo-local-minutes-publication-2026-10-29.md",
+    "meeting": "33d21a2c-50c1-47d5-84d0-0258fe40e225",
+    "review": "demo03-independent-review-20261029.md",
+    "reviewDisposition": "One P2 bootstrap finding fixed with real partial-SQLite RED/GREEN and same identity; normal completed-store revocation preservation passes. No extra review round requested.",
+    "syntheticOnly": true
+  },
+  "demo05_current_20261029": {
+    "status": "SCOPED_UI_BROWSER_CHECKS_PASS_REVIEW_CLOSED",
+    "freshChainMeeting": "941a47fe-87df-4502-b078-b1c4279529fb",
+    "publication": "1c716d71-c9bb-4ae4-a071-526434d2a094",
+    "browserAck": "demo05-ack-publication01.log PASS: original accepted task a58ac2e1-e755-42eb-8b16-d031f0e57619, lost response, recovery queries only, exactly one POST, owner/member documents and dual denial PASS",
+    "safety": "demo05-browser-safety03.log PASS: real two-page409 draft reapply, unconfirmed503 no task, IME zero save during composition/tab retention/one after, stale POST409 zero extra task/human-body change",
+    "csrfCorrection": "Earlier direct member mutation omitted CSRF; its FORBIDDEN403 was not role proof. Corrected valid CSRF gives MEETING_FORBIDDEN403 in demo05-valid-csrf-member-check.log and latest full flow. Read document dual ACL unaffected.",
+    "prototype": "Original8states16images and current10states20images at1440/1024, immutable A originals; final matrix docs/acceptance/b/demo-browser-prototype-2026-10-29.md. Candidate selected-only/body-set filtering and native footer within viewport actual PASS.",
+    "checks": "246 frontend units, types/build/generatedAPI,10 combinedE2E+zero-pixel shared-shell PASS; real 409/IME/tab-retention/stalegeneration rerun final04 PASS; controlled full generation/review/pub03 PASS.",
+    "latestPublishedMeeting": "20320bdb-26a8-493f-b5c4-936688d4d43c",
+    "latestPublication": "684c36c9-186e-4914-9ae0-414d7bde146b",
+    "review": "demo05-ui-runtime-review-20261029.md P2 progress corrected; independent demo05-progress-correction-review-20261029.md closes P2 and candidate correction, no additional P2+. Does not certify formal B or model quality."
+  },
+  "publication_renewal_current_20261029": {
+    "status": "SCOPED_SOURCE_REVIEW_AND_GENUINE_WORKER_BOUNDED_CHECKS_PASS",
+    "plan": "docs/superpowers/plans/2026-10-29-publication-preparation-renewal.md",
+    "meeting": "91e1ab53-7bf9-410f-ad5d-745ffa9e1217",
+    "task": "f683db53-f7b8-4ce2-9933-a90de5fa9fb2",
+    "publication": "d5c2ed09-d559-4113-8a64-52353e9958cb",
+    "red": "publication-renewal-red.log: actual queue lease attempt1, own expiry renewal at two root-free stages -> both PROVENANCE_UNAVAILABLE and zero effects",
+    "initial_fix_failure": "publication-renewal-green01.log retained: predicate onlyString failed; actualJdbcKind probe confirmed LocalDateTime; native-type unit RED thenGREEN6/6",
+    "green": "publication-renewal-worker-green.log: genuine WorkerLoop/session/KnowledgePublicationHandler attempt3, two injected stages PREPARED, then original task SUCCEEDED, one execution/mapping",
+    "scope": "No broad provenance retry; full fresh acquisition only for exact current own expiry-only full task-union signal, shared cumulative ledger, max3 captures, recapture admission <=15s. Lookup/read remains strict.",
+    "runtime": "All6 daily services restored; exact start-worker/stop-worker with source/ownership guards added and launcher8tests PASS.",
+    "remaining": "Historical56.85s claim delay unexplained; full B-QUAL budget/lock/coexistence/saturation/crash/branch review still open.",
+    "bounded": "publication-renewal-bounded-green02.log six real phases PASS; bounded-publication02.log same publication completed with resumed ordinary Worker and doc ACLs.",
+    "checks": "Six focused tests and531 Java unit regression PASS; independent source review no P2+."
+  },
+  "bqual_action_owner_current_20261029": {
+    "status": "LOCAL_SLICE_ADOPTED_NAME_P2_CLOSED",
+    "plan": "docs/superpowers/plans/2026-10-29-local-action-owner-selection.md",
+    "meeting": "70605bec-ada4-469a-bf9c-9f146909db66",
+    "baseline": "bqual-action-red.log actual422notinstalled/zerochange",
+    "tests": "ActionOwnerFields4 plus renewal6 PASS; picker3 incl synchronous reentrant RED/GREEN PASS; bqual-action-genuine01.log actual production factories sameholder/S-F identity withdrawal/post-insert rollback/save+exactreplay PASS",
+    "review": "bqual-action-owner-review-20261029.md P2 retained; bqual-action-name-budget-review-20261029.md closes important finding, no new P2+",
+    "next": "continue BQUAL exact budget/lock/atomicity/criticalrecovery/coexistence/finalbranch review",
+    "checks": "535Java afternamefix;249Web/types/build; genuine02 sixgroups; nameRED126000bytes rawquery1 -> GREEN0 + exact case/Unicode/space; complete browserGreen05 and publishedvalidtuple503/zeroSavedJSON/sameDocSHA PASS"
+  },
+  "m1_demo_current_20261029": {
+    "status": "ACCEPTED_CONTROLLED_LOCAL_WORKFLOW",
+    "basis": "R2 section4.3 matrix docs/acceptance/b/demo-browser-prototype-2026-10-29.md; current realbrowser complete chain plus scopedUI/runtime reviews and closures",
+    "doesNotMean": "Not formalB, realAI/company capability or productiondeployment qualification",
+    "next": "BQUAL same dailyownedlocal scope; stop after formalB"
+  },
+  "bqual_budget_current_20261029": {
+    "status": "SCOPED_NATIVE_PROOF_ADOPTED_TRACE_P2_CLOSED",
+    "logs": [
+      "bqual-budget-genuine01.log",
+      "bqual-budget-genuine02.log",
+      "bqual-budget-genuine03.log"
+    ],
+    "scope": "genuine complete current saved graph S/A/F sharedledger; native physical current minutes row exactUTF8/scalar/UTF16/copy/response/cancel/cumulative; six complete saved.current tinyconfigs beforetargetminutesbody query; ambienttx prebody; zero business effects",
+    "limits": "not every endpoint/full lockset or saturation; source budget review pending",
+    "trace": "bqual-budget-review-20261029.md P2mixedraw/length classifier false-negative -> actualwrapper/filefreedriverRED then10caseGREEN; nativefullfactory03rerunPASS. Closure bqual-budget-trace-closure-20261029.md pending",
+    "evidenceDoc": "docs/acceptance/b/local-core-qualification-2026-10-29.md",
+    "review": "bqual-budget-review-20261029.md retained; bqual-budget-trace-closure-20261029.md closes instrument P2 no new P2+ in scoped correction",
+    "remaining": "not all endpoints/full locksets; new separate named identity acquisition fix under review"
+  },
+  "bqual_read_withdrawal_current_20261029": {
+    "status": "GENUINE_PRODUCTION_FACTORY_AND_NORMAL_OWNER_API_PASS_REVIEW_PENDING",
+    "meeting": "70605bec-ada4-469a-bf9c-9f146909db66",
+    "log": "bqual-read-withdrawal-genuine01.log",
+    "scope": "actualmemberS captureCOMMIT -> owner normalAPI rosterdraft remains200/confirm403 -> FcurrentACLdenies/no projection -> originalroster normalAPI restored200/samebody+elements",
+    "limits": "saved minutes read representative only; no officialdoc/provider-race/fullreadonly-matrix claim",
+    "latestAfterIdentityFix": "bqual-read-withdrawal-genuine02.log PASS with current names reader and normalAPI producers, rosterrestored/samebody/elements"
+  },
+  "bqual_generation_rollback_current_20261029": {
+    "status": "ACTUAL_ACCEPTANCE_INSERT_ROLLBACK_PASS_REVIEW_PENDING",
+    "meeting": "70605bec-ada4-469a-bf9c-9f146909db66",
+    "log": "bqual-generation-rollback-genuine01.log",
+    "scope": "actualproductionfactory generation_input insert executes -> forcedSQLException rollbackroot/projection/input/task/candidate/receipt/audit/outbox counts, no acceptedtask; ambientcommandreject",
+    "limits": "does not prove Worker completion rollback/all interleavings/old503origin"
+  },
+  "bqual_identity_name_current_20261029": {
+    "status": "CAUSAL_REAL_MYSQL_RED_GREEN_PRODUCTION_FIX_REVIEW_PENDING",
+    "plan": "docs/superpowers/plans/2026-10-29-identity-name-acquisition.md",
+    "source": "JdbcMeetingAccess names=true metadata/reserve/fullname; JdbcMeetingRepository passes one configured WorkspaceReadBudget for each union; status-only/activePerson exact matching preserved",
+    "baseline": "bqual-identity-name-red.log actual8400000bytes overdefault8388608 ->1raw/1large no budgetreject, source restored",
+    "green": "bqual-identity-name-green02.log zeroTargetRaw/Large, budgetreject, normalUnicode+exact/minus1/cancel PASS andsource restored",
+    "checks": "535Java PASS bqual-identity-broad-java01.log; current sixservice source start and actual withdraw02/browser-safety01 PASS",
+    "review": "same reviewer bqual-identity-name-review-20261029.md pending",
+    "limits": "physical existing identity prelock and current command regressions; not entireAPI/maxcapacity qualification"
+  },
+  "bqual_info_rollback_current_20261029": {
+    "status": "GENUINE_PRODUCTION_INFO_INSERT_ROLLBACK_PASS_REVIEW_PENDING",
+    "log": "bqual-info-rollback-genuine01.log",
+    "scope": "actual meeting_info_revision insert thenforcedSQLException rollbackinfo/roster/grants/roots/receipt/audit/outbox, genuinefactory sameinstances; ambientguard; optionalcategorynull notfakecompanydict",
+    "remaining": "specificwritepoint only, exact discovery/F interleavings stillneeded"
+  },
+  "next_action": "Continue from docs/development/import-resume-2026-10-29.md and .superpowers/sdd/2026-10-29-import-functional-completion/progress.md; do not expand scope.",
+  "bqual_identity_replay_current_20261029": {
+    "status": "SCOPED_ADOPTED_P2_CLOSED",
+    "red": "bqual-identity-replay-red.log: CREATE/SAVE/CONFIRM fail with later wide directory names",
+    "green": "bqual-identity-replay-green02.log: all3 original results,0rawNames,zeroReplayBusinessChanges,changedPayloadStillConflicts,newNameProposalStillBudgetRejected,revokedActorStillDenied,identitiesRestored",
+    "checks": "535 Java PASS bqual-identity-broad-java03.log;02 test output env omission retained",
+    "review": "bqual-identity-replay-closure-20261029.md no additionalP2+, green02 negative cases/broad03 counts independently checked",
+    "scope": "Current auth and hash still enforced; no final formalB claim"
+  },
+  "bqual_native_raw_current_20261029": {
+    "status": "SCOPED_ADOPTED_INDEPENDENT_REVIEW_NO_P2",
+    "log": "bqual-native-raw05.log",
+    "directory": ".tools/local-app/native-crash/ec0cba9e-2f72-4005-a4c4-f8b02bfd537a",
+    "meeting": "ee9042f7-8a4f-4e99-b2d4-7929e1ef0afc",
+    "task": "1b48a58b-2c8c-430c-8504-72f2ec07c333",
+    "scope": "Actual INSERT return1 activeTX/preCOMMIT nativehalt86,zero partialDomain,inputs/files/refs retained,originaltask ordinaryWorker expired attempt1 then attempt2 succeeds,oneRAW4orderedsegments oneTASK_SUCCEEDED",
+    "remaining": "intake acceptance otherrollback positions,model/publication/provider combos/coexistence/locks andformalB open",
+    "review": "bqual-local-core-native-review-20261029.md: six bounded cases including info/gen rollback/member read; noP2+, retains snapshot/count/cut/network evidence limits"
+  },
+  "bqual_native_external_current_20261029": {
+    "status": "SCOPED_ADOPTED_INDEPENDENT_REVIEW_NO_P2",
+    "candidateLog": "bqual-native-candidate04.log",
+    "candidateDirectory": ".tools/local-app/native-crash/cfeb883d-5217-4c62-8a2a-f8593ab51423",
+    "mappingLog": "bqual-native-mapping01.log",
+    "mappingDirectory": ".tools/local-app/native-crash/99ad1766-5849-4d2d-8345-cd4e311ffbe7",
+    "scope": "Actual INSERT precommit halt86, no partial root/domain rows; original MARKED execution/RECONCILING task; independent exact model and KB process restarts with same cmd/config/store, other roles PID/start ticks retained; ordinary Worker originaltask/execution attempt1 completes; cut→postrestart→recovery remote results/executions/identity/ACL unchanged",
+    "notProved": "Store equality not counted as network0POST; all other acquisition/lock/coexistence/F criteria remain open",
+    "review": "bqual-local-core-native-review-20261029.md: six bounded cases including info/gen rollback/member read; noP2+, retains snapshot/count/cut/network evidence limits"
+  },
+  "bqual_document_withdrawal_current_20261029": {
+    "status": "SCOPED_ADOPTED_MTLS_TEXT_P2_CLOSED",
+    "log": "bqual-document-withdrawal-genuine01.log",
+    "scope": "same genuinefactory/client: post-response rootfree identity withdrawal→FMeetingAccessDenied; pre-send rootfree provider READwithdrawal→realGET403; oneGET/noPOST/noHTML/zero business change percase; restore authority then exactsame documentSHA",
+    "directories": [
+      ".tools/local-app/read-withdrawal/document/1ba1b0ad-13da-4b45-b7c9-f89f80e6afc3",
+      ".tools/local-app/read-withdrawal/document/601dce08-fbb9-4903-ad43-02f6738eca29"
+    ],
+    "notProved": "Cannot revoke bytes already returned; not allreadendpoints; explicit grant updates may advance version",
+    "review": "bqual-official-document-withdrawal-review-20261029.md +bqual-official-document-scope-closure-20261029.md; actualisolatedloopbackHTTP+signedauthorization, not mTLSqualification"
+  },
+  "bqual_minutes_renewal_current_20261029": {
+    "status": "BUDGET_P2_CLOSED_S_DISCOVERY_MAX3_RECORDED_SCOPED_PASS_FINAL_CHECKS_PENDING",
+    "plan": "docs/superpowers/plans/2026-10-29-minutes-preparation-renewal.md",
+    "directory": ".tools/local-app/heartbeat-preparation/45aafcc9-0e47-41bc-a5a0-1f6c783711ae",
+    "task": "32171fd4-bb9f-4316-9bc1-5c6bca2dd6d2",
+    "red": "ActualScommit12s/rootfree physical NOWAIT/own expiry advanced sameownerattempt→PROVENANCE failure, attempt1expired/attempt2success; passWithoutRetryfalse",
+    "next": "Genuine DISCOVERY boundary (session73823), then EXHAUST; soleindependent source/runtime review; remaining BQUAL/coexistence/locks/B00/finalbranch review",
+    "checks": "14focus02 and543Java bqual-minutes-renewal-broad01 PASS 0fail/error/skipped",
+    "failedGreen": "bqual-minutes-heartbeat-green01.log dir9e26fdc4... stillPROVENANCE/firstEXPIRED/attempt2success; do notadopt",
+    "diagnostic": "Second JFR bounded16MiB/2min active via exec_command session17673; automaticallyprintsfilteredprovenance stacks afterordinaryWorkerfinallyrestore",
+    "firstDiagnosis": "JFR b5c22579... onlyone issuer-bound renewal signal thenprepareStored catch, confirming extra15s gate. Removed onlyminutes added15s, originalsameledger30s/max3 retained; Publication15s unchanged",
+    "failedGreen2": "green02 dir6c0b8ca5... task88f1... firstexpired/secondsuccess/oneexec/candidate; stillnotaccepted",
+    "secondDiagnosis": "JFR b21e6ed1... firstFsignal followed by newround PublicationWriteGuard.covers afterD ownheartbeat; initialgeneration now declares completeoriginalGuard beforeD, coveragefailure comparesfullfreshguards/controls/4taskunion andonlyexpiry may signal, neverreplaceD",
+    "green": "bqual-minutes-heartbeat-green03.log dir46541240... task01dd6bdb... sameactualS12s/physicalNOWAIT/sameownerattempt expiryadvanced→attempt1success oneexecution onecandidate",
+    "budgetP2": "Independent source review missing D charge beforecoverage. ActualRED chargeCalls1; charge nowimmediatelyafterD beforewithPending/coverage. Genuine green03 chargeCalls2/sameledger, transientpeak4028766/cap4028765 baselineoneRoundFits/discardedRoundBUDGETreject,0external/candidate atprobeend",
+    "budgetEvidence": "coverage-budget/64908e5b-7d65-4a75-a0cc-6b1b78642981; logbqual-coverage-budget-green03.log; read-only entry/exit Advice in qualificationJVM originalbodyunchanged. OriginalownedtaskordinaryWorkerlater settled by actualAPI",
+    "remaining": "originaldeadline/cancel; final543Java andrenewal/portindependentclosure; coexistence/locks/otheratomic/B00/qualifieddispositions/finalbranch review",
+    "budgetReview": "bqual-coverage-budget-closure-20261029.md closes P2, no additional P2+",
+    "discoveryPositive": "discovery05 dir1954d1b6... task626fca3c... promptlyrelease after firstactualHB, exactlyoneprivateSignal/attempt1success1exec1candidate",
+    "max3Negative": "exhaust01 dir7bf2a37e... task74360380...3Spauses/3privateSignals→prepareStored capPROV,noBUDGET; originalRUNNING attempt1 terminated0exec/candidate, thennormalattempt2success1each",
+    "recordedCurrent": "nativefirstcandidate cut9b78...failedcontroller duehealthPortTIME_WAIT; supplementarya7308... originaltask/execution attempt1SUCCEEDED/1candidate +2body/set expectedcandidate+firstsavedcopy, exactproviderStoreunchanged; preservesoriginalFAIL",
+    "workerPort": "local_app start_worker probe SO_REUSEADDR alignsrealserver; realOSunitRED/GREEN10tests +nativehealthportTIME_WAIT EADDRINUSE plain/reuseavailable andactualcomponentrestart; same browserSession/body/elements, other5 PID/startticks same"
+  },
+  "bqual_final_20261029": {
+    "status": "ACCEPTED_FORMAL_LOCAL_M1_B",
+    "productionSourceFrozen": true,
+    "reviewBase": "34cb226aefe99c67d3681af68d748b0aeea4e073",
+    "reviewPackage": "bqual-final-branch-review-v2-20261029/manifest.json",
+    "sourceFiles": 1077,
+    "java": {
+      "tests": 545,
+      "classes": 101,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "log": "bqual-final-java02.log"
+    },
+    "rosterBudget": "genuineGREEN03/replay02 both PASS on V2 Unicode1020/255/510 corrected source; independent P2 closure pending",
+    "intakeRollback": "genuine03 four actual INSERT-after SQL failures/ambient PASS",
+    "generationFinalRace": "genuine01 actual S/A then before serialized F owner root advance -> PROVENANCE/zero extra graph PASS",
+    "minutesSaturation": "coexistence04 PASS",
+    "reconciliationSaturation": "saturation02 PASS; 2 real maintenance scans/2GET0POST; modern eligible terminal origin disposition pending",
+    "schema": "Flyway validate actual16allSUCCESS;65tables501columns/133secondaryIndexes128FK83CHECK; B00review99; legacy preservation and deferredD01 columns explicit",
+    "browser": "final browser02 PASS on final installed V2; six services live",
+    "remaining": [],
+    "formalBAccepted": true,
+    "noCDEF": true,
+    "noGitPublication": true,
+    "web": {
+      "tests": 249,
+      "failures": 0,
+      "skipped": 0,
+      "typecheck": "PASS",
+      "build": "PASS",
+      "apiGeneration": "PASS",
+      "openapi": "PASS"
+    },
+    "localTools": {
+      "lifecycleTests": 10,
+      "providerTests": 2,
+      "result": "PASS"
+    },
+    "modernMaintenanceDisposition": "Independent bqual-local-maintenance-eligibility-disposition accepts fresh local scope; eligible unmarked terminals sealed atomically, marked terminal+UNDECIDED ineligible; legacy positive remains UNQUALIFIED",
+    "independentFinalReview": {
+      "verdict": "APPROVE",
+      "report": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/bqual-final-branch-source-review-20261029.md",
+      "sha256": "609979da8c6400402d4621a794fbf612d404fb8e22141f925a170ce61e350cce",
+      "openP2OrHigher": 0
+    },
+    "adoptedUtc": "2026-10-28T23:15:10.522814+00:00",
+    "stoppedAtB": true
+  },
+  "pre_final_local_b_active_state_20261029": {
+    "status": "B_INCOMPLETE_M1_DEMO_ACCEPTED_BQUAL_IN_PROGRESS",
+    "execution_status": "B_INCOMPLETE_DEMO_FUNCTIONAL_LOCAL_PROTOTYPE_PARTIAL",
+    "active_task": "DEMO_05_IN_PROGRESS",
+    "active_implementation": {
+      "task": 12,
+      "agent": "/root",
+      "reviewer": "/root/phase_b_independent_review",
+      "status": "ACTIVE_DEMO_05",
+      "next_batch": "Complete fresh demo chain, prototype/IME/conflict gates and bounded attempt-2 diagnosis, then B-QUAL",
+      "stage": "DEMO-03/04 functional synthetic local chain, signed member/owner documents, two independent ACL denials and six-service restart evidenced; fresh full chain in progress.",
+      "noRuntimeAuthority": false,
+      "noWindowRerun": true
+    },
+    "resume_current": {
+      "status": "ACTIVE",
+      "next_batch": "B-L1",
+      "policy": "docs/superpowers/plans/2026-10-27-ama-development-workflow.md",
+      "state_owner": "current-state.json",
+      "historical_routing": "workflow-routing-history-20261027.json",
+      "current_batch": "B-L2",
+      "resumed_utc": "2026-10-27T12:02:47.122384+00:00",
+      "checkpoint": "active-20261027-bl1-bl2.md"
+    },
+    "active_review": {
+      "agent": "/root/phase_b_independent_review",
+      "status": "IDLE_NO_PENDING_CURRENT_BATCH_REVIEW",
+      "latest_adoption": "task-12-info-editor-adoption-20261027.md",
+      "next_review_unit": "B-L1 complete feature batch; early review if high risk"
+    },
+    "next_steps": [
+      "Finish final info/minutes preview + actual state captures/matrix; scoped UI review and current-source checks.",
+      "Causally reproduce production publication self-renewal metadata race on fresh genuine daily submission; plan docs/superpowers/plans/2026-10-29-publication-preparation-renewal.md. Historical56.85s claim delay separately open.",
+      "Then remaining deep local B-QUAL and full branch review. Formal local B only when obligations close; no C/D/E/F."
+    ],
+    "next_action": "All final implementation/native/browser/545Java/249Web/type/build/API/tool checks PASS. Await sole independent Unicode P2 closure and L2/L3/saturation/B00/original-base V2 full-branch verdict; resolve any actual findings, then record formal M1-B and stop before CDEF. Do not re-ask authorization."
+  },
+  "formal_local_b_accepted": false,
+  "prototype_parity_20261029": {
+    "status": "AUDIT_BASELINE",
+    "requestedByUser": true,
+    "prototype": "designDocs/智能会议助手1021版.html",
+    "prototypeSha256": "ab21d0b73f4e48bbf701ee8bca5e958940b61f6e6f680d4ced02de0ce4bab867",
+    "priorAcceptanceArchive": ".superpowers/sdd/2026-10-23-ama-phase-b-remaining/prototype-parity-20261029/prior-acceptance",
+    "priorBackendEvidence": "Retained only in its original scope, no full prototype acceptance",
+    "scopeQuestion": "Full prototype functionality versus currently implemented B functionality asked async; independent UI repair proceeds",
+    "newAcceptanceStatus": "NOT_ACCEPTED",
+    "oldShellTestLimitation": "Only first204px and hidden topbar-right; does not validate complete screen or controls",
+    "sourceWriter": "main",
+    "reviewer": "01a18325-bf0d-72d0-906a-590ac85fff5d",
+    "scope": "用户明确：当前B全部页面和真实功能严格还原；录音/音视频等先实现页面，后端可不实装。",
+    "progress": "41 code/test files frozen for independent review; real flow/publish/native list/future/roles PASS; visual54/56, two8px gaps pending fix.",
+    "new_ledger": ".superpowers/sdd/2026-10-29-prototype-parity/progress.md",
+    "acceptance_standard": "docs/acceptance/b/prototype-parity-2026-10-29.md",
+    "validation_record": "docs/acceptance/b/prototype-parity-validation-2026-10-29.md"
+  },
+  "prototype_scope_latest_20261029": {
+    "allReachableFunctionsRequired": true,
+    "futureUiExemption": false,
+    "pixelComparisonRequired": false,
+    "strictLayoutComponentsCopyStylesInteractions": true,
+    "acceptance": "docs/acceptance/b/prototype-parity-2026-10-29.md"
+  },
+  "active_step": "IMPORT_FUNCTIONAL_COMPLETION",
+  "latest_resume_20261029": {
+    "scope": "all reachable prototype functions/layout/components/styles/fixed copy; no pixel acceptance",
+    "services": "5174/8182/8183; main checkout ports untouched",
+    "java_selected": {
+      "classes": 112,
+      "tests": 590,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "log": ".tools/local-app/full-prototype-java-selected-observation-v1.log"
+    },
+    "web_full_last": 307,
+    "web_full_needs_rerun_after_privacy": false,
+    "recording_native": ".tools/local-app/prototype-parity/20261029-recording-native-v2/report.json",
+    "recording_recovery": ".tools/local-app/prototype-parity/20261029-recording-recovery-v3/report.json",
+    "acceptance": "NOT ACCEPTED",
+    "web_full_log": ".tools/local-app/full-prototype-transcript-modal-full-unit-v16.log",
+    "subsequent_changes_need_rerun": false,
+    "transcript_modal_native": ".tools/local-app/prototype-parity/20261029-transcript-modal-native-v3/report.json",
+    "transcript_conflict_native": ".tools/local-app/prototype-parity/20261029-transcript-modal-conflict-v2/report.json",
+    "transcript_ack_readback_native": ".tools/local-app/prototype-parity/20261029-transcript-ack-readback-green-v1/report.json",
+    "metadata_budget": "original 1MiB and30s unchanged; measured metadata admission and expiring observation cache repaired; same original45-paragraph publication succeeded without a new POST",
+    "core_protocol_combined": ".tools/local-app/prototype-parity/20261029-core-protocol-combined-v1.json",
+    "original_publication_recovery": ".tools/local-app/prototype-parity/20261029-original-publication-recovery-v1/report.json",
+    "native_expiry_without_restart": "not claimed; actual old-worker JFR plus causal session/cache tests and genuine original-execution recovery after normal restart",
+    "source_manifest": ".tools/local-app/prototype-parity/20261029-transcript-budget-final-v1/manifest.json"
+  },
+  "pixel_parity_20261029": {
+    "scope": "all final prototype pages/states/overlays, exact pixels",
+    "supersedes": "previous no-pixel rule",
+    "plan": "docs/superpowers/plans/2026-10-29-pixel-perfect-prototype.md",
+    "referenceSha256": "ab21d0b73f4e48bbf701ee8bca5e958940b61f6e6f680d4ced02de0ce4bab867",
+    "acceptance": "NOT ACCEPTED",
+    "latest_round": "homepage only, scoped PASS and stopped; global requirements remain pending"
+  },
+  "homepage_delivery_20261029": {
+    "scope": "homepage only: listed static views and native interactions",
+    "status": "SCOPED_PASS_STOPPED",
+    "report": "docs/acceptance/b/homepage-pixel-parity-2026-10-29.md",
+    "pixel_report": ".tools/local-app/prototype-parity/20261029-home-final-v12/report.json",
+    "visual_cases": 32,
+    "different_pixels": 0,
+    "native_interactions": 13,
+    "web_unit_tests": 308,
+    "whole_prototype_accepted": false,
+    "stop_after_homepage": true,
+    "next_action": "Wait for an explicit user instruction; do not auto-continue to other pages."
+  },
+  "import_pixel_round_20261029": {
+    "scope": "import dialog and necessary home entry only",
+    "plan": "docs/superpowers/plans/2026-10-29-import-pixel-parity.md",
+    "ledger": ".superpowers/sdd/2026-10-29-import-pixel-parity/progress.md",
+    "stop_after_import": true,
+    "whole_prototype_accepted": false,
+    "functional_followup_plan": "docs/superpowers/plans/2026-10-29-import-functional-completion.md",
+    "pixel_proof": ".tools/local-app/prototype-parity/20261029-import-files-v3/report.json",
+    "functional_accepted": false,
+    "status": "PARTIAL_PAUSED_BY_USER",
+    "handoff": "docs/development/import-resume-2026-10-29.md",
+    "source_manifest": ".tools/local-app/prototype-parity/20261029-import-pause/source-manifest.json",
+    "historical_pixel_proof_not_current_candidate": true,
+    "current_typecheck": "PASS",
+    "current_focused_tests": {
+      "tests": 19,
+      "pass": 18,
+      "fail": 1,
+      "log": ".tools/local-app/import-pause-focused-tests.log"
+    }
+  },
+  "current_import_pause_20261029": {
+    "handoff": "docs/development/import-resume-2026-10-29.md",
+    "handoff_sha256": "86b279a62e739e53bef6dc0a627dd3632040961a947c7713ff2c1440c5bef52e",
+    "manifest": ".tools/local-app/prototype-parity/20261029-import-pause/source-manifest.json",
+    "source_files": 84,
+    "plan": "docs/superpowers/plans/2026-10-29-import-functional-completion.md",
+    "agents_closed": [
+      "01a18731-4476-70f2-9ab0-e014f526c982",
+      "01a18738-1ca3-7843-b4fa-2b885dd5c0cc",
+      "01a18738-1da8-79b3-8105-346fa8078740",
+      "01a1873f-81ee-7793-9a45-3766f1be2af9"
+    ],
+    "new_backend_compiled": false,
+    "new_migrations_applied": false,
+    "accepted": false
   }
 }

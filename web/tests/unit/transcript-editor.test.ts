@@ -58,3 +58,8 @@ test('denial observed by sibling history reader immediately freezes all private 
 test('member authorization reads public saved content with a live cancellation signal',async()=>{
  const view=current();view.capabilities={canReadHistory:false,canReadSources:true,canSave:false,canConfirm:false,canRestore:false};const editor=useTranscriptEditor({authorize:async()=>false,current:async(_id,signal)=>{assert.equal(signal.aborted,false);return view;},send:async()=>receipt()},()=> 'member',()=>meeting,()=>true);await editor.reload();assert.equal(editor.saved.value?.saved?.id,revision);assert.equal(editor.draft.value===null,true);editor.dispose();
 });
+
+test('pending save ticket survives a known ACK and failed readback until a successful GET settles it',async()=>{
+ let view=current(),fail=false,sends=0;const editor=useTranscriptEditor({current:async()=>{if(fail)throw new Error('lost current read');return view;},send:async()=>{sends++;view=current('2',next,'sent');fail=true;return receipt();}},()=> 'owner',()=>meeting,()=>true);
+ try{await editor.reload();editor.edit(edits('sent'));await editor.save();assert.equal(editor.command.state.value,'ACKNOWLEDGED');assert.equal(editor.pendingOperation(),'TRANSCRIPT_SAVE');assert.equal(editor.draft.value?.dirty.value,true);fail=false;await editor.retry();assert.equal(sends,1);assert.equal(editor.pendingOperation(),null);assert.equal(editor.draft.value?.dirty.value,false);assert.equal(editor.draft.value?.baseToken.value,'2');}finally{editor.dispose();}
+});

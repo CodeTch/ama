@@ -2,6 +2,7 @@ package ama.api;
 
 import ama.identity.*;
 import javax.sql.DataSource;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import java.net.URI;
@@ -24,7 +25,8 @@ class IdentityConfiguration {
         }
     }
     @Bean JdbcIdentitySessions sharedIdentitySessions(DataSource source) { return new JdbcIdentitySessions(source); }
-    @Bean SessionIssuer companyIdentity() { return new CompanyIdentityAdapter(); }
+    @Bean @ConditionalOnProperty(name="cas.enabled", havingValue="true")
+    SessionIssuer companyIdentity(JdbcIdentitySessions sessions) { return sessions::issueForVerifiedIdentity; }
     @Bean DirectoryPort companyDirectory() { return new CompanyDirectoryAdapter(); }
     @Bean CasAuthenticationPort casAuthentication(DataSource source, Environment environment) {
         return new CasAuthenticationAdapter(source,

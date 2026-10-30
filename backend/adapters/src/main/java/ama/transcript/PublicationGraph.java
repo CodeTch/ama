@@ -2,6 +2,8 @@ package ama.transcript;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.*;
+import ama.contract.TaskContracts.TaskLease;
+import java.time.LocalDateTime;
 import static ama.contract.MinutesContracts.*;
 import static ama.contract.MinutesContracts.FailureCode.*;
 
@@ -33,6 +35,47 @@ final class PublicationGraph {
   }all.sort((a,b)->{for(String key:q.keys()){Object x=a.get(key),y=b.get(key);int comparison=x instanceof Number&&y instanceof Number?Long.compare(((Number)x).longValue(),((Number)y).longValue()):((String)x).compareTo((String)y);if(comparison!=0)return comparison;}return 0;});return List.copyOf(all);
  }
  private static MinutesPendingDiscovery.Query q(String table,String columns,String key,String where,String meeting,List<String> extra){var cols=new ArrayList<>(List.of(columns.split(" ")));cols.addAll(extra);return new MinutesPendingDiscovery.Query(table,List.copyOf(cols),List.of(key),where,List.of(meeting));}
+ /** Internal signal only after every declared task-union row was freshly compared. No capture is accepted. */
+ static final class PreparationRenewed extends RuntimeException {
+  private final TaskLease lease;
+  private PreparationRenewed(TaskLease lease){super("Same-lease renewal requires fresh publication preparation",null,false,false);this.lease=lease;}
+  boolean issuedFor(TaskLease expected){return lease==expected;}
+ }
+ static boolean onlyOwnExpiryChanged(TaskLease lease,Map<String,List<Map<String,Object>>> before,Map<String,List<Map<String,Object>>> after){
+  var tables=Set.of("durable_task","task_attempt","external_operation","external_execution");
+  if(lease==null||!before.keySet().equals(tables)||!after.keySet().equals(tables))return false;
+  for(String table:tables)if(!table.equals("durable_task")&&!Objects.equals(before.get(table),after.get(table)))return false;
+  var oldRows=before.get("durable_task");var newRows=after.get("durable_task");if(oldRows.size()!=newRows.size())return false;
+  boolean changed=false;
+  for(int n=0;n<oldRows.size();n++){
+   var old=oldRows.get(n);var fresh=newRows.get(n);if(old.equals(fresh))continue;
+   if(changed||!lease.taskId().equals(old.get("id"))||!"RUNNING".equals(old.get("state"))||!lease.leaseOwner().equals(old.get("lease_owner"))||!Long.valueOf(lease.attempt()).equals(old.get("attempt")))return false;
+   var prior=new LinkedHashMap<>(old);var current=new LinkedHashMap<>(fresh);Object first=prior.remove("expires_at"),next=current.remove("expires_at");
+   if(!prior.equals(current))return false;
+   try{var previous=expiry(first);var following=expiry(next);if(previous==null||following==null||!following.isAfter(previous))return false;}
+   catch(java.time.DateTimeException invalid){return false;}
+   changed=true;
+  }
+  return changed;
+ }
+ private static LocalDateTime expiry(Object value){
+  // Connector/J returns DATETIME as LocalDateTime; the metadata reader also supports ISO-normalized Timestamp values.
+  return value instanceof LocalDateTime time?time:value instanceof String text?LocalDateTime.parse(text):null;
+ }
+ static void requirePreparationUnion(TaskLease lease,Map<String,List<Map<String,Object>>> before,Map<String,List<Map<String,Object>>> after){
+  var tables=Set.of("durable_task","task_attempt","external_operation","external_execution");
+  require(lease!=null&&before.keySet().equals(tables)&&after.keySet().equals(tables),PROVENANCE_UNAVAILABLE);
+  if(before.equals(after))return;
+  if(onlyOwnExpiryChanged(lease,before,after))throw new PreparationRenewed(lease);
+  throw fail(PROVENANCE_UNAVAILABLE);
+ }
+ static void lockForPreparation(DataSource source,Plan plan,boolean controls,TaskLease lease){
+  if(controls||lease==null){lock(source,plan,controls);return;}
+  var j=new JdbcTemplate(source);j.setQueryTimeout(2);var before=new LinkedHashMap<String,List<Map<String,Object>>>();var after=new LinkedHashMap<String,List<Map<String,Object>>>();
+  // Preserve declaration and lock order, and compare the complete union before issuing a renewal signal.
+  for(var query:plan.tasks()){before.put(query.table(),plan.rows().get(query.table()));after.put(query.table(),read(j,query,true,plan.budget()));}
+  requirePreparationUnion(lease,before,after);
+ }
  static void lock(DataSource source,Plan plan,boolean controls){var j=new JdbcTemplate(source);j.setQueryTimeout(2);for(var q:controls?plan.controls():plan.tasks())require(read(j,q,true,plan.budget()).equals(plan.rows().get(q.table())),PROVENANCE_UNAVAILABLE);}
  static void lockReplacement(DataSource source,Plan plan,String insertedTask){var j=new JdbcTemplate(source);j.setQueryTimeout(2);for(var query:plan.tasks()){var q=query;if(q.table().equals("durable_task")){var args=new ArrayList<>(q.args());args.add(insertedTask);q=new MinutesPendingDiscovery.Query(q.table(),q.columns(),q.keys(),"("+q.where()+") AND id<>?",args);}require(read(j,q,true,plan.budget()).equals(plan.rows().get(q.table())),PROVENANCE_UNAVAILABLE);}}
  static void reserve(Plan plan,boolean prospective){var rows=plan.rows();long cap=Math.min(256,plan.budget().taskLimit());long tasks=rows.get("durable_task").size()+(prospective?1:0),attempts=rows.get("task_attempt").size()+(prospective?3:0),operations=rows.get("external_operation").size()+(prospective?1:0),executions=rows.get("external_execution").size()+(prospective?1:0),pubAttempts=rows.get("publication_attempt").size()+(prospective?1:0);for(var task:rows.get("durable_task")){String type=(String)task.get("task_type");require(Set.of("TRANSCRIPT_IMPORT_V1","MINUTES_GENERATE_V1","KNOWLEDGE_PUBLISH_V1").contains(type),CAPABILITY_UNAVAILABLE);if(Set.of("READY","RUNNING").contains(task.get("state")))attempts+=((Number)task.get("max_attempts")).longValue()-((Number)task.get("attempt")).longValue();if(!"TRANSCRIPT_IMPORT_V1".equals(type)&&Set.of("READY","RUNNING","RECONCILING").contains(task.get("state"))&&rows.get("external_execution").stream().noneMatch(e->task.get("id").equals(e.get("task_id")))){operations++;executions++;if("KNOWLEDGE_PUBLISH_V1".equals(type))pubAttempts++;}}require(tasks<=cap&&attempts<=cap&&operations<=cap&&executions<=cap&&pubAttempts<=cap&&rows.get("publication_submission").size()+(prospective?1:0)<=cap,BUDGET_EXCEEDED);}

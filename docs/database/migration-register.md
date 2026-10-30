@@ -265,3 +265,11 @@ root 独立以原生MySQL文本/UTC和epoch读取实际history：installed_rank1
 ### V013.1 Task 2 实现采用
 
 作者66e70fdeef286a38592395ce94bdfbb1a93bce4a，fresh独立SPEC PASS / QUALITY APPROVED，0阻断发现；root已完整阅读及核验10源码/134证据SHA、45IT+221units零失败。当前生成模型98表731列保留原96表和D01未分配状态；实际新两表物理资格与旧部署保全分开表述。新会议guard0同事务创建已实测，历史缺行不推断。冻结SQL9280baea…/1817B/checksum-1898004857不变；原12SQL、V003/V004空号与V014..027预留/下一整数V028不变。见[任务2采用记录](../acceptance/b/remaining-task-02-runtime-metadata.md)。无整体B或公司运行时完成推断。
+
+## 2026-10-29 导入功能补全暂停登记
+
+用户已要求完成当前调度批次后暂停。本批 V017 背景材料来源表和新分配 V028 导入主文件有序草稿/命令回执均仅为工作树草稿，**未执行、未冻结、未验收采用**。V028 占用此前保留的下一整数版本，不改 V014–V027 的历史分工。不得在接续时直接启动自动迁移：先读最新接续文档，核对草稿与现有 schema/注册信息、审查和记录首次应用 SHA；随后仅在本工作树独有数据库按序应用，成功/首次应用后保持字节冻结，修正另用前向迁移。禁止 repair、重编号已应用脚本、outOfOrder 或重置旧库。详见 docs/development/import-resume-2026-10-29.md。
+
+## 2026-10-29 导入批次本地执行观察（V017/V028）
+
+在当前工作树拥有的 `ama-local-dev-5c92c4c3a416` 数据库上，串行启动器实际读取 Flyway history 确认：V017 `materials` 与 V028 `import draft` 均按顺序成功安装，前置历史至 V013.4 保留，未使用 repair、outOfOrder、reset 或清空库。首次观察的 Flyway checksum 分别为 V017 `-583668077`、V028 `-15868374`；当前候选源码 SHA 分别为 `f649eab312e6b673baa9893b067cb5df2c453fc2cb6a63e92d0af5772f1fdd16` 与 `0e351a3483accda7f22631db2ffcbc9b26a55eeb6a4fd0e3b7789fb1c539fc8e`。该记录只证明本地受控库的首次成功观察，不代表 D01/V017 的整体业务验收或生产采用。

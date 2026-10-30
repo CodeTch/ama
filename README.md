@@ -1,14 +1,20 @@
+> **本轮边界（最新）：** 用户要求先完成“我的会议”首页像素复刻并停下。首页所列静态场景32项/真实交互13项已通过；详见 [docs/acceptance/b/homepage-pixel-parity-2026-10-29.md](docs/acceptance/b/homepage-pixel-parity-2026-10-29.md)。其余页面不自动继续，整套原型/B阶段仍为 NOT ACCEPTED。
+
+> **最新用户指令：逐页1:1、像素级复刻。** 旧“不做像素级比对”规则已撤销；既有报告仅证明其原范围，新像素矩阵尚未通过。当前计划：`docs/superpowers/plans/2026-10-29-pixel-perfect-prototype.md`。
+
+> **当前原型全量复刻仍未验收通过。** 用户要求全部页面和可达功能复刻原型，撤销旧“未来功能仅做页面”豁免；不做像素级比对。
+
 # 企业智能语音会议助手
 
-当前按[Demo 优先调整计划 R2](docs/superpowers/plans/2026-10-28-ama-demo-first-adjustment.md)和[总计划](docs/superpowers/plans/2026-10-21-ama-delivery-plan.md)推进：前期本地 MySQL、本地文件、单机，按“会议/信息→上传/转写→生成/审阅→发布/文档”逐段同步原型复刻与联调，先交付 **M1-Demo 可演示闭环**，再以 **B-QUAL 完成 M1-B 正式本地验收**。所有尚未完成的 S3、双 MySQL、双活适配及专属依赖最后部署阶段集中处理。
+当前按[全量原型补齐计划](docs/superpowers/plans/2026-10-29-full-prototype-completion.md)和[验收标准](docs/acceptance/b/prototype-parity-2026-10-29.md)继续返工。真实五种文档与七种媒体导入、回听、分段录音和后续处理已取得局部验证；转写编辑、全文替换、两类ACK/并发恢复及45段核心生成/发布恢复的新证据见[本批记录](docs/acceptance/b/transcript-edit-budget-2026-10-29.md)。实时识别、材料、说话人/纠错、专题、模板/局部生成、反馈等仍有 OPEN。当前源代码与证据状态见[持续验证记录](docs/acceptance/b/prototype-parity-validation-2026-10-29.md)和[接续说明](DEVELOPMENT_HANDOFF.md)。
 
-截至 2026-10-30，A 本地工程已交付，B-L1～4 的会议信息/名单、上传导入、转写/生成、纪要/审阅/发布已有源码采纳，local/S3 已有完整 API 链的限定证据；DEMO-01 的 CAS 入口已使用 `ama-integration-harness` 的真实 `/cas/login` 与 `/cas/p3/serviceValidate` 完成浏览器联调。**Demo 尚待验收，B 仍 INCOMPLETE**：文件/Worker/模型/发布装配、原型对照和深度事务/预算/锁序/恢复证明仍待后续片段与 M1-B。真实 AI/企业联调单独验证，受控合成结果不代表真实能力。已有功能、完成状态和 S3 实现全部保留；详细接续见 [DEVELOPMENT_HANDOFF.md](DEVELOPMENT_HANDOFF.md)。
+旧 R2/M1-B 的 ACCEPTED/独立 APPROVE 只对应此前限定的配置、后端与受控流程，其报告继续保留；不能替代这次全页面、全功能验收，也不表示当前没有实现待办。旧来源见[正式本地B记录](docs/acceptance/b/formal-local-b-2026-10-29.md)。
 
 完整结果、测试数量、审查修复、待验证项和 B 阶段入口见[阶段 A 验收报告](docs/acceptance/a/summary.md)。
 
 ## 本地开发
 
-需要可登录、可读写会议数据的本地环境时，在本工作树根目录执行 `python3 tools/dev/local_app.py start`，然后打开 `http://127.0.0.1:5173/meetings`。启动器使用独立持久化 MySQL，并通过联调辅助项目的 CAS 登录页完成开发身份认证；账号、CAS 地址、代理配置及停止/重启方法见[本地开发说明](docs/development/local-development.md)。
+需要可登录、可读写会议数据的本地环境时，先启动兄弟联调项目 `ama-integration-harness` 的 CAS 服务，再在本工作树执行 `python3 tools/dev/local_app.py start --web-port 5174 --api-port 8182 --management-port 8183`，然后打开 `http://127.0.0.1:5174/meetings`。开发和生产都经过服务端 CAS 票据校验后建立 AMA 会话；启动器使用独立持久化 MySQL 和示例会议。CAS 账号、代理配置及停止/重启方法见[本地开发说明](docs/development/local-development.md)。
 
 在 Linux/WSL x86_64 的仓库根目录执行。工具链安装在忽略的 `.tools/`，不会替换系统 Java/Node。
 
@@ -28,7 +34,7 @@ python3 tools/checks/run.py all
 npm --prefix web run dev
 ```
 
-后端启动见 [backend/README.md](backend/README.md)；前端/视觉工具见 [web/README.md](web/README.md)。未配置数据库时存活检查可用、就绪检查返回 503。现有本地启动器可登录、创建会议并保存信息，但尚未安装文件服务、Worker、模型或发布提供方；已有相应业务源码及受控 API 证据不能替代该启动入口的完整 Demo 装配和浏览器验收。实时录音、公司模型/知识库真实集成和生产资格仍以各阶段记录为准。
+后端启动见 [backend/README.md](backend/README.md)；前端/视觉工具见 [web/README.md](web/README.md)。未配置数据库时存活检查可用、就绪检查返回 503。现有本地启动器可登录、创建会议、保存信息及确认名单，并已接通本地 mTLS 文件服务与独立 TXT Worker，可完成有序 TXT 上传导入、转写编辑保存及确认。已安装本地受控模型、候选/编辑/审阅、最终冻结及签名知识库发布，负责人/成员正式文档双层 ACL 与全部组件普通重启已有实际证据。固定合成结果不代表真实 AI 质量；Demo 主要结构与代表性冲突/IME 已验收，深层稳定性资格继续 B-QUAL。实时录音、公司模型/知识库真实集成和生产资格仍以各阶段记录为准。
 
 ## 验证边界
 

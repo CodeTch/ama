@@ -1,0 +1,7 @@
+# R2 B-R12 名单命令读取前预算补缺
+
+当前同一身份/信息源码审查发现members()直接读取roster_member.display_name LONGTEXT，真正待证后才修正。真实业务方法建立新的84,000字节Unicode externalRosterNames快照，真实MeetingConfiguration配置262,144 acquisition bytes：SAVE在故意后写保护SQLException前已执行1次原始姓名SELECT，CONFIRM2次，没有WorkspaceBudget拒绝；完整业务快照未提交变化。RED见W/bqual-roster-budget-red.log，不使用SQL名单夹具。
+
+修正只复用既有BoundedMeetingMetadata协议。一个命令内named identity capture与saved roster capture共享WorkspaceReadBudget；身份覆盖再验只需要固定enterprise IDs，先COUNT及配置rows/byte reservation再取ID，不读取名字。真正名单内容在同genuine held gate/holder下完整parent/set metadata→UTF8/scalar/UTF16/copy/JSON reservation→exactPKtransfer；使用既有saved projection的128行有界资源上限，未新增产品字符上限。CREATE和已受理SAVE/CONFIRM重放维持status-only授权/原结果，提早返回不创建新的named ledger。
+
+真实RED→GREEN要求两个命令均具体WorkspaceReadBudget.Unavailable、0 raw roster name queries、真实原快照不变；baseline正常业务保存成功。随后实际Unicode正常读写/已受理重放负例、相关回归及sole reviewer增量闭环。此次改动仍须纳入最终Java和B-R12/全分支审查，不能仅以静态代码宣称正式B完成。

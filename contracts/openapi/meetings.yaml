@@ -2,7 +2,7 @@ collection:
   get:
     operationId: listMeetings
     summary: List independently authorized saved meeting metadata
-    description: Uses bounded indexed updated-time/id candidates. Each emitted row has fresh authorization. Joined means confirmed enterprise participant, including an owner only when confirmed. No summary or roster labels are read. Unknown/repeated queries fail; changed discovery or exhausted shared budget fails the whole response. No counts/search/snapshot or mutation permission is implied.
+    description: Uses bounded indexed updated-time/id candidates. Each emitted row has fresh authorization. Joined means confirmed enterprise participant, including an owner only when confirmed. Confirmed participant names and saved update time are included; drafts and summary are not read. Unknown/repeated queries fail; changed discovery or exhausted shared budget fails the whole response. Filters apply after fresh authorization within each bounded scan; empty pages can continue with a signed actor/filter-bound cursor. No count/snapshot or mutation permission is implied.
     security:
       - enterpriseSession: []
     parameters:
@@ -15,6 +15,23 @@ collection:
       - name: cursor
         in: query
         schema: {type: string, minLength: 1, maxLength: 1536}
+      - name: q
+        in: query
+        schema: {type: string, maxLength: 128}
+      - name: stages
+        in: query
+        description: Comma separated unique saved stage codes
+        schema: {type: string, maxLength: 180}
+      - name: categories
+        in: query
+        description: Comma separated unique category identifiers, at most 32
+        schema: {type: string, maxLength: 2079}
+      - name: from
+        in: query
+        schema: {type: string, format: date}
+      - name: to
+        in: query
+        schema: {type: string, format: date}
     responses:
       '200':
         description: Bounded private meeting page
