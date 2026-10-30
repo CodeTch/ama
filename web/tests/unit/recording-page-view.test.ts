@@ -34,6 +34,8 @@ test('online recording view matches prototype structure and state copy',async()=
   assert.match(empty,/未接入服务端保存/);
   assert.match(empty,/全部录音段 · 当前累计内容 · 模拟识别/);
   assert.match(empty,/实时文字和AI处理为示例模拟，未接入真实识别及服务端保存/);
+  assert.match(empty,/rect x="5" y="5" width="14" height="14" rx="2"/);
+  assert.match(empty,/M12 4v14m-5-5 5 5 5-5M5 21h14/);
   const active=await renderPage(component,applicationKey,'RECORDING',{...emptyRecord(),parts:[part('RECORDING')]});
   assert.match(active,/暂停录音/);
   assert.match(active,/全部录音段 · 识别中 · 模拟识别/);
