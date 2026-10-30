@@ -35,3 +35,13 @@ test('workspace owner sections preserve genuine paged references and never leak 
  for(const wrong of [{...navigation,relation:'MEMBER',navigationState:'MEMBER_READ_ONLY',privateSectionsState:'AVAILABLE',privateSections},{...navigation,privateSectionsState:'AVAILABLE',privateSections:{...privateSections,candidates:{...privateSections.candidates,detailPath:`/api/v1/meetings/${other}/minutes/candidates`}}},{...navigation,privateSectionsState:'AVAILABLE',privateSections:{...privateSections,publicationId:null,publicationState:'SUCCEEDED'}}]){value=wrong;await assert.rejects(api.navigation(id,new AbortController().signal));}
  }finally{globalThis.fetch=old;}
 });
+
+test('background progress read preserves a mounted observation only in the same scope and clears it on denial',async()=>{
+ const actor=shallowRef<string|null>('owner'),meeting=shallowRef(id);let resolve!:(v:typeof navigation)=>void,reject!:(e:unknown)=>void;
+ const state=useWorkspaceNavigation(()=>new Promise((yes,no)=>{resolve=yes;reject=no;}),()=>actor.value,()=>meeting.value);
+ const first=state.reload();resolve(navigation);await first;
+ const refresh=state.refresh();assert.equal(state.value.value,navigation);assert.equal(state.loading.value,false);
+ meeting.value=other;assert.equal(state.value.value,null);resolve(navigation);await refresh;assert.equal(state.value.value,null);
+ meeting.value=id;const next=state.reload();resolve(navigation);await next;
+ const denied=state.refresh();reject(new Error('denied'));await denied;assert.equal(state.value.value,null);assert.ok(state.error.value);state.dispose();
+});

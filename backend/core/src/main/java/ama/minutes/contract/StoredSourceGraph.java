@@ -34,7 +34,11 @@ public final class StoredSourceGraph {
     boolean included=minutes!=null&&minutes.equals(s.minutesRevisionId())||element!=null&&elementIds.contains(element);
     if(!included||evidenceFilter!=null&&!evidenceFilter.contains(evidence.string("id")))continue;
     FullRow locator=locator(evidence.string("locator_id"),s.meetingId());Origin origin;CatalogFact source;
-    if(minutes!=null){
+    var contexts=index.matching(Table.EVIDENCE_SOURCE_CONTEXT,"id",evidence.string("id"));
+    if(!contexts.isEmpty()){
+     var context=index.one(Table.SOURCE_CONTEXT,index.single(contexts,PROVENANCE_UNAVAILABLE).string("source_context_id"),PROVENANCE_UNAVAILABLE);index.meeting(context,s.meetingId());var input=input(context.string("generation_input_id"),s.meetingId());
+     if(minutes!=null)index.anchor(evidence,body.string("body"));else index.anchor(evidence,index.one(Table.MINUTES_ELEMENT,element,PROVENANCE_UNAVAILABLE).string("body"));source=source(input,RowValues.locator(locator));origin=new GenerationOrigin(input.string("id"),input.string("input_fingerprint"));
+    }else if(minutes!=null){
      index.anchor(evidence,body.string("body"));var input=input(body.nullableString("generation_input_id"),s.meetingId());
      source=source(input,RowValues.locator(locator));origin=new GenerationOrigin(input.string("id"),input.string("input_fingerprint"));
     }else {
@@ -96,35 +100,7 @@ public final class StoredSourceGraph {
    var confirmation=index.one(Table.TRANSCRIPT_CONFIRMATION,input.string("transcript_confirmation_id"),PROVENANCE_UNAVAILABLE);index.meeting(confirmation,meeting);
    for(var segment:index.matching(Table.TRANSCRIPT_SEGMENT,"revision_id",confirmation.string("revision_id")))facts.add(transcript(confirmation,segment.string("segment_id"),meeting));
    require(!facts.isEmpty(),PROVENANCE_UNAVAILABLE);String snapshotId=input.nullableString("material_snapshot_id");
-   if(snapshotId!=null){
-    index.meeting(index.one(Table.MATERIAL_SNAPSHOT,snapshotId,PROVENANCE_UNAVAILABLE),meeting);var materialIds=new HashSet<String>();var ordinals=new HashSet<Long>();
-    for(var member:index.matching(Table.MATERIAL_SNAPSHOT_ITEM,"snapshot_id",snapshotId)){
-     check(cancelled);positive(member.number("ordinal"));require(ordinals.add(member.number("ordinal")),SOURCE_MEMBERSHIP_MISMATCH);String revisionId=member.string("material_revision_id");materialIds.add(revisionId);
-     var revision=index.one(Table.MATERIAL_REVISION,revisionId,PROVENANCE_UNAVAILABLE);var reference=index.one(Table.MATERIAL_REFERENCE,revision.string("reference_id"),PROVENANCE_UNAVAILABLE);index.meeting(reference,meeting);
-     var selections=config.parserSelections().stream().filter(p->p.materialRevisionId().equals(revisionId)).toList();
-     require(selections.size()==1,selections.size()>1?SOURCE_CONTEXT_AMBIGUOUS:CAPABILITY_UNAVAILABLE);String parser=selections.getFirst().parserVersion();
-     var documents=index.matching(Table.PARSED_DOCUMENT,"material_revision_id",revisionId).stream().filter(d->d.string("parser_version").equals(parser)).toList();
-     var document=index.single(documents,CAPABILITY_UNAVAILABLE);String fileId=revision.nullableString("content_file_id");require(fileId!=null,CAPABILITY_UNAVAILABLE);
-     var content=index.file(fileId);var parsed=index.file(document.nullableString("text_file_id"));var units=index.matching(Table.PARSED_UNIT,"document_id",document.string("id"));
-     require(units.size()==document.number("unit_count")&&!units.isEmpty(),SOURCE_MEMBERSHIP_MISMATCH);
-     var sourceUnits=new ArrayList<SourceUnit>();for(var unit:units){check(cancelled);sourceUnits.add(new SourceUnit(unit.number("ordinal"),unit.nullableNumber("page_no"),unit.nullableNumber("paragraph_no"),unit.nullableString("section_path")));}
-     var bounds=new DocumentBounds(fileId,revisionId,document.string("id"),parser,parsed.sha256(),sourceUnits,index.budget.canonical().maxContainerEntries());SourceVersion version;String hash;
-     if(reference.string("kind").equals("LOCAL")){
-      require(fileId.equals(reference.nullableString("file_id"))&&revision.nullableString("external_version")==null&&reference.nullableString("provider_id")==null&&reference.nullableString("external_id")==null,SOURCE_MEMBERSHIP_MISMATCH);
-      require(content.sha256().equals(revision.string("content_hash")),SOURCE_MEMBERSHIP_MISMATCH);
-      version=new FileVersion(fileId,revisionId,document.string("id"),parser,parsed.sha256());hash=content.sha256();
-     }else {
-      version=new KnowledgeVersion(revisionId,reference.string("provider_id"),reference.string("external_id"),revision.string("external_version"),fileId,document.string("id"),parser,parsed.sha256());hash=revision.string("content_hash");
-      facts.add(new CatalogFact(new KnowledgeLocator(revisionId),Role.BACKGROUND,version,hash,0,new KnowledgeBounds(revisionId,reference.string("provider_id"),reference.string("external_id"),revision.string("external_version"),fileId,hash)));
-     }
-     for(var locator:index.rows(Table.SOURCE_LOCATOR)){
-      check(cancelled);if(!locator.string("meeting_id").equals(meeting))continue;var typed=RowValues.locator(locator);
-      if(typed instanceof PageLocator page&&page.fileId().equals(fileId)||typed instanceof ParagraphLocator paragraph&&paragraph.fileId().equals(fileId))facts.add(new CatalogFact(typed,Role.BACKGROUND,version,hash,0,bounds));
-      if(typed instanceof AudioLocator audio&&audio.fileId().equals(fileId))throw fail(CAPABILITY_UNAVAILABLE);
-     }
-    }
-    for(var selection:config.parserSelections()){check(cancelled);require(materialIds.contains(selection.materialRevisionId()),SOURCE_MEMBERSHIP_MISMATCH);}
-   }else require(config.parserSelections().isEmpty(),SOURCE_MEMBERSHIP_MISMATCH);
+   facts.addAll(MaterialCatalog.facts(index,meeting,snapshotId,config));
    var catalog=new SourceCatalog().build(new CatalogFacts(facts,index.budget.canonical().maxContainerEntries()),index.budget.canonical(),cancelled);catalogs.put(id,catalog);return catalog;
   }
   record SavedTranscript(FullRow revision,FullRow batch,List<FullRow> segments,List<FullRow> files) {}

@@ -34,8 +34,7 @@ public final class GenerationFingerprint {
  private static PreparedProjection prepareProjection(GenerationDraft draft,Fence fence,StoredFactsIndex index,GenerationConfiguration config){
   check(index.cancelled);
   require(draft.scope()==Scope.FULL&&draft.targetElementId()==null,CAPABILITY_UNAVAILABLE);
-  // Archived material parser-to-locator capability is a separate required D01 contract. Never enumerate existing locator rows as a complete model catalog.
-  require(draft.materialSnapshotId()==null,CAPABILITY_UNAVAILABLE);
+
   var profiles=config.profiles();String meeting=draft.meetingId();
   var session=index.sources;
   var confirmation=index.one(Table.TRANSCRIPT_CONFIRMATION,draft.transcriptConfirmationId(),PROVENANCE_UNAVAILABLE);index.meeting(confirmation,meeting);
@@ -45,6 +44,7 @@ public final class GenerationFingerprint {
   require(confirmationHash.equals(confirmation.string("content_hash")),FINGERPRINT_MISMATCH);
   var revision=index.one(Table.TRANSCRIPT_REVISION,confirmation.string("revision_id"),PROVENANCE_UNAVAILABLE);
   var catalogFacts=new ArrayList<CatalogFact>();for(var segment:index.matching(Table.TRANSCRIPT_SEGMENT,"revision_id",revision.string("id"))){check(index.cancelled);catalogFacts.add(session.transcript(confirmation,segment.string("segment_id"),meeting));}
+  catalogFacts.addAll(MaterialCatalog.facts(index,meeting,draft.materialSnapshotId(),config));
   var catalog=new SourceCatalog().build(new CatalogFacts(catalogFacts,index.budget.canonical().maxContainerEntries()),index.budget.canonical(),index.cancelled);
 
   var segmentRows=new ArrayList<>(index.matching(Table.TRANSCRIPT_SEGMENT,"revision_id",revision.string("id")));segmentRows.sort(Comparator.comparingLong(r->r.number("ordinal")));
@@ -80,7 +80,7 @@ public final class GenerationFingerprint {
   return new PreparedProjection(object(field("meetingId",string(meeting)),field("inputId",string(draft.inputId())),
    field("confirmation",object(field("id",string(confirmation.string("id"))),field("revisionId",string(revision.string("id"))),field("hashProfile",string(confirmationProfile.version())),field("contentHash",string(confirmationHash)))),
    field("segments",new Sequence(segments)),field("batch",object(field("id",string(revision.string("batch_id"))),field("files",new Sequence(files)))),
-   field("materials",object(field("mode",string("EMPTY")),field("items",list()))),
+   field("materials",MaterialCatalog.manifest(index,draft.materialSnapshotId(),config)),
    field("template",object(field("mode",string(template.string("id").equals(config.defaultTemplateRevisionId())?"DEFAULT":"SELECTED")),field("revisionId",string(template.string("id"))),field("revision",number(template.number("revision"))),field("contentHash",string(templateHash)))),
    field("exclusion",object(field("mode",string(entries.isEmpty()?"EMPTY":"PINNED")),field("revisionId",string(exclusion.string("id"))),field("revision",number(exclusion.number("revision"))),field("contentHash",string(RowsetProjection.hash(exclusionRows,RowsetProjection.EXCLUSION_TABLES,index))),field("entries",new Sequence(entries)))),
    field("elements",elements),field("sources",new Sequence(sources)),

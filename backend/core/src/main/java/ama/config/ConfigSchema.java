@@ -22,13 +22,27 @@ public final class ConfigSchema {
   var f=fields(value,"archiveSchema","artifactType","version","definitionSchema","definition","dependencies");literal(f.get("archiveSchema"),"ama.config-archive.v1");
   ArtifactType type;try{type=ArtifactType.valueOf(text(f.get("artifactType")));}catch(IllegalArgumentException e){throw fail(PROFILE_UNAVAILABLE);}
   var identity=new Identity(type,text(f.get("version")));String schema=text(f.get("definitionSchema"));var definition=f.get("definition");Set<String> slots;
-  if(CONTRACTS.containsKey(type)){
+  if(type==ArtifactType.CATALOG&&identity.version().equals(ama.material.MaterialProfiles.CATALOG)){
+   require(schema.equals("ama.material-catalog.v2"),PROFILE_UNAVAILABLE);var d=fields(definition,"contract","bindings");literal(d.get("contract"),ama.material.MaterialProfiles.CATALOG);var wanted=new HashMap<String,Ref>();var seen=new HashSet<String>();String previous=null;
+   for(var binding:array(d.get("bindings"))){var b=fields(binding,"format","parser");String format=text(b.get("format"));var parser=ref(b.get("parser"));require(ama.material.MaterialProfiles.parser(format).equals(parser.version())&&parser.artifactType()==ArtifactType.PARSER_CONFIG,PROFILE_UNAVAILABLE);String key=format+"|"+parser.version();require(seen.add(key)&&(previous==null||previous.compareTo(key)<0),PROFILE_UNAVAILABLE);previous=key;String slot="PARSER_SHA256_"+parser.sha256();var old=wanted.putIfAbsent(slot,parser);require(old==null||old.equals(parser),PROFILE_UNAVAILABLE);}
+   var deps=dependencies(value,state);var codec=deps.get("CANONICAL_CODEC");require(codec!=null&&codec.artifactType()==ArtifactType.CANONICAL_CODEC,PROFILE_UNAVAILABLE);wanted.put("CANONICAL_CODEC",codec);require(deps.equals(wanted),PROFILE_UNAVAILABLE);return identity;
+  }else if(type==ArtifactType.PARSER_CONFIG&&identity.version().startsWith("ama.material-")){
+   require(schema.equals("ama.material-parser.v1"),PROFILE_UNAVAILABLE);ama.material.MaterialProfiles.definition(definition,identity.version());require(dependencies(value,state).isEmpty(),PROFILE_UNAVAILABLE);return identity;
+  }else if(CONTRACTS.containsKey(type)){
    require(schema.equals("ama.profile-contract.v1")&&identity.version().equals(CONTRACTS.get(type)),PROFILE_UNAVAILABLE);
    literal(fields(definition,"contract").get("contract"),CONTRACTS.get(type));slots=type==ArtifactType.CANONICAL_CODEC?Set.of():Set.of("CANONICAL_CODEC");
   }else switch(type){
-   case PARSER_CONFIG->{require(schema.equals("ama.txt-parser-config.v1")&&identity.version().equals("ama.strict-utf8-lines.v1"),PROFILE_UNAVAILABLE);literal(fields(definition,"contract").get("contract"),"ama.strict-utf8-lines.v1");slots=Set.of();}
+   case PARSER_CONFIG->{
+    boolean mediaV1=identity.version().equals("ama.media-documents.v1"),mediaV2=identity.version().equals("ama.media-documents.v2"),document=identity.version().equals("ama.office-documents.v1");
+    require(schema.equals(mediaV1?"ama.media-document-parser-config.v1":mediaV2?"ama.media-document-parser-config.v2":document?"ama.document-parser-config.v1":"ama.txt-parser-config.v1")&&(mediaV1||mediaV2||document||identity.version().equals("ama.strict-utf8-lines.v1")),PROFILE_UNAVAILABLE);
+    if(document||mediaV1||mediaV2){
+     var d=fields(definition,"contract","formats","engines");literal(d.get("contract"),mediaV1?"ama.media-documents.v1":mediaV2?"ama.media-documents.v2":"ama.office-documents.v1");
+     require(array(d.get("formats")).stream().map(ama.config.WireValues::text).toList().equals(mediaV1?List.of("TXT","DOC","DOCX","PDF","PPTX","MP3","WAV","M4A","MP4","MOV","MKV","WEBM"):mediaV2?List.of("TXT","DOC","DOCX","PDF","PPTX","MP3","WAV","M4A","MP4","MOV","MKV","WEBM","AAC","FLAC","OGG","M4V","AVI","SRT","VTT"):List.of("TXT","DOC","DOCX","PDF","PPTX")),PROFILE_UNAVAILABLE);
+     var engines=mediaV1?fields(d.get("engines"),"pdfbox","poi","xml","asr","modelManifestSha256"):mediaV2?fields(d.get("engines"),"asr","decoder","modelManifestSha256","subtitles","pdfbox","poi","xml"):fields(d.get("engines"),"pdfbox","poi","xml");literal(engines.get("pdfbox"),"3.0.8");literal(engines.get("poi"),"6.0.0");literal(engines.get("xml"),"jdk-stax-v1");
+     if(mediaV1||mediaV2){literal(engines.get("asr"),"faster-whisper.1.2.1");hash(text(engines.get("modelManifestSha256")));}if(mediaV2){literal(engines.get("decoder"),"pyav.19.0.2");literal(engines.get("subtitles"),"ama.strict-timed-subtitles.v1");}
+    }else literal(fields(definition,"contract").get("contract"),"ama.strict-utf8-lines.v1");slots=Set.of();}
    case PROCESSING_CONFIG->{
-    require(schema.equals("ama.import-txt-config.v1"),PROFILE_UNAVAILABLE);var d=fields(definition,"contract","manifestSchemaVersion","parseBudget","canonicalBudget");literal(d.get("contract"),"ama.import-txt.v1");require(number(d.get("manifestSchemaVersion"))==1,PROFILE_UNAVAILABLE);
+    boolean media=schema.equals("ama.import-media-documents-config.v1")||schema.equals("ama.import-media-documents-config.v2"),document=schema.equals("ama.import-documents-config.v1");require(media||document||schema.equals("ama.import-txt-config.v1"),PROFILE_UNAVAILABLE);var d=fields(definition,"contract","manifestSchemaVersion","parseBudget","canonicalBudget");literal(d.get("contract"),schema.equals("ama.import-media-documents-config.v2")?"ama.import-media-documents.v2":media?"ama.import-media-documents.v1":document?"ama.import-documents.v1":"ama.import-txt.v1");require(number(d.get("manifestSchemaVersion"))==1,PROFILE_UNAVAILABLE);
     parseBudget(d.get("parseBudget"));canonicalBudget(d.get("canonicalBudget"));slots=Set.of("CANONICAL_CODEC","CONFIRMATION_HASH","PARSER_CONFIG");
    }
    case PROMPT_CONFIG->{require(schema.equals("ama.generation-prompt.v1"),PROFILE_UNAVAILABLE);String instruction=text(fields(definition,"instructionText").get("instructionText"));require(!instruction.isEmpty(),PROFILE_UNAVAILABLE);slots=profileSlots();}
@@ -49,7 +63,7 @@ public final class ConfigSchema {
  public static Map<String,Ref> dependencies(CanonicalValue archive,ArchiveReadState state){
   var f=fields(archive,"archiveSchema","artifactType","version","definitionSchema","definition","dependencies");var values=array(f.get("dependencies"));
   var out=new LinkedHashMap<String,Ref>();String previous=null;
-  for(var value:values){check(state.cancelled);var d=fields(value,"slot","ref");String slot=text(d.get("slot"));require(slot.matches("[A-Z][A-Z_]*"),PROFILE_UNAVAILABLE);
+  for(var value:values){check(state.cancelled);var d=fields(value,"slot","ref");String slot=text(d.get("slot"));require(slot.matches("[A-Z][A-Z_]*|PARSER_SHA256_[0-9a-f]{64}"),PROFILE_UNAVAILABLE);
    require(previous==null||previous.compareTo(slot)<0,PROFILE_UNAVAILABLE);require(out.putIfAbsent(slot,ref(d.get("ref")))==null,PROFILE_UNAVAILABLE);previous=slot;}
   return Map.copyOf(out);
  }
@@ -76,7 +90,7 @@ public final class ConfigSchema {
   for(int i=0;i<2;i++){var p=fields(profiles.get(i),"kind","ref");literal(p.get("kind"),expected[i]);require(ref(p.get("ref")).artifactType().name().equals(expected[i]),PROFILE_UNAVAILABLE);}
   var base=fields(f.get("base"),"meetingRevision","subjectBusinessVersion","cancelEpoch");for(var v:base.values())number(v);
   var steps=array(f.get("steps"));require(steps.size()==1,CAPABILITY_UNAVAILABLE);var step=fields(steps.getFirst(),"ordinal","kind","parentInput","priorOutput","source","config","parser","model","prompt");
-  require(number(step.get("ordinal"))==1,INPUT_INVALID);literal(step.get("kind"),"IMPORT_TXT");nil(step.get("parentInput"));nil(step.get("priorOutput"));nil(step.get("model"));nil(step.get("prompt"));
+  require(number(step.get("ordinal"))==1,INPUT_INVALID);require(Set.of("ama.strict-utf8-lines.v1","ama.office-documents.v1","ama.media-documents.v1","ama.media-documents.v2").contains(parser.version()),PROFILE_UNAVAILABLE);literal(step.get("kind"),(parser.version().equals("ama.media-documents.v1")||parser.version().equals("ama.media-documents.v2"))?"IMPORT_MEDIA_DOCUMENT":parser.version().equals("ama.office-documents.v1")?"IMPORT_DOCUMENT":"IMPORT_TXT");nil(step.get("parentInput"));nil(step.get("priorOutput"));nil(step.get("model"));nil(step.get("prompt"));
   require(ref(step.get("config")).equals(processing)&&ref(step.get("parser")).equals(parser),PROFILE_UNAVAILABLE);
   var source=fields(step.get("source"),"kind","id");literal(source.get("kind"),"INPUT_BATCH");require(text(source.get("id")).equals(text(batch.get("id"))),INPUT_INVALID);check(state.cancelled);
  }

@@ -16,7 +16,7 @@ test('invalid receipt gaps, hash changes, impossible sizes and suggestion tokens
 });
 test('local browser allocation bound and cancellation are checked before reading file bytes',async()=>{
  let reads=0;const huge=new File([],'large.txt');Object.defineProperty(huge,'size',{value:UPLOAD_FILE_BYTES+1});Object.defineProperty(huge,'arrayBuffer',{value:async()=>{reads++;return new ArrayBuffer(0);}});await assert.rejects(prepareUpload(huge,new AbortController().signal));assert.equal(reads,0);
- const stopped=new AbortController();stopped.abort();await assert.rejects(prepareUpload(new File(['x'],'x.txt'),stopped.signal),{name:'AbortError'});await assert.rejects(prepareUpload(new File(['x'],'x.mp3'),new AbortController().signal));
+ const stopped=new AbortController();stopped.abort();await assert.rejects(prepareUpload(new File(['x'],'x.txt'),stopped.signal),{name:'AbortError'});await assert.rejects(prepareUpload(new File(['x'],'x.exe'),new AbortController().signal));
 });
 test('empty TXT gets one zero-byte part and no unsafe numeric conversion of large suggestions',async()=>{
  const prepared=await prepareUpload(new File([],'empty.TXT'),new AbortController().signal),parts=await prepared.plan([],'9223372036854775807');assert.equal(parts.length,1);assert.ok(parts[0]);assert.equal(parts[0].size,0);assert.equal(parts[0].sha256,await hash(''));assert.equal(prepared.body(parts[0]).size,0);
@@ -33,4 +33,8 @@ test('cancel after byte read and excessive part count leave no usable plan',asyn
 
 test('expected reselect identity is captured before async reads and cannot be replaced in flight',async()=>{
  const expected={sizeToken:'3',sha256:await hash('abd')},replacement=await hash('abc'),pending=prepareUpload(new File(['abc'],'same.txt'),new AbortController().signal,expected);expected.sha256=replacement;await assert.rejects(pending,/Reselected file bytes differ/);
+});
+
+test('all declared document formats retain exact original bytes and identity through upload resume',async()=>{
+ for(const ext of ['doc','docx','pdf','pptx','txt']){const bytes=new Uint8Array([0x50,0x4b,0,255,7]),file=new File([bytes],'会议.'+ext),prepared=await prepareUpload(file,new AbortController().signal);assert.equal(prepared.begin.name,file.name);assert.equal(prepared.begin.size,bytes.length);const parts=await prepared.plan([],'8');assert.deepEqual(new Uint8Array(await prepared.body(parts[0]!).arrayBuffer()),bytes);const resumed=await prepareUpload(file,new AbortController().signal,{sizeToken:String(bytes.length),sha256:prepared.begin.sha256});assert.equal(resumed.begin.sha256,prepared.begin.sha256);}
 });

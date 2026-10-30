@@ -1,6 +1,10 @@
+> **2026-10-28 当前范围（AMA-DEMO-FIRST-20261028 R2）**：按[Demo 优先调整计划](2026-10-28-ama-demo-first-adjustment.md)执行；前期本地 MySQL＋本地文件＋单机，优先原型页面与核心业务联调。已完成/已采纳能力保留，不重做；S3、双 MySQL、双活全部尚未完成的专用实现、配置、测试和依赖归最后 F，前期不新增相关抽象或架构改造。本轮仅调整文档。 A 已交付勾选保持；A-04 未完运维/HA/S3/数据库平台前置归 F-00，不阻塞业务开发。
+
+---
+
 # A：工程基础与关键能力验证 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
+> **For agentic workers:** 沿用 AMA-WORKFLOW-20261027 与 Demo 优先 R2 的 executing-plans 内联流程、完整业务批次和集中审查；旧步骤模板不自动触发新代理、重复开发或提交。
 
 **Goal:** 交付可运行工程和可复现验证工具，尽早暴露模型、存储及自动恢复条件的缺口。
 
@@ -12,7 +16,7 @@
 
 ## Global Constraints
 
-- 继承总计划全部约束；本阶段不改变“两台 RHEL 8.10 x86_64 虚拟机，每台 16 核、32GB 内存”。
+- 继承总计划；“两台 RHEL 8.10 x86_64 虚拟机，每台 16 核、32GB 内存”保留为最终部署需求，未完现场前置归 F-00，前期单机 Demo 不要求这些资源到位。
 - 模型输入为 16kHz、单声道、16bit PCM WAV；VAD/SPK 为完整 WAV 的 Base64，ASR/embed 为 WAV 二进制。
 - 100 场、2 秒窗口约 50 ASR 请求/秒；该数字是探针负载目标，不能据此认定模型有此吞吐。
 - 具体公司协议、目录、容量和隔离能力未提供的项目标记为阻塞相应联调，不制造成功报告。

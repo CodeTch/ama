@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {createBusinessClient} from '../../src/shared/api/business-client.js';
+import {createBusinessClient,type Session} from '../../src/shared/api/business-client.js';
 import {ApiError} from '../../src/shared/api/client.js';
 import type {components} from '../../src/shared/api/generated.js';
 const session:components['schemas']['Session']={actor:{enterpriseId:'owner',status:'ACTIVE',roles:['USER']},csrfToken:'T'.repeat(43),expiresAt:'2030-01-01T00:00:00Z'};
@@ -26,4 +26,10 @@ test('late401 from an old session cannot revoke a newer in-memory session',async
  globalThis.fetch=()=>new Promise<Response>(resolve=>{release=resolve;});
  try{const client=createBusinessClient('https://ama.test',()=>active,()=>{revoked++;active=null;});const pending=client.json('/api/v1/meetings');const newer={...session,csrfToken:'N'.repeat(43)};active=newer;release(new Response('{}',{status:401}));await assert.rejects(pending);assert.equal(revoked,0);assert.equal(active,newer);}
  finally{globalThis.fetch=original;}
+});
+
+test('binary source reads are bounded and require the same session and origin',async()=>{
+ const old=globalThis.fetch;let calls=0,revoked=0;let active:Session|null=session;let release:(value:Response)=>void=()=>{};
+ try{const client=createBusinessClient('https://ama.test',()=>active,()=>{revoked++;active=null;});globalThis.fetch=async()=>{calls++;return new Response(new Uint8Array([1,2,3]),{headers:{'Content-Length':'3','Content-Disposition':"attachment; filename*=UTF-8''%E4%BC%9A%E8%AE%AE.wav"}});};const signal=new AbortController().signal;const value=await client.bytes('/api/v1/meetings/source',{signal,size:3});assert.deepEqual([...new Uint8Array(value.bytes)],[1,2,3]);assert.equal(value.name,'会议.wav');await assert.rejects(client.bytes('https://other.test/api/v1/file',{signal,size:3}));assert.equal(calls,1);await assert.rejects(client.bytes('/api/v1/file',{signal,size:2}));globalThis.fetch=()=>new Promise(resolve=>{release=resolve;});const pending=client.bytes('/api/v1/file',{signal,size:3});active={...session,actor:{...session.actor,enterpriseId:'other'}};release(new Response(new Uint8Array([1,2,3])));await assert.rejects(pending,{name:'AbortError'});assert.equal(revoked,0);active=session;globalThis.fetch=async()=>new Response(null,{status:401});await assert.rejects(client.bytes('/api/v1/file',{signal,size:3}));assert.equal(revoked,1);
+ }finally{globalThis.fetch=old;}
 });

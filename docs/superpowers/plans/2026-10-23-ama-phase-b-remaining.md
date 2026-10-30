@@ -1,4 +1,15 @@
-> **2026-10-27 用户批准的执行补充（AMA-WORKFLOW-20261027）**：后续按[流程与分阶段验证补充计划](2026-10-27-ama-development-workflow.md)执行。完整功能批次集中审查、分层验证、增量证据与后移台账优先于下文冲突的旧流程条款；功能和核心可靠性要求保持。当前开发仍暂停，下次“继续”从 B-L1 信息持久化/真实表单/名单确认开始。下方旧状态段仅为历史，具体技术任务继续有效。
+> **2026-10-28 当前调度（AMA-DEMO-FIRST-20261028 R2）**：执行[Demo 优先调整计划](2026-10-28-ama-demo-first-adjustment.md)。Tasks 1–10 和 B-L1～4 已有采纳，不重做；DEMO-01～05 按业务片段交付 M1-Demo，Task11/12 深度核心证明与 Task13/B-L5 由 B-QUAL 汇合，达到 M1-B 才正式验收。S3、双 MySQL、双活未完实现/配置/验证及专属依赖最后 F；本轮仅文档。
+
+## 当前任务归属（覆盖下文旧双后端门槛）
+
+| 范围 | 当前处理 |
+| --- | --- |
+| 已采纳 Tasks 1–10、B-L1～4 | 保留原完成/采纳结论及限定证据；旧步骤未勾选不表示重新开发 |
+| Task5 local/S3 Worker 与恢复 | 已有实现保留；DEMO-02/05 接通任务与常规重开，本地深入恢复最晚 B-QUAL/M1-B；未完 S3 专属恢复归 DEP-S3/F |
+| Task11/12/13、B-L5 | DEMO-01 会议/信息→02 上传/转写→03 生成/审阅→04 发布/文档→05 完整演示；深度预算/锁序/事务/恢复按 B 摘要归 B-QUAL，未完 S3 浏览器/差异/部署验证归 F |
+| 旧 B-L5 批次与历史权限 | 已关闭且不得重用；日常本地环境按实际授权和归属持续复用，不强制每次新建封存；超出既有授权的资源另行具体处理，本次不给运行授权 |
+
+下方 10-27 及更早状态段是历史原件；其“下一步 B-L1”“ACTIVE/PAUSED”和代理调度不覆盖本段与最新 current-state 的规划字段。最新事实见 B 摘要和 Demo 接续文档。
 
 ---
 
@@ -6,7 +17,7 @@
 
 最新用户指令要求完成当前批次后停止。信息编辑状态层R3已由同一GPT-6 Astra xHigh独立reviewer限定采纳，166项Web单元测试通过、类型检查通过；本批无待修复发现。B阶段仍未全部完成，未开启后续批次。主Agent唯一实现、同一独立reviewer，不新增其他Agent。
 
-详细接续文档：`.superpowers/sdd/2026-10-23-ama-phase-b-remaining/handoff-paused-20261027.md`；权威入口 `RESUME_LATEST.md` 与 `current-state.json`。下次用户“继续”即从已批准计划的未完成项恢复，先信息持久化/真实编辑与名单确认。保留当前工作树/未提交代码/证据；旧runtime授权不自动续期。以下先前ACTIVE及更早暂停记录均为历史，此顶部优先。
+详细接续文档：`.superpowers/sdd/2026-10-23-ama-phase-b-remaining/handoff-paused-20261027.md`；权威入口 `RESUME_LATEST.md` 与 `current-state.json`。下次用户“继续”即从已批准计划的未完成项恢复，先信息持久化/真实编辑与名单确认。保留当前工作树/未提交代码/证据；旧runtime授权不自动续期。以下状态也按历史保留；当前执行以 2026-10-28 入口为准。
 
 ---
 
@@ -22,7 +33,7 @@
 
 # Phase B remaining implementation plan
 
-> Execute continuously with subagents under the user's explicit activation. Do not stop at preparation or after an individual slice.
+> Historical execution template; current scheduling follows AMA-DEMO-FIRST-20261028 and AMA-WORKFLOW-20261027 (inline feature batches). This documentation change does not start implementation.
 
 Spec: docs/superpowers/specs/2026-10-23-ama-phase-b-controlled-runtime.md. Original user-approved architecture and Phase B plan remain binding. Initial BASE 34cb226aefe99c67d3681af68d748b0aeea4e073. Preflights: docs/acceptance/b/remaining-preflight/. New isolated coordination branch codex/phase-b-completion-20261023.
 
@@ -46,7 +57,7 @@ Implement operation-specific first bind/current read/owner history/worker source
 Freeze exact batch/manifest/config outside locks, fresh recheck, insert batch/profile/input, one bindAll + authentic enqueue + CAS/audit/outbox atomic. Real post-intake spec/producer as spec. Idempotent same request one task; different payload conflicts; stale/denied/failure no rows or reference handoff. Add controller/OpenAPI/capabilities, no fake task output.
 ### Task 5: TXT Worker/import output.
 
-Consume real registered task and immutable original archives/actual pinned bytes, strict parser ordered files/aggregate budgets. Prepared atomic RAW revision/segments/task result, rollback failure, no partial writes. Real queue/WorkerLoop/MySQL/local+S3 and fresh-JVM archive/input restart tests.
+Consume real registered task and immutable original archives/actual pinned bytes, strict parser ordered files/aggregate budgets. Prepared atomic RAW revision/segments/task result, rollback failure, no partial writes. Retain adopted real queue/WorkerLoop/MySQL/local+S3 and fresh-JVM evidence. Demo requires basic persistence/task recovery; remaining deep local recovery belongs to B-QUAL by M1-B. Unfinished S3-specific implementation/verification belongs to DEP-S3/F.
 ### Task 6: Saved transcript/marks/current confirmation.
 
 Bounded complete facts reader and same-algorithm draft hash entry; immutable WORKING save/restore inherited provenance, all marks including empty, current/owner history/member effective reads. Actual disabled correction-domain capability. HTTP idempotency/CAS/ACL; unsaved/stale/blank fails; mark-only invalidation; repeated confirmation one ID; archive damage/old config fail correctly.
@@ -67,10 +78,10 @@ Durable acknowledged editor-intent handshake before typing, atomic first-save gu
 Prospective final hash, exact frozen review membership and fresh current readiness. Actual controlled durable HTTP KB protocol, destination proof, stable business key, committed marker and attempts. Lost response/restart/query yields one document; UNKNOWN never resends; zero-effect explicit retry uses existing root/new execution; success makes all writes read-only. Production unavailable without company contracts. Concurrent final/review/edits and denied late facts tested.
 ### Task 12: Web local controlled loop and actual browser acceptance.
 
-Server projections/task read/controller/API errors; real file upload/import/save/confirm/generate/candidate/review/final/publish pages per approved prototype anchors. Draft preservation/409/retry/idempotency/read-only flows; owner/member/outsider/admin. Explicit test identity/harness only. Typecheck/build plus local and S3 actual end-to-end and refresh/restart/lost-response paths. No frontend-only permission checks.
+Server projections/task read/controller/API errors; real file upload/import/save/confirm/generate/candidate/review/final/publish pages per approved prototype anchors. Draft preservation/409/retry/idempotency/read-only flows; owner/member/outsider/admin. Explicit test identity/harness only. Follow R2 DEMO-01..05 vertical slices, page matrix, local MySQL/files/single-host browser loop and representative recovery for M1-Demo; deep assertions remain B-QUAL/M1-B. Controlled model output is not real AI quality; actual platform tests remain B-02/07/08 when available. Unfinished S3-specific end-to-end and recovery moves to DEP-S3/F. No frontend-only permission checks.
 ### Task 13: Final integrated verification, fresh whole independent review, records/delivery.
 
-Run relevant affected full gates once, preserve failures and exact source/evidence hashes. Review all new commits with most capable fresh agent; bounded fixes/re-review. Write docs/acceptance/b/summary.md, demo/test qualification/pending integration records, update DEVELOPMENT_HANDOFF and development-resume. Adopt reviewed work to the active development branch if safe under existing activation; preserve main/old stash/trees. Record complete local B separately from company/HA/capacity and later C/D/E/F.
+DEMO-05 delivers the first demonstrable workflow without claiming Phase B complete. B-QUAL then closes the applicable local core obligations, runs affected final gates and whole-branch review using the existing consolidated policy; preserve failures and exact source/evidence hashes. Bounded fixes/re-review, without a new reviewer solely for replanning. Maintain docs/acceptance/b/summary.md as the current disposition table and update DEVELOPMENT_HANDOFF and development-resume. Adopt reviewed work to the active development branch only under actual authorization; preserve old stash/trees. Record M1-Demo, formal local M1-B, actual platform capability and deployment qualification separately. Stop after B; no automatic C/D/E/F.
 
 ## Shared interface and self-consistency scan
 
@@ -91,7 +102,7 @@ Detailed per-pair collisions and task status live in the plan ledger. Implementa
 
 ## R1 design-review resolutions (normative)
 
-Read the spec's full Normative refinement R1 before each Task2..13 brief. It supersedes ambiguous epoch/retention/API shorthand above. DR-01: sticky real0-only guard; explicitadopt nooriginalepoch equality. DR-02: registered authentic stale-only immutable retention; STALE nonblocking/nonadoptable, current editor-only PENDING; finalrace serialized. DR-03: explicit task->operation heartbeat/complete ownershiphandoff. DR-04: supported v2 graph-copy/edit/conversion matrix, full remapping/no reviewcredit, deterministic required SOURCE_SUPPORT/ACTION_FIELDS reviewset. DR-05: allbrowsermutations exact token/legacy normalization before idempotencydigest. DR-06: producer-owned authoritative read/discovery table plus actualTLSdualstorageE2E. All six original findings preserved; bounded independent rereview required before dependent runtime activation.
+Read the spec's full Normative refinement R1 before each Task2..13 brief. It supersedes ambiguous epoch/retention/API shorthand above. DR-01: sticky real0-only guard; explicitadopt nooriginalepoch equality. DR-02: registered authentic stale-only immutable retention; STALE nonblocking/nonadoptable, current editor-only PENDING; finalrace serialized. DR-03: explicit task->operation heartbeat/complete ownershiphandoff. DR-04: supported v2 graph-copy/edit/conversion matrix, full remapping/no reviewcredit, deterministic required SOURCE_SUPPORT/ACTION_FIELDS reviewset. DR-05: allbrowsermutations exact token/legacy normalization before idempotencydigest. DR-06: producer-owned authoritative read/discovery table plus actual TLS E2E; local browser is required for Demo, unfinished S3 browser qualification is retained under DEP-S3/F. All six original findings preserved; bounded independent rereview required before dependent runtime activation.
 
 ## Adopted authority/external refinement
 
@@ -115,7 +126,7 @@ Read docs/superpowers/specs/2026-10-23-ama-phase-b-saved-transcript.md and exact
 
 ## Task5 adopted confined completion/renew-drain refinement
 
-Read docs/superpowers/specs/2026-10-23-ama-phase-b-import-worker.md and exact original+R1/reviews. New production success uses queue-private genuine after-task scope/inert carrier/same-call writer+validator; old unrelated callbacks remain. Drain selected ordinary renewal without DB locks before completion/Task7 MARKING, JDBC outside monitor; state-aware exactly-once attempt transitions. Mandatory real local/S3 transport abort, genuinepipeline/restart and deterministic authority/concurrency proofs precede runtime qualification.
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-import-worker.md and exact original+R1/reviews. New production success uses queue-private genuine after-task scope/inert carrier/same-call writer+validator; old unrelated callbacks remain. Drain selected ordinary renewal without DB locks before completion/Task7 MARKING, JDBC outside monitor; state-aware exactly-once attempt transitions. Under R2, the genuine local pipeline and basic persistence/protection are Demo obligations; deep transport/authority/concurrency/restart proofs remain B-QUAL obligations by M1-B, brought forward for actual defects or changed high-risk paths. Unfinished S3-specific transport/recovery qualification moves to DEP-S3/F. Already adopted evidence is retained.
 
 ## Task9 adopted minutes-generation refinement
 
@@ -131,4 +142,4 @@ Read docs/superpowers/specs/2026-10-23-ama-phase-b-final-publication.md and exac
 
 ## Task12 adopted web-loop refinement
 
-Read docs/superpowers/specs/2026-10-23-ama-phase-b-web-loop.md and exact original/R1/closure/reviews. T12DR01 pretransfer protection is closed at design level. Actual Task12/B03 protected projection ownership, same-holder producer/rank/full-set integration, cumulative metadata/content/copy/response budgets and new-path MySQL no-transfer/race instrumentation remain source gates. Freeze actual upstream endpoints/OpenAPI before UI; actual HTTPS LOCAL+S3/four-identity/full/recovery/fresh-process/browser and prototype/output custody evidence plus independent source review remain required. Design adoption supplies no runtime qualification.
+Read docs/superpowers/specs/2026-10-23-ama-phase-b-web-loop.md and exact original/R1/closure/reviews. T12DR01 pretransfer protection is closed at design level. Actual Task12/B03 protected projection ownership, same-holder producer/rank/full-set integration, cumulative metadata/content/copy/response budgets and new-path MySQL no-transfer/race instrumentation remain technical requirements; adopted implementation is not reopened solely by these historical source-gate descriptions. R2 requires the actual local browser loop, page matrix, basic four-identity/protection/recovery evidence and applicable change review for M1-Demo, then deeper MySQL/fresh-process/crash evidence by M1-B. Use the verified local origin without weakening transport/authentication protections. Unfinished S3 browser/recovery and deployment-specific qualification remains DEP-S3/F. Design adoption alone supplies no runtime qualification.

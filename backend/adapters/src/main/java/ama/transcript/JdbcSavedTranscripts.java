@@ -202,7 +202,7 @@ public final class JdbcSavedTranscripts {
   for(var r:revisions){
    require(r.string("batch_id").equals(input.string("batch_id"))&&r.string("processing_input_id").equals(input.string("id"))&&r.string("input_fingerprint").equals(verified.fingerprint()),PROVENANCE_UNAVAILABLE);
    var segments=graph.segments(r.string("id"));require(!segments.isEmpty()&&segments.size()<=verified.parseBudget().maxSegments(),BUDGET_EXCEEDED);long ordinal=1;boolean content=false;
-   for(var segment:segments){require(segment.number("ordinal")==ordinal++&&segment.nullableNumber("start_ms")==null&&segment.nullableNumber("end_ms")==null&&segment.nullableString("speaker_id")==null&&segment.nullableNumber("source_paragraph")!=null&&segment.number("source_paragraph")>0&&byFile.containsKey(segment.string("source_file_id")),PROVENANCE_UNAVAILABLE);content|=!segment.string("body").isBlank();}
+   for(var segment:segments){require(segment.number("ordinal")==ordinal++&&TranscriptSegmentProvenance.timing(input.string("parser_version"),segment.nullableNumber("start_ms"),segment.nullableNumber("end_ms"),segment.nullableString("speaker_id"))&&segment.nullableNumber("source_paragraph")!=null&&segment.number("source_paragraph")>0&&byFile.containsKey(segment.string("source_file_id")),PROVENANCE_UNAVAILABLE);content|=!segment.string("body").isBlank();}
    require(content,INPUT_INVALID);
    var segmentIds=segments.stream().map(s->s.string("segment_id")).collect(java.util.stream.Collectors.toSet());
    for(var mark:graph.rows())if(mark.table()==Table.TRANSCRIPT_SEGMENT_MARK&&mark.string("revision_id").equals(r.string("id")))require(segmentIds.contains(mark.string("segment_id")),PROVENANCE_UNAVAILABLE);

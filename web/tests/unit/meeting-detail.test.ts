@@ -10,3 +10,6 @@ test('saved detail clears on route/actor changes and ignores old responses',asyn
 test('failed current authorization never leaves earlier saved contents on screen',async()=>{
  let fail=false;const state=useSavedMeeting(async()=>{if(fail)throw new Error('denied');return saved;},()=> 'owner',()=>id);await state.reload();assert.equal(state.saved.value?.name,'会议');fail=true;await state.reload();assert.equal(state.saved.value,null);assert.ok(state.error.value);state.dispose();
 });
+test('same-scope information refresh retains mounted work until fresh result, but denial clears it',async()=>{
+ const {ApiError}=await import('../../src/shared/api/client.js');let deny=false,resolve!:(v:any)=>void;const s=useSavedMeeting(async()=>deny?Promise.reject(new ApiError('http',403,'denied')):new Promise(r=>resolve=r),()=> 'owner',()=> 'meeting');const first=s.reload();resolve({id:'meeting',name:'before'});await first;const refresh=(s as any).refresh();assert.equal(s.saved.value?.name,'before');resolve({id:'meeting',name:'after'});await refresh;assert.equal(s.saved.value?.name,'after');deny=true;await (s as any).refresh();assert.equal(s.saved.value,null);s.dispose();
+});

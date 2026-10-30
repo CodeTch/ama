@@ -29,6 +29,8 @@ Configuration is injected through environment variables or controlled external S
 
 MySQL: `DATABASE_URL`, `DATABASE_USERNAME`, `DATABASE_PASSWORD`. Default URL is an intentionally unavailable local MySQL dependency until provisioned; startup succeeds and readiness remains 503. `PORT` and `INTERNAL_PORT` configure the two listener ports. `INTERNAL_HEALTH_ALLOWED_NETWORKS` is a comma-separated CIDR allowlist defaulting to IPv4/IPv6 loopback. Health/error replies never expose connection URLs, root directories or credential values. The positive local readiness test uses a real H2 JDBC/TCP server on a temporary port in the test process, stops/restarts it, and checks 200 → 503 → 200; H2 is test scope only and no production profile bypasses MySQL.
 
+CAS 登录由服务端适配器统一负责，开发和生产都使用同一套 CAS 2.0 流程：`GET /auth/cas/login` 重定向到 `CAS_ORIGIN`，回调收到一次性 ticket 后由 API 服务端调用 `/cas/p3/serviceValidate`，成功才签发 `__Host-AMA_SESSION`。部署时必须同时设置 `CAS_ENABLED=true`、`CAS_ORIGIN`、`CAS_SERVICE_URL` 和 `CAS_LOGOUT_SERVICE_URL`；两个回调地址必须分别是应用公开地址的 `/auth/cas/callback` 与 `/auth/cas/logout/callback`。`CAS_IDENTITY_ATTRIBUTE` 默认为 `user`，如果 CAS 用户名不是企业身份稳定 ID，应改为 CAS 返回的稳定属性名，例如 `enterpriseId`。会话寿命由 `CAS_SESSION_LIFETIME_SECONDS` 配置，最大 24 小时。CAS ticket 不在浏览器端解析，也不会把 provider 返回的 XML 原样暴露给用户。
+
 Verification entrypoint: `python3 tools/checks/run.py <unit|it|web|e2e|visual|contract|load|ops> <selector>`.
 
 - `unit DeploymentConfigTest`: Surefire class/method selection, with actual executed count and fresh JUnit evidence paths. `unit ContractClientTest` exercises the test-only HTTP helper against a local HTTP server.

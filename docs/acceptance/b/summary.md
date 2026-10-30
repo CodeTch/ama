@@ -1,10 +1,48 @@
 # Phase B acceptance evidence
 
-This document distinguishes source verification from actual environment qualification. It does not declare Phase B accepted. The authoritative active task and review state is `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json`; this document records acceptance boundaries and supporting evidence.
+> **当前裁定（用户反馈后）：严格原型一致性 REOPENED / NOT ACCEPTED。** 原型界面和功能验收重新执行。原M1-B受控后端证据保留为其限定范围，不能据此宣称产品界面/功能与原型一致或完成交付。
 
-## Scope
+> **2026-10-29 R2 / 正式本地验收完成：M1-Demo ACCEPTED，M1-B ACCEPTED（fresh/current单MySQL、本地文件、受控模型/签名知识库范围）。** 原BASE→最终V2独立全分支审查APPROVE，当前没有开放P2+；B-R01–14本地启用部分已收口。[正式本地B验收记录](formal-local-b-2026-10-29.md)保留全部证据及限定。B-R15企业平台能力、B-R16最后F部署资格和B-R17历史PARTIAL/UNKNOWN/legacy限定各自保留。
 
-The approved workflow is [AMA-WORKFLOW-20261027](../../superpowers/plans/2026-10-27-ama-development-workflow.md). It combines related checks while preserving the required permissions, transactions, lock order, bounded acquisition, durable recovery, actual adapters and browser behavior. Work stops after B-L1 through B-L5; later phases are outside this authorization.
+This document distinguishes source/evidence verification, formal R2 local M1-B acceptance, actual enterprise capability and production qualification. Current formal local B is accepted; it does not certify every enterprise/production environment. The final state and review record are `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json` and the linked formal acceptance report.
+
+<a id="current-open-obligations-r2"></a>
+
+## 当前开放义务分流表（R2）
+
+这是当前验收及后续独立关卡的唯一调度表，来源为开发树证据目录 `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/` 中的 `bl5-final-qualification-matrix-20261028.md`、原 open-obligations、local/S3 实际结果和本地启动器记录。原件、已通过范围及未通过事实均不改；下列编号只用于跟踪当前待办，不替换原 Task/B-L/F5 等来源编号。新鲜本地切片证据见 [DEMO-01/02 本地记录](demo-local-transcript-2026-10-28.md)；它只更新明确列出的范围，表内其余“需补”仍未完成。
+
+“条件阻塞”须有明确判断：只有基本路径已有适用证据、当前无已知重要缺陷且未修改相关高风险保护时，深入证明才可在首次 Demo 后完成；否则提前阻塞该片段。证据复用须匹配源码、schema、装配和断言，不能把 S3 的环境结果直接改写为当前 local 通过。发现缺陷立即升级，不等最晚关卡。维护者在对应行附最新证据/版本/判定，避免另建重复台账。
+
+| ID / 原义务 | 已有事实与限定（均按原范围） | 最终R2裁定 | 关闭依据 / 保留的独立关卡 |
+| --- | --- | --- | --- |
+| B-R01 本地可重复装配 | 日常入口已接登录/MySQL/会议、本地 mTLS 文件及独立 TXT Worker；真实浏览器上传→导入→保存确认和普通停止重开通过；受控模型/签名知识库已装配，生成至发布/成员文档与六服务重启有当前证据。旧 local API 全链仍仅属于已关闭夹具 | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R02 浏览器与原型 | B-L1～4 源码已采纳；原型八个后续状态已从原件最终渲染索引；十个实际状态两视口、完整流程、409/IME/原请求恢复与权限检查通过，逐页结构/差异矩阵已写，受影响审查 P2 关闭；B-R13 本地选择片段及 LONGTEXT 预算 P2 已独立审查关闭 | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R03 信息并发/幂等 | 当前 genuine 信息INSERT后回滚/ambient、真实200/409草稿保留与原请求恢复已证；新增名单命令LONGTEXT预算真实RED02→GREEN02，identity与roster同ledger、完整metadata/reserve前置；当前CREATE/SAVE/CONFIRM正常与已受理原ACK、改payload/fresh auth负例PASS | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R04 导入原子性 | 双TXT有序RAW、坏第二文件无部分RAW、真实RAW INSERT nativehalt→原task普通attempt2唯一恢复；新增 genuine 受理在batch_file/input/task/outbox实际INSERT后强制SQL异常，4/6/16/19条已执行DML的root/引用/输入/task/receipt/audit/outbox/sequence全回滚、ambient拒绝PASS | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R05 生成原子性 / S→A→F | stale409无额外任务、input INSERT后rollback、candidate nativehalt/原执行恢复已证；自身HB限定完整重捕获和失败轮D收费P2修复，DISCOVERY/max3/累计预算/原30s/interrupt限定PASS；真实command S/A后、首serialized F写前owner命令root+1→具体PROVENANCE/零额外gen图PASS | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R06 成员私有区与撤权 | saved-only/私有字段省略/基本名单撤回已有证据；当前 genuine 生产工厂在实际成员 S 捕获 COMMIT 后由 owner API 撤回名单，F 当前会议 ACL 拒绝且不返回投影；API 恢复原名单后原正文/要素相同。其他读路径/身份竞态与全锁序仍按适用范围补证 | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R07 发布 UNKNOWN/ACK | S3 丢响应后仅查询恢复成功已记录；当前浏览器丢已受理ACK仅GET恢复已证；新genuine映射INSERT后precommit nativehalt、原MARKED/RECONCILING保留、KB独立重启及普通Worker原task/execution查回、远端一文档一执行和最终一映射有证；其他开放边界按范围补证 | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R08 正式文档双重 ACL | owner/member200、provider撤READ403、provider允许但非会议成员403；真实读中post-response身份停用使F拒绝、S后pre-send provider撤READ使真实GET403；无HTML/POST/业务变化，恢复原SHA；独立审查与传输文字P2已关闭 | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R09 发布冻结写保护 | MARKED/UNKNOWN/SUCCESS-unapplied 的 12 代表写保护已采纳 | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R10 B3 维护/对账共存与饱和 | 共存04真实minutes capacity1占槽时另一READY0，TXT和原MARKED pub GET1/POST0推进；另saturation02真实reconciliation capacity1/Semaphore0、另一原operation未领取，普通minutes/TXT及2次实际维护查询推进，释放后原pub GET2/POST0、唯一exec/mapping/effect | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R11 B6 应用/Worker/模型/KB 重启、关键 crash | 普通六服务/MySQL重开保留同session/确认稿/纪要/冻结/发布与同文档/文件字节；RAW/candidate/mapping实际INSERT precommit nativehalt、原task正常恢复；model/KB各自独立same-store重启；Worker TIME_WAIT真实RED/工具修复/实际立即组件重开通过 | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R12 预算、锁序及 genuine authority | 已有原生6维/Unicode/精确边界/current S/A/F单ledger/预transfer tiny配置/ambient、genuine issuer/holder/coverage、自修改/撤权与目录姓名/replay闭环；新D失败轮费用P2独立关闭，原deadline/cancel与名单预算RED→GREEN已证，完整拓扑映射已形成 | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R13 行动负责人选择 | 原 422 未安装已保留；最小真实目录选择/服务端 S/F 同 holder 身份校验已实现。实际生产工厂下身份撤回/写后回滚/原请求重放和浏览器选择、清除、刷新、成员拒绝/不授予会议权限通过；独立审查所提姓名传输 P2 已因果修复并复核关闭；修复后已发布 tuple 拒绝/正式文档字节保留通过，详见 [记录](action-owner-local-2026-10-29.md) | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R14 最终集成与 Task13 | 最新545Java/101classes、0failure/error/skip通过；当前受影响browser200/409/IME/stale409和发布冻结/文档SHA通过；B00逐DIFF当前映射与实际16迁移validate/65表部署subset已只读核对；原BASE34cb…到最终工作树1076实现文件冻结独立review中 | **M1-B本地启用范围已关闭** | [最终验收](formal-local-b-2026-10-29.md)与原BASE→V2独立APPROVE；原证据/范围保留，无新增本地待办。 |
+| B-R15 真实模型/SSO/目录/知识库 | 受控模型产生合成纪要；控制链不证明语义质量或企业环境 | **PLATFORM-B未完成，独立能力门保留** | PLATFORM-B / B-02/07/08，接口可用即做；真实输入相关性、关键事实/来源/行动项评审及真实发布/ACL；最晚相应生产功能交付前，由 F-05/06 核验 |
+| B-R16 S3、双 MySQL、双活及专属依赖 | 已有实现及 S3 API 证据保留；未完场景无生产通过结论 | **最后F未完成，DEP归属保留** | DEP-S3/MYSQL/HA/MIGRATE/MATRIX，全部最后 F-00～06；原要求不得遗漏或标完成 |
+| B-R17 历史 PARTIAL/UNKNOWN 与特殊来源 | B01-IMM-01 PARTIAL、B04-Q401 UNKNOWN 和 O5/O6 保持原记录 | **范围裁定完成；原PARTIAL/UNKNOWN/UNQUALIFIED保留** | 适用本地 B 义务最晚 M1-B；部署专属归 F；无关历史调查不无期限阻塞 Demo，也不记为修复完成 |
+
+当前结论：M1-Demo **ACCEPTED（本地受控流程）**；M1-B **INCOMPLETE**；真实平台能力、生产资格各按证据独立记录。B-QUAL 是原 B 深度义务的归口，不是删除要求或把共享可靠性推迟到部署阶段。
+
+当前 DEMO-03/04 详细证据见 [本地纪要与发布记录](demo-local-minutes-publication-2026-10-29.md)。首次发布在 45 秒等待后于任务 attempt 2 成功。生产 preparation 自身续租竞态现有独立因果复现、修复、真实 Worker 和有界负例，详见 [续租记录](publication-renewal-2026-10-29.md)；首次 56.85 秒领取延迟仍未解释，普通重启不替代 crash。浏览器/原型矩阵见 [DEMO-05](demo-browser-prototype-2026-10-29.md)。
+
+## 历史采用与环境边界（保留原记录，以下历史未完成表述不覆盖本页顶部最终裁定）
+
+### Scope
+
+The execution workflow is [AMA-WORKFLOW-20261027](../../superpowers/plans/2026-10-27-ama-development-workflow.md). It combines related checks while preserving the required permissions, transactions, lock order, bounded acquisition, durable recovery, actual adapters and browser behavior. Work stops after B-L1 through B-L5; later phases are outside this authorization.
 
 ## Source evidence already adopted
 
@@ -19,19 +57,19 @@ The exact file manifests, report hashes and command results are retained in the 
 
 ## Runtime evidence boundaries
 
-Historical adopted evidence remains valid only for its recorded version, setup and assertions. The current gap inventory is `bl5-final-qualification-matrix-20261028.md`; `bl5-open-obligations-20261027.md` retains the original preflight inventory. In particular:
+Historical adopted evidence remains valid only for its recorded version, setup and assertions. The sealed result inventory is `bl5-final-qualification-matrix-20261028.md`; `bl5-open-obligations-20261027.md` retains the original preflight inventory. Current scheduling is the R2 table above. In particular:
 
 - Genuine local reconciliation closure and marker-response-loss UNKNOWN observations do not authorize reusing their historical resources or resending uncertain publication effects.
 - The twelve representative write guards at genuine MARKED/UNKNOWN/SUCCESS-unapplied states are already adopted; they must not be relabeled as missing solely because an earlier inventory predates them.
 - Actual application-to-controlled-provider TLS success and same-store/fresh-JVM readback do not prove every precommit crash, UNKNOWN or integrated restart scenario.
 - Authentic legacy repair origin remains unavailable; synthetic business rows cannot replace that provenance.
-- Real MySQL budget-before-transfer, lock ordering, withdrawal/races, generation atomicity, bounded reconciliation coexistence, and local/S3 HTTPS complete workflows require their own relevant evidence.
+- Real MySQL budget-before-transfer, lock ordering, withdrawal/races, generation atomicity and bounded reconciliation coexistence require their own evidence by M1-B, with basic protection and any changed high-risk path validated before Demo. Local full browser flow is required for M1-Demo; the proven loopback development origin may be used without weakening Cookie/Origin/CSRF or internal mTLS. Unfinished S3-specific workflow/recovery and deployment evidence is retained under DEP-S3/F; storage-independent obligations stay in B.
 
-The fresh B-L5 plan is authorized for a maximum of **three hours from the first resource startup**. Human authorization is recorded with an exact plan hash in `bl5-human-authorization-20261027.json`. Other resource, request, memory, disk and identity restrictions remain unchanged. The independent source/harness gate must pass before activation. A runtime cap, an approval, a compiled harness, or a passing source review is not itself a successful runtime test.
+Historical record: the now-settled B-L5 plan was authorized for a maximum of **three hours from the first resource startup**. Human authorization is recorded with an exact plan hash in `bl5-human-authorization-20261027.json`. Other resource, request, memory, disk and identity restrictions remain unchanged. That batch passed its source/harness gate before activation; the authorization cannot be replayed. A runtime cap, an approval, a compiled harness, or a passing source review is not itself a successful runtime test.
 
 ## Retained qualifications and exclusions
 
-B01 IMM remains PARTIAL; B04 Q401 remains UNKNOWN. Company SSO/directory/model/knowledge-service readiness, production identity authority, HA/capacity and native I/O failure qualification are not asserted by controlled fixtures. Visual pixel/viewport closure, host/storage failure qualification and full load/stability matrices retain the explicit later-phase dispositions in the approved workflow. Core Phase B permissions, transactions, application restart and critical crash/recovery requirements remain in Phase B.
+B01 IMM remains PARTIAL; B04 Q401 remains UNKNOWN. Company SSO/directory/model/knowledge-service readiness, production identity authority, HA/capacity and native I/O failure qualification are not asserted by controlled fixtures. Full-product pixel/viewport closure, host/storage failure qualification and full load/stability matrices retain later-phase dispositions; prototype reproduction and comparison for the current Demo pages are brought forward into B. S3, dual-MySQL and active-active unfinished adaptation and exclusive dependencies are assigned to final F. Core Phase B permissions, transactions, application restart and critical crash/recovery requirements remain in Phase B.
 
 No commit, merge or push is part of the current authorization. Final acceptance requires the applicable actual combined regression, resolution or explicit qualified disposition of required open assertions, and the sole independent final branch review.
 

@@ -1,10 +1,10 @@
-> **2026-10-27 用户批准的执行补充（AMA-WORKFLOW-20261027）**：后续按[流程与分阶段验证补充计划](2026-10-27-ama-development-workflow.md)执行。完整功能批次集中审查、分层验证、增量证据与后移台账优先于下文冲突的旧流程条款；功能和核心可靠性要求保持。当前开发仍暂停，下次“继续”从 B-L1 信息持久化/真实表单/名单确认开始。下方旧状态段仅为历史，具体技术任务继续有效。
+> **2026-10-28 当前范围（AMA-DEMO-FIRST-20261028 R2）**：按[Demo 优先调整计划](2026-10-28-ama-demo-first-adjustment.md)的业务片段 DEMO-01～05 先交付 M1-Demo，再由 B-QUAL 完成 M1-B 正式本地验收。前期本地 MySQL＋本地文件＋单机，原型页面与功能一起交付；B-L1～4 已采纳，不按旧未勾选模板重做。S3、双 MySQL、双活未完专用实现/配置/测试/依赖最后 F。本轮仅文档。
 
 ---
 
 # B：平台基础与首个业务闭环 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** 沿用 executing-plans 内联与完整业务批次、集中审查；当前状态以接续入口/采纳记录为准。下列历史任务接口与步骤保留需求追踪，不要求重新开发已采纳实现。
 
 **Goal:** 建立经过评审的数据库详细设计基线，用真实持久化完成“转写文件导入→人工确认→纪要→测试知识库发布”，并建立后续功能共用的权限、文件、任务和版本边界。
 
@@ -17,7 +17,7 @@
 ## Global Constraints
 
 - 继承总计划；未确认名单不授权，平台管理员不默认有正文权限。
-- local/S3 覆盖所有受管文件；文件和目录持久化后再登记 DB、再返回成功；不能当跨资源事务。
+- B 使用现有 local 实现覆盖受管文件；文件和目录持久化后再登记 DB、再返回成功。现有 S3 保留，未完适配/差异验证归 F；不能把文件与 DB 当跨资源事务。
 - 任务租约初始 20 秒、每 5 秒续租、每 5 秒扫描；DB 可用时 30 秒内可重新领取。
 - 业务版本和输入指纹决定能否写回；发布成功只读，未知外部结果先对账。
 - B-00 是表结构落地与验收的设计前置；各领域任务消费其已评审数据字典、关系与约束，变更结构先更新相关设计并完成增量评审。
@@ -26,7 +26,7 @@
 
 ## Review Focus
 
-1. 跨节点会话和离职撤销：B-02 `sessionRevocationWorksOnBothNodes`。
+1. 单机会话和离职撤销在 B-02 验证；`sessionRevocationWorksOnBothNodes` 的未完跨节点部分归 DEP-HA/F-05。
 2. 同幂等键不同请求及两窗口编辑：B-03 `sameKeyDifferentPayloadConflicts`。
 3. 存储成功而事务失败：B-04 `orphanIsNotReadableAsBusinessFile`。
 4. 旧 Worker 在租约到期后返回：B-05 `expiredAttemptCannotCommit`。
@@ -81,7 +81,7 @@
 
 **Interfaces:** Consumes A-02 的已确定协议；Produces `IdentityPort.resolveSession(String): Optional<Actor>`、`DirectoryPort.search(String query,String cursor,int limit): PeoplePage`、`MeetingAccess.require(Actor actor,String meetingId,Action action): void`。Actor 含稳定 enterpriseId、状态、角色；目录人员含 stableId/displayName/department/active。`GET /api/v1/session`、`GET /api/v1/directory/people`。
 
-- [ ] 写 `sessionRevocationWorksOnBothNodes` 及 CSRF/Origin、停用、同名人员测试；普通管理员读取别人的会议 `assertEquals(403, reply.status());`；草稿名单加入的人仍 403；确认后才可读。
+- [ ] 保留单机会话撤销及 CSRF/Origin、停用、同名人员验证；未完 `sessionRevocationWorksOnBothNodes` 归 DEP-HA，不在前期新增跨节点测试；普通管理员读取别人的会议 `assertEquals(403, reply.status());`；草稿名单加入的人仍 403；确认后才可读。
 - [ ] 运行 `python3 tools/checks/run.py it IdentityAccessIT`，确认访问规则失败。
 - [ ] 按 A-02 的公司协议实现 adapter、后端令牌与安全 Cookie、撤销和目录映射；测试身份仅在 test profile 注入，生产配置加载它必须失败。
 - [ ] 重跑 IT；公司测试环境到位后另运行 `python3 tools/checks/run.py contract IdentityAccessIT`，保留真实登录、退出和停用证据。
@@ -101,7 +101,7 @@
 
 ## Task B-04：统一文件契约与两种后端
 
-本任务分三个可独立评审的小交付；最后共同契约通过才算 B-04 完成。
+本任务原共同契约、local、S3 三部分及已采纳成果全部保留。当前 B-04-Demo 只收口 local 与业务登记/API 所需缺口；B-04 的未完 S3 适配和验证单列 DEP-S3/F，不能把该后移部分标为完成，也不阻塞 B Demo。
 
 **Files:** Create `backend/contracts/src/main/java/ama/contract/StorageContracts.java`、`backend/core/src/main/java/ama/storage/FileStoragePort.java`、`backend/core/src/main/java/ama/storage/FileRegistry.java`、`backend/adapters/src/main/java/ama/storage/StorageRouter.java`、`backend/adapters/src/main/java/ama/storage/S3FileStorage.java`、`backend/adapters/src/main/java/ama/storage/LocalFileClient.java`、`backend/file-service/pom.xml`、`backend/file-service/src/main/java/ama/file/LocalFileStore.java`、`backend/file-service/src/main/java/ama/file/InternalFileController.java`、`backend/api/src/main/java/ama/api/FileController.java`、`backend/adapters/src/main/resources/db/migration/V004__files_uploads.sql`、`backend/integration-tests/src/test/java/ama/storage/FileStorageContractIT.java`、`backend/integration-tests/src/test/java/ama/storage/LocalDurabilityIT.java`、`contracts/openapi/files.yaml`。
 
@@ -110,11 +110,11 @@
 **HTTP contract:** `POST /api/v1/meetings/{id}/uploads {purpose,name,size,sha256}`→uploadId/partSize；purpose 仅接受当前用户有权使用的已启用文件用途。`PUT /uploads/{id}/parts/{part}` 传二进制及 `X-Checksum-SHA256`；`POST /uploads/{id}/completion {parts:[{part,sha256}],sha256}`→fileId；`DELETE /uploads/{id}` 中止。providerToken 只保存在服务端，不信任客户端提交的位置或凭证；`GET /files/{id}/content` 经 MeetingAccess 校验，D-06 增加长流撤权检查。
 
 - [ ] 写共同契约：同键同哈希重放、不同内容拒绝、字节范围正确、完成/中止幂等、默认后端改变不影响旧文件。`orphanIsNotReadableAsBusinessFile` 模拟文件写成功而 DB 提交失败，业务 GET 应 404；核心 `assertArrayEquals(expectedRange, bytes); assertEquals("original-backend", token.backendId());`。
-- [ ] 运行 `python3 tools/checks/run.py it FileStorageContractIT`，确认两个实现缺失/行为失败。
+- [ ] 运行 `python3 tools/checks/run.py it FileStorageContractIT`，只针对当前 local 路径的真实缺口确认行为失败；已有两个实现均保留，不人为重造失败。
 - [ ] 实现文件登记、后端路由和上传状态，先评审提交 `feat: define file storage contract and registry`；不开放未实现后端为可用。
 - [ ] 实现 local：同卷临时文件→哈希→文件同步→不覆盖原子发布→目录同步；内部认证、根目录/符号链接防护、挂载身份检查、受保护暂存。写 `LocalDurabilityIT` 注入同步失败和挂载丢失，确认不能返回成功；通过后提交 `feat: implement durable local file service`。
-- [ ] 实现 S3：配置校验、流式读取、multipart 合法 part、校验及重复完成查询；ETag 不冒充 SHA-256；同一共同契约运行 local/s3 两个参数组，通过后提交 `feat: implement S3 file storage adapter`。
-- [ ] 重跑两个 IT，报告各后端实际执行数；断电/DRBD 资格留 F-02，普通文件测试不能代替断电持久化证据。
+- [ ] **后移 DEP-S3/F（仅未完部分）**：复用已采纳 S3 adapter，补目标环境配置校验、流式读取、multipart 合法 part、校验及重复完成查询的适配/验证；ETag 不冒充 SHA-256；共同契约 S3 参数组在 F 验证。已有实现与通过记录不重做。
+- [ ] 本地有变更时定向运行 FileStorageContractIT/LocalDurabilityIT 并报告实际数量；S3 差异和双后端回归归 F，断电/DRBD 资格仍在 F-02。既有证据按原范围复用。
 
 ## Task B-05：可靠任务、outbox 和模型调用额度
 
@@ -166,6 +166,8 @@
 
 ## Task B-09：首个可操作的前端闭环
 
+当前执行拆为 R2 的 DEMO-01～05：按用户操作片段同步装配、原型与 API，优先复用已存在的 `web/src/features/meetings/`、`import/`、`transcript/`、`minutes/` 组件。下列拟建文件名属于原始任务设计，不是另建重复页面的指令。表现层可作原型复刻必需的最小调整；既有领域/权限/版本/恢复协议与可用功能保持。
+
 **Files:** Create `web/src/features/capture/ImportMeetingDialog.vue`、`web/src/features/meeting/MeetingInfoDrawer.vue`、`web/src/features/transcript/TranscriptPage.vue`、`web/src/features/minutes/MinutesPage.vue`、`web/src/features/publication/PublicationPage.vue`、`web/tests/e2e/first-flow.spec.ts`、`web/tests/e2e/fixtures.ts`。Modify `web/src/App.vue`、`web/src/shared/api/generated.ts`。
 
 **Interfaces:** Consumes B-02…B-08 OpenAPI；测试 fixtures 提供 owner/member/outsider/admin 四种独立会话及脱敏转写文件，不把测试登录入口编入生产。
@@ -173,12 +175,18 @@
 - [ ] 写 `importConfirmGeneratePublish`，按真实页面点击与等待后断言 `await expect(page.getByTestId('publication-state')).toHaveText('已发布');`；刷新保持结果，参与者没有编辑按钮且直接写 API 为403。
 - [ ] 运行 `python3 tools/checks/run.py e2e first-flow.spec.ts`，确认未实现步骤失败。
 - [ ] 实现各页最小完整动作及保存/失败/冲突状态，使用原型视觉；实际发生日期未知显示空；异步任务经 taskId 查询/事件恢复。
-- [ ] local/s3 分别跑 E2E，保留当前真实/模拟平台标识；加入同键重试、失败保留输入和刷新后只读断言，执行 typecheck/build。
+- [ ] 在本地 MySQL/local/单机跑完整浏览器 E2E，保留真实/受控平台标识，验证同键重试、失败输入、刷新只读及原型页面截图对照，执行 typecheck/build。S3 E2E 未完部分归 DEP-S3/F。
 - [ ] 提交 `feat: deliver first end-to-end meeting minutes flow`，提交 B 阶段演示与缺口报告。
 
 ## 阶段验收与移交
 
+**M1-Demo 首次演示**按调整计划第 4.2/4.3 节验收：真实页面闭环、逐页原型、基本权限/版本/幂等/未知/持久化与常规重开、受影响验证；结果真实、无重要缺陷、受控提供方清楚标识。精确事务阶段/预算/锁序/完整重启/crash 等剩余证明归 B-QUAL，不统一压在首次演示之前；相关高风险路径发生修改或发现实际缺陷时提前处理。Demo 通过时 **B 仍 INCOMPLETE**。
+
+以下为 **M1-B 正式本地业务验收**。所有适用义务及最晚关卡见 [B 摘要](../../acceptance/b/summary.md#current-open-obligations-r2)，不能仅靠受控演示关闭正式验收：
+
 - [ ] B-00 交付物齐全并通过独立评审；B 阶段迁移/实现与评审基线一致，已开展任务的差异及受影响回归全部闭环；`docs/acceptance/b/summary.md` 引用设计版本和评审证据。
-- [ ] 双文件后端用同一套测试，local 无 S3 服务/凭证仍能完成闭环；数据跨进程重启保留。
+- [ ] 本地 MySQL/local/单机无 S3 服务/凭证、第二数据库或双活依赖即可完成真实页面闭环，数据跨进程重启保留；Demo 页面复刻有对照证据。双后端专属验证未完部分归 F，单列未完成。
 - [ ] 未确认/越权/旧版本不能生成或发布；结果未知查回不会重复文档；任务可恢复。
+- [ ] B-QUAL 关闭全部适用本地核心断言，包括精确并发/写后回滚、读取前累计预算/锁序/同 holder、维护共存/饱和、关键 crash 与各组件重启；最终适用回归与原下界上的全分支审查完成。已采纳证据按有效范围复用。
 - [ ] `docs/acceptance/b/summary.md` 区分可演示闭环与公司真实联调；缺 SSO/模型/知识库任何一项则相应真联调未通过，不能以 mock 交付替代。
+- [ ] 本地 B 达标后停止交接，不自动启动 C/D/E/F；真实模型/企业能力按 B-02/07/08 独立联调，最晚相应生产功能交付前通过，不能把三类部署后移扩大为全部真实能力后移。

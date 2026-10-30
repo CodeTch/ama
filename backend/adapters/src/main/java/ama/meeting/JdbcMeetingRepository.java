@@ -19,6 +19,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 /** One owner for aggregate writes. All SQL uses the same DataSource as identity/audit/fences/outbox. */
 public final class JdbcMeetingRepository implements MeetingRepository {
     private final JdbcTemplate j;
+    private final DataSource source;
+    private final WorkspaceReadBudget.Limits readLimits;
     private final TransactionRunner tx;
     private final JdbcMeetingAccess access;
     private final SubjectFencePort fences;
@@ -35,16 +37,17 @@ public final class JdbcMeetingRepository implements MeetingRepository {
     }
     public JdbcMeetingRepository(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,SubjectFencePort fences,OutboxPort outbox,AuditPort audit,CategoryDictionary categories,ama.transcript.JdbcTranscriptAuthority minutes){this(source,tx,access,fences,outbox,audit,categories,minutes,WorkspaceReadBudget.DEFAULT);}
     public JdbcMeetingRepository(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,SubjectFencePort fences,OutboxPort outbox,AuditPort audit,CategoryDictionary categories,ama.transcript.JdbcTranscriptAuthority minutes,WorkspaceReadBudget.Limits limits){
-        j=new JdbcTemplate(source);readProjection=new JdbcMeetingReadProjection(source,tx,access,limits);this.tx=tx;this.access=access;this.fences=fences;this.outbox=outbox;this.audit=audit;this.categories=categories;this.minutes=minutes;
+        this.source=Objects.requireNonNull(source);this.readLimits=Objects.requireNonNull(limits);j=new JdbcTemplate(source);j.setQueryTimeout(5);readProjection=new JdbcMeetingReadProjection(source,tx,access,limits);this.tx=tx;this.access=access;this.fences=fences;this.outbox=outbox;this.audit=audit;this.categories=categories;this.minutes=minutes;
     }
     @Override public Created create(Actor actor,String key,String trace){
         independent();
         return tx.required(()->{
             var replay=claim(actor,"meetings","CREATE",key,MeetingDigests.fields("meeting-create-v1"));
-            var identities=access.lockIdentities(actor,List.of());
+            // Creation only needs the current actor status; it never snapshots a directory name.
+            var identities=access.tryLockHistoricalIdentities(actor,List.of(),false).orElseThrow(AccessDeniedException::new);
             if(replay.result()!=null){
                 var result=restore(replay,"meeting_info_revision");
-                access.require(access.lockMeeting(identities,result.id()),Action.EDIT);
+                access.require(access.lockPrepared(identities,result.id(),false).orElseThrow(AccessDeniedException::new),Action.EDIT);
                 checkReplay(replay);
                 return new Created(result.id(),result.revision(),"ENTRY");
             }
@@ -64,6 +67,12 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             return new Created(id,0,"ENTRY");
         });
     }
+    /** Returning a stored ACK still requires current authority, but never constructs a new roster snapshot. */
+    private void requireReplayAccess(Actor actor,String meeting,Action action){
+        var identities=access.tryLockHistoricalIdentities(actor,List.of(),false).orElseThrow(AccessDeniedException::new);
+        var held=access.lockPrepared(identities,meeting,false).orElseThrow(AccessDeniedException::new);
+        access.require(held,action);
+    }
     @Override public Mutation save(Actor actor,String id,String key,SaveInfo request,String trace){
         independent();
         // Discovery owns no locks; CAS under root rejects any intervening aggregate change.
@@ -71,12 +80,13 @@ public final class JdbcMeetingRepository implements MeetingRepository {
         var prepared=prepareMinutes(actor,id);
         return tx.required(()->{
             var replay=claim(actor,id,"SAVE_INFO",key,MeetingDigests.save(request));
-            var identities=access.lockIdentities(actor,affected);
+            if(replay.result()!=null){requireReplayAccess(actor,id,Action.EDIT);checkReplay(replay);return restore(replay,"meeting_info_revision");}
+            var budget=new WorkspaceReadBudget(readLimits,()->Thread.currentThread().isInterrupted());
+            var identities=access.lockIdentities(actor,affected,budget);
             var held=access.lockMeeting(identities,id);access.require(held,Action.EDIT);
             checkReplay(replay);
-            if(replay.result()!=null)return restore(replay,"meeting_info_revision");
             writable(held,request.expectedRevision());
-            requireDiscoveredIdentities(held);
+            requireDiscoveredIdentities(held,budget);
             if(request.category()!=null)categories.requireAvailableCategory(request.category());
             var desired=new ArrayList<Member>();
             for(String personId:request.rosterDraftIds()){
@@ -91,7 +101,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             long version=held.root.revision()+1;String info=uuid();
             insertInfo(info,id,version,request.name(),request.category(),request.summary(),request.occurredOn(),actor.enterpriseId());
             var latest=latest(id);
-            if(latest==null || !sameRoster(members(latest.id()),desired))insertRoster(id,version,"DRAFT",desired,null);
+            if(latest==null || !sameRoster(members(held,actor,latest.id(),budget),desired))insertRoster(id,version,"DRAFT",desired,null);
             j.update("UPDATE meeting SET revision=?,info_revision_id=?,actual_meeting_date=?,final_confirmation_id=NULL,updated_at=UTC_TIMESTAMP(6) WHERE id=?",version,info,request.occurredOn(),id);
             j.update("UPDATE meeting_search_projection SET info_revision_id=?,name_search=?,category_id=?,meeting_revision=? WHERE meeting_id=?",info,request.name(),request.category(),version,id);
             fences.advance(held.subject,version,held.root.cancelEpoch(),false);
@@ -106,15 +116,16 @@ public final class JdbcMeetingRepository implements MeetingRepository {
         var prepared=prepareMinutes(actor,id);
         return tx.required(()->{
             var replay=claim(actor,id,"CONFIRM_ROSTER",key,MeetingDigests.fields("meeting-roster-confirm-v1",request.expectedRevision().toString()));
-            var identities=access.lockIdentities(actor,affected);
+            if(replay.result()!=null){requireReplayAccess(actor,id,Action.MANAGE);checkReplay(replay);return restore(replay,"roster_revision");}
+            var budget=new WorkspaceReadBudget(readLimits,()->Thread.currentThread().isInterrupted());
+            var identities=access.lockIdentities(actor,affected,budget);
             var held=access.lockMeeting(identities,id);access.require(held,Action.MANAGE);
             checkReplay(replay);
-            if(replay.result()!=null)return restore(replay,"roster_revision");
             writable(held,request.expectedRevision());
             if(held.root.accessRevision()==Long.MAX_VALUE-1)throw new RevisionExhausted();
-            requireDiscoveredIdentities(held);
+            requireDiscoveredIdentities(held,budget);
             var draft=latest(id);if(draft==null || !draft.state().equals("DRAFT"))throw new Conflict();
-            var people=members(draft.id());
+            var people=members(held,actor,draft.id(),budget);
             for(var member:people)if(member.enterpriseId()!=null){
                 var current=identities.people.get(member.enterpriseId());
                 // A discovery race cannot acquire a new lower-order identity lock here.
@@ -169,18 +180,32 @@ public final class JdbcMeetingRepository implements MeetingRepository {
         ids.addAll(j.queryForList("SELECT m.enterprise_id FROM roster_member m WHERE m.roster_id=(SELECT r.id FROM roster_revision r WHERE r.meeting_id=? ORDER BY r.revision DESC LIMIT 1) AND m.enterprise_id IS NOT NULL",String.class,id));
         return ids;
     }
-    private void requireDiscoveredIdentities(JdbcMeetingAccess.Held held){
+    private void requireDiscoveredIdentities(JdbcMeetingAccess.Held held,WorkspaceReadBudget budget){
         var ids=new HashSet<>(j.queryForList("SELECT enterprise_id FROM meeting_access_grant WHERE meeting_id=? ORDER BY enterprise_id FOR UPDATE",String.class,held.root.id()));
         var latest=latest(held.root.id());
-        if(latest!=null)for(var person:members(latest.id()))if(person.enterpriseId()!=null)ids.add(person.enterpriseId());
+        if(latest!=null){
+            // This prelock validation only needs fixed identity IDs; never transfer roster LONGTEXT here.
+            budget.reserve(1,1,64,64,64,4,false);
+            long count=j.queryForObject("SELECT COUNT(*) FROM roster_member WHERE roster_id=? AND enterprise_id IS NOT NULL",Long.class,latest.id());
+            if(count<0||count>readLimits.rows())throw new WorkspaceReadBudget.Unavailable();
+            reserveRosterIdentityIds(budget,count);
+            var found=j.queryForList("SELECT enterprise_id FROM roster_member WHERE roster_id=? AND enterprise_id IS NOT NULL ORDER BY member_id FOR UPDATE",String.class,latest.id());
+            if(found.size()!=count)throw new WorkspaceReadBudget.Unavailable();ids.addAll(found);
+        }
         // Even a caller guessing a future CAS cannot make discovery omit a newly removed identity.
         // Refuse and roll back; never discover and lock a lower-order identity after the root.
         if(!held.identities.ids().containsAll(ids))throw new Conflict();
     }
+    static void reserveRosterIdentityIds(WorkspaceReadBudget budget,long count){
+        // VARCHAR(255) admits 255 Unicode scalars: up to four UTF-8 bytes and two UTF-16 units each.
+        budget.reserve(count,count,Math.multiplyExact(count,1020L),Math.multiplyExact(count,255L),Math.multiplyExact(count,510L),4,false);
+    }
     private Roster latest(String id){return j.query("SELECT id,revision,state FROM roster_revision WHERE meeting_id=? ORDER BY revision DESC LIMIT 1 FOR UPDATE",(r,n)->new Roster(r.getString(1),r.getLong(2),r.getString(3)),id).stream().findFirst().orElse(null);}
-    private List<Member> members(String roster){return j.query("SELECT member_id,enterprise_id,display_name,member_kind FROM roster_member WHERE roster_id=? ORDER BY member_id FOR UPDATE",(r,n)->new Member(r.getString(1),r.getString(2),r.getString(3),r.getString(4)),roster);}
-    private List<Member> confirmedMembers(String roster,String id){
-        if(j.queryForList("SELECT id FROM roster_revision WHERE id=? AND meeting_id=? AND state='CONFIRMED' FOR UPDATE",String.class,roster,id).size()!=1)throw new AccessDeniedException();return members(roster);
+    private List<Member> members(JdbcMeetingAccess.Held held,Actor actor,String roster,WorkspaceReadBudget budget){
+        var read=new BoundedMeetingMetadata(source,access,actor,held.root.id(),held,budget);
+        if(read.capture("roster_revision","id","id=? AND meeting_id=?",1,roster,held.root.id()).size()!=1)throw new WorkspaceReadBudget.Unavailable();
+        var selected=read.capture("roster_member","member_id enterprise_id display_name member_kind","roster_id=?",128,roster);
+        return read.read(selected).stream().map(row->new Member((String)row.get("member_id"),(String)row.get("enterprise_id"),(String)row.get("display_name"),(String)row.get("member_kind"))).toList();
     }
     private boolean sameRoster(List<Member> before,List<Member> after){
         return signatures(before).equals(signatures(after));

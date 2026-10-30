@@ -99,7 +99,7 @@ export function useTranscriptEditor(api:Api,actor:()=>string|null,meeting:()=>st
   pending=null;command.invalidate();d[action]();sourceRevisionId=saved.value.saved.id;persist();
  }
  return {saved:shallowReadonly(saved),draft:shallowReadonly(draft),loading:shallowReadonly(loading),busy:shallowReadonly(busy),error:shallowReadonly(error),storageStatus:shallowReadonly(storageStatus),recoveryBlocked:shallowReadonly(recoveryBlocked),command,
-  reload:()=>reload(),save:()=>mutate('TRANSCRIPT_SAVE'),confirm:()=>mutate('TRANSCRIPT_CONFIRM'),restore:(id:string)=>mutate('TRANSCRIPT_RESTORE',id),retry:()=>{const operation=command.snapshot.value?.operation;if(operation==='TRANSCRIPT_SAVE'||operation==='TRANSCRIPT_CONFIRM'||operation==='TRANSCRIPT_RESTORE')return mutate(operation);return Promise.resolve();},
+  pendingOperation:()=>pending?.operation??null,reload:()=>reload(),save:()=>mutate('TRANSCRIPT_SAVE'),confirm:()=>mutate('TRANSCRIPT_CONFIRM'),restore:(id:string)=>mutate('TRANSCRIPT_RESTORE',id),retry:()=>{const operation=command.snapshot.value?.operation;if(operation==='TRANSCRIPT_SAVE'||operation==='TRANSCRIPT_CONFIRM'||operation==='TRANSCRIPT_RESTORE')return mutate(operation);return Promise.resolve();},
   edit(value:TranscriptEdits){if(!draft.value||!canEdit()||!edits(value)||value.length!==draft.value.value.value.length||value.some((x,i)=>x.segmentId!==draft.value!.value.value[i]?.segmentId))throw new Error('只能编辑当前完整段落。');draft.value.edit(value);persist();},
   deny(cause:unknown){invalidate();error.value=cause;},discard:()=>resolve('discard'),reapply:()=>resolve('reapply'),logout(){retained=null;if(journal&&!journal.clear())recoveryBlocked.value=true;invalidate();retained=null;},dispose(){disposed=true;stop();invalidate();}
  };

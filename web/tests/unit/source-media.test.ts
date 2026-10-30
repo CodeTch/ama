@@ -1,0 +1,15 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {effectScope,ref} from 'vue';import {useSourceMedia,type MediaScope} from '../../src/features/transcript/useSourceMedia';
+const source={fileId:'file',sha256:'a'.repeat(64),sizeBytes:3,revisionId:'raw',ordinal:1};const initial:MediaScope={meeting:'meeting',revisionId:'raw',accessRevisionToken:'1',sources:[source]};const turn=()=>new Promise<void>(resolve=>setImmediate(resolve));
+test('original media is released on a new read and a session switch; late bytes never create a URL',async()=>{
+ const effect=effectScope(),actor=ref<string|null>('owner'),scope=ref<MediaScope|null>(initial),revoked:string[]=[];let created=0,calls=0,late:(v:{blob:Blob;name:string|null})=>void=()=>{};
+ const state=effect.run(()=>useSourceMedia(async(m,s,signal)=>{calls++;assert.equal(m,'meeting');assert.equal(s.fileId,'file');if(calls===1)return{blob:new Blob(['wav'],{type:'audio/wav'}),name:'会议.wav'};return new Promise(resolve=>{late=resolve;});},()=>actor.value,()=>scope.value,{createObjectURL(){return 'blob:owned-'+(++created);},revokeObjectURL(u){revoked.push(u);}}))!;
+ try{await turn();assert.equal(state.url.value,'blob:owned-1');assert.equal(state.name.value,'会议.wav');const pending=state.select('file');await turn();assert.equal(state.url.value,null);assert.deepEqual(revoked,['blob:owned-1']);actor.value=null;late({blob:new Blob(['late']),name:'private.wav'});await pending;assert.equal(created,1);assert.equal(state.url.value,null);assert.equal(state.name.value,null);assert.deepEqual(state.names.value,{});}finally{effect.stop();}
+});
+test('read failure and explicit scope change fail closed without retaining another file',async()=>{
+ const effect=effectScope(),scope=ref<MediaScope|null>(initial),revoked:string[]=[];let calls=0;const state=effect.run(()=>useSourceMedia(async()=>{if(++calls===1)return{blob:new Blob(['x']),name:'first.wav'};throw new Error('权限已撤回');},()=> 'owner',()=>scope.value,{createObjectURL(){return 'blob:first';},revokeObjectURL(v){revoked.push(v);}}))!;
+ try{await turn();await state.select('foreign');assert.equal(calls,1);await state.select('file');assert.equal(state.url.value,null);assert.match(state.error.value??'',/权限已撤回/);assert.deepEqual(revoked,['blob:first']);scope.value=null;await turn();assert.equal(state.error.value,null);assert.deepEqual(state.sources.value,[]);}finally{effect.stop();}
+});
+test('an equivalent fresh projection does not strand an in-flight media read',async()=>{
+ const effect=effectScope(),scope=ref<MediaScope|null>(structuredClone(initial));let finish:(v:{blob:Blob;name:string|null})=>void=()=>{};const state=effect.run(()=>useSourceMedia(()=>new Promise(resolve=>{finish=resolve;}),()=> 'owner',()=>scope.value,{createObjectURL(){return 'blob:fresh';},revokeObjectURL(){}}))!;
+ try{scope.value=structuredClone(initial);finish({blob:new Blob(['x']),name:'same.wav'});await turn();assert.equal(state.url.value,'blob:fresh');assert.equal(state.busy.value,false);}finally{effect.stop();}
+});

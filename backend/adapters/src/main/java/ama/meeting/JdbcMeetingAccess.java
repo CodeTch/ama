@@ -22,6 +22,7 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     private final Map<Object,Boolean> identitiesStarted=Collections.synchronizedMap(new WeakHashMap<>());
     private final Map<Object,Boolean> rootsStarted=Collections.synchronizedMap(new WeakHashMap<>());
     record Person(String id,String name,String status) {}
+    private record NameSize(String id,String status,long bytes,long points,long units) {}
     record Root(String id,String owner,long revision,long accessRevision,long cancelEpoch,String stage,
                 String lifecycle,String governance,boolean published,String infoId,String rosterId) {}
     record IdentityStatus(String id,String status) {}
@@ -61,8 +62,9 @@ public final class JdbcMeetingAccess implements MeetingAccess {
         if(holder!=null&&identitiesStarted.containsKey(holder))throw new IllegalStateException("Publication preparation cannot follow identity locks");
     }
     @Override public Locked lock(Actor actor,String id){return lockPrepared(captureIdentities(actor,List.of(),false,false,false).orElseThrow(AccessDeniedException::new),id,false).orElseThrow(AccessDeniedException::new);}
-    Identities lockIdentities(Actor actor,Collection<String> affected){
-        return (Identities)captureIdentities(actor,affected,false,false,true).orElseThrow(AccessDeniedException::new);
+    Identities lockIdentities(Actor actor,Collection<String> affected){return lockIdentities(actor,affected,new WorkspaceReadBudget());}
+    Identities lockIdentities(Actor actor,Collection<String> affected,WorkspaceReadBudget budget){
+        return (Identities)captureIdentities(actor,affected,false,false,true,Objects.requireNonNull(budget)).orElseThrow(AccessDeniedException::new);
     }
     @Override public Optional<LockedIdentities> tryLockIdentities(Actor actor,Collection<String> affected,boolean skip){
         return captureIdentities(actor,affected,skip,true,false);
@@ -72,6 +74,21 @@ public final class JdbcMeetingAccess implements MeetingAccess {
         var captured=captureIdentities(actor,historical,skip,false,false);
         if(captured.isPresent()&&!((IdentityCapture)captured.orElseThrow()).ids().containsAll(historical))throw new IllegalArgumentException("Historical identity no longer exists");
         return captured;
+    }
+    /** Current Person validation consumes a same-holder gate whose identity union already covers this ID.
+     * Re-reads only the held row, including changes made by this transaction itself. */
+    public boolean activePerson(Locked locked,String id,String displayName){
+        if(!(locked instanceof JdbcMeetingAccess.Held held)||held.issuer()!=this)
+            throw new IllegalArgumentException("Foreign meeting capability");
+        check(held.identities);
+        if(!held.identities.ids().contains(id))throw new IllegalArgumentException("Selected identity was not prelocked");
+        require(held,Action.EDIT);
+        if(displayName==null)return false;
+        // display_name is LONGTEXT. Match in MySQL and transfer only a bounded literal.
+        // The locking read rechecks current state; this exact identity row is already held.
+        var found=j.query("SELECT 1 FROM enterprise_identity WHERE enterprise_id=? AND status='ACTIVE' AND OCTET_LENGTH(display_name)=? AND CAST(display_name AS BINARY)=CAST(? AS BINARY) FOR UPDATE",
+                (r,n)->r.getInt(1),id,ama.canonical.CanonicalValueCodec.utf8Length(displayName,()->false),displayName);
+        return found.size()==1;
     }
     /** Internal operation facts only. These opaque classes implement neither Locked nor LockedIdentities. */
     public final class FactIdentities {
@@ -100,6 +117,9 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     private void checkFact(FactIdentities value){if(value==null||value.issuer()!=this||value.holder!=transaction())throw new IllegalArgumentException("Foreign or expired fact identities");}
     private void checkFact(FactRoot value){if(value==null||value.issuer()!=this)throw new IllegalArgumentException("Foreign fact root");checkFact(value.identities);}
     private Optional<LockedIdentities> captureIdentities(Actor actor,Collection<String> affected,boolean skip,boolean allActive,boolean names){
+        return captureIdentities(actor,affected,skip,allActive,names,names?new WorkspaceReadBudget():null);
+    }
+    private Optional<LockedIdentities> captureIdentities(Actor actor,Collection<String> affected,boolean skip,boolean allActive,boolean names,WorkspaceReadBudget nameBudget){
         Object currentTransaction=transaction();
         identitiesStarted.put(currentTransaction,true);
         if(rootsStarted.containsKey(currentTransaction))throw new IllegalStateException("Identity prelock cannot follow a meeting root lock");
@@ -108,10 +128,19 @@ public final class JdbcMeetingAccess implements MeetingAccess {
         ids.addAll(affected);ids.add(actor.enterpriseId());var people=new HashMap<String,Person>();var statuses=new HashMap<String,IdentityStatus>();
         for(String id:ids){
             if(names){
-                var found=j.query("SELECT enterprise_id,display_name,status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),
-                        (r,n)->new Person(r.getString(1),r.getString(2),r.getString(3)),id);
-                if(found.isEmpty()){if(skip)return Optional.empty();continue;}
-                var person=found.getFirst();people.put(id,person);statuses.put(id,new IdentityStatus(person.id(),person.status()));
+                // Reserve the schema-bounded identity/status/length row before the driver can buffer it.
+                nameBudget.reserve(1,3,2048,512,1024,2,false);
+                var measured=j.query("SELECT enterprise_id,status,OCTET_LENGTH(display_name),CHAR_LENGTH(display_name),OCTET_LENGTH(CONVERT(display_name USING utf16)) DIV 2 FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),
+                        (r,n)->new NameSize(r.getString(1),r.getString(2),r.getLong(3),r.getLong(4),r.getLong(5)),id);
+                if(measured.isEmpty()){if(skip)return Optional.empty();continue;}
+                var size=measured.getFirst();
+                nameBudget.reserve(0,0,size.bytes(),size.points(),size.units(),8,false);
+                // The same identity row remains locked; no new identity is discovered by this transfer.
+                var values=j.query("SELECT display_name FROM enterprise_identity WHERE enterprise_id=? AND OCTET_LENGTH(display_name)=? AND CHAR_LENGTH(display_name)=? AND OCTET_LENGTH(CONVERT(display_name USING utf16)) DIV 2=? FOR UPDATE",
+                        (r,n)->r.getString(1),id,size.bytes(),size.points(),size.units());
+                nameBudget.check();if(values.size()!=1||values.getFirst()==null)throw new WorkspaceReadBudget.Unavailable();
+                String value=values.getFirst();if(value.length()!=size.units()||value.codePointCount(0,value.length())!=size.points()||ama.canonical.CanonicalValueCodec.utf8Length(value,()->{nameBudget.check();return false;})!=size.bytes())throw new WorkspaceReadBudget.Unavailable();
+                var person=new Person(size.id(),value,size.status());people.put(id,person);statuses.put(id,new IdentityStatus(person.id(),person.status()));
             } else {
                 var found=j.query("SELECT enterprise_id,status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),
                         (r,n)->new IdentityStatus(r.getString(1),r.getString(2)),id);

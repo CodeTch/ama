@@ -157,7 +157,7 @@ COMMIT;""")
   claims=self.verify(headers.get('x-controlled-delegation'),self.app_key,SCHEMA)
   exact(claims,'schema issuer keyId audience storeInstanceId actorId purpose method resource issuedAt expiresAt nonce requestDigest')
   purposes={'/v1/knowledge/destination-authorizations':'DESTINATION_AUTHORIZE','/v1/knowledge/publications':'PUBLISH'}
-  purpose=purposes.get(path) if method=='POST' else 'DESTINATION_READ' if path.startswith('/v1/knowledge/libraries') else 'DOCUMENT_READ' if path.startswith('/v1/knowledge/documents/') else 'RECEIPT_LOOKUP'
+  purpose=purposes.get(path) if method=='POST' else 'MATERIAL_READ' if path.startswith(('/v1/knowledge/material-libraries','/v1/knowledge/material-documents/')) else 'DESTINATION_READ' if path.startswith('/v1/knowledge/libraries') else 'DOCUMENT_READ' if path.startswith('/v1/knowledge/documents/') else 'RECEIPT_LOOKUP'
   expected={**{'issuer':self.ids['clientId'],'keyId':self.ids['delegationKeyId'],'audience':self.ids['providerId'],'storeInstanceId':self.ids['storeInstanceId'],'method':method,'resource':path,'purpose':purpose,'requestDigest':digest(body if method=='POST' else canonical({'method':method,'resource':path}))}}
   if any(claims.get(k)!=v for k,v in expected.items()) or not isinstance(claims['actorId'],str) or not 1<=len(claims['actorId'])<=255 or not re.fullmatch('[A-Za-z0-9_-]{16,64}',claims['nonce']):raise Denied()
   return claims
@@ -176,6 +176,7 @@ COMMIT;""")
     grant=self.grant(actor,body['libraryId'],body['folderId']);now=int(time.time())
     assertion={'schema':'ama.controlled-kb-destination.v1',**self.ids,'actorId':actor,'libraryId':body['libraryId'],'folderId':body['folderId'],'context':body['context'],'authVersion':grant['version'],'issuedAt':now,'expiresAt':now+30}
     return {'providerId':self.ids['providerId'],'storeInstanceId':self.ids['storeInstanceId'],'assertion':self.sign(assertion)}
+   if method=='GET' and path.startswith(('/v1/knowledge/material-libraries','/v1/knowledge/material-documents/')):return self.material_read(actor,path)
    if method=='GET' and path.startswith('/v1/knowledge/libraries'):
     if len(path)>2048 or re.search(r'%(?![0-9A-Fa-f]{2})',path):raise Denied(400)
     try:
@@ -226,6 +227,48 @@ COMMIT;""")
     if document:result['payload']=strict(row['payload'],MAX_PAYLOAD)
     return result
    raise Denied(404)
+ def material_read(self,actor,path):
+  # Caller has already verified service bearer, exact signed delegation and store/key pins.
+  if len(path)>2048 or re.search(r'%(?![0-9A-Fa-f]{2})',path):raise Denied(400)
+  try:
+   parsed=urllib.parse.urlsplit(path)
+   query=urllib.parse.parse_qs(parsed.query,strict_parsing=True,keep_blank_values=True,encoding='utf-8',errors='strict')
+   if parsed.fragment or parsed.scheme or parsed.netloc or any(len(v)!=1 or not v[0] for v in query.values()):raise Denied(400)
+   def identifier(value):
+    if not isinstance(value,str) or not re.fullmatch('[A-Za-z0-9_-]{1,128}',value):raise Denied(400)
+    return value
+   parts=parsed.path.split('/')
+   if len(parts)==5 and parts[1:4]==['v1','knowledge','material-documents']:
+    if set(query)!={'libraryId','version'}:raise Denied(400)
+    document=identifier(parts[4]);library=identifier(query['libraryId'][0]);version=query['version'][0]
+    if not re.fullmatch('[0-9a-f]{64}',version):raise Denied(400)
+    row=self.db.execute('SELECT * FROM document WHERE id=? AND library=? AND client=?',(document,library,self.ids['clientId'])).fetchone()
+    if not row:raise Denied(404)
+    self.grant(actor,library,row['folder'],True)
+    if row['payload_hash']!=version:raise Denied(409,'VERSION_CONFLICT')
+    payload=bytes(row['payload'])
+    if len(payload)>MAX_PAYLOAD or digest(payload)!=version:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+    return {'providerId':self.ids['providerId'],'storeInstanceId':self.ids['storeInstanceId'],'libraryId':library,'documentId':document,'version':version,'sha256':version,'payload':strict(payload,MAX_PAYLOAD)}
+   count=query.get('limit',['20'])[0];search=query.get('search',[''])[0];after=query.get('cursor',[''])[0]
+   if not re.fullmatch('[1-9][0-9]?',count) or int(count)>50 or len(search)>128 or any(ord(c)<32 or 127<=ord(c)<=159 for c in search):raise Denied(400)
+   limit=int(count)
+   if after:identifier(after)
+   if parsed.path=='/v1/knowledge/material-libraries':
+    if set(query)-{'limit','cursor','search'}:raise Denied(400)
+    rows=self.db.execute('SELECT DISTINCT l.id,l.name FROM library l JOIN grant_record g ON g.library=l.id JOIN folder f ON f.id=g.folder AND f.library=l.id WHERE g.actor=? AND g.can_read=1 AND l.id>? AND instr(lower(l.name),lower(?))>0 ORDER BY l.id LIMIT ?',(actor,after,search,limit+1)).fetchall()
+    items=[dict(row) for row in rows[:limit]]
+   elif len(parts)==6 and parts[1:4]==['v1','knowledge','material-libraries'] and parts[5]=='documents':
+    if set(query)-{'limit','cursor','search'}:raise Denied(400)
+    library=identifier(parts[4])
+    if not self.db.execute('SELECT 1 FROM grant_record g JOIN folder f ON f.id=g.folder AND f.library=g.library WHERE g.actor=? AND g.library=? AND g.can_read=1 LIMIT 1',(actor,library)).fetchone():raise Denied()
+    rows=self.db.execute("SELECT d.id,d.library libraryId,json_extract(CAST(d.payload AS TEXT),'$.title') name,d.payload_hash version,length(d.payload) size FROM document d JOIN grant_record g ON g.actor=? AND g.library=d.library AND g.folder=d.folder AND g.can_read=1 WHERE d.library=? AND d.client=? AND d.id>? AND instr(lower(json_extract(CAST(d.payload AS TEXT),'$.title')),lower(?))>0 ORDER BY d.id LIMIT ?",(actor,library,self.ids['clientId'],after,search,limit+1)).fetchall()
+    items=[]
+    for row in rows[:limit]:
+     if not isinstance(row['name'],str) or len(row['name'])>1024 or not 0<row['size']<=MAX_PAYLOAD:raise Denied(413)
+     items.append({'id':row['id'],'libraryId':row['libraryId'],'name':row['name'],'version':row['version'],'sha256':row['version'],'sizeBytesToken':str(row['size'])})
+   else:raise Denied(404)
+   return {'providerId':self.ids['providerId'],'storeInstanceId':self.ids['storeInstanceId'],'items':items,'cursor':items[-1]['id'] if len(rows)>limit else None}
+  except (ValueError,UnicodeError):raise Denied(400)
  def permanent_receipt(self,receipt):
   token=receipt.get('permanentRejection','')
   if not isinstance(token,str) or len(token)>8192 or token.count('.')!=1:raise Denied(409,'PROVIDER_CONFLICT')

@@ -24,3 +24,18 @@ test('current accepts actual empty-owner and profile-bearing member producer env
  globalThis.fetch=async()=>Response.json({...current,parserVersion:'txt.v1',processingConfigVersion:'v1',confirmationHashProfile:'ama.transcript-confirmation.v1'});assert.equal((await api.current(id,new AbortController().signal)).saved?.id,revision);
  }finally{globalThis.fetch=old;}
 });
+
+test('media source route uses exact validated file revision and original byte hash',async()=>{
+ const old=fetch;let calls=0;const bytes=new TextEncoder().encode('RIFF0000WAVE real bytes'),sha=Buffer.from(await crypto.subtle.digest('SHA-256',bytes)).toString('hex');const api=createTranscriptsApi(createBusinessClient('https://ama.test',()=>session,()=>{}),()=> 'owner');
+ try{globalThis.fetch=async path=>{calls++;assert.equal(String(path),`https://ama.test/api/v1/meetings/${id}/transcript/revisions/${revision}/sources/${file}`);return new Response(bytes);};const value=await api.source(id,{fileId:file,sha256:sha,sizeBytes:bytes.length,revisionId:revision},new AbortController().signal);assert.equal(value.blob.size,bytes.length);assert.equal(value.blob.type,'audio/wav');await assert.rejects(api.source(id,{fileId:file,sha256:'0'.repeat(64),sizeBytes:bytes.length,revisionId:revision},new AbortController().signal));const before=calls;await assert.rejects(api.source(id,{fileId:'../foreign',sha256:sha,sizeBytes:bytes.length,revisionId:revision},new AbortController().signal));assert.equal(calls,before);
+ }finally{globalThis.fetch=old;}
+});
+
+test('real declared transcript root conflicts are known rejections instead of uncloseable uncertainty',async()=>{
+ const old=fetch,api=createTranscriptsApi(createBusinessClient('https://ama.test',()=>session,()=>{}),()=> 'owner'),body=JSON.stringify({expectedRevisionToken:'1',sourceRevisionId:revision,segments:[{segmentId:segment,body:'local draft',marks:[]}]});
+ try{globalThis.fetch=async()=>Response.json({error:{code:'REVISION_CONFLICT',message:'private database details',traceId:'00000000-0000-4000-8000-000000000001'}},{status:409});await assert.rejects(api.send({actor:'owner',resource:id,operation:'TRANSCRIPT_SAVE',path:`/api/v1/meetings/${id}/transcript`,key:'known-conflict',body}),(e:any)=>e.kind==='http'&&e.status===409&&e.code==='REVISION_CONFLICT'&&!e.message.includes('database'));}finally{globalThis.fetch=old;}
+});
+test('a transcript rejection contract never blesses malformed errors or a mismatched status',async()=>{
+ const old=fetch,api=createTranscriptsApi(createBusinessClient('https://ama.test',()=>session,()=>{}),()=> 'owner'),body=JSON.stringify({expectedRevisionToken:'1',sourceRevisionId:revision,segments:[{segmentId:segment,body:'local draft',marks:[]}]}),command={actor:'owner',resource:id,operation:'TRANSCRIPT_SAVE',path:`/api/v1/meetings/${id}/transcript`,key:'original',body};
+ try{for(const [status,error] of [[500,{code:'REVISION_CONFLICT',message:'secret',traceId:'00000000-0000-4000-8000-000000000001'}],[409,{code:'REVISION_CONFLICT',message:'secret',traceId:'not-a-trace'}],[409,{code:'UNKNOWN_TRANSCRIPT_CONFLICT',message:'secret',traceId:'00000000-0000-4000-8000-000000000001'}],[409,{code:'REVISION_CONFLICT',message:'secret',traceId:'00000000-0000-4000-8000-000000000001',extra:true}] ] as const){globalThis.fetch=async()=>Response.json({error},{status});await assert.rejects(api.send(command),(e:any)=>e.kind==='response'&&!e.code&&!e.message.includes('secret'));}}finally{globalThis.fetch=old;}
+});

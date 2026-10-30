@@ -63,6 +63,12 @@ MeetingItem:
     id: {type: string, format: uuid}
     name: {type: [string, 'null']}
     category: {type: [string, 'null']}
+    workspaceStage:
+      type: string
+      enum: [ENTRY, TRANSCRIPT_PENDING, TRANSCRIPT_FAILED, MINUTES_PENDING, MINUTES_FAILED, READY_TO_PUBLISH, PUBLISH_FAILED, PUBLISHED]
+      description: Display phase derived from saved pointers and transcript availability, independently of legacy root stage; conveys no command permission.
+    participants: {type: array, maxItems: 128, items: {type: string}}
+    updatedAt: {type: [string, 'null'], description: Saved server update timestamp}
     occurredOn: {type: [string, 'null'], format: date}
     stage: {type: string, enum: [ENTRY, TRANSCRIPT_PENDING, TRANSCRIPT_FAILED, MINUTES_PENDING, MINUTES_FAILED, READY_TO_PUBLISH, PUBLISH_FAILED, PUBLISHED]}
     lifecycle: {type: string, const: ACTIVE}

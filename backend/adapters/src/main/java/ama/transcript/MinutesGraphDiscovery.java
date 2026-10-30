@@ -18,7 +18,7 @@ final class MinutesGraphDiscovery {
  record Selector(String table,String column,Object value,String qualifier) {}
  private record Definition(String name,List<String> keys,List<String> columns) {}
  private record Query(String table,String column,Object value,int depth,boolean required,String qualifier) {Query(String table,String column,Object value,int depth,boolean required){this(table,column,value,depth,required,"");}}
- private static final Set<String> CONTENT=Set.of("body","title","name","themes","reason","target_anchor","section_path","owner_display","owner_mention","config_manifest");
+ private static final Set<String> CONTENT=Set.of("body","title","name","themes","reason","target_anchor","section_path","owner_display","owner_mention","config_manifest","external_version");
  private static final Map<String,Definition> DEFINITIONS=definitions();
  private final JdbcTemplate j;private final String meeting,kind,selected;private final int maximum;private int taskMaximum=256,fileMaximum=64,revisionMaximum=256,depthMaximum=128;private long byteMaximum=16777216;
  private final ArrayDeque<Query> pending=new ArrayDeque<>();
@@ -38,14 +38,18 @@ final class MinutesGraphDiscovery {
  static Discovery guarded(JdbcTranscriptAuthority authority,ama.contract.IdentityContracts.Actor actor,Discovery d,TranscriptAcquisitionBudget.Ledger budget){
   var guard=authority.publicationWriteGuard();var prepared=guard.prepare(actor,d.meeting(),budget);guard.covers(prepared,d.tables());if(d.pending()!=null)guard.covers(prepared,d.pending().rows());return new Discovery(d.meeting(),d.kind(),d.selected(),d.root(),d.tables(),d.memberships(),d.identities(),d.selectors(),d.pending(),prepared);
  }
+ static Discovery guardedForGenerationPreparation(JdbcTranscriptAuthority authority,ama.contract.IdentityContracts.Actor actor,Discovery d,PublicationWriteGuard.Prepared prepared,ama.contract.TaskContracts.TaskLease lease){
+  authority.publicationWriteGuard().coversForGenerationPreparation(prepared,actor,d.meeting(),d.tables(),d.pending()==null?Map.of():d.pending().rows(),lease);
+  return new Discovery(d.meeting(),d.kind(),d.selected(),d.root(),d.tables(),d.memberships(),d.identities(),d.selectors(),d.pending(),prepared);
+ }
  static List<String> metadataColumns(String table){return DEFINITIONS.get(table).columns();}
  private Discovery run(){
   var roots=select(new Query("meeting","id",meeting,0,true));require(roots.size()==1,PROVENANCE_UNAVAILABLE);var root=roots.getFirst();identities.add(text(root,"owner_id"));
   parent("meeting_info_revision",root.get("info_revision_id"),1);parent("roster_revision",root.get("roster_revision_id"),1);parent("final_confirmation",root.get("final_confirmation_id"),1);
   switch(kind){
    case "INITIAL_SETTINGS"->parent("template_revision",requiredSelection(),1);
-   case "CURRENT_GENERATION"->{for(String col:List.of("transcript_confirmation_id","template_revision_id","exclusion_revision_id","element_set_id","minutes_revision_id"))parent(tableFor(col),root.get(col),1);unsupported(root,"material_snapshot_id");}
-   case "SAVED_EFFECTIVE","READINESS","SETTINGS_READ"->{parent("minutes_revision",root.get("minutes_revision_id"),1);parent("element_set",root.get("element_set_id"),1);parent("exclusion_revision",root.get("exclusion_revision_id"),1);parent("template_revision",root.get("template_revision_id"),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
+   case "CURRENT_GENERATION"->{for(String col:List.of("transcript_confirmation_id","template_revision_id","exclusion_revision_id","element_set_id","minutes_revision_id"))parent(tableFor(col),root.get(col),1);parent("material_snapshot",root.get("material_snapshot_id"),1);}
+   case "SAVED_EFFECTIVE","READINESS","SETTINGS_READ"->{parent("material_snapshot",root.get("material_snapshot_id"),1);parent("minutes_revision",root.get("minutes_revision_id"),1);parent("element_set",root.get("element_set_id"),1);parent("exclusion_revision",root.get("exclusion_revision_id"),1);parent("template_revision",root.get("template_revision_id"),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
    case "OWNER_SET"->parent("element_set",requiredSelection(),1);
    case "REVIEW_ID"->parent("result_review",requiredSelection(),1);
    case "BODY_EDIT","BODY_RESTORE"->{parent("minutes_revision",requiredSelection(),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
@@ -99,32 +103,42 @@ final class MinutesGraphDiscovery {
    case "sensitive_exclusion"->parent("source_locator",r.get("locator_id"),depth);
    case "generation_input"->{
     inputTasks("GENERATION_INPUT",id,depth);
-    require("FULL".equals(r.get("scope")),CAPABILITY_UNAVAILABLE);unsupported(r,"material_snapshot_id");unsupported(r,"target_element_id");
+    require("FULL".equals(r.get("scope")),CAPABILITY_UNAVAILABLE);parent("material_snapshot",r.get("material_snapshot_id"),depth);if(r.get("material_snapshot_id")!=null)children("source_context","generation_input_id",id,depth);unsupported(r,"target_element_id");
     parent("transcript_confirmation",r.get("transcript_confirmation_id"),depth);parent("template_revision",r.get("template_revision_id"),depth);parent("exclusion_revision",r.get("exclusion_revision_id"),depth);parent("element_set",r.get("element_set_id"),depth);children("generation_candidate","input_id",id,depth);
    }
    case "minutes_revision"->{parent("minutes_revision",r.get("parent_id"),depth);parent("generation_input",r.get("generation_input_id"),depth);children("evidence_link","minutes_revision_id",id,depth);if(!kind.equals("FINAL"))children("result_review","minutes_revision_id",id,depth);identity(r,"created_by");}
    case "element_set"->{children("minutes_element","set_id",id,depth);children("sensitive_detection","set_id",id,depth);children("background_note","set_id",id,depth);}
-   case "minutes_element"->{parent("element_set",r.get("set_id"),depth);children("action_item","element_id",id,depth);children("action_suggestion","element_id",id,depth);children("evidence_link","element_id",id,depth);if(!kind.equals("FINAL"))children("result_review","element_id",id,depth);}
+   case "minutes_element"->{children("element_source_context","id",id,depth);parent("element_set",r.get("set_id"),depth);children("action_item","element_id",id,depth);children("action_suggestion","element_id",id,depth);children("evidence_link","element_id",id,depth);if(!kind.equals("FINAL"))children("result_review","element_id",id,depth);}
    case "action_item"->{parent("minutes_element",r.get("element_id"),depth);identity(r,"owner_enterprise_id");}
    case "action_suggestion"->{parent("minutes_element",r.get("element_id"),depth);parent("generation_input",r.get("input_id"),depth);}
    case "sensitive_detection"->{parent("element_set",r.get("set_id"),depth);parent("generation_input",r.get("input_id"),depth);children("sensitive_detection_source","detection_id",id,depth);}
    case "background_note"->{parent("element_set",r.get("set_id"),depth);parent("generation_input",r.get("input_id"),depth);children("background_note_source","note_id",id,depth);}
    case "sensitive_detection_source","background_note_source"->parent("source_locator",r.get("locator_id"),depth);
-   case "source_locator"->{require("TRANSCRIPT".equals(r.get("kind")),CAPABILITY_UNAVAILABLE);parent("transcript_revision",r.get("transcript_revision_id"),depth);}
-   case "evidence_link"->{parent("source_locator",r.get("locator_id"),depth);parent("minutes_element",r.get("element_id"),depth);parent("minutes_revision",r.get("minutes_revision_id"),depth);}
+   case "source_locator"->{require(!"AUDIO".equals(r.get("kind")),CAPABILITY_UNAVAILABLE);parent("transcript_revision",r.get("transcript_revision_id"),depth);parent("material_revision",r.get("material_revision_id"),depth);if(r.get("file_id")!=null)parent("file_object",r.get("file_id"),depth);}
+   case "evidence_link"->{children("evidence_source_context","id",id,depth);parent("source_locator",r.get("locator_id"),depth);parent("minutes_element",r.get("element_id"),depth);parent("minutes_revision",r.get("minutes_revision_id"),depth);}
    case "result_review"->{parent("minutes_element",r.get("element_id"),depth);parent("minutes_revision",r.get("minutes_revision_id"),depth);children("result_review_evidence","review_id",id,depth);identity(r,"reviewed_by");}
    case "result_review_evidence"->parent("evidence_link",r.get("evidence_id"),depth);
-   case "final_confirmation"->{if(!kind.equals("FINAL")||!id.equals(selected))break;parent("meeting_info_revision",r.get("info_revision_id"),depth);parent("roster_revision",r.get("roster_revision_id"),depth);for(String col:List.of("transcript_confirmation_id","minutes_revision_id","element_set_id","template_revision_id","exclusion_revision_id"))parent(tableFor(col),r.get(col),depth);unsupported(r,"material_snapshot_id");children("final_result_review","confirmation_id",id,depth);identity(r,"confirmed_by");}
+   case "final_confirmation"->{if(!kind.equals("FINAL")||!id.equals(selected))break;parent("meeting_info_revision",r.get("info_revision_id"),depth);parent("roster_revision",r.get("roster_revision_id"),depth);for(String col:List.of("transcript_confirmation_id","minutes_revision_id","element_set_id","template_revision_id","exclusion_revision_id"))parent(tableFor(col),r.get(col),depth);parent("material_snapshot",r.get("material_snapshot_id"),depth);children("final_result_review","confirmation_id",id,depth);identity(r,"confirmed_by");}
    case "final_result_review"->parent("result_review",r.get("review_id"),depth);
    case "generation_candidate"->{parent("durable_task",r.get("task_id"),depth);parent("generation_input",r.get("input_id"),depth);parent("minutes_revision",r.get("minutes_revision_id"),depth);parent("element_set",r.get("element_set_id"),depth);}
    case "meeting_info_revision"->identity(r,"created_by");
    case "roster_revision"->{identity(r,"confirmed_by");children("roster_member","roster_id",id,depth);}
    case "roster_member"->identity(r,"enterprise_id");
+   case "material_snapshot"->children("material_snapshot_item","snapshot_id",id,depth);
+   case "material_snapshot_item"->parent("material_revision",r.get("material_revision_id"),depth);
+   case "material_revision"->{parent("material_reference",r.get("reference_id"),depth);parent("file_object",r.get("content_file_id"),depth);children("parsed_document","material_revision_id",id,depth);pending.addLast(new Query("file_reference","owner_id",id,depth,false," AND owner_kind='MATERIAL_CONTENT'"));}
+   case "material_reference"->{require(meeting.equals(r.get("meeting_id")),SOURCE_MEMBERSHIP_MISMATCH);}
+   case "parsed_document"->{require("READY".equals(r.get("state")),PROVENANCE_UNAVAILABLE);children("parsed_unit","document_id",id,depth);children("parsed_document_profile","document_id",id,depth);parent("file_object",r.get("text_file_id"),depth);pending.addLast(new Query("file_reference","owner_id",id,depth,false," AND owner_kind='MATERIAL_TEXT'"));}
+   case "parsed_document_profile","parsed_unit"->{}
+   case "source_context"->{parent("generation_input",r.get("generation_input_id"),depth);parent("material_snapshot",r.get("material_snapshot_id"),depth);children("source_context_material","context_id",id,depth);}
+   case "source_context_material"->{parent("material_revision",r.get("material_revision_id"),depth);parent("parsed_document",r.get("parsed_document_id"),depth);}
+   case "evidence_source_context","element_source_context"->parent("source_context",r.get("source_context_id"),depth);
    case "input_batch_file"->{parent("file_object",r.get("file_id"),depth);pending.addLast(new Query("upload_session","completed_file_id",r.get("file_id"),depth,false," AND state='COMPLETED'"));}
    case "durable_task"->{require("MEETING".equals(r.get("subject_kind"))&&meeting.equals(r.get("subject_id")),PROVENANCE_UNAVAILABLE);children("task_attempt","task_id",id,depth);children("external_execution","task_id",id,depth);}
    case "external_execution"->{parent("external_operation",r.get("operation_id"),depth);parent("durable_task",r.get("task_id"),depth);}
    case "external_operation"->{require("MEETING".equals(r.get("subject_kind"))&&meeting.equals(r.get("subject_id")),PROVENANCE_UNAVAILABLE);children("external_execution","operation_id",id,depth);}
-   case "upload_session","file_object","file_reference","task_attempt","transcript_segment","transcript_segment_mark","input_batch_fingerprint_profile"->{}
+   case "file_object"->pending.addLast(new Query("upload_session","completed_file_id",id,depth,false," AND state='COMPLETED'"));
+   case "upload_session","file_reference","task_attempt","transcript_segment","transcript_segment_mark","input_batch_fingerprint_profile"->{}
    default->throw fail(CAPABILITY_UNAVAILABLE);
   }
  }
@@ -152,16 +166,32 @@ final class MinutesGraphDiscovery {
  }
  /** Current metadata reads occur once per rank over the complete declared selector union.
   * An earlier RR discovery snapshot never substitutes for this protected membership comparison. */
+ record Comparison(List<Map<String,Object>> expected,List<Map<String,Object>> actual) {}
  static void lockAndCompare(DataSource source,Discovery expected,String table,TranscriptAcquisitionBudget.Ledger budget){
-  var selectors=expected.selectors().stream().filter(s->s.table().equals(table)).toList();var contribution=expected.pending()==null?null:expected.pending().queries().stream().filter(q->q.table().equals(table)).findFirst().orElse(null);if(selectors.isEmpty()&&contribution==null)return;var definition=DEFINITIONS.get(table);var original=table.equals("meeting")?List.of(expected.root()):expected.tables().getOrDefault(table,List.of());
+  var comparison=lockAndRead(source,expected,table,budget);require(comparison.expected().equals(comparison.actual()),PROVENANCE_UNAVAILABLE);
+ }
+ static Comparison lockAndRead(DataSource source,Discovery expected,String table,TranscriptAcquisitionBudget.Ledger budget){
+  var selectors=expected.selectors().stream().filter(s->s.table().equals(table)).toList();var contribution=expected.pending()==null?null:expected.pending().queries().stream().filter(q->q.table().equals(table)).findFirst().orElse(null);if(selectors.isEmpty()&&contribution==null)return new Comparison(List.of(),List.of());var definition=DEFINITIONS.get(table);var original=table.equals("meeting")?List.of(expected.root()):expected.tables().getOrDefault(table,List.of());
   var union=new HashMap<List<Object>,Map<String,Object>>();for(var row:original)union.put(definition.keys().stream().map(row::get).toList(),row);if(contribution!=null)for(var row:expected.pending().rows().get(table)){var old=union.putIfAbsent(definition.keys().stream().map(row::get).toList(),row);require(old==null||old.equals(row),PROVENANCE_UNAVAILABLE);}var rows=new ArrayList<>(union.values());var orderedKeys=table.equals("generation_candidate")?List.of("created_at","id"):definition.keys();rows.sort((a,b)->compare(orderedKeys.stream().map(a::get).toList(),orderedKeys.stream().map(b::get).toList()));long limit=(long)rows.size()+1;
-  long maximum=(64L+definition.columns().size()*1088L)*limit;budget.admitCapture(maximum,maximum,maximum,2);var j=new JdbcTemplate(source);j.setQueryTimeout(2);var clauses=new ArrayList<>(selectors.stream().map(s->"("+s.column()+"=?"+s.qualifier()+")").toList());var arguments=new ArrayList<Object>();for(var selector:selectors)arguments.add(selector.value());if(contribution!=null){clauses.add("("+contribution.where()+")");arguments.addAll(contribution.args());}String where=String.join(" OR ",clauses);arguments.add(limit);
-  var actual=j.query("SELECT "+String.join(",",definition.columns())+" FROM "+table+(table.equals("generation_candidate")?" FORCE INDEX (candidate_pending)":"")+" WHERE "+where+" ORDER BY "+String.join(",",orderedKeys)+" LIMIT ?"+(expected.publicationWrite()!=null&&MinutesPendingDiscovery.TASKS.contains(table)?"":" FOR UPDATE"),rs->{
+  var j=new JdbcTemplate(source);j.setQueryTimeout(2);var clauses=new ArrayList<>(selectors.stream().map(s->"("+s.column()+"=?"+s.qualifier()+")").toList());var arguments=new ArrayList<Object>();for(var selector:selectors)arguments.add(selector.value());if(contribution!=null){clauses.add("("+contribution.where()+")");arguments.addAll(contribution.args());}String where=String.join(" OR ",clauses);arguments.add(limit);
+  String locking=expected.publicationWrite()!=null&&MinutesPendingDiscovery.TASKS.contains(table)?"":" FOR UPDATE";
+  String from=table+(table.equals("generation_candidate")?" FORCE INDEX (candidate_pending)":"")+" WHERE "+where+" ORDER BY "+String.join(",",orderedKeys)+" LIMIT ?"+locking;
+  // Lock precisely the same bounded union, transferring numeric measurements before raw cells.
+  // A per-cell 255-scalar estimate wrongly rejects ordinary edited transcripts whose keys are UUIDs.
+  // The measurement and raw SELECT share the actual holder and original operation ledger.
+  budget.admitCapture(256,256,256,2);budget.row(4);
+  String byteExpression=sumLengths(definition.columns(),"OCTET_LENGTH(%s)"),pointExpression=sumLengths(definition.columns(),"CHAR_LENGTH(%s)"),unitExpression=sumLengths(definition.columns(),"OCTET_LENGTH(CONVERT(%s USING utf16))/2");
+  var sizes=j.query("SELECT COUNT(*) AS row_count,COALESCE(SUM("+byteExpression+"),0) AS utf8_bytes,COALESCE(SUM("+pointExpression+"),0) AS scalar_count,COALESCE(SUM("+unitExpression+"),0) AS utf16_units FROM (SELECT "+String.join(",",definition.columns())+" FROM "+from+") ama_metadata_capture",rs->{require(rs.next(),PROVENANCE_UNAVAILABLE);long[] result={measurement(rs,"row_count"),measurement(rs,"utf8_bytes"),measurement(rs,"scalar_count"),measurement(rs,"utf16_units")};require(!rs.next(),PROVENANCE_UNAVAILABLE);return result;},arguments.toArray());
+  budget.capture(128,128,128,2);require(sizes[0]==rows.size(),PROVENANCE_UNAVAILABLE);
+  try{long overhead=Math.multiplyExact(sizes[0],64L+definition.columns().size()*64L);budget.admitCapture(Math.addExact(sizes[1],overhead),Math.addExact(sizes[2],overhead),Math.addExact(sizes[3],overhead),2);}catch(ArithmeticException overflow){throw fail(BUDGET_EXCEEDED);}
+  var actual=j.query("SELECT "+String.join(",",definition.columns())+" FROM "+from,rs->{
    var found=new ArrayList<Map<String,Object>>();while(rs.next()){budget.check();require(found.size()<rows.size(),PROVENANCE_UNAVAILABLE);budget.row(definition.columns().size());var row=new LinkedHashMap<String,Object>();
     for(String column:definition.columns()){Object value=rs.getObject(column);if(value instanceof Number n){try{value=new java.math.BigDecimal(n.toString()).longValueExact();}catch(ArithmeticException failure){throw fail(PROVENANCE_UNAVAILABLE);}}else if(value instanceof java.sql.Timestamp t)value=t.toLocalDateTime().toString();else if(value instanceof java.sql.Date date)value=date.toLocalDate().toString();if(value instanceof String text){require(text.length()<=1020,PROVENANCE_UNAVAILABLE);long bytes=ama.canonical.CanonicalValueCodec.utf8Length(text,()->false);budget.capture(bytes,text.codePointCount(0,text.length()),text.length(),4);}row.put(column,value);}found.add(Collections.unmodifiableMap(row));
    }return List.copyOf(found);
-  },arguments.toArray());require(actual.equals(rows),PROVENANCE_UNAVAILABLE);
+  },arguments.toArray());return new Comparison(List.copyOf(rows),actual);
  }
+ private static String sumLengths(List<String> columns,String expression){return String.join("+",columns.stream().map(column->"COALESCE("+expression.formatted(column)+",0)").toList());}
+ private static long measurement(java.sql.ResultSet result,String name)throws java.sql.SQLException{var value=result.getBigDecimal(name);require(value!=null&&value.signum()>=0,PROVENANCE_UNAVAILABLE);try{return value.longValueExact();}catch(ArithmeticException overflow){throw fail(BUDGET_EXCEEDED);}}
  private void identity(Map<String,Object> row,String col){Object id=row.get(col);if(id!=null){require(identities.size()<256||identities.contains(id),BUDGET_EXCEEDED);identities.add((String)id);}}
  private static void unsupported(Map<String,Object> row,String field){require(row.get(field)==null,CAPABILITY_UNAVAILABLE);}
  private static String text(Map<String,Object> row,String col){Object v=row.get(col);require(v instanceof String,PROVENANCE_UNAVAILABLE);return (String)v;}
@@ -176,7 +206,7 @@ final class MinutesGraphDiscovery {
   add(defs,"meeting_info_revision","id","id meeting_id revision category_id actual_meeting_date created_by created_at");
   add(defs,"roster_revision","id","id meeting_id revision state confirmed_at confirmed_by");
   add(defs,"roster_member","roster_id,member_id","roster_id member_id enterprise_id member_kind");
-  add(defs,"input_batch_fingerprint_profile","batch_id","batch_id profile");return Map.copyOf(defs);
+  add(defs,"input_batch_fingerprint_profile","batch_id","batch_id profile");add(defs,"parsed_document","id","id material_revision_id parser_version text_file_id state unit_count error_code");return Map.copyOf(defs);
  }
  private static void add(Map<String,Definition> defs,String table,String keys,String cols){defs.put(table,new Definition(table,List.of(keys.split(",")),List.of(cols.split(" "))));}
 }

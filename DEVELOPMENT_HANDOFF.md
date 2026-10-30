@@ -1,3 +1,37 @@
+> **本轮边界（最新）：** 用户要求先完成“我的会议”首页像素复刻并停下。首页所列静态场景32项/真实交互13项已通过；详见 [docs/acceptance/b/homepage-pixel-parity-2026-10-29.md](docs/acceptance/b/homepage-pixel-parity-2026-10-29.md)。其余页面不自动继续，整套原型/B阶段仍为 NOT ACCEPTED。
+
+> **最新用户指令：逐页1:1、像素级复刻。** 旧“不做像素级比对”规则已撤销；既有报告仅证明其原范围，新像素矩阵尚未通过。当前计划：`docs/superpowers/plans/2026-10-29-pixel-perfect-prototype.md`。
+
+# 当前接续状态 — 原型全量返工执行中
+
+当前 **NOT ACCEPTED**。最新用户要求是：所有页面布局、组件、样式、文字/固定文案与全部可达功能都复刻原型，必须进行逐页像素级比对；TXT 是例子，不能保留旧未来能力豁免。已授权持续实施，不再询问同一授权。
+
+工作树 `/home/tanren/ama/.worktrees/phase-b-completion`，分支 `codex/phase-b-completion-20261023`，保留全部脏代码和历史失败证据，无提交/合并/推送。原型 `designDocs/智能会议助手1021版.html` 原件不改。继续计划 `docs/superpowers/plans/2026-10-29-full-prototype-completion.md`，当前 ledger `.superpowers/sdd/2026-10-29-prototype-parity/progress.md`。
+
+本工作树六服务端口为 **Web5174/API8182/management8183**；5173/8082/8083 是主目录另一组服务，不停止。启动 `python3 tools/dev/local_app.py start --web-port 5174 --api-port 8182 --management-port 8183`；状态命令只输出安全状态。不能把 Maven 编译/测试与启动器重编译并行；不读取本地状态/凭证/PKI 内容。
+
+已取得真实局部证据：五种文档导入；七种音视频真实本机 ASR；WAV/MP4 回听和时间定位；WAV 转写确认到纪要及来源；真实两段浏览器录音→原文件上传→一次处理→带时间戳 RAW。录音使用专门的假设备及公开 fixture 测试，不访问用户设备。新媒体 profile 与旧 TXT/Office 不可变配置共存。Java选定112类590项通过；前端完整307项及 type/build/API通过（v16）。新转写弹窗、45段连续列表、全文替换、真实409重应用、丢失ACK/读取恢复已验证。元数据实际测量替代全列255标量预估，原1 MiB边界不变；真实current及45段生成/审阅/冻结/原发布恢复已通过；原任务与执行不变，恢复无新增POST，正式文档200。发布回执缓存过期根因来自真实Worker JFR，新增会话寿命策略不重置原账本、不重发请求。
+
+录音刷新/权限拒绝/保存后稍后处理native已通过。本批已收口45段、多次修订后的预算修复及生成/发布恢复；局部证据见 `docs/acceptance/b/transcript-edit-budget-2026-10-29.md`。**实时识别、背景材料/知识库材料、说话人/纠错、专题/删除、个人模板/局部生成、反馈/会议库、真实纪要语义模型仍 OPEN。** 无法把静态 FuturePanels 记为完成。既有敏感检测 native 场景也还未证明；不伪造检测结果。
+
+全量当前状态见 `docs/acceptance/b/prototype-parity-validation-2026-10-29.md`，局部媒体结果见 `docs/acceptance/b/media-import-2026-10-29.md`。下方旧阶段记录只保留历史审计，不表示本次全量返工已完成或无需继续。
+
+---
+
+# 当前计划与接续入口 — 2026-10-28 Demo 优先 R2
+
+本次按用户建议重构授权更新计划与接续文档，范围仍为文档。执行 [AMA-DEMO-FIRST-20261028 R2](docs/superpowers/plans/2026-10-28-ama-demo-first-adjustment.md)：前期固定**本地 MySQL、本地文件、单机**，按可操作业务片段同步原型复刻、装配和联调；S3、双 MySQL、双活未完适配及专属依赖最后 F，不提前新增相关实现、抽象、配置体系或测试。
+
+- **当前状态**：A 已交付部分、Tasks 1–10、B-L1～4 采纳和 local/S3 限定 API 证据保留；M1-Demo 待验收，B 仍 **INCOMPLETE**，没有新增完成结论。
+- **下一步**：DEMO-01 会议/信息 → 02 上传/转写 → 03 生成/审阅 → 04 发布/正式文档 → 05 首次完整 Demo → B-QUAL 深度核心证明与正式 M1-B。各片段只补缺口；Demo 达标即可展示，不必等待全部深度验证，但 B 只有正式关卡达标才完成。
+- **验收依据**：调整计划第 4 节的逐页原型矩阵、本地入口及真实 AI 边界；[B 摘要开放义务表](docs/acceptance/b/summary.md#current-open-obligations-r2)记录是否阻塞 Demo、最晚关卡、证据与状态。受控合成纪要不证明真实 AI 质量；公司接口可用即在相关 B 任务联调。
+- **接续入口**：[详细接续记录](docs/development/demo-first-handoff-2026-10-28.md)。原开发树仍为 `/home/tanren/ama/.worktrees/phase-b-completion`，读取 W/`RESUME_LATEST.md` 及 W/`current-state.json.planning_revision_20261028`（revision=R2），W=`.superpowers/sdd/2026-10-23-ama-phase-b-remaining`。不重建树、不重做已采纳功能。
+- **执行边界**：本次未修改业务代码、启动运行/测试资源或提交/合并/推送。日常归属环境依实际授权复用，旧 B-L5 一次性窗口及受限资源不可恢复；完成正式本地 B 后停止，不自动进入 C/D/E/F。
+
+下方为历史记录，保留原事实与范围。旧任务编号含义、双后端验收门槛、B-L1 下一步及历史运行授权不覆盖当前 R2；R1→R2 任务对应见调整计划第 4.1 节。
+
+---
+
 # 当前执行入口 — 2026-10-27 流程已更新，开发仍暂停
 
 执行规则：**AMA-WORKFLOW-20261027**，见[后续开发流程与分阶段验证补充计划](docs/superpowers/plans/2026-10-27-ama-development-workflow.md)。这是用户已批准的后续执行方式，优先于以下旧流程和历史状态。

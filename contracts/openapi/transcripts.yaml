@@ -1542,7 +1542,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -1561,7 +1561,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -1580,7 +1580,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -1599,7 +1599,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -2351,7 +2351,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -2370,7 +2370,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -2389,7 +2389,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -2408,7 +2408,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -2957,7 +2957,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -2976,7 +2976,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -2995,7 +2995,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -3014,7 +3014,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -3369,7 +3369,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -3388,7 +3388,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -3407,7 +3407,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -3426,7 +3426,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "./identity.yaml#/BusinessError"
+                "$ref": "#/TranscriptCommandRejection"
               }
             }
           }
@@ -4105,6 +4105,52 @@
                 "$ref": "./identity.yaml#/BusinessError"
               }
             }
+          }
+        }
+      }
+    }
+  },
+  "TranscriptCommandRejection": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "error"
+    ],
+    "description": "Known non-acceptance from a saved-transcript mutation only. Code/status pairs are fixed: 404: TRANSCRIPT_NOT_FOUND; 409: REVISION_CONFLICT, CURRENT_REVISION_REQUIRED, MEETING_NOT_WRITABLE, REVISION_EXHAUSTED, IDEMPOTENCY_CONFLICT, TRANSCRIPT_CONFLICT; 413: REQUEST_TOO_LARGE; 422: WORKING_REQUIRED, COMPLETE_SEGMENTS_REQUIRED, SEGMENT_IDENTITY_CHANGED, EMPTY_TRANSCRIPT. Unknown, malformed or mismatched responses retain the original uncertain request.",
+    "properties": {
+      "error": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "message",
+          "traceId"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "TRANSCRIPT_NOT_FOUND",
+              "REVISION_CONFLICT",
+              "CURRENT_REVISION_REQUIRED",
+              "MEETING_NOT_WRITABLE",
+              "REVISION_EXHAUSTED",
+              "IDEMPOTENCY_CONFLICT",
+              "TRANSCRIPT_CONFLICT",
+              "REQUEST_TOO_LARGE",
+              "WORKING_REQUIRED",
+              "COMPLETE_SEGMENTS_REQUIRED",
+              "SEGMENT_IDENTITY_CHANGED",
+              "EMPTY_TRANSCRIPT"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 4096
+          },
+          "traceId": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       }

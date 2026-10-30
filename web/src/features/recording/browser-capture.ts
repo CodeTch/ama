@@ -1,0 +1,11 @@
+import type {CaptureFactory} from './recording-types';
+/** Device access happens only inside the explicitly invoked factory. */
+export const browserCapture:CaptureFactory=async(data,lost,signal)=>{
+ const cancelled=()=>{if(signal?.aborted)throw new DOMException('录音请求已取消','AbortError');};cancelled();
+ if(typeof MediaRecorder==='undefined'||!navigator.mediaDevices?.getUserMedia)throw Error('当前浏览器不支持在线录音，请改为导入文件');
+ let denied=false;if(navigator.permissions?.query){try{denied=(await navigator.permissions.query({name:'microphone' as PermissionName})).state==='denied';}catch{/* Unsupported permission discovery still uses the explicit device request. */}}cancelled();if(denied)throw new DOMException('麦克风权限已拒绝，请允许麦克风权限并检查设备','NotAllowedError');
+ let stream:MediaStream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true});}catch(cause){cancelled();if(cause instanceof DOMException&&cause.name==='NotAllowedError')throw cause;throw Error('无法访问麦克风，请检查设备是否可用及浏览器是否支持录音');}if(signal?.aborted){for(const track of stream.getTracks())track.stop();cancelled();}let recorder:MediaRecorder;
+ try{const mime=['audio/webm;codecs=opus','audio/mp4'].find(type=>MediaRecorder.isTypeSupported(type));recorder=new MediaRecorder(stream,mime?{mimeType:mime,audioBitsPerSecond:64000}:undefined);}catch(cause){for(const track of stream.getTracks())track.stop();throw cause;}
+ const ended=()=>lost();for(const track of stream.getAudioTracks())track.addEventListener('ended',ended);recorder.addEventListener('error',ended);recorder.addEventListener('dataavailable',event=>data(event.data));
+ let released=false;return{mime:recorder.mimeType,state:()=>recorder.state,start(){recorder.start(2000);},pause(){recorder.pause();},resume(){recorder.resume();},requestData(){if(recorder.state!=='inactive')recorder.requestData();},stop(){if(recorder.state==='inactive')return Promise.resolve();return new Promise<void>((resolve,reject)=>{recorder.addEventListener('stop',()=>resolve(),{once:true});recorder.addEventListener('error',()=>reject(Error('录音设备异常，仅保留已保存范围')),{once:true});recorder.stop();});},release(){if(released)return;released=true;recorder.removeEventListener('error',ended);for(const track of stream.getAudioTracks())track.removeEventListener('ended',ended);if(recorder.state!=='inactive')recorder.stop();for(const track of stream.getTracks())track.stop();}};
+};

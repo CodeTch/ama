@@ -13,6 +13,16 @@ import ama.identity.SessionPort;
 @Configuration(proxyBeanMethods = false)
 public class SecurityConfiguration {
     @Bean @Order(1)
+    SecurityFilterChain casSecurity(HttpSecurity http) throws Exception {
+        return http.securityMatcher("/auth/cas/**")
+                .csrf(c -> c.disable())
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .requestCache(c -> c.disable())
+                .authorizeHttpRequests(a -> a.anyRequest().permitAll())
+                .build();
+    }
+
+    @Bean @Order(2)
     SecurityFilterChain businessSecurity(HttpSecurity http, SessionPort sessions, Environment environment) throws Exception {
         return http.securityMatcher("/api/**")
                 // CSRF is session-bound and stateless: exact Origin + independent stored token in the filter.

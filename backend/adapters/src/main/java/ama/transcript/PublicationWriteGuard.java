@@ -88,6 +88,13 @@ public final class PublicationWriteGuard {
  /** Called at the common task rank, after all declared domain/session/file acquisitions. */
  public void tasks(Held held,MeetingAccess.Locked gate){var scope=scope(held,gate,Phase.CONTROLS);PublicationGraph.lock(source,scope.plan.graph,false);scope.phase=Phase.TASKS;}
 
+ /** Initial generation preparation only: no failed capture or guard is accepted after a renewal signal. */
+ void tasksForGenerationPreparation(Held held,MeetingAccess.Locked gate,ama.contract.TaskContracts.TaskLease lease){
+  var scope=scope(held,gate,Phase.CONTROLS);MinutesTaskDomainPolicy.shape(lease.spec());
+  require(scope.plan.meeting.equals(lease.spec().subject().id()),PROVENANCE_UNAVAILABLE);
+  PublicationGraph.lockForPreparation(source,scope.plan.graph,false,lease);scope.phase=Phase.TASKS;
+ }
+
  /** Consume once immediately before the actual domain effect. No parsing, hashing or network here. */
  public void claim(Held held,MeetingAccess.Locked gate){
   var scope=scope(held,gate,Phase.TASKS);var plan=scope.plan;
@@ -114,6 +121,25 @@ public final class PublicationWriteGuard {
   var graph=declaration(prepared);for(String table:MinutesPendingDiscovery.TASKS){
    var keys=MinutesSourceRows.SHAPES.get(table).keys();
    for(var expected:rows.getOrDefault(table,List.of())){var matches=graph.rows().get(table).stream().filter(r->keys.stream().allMatch(k->Objects.equals(r.get(k),expected.get(k)))).toList();require(matches.size()==1,PROVENANCE_UNAVAILABLE);var actual=matches.getFirst();for(var cell:expected.entrySet())if(actual.containsKey(cell.getKey()))require(Objects.equals(cell.getValue(),actual.get(cell.getKey())),PROVENANCE_UNAVAILABLE);}
+  }
+ }
+ /** Root-free discovery coverage may reject only the exact same-own-lease renewal for complete reacquisition. */
+ void coversForGenerationPreparation(Prepared prepared,Actor actor,String meeting,Map<String,List<Map<String,Object>>> discovered,Map<String,List<Map<String,Object>>> pending,ama.contract.TaskContracts.TaskLease lease){
+  if(!(prepared instanceof PublicationWriteGuard.Plan plan)||plan.issuer()!=this||!plan.actor.equals(actor)||!plan.meeting.equals(meeting))throw new IllegalArgumentException("Foreign generation publication preparation");
+  MinutesTaskDomainPolicy.shape(lease.spec());require(meeting.equals(lease.spec().subject().id()),PROVENANCE_UNAVAILABLE);
+  try{covers(prepared,discovered);covers(prepared,pending);}
+  catch(Failure mismatch){
+   if(mismatch.code()!=PROVENANCE_UNAVAILABLE||plan.failure!=null)throw mismatch;
+   var current=(Plan)prepare(actor,meeting,plan.budget);
+   if(current.failure!=null)throw current.failure;
+   require(Objects.equals(plan.root,current.root)&&Objects.equals(plan.publications,current.publications)&&Objects.equals(plan.finals,current.finals)&&plan.originals.equals(current.originals)&&plan.executions.equals(current.executions),PROVENANCE_UNAVAILABLE);
+   require(plan.graph.rows().keySet().equals(current.graph.rows().keySet()),PROVENANCE_UNAVAILABLE);
+   for(var control:plan.graph.controls())require(plan.graph.rows().get(control.table()).equals(current.graph.rows().get(control.table())),PROVENANCE_UNAVAILABLE);
+   var before=new LinkedHashMap<String,List<Map<String,Object>>>();var after=new LinkedHashMap<String,List<Map<String,Object>>>();
+   for(String table:MinutesPendingDiscovery.TASKS){before.put(table,plan.graph.rows().get(table));after.put(table,current.graph.rows().get(table));}
+   PublicationGraph.requirePreparationUnion(lease,before,after);
+   // Equal guards cannot explain failed coverage; this is never an accepted replacement declaration.
+   throw mismatch;
   }
  }
  private Scope scope(Held held,MeetingAccess.Locked gate,Phase phase){

@@ -1,10 +1,10 @@
-> **2026-10-27 流程更新（AMA-WORKFLOW-20261027）**：按[执行补充](2026-10-27-ama-development-workflow.md)分层验证、合并相关批次、定向回归。接收 DEFER-LOAD：100 路实时协议验证仍由 C-07 完成，不能在 C 验收时跳过。 本次不启动本阶段。
+> **2026-10-28 当前范围（AMA-DEMO-FIRST-20261028 R2）**：按[Demo 优先调整计划](2026-10-28-ama-demo-first-adjustment.md)执行；前期本地 MySQL＋本地文件＋单机，优先原型页面与核心业务联调。已完成/已采纳能力保留，不重做；S3、双 MySQL、双活全部尚未完成的专用实现、配置、测试和依赖归最后 F，前期不新增相关抽象或架构改造。本轮仅调整文档。 C-04/C-07 的 S3 适配与专属验证归 DEP-S3；本地音频/录音业务、进程恢复与协议资格保留。
 
 ---
 
 # C：音视频处理与实时录音 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** 沿用 AMA-WORKFLOW-20261027 与 Demo 优先 R2 的 executing-plans 内联流程、完整业务批次和集中审查；旧步骤模板不自动触发新代理、重复开发或提交。
 
 **Goal:** 交付正式音视频转写工作台和可恢复的在线录音，验证 100 路实时接入及真实模型延迟。
 
@@ -74,7 +74,7 @@
 - [ ] 写 `staleWriterAndHashConflictRejected`、乱序2先到/重复同哈希/DB失败/存储失败；`assertEquals(0, ack.highestContiguousSeq()); assertFalse(ackClaimsUnpersistedData);`；补齐1后连续到2，完成缺口不得被归档掩盖。
 - [ ] 运行 `python3 tools/checks/run.py it RecordingProtocolIT`，确认故障协议失败。
 - [ ] 实现单采集者租约、二进制限流、固定后端、存储与清单成功后 ACK、删除栅栏；暂停不计时，重开设备新 part；归档流式合并并校验，不提前清理技术分片。
-- [ ] local/s3 重跑 IT；杀实时进程、续租失败、归档重试均不丢已 ACK 数据；旧响应不能覆盖新会话；单元故障注入不替代 F-02 断电演练。
+- [ ] 本阶段在 local 定向运行 IT；S3 适配/差异验证后移 DEP-S3/F；杀实时进程、续租失败、归档重试均不丢已 ACK 数据；旧响应不能覆盖新会话；单元故障注入不替代 F-02 断电演练。
 - [ ] 提交 `feat: persist resumable recordings with durable acknowledgements`。
 
 ## Task C-05：浏览器采集、缓存与恢复体验
@@ -110,7 +110,7 @@
 - [ ] 写报告聚合测试，丢一个已 ACK 分片或少创建一路时不得 PASS；`assert report['passed'] is False`，不能丢弃失败样本计算分位数。
 - [ ] 运行 `python3 -m unittest discover -s tools/load/tests`，确认违规负载不能被识别时失败。
 - [ ] 实现可校验 hash/seq 的模拟采集端、200其他用户场景和端到端打点；不把100个空闲连接当100场实时录音。
-- [ ] local/s3 分别进行2小时协议负载；加入断连/单进程退出；真实模型可用时追加真实链路，未达标记录瓶颈并回到责任任务修复。8小时及主机故障满载资格在 F。
+- [ ] C-07 在 local 进行2小时协议负载（不作为首个 M1-Demo 前置）；S3 参数组及适配/负载后移 DEP-S3/F-04；加入断连/单进程退出；真实模型可用时追加真实链路，未达标记录瓶颈并回到责任任务修复。8小时及主机故障满载资格在 F。
 - [ ] 提交 `test: verify concurrent recording durability and live latency`；报告各验收项通过/失败/待环境，不把全部统称通过。
 
 ## 阶段验收与移交

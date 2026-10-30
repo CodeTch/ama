@@ -1,39 +1,43 @@
 import assert from 'node:assert/strict';
 import {resolve} from 'node:path';
 import {createRequire} from 'node:module';
+
 const require=createRequire(resolve('web/package.json'));
 const {chromium}=require('playwright');
-const base='http://127.0.0.1:5173';
-for(const password of ['any-password','',undefined,'任意密码'.repeat(100)]){
- const form=new URLSearchParams({username:'dev-owner'});
- if(password!==undefined)form.set('password',password);
- const response=await fetch(`${base}/api/dev/login`,{method:'POST',headers:{Origin:base},body:form,redirect:'manual'});
- assert.equal(response.status,303,'Arbitrary, empty and omitted passwords must all sign in');
- assert.match(response.headers.get('set-cookie'),/__Host-AMA_SESSION=.*; Path=\/; Secure; HttpOnly;/);
-}
-for(const origin of ['https://other.invalid',undefined]){
- const response=await fetch(`${base}/api/dev/login`,{method:'POST',headers:origin?{Origin:origin}:{},body:new URLSearchParams({username:'dev-owner'}),redirect:'manual'});
- assert.equal(response.status,403,'The local login still requires its exact browser Origin');
-}
-const unknown=await fetch(`${base}/api/dev/login`,{method:'POST',headers:{Origin:base},body:new URLSearchParams({username:'unknown',password:'anything'}),redirect:'manual'});
-assert.equal(unknown.status,401,'Only the configured development accounts can sign in');
+const base=process.env.AMA_LOCAL_URL??'http://127.0.0.1:5174';
+const username=process.env.AMA_CAS_USERNAME??'dev-owner';
+const password=process.env.AMA_CAS_PASSWORD??'dev-password';
 const browser=await chromium.launch({headless:true});
-try{
- for(const [username,password] of [['dev-owner',''],['dev-member','anything-at-all']]){
-  const context=await browser.newContext();const page=await context.newPage();
-  await page.goto(`${base}/api/dev/login`);
-  await page.getByLabel('开发账号').selectOption(username);
-  if(password)await page.getByLabel('密码').fill(password);
-  await page.getByRole('button',{name:'登录本地环境'}).click();
-  await page.waitForURL(`${base}/meetings`);
-  await page.getByText(username,{exact:true}).waitFor();
-  await page.getByRole('link',{name:username==='dev-owner'?'产品周会（本地示例）':'需求评审（本地示例）'}).waitFor();
-  const status=await page.evaluate(async()=>{
-   const response=await fetch('/api/v1/meetings',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':crypto.randomUUID()},body:'{}'});
-   return response.status;
-  });
-  assert.equal(status,403,'Business writes still require their session CSRF token');
-  await context.close();
- }
- console.log(JSON.stringify({pass:true,checks:['arbitrary-password','empty-password','omitted-password','long-unicode-password','secure-session-cookie','cross-origin-denied','missing-origin-denied','unknown-account-denied','browser-empty-login','browser-arbitrary-login','meeting-data','business-csrf']}));
-}finally{await browser.close();}
+try {
+ const context=await browser.newContext();
+ const page=await context.newPage();
+ const errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ const anonymous=await page.request.get(`${base}/api/v1/session`);
+ assert.equal(anonymous.status(),401,'Unauthenticated browser requests must receive the API 401 contract');
+ const loginPage=await page.request.get(`${base}/login`);
+ assert.equal(loginPage.status(),200,'AMA must expose the production login page');
+ const entry=await page.request.get(`${base}/auth/cas/login`,{maxRedirects:0});
+ assert.equal(entry.status(),302,'AMA must redirect the browser to CAS');
+ assert.match(entry.headers().location,/\/cas\/login\?service=/,'CAS service URL must be the AMA callback');
+ await page.goto(`${base}/login`);
+ await page.getByRole('heading',{name:'登录 Omni',exact:true}).waitFor();
+ assert.equal(await page.locator('.login-brand strong').textContent(),'招商基金');
+ assert.equal(await page.getByText('使用企业账号登录，开始你的工作。',{exact:true}).count(),1);
+ assert.equal((await page.locator('body').innerText()).includes('开发环境'),false);
+ await page.screenshot({path:'.tools/local-app/cas-login-page.png',fullPage:true});
+ await page.locator('#login-username').fill(username);
+ await page.locator('#login-password').fill(password);
+ await page.getByRole('button',{name:'登录'}).click();
+ await page.waitForURL(`${base}/meetings`);
+ const session=await page.evaluate(async()=>{const response=await fetch('/api/v1/session');return {status:response.status,value:await response.json()};});
+ assert.equal(session.status,200);
+ assert.equal(session.value.actor.enterpriseId,username);
+ const cookie=(await context.cookies()).find(value=>value.name==='__Host-AMA_SESSION');
+ assert.ok(cookie?.secure&&cookie.httpOnly,'AMA session cookie must remain Secure and HttpOnly');
+ await page.goto(`${base}/auth/cas/logout`);
+ await page.waitForURL(`${base}/meetings`);
+ assert.equal((await page.request.get(`${base}/api/v1/session`)).status(),401,'CAS logout must revoke the local session');
+ assert.deepEqual(errors,[]);
+ console.log(JSON.stringify({pass:true,checks:['production-login-page','cas-entry-redirect','cas-ticket-validation','session-cookie','session-resolution','cas-logout-revocation','no-page-errors'],actor:username}));
+} finally { await browser.close(); }

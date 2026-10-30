@@ -1,14 +1,14 @@
-> **2026-10-27 流程更新（AMA-WORKFLOW-20261027）**：按[执行补充](2026-10-27-ama-development-workflow.md)分层验证、合并相关批次、定向回归。接收 DEFER-DEPLOY/HA/RESTORE/LOAD：F-01/02/03/04 仍分别完成部署组合、真实故障、备份恢复和生产容量资格；F-05 核验平台集成，F-06 发布条件不降低。 本次不启动本阶段。
+> **2026-10-28 当前范围（AMA-DEMO-FIRST-20261028 R2）**：按[Demo 优先调整计划](2026-10-28-ama-demo-first-adjustment.md)执行；前期本地 MySQL＋本地文件＋单机，优先原型页面与核心业务联调。已完成/已采纳能力保留，不重做；S3、双 MySQL、双活全部尚未完成的专用实现、配置、测试和依赖归最后 F，前期不新增相关抽象或架构改造。本轮仅调整文档。 本阶段为所有业务阶段之后的最后部署适配阶段；接收 DEP-S3/MYSQL/HA/MIGRATE/MATRIX 全部未完事项，既有实现保留，具体方案在 F-00 根据当时确认需求确定。
 
 ---
 
-# F：生产部署、性能、恢复与上线交接 Implementation Plan
+# F：最后部署适配、性能、恢复与上线交接 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** 沿用 AMA-WORKFLOW-20261027 与 Demo 优先 R2 的 executing-plans 内联流程、完整业务批次和集中审查；旧步骤模板不自动触发新代理、重复开发或提交。
 
-**Goal:** 用真实环境证据证明部署组合、容量、安全和自动恢复达到约定目标，并交付可执行的运维/用户手册。
+**Goal:** 在业务 Demo 和后续业务阶段完成后，集中完成 S3、双 MySQL、双活尚未完成的实现、配置、集成验证与回归，再用真实环境证明部署/容量/安全/恢复资格并交接。
 
-**Architecture:** 应用双活；私有数据单活动资源组先隔离再提升。生产环境通过受控配置、数据库兼容迁移、备份恢复和负载故障报告获得资格。
+**Architecture:** 保留既有应用双活、私有数据单活动先隔离再提升的需求与实现；具体部署拓扑、双 MySQL 含义、S3 提供方及技术方案在 F-00 按届时确认的需求决定。未确认不擅自取消原要求，也不前置实施。
 
 **Tech Stack:** RHEL 8.10、Podman/systemd、HAProxy、Pacemaker/Corosync/DRBD、MySQL、local/私有S3/公司S3；测试工具沿用 A/C。
 
@@ -30,17 +30,26 @@
 4. 压测只记成功请求或忽略恢复期间缺口：F-04 将错误、缺口、超时纳入报告。
 5. 旧新版应用并存时数据库迁移不兼容：F-06 检查扩展/迁移/收缩和回滚边界。
 
+## Task F-00：部署需求确认与后移待办归并
+
+**输入：** [调整计划第 5 节](2026-10-28-ama-demo-first-adjustment.md)的 DEP-S3、DEP-MYSQL、DEP-HA、DEP-MIGRATE、DEP-MATRIX；保留全部原任务编号、既有源码和测试结果。
+
+- [ ] 确认 S3 提供方/接入/配置，双 MySQL 的来源或拓扑/连接与切换语义，以及双活节点、入口、数据保护与资源责任；不默认引入双写或新的配置框架。
+- [ ] 逐项对照现有实现和未完工作，确定需要的最小适配及配置；六组合、HA-01…14、性能/恢复目标逐项标适用/待确认，有依据才调整范围，不把待确认标完成。
+- [ ] 将 DEP-S3/MYSQL 的接入配置交 F-01，DEP-HA 的配置/故障/容量交 F-01/02/04，DEP-MIGRATE 交 F-03，全部集成差异与回归交 F-05，发布条件交 F-06。S3 浏览器、跨节点撤权、C/D S3 场景均保留。
+- [ ] 复核原 A-04 运维、凭据/平台配额及目标版本前置；安排批准环境中的实现、配置、测试与运维交付，不使用 Demo 单机证据冒充生产资格。
+
 ## Task F-01：组合部署包与资源约束
 
 **Files:** Create `deploy/containers/Containerfile.api`、`deploy/containers/Containerfile.realtime`、`deploy/containers/Containerfile.worker`、`deploy/containers/Containerfile.file`、`deploy/systemd/ama-app.container`、`deploy/ha/resources.yaml`、`deploy/config-matrix.json`、`tools/ops/validate_deployment.py`、`tools/ops/tests/test_deployment.py`、`docs/runbooks/deployment.md`。Modify A-04 inventory 和 A-01 runner。
 
-**Interfaces:** CLI `python3 tools/checks/run.py ops validate-deployment`，只验证配置；矩阵为私有/公司 MySQL × local/私有S3/公司S3，共6组合。各模式生成选定组件与服务职责表，local 不要求 S3 密钥；私有 S3 用 A 阶段已资格验证的固定版本。
+**Interfaces:** CLI `python3 tools/checks/run.py ops validate-deployment`，只验证配置；原矩阵为私有/公司 MySQL × local/私有S3/公司S3，共6组合，作为需求待办保留；F-00 确认实际适用组合及双 MySQL 语义后实施，未适用项须记录依据。各模式生成选定组件与服务职责表，local 不要求 S3 密钥；私有 S3 复用已有资格证据，目标提供方/固定版本尚未取得的资格在此补齐，不假定 A 已完成生产资格。
 
 - [ ] 写六组合配置测试，禁用模式不得隐式启动依赖；错误挂载/无隔离/两套资源管理配置均失败；`assert result['valid'] is False`，平台全外置不要求本地数据组件。
 - [ ] 运行 `python3 -m unittest discover -s tools/ops/tests -p test_deployment.py`，确认无效配置检不出时失败。
 - [ ] 实现固定镜像摘要、TLS/密钥文件引用、非root账号、内部端口限制、日志/指标、资源上限和单活动数据资源顺序；单台预算以实际可用内存重新核算，初始总预算32GiB不硬套十进制32GB。
 - [ ] 在批准测试环境验证全部6组合的启动/关闭/健康/基础闭环，配额和能力不足的组合记录失败或待环境；校验无秘密入镜像、无测试身份进生产配置。
-- [ ] 提交 `ops: package configurable two-node deployments`；模板可先完成，真实部署资格不能跳过环境验证。
+- [ ] 交付适配实现与配置包；模板也只在最后 F 开展，不提前到 B。真实部署资格不能跳过环境验证，提交按当时授权。
 
 ## Task F-02：自动恢复与文件持久化资格
 
@@ -92,6 +101,8 @@
 
 ## Task F-05：安全、兼容和最终功能覆盖
 
+**新增接收范围（均未完成）：** B remaining Tasks 5/12/13、B-L5 的未完 S3 浏览器/完整重启/差异回归；B-02 跨节点会话撤销；C-04/C-07 S3 录音/容量；D-06/D-07 S3 读取导出/删除恢复；双 MySQL 与双活目标组合下的端到端及受影响回归。复用已完成 local/S3 证据，仅对版本/环境变化和未证实范围补验。
+
 **Files:** Create `backend/integration-tests/src/test/java/ama/security/SecurityAcceptanceIT.java`、`web/tests/e2e/security-access.spec.ts`、`web/tests/visual/governance-pages.spec.ts`、`tools/checks/verify_coverage.py`、`docs/acceptance/f/security-report.md`、`docs/acceptance/f/requirements-evidence.csv`。
 
 **Interfaces:** 证据表每行 requirementId/taskId/commit/command/report/status/environment；验证器对未覆盖、失败、仅mock却标真实通过的行返回非零。
@@ -117,6 +128,7 @@
 
 ## 最终交付判定
 
+- [ ] R2 的 M1-Demo 只代表可演示；M1-B 深度核心义务及后续阶段适用要求已关闭。真实模型关键事实/来源/行动项质量与实际企业集成有证据，不能用受控合成纪要或受控发布替代；待环境/未通过不是生产通过。
 - [ ] A—E 全部范围完成，真实外部契约及公司授权验证通过；没有功能被 mock 永久替代。
 - [ ] 6组合配置及适用实测、HA-01…14、性能与安全、备份/迁移/回滚证据齐全；不适用项需说明依据。
 - [ ] 生产发布经过具体发布包审阅；试运行与长期可用性观测分别记录，不提前宣称月SLA已经实现。

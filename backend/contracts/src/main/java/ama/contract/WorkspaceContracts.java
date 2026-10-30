@@ -8,7 +8,11 @@ public final class WorkspaceContracts {
  public record CategoryPage(List<CategoryItem> items,String nextCursor,boolean hasMore) {
   public CategoryPage {items=List.copyOf(items);}
  }
- public record MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken){}
+ public record MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken,List<String> participants,String updatedAt,String workspaceStage){
+  public MeetingItem {participants=List.copyOf(participants);}
+  public MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken,List<String> participants,String updatedAt){this(id,name,category,occurredOn,stage,lifecycle,relation,writeState,revisionToken,accessRevisionToken,participants,updatedAt,stage);}
+  public MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken){this(id,name,category,occurredOn,stage,lifecycle,relation,writeState,revisionToken,accessRevisionToken,List.of(),null);}
+ }
  public record MeetingPage(List<MeetingItem> items,String nextCursor,boolean hasMore) {
   public MeetingPage {items=List.copyOf(items);}
  }

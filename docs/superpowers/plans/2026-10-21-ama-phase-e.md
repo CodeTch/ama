@@ -1,10 +1,10 @@
-> **2026-10-27 流程更新（AMA-WORKFLOW-20261027）**：按[执行补充](2026-10-27-ama-development-workflow.md)分层验证、合并相关批次、定向回归。DEFER-EXPAND 中治理、声纹、评测、邮件等新增范围仍按 E 交付，不提前并入 B；相关真实接口联调在生产使用前完成。 本次不启动本阶段。
+> **2026-10-28 当前范围（AMA-DEMO-FIRST-20261028 R2）**：按[Demo 优先调整计划](2026-10-28-ama-demo-first-adjustment.md)执行；前期本地 MySQL＋本地文件＋单机，优先原型页面与核心业务联调。已完成/已采纳能力保留，不重做；S3、双 MySQL、双活全部尚未完成的专用实现、配置、测试和依赖归最后 F，前期不新增相关抽象或架构改造。本轮仅调整文档。 运营业务及对应规则仍保留；沿用本地环境，真实公司接口按原业务依赖分列，不把部署适配作为功能开发前置。
 
 ---
 
 # E：运营治理与纪要邮件 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** 沿用 AMA-WORKFLOW-20261027 与 Demo 优先 R2 的 executing-plans 内联流程、完整业务批次和集中审查；旧步骤模板不自动触发新代理、重复开发或提交。
 
 **Goal:** 完整交付一期保留的反馈审核、声纹治理、质量评测、系统配置和邮件能力。
 
@@ -13,6 +13,8 @@
 **Tech Stack:** 总计划技术栈、现有 embed/LLM 服务、企业邮件协议；不新增生产口令系统或独立向量数据库。
 
 **Spec:** [架构](../specs/2026-10-21-ama-architecture-design.md) 第 10、12、15 节；[需求差异 D-10/D-11/D-15/D-17](../specs/2026-10-21-ama-requirements-matrix.md)；[总计划](2026-10-21-ama-delivery-plan.md)。
+
+**执行依赖（R2）：** 本阶段在正式本地 B 及相关 C/D 能力后另行启动。E-01 先落实共享治理规则；E-02 依赖 C-02 embed 与声纹规则，E-03 依赖对应样本/评测规则，E-04 依赖有效成果、权限和邮件契约。不把四个任务机械排成全部串行，也不为首个 Demo 提前建立 E-03 评测平台。真实模型基本语义质量在 B-07/PLATFORM-B 即验证，不等本阶段才首次核查。
 
 ## Global Constraints
 

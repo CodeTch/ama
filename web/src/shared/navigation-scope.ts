@@ -1,0 +1,3 @@
+import type {RouteLocationNormalized,NavigationFailure} from 'vue-router';
+/** afterEach also observes rejected navigations; only a committed route may revoke a live scope. */
+export function syncNavigationScope(to:Pick<RouteLocationNormalized,'name'|'params'|'query'|'path'>,failure:NavigationFailure|void,setScope:(id:string|null)=>void){if(failure)return;if(to.path==='/meetings'&&to.query?.import&&typeof to.query.import==='string'&&/^[0-9a-f-]{36}$/.test(to.query.import)){setScope(to.query.import);return;}setScope((to.name==='meeting-detail'||to.name==='recording')&&typeof to.params.id==='string'?to.params.id:null);}

@@ -1,3 +1,4 @@
+import {importFormat} from '../../shared/document-formats';
 import type {components} from '../../shared/api/generated';
 import {fitsUtf8} from '../../shared/bounded-text';
 // Operational browser allocation limits; not product filename/text limits or server qualification.
@@ -15,7 +16,7 @@ async function checksum(bytes:ArrayBuffer,signal:AbortSignal){cancelled(signal);
 /** Copy/hash bounded actual bytes once. A restored upload must first reselect identical bytes. */
 export async function prepareUpload(file:File,signal:AbortSignal,expected?:ReselectedIdentity){
  cancelled(signal);
- if(!Number.isSafeInteger(file.size)||file.size<0||file.size>UPLOAD_FILE_BYTES||typeof file.name!=='string'||!fitsUtf8(file.name,1024*1024)||!file.name.toLowerCase().endsWith('.txt'))throw new TypeError('File exceeds browser intake capability');
+ if(!Number.isSafeInteger(file.size)||file.size<0||file.size>UPLOAD_FILE_BYTES||typeof file.name!=='string'||!fitsUtf8(file.name,1024*1024)||!importFormat(file.name))throw new TypeError('File exceeds browser intake capability');
  const identity=expected?Object.freeze({sizeToken:expected.sizeToken,sha256:expected.sha256}):null;
  if(identity&&(!unsigned(identity.sizeToken)||identity.sizeToken!==String(file.size)||!hash(identity.sha256)))throw new TypeError('Reselected file identity differs');
  const bytes=await file.arrayBuffer();cancelled(signal);if(bytes.byteLength!==file.size)throw new TypeError('File length changed');

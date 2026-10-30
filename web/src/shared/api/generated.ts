@@ -210,7 +210,7 @@ export interface paths {
         };
         /**
          * List independently authorized saved meeting metadata
-         * @description Uses bounded indexed updated-time/id candidates. Each emitted row has fresh authorization. Joined means confirmed enterprise participant, including an owner only when confirmed. No summary or roster labels are read. Unknown/repeated queries fail; changed discovery or exhausted shared budget fails the whole response. No counts/search/snapshot or mutation permission is implied.
+         * @description Uses bounded indexed updated-time/id candidates. Each emitted row has fresh authorization. Joined means confirmed enterprise participant, including an owner only when confirmed. Confirmed participant names and saved update time are included; drafts and summary are not read. Unknown/repeated queries fail; changed discovery or exhausted shared budget fails the whole response. Filters apply after fresh authorization within each bounded scan; empty pages can continue with a signed actor/filter-bound cursor. No count/snapshot or mutation permission is implied.
          */
         get: operations["listMeetings"];
         put?: never;
@@ -1882,7 +1882,7 @@ export interface components {
         BusinessError: {
             error: {
                 /** @enum {string} */
-                code: "UNAUTHENTICATED" | "FORBIDDEN" | "INVALID_ARGUMENT" | "IDENTITY_UNAVAILABLE" | "IDENTITY_PROVIDER_UNAVAILABLE" | "MEETING_FORBIDDEN" | "MEETING_CONFLICT" | "MEETING_UNAVAILABLE" | "CATEGORY_DICTIONARY_UNAVAILABLE" | "REQUEST_TOO_LARGE" | "FILE_PURPOSE_UNAVAILABLE" | "FILE_CONFLICT" | "FILE_NOT_FOUND" | "FILE_STORAGE_UNAVAILABLE" | "FILE_INVALID_RANGE";
+                code: "UNAUTHENTICATED" | "FORBIDDEN" | "INVALID_ARGUMENT" | "INVALID_CAS_ASSERTION" | "IDENTITY_UNAVAILABLE" | "IDENTITY_PROVIDER_UNAVAILABLE" | "MEETING_FORBIDDEN" | "MEETING_CONFLICT" | "MEETING_UNAVAILABLE" | "CATEGORY_DICTIONARY_UNAVAILABLE" | "REQUEST_TOO_LARGE" | "FILE_PURPOSE_UNAVAILABLE" | "FILE_CONFLICT" | "FILE_NOT_FOUND" | "FILE_STORAGE_UNAVAILABLE" | "FILE_INVALID_RANGE";
                 message: string;
                 /** Format: uuid */
                 traceId: string;
@@ -2052,6 +2052,14 @@ export interface components {
             id: string;
             name: string | null;
             category: string | null;
+            /**
+             * @description Display phase derived from saved pointers and transcript availability, independently of legacy root stage; conveys no command permission.
+             * @enum {string}
+             */
+            workspaceStage?: "ENTRY" | "TRANSCRIPT_PENDING" | "TRANSCRIPT_FAILED" | "MINUTES_PENDING" | "MINUTES_FAILED" | "READY_TO_PUBLISH" | "PUBLISH_FAILED" | "PUBLISHED";
+            participants?: string[];
+            /** @description Saved server update timestamp */
+            updatedAt?: string | null;
             /** Format: date */
             occurredOn: string | null;
             /** @enum {string} */
@@ -2195,7 +2203,7 @@ export interface components {
             /** @enum {string} */
             execution: "INSTALLED" | "NOT_INSTALLED" | "UNAVAILABLE";
             businessReady: boolean;
-            formats: "TXT"[];
+            formats: ("TXT" | "DOC" | "DOCX" | "PDF" | "PPTX" | "MP3" | "WAV" | "M4A" | "MP4" | "MOV" | "MKV" | "WEBM" | "AAC" | "FLAC" | "OGG" | "M4V" | "AVI" | "SRT" | "VTT")[];
             /** @enum {string} */
             purpose: "TRANSCRIPT_INPUT";
             /** @enum {string} */
@@ -2581,6 +2589,16 @@ export interface components {
             replayed: boolean;
             resultIsCurrent: boolean;
             observation: components["schemas"]["Observation"];
+        };
+        /** @description Known non-acceptance from a saved-transcript mutation only. Code/status pairs are fixed: 404: TRANSCRIPT_NOT_FOUND; 409: REVISION_CONFLICT, CURRENT_REVISION_REQUIRED, MEETING_NOT_WRITABLE, REVISION_EXHAUSTED, IDEMPOTENCY_CONFLICT, TRANSCRIPT_CONFLICT; 413: REQUEST_TOO_LARGE; 422: WORKING_REQUIRED, COMPLETE_SEGMENTS_REQUIRED, SEGMENT_IDENTITY_CHANGED, EMPTY_TRANSCRIPT. Unknown, malformed or mismatched responses retain the original uncertain request. */
+        TranscriptCommandRejection: {
+            error: {
+                /** @enum {string} */
+                code: "TRANSCRIPT_NOT_FOUND" | "REVISION_CONFLICT" | "CURRENT_REVISION_REQUIRED" | "MEETING_NOT_WRITABLE" | "REVISION_EXHAUSTED" | "IDEMPOTENCY_CONFLICT" | "TRANSCRIPT_CONFLICT" | "REQUEST_TOO_LARGE" | "WORKING_REQUIRED" | "COMPLETE_SEGMENTS_REQUIRED" | "SEGMENT_IDENTITY_CHANGED" | "EMPTY_TRANSCRIPT";
+                message: string;
+                /** Format: uuid */
+                traceId: string;
+            };
         };
         History: {
             items: {
@@ -4556,6 +4574,13 @@ export interface operations {
                 scope?: "owned" | "joined";
                 limit?: number;
                 cursor?: string;
+                q?: string;
+                /** @description Comma separated unique saved stage codes */
+                stages?: string;
+                /** @description Comma separated unique category identifiers, at most 32 */
+                categories?: string;
+                from?: string;
+                to?: string;
             };
             header?: never;
             path?: never;
@@ -6142,7 +6167,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
@@ -6153,7 +6178,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Stable request transport envelope exceeded. */
@@ -6164,7 +6189,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Unsupported, blank or incomplete segment/mark input. */
@@ -6175,7 +6200,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
@@ -6605,7 +6630,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
@@ -6616,7 +6641,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Stable request transport envelope exceeded. */
@@ -6627,7 +6652,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Unsupported, blank or incomplete segment/mark input. */
@@ -6638,7 +6663,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
@@ -6953,7 +6978,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
@@ -6964,7 +6989,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Stable request transport envelope exceeded. */
@@ -6975,7 +7000,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Unsupported, blank or incomplete segment/mark input. */
@@ -6986,7 +7011,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
@@ -7189,7 +7214,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
@@ -7200,7 +7225,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Stable request transport envelope exceeded. */
@@ -7211,7 +7236,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Unsupported, blank or incomplete segment/mark input. */
@@ -7222,7 +7247,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BusinessError"];
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
                 };
             };
             /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */

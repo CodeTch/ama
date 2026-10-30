@@ -15,6 +15,7 @@ import java.time.*;
 import java.util.*;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 /** This controller is imported only by LocalApplication, on its separate development classpath. */
 @RestController
+@ConditionalOnProperty(name="cas.enabled", havingValue="false")
 public class LocalLogin {
     private final JdbcTemplate jdbc;
     private final DataSource source;
@@ -37,7 +39,9 @@ public class LocalLogin {
     public LocalLogin(DataSource source,Environment environment,SessionPort sessions) {
         this.source=source;this.jdbc=new JdbcTemplate(source);this.environment=environment;this.sessions=sessions;
         origin=environment.getRequiredProperty("identity.allowed-origin");
-        if(!Set.of("http://127.0.0.1:5173","http://localhost:5173").contains(origin))throw new IllegalStateException("Loopback development Origin required");
+        URI configured;
+        try{configured=URI.create(origin);}catch(IllegalArgumentException invalid){throw new IllegalStateException("Loopback development Origin required");}
+        if(!"http".equals(configured.getScheme())||!Set.of("127.0.0.1","localhost").contains(configured.getHost())||configured.getPort()<1024||configured.getPort()>65535||configured.getUserInfo()!=null||configured.getRawQuery()!=null||configured.getRawFragment()!=null||!configured.getRawPath().isEmpty()||!origin.equals("http://"+configured.getHost()+":"+configured.getPort()))throw new IllegalStateException("Loopback development Origin required");
     }
 
     @Bean @Order(0) SecurityFilterChain localLoginSecurity(HttpSecurity http)throws Exception {
@@ -65,7 +69,7 @@ public class LocalLogin {
             a{color:#244b98}small{display:block;line-height:1.7;color:#607086;margin-top:20px}</style>
             <main><span class="badge">仅限本地开发</span><h1>登录智能会议助手</h1><p>使用独立本地数据库。示例账号与会议用于开发验证。</p>
             <form method="post" action="/api/dev/login"><label for="username">开发账号</label><select id="username" name="username">
-            <option value="dev-owner">dev-owner · 开发负责人</option><option value="dev-member">dev-member · 开发参会人</option><option value="dev-viewer">dev-viewer · 开发访客</option></select>
+            <option value="dev-owner">dev-owner · 开发负责人</option><option value="dev-member">dev-member · 开发参会人</option><option value="dev-viewer">dev-viewer · 开发访客</option><option value="dev-admin">dev-admin · 仅平台管理员</option></select>
             <label for="password">密码（任意填写，可留空）</label><input id="password" name="password" type="password" autocomplete="off" placeholder="不校验密码，可直接登录">
             <button type="submit">登录本地环境</button></form><small>本地开发登录不校验密码，选择账号即可登录。<br>本页面仅由专用开发启动器提供。</small></main></html>
             """);

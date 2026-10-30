@@ -169,8 +169,10 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         var segments=new BoundedTranscriptMetadata(j,authority.readBudget()).select("transcript_segment","segment_id ordinal# source_file_id source_paragraph# start_ms# end_ms# speaker_id","revision_id=?","ordinal",(int)Math.min(Integer.MAX_VALUE-1,authority.readBudget().maxFactRows()),result.output().id());
         long ordinal=1;
         for(var segment:segments) {
-            require(number(segment,"ordinal")==ordinal++&&segment.get("source_paragraph")!=null&&number(segment,"source_paragraph")>0&&segment.get("start_ms")==null&&segment.get("end_ms")==null&&segment.get("speaker_id")==null,PROVENANCE_UNAVAILABLE);
-            require(j.queryForObject("SELECT COUNT(*) FROM input_batch_file f JOIN transcription_input i ON i.batch_id=f.batch_id WHERE i.id=? AND f.file_id=?",Long.class,spec.input().id(),text(segment,"source_file_id"))==1,PROVENANCE_UNAVAILABLE);
+            boolean timed=segment.get("start_ms")!=null||segment.get("end_ms")!=null;
+            require(number(segment,"ordinal")==ordinal++&&segment.get("source_paragraph")!=null&&number(segment,"source_paragraph")>0&&segment.get("speaker_id")==null&&(!timed||segment.get("start_ms")!=null&&segment.get("end_ms")!=null&&number(segment,"start_ms")>=0&&number(segment,"end_ms")>number(segment,"start_ms")),PROVENANCE_UNAVAILABLE);
+            // The same existing bounded membership count also proves that times are authorized by the stored profile.
+            require(j.queryForObject("SELECT COUNT(*) FROM input_batch_file f JOIN transcription_input i ON i.batch_id=f.batch_id WHERE i.id=? AND f.file_id=?"+(timed?" AND i.parser_version='ama.media-documents.v1'":""),Long.class,spec.input().id(),text(segment,"source_file_id"))==1,PROVENANCE_UNAVAILABLE);
         }
         require(j.queryForObject("SELECT COUNT(*) FROM transcript_segment_mark WHERE revision_id=?",Long.class,result.output().id())==0,PROVENANCE_UNAVAILABLE);
     }

@@ -173,7 +173,25 @@
         "items": {
           "type": "string",
           "enum": [
-            "TXT"
+            "TXT",
+            "DOC",
+            "DOCX",
+            "PDF",
+            "PPTX",
+            "MP3",
+            "WAV",
+            "M4A",
+            "MP4",
+            "MOV",
+            "MKV",
+            "WEBM",
+            "AAC",
+            "FLAC",
+            "OGG",
+            "M4V",
+            "AVI",
+            "SRT",
+            "VTT"
           ]
         }
       },
