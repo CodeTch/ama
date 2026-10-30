@@ -15,9 +15,9 @@ python3 tools/dev/local_app.py status
 
 ```sh
 cd /home/tanren/ama-integration-harness
-CAS_ALLOWED_SERVICES=http://127.0.0.1:5174/auth/cas/callback,http://127.0.0.1:5174/auth/cas/logout/callback \
+CAS_ALLOWED_SERVICES=http://127.0.0.1:5173/auth/cas/callback,http://127.0.0.1:5173/auth/cas/logout/callback,http://127.0.0.1:5174/auth/cas/callback,http://127.0.0.1:5174/auth/cas/logout/callback \
 MOCK_HTTP_HOST=127.0.0.1 MOCK_HTTP_PORT=8792 \
-MOCK_SMTP_HOST=127.0.0.1 MOCK_SMTP_PORT=2526 \
+MOCK_SMTP_HOST=127.0.0.1 MOCK_SMTP_PORT=2525 \
 MOCK_DATA_DIR=/home/tanren/ama-integration-harness/data/live-8792 \
 MOCK_DB_PATH=/home/tanren/ama-integration-harness/data/live-8792/mock.db \
 ./backend/start.sh
@@ -38,6 +38,26 @@ python3 tools/dev/local_app.py start --web-port 5174 --api-port 8182 --managemen
 | `dev-admin` | 仅 PLATFORM_ADMIN；平台角色不会自动授予会议或正式文档权限 |
 
 CAS 登录页会校验 harness 中的账号密码并返回一次性 ticket；AMA 服务端验证 ticket 后再创建本地数据库会话。示例身份仍存储于当前工作树的真实 MySQL，CAS 用户和企业身份必须使用同一个稳定 ID 才能建立会话。
+
+本轮导入页联调使用 harness 的固定端口启动方式，不覆盖其既有端口设计：
+
+```sh
+cd /home/tanren/ama-integration-harness
+FIXED_PORTS=1 OPEN_BROWSER=0 ./scripts/start_latest.sh
+
+cd /home/tanren/ama
+AMA_INTEGRATION_KNOWLEDGE_ORIGIN=http://127.0.0.1:8792 \
+AMA_CAS_ORIGIN=http://127.0.0.1:8792 \
+python3 tools/dev/local_app.py start --web-port 5173 --api-port 8184 --management-port 8185
+
+AMA_LOCAL_URL=http://127.0.0.1:5173 \
+AMA_CAS_ORIGIN=http://127.0.0.1:8792 \
+node tools/dev/import_cas_integration.mjs
+```
+
+`import_cas_integration.mjs` 使用真实浏览器和真实请求验证匿名拒绝、CAS ticket/会话、会议创建、TXT 上传、保存后刷新恢复、harness 知识库版本读取、导入受理、处理页导航和登出撤销；它只记录请求与响应，不伪造产品成功或处理完成。报告写入 `.tools/local-app/integration-import-cas/report.json`。
+
+2026-10-30 的固定端口实跑结果为 10/10 checks 通过：AMA 会话 actor 为 `dev-owner`，TXT 上传产生真实 `201` 上传初始化和分块/完成请求，刷新未重复上传，知识库读取了 harness 的不透明版本 token；随后将 harness 的知识库读取临时切换为 `403`，确认 AMA 显示权限错误且没有伪造成功；导入返回真实 `202` 并导航到处理页，登出后会话返回 `401`。报告还保留 harness 的 CAS/知识库请求日志，所有浏览器请求均有明确响应或失败分类，页面无 `pageerror`。
 
 前端为 `127.0.0.1:5174`，本地开发 API 为 `127.0.0.1:8182`，管理端口为 `127.0.0.1:8183`。Vite 将 `/api` 和 `/auth` 原路径转发至 `AMA_API_TARGET`；启动器会为 CAS 回调生成当前前端地址的精确 service URL。Cookie、Origin 和 CSRF 均保留；管理路径不经过代理。使用相同的 `127.0.0.1:5174` 地址登录和访问页面，避免混用主机名。
 

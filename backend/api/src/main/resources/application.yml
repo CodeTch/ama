@@ -2,10 +2,12 @@ identity:
   mode: ${IDENTITY_MODE:company}
   allowed-origin: ${IDENTITY_ALLOWED_ORIGIN:http://127.0.0.1:5173}
 cas:
+  enabled: ${CAS_ENABLED:false}
   origin: ${CAS_ORIGIN:http://127.0.0.1:8787}
   service-url: ${CAS_SERVICE_URL:http://127.0.0.1:5173/auth/cas/callback}
-  logout-service-url: ${CAS_LOGOUT_SERVICE_URL:http://127.0.0.1:5173/meetings}
+  logout-service-url: ${CAS_LOGOUT_SERVICE_URL:http://127.0.0.1:5173/auth/cas/logout/callback}
   timeout-ms: ${CAS_TIMEOUT_MS:3000}
+  identity-attribute: ${CAS_IDENTITY_ATTRIBUTE:user}
   session-lifetime-seconds: ${CAS_SESSION_LIFETIME_SECONDS:28800}
 spring:
   application:
@@ -66,13 +68,3 @@ storage:
 internal:
   health:
     allowed-networks: ${INTERNAL_HEALTH_ALLOWED_NETWORKS:127.0.0.1/32,::1/128}
-cas:
-  # Both local and production deployments must set CAS_ENABLED=true and point
-  # CAS_ORIGIN at the same company CAS provider. The safe default keeps
-  # unconfigured test contexts from accepting an accidental login endpoint.
-  enabled: ${CAS_ENABLED:false}
-  origin: ${CAS_ORIGIN:}
-  service-url: ${CAS_SERVICE_URL:}
-  logout-service-url: ${CAS_LOGOUT_SERVICE_URL:}
-  identity-attribute: ${CAS_IDENTITY_ATTRIBUTE:user}
-  session-lifetime-seconds: ${CAS_SESSION_LIFETIME_SECONDS:28800}

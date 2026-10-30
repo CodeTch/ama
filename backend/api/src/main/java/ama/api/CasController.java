@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /** Browser entry points for CAS; credentials never pass through the AMA API. */
 @RestController
+@ConditionalOnProperty(name = "cas.enabled", havingValue = "false", matchIfMissing = true)
 class CasController {
     private final CasAuthenticationPort cas;
     private final SessionPort sessions;
