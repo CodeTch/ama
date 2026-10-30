@@ -42,6 +42,8 @@ test('online recording view matches prototype structure and state copy',async()=
   const interrupted=await renderPage(component,applicationKey,'INTERRUPTED',{...emptyRecord(),parts:[part('INTERRUPTED')]});
   assert.match(interrupted,/已中断，内容保留/);
   assert.match(interrupted,/本段已保存，可开始下一段。/);
+  const finished=await renderPage(component,applicationKey,'FINISHED',{...emptyRecord(),finished:true,parts:[part('SAVED')]});
+  assert.match(finished,/已保存至服务端/);
  }finally{await server.close();}
 });
 
