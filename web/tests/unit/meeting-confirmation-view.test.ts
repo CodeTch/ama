@@ -57,3 +57,12 @@ test('meeting confirmation styles preserve prototype geometry and narrow-screen 
  assert.match(source,/@media\(max-width:760px\)\{[^}]*\.ac-confirm-grid\{grid-template-columns:minmax\(0,1fr\)\}/);
  assert.equal((source.match(/class="card ac-confirm-info"/g)??[]).length,1);
 });
+
+test('meeting confirmation keeps the production state path without a runtime demo branch',async()=>{
+ const source=await readFile(new URL('../../src/features/minutes/PublicationPanel.vue',import.meta.url),'utf8');
+ const start=source.indexOf(`<template v-if="stage==='confirm'">`),end=source.indexOf(`<template v-if="stage==='publish'">`);
+ assert.ok(start>=0&&end>start);
+ const confirmTemplate=source.slice(start,end);
+ assert.match(confirmTemplate,/@click="confirmFinal"/);
+ assert.doesNotMatch(confirmTemplate,/VITE_LOCAL_DEV_LOGIN/);
+});
