@@ -24,24 +24,6 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
     }
     @Override public Optional<Actor> resolveSession(String token) { return resolve(token).map(ResolvedSession::actor); }
 
-    public IssuedSession issueForVerifiedIdentity(String enterpriseId, Duration lifetime) {
-        stableId(enterpriseId);
-        if (lifetime == null || lifetime.isNegative() || lifetime.isZero() || lifetime.compareTo(Duration.ofDays(30)) > 0)
-            throw new IllegalArgumentException("Invalid session lifetime");
-        String token = randomToken(), csrf = randomToken();
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MICROS);
-        Instant expires = now.plus(lifetime).truncatedTo(ChronoUnit.MICROS);
-        transactions.required(() -> {
-            var identity = lockIdentity(enterpriseId);
-            if (!"ACTIVE".equals(identity.get("status"))) throw new IllegalArgumentException("Identity is inactive");
-            long generation = ((Number) identity.get("session_generation")).longValue();
-            jdbc.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (?,?,?,?,?,?)",
-                    hash(token), enterpriseId, generation, csrf, LocalDateTime.ofInstant(now, ZoneOffset.UTC), LocalDateTime.ofInstant(expires, ZoneOffset.UTC));
-            audit.append(new AuditEvent(enterpriseId, "CAS_LOGIN", enterpriseId, generation, "SUCCESS", UUID.randomUUID().toString(), now));
-            return null;
-        });
-        return new IssuedSession(token, csrf, expires);
-    }
     @Override public Optional<ResolvedSession> resolve(String token) {
         if (token == null || !token.matches("[A-Za-z0-9_-]{43}")) return Optional.empty();
         return jdbc.query("""

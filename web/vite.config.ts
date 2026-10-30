@@ -4,10 +4,6 @@ export default defineConfig({
  plugins: [vue()],
  server: {
   proxy: {
-   '/auth': {
-    target: process.env.AMA_API_TARGET ?? 'http://127.0.0.1:8080',
-    changeOrigin: false,
-   },
    '/api': {
     target: process.env.AMA_API_TARGET ?? 'http://127.0.0.1:8080',
     changeOrigin: false,
