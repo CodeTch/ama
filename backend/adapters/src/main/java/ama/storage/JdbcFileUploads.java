@@ -90,6 +90,16 @@ public final class JdbcFileUploads implements FileUploads {
 
     @Override
     public Accepted begin(Actor actor, String meeting, String key, Begin request, String trace) {
+        return beginSelected(actor,meeting,key,request,trace,null);
+    }
+
+    @Override
+    public Accepted beginPinned(Actor actor,String meeting,String key,Begin request,String trace,String backendId) {
+        if(backendId==null||!backendId.matches("[0-9a-f]{64}"))throw new IllegalArgumentException("Managed pinned backend required");
+        return beginSelected(actor,meeting,key,request,trace,backendId);
+    }
+
+    private Accepted beginSelected(Actor actor,String meeting,String key,Begin request,String trace,String pinnedBackend) {
         independent();
         uuid(meeting);
         if (key == null || key.isBlank())
@@ -97,15 +107,15 @@ public final class JdbcFileUploads implements FileUploads {
         ama.contract.FileContracts.text(key);
         String scope = digest(actor.enterpriseId(), meeting, "UPLOAD_BEGIN", key),
                 requestHash =
-                        digest(
+                        pinnedBackend==null?digest(
                                 "file-init-v1",
                                 request.purpose(),
                                 request.name(),
                                 Long.toString(request.size()),
-                                request.sha256());
+                                request.sha256()):digest("file-init-pinned-v1",pinnedBackend,request.purpose(),request.name(),Long.toString(request.size()),request.sha256());
         Accepted acknowledged=tx.required(()->{
             var old=replay(scope,false);Root root=authorize(actor,meeting);purposes.require(actor,meeting,request.purpose());
-            if(old==null)return null;var session=acceptedReplay(old,actor,meeting,request,requestHash);if(root.epoch()!=session.epoch())throw new Conflict();return new Accepted(session.id(),partSize);
+            if(old==null)return null;var session=acceptedReplay(old,actor,meeting,request,requestHash,pinnedBackend);if(root.epoch()!=session.epoch())throw new Conflict();return new Accepted(session.id(),partSize);
         });
         if(acknowledged!=null)return acknowledged;
         var publication=preparePublication(actor,meeting);
@@ -118,16 +128,16 @@ public final class JdbcFileUploads implements FileUploads {
                             if (replay != null) {
                                 Session old =
                                         acceptedReplay(
-                                                replay, actor, meeting, request, requestHash);
+                                                replay, actor, meeting, request, requestHash,pinnedBackend);
                                 if (root.epoch() != old.epoch()) throw new Conflict();
                                 return new Prepared(root, old);
                             }
                             writable(root);
-                            backends.defaultWrite();
+                            selectedBackend(pinnedBackend);
                             return new Prepared(root, null);
                         });
         if (prepared.replay() != null) return new Accepted(prepared.replay().id(), partSize);
-        var backend = backends.defaultWrite();
+        var backend = selectedBackend(pinnedBackend);
         String id = UUID.randomUUID().toString();
         // Short bounded ASCII object keys never contain a display name or browser path.
         StorageKey target = new StorageKey(backend.id(), "files", id.substring(0, 2) + "/" + id);
@@ -140,6 +150,9 @@ public final class JdbcFileUploads implements FileUploads {
                                         target.objectKey(),
                                         request.size()));
         if (!token.backendId().equals(target.backendId())) throw new Unavailable();
+        // Physical I/O can outlive a worker renewal. Re-capture the entire current graph
+        // before committing its receipt; the original epoch and upload binding stay fenced.
+        var committingPublication=preparePublication(actor,meeting);
         return tx.required(
                 () -> {
                     j.update(
@@ -154,10 +167,10 @@ public final class JdbcFileUploads implements FileUploads {
                             digest(key),
                             requestHash);
                     var replay = replay(scope, true);
-                    Root root = authorize(actor, meeting,publication);
+                    Root root = authorize(actor, meeting,committingPublication);
                     purposes.require(actor, meeting, request.purpose());
                     if (replay.get("result_id") != null) {
-                        var old = acceptedReplay(replay, actor, meeting, request, requestHash);
+                        var old = acceptedReplay(replay, actor, meeting, request, requestHash,pinnedBackend);
                         if (root.epoch() != old.epoch()) throw new Conflict();
                         return new Accepted(old.id(), partSize);
                     }
@@ -225,9 +238,10 @@ public final class JdbcFileUploads implements FileUploads {
                         .writePart(before.uploadToken(), number, body, size, sum);
         if (receipt.part() != number || receipt.size() != size || !receipt.sha256().equals(sum))
             throw new Unavailable();
+        var committingPublication=preparePublication(actor,meeting);
         tx.required(
                 () -> {
-                    Root root = authorize(actor, meeting,publication);
+                    Root root = authorize(actor, meeting,committingPublication);
                     Session s = session(id);
                     if(root.epoch()!=s.epoch())throw new Conflict();purposes.require(actor,meeting,s.purpose());
                     PartReceipt old = part(id, number);
@@ -306,9 +320,10 @@ public final class JdbcFileUploads implements FileUploads {
         if (!blob.key().equals(selected.key())
                 || blob.size() != selected.size()
                 || !blob.sha256().equals(selected.hash())) throw new Unavailable();
+        var committingPublication=preparePublication(actor,meeting);
         return tx.required(
                 () -> {
-                    Root root = authorize(actor, meeting,publication);
+                    Root root = authorize(actor, meeting,committingPublication);
                     Session s = session(id);
                     purposes.require(actor, meeting, s.purpose());
                     if (root.epoch() != s.epoch()) throw new Conflict();
@@ -517,11 +532,12 @@ public final class JdbcFileUploads implements FileUploads {
     }
 
     private Session acceptedReplay(
-            Map<String, Object> row, Actor actor, String meeting, Begin request, String hash) {
+            Map<String, Object> row, Actor actor, String meeting, Begin request, String hash,String pinnedBackend) {
         checkRequest(row, actor, meeting, hash);
         if (row.get("result_id") == null) throw new Conflict();
         Session s = session((String) row.get("result_id"));
         if (!s.meeting().equals(meeting)
+                || pinnedBackend!=null&&!s.key().backendId().equals(pinnedBackend)
                 || !s.name().equals(request.name())
                 || !s.purpose().equals(request.purpose())
                 || s.size() != request.size()
@@ -529,6 +545,8 @@ public final class JdbcFileUploads implements FileUploads {
             throw new Conflict();
         return s;
     }
+
+    private FileBackendCatalog.Backend selectedBackend(String pinnedBackend){return pinnedBackend==null?backends.defaultWrite():backends.require(pinnedBackend,true);}
 
     private void finish(Actor actor, String meeting, long revision, String action, String trace) {
         audit.append(

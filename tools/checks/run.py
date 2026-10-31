@@ -71,7 +71,9 @@ def java_tests(selector="*", integration=False):
     # Expand discovered classes: Maven wildcard overrides would mix unit and IT cases.
     method = "#" + selector.split("#", 1)[1] if "#" in selector else ""
     discovered_selector = ",".join(sorted({path.stem + method for path in matched}))
-    command += [f"-Dit.test={discovered_selector}", "-Dfailsafe.failIfNoSpecifiedTests=false", "verify"] if integration else [f"-Dtest={discovered_selector}", "-Dsurefire.failIfNoSpecifiedTests=false", "test"]
+    # verify also visits Surefire: an IT selector must not rerun unrelated unit/fixture cases.
+    # Failsafe still runs the exact discovered IT selection and execute() requires fresh evidence.
+    command += ["-Dtest=__AMA_INTEGRATION_SELECTION_ONLY__", "-Dsurefire.failIfNoSpecifiedTests=false", f"-Dit.test={discovered_selector}", "-Dfailsafe.failIfNoSpecifiedTests=false", "verify"] if integration else [f"-Dtest={discovered_selector}", "-Dsurefire.failIfNoSpecifiedTests=false", "test"]
     return execute(command, ROOT, sorted(reports))
 
 def owned_output(path, group):
@@ -196,6 +198,12 @@ def main(argv=None):
         return java_tests(args.selector or "*", args.group == "it")
     if args.group in ("web", "e2e", "visual"):
         return web_tests(args.group, args.selector or "*", output)
+    if args.group == "load":
+        if args.selector != "realtime-100":
+            print(f"FAIL: load scenario {args.selector!r} is not registered", file=sys.stderr)
+            return 1
+        result = subprocess.run([sys.executable, "tools/load/recording_load.py", "tools/load/scenarios/realtime-100.json"], cwd=ROOT, check=False)
+        return result.returncode if result.returncode > 0 else 0
     if args.group == "contract" and args.selector == "OpenApi":
         return contracts(output)
     if args.group != "all":

@@ -205,6 +205,28 @@ COMMIT;""")
     except (ValueError,UnicodeError):raise Denied(400)
     more=len(rows)>limit;items=[dict(r) for r in rows[:limit]];return {'providerId':self.ids['providerId'],'storeInstanceId':self.ids['storeInstanceId'],'items':items,'cursor':items[-1]['id'] if more else None}
    if method=='POST' and path=='/v1/knowledge/publications':return self.publish(body,actor)
+   if method=='GET' and re.fullmatch(r'/v1/knowledge/documents/doc-[0-9a-f]{32}\?view=location',path):
+    document=path.split('/')[-1].split('?')[0]
+    row=self.db.execute('SELECT id,publication,client,library,folder,payload_hash,result_id FROM document WHERE id=?',(document,)).fetchone()
+    if not row:raise Denied(404)
+    if row['client']!=self.ids['clientId']:raise Denied()
+    grant=self.grant(actor,row['library'],row['folder'],True)
+    library=self.db.execute('SELECT id,name,root FROM library WHERE id=?',(row['library'],)).fetchone()
+    if not library or not isinstance(library['name'],str) or not 1<=len(library['name'])<=1024:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+    chain=[];seen=set();current=row['folder']
+    while current is not None:
+     if len(chain)>=32 or current in seen:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+     seen.add(current);folder=self.db.execute('SELECT id,library,parent,name,is_root FROM folder WHERE id=? AND library=?',(current,row['library'])).fetchone()
+     if not folder or not isinstance(folder['name'],str) or not 1<=len(folder['name'])<=1024:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+     chain.append(folder['name'])
+     if folder['is_root']:
+      if folder['id']!=library['root'] or folder['parent'] is not None:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+      break
+     current=folder['parent']
+     if current is None:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+    if not chain or not 1<=grant['version']<2**63:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+    result=dict(providerId=self.ids['providerId'],storeInstanceId=self.ids['storeInstanceId'],viewerId=actor,documentId=row['id'],resultId=row['result_id'],publicationId=row['publication'],payloadSha256=row['payload_hash'],libraryId=row['library'],libraryName=library['name'],libraryDescription='',folderId=row['folder'],folderPath=list(reversed(chain)),readGrantVersionToken=str(grant['version']))
+    result['locationVersion']=digest(canonical(result));return result
    if method=='GET' and '/executions/' in path:
     parts=path.split('/')
     if len(parts)!=7 or parts[1:4]!=['v1','knowledge','publications'] or parts[5]!='executions':raise Denied(404)

@@ -1,0 +1,1513 @@
+{
+  "RecordingSession": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "sessionId",
+      "partId",
+      "writerEpoch",
+      "backendId"
+    ],
+    "properties": {
+      "sessionId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "partId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "writerEpoch": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 9007199254740991
+      },
+      "backendId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    }
+  },
+  "RecordingLease": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "sessionId",
+      "partId",
+      "writerEpoch",
+      "backendId",
+      "expiresAt"
+    ],
+    "properties": {
+      "sessionId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "partId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "writerEpoch": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 9007199254740991
+      },
+      "backendId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "expiresAt": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "RecordingAck": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "highestContiguousSeq",
+      "missingSeqs"
+    ],
+    "properties": {
+      "highestContiguousSeq": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4096
+      },
+      "missingSeqs": {
+        "type": "array",
+        "maxItems": 512,
+        "uniqueItems": true,
+        "items": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        }
+      }
+    }
+  },
+  "RecordingFinish": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "sessionId",
+      "finalSequence",
+      "archiveTaskId"
+    ],
+    "properties": {
+      "sessionId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "finalSequence": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 4096
+      },
+      "archiveTaskId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "RecordingArchive": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "taskId",
+      "state",
+      "available",
+      "sampleCount"
+    ],
+    "properties": {
+      "taskId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "RUNNING",
+          "RECONCILING",
+          "SUCCEEDED",
+          "FAILED",
+          "CANCELLED",
+          "STALE"
+        ]
+      },
+      "available": {
+        "type": "boolean"
+      },
+      "sampleCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 115200000
+      }
+    }
+  },
+  "RecordingError": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "error"
+    ],
+    "properties": {
+      "error": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "message",
+          "traceId"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "RECORDING_CONFLICT",
+              "RECORDING_GAP",
+              "RECORDING_PAUSED",
+              "RECORDING_UNAVAILABLE",
+              "RECORDING_RATE_LIMITED",
+              "RECORDING_READ_ONLY",
+              "RECORDING_ARCHIVE_NOT_READY",
+              "RECORDING_ARCHIVE_CONFLICT",
+              "RECORDING_ARCHIVE_UNAVAILABLE",
+              "INVALID_RANGE",
+              "FORBIDDEN",
+              "INVALID_ARGUMENT",
+              "REQUEST_TOO_LARGE",
+              "UNAUTHENTICATED"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 4096
+          },
+          "traceId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      }
+    }
+  },
+  "Error": {
+    "description": "Current identity, meeting gate, recording fence or bounded transport rejected the request. No acknowledgement is implied.",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/RecordingError"
+        }
+      }
+    }
+  },
+  "collection": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "meetingId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "createRecording",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "201": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingSession"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    }
+  },
+  "current": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "getRecording",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingSession"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    }
+  },
+  "ack": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "getRecordingAck",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "partId",
+          "in": "query",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingAck"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    }
+  },
+  "claim": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "claimRecordingWriter",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingLease"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "expectedEpoch",
+                "collectorId",
+                "requestId"
+              ],
+              "properties": {
+                "expectedEpoch": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                },
+                "collectorId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "requestId": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "renew": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "renewRecordingWriter",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingLease"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "expectedEpoch",
+                "collectorId"
+              ],
+              "properties": {
+                "expectedEpoch": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                },
+                "collectorId": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "pause": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "pauseRecording",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "X-Expected-Epoch",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          }
+        },
+        {
+          "name": "X-Collector-Id",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "Committed current-session result"
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    }
+  },
+  "resume": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "resumeRecording",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "X-Expected-Epoch",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          }
+        },
+        {
+          "name": "X-Collector-Id",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "Committed current-session result"
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    }
+  },
+  "parts": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "nextRecordingPart",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "X-Expected-Epoch",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          }
+        },
+        {
+          "name": "X-Collector-Id",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingSession"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    }
+  },
+  "chunks": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "putRecordingChunk",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "X-Writer-Epoch",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          }
+        },
+        {
+          "name": "X-Collector-Id",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "X-Part-Id",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "X-Seq",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4096
+          }
+        },
+        {
+          "name": "X-Sample-Start",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 115200000
+          }
+        },
+        {
+          "name": "X-Sample-Count",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 32000
+          }
+        },
+        {
+          "name": "X-Sha256",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingAck"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/octet-stream": {
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "maxLength": 64000
+            }
+          }
+        }
+      }
+    }
+  },
+  "finish": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "finishRecording",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "X-Expected-Epoch",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          }
+        },
+        {
+          "name": "X-Collector-Id",
+          "in": "header",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": "Required while capture is unfinished. Identical sealed finish replay is separately authorized."
+        },
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingFinish"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "minProperties": 1,
+              "maxProperties": 16,
+              "propertyNames": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4096
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "archive": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "getRecordingArchive",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingArchive"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    },
+    "post": {
+      "operationId": "requestRecordingArchive",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingArchive"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    }
+  },
+  "archiveInput": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "meetingId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      {
+        "name": "inputId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "getRecordingArchiveInput",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingArchive"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    }
+  },
+  "audio": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "getRecordingAudio",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Range",
+          "in": "header",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Full registered PCM16 mono 16kHz WAV",
+          "content": {
+            "audio/wav": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "206": {
+          "description": "Single authenticated byte range",
+          "content": {
+            "audio/wav": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "416": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    }
+  },
+  "RecordingManifest": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "sessionId",
+      "paused",
+      "finished",
+      "parts"
+    ],
+    "properties": {
+      "sessionId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "paused": {
+        "type": "boolean"
+      },
+      "finished": {
+        "type": "boolean"
+      },
+      "parts": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 16,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "partId",
+            "highestContiguousSeq",
+            "highestReceivedSeq",
+            "sampleCount"
+          ],
+          "properties": {
+            "partId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "highestContiguousSeq": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4096
+            },
+            "highestReceivedSeq": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4096
+            },
+            "sampleCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 115200000
+            }
+          }
+        }
+      }
+    }
+  },
+  "manifest": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "getRecordingManifest",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingManifest"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@ export default defineConfig({
  server: {
   proxy: {
    '/api': {
+    ws: true,
     target: process.env.AMA_API_TARGET ?? 'http://127.0.0.1:8080',
     changeOrigin: false,
    },

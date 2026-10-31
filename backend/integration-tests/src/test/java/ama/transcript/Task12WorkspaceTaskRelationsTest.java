@@ -24,4 +24,12 @@ class Task12WorkspaceTaskRelationsTest {
   assertEquals(List.of("publication","meeting_info_revision","transcription_input","input_batch","input_batch_fingerprint_profile"),sql.stream().filter(q->q.endsWith("FOR UPDATE")).map(q->q.split(" FROM ")[1].split(" ")[0]).toList());
   assertThrows(WorkspaceReadBudget.Unavailable.class,()->proof.declare("meeting_info_revision",C));
  }
+ @Test void generationMaterialSnapshotMustBeSameMeetingAndStableThroughTheParentLockPhase(){
+  var task=WorkspaceTaskScan.metadata(T,"MINUTES_GENERATE_V1","MINUTES_GENERATE","MEETING",M,"a".repeat(64),"GENERATION_INPUT",I,"b".repeat(64),7,0,0,3,"SUCCEEDED",1,LocalDateTime.of(2026,10,27,0,0));
+  rows.put("generation_input",row("id",I,"meeting_id",M,"transcript_confirmation_id",C,"template_revision_id",B,"exclusion_revision_id",B,"base_revision",7L,"input_fingerprint","b".repeat(64),"scope","FULL","target_element_id",null,"material_snapshot_id",C));
+  rows.put("transcript_confirmation",row("id",C,"meeting_id",M,"revision_id",B));rows.put("transcript_revision",row("id",B,"meeting_id",M,"kind","WORKING"));rows.put("template_revision",row("id",B));rows.put("exclusion_revision",row("id",B,"meeting_id",M));rows.put("material_snapshot",row("id",C,"meeting_id",M,"revision",1L));
+  var proof=new WorkspaceTaskRelations(jdbc,new WorkspaceReadBudget());assertDoesNotThrow(()->proof.capture(List.of(task)));proof.lockAndCompare();
+  rows.get("material_snapshot").put("meeting_id",B);assertThrows(WorkspaceReadBudget.Unavailable.class,()->new WorkspaceTaskRelations(jdbc,new WorkspaceReadBudget()).capture(List.of(task)));
+  rows.get("material_snapshot").put("meeting_id",M);var changed=new WorkspaceTaskRelations(jdbc,new WorkspaceReadBudget());changed.capture(List.of(task));rows.get("material_snapshot").put("revision",2L);assertThrows(WorkspaceReadBudget.Unavailable.class,changed::lockAndCompare);
+ }
 }

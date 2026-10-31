@@ -9,6 +9,17 @@ test('upload view separates original-file recovery, import acceptance and proces
 });
 test('import main section uses final prototype copy and keeps limits out of the empty visual layout',async()=>{
  const server=await createServer({server:{middlewareMode:true},appType:'custom'});
- try{const view=(await server.ssrLoadModule('/src/features/import/UploadImportView.vue')).default;const html=await renderToString(createSSRApp({render:()=>h(view,{items:[],ready:true,blocked:false,error:null,importState:'EMPTY',importBusy:false,taskId:null})}));assert.match(html,/aci-import-section/);assert.match(html,/支持多段录音及多文件添加/);assert.match(html,/选择或拖入会议录音、视频或转写文件/);assert.match(html,/音频：MP3 \/ WAV \/ M4A \/ AAC \/ FLAC \/ OGG \/ WEBM/);assert.match(html,/文本：TXT \/ DOC \/ DOCX \/ PDF \/ PPTX \/ SRT \/ VTT/);assert.doesNotMatch(html,/>必填</);assert.doesNotMatch(html,/>开始转写</);assert.match(html,/\.doc,/);assert.match(html,/\.pdf,/);
+ try{const view=(await server.ssrLoadModule('/src/features/import/UploadImportView.vue')).default;const html=await renderToString(createSSRApp({render:()=>h(view,{items:[],ready:true,blocked:false,error:null,importState:'EMPTY',importBusy:false,taskId:null})}));assert.match(html,/aci-import-section/);assert.match(html,/支持多段录音及多文件添加/);assert.match(html,/选择或拖入会议录音、视频或转写文件/);assert.match(html,/音频：MP3 \/ WAV \/ M4A \/ AAC \/ FLAC \/ OGG \/ WEBM/);assert.match(html,/视频：MP4 \/ MOV \/ M4V \/ AVI \/ MKV　文本：TXT \/ DOCX \/ SRT \/ VTT/);assert.doesNotMatch(html,/>必填</);assert.doesNotMatch(html,/>开始转写</);assert.match(html,/\.doc,/);assert.match(html,/\.pdf,/);
+ }finally{await server.close();}
+});
+
+test('main file format guide keeps the prototype-visible list while the picker retains supported formats',async()=>{
+ const server=await createServer({server:{middlewareMode:true},appType:'custom'});
+ try{
+  const view=(await server.ssrLoadModule('/src/features/import/UploadImportView.vue')).default;
+  const html=await renderToString(createSSRApp({render:()=>h(view,{items:[],ready:true,blocked:false,error:null,importState:'EMPTY',importBusy:false,taskId:null})}));
+  assert.match(html,/视频：MP4 \/ MOV \/ M4V \/ AVI \/ MKV　文本：TXT \/ DOCX \/ SRT \/ VTT/);
+  assert.doesNotMatch(html,/视频： MP4 \/ MOV \/ M4V \/ AVI \/ MKV　文本： TXT \/ DOC \/ DOCX \/ PDF \/ PPTX \/ SRT \/ VTT/);
+  assert.match(html,/accept="[^\"]*\.doc[^\"]*\.pdf[^\"]*\.pptx/);
  }finally{await server.close();}
 });

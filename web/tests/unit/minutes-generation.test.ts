@@ -10,3 +10,10 @@ test('generation uses real producer current readiness and full-scope immutable c
  const body=JSON.stringify({expectedRevisionToken:'9007199254740993',scope:'FULL'});globalThis.fetch=async(url,options)=>{assert.equal(String(url),`https://ama.test/api/v1/meetings/${meeting}/minutes/generations`);assert.equal(options?.body,body);return Response.json({result:{kind:'GENERATION_TASK',meetingId:meeting,inputId:id,taskId:id,inputFingerprint:'a'.repeat(64)},replayed:true,observation},{status:202});};const result=await api.send({actor:'owner',resource:meeting,operation:'MINUTES_GENERATE',path:`/api/v1/meetings/${meeting}/minutes/generations`,key:'original',body});assert.equal(result.result.kind,'GENERATION_TASK');
  }finally{globalThis.fetch=old;}
 });
+test('generation current accepts exact pinned or pending material states and rejects unknown states',async()=>{
+ const api=createMinutesGenerationApi(createBusinessClient('https://ama.test',()=>session,()=>{}),()=> 'owner'),old=fetch;
+ try{for(const materials of ['PINNED','PENDING','UNKNOWN']){
+  globalThis.fetch=async()=>Response.json({saved:{transcriptConfirmationId:id,templateRevisionId:id,exclusionRevisionId:id,elementSetId:null},scope:'FULL',materials,activeTaskIds:[],eligible:false,reasons:['CAPABILITY_UNAVAILABLE'],observation});
+  if(materials==='UNKNOWN')await assert.rejects(()=>api.current(meeting,new AbortController().signal));else assert.equal((await api.current(meeting,new AbortController().signal)).materials,materials);
+ }}finally{globalThis.fetch=old;}
+});

@@ -34,6 +34,11 @@ public final class TranscriptImportRuntime {
   components.authority().requireImportSource(source);
   return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components),"MINUTES_GENERATE_V1",components.authority().minutesTaskPolicy(),"KNOWLEDGE_PUBLISH_V1",components.authority().publicationTaskPolicy()));
  }
+ public static JdbcTaskQueue install(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,JdbcTranscriptAuthority.Components components,RecordingArchiveRuntime.Dependencies recording) {
+  components.authority().requireImportSource(source);
+  if(recording.registry()!=components.registry()||recording.publication()!=components.authority().publicationWriteGuard())throw new IllegalArgumentException("Shared recording authority required");
+  return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components),"MINUTES_GENERATE_V1",components.authority().minutesTaskPolicy(),"KNOWLEDGE_PUBLISH_V1",components.authority().publicationTaskPolicy(),RecordingArchiveRuntime.TYPE,RecordingArchiveRuntime.policy(q,recording)));
+ }
  /** Verify the genuine immutable per-process registrations; does not claim a worker is running. */
  public static void requireCombined(JdbcTaskQueue queue,JdbcTranscriptAuthority authority){
   Objects.requireNonNull(queue);Objects.requireNonNull(authority);authority.requireImportSource(queue.source);
@@ -80,7 +85,7 @@ public final class TranscriptImportRuntime {
     var configs=fields(fields.get("configs"),"processing","parser","model","prompt","profiles");
     var archives=settings.archives().get().loadClosure(List.of(ref(configs.get("processing"))),settings.archiveBudget(),original.length,cancelled);
     var binding=new ConfigBindings(new StrictConfigArchiveReader(),new StrictProcessingManifestReader()).verifyProcessing(input,facts,archives,settings.archiveBudget(),cancelled);
-    require(Set.of(TextTranscriptParser.PROFILE_VERSION,OfficeTranscriptParser.PROFILE_VERSION,MediaTranscriptParser.PROFILE_VERSION).contains(binding.parser().version()),PROFILE_UNAVAILABLE);boolean documents=binding.parser().version().equals(OfficeTranscriptParser.PROFILE_VERSION),media=binding.parser().version().equals(MediaTranscriptParser.PROFILE_VERSION);if(media)failurePrefix="MEDIA_";else if(documents)failurePrefix="DOCUMENT_";
+    boolean media=MediaTranscriptParser.supportsProfile(binding.parser().version());require(media||Set.of(TextTranscriptParser.PROFILE_VERSION,OfficeTranscriptParser.PROFILE_VERSION).contains(binding.parser().version()),PROFILE_UNAVAILABLE);boolean documents=binding.parser().version().equals(OfficeTranscriptParser.PROFILE_VERSION);if(media)failurePrefix="MEDIA_";else if(documents)failurePrefix="DOCUMENT_";
     var members=facts.rows().stream().filter(row->row.table()==Table.INPUT_BATCH_FILE).sorted(Comparator.comparingLong(row->row.number("ordinal"))).toList();
     require(!members.isEmpty()&&members.size()<=settings.archiveBudget().maxBatchFiles(),BUDGET_EXCEEDED);
     var files=new HashMap<String,ContentFile>();for(var file:facts.files())require(files.put(file.id(),file)==null,PROVENANCE_UNAVAILABLE);

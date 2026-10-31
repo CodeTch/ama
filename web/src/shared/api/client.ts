@@ -2,13 +2,13 @@ import type { components } from './generated';
 import {intentConflict} from './intent-contract';
 
 type DeclaredErrorCode = { [K in keyof components['schemas']]: components['schemas'][K] extends {error: {code: infer C extends string}} ? C : never }[keyof components['schemas']];
-const knownCodes: ReadonlySet<string> = new Set(["CATEGORY_DICTIONARY_UNAVAILABLE", "FILE_CONFLICT", "FILE_INVALID_RANGE", "FILE_NOT_FOUND", "FILE_PURPOSE_UNAVAILABLE", "FILE_STORAGE_UNAVAILABLE", "FORBIDDEN", "IDENTITY_PROVIDER_UNAVAILABLE", "IDENTITY_UNAVAILABLE", "INVALID_ARGUMENT", "MEETING_CONFLICT", "MEETING_FORBIDDEN", "MEETING_UNAVAILABLE", "REQUEST_TOO_LARGE", "UNAUTHENTICATED"] satisfies readonly DeclaredErrorCode[]);
+const knownCodes: ReadonlySet<string> = new Set(["CATEGORY_DICTIONARY_UNAVAILABLE", "FILE_CONFLICT", "FILE_INVALID_RANGE", "FILE_NOT_FOUND", "FILE_PURPOSE_UNAVAILABLE", "FILE_STORAGE_UNAVAILABLE", "FORBIDDEN", "IDENTITY_PROVIDER_UNAVAILABLE", "IDENTITY_UNAVAILABLE", "INVALID_ARGUMENT", "MEETING_CONFLICT", "MEETING_FORBIDDEN", "MEETING_UNAVAILABLE", "REQUEST_TOO_LARGE", "UNAUTHENTICATED", "RECORDING_CONFLICT", "RECORDING_GAP", "RECORDING_PAUSED", "RECORDING_UNAVAILABLE", "RECORDING_RATE_LIMITED", "RECORDING_READ_ONLY", "RECORDING_ARCHIVE_NOT_READY", "RECORDING_ARCHIVE_CONFLICT", "RECORDING_ARCHIVE_UNAVAILABLE", "INVALID_RANGE"] satisfies readonly DeclaredErrorCode[]);
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export class ApiError extends Error {
  constructor(public readonly kind:'http'|'network'|'response', public readonly status:number, message:string, public readonly code?:string, public readonly traceId?:string, public readonly details?:unknown) { super(message); this.name='ApiError'; }
 }
 export interface RequestOptions extends RequestInit { maxResponseBytes?:number; expectedStatus?:number; errorContract?:'saved-intent'|'saved-transcript' }
-const messages:Record<number,string>={400:'请求内容无效，请检查后重新提交。',401:'登录状态不可用，请重新登录。',403:'暂无访问权限。',404:'内容不存在或当前不可用。',409:'内容已发生变化，请保留草稿并核对最新版本。',413:'内容超过当前处理限额。',422:'当前输入格式暂不支持。'};
+const messages:Record<number,string>={400:'请求内容无效，请检查后重新提交。',401:'登录状态不可用，请重新登录。',403:'暂无访问权限。',404:'内容不存在或当前不可用。',409:'内容已发生变化，请保留草稿并核对最新版本。',413:'内容超过当前处理限额。',422:'当前输入格式暂不支持。',429:'录音上传暂时受限，音频已保留，请稍后恢复上传。'};
 type TranscriptRejectionCode=components['schemas']['TranscriptCommandRejection']['error']['code'];
 const transcriptRejectionStatus:Readonly<Record<TranscriptRejectionCode,number>>={TRANSCRIPT_NOT_FOUND:404,REVISION_CONFLICT:409,CURRENT_REVISION_REQUIRED:409,MEETING_NOT_WRITABLE:409,REVISION_EXHAUSTED:409,IDEMPOTENCY_CONFLICT:409,TRANSCRIPT_CONFLICT:409,REQUEST_TOO_LARGE:413,WORKING_REQUIRED:422,COMPLETE_SEGMENTS_REQUIRED:422,SEGMENT_IDENTITY_CHANGED:422,EMPTY_TRANSCRIPT:422};
 const transcriptRejectionCodes:ReadonlySet<string>=new Set(Object.keys(transcriptRejectionStatus));
@@ -35,8 +35,8 @@ function safeError(value:unknown,codes:ReadonlySet<string>=knownCodes):{code?:st
 export async function request<T>(path:string, init:RequestOptions={}):Promise<T> {
  const {maxResponseBytes=8*1024*1024,expectedStatus,errorContract,...options}=init;
  const intentMeeting=errorContract==='saved-intent'&&(options.method??'GET').toUpperCase()==='POST'?new URL(path,'https://local.invalid').pathname.match(/^\/api\/v1\/meetings\/([0-9a-f-]{36})\/minutes\/editor-intents$/)?.[1]:undefined;
- const method=(options.method??'GET').toUpperCase(),transcriptRoute=errorContract==='saved-transcript'?new URL(path,'https://local.invalid').pathname.match(/^\/api\/v1\/meetings\/([0-9a-f-]{36})\/transcript(\/marks|\/restorations|\/confirmations)?$/):null;
- const transcriptCommand=transcriptRoute&&UUID.test(transcriptRoute[1]!)&&(method==='PUT'&&(!transcriptRoute[2]||transcriptRoute[2]==='/marks')||method==='POST'&&['/restorations','/confirmations'].includes(transcriptRoute[2]??''));
+ const method=(options.method??'GET').toUpperCase(),transcriptRoute=errorContract==='saved-transcript'?new URL(path,'https://local.invalid').pathname.match(/^\/api\/v1\/meetings\/([0-9a-f-]{36})\/transcript(\/marks|\/restorations|\/confirmations|\/replacements|\/operations\/([0-9a-f-]{36})\/undo)?$/):null;
+ const transcriptCommand=transcriptRoute&&UUID.test(transcriptRoute[1]!)&&(method==='PUT'&&(!transcriptRoute[2]||transcriptRoute[2]==='/marks')||method==='POST'&&(['/restorations','/confirmations','/replacements'].includes(transcriptRoute[2]??'')||!!transcriptRoute[3]&&UUID.test(transcriptRoute[3])));
  if(errorContract&&!intentMeeting&&!transcriptCommand)throw new TypeError('Error contract requires the matching product command');
  if(!Number.isSafeInteger(maxResponseBytes)||maxResponseBytes<1||maxResponseBytes>8*1024*1024)throw new TypeError('Invalid response limit');
  if(expectedStatus!==undefined&&(!Number.isInteger(expectedStatus)||expectedStatus<200||expectedStatus>299))throw new TypeError('Invalid expected status');

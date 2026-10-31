@@ -182,7 +182,7 @@ WorkspaceTaskItem:
     taskId: {type: string, format: uuid}
     kind:
       type: string
-      enum: [TRANSCRIPT_IMPORT_V1, MINUTES_GENERATE_V1, KNOWLEDGE_PUBLISH_V1]
+      enum: [TRANSCRIPT_IMPORT_V1, MINUTES_GENERATE_V1, KNOWLEDGE_PUBLISH_V1, RECORDING_ARCHIVE_V1]
     state:
       type: string
       enum: [READY, RUNNING, RECONCILING, SUCCEEDED, FAILED, CANCELLED, STALE]
@@ -230,7 +230,7 @@ tasks:
         schema:
           type: string
           default: ALL
-          enum: [ALL, TRANSCRIPT_IMPORT_V1, MINUTES_GENERATE_V1, KNOWLEDGE_PUBLISH_V1]
+          enum: [ALL, TRANSCRIPT_IMPORT_V1, MINUTES_GENERATE_V1, KNOWLEDGE_PUBLISH_V1, RECORDING_ARCHIVE_V1]
       - name: limit
         in: query
         schema: {type: integer, minimum: 1, maximum: 50, default: 20}

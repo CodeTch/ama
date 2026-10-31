@@ -16,6 +16,7 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 final class StrictConfigJson {
  private static final Set<String> FIELDS=Set.of(
  "archiveSchema","artifactType","version","definitionSchema","definition","dependencies","slot","ref","sha256",
+ "bindings","format","parserIdentity","unitMapping",
  "asr","modelManifestSha256","decoder","subtitles","formats","engines","pdfbox","poi","xml","contract","manifestSchemaVersion","parseBudget","canonicalBudget","maxSourceBytes","maxUtf16CodeUnits","maxSegments","maxEncodedBytes","maxDepth","maxNodes","maxStringBytes","maxContainerEntries",
  "instructionText","protocolVersion","modelIdentity","credentialRef","parameters","temperatureMicros","maxOutputTokens","seed",
  "output","canonical","maxWireBytes","maxTokens","maxNameUtf16","maxStringUtf16","maxStringUtf8Bytes","maxStringScalars","maxAggregateScalars","maxElements","maxDetections","maxNotes","maxRefs","maxEvidence","maxMemberships",

@@ -5736,5 +5736,253 @@
         }
       }
     }
+  },
+  "PublicationLibraryContext": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "meetingId": {
+        "$ref": "#/Uuid"
+      },
+      "publicationId": {
+        "$ref": "#/Uuid"
+      },
+      "providerId": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "storeInstanceId": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "libraryId": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "libraryName": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1024
+      },
+      "libraryDescription": {
+        "type": "string",
+        "maxLength": 4096
+      },
+      "folderId": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "folderPath": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 32,
+        "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      },
+      "documentId": {
+        "type": "string",
+        "pattern": "^doc-[0-9a-f]{32}$"
+      },
+      "payloadSha256": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "versionToken": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "documentUrl": {
+        "type": "string",
+        "pattern": "^/api/v1/meetings/[0-9a-f-]{36}/publications/[0-9a-f-]{36}/document$"
+      }
+    },
+    "required": [
+      "meetingId",
+      "publicationId",
+      "providerId",
+      "storeInstanceId",
+      "libraryId",
+      "libraryName",
+      "libraryDescription",
+      "folderId",
+      "folderPath",
+      "documentId",
+      "payloadSha256",
+      "versionToken",
+      "documentUrl"
+    ]
+  },
+  "libraryContext": {
+    "get": {
+      "operationId": "getPublicationLibraryContext",
+      "summary": "Read current viewer-authorized verified publication location and metadata version",
+      "description": "Requires fresh current application READ, an exact ACTIVE mapping with compatible successful publication/attempt/execution/submission/final/original manifest, and current provider DOCUMENT_READ for this viewer. No query parameters are accepted. Metadata bounds precede original LONGTEXT transfer. Network, strict parsing, canonical hashing and static escaping happen outside database roots. Fresh final READ and identical lifecycle/mapping precede any buffered response. Payload8MiB/output32MiB ceilings and lower configured cumulative limits apply; no active HTML, Markdown links or remote resources. Cancellation, errors and timeouts abort the registered provider socket and stop further phases. Timeout30s; two simultaneous reads per process, no queue. Missing composition/provider access fails safely without receipt-capability fallback.",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        },
+        {
+          "name": "publicationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Must belong to the requested meeting; ID possession grants no permission."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Current provider READ metadata; versionToken hashes the exact controlled location metadata, not a company version claim",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/PublicationLibraryContext"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid request/token/cursor or unequal dual representations.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session missing/expired.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current application READ or current provider document READ denied; no document content.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Requested same-meeting resource unavailable.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request/read budget exceeded; no truncation.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable original provenance/result/read/new-command installation; no unsafe fallback.",
+          "headers": {
+            "Cache-Control": {
+              "description": "Fresh private response; no caching.",
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

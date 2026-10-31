@@ -102,7 +102,7 @@ public final class JdbcSavedTranscripts {
   var root=graph.root();if(SavedTranscriptGraph.num(root,"revision")!=command.expectedRevision())throw new ama.contract.TranscriptContracts.Failure(409,"REVISION_CONFLICT");
   if(SavedTranscriptGraph.num(root,"ever_published")!=0||!"ACTIVE".equals(root.get("lifecycle"))||!"ACTIVE".equals(root.get("governance_state"))||"PUBLISHED".equals(root.get("stage")))throw new ama.contract.TranscriptContracts.Failure(409,"MEETING_NOT_WRITABLE");
   boolean working=graph.selectedRow().string("kind").equals("WORKING");var op=command.operation();
-  if((op==ama.contract.TranscriptContracts.Operation.CONFIRM||op==ama.contract.TranscriptContracts.Operation.MARKS)&&!working)throw new ama.contract.TranscriptContracts.Failure(422,"WORKING_REQUIRED");
+  if((op==ama.contract.TranscriptContracts.Operation.CONFIRM||op==ama.contract.TranscriptContracts.Operation.MARKS||op==ama.contract.TranscriptContracts.Operation.REPLACE||op==ama.contract.TranscriptContracts.Operation.UNDO)&&!working)throw new ama.contract.TranscriptContracts.Failure(422,"WORKING_REQUIRED");
   if(op!=ama.contract.TranscriptContracts.Operation.RESTORE&&working&&!graph.selected().equals(root.get("transcript_revision_id")))throw new ama.contract.TranscriptContracts.Failure(409,"CURRENT_REVISION_REQUIRED");
   if(op==ama.contract.TranscriptContracts.Operation.CONFIRM)correction.requireReady();
   else require(canAppend(graph),BUDGET_EXCEEDED);
@@ -119,13 +119,20 @@ public final class JdbcSavedTranscripts {
    if(graph.root().get("transcript_confirmation_id")!=null)require(id.equals(graph.root().get("transcript_confirmation_id")),PROVENANCE_UNAVAILABLE);
   }else{
    var parent=graph.selectedRow();created.add(planned(budget,Table.TRANSCRIPT_REVISION,id,graph.meeting(),command.expectedRevision()+1,"WORKING",parent.string("batch_id"),graph.selected(),parent.string("input_fingerprint"),actor.enterpriseId(),time,parent.string("processing_input_id"),null));
-   var segments=graph.segments(graph.selected());boolean restore=command.operation()==ama.contract.TranscriptContracts.Operation.RESTORE;
-   if(!restore&&segments.size()!=command.segments().size())throw new ama.contract.TranscriptContracts.Failure(422,"COMPLETE_SEGMENTS_REQUIRED");boolean content=false;
+   var segments=graph.segments(graph.selected());var operation=command.operation();boolean edits=operation==ama.contract.TranscriptContracts.Operation.SAVE||operation==ama.contract.TranscriptContracts.Operation.MARKS;
+   boolean undo=operation==ama.contract.TranscriptContracts.Operation.UNDO;
+   String preservedRevision=undo?parent.string("parent_id"):graph.selected();var original=undo?graph.segments(preservedRevision):segments;
+   require(original.size()==segments.size(),PROVENANCE_UNAVAILABLE);
+   List<TranscriptReplacementPlanner.Segment> replaced=null;
+   if(operation==ama.contract.TranscriptContracts.Operation.REPLACE){var replacement=command.replacement();replaced=new TranscriptReplacementPlanner().replace(graph.selected(),segments.stream().map(s->new TranscriptReplacementPlanner.Segment(s.string("segment_id"),s.string("body"))).toList(),replacement.find(),replacement.replacement(),replacement.occurrenceIds());}
+   var preservedMarks=new HashMap<String,List<Mark>>();if(!edits)for(var mark:graph.rows())if(mark.table()==Table.TRANSCRIPT_SEGMENT_MARK&&mark.string("revision_id").equals(preservedRevision))preservedMarks.computeIfAbsent(mark.string("segment_id"),ignored->new ArrayList<>()).add(Mark.valueOf(mark.string("mark")));
+   if(edits&&segments.size()!=command.segments().size())throw new ama.contract.TranscriptContracts.Failure(422,"COMPLETE_SEGMENTS_REQUIRED");boolean content=false;
    for(int i=0;i<segments.size();i++){
-    var segment=segments.get(i);var edit=restore?null:command.segments().get(i);if(edit!=null&&!segment.string("segment_id").equals(edit.segmentId()))throw new ama.contract.TranscriptContracts.Failure(422,"SEGMENT_IDENTITY_CHANGED");
-    String body=command.operation()==ama.contract.TranscriptContracts.Operation.SAVE?edit.body():segment.string("body");content|=!body.isBlank();
+    var segment=segments.get(i);var edit=edits?command.segments().get(i):null;if(edit!=null&&!segment.string("segment_id").equals(edit.segmentId()))throw new ama.contract.TranscriptContracts.Failure(422,"SEGMENT_IDENTITY_CHANGED");
+    require(original.get(i).string("segment_id").equals(segment.string("segment_id")),PROVENANCE_UNAVAILABLE);
+    String body=operation==ama.contract.TranscriptContracts.Operation.SAVE?edit.body():replaced!=null?replaced.get(i).body():original.get(i).string("body");content|=!body.isBlank();
     created.add(planned(budget,Table.TRANSCRIPT_SEGMENT,id,segment.string("segment_id"),segment.number("ordinal"),body,segment.string("source_file_id"),segment.nullableNumber("source_paragraph"),segment.nullableNumber("start_ms"),segment.nullableNumber("end_ms"),segment.nullableString("speaker_id")));
-    List<Mark> marks=restore?graph.rows().stream().filter(m->m.table()==Table.TRANSCRIPT_SEGMENT_MARK&&m.string("revision_id").equals(graph.selected())&&m.string("segment_id").equals(segment.string("segment_id"))).map(m->Mark.valueOf(m.string("mark"))).toList():edit.marks();
+    List<Mark> marks=edits?edit.marks():preservedMarks.getOrDefault(segment.string("segment_id"),List.of());
     for(var mark:marks)created.add(planned(budget,Table.TRANSCRIPT_SEGMENT_MARK,id,segment.string("segment_id"),mark.name()));
    }
    if(!content)throw new ama.contract.TranscriptContracts.Failure(422,"EMPTY_TRANSCRIPT");
@@ -142,6 +149,14 @@ public final class JdbcSavedTranscripts {
  }
  public Map<String,Object> readOwner(Actor actor,String meeting,String revision){uuid(revision);return read(actor,meeting,revision,JdbcTranscriptAuthority.SavedPurpose.OWNER_INSPECTION);}
  public Map<String,Object> readCurrent(Actor actor,String meeting){return read(actor,meeting,null,JdbcTranscriptAuthority.SavedPurpose.CURRENT);}
+ public Map<String,Object> search(Actor actor,String meeting,String revision,String query){
+  uuid(revision);var full=readOwner(actor,meeting,revision);
+  if(!(full.get("selected") instanceof Map<?,?> selected)||!"WORKING".equals(selected.get("kind")))throw new ama.contract.TranscriptContracts.Failure(422,"WORKING_REQUIRED");
+  var observation=(Map<?,?>)full.get("observation");if(!revision.equals(observation.get("currentSavedRevisionId")))throw new ama.contract.TranscriptContracts.Failure(409,"CURRENT_REVISION_REQUIRED");
+  var rows=new ArrayList<TranscriptReplacementPlanner.Segment>();for(var value:(List<?>)selected.get("segments")){var segment=(Map<?,?>)value;rows.add(new TranscriptReplacementPlanner.Segment((String)segment.get("segmentId"),(String)segment.get("body")));}
+  var occurrences=new TranscriptReplacementPlanner().search(revision,rows,query);
+  return Map.of("meetingId",meeting,"sourceRevisionId",revision,"expectedRevisionToken",observation.get("revisionToken"),"query",query,"complete",true,"occurrences",occurrences);
+ }
  public Map<String,Object> history(Actor actor,String meeting,int limit,Long before){
   independent();uuid(meeting);if(limit<1||limit>50||before!=null&&before<0)throw new IllegalArgumentException("Invalid history cursor");
   return authority.transactionRunner().required(()->{

@@ -15,6 +15,12 @@ import java.util.*;
 public final class FileServiceMain {
     private FileServiceMain() {}
 
+    static int workerThreads(Properties properties){
+        String value=properties.getProperty("workerThreads","16");
+        if(!value.matches("[1-9][0-9]?")||Integer.parseInt(value)>32)throw new IllegalArgumentException("File worker count must be in 1..32");
+        return Integer.parseInt(value);
+    }
+
     public static void main(String[] args) throws Exception {
         if (args.length != 1)
             throw new IllegalArgumentException("one protected configuration file required");
@@ -81,7 +87,8 @@ public final class FileServiceMain {
                         new InetSocketAddress(
                                 required(p, "bindAddress"), Integer.parseInt(required(p, "port"))),
                         tls,
-                        identities);
+                        identities,workerThreads(p));
+        System.getLogger(FileServiceMain.class.getName()).log(System.Logger.Level.INFO,"File worker threads="+workerThreads(p)+" queueCapacity=128");
         Runtime.getRuntime()
                 .addShutdownHook(
                         new Thread(

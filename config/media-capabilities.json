@@ -1,0 +1,15 @@
+{
+  "schema": "ama.media-capabilities.v1",
+  "local": {
+    "maxFiles": 16,
+    "maxBytesPerFile": 33554432,
+    "maxDurationSeconds": 7200,
+    "formats": ["MP3", "WAV", "M4A", "MP4", "MOV", "MKV", "WEBM"],
+    "normalizedAudio": {"sampleRate": 16000, "channels": 1, "bitsPerSample": 16}
+  },
+  "unsupportedReasons": {
+    "NO_AUDIO_TRACK": "媒体没有可用音轨",
+    "OVERSIZED": "媒体超过当前本地处理上限",
+    "UNSUPPORTED_FORMAT": "媒体格式未接入当前解析服务"
+  }
+}

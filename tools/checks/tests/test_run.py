@@ -203,6 +203,9 @@ class RunnerTests(unittest.TestCase):
             args = json.loads((root / "selection.json").read_text())
             selection = next(arg.removeprefix("-Dit.test=") for arg in args if arg.startswith("-Dit.test="))
             self.assertEqual({"CoreIT", "ExtraIT"}, set(selection.split(",")))
+            self.assertIn("-Dtest=__AMA_INTEGRATION_SELECTION_ONLY__", args,
+                          "verify must not execute unrelated Surefire tests or mutate their retained fixtures")
+            self.assertIn("-Dsurefire.failIfNoSpecifiedTests=false", args)
             with patch.dict("os.environ", {"AMA_TEST_DATABASE_URL": "jdbc:mysql://127.0.0.1/unused"}), contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(0, runner.java_tests("CoreIT#rollback", integration=True))
             args = json.loads((root / "selection.json").read_text())

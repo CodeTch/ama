@@ -25,6 +25,7 @@ class IdentityConfiguration {
         }
     }
     @Bean JdbcIdentitySessions sharedIdentitySessions(DataSource source) { return new JdbcIdentitySessions(source); }
+    @Bean IdentityProvisioner identityProvisioner(JdbcIdentitySessions sessions) { return sessions::ensureCasIdentity; }
     @Bean @ConditionalOnProperty(name="cas.enabled", havingValue="true")
     SessionIssuer companyIdentity(JdbcIdentitySessions sessions) { return sessions::issueForVerifiedIdentity; }
     @Bean DirectoryPort companyDirectory() { return new CompanyDirectoryAdapter(); }

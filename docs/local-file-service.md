@@ -56,3 +56,17 @@ Native bridge: [JNA 5.18.1 upstream release](https://github.com/java-native-acce
 Canonical selected tests are `python3 tools/checks/run.py it LocalDurabilityIT` and `python3 tools/checks/run.py it FileStorageContractIT`, using the explicitly approved test environment required by the runner. The latter currently contains only the local backend parameter group. Fixtures generate their own CA/keys under ignored `target/local-fixtures`, bind loopback, use temporary real Linux directories, and kill/restart only their own file-service processes. Local tests make no MySQL calls. Fault injection is an explicit Java dependency around real IO, with no runtime switch to disable production mount/role checks.
 
 These checks demonstrate ordering, rejection, streaming and process recovery on the exercised Linux fixture. They do not qualify RHEL 8.10 XFS, DRBD, power loss, hypervisor/barrier behavior, STONITH or dual-primary prevention. Actual mount/device/volume/role/PKI values and F-02 qualification remain deployment prerequisites. No host mounts, company services, fencing or third node are created by this implementation.
+
+## Bounded recording sequence reads (C local protocol)
+
+The private mTLS endpoint also supports `POST /internal/v1/read-sequence-v1` for an ordered immutable chunk sequence. It accepts the same READ/WRITE service identities as `read`; it grants no meeting, registry, upload, or business authority. Browser ingress must continue to exclude this route.
+
+The existing `X-Ama-Request` metadata carries the first logical key and exact total size. The JSON body is `{ "chunks": [{ "key": { "backendId": "...", "namespace": "recordings", "objectKey": "..." }, "size": 64000, "sha256": "..." }] }`. The decoder rejects duplicate properties, unknown fields, trailing data, excessive nesting and bodies over 2 MiB. The sequence must contain 1–4096 unique keys from one backend and namespace, each key at most 512 characters and each selected object 1–64000 bytes; total bytes may not exceed 230400000. Values are transport bounds and immutable content claims, not authorization receipts.
+
+A single binary response preserves input order. Both service and client verify each selected length/SHA-256 and complete EOF. The service opens one source at a time. A missing, short, changed or extra source aborts the stream; downstream preparation must not accept partial output. Closing or cancelling the client closes the existing bounded request lifetime. No route may fall back to a different backend. The recording archive still verifies its frozen per-part order, every original chunk, and final WAV hash before its existing task/registry transaction can publish availability. Historical database PCM retains its original DB route, including mixed sessions resumed after the file-backed migration.
+
+The service uses sixteen bounded I/O workers and a 128-exchange queue. This avoids the previous core4/max16/queue128 behavior, which kept ordinary concurrent workloads at four workers until the queue filled. Every native file and directory durability barrier remains in place; increasing I/O concurrency never permits an early persistence receipt.
+
+### 显式文件并发配置
+
+受保护的文件服务配置可设置 `workerThreads`（1–32，默认16）；工作线程上下限相同，队列容量仍为128。所有文件/目录 fsync、客户端角色、挂载和 inode 校验保持原有规则。本地启动器使用 `AMA_LOCAL_FILE_WORKERS=32` 显式选择32，并把本地文件进程 heap上限从默认96MiB调为192MiB；启动日志记录实际线程数。API池使用独立的 `AMA_LOCAL_DB_POOL_MAXIMUM`，取连接超时仍为1000ms。扩展并发已经过真实mTLS/FILE_SYNC阻塞测试：默认16和显式32各有对应并发写入到达屏障，释放前没有任何ACK；这不代替100路或两小时吞吐验证。

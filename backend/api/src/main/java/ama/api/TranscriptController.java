@@ -23,12 +23,19 @@ import org.springframework.web.bind.annotation.*;
  @GetMapping("/confirmation") ResponseEntity<byte[]> confirmation(@PathVariable String meetingId,HttpServletRequest request)throws IOException{var full=service(actor(request),meetingId,false).readCurrent(actor(request),meetingId);var result=new LinkedHashMap<String,Object>();result.put("confirmation",full.get("confirmation"));result.put("observation",full.get("observation"));result.put("correction",full.get("correction"));return json(result);}
  @GetMapping("/confirmations/{confirmationId}") ResponseEntity<byte[]> oldConfirmation(@PathVariable String meetingId,@PathVariable String confirmationId,HttpServletRequest request)throws IOException{return json(service(actor(request),meetingId,true).readConfirmation(actor(request),meetingId,confirmationId));}
  @PutMapping ResponseEntity<byte[]> save(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return mutation(meetingId,request,Operation.SAVE);}
+ @GetMapping("/search") ResponseEntity<byte[]> search(@PathVariable String meetingId,@RequestParam String sourceRevisionId,@RequestParam String query,HttpServletRequest request)throws IOException{return json(service(actor(request),meetingId,true).search(actor(request),meetingId,sourceRevisionId,query));}
+ @PostMapping("/replacements") ResponseEntity<byte[]> replace(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return mutation(meetingId,request,Operation.REPLACE);}
+ @PostMapping("/operations/{operationId}/undo") ResponseEntity<byte[]> undo(@PathVariable String meetingId,@PathVariable String operationId,HttpServletRequest request)throws IOException{ama.contract.MinutesContracts.uuid(operationId);return mutation(meetingId,request,Operation.UNDO,operationId);}
  @PutMapping("/marks") ResponseEntity<byte[]> saveMarks(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return mutation(meetingId,request,Operation.MARKS);}
  @PostMapping("/restorations") ResponseEntity<byte[]> restore(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return mutation(meetingId,request,Operation.RESTORE);}
  @PostMapping("/confirmations") ResponseEntity<byte[]> confirm(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return mutation(meetingId,request,Operation.CONFIRM);}
  private ResponseEntity<byte[]> mutation(String meeting,HttpServletRequest request,Operation operation)throws IOException {
+  return mutation(meeting,request,operation,null);
+ }
+ private ResponseEntity<byte[]> mutation(String meeting,HttpServletRequest request,Operation operation,String undoOperation)throws IOException {
   ama.contract.MinutesContracts.uuid(meeting);var keys=Collections.list(request.getHeaders("Idempotency-Key"));if(keys.size()!=1)throw new IllegalArgumentException("Exactly one idempotency key required");JdbcProcessingIntake.key(keys.getFirst());
   Command command;try(var input=request.getInputStream()){command=TranscriptWire.parse(input,request.getContentLengthLong(),operation);}var actor=actor(request);
+  if(operation==Operation.UNDO&&!command.sourceRevisionId().equals(undoOperation))throw new IllegalArgumentException("Undo must name its source operation revision");
   if(runtime.service()==null){var replay=receipts.lookup(actor,meeting,keys.getFirst(),command);if(replay.isPresent())return json(replay.orElseThrow());throw new Failure(503,"TRANSCRIPT_UNAVAILABLE");}
   return json(runtime.service().mutate(actor,meeting,keys.getFirst(),command,UUID.randomUUID().toString()));
  }

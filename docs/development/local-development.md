@@ -37,7 +37,7 @@ python3 tools/dev/local_app.py start --web-port 5174 --api-port 8182 --managemen
 | `dev-viewer` | 无上述会议权限，用于验证账号隔离，也可创建自己的会议 |
 | `dev-admin` | 仅 PLATFORM_ADMIN；平台角色不会自动授予会议或正式文档权限 |
 
-CAS 登录页会校验 harness 中的账号密码并返回一次性 ticket；AMA 服务端验证 ticket 后再创建本地数据库会话。示例身份仍存储于当前工作树的真实 MySQL，CAS 用户和企业身份必须使用同一个稳定 ID 才能建立会话。
+CAS 登录页会把 harness 账号凭据提交给 AMA API；API 优先执行 CAS v1 TGT/service-ticket 交换，不支持 v1 时回退到 harness 的 CAS 2.0 `/cas/login`，再由服务端验证 ticket 后创建本地数据库会话。示例身份仍存储于当前工作树的真实 MySQL，CAS 用户和企业身份必须使用同一个稳定 ID 才能建立会话。
 
 本轮导入页联调使用 harness 的固定端口启动方式，不覆盖其既有端口设计：
 

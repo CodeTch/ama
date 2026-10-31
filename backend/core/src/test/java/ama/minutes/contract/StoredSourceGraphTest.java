@@ -27,7 +27,9 @@ class StoredSourceGraphTest {
  static Artifact artifact(String v){byte[] bytes=v.getBytes(StandardCharsets.UTF_8);var owned=ama.contract.ConfigArchiveContracts.ArchiveBytes.capture(bytes,BUDGET.canonical().maxEncodedBytes(),BUDGET.canonical().maxEncodedBytes(),()->false);return new Artifact(v,owned.sha256(()->false),owned);}
  static Profiles profiles(){var p=new EnumMap<ProfileKind,Artifact>(ProfileKind.class);for(var k:ProfileKind.values())p.put(k,artifact(switch(k){
   case CANONICAL_CODEC->"ama.canonical-value.v1";case CONFIRMATION_HASH->"ama.transcript-confirmation.v1";case GENERATION_HASH->"ama.generation-input.v2";case ROWSET_HASH->"ama.rowset.v1";case REVIEW_HASH->"ama.result-review.v2";case FINAL_SOURCES->"ama.final-sources.v2";default->k.name()+".v1";}));return new Profiles(p);}
- static GenerationConfiguration config(int input,String parser){return new GenerationConfiguration(id(input),artifact("prompt"),artifact("model"),profiles(),id(9),List.of(new ParserSelection(id(30),parser)));}
+ static final String PDF=ama.material.MaterialProfiles.parser("PDF");
+ static String sha(String text){return HexFormat.of().formatHex(ama.canonical.CanonicalValueCodec.digest().digest(text.getBytes(StandardCharsets.UTF_8)));}
+ static GenerationConfiguration config(int input,int revision){var definitions=new EnumMap<ProfileKind,Artifact>(profiles().definitions());definitions.put(ProfileKind.CATALOG,artifact(ama.material.MaterialProfiles.CATALOG));return new GenerationConfiguration(id(input),artifact("prompt"),artifact("model"),new Profiles(definitions),id(9),List.of(new ParserSelection(id(revision),PDF)));}
  static List<FullRow> base(){
   var rows=new ArrayList<FullRow>();
   rows.add(row(Table.INPUT_BATCH,id(2),id(1),"TRANSCRIPT",H,1L,T));
@@ -44,17 +46,23 @@ class StoredSourceGraphTest {
  static FullRow input(int input,String snapshot,String inputSet){return row(Table.GENERATION_INPUT,id(input),id(1),id(7),snapshot,id(9),id(10),inputSet,"prompt","model",1L,H,"FULL",null);}
  static FullRow locator(int locator){return row(Table.SOURCE_LOCATOR,id(locator),id(1),"PDF_PAGE",null,null,id(31),null,1L,null,null,null,null);}
  static StoredProvenanceFacts materials(){
-  var rows=new ArrayList<>(base());rows.add(input(8,id(32),null));rows.add(input(18,id(32),null));
+  var rows=new ArrayList<>(base());rows.add(input(8,id(32),null));rows.add(input(18,id(42),null));
   rows.add(row(Table.MATERIAL_REFERENCE,id(33),id(1),"LOCAL",null,null,id(31)));
   rows.add(row(Table.MATERIAL_REVISION,id(30),id(33),1L,null,id(31),H,T));
+  rows.add(row(Table.MATERIAL_REVISION,id(40),id(33),2L,null,id(31),H,T));
   rows.add(row(Table.MATERIAL_SNAPSHOT,id(32),id(1),1L,H,T));
   rows.add(row(Table.MATERIAL_SNAPSHOT_ITEM,id(32),id(30),1L));
-  rows.add(row(Table.PARSED_DOCUMENT,id(34),id(30),"p1",id(35),1L));rows.add(row(Table.PARSED_UNIT,id(34),1L,"PAGE",1L,null,null,"one"));
-  rows.add(row(Table.PARSED_DOCUMENT,id(36),id(30),"p2",id(37),1L));rows.add(row(Table.PARSED_UNIT,id(36),1L,"PAGE",1L,null,null,"two"));
+  rows.add(row(Table.MATERIAL_SNAPSHOT,id(42),id(1),2L,H,T));
+  rows.add(row(Table.MATERIAL_SNAPSHOT_ITEM,id(42),id(40),1L));
+  rows.add(row(Table.PARSED_DOCUMENT,id(34),id(30),PDF,id(35),1L));rows.add(row(Table.PARSED_UNIT,id(34),1L,"PAGE",1L,null,null,"one"));
+  rows.add(row(Table.PARSED_DOCUMENT,id(36),id(40),PDF,id(37),1L));rows.add(row(Table.PARSED_UNIT,id(36),1L,"PAGE",1L,null,null,"two"));
+  String parserHash=ama.material.MaterialArchives.ref(ama.material.MaterialArchives.parser("PDF")).sha256();
+  for(int document:List.of(34,36))rows.add(row(Table.PARSED_DOCUMENT_PROFILE,id(document),"PDF",PDF,parserHash));
+  for(int input:List.of(8,18)){int snapshot=input==8?32:42,revision=input==8?30:40,document=input==8?34:36;rows.add(row(Table.SOURCE_CONTEXT,id(input),id(1),"GENERATION_INPUT",id(input),id(7),id(snapshot),ama.material.MaterialProfiles.CATALOG,sha(ama.material.MaterialProfiles.CATALOG),T));rows.add(row(Table.SOURCE_CONTEXT_MATERIAL,id(input),id(revision),id(document)));}
   rows.add(locator(14));
   rows.add(row(Table.BACKGROUND_NOTE,id(16),id(11),id(8),1L,"N1"));rows.add(row(Table.BACKGROUND_NOTE_SOURCE,id(16),id(14)));
   rows.add(row(Table.BACKGROUND_NOTE,id(17),id(11),id(18),2L,"N2"));rows.add(row(Table.BACKGROUND_NOTE_SOURCE,id(17),id(14)));
-  return new StoredProvenanceFacts(rows,List.of(new ContentFile(id(3),H,9),new ContentFile(id(31),H,9),new ContentFile(id(35),"1".repeat(64),3),new ContentFile(id(37),"2".repeat(64),3)),List.of(config(8,"p1"),config(18,"p2")),List.of(),100000L);
+  return new StoredProvenanceFacts(rows,List.of(new ContentFile(id(3),H,9),new ContentFile(id(31),H,9,id(1)),new ContentFile(id(35),sha("one"),3,id(1)),new ContentFile(id(37),sha("two"),3,id(1))),List.of(config(8,30),config(18,40)),List.of(),100000L);
  }
  static final GraphBudget BUDGET=new GraphBudget(new CanonicalBudget(1000000,100,100000,100000,100000),30,100,10000);
  static final GraphSelection SET=new GraphSelection(id(1),null,id(11),null,null);
@@ -64,8 +72,9 @@ class StoredSourceGraphTest {
   assertEquals(1,g.locatorRows().size());assertEquals(2,g.sourceUsages().size());
   assertEquals(new BackgroundUsage(id(16),id(14)),g.sourceUsages().get(0).usage());
   assertEquals(new GenerationOrigin(id(8),H),g.sourceUsages().get(0).origin());
-  assertEquals("p1",((FileVersion)g.sourceUsages().get(0).sourceVersion()).parserVersion());
-  assertEquals("p2",((FileVersion)g.sourceUsages().get(1).sourceVersion()).parserVersion());
+  assertEquals(id(30),((FileVersion)g.sourceUsages().get(0).sourceVersion()).materialRevisionId());
+  assertEquals(id(40),((FileVersion)g.sourceUsages().get(1).sourceVersion()).materialRevisionId());
+  assertEquals(PDF,((FileVersion)g.sourceUsages().get(0).sourceVersion()).parserVersion());
   var f=materials();var reversed=new ArrayList<>(f.rows());Collections.reverse(reversed);
   assertEquals(g,new StoredSourceGraph().derive(new StoredProvenanceFacts(reversed,f.files(),f.configurations(),f.evidenceAnchors(),100000L),SET,BUDGET,()->false));
  }
@@ -73,6 +82,12 @@ class StoredSourceGraphTest {
   var f=materials();var g=new StoredSourceGraph().derive(f,SET,BUDGET,()->false);
   fails(SOURCE_MEMBERSHIP_MISMATCH,()->new StoredSourceGraph().verify(new SourceGraph(g.locatorRows(),List.of()),f,SET,BUDGET,()->false));
   fails(SOURCE_MEMBERSHIP_MISMATCH,()->new StoredSourceGraph().verify(new SourceGraph(g.locatorRows(),List.of(g.sourceUsages().getFirst(),g.sourceUsages().getFirst())),f,SET,BUDGET,()->false));
+ }
+ @Test void materialContextsAndParsedTextHashesRemainMandatory(){
+  var f=materials();var missing=new ArrayList<>(f.rows());missing.removeIf(r->r.table()==Table.SOURCE_CONTEXT&&r.string("id").equals(id(8)));
+  fails(PROVENANCE_UNAVAILABLE,()->new StoredSourceGraph().derive(new StoredProvenanceFacts(missing,f.files(),f.configurations(),List.of(),100000L),SET,BUDGET,()->false));
+  var corrupt=new ArrayList<>(f.files());corrupt.replaceAll(file->file.id().equals(id(35))?new ContentFile(file.id(),"3".repeat(64),file.sizeBytes(),id(1)):file);
+  fails(FINGERPRINT_MISMATCH,()->new StoredSourceGraph().derive(new StoredProvenanceFacts(f.rows(),corrupt,f.configurations(),List.of(),100000L),SET,BUDGET,()->false));
  }
  @Test void ordinaryCopiedLocalElementNeverAcceptsAttractiveHistoricalInput(){
   var f=materials();var rows=new ArrayList<>(f.rows());
@@ -84,7 +99,7 @@ class StoredSourceGraphTest {
  }
  @Test void ambiguousPinnedParserSelectionRejectsInsteadOfChoosingOrder(){
   var f=materials();var rows=new ArrayList<>(f.rows());
-  rows.add(row(Table.PARSED_DOCUMENT,id(38),id(30),"p1",id(35),1L));rows.add(row(Table.PARSED_UNIT,id(38),1L,"PAGE",1L,null,null,"one"));
+  rows.add(row(Table.PARSED_DOCUMENT,id(38),id(30),PDF,id(35),1L));rows.add(row(Table.PARSED_UNIT,id(38),1L,"PAGE",1L,null,null,"one"));
   var facts=new StoredProvenanceFacts(rows,f.files(),f.configurations(),List.of(),100000L);
   fails(SOURCE_CONTEXT_AMBIGUOUS,()->new StoredSourceGraph().derive(facts,SET,BUDGET,()->false));
  }
@@ -102,11 +117,13 @@ class StoredSourceGraphTest {
   rows.add(row(Table.SENSITIVE_DETECTION,id(20),id(11),id(18),"POLITICAL_SENSITIVE",1L));rows.add(row(Table.SENSITIVE_DETECTION_SOURCE,id(20),id(14)));
   var facts=new StoredProvenanceFacts(rows,f.files(),f.configurations(),List.of(),100000L);var graph=new StoredSourceGraph().derive(facts,SET,BUDGET,()->false);
   var codec=new ama.canonical.CanonicalValueCodec();var value=RowValues.graph(graph,()->false);
-  assertEquals(HashProfilesTest.vector("occurrence-graph",".hex"),HexFormat.of().formatHex(codec.encode(value,BUDGET.canonical(),()->false)));
-  String digest=codec.sha256(value,BUDGET.canonical(),()->false);assertEquals(HashProfilesTest.vector("occurrence-graph",".sha256"),digest);
+  assertEquals(HashProfilesTest.vector("occurrence-material-v2",".hex"),HexFormat.of().formatHex(codec.encode(value,BUDGET.canonical(),()->false)));
+  String digest=codec.sha256(value,BUDGET.canonical(),()->false);assertEquals(HashProfilesTest.vector("occurrence-material-v2",".sha256"),digest);
   for(var fileId:List.of(id(35),id(37))){
-   var files=new ArrayList<>(f.files());files.replaceAll(file->file.id().equals(fileId)?new ContentFile(file.id(),"3".repeat(64),file.sizeBytes()):file);
-   var changed=new StoredSourceGraph().derive(new StoredProvenanceFacts(rows,files,f.configurations(),List.of(),100000L),SET,BUDGET,()->false);
+   String document=fileId.equals(id(35))?id(34):id(36),text=fileId.equals(id(35))?"ONE":"TWO";
+   var changedRows=new ArrayList<>(rows);changedRows.replaceAll(r->r.table()==Table.PARSED_UNIT&&r.string("document_id").equals(document)?row(Table.PARSED_UNIT,document,1L,"PAGE",1L,null,null,text):r);
+   var files=new ArrayList<>(f.files());files.replaceAll(file->file.id().equals(fileId)?new ContentFile(file.id(),sha(text),file.sizeBytes(),id(1)):file);
+   var changed=new StoredSourceGraph().derive(new StoredProvenanceFacts(changedRows,files,f.configurations(),List.of(),100000L),SET,BUDGET,()->false);
    assertNotEquals(digest,codec.sha256(RowValues.graph(changed,()->false),BUDGET.canonical(),()->false));
   }
  }

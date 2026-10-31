@@ -106,7 +106,7 @@ public final class JdbcMinutesGenerationPreparation {
  static void writable(Map<String,Object> root,long expected){
   if(num(root,"revision")!=expected)throw new ama.contract.TranscriptContracts.Failure(409,"REVISION_CONFLICT");
   require(num(root,"ever_published")==0&&"ACTIVE".equals(root.get("lifecycle"))&&"ACTIVE".equals(root.get("governance_state"))&&!"PUBLISHED".equals(root.get("stage")),CAPABILITY_UNAVAILABLE);
-  require(root.get("final_confirmation_id")==null&&root.get("material_snapshot_id")==null&&num(root,"materials_pending")==0,CAPABILITY_UNAVAILABLE);
+  require(root.get("final_confirmation_id")==null&&num(root,"materials_pending")==0,CAPABILITY_UNAVAILABLE);
   if(root.get("transcript_confirmation_id")==null)throw new ama.contract.TranscriptContracts.Failure(422,"TRANSCRIPT_CONFIRMATION_REQUIRED");
   if(root.get("template_revision_id")==null&&root.get("exclusion_revision_id")==null)throw new ama.contract.TranscriptContracts.Failure(422,"SETTINGS_REQUIRED");
   require(root.get("template_revision_id")!=null&&root.get("exclusion_revision_id")!=null,CAPABILITY_UNAVAILABLE);

@@ -234,10 +234,26 @@ def status(state):
                       'cas': True, 'databaseContainer': NAME, 'passwordRequired': True}, ensure_ascii=False))
 
 
+def database_pool_maximum():
+    value = os.environ.get('AMA_LOCAL_DB_POOL_MAXIMUM', '20')
+    if not re.fullmatch(r'[0-9]{1,2}', value) or not 1 <= int(value) <= 64:
+        raise ValueError('AMA_LOCAL_DB_POOL_MAXIMUM must be an integer in 1..64')
+    return int(value)
+
+
+def file_worker_threads():
+    value = os.environ.get('AMA_LOCAL_FILE_WORKERS', '16')
+    if not re.fullmatch(r'[0-9]{1,2}', value) or not 1 <= int(value) <= 32:
+        raise ValueError('AMA_LOCAL_FILE_WORKERS must be an integer in 1..32')
+    return int(value)
+
+
 def start(state):
+    pool_maximum = database_pool_maximum()
+    file_workers = file_worker_threads()
     configure_ports(state, None, None, None)
     signature = source_signature()
-    if all(alive(state.get(role)) for role in SERVICE_ROLES) and state.get('sourceSignature') == signature and state.get('activePorts') == state.get('ports'):
+    if all(alive(state.get(role)) for role in SERVICE_ROLES) and state.get('sourceSignature') == signature and state.get('activePorts') == state.get('ports') and state.get('databasePoolMaximum', 20) == pool_maximum and state.get('fileWorkerThreads', 16) == file_workers:
         current_port = database(state)
         if state.get('databasePort') == current_port:
             status(state)
@@ -287,6 +303,7 @@ def start(state):
         if key not in state:
             state[key] = str(uuid.uuid4())
     save(RUNTIME / 'state.json', state)
+    state['fileWorkerThreads'] = file_workers
     settings = prepare(RUNTIME, state, java, env, classpath)
     integration_origin = os.environ.get('AMA_INTEGRATION_KNOWLEDGE_ORIGIN')
     if integration_origin:
@@ -301,6 +318,7 @@ def start(state):
     minutes, model_ready = prepare_minutes(RUNTIME, state, java, env, classpath)
     settings.update({key.removeprefix('--').split('=', 1)[0]: key.split('=', 1)[1] for key in options})
     settings.update(minutes)
+    settings['spring.datasource.hikari.maximum-pool-size'] = pool_maximum
     if integration_origin:
         settings['publication.origin'] = integration_origin
         settings['publication.client-identities'] = RUNTIME / 'knowledge/application.json'
@@ -324,7 +342,7 @@ def start(state):
         'worker.health.port': state['workerHealthPort'], 'worker.health.peer': 'spiffe://ama/local-writer'}
     properties(RUNTIME / 'worker.properties', worker_settings)
     file_env = {**env, 'AMA_FILE_KEYSTORE_PASSWORD': state['pkiPassword'], 'AMA_FILE_TRUSTSTORE_PASSWORD': state['pkiPassword']}
-    state['files'] = launch([java, '-Xmx96m', '-XX:ActiveProcessorCount=2', '-jar', ROOT / 'backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar', RUNTIME / 'file-service.properties'], file_env, 'files.log')
+    state['files'] = launch([java, '-Xmx192m' if file_workers > 16 else '-Xmx96m', '-XX:ActiveProcessorCount=2', '-jar', ROOT / 'backend/file-service/target/ama-file-service-0.1.0-SNAPSHOT-exec.jar', RUNTIME / 'file-service.properties'], file_env, 'files.log')
     save(RUNTIME / 'state.json', state)
     # Wait for this exact process to bind its retained local port before consumers start.
     deadline = time.monotonic() + 30
@@ -363,7 +381,8 @@ def start(state):
     state['backend'] = launch([java, '-Xmx512m', '-cp', classpath, 'ama.localdev.LocalApplication',
         '--spring.config.additional-location=file:' + str(RUNTIME / 'api.properties')], env, 'backend.log')
     save(RUNTIME / 'state.json', state)
-    deadline = time.monotonic() + 60
+    # A measured cold boot exceeded 60s after storage/DB validation; retain a finite startup bound.
+    deadline = time.monotonic() + 120
     while time.monotonic() < deadline:
         if CHILDREN[state['backend']['pid']].poll() is not None:
             raise RuntimeError('Local API exited; inspect ' + str(RUNTIME / 'backend.log'))
@@ -382,6 +401,7 @@ def start(state):
         raise RuntimeError('Local TXT worker exited; inspect worker.log')
     state['activePorts'] = dict(state['ports'])
     state['sourceSignature'] = signature
+    state['databasePoolMaximum'] = pool_maximum
     state['frontend'] = launch([npm, '--prefix', 'web', 'run', 'dev', '--', '--port', str(state['ports']['web']), '--strictPort'], env, 'frontend.log')
     save(RUNTIME / 'state.json', state)
     deadline = time.monotonic() + 30

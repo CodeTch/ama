@@ -9,6 +9,11 @@ import java.io.InputStream;
 public interface FileUploads {
     Accepted begin(Actor actor, String meeting, String key, Begin request, String trace);
 
+    /** Internal artifact producers pin an already accepted backend; never exposed as a browser selector. */
+    default Accepted beginPinned(Actor actor,String meeting,String key,Begin request,String trace,String backendId) {
+        throw new ama.contract.FileContracts.Unavailable();
+    }
+
     void part(
             Actor actor,
             String upload,

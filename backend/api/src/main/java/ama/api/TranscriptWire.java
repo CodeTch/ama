@@ -13,18 +13,22 @@ final class TranscriptWire {
  static Command parse(InputStream input,long length,Operation operation)throws IOException {
   if(length>REQUEST_BYTES)throw new Failure(413,"REQUEST_TOO_LARGE");
   try(var parser=FACTORY.createParser(new Bounded(input))){
-   var reader=new Reader(parser);reader.expect(reader.next(),JsonToken.START_OBJECT);var revisions=JSON.createObjectNode();String source=null;List<Edit> edits=null;
+   var reader=new Reader(parser);reader.expect(reader.next(),JsonToken.START_OBJECT);var revisions=JSON.createObjectNode();String source=null,find=null,replacement=null;List<Edit> edits=null;List<String> occurrences=null;
    while(reader.next()!=JsonToken.END_OBJECT){reader.expect(parser.currentToken(),JsonToken.FIELD_NAME);String field=parser.currentName();var token=reader.next();
     switch(field){
      case "expectedRevision"->{reader.expect(token,JsonToken.VALUE_NUMBER_INT);String text=parser.getText();if(!text.matches("0|[1-9][0-9]*"))throw invalid();revisions.put(field,parser.getBigIntegerValue());}
      case "expectedRevisionToken"->revisions.put(field,reader.text(token));
      case "sourceRevisionId","savedRevisionId"->{if(!field.equals(operation==Operation.CONFIRM?"savedRevisionId":"sourceRevisionId"))throw invalid();source=reader.text(token);}
      case "segments"->{if(operation!=Operation.SAVE&&operation!=Operation.MARKS)throw invalid();reader.expect(token,JsonToken.START_ARRAY);var values=new ArrayList<Edit>();while(reader.next()!=JsonToken.END_ARRAY){if(values.size()>=100000)throw new Failure(413,"REQUEST_TOO_LARGE");values.add(reader.segment(operation));}edits=List.copyOf(values);}
+     case "find"->{if(operation!=Operation.REPLACE)throw invalid();find=reader.text(token);}
+     case "replacement"->{if(operation!=Operation.REPLACE)throw invalid();replacement=reader.text(token);}
+     case "occurrenceIds"->{if(operation!=Operation.REPLACE)throw invalid();reader.expect(token,JsonToken.START_ARRAY);var values=new ArrayList<String>();while(reader.next()!=JsonToken.END_ARRAY){if(values.size()>=10000)throw new Failure(413,"REQUEST_TOO_LARGE");values.add(reader.text(parser.currentToken()));}occurrences=List.copyOf(values);}
      default->throw invalid();
     }
    }
    if(reader.next()!=null||source==null||(operation==Operation.SAVE||operation==Operation.MARKS)&&edits==null)throw invalid();
-   return new Command(operation,HttpRevisionTokens.expected(revisions),source,edits==null?List.of():edits);
+   if(operation==Operation.REPLACE&&(find==null||replacement==null||occurrences==null))throw invalid();
+   return new Command(operation,HttpRevisionTokens.expected(revisions),source,edits==null?List.of():edits,operation==Operation.REPLACE?new Replacement(find,replacement,occurrences):null);
   }catch(com.fasterxml.jackson.core.JsonProcessingException malformed){throw invalid();}
  }
  private static IllegalArgumentException invalid(){return new IllegalArgumentException("Invalid transcript request");}

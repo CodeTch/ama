@@ -1,14 +1,36 @@
 # Phase B acceptance evidence
 
-> **当前裁定（用户反馈后）：严格原型一致性 REOPENED / NOT ACCEPTED。** 原型界面和功能验收重新执行。原M1-B受控后端证据保留为其限定范围，不能据此宣称产品界面/功能与原型一致或完成交付。
+> **2026-10-30 当前裁定：** B 阶段后续按 [逐页像素、非语音 CRUD 与 CAS 联调计划](../../superpowers/plans/2026-10-30-ama-b-followup-pixel-crud-cas.md) 执行；当前总状态为 `NOT ACCEPTED`。原 M1-B 受控后端证据只保留在其限定范围内。
 
-> **2026-10-29 R2 / 正式本地验收完成：M1-Demo ACCEPTED，M1-B ACCEPTED（fresh/current单MySQL、本地文件、受控模型/签名知识库范围）。** 原BASE→最终V2独立全分支审查APPROVE，当前没有开放P2+；B-R01–14本地启用部分已收口。[正式本地B验收记录](formal-local-b-2026-10-29.md)保留全部证据及限定。B-R15企业平台能力、B-R16最后F部署资格和B-R17历史PARTIAL/UNKNOWN/legacy限定各自保留。
+> **2026-10-31 接续证据：** 固定端口 `8792/2525` harness 的 CAS/TXT/知识库导入真实浏览器流程 10/10 通过，harness 全量测试 31 passed；Web E2E 28/28、Web 单元 337/337、C focused Java、load/realtime-100 和构建检查通过。材料读取通过显式 `AMA_INTEGRATION_KNOWLEDGE_ORIGIN=http://127.0.0.1:8792` 验证；主页像素差异仅剩真实数据驱动的数量/空态差异，未遮罩。完整矩阵仍有名单第二身份、Office/转写/纪要/发布等逐页证据和既有 `StoredSourceGraphTest` PROFILE_UNAVAILABLE 夹具失败，因此总状态保持 `NOT ACCEPTED`。
 
-This document distinguishes source/evidence verification, formal R2 local M1-B acceptance, actual enterprise capability and production qualification. Current formal local B is accepted; it does not certify every enterprise/production environment. The final state and review record are `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/current-state.json` and the linked formal acceptance report.
+> **本轮范围：** 所有可达页面、弹窗、抽屉、滚动和固定底栏逐页 1:1 像素复刻；除语音业务外，所有可见增删改查、确认、归组、移除、重试、审核和发布真实走 AMA API 并持久化；录音、音视频、ASR、播放、说话人识别及依赖音频的自动纠错标记 `DEFERRED_VOICE`，只验收其页面静态/延期状态。
+
+> **联调边界：** CAS、会话、材料/导入相关请求使用 `/home/tanren/ama-integration-harness`（Windows/WSL 路径 `\\wsl.localhost\Ubuntu-24.04\home\tanren\ama-integration-harness`）的固定端口 HTTP `8792`、SMTP `2525`。harness 是并行开发的可重复模拟器，不是产品业务权威；只有实际请求证明兼容缺口时才同步修复，并保留双方回归。
+
+> **当前台账：** [页面/CRUD/联调矩阵](b-followup-page-crud-matrix-2026-10-30.md)。任何 `OPEN`、`FAIL`、`UNTESTED` 或未解释的 `DEFERRED` 都不能签署本轮 B 后续通过。
+
+## 2026-10-30 后续验收入口
+
+| 维度 | 必须满足 | 当前结论 |
+| --- | --- | --- |
+| 页面像素 | 原型最终渲染的全部可达页面/覆盖层，1440×900 与 1024×768、DPR=1、同字体/浏览器下精确 diff；语音页也要完成静态/延期状态 | `OPEN` |
+| 非语音功能 | 每个可见增删改查及确认/归组/移除/重试/审核/发布动作触发真实 AMA 请求，事务落库，刷新/重登/权限变化可回读 | `OPEN` |
+| CAS/harness | 固定端口 CAS 登录、退出、ticket 单次消费、service 白名单、身份映射和材料/导入相关错误路径真实浏览器通过；双方定向回归通过 | `OPEN` |
+| 语音边界 | 不访问设备、不上传音视频、不 ASR、不播放、不创建伪任务；页面静态/延期状态通过并标记 `DEFERRED_VOICE` | `DEFERRED_VOICE` |
+| 质量与证据 | Web/type/build/API/契约/启动器测试有新鲜输出，报告绑定源码与 harness revision，未用 mock 或静态构建代替联调 | `OPEN` |
+
+原有 R2 表和报告以下作为历史范围保留，不覆盖本入口。
+
+> **当前裁定（历史 R2 重新打开记录）：严格原型一致性 REOPENED / NOT ACCEPTED。** 原型界面和功能验收重新执行。原M1-B受控后端证据保留为其限定范围，不能据此宣称产品界面/功能与原型一致或完成交付。
+
+> **2026-10-29 R2 历史结果：** M1-Demo/M1-B 的 `ACCEPTED` 只适用于当时 fresh/current 单 MySQL、本地文件、受控模型/签名知识库范围；它不满足 2026-10-30 新增的逐页像素、非语音 CRUD 和 CAS harness 联调门。
+
+This document distinguishes the 2026-10-30 follow-up gate, historical R2 local acceptance, actual enterprise capability and production qualification. The current follow-up is not accepted; historical reports retain their original scope and do not certify every enterprise or production environment.
 
 <a id="current-open-obligations-r2"></a>
 
-## 当前开放义务分流表（R2）
+## 历史 R2 开放义务分流表（保留证据）
 
 这是当前验收及后续独立关卡的唯一调度表，来源为开发树证据目录 `.superpowers/sdd/2026-10-23-ama-phase-b-remaining/` 中的 `bl5-final-qualification-matrix-20261028.md`、原 open-obligations、local/S3 实际结果和本地启动器记录。原件、已通过范围及未通过事实均不改；下列编号只用于跟踪当前待办，不替换原 Task/B-L/F5 等来源编号。新鲜本地切片证据见 [DEMO-01/02 本地记录](demo-local-transcript-2026-10-28.md)；它只更新明确列出的范围，表内其余“需补”仍未完成。
 
@@ -34,7 +56,7 @@ This document distinguishes source/evidence verification, formal R2 local M1-B a
 | B-R16 S3、双 MySQL、双活及专属依赖 | 已有实现及 S3 API 证据保留；未完场景无生产通过结论 | **最后F未完成，DEP归属保留** | DEP-S3/MYSQL/HA/MIGRATE/MATRIX，全部最后 F-00～06；原要求不得遗漏或标完成 |
 | B-R17 历史 PARTIAL/UNKNOWN 与特殊来源 | B01-IMM-01 PARTIAL、B04-Q401 UNKNOWN 和 O5/O6 保持原记录 | **范围裁定完成；原PARTIAL/UNKNOWN/UNQUALIFIED保留** | 适用本地 B 义务最晚 M1-B；部署专属归 F；无关历史调查不无期限阻塞 Demo，也不记为修复完成 |
 
-当前结论：M1-Demo **ACCEPTED（本地受控流程）**；M1-B **INCOMPLETE**；真实平台能力、生产资格各按证据独立记录。B-QUAL 是原 B 深度义务的归口，不是删除要求或把共享可靠性推迟到部署阶段。
+历史 R2 结论：M1-Demo **ACCEPTED（本地受控流程）**；M1-B **INCOMPLETE**；真实平台能力、生产资格各按证据独立记录。B-QUAL 是原 B 深度义务的归口，不是删除要求或把共享可靠性推迟到部署阶段。该结论不覆盖顶部 2026-10-30 后续验收入口。
 
 当前 DEMO-03/04 详细证据见 [本地纪要与发布记录](demo-local-minutes-publication-2026-10-29.md)。首次发布在 45 秒等待后于任务 attempt 2 成功。生产 preparation 自身续租竞态现有独立因果复现、修复、真实 Worker 和有界负例，详见 [续租记录](publication-renewal-2026-10-29.md)；首次 56.85 秒领取延迟仍未解释，普通重启不替代 crash。浏览器/原型矩阵见 [DEMO-05](demo-browser-prototype-2026-10-29.md)。
 

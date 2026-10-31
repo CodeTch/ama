@@ -51,7 +51,7 @@ final class CasProtocol {
                     var group = groups.getFirst();
                     for (var child = group.getFirstChild(); child != null; child = child.getNextSibling()) {
                         if (!(child instanceof Element element) || !NS.equals(element.getNamespaceURI()) || element.getLocalName() == null) continue;
-                        String key = bounded(element.getLocalName(), 128), value = bounded(text(element), 2048);
+                        String key = bounded(element.getLocalName(), 128), value = attributeText(element, 2048);
                         if (attributes.putIfAbsent(key, value) != null) throw new Failure("INVALID_RESPONSE");
                     }
                 }
@@ -76,6 +76,13 @@ final class CasProtocol {
         String value = element.getTextContent();
         if (value == null || value.isBlank() || value.codePoints().anyMatch(Character::isISOControl)) throw new Failure("INVALID_RESPONSE");
         return value.trim();
+    }
+    private static String attributeText(Element element, int max) {
+        String value = element.getTextContent();
+        if (value == null || value.codePoints().anyMatch(Character::isISOControl)) throw new Failure("INVALID_RESPONSE");
+        value = value.trim();
+        if (value.length() > max) throw new Failure("INVALID_RESPONSE");
+        return value;
     }
     private static String bounded(String value, int max) {
         if (value == null || value.isBlank() || value.length() > max) throw new Failure("INVALID_RESPONSE");

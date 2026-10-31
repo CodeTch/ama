@@ -8,6 +8,24 @@ import java.util.Objects;
 public final class StorageContracts {
     private StorageContracts() {}
 
+    /** Bounded ordered immutable-object reads. These values grant no registry/business authority. */
+    public record ReadChunk(StorageKey key,long size,String sha256) {
+        public ReadChunk {
+            if(key==null||key.objectKey().length()>512||size<1||size>64000||sha256==null||!sha256.matches("[0-9a-f]{64}"))throw new IllegalArgumentException("Bounded immutable chunk required");
+        }
+    }
+    public record ReadSequence(List<ReadChunk> chunks) {
+        public static final int MAX_WIRE_BYTES=2*1024*1024;
+        public ReadSequence {
+            chunks=List.copyOf(chunks);
+            if(chunks.isEmpty()||chunks.size()>4096)throw new IllegalArgumentException("Finite chunk sequence required");
+            var first=chunks.getFirst().key();var keys=new java.util.HashSet<StorageKey>();long size=0;
+            for(var chunk:chunks){var key=chunk.key();if(!key.backendId().equals(first.backendId())||!key.namespace().equals(first.namespace())||!keys.add(key))throw new IllegalArgumentException("One backend/namespace and unique ordered keys required");size=Math.addExact(size,chunk.size());}
+            if(size>230400000L)throw new IllegalArgumentException("Chunk sequence exceeds two-hour PCM bound");
+        }
+        public long size(){return chunks.stream().mapToLong(ReadChunk::size).sum();}
+    }
+
     public enum ErrorCode {
         INVALID_ARGUMENT, SIZE_MISMATCH, CHECKSUM_MISMATCH, NOT_FOUND, CONFLICT,
         INVALID_RANGE, INVALID_UPLOAD_STATE, STORAGE_UNAVAILABLE

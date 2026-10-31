@@ -38,15 +38,17 @@ public class LocalApplication {
             throw new IllegalStateException("An isolated loopback ama_local_dev database is required");
     }
 
-    @Bean DataSource localDevelopmentDataSource() {
+    @Bean DataSource localDevelopmentDataSource(Environment environment) {
         requireLocalConfiguration();
-        // Supply the actual DataSource, so spring.datasource.* and external
-        // Spring configuration cannot redirect the API away from migration's
-        // exact, launcher-generated DATABASE_* connection parameters.
+        // Only the bounded pool maximum is configurable. Connection identity remains
+        // migration's exact launcher-generated DATABASE_* parameters.
+        int maximum=environment.getProperty("spring.datasource.hikari.maximum-pool-size",Integer.class,20);
+        if(maximum<1||maximum>64)throw new IllegalArgumentException("Local database pool maximum must be 1..64");
         var pool=new HikariDataSource();
         pool.setDataSource(MysqlDataSources.fromEnvironment("DATABASE_"));
-        pool.setMaximumPoolSize(10);pool.setMinimumIdle(0);
+        pool.setMaximumPoolSize(maximum);pool.setMinimumIdle(0);
         pool.setInitializationFailTimeout(-1);pool.setConnectionTimeout(1000);
+        org.slf4j.LoggerFactory.getLogger(LocalApplication.class).info("Local database pool maximum={} connectionTimeoutMillis={}",pool.getMaximumPoolSize(),pool.getConnectionTimeout());
         return pool;
     }
 
@@ -89,7 +91,8 @@ public class LocalApplication {
             }
             for(var user:USERS.entrySet()) {
                 jdbc.update("INSERT IGNORE INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",user.getKey(),user.getValue());
-                jdbc.update("INSERT IGNORE INTO role_assignment(enterprise_id,role,assigned_at) VALUES (?,?,UTC_TIMESTAMP(6))",user.getKey(),user.getKey().equals("dev-admin")?"PLATFORM_ADMIN":"USER");
+                    if (user.getKey().equals("dev-admin"))
+                        jdbc.update("INSERT IGNORE INTO role_assignment(enterprise_id,role,assigned_at) VALUES (?,'PLATFORM_ADMIN',UTC_TIMESTAMP(6))",user.getKey());
             }
             if(Files.exists(marker))return;
             var day=LocalDate.parse(env.getRequiredProperty("local-dev.seed-date"));

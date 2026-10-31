@@ -107,6 +107,13 @@ public final class PublicationWriteGuard {
  private void verifyOriginals(Scope scope){if(!scope.originalsChecked){var plan=scope.plan;require(submissionOriginals(plan,true).equals(plan.originals)&&executionOriginals(plan,true).equals(plan.executions),PROVENANCE_UNAVAILABLE);scope.originalsChecked=true;}}
  boolean permits(Held held,MeetingAccess.Locked gate){try{requirePermitted(held,gate);return true;}catch(ama.contract.MinutesContracts.Failure denied){return false;}}
  void reserve(Prepared prepared,ama.contract.TaskContracts.TaskSpec prospective){var graph=declaration(prepared);PublicationGraph.reserve(graph,prospective!=null&&graph.rows().get("durable_task").stream().noneMatch(t->prospective.producerKey().equals(t.get("producer_key"))));}
+ /** The installed local archive producer reserves three queue attempts and no remote operation. */
+ public void reserveLocalArchive(Prepared prepared){
+  var graph=declaration(prepared);PublicationGraph.reserve(graph,false);long limit=Math.min(256,graph.budget().taskLimit());
+  long attempts=graph.rows().get("task_attempt").size()+3;
+  for(var task:graph.rows().get("durable_task"))if(Set.of("READY","RUNNING").contains(task.get("state")))attempts+=n(task,"max_attempts")-n(task,"attempt");
+  require(graph.rows().get("durable_task").size()+1<=limit&&attempts<=limit,BUDGET_EXCEEDED);
+ }
  public void requireClaimed(Held held,MeetingAccess.Locked gate){scope(held,gate,Phase.CLAIMED);}
  /** Task7 keeps this authentic held scope, never a detached caller-supplied eligibility flag. */
  public boolean permitsRetention(Held held,MeetingAccess.Locked gate,DataSource expected,String meeting){

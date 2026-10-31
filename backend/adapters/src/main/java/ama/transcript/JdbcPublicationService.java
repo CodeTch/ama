@@ -73,6 +73,18 @@ public final class JdbcPublicationService {
   budget.check();byte[] html=PublicationDocumentView.render(response,manifest,initial.confirmation(),document,initial.result(),budget,limits.responseBytes());
   var fresh=PublicationDocumentRead.capture(this,viewer,meeting,publication,plan);require(initial.equals(fresh),PROVENANCE_UNAVAILABLE);budget.check();return html;
  }
+ /** Current member READ never borrows owner discovery or the original requester's receipt authority. */
+ public Map<String,Object> libraryContext(Actor viewer,String meeting,String publication,PreparationCancellation cancellation)throws java.io.IOException {
+  JdbcMinutesFactsReader.independent();uuid(meeting);uuid(publication);Objects.requireNonNull(cancellation);
+  var budget=limits.ledger(authority.readBudget(),authority.canonicalBudget(),cancellation::cancelled);
+  authority.transactionRunner().required(()->{budget.check();authority.savedAccess().require(authority.savedAccess().lock(viewer,meeting),MeetingAccess.Action.READ);return null;});
+  var plan=PublicationGraph.discover(authority.dataSource(),meeting,budget);var initial=PublicationDocumentRead.capture(this,viewer,meeting,publication,plan);var manifest=PublicationDocumentRead.verify(this,initial,plan);budget.check();
+  String document=(String)initial.mapping().get("external_document_id");var authorized=new Authorization(this,viewer.enterpriseId(),"DOCUMENT_READ",budget);Map<String,Object> raw;
+  try{raw=client.exchange(client.authorized(authorized,"DOCUMENT_READ","GET","/v1/knowledge/documents/"+PublicationDestinationPage.encode(document)+"?view=location",null),65536,cancellation);}
+  catch(ControlledKnowledgeClient.ProviderFailure denied){if(denied.status==403)throw new ama.contract.TranscriptContracts.Failure(403,"OFFICIAL_DOCUMENT_FORBIDDEN");if(denied.status==404)throw new ama.contract.TranscriptContracts.Failure(404,"OFFICIAL_DOCUMENT_UNAVAILABLE");throw denied;}
+  var result=new TreeMap<>(PublicationLibraryContext.validate(raw,manifest,viewer.enterpriseId(),document,initial.result(),budget));result.put("meetingId",meeting);result.put("publicationId",publication);result.put("documentUrl","/api/v1/meetings/"+meeting+"/publications/"+publication+"/document");
+  var fresh=PublicationDocumentRead.capture(this,viewer,meeting,publication,plan);require(initial.equals(fresh),PROVENANCE_UNAVAILABLE);budget.check();return Collections.unmodifiableMap(result);
+ }
  record DestinationAssertion(String token,long expires){}
  DestinationAssertion destination(Authorization authorized,String publication,String provider,String library,String folder)throws java.io.IOException {var body=Map.of("actorId",authorized.actor(),"providerId",provider,"libraryId",library,"folderId",folder,"context",publication);var response=client.exchange(client.authorized(authorized,"DESTINATION_AUTHORIZE","POST","/v1/knowledge/destination-authorizations",body),65536,NEVER);String assertion=ControlledKnowledgeClient.string(response,"assertion");var fields=client.assertion(assertion,authorized.budget);require(authorized.actor().equals(fields.get("actorId"))&&library.equals(fields.get("libraryId"))&&folder.equals(fields.get("folderId"))&&publication.equals(fields.get("context")),PROVENANCE_UNAVAILABLE);return new DestinationAssertion(assertion,((Number)fields.get("expiresAt")).longValue());}
  public Map<String,Object> submit(Actor actor,String meeting,String key,long expected,String confirmation,String provider,String library,String folder,String trace)throws java.io.IOException {

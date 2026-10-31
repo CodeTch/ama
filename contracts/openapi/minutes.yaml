@@ -460,7 +460,8 @@
         "const": "FULL"
       },
       "materials": {
-        "const": "EMPTY"
+        "type": "string",
+        "enum": ["EMPTY", "PINNED", "PENDING"]
       },
       "activeTaskIds": {
         "type": "array",

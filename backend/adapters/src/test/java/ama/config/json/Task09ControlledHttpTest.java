@@ -24,7 +24,7 @@ class Task09ControlledHttpTest {
   }
  }
  String raw(int port,String headers)throws Exception {
-  try(var s=new Socket()){s.connect(new InetSocketAddress("127.0.0.1",port),2000);s.setSoTimeout(3000);s.getOutputStream().write(headers.getBytes(StandardCharsets.US_ASCII));s.getOutputStream().flush();return new String(s.getInputStream().readNBytes(2048),StandardCharsets.US_ASCII);}
+  try(var s=new Socket()){s.connect(new InetSocketAddress("127.0.0.1",port),2000);s.setSoTimeout(3000);s.getOutputStream().write(headers.getBytes(StandardCharsets.US_ASCII));s.getOutputStream().flush();var line=new ByteArrayOutputStream();for(int i=0;i<256;i++){int value=s.getInputStream().read();if(value<0)throw new EOFException("Missing HTTP status line");line.write(value);if(value=='\n')return line.toString(StandardCharsets.US_ASCII);}throw new IOException("Unbounded HTTP status line");}
  }
  String prefix(int port){return "POST /v1/minutes/executions HTTP/1.1\r\nHost: 127.0.0.1:"+port+"\r\nAuthorization: Bearer "+AUTH+"\r\nContent-Type: application/json\r\nContent-Length: 0\r\n";}
  @Test void actualHttpDuplicateRetainsOneDurableResult()throws Exception {

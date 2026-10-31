@@ -34,6 +34,11 @@ public final class InternalFileController implements AutoCloseable {
             SSLContext tls,
             Map<String, Role> roles)
             throws IOException {
+        this(store,address,tls,roles,16);
+    }
+
+    public InternalFileController(LocalFileStore store,InetSocketAddress address,SSLContext tls,Map<String,Role> roles,int workerThreads) throws IOException {
+        if(workerThreads<1||workerThreads>32)throw new IllegalArgumentException("File worker count must be in 1..32");
         if (roles == null
                 || roles.isEmpty()
                 || roles.entrySet().stream()
@@ -60,8 +65,8 @@ public final class InternalFileController implements AutoCloseable {
                 });
         executor =
                 new ThreadPoolExecutor(
-                        4,
-                        16,
+                        workerThreads,
+                        workerThreads,
                         30,
                         TimeUnit.SECONDS,
                         new ArrayBlockingQueue<>(128),
@@ -116,6 +121,7 @@ public final class InternalFileController implements AutoCloseable {
                                 "put",
                                 "stat",
                                 "read",
+                                "read-sequence-v1",
                                 "delete",
                                 "begin",
                                 "part",
@@ -129,7 +135,7 @@ public final class InternalFileController implements AutoCloseable {
                     return;
                 }
                 if (role != Role.WRITE
-                        && !Set.of("stat", "read", "list", "health").contains(route)) {
+                        && !Set.of("stat", "read", "read-sequence-v1", "list", "health").contains(route)) {
                     error(exchange, 403, "FORBIDDEN");
                     return;
                 }
@@ -190,9 +196,10 @@ public final class InternalFileController implements AutoCloseable {
                                 read(exchange, request);
                                 yield null;
                             }
+                            case "read-sequence-v1" -> {readSequence(exchange,request);yield null;}
                             default -> throw new StorageException(ErrorCode.INVALID_ARGUMENT);
                         };
-                if (route.equals("read")) return;
+                if (route.equals("read")||route.equals("read-sequence-v1")) return;
                 store.check();
                 if (result == null) {
                     exchange.sendResponseHeaders(204, -1);
@@ -212,6 +219,22 @@ public final class InternalFileController implements AutoCloseable {
                 if (exchange.getResponseCode() == -1)
                     error(exchange, 503, ErrorCode.STORAGE_UNAVAILABLE.name());
             }
+        }
+    }
+
+    private void readSequence(HttpsExchange exchange,Request request)throws IOException {
+        byte[] body=exchange.getRequestBody().readNBytes(ReadSequence.MAX_WIRE_BYTES+1);
+        if(body.length>ReadSequence.MAX_WIRE_BYTES)throw new StorageException(ErrorCode.INVALID_ARGUMENT);
+        ReadSequence sequence;
+        try {
+            var factory=com.fasterxml.jackson.core.JsonFactory.builder().enable(com.fasterxml.jackson.core.StreamReadFeature.STRICT_DUPLICATE_DETECTION).disable(com.fasterxml.jackson.core.StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
+                .streamReadConstraints(com.fasterxml.jackson.core.StreamReadConstraints.builder().maxNestingDepth(8).maxStringLength(1024).maxNumberLength(19).build()).build();
+            sequence=new ObjectMapper(factory).enable(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_TRAILING_TOKENS).readValue(body,ReadSequence.class);
+        }catch(Exception invalid){throw new StorageException(ErrorCode.INVALID_ARGUMENT);}
+        if(sequence==null||request.size()==null||request.size()!=sequence.size()||!Objects.equals(request.key(),sequence.chunks().getFirst().key()))throw new StorageException(ErrorCode.INVALID_ARGUMENT);
+        try(var input=store.readSequence(sequence)){
+            exchange.getResponseHeaders().set("Content-Type","application/octet-stream");
+            exchange.sendResponseHeaders(200,sequence.size());input.transferTo(exchange.getResponseBody());
         }
     }
 

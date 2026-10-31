@@ -1,5 +1,7 @@
 # AMA Import CAS Integration Implementation Plan
 
+> **2026-10-30 范围关系：** 本文保留导入页 CAS 联调的独立任务与证据要求；B 阶段后续的总范围、逐页像素门、非语音 CRUD 和语音延期以 [B 阶段后续总计划](2026-10-30-ama-b-followup-pixel-crud-cas.md) 及其设计为准。本文不能把导入页局部通过扩展为 B 整体通过。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans (recommended). Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Make the AMA meeting import page start and complete a real local CAS/harness integration flow against the fixed-port `ama-integration-harness`, with regression coverage for configuration and cross-project contracts.

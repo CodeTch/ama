@@ -1,0 +1,11 @@
+import type {createBusinessClient} from './business-client';import {ApiError} from './client';import {exact,uuid,freeze} from './minutes-wire';import {destinationId} from './publications';
+export type LibraryContext=Readonly<{meetingId:string;publicationId:string;providerId:string;storeInstanceId:string;libraryId:string;libraryName:string;libraryDescription:string;folderId:string;folderPath:readonly string[];documentId:string;payloadSha256:string;versionToken:string;documentUrl:string}>;
+const bounded=(v:unknown,max:number,empty=false):v is string=>typeof v==='string'&&v.length<=max&&(empty||!!v.trim())&&!/[\u0000-\u001f\u007f-\u009f\ud800-\udfff]/u.test(v);
+export function createMeetingLibraryApi(client:ReturnType<typeof createBusinessClient>,actor:()=>string|null){return {
+ async context(meeting:string,publication:string,signal:AbortSignal):Promise<LibraryContext>{
+  const who=actor();if(!who||signal.aborted)throw new DOMException('Library identity unavailable','AbortError');if(!uuid(meeting)||!uuid(publication))throw new TypeError('Invalid library source');
+  const v=await client.json<unknown>(`/api/v1/meetings/${meeting}/publications/${publication}/library-context`,{signal,expectedStatus:200,maxResponseBytes:65536});if(who!==actor()||signal.aborted)throw new DOMException('Library identity changed','AbortError');
+  if(!exact(v,'documentId,documentUrl,folderId,folderPath,libraryDescription,libraryId,libraryName,meetingId,payloadSha256,providerId,publicationId,storeInstanceId,versionToken')||v.meetingId!==meeting||v.publicationId!==publication||!bounded(v.providerId,64)||!bounded(v.storeInstanceId,128)||!destinationId(v.libraryId)||!destinationId(v.folderId)||!bounded(v.libraryName,1024)||!bounded(v.libraryDescription,4096,true)||!Array.isArray(v.folderPath)||!v.folderPath.length||v.folderPath.length>32||!v.folderPath.every(x=>bounded(x,1024))||typeof v.documentId!=='string'||!/^doc-[0-9a-f]{32}$/.test(v.documentId)||typeof v.payloadSha256!=='string'||!/^[0-9a-f]{64}$/.test(v.payloadSha256)||typeof v.versionToken!=='string'||!/^[0-9a-f]{64}$/.test(v.versionToken)||v.documentUrl!==`/api/v1/meetings/${meeting}/publications/${publication}/document`)throw new ApiError('response',200,'知识库位置或版本暂无法核实。');
+  return freeze(v as LibraryContext);
+ }
+};}

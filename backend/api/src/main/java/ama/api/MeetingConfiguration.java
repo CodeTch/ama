@@ -17,6 +17,7 @@ class MeetingConfiguration {
         var validators=new java.util.HashMap<String,OutboxReferenceValidator>(new MeetingEventReferences(source).validators());
         new ama.transcript.TranscriptEventReferences(source).validators().forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
         new ama.transcript.MinutesEventReferences(source).validators().forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
+        ama.task.RecordingArchiveRuntime.eventReferences(source).forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
         return new JdbcOutbox(source,validators);
     }
     @Bean JdbcMeetingAccess meetingAccess(DataSource source,TransactionRunner tx,JdbcSubjectFences fences){return new JdbcMeetingAccess(source,tx,fences);}

@@ -25,6 +25,12 @@ test('prototype filters reset cursor and stale reads cannot replace the new filt
  const calls:any[]=[];const list=useMeetingList((scope,cursor,signal,filters?:unknown)=>new Promise(resolve=>calls.push({scope,cursor,signal,filters,resolve})),()=> 'owner');
  const old=list.reload();const fresh=(list as any).selectFilters({q:'产品',stages:['PUBLISHED'],categories:[],from:'2026-10-01',to:''});assert.equal(calls[0].signal.aborted,true);assert.equal(calls[1].cursor,null);assert.equal(calls[1].filters.q,'产品');calls[1].resolve({items:[],nextCursor:null,hasMore:false});await fresh;calls[0].resolve({items:[item],nextCursor:'old',hasMore:true});await old;assert.deepEqual(list.page.value?.items,[]);list.dispose();
 });
+test('filter reads keep the current page visible until the replacement arrives',async()=>{
+ const calls:any[]=[];const list=useMeetingList((scope,cursor,signal,filters?:unknown)=>new Promise(resolve=>calls.push({scope,cursor,signal,filters,resolve})),()=> 'owner');
+ const initial=list.reload();calls[0].resolve({items:[item],nextCursor:null,hasMore:false});await initial;
+ const filtered=list.selectFilters({q:'产品'});assert.deepEqual(list.page.value?.items,[item]);assert.equal(list.loading.value,true);
+ calls[1].resolve({items:[],nextCursor:null,hasMore:false});await filtered;assert.deepEqual(list.page.value?.items,[]);list.dispose();
+});
 
 test('cursor history re-fetches 1→2→3→2 and failed navigation does not advance',async()=>{
  const calls:(string|null)[]=[];let fail=false;const actor=shallowRef<string|null>('owner');const list=useMeetingList(async(_scope,cursor)=>{calls.push(cursor);if(fail)throw Error('offline');return {items:[],hasMore:true,nextCursor:cursor===null?'c2':cursor==='c2'?'c3':'c4'};},()=>actor.value);

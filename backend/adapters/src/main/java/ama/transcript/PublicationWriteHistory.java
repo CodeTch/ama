@@ -30,7 +30,7 @@ final class PublicationWriteHistory {
   for(var task:rows.get("durable_task")){
    require("MEETING".equals(task.get("subject_kind"))&&plan.meeting().equals(task.get("subject_id")),PROVENANCE_UNAVAILABLE);
    String kind=s(task,"task_type"),input=s(task,"input_kind");
-   String expected=switch(kind){case "TRANSCRIPT_IMPORT_V1"->"TRANSCRIPTION_INPUT";case "MINUTES_GENERATE_V1"->"GENERATION_INPUT";case "KNOWLEDGE_PUBLISH_V1"->"PUBLICATION";default->throw fail(CAPABILITY_UNAVAILABLE);};
+   String expected=switch(kind){case "TRANSCRIPT_IMPORT_V1"->"TRANSCRIPTION_INPUT";case "MINUTES_GENERATE_V1"->"GENERATION_INPUT";case "KNOWLEDGE_PUBLISH_V1"->"PUBLICATION";case "RECORDING_ARCHIVE_V1"->"RECORDING_ARCHIVE_INPUT";default->throw fail(CAPABILITY_UNAVAILABLE);};
    require(expected.equals(input),PROVENANCE_UNAVAILABLE);
    if("PUBLICATION".equals(input))require(publicationTasks.put(s(task,"id"),task)==null,PROVENANCE_UNAVAILABLE);
   }

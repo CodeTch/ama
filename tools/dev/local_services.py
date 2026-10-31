@@ -85,7 +85,7 @@ def prepare(runtime, state, java, env, classpath):
     pki=provision_pki(runtime,java,env,state['pkiPassword'])
     result=subprocess.run([str(java),'-cp',classpath,'ama.localdev.LocalProcessingSetup',str(runtime/'processing-archive'),origin,volume,relative,filesystem],env=env,capture_output=True,text=True,check=True,timeout=30)
     installation=json.loads(result.stdout)
-    properties(runtime/'file-service.properties',dict(root=root,mountpoint=mount,device=device,filesystem=filesystem,source=source,volumeId=volume,roleFile=runtime/'file-role',activeRole=state['owner'],backendId=installation['backendId'],serviceOrigin=origin,keyStore=pki/'server.p12',trustStore=pki/'trust.p12',writerIdentities='spiffe://ama/local-writer',bindAddress='127.0.0.1',port=state['filePort']))
+    properties(runtime/'file-service.properties',dict(root=root,mountpoint=mount,device=device,filesystem=filesystem,source=source,volumeId=volume,roleFile=runtime/'file-role',activeRole=state['owner'],backendId=installation['backendId'],serviceOrigin=origin,keyStore=pki/'server.p12',trustStore=pki/'trust.p12',writerIdentities='spiffe://ama/local-writer',bindAddress='127.0.0.1',port=state['filePort'],workerThreads=state.get('fileWorkerThreads',16)))
     values={'files.backends':'local','files.default':'local','files.part-size':262144,
         'files.local.type':'local','files.local.id':installation['backendId'],'files.local.revision':1,
         'files.local.service-origin':origin,'files.local.volume-id':volume,'files.local.relative-root':relative,

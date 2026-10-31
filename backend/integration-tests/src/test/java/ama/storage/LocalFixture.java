@@ -73,6 +73,10 @@ final class LocalFixture implements AutoCloseable {
     }
 
     LocalFileClient startServer(DurabilityHooks hooks) throws Exception {
+        return startServer(hooks,16);
+    }
+
+    LocalFileClient startServer(DurabilityHooks hooks,int workers) throws Exception {
         ensurePki();
         store = open(hooks);
         server =
@@ -84,7 +88,7 @@ final class LocalFixture implements AutoCloseable {
                                 "spiffe://ama/writer",
                                 InternalFileController.Role.WRITE,
                                 "spiffe://ama/reader",
-                                InternalFileController.Role.READ));
+                                InternalFileController.Role.READ),workers);
         server.start();
         uri = URI.create("https://localhost:" + server.port());
         return client("writer");

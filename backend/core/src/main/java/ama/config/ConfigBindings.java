@@ -115,7 +115,7 @@ public final class ConfigBindings {
      }
     }
    }
-   String engine=null;if(parser.version().equals("ama.media-documents.v1")||parser.version().equals("ama.media-documents.v2")){var parserWire=fields(node(parser.identity()).parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies");var parserDefinition=fields(parserWire.get("definition"),"contract","formats","engines");engine=text(fields(parserDefinition.get("engines"),"asr",parser.version().equals("ama.media-documents.v2")?"decoder":"pdfbox","modelManifestSha256",parser.version().equals("ama.media-documents.v2")?"subtitles":"poi").get("modelManifestSha256"));}active();return new ValidatedProcessingBinding(value,digest,codec,confirmation,processing,parser,canonical,parse,raw,engine);
+   String engine=null;if(parser.version().equals("ama.media-documents.v1")||parser.version().equals("ama.media-documents.v2")){var parserWire=fields(node(parser.identity()).parsed.wire(),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies");var parserDefinition=fields(parserWire.get("definition"),"contract","formats","engines");engine=text(fields(parserDefinition.get("engines"),parser.version().equals("ama.media-documents.v2")?new String[]{"asr","decoder","modelManifestSha256","subtitles","pdfbox","poi","xml"}:new String[]{"asr","modelManifestSha256","pdfbox","poi","xml"}).get("modelManifestSha256"));}active();return new ValidatedProcessingBinding(value,digest,codec,confirmation,processing,parser,canonical,parse,raw,engine);
   }
   public Artifact artifact(Ref ref){
    refMatches(ref);return new Artifact(ref.version(),ref.sha256(),node(ref.identity()).bytes);

@@ -298,6 +298,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/topics/memberships": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listOwnMeetingTopicMemberships"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/topics/{id}/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** @description Current private owner-only member count for the whole topic, independent of meeting list pages. Current topic revision must be rechecked before a new deletion. */
+        get: operations["readTopicSummary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/topics/assignments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["assignMeetingsTopicAtomically"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/topics": {
         parameters: {
             query?: never;
@@ -379,6 +430,116 @@ export interface paths {
         get: operations["listFeedback"];
         put?: never;
         post: operations["createFeedback"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/review-queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Current database PLATFORM_ADMIN role required; local acceptance does not claim a global corpus update. */
+        get: operations["listFeedbackReviewQueue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/summaries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Metadata-only overview with current private scope, server state filter and complete counts. Reviewing=true requires a current database administrator role. */
+        get: operations["readFeedbackOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/{feedbackId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                feedbackId: components["parameters"]["FeedbackId"];
+            };
+            cookie?: never;
+        };
+        /** @description Only the submitter or a current platform administrator may read the deliberately submitted feedback; this grants no access to source meeting content. */
+        get: operations["readFeedbackDetail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/{feedbackId}/supplements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                feedbackId: components["parameters"]["FeedbackId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Submitter and current source meeting READ required, including historical replay. The original comment stays immutable. NEEDS_MORE resubmits to PENDING. */
+        post: operations["supplementFeedback"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/{feedbackId}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                feedbackId: components["parameters"]["FeedbackId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Current database PLATFORM_ADMIN role required. Only a current PENDING submission can receive a local decision. */
+        post: operations["reviewFeedback"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/{feedbackId}/review/undo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                feedbackId: components["parameters"]["FeedbackId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Current administrator and exact current revision required. Restores PENDING and appends history, preserving all earlier receipts. */
+        post: operations["undoFeedbackReview"];
         delete?: never;
         options?: never;
         head?: never;
@@ -675,6 +836,63 @@ export interface paths {
         /** @description Fresh owner EDIT and mandatory accepted-result lookup before current CAS/exhaustion/source/archive/readiness. Semantic replay returns only the original committed result with fresh observation; it never reattaches historical pointers. Each new save creates a full immutable WORKING and clears confirmation/final pointers, advances meeting/subject once and records generation debt. */
         put: operations["saveTranscript"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/transcript/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        get: operations["searchTranscriptOccurrences"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/transcript/replacements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Exact selected occurrence IDs from a complete current WORKING search. Source coordinates and marks remain unchanged. Empty replacement removes only selected text; an entirely blank transcript is rejected. Uses the same fresh owner, CAS, accepted-result lookup, closed source graph, transition, audit and outbox transaction as saved transcript edits. */
+        post: operations["replaceTranscriptOccurrences"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/transcript/operations/{operationId}/undo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+                operationId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description sourceRevisionId must equal the path operationId and still be the current WORKING revision. Undo creates a new child copying its verified parent text/marks; a later edit conflicts. No historical row is overwritten. Uses the same fresh owner, CAS, accepted-result lookup, closed source graph, transition, audit and outbox transaction as saved transcript edits. */
+        post: operations["undoTranscriptOperation"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1948,6 +2166,279 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/library-context": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read current viewer-authorized verified publication location and metadata version
+         * @description Requires fresh current application READ, an exact ACTIVE mapping with compatible successful publication/attempt/execution/submission/final/original manifest, and current provider DOCUMENT_READ for this viewer. No query parameters are accepted. Metadata bounds precede original LONGTEXT transfer. Network, strict parsing, canonical hashing and static escaping happen outside database roots. Fresh final READ and identical lifecycle/mapping precede any buffered response. Payload8MiB/output32MiB ceilings and lower configured cumulative limits apply; no active HTML, Markdown links or remote resources. Cancellation, errors and timeouts abort the registered provider socket and stop further phases. Timeout30s; two simultaneous reads per process, no queue. Missing composition/provider access fails safely without receipt-capability fallback.
+         */
+        get: operations["getPublicationLibraryContext"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/recordings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["createRecording"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getRecording"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/ack": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getRecordingAck"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/writer-lease": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["claimRecordingWriter"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/writer-lease/renew": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["renewRecordingWriter"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/chunks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["putRecordingChunk"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/parts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["nextRecordingPart"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/pause": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["pauseRecording"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/resume": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["resumeRecording"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/finish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["finishRecording"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getRecordingArchive"];
+        put?: never;
+        post: operations["requestRecordingArchive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/audio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getRecordingAudio"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/recording-archives/{inputId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+                inputId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getRecordingArchiveInput"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/manifest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getRecordingManifest"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2042,7 +2533,7 @@ export interface components {
             /** Format: uuid */
             taskId: string;
             /** @enum {string} */
-            kind: "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1";
+            kind: "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1" | "RECORDING_ARCHIVE_V1";
             /** @enum {string} */
             state: "READY" | "RUNNING" | "RECONCILING" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "STALE";
             attemptToken: string;
@@ -2224,6 +2715,23 @@ export interface components {
         } | {
             expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
         });
+        Membership: {
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            topicId: string | null;
+        };
+        TopicSummary: {
+            /** Format: uuid */
+            id: string;
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+            meetingCount: number;
+        };
+        MembershipTarget: {
+            /** Format: uuid */
+            meetingId: string;
+            expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+        };
         Topic: {
             /** Format: uuid */
             id: string;
@@ -2243,6 +2751,55 @@ export interface components {
             /** @enum {string} */
             state: "PENDING" | "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
             revisionToken: components["schemas"]["ExpectedRevisionToken"];
+        };
+        FeedbackSummary: components["schemas"]["Feedback"] & {
+            /** Format: date-time */
+            submittedAt: string;
+            reviewReason: string | null;
+        };
+        FeedbackOverview: {
+            items: components["schemas"]["FeedbackSummary"][];
+            /** Format: uuid */
+            nextCursor: string | null;
+            counts: {
+                ALL: number;
+                PENDING: number;
+                ACCEPTED: number;
+                REJECTED: number;
+                NEEDS_MORE: number;
+            };
+        };
+        FeedbackHistory: {
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            action: "SUPPLEMENT" | "REVIEW" | "UNDO_REVIEW";
+            actorId: string;
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+            /** @enum {string} */
+            state: "PENDING" | "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
+            text: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        FeedbackDetail: {
+            feedback: components["schemas"]["Feedback"];
+            /** Format: date-time */
+            submittedAt: string;
+            reviewReason: string | null;
+            reviewedBy: string | null;
+            history: components["schemas"]["FeedbackHistory"][];
+        };
+        FeedbackReceipt: {
+            /** Format: uuid */
+            feedbackId: string;
+            /** Format: uuid */
+            historyId: string;
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+            /** @enum {string} */
+            state: "PENDING" | "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
+            /** @enum {string} */
+            operation: "SUPPLEMENT" | "REVIEW" | "UNDO_REVIEW";
         };
         UploadSummary: {
             /** Format: uuid */
@@ -2711,6 +3268,77 @@ export interface components {
                 traceId: string;
             };
         };
+        TranscriptOccurrence: {
+            occurrenceId: string;
+            /** Format: uuid */
+            segmentId: string;
+            startScalar: number;
+            endScalar: number;
+        };
+        /** @description Complete owner-authorized current WORKING snapshot search, Unicode scalar ranges. Opaque occurrence IDs bind revision, segment, original text, range and literal query. More than10000 matches fails explicitly instead of returning a partial document. */
+        TranscriptReplacementSearch: {
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            expectedRevisionToken: string;
+            query: string;
+            /** @constant */
+            complete: true;
+            occurrences: components["schemas"]["TranscriptOccurrence"][];
+        };
+        /** @description Exact selected occurrence IDs from a complete current WORKING search. Source coordinates and marks remain unchanged. Empty replacement removes only selected text; an entirely blank transcript is rejected. */
+        TranscriptReplacementRequest: {
+            expectedRevision?: components["schemas"]["ExpectedRevision"];
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            find: string;
+            replacement: string;
+            occurrenceIds: string[];
+        } & ({
+            expectedRevision: components["schemas"]["ExpectedRevision"];
+        } | {
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            expectedRevisionToken: string;
+        });
+        /** @description The immutable created WORKING revision is the operation ID; operationId equals revisionId. */
+        TranscriptOperationResult: {
+            /** @constant */
+            kind: "SAVED_REVISION";
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            revisionId: string;
+            /** Format: int64 */
+            historyRevision: number;
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            historyRevisionToken: string;
+            /** Format: uuid */
+            operationId: string;
+        };
+        /** @description Immutable actual result identity plus fresh current observation, never an invented historical accepted meeting revision. Exact replay returns the old result without attaching pointers. Repeated unchanged attached confirmation returns the same ID with no version increment; cleared pointer explicit new confirmation may reattach the same immutable ID with one increment. */
+        TranscriptOperationReceipt: {
+            result: components["schemas"]["TranscriptOperationResult"];
+            replayed: boolean;
+            resultIsCurrent: boolean;
+            observation: components["schemas"]["Observation"];
+        };
+        /** @description sourceRevisionId must equal the path operationId and still be the current WORKING revision. Undo creates a new child copying its verified parent text/marks; a later edit conflicts. No historical row is overwritten. */
+        TranscriptUndoRequest: {
+            expectedRevision?: components["schemas"]["ExpectedRevision"];
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+        } & ({
+            expectedRevision: components["schemas"]["ExpectedRevision"];
+        } | {
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            expectedRevisionToken: string;
+        });
         History: {
             items: {
                 /** Format: uuid */
@@ -2912,8 +3540,8 @@ export interface components {
             };
             /** @constant */
             scope: "FULL";
-            /** @constant */
-            materials: "EMPTY";
+            /** @enum {string} */
+            materials: "EMPTY" | "PINNED" | "PENDING";
             activeTaskIds: string[];
             eligible: boolean;
             reasons: string[];
@@ -4200,6 +4828,80 @@ export interface components {
             hasMore: boolean;
             nextCursor: string | null;
         };
+        PublicationLibraryContext: {
+            meetingId: components["schemas"]["Uuid"];
+            publicationId: components["schemas"]["Uuid"];
+            providerId: string;
+            storeInstanceId: string;
+            libraryId: string;
+            libraryName: string;
+            libraryDescription: string;
+            folderId: string;
+            folderPath: string[];
+            documentId: string;
+            payloadSha256: string;
+            versionToken: string;
+            documentUrl: string;
+        };
+        RecordingSession: {
+            /** Format: uuid */
+            sessionId: string;
+            /** Format: uuid */
+            partId: string;
+            writerEpoch: number;
+            backendId: string;
+        };
+        RecordingError: {
+            error: {
+                /** @enum {string} */
+                code: "RECORDING_CONFLICT" | "RECORDING_GAP" | "RECORDING_PAUSED" | "RECORDING_UNAVAILABLE" | "RECORDING_RATE_LIMITED" | "RECORDING_READ_ONLY" | "RECORDING_ARCHIVE_NOT_READY" | "RECORDING_ARCHIVE_CONFLICT" | "RECORDING_ARCHIVE_UNAVAILABLE" | "INVALID_RANGE" | "FORBIDDEN" | "INVALID_ARGUMENT" | "REQUEST_TOO_LARGE" | "UNAUTHENTICATED";
+                message: string;
+                /** Format: uuid */
+                traceId: string;
+            };
+        };
+        RecordingAck: {
+            highestContiguousSeq: number;
+            missingSeqs: number[];
+        };
+        RecordingLease: {
+            /** Format: uuid */
+            sessionId: string;
+            /** Format: uuid */
+            partId: string;
+            writerEpoch: number;
+            backendId: string;
+            /** Format: date-time */
+            expiresAt: string;
+        };
+        RecordingFinish: {
+            /** Format: uuid */
+            sessionId: string;
+            finalSequence: number;
+            /** Format: uuid */
+            archiveTaskId: string;
+        };
+        RecordingArchive: {
+            /** Format: uuid */
+            taskId: string;
+            /** @enum {string} */
+            state: "READY" | "RUNNING" | "RECONCILING" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "STALE";
+            available: boolean;
+            sampleCount: number;
+        };
+        RecordingManifest: {
+            /** Format: uuid */
+            sessionId: string;
+            paused: boolean;
+            finished: boolean;
+            parts: {
+                /** Format: uuid */
+                partId: string;
+                highestContiguousSeq: number;
+                highestReceivedSeq: number;
+                sampleCount: number;
+            }[];
+        };
     };
     responses: {
         /** @description Source network or listener is not authorized */
@@ -4317,6 +5019,15 @@ export interface components {
                 "application/json": components["schemas"]["BusinessError"];
             };
         };
+        /** @description Current identity, meeting gate, recording fence or bounded transport rejected the request. No acknowledgement is implied. */
+        Error: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["RecordingError"];
+            };
+        };
     };
     parameters: {
         /** @description Must exactly match the configured allowed origin */
@@ -4327,6 +5038,7 @@ export interface components {
         Key: string;
         /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
         Id: string;
+        FeedbackId: string;
         Limit: number;
         /** @description Strict greater-than UUID keyset cursor. Refresh from first page after changes; this is not a snapshot. */
         After: string;
@@ -4591,7 +5303,7 @@ export interface operations {
     listWorkspaceTasks: {
         parameters: {
             query?: {
-                kind?: "ALL" | "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1";
+                kind?: "ALL" | "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1" | "RECORDING_ARCHIVE_V1";
                 limit?: number;
                 cursor?: string;
             };
@@ -4690,6 +5402,8 @@ export interface operations {
                 stages?: string;
                 /** @description Comma separated unique category identifiers, at most 32 */
                 categories?: string;
+                /** @description Personal topic UUID or __none; requires owned scope and is bound into the signed cursor */
+                topic?: string;
                 from?: string;
                 to?: string;
             };
@@ -4932,6 +5646,80 @@ export interface operations {
             503: components["responses"]["MeetingUnavailable"];
         };
     };
+    listOwnMeetingTopicMemberships: {
+        parameters: {
+            query: {
+                /** @description One to fifty unique comma-separated owned meeting UUIDs */
+                meetingIds: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current authorized personal topic membership in requested order */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"][];
+                };
+            };
+        };
+    };
+    readTopicSummary: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current topic membership count */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TopicSummary"];
+                };
+            };
+        };
+    };
+    assignMeetingsTopicAtomically: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    topicId: string | null;
+                    meetings: components["schemas"]["MembershipTarget"][];
+                };
+            };
+        };
+        responses: {
+            /** @description All authorized meeting memberships changed atomically */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     listTopics: {
         parameters: {
             query?: never;
@@ -5049,7 +5837,10 @@ export interface operations {
     assignMeetingTopic: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
             path: {
                 id: string;
             };
@@ -5077,14 +5868,23 @@ export interface operations {
     removeMeetingTopic: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
             path: {
                 id: string;
                 topic: string;
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+                };
+            };
+        };
         responses: {
             /** @description Removed */
             204: {
@@ -5097,7 +5897,10 @@ export interface operations {
     };
     listFeedback: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Last feedback ID from this actor's preceding page */
+                cursor?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -5133,7 +5936,8 @@ export interface operations {
                 "application/json": {
                     /** Format: uuid */
                     meetingId: string;
-                    category: string;
+                    /** @enum {string} */
+                    category: "WORDING" | "LABEL" | "ACTION_OWNER";
                     comment: string;
                 };
             };
@@ -5146,6 +5950,177 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Feedback"];
+                };
+            };
+        };
+    };
+    listFeedbackReviewQueue: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: "20";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private review queue */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["Feedback"][];
+                        /** Format: uuid */
+                        nextCursor: string | null;
+                    };
+                };
+            };
+        };
+    };
+    readFeedbackOverview: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                state?: "PENDING" | "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
+                reviewing?: "true" | "false";
+                limit?: "20";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Feedback overview */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedbackOverview"];
+                };
+            };
+        };
+    };
+    readFeedbackDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                feedbackId: components["parameters"]["FeedbackId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private submitted feedback and append-only history */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedbackDetail"];
+                };
+            };
+        };
+    };
+    supplementFeedback: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                feedbackId: components["parameters"]["FeedbackId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+                    text: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Original immutable history receipt */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedbackReceipt"];
+                };
+            };
+        };
+    };
+    reviewFeedback: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                feedbackId: components["parameters"]["FeedbackId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+                    /** @enum {string} */
+                    decision: "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Local decision original receipt */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedbackReceipt"];
+                };
+            };
+        };
+    };
+    undoFeedbackReview: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                feedbackId: components["parameters"]["FeedbackId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+                };
+            };
+        };
+        responses: {
+            /** @description Undo original receipt */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedbackReceipt"];
                 };
             };
         };
@@ -6500,6 +7475,368 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Receipt"];
+                };
+            };
+            /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
+            400: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or revoked session. */
+            401: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh meeting permission denied. Admin role grants no implicit content access. */
+            403: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Exact same-meeting selected entity missing after authorization. */
+            404: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
+            409: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Stable request transport envelope exceeded. */
+            413: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unsupported, blank or incomplete segment/mark input. */
+            422: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
+            503: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    searchTranscriptOccurrences: {
+        parameters: {
+            query: {
+                sourceRevisionId: string;
+                query: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized complete result. */
+            200: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptReplacementSearch"];
+                };
+            };
+            /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
+            400: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or revoked session. */
+            401: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh meeting permission denied. Admin role grants no implicit content access. */
+            403: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Exact same-meeting selected entity missing after authorization. */
+            404: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
+            409: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Stable request transport envelope exceeded. */
+            413: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unsupported, blank or incomplete segment/mark input. */
+            422: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
+            503: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    replaceTranscriptOccurrences: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TranscriptReplacementRequest"];
+            };
+        };
+        responses: {
+            /** @description Fresh authorized complete result. */
+            200: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptOperationReceipt"];
+                };
+            };
+            /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
+            400: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or revoked session. */
+            401: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh meeting permission denied. Admin role grants no implicit content access. */
+            403: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Exact same-meeting selected entity missing after authorization. */
+            404: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
+            409: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Stable request transport envelope exceeded. */
+            413: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unsupported, blank or incomplete segment/mark input. */
+            422: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
+            503: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    undoTranscriptOperation: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+                operationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TranscriptUndoRequest"];
+            };
+        };
+        responses: {
+            /** @description Fresh authorized complete result. */
+            200: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptOperationReceipt"];
                 };
             };
             /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
@@ -13568,6 +14905,646 @@ export interface operations {
                     "application/json": components["schemas"]["Error"];
                 };
             };
+        };
+    };
+    getPublicationLibraryContext: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                meetingId: components["schemas"]["Uuid"];
+                /** @description Must belong to the requested meeting; ID possession grants no permission. */
+                publicationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current provider READ metadata; versionToken hashes the exact controlled location metadata, not a company version claim */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicationLibraryContext"];
+                };
+            };
+            /** @description Invalid request/token/cursor or unequal dual representations. */
+            400: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session missing/expired. */
+            401: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Current application READ or current provider document READ denied; no document content. */
+            403: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Requested same-meeting resource unavailable. */
+            404: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request/read budget exceeded; no truncation. */
+            413: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
+            503: {
+                headers: {
+                    /** @description Fresh private response; no caching. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    createRecording: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingSession"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    getRecording: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingSession"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    getRecordingAck: {
+        parameters: {
+            query: {
+                partId: string;
+            };
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingAck"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    claimRecordingWriter: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedEpoch: number;
+                    /** Format: uuid */
+                    collectorId: string;
+                    /** Format: uuid */
+                    requestId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingLease"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    renewRecordingWriter: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedEpoch: number;
+                    /** Format: uuid */
+                    collectorId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingLease"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    putRecordingChunk: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-Writer-Epoch": number;
+                "X-Collector-Id": string;
+                "X-Part-Id": string;
+                "X-Seq": number;
+                "X-Sample-Start": number;
+                "X-Sample-Count": number;
+                "X-Sha256": string;
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/octet-stream": string;
+            };
+        };
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingAck"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    nextRecordingPart: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-Expected-Epoch": number;
+                "X-Collector-Id": string;
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingSession"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    pauseRecording: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-Expected-Epoch": number;
+                "X-Collector-Id": string;
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    resumeRecording: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-Expected-Epoch": number;
+                "X-Collector-Id": string;
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    finishRecording: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-Expected-Epoch": number;
+                /** @description Required while capture is unfinished. Identical sealed finish replay is separately authorized. */
+                "X-Collector-Id"?: string;
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingFinish"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    getRecordingArchive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingArchive"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    requestRecordingArchive: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingArchive"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    getRecordingAudio: {
+        parameters: {
+            query?: never;
+            header?: {
+                Range?: string;
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Full registered PCM16 mono 16kHz WAV */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "audio/wav": string;
+                };
+            };
+            /** @description Single authenticated byte range */
+            206: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "audio/wav": string;
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            416: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    getRecordingArchiveInput: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+                inputId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingArchive"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    getRecordingManifest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingManifest"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
 }

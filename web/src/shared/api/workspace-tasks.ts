@@ -4,13 +4,13 @@ import {ApiError} from './client';
 import {revisionToken} from './intent-contract';
 export type WorkspaceTaskPage=components['schemas']['WorkspaceTaskPage'];
 export type WorkspaceTaskKind=components['schemas']['WorkspaceTaskItem']['kind']|'ALL';
-const kinds=['TRANSCRIPT_IMPORT_V1','MINUTES_GENERATE_V1','KNOWLEDGE_PUBLISH_V1'];
+const kinds=['TRANSCRIPT_IMPORT_V1','MINUTES_GENERATE_V1','KNOWLEDGE_PUBLISH_V1','RECORDING_ARCHIVE_V1'];
 const uuid=(value:unknown):value is string=>typeof value==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(value);
 const cursor=(value:unknown):value is string=>typeof value==='string'&&/^[A-Za-z0-9_-]{1,1536}$/.test(value);
 function shape(value:unknown,keys:string):value is Record<string,unknown>{return typeof value==='object'&&value!==null&&!Array.isArray(value)&&Object.keys(value).sort().join(',')===keys;}
 function item(value:unknown,meeting:string,kind:WorkspaceTaskKind):value is components['schemas']['WorkspaceTaskItem']{
  if(!shape(value,'attemptToken,businessRevisionToken,detailPath,inputId,kind,state,taskId')||!uuid(value.taskId)||!uuid(value.inputId)||typeof value.kind!=='string'||!kinds.includes(value.kind)||kind!=='ALL'&&value.kind!==kind||typeof value.state!=='string'||!['READY','RUNNING','RECONCILING','SUCCEEDED','FAILED','CANCELLED','STALE'].includes(value.state)||typeof value.attemptToken!=='string'||!(/^[0-3]$/).test(value.attemptToken)||!revisionToken(value.businessRevisionToken))return false;
- const suffix=value.kind==='TRANSCRIPT_IMPORT_V1'?`processing-tasks/${value.taskId}`:value.kind==='MINUTES_GENERATE_V1'?`minutes/generation-tasks/${value.taskId}`:`publications/${value.inputId}`;
+ const suffix=value.kind==='TRANSCRIPT_IMPORT_V1'?`processing-tasks/${value.taskId}`:value.kind==='MINUTES_GENERATE_V1'?`minutes/generation-tasks/${value.taskId}`:value.kind==='RECORDING_ARCHIVE_V1'?`recording-archives/${value.inputId}`:`publications/${value.inputId}`;
  return value.detailPath===`/api/v1/meetings/${meeting}/${suffix}`;
 }
 export function workspaceTaskPage(value:unknown,meeting:string,kind:WorkspaceTaskKind):value is WorkspaceTaskPage{

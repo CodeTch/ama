@@ -4,7 +4,7 @@ import {ApiError} from './client';
 import {revisionToken} from './intent-contract';
 export type MeetingPage=components['schemas']['MeetingPage'];
 export type MeetingScope='owned'|'joined';
-export type MeetingFilters={q?:string;stages?:string[];categories?:string[];from?:string;to?:string};
+export type MeetingFilters={q?:string;stages?:string[];categories?:string[];from?:string;to?:string;topic?:string};
 function shape(value:unknown,keys:string):value is Record<string,unknown>{return typeof value==='object'&&value!==null&&!Array.isArray(value)&&Object.keys(value).sort().join(',')===keys;}
 const uuid=(v:unknown)=>typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(v);
 const mutation=(v:unknown):v is components['schemas']['Mutation']=>typeof v==='object'&&v!==null&&!Array.isArray(v)&&Object.keys(v).sort().join(',')==='id,revision,revisionToken'&&uuid((v as any).id)&&typeof (v as any).revision==='number'&&Number.isInteger((v as any).revision)&&revisionToken((v as any).revisionToken);
@@ -22,7 +22,7 @@ function page(value:unknown):value is MeetingPage {
 }
 export function createMeetingsApi(client:ReturnType<typeof createBusinessClient>) {
  return {async list(scope:MeetingScope,cursor:string|null,signal:AbortSignal,filters:MeetingFilters={}):Promise<MeetingPage>{
-  if(!['owned','joined'].includes(scope))throw new TypeError('Invalid list scope');const query=new URLSearchParams({scope,limit:'10'});if(cursor!==null)query.set('cursor',cursor);if(filters.q?.trim())query.set('q',filters.q.trim());if(filters.stages?.length)query.set('stages',[...filters.stages].sort().join(','));if(filters.categories?.length)query.set('categories',[...filters.categories].sort().join(','));if(filters.from)query.set('from',filters.from);if(filters.to)query.set('to',filters.to);
+  if(!['owned','joined'].includes(scope))throw new TypeError('Invalid list scope');const query=new URLSearchParams({scope,limit:'10'});if(cursor!==null)query.set('cursor',cursor);if(filters.q?.trim())query.set('q',filters.q.trim());if(filters.stages?.length)query.set('stages',[...filters.stages].sort().join(','));if(filters.categories?.length)query.set('categories',[...filters.categories].sort().join(','));if(filters.from)query.set('from',filters.from);if(filters.to)query.set('to',filters.to);if(filters.topic){if(filters.topic!=='__none'&&!uuid(filters.topic))throw new TypeError('Invalid topic filter');query.set('topic',filters.topic);}
   const result=await client.json<unknown>('/api/v1/meetings?'+query,{signal});if(!page(result))throw new ApiError('response',200,'会议列表响应不可用，请重新加载。');
   result.items.forEach(row=>Object.freeze(row));Object.freeze(result.items);return Object.freeze(result);
  },async remove(id:string,expectedRevisionToken:string,signal:AbortSignal):Promise<components['schemas']['Mutation']>{

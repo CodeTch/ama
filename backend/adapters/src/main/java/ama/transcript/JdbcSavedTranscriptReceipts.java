@@ -18,6 +18,7 @@ public final class JdbcSavedTranscriptReceipts {
  static Identity identity(Actor actor,String meeting,String key,Command command){
   JdbcProcessingIntake.key(key);var digest=new Digest();digest.add("saved-transcript-request-v1");digest.add(command.operation().name());digest.add(Long.toString(command.expectedRevision()));digest.add(command.sourceRevisionId());digest.add(Integer.toString(command.segments().size()));
   for(var segment:command.segments()){digest.add(segment.segmentId());digest.add(segment.body());digest.add(Integer.toString(segment.marks().size()));for(var mark:segment.marks())digest.add(mark.name());}
+  if(command.operation()==Operation.REPLACE){var replacement=command.replacement();digest.add("saved-transcript-replacement-v1");digest.add(replacement.find());digest.add(replacement.replacement());digest.add(Integer.toString(replacement.occurrenceIds().size()));for(var occurrence:replacement.occurrenceIds())digest.add(occurrence);}
   String operation="TRANSCRIPT_"+command.operation().name();return new Identity(JdbcProcessingIntake.digest(actor.enterpriseId(),meeting,operation,key),JdbcProcessingIntake.digest(key),digest.finish(),operation);
  }
  public Optional<Map<String,Object>> lookup(Actor actor,String meeting,String key,Command command){return lookup(actor,meeting,identity(actor,meeting,key,command),command);}
@@ -46,6 +47,7 @@ public final class JdbcSavedTranscriptReceipts {
    if(rows.size()!=1)throw unavailable();var r=rows.getFirst();long revision=((Number)r.get("revision")).longValue();
    if(!"WORKING".equals(r.get("kind"))||r.get("producer_task_id")!=null||!command.sourceRevisionId().equals(r.get("parent_id"))||revision!=command.expectedRevision()+1)throw unavailable();
    result.put("kind","SAVED_REVISION");result.put("meetingId",meeting);result.put("revisionId",stored.result());result.put("historyRevision",revision);result.put("historyRevisionToken",Long.toString(revision));
+   if(command.operation()==Operation.REPLACE||command.operation()==Operation.UNDO)result.put("operationId",stored.result());
   }
   var roots=j.queryForList("SELECT revision,access_revision,transcript_revision_id,transcript_confirmation_id FROM meeting WHERE id=?",meeting);if(roots.size()!=1)throw unavailable();var root=roots.getFirst();
   return Map.of("result",Collections.unmodifiableMap(result),"replayed",replayed,"resultIsCurrent",stored.result().equals(root.get(confirm?"transcript_confirmation_id":"transcript_revision_id")),"observation",JdbcSavedTranscripts.observation(root));

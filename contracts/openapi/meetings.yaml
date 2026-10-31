@@ -26,6 +26,10 @@ collection:
         in: query
         description: Comma separated unique category identifiers, at most 32
         schema: {type: string, maxLength: 2079}
+      - name: topic
+        in: query
+        description: Personal topic UUID or __none; requires owned scope and is bound into the signed cursor
+        schema: {type: string, maxLength: 36}
       - name: from
         in: query
         schema: {type: string, format: date}

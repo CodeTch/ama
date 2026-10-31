@@ -1,0 +1,112 @@
+{
+  "locatorRows": [
+    {
+      "id": "00000000-0000-0000-0000-000000000014",
+      "meeting_id": "00000000-0000-0000-0000-000000000001",
+      "kind": "PDF_PAGE",
+      "transcript_revision_id": null,
+      "segment_id": null,
+      "file_id": "00000000-0000-0000-0000-000000000031",
+      "material_revision_id": null,
+      "page_no": 1,
+      "paragraph_no": null,
+      "section_path": null,
+      "start_ms": null,
+      "end_ms": null
+    }
+  ],
+  "sourceUsages": [
+    {
+      "usage": {
+        "kind": "DETECTION",
+        "detectionId": "00000000-0000-0000-0000-000000000019",
+        "locatorId": "00000000-0000-0000-0000-000000000014"
+      },
+      "locatorId": "00000000-0000-0000-0000-000000000014",
+      "origin": {
+        "kind": "GENERATION_INPUT",
+        "inputId": "00000000-0000-0000-0000-000000000008",
+        "inputFingerprint": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "role": "BACKGROUND",
+      "sourceVersion": {
+        "kind": "FILE",
+        "fileId": "00000000-0000-0000-0000-000000000031",
+        "materialRevisionId": "00000000-0000-0000-0000-000000000030",
+        "parsedDocumentId": "00000000-0000-0000-0000-000000000034",
+        "parserVersion": "ama.material-pdf.v1",
+        "parsedTextSha256": "7692c3ad3540bb803c020b3aee66cd8887123234ea0c6e7143c0add73ff431ed"
+      },
+      "sourceContentHash": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "usage": {
+        "kind": "DETECTION",
+        "detectionId": "00000000-0000-0000-0000-000000000020",
+        "locatorId": "00000000-0000-0000-0000-000000000014"
+      },
+      "locatorId": "00000000-0000-0000-0000-000000000014",
+      "origin": {
+        "kind": "GENERATION_INPUT",
+        "inputId": "00000000-0000-0000-0000-000000000018",
+        "inputFingerprint": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "role": "BACKGROUND",
+      "sourceVersion": {
+        "kind": "FILE",
+        "fileId": "00000000-0000-0000-0000-000000000031",
+        "materialRevisionId": "00000000-0000-0000-0000-000000000040",
+        "parsedDocumentId": "00000000-0000-0000-0000-000000000036",
+        "parserVersion": "ama.material-pdf.v1",
+        "parsedTextSha256": "3fc4ccfe745870e2c0d99f71f30ff0656c8dedd41cc1d7d3d376b0dbe685e2f3"
+      },
+      "sourceContentHash": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "usage": {
+        "kind": "BACKGROUND",
+        "noteId": "00000000-0000-0000-0000-000000000016",
+        "locatorId": "00000000-0000-0000-0000-000000000014"
+      },
+      "locatorId": "00000000-0000-0000-0000-000000000014",
+      "origin": {
+        "kind": "GENERATION_INPUT",
+        "inputId": "00000000-0000-0000-0000-000000000008",
+        "inputFingerprint": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "role": "BACKGROUND",
+      "sourceVersion": {
+        "kind": "FILE",
+        "fileId": "00000000-0000-0000-0000-000000000031",
+        "materialRevisionId": "00000000-0000-0000-0000-000000000030",
+        "parsedDocumentId": "00000000-0000-0000-0000-000000000034",
+        "parserVersion": "ama.material-pdf.v1",
+        "parsedTextSha256": "7692c3ad3540bb803c020b3aee66cd8887123234ea0c6e7143c0add73ff431ed"
+      },
+      "sourceContentHash": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "usage": {
+        "kind": "BACKGROUND",
+        "noteId": "00000000-0000-0000-0000-000000000017",
+        "locatorId": "00000000-0000-0000-0000-000000000014"
+      },
+      "locatorId": "00000000-0000-0000-0000-000000000014",
+      "origin": {
+        "kind": "GENERATION_INPUT",
+        "inputId": "00000000-0000-0000-0000-000000000018",
+        "inputFingerprint": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "role": "BACKGROUND",
+      "sourceVersion": {
+        "kind": "FILE",
+        "fileId": "00000000-0000-0000-0000-000000000031",
+        "materialRevisionId": "00000000-0000-0000-0000-000000000040",
+        "parsedDocumentId": "00000000-0000-0000-0000-000000000036",
+        "parserVersion": "ama.material-pdf.v1",
+        "parsedTextSha256": "3fc4ccfe745870e2c0d99f71f30ff0656c8dedd41cc1d7d3d376b0dbe685e2f3"
+      },
+      "sourceContentHash": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ]
+}

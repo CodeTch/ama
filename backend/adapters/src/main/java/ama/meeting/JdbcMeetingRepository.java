@@ -164,6 +164,9 @@ public final class JdbcMeetingRepository implements MeetingRepository {
                     ||j.queryForObject("SELECT COUNT(*) FROM upload_session WHERE meeting_id=? AND state IN ('OPEN','FINALIZING')",Long.class,id)>0)throw new Conflict();
             if(root.revision()==Long.MAX_VALUE-1||root.cancelEpoch()==Long.MAX_VALUE-1)throw new RevisionExhausted();
             long revision=root.revision()+1,epoch=root.cancelEpoch()+1;
+            // Personal grouping is a current derived association. Retire it in the same
+            // owner-authorized deletion, so a deleted meeting cannot strand an empty topic.
+            j.update("DELETE FROM meeting_topic WHERE meeting_id=?",id);
             j.update("UPDATE meeting SET lifecycle='DELETED',revision=?,cancel_epoch=?,updated_at=UTC_TIMESTAMP(6) WHERE id=?",revision,epoch,id);
             fences.advance(held.subject,revision,epoch,true);
             complete(replay,id,200);

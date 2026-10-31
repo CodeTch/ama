@@ -1,10 +1,14 @@
-> **最新状态：用户要求本批收束后暂停。** 导入会议18张历史像素比对通过后已扩展真实功能，目前是未集成半成品，NOT ACCEPTED。统一[接续文档](../../development/import-resume-2026-10-29.md)列明已完成/未完/失败/恢复顺序。仅“继续任务”后恢复，不按旧首页或B调度重做。
+> **2026-10-30 当前状态：** 后续工作按 [B 阶段后续总计划](../../superpowers/plans/2026-10-30-ama-b-followup-pixel-crud-cas.md)、[范围设计](../../superpowers/specs/2026-10-30-ama-b-followup-pixel-crud-cas-design.md) 和 [页面/CRUD/联调矩阵](b-followup-page-crud-matrix-2026-10-30.md) 执行。总状态 `NOT ACCEPTED`；语音业务标记 `DEFERRED_VOICE`，非语音页面和 CRUD 不再延后。
 
-> **最新用户指令：逐页1:1、像素级复刻。** 旧“不做像素级比对”规则已撤销；既有报告仅证明其原范围，新像素矩阵尚未通过。当前计划：`docs/superpowers/plans/2026-10-29-pixel-perfect-prototype.md`。
+> **当前验收门：** 所有页面静态/交互状态逐页像素比对；所有非语音可见 CRUD 真实落库并回读；固定端口 CAS harness 真实联调。旧报告只证明其原范围，不能替代新矩阵。
 
 # 原型全页面与全功能复刻验证记录（执行中）
 
-当前结论：**NOT ACCEPTED**。用户已撤销旧“未来功能只做页面”的豁免，TXT 只是多格式功能不应遗漏的例子。当前唯一标准为 [全量原型验收标准](prototype-parity-2026-10-29.md)，计划为 `docs/superpowers/plans/2026-10-29-full-prototype-completion.md`。不做像素级比对；布局、组件、固定文案、样式、可达功能均逐项核对。
+当前结论：**NOT ACCEPTED**。用户已要求逐页像素级复刻，并要求除语音外的所有可见增删改查真实实装。当前唯一标准为 [修订后的原型验收标准](prototype-parity-2026-10-29.md)，计划为 [B 阶段后续总计划](../../superpowers/plans/2026-10-30-ama-b-followup-pixel-crud-cas.md)。语音页面只接受像素静态/延期状态，不接受语音业务成功。
+
+## 历史范围证据（不提升 2026-10-30 新范围状态）
+
+下表及后文记录了 2026-10-29 旧范围取得的文档、音视频、回听和录音观察。它们保留用于审计和回归背景；本轮语音业务已按新设计标记 `DEFERRED_VOICE`，旧媒体成功不能替代当前页面静态/延期像素门，也不能把新范围的非语音 CRUD 记为通过。
 
 | 当前项目 | 真实结果 | 仍未完成 |
 |---|---|---|

@@ -65,7 +65,7 @@ final class WorkspaceTaskScan {
   try{
    uuid(meeting);var position=new Position(created,id);
    String expectedPool,expectedInput;
-   switch(type){case "TRANSCRIPT_IMPORT_V1" -> {expectedPool="TRANSCRIPT_IMPORT";expectedInput="TRANSCRIPTION_INPUT";}case "MINUTES_GENERATE_V1" -> {expectedPool="MINUTES_GENERATE";expectedInput="GENERATION_INPUT";}case "KNOWLEDGE_PUBLISH_V1" -> {expectedPool="KNOWLEDGE_PUBLISH";expectedInput="PUBLICATION";}default -> throw new IllegalArgumentException();}
+   switch(type){case "TRANSCRIPT_IMPORT_V1" -> {expectedPool="TRANSCRIPT_IMPORT";expectedInput="TRANSCRIPTION_INPUT";}case "MINUTES_GENERATE_V1" -> {expectedPool="MINUTES_GENERATE";expectedInput="GENERATION_INPUT";}case "KNOWLEDGE_PUBLISH_V1" -> {expectedPool="KNOWLEDGE_PUBLISH";expectedInput="PUBLICATION";}case "RECORDING_ARCHIVE_V1" -> {expectedPool="RECORDING_ARCHIVE";expectedInput="RECORDING_ARCHIVE_INPUT";}default -> throw new IllegalArgumentException();}
    if(!"MEETING".equals(subjectKind)||!expectedPool.equals(pool)||!expectedInput.equals(inputKind)||!STATES.contains(state)||priority!=0||max!=3||version<0||version==Long.MAX_VALUE||epoch<0||epoch==Long.MAX_VALUE||attempt<0||attempt>max)throw new IllegalArgumentException();
    return new Metadata(id,new TaskSpec(type,pool,new SubjectRef(subjectKind,meeting),producer,new TypedRef(inputKind,input),fingerprint,version,priority,epoch,max),state,attempt,position);
   }catch(RuntimeException e){throw new WorkspaceReadBudget.Unavailable(e);}

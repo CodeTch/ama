@@ -1,10 +1,14 @@
-> **2026-10-29 用户反馈后重新打开验收：当前界面/功能严格原型一致性未通过。** 先前M1-B结论仅保留后端及受控流程的原限定证据，不代表完整原型交付。正在按原始HTML更新标准、重新测试并修改；以下已通过记录为此前范围的历史，不覆盖本次返工。
+> **2026-10-30 当前接续：** B 阶段后续统一执行 [逐页像素、非语音 CRUD 与 CAS 联调计划](../superpowers/plans/2026-10-30-ama-b-followup-pixel-crud-cas.md)，页面/CRUD 台账见 [矩阵](../acceptance/b/b-followup-page-crud-matrix-2026-10-30.md)。所有可达页面逐页 1:1 像素复刻；除语音相关业务外的可见增删改查必须真实实装；录音、音视频、ASR、播放、说话人识别和依赖音频纠错标记 `DEFERRED_VOICE`，只做页面静态/延期状态。
 
-# 当前状态 — 2026-10-29 R2 正式本地 B 已完成，停在阶段边界
+> CAS、会话、材料/导入相关请求使用 `/home/tanren/ama-integration-harness`（Windows/WSL：`\\wsl.localhost\Ubuntu-24.04\home\tanren\ama-integration-harness`）固定 HTTP `8792`、SMTP `2525` 联调；harness 只作可重复模拟器，实际请求证明缺口时才同步修复，固定端口不改。当前总状态 `NOT ACCEPTED`。
 
-M1-Demo与正式本地M1-B均已ACCEPTED。原BASE `34cb226aefe99c67d3681af68d748b0aeea4e073` 到 HEAD `4b68213…` 加V2工作树1077实现文件已独立APPROVE，无开放P2+。D失败轮预算、名单LONGTEXT及Unicode ID计量P2均因果修正/独立关闭；holder/全集合/锁序、intake后写rollback、generation真实F竞态、读中撤权、native三切点、组件持久恢复和两类capacity1饱和均已按实际范围采纳。最终545Java/249Web、type/build/API/OpenAPI及lifecycle10/provider2通过，原型HTML与共享shell golden未改。
+> **2026-10-29 历史记录：** 先前 M1-B 结论仅保留后端及受控流程的原限定证据，不代表完整原型交付；下方历史内容不覆盖 2026-10-30 新范围。
 
-[正式本地B验收记录](../acceptance/b/formal-local-b-2026-10-29.md)与[B唯一义务表](../acceptance/b/summary.md)为当前结论。PLATFORM-B、最后F、legacy positive UNQUALIFIED、IMM永久PARTIAL及历史UNKNOWN/56.85s claim限定保持。**没有当前B实现待办；不自动进入C/D/E/F，不重复已完成测试或旧B-L5窗口。** 后续新阶段需用户明确提出。
+# 历史状态 — 2026-10-29 R2 正式本地 B 记录（当前入口见顶部）
+
+历史 R2 记录中的 M1-Demo 与本地 M1-B 曾按限定范围标记 `ACCEPTED`。该结论只覆盖当时的单 MySQL、本地文件、受控模型/知识库和原页面范围，不覆盖 2026-10-30 新增的逐页像素、非语音 CRUD 与 CAS harness 联调门。
+
+[正式本地B验收记录](../acceptance/b/formal-local-b-2026-10-29.md)与[B唯一义务表](../acceptance/b/summary.md)保留该历史结论。PLATFORM-B、最后F、legacy positive UNQUALIFIED、IMM永久PARTIAL及历史UNKNOWN/56.85s claim限定保持；“没有当前 B 实现待办”只描述 2026-10-29 R2 快照，不适用于顶部 2026-10-30 后续范围。
 
 工作树 `/home/tanren/ama/.worktrees/phase-b-completion` 保留可审阅，六服务正常；没有Git提交/合并/推送。W=`.superpowers/sdd/2026-10-23-ama-phase-b-remaining` 的`current-state.json.bqual_final_20261029`与`RESUME_LATEST.md`末尾记录最终采用。下方全部旧阶段/未完成表述作为历史保留，不覆盖此当前状态。
 

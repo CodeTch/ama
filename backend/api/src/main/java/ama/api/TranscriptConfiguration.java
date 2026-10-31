@@ -13,12 +13,15 @@ import java.util.*;
 import org.springframework.context.*;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Configuration(proxyBeanMethods=false) class TranscriptConfiguration {
+ private static final Logger LOG=LoggerFactory.getLogger(TranscriptConfiguration.class);
  record Runtime(JdbcSavedTranscripts service,CorrectionInstallation correction,Map<String,Object> qualification) {}
  @Bean JdbcSavedTranscriptReceipts savedTranscriptReceipts(DataSource source,TransactionRunner tx,MeetingAccess access){return new JdbcSavedTranscriptReceipts(source,tx,access);}
  @Bean Runtime transcriptRuntime(ProcessingConfiguration.Runtime processing,DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,Environment env,ApplicationContext context){
   if(!env.getProperty("transcript.enabled",Boolean.class,false))return new Runtime(null,null,Map.of());
-  try{return assemble(processing,source,fences,outbox,env,context);}catch(IllegalArgumentException|IllegalStateException|ama.contract.MinutesContracts.Failure invalid){return new Runtime(null,null,Map.of());}
+  try{return assemble(processing,source,fences,outbox,env,context);}catch(IllegalArgumentException|IllegalStateException|ama.contract.MinutesContracts.Failure invalid){LOG.warn("Saved transcript runtime unavailable; keeping explicit unavailable state: {}",invalid.toString());return new Runtime(null,null,Map.of());}
  }
  static Runtime assemble(ProcessingConfiguration.Runtime processing,DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,Environment env,ApplicationContext context){
   if(processing.components()==null)throw new IllegalStateException("Shared processing authority unavailable");

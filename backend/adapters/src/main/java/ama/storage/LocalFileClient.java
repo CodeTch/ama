@@ -158,6 +158,16 @@ public final class LocalFileClient implements FileStoragePort {
                         null);
     }
 
+    @Override public InputStream readSequence(ReadSequence sequence) {
+        Objects.requireNonNull(sequence);
+        try {
+            byte[] body=JSON.writeValueAsBytes(sequence);
+            if(body.length>ReadSequence.MAX_WIRE_BYTES)throw new StorageException(ErrorCode.INVALID_ARGUMENT);
+            var metadata=request(sequence.chunks().getFirst().key(),null,sequence.size(),null,null,null,null);
+            return ChunkSequenceStream.verify(send("read-sequence-v1",metadata,new ByteArrayInputStream(body)),sequence);
+        }catch(IOException failure){throw unavailable();}
+    }
+
     @Override
     public void delete(StorageKey key) {
         empty("delete", request(key, null, null, null, null, null, null));

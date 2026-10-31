@@ -17,18 +17,23 @@ public final class JdbcWebMeetingProjectionReader {
   Objects.requireNonNull(filter);
   if(TransactionSynchronizationManager.isActualTransactionActive())throw new WorkspaceReadBudget.Unavailable();
   if(!Set.of("owned","joined").contains(scope)||limit<1||limit>50)throw new IllegalArgumentException("Invalid list request");
+  if(filter.topic()!=null&&!scope.equals("owned"))throw new IllegalArgumentException("Personal topics require owned scope");
   var budget=new WorkspaceReadBudget(limits,()->Thread.currentThread().isInterrupted());String cursorScope="meeting-list-v2/"+scope+"/"+filter.cursorKey();
   budget.reserve(2,4,4096,2048,2048,4,true);String decoded=cursor==null?null:cursors.decode(actor.enterpriseId(),cursorScope,cursor);var after=decoded==null?null:MeetingListScan.Position.parse(decoded);
   try {
-   var candidates=tx.required(()->{budget.check();access.tryLockIdentities(actor,List.of(),false).orElseThrow(MeetingAccess.AccessDeniedException::new);return new MeetingListScan(jdbc).discover(actor,scope,limit,after,budget);});
+   var candidates=tx.required(()->{budget.check();access.tryLockIdentities(actor,List.of(),false).orElseThrow(MeetingAccess.AccessDeniedException::new);if(filter.topic()!=null&&!filter.topic().equals("__none")){budget.reserve(1,1,64,64,64,2,false);if(jdbc.queryForObject("SELECT COUNT(*) FROM topic WHERE id=? AND owner_id=?",Long.class,filter.topic(),actor.enterpriseId())!=1)throw new MeetingAccess.AccessDeniedException();}return new MeetingListScan(jdbc).discover(actor,scope,limit,after,budget);});
    var items=new ArrayList<MeetingItem>();int scanned=Math.min(limit,candidates.size());
    for(int i=0;i<scanned;i++){
     var candidate=candidates.get(i);budget.check();
-    try {var item=tx.required(()->row(actor,scope,candidate,budget));if(item!=null&&filter.matches(item))items.add(item);}
+    try {var item=tx.required(()->{var current=row(actor,scope,candidate,budget);if(current!=null&&filter.topic()!=null&&!topicMatches(actor,current.id(),filter.topic(),budget))return null;return current;});if(item!=null&&filter.matches(item))items.add(item);}
     catch(MeetingAccess.AccessDeniedException denied){/* No denied candidate metadata is emitted. Cursor still advances over it. */}
    }
    boolean more=candidates.size()>scanned;String next=more?cursors.encode(actor.enterpriseId(),cursorScope,candidates.get(scanned-1).position().encode()):null;budget.check();return new MeetingPage(items,next,more);
   }catch(org.springframework.dao.DataAccessException|org.springframework.transaction.TransactionException e){throw new WorkspaceReadBudget.Unavailable(e);}
+ }
+ private boolean topicMatches(Actor actor,String meeting,String topic,WorkspaceReadBudget budget){
+  budget.reserve(2,4,1024,1024,1024,2,false);var rows=jdbc.queryForList("SELECT m.topic_id,t.owner_id FROM meeting_topic m LEFT JOIN topic t ON t.id=m.topic_id WHERE m.meeting_id=? ORDER BY m.topic_id LIMIT 2",meeting);
+  if(rows.size()>1||rows.stream().anyMatch(row->!actor.enterpriseId().equals(row.get("owner_id"))))throw new WorkspaceReadBudget.Unavailable();return topic.equals("__none")?rows.isEmpty():rows.size()==1&&topic.equals(rows.getFirst().get("topic_id"));
  }
  static String workspaceStage(String stage,boolean transcript,boolean confirmed,boolean minutes,boolean frozen){if(!stage.equals("ENTRY"))return stage;return frozen?"READY_TO_PUBLISH":minutes?"MINUTES_PENDING":confirmed?"MINUTES_PENDING":transcript?"TRANSCRIPT_PENDING":"ENTRY";}
  private MeetingItem row(Actor actor,String scope,MeetingListScan.Candidate candidate,WorkspaceReadBudget budget) {

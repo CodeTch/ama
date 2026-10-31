@@ -19,6 +19,8 @@ public interface FileStoragePort {
     StoredBlob put(StorageKey key, InputStream body, long size, String sha256);
     BlobStat stat(StorageKey key);
     InputStream read(StorageKey key, long offset, long length);
+    /** One bounded ordered stream; verifies every selected immutable chunk before complete EOF. */
+    default InputStream readSequence(ReadSequence sequence) {return ChunkSequenceStream.open(this,sequence);}
     void delete(StorageKey key);
     UploadToken beginUpload(UploadSpec spec);
     PartReceipt writePart(UploadToken token, int part, InputStream body, long size, String sha256);

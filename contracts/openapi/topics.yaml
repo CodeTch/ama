@@ -1,3 +1,20 @@
+summary:
+  parameters:
+    - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+  get:
+    operationId: readTopicSummary
+    description: Current private owner-only member count for the whole topic, independent of meeting list pages. Current topic revision must be rechecked before a new deletion.
+    security: [{enterpriseSession: []}]
+    responses:
+      '200': {description: Current topic membership count, content: {application/json: {schema: {$ref: '#/TopicSummary'}}}}
+TopicSummary:
+  type: object
+  additionalProperties: false
+  required: [id, revisionToken, meetingCount]
+  properties:
+    id: {type: string, format: uuid}
+    revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+    meetingCount: {type: integer, minimum: 0, maximum: 1000000000}
 collection:
   get:
     operationId: listTopics
@@ -8,7 +25,7 @@ collection:
     operationId: createTopic
     security: [{enterpriseSession: []}]
     parameters: [{ $ref: './meetings.yaml#/Key' }]
-    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [name, description], properties: {name: {type: string}, description: {type: [string, 'null']}}}}}}
+    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [name, description], properties: {name: {type: string, minLength: 1, maxLength: 255}, description: {type: [string, 'null'], maxLength: 4096}}}}}}
     responses: {'201': {description: Created topic, content: {application/json: {schema: {$ref: '#/Topic'}}}}}
 item:
   parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
@@ -16,7 +33,7 @@ item:
     operationId: updateTopic
     security: [{enterpriseSession: []}]
     parameters: [{ $ref: './meetings.yaml#/Key' }]
-    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [expectedRevisionToken, name, description], properties: {expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}, name: {type: string}, description: {type: [string, 'null']}}}}}}
+    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [expectedRevisionToken, name, description], properties: {expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}, name: {type: string, minLength: 1, maxLength: 255}, description: {type: [string, 'null'], maxLength: 4096}}}}}}
     responses: {'200': {description: Updated topic, content: {application/json: {schema: {$ref: '#/Topic'}}}}}
   delete:
     operationId: deleteTopic
@@ -29,6 +46,7 @@ assignment:
     - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
   post:
     operationId: assignMeetingTopic
+    parameters: [{$ref: './meetings.yaml#/Key'}]
     security: [{enterpriseSession: []}]
     requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [topicId, expectedRevisionToken], properties: {topicId: {type: string, format: uuid}, expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}}}}}}
     responses: {'204': {description: Assigned}}
@@ -38,6 +56,8 @@ assignmentItem:
     - {name: topic, in: path, required: true, schema: {type: string, format: uuid}}
   delete:
     operationId: removeMeetingTopic
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [expectedRevisionToken], properties: {expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}}}}}}
     security: [{enterpriseSession: []}]
     responses: {'204': {description: Removed}}
 Topic:
@@ -45,7 +65,47 @@ Topic:
   required: [id, name, description, revision, revisionToken]
   properties:
     id: {type: string, format: uuid}
-    name: {type: string}
-    description: {type: [string, 'null']}
+    name: {type: string, minLength: 1, maxLength: 255}
+    description: {type: [string, 'null'], maxLength: 4096}
     revision: {type: integer, format: int64}
     revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+
+memberships:
+  get:
+    operationId: listOwnMeetingTopicMemberships
+    security: [{enterpriseSession: []}]
+    parameters:
+      - {name: meetingIds, in: query, required: true, schema: {type: string, maxLength: 1849}, description: One to fifty unique comma-separated owned meeting UUIDs}
+    responses:
+      '200': {description: Current authorized personal topic membership in requested order, content: {application/json: {schema: {type: array, maxItems: 50, items: {$ref: '#/Membership'}}}}}
+batchAssignment:
+  post:
+    operationId: assignMeetingsTopicAtomically
+    security: [{enterpriseSession: []}]
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [topicId, meetings]
+            properties:
+              topicId: {type: [string, 'null'], format: uuid}
+              meetings: {type: array, minItems: 1, maxItems: 50, items: {$ref: '#/MembershipTarget'}}
+    responses: {'204': {description: All authorized meeting memberships changed atomically}}
+Membership:
+  type: object
+  additionalProperties: false
+  required: [meetingId, topicId]
+  properties:
+    meetingId: {type: string, format: uuid}
+    topicId: {type: [string, 'null'], format: uuid}
+MembershipTarget:
+  type: object
+  additionalProperties: false
+  required: [meetingId, expectedRevisionToken]
+  properties:
+    meetingId: {type: string, format: uuid}
+    expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}

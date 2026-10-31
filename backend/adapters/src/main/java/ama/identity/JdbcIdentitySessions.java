@@ -13,8 +13,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import static ama.contract.IdentityContracts.stableId;
 
-/** No issuance API. Every resolution is one fresh shared-DB query; no authorization cache. */
-public final class JdbcIdentitySessions implements SessionPort, IdentityLifecyclePort {
+/** Every resolution checks current shared-DB facts; no authorization cache or JVM-clock validity. */
+public final class JdbcIdentitySessions implements SessionPort, IdentityLifecyclePort, IdentityProvisioner {
     private static final java.security.SecureRandom RANDOM = new java.security.SecureRandom();
     private final JdbcTemplate jdbc;
     private final TransactionRunner transactions;
@@ -26,21 +26,29 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
 
     @Override public Optional<ResolvedSession> resolve(String token) {
         if (token == null || !token.matches("[A-Za-z0-9_-]{43}")) return Optional.empty();
-        return jdbc.query("""
+        String tokenHash=hash(token);
+        var identities=jdbc.queryForList("SELECT enterprise_id FROM identity_session WHERE token_hash=?",String.class,tokenHash);
+        if(identities.isEmpty())return Optional.empty();
+        return transactions.required(()->{
+            lockIdentity(identities.getFirst());
+            Instant now=advanceClock(identities.getFirst());
+            return jdbc.query("""
                 SELECT i.enterprise_id,i.status,r.role,s.csrf_token,s.expires_at
                 FROM identity_session s JOIN enterprise_identity i ON i.enterprise_id=s.enterprise_id
                 LEFT JOIN role_assignment r ON r.enterprise_id=i.enterprise_id
-                WHERE s.token_hash=? AND s.revoked_at IS NULL AND s.expires_at>UTC_TIMESTAMP(6)
-                  AND s.issued_at<=UTC_TIMESTAMP(6) AND i.status='ACTIVE'
+                WHERE s.token_hash=? AND i.enterprise_id=? AND s.revoked_at IS NULL AND s.expires_at>?
+                  AND s.issued_at<=? AND i.status='ACTIVE'
                   AND s.session_generation=i.session_generation
+                FOR SHARE
                 """, result -> {
             if (!result.next()) return Optional.empty();
             String id = result.getString("enterprise_id"), csrf = result.getString("csrf_token");
             Instant expires = result.getObject("expires_at", LocalDateTime.class).toInstant(ZoneOffset.UTC);
-            var roles = EnumSet.noneOf(Role.class);
+            var roles = EnumSet.of(Role.USER);
             do { String role = result.getString("role"); if (role != null) roles.add(Role.valueOf(role)); } while (result.next());
             return Optional.of(new ResolvedSession(new Actor(id, Status.ACTIVE, roles), csrf, expires));
-        }, hash(token));
+            }, tokenHash,identities.getFirst(),LocalDateTime.ofInstant(now,ZoneOffset.UTC),LocalDateTime.ofInstant(now,ZoneOffset.UTC));
+        });
     }
     public IssuedSession issueForVerifiedIdentity(String enterpriseId, Duration lifetime) {
         stableId(enterpriseId);
@@ -51,16 +59,43 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
         new java.security.SecureRandom().nextBytes(csrfBytes);
         String token = Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
         String csrf = Base64.getUrlEncoder().withoutPadding().encodeToString(csrfBytes);
-        Instant now = Instant.now().truncatedTo(ChronoUnit.MICROS), expires = now.plus(lifetime).truncatedTo(ChronoUnit.MICROS);
-        transactions.required(() -> {
+        Instant expires = transactions.required(() -> {
             var identity = lockIdentity(enterpriseId);
             if (!"ACTIVE".equals(identity.get("status"))) throw new ProviderUnavailableException();
+            // Resolution already uses this shared DB clock. A JVM clock ahead of MySQL must
+            // not mint a session that is immediately rejected as issued in the future.
+            Instant now = advanceClock(enterpriseId);
+            Instant expiration = now.plus(lifetime).truncatedTo(ChronoUnit.MICROS);
             jdbc.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (?,?,?,?,?,?)",
-                    hash(token), enterpriseId, identity.get("session_generation"), csrf, LocalDateTime.ofInstant(now, ZoneOffset.UTC), LocalDateTime.ofInstant(expires, ZoneOffset.UTC));
+                    hash(token), enterpriseId, identity.get("session_generation"), csrf, LocalDateTime.ofInstant(now, ZoneOffset.UTC), LocalDateTime.ofInstant(expiration, ZoneOffset.UTC));
             append(enterpriseId, "SESSION_ISSUE_CAS", ((Number) identity.get("session_generation")).longValue(), UUID.randomUUID().toString(), now);
-            return null;
+            return expiration;
         });
         return new IssuedSession(token, csrf, expires);
+    }
+    @Override public void ensureCasIdentity(String enterpriseId, String displayName, String department) {
+        stableId(enterpriseId);
+        String safeName = displayName == null || displayName.isBlank() ? enterpriseId : displayName;
+        String safeDepartment = department == null ? "" : department;
+        if (safeName.codePointCount(0, safeName.length()) > 255 || safeDepartment.codePointCount(0, safeDepartment.length()) > 255)
+            throw new IllegalArgumentException("Invalid CAS identity attributes");
+        Instant verifiedAt = Instant.now().truncatedTo(ChronoUnit.MICROS);
+        transactions.required(() -> {
+            var rows = jdbc.queryForList("SELECT status,session_generation,verified_at FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE", enterpriseId);
+            long generation = 0;
+            if (rows.isEmpty()) {
+                jdbc.update("INSERT INTO enterprise_identity(enterprise_id,display_name,department,status,session_generation,verified_at) VALUES (?,?,?,'ACTIVE',0,?)",
+                        enterpriseId, safeName, safeDepartment, LocalDateTime.ofInstant(verifiedAt, ZoneOffset.UTC));
+            } else {
+                var row = rows.getFirst();
+                generation = ((Number) row.get("session_generation")).longValue();
+                if (!"ACTIVE".equals(row.get("status"))) generation = Math.addExact(generation, 1);
+                jdbc.update("UPDATE enterprise_identity SET display_name=?,department=?,status='ACTIVE',session_generation=?,verified_at=? WHERE enterprise_id=?",
+                        safeName, safeDepartment, generation, LocalDateTime.ofInstant(verifiedAt, ZoneOffset.UTC), enterpriseId);
+            }
+            audit.append(new AuditEvent("SYSTEM_CAS_SYNC", "CAS_IDENTITY_SYNC", enterpriseId, generation, "SUCCESS", UUID.randomUUID().toString(), verifiedAt));
+            return null;
+        });
     }
     @Override public void revoke(String token, String traceId) {
         if (token == null || !token.matches("[A-Za-z0-9_-]{43}")) return;
@@ -106,6 +141,11 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
         var rows = jdbc.queryForList("SELECT status,session_generation,verified_at FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE", id);
         if (rows.isEmpty()) throw new IllegalArgumentException("Unknown identity");
         return rows.getFirst();
+    }
+    /** Identity is already locked. Advancing on every observation prevents expiry resurrection. */
+    private Instant advanceClock(String id){
+        jdbc.update("UPDATE enterprise_identity SET session_time_floor=GREATEST(COALESCE(session_time_floor,UTC_TIMESTAMP(6)),UTC_TIMESTAMP(6)) WHERE enterprise_id=?",id);
+        return jdbc.queryForObject("SELECT session_time_floor FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE",LocalDateTime.class,id).toInstant(ZoneOffset.UTC);
     }
     private void append(String id, String action, long revision, String traceId, Instant time) {
         audit.append(new AuditEvent(id, action, id, revision, "SUCCESS", traceId, time.truncatedTo(ChronoUnit.MICROS)));

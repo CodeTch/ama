@@ -49,7 +49,7 @@ public final class JdbcMinutesInitialSettings {
  private void firstOnly(MinutesGraphCapture.Graph graph,long expected){
   var root=graph.discovery().root();if(number(root,"revision")!=expected)throw conflict("REVISION_CONFLICT");if(expected>=Long.MAX_VALUE-1)throw conflict("REVISION_EXHAUSTED");
   if(number(root,"ever_published")!=0||!"ACTIVE".equals(root.get("lifecycle"))||!"ACTIVE".equals(root.get("governance_state"))||"PUBLISHED".equals(root.get("stage")))throw conflict("MEETING_NOT_WRITABLE");
-  for(String field:List.of("template_revision_id","exclusion_revision_id","minutes_revision_id","element_set_id","final_confirmation_id","material_snapshot_id","generation_fingerprint"))if(root.get(field)!=null)throw conflict("INITIAL_SETTINGS_ALREADY_ESTABLISHED");
+  for(String field:List.of("template_revision_id","exclusion_revision_id","minutes_revision_id","element_set_id","final_confirmation_id","generation_fingerprint"))if(root.get(field)!=null)throw conflict("INITIAL_SETTINGS_ALREADY_ESTABLISHED");
   if(graph.discovery().publicationWrite()==null)throw conflict("MEETING_NOT_WRITABLE");
   for(String table:List.of("generation_input","generation_candidate","minutes_revision","element_set","exclusion_revision","result_review"))if(!j.queryForList("SELECT id FROM "+table+" WHERE meeting_id=? ORDER BY id LIMIT 257",String.class,graph.discovery().meeting()).isEmpty())throw conflict("INITIAL_SETTINGS_ALREADY_ESTABLISHED");
   if(!j.queryForList("SELECT id FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? AND (task_type='MINUTES_GENERATE_V1' OR input_kind='GENERATION_INPUT') ORDER BY id LIMIT 257",String.class,graph.discovery().meeting()).isEmpty())throw conflict("INITIAL_SETTINGS_ALREADY_ESTABLISHED");

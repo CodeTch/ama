@@ -14,6 +14,7 @@ import {createInfoJournal} from './features/meetings/info-journal';
 import {createUploadsApi} from './shared/api/uploads';
 import {createTranscriptImportApi} from './shared/api/transcript-import';
 import {useUploadQueue} from './features/import/useUploadQueue';
+import {createTranscriptOperationsApi,validTranscriptOperationCommand} from './shared/api/transcript-operations';
 import {createTranscriptsApi} from './shared/api/transcripts';
 import {createTranscriptJournal} from './features/transcript/transcript-journal';
 import {createMinutesGenerationApi,validGenerationCommand} from './shared/api/minutes-generation';
@@ -26,13 +27,20 @@ import {ApiError} from './shared/api/client';
 import {createImportDraftsApi} from './shared/api/import-drafts';
 import {createMaterialsApi} from './shared/api/materials';
 import {createRecordingStore} from './features/recording/recording-store';
+import {useTopicCommands} from './features/meetings/useTopicCommands';
 import {createTopicsApi} from './shared/api/topics';
+import {createMeetingLibraryApi} from './shared/api/meeting-library';
 import {createFeedbackApi} from './shared/api/feedback';
+import {useFeedbackActions} from './features/meetings/useFeedbackActions';
+import {validFeedbackCommand} from './features/meetings/useFeedbackSubmission';
 import {useRecorder} from './features/recording/useRecorder';
 import {browserCapture} from './features/recording/browser-capture';
+import {createRecordingApi} from './features/recording/recording-api';
+import {usePcmRecorder} from './features/recording/usePcmRecorder';
 export function createApplication(origin:string,journals:TabJournalContext={tab:crypto.randomUUID(),storage:null,recovery:'NEW_NAMESPACE'}){
  const session=useSession(origin),meetings=createMeetingsApi(session.client),list=useMeetingList(meetings.list,()=>session.current.value?.actor.enterpriseId??null);
  const workspace=createWorkspaceApi(session.client),tasks=createWorkspaceTasksApi(session.client);
+ const meetingLibrary=createMeetingLibraryApi(session.client,()=>session.current.value?.actor.enterpriseId??null);
  const publications=createPublicationsApi(session.client,()=>session.current.value?.actor.enterpriseId??null),publicationJournal=createScopedPrivateJournal(journals,'minutes-publication',validPublicationCommand);
  const minutesSaved=createMinutesSavedApi(session.client,()=>session.current.value?.actor.enterpriseId??null),minutesInspection=createMinutesInspectionApi(session.client);
  const minutesEditorJournal=createMinutesEditorJournal(journals),minutesActionsJournal=createScopedPrivateJournal(journals,'minutes-actions',validMinutesCommand),minutesScopeReady=shallowRef(true);
@@ -47,19 +55,29 @@ export function createApplication(origin:string,journals:TabJournalContext={tab:
  const generationJournal=createScopedPrivateJournal(journals,'minutes-generation',validGenerationCommand),generationScopeReady=shallowRef(true),minutesGeneration=createMinutesGenerationApi(session.client,()=>session.current.value?.actor.enterpriseId??null);
  const stopGenerationIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)generationScopeReady.value=generationJournal.synchronize(actor);},{flush:'sync'});
  const transcriptJournal=createTranscriptJournal(journals),transcriptScopeReady=shallowRef(true),transcripts=createTranscriptsApi(session.client,()=>session.current.value?.actor.enterpriseId??null);
- const stopTranscriptIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)transcriptScopeReady.value=transcriptJournal.synchronize(actor);},{flush:'sync'});
+ const transcriptOperations=createTranscriptOperationsApi(session.client,()=>session.current.value?.actor.enterpriseId??null),transcriptOperationsJournal=createScopedPrivateJournal(journals,'transcript-operations',validTranscriptOperationCommand);
+ function syncTranscript(actor:string|null,id?:string|null){const edits=transcriptJournal.synchronize(actor,id),operations=transcriptOperationsJournal.synchronize(actor,id);transcriptScopeReady.value=edits&&operations;}
+ const stopTranscriptIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)syncTranscript(actor);},{flush:'sync'});
  const infoScopeReady=shallowRef(true),meetingScope=shallowRef<string|null>(null);
  const stopInfoIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)infoScopeReady.value=infoJournal.synchronize(actor);},{flush:'sync'});
- function setMeetingScope(id:string|null){syncMinutes(session.current.value?.actor.enterpriseId??null,id);meetingScope.value=id;generationScopeReady.value=generationJournal.synchronize(session.current.value?.actor.enterpriseId??null,id);transcriptScopeReady.value=transcriptJournal.synchronize(session.current.value?.actor.enterpriseId??null,id);infoScopeReady.value=infoJournal.synchronize(session.current.value?.actor.enterpriseId??null,id);}
+ function setMeetingScope(id:string|null){syncMinutes(session.current.value?.actor.enterpriseId??null,id);meetingScope.value=id;generationScopeReady.value=generationJournal.synchronize(session.current.value?.actor.enterpriseId??null,id);syncTranscript(session.current.value?.actor.enterpriseId??null,id);infoScopeReady.value=infoJournal.synchronize(session.current.value?.actor.enterpriseId??null,id);}
  const actor=()=>session.current.value?.actor.enterpriseId??null,uploads=createUploadsApi(session.client,actor),intake=createTranscriptImportApi(session.client,actor);
  const topics=createTopicsApi(session.client,actor),feedback=createFeedbackApi(session.client,actor);
+ const topicCommands=useTopicCommands(topics,actor,journals),topicScopeError=shallowRef<string|null>(null);
+ const stopTopicIdentity=watch(actor,who=>{topicScopeError.value=null;try{topicCommands.synchronize();if(who)void topicCommands.reload().catch(()=>{if(actor()===who)topicScopeError.value='专题暂无法读取，请重试。';});}catch(cause){topicScopeError.value=cause instanceof Error?cause.message:'专题恢复记录暂不可用。';}},{flush:'sync'});
+ const feedbackActions=useFeedbackActions(feedback,actor,journals),feedbackScopeError=shallowRef<string|null>(null);
+ const stopFeedbackActionsIdentity=watch(actor,()=>{feedbackScopeError.value=null;try{feedbackActions.synchronize();}catch(cause){feedbackScopeError.value=cause instanceof Error?cause.message:'反馈处理恢复记录暂不可用。';}},{flush:'sync'});
+ const feedbackJournal=createScopedPrivateJournal(journals,'feedback-submit',validFeedbackCommand);
+ const stopFeedbackIdentity=watch(actor,who=>{if(who)feedbackJournal.synchronize(who);},{flush:'sync'});
  const uploadQueue=useUploadQueue(uploads,async(id,signal)=>{const nav=await workspace.navigation(id,signal);if(nav.relation!=='OWNER'||nav.navigationState!=='CHECK_PRODUCER')throw new ApiError('http',403,'当前身份或会议状态不允许上传。');return nav;},actor,()=>meetingScope.value??'',()=>meetingScope.value!==null,journals,intake);
  const importDrafts=createImportDraftsApi(session.client,actor),materials=createMaterialsApi(session.client,actor);
  const recordingStore=createRecordingStore(journals.tab);let recordingCleanup:Promise<void>=Promise.resolve(),recordingOwner:string|null=null;
  const recorder=useRecorder(recordingStore,browserCapture,actor,async id=>{await recordingCleanup;const nav=await workspace.navigation(id,new AbortController().signal);if(nav.relation!=='OWNER'||nav.navigationState!=='CHECK_PRODUCER'||nav.stage==='PUBLISHED')throw new ApiError('http',403,'当前会议不允许继续录音。');});
+ const recordingApi=createRecordingApi(session.client),pcmRecorder=usePcmRecorder(recordingApi,()=>session.current.value,journals.tab);
+ const stopPcmIdentity=watch(actor,(who,previous)=>{if(who!==previous)void pcmRecorder.invalidate().catch(()=>{});},{flush:'sync'});
  const stopRecordingIdentity=watch(actor,who=>{if(!who){void recorder.invalidate();return;}if(recordingOwner&&recordingOwner!==who){recordingCleanup=recorder.logout();void recordingCleanup.catch(()=>{});}recordingOwner=who;},{flush:'sync'});
- const stopLogout=session.onLogout(()=>{recordingCleanup=recorder.logout();void recordingCleanup.catch(()=>{});const a=minutesEditorJournal.clear(),b=minutesActionsJournal.clear();const c=publicationJournal.clear();minutesScopeReady.value=a&&b&&c;create.logout();infoScopeReady.value=infoJournal.clear();uploadQueue.logout();generationScopeReady.value=generationJournal.clear();transcriptScopeReady.value=transcriptJournal.clear();});
- return {importDrafts,materials,topics,feedback,recorder,recordingStore,publications,minutesSaved,minutesInspection,minutesScopeReady:shallowReadonly(minutesScopeReady),minutesGeneration,generationScopeReady:shallowReadonly(generationScopeReady),transcripts,transcriptScopeReady:shallowReadonly(transcriptScopeReady),session,meetings,info,create,discovery,createDiscovery,list,workspace,tasks,options,journals,uploads,intake,uploadQueue,setMeetingScope,meetingScope:shallowReadonly(meetingScope),infoScopeReady:shallowReadonly(infoScopeReady),dispose(){stopRecordingIdentity();recorder.dispose();recordingStore.close();stopMinutesIdentity();stopGenerationIdentity();stopTranscriptIdentity();uploadQueue.dispose();createDiscovery.dispose();stop();stopLogout();stopInfoIdentity();list.dispose();session.invalidate();create.dispose();}};
+ const stopLogout=session.onLogout(()=>{recordingCleanup=recorder.logout();void recordingCleanup.catch(()=>{});const a=minutesEditorJournal.clear(),b=minutesActionsJournal.clear();const c=publicationJournal.clear();minutesScopeReady.value=a&&b&&c;create.logout();topicCommands.logout();feedbackActions.logout();feedbackJournal.clear();infoScopeReady.value=infoJournal.clear();uploadQueue.logout();generationScopeReady.value=generationJournal.clear();const transcriptEditsClear=transcriptJournal.clear(),transcriptOperationsClear=transcriptOperationsJournal.clear();transcriptScopeReady.value=transcriptEditsClear&&transcriptOperationsClear;});
+ return {meetingLibrary,feedbackActions,feedbackScopeError:shallowReadonly(feedbackScopeError),topicCommands,topicScopeError:shallowReadonly(topicScopeError),transcriptOperations,importDrafts,materials,topics,feedback,recorder,pcmRecorder,recordingApi,recordingStore,publications,minutesSaved,minutesInspection,minutesScopeReady:shallowReadonly(minutesScopeReady),minutesGeneration,generationScopeReady:shallowReadonly(generationScopeReady),transcripts,transcriptScopeReady:shallowReadonly(transcriptScopeReady),session,meetings,info,create,discovery,createDiscovery,list,workspace,tasks,options,journals,uploads,intake,uploadQueue,setMeetingScope,meetingScope:shallowReadonly(meetingScope),infoScopeReady:shallowReadonly(infoScopeReady),dispose(){stopFeedbackActionsIdentity();feedbackActions.dispose();stopTopicIdentity();topicCommands.dispose();stopFeedbackIdentity();stopPcmIdentity();void pcmRecorder.dispose().catch(()=>{});stopRecordingIdentity();recorder.dispose();recordingStore.close();stopMinutesIdentity();stopGenerationIdentity();stopTranscriptIdentity();uploadQueue.dispose();createDiscovery.dispose();stop();stopLogout();stopInfoIdentity();list.dispose();session.invalidate();create.dispose();}};
 }
 export const applicationKey:InjectionKey<ReturnType<typeof createApplication>>=Symbol('ama-application');
 export function useApplication(){const app=inject(applicationKey);if(!app)throw new Error('Application context missing');return app;}

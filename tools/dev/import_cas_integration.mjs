@@ -127,6 +127,7 @@ try {
   record('real-meeting-create-opens-import-dialog', {meetingId});
 
   const uploadCountBefore = requests.filter(request => request.method === 'POST' && request.path.endsWith('/uploads')).length;
+  await expect(importDialog.getByLabel('选择会议文件', {exact: true})).toBeEnabled({timeout: 30000});
   await importDialog.getByLabel('选择会议文件', {exact: true}).setInputFiles({
     name: '联调导入.txt',
     mimeType: 'text/plain',
@@ -208,7 +209,12 @@ try {
   await page.waitForURL(`${base}/meetings`);
   assert.equal((await session()).status, 401);
   assert.deepEqual(errors, []);
-  const harnessLogResponse = await page.request.get(`${casOrigin}/admin/api/logs?limit=500`);
+  // Filter at the harness before applying its bounded response window. The
+  // import flow can produce more than 500 request records, which previously
+  // evicted the CAS login entries we need to prove this run used the fixed
+  // provider. The harness exposes the module filter as a read-only diagnostic
+  // query; it does not change the fixed-port or provider behavior.
+  const harnessLogResponse = await page.request.get(`${casOrigin}/admin/api/logs?module=cas&limit=500`);
   assert.equal(harnessLogResponse.status(), 200);
   const harnessLogs = (await harnessLogResponse.json()).items ?? [];
   const harnessPaths = new Set(harnessLogs.filter(item => item.module === 'cas').map(item => item.path));

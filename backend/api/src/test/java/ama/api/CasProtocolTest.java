@@ -36,6 +36,14 @@ class CasProtocolTest {
         assertThrows(CasProtocol.Failure.class, () -> CasProtocol.parse(xxe.getBytes(StandardCharsets.UTF_8)));
     }
 
+    @Test void permitsEmptyOptionalAttributes() {
+        var xml = "<cas:serviceResponse xmlns:cas=\"http://www.yale.edu/tp/cas\"><cas:authenticationSuccess><cas:user>account-2</cas:user><cas:attributes><cas:email></cas:email><cas:department>本地测试</cas:department></cas:attributes></cas:authenticationSuccess></cas:serviceResponse>";
+        var assertion = CasProtocol.parse(xml.getBytes(StandardCharsets.UTF_8));
+        assertEquals("account-2", assertion.username());
+        assertEquals("", assertion.attributes().get("email"));
+        assertEquals("本地测试", assertion.attributes().get("department"));
+    }
+
     @Test void rejectsMissingUserAndAmbiguousSuccess() {
         var missing = "<serviceResponse xmlns=\"http://www.yale.edu/tp/cas\"><authenticationSuccess/></serviceResponse>";
         assertThrows(CasProtocol.Failure.class, () -> CasProtocol.parse(missing.getBytes(StandardCharsets.UTF_8)));

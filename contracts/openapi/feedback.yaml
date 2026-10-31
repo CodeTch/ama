@@ -2,13 +2,15 @@ collection:
   get:
     operationId: listFeedback
     security: [{enterpriseSession: []}]
+    parameters:
+      - {name: cursor, in: query, required: false, description: Last feedback ID from this actor's preceding page, schema: {type: string, format: uuid}}
     responses:
       '200': {description: Feedback page, content: {application/json: {schema: {type: object, required: [items, nextCursor], properties: {items: {type: array, items: {$ref: '#/Feedback'}}, nextCursor: {type: [string, 'null']}}}}}}
   post:
     operationId: createFeedback
     security: [{enterpriseSession: []}]
     parameters: [{ $ref: './meetings.yaml#/Key' }]
-    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [meetingId, category, comment], properties: {meetingId: {type: string, format: uuid}, category: {type: string}, comment: {type: string}}}}}}
+    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [meetingId, category, comment], properties: {meetingId: {type: string, format: uuid}, category: {type: string, enum: [WORDING, LABEL, ACTION_OWNER]}, comment: {type: string, minLength: 1, maxLength: 4096}}}}}}
     responses: {'201': {description: Created feedback, content: {application/json: {schema: {$ref: '#/Feedback'}}}}}
 Feedback:
   type: object
@@ -20,3 +22,143 @@ Feedback:
     comment: {type: string}
     state: {type: string, enum: [PENDING, ACCEPTED, REJECTED, NEEDS_MORE]}
     revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+FeedbackId:
+  name: feedbackId
+  in: path
+  required: true
+  schema: {type: string, format: uuid}
+detail:
+  parameters: [{$ref: '#/FeedbackId'}]
+  get:
+    operationId: readFeedbackDetail
+    description: Only the submitter or a current platform administrator may read the deliberately submitted feedback; this grants no access to source meeting content.
+    security: [{enterpriseSession: []}]
+    responses:
+      '200': {description: Private submitted feedback and append-only history, content: {application/json: {schema: {$ref: '#/FeedbackDetail'}}}}
+reviewQueue:
+  get:
+    operationId: listFeedbackReviewQueue
+    description: Current database PLATFORM_ADMIN role required; local acceptance does not claim a global corpus update.
+    security: [{enterpriseSession: []}]
+    parameters:
+      - {name: cursor, in: query, schema: {type: string, format: uuid}}
+      - {name: limit, in: query, schema: {type: string, enum: ['20']}}
+    responses:
+      '200': {description: Private review queue, content: {application/json: {schema: {type: object, additionalProperties: false, required: [items, nextCursor], properties: {items: {type: array, maxItems: 20, items: {$ref: '#/Feedback'}}, nextCursor: {type: [string, 'null'], format: uuid}}}}}}
+supplements:
+  parameters: [{$ref: '#/FeedbackId'}]
+  post:
+    operationId: supplementFeedback
+    description: Submitter and current source meeting READ required, including historical replay. The original comment stays immutable. NEEDS_MORE resubmits to PENDING.
+    security: [{enterpriseSession: []}]
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [expectedRevisionToken, text]
+            properties:
+              expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+              text: {type: string, minLength: 1, maxLength: 4096}
+    responses: {'200': {description: Original immutable history receipt, content: {application/json: {schema: {$ref: '#/FeedbackReceipt'}}}}}
+review:
+  parameters: [{$ref: '#/FeedbackId'}]
+  post:
+    operationId: reviewFeedback
+    description: Current database PLATFORM_ADMIN role required. Only a current PENDING submission can receive a local decision.
+    security: [{enterpriseSession: []}]
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [expectedRevisionToken, decision, reason]
+            properties:
+              expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+              decision: {type: string, enum: [ACCEPTED, REJECTED, NEEDS_MORE]}
+              reason: {type: string, minLength: 1, maxLength: 2048}
+    responses: {'200': {description: Local decision original receipt, content: {application/json: {schema: {$ref: '#/FeedbackReceipt'}}}}}
+undo:
+  parameters: [{$ref: '#/FeedbackId'}]
+  post:
+    operationId: undoFeedbackReview
+    security: [{enterpriseSession: []}]
+    description: Current administrator and exact current revision required. Restores PENDING and appends history, preserving all earlier receipts.
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [expectedRevisionToken], properties: {expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}}}}}}
+    responses: {'200': {description: Undo original receipt, content: {application/json: {schema: {$ref: '#/FeedbackReceipt'}}}}}
+FeedbackHistory:
+  type: object
+  additionalProperties: false
+  required: [id, action, actorId, revisionToken, state, text, createdAt]
+  properties:
+    id: {type: string, format: uuid}
+    action: {type: string, enum: [SUPPLEMENT, REVIEW, UNDO_REVIEW]}
+    actorId: {type: string, minLength: 1, maxLength: 255}
+    revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+    state: {type: string, enum: [PENDING, ACCEPTED, REJECTED, NEEDS_MORE]}
+    text: {type: string, maxLength: 4096}
+    createdAt: {type: string, format: date-time}
+FeedbackDetail:
+  type: object
+  additionalProperties: false
+  required: [feedback, submittedAt, reviewReason, reviewedBy, history]
+  properties:
+    feedback: {$ref: '#/Feedback'}
+    submittedAt: {type: string, format: date-time}
+    reviewReason: {type: [string, 'null'], maxLength: 2048}
+    reviewedBy: {type: [string, 'null'], maxLength: 255}
+    history: {type: array, maxItems: 50, items: {$ref: '#/FeedbackHistory'}}
+FeedbackReceipt:
+  type: object
+  additionalProperties: false
+  required: [feedbackId, historyId, revisionToken, state, operation]
+  properties:
+    feedbackId: {type: string, format: uuid}
+    historyId: {type: string, format: uuid}
+    revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+    state: {type: string, enum: [PENDING, ACCEPTED, REJECTED, NEEDS_MORE]}
+    operation: {type: string, enum: [SUPPLEMENT, REVIEW, UNDO_REVIEW]}
+summaries:
+  get:
+    operationId: readFeedbackOverview
+    description: Metadata-only overview with current private scope, server state filter and complete counts. Reviewing=true requires a current database administrator role.
+    security: [{enterpriseSession: []}]
+    parameters:
+      - {name: cursor, in: query, schema: {type: string, format: uuid}}
+      - {name: state, in: query, schema: {type: string, enum: [PENDING, ACCEPTED, REJECTED, NEEDS_MORE]}}
+      - {name: reviewing, in: query, schema: {type: string, enum: ['true', 'false']}}
+      - {name: limit, in: query, schema: {type: string, enum: ['20']}}
+    responses:
+      '200': {description: Feedback overview, content: {application/json: {schema: {$ref: '#/FeedbackOverview'}}}}
+FeedbackSummary:
+  allOf:
+    - {$ref: '#/Feedback'}
+    - type: object
+      required: [submittedAt, reviewReason]
+      properties:
+        submittedAt: {type: string, format: date-time}
+        reviewReason: {type: [string, 'null'], maxLength: 2048}
+FeedbackOverview:
+  type: object
+  additionalProperties: false
+  required: [items, nextCursor, counts]
+  properties:
+    items: {type: array, maxItems: 20, items: {$ref: '#/FeedbackSummary'}}
+    nextCursor: {type: [string, 'null'], format: uuid}
+    counts:
+      type: object
+      additionalProperties: false
+      required: [ALL, PENDING, ACCEPTED, REJECTED, NEEDS_MORE]
+      properties:
+        ALL: {type: integer, minimum: 0, maximum: 1000000000}
+        PENDING: {type: integer, minimum: 0, maximum: 1000000000}
+        ACCEPTED: {type: integer, minimum: 0, maximum: 1000000000}
+        REJECTED: {type: integer, minimum: 0, maximum: 1000000000}
+        NEEDS_MORE: {type: integer, minimum: 0, maximum: 1000000000}

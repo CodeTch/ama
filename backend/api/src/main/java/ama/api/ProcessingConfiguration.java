@@ -84,8 +84,8 @@ import static ama.contract.ProcessingContracts.*;
             }
         });
     }
-    @Bean JdbcTaskQueue processingQueue(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,Runtime runtime) {
-        return runtime.components()==null?new JdbcTaskQueue(source,fences,outbox,Map.of()):TranscriptImportRuntime.install(source,fences,outbox,runtime.components());
+    @Bean JdbcTaskQueue processingQueue(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,Runtime runtime,ama.meeting.JdbcMeetingAccess access,FileUploads uploads,FileBackendCatalog backends,ama.recording.JdbcRecordingPersistence recordings) {
+        return runtime.components()==null?new JdbcTaskQueue(source,fences,outbox,Map.of()):TranscriptImportRuntime.install(source,fences,outbox,runtime.components(),new RecordingArchiveRuntime.Dependencies(access,runtime.components().registry(),uploads,backends,recordings,runtime.components().authority().publicationWriteGuard()));
     }
     @Bean JdbcProcessingIntake.NewIntake newIntakeBranch(Runtime runtime) {
         return runtime.preparation();

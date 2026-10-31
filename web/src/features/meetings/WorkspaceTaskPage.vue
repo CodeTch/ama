@@ -2,9 +2,9 @@
 import type {WorkspaceTaskPage,WorkspaceTaskKind} from '../../shared/api/workspace-tasks';
 defineProps<{page:WorkspaceTaskPage|null;kind:WorkspaceTaskKind;loading:boolean;error:string|null}>();
 const emit=defineEmits<{refresh:[];first:[];next:[];select:[kind:WorkspaceTaskKind]}>();
-const kinds:Record<WorkspaceTaskKind,string>={ALL:'全部任务',TRANSCRIPT_IMPORT_V1:'文稿导入',MINUTES_GENERATE_V1:'纪要生成',KNOWLEDGE_PUBLISH_V1:'知识库发布'};
+const kinds:Record<WorkspaceTaskKind,string>={ALL:'全部任务',TRANSCRIPT_IMPORT_V1:'文稿导入',MINUTES_GENERATE_V1:'纪要生成',KNOWLEDGE_PUBLISH_V1:'知识库发布',RECORDING_ARCHIVE_V1:'录音归档'};
 const states:Record<WorkspaceTaskPage['items'][number]['state'],string>={READY:'等待处理',RUNNING:'处理中',RECONCILING:'正在核对结果',SUCCEEDED:'处理成功',FAILED:'处理失败',CANCELLED:'已取消',STALE:'已失效'};
-function select(event:Event){const value=(event.target as HTMLSelectElement).value;if(value==='ALL'||value==='TRANSCRIPT_IMPORT_V1'||value==='MINUTES_GENERATE_V1'||value==='KNOWLEDGE_PUBLISH_V1')emit('select',value);}
+function select(event:Event){const value=(event.target as HTMLSelectElement).value;if(value==='ALL'||value==='TRANSCRIPT_IMPORT_V1'||value==='MINUTES_GENERATE_V1'||value==='KNOWLEDGE_PUBLISH_V1'||value==='RECORDING_ARCHIVE_V1')emit('select',value);}
 </script>
 <template>
  <section class="card task-section" aria-labelledby="workspace-tasks-title">

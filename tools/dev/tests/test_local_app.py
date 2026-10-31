@@ -56,6 +56,28 @@ class ProcessOwnershipTests(unittest.TestCase):
 
 
 class ConfigurationIsolationTests(unittest.TestCase):
+    def test_explicit_file_workers_keep_the_default_and_reject_unbounded_counts(self):
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(16, app.file_worker_threads())
+        with patch.dict(os.environ, {'AMA_LOCAL_FILE_WORKERS': '32'}):
+            self.assertEqual(32, app.file_worker_threads())
+        for value in ('0', '33', '-1', '32.0', ' 32', 'invalid'):
+            with self.subTest(value=value), patch.dict(os.environ, {'AMA_LOCAL_FILE_WORKERS': value}):
+                with self.assertRaises(ValueError):
+                    app.file_worker_threads()
+
+    def test_explicit_local_pool_maximum_is_bounded_and_independent_of_spring_environment(self):
+        with patch.dict(os.environ, {'AMA_LOCAL_DB_POOL_MAXIMUM': '32', 'SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE': '64'}):
+            self.assertEqual(32, app.database_pool_maximum())
+            _, _, environment = app.toolchain()
+            self.assertNotIn('SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE', environment)
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(20, app.database_pool_maximum())
+        for value in ('0', '65', '-1', '32.0', ' 32', 'invalid'):
+            with self.subTest(value=value), patch.dict(os.environ, {'AMA_LOCAL_DB_POOL_MAXIMUM': value}):
+                with self.assertRaises(ValueError):
+                    app.database_pool_maximum()
+
     def test_changes_to_local_assembly_invalidate_running_source_signature(self):
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary)

@@ -1,7 +1,7 @@
 import {shallowReadonly,shallowRef,watch} from 'vue';
 import type {WorkspaceTaskPage,WorkspaceTaskKind} from '../../shared/api/workspace-tasks';
 type FetchPage=(meeting:string,kind:WorkspaceTaskKind,cursor:string|null,signal:AbortSignal)=>Promise<WorkspaceTaskPage>;
-const kinds:readonly WorkspaceTaskKind[]=['ALL','TRANSCRIPT_IMPORT_V1','MINUTES_GENERATE_V1','KNOWLEDGE_PUBLISH_V1'];
+const kinds:readonly WorkspaceTaskKind[]=['ALL','TRANSCRIPT_IMPORT_V1','MINUTES_GENERATE_V1','KNOWLEDGE_PUBLISH_V1','RECORDING_ARCHIVE_V1'];
 /** A bounded, explicitly refreshed observation. Never grants producer permission or proves task absence. */
 export function useWorkspaceTasks(fetchPage:FetchPage,actor:()=>string|null,meeting:()=>string){
  const kind=shallowRef<WorkspaceTaskKind>('ALL'),page=shallowRef<WorkspaceTaskPage|null>(null),loading=shallowRef(false),error=shallowRef<unknown>(null);

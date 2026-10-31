@@ -59,8 +59,6 @@ public final class CasAuthenticationAdapter implements ama.identity.CasAuthentic
                 jdbc.update("UPDATE enterprise_identity SET display_name=?,department=?,status='ACTIVE',session_generation=?,verified_at=? WHERE enterprise_id=?",
                         displayName, department, generation, java.time.LocalDateTime.ofInstant(verifiedAt, java.time.ZoneOffset.UTC), enterpriseId);
             }
-            jdbc.update("INSERT IGNORE INTO role_assignment(enterprise_id,role,assigned_at) VALUES (?,'USER',?)",
-                    enterpriseId, java.time.LocalDateTime.ofInstant(verifiedAt, java.time.ZoneOffset.UTC));
             audit.append(new AuditEvent("SYSTEM_CAS_SYNC", "CAS_IDENTITY_SYNC", enterpriseId, generation, "SUCCESS", UUID.randomUUID().toString(), verifiedAt));
             return null;
         });

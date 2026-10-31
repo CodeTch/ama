@@ -132,6 +132,8 @@ def prepare(runtime,state,java,env,classpath):
     if asr_environment(env):
         media_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalMediaSetup',str(root/'archive'),values['minutes.index-sha'],env['AMA_LOCAL_ASR_RUNTIME']],env=env,capture_output=True,text=True,check=True,timeout=30)
         values.update(json.loads(media_setup.stdout))
+    material_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalMaterialSetup',str(root/'archive'),values['minutes.index-sha'],state['minutesTemplateRevisionId']],env=env,capture_output=True,text=True,check=True,timeout=30)
+    values.update(json.loads(material_setup.stdout))
     values.update(prepare_knowledge(runtime,state))
     values.update({'transcript.candidates.installation':'AUTHORITY_CONTROLLED',
         'transcript.publication.installation':'AUTHORITY_CONTROLLED','transcript.transitions.installation-version':'2',

@@ -35,6 +35,9 @@ paths:
     $ref: './meetings.yaml#/info'
   /api/v1/meetings/{id}/roster-confirmations:
     $ref: './meetings.yaml#/confirmations'
+  /api/v1/topics/memberships: { $ref: './topics.yaml#/memberships' }
+  /api/v1/topics/{id}/summary: { $ref: './topics.yaml#/summary' }
+  /api/v1/topics/assignments: { $ref: './topics.yaml#/batchAssignment' }
   /api/v1/topics:
     $ref: './topics.yaml#/collection'
   /api/v1/topics/{id}:
@@ -45,6 +48,18 @@ paths:
     $ref: './topics.yaml#/assignmentItem'
   /api/v1/feedback:
     $ref: './feedback.yaml#/collection'
+  /api/v1/feedback/review-queue:
+    $ref: './feedback.yaml#/reviewQueue'
+  /api/v1/feedback/summaries:
+    $ref: './feedback.yaml#/summaries'
+  /api/v1/feedback/{feedbackId}:
+    $ref: './feedback.yaml#/detail'
+  /api/v1/feedback/{feedbackId}/supplements:
+    $ref: './feedback.yaml#/supplements'
+  /api/v1/feedback/{feedbackId}/review:
+    $ref: './feedback.yaml#/review'
+  /api/v1/feedback/{feedbackId}/review/undo:
+    $ref: './feedback.yaml#/undo'
   /api/v1/meetings/{id}/uploads:
     $ref: './files.yaml#/begin'
   /api/v1/uploads/{id}/parts/{part}:
@@ -75,6 +90,12 @@ paths:
     $ref: './processing.yaml#/task'
   /api/v1/meetings/{meetingId}/transcript:
     $ref: './transcripts.yaml#/current'
+  /api/v1/meetings/{meetingId}/transcript/search:
+    $ref: './transcripts.yaml#/replacementSearch'
+  /api/v1/meetings/{meetingId}/transcript/replacements:
+    $ref: './transcripts.yaml#/replacements'
+  /api/v1/meetings/{meetingId}/transcript/operations/{operationId}/undo:
+    $ref: './transcripts.yaml#/operationUndo'
   /api/v1/meetings/{meetingId}/transcript/history:
     $ref: './transcripts.yaml#/history'
   /api/v1/meetings/{meetingId}/transcript/revisions/{revisionId}:
@@ -195,6 +216,36 @@ paths:
     $ref: './publications.yaml#/destinationFolders'
   /api/v1/meetings/{meetingId}/publications/{publicationId}/document:
     $ref: './publications.yaml#/officialDocument'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/library-context:
+    $ref: './publications.yaml#/libraryContext'
+  /api/v1/meetings/{meetingId}/recordings:
+    $ref: './recording.yaml#/collection'
+  /api/v1/recordings/{sessionId}:
+    $ref: './recording.yaml#/current'
+  /api/v1/recordings/{sessionId}/ack:
+    $ref: './recording.yaml#/ack'
+  /api/v1/recordings/{sessionId}/writer-lease:
+    $ref: './recording.yaml#/claim'
+  /api/v1/recordings/{sessionId}/writer-lease/renew:
+    $ref: './recording.yaml#/renew'
+  /api/v1/recordings/{sessionId}/chunks:
+    $ref: './recording.yaml#/chunks'
+  /api/v1/recordings/{sessionId}/parts:
+    $ref: './recording.yaml#/parts'
+  /api/v1/recordings/{sessionId}/pause:
+    $ref: './recording.yaml#/pause'
+  /api/v1/recordings/{sessionId}/resume:
+    $ref: './recording.yaml#/resume'
+  /api/v1/recordings/{sessionId}/finish:
+    $ref: './recording.yaml#/finish'
+  /api/v1/recordings/{sessionId}/archive:
+    $ref: './recording.yaml#/archive'
+  /api/v1/recordings/{sessionId}/audio:
+    $ref: './recording.yaml#/audio'
+  /api/v1/meetings/{meetingId}/recording-archives/{inputId}:
+    $ref: './recording.yaml#/archiveInput'
+  /api/v1/recordings/{sessionId}/manifest:
+    $ref: './recording.yaml#/manifest'
 components:
   securitySchemes:
     enterpriseSession:

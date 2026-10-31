@@ -1,10 +1,186 @@
-> **本轮边界（最新）：** 用户要求先完成“我的会议”首页像素复刻并停下。首页所列静态场景32项/真实交互13项已通过；详见 [docs/acceptance/b/homepage-pixel-parity-2026-10-29.md](docs/acceptance/b/homepage-pixel-parity-2026-10-29.md)。其余页面不自动继续，整套原型/B阶段仍为 NOT ACCEPTED。
+# 当前接续状态：用户要求停止（2026-10-31 18:58）
 
-> **最新用户指令：逐页1:1、像素级复刻。** 旧“不做像素级比对”规则已撤销；既有报告仅证明其原范围，新像素矩阵尚未通过。当前计划：`docs/superpowers/plans/2026-10-29-pixel-perfect-prototype.md`。
+**本节优先于下方所有历史记录。开发、验证和调度均已停止。** 用户已确认误删容器、镜像和持久卷，数据库45907拒绝连接，原自有MySQL容器不可查。未重建环境、拉镜像、建卷或重新部署。原主库/C测试库V044是事故前状态，不能视为当前仍存在。其余AMA OS进程仍活，业务依赖DB不可用；不要把进程活着写成服务健康。
 
-# 当前接续状态 — 原型全量返工执行中
+本批成果/完整待办/证据及恢复顺序：[专题与知识库当前批次接续](docs/acceptance/b/topic-library-batch-2026-10-31.md)。B/C两份progress.md末尾同步记录。本批单agent/main，无分支/worktree/提交/清理，harness固定8792/2525不变，本批未改兄弟源码。
 
-当前 **NOT ACCEPTED**。最新用户要求是：所有页面布局、组件、样式、文字/固定文案与全部可达功能都复刻原型，必须进行逐页像素级比对；TXT 是例子，不能保留旧未来能力豁免。已授权持续实施，不再询问同一授权。
+- 专题摘要、真实非空删除门、批量冷恢复与会议删除归组事务清理已实现；真实MySQL TopicSummaryIT10 PASS（含拒绝和回滚负例），新CAS/像素尚未部署验证。TOPIC-01 OPEN。
+- 知识库位置读取/当前成员READ/完整冻结发布来源/严格元数据版本/新鲜权限复核，以及真实分页页面已实现。受控provider4、Java边界14、HTTP与async10、最终前端14，type/build/APIbytes通过；新provider未重启、新API未部署，真实CAS/provider路径与精确像素未执行。LIB-01 OPEN。
+- 两小时长测已结束为 **FAIL_INTERRUPTED**，不是运行中/不是通过：原100录音/300CAS用户/7200秒目标，实际停止进度2490.904秒、113152ACK、0完整归档验证、100录音失败503/IDENTITY_UNAVAILABLE。用户确认数据库环境误删；长测driver PID2091026已SIGINT有序退出并写observations。失败报告 `.tools/local-app/recording-load/renewal-100-7200s/interrupted-qualification.json`；没有正常report.json，不能伪造。全部原证据保留。
+- 新源码签名 `957cda0d1c61c1ac2d0eac63d58f96c4894956d2293ee2a4806a0bb73ed93d34`；旧主artifact `582495f1bbf2c5cb6ce035155c9bdb3d3dcf028fb34978f61508c79e7c34ec62`。不能混用旧5824通过证据签收当前新代码。
+- B/C总状态仍NOTACCEPTED。C02生产speech/全局配额/未知回查、C03AI/speaker、C06持久字幕与B其余矩阵未完成。用户恢复后先核实数据库/卷的恢复或新环境来源，再适当回归、部署、专题/知识库CAS像素、其余B/C和重新完整7200。不要在用户已要求停止时自动恢复、启动测试或继续开发。
+
+---
+
+> **接续更新 2026-10-31 18:08（优先于下方旧记录）**：单agent/main，无分支/worktree。当前真正7200秒100录音/300CAS长稳测试已启动，PID2091026，`.tools/local-app/recording-renewal-7200-runner.json` / `recording-load/renewal-100-7200s` / `recording-renewal-7200.log`，起始2026-10-31T10:08:01Z。固定运行时source582495f1bbf2c5cb6ce035155c9bdb3d3dcf028fb34978f61508c79e7c34ec62，API32/files32；不得正常部署/停进程/改runtime配置，直到整个案例结束。新裁定允许有记录的少量定向Maven/Cschema验证与开发（不能报孤立硬件/模型容量），活动记录`recording-renewal-7200-development-activity.json`；不跑全套或重构建部署。第一次系统Python缺websockets在任何写操作前拒绝，实际使用既有`.tools/recording-load-venv/bin/python`15.0.1成功启动。模型仍DISABLED_NOT_INSTALLED，绝不能把协议7200写成字幕资格。
+>
+> 最近已完成且绑定5824：反馈8组真实CAS+36张3视口精确零差异，FEEDBACK-01已改PASS（报告feedback-review-explicit-labels-20261031）；专题7组CAS+base/assignment两套3视口共60精确零差异；native真SIGKILL10/10，恢复54.7秒、45原PCM帧、2733070字节WAV逐帧SHA通过（renewal-feedback-labels-hard-crash-20261031）。Java691、Web419/type/build/APIbytes通过；字段显式标签修正后8及type/build通过。最初feedback管理员标签失败、native45s失败、全部历史失败均保留。
+>
+> 立即继续：Topic仍OPEN，需真实目标数量的冷恢复（原request有meetingIds，不能编旧名；详Bledger/topic-batch-lost-ack-next.md），非空专题“无法删除”原型状态与真实全量成员数摘要、筛选/分组业务负例/像素。准备真实RED→修复（新API部署CAS可等长稳结束，期间Cschema真实IT和HMR诊断继续）。C02生产speech阶段/配额/未知回查，C03AI纠错和speaker，C06持久实时字幕、其余B矩阵仍未完成。不要因阶段性成果停止或发部分最终答复。最新C/B progress末尾记录事实。
+
+> **接续更新 2026-10-31 17:55（优先于下方旧记录）**：main单agent，未建分支/worktree。当前无C07负载；主运行时仍15f0/V043，C测试库V044。录音跨I/O续租修复真实13PASS，旧100/300/600秒status-header案例全部30000分片/100归档通过。专题30项已绑定15f0零像素；新单项/批量归组10项HMR诊断零像素，App共享多选及默认不写入已实现，需新部署绑定。native15f0硬崩溃新回归仅2项通过后脚本45秒等待失败，真实API启动61.571秒；脚本恢复等待改为120秒（单调时间）及保存积压120秒，需新部署重测完整10项。
+>
+> 本轮已新增反馈V044历史、补充、当前DB管理员审核/撤销、不可变回执和metadata overview；真实FeedbackReviewIT10PASS，HTTPwire4PASS。前端SDK/actions私有原请求journal/App同步登出、FeedbackPage及7列原型表已接线；聚焦12项与类型通过，完整当前验证正在/刚完成：`.tools/local-app/feedback-release-verification-runner.json`（顺序Feedback10、Recording13、生产Java预期691）和`feedback-release-web-verification-runner.json`（Web预期419、type/build/API字节）。查日志结果再正常部署，不和Maven并发。已准备未运行`tools/dev/feedback_review_cas_integration.mjs`（真实新CAS提交/丢ACK/补充/审核/撤销/409/403和36项原型像素）。它自身包含开发期Vue真实router guard测试，不伪造业务API。修改源码前先确认没有正在绑定CAS/native证据。
+>
+> 下一步：验证当前套件、正常deploy32pool/32file固定端口；先实际feedback脚本新输出，再Topic7checks/两套像素3视口，最后native真SIGKILL10；失败按真实证据修复并重跑，不覆盖旧失败。Topic批量请求在刷新恢复时的meetingNames原字段为空，当前新批量layout依赖其length，需要补真实目标数恢复（从原请求meetingIds，不编造旧名）并验证。C02/C03AI+speakers/C06及B矩阵大部分仍OPEN；没有实际7200s。不要因此停工或给部分最终答复。详情查B/C progress末尾。
+
+> **接续更新 2026-10-31 17:14（优先于下方旧记录）**：仍在 main 单 agent，无分支/worktree。100/300/600 秒 status-header-steady 实测最终全部30000分片/100归档校验 PASS，但真实续租跨文件I/O导致旧PublicationGraph快照失败已用JFR定位。新增RecordingUploadRenewalIT真实RED10/3失败后，JdbcFileUploads三处I/O后重新采集完整图，GREEN运行中 `.tools/local-app/recording-upload-real-renewal-green.log`；不能提前声称通过。全量B/C仍未完成；最新细节以 `.superpowers/sdd/2026-10-21-ama-phase-c/progress.md` 末尾与B台账为准。下一步验证修复/正常部署，专题像素三视口严格绑定源码，原生录音回归，再实际7200秒资格。当前600秒案例已结束，可在无Maven时正常部署。不得清理旧失败或修改既有发布夹具。
+
+> **2026-10-30 当前权威入口：** B 阶段后续执行 [逐页像素、非语音 CRUD 与 CAS 联调计划](docs/superpowers/plans/2026-10-30-ama-b-followup-pixel-crud-cas.md)，范围设计见 [spec](docs/superpowers/specs/2026-10-30-ama-b-followup-pixel-crud-cas-design.md)，页面/CRUD 台账见 [matrix](docs/acceptance/b/b-followup-page-crud-matrix-2026-10-30.md)。当前总状态 `NOT ACCEPTED`。
+
+### 2026-10-31 16:17 最新：专题后端10项通过，归档状态查询优化验证中
+
+B专题已补持久幂等回执V043、个人单一归组、批量原子归组、当前版本/owner门、成员读取、真正服务端筛选与绑定游标；真实MySQL10项全通过 `.tools/local-app/topic-all-real-green-2.log`，Web410/type/build/API字节校验通过。新全CRUD/CAS脚本 `tools/dev/topic_crud_cas_integration.mjs` 已准备，尚未实际运行；不要将专题整行关闭。旧默认SDK的204、删除版本体及稳定键已修复；新页面通过TopicWorkspace共享私有journal，表格真实专题/分组/编辑删除/批量和筛选已接。详细 `.superpowers/sdd/2026-10-30-ama-b-followup-pixel-crud-cas/topic-persistence-brief.md`，其‘待实现’段已有后续完成，以最新ledger为准。C独立schema已V043；主DB仍V042，禁止手工改主schema。
+
+32线程稳态负载仍在归档：recording-file32-steady-100-runner.json，100/300/600秒采集已结束+30000ACK全部完成，约60/100归档校验（动态读日志）；不得正常部署/停止直到全部case结束。捕获435..495秒与一次前端全量测试重叠，raw事实在capture-frontend-validation-activity.json，不声称独占容量；试图停止时测试已结束，零信号。之后所有Maven在归档期，冻结API/Worker/Files不变。没有实际7200秒运行。
+
+新发现status轮询只取meetingID却扫描完整PCM证明表：真实JDBC观察器 RecordingArchiveStatusQueryIT 已RED（预期0实际1次recording_chunk查询）且继承原7项归档回归。已添加无权限/无完整性承诺的SessionMetadata单行查询，仅改archive authorize路径，ACK/finish/冻结hash/producer/fileRegistry/READ权限保持。正在跑 archive-status-query-real-green.log，runner archive-status-query-green-runner.json；需要8项新鲜GREEN后，完整生产Java688回归（上一全688绿但新Java尚未全跑）。未来新部署才能评估其实际负载改善，当前负载仍旧源码d934afeb。
+
+下一步：等该8项+全生产Java通过；当前600负载全部归档完后，正式owned start（API32/file32，保留DB45907不先stop），真实Topic CAS/截图/像素与native回归，新32线程短稳态/后续实际7200秒协议实测。C02/C03自动建议/说话人/C06和B其余矩阵仍未完成，不停在局部答复。继续main单agent/无分支worktree/提交/清理、harness固定8792/2525，真实模型资格不以模拟冒充。
+
+### 2026-10-31 15:46 最新：C03手工页面真实通过，32线程10分钟负载进行中
+
+C03原生手工选中位置替换/撤销页面完整5项CAS验证通过，报告 `.tools/local-app/transcript-replacements/manual-ui-bound-20261031/report.json`；工作区/部署签名一致，Web403/type/build绿。原查找/替换/位置IDs及请求键在提交丢响应后刷新恢复，原正文只读重试、当前版本重新读取、撤销新版本、RAW不变；全C03的AI建议/说话人/媒体及其余B/C仍OPEN。32线程100/300/60秒真实SIGKILL短测3000/3000完整SHA通过，p95ACK45秒和瞬态4698+6167保留。
+
+正在运行owned detached `recording-file32-steady-100-runner.json`，日志同名前缀.log，输出recording-load/file32-steady-100-600s。100路/300真实CAS用户/600秒采集，API不杀进程，但100个计划断线丢ACK仍有；APIpool32+文件32/heap192，二进制冻结。捕获+全部ACK前不做Maven/正常部署/停服务；可以继续前端TDD和文档。完成并检查稳态吞吐后再实际7200秒，目前未启动两小时。后续可推进B专题稳定请求键/真实CRUD/归组revision，C02/03AI/06生产接线仍缺。main单agent，无分支/worktree/提交/清理；固定harness8792/2525、DB45907/V042，C独立schema与私有参数保留。
+
+### 2026-10-31 15:35 最新：真实硬中断10项通过，100路32线程短测进行中
+
+限流恢复修复已部署a3079caffad3dab7a0891cf33f2b41c0dbc126141d1950e0adc4586416e63a34，实际native SIGKILL10/10通过 `.tools/local-app/recording-native-cas/rate-backoff-hard-crash-20261031/report.json`（faultEnabled=true、SIGKILL、部署/工作区签名一致、原字节补传、刷新不自动采集、分段/归档逐片SHA/回听）。先前7项无故障及真正失败报告均保留。Web395/type/build绿，Java688此前绿且Java未改。
+
+现在有一个实际100路/300用户/60秒API故障短测：`.tools/local-app/recording-file32-100-runner.json`（owned detached），日志recording-file32-100-runner.log，输出recording-load/file32-rate-recovery-100-60s。API池32/文件线程32(heap192m)都已固定进证据；Worker/文件JAR/API均冻结。禁止正常部署、停止服务或改其配置，直到case完成；可继续C03手工UI/单测工作，保留性能观测上下文。无Maven活跃。短测通过并查吞吐后再启动7200秒；两小时尚未执行。
+
+下一开发项：c03-manual-ui-brief.md 的 dialog/controller/privatejournal（已存在的‘纠错建议与候选’按钮入口，默认B布局不变）。C03后端helper/wire/hash/完整Jdbc真实CAS6项、typedSDK4项全已通过，不重做；Java688、Web395。C02/C03自动建议/说话人/C06与B其余矩阵仍OPEN，全B/C NOT ACCEPTED，继续到全部工作完成。main单agent、不创建分支/worktree、不提交清理；harness固定8792/2525；主DB45907/V042，专用Cschema ama_c_recording_a21835cf4f93，私有参数不输出。
+
+### 2026-10-31 15:29 限流恢复修复通过单测，正在部署
+
+真实SIGKILL回归发现的 RATE_LIMITED 恢复缺口已通过失败测试修复：WS只把严格限流错误映射为可重试429；同一原始PCM在等待1000ms后通过现有HTTP通道重试，最多10次，等待后重新核对身份/代次，缓存只在真实ACK后删除；401/403/409等不自动重试。默认服务器每身份128KiB/s及5帧burst、全局限流保持不变。20项定向测试全绿，完整Web395/type/build全绿。旧失败保留；测试首次中间失败是旧fixture把真实SDK的put(session,chunk)误写为单参，已修正并明确记录。
+
+现在只运行 `native-rate-recovery-deploy.log` 正常自有部署，参数API池32+文件32（heap192m），没有C07负载或其他Maven。完成后确认源码与部署一致，再运行新目录的原生真实故障：必须同时 `AMA_NATIVE_API_FAULT=1 AMA_NATIVE_API_HARD_CRASH=1`，检查报告apiProcessFaultEnabled=true、signalSIGKILL、完整10项通过，再100路短测和两小时。不要把之前只有7项且faultEnabled=false的基础报告算故障通过。
+
+C03真实API6项已通过，Java688/Web395；SDK4已通过，C03手工dialog/controller/privatejournal尚未接，c03-manual-ui-brief.md可直接执行。C02/C03自动建议说话人/C06/B其余矩阵仍OPEN。当前main/单agent、无分支worktree，固定harness8792/2525，DB45907/V042；私有参数不得输出。继续全部B/C直到完成，不发局部结束答复。
+
+### 2026-10-31 15:24 紧接续：先修复真实杀进程后的限流恢复
+
+C03 API6项已真实GREEN，main部署/源码cc4db2d4d13e29be155aeed25002d6df01afb1b0f90844518489b1a095ed08a7，API池32/文件32已生效。原生基础7项GREEN，但它未启用故障总开关（不能算杀进程）；补齐AMA_NATIVE_API_FAULT=1和AMA_NATIVE_API_HARD_CRASH=1后，真正SIGKILL回归失败。证据 `.tools/local-app/recording-native-cas/c03-file32-hard-crash-20261031/report.json` / `c03-file32-native-hard-crash.log`：API重启35.569秒期间保留原始seq2/3等PCM，恢复后集中补传触发WS RATE_LIMITED，页面20秒后仍12分片待确认。当前API已由故障脚本恢复PID1750912、全部角色存活；没有C07负载/Maven。先查客户端drain/HTTP429/WSRATE_LIMITED退避与自动恢复，保留服务器原限流与ACK规则，写失败回归再修复，不能简单增大burst或超时掩盖。完整新鲜10项hardcrash通过后才继续100路短测/两小时。
+
+此前已完成：16文件线程600秒100/300真实协议30000/30000+100归档SHA通过，p95ACK50.9秒/996瞬态保留；默认16/显式32文件并发真实屏障测试、C03helper/wire/hash/JDBC/fullCAS、生产Java688、Web391、type/build/OpenAPI全绿。C03前端SDK已有，手工dialog/controller/privatejournal仍待接入，详见c03-manual-ui-brief.md。所有B/C剩余原目标继续，未全验收；main/单agent/无分支worktree，固定harness8792/2525不变，主MySQL45907/V042，Cschema ama_c_recording_a21835cf4f93，私有连接参数不输出。
+
+### 2026-10-31 15:19 最新：C03正式替换/撤销已真实验证，原生录音回归中
+
+当前实例main源码/部署一致 `cc4db2d4d13e29be155aeed25002d6df01afb1b0f90844518489b1a095ed08a7`，API池32、文件32线程/queue128/heap192m均已实际启动确认，所有fsync和权限/挂载校验保留。C03实际CAS新TXT→Worker→RAW→WORKING→全文搜索/选中位置替换/撤销/同键重放/后续编辑旧撤销409/非成员403/RAW不变6项全通过，见 `.tools/local-app/transcript-replacements/real-api-green-20261031/report.json`，会议 `9e0285cd-0d9c-4bea-9954-7330d9431a58`。Java688、Web391、类型/构建、OpenAPI字节校验全绿。C03新typedSDK已接好，但页面手工操作dialog/controller/privatejournal尚未接入；下一步详见 c03-manual-ui-brief.md，勿重复开发已验证的backend/helper/wire/hash。
+
+现在只运行 `c03-file32-native-recording-regression.log`，输出 `.tools/local-app/recording-native-cas/c03-file32-regression-20261031`，实际原生AudioWorklet/HTTP/WS/归档/trueAPI SIGKILL回归；不要正常启停/修改源码/构建以免报告签名变化，等它完成检查结果。没有C07负载和Maven活跃。完成后32文件线程的100路/300用户/60秒故障短测，然后根据吞吐推进7200秒实测。此前16线程600秒实测已30000/30000/100归档SHA通过，ACKp9550.9秒和996瞬态错误保留；两小时尚未执行。
+
+B/C全体验收仍NOT ACCEPTED：C02生产语音流水线、C03AI建议/说话人、C06持久实时字幕及B其余像素/CRUD仍需推进。main/单agent、不分支/worktree/提交/清理；兄弟harness固定8792/2525。主MySQL45907/V042，C专用schema ama_c_recording_a21835cf4f93；私有环境recording-archive-it-env.json，不打印凭据。所有新报告新目录，历史失败保留。
+
+### 2026-10-31 15:08 最新接续：10分钟协议通过、C03正式API在验证
+
+100/300/600秒真实负载已完整通过 `.tools/local-app/recording-load/pool32-steady-100-600s/report.json`：30000分片全部ACK/原始SHA读回、100归档、missingACK0/fatal0；ACKp9550.9秒、996瞬态错误保留。API未杀进程，100次计划断线丢ACK在198–251秒实际执行；不是无故障测试。两小时仍未运行。该case已结束，正常部署可恢复。
+
+正在开发C03精确手工替换/撤销：core helper4、wire新3+旧4、请求哈希2、FileSettingsIT1共14选择测试通过。新真实CAS脚本 `tools/dev/transcript_replacements_cas.mjs` 在旧部署已取得TXT→Worker→RAW→WORKING后search403的RED；新服务已增加搜索/REPLACE/UNDO路由，必须新部署后再跑GREEN，不可先宣布业务完成。详见 `.superpowers/sdd/2026-10-21-ama-phase-c/c03-manual-mutations-brief.md`；core helper、Command新可选Replacement、兼容旧4参构造、严格wire、仅新REPLACE追加哈希、旧SAVE黄金hash不变、JdbcSavedTranscripts复制新WORKING/当前版本/完整来源门/撤销复制已验证父文本与marks均已实现。OpenAPI新增3路径及独立新schema；C03前端SDK/真实UI尚未接入。
+
+文件16线程全阻塞fsync的实际证据已保留；32并发回归确实RED16/32后GREEN(default16/explicit32)。支持受保护workerThreads1..32，默认16保留；本地启动新参数 `AMA_LOCAL_FILE_WORKERS=32` 会写入文件服务配置并把本地file heap升192m(默认96m)，所有fsync/角色/挂载/inode检查与queue128不变。启动器46测试(42pass/4skip)通过。当前运行实例仍是e3f74ffa、API池32、文件16；新代码尚未部署。
+
+当前仅一个Maven `c03-manual-production-java-units.log` 在跑新正式实现的全生产测试；通过后生成/校验Web API types，待所有构建结束再正常 `local_app.py start`，同时显式 `AMA_LOCAL_DB_POOL_MAXIMUM=32 AMA_LOCAL_FILE_WORKERS=32`，CAS/harness8792、bridge46969、Web5174/API8182/8183保持。之后真实CAS替换/撤销GREEN、原生录音回归和32文件线程的100路短测/稳态，再决定7200秒负载。B/C仍NOT ACCEPTED，C02/C03自动建议/说话人/C06与B剩余CRUD/像素未完成。不得停下或写成全部完成。
+
+### 2026-10-31 14:35 最新接续：100路短测通过、Office真实链完成、反馈修复部署中
+
+仍在 `/home/tanren/ama` main、单agent，无分支/worktree/提交/清理。固定 sibling8792/2525保持不变。完整B/C仍NOT ACCEPTED；不可停在局部结果。
+
+C07 `.tools/local-app/recording-load/pool32-concurrent-100/report.json` 实际100录音/300 CAS用户/60.005956秒、3000分片全部ACK并原始SHA读回、100归档、missingAcked0/fatal0，真实API杀进程恢复。保留4081录音及5878背景瞬态错误，ACKp9543623ms；协议短测通过不等于实时模型或两小时资格。实际API上限32已由启动日志和state证明；该次旧driver错误写20，保留原report及独立pool-configuration-observation.json，driver现已修复（13测试）。进程采用owned detached runner，避免PTY约600秒被终止。下一步新部署后先100/300/600秒无故障稳态，再按实测决定7200秒真实故障长测；不能声称已执行两小时。
+
+B导入弹窗 `.tools/local-app/prototype-parity/import-panel-fixed-20261031/report.json`18/18精确零像素（原型不改、无mask/容差、部署/工作区382f5594一致）。Office正式6项联调 `.tools/local-app/integration-import-cas/office-order-corrupt-zip-20261031/report.json`已通过五格式、保存丢ACK重放、顺序刷新无重传、非成员403、Worker原始文件SHA、损坏ZIP无部分RAW、明确放弃后不可读；历史错误夹具/5秒超时/HMR导航/APIRequestContext Securecookie问题均保留说明。
+
+反馈后端原来忽略幂等键和cursor，已真实3项MySQL RED→GREEN，修复原创建ACK与单条审计原子持久化、当前READ门、20条游标、输入4096限制。Web新增私有原请求恢复、稳定键重试及旧身份异步回包隔离6项；全Web386、Java679、类型/构建/OpenAPI字节检查通过。真实浏览器RED已证明丢响应刷新丢内容；最新 `feedback-recovery-deploy.log` 正在部署（AMA_LOCAL_DB_POOL_MAXIMUM=32，保留1秒取连接超时），完成后先跑 `tools/dev/feedback_cas_recovery.mjs`新输出证明GREEN。没有活跃C07负载和Maven；不要在长测期间正常部署/重建，API/worker/files均由driver冻结。
+
+C02/C03/C06生产接线与B其他矩阵仍OPEN，模型质量/字幕p95未验证。主DB45907/V042；专用Cschema ama_c_recording_a21835cf4f93，私有环境 recording-archive-it-env.json；调用统一IT runner需另把AMA_TEST_DATABASE_URL指向同一已批准CURL（不得打印凭据）。所有新验证用新目录，保留旧失败/业务数据，不重跑既有已发布夹具。
+
+### 2026-10-31 13:29 实际时钟回拨阻断与修复（最新）
+
+新部署7002版本的100路短测在第6个真实CAS新用户GET会话时再现401，已用自有只读数据库诊断抓到精确原因：客户端05:20:59.016483Z，DB05:20:59.133084，已签发时间05:20:59.582827，DB回拨后会话被判未来449743微秒；身份ACTIVE、未撤销、代次一致。证据 `.tools/local-app/recording-load/sequence-clock-concurrent-100/events.ndjson`，失败报告保留。不要把它归为harness或隐藏401。
+
+已新增V042 `enterprise_identity.session_time_floor`：真实签发/每次校验在身份锁内推进共享DB时间下限，既有future/expiry/status/generation/revoke校验保持；最终锁定读取当前事实，避免旧RR视图恢复已撤销身份。确定性DB连接级时钟回拨测试先失败，再4项通过 `identity-db-backward-clock-green.log`；新增旧RR撤销用例后组合正在跑 `recording-monotonic-clock-combined.log`（预期50项，当前已见身份5项通过），源代码尚未部署，C专用schema042、main仍041。最后增加校验SQL必须绑定初次发现的身份ID；本组合运行时已编译旧查询，之后需重跑身份/HTTP定向以验证最后绑定，并跑生产679后再部署迁移042。当前唯一Maven会话42142；没有活跃负载。
+
+下一步必须先确认组合结果，顺序进行新身份/HTTP与生产回归、正常`local_app.py start`部署，再100/300短测。文件16工作线程、严格有界顺序读取、取消/回滚/历史DB PCM路径已在前一个47项组合通过并部署7002；单路16秒含SIGKILL和顺序归档8片全部读回通过。100路2小时仍未开始。所有旧失败保留，不覆盖，不新增分支/worktree/agent。
+
+### 2026-10-31 13:14 C-01 及实际负载续作（最新）
+
+C01 新私有可关闭 PCM 资源真实 FFmpeg8项、媒体解析/来源19项、MySQL版本输出4项已通过；生产单元679通过并曾部署为 `8f7796d16b14fb47490dd42a4c235890d946513e0898ff4fcdf9c3df70439b8e`。C01/C02业务语音流水线仍未安装，不能把资源辅助类签收为全阶段。
+
+C07 已交付实际测试传输，使用固定8792 harness创建自有 CAS 测试用户，通过 AMA CAS、真实 Cookie/CSRF、签发租约、标准 WebSocket、确定性 PCM、当前 ACK、完整归档逐片 SHA 读回及200个活跃后台用户。1路16秒含自有 API SIGKILL/原缓存重传/回听通过。第一次100路300用户60秒实测失败：3000片全获ACK，92份归档2760片已验证，8份终态/控制失败，ACK p95约79.8秒且持续积压。完整证据 `.tools/local-app/recording-load/concurrent-100-clock-oracle/`；不能改写该失败报告，实际7200秒尚未运行。
+
+已针对瓶颈推进修复，尚未部署：数据库时钟签发会话，保留未来/过期/撤销/代次检查；文件线程池从实际只工作的4线程改为有界16线程，实际持久化阻塞回归先失败4/16再通过16/16；新增严格有界 mTLS顺序读取，归档一次流传输冻结清单，逐片长度/SHA和总EOF仍检查，历史/混合DB PCM保留原路读取。真实组合47项通过 `recording-sequence-combined-green.log`，含租约/HTTP/WS/归档取消/回滚/损坏及新顺序读取；生产679正在重跑 `bc-sequence-clock-production-units.log`。负载客户端终态丢响应恢复有真实HTTP回归，12项Python通过，补上清单核对、续租/重领、已封存原请求重放和有限重试，不伪造归档可用。
+
+下一步：确认当前生产 Maven 全绿后用 `local_app.py start`（不先stop）部署，再做1路/100路故障短测；只有50片/秒可持续且读回通过才启动100路2小时。所有输出新目录，保留旧失败。测试会先复制worker类并以原环境重启该自有worker，避免后续Maven改变负载期间类加载；API使用内容寻址的已解包JAR。负载期间禁止正常启停/重建服务，只允许测试自己的已核验API故障控制器；凭据仅内存，不写证据。无活跃负载时才正常部署。主DB45907、C schema `ama_c_recording_a21835cf4f93`仍041，全部工作main/单agent。B矩阵及C02/03/06仍OPEN，真实模型、字幕p95仍未验证。
+
+### 2026-10-31 12:41 C-01 推进（最新）
+
+C04/C05 必填 HTTP SHA 修复后的冻结源码验证已通过：`.tools/local-app/recording-native-cas/frozen-required-hash/report.json` 真实 CAS/原生 AudioWorklet/SIGKILL/缓存恢复/归档/回听10项，部署与当时工作区签名 `2a48f5f5c443e89f657992d2947de896daf1f82461167531abb57d45a5d3ebee`。当前新的 C01 修改尚未部署，不回写旧证据签名。
+
+C01 已新增私有、可关闭、有界 PCM 准备资源，保留原文件 SHA、PCM SHA、排序/内容指纹与原文件定位；固定2个重资源，准备完成仍持有槽位直至关闭，工作器单取消作用域可撤销资源。真实 FFmpeg IT8通过（`media-preparation-official-it.log`），含视频200ms原始偏移、无音轨/损坏、阻塞取消、资源关闭和来源排序；工作器3通过。泛型 IT 入口已通过 RED→GREEN 修复意外执行无关 Surefire 用例的问题，入口42项通过。不能把这些本地资源测试记为业务语音流水线完成。
+
+新的真实 MySQL 输出回归 `MediaImportOutputIT`4项已观察到当前 media v2 被旧 v1 SQL 限制拒绝，另3项通过（`media-output-profile-red.log`）；正在修复当前/历史媒体版本与统一来源时间校验。该次使用保留的自有 `ama_c_recording_eb96eed04c36`，仅追加迁移037→041和新夹具行，没有重置旧数据；主验收 schema `ama_c_recording_a21835cf4f93`仍041、DB45907。后续优先使用 `recording-archive-it-env.json`。本地 Whisper 仍未安装；不得把 harness 冒充真实模型安装。C02全局模型配额/阶段恢复、C03工作台、C06字幕、C07真实100路2小时与 B剩余矩阵继续 OPEN。
+
+### 2026-10-31 原生录音与协议验证（最新）
+
+C-04/C-05 已形成原生页面→AudioWorklet→真实 PCM→HTTP/WS→本地文件→MySQL 清单→持久归档任务→授权回听的完整链路。V041 已增加历史会话查找索引，写入租约在分段行之前锁定会议准入，禁止历史重复活动会话绕过单采集端限制，不重写旧音频。实际组合集成39项、生产 Java674、Web381、浏览器 E2E40 通过，OpenAPI 字节校验、类型与构建通过。最新 HTTP 必填 SHA 修复在部署（`recording-hash-final-deploy.log`），部署完成后仍需绑定新签名的真实 CAS 验证；不要混用之前源码签名。
+
+已取得固定源码的真实强杀恢复证据：`.tools/local-app/recording-native-cas/frozen-hard-crash-v041/report.json` 10/10，部署与工作区同为 `547945a1527373dc27058c071f5d235a4aa5c78b34432ed36e4f7e978fbe0ae2`；验证 `SIGKILL` API、原缓存字节补传、租约、新段、刷新无自动设备采集、站内后台、归档 WAV 每分片 SHA 和原生播放器时长。音频上下文实际 44100Hz，输出 16000Hz；48kHz 是另有单元验证，不能冒充原生设备48k实测。物理麦克风、其他企业浏览器与真实 ASR 质量未签收。
+
+最新 API DB 端口 `45907`，专用 C schema 为 `ama_c_recording_a21835cf4f93`（041）；私有环境文件不打印凭据。本轮保持单 agent、main，无新分支/worktree，无提交、清理或业务数据重置；兄弟 harness 固定8792/2525不改。B 官方发布仍经真实 CAS 只读回归6/6，provider POST维持1，证据 `material-publication/after-native-pcm/`。
+
+接下来按 C-01/C-02 推进：FfmpegNormalizer 仍只返回元数据并丢弃 PCM，需有界可关闭准备产物和内容指纹；现有 media v2/历史 v1 的任务准备和 timed-output 允许列表不一致，需真实回归；原始/增强/人工/确认版本、全局模型配额与阶段恢复、持久字幕和100路2小时仍未完成生产接线。C-03/06/07 与 B 其余矩阵继续 OPEN，不能把当前协议/原生录音验证写成 B/C 全部完成。逐步证据及裁决见 `.superpowers/sdd/2026-10-21-ama-phase-c/progress.md`。
+
+### 2026-10-31 11:40 原生 PCM 接入续作
+
+已部署 V039/V040：数据库时钟租约、单会议活动会话准入、标准 Spring WebSocket、共享 HTTP/WS 流控、有界控制帧、恢复清单、原生 AudioWorklet/IndexedDB 和应用级录音生命周期。当前源签名 `644650cba687bd12b0438e652a06e7e9e148e70146f8f25752125daaec5beff7`，本地 MySQL 端口 `45907`；两份私有 C 测试环境 URL 已更新，凭据不写入文档。前端原生录音页已使用实际 PCM 保存确认与恢复上传，旧 MediaRecorder 文件仍可下载；实时识别明确尚未安装。`保存并查看进度` 当前只提交真实录音归档，不冒充语音转写完成。
+
+新鲜验证：生产 Java674、Web379、浏览器 E2E36，生成契约校验/类型/构建通过；真实 MySQL＋HTTP＋WS＋mTLS 文件＋归档组合35项通过。归档取消修复经过真实 Worker 单回调约束复现：生命周期与复制流重复注册导致 READY 重试，现归并到 SourceReadLifetime。跨类偶发 JDBC 超时的测试隔离缺陷也已复现：Hikari 将全局 DriverManager.loginTimeout 从7改成1，夹具关闭后现恢复原值；不修改生产认证或放宽 DB 超时。保留各轮失败证据。
+
+正在运行真实 CAS 浏览器 SDK/WS/归档重验及原生页面的模拟麦克风完整链路，输出使用新目录，不覆盖旧证据。此条写入时尚未取得它们的成功报告。下一步继续原生回听、缓存/刷新/单 API 进程中断联调，再推进 C-01/02/03/06/07 和 B 剩余矩阵/负例。B/C 总状态仍未通过，不能仅以这些组件和协议通过标记整阶段完成。最新逐步账本仍为 `.superpowers/sdd/2026-10-21-ama-phase-c/progress.md`。
+
+### 2026-10-31 09:52 归档任务续作
+
+C-04 新增 V037/V038 持久归档输入、代次和输出登记，安装到既有 durable queue 与 API/worker 统一 authority。真实五项集成验证已通过：普通 owner registry 调用不能绑定 PREPARED 文件，只有队列当前 WRITING invocation 可完成保护引用移交；归档 READY、文件登记与 task SUCCEEDED 同事务，提交失败完整回滚；存储读失败三次后原音频保留，显式重试创建新代次，活动/成功重放保留同 task；完整 WAV/Range/416/删除后权限均验证。证据 `.tools/local-app/recording-archive-retry-green.log`，新保留的专用 schema `ama_c_recording_a21835cf4f93`，私有连接参数见 `.tools/local-app/recording-archive-it-env.json`，不修改旧受限夹具。
+
+结束录音现在返回 archiveTaskId；回听/归档状态与工作台任务类型接线已写入。任务详情地址维持会议范围 `/api/v1/meetings/{meeting}/recording-archives/{input}`，音频读取独立使用 `/api/v1/recordings/{session}/audio` 并核对真实成功任务输出。最新生产 Java669/Web352 通过，OpenAPI 生成校验、类型和构建通过。组合 C IT 与 E2E 正在复跑，随后部署到本地实例并执行 `tools/dev/recording_archive_cas_integration.mjs` 的真实 CAS/worker/回听/名单授权与撤权链路；本条写入时运行实例仍为 V036。
+
+这尚未完成 C-04 单采集者租约、生产 WebSocket，也未接入 C-05 浏览器 PCM/IndexedDB 和 C-06 真实字幕。自动语音业务、完整 B 像素矩阵、实际两小时负载仍继续推进，B/C 总体验收保持未通过。后续应为归档准备安装已有 SourceReadLifetime，使任务取消可立即中止正在阻塞的文件请求，并验证窗口。
+
+### 2026-10-31 09:15 后续进展（历史）
+
+C-04 已部署新文件分片 V036：真实 CAS session `7a45f61a-7893-4c9c-aa30-59dd92761f6b` 的两段四个已 ACK 分片跨整套进程/数据库重启恢复，并经 mTLS 文件服务逐一核对字节/hash（`.tools/local-app/recording-cas-files/`）。新归档准备器合并所有段成 canonical WAV、保留样本映射、校验每个分片及整体 SHA，并幂等写不可变对象；真实 MySQL/本地卷/mTLS/独立文件进程/损坏分片验证 6/6 通过（`recording-archive-integrity.log`）。它仍是准备产物，接下来必须完成 durable task＋FileRegistry 正式登记＋回听，不能把它算作已经可播放的业务归档。固定后端上传登记的回归正在 RED 阶段。
+
+C-02 新 HTTP adapter 经固定 harness 8792 的两秒 WAV 五阶段调用通过；默认种子修复短 WAV 时间范围，同时保留自定义故障；harness 全量 34 passed。没有安装本地离线 ASR，产品音视频能力仍未启用。发现既有 ImportTaskDomainPolicy 的 timed-output 仅允许 media v1，后续接入真实 media v2/HTTP profile 时需加实际回归修复。
+
+B 首页已正式取得 32/32 精确零像素差异，完整有限 dev-viewer CAS/API 夹具、三视口、视口/全页、原型不改、阈值0/无掩码；双方浏览器固定 `--disable-partial-raster` 消除局部栅格舍入。报告 `prototype-parity/home-finite-final-20261031/report.json`。其余页面/状态和负例仍按矩阵 OPEN。
+
+最新广泛验证仍是文件归档接线前 Java667/Web351；随后 focused core/recording bounds、文件集成均通过。独立 C 账本 `.superpowers/sdd/2026-10-21-ama-phase-c/progress.md` 是 C 工作接续入口。持续单 agent/main，未创建分支/worktree、未提交/重置现有修改。
+
+## 2026-10-31 最新接续状态（单 agent / main）
+
+B 阶段新鲜闭环：真实 CAS 材料快照参与纪要生成、编辑保存/刷新、名单授予/撤权/成员只读、合成审阅门禁、最终冻结/同键重放、发布成功和正式文档负责人/成员字节一致。最终确认 `855ee54d-9028-4571-b94c-ee2e60f9c63f`，发布 `7e2edd2f-5dd5-40bd-a7af-e1ef358daafe`，provider POST 一次。证据见 `.tools/local-app/material-minutes/roster-review-final/report.json`、`.tools/local-app/material-publication/first/report.json`。逐页像素矩阵仍有 OPEN，不能整体签收 B。
+
+C 阶段已修复 ACK 实际不持久化音频、重启丢状态、事务回滚虚假 ACK、录音对象 ACL 缺失，以及浏览器按发送序号提前清缓存。V034 保留旧 NULL 音频记录并 fail closed；当前用 MySQL PCM 保存作为修复阶段，尚需完成规范要求的 local FileStoragePort 分片/归档/注册回听链路、多个 part/租约、生产实时模型/字幕接线与两小时实际负载。不要把组件测试当 C 阶段完成。
+
+最新验证：生产 Java 单元 662 通过；新独立本地 schema `ama_c_recording_eb96eed04c36` 的录音 JDBC/真实 HTTP 集成 6 通过（`.tools/local-app/recording-http-mysql-final.log`）；Web 单元 351 通过；类型检查、构建通过。根 Maven 旧 StoredSourceGraph 夹具已修复，仍有历史 integration-tests 证据与环境问题，未声称全量绿。
+
+负载入口已纠正：`python3 tools/checks/run.py load realtime-100` 执行真正负载入口，传输未实现时返回 `NOT_EXECUTED` 和非零状态；6 个报告/选择器测试只证明判定逻辑。已有进度账本 `.superpowers/sdd/2026-10-30-ama-b-followup-pixel-crud-cas/progress.md`。
+
+AMA 本地固定 5174/8182，harness 固定 8792/2525。当前 harness 进程用 `MOCK_CONTROLLED_KNOWLEDGE_ORIGIN=http://127.0.0.1:46969` 显式桥接受控签名发布协议，重启时须传入该可选环境变量；它不是生产权威接口。正在进行 `tools/dev/recording_cas_integration.mjs` 的 prepare → AMA 重启 → recover 验证，不应重建/清空现有业务数据。
+
+> **范围裁定：** 所有可达页面逐页 1:1 像素复刻；除语音相关业务外，所有可见增删改查、确认、归组、移除、重试、审核和发布真实走 AMA API 并持久化。录音、音视频、ASR、播放、说话人识别及依赖音频的自动纠错只做页面静态/延期状态，标记 `DEFERRED_VOICE`。
+
+> **联调裁定：** CAS、会话、材料/导入相关请求使用并行兄弟项目 `\\wsl.localhost\Ubuntu-24.04\home\tanren\ama-integration-harness`（Linux `/home/tanren/ama-integration-harness`）的固定 HTTP `8792`、SMTP `2525`。harness 只作可重复模拟器，不是业务权威；只有 AMA 真实请求证明兼容缺口时才同步修复，不改固定端口。
+
+> 旧计划、旧验收和旧 R2 结果继续作为历史证据保存；它们不能覆盖上述 2026-10-30 范围，也不能把受控流程或静态页面记为整体完成。
+
+> 下方旧接续记录中的工作树、分支、端口和执行顺序只用于历史审计；当前开发约束以仓库根目录 `AGENTS.md` 和本页顶部 2026-10-30 入口为准。
+
+# 历史接续状态 — 2026-10-29 原型全量返工记录（当前入口见顶部）
+
+历史状态曾要求所有页面布局、组件、样式、文字/固定文案与全部可达功能复刻原型；该要求已由顶部 2026-10-30 范围进一步细化为非语音 CRUD 实装和语音 `DEFERRED_VOICE`。此段不代表当前实现已完成。
 
 工作树 `/home/tanren/ama/.worktrees/phase-b-completion`，分支 `codex/phase-b-completion-20261023`，保留全部脏代码和历史失败证据，无提交/合并/推送。原型 `designDocs/智能会议助手1021版.html` 原件不改。继续计划 `docs/superpowers/plans/2026-10-29-full-prototype-completion.md`，当前 ledger `.superpowers/sdd/2026-10-29-prototype-parity/progress.md`。
 
@@ -18,7 +194,7 @@
 
 ---
 
-# 当前计划与接续入口 — 2026-10-28 Demo 优先 R2
+# 历史计划与接续入口 — 2026-10-28 Demo 优先 R2（当前入口见顶部）
 
 本次按用户建议重构授权更新计划与接续文档，范围仍为文档。执行 [AMA-DEMO-FIRST-20261028 R2](docs/superpowers/plans/2026-10-28-ama-demo-first-adjustment.md)：前期固定**本地 MySQL、本地文件、单机**，按可操作业务片段同步原型复刻、装配和联调；S3、双 MySQL、双活未完适配及专属依赖最后 F，不提前新增相关实现、抽象、配置体系或测试。
 
@@ -225,3 +401,10 @@ W=`.superpowers/sdd/2026-10-23-ama-phase-b-remaining`。已封存13份可变前�
 
 
 最新采用记录（2026-10-24）：Task7源码bdf9762458a9d2ea046b0a8a5bb5e2b07c6df2bc已获独立限定SPEC COMPLIANT/quality APPROVED（22818db8，0新问题）及增量机械PASS（2d41fbf0）。采用文档docs/acceptance/b/task-B-remaining-07-prepared-external-adoption-20261024.md与精确镜像已形成。407为153组合IT+254units；原完整批次1FAIL/1ERROR根因UNKNOWN，保留终审跟踪。Task7框架完成，T7CV04真实消费者仍待9/10/11。下一项Task9实际源码/前缀窄重定位及新独占夹具单独ACK，尚未安装Task9。全部B后停止，不进入C/D/E/F；最新机器状态与adoption commit以W/current-state.json为准。
+# 最新 B/C 接续状态（2026-10-31）
+
+当前继续入口为 `/home/tanren/ama` 的 `main` 分支；本轮没有创建分支、worktree 或子 agent。B/C 接续源码和验证均保留在当前工作树。固定端口外部联调使用 `/home/tanren/ama-integration-harness` 的 HTTP `8792`、SMTP `2525`，AMA 本地实例通过显式 `AMA_INTEGRATION_KNOWLEDGE_ORIGIN=http://127.0.0.1:8792` 读取材料；不把 harness 当作生产权威实现，也没有改变固定端口。
+
+最新证据：固定 CAS/材料导入浏览器流程 10/10、harness 全量 31 passed、Web E2E 28/28、Web 单元 337/337、C focused Java/load/build/OpenAPI checks 全通过。最新 B report 在 [`docs/acceptance/b/b-followup-final-2026-10-30.md`](docs/acceptance/b/b-followup-final-2026-10-30.md)，C 记录在 [`docs/acceptance/c/summary.md`](docs/acceptance/c/summary.md)。
+
+阶段结论仍为 `NOT ACCEPTED`：主页全页差异含真实数据数量/空态差异，名单第二身份与完整撤权、Office/转写/纪要/审阅/最终冻结/发布/专题/反馈逐页 CRUD 证据尚未全部闭环；语音业务继续 `DEFERRED_VOICE`。全量 Maven 还保留既有 `StoredSourceGraphTest` 的 `PROFILE_UNAVAILABLE` 夹具失败（2 failures + 3 errors）。不要用历史报告或静态 demo 把这些行升级为 PASS。

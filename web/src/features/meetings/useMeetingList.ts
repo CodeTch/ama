@@ -22,7 +22,7 @@ export function useMeetingList(fetchPage:(scope:MeetingScope,cursor:string|null,
  function next(){if(!page.value?.hasMore||!page.value.nextCursor)throw new Error('No continuation');return load(page.value.nextCursor,'next');}
  function previous(){const p=positions.value[scope.value];if(p.index===0)throw new Error('No previous page');return load(p.cursors[p.index-1]!,'previous');}
  function first(){return load(null,'first');}
- function selectFilters(value:MeetingFilters){filters.value={...value,stages:[...(value.stages??[])],categories:[...(value.categories??[])]};reset();page.value=null;return load(null);}
+ function selectFilters(value:MeetingFilters){filters.value={...value,stages:[...(value.stages??[])],categories:[...(value.categories??[])]};reset();return load(null);}
  function dispose(){invalidate();stop();}
  return {selectFilters,filters:shallowReadonly(filters),scope:shallowReadonly(scope),page:shallowReadonly(page),loading:shallowReadonly(loading),error:shallowReadonly(error),pageNumber,canPrevious,reload,selectScope,next,previous,first,invalidate,dispose};
 }

@@ -170,9 +170,11 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         long ordinal=1;
         for(var segment:segments) {
             boolean timed=segment.get("start_ms")!=null||segment.get("end_ms")!=null;
-            require(number(segment,"ordinal")==ordinal++&&segment.get("source_paragraph")!=null&&number(segment,"source_paragraph")>0&&segment.get("speaker_id")==null&&(!timed||segment.get("start_ms")!=null&&segment.get("end_ms")!=null&&number(segment,"start_ms")>=0&&number(segment,"end_ms")>number(segment,"start_ms")),PROVENANCE_UNAVAILABLE);
+            require(number(segment,"ordinal")==ordinal++&&segment.get("source_paragraph")!=null&&number(segment,"source_paragraph")>0&&segment.get("speaker_id")==null&&(!timed||segment.get("start_ms")!=null&&segment.get("end_ms")!=null&&number(segment,"start_ms")>=0&&number(segment,"end_ms")>number(segment,"start_ms")&&number(segment,"end_ms")<=7200000),PROVENANCE_UNAVAILABLE);
             // The same existing bounded membership count also proves that times are authorized by the stored profile.
-            require(j.queryForObject("SELECT COUNT(*) FROM input_batch_file f JOIN transcription_input i ON i.batch_id=f.batch_id WHERE i.id=? AND f.file_id=?"+(timed?" AND i.parser_version='ama.media-documents.v1'":""),Long.class,spec.input().id(),text(segment,"source_file_id"))==1,PROVENANCE_UNAVAILABLE);
+            var arguments=new ArrayList<Object>(List.of(spec.input().id(),text(segment,"source_file_id")));
+            if(timed){arguments.add(MediaTranscriptParser.PROFILE_VERSION);arguments.add(MediaTranscriptParser.LEGACY_PROFILE_VERSION);}
+            require(j.queryForObject("SELECT COUNT(*) FROM input_batch_file f JOIN transcription_input i ON i.batch_id=f.batch_id WHERE i.id=? AND f.file_id=?"+(timed?" AND i.parser_version IN (?,?)":""),Long.class,arguments.toArray())==1,PROVENANCE_UNAVAILABLE);
         }
         require(j.queryForObject("SELECT COUNT(*) FROM transcript_segment_mark WHERE revision_id=?",Long.class,result.output().id())==0,PROVENANCE_UNAVAILABLE);
     }

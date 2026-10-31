@@ -5,7 +5,7 @@ public final class JdbcWorkspaceTasks {
  public record Item(String taskId,String kind,String state,String attemptToken,String businessRevisionToken,String inputId,String detailPath){}
  public record Page(List<Item> items,String nextCursor,boolean hasMore,String verification){public Page{items=List.copyOf(items);}}
  private final JdbcTranscriptAuthority authority;private final WorkspaceCursor cursors;private final WorkspaceReadBudget.Limits limits;private final WorkspaceTaskScan scan;private final JdbcTemplate jdbc;
- private static final Set<String> KINDS=Set.of("ALL","TRANSCRIPT_IMPORT_V1","MINUTES_GENERATE_V1","KNOWLEDGE_PUBLISH_V1");
+ private static final Set<String> KINDS=Set.of("ALL","TRANSCRIPT_IMPORT_V1","MINUTES_GENERATE_V1","KNOWLEDGE_PUBLISH_V1","RECORDING_ARCHIVE_V1");
  public JdbcWorkspaceTasks(JdbcTranscriptAuthority authority,JdbcTaskQueue queue,WorkspaceCursor cursors,WorkspaceReadBudget.Limits limits){
   TranscriptImportRuntime.requireCombined(queue,authority);if(!(authority.meetingAccess() instanceof JdbcMeetingAccess access))throw new IllegalArgumentException("Actual JDBC owner gate required");access.requireProjectionSource(authority.dataSource());this.authority=authority;this.cursors=Objects.requireNonNull(cursors);this.limits=Objects.requireNonNull(limits);jdbc=new JdbcTemplate(authority.dataSource());jdbc.setQueryTimeout(5);scan=new WorkspaceTaskScan(jdbc);
  }
@@ -28,7 +28,7 @@ public final class JdbcWorkspaceTasks {
  void lockParents(Plan plan){guard(plan,0);plan.phase=1;plan.relations.lockAndCompare();plan.phase=2;}
  Page finish(Plan plan){guard(plan,2);plan.phase=3;for(var row:plan.rows.stream().sorted(Comparator.comparing(WorkspaceTaskScan.Metadata::id)).toList())scan.lockExact(row,plan.budget);
   int count=Math.min(plan.limit,plan.rows.size());var items=new ArrayList<Item>();for(var row:plan.rows.subList(0,count)){if(!plan.kind.equals("ALL")&&!plan.kind.equals(row.spec().type()))continue;
-   plan.budget.reserve(1,8,1024,1024,1024,4,true);String path="/api/v1/meetings/"+plan.meeting;path+=switch(row.spec().type()){case "TRANSCRIPT_IMPORT_V1"->"/processing-tasks/"+row.id();case "MINUTES_GENERATE_V1"->"/minutes/generation-tasks/"+row.id();case "KNOWLEDGE_PUBLISH_V1"->"/publications/"+row.spec().input().id();default->throw unavailable();};
+   plan.budget.reserve(1,8,1024,1024,1024,4,true);String path=plan.relations.detailPath(row);
    items.add(new Item(row.id(),row.spec().type(),row.state(),Long.toString(row.attempt()),Long.toString(row.spec().businessVersion()),row.spec().input().id(),path));
   }
   boolean more=plan.rows.size()>plan.limit;plan.budget.reserve(1,2,2048,2048,2048,4,true);String next=more?cursors.encode(plan.actor.enterpriseId(),"tasks:"+plan.meeting+":"+plan.kind,plan.rows.get(count-1).position().encode()):null;plan.budget.check();plan.phase=4;return new Page(items,next,more,"PERSISTED_RELATION");

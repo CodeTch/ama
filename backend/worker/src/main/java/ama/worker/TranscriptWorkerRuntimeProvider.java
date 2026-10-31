@@ -34,10 +34,14 @@ public final class TranscriptWorkerRuntimeProvider implements WorkerRuntimeProvi
    var validators=new HashMap<String,OutboxReferenceValidator>(new MeetingEventReferences(source).validators());
    new TranscriptEventReferences(source).validators().forEach((k,v)->{if(validators.putIfAbsent(k,v)!=null)throw new IllegalArgumentException("Duplicate outbox validator");});
    new MinutesEventReferences(source).validators().forEach((k,v)->{if(validators.putIfAbsent(k,v)!=null)throw new IllegalArgumentException("Duplicate outbox validator");});
+   RecordingArchiveRuntime.eventReferences(source).forEach((k,v)->{if(validators.putIfAbsent(k,v)!=null)throw new IllegalArgumentException("Duplicate outbox validator");});
    var outbox=new JdbcOutbox(source,validators);
-   var components=JdbcTranscriptAuthority.create(source,tx,access,new TranscriptFilePurposePolicy(),catalog,Map.of(),budget,canonical);
-   var queue=TranscriptImportRuntime.install(source,fences,outbox,components);
-   loop=WorkerLoop.contextual(queue,Map.of("TRANSCRIPT_IMPORT",capacity),Map.of("TRANSCRIPT_IMPORT_V1",(lease,cancel)->TranscriptImportRuntime.prepare(queue,lease,settings,cancel)),worker);
+   var purposes=new TranscriptFilePurposePolicy();
+   var components=JdbcTranscriptAuthority.create(source,tx,access,purposes,catalog,Map.of("RECORDING_ARCHIVE",new ama.recording.RecordingArchiveReferencePolicy(source)),budget,canonical);
+   var uploads=new JdbcFileUploads(source,tx,access,purposes,catalog,new ama.audit.JdbcAuditAdapter(source),outbox,8L*1024*1024,components.authority().publicationWriteGuard());
+   var recordings=new ama.recording.JdbcRecordingPersistence(source,catalog);
+   var queue=TranscriptImportRuntime.install(source,fences,outbox,components,new RecordingArchiveRuntime.Dependencies(access,components.registry(),uploads,catalog,recordings,components.authority().publicationWriteGuard()));
+   loop=WorkerLoop.contextual(queue,Map.of("TRANSCRIPT_IMPORT",capacity,"RECORDING_ARCHIVE",1),Map.of("TRANSCRIPT_IMPORT_V1",(lease,cancel)->TranscriptImportRuntime.prepare(queue,lease,settings,cancel),RecordingArchiveRuntime.TYPE,new RecordingArchiveHandler(queue)),worker);
    if(minutes!=null||publication!=null){
     var operations=new JdbcExternalOperations(queue);var permits=new JdbcModelPermitPool(operations,minutes==null?Map.of():Map.of(ama.model.ControlledMinutesProtocol.MODEL,minutes.modelConfiguration()),(t,m,d)->{throw new IllegalStateException("No controlled cutoff proof");});
     var handlers=new HashMap<String,WorkerLoop.ExternalHandler>();var pools=new HashMap<String,Integer>();var models=new HashMap<String,String>();MinutesReconciliationHandler minutesRecovery=null;KnowledgeReconciliationHandler knowledgeRecovery=null;

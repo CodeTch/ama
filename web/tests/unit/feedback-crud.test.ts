@@ -6,3 +6,12 @@ const session:any={actor:{enterpriseId:'owner',status:'ACTIVE',roles:['USER']},c
 test('feedback facade validates persisted list and submit response',async()=>{
  const old=globalThis.fetch;try{globalThis.fetch=async(_input,init)=>init?.method==='POST'?Response.json({id:'00000000-0000-4000-8000-000000000002',meetingId:'00000000-0000-4000-8000-000000000001',category:'WORDING',comment:'建议',state:'PENDING',revisionToken:'0'},{status:201}):Response.json({items:[],nextCursor:null});const api=createFeedbackApi(createBusinessClient('https://ama.test',()=>session,()=>{}),()=> 'owner');const result=await api.create({meetingId:'00000000-0000-4000-8000-000000000001',category:'WORDING',comment:'建议'});assert.equal(result.state,'PENDING');assert.deepEqual(await api.list(null,new AbortController().signal),{items:[],nextCursor:null});}finally{globalThis.fetch=old;}
 });
+test('feedback retry can retain the original idempotency key and exact request',async()=>{
+ const previous=globalThis.fetch,requests:{key:string|null;body:unknown}[]=[];
+ try{
+  globalThis.fetch=async(_input,init)=>{requests.push({key:new Headers(init?.headers).get('Idempotency-Key'),body:init?.body});return Response.json({id:'00000000-0000-4000-8000-000000000002',meetingId:'00000000-0000-4000-8000-000000000001',category:'WORDING',comment:'建议',state:'PENDING',revisionToken:'0'},{status:201});};
+  const api=createFeedbackApi(createBusinessClient('https://ama.test',()=>session,()=>{}),()=> 'owner'),body={meetingId:'00000000-0000-4000-8000-000000000001',category:'WORDING',comment:'建议'},key='00000000-0000-4000-8000-000000000003';
+  await api.create(body,key);await api.create(body,key);
+  assert.equal(requests[0]!.key,key);assert.deepEqual(requests[1],requests[0]);
+ }finally{globalThis.fetch=previous;}
+});
