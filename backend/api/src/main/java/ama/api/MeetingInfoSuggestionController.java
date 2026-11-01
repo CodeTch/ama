@@ -1,0 +1,18 @@
+package ama.api;
+import ama.access.MeetingAccess;import ama.contract.IdentityContracts.*;import ama.db.TransactionRunner;import ama.meeting.JdbcMeetingRepository;import ama.transcript.*;import com.fasterxml.jackson.core.*;import com.fasterxml.jackson.databind.*;import jakarta.servlet.http.HttpServletRequest;import java.io.*;import java.util.*;import org.springframework.http.*;import org.springframework.web.bind.annotation.*;
+@RestController @RequestMapping("/api/v1/meetings/{meetingId}/info-suggestions")
+class MeetingInfoSuggestionController {
+ private final JdbcMeetingRepository repository;private final MinutesConfiguration.Runtime runtime;private final TransactionRunner tx;private final MeetingAccess access;
+ private final ObjectMapper json=new ObjectMapper(JsonFactory.builder().enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION).build()).enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
+ MeetingInfoSuggestionController(JdbcMeetingRepository repository,MinutesConfiguration.Runtime runtime,TransactionRunner tx,MeetingAccess access){this.repository=repository;this.runtime=runtime;this.tx=tx;this.access=access;}
+ @GetMapping ResponseEntity<byte[]> list(@PathVariable String meetingId,HttpServletRequest request)throws IOException{if(!request.getParameterMap().isEmpty())throw new IllegalArgumentException("Unexpected suggestion query");return response(queries(actor(request),meetingId).list(actor(request),meetingId));}
+ @PostMapping("/{suggestionId}/decision") ResponseEntity<byte[]> decide(@PathVariable String meetingId,@PathVariable String suggestionId,HttpServletRequest request)throws IOException{
+  byte[] bytes=request.getInputStream().readNBytes(4097);if(bytes.length>4096)throw new ama.contract.TranscriptContracts.Failure(413,"REQUEST_TOO_LARGE");JsonNode body;try{body=json.readTree(bytes);}catch(IOException malformed){throw new IllegalArgumentException("Invalid suggestion JSON");}
+  if(body==null||!body.isObject()||body.size()!=2||!body.has("expectedRevisionToken")||!body.has("decision")||!body.get("decision").isTextual()||!Set.of("ACCEPT","REJECT").contains(body.get("decision").textValue()))throw new IllegalArgumentException("Exact suggestion decision required");
+  var keys=Collections.list(request.getHeaders("Idempotency-Key"));if(keys.size()!=1)throw new IllegalArgumentException("One idempotency key required");JdbcProcessingIntake.key(keys.getFirst());long expected=HttpRevisionTokens.expected(body);var actor=actor(request);
+  return response(repository.decideSuggestion(actor,meetingId,suggestionId,keys.getFirst(),expected,body.get("decision").textValue(),()->queries(actor,meetingId).prepare(actor,meetingId,suggestionId),UUID.randomUUID().toString()));
+ }
+ private JdbcMinutesInfoSuggestions queries(Actor actor,String meeting){ama.contract.MinutesContracts.uuid(meeting);if(runtime.queries()!=null)return runtime.queries().infoSuggestions();tx.required(()->{access.require(access.lock(actor,meeting),MeetingAccess.Action.EDIT);return null;});throw new ama.contract.TranscriptContracts.Failure(503,"MINUTES_UNAVAILABLE");}
+ private ResponseEntity<byte[]> response(Object value)throws IOException{return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).header("Cache-Control","private, no-store").body(TranscriptWire.response(value,runtime.responseBytes()));}
+ private static Actor actor(HttpServletRequest request){return ((ResolvedSession)request.getAttribute(SessionSecurityFilter.SESSION)).actor();}
+}

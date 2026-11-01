@@ -56,7 +56,7 @@ final class RecordingWebSocketHandler extends AbstractWebSocketHandler implement
     var offered=Arrays.stream(String.join(",",offer).split(",",-1)).map(String::trim).toList();String proof="ama.csrf."+identity.csrfToken();
     if(offered.size()!=2||!offered.contains(PROTOCOL)||offered.stream().noneMatch(value->MessageDigest.isEqual(value.getBytes(StandardCharsets.US_ASCII),proof.getBytes(StandardCharsets.US_ASCII))))throw new MeetingAccess.AccessDeniedException();
     String path=request.getURI().getPath(),prefix="/api/v1/recordings/",suffix="/stream";if(!path.startsWith(prefix)||!path.endsWith(suffix))throw new IllegalArgumentException("Invalid recording route");String id=path.substring(prefix.length(),path.length()-suffix.length());ama.contract.OutboxContracts.uuid(id);
-    var route=recordings.session(id);tx.required(()->{var held=access.lock(identity.actor(),route.meetingId());access.require(held,MeetingAccess.Action.EDIT);mutations.require(identity.actor(),route.meetingId(),held);if(recordings.finished(id))throw new RecordingService.Closed();return null;});
+    String meeting=recordings.meetingId(id);var route=tx.required(()->{var held=access.lock(identity.actor(),meeting);access.require(held,MeetingAccess.Action.EDIT);return recordings.withinMeeting(id,meeting,()->{mutations.require(identity.actor(),meeting,held);if(recordings.finished(id))throw new RecordingService.Closed();return recordings.session(id);});});
     attributes.put(TOKEN,token);attributes.put(ROUTE,route);return true;
    }catch(ExpiredIdentity denied){response.setStatusCode(HttpStatus.UNAUTHORIZED);return false;}
    catch(MeetingAccess.AccessDeniedException denied){response.setStatusCode(HttpStatus.FORBIDDEN);return false;}

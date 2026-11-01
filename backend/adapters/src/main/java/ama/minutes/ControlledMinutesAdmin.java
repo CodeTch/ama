@@ -4,7 +4,7 @@ import java.nio.file.*;import java.nio.file.attribute.PosixFilePermissions;impor
 /** Explicit restricted installation entry point. Never invoked by an API or worker constructor. */
 public final class ControlledMinutesAdmin {
  private ControlledMinutesAdmin(){}
- public static final ArchiveReadBudget READ=new ArchiveReadBudget(65536,1048576,64,128,16,200000,32,255,65536,262144,1048576,65536,32,250000,500000);
+ public static final ArchiveReadBudget READ=new ArchiveReadBudget(65536,1048576,64,256,16,200000,32,255,65536,262144,1048576,65536,32,250000,500000);
  public static final ConfigArchiveIndex.IndexBudget INDEX=new ConfigArchiveIndex.IndexBudget(4194304,4096,67108864,128);
  private static final ObjectMapper JSON=new ObjectMapper(com.fasterxml.jackson.core.JsonFactory.builder().enable(com.fasterxml.jackson.core.StreamReadFeature.STRICT_DUPLICATE_DETECTION).streamReadConstraints(com.fasterxml.jackson.core.StreamReadConstraints.builder().maxDocumentLength(16384).maxStringLength(4096).maxNestingDepth(4).build()).build()).enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
  public record Installed(String inputSha,String indexSha,String templateId,String revisionId,String promptVersion,String promptSha,String modelVersion,String modelSha,String processingVersion,String processingSha){}

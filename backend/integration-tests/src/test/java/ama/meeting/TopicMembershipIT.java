@@ -23,8 +23,10 @@ class TopicMembershipIT {
   j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",actor.enterpriseId(),actor.enterpriseId());
   var tx=new TransactionRunner(source);var fences=new JdbcSubjectFences(source,Set.of("MEETING"));var access=new JdbcMeetingAccess(source,tx,fences);
   topics=new JdbcTopics(source,tx,access);meetings=new MeetingService(new JdbcMeetingRepository(source,tx,access,fences,new JdbcOutbox(source,new MeetingEventReferences(source).validators()),new JdbcAuditAdapter(source),id->{}));
-  meeting=meetings.create(actor,UUID.randomUUID().toString(),UUID.randomUUID().toString()).id();
+  meeting=meetings.create(actor,UUID.randomUUID().toString(),UUID.randomUUID().toString()).id();publishedFixture(meeting);
  }
+ // Root-state fixture only; this is not a real final-confirmation/publication producer.
+ void publishedFixture(String id){j.update("UPDATE meeting SET stage='PUBLISHED',ever_published=1 WHERE id=?",id);}
  @Test void assignmentIsOnePersonalTopicAndOriginalKeyDoesNotReapplyAnOldChoice(){
   String a=(String)topics.create(actor,UUID.randomUUID().toString(),"专题甲",null).get("id"),b=(String)topics.create(actor,UUID.randomUUID().toString(),"专题乙",null).get("id"),key=UUID.randomUUID().toString();
   assertThrows(ama.contract.MeetingContracts.Conflict.class,()->topics.assign(actor,meeting,a,UUID.randomUUID().toString(),1));assertNull(topics.memberships(actor,List.of(meeting)).getFirst().get("topicId"));
@@ -35,7 +37,7 @@ class TopicMembershipIT {
  }
  @Test void batchChecksAllRevisionsBeforeWritingAndLeavesAclAndSourceVersionsUntouched(){
   String second=meetings.create(actor,UUID.randomUUID().toString(),UUID.randomUUID().toString()).id(),topic=(String)topics.create(actor,UUID.randomUUID().toString(),"批次专题",null).get("id");
-  var grants=j.queryForList("SELECT * FROM meeting_access_grant WHERE meeting_id IN (?,?) ORDER BY meeting_id,enterprise_id",meeting,second);var bad=List.of(new JdbcTopics.MembershipTarget(meeting,0),new JdbcTopics.MembershipTarget(second,1));assertThrows(ama.contract.MeetingContracts.Conflict.class,()->topics.assignMany(actor,UUID.randomUUID().toString(),topic,bad));assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM meeting_topic WHERE meeting_id IN (?,?)",Integer.class,meeting,second));
+  publishedFixture(second);var grants=j.queryForList("SELECT * FROM meeting_access_grant WHERE meeting_id IN (?,?) ORDER BY meeting_id,enterprise_id",meeting,second);var bad=List.of(new JdbcTopics.MembershipTarget(meeting,0),new JdbcTopics.MembershipTarget(second,1));assertThrows(ama.contract.MeetingContracts.Conflict.class,()->topics.assignMany(actor,UUID.randomUUID().toString(),topic,bad));assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM meeting_topic WHERE meeting_id IN (?,?)",Integer.class,meeting,second));
   var both=List.of(new JdbcTopics.MembershipTarget(second,0),new JdbcTopics.MembershipTarget(meeting,0));String key=UUID.randomUUID().toString();topics.assignMany(actor,key,topic,both);topics.assignMany(actor,key,topic,both);var rows=topics.memberships(actor,List.of(second,meeting));assertEquals(List.of(second,meeting),rows.stream().map(row->row.get("meetingId")).toList());assertTrue(rows.stream().allMatch(row->topic.equals(row.get("topicId"))));assertEquals(grants,j.queryForList("SELECT * FROM meeting_access_grant WHERE meeting_id IN (?,?) ORDER BY meeting_id,enterprise_id",meeting,second));
   assertEquals(0,j.queryForObject("SELECT SUM(revision) FROM meeting WHERE id IN (?,?)",Long.class,meeting,second));topics.assignMany(actor,UUID.randomUUID().toString(),null,both);assertTrue(topics.memberships(actor,List.of(second,meeting)).stream().allMatch(row->row.get("topicId")==null));
  }
@@ -46,5 +48,8 @@ class TopicMembershipIT {
  }
  @Test void replayStillRequiresCurrentMeetingAuthority(){
   String topic=(String)topics.create(actor,UUID.randomUUID().toString(),"权限专题",null).get("id"),key=UUID.randomUUID().toString();topics.assign(actor,meeting,topic,key,0);j.update("UPDATE meeting SET lifecycle='DELETING' WHERE id=?",meeting);assertThrows(ama.access.MeetingAccess.AccessDeniedException.class,()->topics.assign(actor,meeting,topic,key,0));
+ }
+ @Test void unpublishedTargetRefusesTheWholeNewAssignmentWith422(){
+  j.update("UPDATE meeting SET stage='ENTRY',ever_published=0 WHERE id=?",meeting);String topic=(String)topics.create(actor,UUID.randomUUID().toString(),"未发布拒绝",null).get("id");var failure=assertThrows(ama.contract.MeetingContracts.TopicNotPublished.class,()->topics.assign(actor,meeting,topic,UUID.randomUUID().toString(),0));assertNotNull(failure);assertNull(topics.memberships(actor,List.of(meeting)).getFirst().get("topicId"));
  }
 }

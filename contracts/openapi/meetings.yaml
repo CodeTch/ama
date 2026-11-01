@@ -2,7 +2,7 @@ collection:
   get:
     operationId: listMeetings
     summary: List independently authorized saved meeting metadata
-    description: Uses bounded indexed updated-time/id candidates. Each emitted row has fresh authorization. Joined means confirmed enterprise participant, including an owner only when confirmed. Confirmed participant names and saved update time are included; drafts and summary are not read. Unknown/repeated queries fail; changed discovery or exhausted shared budget fails the whole response. Filters apply after fresh authorization within each bounded scan; empty pages can continue with a signed actor/filter-bound cursor. No count/snapshot or mutation permission is implied.
+    description: Permission and all filters form one parameterized relation before keyset pagination. Page, total, stageCounts and topicGroups use the same database view. External proofs are prepared only for matching local rows and rechecked under ordered roots. Explicit denial excludes the row; unknown proof or stale projection fails the whole response. Literal LIKE escapes %, _ and =, matches English case insensitively, and only current confirmed names participate. Dates use actual saved DATE and never substitute capture time. Cursors bind actor, scope and all filters; allowedActions are hints, commands always authorize again.
     security:
       - enterpriseSession: []
     parameters:
@@ -131,8 +131,8 @@ item:
         $ref: '#/MeetingUnavailable'
   delete:
     operationId: deleteMeeting
-    summary: Soft-delete an editable meeting owned by the current identity
-    description: Owner only. Uses revision CAS and an idempotency key. The meeting lifecycle becomes DELETED, the cancel epoch advances, current reads and list projections stop exposing the meeting, and the immutable tombstone remains for late task protection. Published, governed, in-flight or stale meetings are rejected without partial effects. Exact replay returns the original mutation after current owner authorization.
+    summary: Accept irreversible deletion and recoverable online cleanup
+    description: Original owner, current revision and immutable request key required. Acceptance immediately denies meeting access, advances the cancellation fence and cancels ordinary tasks. Active/paused recording, unresolved publication, ever-published or governed meetings are rejected. Ordinary uploads and exports are retired by the durable cleanup. Exact replay returns the same deletionTaskId after fresh owner authorization. COMPLETE confirms managed local objects and online owned business rows, excluding external originals and backup retention.
     security:
       - enterpriseSession: []
     parameters:
@@ -165,12 +165,12 @@ item:
               expectedRevisionToken:
                 $ref: '#/ExpectedRevisionToken'
     responses:
-      '200':
-        description: Original deletion mutation, including exact replay
+      '202':
+        description: Stable accepted deletion job, including exact original request replay
         content:
           application/json:
             schema:
-              $ref: '#/Mutation'
+              $ref: './deletions.yaml#/DeletionJob'
       '400':
         $ref: './identity.yaml#/Invalid'
       '401':

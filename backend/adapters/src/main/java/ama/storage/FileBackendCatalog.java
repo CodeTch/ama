@@ -48,7 +48,7 @@ public final class FileBackendCatalog {
      */
     public void configure() {
         for (var b : backends.values()) {
-            if (!b.status().equals("DISABLED")) b.storage().list(b.id(), "files", "", null, 1);
+            if (!b.status().equals("DISABLED")) b.storage().probe(b.id());
             var existing =
                     j.queryForList(
                             "SELECT storage_type,config_revision,status FROM storage_backend WHERE"
@@ -118,7 +118,7 @@ public final class FileBackendCatalog {
     public boolean ready() {
         try {
             var backend = defaultWrite();
-            backend.storage().list(backend.id(), "files", "", null, 1);
+            backend.storage().probe(backend.id());
             return true;
         } catch (RuntimeException unavailable) {
             return false;
@@ -139,6 +139,8 @@ public final class FileBackendCatalog {
      */
     /** Safe route observation only; it grants no source, byte or new-write authority. */
     public String historicalStatus(String id) { return requireHistoricalMetadata(id).status(); }
+    /** Pinned metadata for registering an already durable generated artifact; no storage I/O. */
+    public String historicalType(String id) { return requireHistoricalMetadata(id).type(); }
     /** Metadata observation over explicitly installed historical routes, independent of a write default. */
     public boolean hasHistoricalRoute() {
         for(String id:backends.keySet())try{requireHistoricalMetadata(id);return true;}catch(Unavailable ignored){}

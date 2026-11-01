@@ -31,6 +31,10 @@ export function validMaterialBegin(v:unknown,actor:string,meeting:string):v is C
 export function validMaterialCommand(v:unknown,actor:string,meeting:string):v is CommandSnapshot{
  if(!snapshot(v,actor,meeting)||!materialUuid(meeting))return false;const base=`/api/v1/meetings/${meeting}/materials`;
  if(v.operation==='MATERIAL_RETRY'||v.operation==='MATERIAL_REMOVE'){const suffix=v.path.slice(base.length).split('/');return v.path.startsWith(base+'/')&&materialUuid(suffix[1])&&v.body===''&&(v.operation==='MATERIAL_RETRY'?suffix.length===3&&suffix[2]==='retry':suffix.length===2);}
+ if(v.operation==='MATERIAL_BATCH'){
+  if(v.path!==base+'/batches')return false;
+  try{const b:unknown=JSON.parse(v.body);return object(b)&&exact(b,'expectedRevisionToken,items')&&revisionToken(b.expectedRevisionToken)&&Array.isArray(b.items)&&b.items.length>0&&b.items.length<=64&&b.items.every(x=>object(x)&&(exact(x,'fileId')?materialUuid(x.fileId):exact(x,'documentId,libraryId,version')&&providerId(x.libraryId)&&providerId(x.documentId)&&hash(x.version)))&&new Set(b.items.map(x=>JSON.stringify([x.fileId??null,x.libraryId??null,x.documentId??null,x.version??null]))).size===b.items.length;}catch{return false;}
+ }
  if(v.operation!=='MATERIAL_ADD'||v.path!==base)return false;
  try{const b:unknown=JSON.parse(v.body);return object(b)&&(exact(b,'fileId')?materialUuid(b.fileId):exact(b,'documentId,libraryId,version')&&providerId(b.libraryId)&&providerId(b.documentId)&&hash(b.version));}catch{return false;}
 }
@@ -52,7 +56,14 @@ export function createMaterialsApi(client:ReturnType<typeof createBusinessClient
    if(!object(value)||!exact(value,'items,materialSnapshotId,materialsPending,meetingRevision')||!Array.isArray(value.items)||value.items.length>64||!value.items.every(item)||new Set(value.items.map(x=>x.id)).size!==value.items.length||!(value.materialSnapshotId===null||materialUuid(value.materialSnapshotId))||typeof value.materialsPending!=='boolean'||value.materialsPending!==value.items.some(x=>x.state!=='READY')||!revisionToken(value.meetingRevision)||!value.materialsPending&&value.items.length>0&&value.materialSnapshotId===null)throw invalid();
    return freeze(value as unknown as MaterialListing);
   },
-  async send(command:CommandSnapshot):Promise<MaterialItem>{active(command.actor);if(!validMaterialCommand(command,command.actor,command.resource)||command.operation==='MATERIAL_REMOVE')throw new TypeError('Invalid material command');
+  async batch(command:CommandSnapshot):Promise<Readonly<{items:readonly MaterialItem[];materialSnapshotId:string|null;meetingRevision:string}>>{
+   active(command.actor);if(!validMaterialCommand(command,command.actor,command.resource)||command.operation!=='MATERIAL_BATCH')throw new TypeError('Invalid material batch');
+   const b=JSON.parse(command.body),value=await client.json<unknown>(command.path,{method:'POST',headers:{'Idempotency-Key':command.key},body:command.body,expectedStatus:201,maxResponseBytes:262144});active(command.actor);
+   if(!object(value)||!exact(value,'items,materialSnapshotId,meetingRevision')||!Array.isArray(value.items)||value.items.length!==b.items.length||!value.items.every(item)||new Set(value.items.map(x=>x.id)).size!==value.items.length||!revisionToken(value.meetingRevision)||BigInt(value.meetingRevision)!==BigInt(b.expectedRevisionToken)+1n||!(value.materialSnapshotId===null||materialUuid(value.materialSnapshotId)))throw invalid();
+   for(let i=0;i<b.items.length;i++){const expected=b.items[i],actual=value.items[i]!;if(expected.fileId!==undefined?actual.source!=='LOCAL'||actual.fileId!==expected.fileId:actual.source!=='KNOWLEDGE'||actual.sourceVersion!==expected.version)throw invalid();}
+   return freeze(value as {items:MaterialItem[];materialSnapshotId:string|null;meetingRevision:string});
+  },
+  async send(command:CommandSnapshot):Promise<MaterialItem>{active(command.actor);if(!validMaterialCommand(command,command.actor,command.resource)||!['MATERIAL_ADD','MATERIAL_RETRY'].includes(command.operation))throw new TypeError('Invalid material command');
    const value=await client.json<unknown>(command.path,{method:'POST',headers:{'Idempotency-Key':command.key},...(command.body?{body:command.body}:{}),expectedStatus:command.operation==='MATERIAL_ADD'?201:200,maxResponseBytes:16384});if(!item(value))throw invalid();
    if(command.operation==='MATERIAL_RETRY'&&!command.path.endsWith('/'+value.id+'/retry'))throw invalid();
    if(command.operation==='MATERIAL_ADD'){const b=JSON.parse(command.body);if(b.fileId!==undefined?b.fileId!==value.fileId||value.source!=='LOCAL':value.source!=='KNOWLEDGE'||value.sourceVersion!==b.version)throw invalid();}return freeze(value);

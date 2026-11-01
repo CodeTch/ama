@@ -11,7 +11,7 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 /** Strict configuration-only catalog inspection; no synthetic generation input or business digest. */
 public final class MinutesCatalogAdmission {
  private MinutesCatalogAdmission(){}
- public record Selection(String indexSha,String defaultTemplateRevisionId,Ref prompt,Ref model,List<RawArchive> archives) {public Selection{archives=List.copyOf(archives);}}
+ public record Selection(String indexSha,String defaultTemplateRevisionId,Ref prompt,Ref model,List<RawArchive> archives,String protocolVersion) {public Selection{archives=List.copyOf(archives);}public boolean personalTemplates(){return ama.model.ControlledMinutesProtocol.personalTemplates(protocolVersion);}}
  public static Selection capture(ConfigArchiveSource.Snapshot snapshot,Ref prompt,Ref model,ArchiveReadBudget budget){
   if(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Archive inspection requires no transaction");
   require(prompt.artifactType()==ArtifactType.PROMPT_CONFIG&&model.artifactType()==ArtifactType.MODEL_CONFIG,PROFILE_UNAVAILABLE);
@@ -26,7 +26,8 @@ public final class MinutesCatalogAdmission {
    }else require(dependencies.get(ref).equals(ref.equals(codec)?Map.of():Map.of("CANONICAL_CODEC",codec)),PROFILE_UNAVAILABLE);
   }
   require(expected.equals(definitions.keySet()),PROFILE_UNAVAILABLE);
-  var md=fields(definitions.get(model),"protocolVersion","modelIdentity","credentialRef","parameters");literal(md.get("protocolVersion"),"ama.controlled-minutes-http.v1");literal(md.get("modelIdentity"),"CONTROLLED_MINUTES_V1");nil(md.get("credentialRef"));var params=fields(md.get("parameters"),"temperatureMicros","maxOutputTokens","seed");require(number(params.get("temperatureMicros"))==0&&number(params.get("maxOutputTokens"))==4096&&number(params.get("seed"))==0,PROFILE_UNAVAILABLE);
-  var render=fields(definitions.get(slots.get("RENDER")),"contract","rendererVersion","defaultTemplateRevisionId");literal(render.get("rendererVersion"),ControlledMinutesArchives.RENDERER);String template=text(render.get("defaultTemplateRevisionId"));uuid(template);return new Selection(snapshot.indexSha256(),template,prompt,model,raw);
+  var md=fields(definitions.get(model),"protocolVersion","modelIdentity","credentialRef","parameters");String protocol=text(md.get("protocolVersion"));require(ama.model.ControlledMinutesProtocol.supported(protocol),PROFILE_UNAVAILABLE);literal(md.get("modelIdentity"),"CONTROLLED_MINUTES_V1");nil(md.get("credentialRef"));var params=fields(md.get("parameters"),"temperatureMicros","maxOutputTokens","seed");require(number(params.get("temperatureMicros"))==0&&number(params.get("maxOutputTokens"))==4096&&number(params.get("seed"))==0,PROFILE_UNAVAILABLE);
+  boolean region=ama.model.ControlledMinutesProtocol.regionCapable(protocol);require(slots.get("GENERATION_HASH").version().equals(region?"ama.generation-input.v3":"ama.generation-input.v2")&&slots.get("OUTPUT_SCHEMA").version().equals(region?"ama.minutes-output.v2":"ama.minutes-output.v1"),PROFILE_UNAVAILABLE);
+  var render=fields(definitions.get(slots.get("RENDER")),"contract","rendererVersion","defaultTemplateRevisionId");literal(render.get("rendererVersion"),ama.model.ControlledMinutesProtocol.personalTemplates(protocol)?ControlledPersonalMinutesArchives.RENDERER:ControlledMinutesArchives.RENDERER);String template=text(render.get("defaultTemplateRevisionId"));uuid(template);return new Selection(snapshot.indexSha256(),template,prompt,model,raw,protocol);
  }
 }

@@ -35,6 +35,9 @@ class RecordingAccessIT {
                 "--spring.datasource.password="+System.getenv("AMA_C_RECORDING_DATABASE_PASSWORD"),"--identity.allowed-origin="+origin,
                 "--cas.origin=http://127.0.0.1:8792","--cas.service-url="+origin+"/auth/cas/callback","--cas.logout-service-url="+origin+"/login"));args.addAll(List.of(additional));
         app=new SpringApplicationBuilder(ApiApplication.class,DatabaseProtocolTest.class).run(args.toArray(String[]::new));
+        // Hikari sets DriverManager's process-wide login timeout while this app is running.
+        // Fixture writes must share its established pool instead of opening fresh TLS logins.
+        jdbc=new JdbcTemplate(app.getBean(javax.sql.DataSource.class));
     }
     /** This class isolates current ACL behavior; RecordingFileStorageIT qualifies real file persistence. */
     @org.springframework.context.annotation.Configuration(proxyBeanMethods=false)
@@ -49,6 +52,19 @@ class RecordingAccessIT {
         String hash=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(token.getBytes(StandardCharsets.US_ASCII)));
         jdbc.update("INSERT INTO identity_session(token_hash,enterprise_id,session_generation,csrf_token,issued_at,expires_at) VALUES (?,?,0,?,UTC_TIMESTAMP(6),UTC_TIMESTAMP(6)+INTERVAL 1 HOUR)",hash,id,csrf);
         return token;
+    }
+    @Test void unauthorizedReadsDoNotInspectProtectedPcmProofs()throws Exception {
+        String owner=identity("corrupt-owner-"+UUID.randomUUID()),foreign=identity("corrupt-foreign-"+UUID.randomUUID());
+        String meeting=accepted(call("POST","/meetings",owner,"{}".getBytes(StandardCharsets.UTF_8),Map.of("Idempotency-Key",UUID.randomUUID().toString(),"Content-Type","application/json")),201).path("id").asText();
+        var session=accepted(call("POST","/meetings/"+meeting+"/recordings",owner,new byte[0],Map.of()),201);
+        String id=session.path("sessionId").asText(),part=session.path("partId").asText(),base="/recordings/"+id;
+        // A deliberately incomplete legacy proof is private; it cannot change a foreign user's denial.
+        jdbc.update("INSERT INTO recording_chunk(session_id,part_id,seq,sample_start,sample_count,sha256,bytes,persisted_at) VALUES (?,?,1,0,2,?,4,UTC_TIMESTAMP(6))",id,part,zeroHash());
+        for(String path:List.of(base,base+"/manifest",base+"/ack?partId="+part))accepted(call("GET",path,foreign,new byte[0],Map.of()),403);
+        var claim=json.writeValueAsBytes(Map.of("expectedEpoch",1,"collectorId",UUID.randomUUID().toString(),"requestId",UUID.randomUUID().toString()));
+        accepted(call("POST",base+"/writer-lease",foreign,claim,Map.of("Content-Type","application/json")),403);
+        accepted(call("GET",base,owner,new byte[0],Map.of()),503);
+        assertEquals(1,jdbc.queryForObject("SELECT COUNT(*) FROM recording_chunk WHERE session_id=? AND pcm IS NULL AND pcm_storage_key IS NULL",Integer.class,id));
     }
     static String zeroHash()throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(new byte[4]));}
     HttpResponse<String> call(String method,String path,String token,byte[] bytes,Map<String,String> headers) throws Exception {

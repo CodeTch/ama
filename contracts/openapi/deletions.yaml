@@ -1,0 +1,31 @@
+status:
+  get:
+    operationId: readMeetingDeletion
+    summary: Read the original owner's content-free cleanup status
+    security: [{enterpriseSession: []}]
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    responses:
+      '200':
+        description: Online cleanup status; COMPLETE excludes backups and external source originals
+        content:
+          application/json:
+            schema: {$ref: '#/DeletionJob'}
+      '400': {$ref: './identity.yaml#/Invalid'}
+      '401': {$ref: './identity.yaml#/Unauthenticated'}
+      '403': {$ref: './identity.yaml#/BusinessForbidden'}
+DeletionJob:
+  type: object
+  additionalProperties: false
+  required: [deletionTaskId, meetingId, state, phase, revisionToken, attempts, errorCode]
+  properties:
+    deletionTaskId: {type: string, format: uuid}
+    meetingId: {type: string, format: uuid}
+    state: {type: string, enum: [PENDING, RUNNING, FAILED, COMPLETE]}
+    phase: {type: string, enum: [INVENTORY, STORAGE, PURGE, COMPLETE]}
+    revisionToken: {type: string, pattern: '^(0|[1-9][0-9]{0,18})$'}
+    attempts: {type: integer, minimum: 0}
+    errorCode: {type: [string, 'null']}

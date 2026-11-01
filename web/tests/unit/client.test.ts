@@ -9,6 +9,7 @@ const server=createServer((req,res)=>{
  else if(req.url==='/empty'){res.writeHead(204);res.end();}
  else if(req.url==='/bad-json'){res.setHeader('Content-Type','application/json');res.end('{broken');}
  else if(req.url==='/conflict'){res.writeHead(409,{'Content-Type':'application/json'});res.end(JSON.stringify({error:{code:'MEETING_CONFLICT',message:'private provider details',traceId:'00000000-0000-0000-0000-000000000001'}}));}
+ else if(req.url==='/topic-not-published'){res.writeHead(422,{'Content-Type':'application/json'});res.end(JSON.stringify({error:{code:'TOPIC_NOT_PUBLISHED',message:'private provider details',traceId:'00000000-0000-0000-0000-000000000001'}}));}
  else if(req.url==='/oversized'){res.writeHead(200,{'Content-Type':'application/json'});res.end(JSON.stringify({value:'x'.repeat(5000)}));}
  else if(req.url==='/redirect'){res.writeHead(302,{Location:'/ok'});res.end();}
  else if(req.url==='/private'){res.writeHead(401,{'Content-Type':'application/json'});res.end(JSON.stringify({message:'secret db password',code:'secret'}));}
@@ -63,3 +64,5 @@ test('endpoint-specific success status rejects a different 2xx without treating 
 test('a transcript conflict code does not alter unscoped or unrelated HTTP error classification',async()=>{
  const old=fetch;let calls=0;try{globalThis.fetch=async()=>{calls++;return Response.json({error:{code:'REVISION_CONFLICT',message:'secret',traceId:'00000000-0000-4000-8000-000000000001'}},{status:409});};await assert.rejects(request('https://ama.test/api/v1/meetings/00000000-0000-4000-8000-000000000001/transcript',{method:'PUT'}),(e:unknown)=>e instanceof ApiError&&e.kind==='response');await assert.rejects(request('https://ama.test/api/v1/meetings/00000000-0000-4000-8000-000000000001/info',{method:'PUT',errorContract:'saved-transcript' as any}),TypeError);assert.equal(calls,1);}finally{globalThis.fetch=old;}
 });
+
+test('published-only topic admission has a precise private-safe rejection message',async()=>{await assert.rejects(request(origin+'/topic-not-published'),(e:unknown)=>e instanceof ApiError&&e.kind==='http'&&e.status===422&&e.code==='TOPIC_NOT_PUBLISHED'&&e.message==='仅本人负责的已发布会议可归入专题。');});

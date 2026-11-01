@@ -12,6 +12,17 @@ import ama.identity.SessionPort;
 
 @Configuration(proxyBeanMethods = false)
 public class SecurityConfiguration {
+    @Bean @Order(0)
+    SecurityFilterChain signedKnowledgeEvents(HttpSecurity http) throws Exception {
+        // This single endpoint accepts only a pinned signed terminal receipt, verified by its
+        // controller/service. No session cookie, arbitrary callback URL, or content grant is used.
+        return http.securityMatcher("/integrations/v1/knowledge/governance-events")
+                .csrf(c -> c.disable())
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .requestCache(c -> c.disable())
+                .authorizeHttpRequests(a -> a.requestMatchers(org.springframework.http.HttpMethod.POST,"/integrations/v1/knowledge/governance-events").permitAll().anyRequest().denyAll())
+                .build();
+    }
     @Bean @Order(1)
     SecurityFilterChain casSecurity(HttpSecurity http) throws Exception {
         return http.securityMatcher("/auth/cas/**")

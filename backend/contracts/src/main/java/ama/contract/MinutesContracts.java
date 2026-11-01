@@ -74,7 +74,11 @@ public final class MinutesContracts {
     public enum SensitiveKind { INTERNAL_BUSINESS_DATA,POLITICAL_SENSITIVE }
     public enum Role { MEETING,BACKGROUND }
     public enum Support { PARTIAL,UNSUPPORTED }
-    public enum Scope { FULL,ELEMENT }
+    public enum Scope { FULL,ELEMENT,REGION }
+    /** Explicit region request; instructions guide presentation, never source authority. */
+    public record RegionRequest(String baseElementSetId,Category category,String instructions) {
+        public RegionRequest {uuid(baseElementSetId);require(category!=null&&instructions!=null,FailureCode.INVALID_ARGUMENT);scalars(instructions);require(!instructions.isBlank()&&instructions.codePointCount(0,instructions.length())<=4096,FailureCode.INVALID_ARGUMENT);}
+    }
     public record SourceIds(List<String> values) {
         public SourceIds {
             require(values!=null&&!values.isEmpty(),FailureCode.INVALID_SCHEMA);var seen=new HashSet<String>();
@@ -165,7 +169,7 @@ public final class MinutesContracts {
     public record Output(String schemaVersion,String inputFingerprint,String title,String body,Map<Category,List<Element>> elements,
         List<Detection> sensitive,List<Note> background,List<Ref> sourceRefs,List<Evidence> evidence) {
         public Output {
-            require("ama.minutes-output.v1".equals(schemaVersion),FailureCode.INVALID_SCHEMA);hash(inputFingerprint);text(title,false);text(body,true);
+            require(Set.of("ama.minutes-output.v1","ama.minutes-output.v2").contains(schemaVersion),FailureCode.INVALID_SCHEMA);hash(inputFingerprint);text(title,false);text(body,"ama.minutes-output.v1".equals(schemaVersion));
             require(elements!=null&&elements.keySet().equals(EnumSet.allOf(Category.class)),FailureCode.INVALID_SCHEMA);
             var copy=new EnumMap<Category,List<Element>>(Category.class);
             for(var c:Category.values()){var list=List.copyOf(elements.get(c));for(var e:list)require((c==Category.ACTION)==(e.action()!=null),FailureCode.INVALID_SCHEMA);copy.put(c,list);}
@@ -175,8 +179,9 @@ public final class MinutesContracts {
     public record Anchor(long start,long end,String targetTextSha256) {public Anchor {uint(start);require(start<end,FailureCode.TARGET_INVALID);hash(targetTextSha256);}}
     public record AnchoredEvidence(Evidence evidence,Anchor anchor) {public AnchoredEvidence {require(evidence!=null&&anchor!=null,FailureCode.INVALID_ARGUMENT);}}
     public record ValidatedOutput(Output output,List<AnchoredEvidence> anchors) {public ValidatedOutput {require(output!=null,FailureCode.INVALID_ARGUMENT);anchors=List.copyOf(anchors);}}
-    public record ValidationContext(String inputFingerprint,String taskFingerprint,Scope scope,Catalog catalog) {
-        public ValidationContext {hash(inputFingerprint);hash(taskFingerprint);require(scope!=null&&catalog!=null,FailureCode.INVALID_ARGUMENT);}
+    public record ValidationContext(String inputFingerprint,String taskFingerprint,Scope scope,Catalog catalog,Category region) {
+        public ValidationContext(String inputFingerprint,String taskFingerprint,Scope scope,Catalog catalog){this(inputFingerprint,taskFingerprint,scope,catalog,null);}
+        public ValidationContext {hash(inputFingerprint);hash(taskFingerprint);require(scope!=null&&catalog!=null&&(scope==Scope.REGION)==(region!=null),FailureCode.INVALID_ARGUMENT);}
     }
     public record AcceptedAction(String ownerEnterpriseId,String ownerDisplay,String dueOn) {}
     public record ElementSupport(String key,Support support,AcceptedAction acceptedAction) {}
@@ -197,7 +202,8 @@ public final class MinutesContracts {
         TRANSCRIPT_SEGMENT_MARK("transcript_segment_mark","revision_id:UUID segment_id:UUID mark:TEXT","revision_id,segment_id,mark","mark=KEY,CONCLUSION,DISPUTE,GENERATION_FOCUS"),
         TRANSCRIPTION_INPUT("transcription_input","id:UUID meeting_id:UUID batch_id:UUID kind:TEXT source_revision_id:UUID? material_snapshot_id:UUID? material_mode:TEXT processing_config_version:TEXT parser_version:TEXT? model_config_version:TEXT? prompt_version:TEXT? manifest_schema_version:UINT config_manifest:TEXT input_fingerprint:HASH base_revision:UINT cancel_epoch:UINT created_at:TIMESTAMP","id","kind=IMPORT,ASR,ENHANCE;material_mode=EMPTY,PINNED"),
         TEMPLATE_REVISION("template_revision","id:UUID template_id:UUID revision:UINT owner_id:TEXT? name:TEXT themes:TEXT theme_count:UINT created_at:TIMESTAMP","id",""),
-        GENERATION_INPUT("generation_input","id:UUID meeting_id:UUID transcript_confirmation_id:UUID material_snapshot_id:UUID? template_revision_id:UUID exclusion_revision_id:UUID element_set_id:UUID? prompt_version:TEXT model_config_version:TEXT base_revision:UINT input_fingerprint:HASH scope:TEXT target_element_id:UUID?","id","scope=FULL,ELEMENT"),
+        GENERATION_INPUT("generation_input","id:UUID meeting_id:UUID transcript_confirmation_id:UUID material_snapshot_id:UUID? template_revision_id:UUID exclusion_revision_id:UUID element_set_id:UUID? prompt_version:TEXT model_config_version:TEXT base_revision:UINT input_fingerprint:HASH scope:TEXT target_element_id:UUID?","id","scope=FULL,ELEMENT,REGION"),
+        GENERATION_REGION_REQUEST("generation_region_request","id:UUID meeting_id:UUID base_element_set_id:UUID category:TEXT instructions:TEXT","id","category=OVERVIEW,DISCUSSION,CONCLUSION,ACTION,RISK,OPEN_QUESTION,DISAGREEMENT"),
         MINUTES_REVISION("minutes_revision","id:UUID meeting_id:UUID revision:UINT parent_id:UUID? title:TEXT title_origin:TEXT body:TEXT generation_input_id:UUID? created_by:TEXT created_at:TIMESTAMP","id","title_origin=HUMAN,LINKED,AI"),
         ELEMENT_SET("element_set","id:UUID meeting_id:UUID revision:UINT created_at:TIMESTAMP","id",""),
         MINUTES_ELEMENT("minutes_element","id:UUID set_id:UUID category:TEXT ordinal:UINT body:TEXT support_state:TEXT","id","category=OVERVIEW,DISCUSSION,CONCLUSION,ACTION,RISK,OPEN_QUESTION,DISAGREEMENT;support_state=SUPPORTED,PARTIAL,UNSUPPORTED,NOT_EXTRACTED"),

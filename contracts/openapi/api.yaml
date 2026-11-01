@@ -7,6 +7,36 @@ servers:
   - url: http://127.0.0.1:8081
     description: Loopback management listener; never publish through the public ingress.
 paths:
+  /api/v1/meetings/{meetingId}/info-suggestions:
+    $ref: './info-suggestions.yaml#/collection'
+  /api/v1/meetings/{meetingId}/info-suggestions/{suggestionId}/decision:
+    $ref: './info-suggestions.yaml#/decision'
+  /api/v1/meetings/{id}/materials:
+    $ref: './materials.yaml#/collection'
+  /api/v1/meetings/{id}/materials/batches:
+    $ref: './materials.yaml#/batch'
+  /api/v1/meetings/{id}/materials/{material}:
+    $ref: './materials.yaml#/item'
+  /api/v1/meetings/{id}/materials/{material}/retry:
+    $ref: './materials.yaml#/retry'
+  /api/v1/deletions/{id}:
+    $ref: './deletions.yaml#/status'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/withdrawal:
+    $ref: './governance.yaml#/withdrawal'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/obsolescence:
+    $ref: './governance.yaml#/obsolescence'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/governance:
+    $ref: './governance.yaml#/history'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/governance/{jobId}:
+    $ref: './governance.yaml#/job'
+  /integrations/v1/knowledge/governance-events:
+    $ref: './governance.yaml#/event'
+  /api/v1/meetings/{meetingId}/exports:
+    $ref: './exports.yaml#/collection'
+  /api/v1/exports/{id}:
+    $ref: './exports.yaml#/job'
+  /api/v1/exports/{id}/download:
+    $ref: './exports.yaml#/download'
   /internal/health/live:
     $ref: './health.yaml#/live'
   /internal/health/ready:
@@ -42,6 +72,10 @@ paths:
     $ref: './topics.yaml#/collection'
   /api/v1/topics/{id}:
     $ref: './topics.yaml#/item'
+  /api/v1/templates:
+    $ref: './templates.yaml#/collection'
+  /api/v1/templates/{id}:
+    $ref: './templates.yaml#/item'
   /api/v1/meetings/{id}/topics:
     $ref: './topics.yaml#/assignment'
   /api/v1/meetings/{id}/topics/{topic}:

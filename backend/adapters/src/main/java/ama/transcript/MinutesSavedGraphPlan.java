@@ -8,6 +8,18 @@ final class MinutesSavedGraphPlan {
  private final String body,set;private final List<FullRow> templates;private final TranscriptAcquisitionBudget.Ledger budget;
  private MinutesSavedGraphPlan(String body,String set,List<FullRow> templates,TranscriptAcquisitionBudget.Ledger budget){this.body=body;this.set=set;this.templates=List.copyOf(templates);this.budget=budget;}
  String body(){return body;}String set(){return set;}
+ static MinutesSavedGraphPlan region(String baseSet,String candidateSet,Category category,List<FullRow> complete,String actor,TranscriptAcquisitionBudget.Ledger budget){
+  require(baseSet!=null&&candidateSet!=null&&!baseSet.equals(candidateSet)&&category!=null,INPUT_INVALID);
+  var base=complete.stream().filter(r->r.table()==Table.ELEMENT_SET&&baseSet.equals(r.string("id"))).toList();var candidate=complete.stream().filter(r->r.table()==Table.ELEMENT_SET&&candidateSet.equals(r.string("id"))).toList();require(base.size()==1&&candidate.size()==1&&base.getFirst().string("meeting_id").equals(candidate.getFirst().string("meeting_id")),PROVENANCE_UNAVAILABLE);
+  var merged=new ArrayList<FullRow>();for(var row:complete){
+   if(row.table()==Table.MINUTES_ELEMENT){
+    if(baseSet.equals(row.string("set_id"))&&category.name().equals(row.string("category")))continue;
+    if(candidateSet.equals(row.string("set_id"))){require(category.name().equals(row.string("category")),INVALID_SCHEMA);var cells=new ArrayList<>(row.cells());cells.set(row.table().index("set_id"),cell(baseSet));row=new FullRow(row.table(),cells);}
+   }else if((row.table()==Table.BACKGROUND_NOTE||row.table()==Table.SENSITIVE_DETECTION)&&candidateSet.equals(row.string("set_id")))throw fail(INVALID_SCHEMA);
+   merged.add(row);
+  }
+  return copy(null,baseSet,merged,null,actor,budget);
+ }
  static MinutesSavedGraphPlan candidate(MinutesCandidateGraphPlan candidate,MinutesGraphCapture.Graph graph,TranscriptAcquisitionBudget.Ledger budget){var rows=new ArrayList<>(candidate.rows(1,1));rows.addAll(candidate.reusedLocators());return copy(candidate.bodyId(),candidate.setId(),rows,(String)graph.discovery().root().get("minutes_revision_id"),candidate.owner(),budget);}
  static MinutesSavedGraphPlan copy(String sourceBody,String sourceSet,List<FullRow> complete,String parent,String actor,TranscriptAcquisitionBudget.Ledger budget){
   JdbcMinutesFactsReader.independent();var owners=Set.of(Table.MINUTES_REVISION,Table.ELEMENT_SET,Table.MINUTES_ELEMENT,Table.SENSITIVE_DETECTION,Table.BACKGROUND_NOTE,Table.SOURCE_LOCATOR,Table.EVIDENCE_LINK);var maps=new EnumMap<Table,Map<String,String>>(Table.class);for(Table table:owners)maps.put(table,new HashMap<>());

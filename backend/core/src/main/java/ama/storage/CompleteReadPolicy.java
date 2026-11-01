@@ -7,6 +7,10 @@ public interface CompleteReadPolicy extends FileReferencePolicy {
                    FileRegistry.Reference reference, String fileId, FileRegistry.ReferenceContext context);
     interface ReadPreparation {}
     ReadPreparation prepareRead(Actor actor, String meetingId, FileRegistry.ReadRequest request);
+    /** Optional identity-complete prologue. The registry still validates its own gate and current READ. */
+    default FileRegistry.LockedMeeting lockReadRoot(FileRegistry registry,Actor actor,String meetingId,ReadPreparation prepared){return registry.lock(actor,meetingId,ama.access.MeetingAccess.Action.READ);}
+    /** A graph policy can prelock the full source/artifact union before producer tasks. */
+    default java.util.Optional<FileRegistry.AcquiredSources> prelockedReadSources(List<Object> scopes){return java.util.Optional.empty();}
     void authorizeRead(FileRegistry.LockedMeeting gate, String meetingId, FileRegistry.ReadRequest request);
     Object prelockCurrent(FileRegistry.LockedMeeting gate, String meetingId,
                           FileRegistry.Reference reference, String fileId, ReadPreparation prepared);

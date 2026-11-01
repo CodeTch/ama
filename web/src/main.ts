@@ -1,3 +1,5 @@
+import DeletionNotice from './features/meetings/DeletionNotice.vue';
+import GovernanceNotice from './features/minutes/GovernanceNotice.vue';
 import { createApp, h, Fragment } from 'vue';
 import { createRouter, createWebHistory, RouterView, RouterLink } from 'vue-router';
 import App from './App.vue';
@@ -32,4 +34,4 @@ router.beforeEach(async to=>{
  try{await application.session.refresh();return true;}catch{return {path:'/login'};}
 });
 router.afterEach((to,_from,failure)=>{if(to.name==='meeting-detail'&&to.params.id===DEMO_MEETING_ID)return;syncNavigationScope(to,failure,application.setMeetingScope);});
-createApp({render:()=>h(Fragment,null,[h(RouterView),h(RecordingIndicator)])}).provide(applicationKey,application).use(router).mount('#app');
+createApp({render:()=>h(Fragment,null,[h(RouterView),h(RecordingIndicator),h(GovernanceNotice),h(DeletionNotice)])}).provide(applicationKey,application).use(router).mount('#app');

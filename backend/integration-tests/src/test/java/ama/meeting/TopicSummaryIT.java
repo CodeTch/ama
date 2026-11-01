@@ -12,6 +12,8 @@ class TopicSummaryIT extends TopicMembershipIT {
  }
  @Test void laterLifecycleEventFailureRollsBackMeetingAndPersonalMembershipTogether(){
   String id=(String)topics.create(actor,UUID.randomUUID().toString(),"事务回滚保留归组",null).get("id"),key=UUID.randomUUID().toString();topics.assign(actor,meeting,id,UUID.randomUUID().toString(),0);
+  // Legacy unpublished edge from before the published-only admission fence; preserve cleanup.
+  j.update("UPDATE meeting SET stage='ENTRY',ever_published=0 WHERE id=?",meeting);
   var validators=new HashMap<>(new MeetingEventReferences(source).validators());var actual=validators.get("MEETING_LIFECYCLE");var observed=new java.util.concurrent.atomic.AtomicBoolean();
   validators.put("MEETING_LIFECYCLE",event->{actual.validate(event);assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM meeting_topic WHERE meeting_id=?",Integer.class,meeting));observed.set(true);throw new IllegalStateException("Owned post-validation rollback fixture");});
   var tx=new ama.db.TransactionRunner(source);var fences=new ama.task.JdbcSubjectFences(source,Set.of("MEETING"));var access=new JdbcMeetingAccess(source,tx,fences);
@@ -24,6 +26,8 @@ class TopicSummaryIT extends TopicMembershipIT {
  }
  @Test void deletingAnOwnedMeetingRetiresItsPersonalMembershipBeforeTopicDeletion(){
   String id=(String)topics.create(actor,UUID.randomUUID().toString(),"删除会议后的专题",null).get("id");topics.assign(actor,meeting,id,UUID.randomUUID().toString(),0);
+  // Legacy unpublished edge only; real published meetings remain undeletable.
+  j.update("UPDATE meeting SET stage='ENTRY',ever_published=0 WHERE id=?",meeting);
   meetings.delete(actor,meeting,UUID.randomUUID().toString(),new ama.contract.MeetingContracts.DeleteMeeting(0L),UUID.randomUUID().toString());
   assertEquals(0L,((Number)topics.summary(actor,id).get("meetingCount")).longValue());assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM meeting_topic WHERE meeting_id=?",Integer.class,meeting));topics.delete(actor,id,UUID.randomUUID().toString(),0);
   assertThrows(ama.access.MeetingAccess.AccessDeniedException.class,()->meetings.read(actor,meeting));
@@ -31,7 +35,7 @@ class TopicSummaryIT extends TopicMembershipIT {
  @Test void summaryReflectsAllOriginalMembershipsAndCurrentTopicRevision(){
   String id=(String)topics.create(actor,UUID.randomUUID().toString(),"完整计数",null).get("id"),second=meetings.create(actor,UUID.randomUUID().toString(),UUID.randomUUID().toString()).id();
   var empty=topics.summary(actor,id);assertEquals(id,empty.get("id"));assertEquals(0L,((Number)empty.get("meetingCount")).longValue());assertEquals("0",empty.get("revisionToken"));
-  topics.assignMany(actor,UUID.randomUUID().toString(),id,List.of(new JdbcTopics.MembershipTarget(meeting,0),new JdbcTopics.MembershipTarget(second,0)));assertEquals(2L,((Number)topics.summary(actor,id).get("meetingCount")).longValue());
+  publishedFixture(second);topics.assignMany(actor,UUID.randomUUID().toString(),id,List.of(new JdbcTopics.MembershipTarget(meeting,0),new JdbcTopics.MembershipTarget(second,0)));assertEquals(2L,((Number)topics.summary(actor,id).get("meetingCount")).longValue());
   topics.update(actor,id,UUID.randomUUID().toString(),0,"更名后的完整计数",null);assertEquals("1",topics.summary(actor,id).get("revisionToken"));
   topics.unassign(actor,meeting,id,UUID.randomUUID().toString(),0);assertEquals(1L,((Number)topics.summary(actor,id).get("meetingCount")).longValue());assertEquals(0L,j.queryForObject("SELECT SUM(revision) FROM meeting WHERE id IN (?,?)",Long.class,meeting,second));
  }

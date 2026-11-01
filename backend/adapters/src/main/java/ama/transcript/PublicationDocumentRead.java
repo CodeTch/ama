@@ -35,11 +35,19 @@ final class PublicationDocumentRead {
  }
  /** Complete persisted success association, also used by the DB-only route projection. */
  static Snapshot select(Map<String,Object> root,Map<String,Object> pub,Map<String,Object> confirmation,Map<String,List<Map<String,Object>>> rows) {
+  return selectAssociation(root,pub,confirmation,rows,false);
+ }
+ /** Historical success metadata for governance reconciliation only. No viewer/read grant,
+  * content transfer, write capability, or provider call is issued by this pure validation. */
+ static Snapshot recordedGovernance(Map<String,Object> root,Map<String,Object> pub,Map<String,Object> confirmation,Map<String,List<Map<String,Object>>> rows) {
+  return selectAssociation(root,pub,confirmation,rows,true);
+ }
+ private static Snapshot selectAssociation(Map<String,Object> root,Map<String,Object> pub,Map<String,Object> confirmation,Map<String,List<Map<String,Object>>> rows,boolean recorded) {
   String publication=(String)pub.get("id"),meeting=(String)pub.get("meeting_id"),finalId=(String)pub.get("confirmation_id");
-  require("SUCCEEDED".equals(pub.get("state"))&&"PUBLISHED".equals(root.get("stage"))&&n(root,"ever_published")==1&&"ACTIVE".equals(root.get("lifecycle"))&&"ACTIVE".equals(root.get("governance_state"))&&meeting.equals(root.get("id"))&&finalId.equals(root.get("final_confirmation_id"))&&finalId.equals(confirmation.get("id"))&&meeting.equals(confirmation.get("meeting_id"))&&n(root,"revision")==n(confirmation,"meeting_revision"),PROVENANCE_UNAVAILABLE);
+  require("SUCCEEDED".equals(pub.get("state"))&&"PUBLISHED".equals(root.get("stage"))&&n(root,"ever_published")==1&&"ACTIVE".equals(root.get("lifecycle"))&&(recorded?Set.of("ACTIVE","UNKNOWN","WITHDRAW_PENDING","WITHDRAWN","OBSOLETE_PENDING","OBSOLETE").contains(root.get("governance_state")):"ACTIVE".equals(root.get("governance_state")))&&meeting.equals(root.get("id"))&&finalId.equals(root.get("final_confirmation_id"))&&finalId.equals(confirmation.get("id"))&&meeting.equals(confirmation.get("meeting_id"))&&n(root,"revision")==n(confirmation,"meeting_revision"),PROVENANCE_UNAVAILABLE);
   JdbcMinutesFactsReader.requireEffectiveFinal(root,confirmation);
   var mapping=unique(rows.get("external_document_mapping"),r->publication.equals(r.get("publication_id")));
-  require("ACTIVE".equals(mapping.get("authority_state")),PROVENANCE_UNAVAILABLE);require(PublicationDestinationPage.id(mapping.get("external_document_id")).matches("doc-[0-9a-f]{32}"),PROVENANCE_UNAVAILABLE);
+  require(recorded?Set.of("ACTIVE","UNKNOWN","WITHDRAWN","OBSOLETE").contains(mapping.get("authority_state")):"ACTIVE".equals(mapping.get("authority_state")),PROVENANCE_UNAVAILABLE);require(PublicationDestinationPage.id(mapping.get("external_document_id")).matches("doc-[0-9a-f]{32}"),PROVENANCE_UNAVAILABLE);
   var attempt=unique(rows.get("publication_attempt"),r->publication.equals(r.get("publication_id"))&&"SUCCESS".equals(r.get("outcome")));
   require(finalId.equals(attempt.get("confirmation_id"))&&Set.of("PUBLISH","RECONCILE").contains(attempt.get("kind"))&&attempt.get("finished_at")!=null,PROVENANCE_UNAVAILABLE);
   var execution=unique(rows.get("external_execution"),r->attempt.get("execution_id").equals(r.get("id")));
@@ -49,14 +57,17 @@ final class PublicationDocumentRead {
   require("SUCCEEDED".equals(execution.get("state"))&&"SUCCEEDED".equals(operation.get("state"))&&"SUCCEEDED".equals(task.get("state"))&&execution.get("marked_at")!=null&&execution.get("finished_at")!=null&&execution.get("task_attempt")!=null&&operation.get("id").equals(execution.get("operation_id"))&&n(operation,"current_execution_no")==n(execution,"execution_no"),PROVENANCE_UNAVAILABLE);
   require(publication.equals(submission.get("publication_id"))&&finalId.equals(submission.get("confirmation_id"))&&mapping.get("provider_id").equals(submission.get("provider_id"))&&"UNDECIDED".equals(submission.get("local_state")),PROVENANCE_UNAVAILABLE);
   for(String key:List.of("business_key","library_id","folder_id"))require(Objects.equals(pub.get(key),submission.get(key)),PROVENANCE_UNAVAILABLE);
-  require("KNOWLEDGE_PUBLISH_V1".equals(task.get("task_type"))&&"KNOWLEDGE_PUBLISH".equals(task.get("pool"))&&"MEETING".equals(task.get("subject_kind"))&&meeting.equals(task.get("subject_id"))&&"PUBLICATION".equals(task.get("input_kind"))&&publication.equals(task.get("input_id"))&&"PUBLICATION".equals(task.get("output_kind"))&&publication.equals(task.get("output_id"))&&n(task,"business_version")==n(root,"revision")&&n(task,"cancel_epoch")==n(root,"cancel_epoch"),PROVENANCE_UNAVAILABLE);
+  require("KNOWLEDGE_PUBLISH_V1".equals(task.get("task_type"))&&"KNOWLEDGE_PUBLISH".equals(task.get("pool"))&&"MEETING".equals(task.get("subject_kind"))&&meeting.equals(task.get("subject_id"))&&"PUBLICATION".equals(task.get("input_kind"))&&publication.equals(task.get("input_id"))&&"PUBLICATION".equals(task.get("output_kind"))&&publication.equals(task.get("output_id"))&&n(task,"business_version")==n(root,"revision")&&(recorded?n(task,"cancel_epoch")<=n(root,"cancel_epoch"):n(task,"cancel_epoch")==n(root,"cancel_epoch")),PROVENANCE_UNAVAILABLE);
   require("KNOWLEDGE_PUBLISH".equals(operation.get("operation_kind"))&&"MEETING".equals(operation.get("subject_kind"))&&meeting.equals(operation.get("subject_id"))&&pub.get("business_key").equals(operation.get("business_key"))&&submission.get("logical_request_hash").equals(operation.get("request_hash"))&&submission.get("logical_request_hash").equals(task.get("input_fingerprint"))&&submission.get("execution_request_hash").equals(execution.get("request_hash")),PROVENANCE_UNAVAILABLE);
   var attempts=rows.get("task_attempt").stream().filter(r->task.get("id").equals(r.get("task_id"))).toList();require(attempts.size()==n(task,"attempt")&&attempts.stream().allMatch(r->r.get("ended_at")!=null)&&attempts.stream().anyMatch(r->n(r,"attempt")==n(execution,"task_attempt")&&"SUCCEEDED".equals(r.get("outcome"))),PROVENANCE_UNAVAILABLE);
   return new Snapshot(root,pub,confirmation,mapping,submission,task,operation,execution,attempt,null,null);
  }
  static Map<String,Object> verify(JdbcPublicationService service,Snapshot snapshot,PublicationGraph.Plan plan) {
+  return verify(service.client,snapshot,plan);
+ }
+ static Map<String,Object> verify(ControlledKnowledgeClient client,Snapshot snapshot,PublicationGraph.Plan plan) {
   JdbcMinutesFactsReader.independent();var budget=plan.budget();var manifest=PublicationManifest.read(snapshot.manifest(),budget);PublicationManifest.history(manifest,plan);
-  for(var identity:service.client.identities().entrySet())require(identity.getValue().equals(manifest.get(identity.getKey())),PROVENANCE_UNAVAILABLE);
+  for(var identity:client.identities().entrySet())require(identity.getValue().equals(manifest.get(identity.getKey())),PROVENANCE_UNAVAILABLE);
   for(var pair:Map.of("publicationId","publication_id","confirmationId","confirmation_id","providerId","provider_id","requesterId","requester_id","businessKey","business_key","libraryId","library_id","folderId","folder_id","logicalRequestHash","logical_request_hash","executionRequestHash","execution_request_hash").entrySet())require(Objects.equals(manifest.get(pair.getKey()),snapshot.submission().get(pair.getValue())),PROVENANCE_UNAVAILABLE);
   require(snapshot.root().get("id").equals(manifest.get("meetingId"))&&n(manifest,"executionNo")==n(snapshot.execution(),"execution_no")&&n(manifest,"submissionNo")==n(snapshot.submission(),"submission_no")&&JdbcPublicationService.spec(manifest,budget).equals(TranscriptReadGraph.spec(snapshot.task())),PROVENANCE_UNAVAILABLE);
   PublicationManifest.logical(manifest,(String)snapshot.confirmation().get("source_manifest_hash"),(String)snapshot.confirmation().get("input_fingerprint"),budget);return manifest;

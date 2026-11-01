@@ -10,7 +10,13 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 public final class OutputValidation {
  public ValidatedOutput validate(Output output,ValidationContext context,BooleanSupplier cancelled){
   require(output!=null&&context!=null,INVALID_ARGUMENT);check(cancelled);
-  require(context.scope()==Scope.FULL,CAPABILITY_UNAVAILABLE);
+  require(context.scope()==Scope.FULL||context.scope()==Scope.REGION,CAPABILITY_UNAVAILABLE);
+  if(context.scope()==Scope.REGION){
+   require(output.schemaVersion().equals("ama.minutes-output.v2"),INVALID_SCHEMA);
+   require(output.title().isEmpty()&&output.body().isEmpty()&&output.sensitive().isEmpty()&&output.background().isEmpty(),INVALID_SCHEMA);
+   for(var category:Category.values())if(category!=context.region())require(output.elements().get(category).isEmpty(),INVALID_SCHEMA);
+   require(output.evidence().stream().noneMatch(e->e.target() instanceof BodyTarget),INVALID_SCHEMA);
+  }else text(output.body(),true);
   require(output.inputFingerprint().equals(context.inputFingerprint())&&context.inputFingerprint().equals(context.taskFingerprint()),FINGERPRINT_MISMATCH);
   var allKeys=new HashSet<String>();var elements=new HashMap<String,Element>();
   for(var c:Category.values())for(var e:output.elements().get(c)){check(cancelled);require(allKeys.add(e.key()),INVALID_SCHEMA);elements.put(e.key(),e);}

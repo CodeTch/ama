@@ -8,7 +8,7 @@ import {knowledgeKey,materialFormat,materialUuid,validKnowledgeDocument,validMat
 
 type Api=ReturnType<typeof createMaterialsApi>;
 export type MaterialState=Readonly<{busy:boolean;blocked:boolean;failed:boolean;hasFiles:boolean}>;
-type JobKind='LOCAL'|'KNOWLEDGE'|'RETRY'|'REMOVE';
+type JobKind='LOCAL'|'KNOWLEDGE'|'BATCH'|'RETRY'|'REMOVE';
 type StoredJob=Readonly<{id:string;kind:JobKind;name:string;begin:CommandSnapshot|null;completion:CommandSnapshot|null;command:CommandSnapshot|null;uploadId:string|null;selection:KnowledgeDocument|null}>;
 export type MaterialJob=StoredJob&Readonly<{status:string;error:string|null;needsFile:boolean;canRemove:boolean}>;
 const object=(v:unknown):v is Record<string,unknown>=>typeof v==='object'&&v!==null&&!Array.isArray(v);
@@ -19,14 +19,14 @@ const freezeJob=(job:StoredJob,status='等待恢复原操作',error:string|null=
 function validJobs(v:unknown,actor:string,meeting:string):v is StoredJob[]{
  if(!Array.isArray(v)||v.length>64||new Set(v.map(x=>x?.id)).size!==v.length)return false;
  return v.every(j=>{
-  if(!object(j)||!exact(j,'begin,command,completion,id,kind,name,selection,uploadId')||!materialUuid(j.id)||typeof j.name!=='string'||!fitsUtf8(j.name,1024*1024)||!['LOCAL','KNOWLEDGE','RETRY','REMOVE'].includes(String(j.kind))||!(j.uploadId===null||materialUuid(j.uploadId))||!(j.selection===null||validKnowledgeDocument(j.selection)))return false;
+  if(!object(j)||!exact(j,'begin,command,completion,id,kind,name,selection,uploadId')||!materialUuid(j.id)||typeof j.name!=='string'||!fitsUtf8(j.name,1024*1024)||!['LOCAL','KNOWLEDGE','BATCH','RETRY','REMOVE'].includes(String(j.kind))||!(j.uploadId===null||materialUuid(j.uploadId))||!(j.selection===null||validKnowledgeDocument(j.selection)))return false;
   if(j.begin!==null&&(!validMaterialBegin(j.begin,actor,meeting)||j.kind!=='LOCAL'))return false;
-  if(j.command!==null&&(!validMaterialCommand(j.command,actor,meeting)||j.command.operation!==(j.kind==='REMOVE'?'MATERIAL_REMOVE':j.kind==='RETRY'?'MATERIAL_RETRY':'MATERIAL_ADD')))return false;
+  if(j.command!==null&&(!validMaterialCommand(j.command,actor,meeting)||j.command.operation!==(j.kind==='REMOVE'?'MATERIAL_REMOVE':j.kind==='RETRY'?'MATERIAL_RETRY':j.kind==='BATCH'?'MATERIAL_BATCH':'MATERIAL_ADD')))return false;
   if(j.kind==='KNOWLEDGE'){
    if(!j.selection||!j.command)return false;const b=JSON.parse(j.command.body);if(b.libraryId!==j.selection.libraryId||b.documentId!==j.selection.id||b.version!==j.selection.version)return false;
   }else if(j.selection!==null)return false;
   if(j.kind==='LOCAL'&&j.command!==null&&!materialUuid(JSON.parse(j.command.body).fileId))return false;
-  if(j.kind!=='LOCAL'&&(j.begin!==null||j.completion!==null||j.uploadId!==null)||['REMOVE','RETRY'].includes(String(j.kind))&&j.command===null)return false;
+  if(j.kind!=='LOCAL'&&(j.begin!==null||j.completion!==null||j.uploadId!==null)||['REMOVE','RETRY','BATCH'].includes(String(j.kind))&&j.command===null)return false;
   if(j.completion!==null){
    const c=j.completion;if(!j.begin||!j.uploadId||!object(c)||!exact(c,'actor,body,key,operation,path,resource')||c.actor!==actor||c.resource!==j.uploadId||c.operation!=='UPLOAD_COMPLETE'||c.path!==`/api/v1/uploads/${j.uploadId}/completion`||!materialUuid(c.key)||typeof c.body!=='string'||!fitsUtf8(c.body,1024*1024))return false;
    try{const b:unknown=JSON.parse(c.body),begin=JSON.parse(j.begin.body);if(!object(b)||!exact(b,'parts,sha256')||b.sha256!==begin.sha256||!Array.isArray(b.parts)||b.parts.length<1||b.parts.length>UPLOAD_PART_COUNT||!b.parts.every((p,i)=>object(p)&&exact(p,'part,sha256')&&p.part===i+1&&typeof p.sha256==='string'&&/^[0-9a-f]{64}$/.test(p.sha256)))return false;}catch{return false;}
@@ -52,7 +52,7 @@ export function useMaterials(api:Api,actor:()=>string|null,meeting:()=>string,co
   if(reloadFlight)return reloadFlight;if(disposed||!actor()||!materialUuid(meeting())||!eligible())return Promise.resolve();const turn=epoch;loading.value=true;
   const run=async()=>{try{
    active(turn);
-   if(!restored){const found=journal.load(actor()!,meeting());if(found.kind!=='EMPTY'&&found.kind!=='RESTORED')throw new Error('材料恢复记录不可用，请保留原操作并恢复存储后重试。');jobs.value=found.kind==='RESTORED'?Object.freeze(found.value.map(j=>freezeJob(j))):[];restored=true;}
+   if(!restored){const found=journal.load(actor()!,meeting());if(found.kind!=='EMPTY'&&found.kind!=='RESTORED')throw new Error('材料恢复记录不可用，请保留原操作并恢复存储后重试。');jobs.value=found.kind==='RESTORED'?Object.freeze(found.value.map(j=>freezeJob(j,'等待恢复原操作','原请求结果尚未确认，请查回原请求。'))):[];restored=true;}
    if(storageBlocked.value)persist();await fresh(turn);active(turn);error.value=null;
   }catch(cause){if(turn===epoch){ready.value=false;error.value=message(cause);}}finally{if(turn===epoch){loading.value=false;reloadFlight=null;}}};
   reloadFlight=run();return reloadFlight;
@@ -93,19 +93,18 @@ export function useMaterials(api:Api,actor:()=>string|null,meeting:()=>string,co
  }
  async function perform(id:string,turn:number):Promise<boolean>{
   try{active(turn);patch(id,{error:null});if(get(id).kind==='LOCAL')await localUpload(id,turn);active(turn);const job=get(id);if(!job.command)throw new Error('材料原请求缺失。');patch(id,{status:job.kind==='REMOVE'?'移除中':'解析并关联材料中'});
-   if(job.kind==='REMOVE')await api.remove(job.command);else await api.send(job.command);active(turn);
+   if(job.kind==='REMOVE')await api.remove(job.command);else if(job.kind==='BATCH')await api.batch(job.command);else await api.send(job.command);active(turn);
    await fresh(turn);active(turn);
    const remaining=jobs.value.filter(j=>j.id!==id);persist(remaining);jobs.value=Object.freeze(remaining);files.delete(id);error.value=null;return true;
-  }catch(cause){if(turn===epoch){patch(id,{status:'操作未完成',error:message(cause)});error.value=message(cause);}return false;}
+  }catch(cause){if(turn===epoch){const job=get(id);patch(id,{status:'操作未完成',error:message(cause),needsFile:job.kind==='LOCAL'&&!job.command&&!job.completion&&!files.has(id)});error.value=message(cause);}return false;}
  }
  async function run(ids:readonly string[]){writable();const turn=epoch;busy.value=true;try{for(const id of ids){active(turn);await perform(id,turn);}}finally{if(turn===epoch)busy.value=false;}}
  async function addLocal(selected:readonly File[]){writable();if(jobs.value.length)throw new Error('请先恢复已有材料操作。');if(items.value.length+selected.length>64)throw new Error('背景材料最多64份。');
   const added=selected.map(file=>{const id=crypto.randomUUID();files.set(id,file);return freezeJob({id,kind:'LOCAL',name:file.name,begin:null,completion:null,command:null,uploadId:null,selection:null},'等待校验');});jobs.value=Object.freeze([...jobs.value,...added]);persist();await run(added.map(j=>j.id));
  }
- async function addKnowledge(selected:readonly KnowledgeDocument[]){writable();if(selected.some(d=>!validKnowledgeDocument(d))||new Set(selected.map(knowledgeKey)).size!==selected.length)throw new Error('知识库选择缺少明确版本。');if(items.value.length+selected.length>64)throw new Error('背景材料最多64份。');
-  const ids:string[]=[],byId=new Map<string,string>();for(const d of selected){const prior=jobs.value.find(j=>j.kind==='KNOWLEDGE'&&j.selection&&knowledgeKey(j.selection)===knowledgeKey(d));if(prior){ids.push(prior.id);byId.set(prior.id,knowledgeKey(d));continue;}
-   if(jobs.value.some(j=>j.kind!=='KNOWLEDGE'))throw new Error('请先恢复已有材料操作。');const j=freezeJob({id:crypto.randomUUID(),kind:'KNOWLEDGE',name:d.name,begin:null,completion:null,uploadId:null,selection:Object.freeze({...d}),command:createCommand('MATERIAL_ADD',`/api/v1/meetings/${meeting()}/materials`,JSON.stringify({libraryId:d.libraryId,documentId:d.id,version:d.version}))});jobs.value=Object.freeze([...jobs.value,j]);ids.push(j.id);byId.set(j.id,knowledgeKey(d));}
-  persist();await run(ids);return ids.filter(id=>!jobs.value.some(j=>j.id===id)).map(id=>byId.get(id)!);
+ async function addKnowledge(selected:readonly KnowledgeDocument[]){writable();if(!selected.length||selected.some(d=>!validKnowledgeDocument(d))||new Set(selected.map(knowledgeKey)).size!==selected.length)throw new Error('知识库选择缺少明确版本。');if(items.value.length+selected.length>64)throw new Error('背景材料最多64份。');if(jobs.value.length)throw new Error('请先恢复已有材料操作。');
+  const command=createCommand('MATERIAL_BATCH',`/api/v1/meetings/${meeting()}/materials/batches`,JSON.stringify({expectedRevisionToken:listing.value!.meetingRevision,items:selected.map(d=>({libraryId:d.libraryId,documentId:d.id,version:d.version}))}));
+  const job=freezeJob({id:crypto.randomUUID(),kind:'BATCH',name:`知识库材料（${selected.length}份）`,begin:null,completion:null,uploadId:null,selection:null,command});jobs.value=Object.freeze([job]);persist();await run([job.id]);return jobs.value.some(j=>j.id===job.id)?[]:selected.map(knowledgeKey);
  }
  async function retryJob(id:string,file?:File){writable();if(file)files.set(id,file);persist();await run([get(id).id]);}
  async function removeJob(id:string){writable();if(!get(id).canRemove)throw new Error('原请求结果尚未确认，不能丢弃该材料操作。');const remaining=jobs.value.filter(j=>j.id!==id);persist(remaining);jobs.value=Object.freeze(remaining);files.delete(id);}

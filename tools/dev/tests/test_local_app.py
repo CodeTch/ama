@@ -56,6 +56,21 @@ class ProcessOwnershipTests(unittest.TestCase):
 
 
 class ConfigurationIsolationTests(unittest.TestCase):
+    def test_harness_origins_are_explicit_bounded_and_preserved_separately(self):
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertEqual({'knowledge':None,'model':None,'cas':'http://127.0.0.1:8792'},app.integration_origins())
+        with patch.dict(os.environ, {'AMA_INTEGRATION_KNOWLEDGE_ORIGIN':'http://127.0.0.1:8792','AMA_INTEGRATION_MODEL_ORIGIN':'http://127.0.0.1:8792'},clear=True):
+            self.assertEqual({'knowledge':'http://127.0.0.1:8792','model':'http://127.0.0.1:8792','cas':'http://127.0.0.1:8792'},app.integration_origins())
+        for value in ['http://127.0.0.1:65536','http://remote:8792','http://127.0.0.1:8792/path','https://127.0.0.1:8792']:
+            with self.subTest(value=value),patch.dict(os.environ,{'AMA_INTEGRATION_MODEL_ORIGIN':value},clear=True):
+                with self.assertRaises(ValueError):app.integration_origins()
+
+    def test_changing_only_the_model_harness_origin_requires_a_real_restart(self):
+        ports={'web':5174,'api':8182,'management':8183}
+        state={'sourceSignature':'same','ports':ports,'activePorts':ports,'databasePort':'12345','databasePoolMaximum':20,'fileWorkerThreads':16,'integrationOrigins':{'knowledge':'http://127.0.0.1:8792','model':None,'cas':'http://127.0.0.1:8792'}}
+        with patch.dict(os.environ,{'AMA_INTEGRATION_KNOWLEDGE_ORIGIN':'http://127.0.0.1:8792','AMA_INTEGRATION_MODEL_ORIGIN':'http://127.0.0.1:8792'},clear=True),patch.object(app,'alive',return_value=True),patch.object(app,'source_signature',return_value='same'),patch.object(app,'database',return_value='12345'),patch.object(app,'status'),patch.object(app,'stop_process',side_effect=RuntimeError('restart-required')):
+            with self.assertRaisesRegex(RuntimeError,'restart-required'):app.start(state)
+
     def test_explicit_file_workers_keep_the_default_and_reject_unbounded_counts(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(16, app.file_worker_threads())
@@ -107,9 +122,9 @@ class ConfigurationIsolationTests(unittest.TestCase):
     def test_start_rechecks_owned_mysql_even_when_frontend_and_api_are_alive(self):
         state={role:{'pid':index+1} for index,role in enumerate(app.SERVICE_ROLES)}
         app.configure_ports(state,None,None,None)
-        state.update(databasePort='12345',sourceSignature=app.source_signature(),activePorts=dict(state['ports']))
+        state.update(databasePort='12345',sourceSignature=app.source_signature(),activePorts=dict(state['ports']),integrationOrigins=app.integration_origins())
         # Fake PIDs must never reach an OS signal, even if this regression takes a restart branch.
-        with patch.object(app,'alive',return_value=True),patch.object(app,'stop_process') as stop,patch.object(app,'database',return_value='12345') as database,patch.object(app,'status'):
+        with patch.object(app,'alive',return_value=True),patch.object(app,'stop_process') as stop,patch.object(app,'force_release_port',side_effect=AssertionError('unit fixture must never signal a real listener')),patch.object(app,'database',return_value='12345') as database,patch.object(app,'status'):
             app.start(state)
         database.assert_called_once_with(state)
         stop.assert_not_called()
@@ -219,3 +234,25 @@ class PortIsolationTests(unittest.TestCase):
         for ports in [(0,8182,8183),(5174,65536,8183),(5174,5174,8183)]:
             with self.assertRaises(ValueError):app.configure_ports(state,*ports)
         self.assertEqual(state,{})
+
+
+class MinutesScenarioTests(unittest.TestCase):
+    def test_explicit_scenarios_reject_unknown_values(self):
+        for value in ['standard', 'sensitive']:
+            with patch.dict(app.os.environ, {'AMA_LOCAL_MINUTES_SCENARIO': value}):
+                self.assertEqual(app.minutes_scenario(), value)
+        with patch.dict(app.os.environ, {'AMA_LOCAL_MINUTES_SCENARIO': 'unbounded'}):
+            with self.assertRaises(ValueError):app.minutes_scenario()
+
+    def test_same_source_with_changed_scenario_cannot_reuse_an_old_runtime(self):
+        ports={'web':5174,'api':8182,'management':8183}
+        origins={'knowledge':None,'model':None,'cas':None}
+        state={'sourceSignature':'same','activePorts':dict(ports),'ports':dict(ports),
+               'databasePoolMaximum':20,'fileWorkerThreads':16,'integrationOrigins':origins,
+               'databasePort':46443,'minutesScenario':'standard'}
+        with patch.object(app,'alive',return_value=True),patch.object(app,'source_signature',return_value='same'),patch.object(app,'database_pool_maximum',return_value=20),patch.object(app,'file_worker_threads',return_value=16),patch.object(app,'integration_origins',return_value=origins),patch.object(app,'database',return_value=46443),patch.object(app,'status') as status,patch.object(app,'stop_process',side_effect=RuntimeError('restart selected')) as stop:
+            with patch.dict(app.os.environ,{'AMA_LOCAL_MINUTES_SCENARIO':'standard'}):app.start(state)
+            status.assert_called_once();stop.assert_not_called()
+            with patch.dict(app.os.environ,{'AMA_LOCAL_MINUTES_SCENARIO':'sensitive'}):
+                with self.assertRaisesRegex(RuntimeError,'restart selected'):app.start(state)
+            stop.assert_called_once()

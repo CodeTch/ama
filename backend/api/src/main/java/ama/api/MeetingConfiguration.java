@@ -18,9 +18,10 @@ class MeetingConfiguration {
         new ama.transcript.TranscriptEventReferences(source).validators().forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
         new ama.transcript.MinutesEventReferences(source).validators().forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
         ama.task.RecordingArchiveRuntime.eventReferences(source).forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
+        ama.task.MinutesExportRuntime.eventReferences(source).forEach((key,value)->{if(validators.putIfAbsent(key,value)!=null)throw new IllegalStateException("Duplicate event validator");});
         return new JdbcOutbox(source,validators);
     }
-    @Bean JdbcMeetingAccess meetingAccess(DataSource source,TransactionRunner tx,JdbcSubjectFences fences){return new JdbcMeetingAccess(source,tx,fences);}
+    @Bean JdbcMeetingAccess meetingAccess(DataSource source,TransactionRunner tx,JdbcSubjectFences fences,org.springframework.core.env.Environment env){var access=new JdbcMeetingAccess(source,tx,fences);if(env.getProperty("publication.governance-enabled",Boolean.class,false))access.installPublicationValidity();return access;}
     @Bean WorkspaceCursor workspaceCursors(){return new WorkspaceCursor();}
     @Bean WorkspaceReadBudget.Limits workspaceReadLimits(org.springframework.core.env.Environment env){
         var d=WorkspaceReadBudget.DEFAULT;
@@ -43,5 +44,6 @@ class MeetingConfiguration {
     @Bean MeetingService meetings(JdbcMeetingRepository repository){return new MeetingService(repository);}
     @Bean RosterService rosters(JdbcMeetingRepository repository){return new RosterService(repository);}
     @Bean JdbcTopics topics(DataSource source,TransactionRunner tx,JdbcMeetingAccess access){return new JdbcTopics(source,tx,access);}
+    @Bean ama.minutes.JdbcPersonalTemplates personalTemplates(DataSource source,TransactionRunner tx,JdbcMeetingAccess access){return new ama.minutes.JdbcPersonalTemplates(source,tx,access);}
     @Bean JdbcFeedback feedback(DataSource source,TransactionRunner tx,JdbcMeetingAccess access){return new JdbcFeedback(source,tx,access);}
 }

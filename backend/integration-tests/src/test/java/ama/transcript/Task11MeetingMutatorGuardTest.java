@@ -22,10 +22,14 @@ class Task11MeetingMutatorGuardTest {
    var prior=f.responder;
    f.responder=sql->{
     if(sql.contains("task_type IN ('MINUTES_GENERATE_V1','TRANSCRIPT_IMPORT_V1')")||sql.contains("operation_kind='MINUTES_GENERATE'")||sql.contains(" WHERE 1=0 ")||sql.contains(" WHERE (1=0) OR (1=0) "))return sql.startsWith("SELECT COUNT(*)")?List.of(Map.of("count",0L)):List.of();
+    if(sql.startsWith("SELECT enterprise_id,status,OCTET_LENGTH(display_name)"))return List.of(Task11ImportPublicationGuardTest.row("enterprise_id","owner","status","ACTIVE","bytes",5L,"points",5L,"units",5L));
+    if(sql.startsWith("SELECT display_name FROM enterprise_identity"))return List.of(Map.of("display_name","Owner"));
     if(sql.contains(" FROM enterprise_identity "))return List.of(sql.startsWith("SELECT status ")?Map.of("status","ACTIVE"):sql.startsWith("SELECT enterprise_id,status ")?Task11ImportPublicationGuardTest.row("enterprise_id","owner","status","ACTIVE"):Task11ImportPublicationGuardTest.row("enterprise_id","owner","display_name","Owner","status","ACTIVE"));
     if(sql.contains(" FROM idempotency_record "))return List.of(receipt);
     if(sql.contains(" FROM task_subject "))return List.of(Map.of("business_version",version.get()));
+    if(sql.startsWith("SELECT COUNT(*) FROM roster_member "))return List.of(Map.of("count",0L));
     if(sql.contains(" FROM meeting_access_grant ")||sql.contains(" FROM roster_member "))return List.of();
+    if(sql.contains(" FROM roster_revision ")&&sql.contains("__n0"))return List.of(Task11ImportPublicationGuardTest.row("id",R,"__n0",false,"__b0",36L,"__p0",36L,"__u0",36L));
     if(sql.contains(" FROM roster_revision "))return List.of(Task11ImportPublicationGuardTest.row("id",R,"revision",version.get(),"state","DRAFT"));
     if(sql.contains(" FROM meeting ")){root.put("revision",version.get());if(sql.startsWith("SELECT COUNT(*)"))return List.of(Map.of("count",1L));String columns=sql.substring(7,sql.indexOf(" FROM meeting "));if(columns.equals("*"))return List.of(new LinkedHashMap<>(root));var projected=new LinkedHashMap<String,Object>();for(String field:columns.split(","))projected.put(field,root.get(field));return List.of(projected);}
     return prior==null?null:prior.apply(sql);

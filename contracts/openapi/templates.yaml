@@ -1,0 +1,90 @@
+collection:
+  get:
+    operationId: listPersonalTemplates
+    description: Current actor's active personal templates only. Built-in templates and generation capability remain in the meeting-scoped template catalog.
+    security: [{enterpriseSession: []}]
+    parameters:
+      - {name: limit, in: query, schema: {type: integer, minimum: 1, maximum: 50, default: 20}}
+      - {name: cursor, in: query, description: Last ID from the preceding page, schema: {type: string, format: uuid}}
+    responses:
+      '200': {description: Private bounded template page, content: {application/json: {schema: {$ref: '#/PersonalTemplatePage'}}}}
+  post:
+    operationId: createPersonalTemplate
+    description: Persist an immutable first revision with 1–8 ordered personal themes. Same actor/key/body returns the original acknowledgement even after later edit/removal. Creation grants no model capability.
+    security: [{enterpriseSession: []}]
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody: {required: true, content: {application/json: {schema: {$ref: '#/PersonalTemplateInput'}}}}
+    responses:
+      '201': {description: Original creation receipt, content: {application/json: {schema: {$ref: '#/PersonalTemplate'}}}}
+item:
+  parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
+  get:
+    operationId: readPersonalTemplate
+    security: [{enterpriseSession: []}]
+    responses:
+      '200': {description: Current private template revision, content: {application/json: {schema: {$ref: '#/PersonalTemplate'}}}}
+  put:
+    operationId: updatePersonalTemplate
+    description: Current owner and exact command revision required. Appends a new immutable revision and preserves all earlier references. Current normalized names are unique per owner.
+    security: [{enterpriseSession: []}]
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody: {required: true, content: {application/json: {schema: {$ref: '#/PersonalTemplateUpdate'}}}}
+    responses:
+      '200': {description: Original edit receipt, content: {application/json: {schema: {$ref: '#/PersonalTemplate'}}}}
+  delete:
+    operationId: removePersonalTemplate
+    description: Hides the template from future choices without deleting any immutable revision, generation input or final snapshot. Original receipt replay never reactivates it.
+    security: [{enterpriseSession: []}]
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody: {required: true, content: {application/json: {schema: {$ref: '#/PersonalTemplateRemoval'}}}}
+    responses:
+      '200': {description: Original removal receipt with deleted=true, content: {application/json: {schema: {$ref: '#/PersonalTemplate'}}}}
+TemplateName:
+  type: string
+  minLength: 1
+  description: Nonblank Unicode scalar text, at most 8192 UTF-8 bytes as a transport/resource bound. NFC and Unicode whitespace trimming form the duplicate-name identity.
+TemplateThemes:
+  type: array
+  minItems: 1
+  maxItems: 8
+  description: Ordered nonblank Unicode themes, each at most 8192 UTF-8 bytes; versioned JSON document at most 65536 bytes. These are personal chapter names, separate from the seven element categories.
+  items: {type: string, minLength: 1}
+PersonalTemplateInput:
+  type: object
+  additionalProperties: false
+  required: [name, themes]
+  properties:
+    name: {$ref: '#/TemplateName'}
+    themes: {$ref: '#/TemplateThemes'}
+PersonalTemplateUpdate:
+  type: object
+  additionalProperties: false
+  required: [expectedRevisionToken, name, themes]
+  properties:
+    expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+    name: {$ref: '#/TemplateName'}
+    themes: {$ref: '#/TemplateThemes'}
+PersonalTemplateRemoval:
+  type: object
+  additionalProperties: false
+  required: [expectedRevisionToken]
+  properties:
+    expectedRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+PersonalTemplate:
+  type: object
+  additionalProperties: false
+  required: [id, revisionId, revisionToken, name, themes, deleted]
+  properties:
+    id: {type: string, format: uuid}
+    revisionId: {type: string, format: uuid}
+    revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+    name: {$ref: '#/TemplateName'}
+    themes: {$ref: '#/TemplateThemes'}
+    deleted: {type: boolean}
+PersonalTemplatePage:
+  type: object
+  additionalProperties: false
+  required: [items, nextCursor]
+  properties:
+    items: {type: array, maxItems: 50, items: {$ref: '#/PersonalTemplate'}}
+    nextCursor: {type: [string, 'null'], format: uuid}

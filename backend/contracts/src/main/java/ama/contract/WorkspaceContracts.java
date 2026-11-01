@@ -8,13 +8,14 @@ public final class WorkspaceContracts {
  public record CategoryPage(List<CategoryItem> items,String nextCursor,boolean hasMore) {
   public CategoryPage {items=List.copyOf(items);}
  }
- public record MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken,List<String> participants,String updatedAt,String workspaceStage){
-  public MeetingItem {participants=List.copyOf(participants);}
+ public record MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken,List<String> participants,String updatedAt,String workspaceStage,String ownerName,long materialCount,List<String> allowedActions,String destination){
+  public MeetingItem {participants=List.copyOf(participants);allowedActions=List.copyOf(allowedActions);if(materialCount<0)throw new IllegalArgumentException("Invalid material count");}
+  public MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken,List<String> participants,String updatedAt,String workspaceStage){this(id,name,category,occurredOn,stage,lifecycle,relation,writeState,revisionToken,accessRevisionToken,participants,updatedAt,workspaceStage,null,0,List.of("OPEN"),"/meeting/"+id);}
   public MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken,List<String> participants,String updatedAt){this(id,name,category,occurredOn,stage,lifecycle,relation,writeState,revisionToken,accessRevisionToken,participants,updatedAt,stage);}
   public MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken){this(id,name,category,occurredOn,stage,lifecycle,relation,writeState,revisionToken,accessRevisionToken,List.of(),null);}
  }
- public record MeetingPage(List<MeetingItem> items,String nextCursor,boolean hasMore) {
-  public MeetingPage {items=List.copyOf(items);}
+ public record MeetingPage(List<MeetingItem> items,String nextCursor,boolean hasMore,long total,java.util.Map<String,Long> stageCounts,java.util.Map<String,Long> topicGroups) {
+  public MeetingPage {items=List.copyOf(items);stageCounts=java.util.Map.copyOf(stageCounts);topicGroups=java.util.Map.copyOf(topicGroups);if(total<0||total>9007199254740991L)throw new IllegalArgumentException("Invalid total");}
  }
 
  public record CommandAssociation(String operation,String meetingId,String resultKind,String resultId,String acceptedRevisionToken,int originalHttpStatus){}

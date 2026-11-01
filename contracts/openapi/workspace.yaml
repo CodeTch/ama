@@ -79,10 +79,20 @@ MeetingItem:
       description: List navigation never grants edit permission or evaluates producer readiness. Owner must open workspace for fresh producer state.
     revisionToken: {type: string, pattern: '^(0|[1-9][0-9]{0,18})$'}
     accessRevisionToken: {type: string, pattern: '^(0|[1-9][0-9]{0,18})$'}
+    ownerName: {type: [string, 'null']}
+    materialCount: {type: integer, minimum: 0, maximum: 9007199254740991}
+    allowedActions:
+      type: array
+      uniqueItems: true
+      items: {type: string, enum: [OPEN, DELETE, RETRY_TRANSCRIPT, RETRY_MINUTES, RETRY_PUBLISH]}
+      description: Current list action hints; every command independently rechecks its current prerequisites and permissions.
+    destination:
+      type: string
+      pattern: '^/meeting/[0-9a-f-]{36}/(processing|transcript|minutes|publish|published)$'
 MeetingPage:
   type: object
   additionalProperties: false
-  required: [items, nextCursor, hasMore]
+  required: [items, nextCursor, hasMore, total, stageCounts, topicGroups]
   properties:
     items:
       type: array
@@ -91,10 +101,19 @@ MeetingPage:
     nextCursor:
       type: [string, 'null']
       maxLength: 1536
-      description: Encrypted actor/scope-bound continuation over scanned candidates. Expires after five minutes.
+      description: Encrypted actor/scope/filter-bound continuation over authorized matching rows. Expires after five minutes. Each request has its own consistent database snapshot.
     hasMore:
       type: boolean
-      description: Further bounded candidates may exist. Empty items with hasMore true is valid; denied rows are not disclosed. No total-count or snapshot claim.
+      description: Further authorized matching rows exist in this request snapshot. Filtering precedes pagination.
+    total: {type: integer, minimum: 0, maximum: 9007199254740991}
+    stageCounts:
+      type: object
+      description: All eight stages, including zero counts, with exactly the same permission and filter relation as total.
+      additionalProperties: {type: integer, minimum: 0, maximum: 9007199254740991}
+    topicGroups:
+      type: object
+      description: Current owner's topic IDs and __none, using exactly the same relation. Empty for joined scope.
+      additionalProperties: {type: integer, minimum: 0, maximum: 9007199254740991}
 
 CommandAssociation:
   type: object
@@ -182,7 +201,7 @@ WorkspaceTaskItem:
     taskId: {type: string, format: uuid}
     kind:
       type: string
-      enum: [TRANSCRIPT_IMPORT_V1, MINUTES_GENERATE_V1, KNOWLEDGE_PUBLISH_V1, RECORDING_ARCHIVE_V1]
+      enum: [TRANSCRIPT_IMPORT_V1, MINUTES_GENERATE_V1, KNOWLEDGE_PUBLISH_V1, RECORDING_ARCHIVE_V1, MINUTES_EXPORT_V1]
     state:
       type: string
       enum: [READY, RUNNING, RECONCILING, SUCCEEDED, FAILED, CANCELLED, STALE]
@@ -195,7 +214,7 @@ WorkspaceTaskItem:
     detailPath:
       type: string
       maxLength: 256
-      description: Actual producer detail route. Publication links address the publication root; original task identity remains taskId.
+      description: Actual producer detail route. Publication links address the publication root; original task identity remains taskId. Export links address /api/v1/exports/{taskId} and require fresh authorization when opened.
 WorkspaceTaskPage:
   type: object
   additionalProperties: false
@@ -230,7 +249,7 @@ tasks:
         schema:
           type: string
           default: ALL
-          enum: [ALL, TRANSCRIPT_IMPORT_V1, MINUTES_GENERATE_V1, KNOWLEDGE_PUBLISH_V1, RECORDING_ARCHIVE_V1]
+          enum: [ALL, TRANSCRIPT_IMPORT_V1, MINUTES_GENERATE_V1, KNOWLEDGE_PUBLISH_V1, RECORDING_ARCHIVE_V1, MINUTES_EXPORT_V1]
       - name: limit
         in: query
         schema: {type: integer, minimum: 1, maximum: 50, default: 20}

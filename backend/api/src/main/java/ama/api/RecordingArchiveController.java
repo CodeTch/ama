@@ -20,7 +20,8 @@ public final class RecordingArchiveController {
  @GetMapping("/api/v1/recordings/{sessionId}/audio")
  void audio(@PathVariable String sessionId,HttpServletRequest request,HttpServletResponse response)throws IOException {
   var actor=actor(request);var ranges=Collections.list(request.getHeaders("Range"));if(ranges.size()>1)throw new IllegalArgumentException("One range required");String range=ranges.isEmpty()?null:ranges.getFirst();
-  try(var download=RecordingArchiveRuntime.download(queue,actor,sessionId,range)){
+  var identity=SessionSecurityFilter.readIdentity(request);
+  try(var download=AuthorizedDownloads.guard(RecordingArchiveRuntime.download(queue,actor,sessionId,range),identity,(current,probe)->RecordingArchiveRuntime.download(queue,current,sessionId,probe))){
    response.setStatus(range==null?200:206);response.setContentType("audio/wav");response.setHeader("Accept-Ranges","bytes");response.setHeader("X-Content-Type-Options","nosniff");response.setHeader("Cache-Control","private, no-store");response.setHeader("Content-Disposition","inline; filename=recording.wav");response.setContentLengthLong(download.length());
    if(range!=null)response.setHeader("Content-Range","bytes "+download.offset()+"-"+(download.offset()+download.length()-1)+"/"+download.file().size());download.body().transferTo(response.getOutputStream());
   }

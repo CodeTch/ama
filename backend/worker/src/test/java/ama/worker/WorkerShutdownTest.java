@@ -53,9 +53,9 @@ class WorkerShutdownTest {
         var definitions = new FileBackendDefinitions(List.of(new FileBackendCatalog.Backend(
                 definition.id(), "local", 1, "READ_ONLY", storage, definition),new FileBackendCatalog.Backend(secondDefinition.id(),"local",1,"READ_ONLY",secondStorage,secondDefinition)), null);
         var constructor = TranscriptWorkerRuntimeProvider.Runtime.class
-                .getDeclaredConstructor(WorkerLoop.class, WorkerLoop.class, ReconciliationLoop.class, ama.model.ControlledMinutesClient.class, ama.transcript.ControlledKnowledgeClient.class, FileBackendDefinitions.class);
+                .getDeclaredConstructor(WorkerLoop.class, WorkerLoop.class, ReconciliationLoop.class, ama.model.ControlledMinutesClient.class, ama.transcript.ControlledKnowledgeClient.class, FileBackendDefinitions.class, ama.transcript.JdbcMaterialAuthority.class, ama.transcript.JdbcPublicationGovernance.class);
         constructor.setAccessible(true);
-        var runtime = constructor.newInstance(loop, null, null, null, null, definitions);
+        var runtime = constructor.newInstance(loop, null, null, null, null, definitions, null, null);
         var executors = executors(loop);
         try {
             loop.pollOnce("cpu"); assertTrue(ready.await(2, TimeUnit.SECONDS));

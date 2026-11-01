@@ -43,6 +43,7 @@ function addExternal(){if(external.value.trim()){update('externalRosterNames',[.
    <ul class="selected"><li v-for="(name,index) in value.externalRosterNames??[]" :key="index">{{name}}<button type="button" class="btn" @click="update('externalRosterNames',(value.externalRosterNames??[]).filter((_,i)=>i!==index))">移除</button></li></ul>
 </section><div class="actions"><span class="small muted">已选 {{value.rosterDraftIds.length+(value.externalRosterNames??[]).length}} 人</span><button type="button" class="btn primary" @click="peopleDialog?.close()">完成选择</button></div></dialog>
   </fieldset>
+  <slot name="suggestions"/>
   <div v-if="presentation!=='final'" class="actions ac-info-drawer-footer"><button class="btn" :disabled="busy||blocked||unresolved" @click="emit('close')">取消</button><button v-if="unresolved" class="btn btn-primary" :disabled="busy||blocked" @click="emit('retry')">重试原请求</button><button v-else class="btn btn-primary" :disabled="busy||blocked||conflict||state==='CONFLICT'||state==='REJECTED'" @click="emit('save')">保存</button></div>
   <div v-if="conflict||state==='CONFLICT'||state==='REJECTED'" class="actions"><button v-if="conflict" class="btn" :disabled="busy||unresolved||blocked" @click="emit('reapply')">保留草稿并应用到最新版本</button><button class="btn" :disabled="busy||unresolved||blocked" @click="emit('discard')">放弃本地修改</button></div>
  </section>

@@ -3,11 +3,17 @@ import jakarta.servlet.http.HttpServletResponse;import java.io.IOException;impor
 @RestControllerAdvice(assignableTypes=MaterialController.class) @org.springframework.core.annotation.Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE) class MaterialErrors {
  private void write(HttpServletResponse r,int status,String code)throws IOException {BusinessErrors.write(r,status,code,"Material request could not be completed");r.setHeader("Cache-Control","private, no-store");}
  @ExceptionHandler(ama.contract.TranscriptContracts.Failure.class) void explicit(ama.contract.TranscriptContracts.Failure failure,HttpServletResponse r)throws IOException{write(r,failure.status(),failure.code());}
- @ExceptionHandler(ama.contract.MinutesContracts.Failure.class) void provenance(ama.contract.MinutesContracts.Failure failure,HttpServletResponse r)throws IOException{if(java.util.Set.of(ama.contract.MinutesContracts.FailureCode.INVALID_ARGUMENT,ama.contract.MinutesContracts.FailureCode.INVALID_SCALAR,ama.contract.MinutesContracts.FailureCode.INVALID_ID).contains(failure.code()))write(r,400,"INVALID_ARGUMENT");else write(r,503,"MATERIAL_UNAVAILABLE");}
+ @ExceptionHandler(ama.contract.MinutesContracts.Failure.class) void provenance(ama.contract.MinutesContracts.Failure failure,HttpServletResponse r)throws IOException{diagnose(failure,failure.code().name());if(java.util.Set.of(ama.contract.MinutesContracts.FailureCode.INVALID_ARGUMENT,ama.contract.MinutesContracts.FailureCode.INVALID_SCALAR,ama.contract.MinutesContracts.FailureCode.INVALID_ID).contains(failure.code()))write(r,400,"INVALID_ARGUMENT");else write(r,503,"MATERIAL_UNAVAILABLE");}
  @ExceptionHandler(ama.access.MeetingAccess.AccessDeniedException.class) void denied(HttpServletResponse r)throws IOException{write(r,403,"MEETING_FORBIDDEN");}
  @ExceptionHandler(ama.contract.FileContracts.NotFound.class) void missing(HttpServletResponse r)throws IOException{write(r,404,"MATERIAL_NOT_FOUND");}
  @ExceptionHandler(ama.contract.FileContracts.Conflict.class) void conflict(HttpServletResponse r)throws IOException{write(r,409,"MATERIAL_CONFLICT");}
  @ExceptionHandler(IllegalArgumentException.class) void invalid(HttpServletResponse r)throws IOException{write(r,400,"INVALID_ARGUMENT");}
  @ExceptionHandler(ama.storage.JdbcFileRegistry.RangeFailure.class) void range(ama.storage.JdbcFileRegistry.RangeFailure failure,HttpServletResponse r)throws IOException{r.setHeader("Content-Range","bytes */"+failure.size());write(r,416,"FILE_INVALID_RANGE");}
- @ExceptionHandler(Exception.class) void unavailable(HttpServletResponse r)throws IOException{write(r,503,"MATERIAL_UNAVAILABLE");}
+ @ExceptionHandler(Exception.class) void unavailable(Exception failure,HttpServletResponse r)throws IOException{
+  diagnose(failure,"UNAVAILABLE");write(r,503,"MATERIAL_UNAVAILABLE");
+ }
+ private static void diagnose(Throwable failure,String code){
+  var details=new StringBuilder("Material request unavailable code=").append(code);Throwable cause=failure;for(int n=0;cause!=null&&n<4;n++,cause=cause.getCause()){details.append(" type=").append(cause.getClass().getName());for(var frame:java.util.Arrays.stream(cause.getStackTrace()).filter(f->f.getClassName().startsWith("ama.")).limit(5).toList())details.append(" at ").append(frame);}
+  java.util.logging.Logger.getLogger(MaterialErrors.class.getName()).warning(details.toString());
+ }
 }

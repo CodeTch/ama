@@ -6,6 +6,12 @@ const meeting='00000000-0000-4000-8000-000000000001',id='00000000-0000-4000-8000
 const current=(eligible:boolean):GenerationCurrent=>({saved:{transcriptConfirmationId:eligible?id:null,templateRevisionId:id,exclusionRevisionId:id,elementSetId:null},scope:'FULL',materials:'EMPTY',activeTaskIds:[],eligible,reasons:eligible?[]:['TRANSCRIPT_CONFIRMATION_REQUIRED'],observation:{revision:3,revisionToken:'3',accessRevision:0,accessRevisionToken:'0',currentConfirmationId:null,currentMinutesRevisionId:null}});
 const receipt:GenerationReceipt={result:{kind:'GENERATION_TASK',meetingId:meeting,inputId:id,taskId:id,inputFingerprint:'a'.repeat(64)},replayed:true,observation:current(true).observation};
 const storage=()=>{const data=new Map<string,string>();return {getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>{data.set(k,v);},removeItem:(k:string)=>{data.delete(k);}};};
+test('region recovery preserves original category instructions and base after the source changes',async()=>{
+ const seen:CommandSnapshot[]=[],context={tab:'region',storage:storage(),recovery:'RESUME_NAMESPACE' as const};let base=id;
+ const api={current:async()=>({...current(true),saved:{...current(true).saved,elementSetId:base}}),templates:async()=>({items:[],nextCursor:null,observation:current(true).observation}),send:async(c:CommandSnapshot)=>{seen.push(c);if(seen.length===1)throw new Error('lost region ACK');return receipt;}};
+ const a=useMinutesGeneration(api,()=> 'owner',()=>meeting,()=>true,context);await a.reload();await a.generateRegion({baseElementSetId:id,category:'ACTION',instructions:'只整理已有行动，不补日期'});assert.equal(a.command.state.value,'UNCERTAIN');a.dispose();base=meeting;
+ const b=useMinutesGeneration(api,()=> 'owner',()=>meeting,()=>true,context);await b.reload();await b.retry();assert.deepEqual(seen[1],seen[0]);await b.generateRegion({baseElementSetId:id,category:'ACTION',instructions:'新请求'});assert.equal(seen.length,2);b.dispose();
+});
 test('generation refresh recovers exact original command before new unavailable eligibility checks',async()=>{
  const seen:CommandSnapshot[]=[],context={tab:'tab',storage:storage(),recovery:'RESUME_NAMESPACE' as const};let ready=true;
  const api={current:async()=>current(ready),templates:async()=>({items:[],nextCursor:null,observation:current(ready).observation}),send:async(c:CommandSnapshot)=>{seen.push(c);if(seen.length===1)throw new Error('lost');return receipt;}};

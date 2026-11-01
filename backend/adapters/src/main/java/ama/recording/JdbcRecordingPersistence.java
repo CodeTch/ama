@@ -25,6 +25,17 @@ public final class JdbcRecordingPersistence implements RecordingService.Persiste
     }
     @Override public String backend(String requested){return backends==null?requested:backends.defaultWrite().id();}
     @Override public boolean recoverable(){return true;}
+    @Override public String meetingId(String id) {
+        var rows=jdbc.queryForList("SELECT meeting_id FROM recording_session WHERE session_id=?",String.class,id);
+        if(rows.size()!=1)throw new IllegalArgumentException("Unknown recording session");return rows.getFirst();
+    }
+    @Override public <T> T withinMeeting(String id,String expectedMeeting,Supplier<T> work) {
+        return transactions.required(()->{
+            // Preserve admission-before-session ordering used by new sessions and writer leases.
+            jdbc.queryForList("SELECT meeting_id FROM recording_meeting_capture WHERE meeting_id=? FOR UPDATE",String.class,expectedMeeting);
+            return RecordingService.Persistence.super.withinMeeting(id,expectedMeeting,work);
+        });
+    }
     @Override public <T> T locked(String id,Supplier<T> work) {
         return transactions.required(() -> {
             if(id!=null)jdbc.query("SELECT session_id FROM recording_session WHERE session_id=? FOR UPDATE",(r,n)->r.getString(1),id);
@@ -70,6 +81,44 @@ public final class JdbcRecordingPersistence implements RecordingService.Persiste
     public SessionMetadata sessionMetadata(String id) {
         var rows=jdbc.query("SELECT session_id,meeting_id,part_id,writer_epoch,backend_id,state FROM recording_session WHERE session_id=?",(r,n)->new SessionMetadata(new RecordingContracts.Session(r.getString(1),r.getString(2),r.getString(3),r.getLong(4),r.getString(5)),r.getString(6)),id);
         if(rows.size()!=1)throw new IllegalArgumentException("Unknown recording session");return rows.getFirst();
+    }
+    @Override public RecordingService.AppendSnapshot loadForAppend(String id,RecordingContracts.Chunk chunk) {
+        if(!org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive()
+                ||!org.springframework.transaction.support.TransactionSynchronizationManager.hasResource(jdbc.getDataSource()))
+            throw new IllegalStateException("Append projection requires the locked session transaction");
+        var metadata=sessionMetadata(id);
+        var parts=jdbc.queryForList("SELECT part_id FROM recording_part WHERE session_id=? ORDER BY part_no LIMIT 17",String.class,id);
+        if(parts.size()>16||!parts.contains(metadata.session().partId()))throw new IllegalStateException("Invalid recording parts");
+        var parameters=new java.util.ArrayList<Object>(parts);parameters.add(id);
+        // Validate every committed route/length on the server. Only aggregate scalars cross JDBC;
+        // no cached totals or omitted old corruption can authorize the next ACK.
+        var totals=jdbc.queryForObject("""
+                SELECT COUNT(*),COALESCE(SUM(c.sample_count),0),COALESCE(SUM(CASE WHEN
+                    c.sample_count<1 OR c.sample_count>32000 OR c.bytes<>c.sample_count*2
+                    OR c.seq<1 OR c.seq>4608 OR c.sample_start<0 OR c.sample_start>9223372036854775807-c.sample_count
+                    OR (c.pcm_length IS NULL AND (c.pcm_storage_key IS NULL OR BINARY c.pcm_storage_key<>BINARY CONCAT(c.session_id,'/',c.part_id,'/',c.seq)))
+                    OR (c.pcm_length IS NOT NULL AND (c.pcm_length<>c.sample_count*2 OR c.pcm_storage_key IS NOT NULL))
+                    OR BINARY c.part_id NOT IN (%s)
+                    THEN 1 ELSE 0 END),0)
+                FROM (SELECT session_id,part_id,seq,sample_start,sample_count,bytes,OCTET_LENGTH(pcm) AS pcm_length,pcm_storage_key
+                      FROM recording_chunk WHERE session_id=? LIMIT 4097) c
+                """.formatted(String.join(",",java.util.Collections.nCopies(parts.size(),"BINARY ?"))),
+                (r,n)->new long[]{r.getLong(1),r.getLong(2),r.getLong(3)},parameters.toArray());
+        if(totals==null||totals[0]>RecordingContracts.MAX_SESSION_CHUNKS||totals[1]>RecordingContracts.MAX_SESSION_SAMPLES||totals[2]!=0)throw new IllegalStateException("Recording PCM missing or invalid");
+        var frontier=jdbc.queryForObject("""
+                SELECT COALESCE(MAX(seq),0),COALESCE(MIN(CASE WHEN seq<>position THEN position-1 END),MAX(seq),0)
+                FROM (SELECT seq,ROW_NUMBER() OVER(ORDER BY seq) AS position
+                      FROM recording_chunk WHERE session_id=? AND part_id=? LIMIT 4097) c
+                """,(r,n)->new long[]{r.getLong(1),r.getLong(2)},id,metadata.session().partId());
+        if(frontier==null)throw new IllegalStateException("Missing recording frontier");
+        long highest=frontier[1],maximum=frontier[0];
+        if(maximum<highest||maximum-highest>512)throw new IllegalStateException("Recording retry tail exceeds bound");
+        long upper=chunk.seq()==Long.MAX_VALUE?Long.MAX_VALUE:chunk.seq()+1;
+        var proofs=jdbc.query("""
+                SELECT part_id,seq,sample_start,sample_count,sha256 FROM recording_chunk
+                WHERE session_id=? AND part_id=? AND (seq>? OR seq BETWEEN ? AND ?) ORDER BY seq LIMIT 516
+                """,(r,n)->new RecordingService.Proof(r.getString(1),r.getLong(2),r.getLong(3),r.getLong(4),r.getString(5)),id,metadata.session().partId(),highest,chunk.seq()-1,upper);
+        return new RecordingService.AppendSnapshot(metadata.session(),metadata.state().equals("PAUSED"),metadata.state().equals("FINISHED"),parts,totals[0],totals[1],highest,maximum,proofs);
     }
     @Override public void persist(RecordingContracts.Session s,RecordingContracts.Chunk c) {
         byte[] pcm=c.pcm();String key=null;

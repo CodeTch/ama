@@ -4,6 +4,7 @@ import type {CommandSnapshot} from '../composables/useCommand';
 import {revisionToken} from './intent-contract';
 import {ApiError} from './client';
 import {fitsUtf8} from '../bounded-text';
+export type GenerationRegion={baseElementSetId:string;category:'OVERVIEW'|'DISCUSSION'|'CONCLUSION'|'ACTION'|'RISK'|'OPEN_QUESTION'|'DISAGREEMENT';instructions:string};
 export type GenerationCurrent=components['schemas']['MinutesCurrent'];
 export type GenerationTemplates=components['schemas']['MinutesTemplates'];
 export type GenerationReceipt=components['schemas']['MinutesInitialReceipt']|components['schemas']['MinutesGenerationReceipt'];
@@ -13,11 +14,15 @@ const uuid=(v:unknown):v is string=>typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{
 const nullableId=(v:unknown)=>v===null||uuid(v),number=(v:unknown)=>typeof v==='number'&&Number.isInteger(v)&&v>=0;
 function observation(v:unknown):v is components['schemas']['MinutesObservation']{return exact(v,'accessRevision,accessRevisionToken,currentConfirmationId,currentMinutesRevisionId,revision,revisionToken')&&number(v.revision)&&number(v.accessRevision)&&revisionToken(v.revisionToken)&&revisionToken(v.accessRevisionToken)&&nullableId(v.currentConfirmationId)&&nullableId(v.currentMinutesRevisionId);}
 function invalid():never{throw new ApiError('response',200,'纪要生成状态暂无法确认，请重新读取。');}
+function templateChoice(value:unknown){
+ if(!exact(value,'default,name,revisionId,selectable,templateId,themeCount,themes')||!uuid(value.templateId)||!uuid(value.revisionId)||typeof value.name!=='string'||!fitsUtf8(value.name,16384)||typeof value.selectable!=='boolean'||typeof value.default!=='boolean'||typeof value.themeCount!=='number'||!Number.isInteger(value.themeCount)||value.themeCount<1||value.themeCount>8||!Array.isArray(value.themes)||value.themes.length!==value.themeCount||!value.themes.every(theme=>typeof theme==='string'&&!!theme.trim()&&fitsUtf8(theme,8192)))return false;
+ return value.default?value.themeCount===7&&new Set(value.themes).size===7&&value.themes.every(theme=>['OVERVIEW','DISCUSSION','CONCLUSION','ACTION','RISK','OPEN_QUESTION','DISAGREEMENT'].includes(theme)):fitsUtf8(JSON.stringify({schemaVersion:'ama.personal-minutes-template.v1',themes:value.themes}),65536);
+}
 function freeze<T>(v:T):T{if(v!==null&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
 export function validGenerationCommand(v:unknown,actor:string,meeting:string):v is CommandSnapshot{
  if(!exact(v,'actor,body,key,operation,path,resource')||v.actor!==actor||v.resource!==meeting||typeof v.key!=='string'||!/^[-a-zA-Z0-9_]{1,128}$/.test(v.key)||typeof v.body!=='string'||!fitsUtf8(v.body,65536))return false;
  const initial=v.operation==='MINUTES_INITIAL';if(!initial&&v.operation!=='MINUTES_GENERATE'||v.path!==`/api/v1/meetings/${meeting}/minutes/${initial?'initial-settings':'generations'}`)return false;
- try{const b:unknown=JSON.parse(v.body);return exact(b,initial?'expectedRevisionToken,templateRevisionId':'expectedRevisionToken,scope')&&revisionToken(b.expectedRevisionToken)&&(initial?uuid(b.templateRevisionId):b.scope==='FULL');}catch{return false;}
+ try{const b:unknown=JSON.parse(v.body);if(!object(b)||!revisionToken(b.expectedRevisionToken))return false;if(initial)return exact(b,'expectedRevisionToken,templateRevisionId')&&uuid(b.templateRevisionId);if(b.scope==='FULL')return exact(b,'expectedRevisionToken,scope');return exact(b,'baseElementSetId,category,expectedRevisionToken,instructions,scope')&&b.scope==='REGION'&&uuid(b.baseElementSetId)&&typeof b.category==='string'&&['OVERVIEW','DISCUSSION','CONCLUSION','ACTION','RISK','OPEN_QUESTION','DISAGREEMENT'].includes(b.category)&&typeof b.instructions==='string'&&!!b.instructions.trim()&&Array.from(b.instructions).length<=4096&&fitsUtf8(b.instructions,16384);}catch{return false;}
 }
 export function createMinutesGenerationApi(client:ReturnType<typeof createBusinessClient>,actor:()=>string|null){return {
  async current(meeting:string,signal:AbortSignal):Promise<GenerationCurrent>{
@@ -26,8 +31,8 @@ export function createMinutesGenerationApi(client:ReturnType<typeof createBusine
  },
  async templates(meeting:string,cursor:string|null,signal:AbortSignal):Promise<GenerationTemplates>{
   if(!uuid(meeting)||cursor!==null&&(typeof cursor!=='string'||!fitsUtf8(cursor,4096)))throw new TypeError('Invalid template request');const query=new URLSearchParams({limit:'20'});if(cursor!==null)query.set('cursor',cursor);
-  const v=await client.json<unknown>(`/api/v1/meetings/${meeting}/minutes/templates?${query}`,{signal,expectedStatus:200,maxResponseBytes:1024*1024});
-  if(!exact(v,'items,nextCursor,observation')||!observation(v.observation)||!(v.nextCursor===null||typeof v.nextCursor==='string'&&fitsUtf8(v.nextCursor,4096))||!Array.isArray(v.items)||v.items.length>50||!v.items.every(x=>exact(x,'default,name,revisionId,selectable,templateId,themeCount,themes')&&uuid(x.templateId)&&uuid(x.revisionId)&&typeof x.name==='string'&&fitsUtf8(x.name,16384)&&typeof x.selectable==='boolean'&&typeof x.default==='boolean'&&x.themeCount===7&&Array.isArray(x.themes)&&x.themes.length===7&&new Set(x.themes).size===7&&x.themes.every(t=>['OVERVIEW','DISCUSSION','CONCLUSION','ACTION','RISK','OPEN_QUESTION','DISAGREEMENT'].includes(t)))||new Set(v.items.map(x=>x.revisionId)).size!==v.items.length)return invalid();return freeze(v as GenerationTemplates);
+  const v=await client.json<unknown>(`/api/v1/meetings/${meeting}/minutes/templates?${query}`,{signal,expectedStatus:200,maxResponseBytes:4*1024*1024});
+  if(!exact(v,'items,nextCursor,observation')||!observation(v.observation)||!(v.nextCursor===null||typeof v.nextCursor==='string'&&fitsUtf8(v.nextCursor,4096))||!Array.isArray(v.items)||v.items.length>50||!v.items.every(templateChoice)||new Set(v.items.map(x=>x.revisionId)).size!==v.items.length)return invalid();return freeze(v as GenerationTemplates);
  },
  async send(command:CommandSnapshot):Promise<GenerationReceipt>{
   if(!actor()||actor()!==command.actor)throw new DOMException('Generation actor changed','AbortError');if(!validGenerationCommand(command,command.actor,command.resource)||!uuid(command.resource))throw new TypeError('Invalid generation command');

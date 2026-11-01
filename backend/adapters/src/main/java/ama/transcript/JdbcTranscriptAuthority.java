@@ -29,6 +29,7 @@ public final class JdbcTranscriptAuthority {
  private final DataSource source;private final JdbcTemplate j;private final TransactionRunner tx;
  private final MeetingAccess access;private final ArchiveReadBudget budget;private final CanonicalBudget canonical;
  private FileRegistry registry;
+ private volatile SavedMinutesExportSource exports;
  private final PublicationWriteGuard publicationWrites;
  private FileBackendCatalog savedBackends;
  private FilePurposePolicy purposes;
@@ -62,15 +63,46 @@ public final class JdbcTranscriptAuthority {
  private JdbcTranscriptAuthority(DataSource source,TransactionRunner tx,MeetingAccess access,ArchiveReadBudget budget,CanonicalBudget canonical){
   this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);minutesTaskPolicy=new MinutesTaskDomainPolicy(this,source);publicationTaskPolicy=new PublicationTaskDomainPolicy(this,source);publicationWrites=new PublicationWriteGuard(this);
  }
+ private volatile JdbcMaterialAuthority materialAuthority;
+ synchronized void installMaterialAuthority(JdbcMaterialAuthority service){if(materialAuthority!=null)throw new IllegalStateException("Material authority already installed");materialAuthority=Objects.requireNonNull(service);}
+ JdbcMaterialAuthority materialAuthority(){return materialAuthority;}
  MeetingAccess savedAccess(){return access;}
+ /** Only the material intake can read a completed upload before its first business reference. */
+ FileRegistry.Download readMaterialUpload(Actor actor,String meeting,String file)throws java.io.IOException{
+  var captured=captureMaterialUpload(actor,meeting,file);var original=captured.file();
+  var raw=savedBackends.require(original.key().backendId(),false).storage().read(original.key(),0,original.size());
+  var guarded=new RevocableInputStream(raw,captured.deadline(),()->{
+   var fresh=captureMaterialUpload(actor,meeting,file);
+   if(!original.equals(fresh.file()))throw new ama.contract.FileContracts.NotFound();
+   return fresh.deadline();
+  });
+  return new FileRegistry.Download(original,guarded,0,original.size(),captured.deadline());
+ }
+ private record MaterialUpload(FileRegistry.FileRecord file,Instant deadline){}
+ private MaterialUpload captureMaterialUpload(Actor actor,String meeting,String file){
+  independent();uuid(meeting);uuid(file);access.prepareExternalRead(actor,meeting);
+  return tx.required(()->{
+   var gate=registry.lock(actor,meeting,MeetingAccess.Action.EDIT);var ids=List.of(file);
+   var held=registry.prelockSources(gate,ids,false).orElseThrow(ama.contract.FileContracts.NotFound::new);
+   var completed=registry.sources(gate,held,ids).getFirst();var record=completed.file();
+   if(!MaterialFileReferencePolicy.PURPOSE.equals(completed.originalPurpose())||!meeting.equals(record.meetingId()))throw new ama.contract.FileContracts.NotFound();
+   String name=j.queryForObject("SELECT IF(OCTET_LENGTH(display_name)<=4096,display_name,NULL) FROM file_object WHERE id=?",String.class,file);
+   if(name==null)throw new ama.contract.FileContracts.Unavailable();
+   var named=new FileRegistry.FileRecord(record.fileId(),record.meetingId(),record.key(),record.size(),record.sha256(),record.state(),record.locationRevision(),record.referenceEpoch(),name);
+   return new MaterialUpload(named,access.readAuthorityDeadline(registry.access(gate)).orElse(Instant.MAX));
+  });
+ }
  public static Components create(DataSource source,TransactionRunner tx,MeetingAccess access,FilePurposePolicy purposes,
          FileBackendCatalog backends,Map<String,FileReferencePolicy> legacy,ArchiveReadBudget budget,CanonicalBudget canonical){
-  if(legacy.containsKey(REFERENCE))throw new IllegalArgumentException("Production transcript authority owns its complete policy registration");
+  if(legacy.containsKey(REFERENCE)||legacy.containsKey("MINUTES_EXPORT"))throw new IllegalArgumentException("Production transcript authority owns its complete policy registration");
   var authority=new JdbcTranscriptAuthority(source,tx,access,budget,canonical);authority.purposes=Objects.requireNonNull(purposes);authority.savedBackends=Objects.requireNonNull(backends);var policies=new HashMap<>(legacy);policies.put(REFERENCE,authority.policy);var materials=new MaterialFileReferencePolicy(source);policies.put(MaterialFileReferencePolicy.CONTENT,materials);policies.put(MaterialFileReferencePolicy.TEXT,materials);
+  policies.put("MINUTES_EXPORT",new ama.export.MinutesExportReferencePolicy(source,authority::exportSource));
   var registry=new JdbcFileRegistry(source,tx,access,purposes,backends,policies,budget);authority.attach(registry);registry.installPublicationGuard(authority.publicationWrites);
   return new Components(registry,authority,new JdbcProcessingIntakeFacts(authority),new JdbcProcessingSourceReader(authority));
  }
  private void attach(FileRegistry registry){if(this.registry!=null)throw new IllegalStateException("Duplicate authority attachment");this.registry=Objects.requireNonNull(registry);}
+ public synchronized SavedMinutesExportSource installExportSource(java.util.function.Supplier<ConfigArchiveSource.Snapshot> archives,String pin,TranscriptAcquisitionBudget limits){if(exports!=null)throw new IllegalStateException("Export source already installed");exports=new SavedMinutesExportSource(this,archives,pin,limits);return exports;}
+ public SavedMinutesExportSource exportSource(){var selected=exports;if(selected==null)throw new ama.contract.FileContracts.Unavailable();return selected;}
  ProcessingIntakeFacts.Draft readDraft(Actor actor,String meeting,List<String> files,BooleanSupplier cancelled){
   independent();ids(files);check(cancelled);
   var draft=tx.required(()->{

@@ -41,7 +41,7 @@ public final class JdbcMinutesFactsReader {
  private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member){return read(actor,meeting,selector,selected,member,limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->false));}
  private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget){
   independent();uuid(meeting);require(Set.of("INITIAL_SETTINGS","CURRENT_GENERATION","STORED_INPUT","CANDIDATE","SAVED_EFFECTIVE","OWNER_REVISION","REVIEW_BODY","REVIEW_ELEMENT","FINAL","REUSE_SOURCES","OWNER_SET","REVIEW_ID","READINESS","SETTINGS_READ").contains(selector),INVALID_ARGUMENT);
-  Objects.requireNonNull(budget);
+  Objects.requireNonNull(budget);authority.savedAccess().prepareExternalRead(actor,meeting);
   MinutesGraphDiscovery.Discovery discovered=null;RuntimeException discoveryError=null;
   try{discovered=MinutesGraphDiscovery.discover(authority.dataSource(),meeting,selector,selected,limits,authority.readBudget());if(selector.equals("READINESS"))discovered=MinutesGraphDiscovery.withPending(authority.dataSource(),discovered,limits.tasks(),budget);charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}
   final var plan=discovered;final var failedDiscovery=discoveryError;
@@ -49,6 +49,7 @@ public final class JdbcMinutesFactsReader {
   Snapshot prepared=null;RuntimeException preparationError=null;
   try{prepared=prepare(captured,budget);}catch(RuntimeException failure){cancellation(failure);preparationError=failure;}
   final var result=prepared;final var failed=preparationError;
+  authority.savedAccess().prepareExternalRead(actor,meeting);
   return authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,plan,member?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);if(failed!=null)throw failed;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);var fresh=member&&!selector.equals("FINAL")||selector.equals("READINESS")?MinutesGraphCapture.captureCurrent(authority,scope,gate,actor,plan,budget):MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);if(member&&selector.equals("FINAL"))requireEffectiveFinal(fresh.discovery().root(),JdbcMinutesSavedQueries.project(one(fresh,Table.FINAL_CONFIRMATION,selected)));require(captured.equals(fresh),PROVENANCE_UNAVAILABLE);return result;});
  }
  static ama.storage.FileRegistry.LockedMeeting lockGraph(JdbcTranscriptAuthority authority,Actor actor,String meeting,MinutesGraphDiscovery.Discovery plan){return lockGraph(authority,actor,meeting,plan,MeetingAccess.Action.EDIT);}

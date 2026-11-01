@@ -2,7 +2,7 @@ import {shallowRef,shallowReadonly,watch} from 'vue';
 import {useCommand,type CommandSnapshot} from '../../shared/composables/useCommand';
 import {createScopedPrivateJournal} from '../../shared/composables/scoped-private-journal';
 import type {TabJournalContext} from '../../shared/composables/tab-journal';
-import {validGenerationCommand,type GenerationCurrent,type GenerationTemplates,type GenerationReceipt} from '../../shared/api/minutes-generation';
+import {validGenerationCommand,type GenerationCurrent,type GenerationTemplates,type GenerationReceipt,type GenerationRegion} from '../../shared/api/minutes-generation';
 import {ApiError} from '../../shared/api/client';
 type Api={authorize?:(id:string,signal:AbortSignal)=>Promise<unknown>;current:(id:string,signal:AbortSignal)=>Promise<GenerationCurrent>;templates:(id:string,cursor:string|null,signal:AbortSignal)=>Promise<GenerationTemplates>;send:(c:CommandSnapshot)=>Promise<GenerationReceipt>};
 const denied=(e:unknown)=>e instanceof ApiError&&e.kind==='http'&&[401,403].includes(e.status??0);
@@ -32,7 +32,7 @@ export function useMinutesGeneration(api:Api,actor:()=>string|null,meeting:()=>s
  async function loadTemplates(more=false){if(disposed||busy.value||loading.value||!ready.value||!eligible()||!actor())return;const generation=epoch,id=meeting(),who=actor(),turn=++readTurn;controller?.abort();const request=new AbortController();controller=request;loading.value=true;error.value=null;const active=()=>!disposed&&generation===epoch&&turn===readTurn&&who===actor()&&id===meeting()&&eligible();
   try{const page=await api.templates(id,more?templates.value?.nextCursor??null:null,request.signal);if(active())templates.value=page;}catch(cause){if(active()){if(denied(cause))invalidate();error.value=cause;}}finally{if(active()){loading.value=false;controller=null;}}
  }
- function send(operation:'MINUTES_INITIAL'|'MINUTES_GENERATE',template?:string,retry=false):Promise<void>{
+ function send(operation:'MINUTES_INITIAL'|'MINUTES_GENERATE',template?:string,retry=false,region?:GenerationRegion):Promise<void>{
   if(disposed)return Promise.resolve();if(flight)return flight;const generation=epoch,who=actor(),id=meeting();const active=()=>!disposed&&generation===epoch&&who===actor()&&id===meeting()&&eligible();
   const run=async()=>{try{
    if(!who||!active()||!ready.value||blocked.value)throw new Error('请先读取当前会议并恢复原操作。');busy.value=true;error.value=null;
@@ -44,7 +44,8 @@ export function useMinutesGeneration(api:Api,actor:()=>string|null,meeting:()=>s
      if(fresh.saved.templateRevisionId!==null||fresh.saved.exclusionRevisionId!==null)throw new Error('初始设置已存在，请重新读取。');
      if(!templates.value?.items.some(t=>t.revisionId===template&&t.selectable))throw new Error('请从真实可选模板中选择。');
     }
-    const body=operation==='MINUTES_GENERATE'?{expectedRevisionToken:fresh.observation.revisionToken,scope:'FULL'}:{expectedRevisionToken:fresh.observation.revisionToken,templateRevisionId:template};
+    if(region&&region.baseElementSetId!==fresh.saved.elementSetId)throw new Error('要素版本已变化，请重新读取并核对区域。');
+    const body=operation==='MINUTES_GENERATE'?(region?{expectedRevisionToken:fresh.observation.revisionToken,scope:'REGION',...region}:{expectedRevisionToken:fresh.observation.revisionToken,scope:'FULL'}):{expectedRevisionToken:fresh.observation.revisionToken,templateRevisionId:template};
     command.prepare({actor:who,resource:id,operation,path:`/api/v1/meetings/${id}/minutes/${operation==='MINUTES_GENERATE'?'generations':'initial-settings'}`,key:crypto.randomUUID(),body});
    }
    if(!active())return;const original=command.snapshot.value;if(!original||journal&&journal.save(who,id,original)!=='SAVED')throw new Error('原请求无法保存，请保持页面打开并重试。');
@@ -55,7 +56,7 @@ export function useMinutesGeneration(api:Api,actor:()=>string|null,meeting:()=>s
   }catch(cause){if(active()){if(denied(cause))invalidate();error.value=cause;}}finally{if(active())busy.value=false;}};
   let finish!:()=>void;const result=new Promise<void>(r=>{finish=r;});flight=result;void result.then(()=>{if(generation===epoch)flight=null;});void run().then(finish,finish);return result;
  }
- return {current:shallowReadonly(current),templates:shallowReadonly(templates),loading:shallowReadonly(loading),busy:shallowReadonly(busy),ready:shallowReadonly(ready),blocked:shallowReadonly(blocked),error:shallowReadonly(error),command,reload:()=>reload(),loadTemplates,initialize:(id:string)=>send('MINUTES_INITIAL',id),generate:()=>send('MINUTES_GENERATE'),retry:()=>send(command.snapshot.value?.operation==='MINUTES_INITIAL'?'MINUTES_INITIAL':'MINUTES_GENERATE',undefined,true),
+ return {current:shallowReadonly(current),templates:shallowReadonly(templates),loading:shallowReadonly(loading),busy:shallowReadonly(busy),ready:shallowReadonly(ready),blocked:shallowReadonly(blocked),error:shallowReadonly(error),command,reload:()=>reload(),loadTemplates,initialize:(id:string)=>send('MINUTES_INITIAL',id),generate:()=>send('MINUTES_GENERATE'),generateRegion:(region:GenerationRegion)=>send('MINUTES_GENERATE',undefined,false,Object.freeze({...region})),retry:()=>send(command.snapshot.value?.operation==='MINUTES_INITIAL'?'MINUTES_INITIAL':'MINUTES_GENERATE',undefined,true),
   discardRejected(){if(flight||!['CONFLICT','REJECTED'].includes(command.state.value))throw new Error('原请求结果尚未明确。');if(journal&&!journal.clear())throw new Error('恢复记录无法清理。');command.invalidate();retained=null;},
   logout(){retained=null;if(journal&&!journal.clear())blocked.value=true;invalidate();retained=null;},dispose(){disposed=true;stop();invalidate();}
  };

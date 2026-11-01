@@ -1,0 +1,79 @@
+withdrawal:
+  parameters:
+    - {$ref: '#/MeetingId'}
+    - {$ref: '#/PublicationId'}
+  post:
+    operationId: withdrawPublication
+    description: The active original owner submits a durable command. Local protected reads stop atomically before external delivery. An unknown external result remains denied; the exact original key/request recovers the original job. No terminal publication can be restored or republished.
+    security: [{enterpriseSession: []}]
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody: {required: true, content: {application/json: {schema: {$ref: '#/GovernanceRequest'}}}}
+    responses:
+      '202': {description: Original durable governance job, content: {application/json: {schema: {$ref: '#/GovernanceJob'}}}}
+      '403': {description: Active original owner required}
+      '409': {description: Original tuple or revision conflict; another governance command already exists}
+obsolescence:
+  parameters:
+    - {$ref: '#/MeetingId'}
+    - {$ref: '#/PublicationId'}
+  post:
+    operationId: obsoletePublication
+    description: Same original-command protocol as withdrawal; requests irreversible obsolescence of the exact recorded published document.
+    security: [{enterpriseSession: []}]
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody: {required: true, content: {application/json: {schema: {$ref: '#/GovernanceRequest'}}}}
+    responses:
+      '202': {description: Original durable governance job, content: {application/json: {schema: {$ref: '#/GovernanceJob'}}}}
+history:
+  parameters:
+    - {$ref: '#/MeetingId'}
+    - {$ref: '#/PublicationId'}
+  get:
+    operationId: publicationGovernanceHistory
+    description: At most twenty original owner-only bounded metadata records. Remains available after ordinary document reading is revoked; conveys no content or download authority.
+    security: [{enterpriseSession: []}]
+    responses:
+      '200': {description: Private governance history, content: {application/json: {schema: {type: array, maxItems: 20, items: {$ref: '#/GovernanceJob'}}}}}
+job:
+  parameters:
+    - {$ref: '#/MeetingId'}
+    - {$ref: '#/PublicationId'}
+    - {name: jobId, in: path, required: true, schema: {type: string, format: uuid}}
+  get:
+    operationId: publicationGovernanceJob
+    security: [{enterpriseSession: []}]
+    responses:
+      '200': {description: Current owner-only governance metadata, content: {application/json: {schema: {$ref: '#/GovernanceJob'}}}}
+event:
+  post:
+    operationId: receiveSignedKnowledgeGovernanceEvent
+    description: Controlled integration protocol only. A raw canonical Ed25519 signed terminal receipt, at most 8192 ASCII bytes, bound to the configured provider/store/client/keys and the genuine original successful publication. No cookie grants permission. Invalid signatures, resource substitutions, conflicting events and state resurrection are rejected; duplicate terminal events are idempotent. Company protocol qualification remains separate.
+    security: []
+    requestBody: {required: true, content: {text/plain: {schema: {type: string, maxLength: 8192}}}}
+    responses:
+      '204': {description: Verified terminal event applied or original duplicate confirmed}
+      '400': {description: Invalid or conflicting signed event}
+      '413': {description: Event exceeds byte bound}
+MeetingId: {name: meetingId, in: path, required: true, schema: {type: string, format: uuid}}
+PublicationId: {name: publicationId, in: path, required: true, schema: {type: string, format: uuid}}
+GovernanceRequest:
+  type: object
+  additionalProperties: false
+  required: [expectedRevisionToken, reason]
+  properties:
+    expectedRevisionToken: {type: string, pattern: '^(0|[1-9][0-9]{0,18})$'}
+    reason: {type: string, minLength: 1, maxLength: 2048, description: Nonblank Unicode; at most 8192 UTF-8 bytes}
+GovernanceJob:
+  type: object
+  additionalProperties: false
+  required: [governanceJobId, meetingId, publicationId, action, reason, state, lastError, createdAt, finishedAt]
+  properties:
+    governanceJobId: {type: string, format: uuid}
+    meetingId: {type: string, format: uuid}
+    publicationId: {type: string, format: uuid}
+    action: {type: string, enum: [WITHDRAW, OBSOLETE]}
+    reason: {type: string, maxLength: 2048}
+    state: {type: string, enum: [PENDING, RECONCILING, SUCCEEDED, CONFLICT]}
+    lastError: {type: [string, 'null'], maxLength: 64}
+    createdAt: {type: string}
+    finishedAt: {type: [string, 'null']}

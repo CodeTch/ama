@@ -18,6 +18,8 @@ public interface FileRegistry {
 
     interface LockedReference {}
     interface LockedSources {}
+    /** One genuine registry receipt for a complete union; it cannot be replaced by caller file DTOs. */
+    record AcquiredSources(LockedSources receipt,java.util.List<String> fileIds){public AcquiredSources{java.util.Objects.requireNonNull(receipt);fileIds=java.util.List.copyOf(fileIds);}}
     interface ReferenceContext {}
     interface ReadRequest { String referenceKind(); }
     record CurrentReadRequest(String referenceKind, String fileId) implements ReadRequest {}
@@ -30,6 +32,9 @@ public interface FileRegistry {
             ReferenceContext context) { throw new ama.contract.FileContracts.Unavailable(); }
     default java.util.Optional<LockedSources> prelockSources(LockedMeeting gate,
             java.util.List<String> completeFileIds, boolean skipLocked) { throw new ama.contract.FileContracts.Unavailable(); }
+    /** Original batch budget plus one independently registered derived artifact, in one lock union. */
+    default java.util.Optional<LockedSources> prelockDerivedSources(LockedMeeting gate,
+            java.util.List<String> originalFileIds,String derivedFileId,boolean skipLocked){throw new ama.contract.FileContracts.Unavailable();}
     default java.util.List<CompletedSource> sources(LockedMeeting expectedGate, LockedSources held,
             java.util.List<String> exactFileIds) { throw new ama.contract.FileContracts.Unavailable(); }
     default void bindAll(LockedSources sources, java.util.List<Binding> bindings) { throw new ama.contract.FileContracts.Unavailable(); }
@@ -54,8 +59,10 @@ public interface FileRegistry {
             long referenceEpoch,
             String displayName) {}
 
-    record Download(FileRecord file, InputStream body, long offset, long length)
+    record Download(FileRecord file, InputStream body, long offset, long length,java.time.Instant authorityDeadline)
             implements AutoCloseable {
+        public Download(FileRecord file,InputStream body,long offset,long length){this(file,body,offset,length,java.time.Instant.MAX);}
+        public Download {java.util.Objects.requireNonNull(authorityDeadline);}
         public void close() throws java.io.IOException {
             body.close();
         }

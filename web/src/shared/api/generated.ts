@@ -4,6 +4,291 @@
  */
 
 export interface paths {
+    "/api/v1/meetings/{meetingId}/info-suggestions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["Meeting"];
+            };
+            cookie?: never;
+        };
+        /** @description Owner-private pending NAME/SUMMARY proposals from genuine asynchronous candidates. Full provenance and current confirmation/material/template/exclusion are verified. Summary is ordered OVERVIEW content, never the complete minutes body. Loading never modifies human information. Category remains an explicit dictionary selection. */
+        get: operations["listInfoSuggestions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/info-suggestions/{suggestionId}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["Meeting"];
+                suggestionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Explicit ACCEPT writes only the selected saved information field, preserves roster drafts/grants, advances the aggregate fence and retains an immutable receipt. REJECT records the decision without modifying human information. Original-key replay returns the original revision under current owner authority; different body conflicts. No client-supplied suggestion value is accepted. Human drafts must be saved before deciding. */
+        post: operations["decideInfoSuggestion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/materials": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get: operations["listMeetingMaterials"];
+        put?: never;
+        post: operations["addMeetingMaterial"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/materials/batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Atomic 1–64 exact source selection. Validate the entire external batch before staging; current local ACL and signed exact-version proof are rechecked at commit. One invalid source adds no references and changes no effective snapshot. Original ordered body/key replays the immutable receipt; changing order/body conflicts. Managed staging files may remain for cleanup. */
+        post: operations["addMeetingMaterialBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/materials/{material}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                material: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description Remove the current selection. Retained historical versions remain subject to current external authority. */
+        delete: operations["removeMeetingMaterial"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/materials/{material}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                material: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["retryMaterialParse"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/deletions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read the original owner's content-free cleanup status */
+        get: operations["readMeetingDeletion"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/withdrawal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MeetingId"];
+                publicationId: components["parameters"]["PublicationId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description The active original owner submits a durable command. Local protected reads stop atomically before external delivery. An unknown external result remains denied; the exact original key/request recovers the original job. No terminal publication can be restored or republished. */
+        post: operations["withdrawPublication"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/obsolescence": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MeetingId"];
+                publicationId: components["parameters"]["PublicationId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Same original-command protocol as withdrawal; requests irreversible obsolescence of the exact recorded published document. */
+        post: operations["obsoletePublication"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/governance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MeetingId"];
+                publicationId: components["parameters"]["PublicationId"];
+            };
+            cookie?: never;
+        };
+        /** @description At most twenty original owner-only bounded metadata records. Remains available after ordinary document reading is revoked; conveys no content or download authority. */
+        get: operations["publicationGovernanceHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/governance/{jobId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MeetingId"];
+                publicationId: components["parameters"]["PublicationId"];
+                jobId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["publicationGovernanceJob"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/integrations/v1/knowledge/governance-events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Controlled integration protocol only. A raw canonical Ed25519 signed terminal receipt, at most 8192 ASCII bytes, bound to the configured provider/store/client/keys and the genuine original successful publication. No cookie grants permission. Invalid signatures, resource substitutions, conflicting events and state resurrection are rejected; duplicate terminal events are idempotent. Company protocol qualification remains separate. */
+        post: operations["receiveSignedKnowledgeGovernanceEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/exports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Export the current genuinely saved revision. Requires current READ access, active governance and the fixed final version after publication. Same actor/meeting/key/request replays the original job; changed source revision or format under that key conflicts. Caller draft text is never accepted. */
+        post: operations["createMinutesExport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/exports/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get: operations["readMinutesExport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/exports/{id}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** @description Fresh authorization and complete saved-source/producer proof before storage open. Same session and file proof renew during streaming; revocation or unavailable renewal terminates the stream within five seconds. No redirects or public storage URL. */
+        get: operations["downloadMinutesExport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/internal/health/live": {
         parameters: {
             query?: never;
@@ -210,7 +495,7 @@ export interface paths {
         };
         /**
          * List independently authorized saved meeting metadata
-         * @description Uses bounded indexed updated-time/id candidates. Each emitted row has fresh authorization. Joined means confirmed enterprise participant, including an owner only when confirmed. Confirmed participant names and saved update time are included; drafts and summary are not read. Unknown/repeated queries fail; changed discovery or exhausted shared budget fails the whole response. Filters apply after fresh authorization within each bounded scan; empty pages can continue with a signed actor/filter-bound cursor. No count/snapshot or mutation permission is implied.
+         * @description Permission and all filters form one parameterized relation before keyset pagination. Page, total, stageCounts and topicGroups use the same database view. External proofs are prepared only for matching local rows and rechecked under ordered roots. Explicit denial excludes the row; unknown proof or stale projection fails the whole response. Literal LIKE escapes %, _ and =, matches English case insensitively, and only current confirmed names participate. Dates use actual saved DATE and never substitute capture time. Cursors bind actor, scope and all filters; allowedActions are hints, commands always authorize again.
          */
         get: operations["listMeetings"];
         put?: never;
@@ -243,8 +528,8 @@ export interface paths {
         put?: never;
         post?: never;
         /**
-         * Soft-delete an editable meeting owned by the current identity
-         * @description Owner only. Uses revision CAS and an idempotency key. The meeting lifecycle becomes DELETED, the cancel epoch advances, current reads and list projections stop exposing the meeting, and the immutable tombstone remains for late task protection. Published, governed, in-flight or stale meetings are rejected without partial effects. Exact replay returns the original mutation after current owner authorization.
+         * Accept irreversible deletion and recoverable online cleanup
+         * @description Original owner, current revision and immutable request key required. Acceptance immediately denies meeting access, advances the cancellation fence and cancels ordinary tasks. Active/paused recording, unresolved publication, ever-published or governed meetings are rejected. Ordinary uploads and exports are retired by the durable cleanup. Exact replay returns the same deletionTaskId after fresh owner authorization. COMPLETE confirms managed local objects and online owned business rows, excluding external originals and backup retention.
          */
         delete: operations["deleteMeeting"];
         options?: never;
@@ -378,6 +663,44 @@ export interface paths {
         put: operations["updateTopic"];
         post?: never;
         delete: operations["deleteTopic"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Current actor's active personal templates only. Built-in templates and generation capability remain in the meeting-scoped template catalog. */
+        get: operations["listPersonalTemplates"];
+        put?: never;
+        /** @description Persist an immutable first revision with 1–8 ordered personal themes. Same actor/key/body returns the original acknowledgement even after later edit/removal. Creation grants no model capability. */
+        post: operations["createPersonalTemplate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/templates/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get: operations["readPersonalTemplate"];
+        /** @description Current owner and exact command revision required. Appends a new immutable revision and preserves all earlier references. Current normalized names are unique per owner. */
+        put: operations["updatePersonalTemplate"];
+        post?: never;
+        /** @description Hides the template from future choices without deleting any immutable revision, generation input or final snapshot. Original receipt replay never reactivates it. */
+        delete: operations["removePersonalTemplate"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1479,7 +1802,7 @@ export interface paths {
     "/api/v1/meetings/{meetingId}/minutes/sources/{locatorId}": {
         parameters: {
             query: {
-                targetKind: "BODY" | "ELEMENT";
+                targetKind: "BODY" | "ELEMENT" | "SET";
                 targetId: string;
             };
             header?: never;
@@ -2443,6 +2766,141 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        InfoSuggestion: {
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            field: "NAME" | "SUMMARY";
+            value: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: uuid */
+            candidateId: string;
+            /** Format: uuid */
+            inputId: string;
+            inputFingerprint: string;
+            /** Format: uuid */
+            transcriptConfirmationId: string;
+        };
+        InfoSuggestions: {
+            /** Format: uuid */
+            meetingId: string;
+            revisionToken: string;
+            /** @constant */
+            categoryStatus: "SELECT_REQUIRED";
+            items: components["schemas"]["InfoSuggestion"][];
+        };
+        BusinessError: {
+            error: {
+                /** @enum {string} */
+                code: "UNAUTHENTICATED" | "FORBIDDEN" | "INVALID_ARGUMENT" | "INVALID_CAS_ASSERTION" | "IDENTITY_UNAVAILABLE" | "IDENTITY_PROVIDER_UNAVAILABLE" | "MEETING_FORBIDDEN" | "MEETING_CONFLICT" | "TOPIC_NOT_PUBLISHED" | "MEETING_UNAVAILABLE" | "CATEGORY_DICTIONARY_UNAVAILABLE" | "REQUEST_TOO_LARGE" | "FILE_PURPOSE_UNAVAILABLE" | "FILE_CONFLICT" | "FILE_NOT_FOUND" | "FILE_STORAGE_UNAVAILABLE" | "FILE_INVALID_RANGE";
+                message: string;
+                /** Format: uuid */
+                traceId: string;
+            };
+        };
+        /** @description Opaque canonical decimal revision, 0..9223372036854775806. Preserve the string exactly. Dual representations must agree. */
+        ExpectedRevisionToken: string;
+        Mutation: {
+            /** Format: uuid */
+            id: string;
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+            /** Format: int64 */
+            revision: number;
+        };
+        MaterialItem: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            materialRevisionId: string;
+            /** Format: uuid */
+            parsedDocumentId: string;
+            /** Format: uuid */
+            fileId: string;
+            name: string;
+            /** @enum {string} */
+            source: "LOCAL" | "KNOWLEDGE";
+            sourceVersion: string | null;
+            sizeBytesToken: string;
+            sha256: string;
+            /** @enum {string} */
+            state: "READY" | "FAILED";
+            error: string | null;
+        };
+        MaterialListing: {
+            items: components["schemas"]["MaterialItem"][];
+            /** Format: uuid */
+            materialSnapshotId: string | null;
+            materialsPending: boolean;
+            meetingRevision: string;
+        };
+        MaterialSelection: {
+            /** Format: uuid */
+            fileId: string;
+        } | {
+            libraryId: string;
+            documentId: string;
+            version: string;
+        };
+        MaterialBatch: {
+            items: components["schemas"]["MaterialItem"][];
+            /** Format: uuid */
+            materialSnapshotId: string | null;
+            meetingRevision: string;
+        };
+        DeletionJob: {
+            /** Format: uuid */
+            deletionTaskId: string;
+            /** Format: uuid */
+            meetingId: string;
+            /** @enum {string} */
+            state: "PENDING" | "RUNNING" | "FAILED" | "COMPLETE";
+            /** @enum {string} */
+            phase: "INVENTORY" | "STORAGE" | "PURGE" | "COMPLETE";
+            revisionToken: string;
+            attempts: number;
+            errorCode: string | null;
+        };
+        GovernanceRequest: {
+            expectedRevisionToken: string;
+            /** @description Nonblank Unicode; at most 8192 UTF-8 bytes */
+            reason: string;
+        };
+        GovernanceJob: {
+            /** Format: uuid */
+            governanceJobId: string;
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            publicationId: string;
+            /** @enum {string} */
+            action: "WITHDRAW" | "OBSOLETE";
+            reason: string;
+            /** @enum {string} */
+            state: "PENDING" | "RECONCILING" | "SUCCEEDED" | "CONFLICT";
+            lastError: string | null;
+            createdAt: string;
+            finishedAt: string | null;
+        };
+        MinutesExportRequest: {
+            /** Format: uuid */
+            sourceRevision: string;
+            /** @enum {string} */
+            format: "md" | "pdf" | "docx";
+        };
+        MinutesExportStatus: {
+            /** Format: uuid */
+            exportJobId: string;
+            /** @enum {string} */
+            state: "READY" | "RUNNING" | "RECONCILING" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "STALE";
+            /** Format: uuid */
+            sourceRevision: string;
+            /** @enum {string} */
+            format: "md" | "pdf" | "docx";
+            /** Format: uuid */
+            fileId: string | null;
+            error: string | null;
+        };
         Health: {
             /** @enum {string} */
             status: "UP" | "DOWN" | "OUT_OF_SERVICE" | "UNKNOWN";
@@ -2460,15 +2918,6 @@ export interface components {
             csrfToken: string;
             /** Format: date-time */
             expiresAt: string;
-        };
-        BusinessError: {
-            error: {
-                /** @enum {string} */
-                code: "UNAUTHENTICATED" | "FORBIDDEN" | "INVALID_ARGUMENT" | "INVALID_CAS_ASSERTION" | "IDENTITY_UNAVAILABLE" | "IDENTITY_PROVIDER_UNAVAILABLE" | "MEETING_FORBIDDEN" | "MEETING_CONFLICT" | "MEETING_UNAVAILABLE" | "CATEGORY_DICTIONARY_UNAVAILABLE" | "REQUEST_TOO_LARGE" | "FILE_PURPOSE_UNAVAILABLE" | "FILE_CONFLICT" | "FILE_NOT_FOUND" | "FILE_STORAGE_UNAVAILABLE" | "FILE_INVALID_RANGE";
-                message: string;
-                /** Format: uuid */
-                traceId: string;
-            };
         };
         Person: {
             stableId: string;
@@ -2494,8 +2943,6 @@ export interface components {
             /** @enum {integer} */
             originalHttpStatus: 200 | 201;
         };
-        /** @description Opaque canonical decimal revision, 0..9223372036854775806. Preserve the string exactly. Dual representations must agree. */
-        ExpectedRevisionToken: string;
         CommandObservation: {
             /** Format: uuid */
             meetingId: string;
@@ -2533,14 +2980,14 @@ export interface components {
             /** Format: uuid */
             taskId: string;
             /** @enum {string} */
-            kind: "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1" | "RECORDING_ARCHIVE_V1";
+            kind: "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1" | "RECORDING_ARCHIVE_V1" | "MINUTES_EXPORT_V1";
             /** @enum {string} */
             state: "READY" | "RUNNING" | "RECONCILING" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "STALE";
             attemptToken: string;
             businessRevisionToken: components["schemas"]["ExpectedRevisionToken"];
             /** Format: uuid */
             inputId: string;
-            /** @description Actual producer detail route. Publication links address the publication root; original task identity remains taskId. */
+            /** @description Actual producer detail route. Publication links address the publication root; original task identity remains taskId. Export links address /api/v1/exports/{taskId} and require fresh authorization when opened. */
             detailPath: string;
         };
         WorkspaceTaskPage: {
@@ -2657,20 +3104,27 @@ export interface components {
             writeState: "MEMBER_READ_ONLY" | "PUBLISHED_READ_ONLY" | "CHECK_WORKSPACE";
             revisionToken: string;
             accessRevisionToken: string;
+            ownerName?: string | null;
+            materialCount?: number;
+            /** @description Current list action hints; every command independently rechecks its current prerequisites and permissions. */
+            allowedActions?: ("OPEN" | "DELETE" | "RETRY_TRANSCRIPT" | "RETRY_MINUTES" | "RETRY_PUBLISH")[];
+            destination?: string;
         };
         MeetingPage: {
             items: components["schemas"]["MeetingItem"][];
-            /** @description Encrypted actor/scope-bound continuation over scanned candidates. Expires after five minutes. */
+            /** @description Encrypted actor/scope/filter-bound continuation over authorized matching rows. Expires after five minutes. Each request has its own consistent database snapshot. */
             nextCursor: string | null;
-            /** @description Further bounded candidates may exist. Empty items with hasMore true is valid; denied rows are not disclosed. No total-count or snapshot claim. */
+            /** @description Further authorized matching rows exist in this request snapshot. Filtering precedes pagination. */
             hasMore: boolean;
-        };
-        Mutation: {
-            /** Format: uuid */
-            id: string;
-            revisionToken: components["schemas"]["ExpectedRevisionToken"];
-            /** Format: int64 */
-            revision: number;
+            total: number;
+            /** @description All eight stages, including zero counts, with exactly the same permission and filter relation as total. */
+            stageCounts: {
+                [key: string]: number;
+            };
+            /** @description Current owner's topic IDs and __none, using exactly the same relation. Empty for joined scope. */
+            topicGroups: {
+                [key: string]: number;
+            };
         };
         Member: {
             /** Format: uuid */
@@ -2740,6 +3194,37 @@ export interface components {
             /** Format: int64 */
             revision: number;
             revisionToken: components["schemas"]["ExpectedRevisionToken"];
+        };
+        /** @description Nonblank Unicode scalar text, at most 8192 UTF-8 bytes as a transport/resource bound. NFC and Unicode whitespace trimming form the duplicate-name identity. */
+        TemplateName: string;
+        /** @description Ordered nonblank Unicode themes, each at most 8192 UTF-8 bytes; versioned JSON document at most 65536 bytes. These are personal chapter names, separate from the seven element categories. */
+        TemplateThemes: string[];
+        PersonalTemplate: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            revisionId: string;
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+            name: components["schemas"]["TemplateName"];
+            themes: components["schemas"]["TemplateThemes"];
+            deleted: boolean;
+        };
+        PersonalTemplatePage: {
+            items: components["schemas"]["PersonalTemplate"][];
+            /** Format: uuid */
+            nextCursor: string | null;
+        };
+        PersonalTemplateInput: {
+            name: components["schemas"]["TemplateName"];
+            themes: components["schemas"]["TemplateThemes"];
+        };
+        PersonalTemplateUpdate: {
+            expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
+            name: components["schemas"]["TemplateName"];
+            themes: components["schemas"]["TemplateThemes"];
+        };
+        PersonalTemplateRemoval: {
+            expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
         };
         Feedback: {
             /** Format: uuid */
@@ -3440,15 +3925,15 @@ export interface components {
             /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
             expectedRevisionToken: string;
         });
+        /** @description Built-in defaults retain the seven controlled element categories. Personal entries contain 1-8 chapter themes and are selectable only when the installed renderer/model protocol supports them. */
         MinutesTemplate: {
             /** Format: uuid */
             templateId: string;
             /** Format: uuid */
             revisionId: string;
             name: string;
-            themes: ("OVERVIEW" | "DISCUSSION" | "CONCLUSION" | "ACTION" | "RISK" | "OPEN_QUESTION" | "DISAGREEMENT")[];
-            /** @constant */
-            themeCount: 7;
+            themes: string[];
+            themeCount: number;
             selectable: boolean;
             default: boolean;
         };
@@ -3498,24 +3983,32 @@ export interface components {
             replayed: boolean;
             observation: components["schemas"]["MinutesObservation"];
         };
-        /** @description Exact object. Duplicate/unknown fields, trailing data, fractions and unequal dual revision representations are rejected. Body transport limit is 1 MiB. */
+        /** @description Exact FULL or REGION command. Duplicate/unknown fields and unequal dual revision forms are rejected. REGION pins a saved base set, category and presentation instructions; only its candidate region may change. Request limit 64 KiB. */
         MinutesGenerationCommand: {
             /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
             expectedRevisionToken?: string;
             /** @description Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically. */
             expectedRevision?: number;
-            /**
-             * @description Required exact FULL scope. Omitting scope is invalid.
-             * @enum {string}
-             */
-            scope: "FULL";
-        } & ({
+            /** @enum {string} */
+            scope: "FULL" | "REGION";
+            /** Format: uuid */
+            baseElementSetId?: string;
+            /** @enum {string} */
+            category?: "OVERVIEW" | "DISCUSSION" | "CONCLUSION" | "ACTION" | "RISK" | "OPEN_QUESTION" | "DISAGREEMENT";
+            instructions?: string;
+        } & (({
             /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
             expectedRevisionToken: string;
         } | {
             /** @description Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically. */
             expectedRevision: number;
-        });
+        }) & ({
+            /** @enum {unknown} */
+            scope?: "FULL";
+        } | {
+            /** @enum {unknown} */
+            scope?: "REGION";
+        }));
         MinutesGenerationReceipt: {
             result: {
                 /** @constant */
@@ -3816,6 +4309,13 @@ export interface components {
             support_state: "SUPPORTED" | "PARTIAL" | "UNSUPPORTED";
             target_anchor: string;
         };
+        MinutesRegionRequest: {
+            /** Format: uuid */
+            baseElementSetId: string;
+            /** @enum {string} */
+            category: "OVERVIEW" | "DISCUSSION" | "CONCLUSION" | "ACTION" | "RISK" | "OPEN_QUESTION" | "DISAGREEMENT";
+            instructions: string;
+        };
         MinutesCandidate: {
             candidate: components["schemas"]["MinutesCandidateMetadata"];
             graph: {
@@ -3838,6 +4338,7 @@ export interface components {
                 reasons: string[];
             };
             observation: components["schemas"]["MinutesObservation"];
+            region?: components["schemas"]["MinutesRegionRequest"] | null;
         };
         SavedBody: {
             /** Format: uuid */
@@ -4904,24 +5405,26 @@ export interface components {
         };
     };
     responses: {
-        /** @description Source network or listener is not authorized */
-        Forbidden: {
+        /** @description Session absent, expired, revoked, disabled or from an old generation */
+        Unauthenticated: {
             headers: {
                 [name: string]: unknown;
             };
             content: {
-                "application/json": {
-                    error: {
-                        /** @constant */
-                        code: "FORBIDDEN";
-                        /** @constant */
-                        message: "Access denied";
-                    };
-                };
+                "application/json": components["schemas"]["BusinessError"];
             };
         };
-        /** @description Session absent, expired, revoked, disabled or from an old generation */
-        Unauthenticated: {
+        /** @description Current authority, version or bounded source proof does not permit the operation */
+        Error: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["BusinessError"];
+            };
+        };
+        /** @description Invalid directory page request */
+        Invalid: {
             headers: {
                 [name: string]: unknown;
             };
@@ -4938,17 +5441,24 @@ export interface components {
                 "application/json": components["schemas"]["BusinessError"];
             };
         };
-        /** @description Identity database or unqualified company provider unavailable */
-        Unavailable: {
+        /** @description Source network or listener is not authorized */
+        Forbidden: {
             headers: {
                 [name: string]: unknown;
             };
             content: {
-                "application/json": components["schemas"]["BusinessError"];
+                "application/json": {
+                    error: {
+                        /** @constant */
+                        code: "FORBIDDEN";
+                        /** @constant */
+                        message: "Access denied";
+                    };
+                };
             };
         };
-        /** @description Invalid directory page request */
-        Invalid: {
+        /** @description Identity database or unqualified company provider unavailable */
+        Unavailable: {
             headers: {
                 [name: string]: unknown;
             };
@@ -5020,7 +5530,7 @@ export interface components {
             };
         };
         /** @description Current identity, meeting gate, recording fence or bounded transport rejected the request. No acknowledgement is implied. */
-        Error: {
+        recording_Error: {
             headers: {
                 [name: string]: unknown;
             };
@@ -5030,12 +5540,15 @@ export interface components {
         };
     };
     parameters: {
+        Meeting: string;
+        /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+        Key: string;
         /** @description Must exactly match the configured allowed origin */
         Origin: string;
         /** @description Independent session-bound token returned by currentSession */
         Csrf: string;
-        /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
-        Key: string;
+        MeetingId: string;
+        PublicationId: string;
         /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
         Id: string;
         FeedbackId: string;
@@ -5068,6 +5581,591 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    listInfoSuggestions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["Meeting"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current proposals and exact meeting version */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InfoSuggestions"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    decideInfoSuggestion: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meetingId: components["parameters"]["Meeting"];
+                suggestionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    /** @enum {string} */
+                    decision: "ACCEPT" | "REJECT";
+                };
+            };
+        };
+        responses: {
+            /** @description Historical decision receipt; re-read saved information */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mutation"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    listMeetingMaterials: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current authorized material receipt */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaterialListing"];
+                };
+            };
+            /** @description Local ACL or external authority explicitly denied */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact version, revision or original request conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Fresh authority unavailable; retry original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    addMeetingMaterial: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaterialSelection"];
+            };
+        };
+        responses: {
+            /** @description Current authorized material receipt */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaterialItem"];
+                };
+            };
+            /** @description Local ACL or external authority explicitly denied */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact version, revision or original request conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Fresh authority unavailable; retry original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    addMeetingMaterialBatch: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    items: components["schemas"]["MaterialSelection"][];
+                };
+            };
+        };
+        responses: {
+            /** @description Current authorized material receipt */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaterialBatch"];
+                };
+            };
+            /** @description Local ACL or external authority explicitly denied */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact version, revision or original request conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Fresh authority unavailable; retry original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    removeMeetingMaterial: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                material: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Removed from current snapshot */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Access denied */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    retryMaterialParse: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+                material: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current authorized material receipt */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaterialItem"];
+                };
+            };
+            /** @description Local ACL or external authority explicitly denied */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact version, revision or original request conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Fresh authority unavailable; retry original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readMeetingDeletion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Online cleanup status; COMPLETE excludes backups and external source originals */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletionJob"];
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+        };
+    };
+    withdrawPublication: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                meetingId: components["parameters"]["MeetingId"];
+                publicationId: components["parameters"]["PublicationId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GovernanceRequest"];
+            };
+        };
+        responses: {
+            /** @description Original durable governance job */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GovernanceJob"];
+                };
+            };
+            /** @description Active original owner required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Original tuple or revision conflict; another governance command already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    obsoletePublication: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                meetingId: components["parameters"]["MeetingId"];
+                publicationId: components["parameters"]["PublicationId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GovernanceRequest"];
+            };
+        };
+        responses: {
+            /** @description Original durable governance job */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GovernanceJob"];
+                };
+            };
+        };
+    };
+    publicationGovernanceHistory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MeetingId"];
+                publicationId: components["parameters"]["PublicationId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private governance history */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GovernanceJob"][];
+                };
+            };
+        };
+    };
+    publicationGovernanceJob: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MeetingId"];
+                publicationId: components["parameters"]["PublicationId"];
+                jobId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current owner-only governance metadata */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GovernanceJob"];
+                };
+            };
+        };
+    };
+    receiveSignedKnowledgeGovernanceEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "text/plain": string;
+            };
+        };
+        responses: {
+            /** @description Verified terminal event applied or original duplicate confirmed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid or conflicting signed event */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Event exceeds byte bound */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    createMinutesExport: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MinutesExportRequest"];
+            };
+        };
+        responses: {
+            /** @description Original durable job */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesExportStatus"];
+                };
+            };
+            /** @description Current read denied */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Key/request conflict or source changed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readMinutesExport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current job of the requesting actor; fileId is null while unavailable or invalidated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinutesExportStatus"];
+                };
+            };
+        };
+    };
+    downloadMinutesExport: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description One bytes range only */
+                Range?: string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact registered artifact */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+            /** @description Authorized byte interval */
+            206: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+            /** @description Artifact not available for current source */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid byte interval */
+            416: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     internalLiveness: {
         parameters: {
             query?: never;
@@ -5303,7 +6401,7 @@ export interface operations {
     listWorkspaceTasks: {
         parameters: {
             query?: {
-                kind?: "ALL" | "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1" | "RECORDING_ARCHIVE_V1";
+                kind?: "ALL" | "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1" | "RECORDING_ARCHIVE_V1" | "MINUTES_EXPORT_V1";
                 limit?: number;
                 cursor?: string;
             };
@@ -5542,13 +6640,13 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Original deletion mutation, including exact replay */
-            200: {
+            /** @description Stable accepted deletion job, including exact original request replay */
+            202: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Mutation"];
+                    "application/json": components["schemas"]["DeletionJob"];
                 };
             };
             400: components["responses"]["Invalid"];
@@ -5718,6 +6816,15 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description A selected meeting is not published; the entire batch remains unchanged */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
         };
     };
     listTopics: {
@@ -5834,6 +6941,137 @@ export interface operations {
             };
         };
     };
+    listPersonalTemplates: {
+        parameters: {
+            query?: {
+                limit?: number;
+                /** @description Last ID from the preceding page */
+                cursor?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded template page */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonalTemplatePage"];
+                };
+            };
+        };
+    };
+    createPersonalTemplate: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PersonalTemplateInput"];
+            };
+        };
+        responses: {
+            /** @description Original creation receipt */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonalTemplate"];
+                };
+            };
+        };
+    };
+    readPersonalTemplate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current private template revision */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonalTemplate"];
+                };
+            };
+        };
+    };
+    updatePersonalTemplate: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PersonalTemplateUpdate"];
+            };
+        };
+        responses: {
+            /** @description Original edit receipt */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonalTemplate"];
+                };
+            };
+        };
+    };
+    removePersonalTemplate: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PersonalTemplateRemoval"];
+            };
+        };
+        responses: {
+            /** @description Original removal receipt with deleted=true */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonalTemplate"];
+                };
+            };
+        };
+    };
     assignMeetingTopic: {
         parameters: {
             query?: never;
@@ -5862,6 +7100,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Only owner-published meetings can be assigned */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
             };
         };
     };
@@ -11090,7 +12337,7 @@ export interface operations {
     SavedSource: {
         parameters: {
             query: {
-                targetKind: "BODY" | "ELEMENT";
+                targetKind: "BODY" | "ELEMENT" | "SET";
                 targetId: string;
             };
             header?: never;
@@ -15024,14 +16271,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingSession"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     getRecording: {
@@ -15054,14 +16301,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingSession"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     getRecordingAck: {
@@ -15086,14 +16333,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingAck"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     claimRecordingWriter: {
@@ -15131,14 +16378,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingLease"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     renewRecordingWriter: {
@@ -15174,14 +16421,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingLease"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     putRecordingChunk: {
@@ -15220,14 +16467,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingAck"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     nextRecordingPart: {
@@ -15257,14 +16504,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingSession"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     pauseRecording: {
@@ -15292,14 +16539,14 @@ export interface operations {
                 };
                 content?: never;
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     resumeRecording: {
@@ -15327,14 +16574,14 @@ export interface operations {
                 };
                 content?: never;
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     finishRecording: {
@@ -15371,14 +16618,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingFinish"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     getRecordingArchive: {
@@ -15401,14 +16648,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingArchive"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     requestRecordingArchive: {
@@ -15436,14 +16683,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingArchive"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     getRecordingAudio: {
@@ -15477,13 +16724,13 @@ export interface operations {
                     "audio/wav": string;
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            416: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            416: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     getRecordingArchiveInput: {
@@ -15507,14 +16754,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingArchive"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
     getRecordingManifest: {
@@ -15537,14 +16784,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingManifest"];
                 };
             };
-            400: components["responses"]["Error"];
-            401: components["responses"]["Error"];
-            403: components["responses"]["Error"];
-            404: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            413: components["responses"]["Error"];
-            429: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
         };
     };
 }

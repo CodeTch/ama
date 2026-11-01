@@ -81,3 +81,45 @@ class MediaEnvironmentTests(unittest.TestCase):
             root=Path(temporary);config=root/'.tools/local-models/asr-runtime.json';config.parent.mkdir(parents=True);outside=root/'other.json';outside.write_text('{}');config.symlink_to(outside)
             with patch.object(local_minutes,'ROOT',root):
                 with self.assertRaises(RuntimeError):local_minutes.asr_environment({})
+
+
+class PersonalTemplatePreparationTests(unittest.TestCase):
+    def test_fresh_personal_release_is_appended_after_document_and_material_profiles(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as temporary:
+            runtime=Path(temporary).resolve()
+            state={'owner':'template-preparation','modelPort':47091,'knowledgePort':46969,
+                   'minutesTemplateId':'00000000-0000-4000-8000-000000000001',
+                   'minutesTemplateRevisionId':'00000000-0000-4000-8000-000000000002'}
+            phases={'ama.localdev.LocalMinutesSetup':'a'*64,'ama.localdev.LocalDocumentSetup':'b'*64,
+                    'ama.localdev.LocalMaterialSetup':'c'*64,'ama.localdev.LocalPersonalTemplatesSetup':'d'*64,'ama.localdev.LocalRegionMinutesSetup':'e'*64}
+            calls=[]
+            def run(command,**options):
+                calls.append(command)
+                pin=phases[command[4]]
+                return subprocess.CompletedProcess(command,0,json.dumps({'minutes.index-sha':pin,'processing.index-sha':pin}), '')
+            with patch.object(local_minutes.subprocess,'run',side_effect=run),patch.object(local_minutes,'prepare_knowledge',return_value={}),patch.object(local_minutes,'asr_environment',return_value=False):
+                values,_=local_minutes.prepare(runtime,state,Path('/owned/java'),{},'owned-classpath')
+            self.assertEqual([command[4] for command in calls],list(phases))
+            self.assertEqual(calls[-2][-2:],[phases['ama.localdev.LocalMaterialSetup'],state['minutesTemplateRevisionId']])
+            self.assertEqual(values['minutes.index-sha'],'e'*64)
+            self.assertEqual(values['processing.index-sha'],'e'*64)
+            self.assertEqual(values['processing.bounds.dependencies'],256)
+
+
+class SensitiveScenarioPreparationTests(unittest.TestCase):
+    def test_sensitive_scenario_is_an_explicit_new_release_not_a_rewrite_of_retained_archives(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as temporary:
+            state={'owner':'sensitive-preparation','modelPort':47091,'knowledgePort':46969,
+                   'minutesTemplateId':'00000000-0000-4000-8000-000000000001',
+                   'minutesTemplateRevisionId':'00000000-0000-4000-8000-000000000002','minutesScenario':'sensitive'}
+            calls=[]
+            def run(command,**options):
+                calls.append(command)
+                return subprocess.CompletedProcess(command,0,json.dumps({'minutes.index-sha':'e'*64,'processing.index-sha':'e'*64}),'')
+            with patch.object(local_minutes.subprocess,'run',side_effect=run),patch.object(local_minutes,'prepare_knowledge',return_value={}),patch.object(local_minutes,'asr_environment',return_value=False):
+                local_minutes.prepare(Path(temporary).resolve(),state,Path('/owned/java'),{},'owned-classpath')
+            self.assertEqual(calls[-1][4],'ama.localdev.LocalRegionMinutesSetup')
+            self.assertEqual(calls[-1][-1],'SENSITIVE_SCENARIO')
+            self.assertEqual(calls[-1][-3:-1],['e'*64,state['minutesTemplateRevisionId']])

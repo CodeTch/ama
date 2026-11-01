@@ -13,6 +13,8 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 
 public final class GenerationFingerprint {
  public static final String PROFILE="ama.generation-input.v2";
+ public static final String REGION_PROFILE="ama.generation-input.v3";
+ private static String profile(Profiles profiles){String value=profiles.definition(ProfileKind.GENERATION_HASH).version();require(Set.of(PROFILE,REGION_PROFILE).contains(value),PROFILE_UNAVAILABLE);return value;}
  public record Projection(CanonicalValue manifest,String fingerprint,Profiles profiles,ValidationBudget outputBudget,CanonicalBudget canonicalBudget,ConfigBindings.ValidatedOperation operation,Catalog catalog,CanonicalValue.ObjectValue promptDefinition,CanonicalValue.ObjectValue modelDefinition){
   public Projection(CanonicalValue manifest,String fingerprint,Profiles profiles,ValidationBudget outputBudget,CanonicalBudget canonicalBudget,ConfigBindings.ValidatedOperation operation){this(manifest,fingerprint,profiles,outputBudget,canonicalBudget,operation,null,null,null);}
   private Projection complete(ConfigBindings.ValidatedOperation operation){return new Projection(manifest,fingerprint,profiles,outputBudget,canonicalBudget,operation,catalog,promptDefinition,modelDefinition);}
@@ -33,7 +35,16 @@ public final class GenerationFingerprint {
  static CanonicalValue project(GenerationDraft draft,Fence fence,StoredFactsIndex index,GenerationConfiguration config){return prepareProjection(draft,fence,index,config).manifest();}
  private static PreparedProjection prepareProjection(GenerationDraft draft,Fence fence,StoredFactsIndex index,GenerationConfiguration config){
   check(index.cancelled);
-  require(draft.scope()==Scope.FULL&&draft.targetElementId()==null,CAPABILITY_UNAVAILABLE);
+  require((draft.scope()==Scope.FULL||draft.scope()==Scope.REGION)&&draft.targetElementId()==null,CAPABILITY_UNAVAILABLE);
+  String generationProfile=profile(config.profiles());
+  CanonicalValue scope=object(field("kind",string("FULL")),field("target",nil()));
+  var requests=index.matching(Table.GENERATION_REGION_REQUEST,"id",draft.inputId());
+  if(draft.scope()==Scope.REGION){
+   require(generationProfile.equals(REGION_PROFILE),PROFILE_UNAVAILABLE);require(requests.size()==1,PROVENANCE_UNAVAILABLE);var request=requests.getFirst();index.meeting(request,draft.meetingId());
+   var selected=new RegionRequest(request.string("base_element_set_id"),Category.valueOf(request.string("category")),request.string("instructions"));
+   require(selected.baseElementSetId().equals(draft.elementSetId()),INPUT_INVALID);
+   scope=object(field("kind",string("REGION")),field("target",object(field("baseElementSetId",string(selected.baseElementSetId())),field("category",string(selected.category().name())),field("instructions",string(selected.instructions())))));
+  }else require(requests.isEmpty(),INPUT_INVALID);
 
   var profiles=config.profiles();String meeting=draft.meetingId();
   var session=index.sources;
@@ -85,7 +96,7 @@ public final class GenerationFingerprint {
    field("exclusion",object(field("mode",string(entries.isEmpty()?"EMPTY":"PINNED")),field("revisionId",string(exclusion.string("id"))),field("revision",number(exclusion.number("revision"))),field("contentHash",string(RowsetProjection.hash(exclusionRows,RowsetProjection.EXCLUSION_TABLES,index))),field("entries",new Sequence(entries)))),
    field("elements",elements),field("sources",new Sequence(sources)),
    field("configs",object(field("prompt",reference(config.prompt())),field("model",reference(config.model())),field("profiles",new Sequence(profileValues)))),
-   field("scope",object(field("kind",string("FULL")),field("target",nil()))),
+   field("scope",scope),
    field("base",object(field("meetingRevision",number(fence.meetingRevision())),field("subjectBusinessVersion",number(fence.subjectBusinessVersion())),field("cancelEpoch",number(fence.cancelEpoch()))))),catalog);
  }
  Projection recomputeStored(FullRow input,Fence fence,Profiles profiles,StoredFactsIndex index){
@@ -96,7 +107,7 @@ public final class GenerationFingerprint {
   require(confirmationHash.equals(confirmation.string("content_hash")),FINGERPRINT_MISMATCH);
   var previous=index.hashBudget;
   try {
-   index.hashBudget=TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled));var prepared=prepareProjection(draft(input),fence,index,bound);var manifest=prepared.manifest();String fingerprint=DomainHash.hash(profiles.definition(ProfileKind.GENERATION_HASH),PROFILE,"GENERATION_INPUT",manifest,index.hashBudget,cancelled);
+   index.hashBudget=TranscriptConfirmationHash.minimum(budget.canonical(),resolver.generationBudget(input,cancelled));var prepared=prepareProjection(draft(input),fence,index,bound);var manifest=prepared.manifest();String fingerprint=DomainHash.hash(profiles.definition(ProfileKind.GENERATION_HASH),profile(profiles),"GENERATION_INPUT",manifest,index.hashBudget,cancelled);
    check(cancelled);return new Projection(manifest,fingerprint,bound.profiles(),resolver.outputBudget(bound,cancelled),resolver.generationBudget(input,cancelled),null,prepared.catalog(),resolver.promptDefinition(bound,cancelled),resolver.modelDefinition(bound,cancelled));
   } finally {index.hashBudget=previous;}
  }
@@ -136,7 +147,7 @@ public final class GenerationFingerprint {
    var session=index.sources;var graph=session.graph(new GraphSelection(draft.meetingId(),null,draft.elementSetId(),null,null),null);
    OriginChainVerifier.verify(index,session,graph,active);
   }
-  String fingerprint=DomainHash.hash(config.profiles().definition(ProfileKind.GENERATION_HASH),PROFILE,"GENERATION_INPUT",manifest,TranscriptConfirmationHash.minimum(budget.canonical(),active.generationBudget(draft,cancelled)),cancelled);
+  String fingerprint=DomainHash.hash(config.profiles().definition(ProfileKind.GENERATION_HASH),profile(config.profiles()),"GENERATION_INPUT",manifest,TranscriptConfirmationHash.minimum(budget.canonical(),active.generationBudget(draft,cancelled)),cancelled);
   var outputBudget=active.outputBudget(config,cancelled);var canonicalBudget=active.generationBudget(draft,cancelled);var prompt=active.promptDefinition(config,cancelled);var model=active.modelDefinition(config,cancelled);var verified=operation.finish();check(cancelled);return new Projection(manifest,fingerprint,config.profiles(),outputBudget,canonicalBudget,verified,prepared.catalog(),prompt,model);
  }
 }

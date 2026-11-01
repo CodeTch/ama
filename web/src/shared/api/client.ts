@@ -2,7 +2,7 @@ import type { components } from './generated';
 import {intentConflict} from './intent-contract';
 
 type DeclaredErrorCode = { [K in keyof components['schemas']]: components['schemas'][K] extends {error: {code: infer C extends string}} ? C : never }[keyof components['schemas']];
-const knownCodes: ReadonlySet<string> = new Set(["CATEGORY_DICTIONARY_UNAVAILABLE", "FILE_CONFLICT", "FILE_INVALID_RANGE", "FILE_NOT_FOUND", "FILE_PURPOSE_UNAVAILABLE", "FILE_STORAGE_UNAVAILABLE", "FORBIDDEN", "IDENTITY_PROVIDER_UNAVAILABLE", "IDENTITY_UNAVAILABLE", "INVALID_ARGUMENT", "MEETING_CONFLICT", "MEETING_FORBIDDEN", "MEETING_UNAVAILABLE", "REQUEST_TOO_LARGE", "UNAUTHENTICATED", "RECORDING_CONFLICT", "RECORDING_GAP", "RECORDING_PAUSED", "RECORDING_UNAVAILABLE", "RECORDING_RATE_LIMITED", "RECORDING_READ_ONLY", "RECORDING_ARCHIVE_NOT_READY", "RECORDING_ARCHIVE_CONFLICT", "RECORDING_ARCHIVE_UNAVAILABLE", "INVALID_RANGE"] satisfies readonly DeclaredErrorCode[]);
+const knownCodes: ReadonlySet<string> = new Set(["CATEGORY_DICTIONARY_UNAVAILABLE", "FILE_CONFLICT", "FILE_INVALID_RANGE", "FILE_NOT_FOUND", "FILE_PURPOSE_UNAVAILABLE", "FILE_STORAGE_UNAVAILABLE", "FORBIDDEN", "IDENTITY_PROVIDER_UNAVAILABLE", "IDENTITY_UNAVAILABLE", "INVALID_ARGUMENT", "MEETING_CONFLICT", "TOPIC_NOT_PUBLISHED", "MEETING_FORBIDDEN", "MEETING_UNAVAILABLE", "REQUEST_TOO_LARGE", "UNAUTHENTICATED", "RECORDING_CONFLICT", "RECORDING_GAP", "RECORDING_PAUSED", "RECORDING_UNAVAILABLE", "RECORDING_RATE_LIMITED", "RECORDING_READ_ONLY", "RECORDING_ARCHIVE_NOT_READY", "RECORDING_ARCHIVE_CONFLICT", "RECORDING_ARCHIVE_UNAVAILABLE", "INVALID_RANGE"] satisfies readonly DeclaredErrorCode[]);
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export class ApiError extends Error {
  constructor(public readonly kind:'http'|'network'|'response', public readonly status:number, message:string, public readonly code?:string, public readonly traceId?:string, public readonly details?:unknown) { super(message); this.name='ApiError'; }
@@ -47,7 +47,7 @@ export async function request<T>(path:string, init:RequestOptions={}):Promise<T>
  if(!response.ok) {
   let safe:{code?:string;traceId?:string}={};let details:unknown;
   try{const body=await boundedJson(response,16384);safe=safeError(body);if(transcriptCommand){const declared=safeError(body,transcriptRejectionCodes);if(declared.code&&transcriptRejectionStatus[declared.code as TranscriptRejectionCode]===response.status)safe=declared;}if(response.status===409&&intentMeeting&&intentConflict(body,intentMeeting)){safe={code:'REVISION_CONFLICT'};details=body;}}catch(error){if(aborted(error,options.signal))throw error;}
-  throw new ApiError(safe.code?'http':'response',response.status,messages[response.status]??'服务暂不可用，请稍后重试。',safe.code,safe.traceId,details);
+  throw new ApiError(safe.code?'http':'response',response.status,safe.code==='TOPIC_NOT_PUBLISHED'&&response.status===422?'仅本人负责的已发布会议可归入专题。':messages[response.status]??'服务暂不可用，请稍后重试。',safe.code,safe.traceId,details);
  }
  if(expectedStatus!==undefined&&response.status!==expectedStatus){try{await response.body?.cancel();}catch{/* Keep the unexpected-success failure. */}throw new ApiError('response',response.status,'操作响应状态异常，请保留原请求并核对结果。');}
  if(response.status===204||response.status===205)return undefined as T;

@@ -5,7 +5,7 @@ public final class JdbcWorkspaceTasks {
  public record Item(String taskId,String kind,String state,String attemptToken,String businessRevisionToken,String inputId,String detailPath){}
  public record Page(List<Item> items,String nextCursor,boolean hasMore,String verification){public Page{items=List.copyOf(items);}}
  private final JdbcTranscriptAuthority authority;private final WorkspaceCursor cursors;private final WorkspaceReadBudget.Limits limits;private final WorkspaceTaskScan scan;private final JdbcTemplate jdbc;
- private static final Set<String> KINDS=Set.of("ALL","TRANSCRIPT_IMPORT_V1","MINUTES_GENERATE_V1","KNOWLEDGE_PUBLISH_V1","RECORDING_ARCHIVE_V1");
+ private static final Set<String> KINDS=Set.of("ALL","TRANSCRIPT_IMPORT_V1","MINUTES_GENERATE_V1","KNOWLEDGE_PUBLISH_V1","RECORDING_ARCHIVE_V1","MINUTES_EXPORT_V1");
  public JdbcWorkspaceTasks(JdbcTranscriptAuthority authority,JdbcTaskQueue queue,WorkspaceCursor cursors,WorkspaceReadBudget.Limits limits){
   TranscriptImportRuntime.requireCombined(queue,authority);if(!(authority.meetingAccess() instanceof JdbcMeetingAccess access))throw new IllegalArgumentException("Actual JDBC owner gate required");access.requireProjectionSource(authority.dataSource());this.authority=authority;this.cursors=Objects.requireNonNull(cursors);this.limits=Objects.requireNonNull(limits);jdbc=new JdbcTemplate(authority.dataSource());jdbc.setQueryTimeout(5);scan=new WorkspaceTaskScan(jdbc);
  }

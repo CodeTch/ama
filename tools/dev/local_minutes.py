@@ -134,10 +134,14 @@ def prepare(runtime,state,java,env,classpath):
         values.update(json.loads(media_setup.stdout))
     material_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalMaterialSetup',str(root/'archive'),values['minutes.index-sha'],state['minutesTemplateRevisionId']],env=env,capture_output=True,text=True,check=True,timeout=30)
     values.update(json.loads(material_setup.stdout))
+    personal_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalPersonalTemplatesSetup',str(root/'archive'),values['minutes.index-sha'],state['minutesTemplateRevisionId']],env=env,capture_output=True,text=True,check=True,timeout=30)
+    values.update(json.loads(personal_setup.stdout))
+    region_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalRegionMinutesSetup',str(root/'archive'),values['minutes.index-sha'],state['minutesTemplateRevisionId'],*(['SENSITIVE_SCENARIO'] if state.get('minutesScenario')=='sensitive' else [])],env=env,capture_output=True,text=True,check=True,timeout=30)
+    values.update(json.loads(region_setup.stdout))
     values.update(prepare_knowledge(runtime,state))
     values.update({'transcript.candidates.installation':'AUTHORITY_CONTROLLED',
         'transcript.publication.installation':'AUTHORITY_CONTROLLED','transcript.transitions.installation-version':'2',
-        'processing.bounds.artifacts':64,'processing.bounds.dependencies':128,'processing.bounds.graph-depth':16})
+        'processing.bounds.artifacts':64,'processing.bounds.dependencies':256,'processing.bounds.graph-depth':16})
     # Retain the admin's immutable installation files; each process gets its own readiness receipt.
     ready=root/('ready-'+secrets.token_hex(8))
     write(root/'runtime.properties','\n'.join(['mode=CONTROLLED_INSTALLATION','bind=127.0.0.1',

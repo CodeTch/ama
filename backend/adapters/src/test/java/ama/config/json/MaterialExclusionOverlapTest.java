@@ -1,0 +1,11 @@
+package ama.config.json;
+import ama.canonical.*;import ama.contract.MinutesContracts.*;import ama.minutes.contract.ContractValues;import ama.model.*;import java.util.*;import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;import static ama.canonical.CanonicalValue.*;
+class MaterialExclusionOverlapTest {
+ static String id(int n){return "00000000-0000-4000-8000-"+String.format("%012d",n);}static final String H="a".repeat(64);
+ static KnowledgeVersion version(int revision){return new KnowledgeVersion(id(revision),"provider","doc","v1",id(2),id(3),"parser.v1",H);}
+ static CanonicalValue source(String alias,Locator locator,SourceVersion version){return object(field("sourceId",string(alias)),field("locator",ContractValues.locator(locator)),field("role",string("BACKGROUND")),field("sourceVersion",ContractValues.sourceVersion(version)),field("sourceContentHash",string(H)));}
+ static Map<String,CanonicalValue> manifest(Locator selected){return Map.of("sources",list(source("s1",new KnowledgeLocator(id(1)),version(1)),source("s2",new ParagraphLocator(ParagraphKind.TEXT_PARAGRAPH,id(2),1,null),version(1)),source("s3",new ParagraphLocator(ParagraphKind.TEXT_PARAGRAPH,id(2),2,null),new FileVersion(id(2),id(1),id(3),"parser.v1",H)),source("s4",new KnowledgeLocator(id(4)),version(4))),"exclusion",object(field("mode",string("PINNED")),field("revisionId",string(id(8))),field("revision",number(1)),field("contentHash",string(H)),field("entries",list(object(field("locatorId",string(id(9))),field("locator",ContractValues.locator(selected)),field("category",string("POLITICAL_SENSITIVE")),field("reasonHash",nil()))))));}
+ @Test void wholeKnowledgeExclusionAlsoRemovesAllParsedAliasesOfThatExactVersion(){assertEquals(Set.of("s1","s2","s3"),MinutesSourceExclusions.aliases(manifest(new KnowledgeLocator(id(1)))));}
+ @Test void partialParagraphAlsoRemovesTheWholeDocumentCopyButRetainsAnotherParagraph(){assertEquals(Set.of("s1","s2"),MinutesSourceExclusions.aliases(manifest(new ParagraphLocator(ParagraphKind.TEXT_PARAGRAPH,id(2),1,null))));}
+ @Test void anotherMaterialRevisionDoesNotBecomeBlockedThroughAWholeDocumentBridge(){assertEquals(Set.of("s4"),MinutesSourceExclusions.aliases(manifest(new KnowledgeLocator(id(4)))));}
+}

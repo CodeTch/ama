@@ -5,6 +5,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RecordingServiceTest {
+    @Test void routingDoesNotInspectProtectedProofsAndBindingStopsForeignWork(){
+        var called=new java.util.concurrent.atomic.AtomicBoolean();
+        var persistence=new RecordingService.Persistence(){
+            public boolean recoverable(){return true;}
+            public String meetingId(String id){return "actual-meeting";}
+            public RecordingService.Snapshot load(String id){throw new IllegalStateException("protected proof is corrupt");}
+            public void persist(RecordingContracts.Session session,RecordingContracts.Chunk chunk){throw new AssertionError("No recording write expected");}
+        };
+        var service=new RecordingService(persistence);assertEquals("actual-meeting",service.meetingId("session"));
+        assertThrows(RecordingService.StaleWriter.class,()->service.withinMeeting("session","foreign-meeting",()->{called.set(true);return true;}));assertFalse(called.get());
+        assertThrows(IllegalStateException.class,()->service.withinMeeting("session","actual-meeting",()->service.session("session")));
+    }
     @Test void recoveryManifestKeepsOrderedPartsAndDistinguishesGapsFromPersistedSamples(){
         var service=new RecordingService();var first=service.open("meeting","backend");
         service.accept(first.sessionId(),1,new ama.contract.RecordingContracts.Chunk(first.partId(),1,2,2,2,new byte[]{1,2,3,4}));

@@ -1,0 +1,435 @@
+{
+  "MaterialItem": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "materialRevisionId",
+      "parsedDocumentId",
+      "fileId",
+      "name",
+      "source",
+      "sourceVersion",
+      "sizeBytesToken",
+      "sha256",
+      "state",
+      "error"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "materialRevisionId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "parsedDocumentId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "fileId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "source": {
+        "type": "string",
+        "enum": [
+          "LOCAL",
+          "KNOWLEDGE"
+        ]
+      },
+      "sourceVersion": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "sizeBytesToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]*)$"
+      },
+      "sha256": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "FAILED"
+        ]
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  },
+  "MaterialSelection": {
+    "oneOf": [
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fileId"
+        ],
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "libraryId",
+          "documentId",
+          "version"
+        ],
+        "properties": {
+          "libraryId": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "documentId": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    ]
+  },
+  "MaterialListing": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "materialSnapshotId",
+      "materialsPending",
+      "meetingRevision"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/MaterialItem"
+        },
+        "maxItems": 64
+      },
+      "materialSnapshotId": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "uuid"
+      },
+      "materialsPending": {
+        "type": "boolean"
+      },
+      "meetingRevision": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    }
+  },
+  "MaterialBatch": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "materialSnapshotId",
+      "meetingRevision"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/MaterialItem"
+        },
+        "maxItems": 64
+      },
+      "materialSnapshotId": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "uuid"
+      },
+      "meetingRevision": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    }
+  },
+  "collection": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "listMeetingMaterials",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Current authorized material receipt",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MaterialListing"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Local ACL or external authority explicitly denied"
+        },
+        "409": {
+          "description": "Exact version, revision or original request conflict"
+        },
+        "503": {
+          "description": "Fresh authority unavailable; retry original request"
+        }
+      }
+    },
+    "post": {
+      "operationId": "addMeetingMaterial",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/MaterialSelection"
+            }
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Current authorized material receipt",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MaterialItem"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Local ACL or external authority explicitly denied"
+        },
+        "409": {
+          "description": "Exact version, revision or original request conflict"
+        },
+        "503": {
+          "description": "Fresh authority unavailable; retry original request"
+        }
+      }
+    }
+  },
+  "batch": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "addMeetingMaterialBatch",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "expectedRevisionToken",
+                "items"
+              ],
+              "properties": {
+                "expectedRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                "items": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 64,
+                  "uniqueItems": true,
+                  "items": {
+                    "$ref": "#/MaterialSelection"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Current authorized material receipt",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MaterialBatch"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Local ACL or external authority explicitly denied"
+        },
+        "409": {
+          "description": "Exact version, revision or original request conflict"
+        },
+        "503": {
+          "description": "Fresh authority unavailable; retry original request"
+        }
+      },
+      "description": "Atomic 1–64 exact source selection. Validate the entire external batch before staging; current local ACL and signed exact-version proof are rechecked at commit. One invalid source adds no references and changes no effective snapshot. Original ordered body/key replays the immutable receipt; changing order/body conflicts. Managed staging files may remain for cleanup."
+    }
+  },
+  "retry": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      {
+        "name": "material",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "retryMaterialParse",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "403": {
+          "description": "Local ACL or external authority explicitly denied"
+        },
+        "409": {
+          "description": "Exact version, revision or original request conflict"
+        },
+        "503": {
+          "description": "Fresh authority unavailable; retry original request"
+        },
+        "200": {
+          "description": "Current authorized material receipt",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MaterialItem"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ]
+    }
+  },
+  "item": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      {
+        "name": "material",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "delete": {
+      "operationId": "removeMeetingMaterial",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Remove the current selection. Retained historical versions remain subject to current external authority.",
+      "responses": {
+        "204": {
+          "description": "Removed from current snapshot"
+        },
+        "403": {
+          "description": "Access denied"
+        }
+      }
+    }
+  }
+}

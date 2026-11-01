@@ -17,6 +17,9 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     private final JdbcTemplate j;
     private final TransactionRunner tx;
     private final SubjectFencePort fences;
+    private volatile boolean publicationValidity;
+    private volatile String materialPins;
+    private volatile java.util.function.BiConsumer<Actor,String> externalPreparation=(actor,id)->{};
     // No transaction synchronization: B05 owns the sole final-flush synchronization.
     // Weak keys track actual Spring transaction holders without retaining completed transactions.
     private final Map<Object,Boolean> identitiesStarted=Collections.synchronizedMap(new WeakHashMap<>());
@@ -41,10 +44,22 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     }
     final class Held implements Locked {
         final IdentityCapture identities; final SubjectFencePort.LockedSubject subject; final Root root;
+        java.time.Instant authorityDeadline;
         private Held(IdentityCapture identities,SubjectFencePort.LockedSubject subject,Root root){this.identities=identities;this.subject=subject;this.root=root;}
         JdbcMeetingAccess issuer(){return JdbcMeetingAccess.this;}
     }
     public JdbcMeetingAccess(DataSource source,TransactionRunner tx,SubjectFencePort fences){this.source=source;this.j=new JdbcTemplate(source);this.tx=tx;this.fences=fences;}
+    /** One-way installation for deployments with the controlled governance protocol enabled. */
+    public void installPublicationValidity(){publicationValidity=true;}
+    public void installMaterialValidity(String pins){if(pins==null||!pins.matches("[0-9a-f]{64}"))throw new IllegalArgumentException("Material pins hash required");materialPins=pins;}
+    public void installExternalPreparation(java.util.function.BiConsumer<Actor,String> preparation){externalPreparation=Objects.requireNonNull(preparation);}
+    @Override public void prepareExternalRead(Actor actor,String id){
+        if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("External preparation must precede caller transaction");
+        tx.required(()->{requireLocalRead(lock(actor,id));return null;});
+        externalPreparation.accept(actor,id);
+    }
+    /** Metadata preparation only. This check does not authorize content or skip a later full require. */
+    public void requireLocalRead(Locked locked){local(locked,Action.READ);}
     @Override public void require(Actor actor,String id,Action action){
         if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Use the prelocked access capability inside caller transactions");
         tx.required(()->{require(lock(actor,id),action);return null;});
@@ -114,6 +129,13 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     public boolean factAllowsBusiness(FactRoot value,long expectedEpoch,long originalVersion){checkFact(value);var root=value.root;return factActorActive(value.identities)&&root.owner().equals(value.identities.actor)&&root.lifecycle().equals("ACTIVE")&&root.governance().equals("ACTIVE")&&!root.published()&&!value.subject.deleted()&&root.cancelEpoch()==expectedEpoch&&root.revision()>=originalVersion;}
     /** Converts only an actually authorized current root; the denied fact capability is never a source grant. */
     public Locked authorizeFactRoot(FactRoot value,long expectedEpoch,long originalVersion){checkFact(value);if(!factAllowsBusiness(value,expectedEpoch,originalVersion))throw new AccessDeniedException();var ids=new AuthorizationIdentities(value.identities.actor,value.identities.statuses);var held=new Held(ids,value.subject,value.root);require(held,Action.EDIT);return held;}
+    /** Read-only background work can use a published current root; no business-write eligibility is implied. */
+    public Optional<Locked> authorizeReadFactRoot(FactRoot value,long expectedEpoch,long originalVersion){
+        checkFact(value);var root=value.root;
+        if(!factActorActive(value.identities)||value.subject.deleted()||root.cancelEpoch()!=expectedEpoch||root.revision()<originalVersion||!root.lifecycle().equals("ACTIVE")||!root.governance().equals("ACTIVE"))return Optional.empty();
+        var ids=new AuthorizationIdentities(value.identities.actor,value.identities.statuses);var held=new Held(ids,value.subject,root);
+        try{require(held,Action.READ);return Optional.of(held);}catch(AccessDeniedException denied){return Optional.empty();}
+    }
     private void checkFact(FactIdentities value){if(value==null||value.issuer()!=this||value.holder!=transaction())throw new IllegalArgumentException("Foreign or expired fact identities");}
     private void checkFact(FactRoot value){if(value==null||value.issuer()!=this)throw new IllegalArgumentException("Foreign fact root");checkFact(value.identities);}
     private Optional<LockedIdentities> captureIdentities(Actor actor,Collection<String> affected,boolean skip,boolean allActive,boolean names){
@@ -178,24 +200,40 @@ public final class JdbcMeetingAccess implements MeetingAccess {
                 ||!held.identities.ids().containsAll(affected))throw new IllegalArgumentException("Meeting capability coverage mismatch");
         require(held,action);
     }
-    @Override public void require(Locked locked,Action action){
+    private Root local(Locked locked,Action action){
         if(!(locked instanceof JdbcMeetingAccess.Held held)||held.issuer()!=this)throw new IllegalArgumentException("Foreign meeting capability");
-        check(held.identities);Objects.requireNonNull(action);
-        // Re-read the already-held root so mutations by the same caller transaction cannot
-        // reuse a cached governance/pointer decision. No new root or identity lock is discovered.
-        var root=root(held.root.id());
+        check(held.identities);Objects.requireNonNull(action);var root=root(held.root.id());
         if(!"ACTIVE".equals(j.queryForObject("SELECT status FROM enterprise_identity WHERE enterprise_id=?",String.class,held.identities.actor)))throw new AccessDeniedException();
-        if(!root.lifecycle().equals("ACTIVE") || !root.governance().equals("ACTIVE"))throw new AccessDeniedException();
-        if(root.owner().equals(held.identities.actor))return;
-        if(action!=Action.READ || root.rosterId()==null)throw new AccessDeniedException();
-        // Validate every provenance edge independently: pointers/FKs alone do not establish membership.
+        if(!root.lifecycle().equals("ACTIVE")||!root.governance().equals("ACTIVE"))throw new AccessDeniedException();
+        if(root.owner().equals(held.identities.actor))return root;
+        if(action!=Action.READ||root.rosterId()==null)throw new AccessDeniedException();
         var grants=j.queryForList("SELECT roster_id FROM meeting_access_grant WHERE meeting_id=? AND enterprise_id=? AND action='READ' FOR UPDATE",String.class,root.id(),held.identities.actor);
         if(grants.size()!=1||!root.rosterId().equals(grants.getFirst()))throw new AccessDeniedException();
         var rosters=j.queryForList("SELECT id FROM roster_revision WHERE id=? AND meeting_id=? AND state='CONFIRMED' FOR UPDATE",String.class,root.rosterId(),root.id());
         if(rosters.size()!=1)throw new AccessDeniedException();
         var members=j.queryForList("SELECT member_id FROM roster_member WHERE roster_id=? AND enterprise_id=? AND member_kind='ENTERPRISE' FOR UPDATE",String.class,root.rosterId(),held.identities.actor);
-        if(members.size()!=1)throw new AccessDeniedException();
+        if(members.size()!=1)throw new AccessDeniedException();return root;
     }
+    @Override public void require(Locked locked,Action action){
+        var root=local(locked,action);var held=(Held)locked;held.authorityDeadline=null;
+        if(publicationValidity&&root.published()){
+            var fresh=j.query("SELECT a.verified_until FROM publication_governance_authority a JOIN external_document_mapping d ON d.publication_id=a.publication_id JOIN publication p ON p.id=a.publication_id JOIN meeting m ON m.id=p.meeting_id AND m.final_confirmation_id=p.confirmation_id WHERE m.id=? AND p.state='SUCCEEDED' AND d.authority_state='ACTIVE' AND a.state='ACTIVE' AND a.document_id=d.external_document_id AND a.verified_until>UTC_TIMESTAMP(6) LIMIT 2 FOR UPDATE",(r,n)->r.getObject(1,java.time.LocalDateTime.class).toInstant(java.time.ZoneOffset.UTC),root.id());
+            if(fresh.size()!=1)throw new AuthorityUnavailableException();held.authorityDeadline=fresh.getFirst();
+        }
+        if(action==Action.MANAGE)return;
+        if(materialPins!=null){
+            var snapshot=MaterialAuthorityDependencies.capture(j,root.id());
+            if(!snapshot.items().isEmpty()){
+                var rows=j.queryForList("SELECT state,verified_until,verified_until>UTC_TIMESTAMP(6) fresh FROM material_authority_cache WHERE meeting_id=? AND actor_id=? AND dependency_hash=? AND pins_hash=? FOR UPDATE",root.id(),held.identities.actor,snapshot.fingerprint(),materialPins);
+                if(rows.size()!=1)throw new AuthorityUnavailableException();var row=rows.getFirst();
+                if("DENIED".equals(row.get("state")))throw new AccessDeniedException();
+                if(!"ACTIVE".equals(row.get("state"))||row.get("fresh")==null||((Number)row.get("fresh")).intValue()!=1)throw new AuthorityUnavailableException();
+                var until=((java.time.LocalDateTime)row.get("verified_until")).toInstant(java.time.ZoneOffset.UTC);deadline(held,until);
+            }
+        }else if(publicationValidity)new PublishedDependencyValidity(j).deadline(root.id()).ifPresent(until->deadline(held,until));
+    }
+    private static void deadline(Held held,java.time.Instant until){if(held.authorityDeadline==null||until.isBefore(held.authorityDeadline))held.authorityDeadline=until;}
+    @Override public Optional<java.time.Instant> readAuthorityDeadline(Locked locked){require(locked,Action.READ);return Optional.ofNullable(((Held)locked).authorityDeadline);}
     /** Detached metadata only; possession of this record is never an authorization capability. */
     public record WorkspaceStatus(String id,String revisionToken,String accessRevisionToken,String stage,String lifecycle,String governance,boolean owner,boolean published,String infoId,String rosterId) {}
     public WorkspaceStatus workspaceStatus(Locked locked,Actor actor,String meeting) {

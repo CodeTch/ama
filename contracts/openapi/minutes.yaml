@@ -85,23 +85,17 @@
       },
       "themes": {
         "type": "array",
-        "maxItems": 7,
+        "minItems": 1,
+        "maxItems": 8,
         "items": {
           "type": "string",
-          "enum": [
-            "OVERVIEW",
-            "DISCUSSION",
-            "CONCLUSION",
-            "ACTION",
-            "RISK",
-            "OPEN_QUESTION",
-            "DISAGREEMENT"
-          ]
+          "minLength": 1
         }
       },
       "themeCount": {
         "type": "integer",
-        "const": 7
+        "minimum": 1,
+        "maximum": 8
       },
       "selectable": {
         "type": "boolean"
@@ -109,7 +103,8 @@
       "default": {
         "type": "boolean"
       }
-    }
+    },
+    "description": "Built-in defaults retain the seven controlled element categories. Personal entries contain 1-8 chapter themes and are selectable only when the installed renderer/model protocol supports them."
   },
   "MinutesTemplates": {
     "type": "object",
@@ -224,12 +219,33 @@
       "scope": {
         "type": "string",
         "enum": [
-          "FULL"
-        ],
-        "description": "Required exact FULL scope. Omitting scope is invalid."
+          "FULL",
+          "REGION"
+        ]
+      },
+      "baseElementSetId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "category": {
+        "type": "string",
+        "enum": [
+          "OVERVIEW",
+          "DISCUSSION",
+          "CONCLUSION",
+          "ACTION",
+          "RISK",
+          "OPEN_QUESTION",
+          "DISAGREEMENT"
+        ]
+      },
+      "instructions": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
       }
     },
-    "description": "Exact object. Duplicate/unknown fields, trailing data, fractions and unequal dual revision representations are rejected. Body transport limit is 1 MiB.",
+    "description": "Exact FULL or REGION command. Duplicate/unknown fields and unequal dual revision forms are rejected. REGION pins a saved base set, category and presentation instructions; only its candidate region may change. Request limit 64 KiB.",
     "allOf": [
       {
         "anyOf": [
@@ -259,6 +275,52 @@
                 "description": "Legacy exact JSON integer, accepted through 9223372036854775806. Browsers preserve expectedRevisionToken as an opaque decimal string; equal dual forms normalize identically."
               }
             }
+          }
+        ]
+      },
+      {
+        "oneOf": [
+          {
+            "properties": {
+              "scope": {
+                "enum": [
+                  "FULL"
+                ]
+              }
+            },
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "baseElementSetId"
+                  ]
+                },
+                {
+                  "required": [
+                    "category"
+                  ]
+                },
+                {
+                  "required": [
+                    "instructions"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "properties": {
+              "scope": {
+                "enum": [
+                  "REGION"
+                ]
+              }
+            },
+            "required": [
+              "baseElementSetId",
+              "category",
+              "instructions"
+            ]
           }
         ]
       }
@@ -461,7 +523,11 @@
       },
       "materials": {
         "type": "string",
-        "enum": ["EMPTY", "PINNED", "PENDING"]
+        "enum": [
+          "EMPTY",
+          "PINNED",
+          "PENDING"
+        ]
       },
       "activeTaskIds": {
         "type": "array",
@@ -1694,6 +1760,16 @@
       },
       "observation": {
         "$ref": "#/MinutesObservation"
+      },
+      "region": {
+        "anyOf": [
+          {
+            "$ref": "#/MinutesRegionRequest"
+          },
+          {
+            "type": "null"
+          }
+        ]
       }
     }
   },
@@ -5930,7 +6006,7 @@
         "properties": {
           "route": {
             "type": "string",
-            "pattern": "^/api/v1/meetings/"
+            "pattern": "^/api/v1/(meetings/|files/[0-9a-f-]{36}/content$)"
           },
           "eligibility": {
             "const": "RECHECK_REQUIRED"
@@ -7883,7 +7959,8 @@
           "type": "string",
           "enum": [
             "BODY",
-            "ELEMENT"
+            "ELEMENT",
+            "SET"
           ]
         }
       },
@@ -11929,6 +12006,38 @@
       },
       "current": {
         "$ref": "#/SavedIntentProjection"
+      }
+    }
+  },
+  "MinutesRegionRequest": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "baseElementSetId",
+      "category",
+      "instructions"
+    ],
+    "properties": {
+      "baseElementSetId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "category": {
+        "type": "string",
+        "enum": [
+          "OVERVIEW",
+          "DISCUSSION",
+          "CONCLUSION",
+          "ACTION",
+          "RISK",
+          "OPEN_QUESTION",
+          "DISAGREEMENT"
+        ]
+      },
+      "instructions": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
       }
     }
   }

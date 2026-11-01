@@ -23,16 +23,19 @@ class TopicListFilterIT {
   j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",actor.enterpriseId(),actor.enterpriseId());
   var tx=new TransactionRunner(source);var fences=new JdbcSubjectFences(source,Set.of("MEETING"));var access=new JdbcMeetingAccess(source,tx,fences);
   topics=new JdbcTopics(source,tx,access);meetings=new MeetingService(new JdbcMeetingRepository(source,tx,access,fences,new JdbcOutbox(source,new MeetingEventReferences(source).validators()),new JdbcAuditAdapter(source),id->{}));
-  meeting=meetings.create(actor,UUID.randomUUID().toString(),UUID.randomUUID().toString()).id();
+  meeting=meetings.create(actor,UUID.randomUUID().toString(),UUID.randomUUID().toString()).id();publishedFixture(meeting);
  }
  private JdbcWebMeetingProjectionReader reader(){var tx=new TransactionRunner(source);var access=new JdbcMeetingAccess(source,tx,new JdbcSubjectFences(source,Set.of("MEETING")));return new JdbcWebMeetingProjectionReader(source,tx,access,new WorkspaceCursor(),WorkspaceReadBudget.DEFAULT);}
  private MeetingListFilter filter(String topic){return new MeetingListFilter("",Set.of(),Set.of(),null,null,topic);}
- @Test void realOwnedMembershipFilterAdvancesEmptyPagesAndBindsCursorToTopic(){
+ // Root-state fixture only; this is not a real final-confirmation/publication producer.
+ void publishedFixture(String id){j.update("UPDATE meeting SET stage='PUBLISHED',ever_published=1 WHERE id=?",id);}
+ @Test void realOwnedMembershipFiltersBeforePaginationAndBindsCursorToTopic(){
   String topic=(String)topics.create(actor,UUID.randomUUID().toString(),"筛选专题",null).get("id");topics.assign(actor,meeting,topic,UUID.randomUUID().toString(),0);String second=meetings.create(actor,UUID.randomUUID().toString(),UUID.randomUUID().toString()).id();
   // Only the list-order timestamps of this test's new genuine meetings are controlled.
   j.update("UPDATE meeting SET updated_at='2026-10-31 08:00:00.000001' WHERE id=?",meeting);j.update("UPDATE meeting SET updated_at='2026-10-31 08:00:00.000002' WHERE id=?",second);
-  var reader=reader();var first=reader.list(actor,"owned",1,null,filter(topic));assertTrue(first.items().isEmpty());assertTrue(first.hasMore());assertNotNull(first.nextCursor());var next=reader.list(actor,"owned",1,first.nextCursor(),filter(topic));assertEquals(List.of(meeting),next.items().stream().map(ama.contract.WorkspaceContracts.MeetingItem::id).toList());assertFalse(next.hasMore());
-  assertThrows(IllegalArgumentException.class,()->reader.list(actor,"owned",1,first.nextCursor(),filter("__none")));assertEquals(List.of(second),reader.list(actor,"owned",10,null,filter("__none")).items().stream().map(ama.contract.WorkspaceContracts.MeetingItem::id).toList());assertThrows(IllegalArgumentException.class,()->reader.list(actor,"joined",10,null,filter(topic)));
+  var reader=reader();var first=reader.list(actor,"owned",1,null,filter(topic));assertEquals(List.of(meeting),first.items().stream().map(ama.contract.WorkspaceContracts.MeetingItem::id).toList());assertFalse(first.hasMore());assertEquals(1,first.total());assertEquals(Map.of(topic,1L),first.topicGroups());
+  var all=reader.list(actor,"owned",1,null);assertTrue(all.hasMore());assertThrows(IllegalArgumentException.class,()->reader.list(actor,"owned",1,all.nextCursor(),filter("__none")));assertEquals(List.of(second),reader.list(actor,"owned",10,null,filter("__none")).items().stream().map(ama.contract.WorkspaceContracts.MeetingItem::id).toList());assertThrows(IllegalArgumentException.class,()->reader.list(actor,"joined",10,null,filter(topic)));
+
  }
  @Test void personalTopicFilterCannotProbeAnotherOwnersTopic(){
   var other=new Actor("filter-other-"+UUID.randomUUID(),Status.ACTIVE,Set.of(Role.USER));j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",other.enterpriseId(),other.enterpriseId());String foreign=(String)topics.create(other,UUID.randomUUID().toString(),"私有专题",null).get("id");assertThrows(ama.access.MeetingAccess.AccessDeniedException.class,()->reader().list(actor,"owned",10,null,filter(foreign)));

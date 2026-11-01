@@ -13,7 +13,7 @@ import java.util.*;
 public final class LocalFileStore implements FileStoragePort, AutoCloseable {
     private static final ObjectMapper JSON = new ObjectMapper();
     final LinuxFiles fs;
-    final LinuxFiles.Fd root, objects, staging, uploads;
+    final LinuxFiles.Fd root, objects, staging, uploads, prefixes;
     final ImmutableFiles files;
     final String backend;
     private final Path path;
@@ -28,15 +28,17 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
         this.volume = Objects.requireNonNull(volume);
         fs = new LinuxFiles(Objects.requireNonNull(hooks));
         root = fs.root(path);
-        LinuxFiles.Fd o = null, s = null, u = null;
+        LinuxFiles.Fd o = null, s = null, u = null, p = null;
         try {
             volume.check(fs, root);
             o = fs.directory(root, "objects", true);
             s = fs.directory(root, "staging", true);
             u = fs.directory(root, "uploads", true);
+            p = fs.directory(root, "recording-fences", true);
             objects = o;
             staging = s;
             uploads = u;
+            prefixes = p;
             files = new ImmutableFiles(fs, root, staging, this::check);
             journal = new LocalUploadJournal(this);
             check();
@@ -44,6 +46,7 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
             if (o != null) o.close();
             if (s != null) s.close();
             if (u != null) u.close();
+            if (p != null) p.close();
             root.close();
             throw e;
         }
@@ -58,6 +61,7 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
         verifyChild("objects", objects);
         verifyChild("staging", staging);
         verifyChild("uploads", uploads);
+        verifyChild("recording-fences", prefixes);
     }
 
     private void verifyChild(String name, LinuxFiles.Fd original) {
@@ -121,17 +125,39 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
     }
 
     @Override
+    public void probe(String backendId) {
+        backend(backendId);
+        check();
+    }
+
+    @Override
     public StoredBlob put(StorageKey key, InputStream body, long size, String sha256) {
         Objects.requireNonNull(body);
-        try (var dir = object(key, true)) {
+        try (var prefix = writingPrefix(key); var dir = object(key, true)) {
             fs.lock(dir);if(fs.exists(dir,"discarded"))throw new StorageException(ErrorCode.INVALID_UPLOAD_STATE);
             files.put(dir, "data", body, size, sha256);
             fs.sync(objects, true);
             fs.sync(root, true);
             check();
             verifyNamed(objects, ImmutableFiles.hash(json(key)), fs.identity(dir));
+            if(prefix!=null)verifyNamed(prefixes,ImmutableFiles.hash(json(recordingScope(key))),fs.identity(prefix));
             return new StoredBlob(key, size, sha256, null);
         }
+    }
+
+    private StorageKey recordingScope(StorageKey key){return new StorageKey(key.backendId(),"recordings",key.objectKey().split("/",2)[0]);}
+    private LinuxFiles.Fd prefix(StorageKey scope){
+        backend(scope.backendId());check();String name=ImmutableFiles.hash(json(scope));var dir=fs.directory(prefixes,name,true);
+        try{fs.lock(dir);files.bytes(dir,"scope",json(scope));if(!scope.equals(decode(files.bytes(dir,"scope",1048576),StorageKey.class)))throw LinuxFiles.unavailable();verifyNamed(prefixes,name,fs.identity(dir));return dir;}
+        catch(RuntimeException failure){dir.close();throw failure;}
+    }
+    private LinuxFiles.Fd writingPrefix(StorageKey key){
+        if(!"recordings".equals(key.namespace()))return null;var dir=prefix(recordingScope(key));
+        if(fs.exists(dir,"closed")){dir.close();throw new StorageException(ErrorCode.INVALID_UPLOAD_STATE);}return dir;
+    }
+    @Override public void fenceRecordingSession(StorageKey scope){
+        if(scope==null||!"recordings".equals(scope.namespace())||!scope.objectKey().matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))throw new StorageException(ErrorCode.INVALID_ARGUMENT);
+        try(var dir=prefix(scope)){files.bytes(dir,"closed",new byte[0]);fs.sync(dir,true);fs.sync(prefixes,true);fs.sync(root,true);check();verifyNamed(prefixes,ImmutableFiles.hash(json(scope)),fs.identity(dir));}
     }
 
     @Override
@@ -202,6 +228,7 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
     }
 
     /** The object-directory lock also fences direct/other-session publications of this key. */
+    @Override public void retireKey(StorageKey key) {retire(key);}
     void retire(StorageKey key) {
         try(var dir=object(key,true)) {
             fs.lock(dir);files.bytes(dir,"discarded",new byte[0]);fs.sync(dir,true);
@@ -305,6 +332,7 @@ public final class LocalFileStore implements FileStoragePort, AutoCloseable {
         if (!closed) {
             closed = true;
             uploads.close();
+            prefixes.close();
             staging.close();
             objects.close();
             root.close();

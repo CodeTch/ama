@@ -31,7 +31,9 @@ class StrictMinutesJsonReaderTest {
    fails(INVALID_SCHEMA,()->read(json().replace("\"title\":\"\",","")));
    fails(INVALID_JSON,()->read(json()+" {}"));
    fails(INVALID_JSON,()->read(String.valueOf((char)96).repeat(3)+"json"+json()));
-   fails(INVALID_SCHEMA,()->read(json().replace("ama.minutes-output.v1","ama.minutes-output.v2")));
+   fails(INVALID_SCHEMA,()->read(json().replace("ama.minutes-output.v1","ama.minutes-output.v99")));
+   assertEquals("ama.minutes-output.v2",read(json().replace("ama.minutes-output.v1","ama.minutes-output.v2")).output().schemaVersion());
+   fails(INVALID_SCHEMA,()->read(json().replace("ama.minutes-output.v1","ama.minutes-output.v2").replace("A😀B","")));
    fails(FINGERPRINT_MISMATCH,()->read(json().replace(H,"1".repeat(64))));
  }
  @Test void utf8DecoderRejectsMalformedSuffixBomOtherEncodingsAndEscapedSurrogates(){

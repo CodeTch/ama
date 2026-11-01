@@ -52,6 +52,34 @@ public final class ControlledKnowledgeClient implements AutoCloseable {
  Call materialRead(MaterialKnowledge.Authorization authorization,String path){
   authorization.require(this);if(path==null||path.length()>2048||!path.matches("/v1/knowledge/material-(?:libraries|documents)[A-Za-z0-9_:/?=&%.-]*"))throw new IllegalArgumentException("Fixed material read resource required");return new Call(this,authorization.actor(),"MATERIAL_READ","GET",path,new byte[0],authorization.budget);
  }
+ final class MaterialProof {
+  final String digest;final Instant until;private final JdbcMaterialAuthority.Request request;
+  private MaterialProof(JdbcMaterialAuthority.Request request,String token){this.request=request;var claims=KnowledgeMaterialClaims.verify(assertion,identities,token,request.actor.enterpriseId(),request.hash,Instant.now().getEpochSecond());until=Instant.ofEpochSecond((Long)claims.get("expiresAt"));digest=ControlledKnowledgeClient.digest(token.getBytes(StandardCharsets.US_ASCII));}
+  void require(JdbcMaterialAuthority.Request expected){if(request!=expected||!until.isAfter(Instant.now()))throw new ama.access.MeetingAccess.AuthorityUnavailableException();request.require(ControlledKnowledgeClient.this);}
+ }
+ MaterialProof materialAuthority(JdbcMaterialAuthority.Request request)throws IOException {
+  request.require(this);byte[] body=canonical(Map.of("protocol","ama.controlled-material-authority.v1","actorId",request.actor.enterpriseId(),"items",request.items),request.budget);
+  var call=new Call(this,request.actor.enterpriseId(),"MATERIAL_READ","POST","/v1/knowledge/material-authorizations",body,request.budget);
+  var response=exchange(call,12288,JdbcPublicationService.NEVER);if(!response.keySet().equals(Set.of("providerId","storeInstanceId","assertion")))throw new IOException("INVALID_MATERIAL_AUTHORITY");
+  return new MaterialProof(request,string(response,"assertion"));
+ }
+ Call governanceRead(PublicationGovernanceBinding.Prepared binding,String command){
+  binding.require(this);if(command!=null&&!command.matches("[A-Za-z0-9_.:-]{1,128}"))throw new IllegalArgumentException("Governance command key");
+  String path="/v1/knowledge/governance/documents/"+binding.documentId()+"/"+(command==null?"state":"commands/"+command);
+  return new Call(this,binding.actorId(),"GOVERNANCE_OBSERVE","GET",path,new byte[0],binding.budget());
+ }
+ Call governanceWrite(JdbcPublicationGovernance.Send send){
+  send.require(this);return new Call(this,send.binding.actorId(),"GOVERNANCE_CHANGE","POST","/v1/knowledge/governance/documents/"+send.binding.documentId()+"/commands",send.bytes(),send.binding.budget());
+ }
+ final class GovernanceProof {
+  final Map<String,Object> claims;final String digest;final boolean fresh;
+  private GovernanceProof(String token,boolean fresh){this.fresh=fresh;this.claims=KnowledgeGovernanceClaims.verify(assertion,identities,token,fresh,Instant.now().getEpochSecond());digest=ControlledKnowledgeClient.digest(token.getBytes(StandardCharsets.US_ASCII));}
+  void require(PublicationGovernanceBinding.Prepared binding){
+   binding.require(ControlledKnowledgeClient.this);
+   if(!binding.documentId().equals(claims.get("documentId"))||!binding.publicationId().equals(claims.get("publicationId"))||!binding.actorId().equals(claims.get("actorId"))||fresh&&((Number)claims.get("expiresAt")).longValue()<=Instant.now().getEpochSecond())throw new IllegalArgumentException("Governance resource or freshness mismatch");
+  }
+ }
+ GovernanceProof governanceProof(String token,boolean fresh){return new GovernanceProof(token,fresh);}
  private String delegation(Call call){
   if(call.issuer!=this)throw new IllegalArgumentException("Foreign controlled call");long now=Instant.now().getEpochSecond();var claims=new TreeMap<String,Object>();claims.put("schema","ama.controlled-kb-delegation.v1");claims.put("issuer",identities.get("clientId"));claims.put("keyId",identities.get("delegationKeyId"));claims.put("audience",identities.get("providerId"));claims.put("storeInstanceId",identities.get("storeInstanceId"));claims.put("actorId",call.actor);claims.put("purpose",call.purpose);claims.put("method",call.method);claims.put("resource",call.path);claims.put("issuedAt",now);claims.put("expiresAt",now+30);claims.put("nonce",UUID.randomUUID().toString().replace("-",""));claims.put("requestDigest",digest(call.method.equals("POST")?call.body:canonical(Map.of("method",call.method,"resource",call.path))));byte[] raw=canonical(claims,call.budget);
   try{var signature=Signature.getInstance("Ed25519");signature.initSign(signing);signature.update(raw);String result=base64(raw)+"."+base64(signature.sign());if(result.length()>4096)throw new IllegalArgumentException("Delegation budget");return result;}catch(GeneralSecurityException failure){throw new IllegalStateException("Controlled signer unavailable");}

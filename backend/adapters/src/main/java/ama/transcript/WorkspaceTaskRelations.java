@@ -4,8 +4,9 @@ import ama.meeting.WorkspaceReadBudget;import org.springframework.jdbc.core.Jdbc
  * Internal declaration and lock phases must be composed under the caller's authentic owner gate.
  */
 final class WorkspaceTaskRelations {
- private static final List<String> RANK=List.of("publication","final_confirmation","publication_submission","meeting_info_revision","roster_revision","transcript_revision","transcript_confirmation","transcription_input","input_batch","input_batch_fingerprint_profile","template_revision","exclusion_revision","generation_input","material_snapshot","minutes_revision","element_set","generation_candidate","recording_session","recording_archive_input");
+ private static final List<String> RANK=List.of("publication","final_confirmation","publication_submission","meeting_info_revision","roster_revision","transcript_revision","transcript_confirmation","transcription_input","input_batch","input_batch_fingerprint_profile","template_revision","exclusion_revision","generation_input","material_snapshot","minutes_revision","element_set","generation_candidate","recording_session","recording_archive_input","minutes_export_input");
  private static final Map<String,String> COLUMNS=Map.ofEntries(
+  Map.entry("minutes_export_input","id,meeting_id,source_revision_id,format,base_revision,cancel_epoch,final_confirmation_id,input_fingerprint,producer_key"),
   Map.entry("recording_session","session_id,meeting_id,backend_id,state"),Map.entry("recording_archive_input","id,session_id,meeting_id,requested_by,base_revision,cancel_epoch,input_fingerprint,producer_key"),
   Map.entry("publication","id,meeting_id,confirmation_id,state,revision"),Map.entry("final_confirmation","id,meeting_id,meeting_revision,info_revision_id,roster_revision_id,transcript_confirmation_id,minutes_revision_id,element_set_id,template_revision_id,exclusion_revision_id"),Map.entry("meeting_info_revision","id,meeting_id,revision"),Map.entry("roster_revision","id,meeting_id,revision,state"),
   Map.entry("minutes_revision","id,meeting_id,revision,generation_input_id"),Map.entry("element_set","id,meeting_id,revision"),Map.entry("generation_candidate","id,meeting_id,input_id,task_id,minutes_revision_id,element_set_id,state,input_fingerprint"),
@@ -20,6 +21,11 @@ final class WorkspaceTaskRelations {
  WorkspaceTaskRelations(JdbcTemplate jdbc,WorkspaceReadBudget budget,boolean ownerInputs){this.jdbc=Objects.requireNonNull(jdbc);this.budget=Objects.requireNonNull(budget);this.ownerInputs=ownerInputs;}
  void capture(List<WorkspaceTaskScan.Metadata> tasks){if(captured)throw unavailable();captured=true;for(var task:tasks){budget.check();var spec=task.spec();String meeting=spec.subject().id();
   switch(spec.type()){
+   case "MINUTES_EXPORT_V1" -> {
+    var input=parent("minutes_export_input",spec.input().id());same(input,"meeting_id",meeting);same(input,"input_fingerprint",spec.inputFingerprint());same(input,"producer_key",spec.producerKey());number(input,"base_revision",spec.businessVersion());number(input,"cancel_epoch",spec.cancelEpoch());if(!Set.of("md","pdf","docx").contains(input.get("format")))throw unavailable();
+    String body=id(input,"source_revision_id");same(parent("minutes_revision",body),"meeting_id",meeting);
+    if(input.get("final_confirmation_id")!=null){var confirmation=parent("final_confirmation",id(input,"final_confirmation_id"));same(confirmation,"meeting_id",meeting);same(confirmation,"minutes_revision_id",body);}
+   }
    case "RECORDING_ARCHIVE_V1" -> {
     var input=parent("recording_archive_input",spec.input().id());same(input,"meeting_id",meeting);same(input,"input_fingerprint",spec.inputFingerprint());same(input,"producer_key",spec.producerKey());number(input,"base_revision",spec.businessVersion());number(input,"cancel_epoch",spec.cancelEpoch());
     var session=parent("recording_session",id(input,"session_id"));same(session,"meeting_id",meeting);same(session,"state","FINISHED");
@@ -29,7 +35,7 @@ final class WorkspaceTaskRelations {
     String batchId=id(input,"batch_id");var batch=parent("input_batch",batchId);same(batch,"meeting_id",meeting);same(batch,"kind","TRANSCRIPT");number(batch,"base_revision",spec.businessVersion());same(parent("input_batch_fingerprint_profile",batchId),"profile","ama.input-batch.v1");
    }
    case "MINUTES_GENERATE_V1" -> {
-    var input=parent("generation_input",spec.input().id());same(input,"meeting_id",meeting);same(input,"scope","FULL");empty(input,"target_element_id");same(input,"input_fingerprint",spec.inputFingerprint());number(input,"base_revision",spec.businessVersion());
+    var input=parent("generation_input",spec.input().id());same(input,"meeting_id",meeting);if(!Set.of("FULL","REGION").contains(input.get("scope")))throw unavailable();empty(input,"target_element_id");same(input,"input_fingerprint",spec.inputFingerprint());number(input,"base_revision",spec.businessVersion());
     if(input.get("material_snapshot_id")!=null){var snapshot=parent("material_snapshot",id(input,"material_snapshot_id"));same(snapshot,"meeting_id",meeting);number(snapshot,"revision");}
     var confirmation=parent("transcript_confirmation",id(input,"transcript_confirmation_id"));same(confirmation,"meeting_id",meeting);var revision=parent("transcript_revision",id(confirmation,"revision_id"));same(revision,"meeting_id",meeting);same(revision,"kind","WORKING");parent("template_revision",id(input,"template_revision_id"));same(parent("exclusion_revision",id(input,"exclusion_revision_id")),"meeting_id",meeting);
    }
@@ -44,6 +50,7 @@ final class WorkspaceTaskRelations {
  String detailPath(WorkspaceTaskScan.Metadata row){
   if(!locked)throw unavailable();String prefix="/api/v1/meetings/"+row.spec().subject().id();
   return switch(row.spec().type()){
+   case "MINUTES_EXPORT_V1" -> "/api/v1/exports/"+row.id();
    case "TRANSCRIPT_IMPORT_V1" -> prefix+"/processing-tasks/"+row.id();
    case "MINUTES_GENERATE_V1" -> prefix+"/minutes/generation-tasks/"+row.id();
    case "KNOWLEDGE_PUBLISH_V1" -> prefix+"/publications/"+row.spec().input().id();
@@ -57,7 +64,7 @@ final class WorkspaceTaskRelations {
  private Map<String,Object> parent(String table,String id){try{ama.contract.OutboxContracts.uuid(id);}catch(RuntimeException invalid){throw unavailable();}var key=new Key(table,id);return parents.computeIfAbsent(key,k->read(k,false));}
  private Map<String,Object> read(Key key,boolean lock){
   budget.check();String declared=COLUMNS.get(key.table());if(declared==null)throw unavailable();final String columns=ownerInputs?declared:declared.replace(",processing_input_id","").replace(",generation_input_id","");String pk=key.table().equals("publication_submission")?"task_id":key.table().equals("input_batch_fingerprint_profile")?"batch_id":key.table().equals("recording_session")?"session_id":"id";
-  long bound=key.table().equals("transcription_input")?4096:Set.of("publication_submission","recording_archive_input").contains(key.table())?2048:512;budget.reserve(1,16,bound,bound,bound,4,false);
+  long bound=key.table().equals("transcription_input")?4096:Set.of("publication_submission","recording_archive_input","minutes_export_input").contains(key.table())?2048:512;budget.reserve(1,16,bound,bound,bound,4,false);
   var value=jdbc.query("SELECT "+columns+" FROM "+key.table()+" WHERE "+pk+"=? LIMIT 2"+(lock?" FOR UPDATE":""),rs->{if(!rs.next())throw unavailable();var row=new LinkedHashMap<String,Object>();for(String column:columns.split(","))row.put(column,rs.getObject(column));if(rs.next())throw unavailable();return Collections.unmodifiableMap(row);},key.id());
   budget.check();same(value,pk,key.id());return value;
  }

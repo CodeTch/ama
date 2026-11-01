@@ -1,3 +1,200 @@
+> **2026-11-01 用户要求本批收尾后暂停（最新指令优先）**：本批开发/真实验证已收尾，后续仅收到“继续任务”才继续。**D尚未完成、B/C/D均NOT_ACCEPTED。** 本页下方旧“不停下”与运行中检查点已成为历史，不能覆盖本次暂停。
+>
+> **唯一准确接续入口**：[当前批次暂停与精准接续](docs/development/phase-d-pause-2026-11-01.md)、[阶段D未完成摘要](docs/acceptance/d/summary.md)、机器状态 `.tools/local-app/task-current-status.json`。仍在 `/home/tanren/ama` main、单agent，无分支/worktree/提交/重置；外部兄弟8792/2525固定。
+>
+> **当前环境**：standard、V054、本地Web5174/API8182/management8183/MySQL46443，服务保留运行。源码/部署签名 `531ac0128c910789e1bb598a4e4117c208ffbbc9457627024e7ec8cfcb2210fc`。本批真实v4 API验证时 `377765521a0de8e7e2acdca2abac3ee02c44b7779b1bc2b03cecd7e523910161`；build产物web/dist/index.html被现有签名算法计入，构建后已重新部署对齐。不要篡改state绑定。
+>
+> standard最终回读 `.tools/local-app/sensitive-exclusion/standard-readback-02/report.json` **2PASS**，531ac源码/部署一致，原件SHA、已采用/空排除与旧v3原key保持；首次构建指纹不一致的readback-01保留FAIL。
+>
+> **本批已通过**：生产Java854、完整Web481、Topic MySQL22、本地运行工具30、兄弟桥接5、type/build/API一致。v4物理材料排除实际CAS/API **六组PASS**：`.tools/local-app/sensitive-exclusion/material-v4-api-01/report.json`。整份知识库及10个页段别名均不进入payload，候选只引用剩余转写；显式采用保留人工标题，savedOnly连续两次保存，明确移除后再加入422，旧v3生成原key仍返回旧task。旧归档/v1-v3语义保留，新protocol/requestHash v4独立归档。新增current SET目录来源与typed current selection、独立背景UI、来源全引用防绕过、loading修复。**UI失败没有改成PASS**：material-v4-01首次loading临时按钮竞态，已加授权等待loading；material-v4-02材料预览等待超时/元素消失，根因未定位，没有新生成。API PASS不能代替完整UI。
+>
+> **d3夹具已改变，不能当原PENDING重用**：会议d3b0423d-1a61-4995-adf7-6bddee8ca7f7 ACTIVE，revision13；body e72d3b8f-bb18-4c31-a157-ff9e4ff9e568、set2d436d9b-2a7d-48d8-86ee-1fb538f5cfe0；excl940501bf-2315-467b-92f0-1dc8e1cc0281已空，needsGeneration=true。新taskb41376dc-f502-48e6-9964-1fe8a42ea67b/input210697ac-80c4-4107-917f-bae8c393092b SUCCEEDED，candidate12398057-88c3-49f5-85ee-aaa621902c18 **ADOPTED**。旧unsafe task7d5307e4仍SUCCEEDED，但candidatec80eacad **REJECTED**；保留真实泄露RED proof和全部失败。原SET5e09不能走current入口，404正确。原key/body均在各case/private-originals.json，未知ACK只能原请求查回。
+>
+> **下一次继续的第一批**：先定位材料预览组件/请求/epoch/scope竞态，再以新鲜完整脚本 `.tools/local-app/continue-sensitive-material-v4-ui-cas.mjs`（已语法检查，未执行）在sensitive模式新目录 `sensitive-exclusion/fresh-material-v4-ui-01` 验证真实TXT+KB UI。不要将当前d3状态误作原态。之后恢复standard，执行尚未启动 `.tools/local-app/continue-d08-published-topic-cas.mjs .tools/local-app/d08-page-matrix/topic-cas-01`（真发布→专题新422/403/409/正向+三视口）。然后全D08按钮/页面/原型矩阵和最终summary签收。当前旧937167依赖withdrawn，禁止当有效发布正向；ef8a6056已删除并物理清理，禁止再用。原型不改，B/C容量FAILED保持。
+
+> **2026-11-01 09:09 持续执行，重要D03新缺陷与v4修复（尚未部署）**：当前runtime仍sensitive `5c41ab2586690de0c8974eb0dc4d247752b67185f3560c158228a0009dd932c3`。该版生产Java849PASS、Web479全套+新增client错误单测等33focusedPASS、Topic*IT22PASS、type/API一致PASS。单agent/main，继续到D全部完成，不暂停。外部8792/2525固定。
+>
+> **真实材料排除发现原始内容旁路**：`sensitive-exclusion/material-resume-02` 前4组PASS：同会d3b0423d...，独立KB目录无body evidence的SET200/错误set404/外人403、UI敏感+背景来源/原件fetch200、实际checkbox保存BG排除+幂等/409/任意源422/人工body-set保留。新FULL task **7d5307e4-f4d6-4d39-83b2-62655bfb2cf2** /input **825f7f19-a012-40ad-a5e9-5f14e6f7fb3a** SUCCEEDED，candidate **c80eacad-4ffe-4e41-b836-a2339bfe898c PENDING，禁止采用**。脚本误写payload.background（实际backgroundMaterials）TypeError停止；随后独立检查发现真实问题：排除整份KNOWLEDGE_VERSION(alias s4)后，s5-s14同一版本10个TEXT_PARAGRAPH依然进入模型payload。实际request `.tools/local-app/minutes/provider-store/requests/f8afd578-7f84-4fd7-81e4-25a7db8c3c96.json`，原始RED证明在case/physical-exclusion-red-proof.json。旧current人工body af620aa4、set5e09f693未改变，root rev8，excl e8c08857，body HUMAN；KB material f39e90dd/file239582d8；不要新建原任务恢复key或伪造它失败。
+>
+> **修复源码**：新增`ama.model.MinutesSourceExclusions` O(n)直接物理重叠：整份知识库排除会排除同materialRevision/document/parser/textSHA/file的页段；排除某段也移除包含它的整份副本，但不把whole bridge再当原选择导致其他段被连带排除；其他revision/pin不受影响。renderer的transcript/background/pinnedElements共用closed locator集合，输出guard在新版本校验所有sourceRefs（含sensitive/background无evidence），controlled provider和wire完整性同步使用closed alias集。
+>
+> **保留旧归档语义**：为避免重算旧v1-v3请求字节，增加protocol **ama.controlled-minutes-http.v4** /requestHash **ama.minutes-model-request.v4**；input仍v3、outputv2；regionCapable(v3/v4)。ControlledRegionMinutesArchives.enable(fresh,boolean)旧默认v3字节不变，v4新release。LocalRegionMinutesSetup每次先保留旧standard/sensitive v3，再追加新`ama.local.source-exclusions.v1`和`ama.local.source-exclusions-sensitive.v1`，两种场景共同最终index pin；保留所有旧读/回执，不能改旧store结果。harness只有透明桥接新增v4参数回归，不改端口或模拟业务权威。
+>
+> 回归：MaterialExclusionOverlapTest3 + RegionProtocol v4 + RegionArchives v4/旧bytes + PersonalTemplateRenderer/SensitiveProvider目标全PASS（continue-material-overlap-green2.log），新runtime30PASS，installer javac compile2PASS（compile1误用了旧frozen application classpath故缺新overload，保留），harness5PASS（PYTHONPATH用兄弟.python_deps，continue-source-exclusions-harness2.log）。**当前生产全Java运行中**日志continue-source-exclusions-production-java1.log/exec session33104，等结束再部署，禁止并发Maven。
+>
+> 待执行脚本 **`.tools/local-app/resume-sensitive-material-v4-cas.mjs .tools/local-app/sensitive-exclusion/material-v4-01`**：复用同d3会议，首先明确拒绝已知unsafe旧c80候选，再新明确v4任务（原已SUCCEEDED且未采用，不能重放冒充v4）。已修正backgroundMaterials字段，要求backgroundMaterials全空、candidate有效locator全TRANSCRIPT、v4协议；然后采用→旧SET source404→savedOnly连续两次保存→UI显式移除→未检测源重新加入422。保留原case全部FAIL；冻结源码/Maven跑新case。若新候选已受理需从其原task接续，不可反复另建generation。
+>
+> D08另待真实published专题正向：**`.tools/local-app/continue-d08-published-topic-cas.mjs .tools/local-app/d08-page-matrix/topic-cas-01`** 已语法检查，创建新TXT/确认/合法info名单→FULL→逐项显式synthetic review→final→真实publish→未发布与混批422/owner published正向/非空删409/外人403/旧key不重应用/三视口topicUI。使用当前受控模型不宣称语义质量；旧937167依赖withdrawn不能当正向。脚本root route('')已去尾斜杠，搜索用关键词aria，dialog重名已修复。首次topic做真正发布比较慢，预计数分钟。注意此script初次setup先initialsettings再info（合法），并使用每次API真实key/body保存private-originals，失败后先看ownedfixture和current task再恢复。
+>
+> 接着还须完整D08三视口/原型/逐按钮矩阵、最终Dsummary与状态整合；D尚NOT_ACCEPTED。新增前端无稿读取错误有明确retry，SET readonly不开放审阅；当前敏感标签统一“锁定来源”。B/C原100路7200s FAILED保持，不因D改变。
+
+> **2026-11-01 08:57 持续执行检查点，不暂停**：main/单agent，无分支/提交/worktree。当前运行是sensitive场景 `2331444c7d7d12763fdfc57d1aa4581f43e95d2bfcccd82600a802c9aba83d40`，之后的Java/前端改动尚未部署。外部固定8792/2525。新增D03当前SET来源严格currentSet+真实evidence或目录成员，材料排除先StoredSourceGraph完整proof后MinutesEditSources当前confirmation/snapshot/document/parser门；独立背景目录已接UI；保存旧选择只接受当前保存tuple且有已验证历史applied exclusion来源（允许反复原样保存，旧版本不再当前仍拒绝），无任意locator重新加入。前端19PASS、全web479PASS、typecheck首轮SET reviews参数曾失败已修复，最终需复验。typed source13/provider7/adaptive2 PASS；本地rich-output fixture第二敏感/背景改为实际BACKGROUND且不附body evidence，standard不变。
+>
+> 实际材料case `sensitive-exclusion/material-cas-01` 已创建真实TXT+KB、初次FULL成功、人工标题/正文保存。会议 **d3b0423d-1a61-4995-adf7-6bddee8ca7f7** ACTIVE，task234a478d/inputcd59c9e7初次任务已成功并首次自动保存。SET来源200/错误set404/外人403通过。case01整例FAIL于脚本page.request文件GET401；改为页面fetch并复用原meeting。resume-01整例FAIL于首次工作区空白，没有排除变更；diagnose-sensitive-workspace1.json重新真实读取成功，发现editor.error未在无draft时呈现，现增加错误/重新读取入口并泛化材料“锁定来源”标签。新脚本 `.tools/local-app/resume-sensitive-material-cas2.mjs` 待部署后执行，包含原fixture复用、文件fetch、知识库目录UI、保存排除、实际模型payload过滤、显式采用、savedOnly重复保存/显式移除/再加入422；修正savedOnly实际文案selector。失败不覆盖。
+>
+> D08另发现明确需求缺陷：D计划/requirements LIST-05要求仅负责人已发布会议可归集，旧JdbcTopics却允许ENTRY。新TopicNotPublished ->422、明确中文错误及OpenAPI/SDK接入；新归组在全部锁定root revision/owner/topic验证后全批stage=PUBLISHED且ever_published，原旧receipt仍只读重放、legacy移除不被限制；外部authority准备在TX外。TopicMembershipIT新负例RED真实“未抛异常”，修后5PASS；Topic*IT green1 22项2旧删除fixture失败（此前把全部root设PUBLISHED不应删除），已明确模拟guard之前legacy ENTRY edge修复，**green2正在运行**日志continue-topic-published-green2.log。没有真实published正向资格：当前唯一local PUBLISHED ACTIVE 937167...依赖已撤回原件，禁止使用。须新真实TXT→确认→FULL→显式review→final→publish，验证专题新422/403/409、批量原子性及已发布正向、不改body/ACL。`.tools/local-app/resume-library-cas.mjs`可提取review/final/publish，不可直接复用其旧已发布fixture。
+>
+> 下步：等green2结束/查看全部结果→生产Java全测及frontend/API→部署sensitive→resume-sensitive-material-cas2实际验证（冻结源码/Maven）→恢复standard后新专题published资格和D08完整三视口/原型/button矩阵→最终D验收summary。D仍未完成，用户要求不能停下。B/C原容量FAILED保持NOT_ACCEPTED。
+
+> **2026-11-01T08:42:19+08:00 持续执行最新检查点（不暂停）**：main/单agent，继续至D全部完成。当前standard场景，部署/source `fe9822cd55aee1c395a72db669db37f72a97ab57356fa82f45067b738499b250`，V054，所有角色运行，外部CAS/model/knowledge全部8792，SMTP2525固定。生产Java841PASS（continue-sensitive-production-java1.log）、额外生成/发布边界36PASS（continue-sensitive-phase-boundaries1.log）、本地runtime24PASS；最新phone CSS后web477PASS/typecheckPASS，git diff-check通过。
+>
+> **D01材料变更+D07实际物理清理已PASS5**：`.tools/local-app/material-change-deletion/cas-01/report.json`，目标会议 ef8a6056-aa01-4dad-8a37-9a74de189ee8 **已删除/清理完成**，不可再作为可读fixture。原CAS03区域候选也随其清理。上传local TXT→READY→新KB+local快照，原人工body/set保持，needs_generation从false→true，无隐式任务；明确FULL任务只产候选。删除原键/冲突/立即403/COMPLETE；独立核对5个file对象原字节SHA和删除后data不存在+discarded永久标记，V053建议/V054区域请求等行清零；外部doc-dc62d108c47719ab9c2203f56564f8af版本/字节SHA不变，在新witness e2e79824-9dee-4506-bef3-e1f944f933a0 实际重新引用下载200。详见 docs/acceptance/d/material-change-deletion-2026-11-01.md。
+>
+> **D03敏感纯转写case通过6组**：sensitive-exclusion/cas-01/report.json，会议159e4fae-3de5-4e18-bb84-38fbcb6c97d7仍ACTIVE。真实TXT→RAW/确认→sensitive FULL v3两类检测→人工body→单项UI排除/原键/异体409/非当前source422→新FULL候选验证rendered payload无排除原文且新证据/敏感/背景无被排除物理source→全部排除共享物理union→原转写/原要素/人工body保留。无真实模型准确率声明。当前已恢复standard，安装器每次把standard+sensitive两组新v3归档追加至共同最终pin，选择不同prompt/model但保留全部历史。mobile-01已验证standard读取sensitive历史+原key回放。
+>
+> **D08手机修复实际PASS2**：`.tools/local-app/d08-page-matrix/mobile-01/report.json`；旧390敏感截图证实scope core-navigation column压扁正文。MinutesWorkspace追加<=900横向nav及auto宽chip/独立内容滚动，实际1440/1024/390几何+截图通过，390 nav<70、正文>=180、复选框在可读内容区。原型8状态*3视口reference-01保留；尚未完成全按钮/专题/全页对比，page-matrix.md仍执行中。
+>
+> **REGION边界**：negatives-01前三组PASS（合法转换CONCLUSION为空→真实空区域生成采用、旧base新请求409、原key采用后重放），其第二RISK任务f6dabef1...最终FAILED/ATTEMPT_LIMIT且SQL零external executions/candidates，保留。next-diagnose-01新明确请求task6eec22ee...重试后SUCCEEDED。negatives-resume-01五组PASS：恢复该候选、独立CAS外人读/生成/采用403、并发actionFields后旧候选409不改人工稿、FULL候选保留旧稿、另一会议0c5...旧FULL原key在REGION后继续重放。PublicationGraph固定16页最坏预留导致BUDGET假拒，worker JFR region-next-worker-snapshot2.txt定位Ledger.admitCapture:25；新增实际reader回归RED2（2项1真失败）→GREEN，Ledger.captureRowLimit按原剩余预算缩页，无提高预算上限，已部署。cas04真实ACK丢失刷新同key/body恢复成功，后续resume-cas04-01实际采用/材料编辑/来源API通过，但UI读lease超4.5s清空展示导致整例FAIL，不能改PASS。case02材料/copy/noDate实际PASS4在material-cas02-02。两份source-equivalence.json真实SQL核对非目标6类文字/context/物理locator pins/support/anchors完全一致；locator/evidence ID复制会变化，不能按ID直接比较。
+>
+> **仍须完成，不能结束D**：
+> 1. 新审计到D03材料敏感/独立目录缺口：JdbcMinutesSettingsCommands.replaceExclusions仍只接TRANSCRIPT；有效KB/page敏感来源会CAPABILITY_UNAVAILABLE。新Source读取已支持材料正文/原件，但当前targetKind只BODY/ELEMENT，目录有source但无evidence时UI无法preview。应新增当前SET严格作用域读取（同currentSet且仅evidence或sensitive/background目录真实成员），前端Sources支持SET，不提供SET审阅/编辑授权；用MinutesEditSources的完整provenance后当前confirmation/material-snapshot/document/parser门禁替代Transcript-only。
+> 2. 另一个排除问题：UI savedOnly标签承诺保留旧选择，但API只允许current detection。新候选采用后旧排除不再检测时，保留已保存选择会422。需允许sourceExclusionRevision内已保存且仍属当前确认/材料版本的同项保留，任意新未检测locator仍422；材料/转写换版不能凭旧项授权。
+> 3. 为实际验证上述两点，可在controlled:rich-output且有BACKGROUND时让第二类检测及background note引用真实BG source，并登记sourceRefs；standard/no-sensitive维持原行为。这是开发fixture非权威。再验证KB目录（无正文evidence）读取/排除、采用后savedOnly保留/移除、foreign/noncurrent拒绝。独立背景目录当前backend有value.background但MinutesWorkspace尚未渲染，可加在敏感区之后且不改变原7个nav初始布局。
+> 4. D08完整可达按钮/原型矩阵、专题新鲜403/422/409与三视口，最后完整回归、docs/acceptance/d/summary.md和阶段状态整合。B/C长测FAILED保持，S3/跨后端/备份义务按F不虚报。无分支/提交/重置/子agent。
+
+> **2026-11-01T07:59:41+08:00 持续执行最新检查点**：当前deploy5 `2b397f912feb4bb46400a33548728aedd131e1c3cfa942148691a4255b054eb0` / V054；生产Java833PASS、web477PASS、typecheck、SDK+runtime guards一致PASS、diff-check PASS。单agent/main、外部8792/2525不改、D未完成。材料编辑新增MinutesEditSources：完整stored provenance先行，再验当前confirmation/材料snapshot成员/解析document+parser；GraphDiscovery编辑/恢复加当前material_snapshot。来源读取新增MinutesMaterialSource按来源版本精确读取页/段/知识库全文，受保护files/{id}/content；前端Source API允许受控文件路由，runtime guards同步。候选footer已加wrap修复390裁切。
+> material-cas02-02/report.json **4组实际PASS**：会议b25c93c2，KB+transcript区域要素编辑成功，两种真实text/受管原件200，390来源窗口、复制未保存草稿（实际延迟原autosave，GET仍旧正文，释放后原保存200）、空日期不显示。material-cas02-01复制断言撞1200ms自动保存而失败保留，非产品复制缺陷；其自动保存已真实写入，不能假定b25正文仍原初内容。
+> 当前主完整REGION验收 `node .tools/local-app/continue-region-cas.mjs .tools/local-app/region-generation/cas-03` 正在跑，log continue-region-cas3.log，运行中冻结源码/Maven；脚本现在保存private-originals，目标真实受理ACK丢失→刷新同键同体恢复→候选/三视口footer边界→显式采用/所有其他区域和人工body保持→材料编辑/来源→复制/空日期。当前其他case的ADOPTED原candidate d49dc已采用，不得重当PENDING。
+> 下一步仍有：REGION空区域、旧base/过期/越权/排除负例与FULL历史回归；D01改材料保留人工正文实际case；D03真实敏感检测/全文局部排除（本地默认controlled:rich-no-sensitive不给检测）；D07 KB/local+V053/V054真实删除及外部原件保留；D08完整原型/按钮矩阵/专题负例/最终summary。D08参考八状态三视口已采reference-01，page-matrix.md已建仍执行中，不能按静态437按钮扫描关闭。B/C原容量失败保持。
+
+> **2026-11-01T07:50:04+08:00 REGION 实际链路检查点，继续执行**：V054已部署。初始安装累计依赖119→新增v3超128，JFR定位依赖预算，新增retention回归RED→9PASS；本地READ/runtime上限256仍有界，Python5PASS。cas01选择ACTIVE但上游已撤回的doc798而403，正确拒绝，改选doc-dc62d108c47719ab9c2203f56564f8af。cas02会议b25c93c2-8617-4fe3-89cb-e348dd563df9，FULLv3/人工正文+行动字段已通过；REGION原key/body在cas02/original-region.json，入队曾503并回滚，JFR定位MinutesTaskDomainPolicy遗漏FULL-only，同时修复MinutesEventReferences。deploy3=7234e4ae；resume-cas02-01原键受理task a1d7740a-7602-4bc3-b524-ef4eb24e8ca9成功，candidate d49dc78a-3b9d-40c4-a550-e539d04309c8 PENDING/可采用，尚未采用。UI因生成响应guards未同步而拒绝region字段，现guard RED→3PASS，API检查已包含guards --check；全web/typecheck运行，随后deploy4后用resume-region-cas02.mjs继续同候选。主稿仍revision8/人工body保持；不得另发新生成键冒充原请求恢复。D未完成，不停止。
+
+> **2026-11-01T07:36:33+08:00 额度中断后继续执行**：main/单agent，继续至D完成。旧fullJava3生产模块通过、integration-tests存在缺失历史冻结证据/专用环境及旧夹具失败，不能写全Java通过。生成相位和只读投影11项已修复通过；名单夹具补齐bounded identity后发现COUNT响应缺失，现已补齐待重验。当前production-java4运行，不并发Maven、不部署；完成后部署V054和REGION实际CAS。当前实际仍a9364664/V053。
+
+> **2026-11-01 06:15 持续执行检查点（不暂停）**：D02 AI 信息建议已完成实际CAS cas05七组PASS（含真实采纳丢响应/刷新/原键重试/最终记录清理、三视口），签名 `a9364664a8a3abafda79a778871aa52089e7bfb1482cc90dc6217f318ab86067` / V053。cas03初始化清私有journal的缺陷已修复，原case原键重放PASS无第二次写；cas01/02已实际采纳，不再是pending。详见 `docs/acceptance/d/information-suggestions-2026-11-01.md`。
+>
+> D03/D04区域生成正在实现，**尚未部署/实际验收**：V054不可变region_request、显式REGION、generation-input.v3/output.v2/protocol.v3新归档，旧FULL v1/v2保留。指纹5、输出3、归档8、wire2、合并3目标PASS；原始测试夹具SOURCE_LOCATOR枚举错误和编译RED保留。候选仅有目标区域/空正文，采用复制合并原要素集，保留原正文并needs_generation=1；编辑原请求恢复与真实弹窗接入，前端全475PASS/typecheck/SDK一致。兄弟harness仅扩展v3透传回归参数，4PASS，不改8792/2525。
+>
+> 当前全Java `continue-region-full-java1.log` 正在运行，结束前不改Java、不部署。下步核对结果→材料来源编辑能力/REGION实际队列→部署V054→真实CAS区域请求和采用（带KB、人工正文、其他行动字段、空区域、原键丢响应、外部错误、过期采用、最终确认阻断、旧FULL回归）。安装器 `LocalRegionMinutesSetup` 已添加但未实际执行。D08矩阵、D01更改材料旧稿保持、D04复制/日期actualUI和D07新表真实删除仍OPEN。**仍保持单agent/main、D全部完成前继续，不把当前检查点当成停止授权。**
+
+> **2026-11-01 05:53 最新持续执行检查点（不暂停，覆盖下方历史）**：main 单 agent、无分支/worktree，用户要求 D 全部完成前继续；外部固定 harness8792/2525，非公司权威。D02 查询已完成实际CAS cas03五组PASS（650986bb），容量reuse5三类2508/2114/2393ms，详见 `docs/acceptance/d/meeting-query-2026-11-01.md`。V052修复材料变更遗漏search projection版本，仅精确一致旧元数据回填；旧 `54e9ddac` 缺失外部库位置仍UNKNOWN，不带筛选的包含它的查询503，未删/伪造旧来源。
+>
+> D02信息建议已实现V053、候选同事务索引、完整来源校验读取、单字段采纳/拒绝/幂等回执/出站审计事件、前端原请求恢复。部署1ae01157/V053（backend932867）已有真实CAS四组后端PASS，cas01脚本错误认为改回原文自动清dirty；cas02发现保存后建议刷新时采纳按钮提前启用，未发送请求。已新增canDecide版本/加载门禁，5单测PASS+typecheck4PASS。调试debug01实际采纳了cas02会议 `fde433a5-3095-4679-8216-dfb29a81a078` 的名称（revision8），不能再当待采纳；cas01会议 `5a8ea49f-4951-4111-bf56-3fd8481091a4` NAME仍pending、SUMMARY已reject。完整Java804PASS (`continue-info-suggestion-full-java1.log`)，前端471PASS在门禁修复前，修复后5项targetedPASS。当前 `continue-info-suggestion-deploy2.log` 正在重新部署最新源，完成后运行 `node .tools/local-app/continue-info-suggestions-cas.mjs .tools/local-app/info-suggestions/cas-03`，原始失败报告不可覆盖。运行CAS期间冻结源和Maven。
+>
+> 仍未完成：D02最终actualACK丢失恢复/源变化等；D03/D04真实区域局部生成（FULL占位仍未改）；D01改材料旧人工稿保持actualcase；D03敏感排除/材料编辑实际验证；D04未保存正文复制/无日期actualUI；D07新KB/local/建议表真实删除；D08完整原型/按钮矩阵。检查发现 `JdbcMinutesSavedCommands.edit` 的derived.sourceUsages仅接受TranscriptVersion，材料编辑可能显式CAPABILITY_UNAVAILABLE，须实测并修复，不能直接把D03标完成。primary05/e882 WITHDRAWN、db0 OBSOLETE，仍按下方05:19说明禁止再当ACTIVE。B/C长测FAILED不改写。
+
+> **2026-11-01 05:19 持续执行最新检查点（覆盖下方历史状态，不暂停）**：用户要求 D 全部完成前持续推进；main 单 agent，不开分支/worktree。实际部署签名 `4f46a028c51c55ae6b5b6b2f2fc4d47b7abfd0856dabebd89efccbf324c7dc5c`，V051，backend892683。全部公司接口经过兄弟项目8792/2525固定端口，不视为真实公司权威。D01 ui-cas08五组PASS + 原始DOCX/PPTX/PDF七个定位逐字核对PASS；D04 material-template-cas03十四组PASS；D05 cas05八组PASS + 原primary任务 resume-cas03五组PASS（详见 docs/acceptance/d/governance-2026-11-01.md）。**primary05和e882现已WITHDRAWN，db0现已OBSOLETE；不得再把它们当ACTIVE新引用来源，不要另造原撤回键。** 937167的材料模板发布也依赖primary05，普通读应拒绝。
+>
+> 当前正在 D02 查询实现：新 MeetingQueryRelation 同权限/同筛选 SQL 分页及total/stageCounts/topicGroups；MeetingQueryIT RED3→GREEN1 两项PASS（RED1编译夹具错误/RED2旧save缺transition，均保留）；MaterialAuthorityGateIT五项PASS；TopicListFilterIT三项PASS；前端12项PASS+typecheck4 PASS。新列表实现**尚未部署**。新增容量探针 `.tools/local-app/run-d02-capacity.py a6d5831b` 正在专属 Cschema 创建100000会议/1000人/1000000片段；仅SQL规模夹具，不是业务生产者证明，保留所有数据；进度日志 continue-d02-capacity-a6d5831b.log，进程/exec见本轮工具记录。探针运行期间不要Maven改target类。
+>
+> D02未完：容量最终结果/实际CAS界面/信息AI建议采纳拒绝。D03/D04 **局部重新生成仍未实现**（FuturePanels占位，FULL深层限制），必须完成，不能用全量生成冒充。D08完整原型对照和页面按钮矩阵仍OPEN。复制当前未保存正文已修复，18组件测试PASS；无截止日期不显示日期。新材料表删除IT5/5PASS。完整Java/完整web需最终重跑；旧WorkerShutdown反射夹具修复后尚无一次最新全Java绿色。保留B/C原容量FAILED，不可宣称其已通过。
+
+> **2026-11-01 04:11 持续执行检查点**：用户要求直到D全部完成，不暂停、不提问；main单agent继续。当前部署8f0e7372/V051；D01固定harness真实batch-cas04六组PASS，consumer `97919ef9-7613-4e4a-8f42-6a1c8c3e0a7c`引用primary05/e882两个仍ACTIVE来源。前3case503根因数组规范摘要误用对象根解析，已修复并保留RED。新隔离解析/三格式源定位/真实进程拒绝网络文件exec及64MiB解压限额已有12组合测试PASS，源码尚未部署；actualUI脚本`continue-material-ui-cas.mjs`待部署后运行。继续D01 UI→D04带材料模板→D05撤回/废止传播→D02/D03/D08，不把现有部分PASS当D完成。不要提前撤回primary05。所有外部请求8792，兄弟固定端口设计不变。
+
+## 2026-11-01 03:41 持续推进 D（本检查点不暂停）
+
+最新部署 `d1bdccd8ed94867555390bcc4a891359407e892bb53f420b508d5bc361efafce`，main V049；backend756682、worker756681、files756633；harness757020 固定8792/2525，材料签名请求现已透明桥接。准确任务状态 `.tools/local-app/task-current-status.json`。
+
+D06实际 `.tools/local-app/exports/cas-deployed-06/report.json` PASS：3格式固定发布版本、原键重放/冲突、full/Range；两次503与重试保留。此前重复ACTIVE心跳改发布映射时间已修复；数据库繁忙导致5秒证明短暂过期，现在拒读503/可重试，不再误记永久撤权。真实graph07持续poll三格式PASS、queue缺证明保留READY4PASS、HTTP503/403分类3PASS。D06撤回/依赖及完整UI尚未验收。
+
+D07实际CAS/浏览器 `deletions/cas-01` 5组PASS，原键丢响应刷新查回、在线清理COMPLETE、他人拒读/曾发布拒删；1440/1024截图，1024已检查。D04 `personal-templates/candidate-history-cas-04` 5组PASS：候选保留旧稿/阻断最终确认、错误指纹拒绝、历史恢复新版本、旧候选拒采用、新采用保留历史。旧cas02/03是验收脚本路径错误，修为disposals/history后全链路通过。
+
+D01新计划 `docs/superpowers/plans/2026-11-01-ama-d01-material-authority.md`。外部batch权限端点provider51PASS/harness41PASS/Java验签3+原治理5PASS，已部署。固定harness真实协议case `material-authority/protocol-cas-01` 200/200/409、验签与5pins/actor/itemsHash/原5秒期限通过。**尚未实现**应用按actor/meeting权限缓存、精确library持久化、原子批量引用；当前旧通用外部材料仍按UNKNOWN拒读，不能假装完成。下一步实施计划Task2/3，再验证D05材料失效传播，保留主发布fixture05cc...在D01引用验收前ACTIVE，不要提前撤回。
+
+长测最终FAILED与全部342798 ACK物理哈希PASS分别保留，详见下方。D总体未完成；继续执行，不能结束工作或只交报告。
+
+## 2026-11-01 继续任务：部署与长测最终结果
+
+当前按用户新指令持续推进 D，单 agent、main，不再执行旧暂停要求。D04–D07 已部署，main V049，签名 `3830f9e51685b570e5693d3b308ff1d323d2e5af24f2ed66316b4b9d00c0e111`；harness PID713085，固定8792/2525，已启用签名回调透明转发。
+
+长测最终失败：342798 ACK，12 归档、43200 归档分片，88 路错误；独立只读物理 SHA-256 对全部 ACK 分片复核通过（21939072000 字节）。物理复核不代表归档/API/容量通过。证据位于 `.tools/local-app/recording-load/continue-append-100-7200s-01/`，所有失败证据保留。
+
+当前回归：D06 `cas-deployed-02` 在原键202/冲突409后查询403，正在定位治理新鲜度与发布映射重复更新冲突，尚未通过；D07 `cas-01` 实际 CAS/浏览器验收运行。最新生产 Java783PASS、web460PASS、SDK/typecheckPASS，组件通过不等于阶段 D 完成。
+
+## 2026-11-01 03:08 接续检查点（持续开发，未宣布 D 完成）
+
+- 遵守 `/home/tanren/ama` main、单 agent；固定 harness 8792 / SMTP2525。当前用户要求推进到 D 全部完成，不能把此检查点当作暂停。
+- D07 新增 V049 独立删除账本与后台恢复清理；原键 DELETE 返回 202 + 稳定 deletionTaskId，GET `/api/v1/deletions/{id}` 只开放原所有者的无正文状态。受理封禁根/epoch 并取消普通任务；录音/暂停、未决或曾发布仍拒绝。
+- 真正清理本地受管对象、上传分片、未登记导出意图、录音前缀下实际孤儿键；受管键和录音前缀永久封禁后再删在线正文/索引/历史。SQL 按明确所有权/子表优先，保留最少 root/fence/ledger；不改知识库原件、其他会议、个人模板/专题。未知存储状态保持 FAILED + 原任务自动重试。
+- `LocalRecordingFenceIT` 3 PASS，`MeetingDeletionIT` 4 PASS（`continue-meeting-deletion-green5.log`）：原键回执、迟到 complete/PCM、孤儿 export、临时存储故障、租约重启、停用发起人、受理回滚。旧 `LocalKeyRetirementIT` 3 PASS / deletion recording guard2PASS。只升级独立 Cschema 到 V049，主库 V045 未迁移。
+- 新删除前端全局弹窗/原键恢复/身份隔离 4 PASS；全前端 460 PASS `continue-deletion-web-full1.log`；初次类型检查 PASS，最终 typecheck/SDK 再核对中。实际 API/CAS/浏览器需要待长测完结后正常部署。
+- 新发现 D06 普通编辑 guard 的已知任务类型遗漏 `MINUTES_EXPORT_V1`；正在用 `Task11PublicationWriteHistoryTest` 补 RED → GREEN，暂未修复/宣称通过。
+- 长测 runner508279 仍进行归档检查，342798 ACK，至少11归档通过、至少25错误；保持 frozen binary/files/worker/harness 不重启。不要声称100路两小时合格。完成后保留 report/ACK物理校验，再部署最新版本，先做原已发布 fixture 的三格式实际导出再治理撤回。
+
+## 2026-11-01 02:44 最新接续快照（继续运行至阶段 D 全部完成）
+
+- 用户最新授权：单 agent，AMA `main`，不建 worktree、不切分支、不问疑点；所有公司联调走兄弟 harness 固定8792/2525，可修兄弟源码但不将模拟协议当公司权威。历史“本次调度结束停下”已被最新继续到D完成指令覆盖。
+- **暂不部署/重启/迁移主环境**：`continue-append-100-7200s-01` PID508279仍在归档收尾；冻结后端签名9b5007f6、主V045不变。342798 ACK，15QueueFull、另归档403/ValueError，至少3归档实际哈希通过，整体失败不可写成100路通过。保留所有失败与数据；归档完成/超时后再更新运行实例。
+- D06 genuine graph04已闭合导出与原发布图共同读取；D05 genuine graph05增加真实DB命令状态测试均PASS。新治理API/签名回调/后台持久对账、5秒签名有效性门禁、原始deadline传递到长流、前端原键恢复/全局治理窗口均已在源码。
+- 最近验证：生产Java778PASS，新增材料依赖有效性3PASS；Web456PASS、typecheck和SDK一致PASS；真实DB图场景genuine05PASS。真实CAS/harness治理、下载撤权、D06 API导出、D04材料模板/候选历史及浏览器仍待部署后跑。
+- 重要边界：缓存的KNOWLEDGE材料有界追溯真实本地发布映射和原签名deadline；未映射的外部知识库来源当前UNKNOWN拒读，D01须补通用真实引用权限/有效性验证。治理协议与模型结果仍是受控联调，非真实模型质量或公司契约认证。
+- D07仅key永久退休、活动录音拒删组件完成；仍须独立持久清理任务、完整存储清单/录音前缀迟到写栅栏、在线SQL正文清理、202状态API/UI、实际重启与故障验收。D01/D02/D03/D04/D08其余开放项仍依原矩阵推进。
+- 测试证据与当前状态：`.superpowers/sdd/2026-10-21-ama-phase-d/progress.md`、`.tools/local-app/task-current-status.json`。本节是活动中检查点，不是阶段完成声明。
+
+> **当前接续 2026-11-01：继续全部任务，未停止。** 单 agent、根目录 main。固定harness8792/2525 PID471583，v2协议头实际RED→36测试→GREEN。个人模板全链12PASS、原生UI丢ACK恢复/CRUD4PASS；当前部署9b5007f6。原生真SIGKILL10PASS、100/300/60秒3000分片100归档PASS。新完整7200长测PID508279，case `recording-load/continue-append-100-7200s-01`，冻结运行角色/双bridge/固定端口，结束前禁止正常deploy/restart。源码另有未部署的D04带材料模板切换修复7项GREEN；candidate/history真实CAS因长测期间数据库连接争用在初始GET503退出，未提交修改，待长测后重验。源码工作/定向测试可继续并记录共享主机活动，不冒充模型质量或最新源码长测。B/C/D仍NOTACCEPTED；D执行ledger已建立。
+
+当前补充：D06 源码已接入 API/worker/UI（尚未部署）；Java 最近全量 765 PASS、Web 450 PASS。真实已发布 CAS 会议的 103 行有界来源闭包复制到独立 `ama_c_recording_f16d02fdc26e`，`SavedMinutesExportGraphIT` 1 场景通过三格式队列/转换/登记/完整及 Range 下载，来源改动/治理 pending 拒读；实际 PDF 与 DOCX→PDF 首页面已查看，8 个中文主题及 emoji 正常。日志 `continue-export-genuine-graph-green2.log`，产物 `.tools/local-app/exports/genuine-graph-02/`。仍待长测后新 API/CAS 和真实浏览器验收，不将组件通过当 D06 完成。D07 local 永久键退休 3 PASS、删除录音状态守卫 2 PASS；完整后台清理未实现。D05 provider 治理协议 9 场景及既有全回归 40 PASS，harness 新受控治理转发全套 37 PASS，固定端口/运行实例未改；应用侧持久治理、对账/回调与 UI 仍在开发。长测已出现 QueueFull，约 92 分钟时 10 路错误，继续完成后续证据；本轮不能判 100 路全部通过。
+
+> **历史停止记录 2026-10-31 23:28：当时按用户要求停止；已被 2026-11-01 的“继续至阶段 D 完成”指令覆盖。以下状态仅供历史追溯。**
+
+完整接续文档：[本轮停止位置、证据与后续顺序](docs/development/task-continuation-2026-10-31-2328.md)。机器状态：`.tools/local-app/task-continuation-status-20261031-2328.json`（0600，不含凭据）。当前无Maven/测试JVM、CAS验收脚本或录音压测。既有开发服务保留运行，8183就绪200/UP；没有新部署、长测、后台自动调度或数据清理。
+
+最后完成的是个人模板初始化事件修复：实际CAS先在回执builtin-only校验503，修复后第二个case在outbox builtin-only校验400；均有JFR定位和原失败报告。最新事件引用校验改为本人父/子/当前生命周期一致且未删除，真实MySQL RED→GREEN，`PersonalTemplate*IT`21项全部通过（含继承用例，不是完整业务或21个独立功能），日志`resume-personal-template-initial-event-green.log`。**最新事件修复尚未部署**；当前线上仍会在该初始化事件处失败，尚未进入此批v2模型请求。harness新协议header缺口尚未实际触发/修复，不要归因或提前修改。
+
+工作区签名`ad062c02d605eb4cdb49fbc4e6791ebba485ff5701e87db96fac2f1bdcc2c4ef`；部署签名`744bfad00d97dd7b828c901d332cc4c96393908e6d3e5ad3fefb20a117816e3a`。最近完整Java734PASS在最新事件修复之前；Web445/type/build/APIbytesPASS；录音78PASS；load Python18PASS。当前main、单agent，无新分支/worktree/提交/重置。主库46443/V045/35成功0失败，Cschema`ama_c_recording_1ef37ff530a7`V045，API池32/file32，cas/knowledge/model全部8792；兄弟harness195659固定8792/2525、原mock.db和bridge46969/47091保留。
+
+旧7200长测实际在5317.307秒失败中止，89路producer溢出、backgroundFatal0；最终230354 ACK的14742656000字节另行只读物理SHA全匹配，不能替代两小时/归档验收，旧report继续passed=false。新版native/100路短测/完整长测未启动。B/C/D均NOTACCEPTED；B矩阵5PASS/13OPEN/2DEFERRED_VOICE，MIN-01仍OPEN；C02/C03自动与speaker/C06持久字幕、D治理/导出/物理清理/视觉等继续见完整接续文档。
+
+收到“继续任务”后先核实现场和签名，补最新事件修复的全量验证/正常部署→新目录真实CAS模板全链→实际证明后才修harnessheader→模板UI/像素→新版nativeSIGKILL/100路短测/完整7200→C及B/D剩余。停止期间不自动执行这些步骤。
+
+> **历史接续 2026-10-31 23:14：append/模板新源码已部署，真实harness个人模板链路正在联调；旧7200长测失败保留。**
+
+当前部署签名`1f226000b78b62597de84948172d3ba11304483f3744790a00d3cc574e6ef2d3`与源码一致，所有角色存活、8183 readiness200/UP，API32/file32，外部cas/knowledge/model均8792，harness195659固定8792/2525及原data/mock.db/双bridge未改。正常startup5.507秒。主库已随本次正常启动迁移V045（需只读查账确认记录数），CschemaV045。当前新个人模板真实CAS脚本`tools/dev/personal_templates_cas_integration.mjs`运行于`personal-templates/current-v2-harness-01`；已通过CRUD/8主题/原键/过期/非法与独立foreign403。TXT→RAW→初始化/生成→删除后历史→最终/发布及UI还在执行，先查日志再推断。预部署同脚本POST403 RED报告保留。
+
+append最终SQL修复实际15GREEN（全history3600行重试传回5行，15次pooledload对比54000→45行，最近median21.50→15.83ms；只属组件测量）。先前更慢33ms方案及SQLplans完整保留。MySQL大小写排序规则绕过老分段校验真实RED1→BINARY分段比较修复。当前全录音IT78PASS，包括新append15/旧协议7/WS5/access6/lease7/connection1/归档及存储37；模板IT17PASS（含继承的录音ACL6，不称17个独立模板功能）。生产Java当前734PASS、Web当前445PASS、typecheck/build/APIbytesPASS、runtime配置Python21PASS、loadPython18PASS。自审记录recording-append-self-review.md，受用户单agent约束，非独立审查。没有新的两小时case，未重跑native/100路pilot；全B/C/D及MIN-01仍未验收。
+
+> **历史接续 2026-10-31 22:43：7200 长测实际失败后中止，正在修复；个人模板源码仍未部署。**
+
+本节覆盖下方仍写“长测运行中”的历史状态。case `recording-load/resume-harness-100-7200s` 驱动 PID282411 已在5317.307秒以SIGINT退出，仅信号测试驱动，未停止任何应用角色或删除业务数据。中止前230264 ACK/89错误，最终observations捕获230354 ACK、89路producer额外proof未入队，backgroundFatalErrors=0。当前report.json明确passed=false、fullRequestedDurationCompleted=false、POST_ABORT_AGGREGATION_USING_FROZEN_ORIGINAL_REPORT_SOURCE；未归档的ACK尚未回读，missingAckedChunks不能解释成已确认丢失。abort-decision.json、observations、原始events及JFR全部保留。
+
+根因调查：75分钟实际JFR显示API执行热点为JdbcRecordingPersistence.load及其proof mapper、文件服务574个fsync执行样本；同时API池等待、文件PUT占连接。5192秒时72路采集时钟缺口超过300块队列。驱动producer的QueueFull无法放入sentinel，consumer仍可永久等待，须先RED→GREEN修复此挂起。不得只增大pool/timeout/queue或放松fsync/证明校验。下一步分析实际JFR调用链、用可复现基准确认逐块全历史加载/目录同步各自成本，单变量修复后短测，再新目录完整7200秒。旧失败不覆盖。应用角色冻结要求已随失败case退出结束；修改部署仍须完整验证且不破坏已ACK数据。
+
+模板首次初始化/可生成capability、v2 publication renderer、append-only LocalPersonalTemplatesSetup源码已续做，定向测试通过见resume-personal-template-initial-selection-green.log、publication-renderer-green2.log、local-prepare-green.log；完整验证及真实CAS/像素未执行。实际helper clone归档检查因私有properties Unicode转义解析KeyError先失败，需解码键值后新日志重跑，尚未发生归档修改。harness新GET协议header仍待实际8792复现后修复。B/C/D整体及MIN-01仍未验收。
+
+> **历史接续 2026-10-31 22:20：7200 长测继续；新个人模板源码未部署。**
+
+负载 runner PID282411，进度见case progress.json（本记录时约4000秒、18.7万ACK、fatal0）。实际注入代码在duration/2，即3600秒执行API_SIGKILL，6秒后启动同一二进制（不是此前brief推测的45%）；events.ndjson保留两个真实事件。管理就绪8183实际返回UP。仍须等7200采集、全部ACK和100归档/SHA完成，禁止正常deploy/stop或改harness固定8792/2525、bridge配置；新源码不属于本次冻结长测。允许记录定向Cschema/组件验证，非隔离硬件/模型容量。
+
+模板实际Cschema V045：CRUD7+metadata发现1+HTTP9（其中6为录音ACL）=17PASS，resume-personal-template-budget-green.log；主库仍V044。LongText读取前可由组合目录扣除当前acquisition预算。模板生命周期已纳入metadata discovery及真实S/F锁定capture；新选择的owner在私有正文转移前拒绝foreign，deleted/superseded拒绝，旧fixed7无state的版本保留兼容。
+协议/档案组合23PASS；后续renderer/client组合64中63通过、旧Task09ControlledHttpTest.actualHttpDuplicateRetainsOneDurableResult一次connect timeout，保留失败；同条件单独1PASS，随后recorded-lookup-green组合40+（按XML/log实际计数）PASS。原v1请求/七类主题/哈希golden不变，v2单独request hash域与GET协议header，控制模型身份/全局额度不分裂。组合档案与个人目录capability只能由配套v2renderer+model允许。新的catalog/selection组合PASS（resume-personal-template-catalog-green.log），再结合当前预算把个人模板纳入会议目录，v1可见但不可生成。
+
+前端SDK/目录3+3、私有命令4、app身份/退出组合8、dialog1、workspace2、既有MinutesWorkspace加路由保护18均PASS（各resume-personal-template-*.log）。当前新增模板弹窗/管理/CRUD已接controller/App；创建提交不确定时原key/body/themes保持只读，刷新不自动应用到另一会议；保存后会议选择失败诚实保留已创建模板。实际UI/CAS/像素尚未跑，typecheck/完整Web/Java也在长测后执行。矩阵MIN-01及B/C/D整体仍NOTACCEPTED。
+
+v2受控提供方第一次真实响应仍v1，已RED→修复版本绑定；布局缺少章节名亦RED→GREEN（model-layout-green）。提供方仍合成测试输出，不签收真实LLM质量。新的publication renderer允许v2个人模板投影完全相同已保存正文/标题，v1及foreign/主题0、9仍拒绝；首次GREEN用例因CanonicalJson将换行规范编码而非短转义导致fixture字符串断言失败，已改成预期正文的规范JSON片段，当前publication-renderer-green2正在运行，查结果再称通过。
+
+紧接着做：1）个人模板首次初始化目前仍default-only，需要在v2下复用生命周期/owner/布局校验，不能让目录selectable=true却初始化失败；2）新增LocalPersonalTemplatesSetup append-only安装，旧archives不覆盖，当前old v1请求查回仍走prepareRecordedAtIndex；3）完整current Web/type/build/API和Java验证待负载结束；4）部署32/32且所有外部origins8792，真实CAS个人模板/生成/候选/发布及三视口原型像素。harness现有minutes bridge GET白名单尚未加新X-Ama-Minutes-Protocol，必须先从真实8792请求确认缺口再同步最小修复+兄弟测试，不能把便利模拟协议当企业权威。
+
+> **2026-10-31 接续：两小时录音仍运行；模板源码/新录音鉴权修复均未部署。**
+
+当前长测 runner PID282411（每次按 runner/process 记录核实），固定100录音/300CAS/7200秒，仍须等采集、全部ACK、100归档与原始SHA完整回读。冻结API/worker/file角色及8792/2525 harness配置，不得正常deploy/stop。开发仅定向自有C schema，活动详case development-activity.json，不是隔离硬件/模型容量。
+
+新录音鉴权顺序修复GREEN：RecordingService11+RecordingController6+真实Socket5+Access6+WriterLease7，共35通过，证据resume-recording-preauthorization-green.log；损坏私有PCM仍owner503/foreign403，scope绑定与admission→session锁序保留。字幕发布组件针对失败投递不进入replay、重复幂等/冲突与未知cursor的回归GREEN（resume-subtitle-replay-green.log）；C06持久生产链仍未接入，不能称字幕完成。
+
+个人模板按既有B后续/D04继续：V045只迁移自有Cschema，主库仍V044。不可变template_revision+私有生命周期/原回执，1/8主题、0/9/坏Unicode拒绝、NFC同名、过期冲突、删除保留历史/原键不复活、管理员越权及disabled身份重验、分页实际MySQL6PASS（resume-personal-template-green2.log）。实际HTTP新端点先403 RED，接线后9PASS（3模板+6继承录音ACL；resume-personal-template-http-green.log），SDK3PASS+OpenAPI生成（resume-personal-template-sdk-green.log）。模板目前只有持久化/HTTP/SDK，UI/可生成能力尚未完成，MIN-01仍OPEN。
+
+为保持受控七类v1旧输入/旧hash，新增显式个人主题协议v2及renderer档案；底层controlled模型身份与跨进程全局额度保持同一个MODEL，不按协议分裂额度。新协议/档案单测RED已保留；组合GREEN正在resume-personal-template-protocol-archives-green2.log，查结果后再改源码。第一次protocol-green因在编译期间加入下一批档案测试而失败，另有Ref导入歧义编译失败，均保留；不写成已通过。下一步完成renderer/preparation/原始lookup版本绑定、当前模板选择与UI，长测结束后完整回归/部署/固定harness真CAS生成像素。不得把模拟成功当企业质量。
+
+> **长测仍在进行；新录音ACL修复只在工作区验证，尚未部署。**
+
+2026-10-31 长测期间当前开发：发现RecordingController/lease/WS握手在当前会议ACL之前调用完整service.session，从而读取所有PCM证明；真实Cschema HTTP回归已RED：损坏私有legacy PCM时非成员GET503而非403（resume-recording-preauthorization-red.log）。新增metadata-only meetingId路由，在当前会议gate内以admission→session顺序锁定并核对实际meeting绑定后才执行原完整证明/租约/变更；不弱化owner对损坏PCM的503。Core纯scope-bound测试先缺方法RED，现actual HTTP5/WS5/Lease4与core/API定向组合正在resume-recording-preauthorization-green.log验证。新代码未部署，7200冻结API仍旧签名；不得混用为当前修复已在线。活动记录在case development-activity.json，仅Cschema，非隔离硬件容量证明。
+
+> **当前执行更新：7200秒新case进行中，详情以下最新接续。**
+
+2026-10-31 21:03接续：当前源码专题CAS10+三视口72精确零差异、知识库固定harness6+三视口12精确零差异已签收对应矩阵行（TOPIC/LIB PASS；治理移除D05尚未完成，整个B仍NOTACCEPTED）。原生真SIGKILL10PASS，11.8秒恢复、17原始分片957416字节WAV逐帧SHA。新的100/300/60秒实际协议短测完整PASS：3000sent/ACK/原始SHA/100归档，missingACK0/fatal0，2273瞬态、ACKp95约20.08秒，API真SIGKILL及100计划断线保留；不是字幕性能。证据recording-load/resume-harness-100-60s-02/report.json。前次setup300用户后ModuleNotFoundError属于本轮helper将venv路径.resolve丢环境的错误，原失败保留，未发送PCM；新CLI依赖前置检查RED→GREEN14测试且在任何role/CAS变更前拒绝缺依赖，helper保留venv绝对词法路径。
+完整100录音/300CAS/7200秒新case已按先短后长启动，含真正APIkill（模型不安装、仅协议）。Runner resume-harness-load-100-7200s-runner.json，日志resume-harness-load-100-7200s.log，输出recording-load/resume-harness-100-7200s。按runner核实PID/状态，未完成前不能声称两小时通过。可用磁盘约894GB，预估原片+完整归档约58GB已检查。所有运行角色二进制冻结，禁止正常deploy/stop或改运行配置直到整个case结束；允许有记录的少量定向开发/验证，不能称隔离硬件/真实模型容量。旧FAIL_INTERRUPTED不覆盖。
+API32/files32、主DB46443/V044、专用Cschema ama_c_recording_1ef37ff530a7。外部CAS/知识库/受控纪要模型全部经过固定8792，harness双bridge原始协议转发、SMTP2525不改；harness当前修改全35测试通过，AMA启动器48测试44PASS/4SKIP，Java698、Web433/type/build/APIbytes通过。新SpeechPipelineIT固定8792五阶段1PASS（short采集完成+全部ACK后单独记录Maven活动），只证明模拟协议。B其余矩阵/C02业务与额度/阶段恢复、C03AI与speaker、C06持久字幕及D余项仍需继续。C02细化brief c02-harness-runtime-next.md，不能以组件冒充生产。
+
+---
+> **2026-10-31 当前执行更新：用户已再次明确所有外部接口必须走固定8792/2525的兄弟harness，兼容问题可同步修复兄弟代码；模拟器不作为真实权威。** 新probe真实7PASS、专题MySQL10PASS、录音续租13PASS、生产Java698PASS，Web432/type/build/APIbytesPASS。存储枚举导致的120秒失败已保留；新probe正常部署后API12.26秒启动，主库46443/V044、API32/file32。当前源码与部署签名一致（见state），新专题CAS10PASS `b-followup/resume-topic-bound-20261031-02/report.json`。知识库在切到harness后实际404，确认harness启动缺少现有controlled bridge配置；仅重启已核实9436进程到同8792/2525+原data/mock.db+bridge46969，不改固定端口。新runner记录`resume-harness-bridge-process.json`。准备重跑知识库新路径/撤权/三视口，再原生SIGKILL、100路短测和完整7200；当前无C07负载。公司TCP不可达不再作为联调阻塞，全部后续按harness模拟协议推进。B/C/D仍未完成，持续执行。
+
+# 当前接续状态：用户已要求继续全部后续任务（2026-10-31）
+
+本节取代下方历史停止指令。当前在 `/home/tanren/ama` main 接续，使用既有设计/计划单 agent 执行；不建立分支或工作树。只读现场核实自有 MySQL 容器已于2026-10-31T11:54:40Z重新创建，端口46443；主库V044/迁移34条/失败0，初始4场会议。仅主库存在，原C测试schema未恢复；不能宣称旧数据恢复。当前运行源码与工作区957cda0…一致，API pool20/file workers16。旧FAIL_INTERRUPTED长测及其他历史证据保留。
+
+新真实CAS专题9项通过，报告 `.tools/local-app/b-followup/resume-topic-20261031-01/report.json`，包括批量已提交丢ACK刷新原请求、非空摘要/删除409、会议删除后退役归组与空专题删除。正在重验三视口像素，随后新发布夹具→知识库位置/权限/分页/刷新/像素，再继续B/C/D余项。B/C仍NOT ACCEPTED。数据库重建并非本轮执行，不将历史签名证据重标为当前完成。
+
+---
+
 # 当前接续状态：用户要求停止（2026-10-31 18:58）
 
 **本节优先于下方所有历史记录。开发、验证和调度均已停止。** 用户已确认误删容器、镜像和持久卷，数据库45907拒绝连接，原自有MySQL容器不可查。未重建环境、拉镜像、建卷或重新部署。原主库/C测试库V044是事故前状态，不能视为当前仍存在。其余AMA OS进程仍活，业务依赖DB不可用；不要把进程活着写成服务健康。

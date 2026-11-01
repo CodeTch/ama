@@ -248,12 +248,33 @@ def file_worker_threads():
     return int(value)
 
 
+def integration_origins():
+    values = {'knowledge': os.environ.get('AMA_INTEGRATION_KNOWLEDGE_ORIGIN') or None,
+              'model': os.environ.get('AMA_INTEGRATION_MODEL_ORIGIN') or None}
+    values['cas'] = os.environ.get('AMA_CAS_ORIGIN', values['knowledge'] or 'http://127.0.0.1:8792')
+    for name, value in values.items():
+        if value is not None:
+            match = re.fullmatch(r'http://127\.0\.0\.1:([1-9][0-9]{2,4})', value)
+            if not match or not 1024 <= int(match[1]) <= 65535:
+                raise ValueError('Explicit bounded loopback integration origin required: ' + name)
+    return values
+
+
+def minutes_scenario():
+    value = os.environ.get('AMA_LOCAL_MINUTES_SCENARIO', 'standard')
+    if value not in {'standard', 'sensitive'}:
+        raise ValueError('Explicit standard or sensitive local minutes scenario required')
+    return value
+
+
 def start(state):
     pool_maximum = database_pool_maximum()
     file_workers = file_worker_threads()
+    origins = integration_origins()
+    scenario = minutes_scenario()
     configure_ports(state, None, None, None)
     signature = source_signature()
-    if all(alive(state.get(role)) for role in SERVICE_ROLES) and state.get('sourceSignature') == signature and state.get('activePorts') == state.get('ports') and state.get('databasePoolMaximum', 20) == pool_maximum and state.get('fileWorkerThreads', 16) == file_workers:
+    if all(alive(state.get(role)) for role in SERVICE_ROLES) and state.get('sourceSignature') == signature and state.get('activePorts') == state.get('ports') and state.get('databasePoolMaximum', 20) == pool_maximum and state.get('fileWorkerThreads', 16) == file_workers and state.get('integrationOrigins') == origins and state.get('minutesScenario', 'standard') == scenario:
         current_port = database(state)
         if state.get('databasePort') == current_port:
             status(state)
@@ -304,8 +325,9 @@ def start(state):
             state[key] = str(uuid.uuid4())
     save(RUNTIME / 'state.json', state)
     state['fileWorkerThreads'] = file_workers
+    state['minutesScenario'] = scenario
     settings = prepare(RUNTIME, state, java, env, classpath)
-    integration_origin = os.environ.get('AMA_INTEGRATION_KNOWLEDGE_ORIGIN')
+    integration_origin = origins['knowledge']
     if integration_origin:
         if not re.fullmatch(r'http://127\.0\.0\.1:[1-9][0-9]{2,4}', integration_origin):
             raise RuntimeError('AMA_INTEGRATION_KNOWLEDGE_ORIGIN must be a pinned loopback HTTP origin')
@@ -318,11 +340,20 @@ def start(state):
     minutes, model_ready = prepare_minutes(RUNTIME, state, java, env, classpath)
     settings.update({key.removeprefix('--').split('=', 1)[0]: key.split('=', 1)[1] for key in options})
     settings.update(minutes)
+    settings.update({
+        'exports.enabled': 'true',
+        'publication.governance-enabled': 'true',
+        'exports.work-root': RUNTIME / 'export-work',
+        'exports.cjk-font': os.environ.get('AMA_EXPORT_CJK_FONT', '/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc'),
+        'exports.unicode-font': os.environ.get('AMA_EXPORT_UNICODE_FONT', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'),
+    })
+    if origins['model']:
+        settings['minutes.provider-origin'] = origins['model']
     settings['spring.datasource.hikari.maximum-pool-size'] = pool_maximum
     if integration_origin:
         settings['publication.origin'] = integration_origin
         settings['publication.client-identities'] = RUNTIME / 'knowledge/application.json'
-    cas_origin = os.environ.get('AMA_CAS_ORIGIN', integration_origin or 'http://127.0.0.1:8792')
+    cas_origin = origins['cas']
     if not re.fullmatch(r'http://127\.0\.0\.1:[1-9][0-9]{2,4}', cas_origin):
         raise RuntimeError('AMA_CAS_ORIGIN must be a pinned loopback HTTP origin')
     settings.update({
@@ -402,6 +433,7 @@ def start(state):
     state['activePorts'] = dict(state['ports'])
     state['sourceSignature'] = signature
     state['databasePoolMaximum'] = pool_maximum
+    state['integrationOrigins'] = origins
     state['frontend'] = launch([npm, '--prefix', 'web', 'run', 'dev', '--', '--port', str(state['ports']['web']), '--strictPort'], env, 'frontend.log')
     save(RUNTIME / 'state.json', state)
     deadline = time.monotonic() + 30

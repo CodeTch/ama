@@ -34,5 +34,6 @@ public final class MeetingContracts {
     }
     public static final class RevisionExhausted extends RuntimeException {}
     public static final class Conflict extends RuntimeException { public Conflict() { super("Meeting revision or request conflicts"); } }
+    public static final class TopicNotPublished extends RuntimeException { public TopicNotPublished(){super("Only published meetings can be added to a personal topic");} }
     public static final class CategoryUnavailable extends RuntimeException { public CategoryUnavailable() { super("Category dictionary unavailable"); } }
 }

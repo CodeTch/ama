@@ -1,7 +1,7 @@
 package ama.api;
 import jakarta.servlet.http.HttpServletResponse;import java.io.IOException;import org.springframework.web.bind.annotation.*;
 /** Publication failures remain on the business route, never a secondary /error dispatch. */
-@RestControllerAdvice(assignableTypes={PublicationController.class,FinalConfirmationController.class,PublicationDiscoveryController.class,PublicationDocumentController.class})
+@RestControllerAdvice(assignableTypes={PublicationController.class,FinalConfirmationController.class,PublicationDiscoveryController.class,PublicationDocumentController.class,GovernanceController.class,KnowledgeGovernanceEventController.class})
 @org.springframework.core.annotation.Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE)
 class PublicationErrors {
  private void write(HttpServletResponse response,int status,String code)throws IOException{response.setHeader("Cache-Control","private, no-store");var privateResponse=new jakarta.servlet.http.HttpServletResponseWrapper(response){@Override public void setHeader(String name,String value){super.setHeader(name,name.equalsIgnoreCase("Cache-Control")?"private, no-store":value);}};BusinessErrors.write(privateResponse,status,code,"Publication request could not be completed");}

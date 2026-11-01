@@ -111,6 +111,40 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             return new Mutation(id,version);
         });
     }
+    /** Immutable proposal value is supplied only by the configured, provenance-verifying reader. */
+    public Mutation decideSuggestion(Actor actor,String id,String suggestion,String key,long expected,String decision,
+            java.util.function.Supplier<ama.transcript.JdbcMinutesInfoSuggestions.Prepared> source,String trace){
+        independent();ama.contract.OutboxContracts.uuid(id);ama.contract.OutboxContracts.uuid(suggestion);MeetingService.key(key);ama.contract.MeetingContracts.revision(expected);
+        if(!Set.of("ACCEPT","REJECT").contains(decision))throw new IllegalArgumentException("Explicit suggestion decision required");
+        ama.transcript.JdbcMinutesInfoSuggestions.Prepared value=null;RuntimeException preparationFailure=null;
+        if(decision.equals("ACCEPT"))try{value=Objects.requireNonNull(source.get());}catch(RuntimeException unavailable){preparationFailure=unavailable;}
+        final var prepared=value;final var problem=preparationFailure;var transitionPlan=decision.equals("ACCEPT")?prepareMinutes(actor,id):null;
+        return tx.required(()->{
+            var replay=claim(actor,id,"INFO_SUGGESTION_DECIDE",key,MeetingDigests.fields("ama.info-suggestion-decision.v1",suggestion,Long.toString(expected),decision));
+            var identities=access.tryLockHistoricalIdentities(actor,List.of(),false).orElseThrow(AccessDeniedException::new);
+            var held=(JdbcMeetingAccess.Held)access.lockPrepared(identities,id,false).orElseThrow(AccessDeniedException::new);access.require(held,Action.EDIT);checkReplay(replay);
+            if(replay.result()!=null){var receipt=j.queryForMap("SELECT meeting_id,decided_revision FROM meeting_info_suggestion WHERE id=? AND state<>'PENDING'",replay.result());if(!id.equals(receipt.get("meeting_id"))||replay.status()!=200)throw new IllegalStateException("Invalid suggestion receipt");return new Mutation(id,((Number)receipt.get("decided_revision")).longValue());}
+            writable(held,expected);
+            var indexes=j.queryForList("SELECT candidate_id,field,state FROM meeting_info_suggestion WHERE id=? AND meeting_id=? FOR UPDATE",suggestion,id);
+            if(indexes.size()!=1)throw new AccessDeniedException();var selected=indexes.getFirst();if(!"PENDING".equals(selected.get("state")))throw new Conflict();
+            long version=expected;
+            if(decision.equals("ACCEPT")){
+                if(problem!=null)throw problem;if(minutes==null)throw new ama.contract.TranscriptContracts.Failure(503,"MINUTES_TRANSITION_UNAVAILABLE");if(transitionPlan.failure()!=null)throw transitionPlan.failure();
+                prepared.requireFor(actor,id,suggestion,expected,j.queryForObject("SELECT transcript_confirmation_id FROM meeting WHERE id=?",String.class,id));
+                if(!prepared.candidateId().equals(selected.get("candidate_id"))||!prepared.field().equals(selected.get("field")))throw new Conflict();
+                var budget=new WorkspaceReadBudget(readLimits,()->Thread.currentThread().isInterrupted());var metadata=new BoundedMeetingMetadata(this.source,access,actor,id,held,budget);
+                var info=metadata.read(metadata.capture("meeting_info_revision","name category_id summary actual_meeting_date","id=? AND meeting_id=?",1,held.root.infoId(),id));if(info.size()!=1)throw new WorkspaceReadBudget.Unavailable();var old=info.getFirst();
+                var transition=minutes.lockMinutesTransition(transitionPlan.value(),actor,id,held);version=expected+1;String infoId=uuid();String date=(String)old.get("actual_meeting_date");
+                String name=prepared.field().equals("NAME")?prepared.value():(String)old.get("name"),summary=prepared.field().equals("SUMMARY")?prepared.value():(String)old.get("summary");
+                insertInfo(infoId,id,version,name,(String)old.get("category_id"),summary,date==null?null:LocalDate.parse(date),actor.enterpriseId());
+                if(j.update("UPDATE meeting SET revision=?,info_revision_id=?,final_confirmation_id=NULL,updated_at=UTC_TIMESTAMP(6) WHERE id=? AND revision=?",version,infoId,id,expected)!=1)throw new Conflict();
+                if(j.update("UPDATE meeting_search_projection SET info_revision_id=?,name_search=?,meeting_revision=? WHERE meeting_id=?",infoId,name,version,id)!=1)throw new WorkspaceReadBudget.Unavailable();
+                fences.advance(held.subject,version,held.root.cancelEpoch(),false);minutes.finishMinutesTransition(transition,version);
+            }
+            if(j.update("UPDATE meeting_info_suggestion SET state=?,decided_by=?,decided_at=UTC_TIMESTAMP(6),decided_revision=? WHERE id=? AND meeting_id=? AND state='PENDING'",decision.equals("ACCEPT")?"ACCEPTED":"REJECTED",actor.enterpriseId(),version,suggestion,id)!=1)throw new Conflict();
+            complete(replay,suggestion,200);finish(actor,id,version,"MEETING_INFO_SUGGESTION_DECIDED","MEETING_INFO_SUGGESTION",suggestion,trace);return new Mutation(id,version);
+        });
+    }
     @Override public Mutation confirm(Actor actor,String id,String key,ConfirmRoster request,String trace){
         independent();var affected=affected(id);
         var prepared=prepareMinutes(actor,id);
@@ -157,11 +191,17 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             if(replay.result()!=null){requireDeleteReplayAccess(actor,replay.result());checkReplay(replay);return restoreMeeting(replay);}
             var identities=access.tryLockHistoricalIdentities(actor,List.of(),false).orElseThrow(AccessDeniedException::new);
             var held=(JdbcMeetingAccess.Held)access.lockPrepared(identities,id,false).orElseThrow(AccessDeniedException::new);
-            access.require(held,Action.EDIT);checkReplay(replay);
+            access.require(held,Action.MANAGE);checkReplay(replay);
             var root=held.root;
             if(root.revision()!=request.expectedRevision()||root.lifecycle().equals("DELETED")||root.governance().equals("WITHDRAW_PENDING")||root.governance().equals("WITHDRAWN")||root.governance().equals("OBSOLETE_PENDING")||root.governance().equals("OBSOLETE")||root.published()||root.stage().equals("PUBLISHED"))throw new Conflict();
-            if(j.queryForObject("SELECT COUNT(*) FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? AND state IN ('READY','RUNNING','RECONCILING')",Long.class,id)>0
-                    ||j.queryForObject("SELECT COUNT(*) FROM upload_session WHERE meeting_id=? AND state IN ('OPEN','FINALIZING')",Long.class,id)>0)throw new Conflict();
+            // Recording admission and state transitions acquire this same meeting root first.
+            // Only a positively finished session is eligible; an unknown state is not completion.
+            if(!j.queryForList("SELECT session_id FROM recording_session WHERE meeting_id=? AND state<>'FINISHED' ORDER BY session_id LIMIT 1 FOR UPDATE",String.class,id).isEmpty())throw new Conflict();
+            // An unresolved publication may already have external effect. Ordinary local work
+            // and uploads are instead cancelled by the same root/epoch fence as acceptance.
+            if(!j.queryForList("SELECT id FROM publication WHERE meeting_id=? AND state<>'FAILED' LIMIT 1 FOR UPDATE",String.class,id).isEmpty()
+                    ||!j.queryForList("SELECT a.id FROM publication_attempt a JOIN publication p ON p.id=a.publication_id WHERE p.meeting_id=? AND a.outcome<>'FAILED' LIMIT 1 FOR UPDATE",String.class,id).isEmpty()
+                    ||!j.queryForList("SELECT id FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? AND task_type='KNOWLEDGE_PUBLISH_V1' AND state NOT IN ('FAILED','CANCELLED','STALE') LIMIT 1 FOR UPDATE",String.class,id).isEmpty())throw new Conflict();
             if(root.revision()==Long.MAX_VALUE-1||root.cancelEpoch()==Long.MAX_VALUE-1)throw new RevisionExhausted();
             long revision=root.revision()+1,epoch=root.cancelEpoch()+1;
             // Personal grouping is a current derived association. Retire it in the same
@@ -169,7 +209,10 @@ public final class JdbcMeetingRepository implements MeetingRepository {
             j.update("DELETE FROM meeting_topic WHERE meeting_id=?",id);
             j.update("UPDATE meeting SET lifecycle='DELETED',revision=?,cancel_epoch=?,updated_at=UTC_TIMESTAMP(6) WHERE id=?",revision,epoch,id);
             fences.advance(held.subject,revision,epoch,true);
-            complete(replay,id,200);
+            j.queryForList("SELECT id FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? ORDER BY id FOR UPDATE",String.class,id);
+            j.update("UPDATE durable_task SET state='CANCELLED',lease_owner=NULL,expires_at=NULL,last_error='MEETING_DELETED' WHERE subject_kind='MEETING' AND subject_id=? AND state IN ('READY','RUNNING','RECONCILING')",id);
+            j.update("INSERT INTO meeting_deletion(id,meeting_id,requested_by,accepted_revision,cancel_epoch,state,phase,available_at,created_at) VALUES (?,?,?,?,?,'PENDING','INVENTORY',UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))",uuid(),id,actor.enterpriseId(),revision,epoch);
+            complete(replay,id,202);
             audit.append(new AuditEvent(actor.enterpriseId(),"MEETING_DELETED",id,revision,"SUCCEEDED",trace,Instant.now()));
             outbox.append(new EventDraft("MEETING_DELETED",null,new SubjectRef("MEETING",id),revision,new Reference("MEETING_LIFECYCLE",id)));
             outbox.flush();
@@ -193,7 +236,7 @@ public final class JdbcMeetingRepository implements MeetingRepository {
     }
     private Mutation restoreMeeting(Replay replay){
         var rows=j.query("SELECT id,revision FROM meeting WHERE id=?",(r,n)->new Mutation(r.getString(1),r.getLong(2)),replay.result());
-        if(rows.size()!=1||replay.status()!=200)throw new IllegalStateException("Invalid deleted meeting receipt");return rows.getFirst();
+        if(rows.size()!=1||(replay.status()!=200&&replay.status()!=202))throw new IllegalStateException("Invalid deleted meeting receipt");return rows.getFirst();
     }
     private void requireDeleteReplayAccess(Actor actor,String meeting){
         var identities=access.tryLockHistoricalIdentities(actor,List.of(),false).orElseThrow(AccessDeniedException::new);

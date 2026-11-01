@@ -18,7 +18,7 @@ final class MinutesGraphDiscovery {
  record Selector(String table,String column,Object value,String qualifier) {}
  private record Definition(String name,List<String> keys,List<String> columns) {}
  private record Query(String table,String column,Object value,int depth,boolean required,String qualifier) {Query(String table,String column,Object value,int depth,boolean required){this(table,column,value,depth,required,"");}}
- private static final Set<String> CONTENT=Set.of("body","title","name","themes","reason","target_anchor","section_path","owner_display","owner_mention","config_manifest","external_version");
+ private static final Set<String> CONTENT=Set.of("body","title","name","themes","reason","target_anchor","section_path","owner_display","owner_mention","config_manifest","external_version","instructions");
  private static final Map<String,Definition> DEFINITIONS=definitions();
  private final JdbcTemplate j;private final String meeting,kind,selected;private final int maximum;private int taskMaximum=256,fileMaximum=64,revisionMaximum=256,depthMaximum=128;private long byteMaximum=16777216;
  private final ArrayDeque<Query> pending=new ArrayDeque<>();
@@ -52,12 +52,12 @@ final class MinutesGraphDiscovery {
    case "SAVED_EFFECTIVE","READINESS","SETTINGS_READ"->{parent("material_snapshot",root.get("material_snapshot_id"),1);parent("minutes_revision",root.get("minutes_revision_id"),1);parent("element_set",root.get("element_set_id"),1);parent("exclusion_revision",root.get("exclusion_revision_id"),1);parent("template_revision",root.get("template_revision_id"),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
    case "OWNER_SET"->parent("element_set",requiredSelection(),1);
    case "REVIEW_ID"->parent("result_review",requiredSelection(),1);
-   case "BODY_EDIT","BODY_RESTORE"->{parent("minutes_revision",requiredSelection(),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
-   case "SET_EDIT","SET_RESTORE"->{parent("element_set",requiredSelection(),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
+   case "BODY_EDIT","BODY_RESTORE"->{parent("material_snapshot",root.get("material_snapshot_id"),1);parent("minutes_revision",requiredSelection(),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
+   case "SET_EDIT","SET_RESTORE"->{parent("material_snapshot",root.get("material_snapshot_id"),1);parent("element_set",requiredSelection(),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
    case "OWNER_REVISION"->parent("minutes_revision",requiredSelection(),1);
    case "STORED_INPUT"->{parent("generation_input",requiredSelection(),1);if(j.queryForList("SELECT id FROM generation_candidate WHERE input_id=? ORDER BY id LIMIT 2",String.class,selected).isEmpty())parent("minutes_revision",root.get("minutes_revision_id"),1);}
    case "REUSE_SOURCES"->{require(selected!=null&&selected.length()==73,INVALID_ARGUMENT);var ids=selected.split("/",-1);require(ids.length==2,INVALID_ARGUMENT);uuid(ids[0]);uuid(ids[1]);parent("generation_candidate",ids[0],1);parent("exclusion_revision",ids[1],1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);parent("template_revision",root.get("template_revision_id"),1);}
-   case "SETTINGS_TEMPLATE","SETTINGS_EXCLUSIONS"->{for(String col:List.of("minutes_revision_id","element_set_id","transcript_confirmation_id","template_revision_id","exclusion_revision_id"))parent(tableFor(col),root.get(col),1);if(kind.equals("SETTINGS_TEMPLATE"))parent("template_revision",requiredSelection(),1);}
+   case "SETTINGS_TEMPLATE","SETTINGS_EXCLUSIONS"->{parent("material_snapshot",root.get("material_snapshot_id"),1);for(String col:List.of("minutes_revision_id","element_set_id","transcript_confirmation_id","template_revision_id","exclusion_revision_id"))parent(tableFor(col),root.get(col),1);if(kind.equals("SETTINGS_TEMPLATE"))parent("template_revision",requiredSelection(),1);}
    case "ADOPT"->{parent("generation_candidate",requiredSelection(),1);parent("minutes_revision",root.get("minutes_revision_id"),1);}
    case "CANDIDATE"->parent("generation_candidate",requiredSelection(),1);
    case "REVIEW_BODY"->parent("minutes_revision",requiredSelection(),1);
@@ -98,14 +98,16 @@ final class MinutesGraphDiscovery {
    case "transcription_input"->{inputTasks("TRANSCRIPTION_INPUT",id,depth);require("IMPORT".equals(r.get("kind"))&&"EMPTY".equals(r.get("material_mode")),CAPABILITY_UNAVAILABLE);unsupported(r,"material_snapshot_id");unsupported(r,"source_revision_id");parent("input_batch",r.get("batch_id"),depth);}
    case "input_batch"->{pending.addLast(new Query("file_reference","owner_id",id,depth,false," AND owner_kind='INPUT_BATCH_FILE'"));children("input_batch_file","batch_id",id,depth);children("input_batch_fingerprint_profile","batch_id",id,depth);}
    case "template_revision"->{parent("minutes_template",r.get("template_id"),depth);identity(r,"owner_id");}
-   case "minutes_template"->{identity(r,"owner_id");}
+   case "minutes_template"->{identity(r,"owner_id");if(r.get("owner_id")!=null)children("personal_template_state","template_id",id,depth);}
+   case "personal_template_state"->identity(r,"owner_id");
    case "exclusion_revision"->children("sensitive_exclusion","revision_id",id,depth);
    case "sensitive_exclusion"->parent("source_locator",r.get("locator_id"),depth);
    case "generation_input"->{
     inputTasks("GENERATION_INPUT",id,depth);
-    require("FULL".equals(r.get("scope")),CAPABILITY_UNAVAILABLE);parent("material_snapshot",r.get("material_snapshot_id"),depth);if(r.get("material_snapshot_id")!=null)children("source_context","generation_input_id",id,depth);unsupported(r,"target_element_id");
+    require(Set.of("FULL","REGION").contains(r.get("scope")),CAPABILITY_UNAVAILABLE);children("generation_region_request","id",id,depth);parent("material_snapshot",r.get("material_snapshot_id"),depth);if(r.get("material_snapshot_id")!=null)children("source_context","generation_input_id",id,depth);unsupported(r,"target_element_id");
     parent("transcript_confirmation",r.get("transcript_confirmation_id"),depth);parent("template_revision",r.get("template_revision_id"),depth);parent("exclusion_revision",r.get("exclusion_revision_id"),depth);parent("element_set",r.get("element_set_id"),depth);children("generation_candidate","input_id",id,depth);
    }
+   case "generation_region_request"->{require("REGION".equals(tables.get("generation_input").get(List.of(id)).get("scope")),PROVENANCE_UNAVAILABLE);parent("element_set",r.get("base_element_set_id"),depth);}
    case "minutes_revision"->{parent("minutes_revision",r.get("parent_id"),depth);parent("generation_input",r.get("generation_input_id"),depth);children("evidence_link","minutes_revision_id",id,depth);if(!kind.equals("FINAL"))children("result_review","minutes_revision_id",id,depth);identity(r,"created_by");}
    case "element_set"->{children("minutes_element","set_id",id,depth);children("sensitive_detection","set_id",id,depth);children("background_note","set_id",id,depth);}
    case "minutes_element"->{children("element_source_context","id",id,depth);parent("element_set",r.get("set_id"),depth);children("action_item","element_id",id,depth);children("action_suggestion","element_id",id,depth);children("evidence_link","element_id",id,depth);if(!kind.equals("FINAL"))children("result_review","element_id",id,depth);}
@@ -202,6 +204,7 @@ final class MinutesGraphDiscovery {
   var defs=new HashMap<String,Definition>();for(var shape:MinutesSourceRows.SHAPES.values())defs.put(shape.table(),new Definition(shape.table(),shape.keys(),shape.columns().stream().filter(c->!MinutesSourceRows.CONTENT.contains(c)).toList()));for(Table table:Table.values())defs.put(table.sqlName(),new Definition(table.sqlName(),table.primaryKey(),table.columns().stream().map(ColumnSpec::name).filter(c->!CONTENT.contains(c)).toList()));
   add(defs,"meeting","id","id owner_id revision cancel_epoch access_revision stage lifecycle governance_state ever_published info_revision_id roster_revision_id transcript_revision_id transcript_confirmation_id minutes_revision_id element_set_id template_revision_id exclusion_revision_id material_snapshot_id final_confirmation_id generation_fingerprint needs_generation materials_pending");
   add(defs,"minutes_template","id","id owner_id name_hash current_revision_id revision created_at");
+  add(defs,"personal_template_state","template_id","template_id owner_id command_revision deleted_at");
   add(defs,"generation_candidate","id","id meeting_id input_id task_id minutes_revision_id element_set_id base_revision input_fingerprint state created_at decided_at");
   add(defs,"meeting_info_revision","id","id meeting_id revision category_id actual_meeting_date created_by created_at");
   add(defs,"roster_revision","id","id meeting_id revision state confirmed_at confirmed_by");

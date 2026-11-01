@@ -14,6 +14,7 @@ final class MaterialMinutesWire {
   var sources=new HashMap<String,Map<String,CanonicalValue>>();for(var value:array(manifest.get("sources"))){var source=fields(value,"sourceId","locator","role","sourceVersion","sourceContentHash");require(sources.putIfAbsent(text(source.get("sourceId")),source)==null,INPUT_INVALID);}
   require(payload.containsKey("backgroundMaterials"),INPUT_INVALID);var seen=new HashSet<String>();for(var value:array(payload.get("backgroundMaterials"))){var unit=fields(value,"sourceId","locator","sourceVersion","body");String alias=text(unit.get("sourceId"));var original=sources.get(alias);require(original!=null&&seen.add(alias)&&text(original.get("role")).equals("BACKGROUND")&&original.get("locator").equals(unit.get("locator"))&&original.get("sourceVersion").equals(unit.get("sourceVersion"))&&!text(unit.get("body")).isBlank(),INPUT_INVALID);}
   var excluded=new HashSet<String>();for(var value:array(fields(payload.get("exclusions"),"revisionId","entries").get("entries")))excluded.add(text(fields(value,"sourceId","locatorId","category","reasonHash").get("sourceId")));
+  if(ControlledMinutesProtocol.sourceExclusions(text(payload.get("protocolVersion")))){excluded=new HashSet<>(MinutesSourceExclusions.aliases(manifest));for(var alias:seen)require(!excluded.contains(alias),INPUT_INVALID);}
   for(var source:sources.entrySet())if(text(source.getValue().get("role")).equals("BACKGROUND")&&!excluded.contains(source.getKey()))require(seen.contains(source.getKey()),INPUT_INVALID);
  }
  private MaterialMinutesWire(){}

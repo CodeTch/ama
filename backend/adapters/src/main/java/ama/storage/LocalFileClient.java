@@ -64,7 +64,7 @@ public final class LocalFileClient implements FileStoragePort {
                             .encodeToString(JSON.writeValueAsBytes(value));
             var request =
                     HttpRequest.newBuilder(base.resolve("/internal/v1/" + operation))
-                            .timeout(Duration.ofMinutes(5))
+                            .timeout(operation.equals("probe-v1")?Duration.ofSeconds(10):Duration.ofMinutes(5))
                             .header("X-Ama-Request", metadata);
             if (operation.equals("read") && value.length() != null && value.length() > 0)
                 request.header(
@@ -80,7 +80,8 @@ public final class LocalFileClient implements FileStoragePort {
             var response=future.get();
             owned.body(response.body());
             var registration=scoped;
-            var lifetime=new DeadlineInputStream(response.body(),bodyLifetime,()->{try{owned.abort();}finally{registration.close();}});
+            var timeout=operation.equals("probe-v1")&&bodyLifetime.compareTo(Duration.ofSeconds(10))>0?Duration.ofSeconds(10):bodyLifetime;
+            var lifetime=new DeadlineInputStream(response.body(),timeout,()->{try{owned.abort();}finally{registration.close();}});
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
                 try (var in = lifetime) {
                     byte[] bytes = in.readNBytes(4097);
@@ -173,6 +174,13 @@ public final class LocalFileClient implements FileStoragePort {
         empty("delete", request(key, null, null, null, null, null, null));
     }
 
+    @Override public void retireKey(StorageKey key) {
+        empty("retire-key-v1", request(key, null, null, null, null, null, null));
+    }
+    @Override public void fenceRecordingSession(StorageKey scope) {
+        empty("fence-recording-v1", request(scope, null, null, null, null, null, null));
+    }
+
     @Override
     public UploadToken beginUpload(UploadSpec spec) {
         return json(
@@ -209,6 +217,13 @@ public final class LocalFileClient implements FileStoragePort {
     @Override
     public void discardUpload(UploadToken token, StorageKey key) {
         empty("discard-upload", request(key, token, null, null, null, null, null));
+    }
+
+    @Override
+    public void probe(String backend) {
+        new StorageKey(backend,"files","validation");
+        var value=json("probe-v1",new Request(null,null,null,null,null,null,null,backend,null,null,null,null,null,null),null,Map.class);
+        if(value==null||!value.equals(Map.of("backendId",backend)))throw unavailable();
     }
 
     @Override

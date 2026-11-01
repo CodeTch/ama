@@ -20,6 +20,25 @@ public final class RecordingService {
         default void finish(RecordingContracts.Session session, Map<String, Long> finalSequences) {}
         default boolean recoverable() { return false; }
         default Snapshot load(String sessionId) { throw new IllegalStateException("Recording recovery unavailable"); }
+        /** Same committed facts as load, projected for one append under the session lock. */
+        default AppendSnapshot loadForAppend(String sessionId,RecordingContracts.Chunk chunk) {
+            var full=load(sessionId);var active=new HashMap<Long,Proof>();
+            for(var proof:full.chunks()) {
+                if(!full.parts().contains(proof.partId()))throw new IllegalStateException("Unissued recording proof");
+                if(proof.partId().equals(full.session().partId())&&active.put(proof.seq(),proof)!=null)throw new IllegalStateException("Duplicate recording proof");
+            }
+            long highest=0;while(active.containsKey(highest+1))highest++;
+            long prefix=highest,seq=chunk.seq();
+            var relevant=active.values().stream().filter(p->p.seq()>prefix||p.seq()==seq||p.seq()==seq-1||seq<Long.MAX_VALUE&&p.seq()==seq+1).toList();
+            return new AppendSnapshot(full.session(),full.paused(),full.finished(),full.parts(),full.chunks().size(),
+                    full.chunks().stream().mapToLong(Proof::sampleCount).sum(),highest,active.keySet().stream().mapToLong(Long::longValue).max().orElse(0),relevant);
+        }
+        /** Routing only; it conveys no permission or PCM integrity claim. */
+        default String meetingId(String sessionId) {return load(sessionId).session().meetingId();}
+        /** Caller already holds its meeting gate; bind the actual session before doing any work. */
+        default <T> T withinMeeting(String sessionId,String expectedMeeting,Supplier<T> work) {
+            return locked(sessionId,()->{if(!expectedMeeting.equals(meetingId(sessionId)))throw new StaleWriter();return work.get();});
+        }
         /** JDBC holds a session row in the caller transaction, memory fixtures serialize here. */
         default <T> T locked(String sessionId, Supplier<T> work) { synchronized (this) { return work.get(); } }
     }
@@ -29,6 +48,19 @@ public final class RecordingService {
     public record Snapshot(RecordingContracts.Session session, boolean paused, boolean finished, List<Proof> chunks, List<String> parts) {
         public Snapshot { Objects.requireNonNull(session); chunks=List.copyOf(chunks);parts=List.copyOf(parts);if(!parts.contains(session.partId())||new java.util.HashSet<>(parts).size()!=parts.size())throw new IllegalStateException("Invalid recording parts"); }
         public Snapshot(RecordingContracts.Session session,boolean paused,boolean finished,List<Proof> chunks){this(session,paused,finished,chunks,List.of(session.partId()));}
+    }
+    /** The complete totals and integrity checks come from persistence, never a process cache. */
+    public record AppendSnapshot(RecordingContracts.Session session,boolean paused,boolean finished,List<String> parts,
+                                 long totalChunks,long totalSamples,long highestContiguousSeq,long highestReceivedSeq,List<Proof> chunks) {
+        public AppendSnapshot {
+            Objects.requireNonNull(session);parts=List.copyOf(parts);chunks=List.copyOf(chunks);
+            if(parts.size()>16||!parts.contains(session.partId())||new java.util.HashSet<>(parts).size()!=parts.size()
+                    ||totalChunks<0||totalChunks>RecordingContracts.MAX_SESSION_CHUNKS||totalSamples<0||totalSamples>RecordingContracts.MAX_SESSION_SAMPLES
+                    ||highestContiguousSeq<0||highestContiguousSeq>totalChunks||highestReceivedSeq<highestContiguousSeq
+                    ||highestReceivedSeq-highestContiguousSeq>512||chunks.size()>515)throw new IllegalStateException("Invalid append manifest");
+            var sequences=new java.util.HashSet<Long>();
+            for(var proof:chunks)if(!proof.partId().equals(session.partId())||proof.seq()<1||proof.seq()>highestReceivedSeq||!sequences.add(proof.seq()))throw new IllegalStateException("Invalid append proof");
+        }
     }
     public static final class StaleWriter extends RuntimeException { public StaleWriter() { super("Stale recording writer"); } }
     public static final class HashConflict extends RuntimeException { public HashConflict() { super("Recording sequence or sample conflict"); } }
@@ -50,6 +82,13 @@ public final class RecordingService {
         });
     }
     public RecordingContracts.Session session(String sessionId) { return persistence.locked(sessionId, () -> state(sessionId).session); }
+    public String meetingId(String sessionId) {return persistence.locked(sessionId,()->persistence.recoverable()?persistence.meetingId(sessionId):state(sessionId).session.meetingId());}
+    /** Scope binding only. All permissions remain the transport's current meeting gate. */
+    public <T> T withinMeeting(String sessionId,String expectedMeeting,Supplier<T> work) {
+        Objects.requireNonNull(expectedMeeting);Objects.requireNonNull(work);
+        if(persistence.recoverable())return persistence.withinMeeting(sessionId,expectedMeeting,work);
+        return persistence.locked(sessionId,()->{if(!expectedMeeting.equals(state(sessionId).session.meetingId()))throw new StaleWriter();return work.get();});
+    }
     public record PartManifest(String partId,long highestContiguousSeq,long highestReceivedSeq,long sampleCount) {}
     public record Manifest(String sessionId,boolean paused,boolean finished,List<PartManifest> parts) { public Manifest{parts=List.copyOf(parts);} }
     public Manifest manifest(String sessionId) { return persistence.locked(sessionId,()->{var s=state(sessionId);var parts=new java.util.ArrayList<PartManifest>();for(var entry:s.parts.entrySet()){var chunks=entry.getValue();parts.add(new PartManifest(entry.getKey(),ack(chunks).highestContiguousSeq(),chunks.keySet().stream().mapToLong(Long::longValue).max().orElse(0),chunks.values().stream().mapToLong(Proof::sampleCount).sum()));}return new Manifest(sessionId,s.paused,s.finished,parts);}); }
@@ -62,6 +101,7 @@ public final class RecordingService {
     public RecordingContracts.Ack accept(String id, long epoch, RecordingContracts.Chunk chunk) {
         Objects.requireNonNull(chunk);
         return persistence.locked(id, () -> {
+            if(persistence.recoverable())return acceptRecovered(id,epoch,chunk);
             var s=state(id,epoch); requirePart(s,chunk.partId());
             if(!s.session.partId().equals(chunk.partId()))throw new StaleWriter();
             var chunks=s.parts.get(chunk.partId());
@@ -84,6 +124,29 @@ public final class RecordingService {
             }
             return ack(chunks);
         });
+    }
+    private RecordingContracts.Ack acceptRecovered(String id,long epoch,RecordingContracts.Chunk chunk) {
+        var s=persistence.loadForAppend(id,chunk);
+        if(s.session().writerEpoch()!=epoch)throw new StaleWriter();
+        if(!s.parts().contains(chunk.partId()))throw new IllegalArgumentException("Recording part was not issued");
+        if(!s.session().partId().equals(chunk.partId()))throw new StaleWriter();
+        if(chunk.seq()>s.highestContiguousSeq()+512)throw new IllegalArgumentException("Recording sequence outside retry window");
+        if(chunk.writerEpoch()!=0&&chunk.writerEpoch()!=epoch)throw new StaleWriter();
+        if(s.paused())throw new Paused();if(s.finished())throw new Closed();
+        var chunks=new HashMap<Long,Proof>();for(var proof:s.chunks())chunks.put(proof.seq(),proof);
+        var proof=Proof.of(chunk);var old=chunks.get(chunk.seq());
+        if(old!=null&&!old.equals(proof))throw new HashConflict();
+        if(old==null) {
+            if(s.totalChunks()>=RecordingContracts.MAX_SESSION_CHUNKS||chunk.sampleCount()>RecordingContracts.MAX_SESSION_SAMPLES-s.totalSamples())throw new IllegalArgumentException("Recording session limit reached");
+            var before=chunks.get(chunk.seq()-1);var after=chunk.seq()==Long.MAX_VALUE?null:chunks.get(chunk.seq()+1);
+            if(chunk.seq()==1&&chunk.sampleStart()!=0||before!=null&&before.sampleStart()+before.sampleCount()!=chunk.sampleStart()
+                    ||after!=null&&chunk.sampleStart()+chunk.sampleCount()!=after.sampleStart())throw new HashConflict();
+            persistence.persist(s.session(),chunk);chunks.put(chunk.seq(),proof);
+        }
+        long highest=s.highestContiguousSeq();while(chunks.containsKey(highest+1))highest++;
+        long max=Math.max(s.highestReceivedSeq(),chunk.seq());var missing=new java.util.ArrayList<Long>();
+        for(long seq=highest+1;seq<max;seq++)if(!chunks.containsKey(seq))missing.add(seq);
+        return new RecordingContracts.Ack(highest,missing);
     }
     public RecordingContracts.Ack ack(String id,String partId) {
         return persistence.locked(id, () -> {var s=state(id);requirePart(s,partId);return ack(s.parts.get(partId));});

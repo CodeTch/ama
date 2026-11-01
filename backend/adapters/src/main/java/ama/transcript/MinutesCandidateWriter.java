@@ -17,6 +17,7 @@ final class MinutesCandidateWriter {
   for(var row:rows)insert(row);
   require(j.update("INSERT INTO generation_candidate(id,meeting_id,input_id,task_id,minutes_revision_id,element_set_id,base_revision,input_fingerprint,state,created_at,decided_at) VALUES (?,?,?,?,?,?,?,?,?,?,NULL)",plan.candidateId(),facts.spec().subject().id(),facts.spec().input().id(),facts.taskId(),plan.bodyId(),plan.setId(),facts.spec().businessVersion(),facts.spec().inputFingerprint(),state,java.time.LocalDateTime.ofInstant(java.time.Instant.parse(plan.createdAt()),java.time.ZoneOffset.UTC))==1,PROVENANCE_UNAVAILABLE);
   validateGraph(held,context,observation,new TypedRef("GENERATION_CANDIDATE",plan.candidateId()),state);
+  JdbcMinutesInfoSuggestions.index(j,facts.spec().subject().id(),plan.candidateId(),rows,plan.bodyId(),plan.setId(),facts.spec().input().id(),plan.createdAt());
   new ama.audit.JdbcAuditAdapter(authority.dataSource()).append(new ama.contract.AuditContracts.AuditEvent(plan.owner(),"MINUTES_GENERATION_COMPLETED",facts.spec().subject().id(),facts.spec().businessVersion(),"SUCCEEDED",facts.executionId(),java.time.Instant.now()));
   return new TypedRef("GENERATION_CANDIDATE",plan.candidateId());
  }

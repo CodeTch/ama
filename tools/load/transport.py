@@ -5,6 +5,7 @@ import asyncio
 from contextlib import closing
 import hashlib
 import http.client
+import importlib
 import json
 import math
 import os
@@ -217,26 +218,33 @@ class Transport:
                 await asyncio.sleep(.5)
     async def produce(self,r,queue):
         duration=self.scenario["durationSeconds"];step=self.scenario["chunkMs"]/1000;count=math.ceil(duration/step);position=0
+        for index in range(count):
+            due=self.epoch+index*step
+            await asyncio.sleep(max(0,due-time.monotonic()))
+            samples=min(int(step*16000),duration*16000-position);pcm=pcm_bytes(self.run,r["recorderId"],index+1,samples)
+            proof=dict(seq=index+1,start=position,samples=samples,sha256=hashlib.sha256(pcm).hexdigest());r["proofs"].append(proof);position+=samples
+            queue.put_nowait((proof,pcm,due));r["sentChunks"]+=1;r["sampleCount"]+=samples
+        await asyncio.sleep(max(0,self.epoch+duration-time.monotonic()));r["observedSeconds"]=time.monotonic()-self.epoch
+        await queue.put(None)
+    async def next_produced(self,queue,producer):
+        # A full queue cannot carry its own failure sentinel. Observe the task as well.
+        # Check failure before consuming even when the queue already contains partial audio.
+        if producer.done():
+            producer.result()
+            return await queue.get()
+        receive=asyncio.create_task(queue.get())
         try:
-            for index in range(count):
-                due=self.epoch+index*step
-                await asyncio.sleep(max(0,due-time.monotonic()))
-                samples=min(int(step*16000),duration*16000-position);pcm=pcm_bytes(self.run,r["recorderId"],index+1,samples)
-                proof=dict(seq=index+1,start=position,samples=samples,sha256=hashlib.sha256(pcm).hexdigest());r["proofs"].append(proof);position+=samples
-                queue.put_nowait((proof,pcm,due));r["sentChunks"]+=1;r["sampleCount"]+=samples
-            await asyncio.sleep(max(0,self.epoch+duration-time.monotonic()));r["observedSeconds"]=time.monotonic()-self.epoch
-            await queue.put(None)
-        except BaseException:
-            # Bounded producer failure is visible; a consumer may not hang and then claim full duration.
-            r["errors"]+=1
-            try:queue.put_nowait(None)
-            except asyncio.QueueFull:pass
-            raise
+            await asyncio.wait((receive,producer),return_when=asyncio.FIRST_COMPLETED)
+            if producer.done():producer.result()
+            return await receive
+        finally:
+            if not receive.done():receive.cancel()
+            await asyncio.gather(receive,return_exceptions=True)
     async def record(self,r):
         await self.ready.wait();queue=asyncio.Queue(maxsize=300);producer=asyncio.create_task(self.produce(r,queue));ws=r.pop("_socket",None);disconnected=False
         try:
             while True:
-                item=await queue.get()
+                item=await self.next_produced(queue,producer)
                 if item is None:break
                 proof,pcm,due=item;started=time.monotonic();deadline=started+90
                 while True:
@@ -354,6 +362,9 @@ class Transport:
             value=dict(monotonic=now,roles=used,missingRoles=missing,loadMaxRssBytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024)
             self.resources.append(value);self.event("RESOURCES",**value);await asyncio.sleep(5)
     async def run_all(self):
+        # Verify the selected interpreter before freezing roles or creating any CAS users.
+        importlib.import_module("websockets.asyncio.client")
+        importlib.import_module("websockets.exceptions")
         self.output=self.output.resolve()
         if not self.output.is_relative_to(ROOT) or self.output==ROOT:raise ValueError("New output inside this checkout required")
         self.output.mkdir(parents=True,exist_ok=False);os.chmod(self.output,0o700)

@@ -83,7 +83,8 @@ public final class JdbcFileRegistry implements FileRegistry {
             long epoch,
             StorageKey key,
             long size,
-            String hash) {}
+            String hash,
+            boolean generated) {}
 
     public JdbcFileRegistry(
             DataSource source,
@@ -198,6 +199,7 @@ public final class JdbcFileRegistry implements FileRegistry {
         var originals = new TreeMap<String, Original>();
         for (var proof : proofs) {
             var original = original(proof.file, false);
+            if(original.generated())throw new NotFound(); // Derived references are installed by their queue completion only.
             if (!gate.meeting.equals(original.meeting())
                     || !gate.meeting.equals(file(proof.file, false).meetingId()))
                 throw new NotFound();
@@ -225,6 +227,7 @@ public final class JdbcFileRegistry implements FileRegistry {
 
     private void bind(Proof proof, Binding binding, Original original, FileRecord file) {
         Gate gate = proof.gate;
+        if(original.generated())throw new NotFound();
         checkOriginal(gate, original, file);
         if (file.locationRevision() != binding.expectedLocationRevision()) throw new Conflict();
         String uploadId = binding.uploadId();
@@ -276,7 +279,8 @@ public final class JdbcFileRegistry implements FileRegistry {
                         String.class,
                         id);
         if (discovered.size() != 1 || discovered.getFirst() == null) throw new NotFound();
-        FileRecord record =
+        access.prepareExternalRead(actor,discovered.getFirst());
+        AuthorizedFile record =
                 tx.required(
                         () -> {
                             Gate gate =
@@ -296,16 +300,9 @@ public final class JdbcFileRegistry implements FileRegistry {
                                                             r.getString(2),
                                                             r.getString(3)),
                                             id);
-                            return legacyRead(gate,references,id);
+                            return authorized(gate,legacyRead(gate,references,id));
                         });
-        long[] interval = range(range, record.size());
-        return new Download(
-                record,
-                backends.require(record.key().backendId(), false)
-                        .storage()
-                        .read(record.key(), interval[0], interval[1]),
-                interval[0],
-                interval[1]);
+        return open(record,range);
     }
 
     private FileRecord legacyRead(Gate gate,List<Reference> references,String id){
@@ -356,6 +353,10 @@ public final class JdbcFileRegistry implements FileRegistry {
     }
 
     private void checkOriginal(Gate gate, Original original, FileRecord file) {
+        // One physical file has exactly one origin family. Never prefer an upload over a
+        // contradictory generated origin (including the complete-source read path).
+        String other=original.generated()?"SELECT COUNT(*) FROM upload_session WHERE completed_file_id=? AND state='COMPLETED'":"SELECT COUNT(*) FROM generated_file_origin WHERE file_id=?";
+        if(j.queryForObject(other,Integer.class,file.fileId())!=0)throw new NotFound();
         if (!file.state().equals("AVAILABLE")
                 || !gate.meeting.equals(file.meetingId())
                 || !original.meeting().equals(gate.meeting)
@@ -385,8 +386,10 @@ public final class JdbcFileRegistry implements FileRegistry {
                                                 r.getString("namespace"),
                                                 r.getString("object_key")),
                                         r.getLong("expected_size"),
-                                        r.getString("expected_sha256")),
+                                        r.getString("expected_sha256"),false),
                         file);
+        if(rows.isEmpty())rows=j.query("SELECT origin_id,meeting_id,purpose,cancel_epoch,backend_id,namespace,object_key,size_bytes,sha256 FROM generated_file_origin WHERE file_id=? AND origin_kind='MINUTES_EXPORT' AND purpose='MINUTES_EXPORT'"+(lock?" FOR UPDATE":""),
+                (r,n)->new Original(r.getString(1),r.getString(2),r.getString(3),r.getLong(4),new StorageKey(r.getString(5),r.getString(6),r.getString(7)),r.getLong(8),r.getString(9),true),file);
         if (rows.size() != 1) throw new NotFound();
         return rows.getFirst();
     }
@@ -484,21 +487,31 @@ public final class JdbcFileRegistry implements FileRegistry {
         if(prepared.state==PreparedState.FATAL)throw new Unavailable();
         if(prepared.state==PreparedState.INELIGIBLE)throw new NotFound();
     }
+    private Gate readGate(Actor actor,String meeting,PreparedRead prepared){
+        var held=prepared!=null&&prepared.state==PreparedState.PREPARED?prepared.policy.lockReadRoot(this,actor,meeting,prepared.data):lock(actor,meeting,MeetingAccess.Action.READ);
+        var gate=gate(held);
+        if(!gate.meeting.equals(meeting)||!gate.actor.enterpriseId().equals(actor.enterpriseId()))throw new IllegalArgumentException("Foreign read root");
+        access.require(gate.access,MeetingAccess.Action.READ);return gate;
+    }
     @Override public Download read(Actor actor,String meeting,ReadRequest request,String range){
         if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Read owns its authorization transaction");
         Objects.requireNonNull(actor);uuid(meeting);String requested=validateSelector(request);ama.contract.MinutesContracts.check(()->false);
+        access.prepareExternalRead(actor,meeting);
         var prepared=prepare(actor,meeting,request);
-        FileRecord pinned=tx.required(()->{
-            var gate=(Gate)lock(actor,meeting,MeetingAccess.Action.READ);authorizeOperation(gate,request,prepared.policy);requirePrepared(prepared);
+        AuthorizedFile pinned=tx.required(()->{
+            var gate=readGate(actor,meeting,prepared);authorizeOperation(gate,request,prepared.policy);requirePrepared(prepared);
             var policy=prepared.policy;var plan=policy.prelockRead(gate,meeting,request,prepared.data);
             if(plan==null||plan.context()==null||!requested.equals(plan.requestedFileId())||plan.completeMembers().isEmpty()||plan.completeMembers().size()>sourceBudget.maxBatchFiles())throw new Unavailable();
             var proofs=new ArrayList<Proof>();var unique=new HashSet<CompleteReadPolicy.ReadMember>();
             for(var member:plan.completeMembers()){
                 if(!member.reference().kind().equals(request.referenceKind())||!unique.add(member))throw new Unavailable();
-                var proof=(Proof)prelock(gate,member.reference(),member.fileId(),plan.context());
+                // The registered complete policy may already own a source union before its tasks.
+                // This is a read-only proof revisit; the public write prelock still forbids it.
+                var domain=policy.prelock(gate,meeting,member.reference(),member.fileId(),plan.context());
+                var proof=new Proof(gate,member.reference(),member.fileId(),policy,domain);
                 if(proof.policy!=policy||proof.domain!=plan.context())throw new Unavailable();proofs.add(proof);
             }
-            return completeRead(gate,proofs,requested);
+            return authorized(gate,completeRead(gate,proofs,requested));
         });
         return open(pinned,range);
     }
@@ -508,6 +521,7 @@ public final class JdbcFileRegistry implements FileRegistry {
         uuid(id);ama.contract.MinutesContracts.check(()->false);
         var meetings=j.queryForList("SELECT meeting_id FROM file_object WHERE id=? AND state='AVAILABLE'",String.class,id);
         if(meetings.size()!=1||meetings.getFirst()==null)throw new NotFound();String meeting=meetings.getFirst();
+        access.prepareExternalRead(actor,meeting);
         List<Reference> discovered=List.of();PreparedRead prepared=null;CurrentReadRequest request=null;
         try {
             discovered=BoundedFileReferences.read(j,sourceBudget,id);CompleteReadPolicy provider=null;
@@ -518,23 +532,26 @@ public final class JdbcFileRegistry implements FileRegistry {
             if(request!=null)prepared=prepare(actor,meeting,request);
         }catch(RuntimeException failure){cancellation(failure);prepared=new PreparedRead(null,null,PreparedState.FATAL,failure);}
         final var references=discovered;final var outcome=prepared;final var selector=request;
-        FileRecord pinned=tx.required(()->{
-            var gate=(Gate)lock(actor,meeting,MeetingAccess.Action.READ);
+        AuthorizedFile pinned=tx.required(()->{
+            var gate=readGate(actor,meeting,outcome);
             if(selector!=null)authorizeOperation(gate,selector,outcome==null?null:outcome.policy);
             if(outcome!=null&&outcome.state==PreparedState.FATAL)throw new Unavailable();
             if(!BoundedFileReferences.read(j,sourceBudget,id).equals(references))throw new Unavailable();
             if(outcome==null||outcome.state==PreparedState.INELIGIBLE){
                 var legacy=references.stream().filter(r->!(policies.get(r.kind()) instanceof CompleteReadPolicy)).toList();
-                return legacyRead(gate,legacy,id);
+                return authorized(gate,legacyRead(gate,legacy,id));
             }
-            return genericComplete(gate,references,id,outcome);
+            return authorized(gate,genericComplete(gate,references,id,outcome));
         });return open(pinned,range);
     }
-    private Download open(FileRecord pinned,String range){
+    private record AuthorizedFile(FileRecord file,java.time.Instant deadline){}
+    private AuthorizedFile authorized(Gate gate,FileRecord file){return new AuthorizedFile(file,access.readAuthorityDeadline(gate.access).orElse(java.time.Instant.MAX));}
+    private Download open(AuthorizedFile authorized,String range){
         if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Storage open must follow commit");
         ama.contract.MinutesContracts.check(()->false);
+        FileRecord pinned=authorized.file();
         long[] interval=range(range,pinned.size());
-        return new Download(pinned,backends.require(pinned.key().backendId(),false).storage().read(pinned.key(),interval[0],interval[1]),interval[0],interval[1]);
+        return new Download(pinned,backends.require(pinned.key().backendId(),false).storage().read(pinned.key(),interval[0],interval[1]),interval[0],interval[1],authorized.deadline());
     }
     private record ProofKey(Reference reference,String file) {}
     private FileRecord genericComplete(Gate gate,List<Reference> references,String requested,PreparedRead prepared){
@@ -578,8 +595,14 @@ public final class JdbcFileRegistry implements FileRegistry {
                 domains.computeIfAbsent(p.domain,k->new ArrayList<>()).add(p);
             }
         }
-        var receipt=prelockSources(gate,List.copyOf(fileIds),false).orElseThrow(NotFound::new);
-        var actual=sources(gate,receipt,List.copyOf(fileIds));var files=new HashMap<String,CompletedSource>();for(var a:actual)files.put(a.file().fileId(),a);
+        var prior=provider==null?Optional.<AcquiredSources>empty():provider.prelockedReadSources(List.copyOf(domains.keySet()));
+        List<CompletedSource> actual;
+        if(prior.isPresent()){
+            var union=prior.orElseThrow();
+            if(!new HashSet<>(union.fileIds()).containsAll(fileIds))throw new Unavailable();
+            actual=sources(gate,union.receipt(),union.fileIds()).stream().filter(s->fileIds.contains(s.file().fileId())).toList();
+        }else{var receipt=prelockSources(gate,List.copyOf(fileIds),false).orElseThrow(NotFound::new);actual=sources(gate,receipt,List.copyOf(fileIds));}
+        var files=new HashMap<String,CompletedSource>();for(var a:actual)files.put(a.file().fileId(),a);
         boolean readable=false;var valid=new ArrayList<Object>();
         for(var p:proofs)if(!(p.policy instanceof CompleteReadPolicy)){
             try{validateReadReference(p,files.get(p.file));if(p.file.equals(requested))readable=true;}catch(NotFound denied){/* legacy alternative */}
@@ -624,7 +647,9 @@ public final class JdbcFileRegistry implements FileRegistry {
         final SortedMap<String,Original> originals;
         final SortedMap<String,FileRecord> files;
         SourcePhase phase=SourcePhase.SOURCES_HELD;
-        private Sources(Gate gate,SortedMap<String,Original> originals,SortedMap<String,FileRecord> files){
+        final boolean derivedUnion;
+        private Sources(Gate gate,SortedMap<String,Original> originals,SortedMap<String,FileRecord> files,boolean derivedUnion){
+            this.derivedUnion=derivedUnion;
             this.gate=gate;this.originals=Collections.unmodifiableSortedMap(new TreeMap<>(originals));
             this.files=Collections.unmodifiableSortedMap(new TreeMap<>(files));
         }
@@ -642,28 +667,50 @@ public final class JdbcFileRegistry implements FileRegistry {
         }
     }
     private SortedSet<String> completeIds(List<String> ids){
+        return completeIds(ids,0);
+    }
+    private SortedSet<String> completeIds(List<String> ids,int extra){
         if(sourceBudget==null)throw new Unavailable();
-        if(ids==null||ids.isEmpty()||ids.size()>sourceBudget.maxBatchFiles())throw new IllegalArgumentException("Complete bounded source set required");
+        if(ids==null||ids.isEmpty()||(long)ids.size()>(long)sourceBudget.maxBatchFiles()+extra)throw new IllegalArgumentException("Complete bounded source set required");
         var result=new TreeSet<String>();for(String id:ids){uuid(id);if(!result.add(id))throw new IllegalArgumentException("Duplicate source");}return result;
     }
     @Override public Optional<LockedSources> prelockSources(LockedMeeting held,List<String> ids,boolean skip){
-        var gate=gate(held);var complete=completeIds(ids);
+        return acquireSources(held,ids,skip,null);
+    }
+    @Override public Optional<LockedSources> prelockDerivedSources(LockedMeeting held,List<String> originals,String derived,boolean skip){
+        uuid(derived);Objects.requireNonNull(originals);var union=new ArrayList<>(originals);union.add(derived);return acquireSources(held,union,skip,derived);
+    }
+    private Optional<LockedSources> acquireSources(LockedMeeting held,List<String> ids,boolean skip,String derived){
+        var gate=gate(held);var complete=completeIds(ids,derived==null?0:1);
         if(gate.filesStarted)throw new IllegalStateException("Source acquisition already started");
         gate.filesStarted=true;
-        var state=new SourceAcquisition();var associations=new TreeMap<String,String>();
-        for(String id:complete){state.check();var found=originalIds(id);if(found.size()!=1)throw new NotFound();associations.put(id,found.getFirst());}
+        var state=new SourceAcquisition();var associations=new TreeMap<String,String>();var generated=new TreeSet<String>();
+        for(String id:complete){
+            state.check();var found=originalIds(id);
+            if(found.isEmpty()){
+                if(j.queryForObject("SELECT COUNT(*) FROM generated_file_origin WHERE file_id=? AND origin_kind='MINUTES_EXPORT' AND purpose='MINUTES_EXPORT'",Integer.class,id)!=1)throw new NotFound();
+                generated.add(id);
+            }else{if(found.size()!=1)throw new NotFound();associations.put(id,found.getFirst());}
+        }
+        if(derived!=null&&!generated.equals(Set.of(derived)))throw new NotFound();
         var originals=new TreeMap<String,Original>();
         for(String upload:new TreeSet<>(associations.values())){
             if(!measure("upload_session",upload,List.of("id","meeting_id","purpose","backend_id","namespace","object_key","expected_sha256","state","completed_file_id"),skip,state,3))return Optional.empty();
             var rows=j.query("SELECT id,meeting_id,purpose,cancel_epoch,backend_id,namespace,object_key,expected_size,expected_sha256,state,completed_file_id FROM upload_session WHERE id=? FOR UPDATE",
-                (r,n)->new Object[]{new Original(r.getString(1),r.getString(2),r.getString(3),exact(r,"cancel_epoch"),new StorageKey(r.getString(5),r.getString(6),r.getString(7)),exact(r,"expected_size"),r.getString(9)),r.getString(10),r.getString(11)},upload);
+                (r,n)->new Object[]{new Original(r.getString(1),r.getString(2),r.getString(3),exact(r,"cancel_epoch"),new StorageKey(r.getString(5),r.getString(6),r.getString(7)),exact(r,"expected_size"),r.getString(9),false),r.getString(10),r.getString(11)},upload);
             if(rows.size()!=1)throw new NotFound();var row=rows.getFirst();var original=(Original)row[0];
             String file=(String)row[2];
             if(!"COMPLETED".equals(row[1])||!upload.equals(associations.get(file))||!gate.meeting.equals(original.meeting())||original.hash()==null)throw new NotFound();
             originals.put(file,original);
         }
         // Recheck complete associations after all original primary-key locks, never LIMIT 1.
-        for(String id:complete)if(!originalIds(id).equals(List.of(associations.get(id))))throw new Conflict();
+        for(String id:associations.keySet())if(!originalIds(id).equals(List.of(associations.get(id))))throw new Conflict();
+        for(String id:generated){
+            if(!measureKey("generated_file_origin","file_id",id,List.of("file_id","origin_id","meeting_id","origin_kind","purpose","backend_id","namespace","object_key","sha256","task_id"),skip,state,3))return Optional.empty();
+            var original=original(id,true);
+            if(!original.generated()||!gate.meeting.equals(original.meeting())||!originalIds(id).isEmpty())throw new NotFound();
+            originals.put(id,original);
+        }
         var files=new TreeMap<String,FileRecord>();
         for(String id:complete){
             if(!measure("file_object",id,List.of("id","meeting_id","backend_id","storage_type","namespace","object_key","sha256","state"),skip,state,2))return Optional.empty();
@@ -676,14 +723,17 @@ public final class JdbcFileRegistry implements FileRegistry {
             if(rows.size()!=1)throw new NotFound();var file=rows.getFirst();checkOriginal(gate,originals.get(id),file);
             if(file.referenceEpoch()>=Long.MAX_VALUE-1||file.locationRevision()>=Long.MAX_VALUE-1)throw new Conflict();files.put(id,file);
         }
-        return Optional.of(new Sources(gate,originals,files));
+        return Optional.of(new Sources(gate,originals,files,derived!=null));
     }
     private List<String> originalIds(String file){
         return j.queryForList("SELECT id FROM upload_session WHERE completed_file_id=? AND state='COMPLETED' ORDER BY id LIMIT 2",String.class,file);
     }
     private boolean measure(String table,String id,List<String> columns,boolean skip,SourceAcquisition state,long edges){
+        return measureKey(table,"id",id,columns,skip,state,edges);
+    }
+    private boolean measureKey(String table,String key,String id,List<String> columns,boolean skip,SourceAcquisition state,long edges){
         String projection=String.join(",",columns.stream().map(c->"COALESCE(OCTET_LENGTH("+c+"),0),COALESCE(CHAR_LENGTH("+c+"),0),COALESCE(OCTET_LENGTH(CONVERT("+c+" USING utf16)) DIV 2,0)").toList());
-        return j.query("SELECT "+projection+" FROM "+table+" WHERE id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),rs->{
+        return j.query("SELECT "+projection+" FROM "+table+" WHERE "+key+"=? FOR UPDATE"+(skip?" SKIP LOCKED":""),rs->{
             state.check();if(!rs.next()){if(skip)return false;throw new NotFound();}state.row(edges);
             for(int i=0;i<columns.size();i++)state.text(rs.getLong(i*3+1),rs.getLong(i*3+2),rs.getLong(i*3+3));return true;
         },id);
@@ -692,9 +742,11 @@ public final class JdbcFileRegistry implements FileRegistry {
         try{return rs.getBigDecimal(column).longValueExact();}catch(ArithmeticException|NullPointerException failure){throw new Conflict();}
     }
     private Sources checkedSources(LockedMeeting expected,LockedSources held,List<String> ids){
-        var gate=gate(expected);var complete=completeIds(ids);
+        var gate=gate(expected);
         if(!(held instanceof JdbcFileRegistry.Sources sources)||sources.issuer()!=this||sources.gate!=gate
-                ||sources.phase!=SourcePhase.SOURCES_HELD||!sources.files.keySet().equals(complete))throw new IllegalArgumentException("Foreign, consumed or incomplete sources");
+                ||sources.phase!=SourcePhase.SOURCES_HELD)throw new IllegalArgumentException("Foreign, consumed or incomplete sources");
+        var complete=completeIds(ids,sources.derivedUnion?1:0);
+        if(!sources.files.keySet().equals(complete))throw new IllegalArgumentException("Incomplete source union");
         gate(sources.gate);return sources;
     }
     @Override public List<CompletedSource> sources(LockedMeeting expected,LockedSources held,List<String> ids){

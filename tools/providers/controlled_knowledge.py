@@ -121,6 +121,11 @@ COMMIT;""")
    self.db.execute('INSERT INTO folder VALUES(?,?,NULL,?,1)',('controlled-root','controlled-library','Controlled root'))
   actual=self.db.execute('SELECT pins FROM identity WHERE singleton=1').fetchone()
   if not actual or bytes(actual[0])!=canonical(pins):raise RuntimeError('Pinned store/key identity mismatch')
+  # Additive protocol migration on this explicitly owned controlled store. No document rewrite.
+  self.db.executescript("""BEGIN IMMEDIATE;
+CREATE TABLE IF NOT EXISTS document_governance(document TEXT PRIMARY KEY REFERENCES document(id),state TEXT NOT NULL CHECK(state IN ('ACTIVE','WITHDRAWN','OBSOLETE')),revision INTEGER NOT NULL CHECK(revision>=0),event_id TEXT NOT NULL UNIQUE,changed_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS governance_command(document TEXT NOT NULL REFERENCES document(id),command_key TEXT NOT NULL,actor TEXT NOT NULL,request_hash TEXT NOT NULL,receipt BLOB NOT NULL,PRIMARY KEY(document,command_key));
+COMMIT;""")
  def create_child_folder(self,folder):
   if not re.fullmatch(r'[a-z][a-z0-9-]{0,127}',folder) or folder=='controlled-root':raise RuntimeError('Bounded new child destination required')
   expected=(folder,'controlled-library','controlled-root',folder,0)
@@ -156,8 +161,9 @@ COMMIT;""")
   if not bearer.startswith('Bearer ') or not hmac.compare_digest(digest(bearer[7:].encode()),self.verifier):raise Denied(401)
   claims=self.verify(headers.get('x-controlled-delegation'),self.app_key,SCHEMA)
   exact(claims,'schema issuer keyId audience storeInstanceId actorId purpose method resource issuedAt expiresAt nonce requestDigest')
-  purposes={'/v1/knowledge/destination-authorizations':'DESTINATION_AUTHORIZE','/v1/knowledge/publications':'PUBLISH'}
+  purposes={'/v1/knowledge/destination-authorizations':'DESTINATION_AUTHORIZE','/v1/knowledge/publications':'PUBLISH','/v1/knowledge/material-authorizations':'MATERIAL_READ'}
   purpose=purposes.get(path) if method=='POST' else 'MATERIAL_READ' if path.startswith(('/v1/knowledge/material-libraries','/v1/knowledge/material-documents/')) else 'DESTINATION_READ' if path.startswith('/v1/knowledge/libraries') else 'DOCUMENT_READ' if path.startswith('/v1/knowledge/documents/') else 'RECEIPT_LOOKUP'
+  if re.fullmatch(r'/v1/knowledge/governance/documents/doc-[0-9a-f]{32}/(?:state|commands(?:/[A-Za-z0-9_.:-]{1,128})?)',path):purpose='GOVERNANCE_CHANGE' if method=='POST' else 'GOVERNANCE_OBSERVE'
   expected={**{'issuer':self.ids['clientId'],'keyId':self.ids['delegationKeyId'],'audience':self.ids['providerId'],'storeInstanceId':self.ids['storeInstanceId'],'method':method,'resource':path,'purpose':purpose,'requestDigest':digest(body if method=='POST' else canonical({'method':method,'resource':path}))}}
   if any(claims.get(k)!=v for k,v in expected.items()) or not isinstance(claims['actorId'],str) or not 1<=len(claims['actorId'])<=255 or not re.fullmatch('[A-Za-z0-9_-]{16,64}',claims['nonce']):raise Denied()
   return claims
@@ -168,8 +174,11 @@ COMMIT;""")
  def receipt(self,request,state,**extra):return {**{k:request[k] for k in ('providerId','publicationId','confirmationId','businessKey','logicalRequestHash','executionRequestHash','executionId','executionNo','actorId','libraryId','folderId','payloadSha256')},'protocol':'ama.controlled-knowledge-receipt.v1','storeInstanceId':self.ids['storeInstanceId'],'clientId':self.ids['clientId'],'state':state,**extra}
  def serve(self,method,path,headers,raw):
   call=self.authorize(headers,method,path,raw);actor=call['actorId'];body=strict(raw,MAX_WIRE) if method=='POST' else None
+  if method=='POST' and not isinstance(body,dict):raise Denied(400,'INVALID_PROVIDER_RECEIPT')
   if body is not None and body.get('actorId')!=actor:raise Denied()
   with self.lock:
+   if path.startswith('/v1/knowledge/governance/'):return self.governance(method,path,actor,body)
+   if method=='POST' and path=='/v1/knowledge/material-authorizations':return self.material_authority(actor,body)
    if method=='POST' and path=='/v1/knowledge/destination-authorizations':
     exact(body,'actorId providerId libraryId folderId context')
     if body['providerId']!=self.ids['providerId']:raise Denied()
@@ -210,7 +219,7 @@ COMMIT;""")
     row=self.db.execute('SELECT id,publication,client,library,folder,payload_hash,result_id FROM document WHERE id=?',(document,)).fetchone()
     if not row:raise Denied(404)
     if row['client']!=self.ids['clientId']:raise Denied()
-    grant=self.grant(actor,row['library'],row['folder'],True)
+    self.require_document_active(row['id']);grant=self.grant(actor,row['library'],row['folder'],True)
     library=self.db.execute('SELECT id,name,root FROM library WHERE id=?',(row['library'],)).fetchone()
     if not library or not isinstance(library['name'],str) or not 1<=len(library['name'])<=1024:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
     chain=[];seen=set();current=row['folder']
@@ -243,12 +252,67 @@ COMMIT;""")
     document=path.startswith('/v1/knowledge/documents/');id=path.split('/')[-1];row=self.db.execute('SELECT * FROM document WHERE '+('id' if document else 'result_id')+'=?',(id,)).fetchone()
     if not row:raise Denied(404)
     if row['client']!=self.ids['clientId']:raise Denied()
-    if document:self.grant(actor,row['library'],row['folder'],True)
+    if document:self.require_document_active(row['id']);self.grant(actor,row['library'],row['folder'],True)
     elif row['actor']!=actor:raise Denied()
     result={'providerId':self.ids['providerId'],'storeInstanceId':self.ids['storeInstanceId'],'documentId':row['id'],'resultId':row['result_id'],'publicationId':row['publication'],'payloadSha256':row['payload_hash']}
     if document:result['payload']=strict(row['payload'],MAX_PAYLOAD)
     return result
    raise Denied(404)
+ def require_document_active(self,document):
+  row=self.db.execute('SELECT state FROM document_governance WHERE document=?',(document,)).fetchone()
+  if row and row['state']!='ACTIVE':raise Denied(403,'DOCUMENT_NOT_ACTIVE')
+ def governance(self,method,path,actor,body):
+  match=re.fullmatch(r'/v1/knowledge/governance/documents/(doc-[0-9a-f]{32})/(state|commands(?:/[A-Za-z0-9_.:-]{1,128})?)',path)
+  if not match:raise Denied(404)
+  document,tail=match.groups();row=self.db.execute('SELECT id,publication,client,actor,library,folder FROM document WHERE id=?',(document,)).fetchone()
+  if not row:raise Denied(404)
+  if row['client']!=self.ids['clientId'] or row['actor']!=actor:raise Denied()
+  def envelope(claims):return dict(providerId=self.ids['providerId'],storeInstanceId=self.ids['storeInstanceId'],assertion=self.sign(claims))
+  if method=='GET' and tail.startswith('commands/'):
+   saved=self.db.execute('SELECT actor,receipt FROM governance_command WHERE document=? AND command_key=?',(document,tail.split('/')[1])).fetchone()
+   if not saved:raise Denied(404,'GOVERNANCE_NOT_FOUND')
+   if saved['actor']!=actor:raise Denied()
+   return strict(saved['receipt'],8192)
+  if method=='GET' and tail=='state':
+   now=int(time.time());self.db.execute("INSERT OR IGNORE INTO document_governance VALUES(?,'ACTIVE',0,?,?)",(document,secrets.token_hex(16),now));state=self.db.execute('SELECT * FROM document_governance WHERE document=?',(document,)).fetchone()
+   return envelope(dict(schema='ama.controlled-kb-governance-state.v1',**self.ids,documentId=document,publicationId=row['publication'],actorId=actor,state=state['state'],revisionToken=str(state['revision']),eventId=state['event_id'],issuedAt=now,expiresAt=now+5))
+  if method!='POST' or tail!='commands':raise Denied(404)
+  exact(body,'protocol actorId documentId publicationId commandKey expectedRevisionToken action reason')
+  key=body['commandKey'];version=body['expectedRevisionToken'];reason=body['reason']
+  if body['protocol']!='ama.controlled-knowledge-governance.v1' or body['documentId']!=document or body['publicationId']!=row['publication'] or body['action'] not in ('WITHDRAW','OBSOLETE') or not isinstance(key,str) or not re.fullmatch('[A-Za-z0-9_.:-]{1,128}',key) or not isinstance(version,str) or not re.fullmatch('0|[1-9][0-9]{0,18}',version) or int(version)>=2**63-1 or not isinstance(reason,str) or not reason.strip() or len(reason)>2048 or len(reason.encode('utf-8'))>8192:raise Denied(400,'INVALID_GOVERNANCE_REQUEST')
+  request_hash=digest(canonical(body));self.db.execute('BEGIN IMMEDIATE')
+  try:
+   old=self.db.execute('SELECT actor,request_hash,receipt FROM governance_command WHERE document=? AND command_key=?',(document,key)).fetchone()
+   if old:
+    if old['actor']!=actor or old['request_hash']!=request_hash:raise Denied(409,'GOVERNANCE_CONFLICT')
+    result=strict(old['receipt'],8192);self.db.commit();return result
+   self.grant(actor,row['library'],row['folder']);now=int(time.time());self.db.execute("INSERT OR IGNORE INTO document_governance VALUES(?,'ACTIVE',0,?,?)",(document,secrets.token_hex(16),now));current=self.db.execute('SELECT * FROM document_governance WHERE document=?',(document,)).fetchone()
+   if current['state']!='ACTIVE' or current['revision']!=int(version):raise Denied(409,'GOVERNANCE_CONFLICT')
+   state='WITHDRAWN' if body['action']=='WITHDRAW' else 'OBSOLETE';event=secrets.token_hex(16);revision=current['revision']+1
+   claims=dict(schema='ama.controlled-kb-governance-receipt.v1',**self.ids,documentId=document,publicationId=row['publication'],actorId=actor,commandKey=key,requestSha256=request_hash,reasonSha256=digest(reason.encode('utf-8')),action=body['action'],state=state,revisionToken=str(revision),eventId=event,verifiedAt=now)
+   result=envelope(claims);self.db.execute('UPDATE document_governance SET state=?,revision=?,event_id=?,changed_at=? WHERE document=?',(state,revision,event,now,document));self.db.execute('INSERT INTO governance_command VALUES(?,?,?,?,?)',(document,key,actor,request_hash,canonical(result)));self.db.commit();return result
+  except BaseException:self.db.rollback();raise
+ def material_authority(self,actor,body):
+  exact(body,'protocol actorId items')
+  if body['protocol']!='ama.controlled-material-authority.v1' or not isinstance(body['items'],list) or not 1<=len(body['items'])<=64:raise Denied(400)
+  seen=set()
+  for item in body['items']:
+   if not isinstance(item,dict):raise Denied(400)
+   exact(item,'libraryId documentId version')
+   if any(not isinstance(item[k],str) or not re.fullmatch('[A-Za-z0-9_-]{1,128}',item[k]) for k in ('libraryId','documentId')) or not isinstance(item['version'],str) or not re.fullmatch('[0-9a-f]{64}',item['version']):raise Denied(400)
+   identity=(item['libraryId'],item['documentId'],item['version'])
+   if identity in seen:raise Denied(400)
+   seen.add(identity)
+  # Validate the whole exact-version batch under the provider's serialized store operation.
+  # No content is returned, and no partial or stale authority survives any failed item.
+  for library,document,version in seen:
+   row=self.db.execute('SELECT * FROM document WHERE id=? AND library=? AND client=?',(document,library,self.ids['clientId'])).fetchone()
+   if not row:raise Denied(404)
+   self.require_document_active(document);self.grant(actor,library,row['folder'],True)
+   if row['payload_hash']!=version:raise Denied(409,'VERSION_CONFLICT')
+   if digest(bytes(row['payload']))!=version:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+  now=int(time.time());claims=dict(schema='ama.controlled-material-authority.v1',**self.ids,actorId=actor,itemsSha256=digest(canonical(body['items'])),issuedAt=now,expiresAt=now+5)
+  return dict(providerId=self.ids['providerId'],storeInstanceId=self.ids['storeInstanceId'],assertion=self.sign(claims))
  def material_read(self,actor,path):
   # Caller has already verified service bearer, exact signed delegation and store/key pins.
   if len(path)>2048 or re.search(r'%(?![0-9A-Fa-f]{2})',path):raise Denied(400)
@@ -266,7 +330,7 @@ COMMIT;""")
     if not re.fullmatch('[0-9a-f]{64}',version):raise Denied(400)
     row=self.db.execute('SELECT * FROM document WHERE id=? AND library=? AND client=?',(document,library,self.ids['clientId'])).fetchone()
     if not row:raise Denied(404)
-    self.grant(actor,library,row['folder'],True)
+    self.require_document_active(row['id']);self.grant(actor,library,row['folder'],True)
     if row['payload_hash']!=version:raise Denied(409,'VERSION_CONFLICT')
     payload=bytes(row['payload'])
     if len(payload)>MAX_PAYLOAD or digest(payload)!=version:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
@@ -283,7 +347,7 @@ COMMIT;""")
     if set(query)-{'limit','cursor','search'}:raise Denied(400)
     library=identifier(parts[4])
     if not self.db.execute('SELECT 1 FROM grant_record g JOIN folder f ON f.id=g.folder AND f.library=g.library WHERE g.actor=? AND g.library=? AND g.can_read=1 LIMIT 1',(actor,library)).fetchone():raise Denied()
-    rows=self.db.execute("SELECT d.id,d.library libraryId,json_extract(CAST(d.payload AS TEXT),'$.title') name,d.payload_hash version,length(d.payload) size FROM document d JOIN grant_record g ON g.actor=? AND g.library=d.library AND g.folder=d.folder AND g.can_read=1 WHERE d.library=? AND d.client=? AND d.id>? AND instr(lower(json_extract(CAST(d.payload AS TEXT),'$.title')),lower(?))>0 ORDER BY d.id LIMIT ?",(actor,library,self.ids['clientId'],after,search,limit+1)).fetchall()
+    rows=self.db.execute("SELECT d.id,d.library libraryId,json_extract(CAST(d.payload AS TEXT),'$.title') name,d.payload_hash version,length(d.payload) size FROM document d JOIN grant_record g ON g.actor=? AND g.library=d.library AND g.folder=d.folder AND g.can_read=1 WHERE NOT EXISTS(SELECT 1 FROM document_governance dg WHERE dg.document=d.id AND dg.state<>'ACTIVE') AND d.library=? AND d.client=? AND d.id>? AND instr(lower(json_extract(CAST(d.payload AS TEXT),'$.title')),lower(?))>0 ORDER BY d.id LIMIT ?",(actor,library,self.ids['clientId'],after,search,limit+1)).fetchall()
     items=[]
     for row in rows[:limit]:
      if not isinstance(row['name'],str) or len(row['name'])>1024 or not 0<row['size']<=MAX_PAYLOAD:raise Denied(413)

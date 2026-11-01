@@ -7,6 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /** Synthetic immutable history checks only; neither these rows nor this verifier issue authority. */
 class Task11PublicationWriteHistoryTest {
+ @Test void localExportHistoryDoesNotPreventLaterUnpublishedEditsOrImpersonatePublication(){
+  var f=new Fixture();var task=row("id",TASK,"task_type","MINUTES_EXPORT_V1","subject_kind","MEETING","subject_id",MEETING,"input_kind","MINUTES_EXPORT_INPUT");f.rows.get("durable_task").add(task);assertDoesNotThrow(f::verify);
+  task.put("input_kind","PUBLICATION");assertThrows(RuntimeException.class,f::verify);task.put("input_kind","MINUTES_EXPORT_INPUT");
+  f.rows.get("external_operation").add(row("id",OP,"operation_kind","KNOWLEDGE_PUBLISH","subject_kind","MEETING","subject_id",MEETING));f.rows.get("external_execution").add(row("id",EXEC,"operation_id",OP,"task_id",TASK));assertThrows(RuntimeException.class,f::verify);
+ }
  static final String MEETING="12345678-1234-4234-8234-123456789ac1",PUB="12345678-1234-4234-8234-123456789abc",FINAL="12345678-1234-4234-8234-123456789abd",TASK="12345678-1234-4234-8234-123456789abe",OP="12345678-1234-4234-8234-123456789abf",EXEC="12345678-1234-4234-8234-123456789ac0",STORE="12345678-1234-4234-8234-123456789ac2";
  static Map<String,Object> row(Object... pairs){var out=new LinkedHashMap<String,Object>();for(int i=0;i<pairs.length;i+=2)out.put((String)pairs[i],pairs[i+1]);return out;}
  static final class Fixture {

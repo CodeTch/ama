@@ -10,15 +10,15 @@ export function useMeetingLibrary(deps:Dependencies,actor:()=>string|null){
   try{
    const result=await deps.meetings.list(page.scope,page.cursor,controller.signal,{stages:['PUBLISHED']});if(!current())return;
    if(result.hasMore&&(!result.nextCursor||result.nextCursor===page.cursor||page.seen.has(result.nextCursor)))throw new ApiError('response',200,'会议库分页暂无法继续，请重新读取。');
-   const admitted:LibraryRow[]=[],warnings:string[]=[];let position=0,transient:unknown=null;
+   const admitted=new Map<string,LibraryRow>(),warnings:string[]=[];let position=0,transient:unknown=null;
    async function work(){while(current()){
     const meeting=result.items[position++];if(!meeting)return;
     try{const publication=(await deps.publications.current(meeting.id,controller.signal)).publication;if(!current())return;if(!publication||publication.documentViewAvailability!=='READY'||!publication.officialDocumentUrl){warnings.push('部分会议的正式成果索引尚未就绪，请稍后重新读取。');continue;}
-     const context=await deps.library.context(meeting.id,publication.publicationId,controller.signal);if(current())admitted.push(Object.freeze({meeting,context}));
+     const context=await deps.library.context(meeting.id,publication.publicationId,controller.signal);if(current())admitted.set(meeting.id,Object.freeze({meeting,context}));
     }catch(cause){if(!current())return;if(cause instanceof ApiError&&[401,403,404].includes(cause.status??0)){if(cause.status===401)throw cause;warnings.push('部分正式成果当前不可访问，已隐藏相关条目。');}else transient??=cause;}
    }}
    await Promise.all([work(),work()]);if(!current())return;
-   const unique=new Map(rows.value.map(row=>[row.meeting.id,row]));for(const meeting of result.items)unique.delete(meeting.id);for(const row of admitted)unique.set(row.meeting.id,row);rows.value=Object.freeze([...unique.values()]);issues.value=Object.freeze([...new Set([...issues.value,...warnings])]);
+   const unique=new Map(rows.value.map(row=>[row.meeting.id,row]));for(const meeting of result.items)unique.delete(meeting.id);for(const meeting of result.items){const row=admitted.get(meeting.id);if(row)unique.set(meeting.id,row);}rows.value=Object.freeze([...unique.values()]);issues.value=Object.freeze([...new Set([...issues.value,...warnings])]);
    if(transient)throw transient;
    if(result.nextCursor)page.seen.add(result.nextCursor);page.cursor=result.nextCursor;page.done=!result.hasMore;moreAvailable.value=pages.some(p=>!p.done);
   }catch(cause){if(current()){if(cause instanceof ApiError&&[401,403].includes(cause.status??0)){rows.value=[];issues.value=[];}error.value=cause instanceof Error?cause.message:'会议库暂无法读取，请重试。';controller.abort();}}

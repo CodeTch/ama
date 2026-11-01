@@ -123,11 +123,14 @@ public final class InternalFileController implements AutoCloseable {
                                 "read",
                                 "read-sequence-v1",
                                 "delete",
+                                "retire-key-v1",
+                                "fence-recording-v1",
                                 "begin",
                                 "part",
                                 "complete",
                                 "abort",
                                 "discard-upload",
+                                "probe-v1",
                                 "list",
                                 "health")
                         .contains(route)) {
@@ -135,7 +138,7 @@ public final class InternalFileController implements AutoCloseable {
                     return;
                 }
                 if (role != Role.WRITE
-                        && !Set.of("stat", "read", "read-sequence-v1", "list", "health").contains(route)) {
+                        && !Set.of("stat", "read", "read-sequence-v1", "list", "health", "probe-v1").contains(route)) {
                     error(exchange, 403, "FORBIDDEN");
                     return;
                 }
@@ -158,6 +161,10 @@ public final class InternalFileController implements AutoCloseable {
                 }
                 Object result =
                         switch (route) {
+                            case "probe-v1" -> {
+                                store.probe(request.backendId());
+                                yield Map.of("backendId",request.backendId());
+                            }
                             case "put" ->
                                     store.put(
                                             request.key(),
@@ -167,6 +174,14 @@ public final class InternalFileController implements AutoCloseable {
                             case "stat" -> store.stat(request.key());
                             case "delete" -> {
                                 store.delete(request.key());
+                                yield null;
+                            }
+                            case "retire-key-v1" -> {
+                                store.retireKey(request.key());
+                                yield null;
+                            }
+                            case "fence-recording-v1" -> {
+                                store.fenceRecordingSession(request.key());
                                 yield null;
                             }
                             case "begin" -> store.beginUpload(request.spec());

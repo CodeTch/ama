@@ -1,0 +1,77 @@
+collection:
+  parameters:
+    - {$ref: '#/Meeting'}
+  get:
+    operationId: listInfoSuggestions
+    description: Owner-private pending NAME/SUMMARY proposals from genuine asynchronous candidates. Full provenance and current confirmation/material/template/exclusion are verified. Summary is ordered OVERVIEW content, never the complete minutes body. Loading never modifies human information. Category remains an explicit dictionary selection.
+    security: [{enterpriseSession: []}]
+    responses:
+      '200':
+        description: Current proposals and exact meeting version
+        content: {application/json: {schema: {$ref: '#/InfoSuggestions'}}}
+      '401': {$ref: './identity.yaml#/Unauthenticated'}
+      '403': {$ref: '#/Error'}
+      '409': {$ref: '#/Error'}
+      '503': {$ref: '#/Error'}
+decision:
+  parameters:
+    - {$ref: '#/Meeting'}
+    - {name: suggestionId, in: path, required: true, schema: {type: string, format: uuid}}
+  post:
+    operationId: decideInfoSuggestion
+    description: Explicit ACCEPT writes only the selected saved information field, preserves roster drafts/grants, advances the aggregate fence and retains an immutable receipt. REJECT records the decision without modifying human information. Original-key replay returns the original revision under current owner authority; different body conflicts. No client-supplied suggestion value is accepted. Human drafts must be saved before deciding.
+    security: [{enterpriseSession: []}]
+    parameters:
+      - {$ref: './meetings.yaml#/Key'}
+      - {$ref: './identity.yaml#/Origin'}
+      - {$ref: './identity.yaml#/Csrf'}
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [expectedRevisionToken, decision]
+            properties:
+              expectedRevisionToken: {type: string, pattern: '^(0|[1-9][0-9]{0,18})$'}
+              decision: {type: string, enum: [ACCEPT, REJECT]}
+    responses:
+      '200':
+        description: Historical decision receipt; re-read saved information
+        content: {application/json: {schema: {$ref: './meetings.yaml#/Mutation'}}}
+      '400': {$ref: './identity.yaml#/Invalid'}
+      '401': {$ref: './identity.yaml#/Unauthenticated'}
+      '403': {$ref: '#/Error'}
+      '409': {$ref: '#/Error'}
+      '503': {$ref: '#/Error'}
+Meeting:
+  name: meetingId
+  in: path
+  required: true
+  schema: {type: string, format: uuid}
+Error:
+  description: Current authority, version or bounded source proof does not permit the operation
+  content: {application/json: {schema: {$ref: './identity.yaml#/BusinessError'}}}
+InfoSuggestions:
+  type: object
+  additionalProperties: false
+  required: [meetingId, revisionToken, items, categoryStatus]
+  properties:
+    meetingId: {type: string, format: uuid}
+    revisionToken: {type: string, pattern: '^(0|[1-9][0-9]{0,18})$'}
+    categoryStatus: {type: string, const: SELECT_REQUIRED}
+    items: {type: array, maxItems: 2, items: {$ref: '#/InfoSuggestion'}}
+InfoSuggestion:
+  type: object
+  additionalProperties: false
+  required: [id, field, value, createdAt, candidateId, inputId, inputFingerprint, transcriptConfirmationId]
+  properties:
+    id: {type: string, format: uuid}
+    field: {type: string, enum: [NAME, SUMMARY]}
+    value: {type: string, minLength: 1}
+    createdAt: {type: string, format: date-time}
+    candidateId: {type: string, format: uuid}
+    inputId: {type: string, format: uuid}
+    inputFingerprint: {type: string, pattern: '^[0-9a-f]{64}$'}
+    transcriptConfirmationId: {type: string, format: uuid}

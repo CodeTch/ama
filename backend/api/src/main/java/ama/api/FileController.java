@@ -111,7 +111,8 @@ class FileController {
         var ranges = Collections.list(request.getHeaders("Range"));
         if (ranges.size() > 1) throw new IllegalArgumentException("One range header required");
         String range = ranges.isEmpty() ? null : ranges.getFirst();
-        try (var download = registry.download(actor(request), id, range)) {
+        var identity=SessionSecurityFilter.readIdentity(request);
+        try (var download = AuthorizedDownloads.guard(registry.download(actor(request), id, range),identity,(current,probe)->registry.download(current,id,probe))) {
             response.setStatus(range == null ? 200 : 206);
             response.setContentType("application/octet-stream");
             response.setHeader("Accept-Ranges", "bytes");

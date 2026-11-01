@@ -16,12 +16,26 @@ import java.util.List;
  * backend, namespace and prefix. No implementation may fall back to another backend.
  */
 public interface FileStoragePort {
+    /** Checks the selected backend's current availability, without claiming object integrity.
+     * Implementations may provide a bounded topology probe; older adapters retain their list check. */
+    default void probe(String backendId) {list(backendId,"files","",null,1);}
     StoredBlob put(StorageKey key, InputStream body, long size, String sha256);
     BlobStat stat(StorageKey key);
     InputStream read(StorageKey key, long offset, long length);
     /** One bounded ordered stream; verifies every selected immutable chunk before complete EOF. */
     default InputStream readSequence(ReadSequence sequence) {return ChunkSequenceStream.open(this,sequence);}
     void delete(StorageKey key);
+    /** Permanently fences an exclusively owned logical key before removing its current bytes.
+     * A successful return survives process restart and rejects every later put/complete for
+     * this key, including when it did not exist. Callers first commit their no-attachment
+     * tombstone and retain the exact managed key as retry inventory. Upload parts require
+     * discardUpload as well. This does not claim erasure of backups or remote versions. */
+    default void retireKey(StorageKey key) {throw new StorageException(ErrorCode.STORAGE_UNAVAILABLE);}
+    /** Permanently forbids every future object PUT/complete under recordings/<session UUID>/,
+     * including keys absent from SQL after a rolled-back append. The key argument is exactly
+     * (original backend, recordings, session UUID). This fences writes only: callers still
+     * enumerate and retire the actual stored keys before claiming physical erasure. */
+    default void fenceRecordingSession(StorageKey scope) {throw new StorageException(ErrorCode.STORAGE_UNAVAILABLE);}
     UploadToken beginUpload(UploadSpec spec);
     PartReceipt writePart(UploadToken token, int part, InputStream body, long size, String sha256);
 

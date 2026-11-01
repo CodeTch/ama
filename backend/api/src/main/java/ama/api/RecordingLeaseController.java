@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
  RecordingLeaseController(RecordingService recordings,JdbcRecordingWriterLeases leases,TransactionRunner tx,MeetingAccess access,RecordingMutationGuard mutations){this.recordings=recordings;this.leases=leases;this.tx=tx;this.access=access;this.mutations=mutations;}
  @PostMapping("/api/v1/recordings/{sessionId}/writer-lease")
  JdbcRecordingWriterLeases.Lease claim(@PathVariable String sessionId,HttpServletRequest request)throws IOException {
-  var actor=actor(request);var body=RecordingJson.read(request,Claim.class);epoch(body==null?null:body.expectedEpoch());String meeting=recordings.session(sessionId).meetingId();
-  return tx.required(()->{var held=access.lock(actor,meeting);access.require(held,MeetingAccess.Action.EDIT);mutations.require(actor,meeting,held);return leases.acquire(sessionId,body.expectedEpoch(),body.collectorId(),body.requestId());});
+  var actor=actor(request);var body=RecordingJson.read(request,Claim.class);epoch(body==null?null:body.expectedEpoch());String meeting=recordings.meetingId(sessionId);
+  return tx.required(()->{var held=access.lock(actor,meeting);access.require(held,MeetingAccess.Action.EDIT);return recordings.withinMeeting(sessionId,meeting,()->{mutations.require(actor,meeting,held);return leases.acquire(sessionId,body.expectedEpoch(),body.collectorId(),body.requestId());});});
  }
  @PostMapping("/api/v1/recordings/{sessionId}/writer-lease/renew")
  JdbcRecordingWriterLeases.Lease renew(@PathVariable String sessionId,HttpServletRequest request)throws IOException {
-  var actor=actor(request);var body=RecordingJson.read(request,Renew.class);epoch(body==null?null:body.expectedEpoch());String meeting=recordings.session(sessionId).meetingId();
-  return tx.required(()->{var held=access.lock(actor,meeting);access.require(held,MeetingAccess.Action.EDIT);mutations.require(actor,meeting,held);return leases.renew(sessionId,body.expectedEpoch(),body.collectorId());});
+  var actor=actor(request);var body=RecordingJson.read(request,Renew.class);epoch(body==null?null:body.expectedEpoch());String meeting=recordings.meetingId(sessionId);
+  return tx.required(()->{var held=access.lock(actor,meeting);access.require(held,MeetingAccess.Action.EDIT);return recordings.withinMeeting(sessionId,meeting,()->{mutations.require(actor,meeting,held);return leases.renew(sessionId,body.expectedEpoch(),body.collectorId());});});
  }
  private static void epoch(Long epoch){if(epoch==null||epoch<1)throw new IllegalArgumentException("Expected writer epoch required");}
  private static Actor actor(HttpServletRequest request){if(!(request.getAttribute(SessionSecurityFilter.SESSION) instanceof ResolvedSession session))throw new MeetingAccess.AccessDeniedException();return session.actor();}

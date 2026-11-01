@@ -31,13 +31,15 @@
 | REVIEW-01 | 来源审阅、敏感信息、行动负责人 | IN_SCOPE（纯文本部分） | 审阅记录、负责人文本选择/清除、确认前门槛真实持久化 | 目录/身份请求使用 CAS 会话 | 审阅/负责人回读、越权/撤权、确认阻断/通过 | `OPEN` |
 | FINAL-01 | 最终确认、冻结和只读 | IN_SCOPE | 确认、冻结、冲突恢复；冻结后写保护 | owner/member ACL | 事务结果、重复命令、刷新和只读回读 | `OPEN` |
 | PUB-01 | 发布、未知 ACK、正式文档 | IN_SCOPE | 目的地选择、发布、状态查询、失败重试、只读文档 | provider ACL 和 CAS 身份 | 只查回不重发、成员/非成员/撤权、文档字节/截图 | `OPEN` |
-| TOPIC-01 | 专题、归组、列表切换 | IN_SCOPE | 新建、编辑、搜索、单项/批量归组、移除/删除 | owner/member 权限 | CRUD API、回读、冲突/删除确认、pixel diff | `OPEN` |
-| LIB-01 | 会议知识库和文档导航 | IN_SCOPE | 标签/条目读取、选择、移除、只读导航 | provider 版本和 ACL | 真实版本 token、403/404、页面状态和回读 | `OPEN` |
+| TOPIC-01 | 专题、归组、列表切换 | IN_SCOPE | 新建、编辑、搜索、单项/批量归组、移除/删除 | owner/member 权限 | CRUD API、回读、冲突/删除确认、pixel diff | `PASS` |
+| LIB-01 | 会议知识库和文档导航 | IN_SCOPE（原型只读库） | 实际条目/位置/版本读取、分页、来源与会议导航；成果移除/失效按D-05治理规则执行 | 固定8792 harness，当前provider READ和会议ACL | 真实context/撤权403/恢复新版、来源导航、三视口12项零差异 | `PASS` |
 | FEEDBACK-01 | 反馈列表、详情和处理状态 | IN_SCOPE | 创建、读取、补充、审核状态更新/撤销（按领域规则） | CAS 身份和权限 | 状态持久化、非授权拒绝、刷新和截图 | `PASS` |
 | VOICE-01 | 录音页及录音控件 | DEFERRED_VOICE | 只实现原型静态/延期/错误状态；不访问设备、不建任务 | 不触发录音外部接口 | 1440/1024 pixel diff、`getUserMedia` 未调用、无写入 | `DEFERRED_VOICE` |
 | VOICE-02 | 音视频、播放、ASR、说话人 | DEFERRED_VOICE | 只实现原型结构和延期状态；不上传媒体、不 ASR、不播放 | 不触发媒体/ASR接口 | 静态 pixel diff、无文件/任务/结果、副作用为零 | `DEFERRED_VOICE` |
 | CROSS-01 | CAS + 导入完整浏览器链 | IN_SCOPE | 匿名→登录→会议→文本导入→材料读取→受理→退出 | 固定 `8792/2525`，真实 harness | 端到端报告、双方回归、页面无错误 | `OPEN` |
 | CROSS-02 | 负例与兼容修复 | IN_SCOPE | 400/401/403/404/409/500、过期/重复 ticket、版本冲突诚实呈现 | 只修复被真实请求证明缺失的 harness 路由/响应 | 失败日志、最小 patch、harness 定向测试、AMA 回归 | `OPEN` |
+
+2026-10-31 23:28 用户要求完成当前批次后停止，等待“继续任务”。本矩阵仍5项PASS、13项OPEN、2项DEFERRED_VOICE；MIN-01没有关闭。个人模板CRUD/协议/页面已实现，初始化回执与事件的真实MySQL定向21项通过，最新事件修复未部署；完整生成/候选/最终发布、原生模板UI恢复及像素验收未完成。停止位置、源码/部署差异与证据见[任务接续记录](../../development/task-continuation-2026-10-31-2328.md)。
 
 ## 关闭规则
 
@@ -85,3 +87,21 @@
 ### 2026-10-31 18:58 用户停止时的专题/知识库与环境状态
 
 详 [当前批次接续](topic-library-batch-2026-10-31.md)。TOPIC-01新摘要/删除/恢复及真实事务10项通过，LIB-01后端/受控provider/前端读取实现与定向测试完成，均缺新部署CAS/像素，保留OPEN。原已通过条目作为带旧sourceSignature的历史证据保留，不代表误删后环境当前可用。用户确认容器、镜像和持久卷误删，所有开发/验证已停止，未重建数据或部署；总体NOTACCEPTED。
+
+### 用户恢复后的新环境接续（2026-10-31）
+
+原数据库卷事故后已重建的主库迁移V044，端口46443；不将旧业务数据写作已恢复。源码957cda0的全新专题CAS9项通过（`b-followup/resume-topic-20261031-01/report.json`），手工替换/撤销真实CAS6项通过（`transcript-replacements/resume-cas-20261031-01/report.json`）。新专题基础三视口30项、单/批量归组三视口30项、扩展非空分组三视口42项均为精确零差异（基础状态与扩展报告有重叠，不相加声称独立102项）。扩展最初失败由参考夹具未读取归组后的真实排序/updatedAt造成，修正仅参考数据投影，保留原型及失败报告。
+
+新会议e8824826-5e77-4029-b94d-28fdaa42e4c8实际完成确认/受控合成纪要/显式审阅/冻结/发布/当前位置与成员权限，7项真实检查PASS（`b-followup/resume-library-20261031-04/report.json`）。提供方来自当前自有local受控进程，CAS仍为8792模拟器；不冒充企业知识库或真实模型质量。首次任务完成期间有一次503来源图变化，后续同task读取200，未新建第二生成；测试请求字段与query错误也保留原失败。
+
+知识库页头精确对照实测3198像素差异，修正面包屑/按钮文字和链接行高后HMR4项零差异。新正式脚本`tools/dev/meeting_library_cas_integration.mjs`涵盖实际READ撤回/恢复、版本变化、成员/非成员、三视口和导航；尚待新部署执行，LIB-01仍OPEN。专题新增真实服务端筛选检查也待新部署重跑，TOPIC-01仍OPEN。全Web432、生产Java698、type/build/APIbytes已通过，但这些计数在存储probe修复之前；当前新验证见后续记录。
+
+正常新部署受历史113k录音对象的存储全枚举阻断，120秒未就绪，证据`resume-library-topic-deploy-20261031-01.log`；已停止仅该失败部署的自有应用进程，数据库/文件/失败证据保留。新增每backend可用性探测避免枚举，仍验证backendID/mTLS/实际卷/角色/inode；真正文件列表不改，其他适配器默认仍list。真实LocalFileProbeIT2+顺序读取3+并发2共7PASS（`resume-file-probe-green.log`）；专题10/录音13/生产全套顺序复验中，再正常部署32pool/32file并完成CAS/像素/native/100路及完整7200秒。不得把旧中断长测标完成。
+
+### 当前源码的专题与只读知识库签收（2026-10-31）
+
+TOPIC-01：当前冻结源码的真实CAS10项和三视口72项精确零像素通过。汇总 `.tools/local-app/resume-topic-final-qualification.json`，业务 `b-followup/resume-topic-final-20261031-01/report.json`；像素 `prototype-parity/resume-topic-final-{expanded,assignment}-{1440,1536,1024}-20261031-01/report.json`，全部部署/工作区签名一致，无mask/容差。包含非空专题全量摘要/删除阻断、真实服务端筛选、单/批量归组/移出、默认不写入、丢ACK刷新原请求、版本冲突原子拒绝、非owner拒绝及会议删除后归组退役。真实MySQL专题事务10项、录音续租13项和生产698项也通过。当前TOPIC-01签收不覆盖D其他规则或全产品视觉收口。
+
+LIB-01：`b-followup/resume-library-final-20261031-01/report.json`真实6项+三视口12项零像素，部署/工作区签名一致。所有产品外部请求经8792，报告含harness当前源码SHA；管理日志确认location 200/403实际穿过harness。当前成员READ、非成员拒绝、提供方撤READ后刷新隐藏、恢复新grant版本、真实分页/刷新/按会议ID导航均通过。并发provider回包乱序已确定性RED→GREEN，Web全433/type/build/APIbytes通过。原型`PAGES['/meeting-library']`为只读浏览，没有删除已发布成果按钮；Ruling：本行的“移除”明确归原有D-05治理/失效传播，不能新增旁路删除已发布快照或将治理任务标完成。原型只读路径验收通过，D-05仍未完成。旧失败/局部验证不被重标。
+
+新TXT会议db0dbb33-962f-469a-bb86-074f9f28bd35的实际纪要执行与结果读取已经8792；提供方模型/知识库仍是可重复受控模拟器，不是企业权威。生成/发布脚本最后因同名会议定位歧义失败的报告保留，新的库脚本用真实meetingId定位并对全部真实已发布条目投影对比。新原生SIGKILL恢复10项PASS，11.8秒恢复、17原帧957416字节WAV逐帧SHA；报告`recording-native-cas/resume-harness-probe-hard-crash-20261031-01/report.json`。100路60秒短测当前运行，尚不证明两小时或字幕性能。

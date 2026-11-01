@@ -5,7 +5,10 @@
 在 Linux / WSL 中，从本工作树根目录运行：
 
 ```sh
-python3 tools/dev/local_app.py start
+AMA_CAS_ORIGIN=http://127.0.0.1:8792 \
+AMA_INTEGRATION_KNOWLEDGE_ORIGIN=http://127.0.0.1:8792 \
+AMA_INTEGRATION_MODEL_ORIGIN=http://127.0.0.1:8792 \
+python3 tools/dev/local_app.py start --web-port 5174 --api-port 8182 --management-port 8183
 python3 tools/dev/local_app.py status
 ```
 
@@ -22,8 +25,9 @@ MOCK_DATA_DIR=/home/tanren/ama-integration-harness/data/live-8792 \
 MOCK_DB_PATH=/home/tanren/ama-integration-harness/data/live-8792/mock.db \
 ./backend/start.sh
 
-cd /home/tanren/ama/.worktrees/phase-b-completion
+cd /home/tanren/ama
 AMA_INTEGRATION_KNOWLEDGE_ORIGIN=http://127.0.0.1:8792 \
+AMA_INTEGRATION_MODEL_ORIGIN=http://127.0.0.1:8792 \
 AMA_CAS_ORIGIN=http://127.0.0.1:8792 \
 python3 tools/dev/local_app.py start --web-port 5174 --api-port 8182 --management-port 8183
 ```
@@ -47,6 +51,7 @@ FIXED_PORTS=1 OPEN_BROWSER=0 ./scripts/start_latest.sh
 
 cd /home/tanren/ama
 AMA_INTEGRATION_KNOWLEDGE_ORIGIN=http://127.0.0.1:8792 \
+AMA_INTEGRATION_MODEL_ORIGIN=http://127.0.0.1:8792 \
 AMA_CAS_ORIGIN=http://127.0.0.1:8792 \
 python3 tools/dev/local_app.py start --web-port 5173 --api-port 8184 --management-port 8185
 
@@ -56,6 +61,8 @@ node tools/dev/import_cas_integration.mjs
 ```
 
 `import_cas_integration.mjs` 使用真实浏览器和真实请求验证匿名拒绝、CAS ticket/会话、会议创建、TXT 上传、保存后刷新恢复、harness 知识库版本读取、导入受理、处理页导航和登出撤销；它只记录请求与响应，不伪造产品成功或处理完成。报告写入 `.tools/local-app/integration-import-cas/report.json`。
+
+当前外部接口联调统一经过兄弟 harness 的固定 HTTP8792/SMTP2525。签名知识库协议与受控纪要协议可分别通过 harness 的 `MOCK_CONTROLLED_KNOWLEDGE_ORIGIN` 和 `MOCK_CONTROLLED_MINUTES_ORIGIN` 显式转发到本地受控提供方，目标端口读取当前 `.tools/local-app/state.json` 的 `knowledgePort` / `modelPort`，不能将它们设为8792形成转发环。AMA 的 `AMA_INTEGRATION_KNOWLEDGE_ORIGIN`、`AMA_INTEGRATION_MODEL_ORIGIN` 均设为 `http://127.0.0.1:8792`；启动器把它们写入API/Worker配置，并在来源改变时真正重启，避免沿用原直连。harness透传原始载荷与协议绑定头，不制造权威回执或企业能力；纪要正文在管理日志中仅记录大小/摘要。VAD/SPK/ASR/标点/纠错继续使用harness已有对应接口。不能将模拟器联调写成真实模型质量或公司知识库资格。
 
 2026-10-30 的固定端口实跑结果为 10/10 checks 通过：AMA 会话 actor 为 `dev-owner`，TXT 上传产生真实 `201` 上传初始化和分块/完成请求，刷新未重复上传，知识库读取了 harness 的不透明版本 token；随后将 harness 的知识库读取临时切换为 `403`，确认 AMA 显示权限错误且没有伪造成功；导入返回真实 `202` 并导航到处理页，登出后会话返回 `401`。报告还保留 harness 的 CAS/知识库请求日志，所有浏览器请求均有明确响应或失败分类，页面无 `pageerror`。
 

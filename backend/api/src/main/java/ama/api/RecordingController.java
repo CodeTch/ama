@@ -84,17 +84,17 @@ class RecordingController {
         actor(request);return finish(sessionId,epoch,RecordingJson.finals(request),request,collector);
     }
     FinishResponse finish(String sessionId,long epoch,Map<String,Long> finalSequences,HttpServletRequest request,String collector) {
-        actor(request);String meeting=service.session(sessionId).meetingId();
-        var sealed=meeting(request,meeting,gate -> {if(!service.finished(sessionId)){mutations.require(actor(request),meeting,gate);leases.require(sessionId,epoch,collector);}return service.finish(sessionId,epoch,finalSequences);});
+        actor(request);String meeting=service.meetingId(sessionId);
+        var sealed=meeting(request,meeting,gate -> service.withinMeeting(sessionId,meeting,()->{if(!service.finished(sessionId)){mutations.require(actor(request),meeting,gate);leases.require(sessionId,epoch,collector);}return service.finish(sessionId,epoch,finalSequences);}));
         return new FinishResponse(sealed.sessionId(),sealed.finalSequence(),archives.accept(actor(request),sessionId));
     }
     private <T> T writer(HttpServletRequest request,String id,long epoch,String collector,Supplier<T> work) {
-        actor(request);String meeting=service.session(id).meetingId();
-        return meeting(request,meeting,gate->{mutations.require(actor(request),meeting,gate);leases.require(id,epoch,collector);return work.get();});
+        actor(request);String meeting=service.meetingId(id);
+        return meeting(request,meeting,gate->service.withinMeeting(id,meeting,()->{mutations.require(actor(request),meeting,gate);leases.require(id,epoch,collector);return work.get();}));
     }
     private <T> T session(HttpServletRequest request,String id,Supplier<T> work) {
-        actor(request);String meetingId=service.session(id).meetingId();
-        return meeting(request,meetingId,gate->work.get());
+        actor(request);String meetingId=service.meetingId(id);
+        return meeting(request,meetingId,gate->service.withinMeeting(id,meetingId,work));
     }
     private <T> T meeting(HttpServletRequest request,String id,java.util.function.Function<MeetingAccess.Locked,T> work) {
         var actor=actor(request);

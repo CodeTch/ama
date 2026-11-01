@@ -10,15 +10,21 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 
 /** Exact saved content rendering. Provenance authority remains with the registered S/A/F caller. */
 public final class ControlledKnowledgeDocumentRenderer {
- public static final String VERSION="ama.controlled-minutes-render.v1";
+ public static final String VERSION="ama.controlled-minutes-render.v1",PERSONAL_VERSION="ama.controlled-minutes-render.v2";
  public record Member(String memberKind,String displayName){}
  public record Meeting(String name,String categoryId,String actualDate,List<Member> roster){public Meeting{roster=List.copyOf(roster);}}
  public byte[] render(FinalFacts selected,Meeting meeting,String rendererVersion,String defaultTemplateRevisionId,Artifact artifact,long limit,BooleanSupplier cancelled){return render(selected,meeting,rendererVersion,defaultTemplateRevisionId,artifact,limit,cancelled,null);}
  public byte[] render(FinalFacts selected,Meeting meeting,String rendererVersion,String defaultTemplateRevisionId,Artifact artifact,long limit,BooleanSupplier cancelled,ama.transcript.TranscriptAcquisitionBudget.Ledger budget){
-  require(VERSION.equals(rendererVersion)&&limit>0&&limit<=8388608,PROFILE_UNAVAILABLE);
-  var facts=selected.stored();var finalRow=one(facts,Table.FINAL_CONFIRMATION,selected.confirmationId());require(defaultTemplateRevisionId.equals(finalRow.string("template_revision_id")),PROFILE_UNAVAILABLE);
+  boolean personal=PERSONAL_VERSION.equals(rendererVersion);require((VERSION.equals(rendererVersion)||personal)&&limit>0&&limit<=8388608,PROFILE_UNAVAILABLE);
+  var facts=selected.stored();var finalRow=one(facts,Table.FINAL_CONFIRMATION,selected.confirmationId());if(!personal)require(defaultTemplateRevisionId.equals(finalRow.string("template_revision_id")),PROFILE_UNAVAILABLE);
   var body=one(facts,Table.MINUTES_REVISION,finalRow.string("minutes_revision_id"));var template=one(facts,Table.TEMPLATE_REVISION,finalRow.string("template_revision_id"));
+  if(personal&&template.nullableString("owner_id")!=null){
+   // The closed frozen input already binds the validated layout. Export the exact saved body;
+   // never regenerate it from the owner's mutable current template or lifecycle state.
+   require(template.nullableString("owner_id").equals(finalRow.string("confirmed_by"))&&template.number("theme_count")>=1&&template.number("theme_count")<=8,PROVENANCE_UNAVAILABLE);
+  }else{require(defaultTemplateRevisionId.equals(template.string("id")),PROFILE_UNAVAILABLE);
   require(template.string("themes").equals("{\"schemaVersion\":\"ama.controlled-minutes-template.v1\",\"themes\":[\"OVERVIEW\",\"DISCUSSION\",\"CONCLUSION\",\"ACTION\",\"RISK\",\"OPEN_QUESTION\",\"DISAGREEMENT\"]}"),PROFILE_UNAVAILABLE);
+  }
   if(budget!=null){long bound=8192+6L*(body.string("title").length()*2L+body.string("body").length()+meeting.name().length()+meeting.categoryId().length()+(meeting.actualDate()==null?0:meeting.actualDate().length())+artifact.version().length());budget.row(32);for(var member:meeting.roster()){budget.row(2);bound=Math.addExact(bound,128+6L*(member.memberKind().length()+member.displayName().length()));}for(var row:facts.rows())if(row.table()==Table.MINUTES_ELEMENT&&finalRow.string("element_set_id").equals(row.string("set_id"))||row.table()==Table.ACTION_ITEM){budget.row(row.cells().size());bound=Math.addExact(bound,512);for(var cell:row.cells())if(cell instanceof TextCell text)bound=Math.addExact(bound,6L*text.value().length());}require(bound<=limit,BUDGET_EXCEEDED);budget.capture(bound,bound,bound,6);}
   var roster=new ArrayList<CanonicalValue>();for(var member:meeting.roster()){check(cancelled);roster.add(object(field("memberKind",string(member.memberKind())),field("displayName",string(member.displayName()))));}
   var sections=new ArrayList<CanonicalValue>();for(Category category:Category.values()){

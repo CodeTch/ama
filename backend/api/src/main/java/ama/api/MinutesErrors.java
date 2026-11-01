@@ -1,8 +1,9 @@
 package ama.api;
 import jakarta.servlet.http.HttpServletResponse;import java.io.IOException;import org.springframework.web.bind.annotation.*;
-@RestControllerAdvice(assignableTypes={MinutesController.class,MinutesSavedController.class}) @org.springframework.core.annotation.Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE) class MinutesErrors {
+@RestControllerAdvice(assignableTypes={MinutesController.class,MinutesSavedController.class,MeetingInfoSuggestionController.class}) @org.springframework.core.annotation.Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE) class MinutesErrors {
  private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(MinutesErrors.class);
  private void write(HttpServletResponse response,int status,String code)throws IOException {BusinessErrors.write(response,status,code,"Minutes request could not be completed");response.setHeader("Cache-Control","private, no-store");}
+ @ExceptionHandler(ama.contract.MeetingContracts.Conflict.class) void conflict(HttpServletResponse response)throws IOException{write(response,409,"MEETING_CONFLICT");}
  @ExceptionHandler(ama.contract.TranscriptContracts.Failure.class) void explicit(ama.contract.TranscriptContracts.Failure error,HttpServletResponse response)throws IOException{write(response,error.status(),error.code());}
  @ExceptionHandler(ama.contract.MinutesContracts.Failure.class) void domain(ama.contract.MinutesContracts.Failure error,HttpServletResponse response)throws IOException{LOG.warn("Minutes domain failure: {}",error.code());switch(error.code()){case INVALID_ARGUMENT,INVALID_SCALAR,INVALID_ID->write(response,400,"INVALID_ARGUMENT");case BUDGET_EXCEEDED->write(response,413,"REQUEST_TOO_LARGE");default->write(response,503,"MINUTES_UNAVAILABLE");}}
  @ExceptionHandler(ama.access.MeetingAccess.AccessDeniedException.class) void denied(HttpServletResponse response)throws IOException{write(response,403,"MEETING_FORBIDDEN");}

@@ -25,6 +25,17 @@ public record TranscriptAcquisitionBudget(long utf8,long scalars,long utf16,long
    require(b<=Math.min(limits.utf8,archive.maxTotalBytes())-bytes&&p<=Math.min(limits.scalars,archive.maxAggregateScalars())-points&&u<=limits.utf16-units,BUDGET_EXCEEDED);
    require(b<=(limits.copyBytes-copies)/ownedCopies&&u<=(limits.copyUtf16-copyUnits)/ownedCopies,BUDGET_EXCEEDED);
   }
+  /** Maximum whole metadata rows that can be admitted without changing any budget counter. */
+  public int captureRowLimit(long perRowBytes,long perRowPoints,long perRowUnits,int ownedCopies,int requested){
+   check();require(perRowBytes>0&&perRowPoints>0&&perRowUnits>0&&ownedCopies>0&&requested>0,INVALID_ARGUMENT);
+   long count=requested;
+   count=Math.min(count,(Math.min(limits.utf8,archive.maxTotalBytes())-bytes)/perRowBytes);
+   count=Math.min(count,(Math.min(limits.scalars,archive.maxAggregateScalars())-points)/perRowPoints);
+   count=Math.min(count,(limits.utf16-units)/perRowUnits);
+   count=Math.min(count,(limits.copyBytes-copies)/ownedCopies/perRowBytes);
+   count=Math.min(count,(limits.copyUtf16-copyUnits)/ownedCopies/perRowUnits);
+   return (int)Math.max(0,count);
+  }
   private void reserve(long b,long p,long u,int ownedCopies,boolean projected){
    require(b<=Math.min(limits.utf8,archive.maxTotalBytes())-bytes&&p<=Math.min(limits.scalars,archive.maxAggregateScalars())-points&&u<=limits.utf16-units,BUDGET_EXCEEDED);
    require(b<=(limits.copyBytes-copies)/ownedCopies&&u<=(limits.copyUtf16-copyUnits)/ownedCopies,BUDGET_EXCEEDED);

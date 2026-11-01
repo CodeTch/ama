@@ -47,11 +47,13 @@ public final class JdbcTopics {
     }
     private void membershipCommand(Actor actor,String key,String operation,String resource,String topic,List<MembershipTarget> targets,boolean remove){
         var fields=new ArrayList<String>();Collections.addAll(fields,"topic-membership-command-v1",operation,topic,Integer.toString(targets.size()));for(var target:targets){fields.add(target.meetingId());fields.add(Long.toString(target.expectedRevision()));}String request=MeetingDigests.fields(fields.toArray(String[]::new));
+        for(var target:targets)access.prepareExternalRead(actor,target.meetingId());
         tx.required(()->{
             var claim=receipts.claim(actor,resource,operation,key,request);var roots=lockMeetings(actor,targets);
             if(claim.replay()){if(claim.status()!=204||claim.result()!=null)throw new IllegalStateException("Topic receipt unavailable");return null;}
             for(var target:targets)if(!roots.get(target.meetingId()).revisionToken().equals(Long.toString(target.expectedRevision())))throw new Conflict();
             if(topic!=null)owned(actor,topic);
+            if(!remove&&topic!=null&&roots.values().stream().anyMatch(root->!root.published()||!"PUBLISHED".equals(root.stage())))throw new ama.contract.MeetingContracts.TopicNotPublished();
             // Validate every existing edge before touching any meeting in the batch.
             var edges=new HashMap<String,List<String>>();for(var target:targets){var current=currentTopics(actor,target.meetingId());if(remove&&!current.isEmpty()&&!current.equals(List.of(topic)))throw new Conflict();edges.put(target.meetingId(),current);}
             for(var target:targets){
@@ -72,6 +74,7 @@ public final class JdbcTopics {
     }
     public List<Map<String,Object>> memberships(Actor actor,List<String> meetings){
         if(meetings==null)throw new IllegalArgumentException("Meetings required");var targets=targets(meetings.stream().map(id->new MembershipTarget(id,0)).toList());
+        for(var target:targets)access.prepareExternalRead(actor,target.meetingId());
         return tx.required(()->{lockMeetings(actor,targets);var result=new ArrayList<Map<String,Object>>();for(String meeting:meetings){var current=currentTopics(actor,meeting);if(current.size()>1)throw new IllegalStateException("Meeting has multiple legacy topics");var row=new LinkedHashMap<String,Object>();row.put("meetingId",meeting);row.put("topicId",current.isEmpty()?null:current.getFirst());result.add(row);}return List.copyOf(result);});
     }
     /** Full current count, not the number of rows on the owner's current meeting page. */

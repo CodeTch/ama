@@ -28,6 +28,8 @@ public final class ConfigSchema {
    var deps=dependencies(value,state);var codec=deps.get("CANONICAL_CODEC");require(codec!=null&&codec.artifactType()==ArtifactType.CANONICAL_CODEC,PROFILE_UNAVAILABLE);wanted.put("CANONICAL_CODEC",codec);require(deps.equals(wanted),PROFILE_UNAVAILABLE);return identity;
   }else if(type==ArtifactType.PARSER_CONFIG&&identity.version().startsWith("ama.material-")){
    require(schema.equals("ama.material-parser.v1"),PROFILE_UNAVAILABLE);ama.material.MaterialProfiles.definition(definition,identity.version());require(dependencies(value,state).isEmpty(),PROFILE_UNAVAILABLE);return identity;
+  }else if(type==ArtifactType.GENERATION_HASH&&identity.version().equals("ama.generation-input.v3")||type==ArtifactType.OUTPUT_SCHEMA&&identity.version().equals("ama.minutes-output.v2")){
+   require(schema.equals("ama.profile-contract.v1"),PROFILE_UNAVAILABLE);literal(fields(definition,"contract").get("contract"),identity.version());slots=Set.of("CANONICAL_CODEC");
   }else if(CONTRACTS.containsKey(type)){
    require(schema.equals("ama.profile-contract.v1")&&identity.version().equals(CONTRACTS.get(type)),PROFILE_UNAVAILABLE);
    literal(fields(definition,"contract").get("contract"),CONTRACTS.get(type));slots=type==ArtifactType.CANONICAL_CODEC?Set.of():Set.of("CANONICAL_CODEC");

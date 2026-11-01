@@ -14,15 +14,20 @@ class MaterialSnapshotFenceTest {
         String meeting = "11111111-1111-4111-8111-111111111111";
         var subject = new TestSubject(new SubjectRef("MEETING", meeting), 7, 0, false);
         var fences = new TestFences(subject);
+        var projections = new java.util.ArrayList<Object[]>();
         var jdbc = new JdbcTemplate() {
             @Override
             public int update(String sql, Object... args) {
+                if(sql.startsWith("UPDATE meeting_search_projection"))projections.add(args);
                 return 1;
             }
         };
 
         long revision = JdbcMaterials.advanceSnapshot(jdbc, fences, meeting, "snapshot-id", false);
 
+        assertEquals(1, projections.size());
+        assertEquals(8L, projections.getFirst()[0]);
+        assertEquals(meeting, projections.getFirst()[1]);
         assertEquals(8, revision);
         assertEquals(8, fences.advanced.businessVersion());
         assertEquals(0, fences.advanced.cancelEpoch());

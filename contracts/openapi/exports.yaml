@@ -1,0 +1,49 @@
+collection:
+  parameters: [{name: meetingId, in: path, required: true, schema: {type: string, format: uuid}}]
+  post:
+    operationId: createMinutesExport
+    description: Export the current genuinely saved revision. Requires current READ access, active governance and the fixed final version after publication. Same actor/meeting/key/request replays the original job; changed source revision or format under that key conflicts. Caller draft text is never accepted.
+    security: [{enterpriseSession: []}]
+    parameters: [{$ref: './meetings.yaml#/Key'}]
+    requestBody: {required: true, content: {application/json: {schema: {$ref: '#/MinutesExportRequest'}}}}
+    responses:
+      '202': {description: Original durable job, content: {application/json: {schema: {$ref: '#/MinutesExportStatus'}}}}
+      '409': {description: Key/request conflict or source changed}
+      '403': {description: Current read denied}
+job:
+  parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
+  get:
+    operationId: readMinutesExport
+    security: [{enterpriseSession: []}]
+    responses:
+      '200': {description: Current job of the requesting actor; fileId is null while unavailable or invalidated, content: {application/json: {schema: {$ref: '#/MinutesExportStatus'}}}}
+download:
+  parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
+  get:
+    operationId: downloadMinutesExport
+    description: Fresh authorization and complete saved-source/producer proof before storage open. Same session and file proof renew during streaming; revocation or unavailable renewal terminates the stream within five seconds. No redirects or public storage URL.
+    security: [{enterpriseSession: []}]
+    parameters: [{name: Range, in: header, schema: {type: string}, description: One bytes range only}]
+    responses:
+      '200': {description: Exact registered artifact, content: {application/octet-stream: {schema: {type: string, format: binary}}}}
+      '206': {description: Authorized byte interval, content: {application/octet-stream: {schema: {type: string, format: binary}}}}
+      '409': {description: Artifact not available for current source}
+      '416': {description: Invalid byte interval}
+MinutesExportRequest:
+  type: object
+  additionalProperties: false
+  required: [sourceRevision, format]
+  properties:
+    sourceRevision: {type: string, format: uuid}
+    format: {type: string, enum: [md, pdf, docx]}
+MinutesExportStatus:
+  type: object
+  additionalProperties: false
+  required: [exportJobId, state, sourceRevision, format, fileId, error]
+  properties:
+    exportJobId: {type: string, format: uuid}
+    state: {type: string, enum: [READY, RUNNING, RECONCILING, SUCCEEDED, FAILED, CANCELLED, STALE]}
+    sourceRevision: {type: string, format: uuid}
+    format: {type: string, enum: [md, pdf, docx]}
+    fileId: {type: [string, 'null'], format: uuid}
+    error: {type: [string, 'null']}

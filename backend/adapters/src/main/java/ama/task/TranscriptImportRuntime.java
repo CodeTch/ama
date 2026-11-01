@@ -40,6 +40,12 @@ public final class TranscriptImportRuntime {
   return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components),"MINUTES_GENERATE_V1",components.authority().minutesTaskPolicy(),"KNOWLEDGE_PUBLISH_V1",components.authority().publicationTaskPolicy(),RecordingArchiveRuntime.TYPE,RecordingArchiveRuntime.policy(q,recording)));
  }
  /** Verify the genuine immutable per-process registrations; does not claim a worker is running. */
+ public static JdbcTaskQueue install(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,JdbcTranscriptAuthority.Components components,RecordingArchiveRuntime.Dependencies recording,MinutesExportRuntime.Dependencies exports){
+  if(exports==null)return install(source,fences,outbox,components,recording);
+  components.authority().requireImportSource(source);exports.saved().requireAuthority(components.authority());
+  if(recording.registry()!=components.registry()||exports.registry()!=components.registry()||recording.publication()!=components.authority().publicationWriteGuard())throw new IllegalArgumentException("Shared source authority required");
+  return JdbcTaskQueue.installConfined(source,fences,outbox,q->Map.of("TRANSCRIPT_IMPORT_V1",new ImportPolicy(q,components),"MINUTES_GENERATE_V1",components.authority().minutesTaskPolicy(),"KNOWLEDGE_PUBLISH_V1",components.authority().publicationTaskPolicy(),RecordingArchiveRuntime.TYPE,RecordingArchiveRuntime.policy(q,recording),MinutesExportRuntime.TYPE,MinutesExportRuntime.policy(q,exports)));
+ }
  public static void requireCombined(JdbcTaskQueue queue,JdbcTranscriptAuthority authority){
   Objects.requireNonNull(queue);Objects.requireNonNull(authority);authority.requireImportSource(queue.source);
   if(!(queue.policies.get("TRANSCRIPT_IMPORT_V1") instanceof ImportPolicy p)||p.queue!=queue||p.components.authority()!=authority||queue.policies.get("MINUTES_GENERATE_V1")!=authority.minutesTaskPolicy()||queue.policies.get("KNOWLEDGE_PUBLISH_V1")!=authority.publicationTaskPolicy())throw new IllegalArgumentException("Genuine combined task registrations required");

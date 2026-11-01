@@ -2,6 +2,7 @@
 import {computed,onMounted,onUnmounted,ref,watch,nextTick} from 'vue';
 import {useRoute,useRouter,onBeforeRouteLeave,onBeforeRouteUpdate} from 'vue-router';
 import {useApplication} from '../../application';
+import {usePublicationReadLease} from '../minutes/usePublicationReadLease';
 import {useWorkspaceNavigation} from './useWorkspaceNavigation';
 import MeetingProgress from './MeetingProgress.vue';
 import WorkspaceOverview from './WorkspaceOverview.vue';
@@ -20,7 +21,7 @@ import {DEMO_MEETING_ID} from './meeting-prototype-demo';
 import {useSavedMeeting} from './useSavedMeeting';
 import {ApiError} from '../../shared/api/client';
 import Icon from '../../shared/Icon.vue';
-const route=useRoute(),router=useRouter(),{session,info,workspace,infoScopeReady,transcriptScopeReady,generationScopeReady,minutesScopeReady,setMeetingScope}=useApplication();
+const route=useRoute(),router=useRouter(),{session,info,workspace,infoScopeReady,transcriptScopeReady,generationScopeReady,minutesScopeReady,setMeetingScope,governanceCommands,deletionCommands}=useApplication();
 const meeting=computed(()=>typeof route.params.id==='string'?route.params.id:'');
 const isDemoMeeting=computed(()=>meeting.value===DEMO_MEETING_ID);
 const state=useSavedMeeting(info.saved,()=>session.current.value?.actor.enterpriseId??null,()=>meeting.value);
@@ -39,7 +40,14 @@ const navigation=useWorkspaceNavigation(workspace.navigation,()=>session.current
 const effectivePublished=computed(()=>publishedObserved.value||state.saved.value?.stage==='PUBLISHED'||navigation.value.value?.stage==='PUBLISHED');
 const saved=state.saved,loading=computed(()=>state.loading.value||navigation.loading.value);
 const navigationMessage=computed(()=>navigation.error.value instanceof ApiError?navigation.error.value.message:'会议导航暂不可用，请重试。');
-function reload(){setMeetingScope(meeting.value);void state.refresh();void navigation.refresh();}
+const governanceBlocked=computed(()=>governanceCommands?.blockedMeeting.value===meeting.value||deletionCommands?.blockedMeeting.value===meeting.value);
+watch(governanceBlocked,blocked=>{if(blocked){state.invalidate();navigation.invalidate();infoDrawerOpen.value=false;advanced.value=false;uploadDialog.value?.forceClose();}},{flush:'sync'});
+const publicationReadError=ref<string|null>(null);
+const publicationLease=usePublicationReadLease(signal=>workspace.navigation(meeting.value,signal),()=>`${session.current.value?.actor.enterpriseId}/${meeting.value}`,cause=>{publicationReadError.value=cause instanceof Error?cause.message:'会议内容暂不可访问，请重新读取。';state.invalidate();navigation.invalidate();infoDrawerOpen.value=false;advanced.value=false;});
+// Unpublished meetings can retain knowledge sources whose authority is later revoked.
+const canRenewContent=computed(()=>!!session.current.value&&saved.value?.id===meeting.value&&!isDemoMeeting.value&&!governanceBlocked.value&&!publicationReadError.value);
+watch(()=>[session.current.value?.actor.enterpriseId,meeting.value,canRenewContent.value],()=>{publicationLease.dispose();if(canRenewContent.value)publicationLease.start();},{flush:'sync',immediate:true});
+function reload(){setMeetingScope(meeting.value);if(governanceBlocked.value){state.invalidate();navigation.invalidate();return;}publicationReadError.value=null;void state.refresh();void navigation.refresh();}
 const message=computed(()=>state.error.value instanceof ApiError?state.error.value.message:'会议信息暂不可用，请稍后重试。');
 const stop=watch(()=>[session.current.value,meeting.value],()=>{publishedObserved.value=false;if(session.current.value&&!isDemoMeeting.value)reload();},{immediate:true});
 async function refreshSession(){try{await session.refresh();}catch{/* Session state explains the failure. */}}
@@ -48,13 +56,15 @@ async function beforeMeetingLeave(){if(isDemoMeeting.value)return true;if(upload
 onBeforeRouteLeave(beforeMeetingLeave);
 onBeforeRouteUpdate((to,from)=>to.params.id!==from.params.id||to.params.stage!==from.params.stage?beforeMeetingLeave():true);
 onMounted(()=>{if(!isDemoMeeting.value&&!session.current.value)void refreshSession();});
-onUnmounted(()=>{stop();state.dispose();navigation.dispose();});
+onUnmounted(()=>{publicationLease.dispose();stop();state.dispose();navigation.dispose();});
 </script>
 <template><MeetingPrototypeStage v-if="isDemoMeeting" :stage="activeStage==='confirm'?'confirm':activeStage==='minutes'?'minutes':'transcript'" :meeting-id="meeting" @navigate="goStage"/><div v-else class="layout"><div class="main">
  <header class="topbar"><nav class="topbar-heading" aria-label="主导航"><RouterLink to="/meetings" class="topbar-home"><Icon name="list"/> 我的会议</RouterLink><span class="topbar-crumb">/ {{activeStage==='published'?'已发布会议':'会议工作台'}}</span></nav><div class="topbar-right"><span class="small muted">{{session.current.value?.actor.enterpriseId??'企业登录暂不可用'}}</span></div></header>
  <main class="content detail-page" :class="{'minutes-stage':activeStage==='minutes'}"><div class="aci-detail ac-related" :class="{'m19-published-page':activeStage==='published'}">
   <div class="page-head aci-detail-head"><div class="ac-workspace-leading"><RouterLink to="/meetings" class="btn ac-workspace-back" aria-label="返回列表">‹</RouterLink><div class="aci-heading-text"><div class="aci-title-row"><h1 class="page-title">{{saved?.name??'未命名会议'}}</h1><span class="tag" :class="effectivePublished?'green':'blue'">{{stageLabel}}</span></div><div class="page-desc">{{meeting}} · {{saved?.confirmedRosterId?'会议信息已确认':'待补充会议信息'}}</div></div></div><div class="flex ac-workspace-actions"><span class="small muted">{{activeStage==='minutes'?minutesRef?.saveMessage:transcriptRef?.dirty?'有未保存修改':''}}</span><button v-if="navigation.value.value?.relation==='OWNER'&&!effectivePublished&&activeStage!=='confirm'" class="btn" @click="infoDrawerOpen=true">编辑会议信息</button><button v-if="navigation.value.value?.relation==='OWNER'&&!effectivePublished&&!['confirm','publish'].includes(activeStage)" class="btn primary" @click="saveVisible">保存</button><button class="btn sm ghost" aria-label="更多操作" @click="advanced=!advanced">···</button></div></div>
   <section v-if="!session.current.value" class="card empty"><h2>{{session.status.value==='LOADING'?'正在检查登录':'企业登录暂不可用'}}</h2><button class="btn" @click="refreshSession">重新检查登录</button></section>
+  <section v-else-if="governanceBlocked" class="card card-p" role="status"><h2>会议内容当前不可访问</h2><p class="mt12">已提交删除、撤回或废止请求。可通过对应状态窗口查回原请求及处理进度。</p><RouterLink class="btn mt16" to="/meetings">返回会议列表</RouterLink></section>
+  <section v-else-if="publicationReadError" class="card card-p" role="alert"><p>{{publicationReadError}}</p><button class="btn mt12" @click="reload">重新读取权限与内容</button></section>
   <p v-else-if="loading&&!saved" role="status" class="card card-p">正在加载会议信息…</p>
   <section v-else-if="state.error.value&&!saved" role="alert" class="card card-p"><p>{{message}}</p><button class="btn" @click="reload">重试</button></section>
   <template v-else-if="saved">
