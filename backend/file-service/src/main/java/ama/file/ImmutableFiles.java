@@ -51,6 +51,7 @@ final class ImmutableFiles {
         if (size < 0 || sha256 == null || !sha256.matches("[0-9a-fA-F]{64}"))
             throw new StorageException(ErrorCode.INVALID_ARGUMENT);
         guard.run();
+        if (replay(dir, name, body, size, sha256)) return;
         String temp = UUID.randomUUID().toString();
         boolean created = false;
         LinuxFiles.Identity accepted = null;
@@ -113,6 +114,47 @@ final class ImmutableFiles {
                     /* Failed operation remains failed; unacknowledged staging is recoverable garbage. */
                 }
             }
+        }
+    }
+
+    /** A prior visible result still needs complete input/inode checks and fresh durability.
+     * No link count changes are made, so another staged copy and unlink are unnecessary. */
+    private boolean replay(LinuxFiles.Fd dir, String name, InputStream body, long size, String sha256) {
+        LinuxFiles.Fd existing;
+        try { existing = fs.file(dir, name, false); }
+        catch (StorageException absent) {
+            if (absent.code() == ErrorCode.NOT_FOUND) return false;
+            throw absent;
+        }
+        try (existing) {
+            MessageDigest inputHash = digest();
+            byte[] buffer = new byte[65536];
+            long actual = 0;
+            for (int n; (n = body.read(buffer)) >= 0;) {
+                guard.run();
+                if (n > size - actual) throw new StorageException(ErrorCode.SIZE_MISMATCH);
+                inputHash.update(buffer, 0, n);
+                actual += n;
+            }
+            if (actual != size) throw new StorageException(ErrorCode.SIZE_MISMATCH);
+            if (!HexFormat.of().formatHex(inputHash.digest()).equalsIgnoreCase(sha256))
+                throw new StorageException(ErrorCode.CHECKSUM_MISMATCH);
+            Digest got = digest(existing);
+            if (got.size() != size || !got.sha256().equalsIgnoreCase(sha256))
+                throw new StorageException(ErrorCode.CONFLICT);
+            var accepted = fs.identity(existing);
+            fs.sync(existing, false);
+            fs.sync(dir, true);
+            fs.sync(root, true);
+            try (var published = fs.file(dir, name, false)) {
+                var identity = fs.identity(published);
+                if (identity.device() != accepted.device() || identity.inode() != accepted.inode())
+                    throw LinuxFiles.unavailable();
+            }
+            guard.run();
+            return true;
+        } catch (IOException | ArithmeticException failure) {
+            throw LinuxFiles.unavailable();
         }
     }
 

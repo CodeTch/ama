@@ -16,8 +16,8 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
     private static final class Prepared {
         final Actor owner;final MeetingAccess.LockedIdentities identities;final List<TranscriptReadGraph> graphs;final MinutesPendingDiscovery.Plan pending;
         FileRegistry.LockedMeeting completionGate;
-        final TranscriptAcquisitionBudget.Ledger budget;final PublicationWriteGuard.Prepared publication;PublicationWriteGuard.Held publicationHeld;MeetingAccess.Locked access;
-        Prepared(Actor owner,MeetingAccess.LockedIdentities identities,List<TranscriptReadGraph> graphs,MinutesPendingDiscovery.Plan pending,PublicationWriteGuard.Prepared publication,TranscriptAcquisitionBudget.Ledger budget){this.budget=budget;this.owner=owner;this.identities=identities;this.graphs=graphs;this.pending=pending;this.publication=publication;}
+        final Acquisition purpose;final TranscriptAcquisitionBudget.Ledger budget;final PublicationWriteGuard.Prepared publication;PublicationWriteGuard.Held publicationHeld;MeetingAccess.Locked access;
+        Prepared(Actor owner,MeetingAccess.LockedIdentities identities,List<TranscriptReadGraph> graphs,MinutesPendingDiscovery.Plan pending,PublicationWriteGuard.Prepared publication,TranscriptAcquisitionBudget.Ledger budget,Acquisition purpose){this.purpose=purpose;this.budget=budget;this.owner=owner;this.identities=identities;this.graphs=graphs;this.pending=pending;this.publication=publication;}
         Actor owner(){return owner;}MeetingAccess.LockedIdentities identities(){return identities;}List<TranscriptReadGraph> graphs(){return graphs;}
     }
     private record Adopted(JdbcTranscriptAuthority.HeldProcessingFacts held,FileRegistry.LockedMeeting gate,TaskSpec spec) {
@@ -33,7 +33,7 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         return issuer.issue(List.of(spec),Acquisition.TASK_MUTATION,new Adopted(held,gate,spec),true);
     }
     public Optional<PreparedDomain> prepare(List<TaskSpec> specs,Acquisition purpose,boolean skip) {
-        if(purpose!=Acquisition.TASK_MUTATION||specs==null||specs.isEmpty())throw new DomainPreparationUnavailableException();
+        if(!Set.of(Acquisition.TASK_MUTATION,Acquisition.TASK_PREPARATION).contains(purpose)||specs==null||specs.isEmpty())throw new DomainPreparationUnavailableException();
         var first=specs.getFirst();
         var graphs=new ArrayList<TranscriptReadGraph>();var budget=authority.publicationBudget();
         String owner=null;
@@ -54,11 +54,11 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         }
         var pending=MinutesPendingDiscovery.discover(authority.dataSource(),first.subject().id(),budget);
         var actor=new Actor(owner,Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
-        var publication=authority.publicationWriteGuard().prepare(actor,first.subject().id(),budget);
-        authority.publicationWriteGuard().covers(publication,pending.rows());
+        var publication=purpose==Acquisition.TASK_PREPARATION?authority.publicationWriteGuard().prepareTaskPreparation(actor,first.subject().id(),budget):authority.publicationWriteGuard().prepare(actor,first.subject().id(),budget);
+        if(purpose==Acquisition.TASK_PREPARATION)authority.publicationWriteGuard().coversTaskPreparation(publication,pending.rows());else authority.publicationWriteGuard().covers(publication,pending.rows());
         var identities=authority.meetingAccess().tryLockIdentities(actor,List.of(owner),skip);
         if(identities.isEmpty())return Optional.empty();
-        return Optional.of(issuer.issue(specs,purpose,new Prepared(actor,identities.orElseThrow(),List.copyOf(graphs),pending,publication,budget),true));
+        return Optional.of(issuer.issue(specs,purpose,new Prepared(actor,identities.orElseThrow(),List.copyOf(graphs),pending,publication,budget,purpose),true));
     }
     public void requirePrepared(List<TaskSpec> specs,Acquisition purpose,PreparedDomain prepared) {
         issuer.require(specs,purpose,prepared);
@@ -83,8 +83,8 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         }
     }
     private boolean lockAll(List<TaskSpec> specs,boolean skip,PreparedDomain prepared) {
-        issuer.require(specs,Acquisition.TASK_MUTATION,prepared);
         Object value=issuer.value(prepared);
+        issuer.require(specs,value instanceof Prepared p?p.purpose:Acquisition.TASK_MUTATION,prepared);
         if(value instanceof Adopted adopted) {
             authority.requireCreatedTransition(adopted.gate(),adopted.held(),adopted.spec());
             return true;
@@ -145,8 +145,10 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         return true;
     }
     private void capacity(Prepared p){authority.publicationWriteGuard().tasks(p.publicationHeld,p.access);MinutesPendingDiscovery.compareHeld(authority.dataSource(),p.pending,MinutesPendingDiscovery.TASKS);authority.publicationWriteGuard().reserve(p.publication,null);MinutesDomainCapacity.reserve(p.pending.rows(),authority.minutesDomain().taskLimit(),256,null);}
-    void requireCompletion(List<TaskSpec> specs,PreparedDomain prepared){
-        issuer.require(specs,Acquisition.TASK_MUTATION,prepared);
+    void requireCompletion(List<TaskSpec> specs,PreparedDomain prepared){requireGate(specs,prepared,Acquisition.TASK_MUTATION);}
+    void requirePreparation(List<TaskSpec> specs,PreparedDomain prepared){requireGate(specs,prepared,Acquisition.TASK_PREPARATION);}
+    private void requireGate(List<TaskSpec> specs,PreparedDomain prepared,Acquisition purpose){
+        issuer.require(specs,purpose,prepared);
         if(!(issuer.value(prepared) instanceof Prepared p)||p.completionGate==null||!issuer.permitsEffects(prepared))throw new DomainPreparationUnavailableException();
         // EDIT was established before this gate was retained, after the complete current graph.
         // Registry access checks issuer/holder only; re-running requirePrepared would refresh roots late.
@@ -173,8 +175,8 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
             require(number(segment,"ordinal")==ordinal++&&segment.get("source_paragraph")!=null&&number(segment,"source_paragraph")>0&&segment.get("speaker_id")==null&&(!timed||segment.get("start_ms")!=null&&segment.get("end_ms")!=null&&number(segment,"start_ms")>=0&&number(segment,"end_ms")>number(segment,"start_ms")&&number(segment,"end_ms")<=7200000),PROVENANCE_UNAVAILABLE);
             // The same existing bounded membership count also proves that times are authorized by the stored profile.
             var arguments=new ArrayList<Object>(List.of(spec.input().id(),text(segment,"source_file_id")));
-            if(timed){arguments.add(MediaTranscriptParser.PROFILE_VERSION);arguments.add(MediaTranscriptParser.LEGACY_PROFILE_VERSION);}
-            require(j.queryForObject("SELECT COUNT(*) FROM input_batch_file f JOIN transcription_input i ON i.batch_id=f.batch_id WHERE i.id=? AND f.file_id=?"+(timed?" AND i.parser_version IN (?,?)":""),Long.class,arguments.toArray())==1,PROVENANCE_UNAVAILABLE);
+            if(timed){arguments.add(MediaTranscriptParser.PROFILE_VERSION);arguments.add(MediaTranscriptParser.LEGACY_PROFILE_VERSION);arguments.add(ama.task.ControlledSpeechProfile.PARSER);}
+            require(j.queryForObject("SELECT COUNT(*) FROM input_batch_file f JOIN transcription_input i ON i.batch_id=f.batch_id WHERE i.id=? AND f.file_id=?"+(timed?" AND i.parser_version IN (?,?,?)":""),Long.class,arguments.toArray())==1,PROVENANCE_UNAVAILABLE);
         }
         require(j.queryForObject("SELECT COUNT(*) FROM transcript_segment_mark WHERE revision_id=?",Long.class,result.output().id())==0,PROVENANCE_UNAVAILABLE);
     }

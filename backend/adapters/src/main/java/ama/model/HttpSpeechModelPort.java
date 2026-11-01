@@ -39,13 +39,25 @@ public final class HttpSpeechModelPort implements SpeechModelPort,AutoCloseable 
         }
     }
     @FunctionalInterface public interface WavSource { InputStream open(SpeechContracts.WavClip clip) throws IOException; }
+    /** Internal admission lifecycle. Only complete response EOF or a proven no-send may settle;
+     * a timeout/disconnect is unknown even after the client has aborted its request. */
+    public interface ExecutionObserver {
+        String beforeSend(Stage stage,String requestSha256);
+        void completed(String executionId,int status,String responseSha256);
+        void notSent(String executionId);
+        void unknown(String executionId);
+    }
+    private static final ExecutionObserver UNOBSERVED=new ExecutionObserver(){
+        public String beforeSend(Stage stage,String sha){return null;}public void completed(String id,int status,String sha){}public void notSent(String id){}public void unknown(String id){}
+    };
     public static final class InvalidResponse extends RuntimeException { public InvalidResponse(){super("Invalid speech provider response");} }
     public static final class Unavailable extends RuntimeException { public Unavailable(){super("Speech provider unavailable");} }
-    private final Config config;private final WavSource source;private final SdkHttpClient http;private final ObjectMapper json;
+    private final Config config;private final WavSource source;private final SdkHttpClient http;private final ObjectMapper json;private final ExecutionObserver observer;
     private final Semaphore capacity;private final Set<ExecutableHttpRequest> active=ConcurrentHashMap.newKeySet();private volatile boolean closed;
     private final ScheduledExecutorService deadlines=Executors.newSingleThreadScheduledExecutor(r->{var t=new Thread(r,"speech-http-deadline");t.setDaemon(true);return t;});
-    public HttpSpeechModelPort(Config config,WavSource source) {
-        this.config=Objects.requireNonNull(config);this.source=Objects.requireNonNull(source);capacity=new Semaphore(config.concurrency());
+    public HttpSpeechModelPort(Config config,WavSource source) {this(config,source,UNOBSERVED);}
+    public HttpSpeechModelPort(Config config,WavSource source,ExecutionObserver observer) {
+        this.config=Objects.requireNonNull(config);this.source=Objects.requireNonNull(source);this.observer=Objects.requireNonNull(observer);capacity=new Semaphore(config.concurrency());
         http=Apache5HttpClient.builder().connectionTimeout(config.timeout()).socketTimeout(config.timeout()).connectionAcquisitionTimeout(config.timeout()).maxConnections(config.concurrency())
                 .proxyConfiguration(ProxyConfiguration.builder().useSystemPropertyValues(false).useEnvironmentVariableValues(false).build()).build();
         json=new ObjectMapper(JsonFactory.builder().enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION).disable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
@@ -101,26 +113,39 @@ public final class HttpSpeechModelPort implements SpeechModelPort,AutoCloseable 
     private byte[] payload(Object value){try{return json.writeValueAsBytes(value);}catch(IOException failure){throw new IllegalArgumentException("Invalid speech request");}}
     private JsonNode exchange(Stage stage,java.util.function.Supplier<byte[]> prepare,String type) {
         if(closed||!capacity.tryAcquire())throw new Unavailable();ExecutableHttpRequest request=null;Future<?> timer=null;var expired=new AtomicBoolean();
+        String execution=null;boolean called=false,completed=false;Throwable primary=null;
         try {
             byte[] body=prepare.get();
+            if(observer!=UNOBSERVED){execution=observer.beforeSend(stage,sha256(body));if(execution==null||!UUID.fromString(execution).toString().equals(execution))throw new IllegalArgumentException("Canonical speech execution required");}
             var endpoint=config.endpoints().get(stage);
             var builder=SdkHttpFullRequest.builder().uri(endpoint.uri()).method(SdkHttpMethod.POST).putHeader("Host",endpoint.host()).putHeader("Content-Type",type).putHeader("Accept","application/json").putHeader("Content-Length",Integer.toString(body.length));
             if(endpoint.authorization()!=null)builder.putHeader("Authorization",endpoint.authorization());
+            if(execution!=null)builder.putHeader("X-Ama-Speech-Execution",execution);
             request=http.prepareRequest(HttpExecuteRequest.builder().request(builder.build()).contentStreamProvider(ContentStreamProvider.fromByteArrayUnsafe(body)).build());
             active.add(request);var operation=request;if(closed)throw new Unavailable();
             timer=deadlines.schedule(()->{expired.set(true);operation.abort();},config.timeout().toMillis(),TimeUnit.MILLISECONDS);
-            var response=request.call();
+            called=true;var response=request.call();
             try(var input=response.responseBody().orElseThrow(Unavailable::new)) {
-                int status=response.httpResponse().statusCode();if(status==429)throw new CompanySpeechAdapter.RateLimited();if(status!=200)throw new Unavailable();
-                var contentType=response.httpResponse().firstMatchingHeader("Content-Type").orElse("");if(!contentType.toLowerCase(Locale.ROOT).matches("application/json(?:;.*)?"))throw new InvalidResponse();
+                int status=response.httpResponse().statusCode();
+                if(execution==null){if(status==429)throw new CompanySpeechAdapter.RateLimited();if(status!=200)throw new Unavailable();}
+                var contentType=response.httpResponse().firstMatchingHeader("Content-Type").orElse("");if(status==200&&!contentType.toLowerCase(Locale.ROOT).matches("application/json(?:;.*)?"))throw new InvalidResponse();
                 var length=response.httpResponse().firstMatchingHeader("Content-Length");if(length.isPresent()&&(!length.get().matches("[0-9]{1,9}")||Long.parseLong(length.get())>config.maxResponseBytes()))throw new InvalidResponse();
                 byte[] raw=input.readNBytes(config.maxResponseBytes()+1);if(raw.length>config.maxResponseBytes())throw new InvalidResponse();
+                if(execution!=null){observer.completed(execution,status,sha256(raw));completed=true;}
+                if(status==429)throw new CompanySpeechAdapter.RateLimited();if(status!=200)throw new Unavailable();
                 var value=json.readTree(raw);if(value==null||!value.isObject())throw new InvalidResponse();return value;
             }
-        }catch(com.fasterxml.jackson.core.JsonProcessingException malformed){throw new InvalidResponse();}
-        catch(IOException failure){if(expired.get())throw new CompanySpeechAdapter.TimedOut();throw new Unavailable();}
-        finally{if(timer!=null)timer.cancel(false);if(request!=null){active.remove(request);request.abort();}capacity.release();}
+        }catch(com.fasterxml.jackson.core.JsonProcessingException malformed){var failure=new InvalidResponse();primary=failure;throw failure;}
+        catch(IOException cause){RuntimeException failure=expired.get()?new CompanySpeechAdapter.TimedOut():new Unavailable();primary=failure;throw failure;}
+        catch(RuntimeException|Error failure){primary=failure;throw failure;}
+        finally{
+            try{
+                if(timer!=null)timer.cancel(false);if(request!=null){active.remove(request);request.abort();}
+                if(execution!=null&&!completed){try{if(called)observer.unknown(execution);else observer.notSent(execution);}catch(RuntimeException|Error failure){if(primary!=null)primary.addSuppressed(failure);else throw failure;}}
+            }finally{capacity.release();}
+        }
     }
+    private static String sha256(byte[] bytes){try{return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));}catch(java.security.NoSuchAlgorithmException unavailable){throw new IllegalStateException(unavailable);}}
     private static JsonNode array(JsonNode value,String key){var result=value.get(key);if(result==null||!result.isArray())throw new InvalidResponse();return result;}
     private static String text(JsonNode value){var text=value.get("text");if(text==null||!text.isTextual()||text.textValue().isBlank())throw new InvalidResponse();return text.textValue();}
     private static void range(JsonNode value,int size,SpeechContracts.WavClip clip){if(!value.isArray()||value.size()!=size)throw new InvalidResponse();rangeValues(value.get(0),value.get(1),clip);}

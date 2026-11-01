@@ -14,3 +14,22 @@ test('the original transcript stays continuous beyond forty segments and exposes
  const server=await createServer({server:{middlewareMode:true,hmr:false},appType:'custom'});try{const component=(await server.ssrLoadModule('/src/features/transcript/TranscriptForm.vue')).default;const value=Array.from({length:45},(_,i)=>({segmentId:'seg-'+i,body:'第'+i+'条原始内容',marks:[]}));const html=await renderToString(createSSRApp({render:()=>h(component,{value,editable:true,busy:false,dirty:false,conflict:null,conflictToken:null,state:'EMPTY',blocked:false,storageStatus:'SAVED',error:null,confirmed:false,canConfirm:true})}));assert.equal((html.match(/class="seg"/g)??[]).length,45);assert.doesNotMatch(html,/转写段落分页/);assert.match(html,/编辑转写片段/);assert.match(html,/aria-label="转写内容"/);assert.match(html,/placeholder="搜索转写"/);
  }finally{await server.close();}
 });
+
+
+test('published transcript presents the frozen readback without editing or disabled correction controls',async()=>{
+ const server=await createServer({server:{middlewareMode:true,hmr:false},appType:'custom'});
+ try{
+  const component=(await server.ssrLoadModule('/src/features/transcript/TranscriptForm.vue')).default;
+  const html=await renderToString(createSSRApp({render:()=>h(component,{published:true,value:[{segmentId:'seg',body:'Frozen published speech',marks:['KEY']}],editable:false,busy:false,dirty:false,conflict:null,conflictToken:null,state:'EMPTY',blocked:false,storageStatus:'SAVED',error:null,confirmed:true,canConfirm:false,provenance:[{segmentId:'seg',sourceFileId:'file',startMs:30500,endMs:35000,speakerId:null}],playableFiles:['file']})}));
+  assert.match(html,/发布绑定确认转写/);
+  assert.match(html,/Frozen published speech/);
+  assert.match(html,/00:30/);
+  assert.doesNotMatch(html,/搜索转写|批量替换|全部接受|全部拒绝|编辑转写片段|建立人工工作版本/);
+ }finally{await server.close();}
+});
+
+
+test('published untimed text uses an unavailable clock instead of inventing an audio position',async()=>{
+ const server=await createServer({server:{middlewareMode:true,hmr:false},appType:'custom'});
+ try{const component=(await server.ssrLoadModule('/src/features/transcript/TranscriptForm.vue')).default;const html=await renderToString(createSSRApp({render:()=>h(component,{published:true,value:[{segmentId:'text',body:'Untimed original text',marks:[]}],editable:false,busy:false,dirty:false,conflict:null,conflictToken:null,state:'EMPTY',blocked:false,storageStatus:'SAVED',error:null,confirmed:true,canConfirm:false})}));assert.match(html,/此片段无对应原录音/);assert.match(html,/>--:--<\/button>/);assert.doesNotMatch(html,/00:00/);}finally{await server.close();}
+});

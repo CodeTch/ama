@@ -109,12 +109,29 @@ def prepare_knowledge(runtime,state):
 
 def asr_environment(env):
     env.pop('AMA_LOCAL_ASR_RUNTIME',None)
+    env.pop('AMA_LOCAL_SPEECH_RUNTIME',None)
     config=ROOT/'.tools/local-models/asr-runtime.json'
     if config.is_symlink() or config.parent.is_symlink():raise RuntimeError('Owned regular ASR runtime required')
     if not config.exists():return False
     if not config.is_file() or config.stat().st_size>16384:raise RuntimeError('Bounded ASR runtime required')
     env['AMA_LOCAL_ASR_RUNTIME']=str(config)
+    speech=config.with_name('speech-runtime-v1.json')
+    if speech.is_symlink():raise RuntimeError('Owned speech runtime required')
+    if speech.exists():
+        if not speech.is_file() or speech.stat().st_size>16384:raise RuntimeError('Bounded speech runtime required')
+        env['AMA_LOCAL_SPEECH_RUNTIME']=str(speech)
     return True
+
+def install_speech_environment(env):
+    directory=ROOT/'.tools/local-models'
+    private_dir(directory)
+    raw=(ROOT/'backend/adapters/src/main/resources/ama/transcript/speech-engine-v1.json').read_bytes()
+    manifest=directory/'speech-engine-v1.json'
+    same(manifest,raw)
+    runtime=directory/'speech-runtime-v1.json'
+    same(runtime,(json.dumps({'schema':'ama.controlled-speech-runtime.v1','manifest':str(manifest),
+        'manifestSha256':hashlib.sha256(raw).hexdigest()},sort_keys=True,separators=(',',':'))+'\n').encode())
+    env['AMA_LOCAL_SPEECH_RUNTIME']=str(runtime)
 
 def prepare(runtime,state,java,env,classpath):
     root=runtime/'minutes'
@@ -132,6 +149,9 @@ def prepare(runtime,state,java,env,classpath):
     if asr_environment(env):
         media_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalMediaSetup',str(root/'archive'),values['minutes.index-sha'],env['AMA_LOCAL_ASR_RUNTIME']],env=env,capture_output=True,text=True,check=True,timeout=30)
         values.update(json.loads(media_setup.stdout))
+        install_speech_environment(env)
+        speech_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalSpeechSetup',str(root/'archive'),values['minutes.index-sha'],env['AMA_LOCAL_SPEECH_RUNTIME']],env=env,capture_output=True,text=True,check=True,timeout=30)
+        values.update(json.loads(speech_setup.stdout))
     material_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalMaterialSetup',str(root/'archive'),values['minutes.index-sha'],state['minutesTemplateRevisionId']],env=env,capture_output=True,text=True,check=True,timeout=30)
     values.update(json.loads(material_setup.stdout))
     personal_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalPersonalTemplatesSetup',str(root/'archive'),values['minutes.index-sha'],state['minutesTemplateRevisionId']],env=env,capture_output=True,text=True,check=True,timeout=30)

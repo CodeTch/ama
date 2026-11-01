@@ -59,7 +59,7 @@ public final class JdbcTaskQueue implements TaskQueue {
   if(specs.stream().anyMatch(s->policies.get(s.type())!=p||!s.subject().equals(subject)))throw new DomainPreparationUnavailableException();
   var prepared=supplied==null?p.prepare(specs,purpose,skip):Optional.of(supplied);
   if(prepared.isEmpty())return Optional.empty();JdbcTaskPreparations.requireTransaction(source,prepared.orElseThrow());p.requirePrepared(specs,purpose,prepared.orElseThrow());
-  if(purpose==TaskDomainPolicy.Acquisition.TASK_MUTATION&&!p.permitsDomainEffects(prepared.orElseThrow()))return Optional.empty();
+  if(purpose!=TaskDomainPolicy.Acquisition.EXTERNAL_FACT_OBSERVATION&&!p.permitsDomainEffects(prepared.orElseThrow()))return Optional.empty();
   return Optional.of(new DomainScope(p,List.copyOf(specs),purpose,prepared.orElseThrow()));
  }
  Optional<SubjectFencePort.LockedSubject> lockDomain(DomainScope scope,TaskSpec s,boolean skip){
@@ -132,7 +132,15 @@ public final class JdbcTaskQueue implements TaskQueue {
  }
  Optional<ValidatedLease> validatedLease(TaskLease lease){return validatedLease(lease,null);}
  Optional<ValidatedLease> validatedLease(TaskLease lease,TaskDomainPolicy.PreparedDomain supplied){
-  var prepared=prepareDomain(List.of(lease.spec()),TaskDomainPolicy.Acquisition.TASK_MUTATION,false,supplied);
+  return validated(lease,supplied,TaskDomainPolicy.Acquisition.TASK_MUTATION);
+ }
+ Optional<ValidatedLease> validatedPreparationLease(TaskLease lease){return validated(lease,null,TaskDomainPolicy.Acquisition.TASK_PREPARATION);}
+ /** A changed discovery grants no authority. Roll back and acquire the full graph again. */
+ <T>T preparation(Callable<T> action){
+  independent();for(int attempt=0;;attempt++)try{return tx.required(action);}catch(ama.transcript.PublicationWriteGuard.StorageSnapshotChanged changed){if(attempt>=2)throw changed;}
+ }
+ private Optional<ValidatedLease> validated(TaskLease lease,TaskDomainPolicy.PreparedDomain supplied,TaskDomainPolicy.Acquisition purpose){
+  var prepared=prepareDomain(List.of(lease.spec()),purpose,false,supplied);
   if(prepared.isEmpty())return Optional.empty();var scope=prepared.orElseThrow();
   var domain=lockDomain(scope,lease.spec(),false);if(domain.isEmpty())return Optional.empty();
   var locked=row(lease.taskId(),true,false);if(locked.isEmpty())return Optional.empty();var r=locked.orElseThrow();

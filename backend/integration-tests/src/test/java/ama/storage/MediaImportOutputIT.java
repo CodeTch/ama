@@ -26,14 +26,19 @@ class MediaImportOutputIT {
   Flyway.configure().dataSource(source).locations("classpath:db/migration").load().migrate();
  }
  static String id(){return UUID.randomUUID().toString();}
+ @Test void currentMediaProfileIsActuallyAdmittedWithAnArchivedMediaStep()throws Exception {validate(MediaTranscriptParser.PROFILE_VERSION,true,false,true);}
+ @Test void controlledSpeechProfileIsActuallyAdmittedWithItsOwnArchivedStep()throws Exception {validate(ControlledSpeechProfile.PARSER,true,false,true);}
+ @Test void controlledSpeechProfileAllowsOriginalTimedOutput()throws Exception {validate(ControlledSpeechProfile.PARSER,true,false);}
+ @Test void historicalMediaProfileIsStillActuallyAdmitted()throws Exception {validate(MediaTranscriptParser.LEGACY_PROFILE_VERSION,true,false,true);}
  @Test void currentMediaProfileAllowsItsActualTimedSource()throws Exception {validate(MediaTranscriptParser.PROFILE_VERSION,true,false);}
  @Test void historicalMediaProfileKeepsItsTimedSourceCompatibility()throws Exception {validate(MediaTranscriptParser.LEGACY_PROFILE_VERSION,true,false);}
  @Test void textProfileStillCannotClaimMediaTimestamps()throws Exception {validate(TextTranscriptParser.PROFILE_VERSION,false,false);}
  @Test void mediaProfileCannotAttributeATimedSegmentToAnUnissuedSource()throws Exception {validate(MediaTranscriptParser.PROFILE_VERSION,false,true);}
- void validate(String parser,boolean allowed,boolean foreignSource)throws Exception {
+ void validate(String parser,boolean allowed,boolean foreignSource)throws Exception {validate(parser,allowed,foreignSource,false);}
+ void validate(String parser,boolean allowed,boolean foreignSource,boolean admit)throws Exception {
   try(var files=new ManagedLocalFixture(root.resolve(id()))){
    var storage=files.startServer();var catalog=new FileBackendCatalog(source,List.of(new FileBackendCatalog.Backend(files.binding.id(),"local",1,"WRITABLE",storage,files.binding)),files.binding.id());catalog.configure();
-   var tx=new TransactionRunner(source);var fences=new JdbcSubjectFences(source,Set.of("MEETING"));var access=new JdbcMeetingAccess(source,tx,fences);var outbox=new JdbcOutbox(source,new MeetingEventReferences(source).validators());
+   var tx=new TransactionRunner(source);var fences=new JdbcSubjectFences(source,Set.of("MEETING"));var access=new JdbcMeetingAccess(source,tx,fences);var validators=new HashMap<String,ama.task.OutboxReferenceValidator>(new MeetingEventReferences(source).validators());validators.putAll(new TranscriptEventReferences(source).validators());var outbox=new JdbcOutbox(source,validators);
    String owner="media-output-"+id();j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",owner,owner);var actor=new Actor(owner,Status.ACTIVE,Set.of(Role.USER));
    var meetings=new MeetingService(new JdbcMeetingRepository(source,tx,access,fences,outbox,new ama.audit.JdbcAuditAdapter(source),m->{}));String meeting=meetings.create(actor,id(),"media-output-policy").id();
    FilePurposePolicy purposes=(a,m,p)->{if(!p.equals("TRANSCRIPT_INPUT"))throw new FilePurposePolicy.Unavailable();};
@@ -41,6 +46,28 @@ class MediaImportOutputIT {
    var uploads=new JdbcFileUploads(source,tx,access,purposes,catalog,new ama.audit.JdbcAuditAdapter(source),outbox,1024,components.authority().publicationWriteGuard());
    byte[] bytes={1,2,3,4};String hash=HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
    String file=upload(uploads,actor,meeting,bytes,hash),attributed=foreignSource?upload(uploads,actor,meeting,bytes,hash):file;
+   if(admit){
+    String version=parser.equals(ControlledSpeechProfile.PARSER)?"v3":parser.equals(MediaTranscriptParser.PROFILE_VERSION)?"v2":"v1";
+    var archives=new ArrayList<ama.contract.ConfigArchiveContracts.RawArchive>();
+    for(String[] resource:new String[][]{{"restart/codec","CANONICAL_CODEC","ama.canonical-value.v1"},{"restart/confirmation","CONFIRMATION_HASH","ama.transcript-confirmation.v1"},{"media-parser-"+version,"PARSER_CONFIG",parser},{"media-processing-"+version,"PROCESSING_CONFIG","ama.import-media-documents."+version}}){
+     try(var in=getClass().getResourceAsStream("/ama/transcript/"+resource[0]+".json")){assertNotNull(in);archives.add(new ama.contract.ConfigArchiveContracts.RawArchive(ama.contract.ConfigArchiveContracts.ArtifactType.valueOf(resource[1]),resource[2],in.readAllBytes()));}
+    }
+    Path directory=java.nio.file.Files.createDirectory(root.resolve("archives-"+id()));
+    var pin=new ama.config.file.ControlledArchiveReleaseWriter().publish(directory,null,archives,ama.minutes.ControlledMinutesAdmin.INDEX,ama.minutes.ControlledMinutesAdmin.READ,()->false);
+    var snapshot=new ama.config.file.ControlledConfigArchiveSource().open(directory,pin,ama.minutes.ControlledMinutesAdmin.INDEX,ama.minutes.ControlledMinutesAdmin.READ,()->false);
+    var processing=snapshot.index().entries().stream().map(ama.config.ConfigArchiveIndex.Entry::ref).filter(r->r.artifactType()==ama.contract.ConfigArchiveContracts.ArtifactType.PROCESSING_CONFIG).findFirst().orElseThrow();
+    var queue=TranscriptImportRuntime.install(source,fences,outbox,components);
+    var intake=new JdbcProcessingIntake(source,tx,access,components,fences,queue,outbox,new ama.audit.JdbcAuditAdapter(source),(a,m,r)->components.authority().prepare(components.intake().readDraft(a,m,r.orderedFileIds(),()->false),id(),id(),snapshot,processing,()->false));
+    var request=new ama.contract.ProcessingContracts.ImportRequest(0,List.of(file));String key=id();
+    var accepted=intake.accept(actor,meeting,key,request,"MEDIA_PROFILE_REGRESSION");
+    assertEquals(accepted,intake.accept(actor,meeting,key,request,"MEDIA_PROFILE_REPLAY"));
+    assertEquals("READY",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,accepted.taskId()));
+    var manifest=new com.fasterxml.jackson.databind.ObjectMapper().readTree(j.queryForObject("SELECT config_manifest FROM transcription_input WHERE id=?",String.class,accepted.inputId()));
+    assertEquals("IMPORT_MEDIA_DOCUMENT",manifest.path("steps").get(0).path("kind").asText());
+    assertEquals(parser,manifest.path("configs").path("parser").path("version").asText());
+    assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM durable_task WHERE subject_id=?",Integer.class,meeting));
+    return;
+   }
    String batch=id(),input=id(),task=id(),revision=id(),producer=HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(task.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
    j.update("INSERT INTO input_batch(id,meeting_id,kind,input_fingerprint,base_revision,created_at) VALUES (?,?,'TRANSCRIPT',?,1,UTC_TIMESTAMP(6))",batch,meeting,hash);
    j.update("INSERT INTO input_batch_fingerprint_profile(batch_id,profile) VALUES (?,'ama.input-batch.v1')",batch);

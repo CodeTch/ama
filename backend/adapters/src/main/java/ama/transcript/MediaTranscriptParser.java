@@ -20,7 +20,7 @@ public final class MediaTranscriptParser implements MeasuredTranscriptDocumentPa
  public static final String PROFILE_VERSION="ama.media-documents.v2";
  public static final List<String> LEGACY_FORMATS=List.of("TXT","DOC","DOCX","PDF","PPTX","MP3","WAV","M4A","MP4","MOV","MKV","WEBM");
  public static final List<String> FORMATS=List.of("TXT","DOC","DOCX","PDF","PPTX","MP3","WAV","M4A","MP4","MOV","MKV","WEBM","AAC","FLAC","OGG","M4V","AVI","SRT","VTT");
- public static boolean supportsProfile(String version){return PROFILE_VERSION.equals(version)||LEGACY_PROFILE_VERSION.equals(version);}
+ public static boolean supportsProfile(String version){return PROFILE_VERSION.equals(version)||LEGACY_PROFILE_VERSION.equals(version)||"ama.media-documents.v3".equals(version);}
  public static List<String> formats(String version){if(!supportsProfile(version))throw new IllegalArgumentException("Unsupported media profile");return LEGACY_PROFILE_VERSION.equals(version)?LEGACY_FORMATS:FORMATS;}
  private static final long SOURCE_LIMIT=32L*1024*1024;
  public record Config(Path python,Path runner,Path model,Path manifest,String manifestSha256,long timeoutMillis){
@@ -34,7 +34,7 @@ public final class MediaTranscriptParser implements MeasuredTranscriptDocumentPa
  private final Config config;
  private final String profileVersion;
  public MediaTranscriptParser(Config config){this(config,PROFILE_VERSION);}
- public MediaTranscriptParser(Config config,String profileVersion){this.config=Objects.requireNonNull(config);if(!supportsProfile(profileVersion))throw new IllegalArgumentException("Unsupported media profile");this.profileVersion=profileVersion;}
+ public MediaTranscriptParser(Config config,String profileVersion){this.config=Objects.requireNonNull(config);if(!Set.of(PROFILE_VERSION,LEGACY_PROFILE_VERSION).contains(profileVersion))throw new IllegalArgumentException("Unsupported media profile");this.profileVersion=profileVersion;}
  public Result parse(InputStream source,UUID file,String hash,ParseBudget budget,BooleanSupplier cancelled)throws ParseException{return parseMeasured(source,file,hash,budget,cancelled).result();}
  public MeasuredResult parseMeasured(InputStream source,UUID file,String hash,ParseBudget budget,BooleanSupplier cancelled,String sourceName)throws ParseException {
   if(sourceName==null||sourceName.length()>1048576)throw new ParseException(INVALID_ARGUMENT);int dot=sourceName.lastIndexOf('.');String format=dot<0?"":sourceName.substring(dot+1).toUpperCase(Locale.ROOT);if(!formats(profileVersion).contains(format))throw new ParseException(INVALID_ARGUMENT);

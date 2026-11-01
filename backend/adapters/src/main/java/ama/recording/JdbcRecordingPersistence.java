@@ -12,12 +12,31 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-/** PCM bytes and manifest share one MySQL transaction; no process-local state can authorize an ACK. */
+/** Durable PCM precedes the committed manifest; current database fences validate reused metadata. */
 public final class JdbcRecordingPersistence implements RecordingService.Persistence {
     private final JdbcTemplate jdbc;
     private final TransactionRunner transactions;
     private final FileBackendCatalog backends;
+    private record Verified(RecordingContracts.Session session,long generation,long chunks,long samples) {}
+    // A process-local verification is never sufficient: every reuse also locks and reads the
+    // database generation, which every chunk mutation advances in the same transaction.
+    private final Map<String,Verified> verified=java.util.Collections.synchronizedMap(new java.util.LinkedHashMap<>(128,.75f,true){
+        @Override protected boolean removeEldestEntry(Map.Entry<String,Verified> entry){return size()>1024;}
+    });
+    private final class VerificationTransaction implements TransactionSynchronization {
+        final JdbcRecordingPersistence owner=JdbcRecordingPersistence.this;
+        final Map<String,Verified> values=new java.util.HashMap<>();
+        @Override public void afterCommit(){verified.putAll(values);}
+    }
+    private VerificationTransaction verificationTransaction(boolean create){
+        if(!TransactionSynchronizationManager.isSynchronizationActive())return null;
+        for(var synchronization:TransactionSynchronizationManager.getSynchronizations())
+            if(synchronization instanceof JdbcRecordingPersistence.VerificationTransaction candidate&&candidate.owner==this)return candidate;
+        if(!create)return null;var value=new VerificationTransaction();TransactionSynchronizationManager.registerSynchronization(value);return value;
+    }
     /** Explicit database-PCM fixture/legacy mode; deployed configuration supplies the file catalog. */
     public JdbcRecordingPersistence(DataSource source) { this(source,null); }
     public JdbcRecordingPersistence(DataSource source,FileBackendCatalog backends) {
@@ -79,36 +98,50 @@ public final class JdbcRecordingPersistence implements RecordingService.Persiste
         public SessionMetadata {Objects.requireNonNull(session);if(!java.util.Set.of("OPEN","PAUSED","FINISHED").contains(state))throw new IllegalStateException("Invalid recording state");}
     }
     public SessionMetadata sessionMetadata(String id) {
-        var rows=jdbc.query("SELECT session_id,meeting_id,part_id,writer_epoch,backend_id,state FROM recording_session WHERE session_id=?",(r,n)->new SessionMetadata(new RecordingContracts.Session(r.getString(1),r.getString(2),r.getString(3),r.getLong(4),r.getString(5)),r.getString(6)),id);
+        return sessionRow(id,false).metadata();
+    }
+    private record SessionRow(SessionMetadata metadata,long generation) {}
+    private SessionRow sessionRow(String id,boolean currentAppend) {
+        // Routing happens before identity/meeting acquisition. Only the append path has
+        // already acquired the session in the correct order and may force a current read.
+        var rows=jdbc.query("SELECT session_id,meeting_id,part_id,writer_epoch,backend_id,state,manifest_generation FROM recording_session WHERE session_id=?"+(currentAppend?" FOR SHARE":""),(r,n)->new SessionRow(new SessionMetadata(new RecordingContracts.Session(r.getString(1),r.getString(2),r.getString(3),r.getLong(4),r.getString(5)),r.getString(6)),r.getLong(7)),id);
         if(rows.size()!=1)throw new IllegalArgumentException("Unknown recording session");return rows.getFirst();
     }
     @Override public RecordingService.AppendSnapshot loadForAppend(String id,RecordingContracts.Chunk chunk) {
         if(!org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive()
                 ||!org.springframework.transaction.support.TransactionSynchronizationManager.hasResource(jdbc.getDataSource()))
             throw new IllegalStateException("Append projection requires the locked session transaction");
-        var metadata=sessionMetadata(id);
-        var parts=jdbc.queryForList("SELECT part_id FROM recording_part WHERE session_id=? ORDER BY part_no LIMIT 17",String.class,id);
+        var row=sessionRow(id,true);var metadata=row.metadata();
+        var parts=jdbc.queryForList("SELECT part_id FROM recording_part WHERE session_id=? ORDER BY part_no LIMIT 17 FOR SHARE",String.class,id);
         if(parts.size()>16||!parts.contains(metadata.session().partId()))throw new IllegalStateException("Invalid recording parts");
+        long generation=row.generation();var previous=verified.get(id);
+        boolean reusable=parts.size()==1&&previous!=null&&previous.generation()==generation&&previous.session().equals(metadata.session());
         var parameters=new java.util.ArrayList<Object>(parts);parameters.add(id);
-        // Validate every committed route/length on the server. Only aggregate scalars cross JDBC;
-        // no cached totals or omitted old corruption can authorize the next ACK.
-        var totals=jdbc.queryForObject("""
+        // Establish a complete current-read proof after restart/eviction or ANY chunk mutation.
+        // The generation lock excludes mutations while a matching proof is used. In particular,
+        // an RR snapshot from an earlier permission read cannot be paired with a newer generation.
+        var totals=reusable?new long[]{previous.chunks(),previous.samples(),0,previous.chunks()==0?0:1,previous.chunks()}:jdbc.queryForObject("""
                 SELECT COUNT(*),COALESCE(SUM(c.sample_count),0),COALESCE(SUM(CASE WHEN
                     c.sample_count<1 OR c.sample_count>32000 OR c.bytes<>c.sample_count*2
                     OR c.seq<1 OR c.seq>4608 OR c.sample_start<0 OR c.sample_start>9223372036854775807-c.sample_count
                     OR (c.pcm_length IS NULL AND (c.pcm_storage_key IS NULL OR BINARY c.pcm_storage_key<>BINARY CONCAT(c.session_id,'/',c.part_id,'/',c.seq)))
                     OR (c.pcm_length IS NOT NULL AND (c.pcm_length<>c.sample_count*2 OR c.pcm_storage_key IS NOT NULL))
                     OR BINARY c.part_id NOT IN (%s)
-                    THEN 1 ELSE 0 END),0)
+                    THEN 1 ELSE 0 END),0),COALESCE(MIN(c.seq),0),COALESCE(MAX(c.seq),0)
                 FROM (SELECT session_id,part_id,seq,sample_start,sample_count,bytes,OCTET_LENGTH(pcm) AS pcm_length,pcm_storage_key
-                      FROM recording_chunk WHERE session_id=? LIMIT 4097) c
+                      FROM recording_chunk WHERE session_id=? LIMIT 4097 FOR SHARE) c
                 """.formatted(String.join(",",java.util.Collections.nCopies(parts.size(),"BINARY ?"))),
-                (r,n)->new long[]{r.getLong(1),r.getLong(2),r.getLong(3)},parameters.toArray());
+                (r,n)->new long[]{r.getLong(1),r.getLong(2),r.getLong(3),r.getLong(4),r.getLong(5)},parameters.toArray());
         if(totals==null||totals[0]>RecordingContracts.MAX_SESSION_CHUNKS||totals[1]>RecordingContracts.MAX_SESSION_SAMPLES||totals[2]!=0)throw new IllegalStateException("Recording PCM missing or invalid");
-        var frontier=jdbc.queryForObject("""
+        // With one issued part, the integrity scan above proves every row belongs to it.
+        // Unique positive sequences with min=1 and count=max prove a complete prefix;
+        // reuse that proof instead of scanning/sorting the same history a second time.
+        // Gaps and multipart recordings still require the complete current-part frontier.
+        boolean contiguousSinglePart=parts.size()==1&&(totals[0]==0||totals[3]==1&&totals[0]==totals[4]);
+        var frontier=contiguousSinglePart?new long[]{totals[4],totals[4]}:jdbc.queryForObject("""
                 SELECT COALESCE(MAX(seq),0),COALESCE(MIN(CASE WHEN seq<>position THEN position-1 END),MAX(seq),0)
                 FROM (SELECT seq,ROW_NUMBER() OVER(ORDER BY seq) AS position
-                      FROM recording_chunk WHERE session_id=? AND part_id=? LIMIT 4097) c
+                      FROM recording_chunk WHERE session_id=? AND part_id=? LIMIT 4097 FOR SHARE) c
                 """,(r,n)->new long[]{r.getLong(1),r.getLong(2)},id,metadata.session().partId());
         if(frontier==null)throw new IllegalStateException("Missing recording frontier");
         long highest=frontier[1],maximum=frontier[0];
@@ -116,8 +149,10 @@ public final class JdbcRecordingPersistence implements RecordingService.Persiste
         long upper=chunk.seq()==Long.MAX_VALUE?Long.MAX_VALUE:chunk.seq()+1;
         var proofs=jdbc.query("""
                 SELECT part_id,seq,sample_start,sample_count,sha256 FROM recording_chunk
-                WHERE session_id=? AND part_id=? AND (seq>? OR seq BETWEEN ? AND ?) ORDER BY seq LIMIT 516
+                WHERE session_id=? AND part_id=? AND (seq>? OR seq BETWEEN ? AND ?) ORDER BY seq LIMIT 516 FOR SHARE
                 """,(r,n)->new RecordingService.Proof(r.getString(1),r.getLong(2),r.getLong(3),r.getLong(4),r.getString(5)),id,metadata.session().partId(),highest,chunk.seq()-1,upper);
+        var transaction=verificationTransaction(true);
+        if(transaction!=null){if(contiguousSinglePart)transaction.values.put(id,new Verified(metadata.session(),generation,totals[0],totals[1]));else transaction.values.remove(id);}
         return new RecordingService.AppendSnapshot(metadata.session(),metadata.state().equals("PAUSED"),metadata.state().equals("FINISHED"),parts,totals[0],totals[1],highest,maximum,proofs);
     }
     @Override public void persist(RecordingContracts.Session s,RecordingContracts.Chunk c) {
@@ -134,6 +169,13 @@ public final class JdbcRecordingPersistence implements RecordingService.Persiste
         }
         jdbc.update("INSERT INTO recording_chunk(session_id,part_id,seq,sample_start,sample_count,sha256,bytes,pcm,pcm_storage_key,persisted_at) VALUES (?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(6))",
                 s.sessionId(),c.partId(),c.seq(),c.sampleStart(),c.sampleCount(),c.sha256(),pcm.length,backends==null?pcm:null,key);
+        var transaction=verificationTransaction(false);var before=transaction==null?null:transaction.values.remove(s.sessionId());
+        if(before!=null&&before.session().equals(s)&&c.partId().equals(s.partId())&&c.seq()==before.chunks()+1&&c.sampleStart()==before.samples()){
+            // The one-row INSERT advances the database trigger exactly once. Any other
+            // DML would advance it further, making this candidate fail the next current
+            // generation comparison. Publish only after commit; no second query is needed.
+            transaction.values.put(s.sessionId(),new Verified(s,Math.addExact(before.generation(),1),before.chunks()+1,Math.addExact(before.samples(),c.sampleCount())));
+        }
     }
     private static String objectKey(String session,String part,long seq){return session+"/"+part+"/"+seq;}
     /** Frozen metadata must still match; storage/legacy routing always comes from the actual DB. */

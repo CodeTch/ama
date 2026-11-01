@@ -23,6 +23,12 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 /** Shared per-process installation: one existing transcript issuer, one fixed confined registration. */
 public final class TranscriptImportRuntime {
  private TranscriptImportRuntime() {}
+ /** Explicit local harness recovery; worker lifetime owns the returned resource. */
+ public static AutoCloseable startSpeechMaintenance(JdbcTaskQueue queue){
+  String runtime=System.getenv("AMA_LOCAL_SPEECH_RUNTIME");if(runtime==null)return ()->{};
+  if(!(queue.policies.get("TRANSCRIPT_IMPORT_V1") instanceof ImportPolicy policy)||policy.queue!=queue)throw new IllegalArgumentException("Installed import required");
+  return new SpeechExecutionMaintenance(queue,policy.components.authority(),java.nio.file.Path.of(runtime));
+ }
  public record Settings(Supplier<ConfigArchiveSource.Snapshot> archives,ArchiveReadBudget archiveBudget,
                         TranscriptDocumentParser.ParseBudget aggregate,Duration batchDeadline) {
   public Settings {
@@ -96,7 +102,8 @@ public final class TranscriptImportRuntime {
     require(!members.isEmpty()&&members.size()<=settings.archiveBudget().maxBatchFiles(),BUDGET_EXCEEDED);
     var files=new HashMap<String,ContentFile>();for(var file:facts.files())require(files.put(file.id(),file)==null,PROVENANCE_UNAVAILABLE);
     long declared=0;for(var member:members){var file=files.get(member.string("file_id"));require(file!=null&&file.sizeBytes()<=settings.aggregate().maxSourceBytes()-declared,BUDGET_EXCEEDED);declared+=file.sizeBytes();}
-    MeasuredTranscriptDocumentParser parser=media?mediaParser(binding.engineManifestSha256(),binding.parser().version()):documents?new OfficeTranscriptParser():new TextTranscriptParser();var segments=new ArrayList<TranscriptDocumentParser.Segment>();long bytes=0,units=0;
+    boolean speechProfile=binding.parser().version().equals(ControlledSpeechProfile.PARSER);MeasuredTranscriptDocumentParser parser=speechProfile?null:media?mediaParser(binding.engineManifestSha256(),binding.parser().version()):documents?new OfficeTranscriptParser():new TextTranscriptParser();var segments=new ArrayList<TranscriptDocumentParser.Segment>();long bytes=0,units=0,samples=0;
+    try(var speech=speechProfile?new SpeechMediaPipeline(queue,components,lease,binding.engineManifestSha256(),cancelled):null){
     for(var member:members){
      check(cancelled);var file=files.get(member.string("file_id"));
      long remainingBytes=settings.aggregate().maxSourceBytes()-bytes,remainingUnits=settings.aggregate().maxUtf16CodeUnits()-units;
@@ -106,10 +113,11 @@ public final class TranscriptImportRuntime {
      MeasuredTranscriptDocumentParser.MeasuredResult measured;
      try(var download=components.sources().open(lease,lease.spec().input().id(),file.id())) {
       require(download.file().fileId().equals(file.id())&&download.file().meetingId().equals(file.meetingId())&&download.file().sha256().equals(file.sha256())&&download.file().size()==file.sizeBytes()&&download.offset()==0&&download.length()==file.sizeBytes(),PROVENANCE_UNAVAILABLE);
-      measured=parser instanceof MediaTranscriptParser m?m.parseMeasured(download.body(),UUID.fromString(file.id()),file.sha256(),budget,cancelled,download.file().displayName()):parser.parseMeasured(download.body(),UUID.fromString(file.id()),file.sha256(),budget,cancelled);
+      measured=speech!=null?speech.parse(download.body(),UUID.fromString(file.id()),file.sha256(),budget,cancelled,download.file().displayName(),115200000-samples):parser instanceof MediaTranscriptParser m?m.parseMeasured(download.body(),UUID.fromString(file.id()),file.sha256(),budget,cancelled,download.file().displayName()):parser.parseMeasured(download.body(),UUID.fromString(file.id()),file.sha256(),budget,cancelled);
      }
      check(cancelled);require(measured.usage().sourceBytes()==file.sizeBytes()&&measured.usage().segments()==measured.result().segments().size(),PROVENANCE_UNAVAILABLE);
-     bytes=Math.addExact(bytes,measured.usage().sourceBytes());units=Math.addExact(units,measured.usage().decodedUtf16CodeUnits());segments.addAll(measured.result().segments());
+     bytes=Math.addExact(bytes,measured.usage().sourceBytes());units=Math.addExact(units,measured.usage().decodedUtf16CodeUnits());segments.addAll(measured.result().segments());samples=Math.addExact(samples,measured.usage().normalizedSamples());require(samples<=115200000,BUDGET_EXCEEDED);
+    }
     }
     check(cancelled);String owner=queue.jdbc.queryForObject("SELECT owner_id FROM meeting WHERE id=?",String.class,lease.spec().subject().id());
     return new Carrier(new Raw(lease,UUID.randomUUID().toString(),owner,input.string("batch_id"),Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS),segments,null),cancelled);

@@ -64,10 +64,20 @@ public final class JdbcMaterials {
   var start=authority.transactionRunner().required(()->{registry.lock(actor,meeting,MeetingAccess.Action.EDIT);var root=root(meeting);if(root.revision()!=expected)throw failure(409,"REVISION_CONFLICT");if(active(meeting).size()+selected.size()>MAX_MATERIALS)throw failure(422,"MATERIAL_LIMIT_EXCEEDED");return root;});
   var inputs=new ArrayList<Staged>();long bytes=0;
   // Finish every exact external source/ACL/version preflight before any reference or cache upload.
-  for(var selection:selected){
+  try{for(var selection:selected){
    if(selection.fileId()!=null){try(var download=authority.readMaterialUpload(actor,meeting,selection.fileId())){if(!meeting.equals(download.file().meetingId()))throw new NotFound();bytes=Math.addExact(bytes,download.file().size());inputs.add(new Staged(selection,new Source(download.file().fileId(),download.file().sha256(),download.file().displayName(),null,null,null),null,null));}}
    else {if(knowledge==null||authority.materialAuthority()==null)throw failure(503,"MATERIAL_KNOWLEDGE_UNAVAILABLE");var doc=knowledge.document(actor,meeting,selection.libraryId(),selection.documentId(),selection.version());bytes=Math.addExact(bytes,doc.bytes().length);inputs.add(new Staged(selection,null,doc,null));}
    if(bytes>64L*1024*1024)throw failure(422,"MATERIAL_BATCH_BYTES_EXCEEDED");
+  }
+  }catch(ama.contract.TranscriptContracts.Failure conflict){
+   if(!"MATERIAL_KNOWLEDGE_VERSION_CONFLICT".equals(conflict.code()))throw conflict;
+   // Serialize the terminal outcome with the same root lock and journal as success.
+   // A concurrently admitted success wins; a durable rejection forbids every later admission.
+   var committed=authority.transactionRunner().required(()->{
+    registry.lock(actor,meeting,MeetingAccess.Action.EDIT);var receipt=batchReceipt(meeting,scope,request);if(receipt!=null)return receipt;
+    j.update("INSERT INTO material_batch_receipt VALUES (?,?,?,?,UTC_TIMESTAMP(6))",meeting,scope,request,"{\"rejection\":\"MATERIAL_BATCH_VERSION_REJECTED\"}");return (Batch)null;
+   });
+   if(committed!=null)return committed;throw failure(409,"MATERIAL_BATCH_VERSION_REJECTED");
   }
   var staged=new ArrayList<Staged>();var additions=new ArrayList<ama.meeting.MaterialAuthorityDependencies.Item>();
   for(int i=0;i<inputs.size();i++){
@@ -90,7 +100,7 @@ public final class JdbcMaterials {
    try{String body=ControlledKnowledgeClient.JSON.writeValueAsString(result);if(body.length()>262144)throw new IllegalStateException("Material batch receipt budget");j.update("INSERT INTO material_batch_receipt VALUES(?,?,?,?,UTC_TIMESTAMP(6))",meeting,scope,request,body);}catch(com.fasterxml.jackson.core.JsonProcessingException invalid){throw new IllegalStateException(invalid);}return result;
   });
  }
- private Batch batchReceipt(String meeting,String scope,String request){var rows=j.queryForList("SELECT request_hash,IF(OCTET_LENGTH(response_body)<=262144,response_body,NULL) response_body FROM material_batch_receipt WHERE meeting_id=? AND scope_hash=?",meeting,scope);if(rows.isEmpty())return null;var row=rows.getFirst();if(!request.equals(row.get("request_hash")))throw failure(409,"IDEMPOTENCY_CONFLICT");if(!(row.get("response_body") instanceof String body))throw failure(503,"MATERIAL_RECEIPT_UNAVAILABLE");try{return ControlledKnowledgeClient.JSON.readValue(body,Batch.class);}catch(IOException invalid){throw failure(503,"MATERIAL_RECEIPT_UNAVAILABLE");}}
+ private Batch batchReceipt(String meeting,String scope,String request){var rows=j.queryForList("SELECT request_hash,IF(OCTET_LENGTH(response_body)<=262144,response_body,NULL) response_body FROM material_batch_receipt WHERE meeting_id=? AND scope_hash=?",meeting,scope);if(rows.isEmpty())return null;var row=rows.getFirst();if(!request.equals(row.get("request_hash")))throw failure(409,"IDEMPOTENCY_CONFLICT");if(!(row.get("response_body") instanceof String body))throw failure(503,"MATERIAL_RECEIPT_UNAVAILABLE");try{var outcome=ControlledKnowledgeClient.JSON.readTree(body);if(outcome.isObject()&&outcome.size()==1&&"MATERIAL_BATCH_VERSION_REJECTED".equals(outcome.path("rejection").asText()))throw failure(409,"MATERIAL_BATCH_VERSION_REJECTED");return ControlledKnowledgeClient.JSON.readValue(body,Batch.class);}catch(IOException invalid){throw failure(503,"MATERIAL_RECEIPT_UNAVAILABLE");}}
  public Item retry(Actor actor,String meeting,String material,String key,String trace)throws IOException {
   uuid(meeting);uuid(material);JdbcProcessingIntake.key(key);String scope=JdbcProcessingIntake.digest(actor.enterpriseId(),meeting,"MATERIAL_RETRY",key),request=JdbcProcessingIntake.digest(material);
   var started=start(actor,meeting,scope,request,material);if(started.replay()!=null)return started.replay();var prior=started.prior();if(!"FAILED".equals(prior.get("parse_state"))&&!"UNSUPPORTED".equals(prior.get("parse_state")))throw failure(409,"MATERIAL_NOT_FAILED");

@@ -1,3 +1,4 @@
+import {ApiError} from '../../shared/api/client';
 import {computed,shallowReadonly,shallowRef,watch} from 'vue';
 import {createScopedPrivateJournal} from '../../shared/composables/scoped-private-journal';
 import type {TabJournalContext} from '../../shared/composables/tab-journal';
@@ -36,7 +37,7 @@ function validJobs(v:unknown,actor:string,meeting:string):v is StoredJob[]{
 }
 
 /** Independent material intake. Journals retain original commands, never bytes or restored ACK authority. */
-export function useMaterials(api:Api,actor:()=>string|null,meeting:()=>string,context:TabJournalContext,eligible:()=>boolean=()=>true){
+export function useMaterials(api:Api,actor:()=>string|null,meeting:()=>string,context:TabJournalContext,eligible:()=>boolean=()=>true,discardedBatch:()=>void=()=>{}){
  const items=shallowRef<readonly MaterialItem[]>([]),jobs=shallowRef<readonly MaterialJob[]>([]),ready=shallowRef(false),busy=shallowRef(false),loading=shallowRef(false),error=shallowRef<string|null>(null),storageBlocked=shallowRef(false),listing=shallowRef<MaterialListing|null>(null);
  const journal=createScopedPrivateJournal(context,'import-materials',validJobs),files=new Map<string,File>();
  let epoch=0,disposed=false,controller=new AbortController(),restored=false,reloadFlight:Promise<void>|null=null,readSequence=0;
@@ -96,7 +97,7 @@ export function useMaterials(api:Api,actor:()=>string|null,meeting:()=>string,co
    if(job.kind==='REMOVE')await api.remove(job.command);else if(job.kind==='BATCH')await api.batch(job.command);else await api.send(job.command);active(turn);
    await fresh(turn);active(turn);
    const remaining=jobs.value.filter(j=>j.id!==id);persist(remaining);jobs.value=Object.freeze(remaining);files.delete(id);error.value=null;return true;
-  }catch(cause){if(turn===epoch){const job=get(id);patch(id,{status:'操作未完成',error:message(cause),needsFile:job.kind==='LOCAL'&&!job.command&&!job.completion&&!files.has(id)});error.value=message(cause);}return false;}
+  }catch(cause){if(turn===epoch){const job=get(id);patch(id,{canRemove:job.canRemove||job.kind==='BATCH'&&cause instanceof ApiError&&cause.status===409&&cause.code==='MATERIAL_BATCH_VERSION_REJECTED',status:'操作未完成',error:message(cause),needsFile:job.kind==='LOCAL'&&!job.command&&!job.completion&&!files.has(id)});error.value=message(cause);}return false;}
  }
  async function run(ids:readonly string[]){writable();const turn=epoch;busy.value=true;try{for(const id of ids){active(turn);await perform(id,turn);}}finally{if(turn===epoch)busy.value=false;}}
  async function addLocal(selected:readonly File[]){writable();if(jobs.value.length)throw new Error('请先恢复已有材料操作。');if(items.value.length+selected.length>64)throw new Error('背景材料最多64份。');
@@ -107,7 +108,7 @@ export function useMaterials(api:Api,actor:()=>string|null,meeting:()=>string,co
   const job=freezeJob({id:crypto.randomUUID(),kind:'BATCH',name:`知识库材料（${selected.length}份）`,begin:null,completion:null,uploadId:null,selection:null,command});jobs.value=Object.freeze([job]);persist();await run([job.id]);return jobs.value.some(j=>j.id===job.id)?[]:selected.map(knowledgeKey);
  }
  async function retryJob(id:string,file?:File){writable();if(file)files.set(id,file);persist();await run([get(id).id]);}
- async function removeJob(id:string){writable();if(!get(id).canRemove)throw new Error('原请求结果尚未确认，不能丢弃该材料操作。');const remaining=jobs.value.filter(j=>j.id!==id);persist(remaining);jobs.value=Object.freeze(remaining);files.delete(id);}
+ async function removeJob(id:string){writable();if(!get(id).canRemove)throw new Error('原请求结果尚未确认，不能丢弃该材料操作。');const batch=get(id).kind==='BATCH',remaining=jobs.value.filter(j=>j.id!==id);persist(remaining);jobs.value=Object.freeze(remaining);files.delete(id);if(!remaining.length)error.value=null;if(batch)discardedBatch();}
  async function materialAction(id:string,kind:'RETRY'|'REMOVE'){writable();if(jobs.value.length)throw new Error('请先恢复已有材料操作。');const material=items.value.find(i=>i.id===id);if(!material)throw new Error('材料已变化，请重新读取。');if(kind==='RETRY'&&material.state!=='FAILED')throw new Error('仅失败材料可重试解析。');
   const j=freezeJob({id:crypto.randomUUID(),kind,name:material.name,begin:null,completion:null,uploadId:null,selection:null,command:createCommand(kind==='RETRY'?'MATERIAL_RETRY':'MATERIAL_REMOVE',`/api/v1/meetings/${meeting()}/materials/${id}`+(kind==='RETRY'?'/retry':''),'')});jobs.value=Object.freeze([...jobs.value,j]);persist();await run([j.id]);
  }
@@ -133,6 +134,6 @@ export function useKnowledgeMaterials(api:Api,actor:()=>string|null,meeting:()=>
  function settle(added:readonly string[]){selected.value=Object.freeze(selected.value.filter(d=>!added.includes(knowledgeKey(d))));persist();}
  function clear(){selected.value=[];persist();}
  function setReview(value:boolean){review.value=value;persist();if(!value)void loadDocuments();}
- function close(){opened.value=false;persist();}
+ function close(){opened.value=false;documents.value=[];cursor.value=null;persist();}
  return {libraries,documents,selected,query,library,review,loading,libraryLoading,error,libraryError,cursor,libraryCursor,opened,open,close,chooseLibrary,search,toggle,settle,clear,setReview,reloadLibraries:()=>loadLibraries(),reloadDocuments:()=>loadDocuments(),moreLibraries:()=>loadLibraries(true),moreDocuments:()=>loadDocuments(true),logout(){invalidate();journal.clear();},dispose(){disposed=true;stop();invalidate();}};
 }

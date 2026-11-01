@@ -12,6 +12,113 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /** Real MySQL metadata hot path. Seeded file routes are fixtures, not evidence of stored audio. */
 class RecordingAppendIT extends RecordingProtocolIT {
+    @Test void detachedRoutingMetadataCannotLockSessionBeforeIdentityAuthorization() throws Exception {
+        var s=seeded(2,2);var persistence=new JdbcRecordingPersistence(source);
+        try(var connection=source.getConnection()){
+            connection.setAutoCommit(false);
+            try(var statement=connection.prepareStatement("SELECT session_id FROM recording_session WHERE session_id=? FOR UPDATE")){
+                statement.setString(1,s.sessionId());try(var result=statement.executeQuery()){assertTrue(result.next());}
+            }
+            try(var executor=java.util.concurrent.Executors.newSingleThreadExecutor()){
+                var read=executor.submit(()->new ama.db.TransactionRunner(source).required(()->persistence.sessionMetadata(s.sessionId())));
+                try{assertEquals(s,read.get(1500,java.util.concurrent.TimeUnit.MILLISECONDS).session());}
+                finally{connection.rollback();}
+            }
+        }
+    }
+    @Test void committedContiguousAppendsHaveBoundedServerWorkAfterHistoryVerification() throws Exception {
+        var session=seeded(3600,2);
+        try(var connection=source.getConnection()) {
+            var single=new org.springframework.jdbc.datasource.SingleConnectionDataSource(connection,true);
+            var probe=new org.springframework.jdbc.core.JdbcTemplate(single);
+            var persistence=new JdbcRecordingPersistence(single);var service=new RecordingService(persistence);
+            assertEquals(3601,service.accept(session.sessionId(),1,chunk(session,3601)).highestContiguousSeq());
+            long before=handlerReads(probe);
+            assertEquals(3602,service.accept(session.sessionId(),1,chunk(session,3602)).highestContiguousSeq());
+            long scanned=handlerReads(probe)-before;
+            System.out.println("APPEND_VERIFIED_GENERATION_PROBE history=3601 handlerReads="+scanned);
+            assertTrue(scanned<=24,"A verified contiguous append reread "+scanned+" historical rows");
+            // A new process instance has no local verification and must establish its own proof.
+            var restarted=new JdbcRecordingPersistence(single);before=handlerReads(probe);
+            var snapshot=restarted.locked(session.sessionId(),()->restarted.loadForAppend(session.sessionId(),chunk(session,3603)));
+            assertEquals(3602,snapshot.totalChunks());assertEquals(7204,snapshot.totalSamples());
+            assertTrue(handlerReads(probe)-before>=3602,"Restart must not trust another instance's cached verification");
+        }
+    }
+
+    @Test void oldMetadataMutationInvalidatesAnAlreadyVerifiedHistory() {
+        var s=seeded(2400,2);var service=service();
+        assertEquals(2401,service.accept(s.sessionId(),1,chunk(s,2401)).highestContiguousSeq());
+        jdbc.update("UPDATE recording_chunk SET pcm_storage_key=NULL WHERE session_id=? AND seq=1",s.sessionId());
+        assertThrows(IllegalStateException.class,()->service.accept(s.sessionId(),1,chunk(s,2402)));
+        assertEquals(2401,jdbc.queryForObject("SELECT COUNT(*) FROM recording_chunk WHERE session_id=?",Integer.class,s.sessionId()));
+    }
+
+    @Test void rolledBackVerificationCannotAuthorizeAnEqualGenerationWithDifferentCommittedSamples() {
+        var s=seeded(3600,2);var persistence=new JdbcRecordingPersistence(source);var service=new RecordingService(persistence);
+        var tx=new ama.db.TransactionRunner(source);
+        assertThrows(IllegalStateException.class,()->tx.required(()->{service.accept(s.sessionId(),1,chunk(s,3601));throw new IllegalStateException("rollback");}));
+        var other=service();other.accept(s.sessionId(),1,new RecordingContracts.Chunk(s.partId(),1,3601,7200,3,new byte[]{1,2,3,4,5,6}));
+        var actual=persistence.locked(s.sessionId(),()->persistence.loadForAppend(s.sessionId(),new RecordingContracts.Chunk(s.partId(),1,3602,7203,2,new byte[]{1,2,3,4})));
+        assertEquals(3601,actual.totalChunks());assertEquals(7203,actual.totalSamples());assertEquals(3601,actual.highestContiguousSeq());
+    }
+
+    @Test void removingAnEarlierChunkInvalidatesTheVerifiedContiguousFrontier() {
+        var s=seeded(2,2);var service=service();service.accept(s.sessionId(),1,chunk(s,3));
+        jdbc.update("DELETE FROM recording_chunk WHERE session_id=? AND seq=1",s.sessionId());
+        var ack=service.accept(s.sessionId(),1,chunk(s,4));assertEquals(0,ack.highestContiguousSeq());assertEquals(List.of(1L),ack.missingSeqs());
+        assertThrows(RecordingService.Gap.class,()->service.finish(s.sessionId(),1,Map.of(s.partId(),4L)));
+    }
+
+    @Test void earlierRepeatableReadSnapshotCannotHideACommittedChunkFromNewGeneration() throws Exception {
+        var s=seeded(2,2);
+        try(var connection=source.getConnection();var executor=java.util.concurrent.Executors.newSingleThreadExecutor()){
+            var single=new org.springframework.jdbc.datasource.SingleConnectionDataSource(connection,true);var probe=new org.springframework.jdbc.core.JdbcTemplate(single);var persistence=new JdbcRecordingPersistence(single);
+            new ama.db.TransactionRunner(single).required(()->{
+                assertEquals(2,probe.queryForObject("SELECT COUNT(*) FROM recording_chunk WHERE session_id=?",Integer.class,s.sessionId()));
+                executor.submit(()->service().accept(s.sessionId(),1,chunk(s,3))).get(15,java.util.concurrent.TimeUnit.SECONDS);
+                var actual=persistence.locked(s.sessionId(),()->persistence.loadForAppend(s.sessionId(),chunk(s,4)));
+                assertEquals(3,actual.totalChunks());assertEquals(6,actual.totalSamples());assertEquals(3,actual.highestContiguousSeq());return null;
+            });
+        }
+    }
+
+    @Test void earlierRepeatableReadSnapshotCannotRestoreTheOldWriterEpoch() throws Exception {
+        var s=seeded(2,2);
+        try(var connection=source.getConnection();var executor=java.util.concurrent.Executors.newSingleThreadExecutor()){
+            var single=new org.springframework.jdbc.datasource.SingleConnectionDataSource(connection,true);var probe=new org.springframework.jdbc.core.JdbcTemplate(single);var persistence=new JdbcRecordingPersistence(single);
+            new ama.db.TransactionRunner(single).required(()->{
+                assertEquals(1,probe.queryForObject("SELECT writer_epoch FROM recording_session WHERE session_id=?",Integer.class,s.sessionId()));
+                var next=executor.submit(()->{var other=service();other.pause(s.sessionId(),1);return other.nextPart(s.sessionId(),1);}).get(15,java.util.concurrent.TimeUnit.SECONDS);
+                var actual=persistence.locked(s.sessionId(),()->persistence.loadForAppend(s.sessionId(),new RecordingContracts.Chunk(next.partId(),2,1,0,2,new byte[]{1,2,3,4})));
+                assertEquals(next,actual.session());assertEquals(2,actual.parts().size());assertEquals(0,actual.highestContiguousSeq());return null;
+            });
+        }
+    }
+
+    @Test void contiguousTwoHourHistoryNeedsOnlyOneFullMetadataPassPerAck() throws Exception {
+        var session=seeded(3600,2);
+        try(var connection=source.getConnection()) {
+            var single=new org.springframework.jdbc.datasource.SingleConnectionDataSource(connection,true);
+            var probe=new org.springframework.jdbc.core.JdbcTemplate(single);
+            var persistence=new JdbcRecordingPersistence(single);
+            // MySQL's own session counters measure server work, including rows never transferred
+            // over JDBC. The bound allows one complete integrity scan plus bounded tail probes.
+            long before=handlerReads(probe);
+            var projection=persistence.locked(session.sessionId(),()->persistence.loadForAppend(session.sessionId(),chunk(session,3601)));
+            long scanned=handlerReads(probe)-before;
+            assertEquals(3600,projection.highestContiguousSeq());
+            assertEquals(3600,projection.totalChunks());
+            assertEquals(7200,projection.totalSamples());
+            System.out.println("APPEND_SERVER_WORK_PROBE history=3600 handlerReads="+scanned);
+            assertTrue(scanned<=4000,"A contiguous ACK scanned "+scanned+" indexed rows; budget is one history pass plus bounded neighbours");
+        }
+    }
+
+    private static long handlerReads(org.springframework.jdbc.core.JdbcTemplate probe) {
+        return Long.parseLong(probe.queryForMap("SHOW SESSION STATUS LIKE 'Handler_read_next'").get("Value").toString());
+    }
+
     @Test void lateExactRetryDoesNotTransferTheWholeCommittedHistory() {
         var s = seeded(3600, 2);
         var measured = new Counted(source);

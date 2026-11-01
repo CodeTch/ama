@@ -31,6 +31,22 @@ CHILDREN = {}
 SERVICE_ROLES = ('frontend', 'backend', 'worker', 'files', 'model', 'knowledge')
 
 
+def load_local_settings(path=None):
+    """Retain explicit local integration choices across desktop/new-shell starts."""
+    path = Path(path) if path is not None else RUNTIME / 'local-settings.json'
+    if not path.exists():
+        return
+    if path.is_symlink() or not path.is_file() or path.stat().st_size > 4096 or path.stat().st_mode & 0o777 != 0o600:
+        raise ValueError('Restricted local settings required')
+    allowed = {'AMA_CAS_ORIGIN', 'AMA_INTEGRATION_KNOWLEDGE_ORIGIN', 'AMA_INTEGRATION_MODEL_ORIGIN',
+               'AMA_LOCAL_DB_POOL_MAXIMUM', 'AMA_LOCAL_FILE_WORKERS', 'AMA_LOCAL_MINUTES_SCENARIO'}
+    values = json.loads(path.read_text())
+    if not isinstance(values, dict) or not set(values) <= allowed or any(not isinstance(v, str) for v in values.values()):
+        raise ValueError('Only explicit local integration settings may be retained')
+    for key, value in values.items():
+        os.environ.setdefault(key, value)
+
+
 def configure_ports(state, web, api, management):
     """Retain this checkout's explicit listeners without taking another checkout's ports."""
     retained = state.get('ports', {})
@@ -293,7 +309,11 @@ def start(state):
                IDENTITY_ALLOWED_ORIGIN=ORIGIN, AMA_API_TARGET=f"http://127.0.0.1:{state['ports']['api']}", VITE_LOCAL_DEV_LOGIN='1')
     classpath = application(java, env)
     print('Applying schema migrations only to the dedicated local database...', flush=True)
-    run_logged([java, '-cp', classpath, 'ama.db.MigrationMain'], env, 'migration.log')
+    # DDL runs as the administrator of this verified owned container. Runtime roles keep
+    # their original database account; trigger creation never requires granting it SUPER
+    # or enabling log_bin_trust_function_creators on the server.
+    run_logged([java, '-cp', classpath, 'ama.db.MigrationMain'],
+               env | {'DATABASE_USERNAME': 'root', 'DATABASE_PASSWORD': state['rootPassword']}, 'migration.log')
     snapshot = b'AMAC' + b'\x01' + struct.pack('>I', 3)
     for key, label in [('project', '项目会议'), ('review', '需求评审'), ('workshop', '专题讨论')]:
         for field in (key, label):
@@ -498,6 +518,7 @@ def start_worker(state):
 
 
 def main():
+    load_local_settings()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['start', 'stop', 'status', 'start-worker', 'stop-worker'])
     parser.add_argument('--web-port', type=int)

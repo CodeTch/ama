@@ -14,16 +14,20 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 public final class PublicationWriteGuard {
  public interface Prepared extends ama.storage.FileRegistry.WritePreparation {}
  public interface Held {}
+ /** Only asks the storage caller to roll back and acquire a new complete plan. */
+ public static final class StorageSnapshotChanged extends RuntimeException {
+  StorageSnapshotChanged(){super("Storage task snapshot changed",null,false,false);}
+ }
  private enum Phase { CONTROLS, TASKS, CLAIMED }
  private final JdbcTranscriptAuthority authority;
  private final DataSource source;
  private final JdbcTemplate j;
  private final class Plan implements Prepared {
-  final Actor actor;final String meeting;final TranscriptAcquisitionBudget.Ledger budget;
+  final Actor actor;final String meeting;final TranscriptAcquisitionBudget.Ledger budget;final boolean storage;
   Map<String,Object> root;List<Map<String,Object>> publications,finals;PublicationGraph.Plan graph;
   Map<String,String> originals=Map.of();Map<String,PublicationWriteHistory.ExecutionOriginal> executions=Map.of();
   RuntimeException failure;
-  Plan(Actor actor,String meeting,TranscriptAcquisitionBudget.Ledger budget){this.actor=actor;this.meeting=meeting;this.budget=budget;}
+  Plan(Actor actor,String meeting,TranscriptAcquisitionBudget.Ledger budget,boolean storage){this.actor=actor;this.meeting=meeting;this.budget=budget;this.storage=storage;}
   PublicationWriteGuard issuer(){return PublicationWriteGuard.this;}
  }
  private final class Scope implements Held {
@@ -34,6 +38,12 @@ public final class PublicationWriteGuard {
  PublicationWriteGuard(JdbcTranscriptAuthority authority){this.authority=Objects.requireNonNull(authority);source=authority.dataSource();j=new JdbcTemplate(source);j.setQueryTimeout(2);}
 
  public Prepared prepare(Actor actor,String meeting){return prepare(actor,meeting,authority.publicationBudget());}
+ public Prepared prepareStorage(Actor actor,String meeting){return prepare(actor,meeting,authority.publicationBudget(),true);}
+ Prepared prepareTaskPreparation(Actor actor,String meeting,TranscriptAcquisitionBudget.Ledger budget){return prepare(actor,meeting,budget,true);}
+ public Prepared refreshStorage(Prepared previous){
+  if(!(previous instanceof PublicationWriteGuard.Plan plan)||plan.issuer()!=this||!plan.storage)throw new IllegalArgumentException("Actual storage preparation required");
+  return prepare(plan.actor,plan.meeting,plan.budget,true);
+ }
  public void requireStorageSource(DataSource source,MeetingAccess access){if(this.source!=source||authority.savedAccess()!=access)throw new IllegalArgumentException("Foreign publication guard storage assembly");}
  public void requireInstallation(ama.storage.FileRegistry registry,DataSource source,MeetingAccess access){requireStorageSource(source,access);if(authority.fileRegistry()!=registry)throw new IllegalArgumentException("Foreign publication guard registry");}
  public void requireRegistration(Held held,MeetingAccess.Locked gate){scope(held,gate,Phase.CONTROLS);}
@@ -44,10 +54,13 @@ public final class PublicationWriteGuard {
  }
  /** May run in a worker acquisition transaction, but always before its first root. */
  public Prepared prepare(Actor actor,String meeting,TranscriptAcquisitionBudget.Ledger budget){
+  return prepare(actor,meeting,budget,false);
+ }
+ private Prepared prepare(Actor actor,String meeting,TranscriptAcquisitionBudget.Ledger budget,boolean storage){
   Objects.requireNonNull(actor);uuid(meeting);Objects.requireNonNull(budget);
   if(!(authority.savedAccess() instanceof JdbcMeetingAccess access))throw new IllegalStateException("Actual JDBC root tracker required");
   access.requireBeforeIdentityAcquisition();
-  var plan=new Plan(actor,meeting,budget);
+  var plan=new Plan(actor,meeting,budget,storage);
   try{
    plan.root=root(meeting,budget,false);plan.publications=publications(meeting,budget,false);plan.finals=finals(meeting,budget,false);
    plan.graph=PublicationGraph.discover(source,meeting,budget);
@@ -86,7 +99,7 @@ public final class PublicationWriteGuard {
  }
 
  /** Called at the common task rank, after all declared domain/session/file acquisitions. */
- public void tasks(Held held,MeetingAccess.Locked gate){var scope=scope(held,gate,Phase.CONTROLS);PublicationGraph.lock(source,scope.plan.graph,false);scope.phase=Phase.TASKS;}
+ public void tasks(Held held,MeetingAccess.Locked gate){var scope=scope(held,gate,Phase.CONTROLS);if(scope.plan.storage)PublicationGraph.lockStorage(source,scope.plan.graph);else PublicationGraph.lock(source,scope.plan.graph,false);scope.phase=Phase.TASKS;}
 
  /** Initial generation preparation only: no failed capture or guard is accepted after a renewal signal. */
  void tasksForGenerationPreparation(Held held,MeetingAccess.Locked gate,ama.contract.TaskContracts.TaskLease lease){
@@ -125,9 +138,13 @@ public final class PublicationWriteGuard {
  boolean fencesOrdinary(Prepared prepared){if(!(prepared instanceof PublicationWriteGuard.Plan plan)||plan.issuer()!=this)throw new IllegalArgumentException("Foreign publication preparation");if(Thread.currentThread().isInterrupted()||plan.failure instanceof ama.contract.MinutesContracts.Failure f&&f.code()==CANCELLED)throw fail(CANCELLED);return plan.failure!=null;}
  PublicationGraph.Plan declaration(Prepared prepared){if(!(prepared instanceof PublicationWriteGuard.Plan plan)||plan.issuer()!=this||plan.graph==null)throw fail(PROVENANCE_UNAVAILABLE);return plan.graph;}
  void covers(Prepared prepared,Map<String,List<Map<String,Object>>> rows){
+  covers(prepared,rows,false);
+ }
+ void coversTaskPreparation(Prepared prepared,Map<String,List<Map<String,Object>>> rows){covers(prepared,rows,true);}
+ private void covers(Prepared prepared,Map<String,List<Map<String,Object>>> rows,boolean recapture){
   var graph=declaration(prepared);for(String table:MinutesPendingDiscovery.TASKS){
    var keys=MinutesSourceRows.SHAPES.get(table).keys();
-   for(var expected:rows.getOrDefault(table,List.of())){var matches=graph.rows().get(table).stream().filter(r->keys.stream().allMatch(k->Objects.equals(r.get(k),expected.get(k)))).toList();require(matches.size()==1,PROVENANCE_UNAVAILABLE);var actual=matches.getFirst();for(var cell:expected.entrySet())if(actual.containsKey(cell.getKey()))require(Objects.equals(cell.getValue(),actual.get(cell.getKey())),PROVENANCE_UNAVAILABLE);}
+   for(var expected:rows.getOrDefault(table,List.of())){var matches=graph.rows().get(table).stream().filter(r->keys.stream().allMatch(k->Objects.equals(r.get(k),expected.get(k)))).toList();if(recapture&&matches.size()!=1)throw new StorageSnapshotChanged();require(matches.size()==1,PROVENANCE_UNAVAILABLE);var actual=matches.getFirst();for(var cell:expected.entrySet())if(actual.containsKey(cell.getKey())){if(recapture&&!Objects.equals(cell.getValue(),actual.get(cell.getKey())))throw new StorageSnapshotChanged();require(Objects.equals(cell.getValue(),actual.get(cell.getKey())),PROVENANCE_UNAVAILABLE);}}
   }
  }
  /** Root-free discovery coverage may reject only the exact same-own-lease renewal for complete reacquisition. */

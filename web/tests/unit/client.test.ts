@@ -2,6 +2,14 @@ import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { request, ApiError } from '../../src/shared/api/client.js';
+
+test('material content and version rejections preserve safe codes and explain the recovery',async()=>{
+ const old=fetch;
+ try{for(const [code,status,part] of [['MATERIAL_KNOWLEDGE_CONTENT_INVALID',503,'校验'],['MATERIAL_BATCH_VERSION_REJECTED',409,'重新选择']] as const){
+  globalThis.fetch=async()=>Response.json({error:{code,message:'private document contents',traceId:'00000000-0000-4000-8000-000000000001'}},{status});
+  await assert.rejects(request('https://ama.test/api/v1/meetings/00000000-0000-4000-8000-000000000001/materials/batches'),(e:unknown)=>e instanceof ApiError&&e.kind==='http'&&e.code===code&&e.message.includes(part)&&!e.message.includes('private'));
+ }}finally{globalThis.fetch=old;}
+});
 let origin='';
 const server=createServer((req,res)=>{
  if(req.url==='/ok'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify({value:42,accept:req.headers.accept,custom:req.headers['x-example']}));}

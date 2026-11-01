@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted,onUnmounted,ref,watch} from 'vue';
-const props=withDefaults(defineProps<{open:boolean;title?:string;preventClose?:boolean}>(),{title:'会议信息'});
+const props=withDefaults(defineProps<{open:boolean;title?:string;closeLabel?:string;preventClose?:boolean}>(),{title:'会议信息',closeLabel:'关闭编辑会议信息'});
 const emit=defineEmits<{close:[]}>(),dialog=ref<HTMLDialogElement>(),openedOnce=ref(props.open);
 function sync(){
  if(!dialog.value)return;
@@ -20,7 +20,7 @@ onUnmounted(()=>document.body.classList.remove('drawer-open'));
 </script>
 <template>
  <dialog ref="dialog" class="info-drawer ac-info-drawer" role="dialog" aria-modal="true" aria-labelledby="info-drawer-title" @cancel.prevent="requestClose" @click="backdrop">
-  <header class="info-drawer-header"><h2 id="info-drawer-title">{{title}}</h2><button class="btn sm" type="button" aria-label="关闭编辑会议信息" @click="requestClose" :disabled="preventClose">✕</button></header>
+  <header class="info-drawer-header"><h2 id="info-drawer-title">{{title}}</h2><button class="btn sm" type="button" :aria-label="closeLabel" @click="requestClose" :disabled="preventClose">✕</button></header>
   <div v-if="open||openedOnce" class="info-drawer-body"><slot/></div>
  </dialog>
 </template>

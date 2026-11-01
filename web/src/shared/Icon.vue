@@ -1,8 +1,10 @@
 <script setup lang="ts">
-defineProps<{name:'list'|'mic'|'plus'|'layers'|'play'|'pause'|'file'|'refresh'|'edit'|'search'|'x'|'copy'|'calendar'|'message'|'guide'|'reset'|'arrowL'|'arrowR'|'alert';size?:number}>();
+defineProps<{name:'download'|'kb'|'list'|'mic'|'plus'|'layers'|'play'|'pause'|'file'|'refresh'|'edit'|'search'|'x'|'copy'|'calendar'|'message'|'guide'|'reset'|'arrowL'|'arrowR'|'alert';size?:number}>();
 </script>
 <template><svg :width="size||16" :height="size||16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px" aria-hidden="true">
- <template v-if="name==='list'"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1.4"/><circle cx="4" cy="12" r="1.4"/><circle cx="4" cy="18" r="1.4"/></template>
+ <template v-if="name==='download'"><path d="M12 4v11"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></template>
+ <template v-else-if="name==='kb'"><path d="M4 19V6a2 2 0 0 1 2-2h5v15H6a2 2 0 0 0-2 2v-2Z"/><path d="M11 4h5a2 2 0 0 1 2 2v13"/></template>
+ <template v-else-if="name==='list'"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1.4"/><circle cx="4" cy="12" r="1.4"/><circle cx="4" cy="18" r="1.4"/></template>
  <template v-else-if="name==='mic'"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></template>
  <path v-else-if="name==='plus'" d="M12 5v14M5 12h14"/>
  <path v-else-if="name==='play'" d="M8 5.5v13l11-6.5-11-6.5Z"/>

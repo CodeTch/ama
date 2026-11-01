@@ -12,6 +12,27 @@ function context():TabJournalContext{const data=new Map<string,string>();return{
 function api(actor:()=>string|null=()=> 'owner'){return createMaterialsApi(createBusinessClient('https://ama.test',()=>session,()=>{}),actor);}
 const tick=()=>new Promise(resolve=>setTimeout(resolve,0));
 
+test('discarding a definitive version rejection clears the separate picker draft before choosing fresh versions',async()=>{
+ const old=fetch,ctx=context();let version='a'.repeat(64);
+ globalThis.fetch=async(url,init)=>{
+  const path=new URL(String(url)).pathname;
+  if(init?.method==='POST')return Response.json({error:{code:'MATERIAL_BATCH_VERSION_REJECTED',message:'private',traceId:'00000000-0000-4000-8000-000000000001'}},{status:409});
+  if(path.endsWith('/material-libraries'))return Response.json({items:[{id:'lib',name:'library'}],cursor:null});
+  if(path.endsWith('/documents'))return Response.json({items:[{id:'doc',libraryId:'lib',name:'document',version,sha256:version,sizeBytesToken:'20'}],cursor:null});
+  return Response.json({items:[],materialSnapshotId:null,materialsPending:false,meetingRevision:'1'});
+ };
+ const picker=useKnowledgeMaterials(api(),()=> 'owner',()=>meeting,ctx);
+ const state=useMaterials(api(),()=> 'owner',()=>meeting,ctx,()=>true,()=>{picker.clear();picker.close();});
+ try{await picker.open();picker.toggle(picker.documents.value[0]!);await state.reload();await state.addKnowledge(picker.selected.value);await state.removeJob(state.jobs.value[0]!.id);assert.equal(picker.selected.value.length,0);assert.equal(picker.opened.value,false);assert.equal(picker.documents.value.length,0);version='b'.repeat(64);await picker.open();picker.toggle(picker.documents.value[0]!);assert.equal(picker.selected.value[0]?.version,version);}finally{state.dispose();picker.dispose();globalThis.fetch=old;}
+});
+
+test('a durably rejected batch can be removed only after the original request returns its definitive rejection',async()=>{
+ const old=fetch,journal=context(),version='a'.repeat(64);let reject=false;
+ globalThis.fetch=async(_url,init)=>init?.method==='POST'?Response.json({error:{code:reject?'MATERIAL_BATCH_VERSION_REJECTED':'MATERIAL_KNOWLEDGE_VERSION_CONFLICT',message:'private',traceId:'00000000-0000-4000-8000-000000000001'}},{status:409}):Response.json({items:[],materialSnapshotId:null,materialsPending:false,meetingRevision:'1'});
+ const state=useMaterials(api(),()=> 'owner',()=>meeting,journal);
+ try{await state.reload();await state.addKnowledge([{id:'doc',libraryId:'lib',name:'document',version,sha256:version,sizeBytesToken:'20'}]);const id=state.jobs.value[0]!.id;await assert.rejects(state.removeJob(id));reject=true;await state.retryJob(id);assert.equal(state.jobs.value[0]!.canRemove,true);await state.removeJob(id);assert.equal(state.jobs.value.length,0);assert.equal(state.error.value,null);}finally{state.dispose();globalThis.fetch=old;}
+});
+
 test('local materials use actual hashed bytes, part receipts and MATERIAL_SOURCE before association',async()=>{
  const original=fetch,bytes=new File(['real PDF bytes'],'背景.pdf'),sha=Buffer.from(await crypto.subtle.digest('SHA-256',await bytes.arrayBuffer())).toString('hex');
  let completed=false,added=false;const partReceipts:Array<{part:number;sizeBytes:number;sizeBytesToken:string;sha256:string}>=[],seen:string[]=[];

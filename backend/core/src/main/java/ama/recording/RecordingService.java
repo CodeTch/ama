@@ -49,7 +49,7 @@ public final class RecordingService {
         public Snapshot { Objects.requireNonNull(session); chunks=List.copyOf(chunks);parts=List.copyOf(parts);if(!parts.contains(session.partId())||new java.util.HashSet<>(parts).size()!=parts.size())throw new IllegalStateException("Invalid recording parts"); }
         public Snapshot(RecordingContracts.Session session,boolean paused,boolean finished,List<Proof> chunks){this(session,paused,finished,chunks,List.of(session.partId()));}
     }
-    /** The complete totals and integrity checks come from persistence, never a process cache. */
+    /** Persistence verifies the complete totals under its current manifest fence; the collector cannot supply them. */
     public record AppendSnapshot(RecordingContracts.Session session,boolean paused,boolean finished,List<String> parts,
                                  long totalChunks,long totalSamples,long highestContiguousSeq,long highestReceivedSeq,List<Proof> chunks) {
         public AppendSnapshot {

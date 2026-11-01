@@ -33,3 +33,12 @@ v4 实际 CAS/API 接续 `.tools/local-app/sensitive-exclusion/material-v4-api-0
 当前会议已发生上述显式采用和移除：revisionToken=13，当前正文 `e72d3b8f-bb18-4c31-a157-ff9e4ff9e568`、要素集 `2d436d9b-2a7d-48d8-86ee-1fb538f5cfe0`、排除修订 `940501bf-2315-467b-92f0-1dc8e1cc0281`（空集合），needsGeneration=true。不得把原候选当 PENDING 或把旧 SET 当当前版本继续点击。
 
 完整浏览器接续脚本已准备为 `.tools/local-app/continue-sensitive-material-v4-ui-cas.mjs`，仅语法检查，尚未执行。该脚本使用全新真实 TXT/KB 会议，先生成含知识库检测的新稿，再验证目录预览、排除、v4 过滤、显式采用、旧项保留与 UI 移除；需要显式 sensitive 场景。用户要求本批结束后停止，后续只在收到“继续任务”后启动。当前已恢复 standard 场景，见项目接续文档。
+
+
+## 接续：材料完整UI通过与授权续查修复
+
+用户要求继续任务后，新鲜 `sensitive-exclusion/fresh-material-v4-ui-01` 完成前7组实际检查，最后在saved-only界面被续查到期清空，整例FAIL保留。原因之一经确定时钟回归复现：旧调度在响应完成后才等待2秒，但授权截止时间按请求开始计算，慢而成功的响应可使下一次续查错过期限。改为按请求开始时间计算下一次间隔；4.5秒上限、拒绝/停滞清空和旧scope隔离保持。回归RED→GREEN3，完整前端485PASS、类型/build/API一致PASS。首次新增测试的严格空值类型检查失败也保留，修正下标断言后目标测试及检查通过。
+
+`lease-cadence-ui-01/report.json` 对同一失败会议持续15秒实际回读PASS。之后新鲜完整 `sensitive-exclusion/fresh-material-v4-ui-02/report.json` **8组全部PASS**，源码/部署 `c7d15b5ba2cdd328b6995f78f1683e2f83405686668c72aed6a0ef35bffa8857`，会议 `ff9336ad-f937-4aa9-bd76-97eadbbfeb62`。完整覆盖真实TXT/KB与确认、无正文证据的当前SET目录/错误SET404/外人403、敏感原文预览/受管原件/独立背景目录、1440/1024/390下勾选保存、原键重放/异体409/任意源422、实际v4输入及所有新输出不引用排除KB、显式采用与人工标题保留、已保存旧项两次保留、采用后的saved-only实际取消勾选保存、移除后重新加入422。无浏览器pageerror；原有失败报告不被此新结果覆盖。
+
+本次通过证明受控协议和物理来源过滤，未提升模型语义准确率资格。D08全页面/原型矩阵独立继续，不能据此宣布阶段D完成。

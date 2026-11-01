@@ -6,7 +6,7 @@ import ama.contract.ExternalContracts.ExternalRequest;
 
 /** A registered task type has a domain-owned policy. Unknown type/kind is rejected without a fallback. */
 public interface TaskDomainPolicy {
-    enum Acquisition { TASK_MUTATION, EXTERNAL_FACT_OBSERVATION }
+    enum Acquisition { TASK_MUTATION, EXTERNAL_FACT_OBSERVATION, TASK_PREPARATION }
     /** Opaque issuer/transaction/purpose/full-spec capability, never a caller boolean. */
     interface PreparedDomain {}
     /** Before ANY subject/root/task lock. Missing implementations fail closed. */

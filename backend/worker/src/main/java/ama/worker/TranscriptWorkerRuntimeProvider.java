@@ -29,7 +29,7 @@ public final class TranscriptWorkerRuntimeProvider implements WorkerRuntimeProvi
   if(capacity<1||capacity>64)throw new IllegalArgumentException("Bounded worker capacity required");
  }
  @Override public WorkerRuntime create(){
-  ama.model.ControlledMinutesClient minutesClient=null;ControlledKnowledgeClient knowledgeClient=null;WorkerLoop loop=null,external=null;ReconciliationLoop reconciliation=null;JdbcMaterialAuthority materialAuthority=null;JdbcPublicationGovernance governance=null;
+  ama.model.ControlledMinutesClient minutesClient=null;ControlledKnowledgeClient knowledgeClient=null;WorkerLoop loop=null,external=null;AutoCloseable speech=null;ReconciliationLoop reconciliation=null;JdbcMaterialAuthority materialAuthority=null;JdbcPublicationGovernance governance=null;
   try{
    // Validate retained archive index before any poll, independent of the current processing default.
    settings.archives().get();
@@ -47,6 +47,7 @@ public final class TranscriptWorkerRuntimeProvider implements WorkerRuntimeProvi
    var recordings=new ama.recording.JdbcRecordingPersistence(source,catalog);
    var exportSource=exports==null?null:components.authority().installExportSource(minutes.archives(),minutes.pin(),minutes.bounds());
    var queue=TranscriptImportRuntime.install(source,fences,outbox,components,new RecordingArchiveRuntime.Dependencies(access,components.registry(),uploads,catalog,recordings,components.authority().publicationWriteGuard()),exportSource==null?null:new MinutesExportRuntime.Dependencies(access,components.registry(),catalog,exportSource));
+   speech=TranscriptImportRuntime.startSpeechMaintenance(queue);
    var localPools=new HashMap<String,Integer>(Map.of("TRANSCRIPT_IMPORT",capacity,"RECORDING_ARCHIVE",1));var localHandlers=new HashMap<String,WorkerLoop.ContextualPreparedHandler>();localHandlers.put("TRANSCRIPT_IMPORT_V1",(lease,cancel)->TranscriptImportRuntime.prepare(queue,lease,settings,cancel));localHandlers.put(RecordingArchiveRuntime.TYPE,new RecordingArchiveHandler(queue));
    if(exports!=null){localPools.put(MinutesExportRuntime.POOL,1);localHandlers.put(MinutesExportRuntime.TYPE,new MinutesExportHandler(queue,exports));}
    loop=WorkerLoop.contextual(queue,localPools,localHandlers,worker);
@@ -60,12 +61,12 @@ public final class TranscriptWorkerRuntimeProvider implements WorkerRuntimeProvi
     ReconciliationLoop.PreparedHandler dispatcher=session->{var actual=(ExternalExecutionSession)session;var token=actual.token();String kind=jdbc.queryForObject("SELECT o.operation_kind FROM external_operation o JOIN external_execution e ON e.operation_id=o.id WHERE o.id=? AND e.id=? AND e.execution_no=?",String.class,token.operationId(),token.executionId(),token.executionNo());if("KNOWLEDGE_PUBLISH".equals(kind)&&knowledgeHandler!=null)knowledgeHandler.reconcile(session);else if("MINUTES_GENERATE".equals(kind)&&minutesHandler!=null)minutesHandler.reconcile(session);else throw new IllegalStateException("No installed recovery handler for recorded operation");};
     int recoveryCapacity=publication==null?minutes.reconciliationCapacity():publication.reconciliationCapacity();reconciliation=publication==null?ReconciliationLoop.prepared(operations,permits,recoveryCapacity,dispatcher,worker):ReconciliationLoop.preparedWithPublicationMaintenance(operations,permits,recoveryCapacity,dispatcher,worker,new JdbcPublicationLocalRecovery(components.authority(),publication.bounds(),queue,outbox));
    }
-   return new Runtime(loop,external,reconciliation,minutesClient,knowledgeClient,definitions,materialAuthority,governance);
-  }catch(RuntimeException|Error failure){for(AutoCloseable resource:Arrays.asList(external,reconciliation,loop,materialAuthority,governance)){if(resource!=null)try{resource.close();}catch(Exception|Error close){if(close!=failure)failure.addSuppressed(close);}}if(minutesClient!=null)minutesClient.close();if(knowledgeClient!=null)knowledgeClient.close();try{definitions.close();}catch(Exception ignored){}throw failure;}
+   return new Runtime(loop,external,reconciliation,minutesClient,knowledgeClient,definitions,materialAuthority,governance,speech);
+  }catch(RuntimeException|Error failure){for(AutoCloseable resource:Arrays.asList(external,reconciliation,loop,materialAuthority,governance,speech)){if(resource!=null)try{resource.close();}catch(Exception|Error close){if(close!=failure)failure.addSuppressed(close);}}if(minutesClient!=null)minutesClient.close();if(knowledgeClient!=null)knowledgeClient.close();try{definitions.close();}catch(Exception ignored){}throw failure;}
  }
  public static final class Runtime implements WorkerRuntime {
-  private final JdbcMaterialAuthority materialAuthority;private final JdbcPublicationGovernance governance;private final WorkerLoop loop,external;private final ControlledKnowledgeClient knowledgeClient;private final ReconciliationLoop reconciliation;private final ama.model.ControlledMinutesClient client;private final FileBackendDefinitions definitions;private boolean closed;
-  private Runtime(WorkerLoop loop,WorkerLoop external,ReconciliationLoop reconciliation,ama.model.ControlledMinutesClient client,ControlledKnowledgeClient knowledgeClient,FileBackendDefinitions definitions,JdbcMaterialAuthority materialAuthority,JdbcPublicationGovernance governance){this.materialAuthority=materialAuthority;this.governance=governance;this.loop=loop;this.external=external;this.reconciliation=reconciliation;this.client=client;this.knowledgeClient=knowledgeClient;this.definitions=definitions;}
+  private final JdbcMaterialAuthority materialAuthority;private final JdbcPublicationGovernance governance;private final WorkerLoop loop,external;private final ControlledKnowledgeClient knowledgeClient;private final ReconciliationLoop reconciliation;private final ama.model.ControlledMinutesClient client;private final FileBackendDefinitions definitions;private boolean closed;private final AutoCloseable speech;
+  private Runtime(WorkerLoop loop,WorkerLoop external,ReconciliationLoop reconciliation,ama.model.ControlledMinutesClient client,ControlledKnowledgeClient knowledgeClient,FileBackendDefinitions definitions,JdbcMaterialAuthority materialAuthority,JdbcPublicationGovernance governance,AutoCloseable speech){this.speech=speech;this.materialAuthority=materialAuthority;this.governance=governance;this.loop=loop;this.external=external;this.reconciliation=reconciliation;this.client=client;this.knowledgeClient=knowledgeClient;this.definitions=definitions;}
   public void start(){loop.start();if(external!=null)external.start();if(reconciliation!=null)reconciliation.start();}
   public WorkerLoop.Observation observation(){return loop.observation();}
   public synchronized void close(){
@@ -78,6 +79,7 @@ public final class TranscriptWorkerRuntimeProvider implements WorkerRuntimeProvi
    try{if(governance!=null)governance.close();}catch(RuntimeException|Error error){if(failure==null)failure=error;else failure.addSuppressed(error);}
    try{if(client!=null)client.close();}catch(RuntimeException|Error error){if(failure==null)failure=error;else failure.addSuppressed(error);}
    try{if(knowledgeClient!=null)knowledgeClient.close();}catch(RuntimeException|Error error){if(failure==null)failure=error;else failure.addSuppressed(error);}
+   try{speech.close();}catch(Exception|Error error){if(failure==null)failure=error;else failure.addSuppressed(error);}
    try{definitions.close();}catch(Exception|Error error){if(failure==null)failure=error;else if(failure!=error)failure.addSuppressed(error);}
    if(failure instanceof RuntimeException error)throw error;
    if(failure instanceof Error error)throw error;

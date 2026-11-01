@@ -20,12 +20,17 @@ class WorkerShutdownTest {
 
     @Test void firstBackendFailureStillClosesSecondBackendOnce() throws Exception {failedAbortCleanup(false,false);}
     @Test void interruptedFirstBackendFailureStillClosesSecondBackendOnce() throws Exception {failedAbortCleanup(true,false);}
+    @Test void speechMaintenanceFailureStillClosesBothBackendsOnce() throws Exception {failedAbortCleanup(false,false,true);}
 
     private void failedAbortCleanup(boolean interrupt,boolean abortFailure) throws Exception {
+        failedAbortCleanup(interrupt,abortFailure,false);
+    }
+    private void failedAbortCleanup(boolean interrupt,boolean abortFailure,boolean speechFailure) throws Exception {
         var queue = new WorkerLoopTest.LocalTasks(); queue.add("cpu"); queue.add("cpu");
         var ready = new CountDownLatch(2); var release = new CountDownLatch(1);
         var aborts = new AtomicInteger(); var preparations = new AtomicInteger();
-        var writers = new AtomicInteger(); var backendCloses = new AtomicInteger();var secondBackendCloses=new AtomicInteger();
+        var writers = new AtomicInteger(); var backendCloses = new AtomicInteger();var secondBackendCloses=new AtomicInteger();var speechCloses=new AtomicInteger();
+        var speechCloseFailure=new IllegalStateException("SPEECH_CLOSE_FAILED");
         var backendFailure=new IllegalStateException("FIRST_BACKEND_CLOSE_FAILED");
         var firstFailure = new IllegalStateException("OWNED_ABORT_FAILED");
         var loop = WorkerLoop.contextual(queue, Map.of("cpu", 2), Map.of("TEST", (lease, cancellation) -> {
@@ -53,9 +58,10 @@ class WorkerShutdownTest {
         var definitions = new FileBackendDefinitions(List.of(new FileBackendCatalog.Backend(
                 definition.id(), "local", 1, "READ_ONLY", storage, definition),new FileBackendCatalog.Backend(secondDefinition.id(),"local",1,"READ_ONLY",secondStorage,secondDefinition)), null);
         var constructor = TranscriptWorkerRuntimeProvider.Runtime.class
-                .getDeclaredConstructor(WorkerLoop.class, WorkerLoop.class, ReconciliationLoop.class, ama.model.ControlledMinutesClient.class, ama.transcript.ControlledKnowledgeClient.class, FileBackendDefinitions.class, ama.transcript.JdbcMaterialAuthority.class, ama.transcript.JdbcPublicationGovernance.class);
+                .getDeclaredConstructor(WorkerLoop.class, WorkerLoop.class, ReconciliationLoop.class, ama.model.ControlledMinutesClient.class, ama.transcript.ControlledKnowledgeClient.class, FileBackendDefinitions.class, ama.transcript.JdbcMaterialAuthority.class, ama.transcript.JdbcPublicationGovernance.class,AutoCloseable.class);
         constructor.setAccessible(true);
-        var runtime = constructor.newInstance(loop, null, null, null, null, definitions, null, null);
+        AutoCloseable speech=()->{speechCloses.incrementAndGet();if(speechFailure)throw speechCloseFailure;};
+        var runtime = constructor.newInstance(loop, null, null, null, null, definitions, null, null,speech);
         var executors = executors(loop);
         try {
             loop.pollOnce("cpu"); assertTrue(ready.await(2, TimeUnit.SECONDS));
@@ -63,17 +69,18 @@ class WorkerShutdownTest {
             var thrown = assertThrows(IllegalStateException.class, runtime::close);
             boolean retainedInterrupt = Thread.interrupted();
             assertAll(
-                    () -> assertSame(abortFailure?firstFailure:backendFailure, thrown, "Preserve the first owned cleanup failure"),
+                    () -> assertSame(abortFailure?firstFailure:speechFailure?speechCloseFailure:backendFailure, thrown, "Preserve the first owned cleanup failure"),
+                    () -> assertEquals(1,speechCloses.get(),"Speech recovery must close despite another cleanup failure"),
                     () -> assertEquals(2, aborts.get(), "A failed abort cannot skip another owned execution"),
                     () -> assertEquals(1, backendCloses.get(), "Provider must attempt the first backend once"),
                     () -> assertEquals(1,secondBackendCloses.get(),"Failed backend close cannot abandon later owned backend"),
-                    () -> {if(abortFailure)assertTrue(Arrays.asList(thrown.getSuppressed()).contains(backendFailure));},
+                    () -> {if(abortFailure||speechFailure)assertTrue(Arrays.asList(thrown.getSuppressed()).contains(backendFailure));},
                     () -> assertTrue(executors.stream().allMatch(ExecutorService::isTerminated), "Every owned executor must terminate"),
                     () -> assertEquals(interrupt, retainedInterrupt),
                     () -> assertEquals(0, writers.get()),
                     () -> assertTrue(queue.outputs.isEmpty(), "No completion or quarantine after close"));
             runtime.close();
-            assertEquals(1, backendCloses.get());assertEquals(1,secondBackendCloses.get()); assertEquals(2, aborts.get());
+            assertEquals(1, backendCloses.get());assertEquals(1,secondBackendCloses.get());assertEquals(1,speechCloses.get()); assertEquals(2, aborts.get());
         } finally {
             // Rescue the known old implementation after RED so its leaked JVM threads cannot hang Surefire.
             Thread.interrupted(); release.countDown();

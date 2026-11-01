@@ -12,10 +12,11 @@ public final class CorrectionInstallation {
  private CorrectionInstallation(Declaration selected,Collection<String> inventory){this.selected=selected;providers=List.copyOf(inventory);}
  public static CorrectionInstallation compose(Declaration selected,Collection<String> actualProviderInventory){return new CorrectionInstallation(selected,actualProviderInventory);}
  public Projection projection(){
-  boolean valid=selected!=null&&"DISABLED_NOT_INSTALLED".equals(selected.mode())&&"1".equals(selected.version())&&selected.qualificationId()!=null&&selected.qualificationId().matches("[A-Za-z0-9][A-Za-z0-9._-]{0,127}")&&providers.isEmpty();
-  return valid?new Projection("DISABLED_NOT_INSTALLED","NOT_APPLICABLE",selected.qualificationId()):new Projection("UNAVAILABLE","UNAVAILABLE",null);
+  boolean valid=selected!=null&&Set.of("DISABLED_NOT_INSTALLED","CONTROLLED_SPEECH").contains(selected.mode())&&"1".equals(selected.version())&&selected.qualificationId()!=null&&selected.qualificationId().matches("[A-Za-z0-9][A-Za-z0-9._-]{0,127}")&&providers.isEmpty();
+  if(!valid)return new Projection("UNAVAILABLE","UNAVAILABLE",null);
+  return "CONTROLLED_SPEECH".equals(selected.mode())?new Projection("CONTROLLED_SPEECH","READY",selected.qualificationId()):new Projection("DISABLED_NOT_INSTALLED","NOT_APPLICABLE",selected.qualificationId());
  }
- public void requireReady(){if(!projection().readiness().equals("NOT_APPLICABLE"))throw fail(CAPABILITY_UNAVAILABLE);}
+ public void requireReady(){if(!Set.of("NOT_APPLICABLE","READY").contains(projection().readiness()))throw fail(CAPABILITY_UNAVAILABLE);}
  public void requireSame(CorrectionInstallation expected){if(expected!=this||expected.bootIdentity!=bootIdentity)throw fail(CAPABILITY_UNAVAILABLE);}
  public List<String> providerInventory(){return providers;}
 }

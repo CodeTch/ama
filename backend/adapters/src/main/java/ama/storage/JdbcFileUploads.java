@@ -118,10 +118,9 @@ public final class JdbcFileUploads implements FileUploads {
             if(old==null)return null;var session=acceptedReplay(old,actor,meeting,request,requestHash,pinnedBackend);if(root.epoch()!=session.epoch())throw new Conflict();return new Accepted(session.id(),partSize);
         });
         if(acknowledged!=null)return acknowledged;
-        var publication=preparePublication(actor,meeting);
         Prepared prepared =
-                tx.required(
-                        () -> {
+                withPublication(actor,meeting,
+                        publication -> {
                             var replay = replay(scope, false);
                             Root root = authorize(actor, meeting,publication);
                             purposes.require(actor, meeting, request.purpose());
@@ -152,9 +151,8 @@ public final class JdbcFileUploads implements FileUploads {
         if (!token.backendId().equals(target.backendId())) throw new Unavailable();
         // Physical I/O can outlive a worker renewal. Re-capture the entire current graph
         // before committing its receipt; the original epoch and upload binding stay fenced.
-        var committingPublication=preparePublication(actor,meeting);
-        return tx.required(
-                () -> {
+        return withPublication(actor,meeting,
+                committingPublication -> {
                     j.update(
                             "INSERT INTO"
                                 + " idempotency_record(scope_hash,actor_id,resource_id,operation,key_hash,request_hash,state,http_status,created_at)"
@@ -224,8 +222,7 @@ public final class JdbcFileUploads implements FileUploads {
             var old=part(id,number);if(old==null)return false;if(old.size()!=size||!old.sha256().equals(sum))throw new Conflict();return true;
         });
         if(acknowledged)return;
-        var publication=preparePublication(actor,meeting);
-        PartStart started=tx.required(()->{
+        PartStart started=withPublication(actor,meeting,publication->{
             Root root=authorize(actor,meeting,publication);Session s=session(id);
             if(root.epoch()!=s.epoch())throw new Conflict();purposes.require(actor,meeting,s.purpose());
             var existing=part(id,number);if(existing!=null){if(existing.size()!=size||!existing.sha256().equals(sum))throw new Conflict();return new PartStart(s,true);}
@@ -238,9 +235,8 @@ public final class JdbcFileUploads implements FileUploads {
                         .writePart(before.uploadToken(), number, body, size, sum);
         if (receipt.part() != number || receipt.size() != size || !receipt.sha256().equals(sum))
             throw new Unavailable();
-        var committingPublication=preparePublication(actor,meeting);
-        tx.required(
-                () -> {
+        withPublication(actor,meeting,
+                committingPublication -> {
                     Root root = authorize(actor, meeting,committingPublication);
                     Session s = session(id);
                     if(root.epoch()!=s.epoch())throw new Conflict();purposes.require(actor,meeting,s.purpose());
@@ -275,10 +271,9 @@ public final class JdbcFileUploads implements FileUploads {
             var stored=receipts(id);manifest(session,stored,request);return session.state().equals("COMPLETED")?new Completed(session.file()):null;
         });
         if(acknowledged!=null)return acknowledged;
-        var publication=preparePublication(actor,meeting);
         Frozen frozen =
-                tx.required(
-                        () -> {
+                withPublication(actor,meeting,
+                        publication -> {
                             Root root = authorize(actor, meeting,publication);
                             Session s = session(id);
                             purposes.require(actor, meeting, s.purpose());
@@ -320,9 +315,8 @@ public final class JdbcFileUploads implements FileUploads {
         if (!blob.key().equals(selected.key())
                 || blob.size() != selected.size()
                 || !blob.sha256().equals(selected.hash())) throw new Unavailable();
-        var committingPublication=preparePublication(actor,meeting);
-        return tx.required(
-                () -> {
+        return withPublication(actor,meeting,
+                committingPublication -> {
                     Root root = authorize(actor, meeting,committingPublication);
                     Session s = session(id);
                     purposes.require(actor, meeting, s.purpose());
@@ -398,7 +392,20 @@ public final class JdbcFileUploads implements FileUploads {
             backends.require(s.key().backendId(), false).storage().discardUpload(s.uploadToken(),s.key());
     }
 
-    private ama.transcript.PublicationWriteGuard.Prepared preparePublication(Actor actor,String meeting){return publicationWrites==null?null:publicationWrites.prepare(actor,meeting);}
+    private ama.transcript.PublicationWriteGuard.Prepared preparePublication(Actor actor,String meeting){return publicationWrites==null?null:publicationWrites.prepareStorage(actor,meeting);}
+    private <T> T withPublication(Actor actor,String meeting,java.util.function.Function<ama.transcript.PublicationWriteGuard.Prepared,T> work){
+        var preparation=preparePublication(actor,meeting);
+        for(int attempt=0;;attempt++){
+            final var selected=preparation;
+            try{return tx.required(()->work.apply(selected));}
+            catch(ama.transcript.PublicationWriteGuard.StorageSnapshotChanged changed){
+                if(attempt>=2)throw ama.contract.MinutesContracts.fail(ama.contract.MinutesContracts.FailureCode.PROVENANCE_UNAVAILABLE);
+                // The failed transaction is fully rolled back. Preserve the original
+                // acquisition budget/deadline and never repeat the physical upload RPC.
+                preparation=publicationWrites.refreshStorage(preparation);
+            }
+        }
+    }
     private Root authorize(Actor actor,String meeting){return authorize(actor,meeting,null);}
     private Root authorize(Actor actor,String meeting,ama.transcript.PublicationWriteGuard.Prepared prepared){
         var gate=access.lock(actor,meeting);access.require(gate,MeetingAccess.Action.EDIT);

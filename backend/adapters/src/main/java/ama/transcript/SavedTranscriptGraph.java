@@ -12,7 +12,9 @@ import static ama.transcript.SavedTranscriptRows.*;
 /** Complete detached S/F facts. No authority is carried by this record. */
 record SavedTranscriptGraph(String meeting,String selected,Map<String,Object> root,List<FullRow> rows,
  List<Map<String,Object>> sessions,List<Map<String,Object>> files,Map<String,Object> task,
- String profile,List<Map<String,Object>> sourceBytes,long maximumHistory) {
+ String profile,List<Map<String,Object>> sourceBytes,long maximumHistory,SpeechReviewFacts review) {
+ SavedTranscriptGraph(String meeting,String selected,Map<String,Object> root,List<FullRow> rows,List<Map<String,Object>> sessions,List<Map<String,Object>> files,Map<String,Object> task,String profile,List<Map<String,Object>> sourceBytes,long maximumHistory){this(meeting,selected,root,rows,sessions,files,task,profile,sourceBytes,maximumHistory,SpeechReviewFacts.EMPTY);}
+ SavedTranscriptGraph withReview(SpeechReviewFacts facts){return new SavedTranscriptGraph(meeting,selected,root,rows,sessions,files,task,profile,sourceBytes,maximumHistory,facts);}
  static final Shape ROOT=metadata("meeting","id","id owner_id revision# cancel_epoch# access_revision# stage lifecycle governance_state ever_published# transcript_revision_id transcript_confirmation_id final_confirmation_id needs_generation#");
  static final Shape FILE=metadata("file_object","id","id meeting_id backend_id storage_type namespace object_key size_bytes# sha256 state location_revision# reference_epoch#");
  static final Shape SESSION=metadata("upload_session","id","id meeting_id purpose cancel_epoch# backend_id namespace object_key expected_size# expected_sha256 state completed_file_id");

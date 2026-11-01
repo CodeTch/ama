@@ -4,7 +4,9 @@ import java.util.UUID;
 import java.util.function.BooleanSupplier;
 /** Successful usage measured from the original bytes and all decoded input units. */
 public interface MeasuredTranscriptDocumentParser extends TranscriptDocumentParser {
- record Usage(long sourceBytes,long decodedUtf16CodeUnits,int segments) {}
+ record Usage(long sourceBytes,long decodedUtf16CodeUnits,int segments,long normalizedSamples) {
+  public Usage(long sourceBytes,long decodedUtf16CodeUnits,int segments){this(sourceBytes,decodedUtf16CodeUnits,segments,0);}
+ }
  record MeasuredResult(Result result,Usage usage) {}
  MeasuredResult parseMeasured(InputStream source,UUID fileId,String expectedSourceSha256,
      ParseBudget budget,BooleanSupplier cancelled) throws ParseException;

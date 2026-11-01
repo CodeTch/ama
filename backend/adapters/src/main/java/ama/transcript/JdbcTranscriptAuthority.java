@@ -59,7 +59,7 @@ public final class JdbcTranscriptAuthority {
   }
   public String batchId(){return batch;}public String inputId(){return input;}public TaskSpec spec(){return spec;}
  }
- public record Components(FileRegistry registry,JdbcTranscriptAuthority authority,ProcessingIntakeFacts intake,ProcessingSourceReader sources) {}
+ public record Components(FileRegistry registry,JdbcTranscriptAuthority authority,ProcessingIntakeFacts intake,ProcessingSourceReader sources,FileBackendCatalog backends) {}
  private JdbcTranscriptAuthority(DataSource source,TransactionRunner tx,MeetingAccess access,ArchiveReadBudget budget,CanonicalBudget canonical){
   this.source=Objects.requireNonNull(source);j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=Objects.requireNonNull(tx);this.access=Objects.requireNonNull(access);this.budget=Objects.requireNonNull(budget);this.canonical=Objects.requireNonNull(canonical);policy=new InputBatchFileReferencePolicy(this);taskPolicy=new ImportTaskDomainPolicy(this,source);minutesTaskPolicy=new MinutesTaskDomainPolicy(this,source);publicationTaskPolicy=new PublicationTaskDomainPolicy(this,source);publicationWrites=new PublicationWriteGuard(this);
  }
@@ -98,7 +98,7 @@ public final class JdbcTranscriptAuthority {
   var authority=new JdbcTranscriptAuthority(source,tx,access,budget,canonical);authority.purposes=Objects.requireNonNull(purposes);authority.savedBackends=Objects.requireNonNull(backends);var policies=new HashMap<>(legacy);policies.put(REFERENCE,authority.policy);var materials=new MaterialFileReferencePolicy(source);policies.put(MaterialFileReferencePolicy.CONTENT,materials);policies.put(MaterialFileReferencePolicy.TEXT,materials);
   policies.put("MINUTES_EXPORT",new ama.export.MinutesExportReferencePolicy(source,authority::exportSource));
   var registry=new JdbcFileRegistry(source,tx,access,purposes,backends,policies,budget);authority.attach(registry);registry.installPublicationGuard(authority.publicationWrites);
-  return new Components(registry,authority,new JdbcProcessingIntakeFacts(authority),new JdbcProcessingSourceReader(authority));
+  return new Components(registry,authority,new JdbcProcessingIntakeFacts(authority),new JdbcProcessingSourceReader(authority),backends);
  }
  private void attach(FileRegistry registry){if(this.registry!=null)throw new IllegalStateException("Duplicate authority attachment");this.registry=Objects.requireNonNull(registry);}
  public synchronized SavedMinutesExportSource installExportSource(java.util.function.Supplier<ConfigArchiveSource.Snapshot> archives,String pin,TranscriptAcquisitionBudget limits){if(exports!=null)throw new IllegalStateException("Export source already installed");exports=new SavedMinutesExportSource(this,archives,pin,limits);return exports;}
@@ -137,7 +137,7 @@ public final class JdbcTranscriptAuthority {
    "batch",obj("id",batch,"kind","TRANSCRIPT","files",new Sequence(ordered)),"sourceRevisionId",null,"materials",obj("mode","EMPTY","items",list()),
    "configs",obj("processing",wire(processing),"parser",wire(parser),"model",null,"prompt",null,"profiles",list(obj("kind","CANONICAL_CODEC","ref",wire(refs.get(ArtifactType.CANONICAL_CODEC))),obj("kind","CONFIRMATION_HASH","ref",wire(refs.get(ArtifactType.CONFIRMATION_HASH))))),
    "base",obj("meetingRevision",target,"subjectBusinessVersion",target,"cancelEpoch",draft.cancelEpoch()),
-   "steps",list(obj("ordinal",1,"kind",parser.version().equals("ama.media-documents.v1")?"IMPORT_MEDIA_DOCUMENT":parser.version().equals("ama.office-documents.v1")?"IMPORT_DOCUMENT":"IMPORT_TXT","parentInput",null,"priorOutput",null,"source",obj("kind","INPUT_BATCH","id",batch),"config",wire(processing),"parser",wire(parser),"model",null,"prompt",null)));
+   "steps",list(obj("ordinal",1,"kind",MediaTranscriptParser.supportsProfile(parser.version())?"IMPORT_MEDIA_DOCUMENT":parser.version().equals("ama.office-documents.v1")?"IMPORT_DOCUMENT":"IMPORT_TXT","parentInput",null,"priorOutput",null,"source",obj("kind","INPUT_BATCH","id",batch),"config",wire(processing),"parser",wire(parser),"model",null,"prompt",null)));
   byte[] bytes=CanonicalJson.encode(manifestValue,budget.maxManifestBytes(),cancelled);String manifest=new String(bytes,StandardCharsets.UTF_8);
   var rows=new ArrayList<FullRow>();rows.add(row(Table.INPUT_BATCH,batch,draft.meetingId(),"TRANSCRIPT",batchHash,target,time));
   for(var m:members)rows.add(row(Table.INPUT_BATCH_FILE,batch,m.ordinal(),m.fileId(),m.sha256()));
@@ -209,6 +209,7 @@ public final class JdbcTranscriptAuthority {
  DataSource dataSource(){return source;}TransactionRunner transactionRunner(){return tx;}
  /** Deny-only verification of the exact retained complete graph; no acquisition or authority issuance. */
  public void requireImportCompletion(List<TaskSpec> specs,ama.task.TaskDomainPolicy.PreparedDomain prepared){taskPolicy.requireCompletion(specs,prepared);}
+ public void requireImportPreparation(List<TaskSpec> specs,ama.task.TaskDomainPolicy.PreparedDomain prepared){taskPolicy.requirePreparation(specs,prepared);}
  public void requireImportSource(DataSource expected){if(source!=expected)throw new IllegalArgumentException("Foreign import source");}
  public StoredProvenanceFacts readWorkerFacts(TaskLease lease,BooleanSupplier cancelled){
   independent();Objects.requireNonNull(lease);check(cancelled);
@@ -400,6 +401,9 @@ public final class JdbcTranscriptAuthority {
  /** Future disposition/freeze integration must consume this exact retained root/graph handle. */
  public void requireSavedHeld(HeldSavedTranscript value,FileRegistry.LockedMeeting gate,Actor actor,String meeting){
   requireSavedScope(value,gate,actor,meeting,SavedPurpose.MUTATION);require(((SavedScope)value).complete!=null,PROVENANCE_UNAVAILABLE);
+ }
+ void requireSpeechReviewWrite(HeldSavedTranscript value,FileRegistry.LockedMeeting gate,Actor actor,SavedTranscriptGraph graph){
+  requireSavedHeld(value,gate,actor,graph.meeting());require(((SavedScope)value).complete==graph,PROVENANCE_UNAVAILABLE);
  }
  String savedRouteStatus(String backend){return savedBackends.historicalStatus(backend);}
  ArchiveReadBudget readBudget(){return budget;}

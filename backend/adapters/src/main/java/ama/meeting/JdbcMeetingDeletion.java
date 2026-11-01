@@ -64,6 +64,7 @@ public final class JdbcMeetingDeletion implements AutoCloseable {
   added+=inventory(job,"FILE","SELECT f.id,f.backend_id,f.namespace,f.object_key,NULL token FROM file_object f WHERE f.meeting_id=?");
   added+=inventory(job,"UPLOAD","SELECT f.id,f.backend_id,f.namespace,f.object_key,f.provider_upload_token token FROM upload_session f WHERE f.meeting_id=?");
   added+=inventory(job,"EXPORT","SELECT f.id,f.backend_id,f.namespace,f.object_key,NULL token FROM minutes_export_artifact f JOIN minutes_export_input i ON i.id=f.input_id WHERE i.meeting_id=?");
+  added+=inventory(job,"PCM","SELECT f.id,f.backend_id,f.namespace,f.object_key,NULL token FROM speech_pcm_artifact f WHERE f.meeting_id=?");
   added+=inventory(job,"RECORDING","SELECT f.session_id id,f.backend_id,'recordings' namespace,f.session_id object_key,NULL token FROM recording_session f WHERE f.meeting_id=?");
   return added;
  }

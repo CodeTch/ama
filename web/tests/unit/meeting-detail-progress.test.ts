@@ -29,6 +29,6 @@ test('actual detail refreshes saved progress without unmounting a draft and clea
   // A knowledge-dependent unpublished draft must lose cached content too.
   defer=false;rejectReads=true;await new Promise(resolve=>setTimeout(resolve,2300));await flush();assert.deepEqual(steps(),[]);assert.equal(nodes(root).filter(n=>n.props?.['data-stub']==='minutes').length,0);
   rejectReads=false;const retry=nodes(root).find(n=>n.tag==='button'&&n.text==='重新读取权限与内容');assert.ok(retry);retry.props.onClick();await flush();assert.deepEqual(steps(),[true,true,true,true,false]);
-  emitMinutes('published');await flush();assert.deepEqual(steps(),[true,true,true,true,true]);current.value=null;await flush();assert.deepEqual(steps(),[]);
+  emitMinutes('published');await flush();assert.deepEqual(steps(),[],'Published readback uses the adopted detail layout without the editing progress steps');assert.ok(nodes(root).some(n=>String(n.props?.class??'').includes('m19-published-page')));assert.ok(nodes(root).some(n=>n.props?.['data-stub']==='minutes'),'The frozen result stays mounted in readback');current.value=null;await flush();assert.deepEqual(steps(),[]);
  }finally{try{app?.unmount();}finally{for(const restore of originals.reverse())restore();await server.close();}}
 });

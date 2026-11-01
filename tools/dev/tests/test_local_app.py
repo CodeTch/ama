@@ -56,6 +56,17 @@ class ProcessOwnershipTests(unittest.TestCase):
 
 
 class ConfigurationIsolationTests(unittest.TestCase):
+    def test_retained_local_settings_survive_new_shell_but_explicit_environment_wins(self):
+        import json
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'settings.json';path.write_text(json.dumps({'AMA_INTEGRATION_KNOWLEDGE_ORIGIN':'http://127.0.0.1:8792','AMA_LOCAL_DB_POOL_MAXIMUM':'32'}));path.chmod(0o600)
+            with patch.dict(os.environ,{'AMA_LOCAL_DB_POOL_MAXIMUM':'20'},clear=True):
+                app.load_local_settings(path)
+                self.assertEqual('http://127.0.0.1:8792',os.environ['AMA_INTEGRATION_KNOWLEDGE_ORIGIN'])
+                self.assertEqual('20',os.environ['AMA_LOCAL_DB_POOL_MAXIMUM'])
+            path.write_text(json.dumps({'DATABASE_PASSWORD':'foreign'}))
+            with self.assertRaises(ValueError):app.load_local_settings(path)
+
     def test_harness_origins_are_explicit_bounded_and_preserved_separately(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual({'knowledge':None,'model':None,'cas':'http://127.0.0.1:8792'},app.integration_origins())
