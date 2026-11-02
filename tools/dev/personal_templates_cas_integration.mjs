@@ -78,8 +78,8 @@ try{
  assert.deepEqual(await call('POST','/api/v1/templates',createBody,201,createKey),original);assert(!(await get('/api/v1/templates')).items.some(item=>item.id===primary.id));check('template-delete-retains-saved-minutes-and-original-create-replay-does-not-reactivate');
  await page.goto(base+`/meeting/${meetingId}/minutes`);await page.getByRole('button',{name:'会议纪要',exact:true}).click();await expect(page.locator('.minutes-body h3')).toHaveText(savedBody.title);
  await page.getByRole('button',{name:'新增模板',exact:true}).click();const personal=page.getByRole('dialog',{name:'新增总结模板',exact:true});await expect(personal).toBeVisible();
- for(const [width,height] of [[1440,900],[1024,768],[390,844]]){await page.setViewportSize({width,height});await page.screenshot({path:`${output}/personal-dialog-${width}.png`});}
- await personal.getByRole('button',{name:'取消',exact:true}).click();check('native-template-dialog-and-saved-output-three-viewports');
+ for(const [width,height] of [[1440,900],[1024,768]]){await page.setViewportSize({width,height});await page.screenshot({path:`${output}/personal-dialog-${width}.png`});}
+ await personal.getByRole('button',{name:'取消',exact:true}).click();check('native-template-dialog-and-saved-output-two-desktop-viewports');
  let info=await get(`/api/v1/meetings/${meetingId}`);
  info=await call('PUT',route('info'),{expectedRevisionToken:info.revisionToken,name:'个人模板全链路联调',category:'project',summary:'八个个人主题的保存、删除后历史保留及最终发布。',occurredOn:'2026-10-31',rosterDraftIds:['dev-member'],externalRosterNames:[]});
  await call('POST',route('roster-confirmations'),{expectedRevisionToken:info.revisionToken});

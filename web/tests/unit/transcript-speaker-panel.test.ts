@@ -1,0 +1,5 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {createServer} from 'vite';import {createSSRApp,h} from 'vue';import {renderToString} from 'vue/server-renderer';
+test('human speaker workbench shows immutable labels and explicit merges without pretending machine real names',async()=>{
+ const server=await createServer({root:new URL('../../',import.meta.url).pathname,server:{middlewareMode:true},appType:'custom'});try{const component=(await server.ssrLoadModule('/src/features/transcript/TranscriptSpeakerPanel.vue')).default,snapshot={sourceRevisionId:'version',items:[{id:'one',label:'人工王工',enterpriseId:null,source:'HUMAN',segmentIds:['s1']},{id:'two',label:'人工李工',enterpriseId:null,source:'HUMAN',segmentIds:['s2']}]};const html=await renderToString(createSSRApp({render:()=>h(component,{snapshot,segments:[{segmentId:'s1',ordinal:1,body:'第一段'},{segmentId:'s2',ordinal:2,body:'第二段'}],busy:false,editable:true})}));assert.match(html,/合并说话人/);assert.match(html,/保留历史版本/);assert.match(html,/人工标注/);assert.doesNotMatch(html,/自动实名|已验证实名/);
+ }finally{await server.close();}
+});

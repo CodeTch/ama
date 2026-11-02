@@ -31,7 +31,7 @@ class RecordingControllerTest {
     RecordingControllerTest() {
         when(tx.required(any())).thenAnswer(i -> ((Callable<?>)i.getArgument(0)).call());
         when(access.lock(any(),anyString())).thenReturn(held);
-        controller=new RecordingController(service,new MockEnvironment(),tx,access,(actor,session)->{if(admissionFails.get())throw new ama.contract.FileContracts.Unavailable();return archiveTask;},leases,mutations,ingress);
+        controller=new RecordingController(service,new MockEnvironment(),tx,access,(actor,session)->{if(admissionFails.get())throw new ama.contract.FileContracts.Unavailable();return archiveTask;},leases,mutations,ingress,new RecordingSubtitleRuntime(null));
     }
     MockHttpServletRequest request() {
         var r=new MockHttpServletRequest();r.setAttribute(SessionSecurityFilter.SESSION,new ResolvedSession(owner,"csrf",java.time.Instant.now().plusSeconds(600)));return r;

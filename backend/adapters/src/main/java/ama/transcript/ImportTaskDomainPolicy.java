@@ -77,6 +77,12 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
             if(skip)return false;
             throw missing;
         }
+        catch(ama.contract.FileContracts.Unavailable unavailable) {
+            // Candidate selection may skip a temporarily unconfigured historical route.
+            // Actual preparation/completion keeps failing closed without its exact source.
+            if(skip)return false;
+            throw unavailable;
+        }
         catch(ama.contract.MinutesContracts.Failure raced) {
             if(skip&&(raced.code()==PROVENANCE_UNAVAILABLE||raced.code()==PROFILE_UNAVAILABLE))return false;
             throw raced;
@@ -154,6 +160,8 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
         // Registry access checks issuer/holder only; re-running requirePrepared would refresh roots late.
         authority.publicationWriteGuard().requireClaimed(p.publicationHeld,authority.fileRegistry().access(p.completionGate));
         require(p.graphs().stream().map(g->g.expected).toList().equals(specs),PROVENANCE_UNAVAILABLE);
+        for(var graph:p.graphs())if(RecordingTranscriptProfile.PARSER.equals(text(graph.input,"parser_version"))){require(graph.members.size()==1,PROVENANCE_UNAVAILABLE);var member=graph.members.getFirst();require(ama.recording.JdbcRecordingTranscriptSources.readyCopy(j,text(graph.input,"meeting_id"),p.owner.enterpriseId(),graph.expected.cancelEpoch(),text(member,"file_id"),text(member,"sha256")),PROVENANCE_UNAVAILABLE);}
+
     }
     public void validateInput(TaskSpec spec) {
         shape(spec);
@@ -175,8 +183,8 @@ final class ImportTaskDomainPolicy implements TaskDomainPolicy {
             require(number(segment,"ordinal")==ordinal++&&segment.get("source_paragraph")!=null&&number(segment,"source_paragraph")>0&&segment.get("speaker_id")==null&&(!timed||segment.get("start_ms")!=null&&segment.get("end_ms")!=null&&number(segment,"start_ms")>=0&&number(segment,"end_ms")>number(segment,"start_ms")&&number(segment,"end_ms")<=7200000),PROVENANCE_UNAVAILABLE);
             // The same existing bounded membership count also proves that times are authorized by the stored profile.
             var arguments=new ArrayList<Object>(List.of(spec.input().id(),text(segment,"source_file_id")));
-            if(timed){arguments.add(MediaTranscriptParser.PROFILE_VERSION);arguments.add(MediaTranscriptParser.LEGACY_PROFILE_VERSION);arguments.add(ama.task.ControlledSpeechProfile.PARSER);}
-            require(j.queryForObject("SELECT COUNT(*) FROM input_batch_file f JOIN transcription_input i ON i.batch_id=f.batch_id WHERE i.id=? AND f.file_id=?"+(timed?" AND i.parser_version IN (?,?,?)":""),Long.class,arguments.toArray())==1,PROVENANCE_UNAVAILABLE);
+            if(timed){arguments.add(MediaTranscriptParser.PROFILE_VERSION);arguments.add(MediaTranscriptParser.LEGACY_PROFILE_VERSION);arguments.add(ama.task.ControlledSpeechProfile.PARSER);arguments.add(RecordingTranscriptProfile.PARSER);}
+            require(j.queryForObject("SELECT COUNT(*) FROM input_batch_file f JOIN transcription_input i ON i.batch_id=f.batch_id WHERE i.id=? AND f.file_id=?"+(timed?" AND i.parser_version IN (?,?,?,?)":""),Long.class,arguments.toArray())==1,PROVENANCE_UNAVAILABLE);
         }
         require(j.queryForObject("SELECT COUNT(*) FROM transcript_segment_mark WHERE revision_id=?",Long.class,result.output().id())==0,PROVENANCE_UNAVAILABLE);
     }

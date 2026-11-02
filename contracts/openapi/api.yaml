@@ -47,6 +47,8 @@ paths:
     $ref: './identity.yaml#/logout'
   /api/v1/session/logout-all:
     $ref: './identity.yaml#/logoutAll'
+  /api/v1/directory/departments:
+    $ref: './identity.yaml#/departments'
   /api/v1/directory/people:
     $ref: './identity.yaml#/people'
   /api/v1/meetings/command-discovery:
@@ -124,6 +126,14 @@ paths:
     $ref: './processing.yaml#/task'
   /api/v1/meetings/{meetingId}/transcript:
     $ref: './transcripts.yaml#/current'
+  /api/v1/meetings/{meetingId}/transcript/speakers:
+    $ref: './transcripts.yaml#/speakers'
+  /api/v1/meetings/{meetingId}/transcript/corrections:
+    $ref: './transcripts.yaml#/corrections'
+  /api/v1/meetings/{meetingId}/transcript/correction-proposals:
+    $ref: './transcripts.yaml#/correctionProposals'
+  /api/v1/meetings/{meetingId}/transcript/corrections/{candidateId}/decisions:
+    $ref: './transcripts.yaml#/correctionDecision'
   /api/v1/meetings/{meetingId}/transcript/search:
     $ref: './transcripts.yaml#/replacementSearch'
   /api/v1/meetings/{meetingId}/transcript/replacements:
@@ -278,8 +288,14 @@ paths:
     $ref: './recording.yaml#/audio'
   /api/v1/meetings/{meetingId}/recording-archives/{inputId}:
     $ref: './recording.yaml#/archiveInput'
+  /api/v1/recordings/{sessionId}/subtitles:
+    $ref: './recording.yaml#/subtitles'
   /api/v1/recordings/{sessionId}/manifest:
     $ref: './recording.yaml#/manifest'
+  /api/v1/recordings/{sessionId}/transcription-source:
+    $ref: './recording.yaml#/transcriptionSource'
+  /api/v1/meetings/{meetingId}/recording-transcription-source:
+    $ref: './recording.yaml#/currentTranscriptionSource'
 components:
   securitySchemes:
     enterpriseSession:

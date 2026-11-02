@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.web.bind.annotation.*;
 
-@ControllerAdvice(assignableTypes={RecordingController.class,RecordingLeaseController.class})
+@ControllerAdvice(assignableTypes={RecordingController.class,RecordingLeaseController.class,RecordingSubtitleController.class,RecordingTranscriptController.class})
 class RecordingErrors {
     private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(RecordingErrors.class);
     @ExceptionHandler(RecordingIngressBudget.RateLimited.class)
@@ -18,7 +18,7 @@ class RecordingErrors {
     void denied(HttpServletResponse response) throws IOException { BusinessErrors.write(response,403,"FORBIDDEN","Access denied"); }
     @ExceptionHandler(RecordingController.TooLarge.class)
     void tooLarge(HttpServletResponse response) throws IOException { BusinessErrors.write(response,413,"REQUEST_TOO_LARGE","Recording chunk exceeds two seconds"); }
-    @ExceptionHandler({RecordingService.StaleWriter.class, RecordingService.HashConflict.class, RecordingService.Gap.class, RecordingService.Closed.class})
+    @ExceptionHandler({RecordingService.StaleWriter.class, RecordingService.HashConflict.class, RecordingService.Gap.class, RecordingService.Closed.class,ama.contract.FileContracts.Conflict.class})
     void conflict(RuntimeException error, HttpServletResponse response) throws IOException { BusinessErrors.write(response, 409, error instanceof RecordingService.Gap ? "RECORDING_GAP" : "RECORDING_CONFLICT", "Recording session changed or has an unpersisted gap"); }
     @ExceptionHandler(RecordingService.Paused.class)
     void paused(HttpServletResponse response) throws IOException { BusinessErrors.write(response, 409, "RECORDING_PAUSED", "Recording session is paused"); }

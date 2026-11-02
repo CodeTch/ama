@@ -11962,13 +11962,15 @@
       "mode": {
         "enum": [
           "DISABLED_NOT_INSTALLED",
-          "UNAVAILABLE"
+          "UNAVAILABLE",
+          "CONTROLLED_SPEECH"
         ]
       },
       "readiness": {
         "enum": [
           "NOT_APPLICABLE",
-          "UNAVAILABLE"
+          "UNAVAILABLE",
+          "READY"
         ]
       },
       "qualificationId": {

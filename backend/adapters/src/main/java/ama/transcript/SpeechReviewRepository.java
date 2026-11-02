@@ -44,7 +44,7 @@ final class SpeechReviewRepository {
    var captured=new LinkedHashMap<>(row);captured.putAll(bodies.getFirst());mutableCandidates.add(captured);
   }
   var candidates=freeze(mutableCandidates);
-  if(!ControlledSpeechProfile.PARSER.equals(graph.input().string("parser_version"))){require(candidates.isEmpty(),PROVENANCE_UNAVAILABLE);return new SpeechReviewFacts(candidates,List.of(),List.of(),models,otherPending);}
+  if(!Set.of(ControlledSpeechProfile.PARSER,RecordingTranscriptProfile.PARSER).contains(graph.input().string("parser_version"))){require(candidates.isEmpty(),PROVENANCE_UNAVAILABLE);return new SpeechReviewFacts(candidates,List.of(),List.of(),models,otherPending);}
   if(!models)return new SpeechReviewFacts(candidates,List.of(),List.of(),false,otherPending);
   for(int n=0;n<61;n++)budget.row(18);budget.capture(61*2048L,61*2048L,61*2048L,2);
   var audio=freeze(j.queryForList("SELECT id,meeting_id,input_id,task_id,file_id,clip_key,source_sha256,pcm_sha256,engine_sha256,source_samples,start_sample,sample_count,wav_sha256,byte_count,state FROM speech_pcm_artifact WHERE input_id=? ORDER BY file_id,start_sample LIMIT 61 FOR UPDATE",input));

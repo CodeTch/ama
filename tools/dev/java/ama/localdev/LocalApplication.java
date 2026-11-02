@@ -52,21 +52,9 @@ public class LocalApplication {
         return pool;
     }
 
-    @Bean @Primary DirectoryPort localDirectory(DataSource source) {
-        var jdbc=new JdbcTemplate(source);
-        return (query,cursor,limit)-> {
-            if(limit<1||limit>100||query==null||query.length()>255||(cursor!=null&&!USERS.containsKey(cursor)))
-                throw new IllegalArgumentException("Invalid development directory query");
-            var rows=jdbc.query("""
-                SELECT enterprise_id,display_name FROM enterprise_identity
-                WHERE status='ACTIVE' AND enterprise_id IN ('1','dev-owner','dev-member','dev-viewer','dev-admin')
-                AND (LOCATE(?,enterprise_id)>0 OR LOCATE(?,display_name)>0) AND enterprise_id>?
-                ORDER BY enterprise_id LIMIT ?
-                """,(r,n)->new Person(r.getString(1),r.getString(2),"本地开发",true),query,query,cursor==null?"":cursor,limit+1);
-            boolean more=rows.size()>limit;
-            var page=List.copyOf(rows.subList(0,Math.min(rows.size(),limit)));
-            return new PeoplePage(page,more?page.getLast().stableId():null);
-        };
+    @Bean(destroyMethod="close") @Primary ama.identity.ControlledDirectoryAdapter localDirectory(Environment env) {
+        return new ama.identity.ControlledDirectoryAdapter(
+            java.net.URI.create(env.getRequiredProperty("local-dev.directory-origin")), Duration.ofSeconds(3));
     }
 
     @Bean @Primary CategoryDictionary localCategories(Environment env)throws Exception {

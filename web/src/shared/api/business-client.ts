@@ -6,9 +6,10 @@ export type Session=components['schemas']['Session'];
 export function createBusinessClient(origin:string,session:()=>Session|null,onUnauthorized:()=>void) {
  const base=new URL(origin);if(!['https:','http:'].includes(base.protocol)||base.username||base.password||base.pathname!=='/'||base.search||base.hash)throw new TypeError('Invalid application origin');
  return {
-  async bytes(path:string,options:{signal:AbortSignal;size:number}):Promise<{bytes:ArrayBuffer;name:string|null}>{
-   if(!path.startsWith('/api/v1/')||path.includes('\\')||path.includes('#')||!Number.isSafeInteger(options.size)||options.size<0||options.size>32*1024*1024)throw new TypeError('Bounded product source required');
+  async bytes(path:string,options:{signal:AbortSignal;size:number;recordingWav?:boolean}):Promise<{bytes:ArrayBuffer;name:string|null}>{
+   if(!path.startsWith('/api/v1/')||path.includes('\\')||path.includes('#')||!Number.isSafeInteger(options.size)||options.size<0||options.size>(options.recordingWav===true?230400044:32*1024*1024))throw new TypeError('Bounded product source required');
    const target=new URL(path,base);if(target.origin!==base.origin||!target.pathname.startsWith('/api/v1/'))throw new TypeError('Same-origin product source required');
+   if(options.recordingWav===true&&!/^\/api\/v1\/meetings\/[0-9a-f-]{36}\/transcript(?:\/revisions\/[0-9a-f-]{36})?\/sources\/[0-9a-f-]{36}$/.test(target.pathname))throw new TypeError('Managed transcript recording source route required');
    const current=session();if(!current){onUnauthorized();throw new ApiError('http',401,'登录状态不可用，请重新登录。');}
    const active=()=>{if(options.signal.aborted||session()?.actor.enterpriseId!==current.actor.enterpriseId)throw new DOMException('Source scope changed','AbortError');};
    active();let response:Response;

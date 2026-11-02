@@ -33,6 +33,29 @@ def encode_frame(part,epoch,seq,start,pcm):
     if any(type(v) is not int or v<minimum or v>2**63-1 for v,minimum in [(epoch,1),(seq,1),(start,0)]) or not isinstance(pcm,bytes) or not 2<=len(pcm)<=64000 or len(pcm)%2:raise ValueError("Bounded recording frame required")
     return b"AMA1"+uuid.UUID(part).bytes+struct.pack(">QQQI",epoch,seq,start,len(pcm)//2)+hashlib.sha256(pcm).digest()+pcm
 
+def observe_subtitle_event(recording,event,received,epoch):
+    seq=event.get("sourceFinalSeq");end=event.get("endMs")
+    if type(seq) is not int or not 1<=seq<=len(recording["proofs"]) or type(end) is not int:raise ValueError("Unobserved subtitle source")
+    proof=recording["proofs"][seq-1];expected=(proof["start"]+proof["samples"]+15)//16
+    if event.get("sessionId")!=recording["sessionId"] or event.get("partId")!=recording["session"]["partId"] or end!=expected:raise ValueError("Subtitle source changed")
+    latency=(received-epoch-end/1000)*1000
+    if latency<0:raise ValueError("Subtitle arrived before source capture ended")
+    return {k:event.get(k) for k in ("eventId","sessionId","partId","segmentId","revision","sourceFinalSeq","startMs","endMs","status","createdAt")}|dict(latencyMs=latency,observedMonotonic=received,textSha256=hashlib.sha256(event.get("text","").encode()).hexdigest())
+
+def wait_for_owned_listener(port,is_alive,timeout=30):
+    """Listener readiness never substitutes for the exact owned process identity."""
+    import socket
+    deadline=time.monotonic()+timeout
+    while True:
+        if not is_alive():raise RuntimeError("Owned role exited before readiness")
+        try:
+            with socket.create_connection(("127.0.0.1",port),timeout=.25):pass
+            if not is_alive():raise RuntimeError("Owned role exited during readiness")
+            return
+        except OSError:
+            if time.monotonic()>=deadline:raise TimeoutError("Owned role listener not ready")
+            time.sleep(.05)
+
 class HttpFailure(Exception):
     def __init__(self,status,method,path):
         super().__init__(f"HTTP {status}: {method} {path}");self.status=status;self.method=method;self.path=path
@@ -136,6 +159,8 @@ class Transport:
         sys.path.insert(0,str(ROOT/"tools/dev"));import local_app
         state=json.loads((local_app.RUNTIME/"state.json").read_text());role=state["worker"]
         if state.get("owner")!=local_app.OWNER or not local_app.alive(role):raise ValueError("Owned running worker required")
+        working=local_app.source_signature()
+        if state.get("sourceSignature")!=working:raise ValueError("Deploy current source before recording qualification")
         pid=role["pid"];args=[v.decode() for v in Path(f"/proc/{pid}/cmdline").read_bytes().rstrip(b"\0").split(b"\0")];env=dict(v.decode().split("=",1) for v in Path(f"/proc/{pid}/environ").read_bytes().rstrip(b"\0").split(b"\0"))
         position=args.index("-cp")+1;entries=args[position].split(":");classes=Path(entries[0]).resolve()
         if not classes.is_relative_to(ROOT) or not(classes/"ama/worker/TranscriptWorkerMain.class").is_file():raise ValueError("Owned worker class directory required")
@@ -146,7 +171,8 @@ class Transport:
         # target/classes so later Maven compilation cannot alter a live load's class loading.
         args[position]=":".join([str(frozen),*entries[1:]]);local_app.stop_process(role)
         state["worker"]=local_app.launch(args,env,"worker.log");local_app.save(local_app.RUNTIME/"state.json",state)
-        self.execution=dict(amaDeployedSourceSignature=state["sourceSignature"],workerClassesSha256=digest.hexdigest(),workerPid=state["worker"]["pid"],backendPid=state["backend"]["pid"])
+        wait_for_owned_listener(state["workerHealthPort"],lambda:local_app.alive(state["worker"]))
+        self.execution=dict(amaWorkingSourceSignature=working,amaDeployedSourceSignature=state["sourceSignature"],workerClassesSha256=digest.hexdigest(),workerPid=state["worker"]["pid"],backendPid=state["backend"]["pid"])
         api_env=dict(v.decode().split("=",1) for v in Path(f"/proc/{state['backend']['pid']}/environ").read_bytes().rstrip(b"\0").split(b"\0"))
         self.execution["apiPoolMaximumConfigured"]=configured_pool_maximum(state,api_env)
         self.execution["apiPoolConnectionTimeoutMillis"]=1000
@@ -166,6 +192,7 @@ class Transport:
         if not jar.is_relative_to(ROOT) or not jar.is_file():raise ValueError("Owned immutable file executable required")
         frozen=self.output/"file-service-exec.jar";shutil.copyfile(jar,frozen);frozen.chmod(0o600);digest=hashlib.sha256(frozen.read_bytes()).hexdigest();args[position]=str(frozen)
         local_app.stop_process(role);state["files"]=local_app.launch(args,env,"files.log");local_app.save(local_app.RUNTIME/"state.json",state)
+        wait_for_owned_listener(state["filePort"],lambda:local_app.alive(state["files"]))
         self.execution.update(fileExecutableSha256=digest,filePid=state["files"]["pid"],fileWorkerThreadsConfigured=state.get("fileWorkerThreads",16),fileHeapMaximumMiB=192 if state.get("fileWorkerThreads",16)>16 else 96)
         (self.output/"execution.json").write_text(json.dumps(self.execution,indent=2))
     async def http(self,client,method,path,body=None,**kw):
@@ -180,7 +207,7 @@ class Transport:
         value=dict(recorderId=username,meetingId=meeting["id"],errors=0,transientErrors=0,sentChunks=0,ackedChunks=0,verifiedChunks=0,sampleCount=0,hashMatched=False,latenciesMs=[],queueAgesMs=[],observedSeconds=0,proofs=[],client=client)
         if recorder:
             session=await self.http(client,"POST",f"/api/v1/meetings/{meeting['id']}/recordings",expected=201)
-            value.update(sessionId=session["sessionId"],session=session,collectorId=str(uuid.uuid4()))
+            value.update(sessionId=session["sessionId"],session=session,collectorId=str(uuid.uuid4()),longFileSelected=index<self.scenario.get("longFileRecorderCount",0))
         else:value.update(userId=username,requests=0,initialPhaseSeconds=(index-self.scenario["recorders"])/max(1,self.scenario["totalUsers"]-self.scenario["recorders"])*15)
         self.event("CAS_USER_READY",actor=username,meetingId=meeting["id"],recorder=recorder);return value
     async def socket(self,r):
@@ -219,7 +246,7 @@ class Transport:
     async def produce(self,r,queue):
         duration=self.scenario["durationSeconds"];step=self.scenario["chunkMs"]/1000;count=math.ceil(duration/step);position=0
         for index in range(count):
-            due=self.epoch+index*step
+            due=self.epoch+min((index+1)*step,duration)
             await asyncio.sleep(max(0,due-time.monotonic()))
             samples=min(int(step*16000),duration*16000-position);pcm=pcm_bytes(self.run,r["recorderId"],index+1,samples)
             proof=dict(seq=index+1,start=position,samples=samples,sha256=hashlib.sha256(pcm).hexdigest());r["proofs"].append(proof);position+=samples
@@ -257,7 +284,7 @@ class Transport:
                             r["renewed"]=time.monotonic()
                         frame=encode_frame(session["partId"],session["writerEpoch"],proof["seq"],proof["start"],pcm)
                         await ws.send(frame)
-                        if not disconnected and proof["seq"]==max(2,math.ceil(self.scenario["durationSeconds"]*1000/self.scenario["chunkMs"]/3)):
+                        if self.scenario.get("dropAck",True) and not disconnected and proof["seq"]==max(2,math.ceil(self.scenario["durationSeconds"]*1000/self.scenario["chunkMs"]/3)):
                             disconnected=True;self.event("DROP_ACK_DISCONNECT",actor=r["recorderId"],seq=proof["seq"]);await ws.close();ws=None;raise ConnectionError("Planned lost ACK")
                         ack=json.loads(await asyncio.wait_for(ws.recv(),15))
                         if ack!={"type":"ACK","sessionId":r["sessionId"],"partId":session["partId"],"writerEpoch":session["writerEpoch"],"highestContiguousSeq":proof["seq"],"missingSeqs":[]}:
@@ -282,7 +309,7 @@ class Transport:
             await producer
             if ws:await ws.close();ws=None
             path=f"/api/v1/recordings/{r['sessionId']}";finish=await self.finish(r)
-            r["archiveTaskId"]=finish["archiveTaskId"];until=time.monotonic()+1800
+            r["archiveTaskId"]=finish["archiveTaskId"];r["captureFinished"]=True;until=time.monotonic()+1800
             while True:
                 try:status=await self.http(r["client"],"GET",path+"/archive")
                 except (OSError,TimeoutError,HttpFailure) as failure:
@@ -295,6 +322,7 @@ class Transport:
                 await asyncio.sleep(2)
             async with self.http_slots:result=await asyncio.to_thread(r["client"].verify_archive,r["session"],r["proofs"])
             r.update(result);self.event("ARCHIVE_VERIFIED",actor=r["recorderId"],sessionId=r["sessionId"],**result)
+            if r.get("longFileSelected"):await self.transcribe_archive(r)
         except Exception as failure:
             r["errors"]+=1;r["errorType"]=type(failure).__name__;r["failedStatus"]=getattr(failure,"status",None);r["failedPath"]=getattr(failure,"path",None)
             self.event("RECORDING_FAILED",actor=r["recorderId"],errorType=type(failure).__name__,status=r["failedStatus"],businessCode=getattr(failure,"business_code",None),path=r["failedPath"],clockDiagnostic=getattr(failure,"clock_diagnostic",None))
@@ -302,6 +330,67 @@ class Transport:
             if ws:await ws.close()
             if not producer.done():producer.cancel()
             await asyncio.gather(producer,return_exceptions=True)
+    async def transcribe_archive(self,r):
+        """Use the still-live real CAS session after capture; no credentials in evidence."""
+        started=time.monotonic();deadline=started+1200;client=r["client"];root=f"/api/v1/meetings/{r['meetingId']}";source_path=f"/api/v1/recordings/{r['sessionId']}/transcription-source"
+        async def request(method,path,body=None,**kw):
+            while True:
+                try:return await self.http(client,method,path,body,**kw)
+                except (OSError,TimeoutError,HttpFailure) as failure:
+                    if isinstance(failure,HttpFailure) and failure.status not in (429,500,502,503,504):raise
+                    r["transientErrors"]+=1;self.event("LONG_FILE_TRANSIENT",actor=r["recorderId"],method=method,path=path,status=getattr(failure,"status",None),errorType=type(failure).__name__)
+                    if time.monotonic()>deadline:raise
+                    await asyncio.sleep(1)
+        source=await request("POST",source_path,{},expected=202,headers={"Idempotency-Key":str(uuid.uuid4())})
+        while source.get("state")!="READY":
+            if source.get("state") not in ("PENDING","LEASED","DELAYED") or time.monotonic()>deadline:raise ValueError("Actual recording source did not complete")
+            await asyncio.sleep(1);source=await request("GET",source_path)
+        if source.get("sourceSha256")!=r["wavSha256"] or source.get("sourceBytes")!=r["wavBytes"] or source.get("sourceSamples")!=r["sampleCount"]:raise ValueError("Recording source differs from verified full archive")
+        capabilities=await request("GET",root+"/processing-capabilities")
+        if capabilities.get("canSubmit") is not True:raise ValueError("Actual import unavailable")
+        body=dict(expectedRevisionToken=capabilities["revisionToken"],orderedFileIds=[source["fileId"]]);key=str(uuid.uuid4())
+        accepted=await request("POST",root+"/transcript-imports",body,expected=202,headers={"Idempotency-Key":key})
+        if accepted.get("meetingId")!=r["meetingId"]:raise ValueError("Import receipt scope changed")
+        while True:
+            page=await request("GET",root+"/tasks?kind=TRANSCRIPT_IMPORT_V1&limit=20");tasks=[task for task in page.get("items",[]) if task.get("taskId")==accepted["taskId"]]
+            if len(tasks)!=1:raise ValueError("Actual import task missing")
+            state=tasks[0]["state"]
+            if state=="SUCCEEDED":break
+            if state not in ("READY","RUNNING","RECONCILING") or time.monotonic()>deadline:raise ValueError("Actual archive transcription failed: "+str(state))
+            await asyncio.sleep(2)
+        history=await request("GET",root+"/transcript/history?limit=20");raws=[item for item in history.get("items",[]) if item.get("kind")=="RAW"]
+        if len(raws)!=1 or not raws[0].get("id"):raise ValueError("Actual independent RAW revision missing")
+        transcript=await request("GET",root+"/transcript/revisions/"+raws[0]["id"]);selected=transcript.get("selected") or {};segments=selected.get("segments",[]);sources=transcript.get("sources",[])
+        if transcript.get("meetingId")!=r["meetingId"] or selected.get("id")!=raws[0]["id"] or selected.get("kind")!="RAW" or not segments or not all(segment.get("sourceFileId")==source["fileId"] for segment in segments) or min(segment.get("startMs",-1) for segment in segments)!=0 or max(segment.get("endMs",0) for segment in segments)!=self.scenario["durationSeconds"]*1000 or not any(file.get("fileId")==source["fileId"] and file.get("sha256")==r["wavSha256"] for file in sources):raise ValueError("Independent RAW source or time coverage differs from archive")
+        result=dict(passed=True,state=state,sourceFileId=source["fileId"],sourceSha256=source["sourceSha256"],sourceBytes=source["sourceBytes"],sourceSamples=source["sourceSamples"],taskId=accepted["taskId"],inputId=accepted["inputId"],rawRevisionId=raws[0]["id"],segments=len(segments),lastEndMs=max(segment["endMs"] for segment in segments),elapsedSeconds=time.monotonic()-started)
+        r["longFileTranscription"]=result;self.event("LONG_FILE_RAW_VERIFIED",actor=r["recorderId"],**result)
+
+    async def subtitles(self,r):
+        await self.ready.wait();cursor="0";r.update(subtitleEvents=[],subtitleState="NOT_STARTED",subtitleErrors=0,subtitleTransientErrors=0)
+        deadline=self.epoch+self.scenario["durationSeconds"]+240
+        try:
+            while True:
+                path=f"/api/v1/recordings/{r['sessionId']}/subtitles?afterEventId={cursor}&limit=64"
+                try:value=await self.http(r["client"],"GET",path)
+                except (OSError,TimeoutError,HttpFailure) as failure:
+                    if isinstance(failure,HttpFailure) and failure.status not in (429,500,502,503,504):raise
+                    r["subtitleTransientErrors"]+=1;self.event("SUBTITLE_READ_TRANSIENT",actor=r["recorderId"],errorType=type(failure).__name__,status=getattr(failure,"status",None))
+                    if time.monotonic()>deadline:raise
+                    await asyncio.sleep(.5);continue
+                received=time.monotonic()
+                if value.get("sessionId")!=r["sessionId"] or value.get("meetingId")!=r["meetingId"] or not isinstance(value.get("events"),list):raise ValueError("Subtitle scope mismatch")
+                for event in value["events"]:
+                    if event.get("eventId")!=str(int(cursor)+1):raise ValueError("Subtitle cursor gap")
+                    observation=observe_subtitle_event(r,event,received,self.epoch)
+                    r["subtitleEvents"].append(observation);self.event("SUBTITLE_OBSERVED",actor=r["recorderId"],**observation);cursor=event["eventId"]
+                if value.get("nextCursor")!=cursor:raise ValueError("Subtitle cursor changed")
+                r["subtitleState"]=value.get("state")
+                if r.get("captureFinished") and value.get("state")=="DONE" and not value.get("hasMore"):return
+                if received>deadline:raise TimeoutError("Subtitles did not finish")
+                await asyncio.sleep(0 if value.get("hasMore") else .5)
+        except Exception as failure:
+            r["subtitleErrors"]+=1;r["subtitleErrorType"]=type(failure).__name__;self.event("SUBTITLE_OBSERVATION_FAILED",actor=r["recorderId"],errorType=type(failure).__name__)
+
     async def finish(self,r):
         """Reconcile exact sealed PCM on uncertain replies; never manufacture archive availability."""
         path=f"/api/v1/recordings/{r['sessionId']}";deadline=time.monotonic()+180;client=r["client"]
@@ -356,11 +445,16 @@ class Transport:
             used=[];missing=[]
             for name,pid in roles.items():
                 try:
-                    fields=Path(f"/proc/{pid}/stat").read_text().rsplit(")",1)[1].split();cpu=int(fields[11])+int(fields[12]);identity=(pid,fields[19]);old=previous.get(name);percent=(cpu-old[1])/ticks/(now-old[2])*100 if old and old[0]==identity else None;previous[name]=(identity,cpu,now)
+                    fields=Path(f"/proc/{pid}/stat").read_text().rsplit(")",1)[1].split()
+                    if fields[0] in ("Z","X"):raise OSError("Owned role exited")
+                    cpu=int(fields[11])+int(fields[12]);identity=(pid,fields[19]);old=previous.get(name);percent=(cpu-old[1])/ticks/(now-old[2])*100 if old and old[0]==identity else None;previous[name]=(identity,cpu,now)
                     used.append(dict(role=name,pid=pid,rssBytes=int(fields[21])*page,cpuPercent=percent))
                 except (OSError,ValueError,IndexError):missing.append(name)
             value=dict(monotonic=now,roles=used,missingRoles=missing,loadMaxRssBytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024)
-            self.resources.append(value);self.event("RESOURCES",**value);await asyncio.sleep(5)
+            self.resources.append(value);self.event("RESOURCES",**value)
+            unexpected=[name for name in missing if not(self.api_fault and name=="backend")]
+            if unexpected:raise RuntimeError("Required owned roles unavailable: "+",".join(unexpected))
+            await asyncio.sleep(5)
     async def run_all(self):
         # Verify the selected interpreter before freezing roles or creating any CAS users.
         importlib.import_module("websockets.asyncio.client")
@@ -383,15 +477,17 @@ class Transport:
             await asyncio.gather(*(self.prime(r) for r in recordings))
             resource_task=asyncio.create_task(self.sample_resources())
             self.epoch=time.monotonic();self.ready.set();self.event("START",recorders=len(recordings),backgroundUsers=len(background),scenario=s)
-            tasks=[asyncio.create_task(self.record(r)) for r in recordings]+[asyncio.create_task(self.background(b)) for b in background]+[asyncio.create_task(self.inject())]
+            tasks=([asyncio.create_task(self.subtitles(r)) for r in recordings] if s.get("observeSubtitles") else [])+[asyncio.create_task(self.record(r)) for r in recordings]+[asyncio.create_task(self.background(b)) for b in background]+[asyncio.create_task(self.inject())]
             while any(not task.done() for task in tasks):
                 await asyncio.sleep(5)
-                failed=[task for task in tasks if task.done() and not task.cancelled() and task.exception() is not None]
+                failed=[task for task in [*tasks,resource_task] if task.done() and not task.cancelled() and task.exception() is not None]
                 if failed:
                     fatal=type(failed[0].exception()).__name__;self.event("LOAD_CONTROLLER_FAILED",errorType=fatal);break
                 status=dict(elapsedSeconds=time.monotonic()-self.epoch,recorders=len(recordings),acknowledgedChunks=sum(r["ackedChunks"] for r in recordings),verifiedArchives=sum(r["hashMatched"] for r in recordings),errors=sum(r["errors"] for r in recordings)+sum(b["errors"] for b in background))
                 (self.output/"progress.json").write_text(json.dumps(status));print(json.dumps(status),flush=True)
-            if fatal is None:await asyncio.gather(*tasks)
+            if fatal is None:
+                await asyncio.gather(*tasks)
+                if resource_task.done():await resource_task
         except Exception as failure:
             fatal=type(failure).__name__;self.event("LOAD_SETUP_FAILED",errorType=fatal,status=getattr(failure,"status",None),businessCode=getattr(failure,"business_code",None),method=getattr(failure,"method",None),path=getattr(failure,"path",None),clockDiagnostic=getattr(failure,"clock_diagnostic",None))
         finally:
@@ -407,7 +503,24 @@ class Transport:
             clean=lambda rows:[{k:v for k,v in r.items() if k not in ("client","collectorId")} for r in rows]
             (self.output/"observations.json").write_text(json.dumps(dict(recordings=clean(recordings),background=clean(background),faultEvents=self.fault.events,resources=self.resources),indent=2));os.chmod(self.output/"observations.json",0o600)
         from .report import qualify_transport
-        report=qualify_transport(s,recordings,background);report.update(evidenceMode="ACTUAL_LOOPBACK_CAS_WEBSOCKET_FILE_MYSQL",runId=self.run,sourceEvidence=str(self.output/"observations.json"),apiFaultEvents=self.fault.events,modelExecution="DISABLED_NOT_INSTALLED")
+        report=qualify_transport(s,recordings,background);report.update(evidenceMode="ACTUAL_LOOPBACK_CAS_WEBSOCKET_FILE_MYSQL",runId=self.run,sourceEvidence=str(self.output/"observations.json"),apiFaultEvents=self.fault.events,modelExecution="CONTROLLED_SIBLING_HARNESS" if s.get("observeSubtitles") else "NOT_OBSERVED")
+        if s.get("observeSubtitles"):
+            from .report import qualify_subtitles
+            observed=qualify_subtitles(s,recordings);report["subtitleQualification"]=observed
+            report.update(temporarySubtitleP95Ms=observed["temporarySubtitleP95Ms"],stableSubtitleP95Ms=observed["stableSubtitleP95Ms"])
+            report["passed"]=report["passed"] and observed["passed"];report["reasons"].extend(observed["reasons"])
+            report["scope"]="RECORDING_PROTOCOL_AND_CONTROLLED_HARNESS_SUBTITLE_LATENCY"
+        if s.get("longFileRecorderCount",0):
+            from .report import qualify_long_file
+            observed=qualify_long_file(s,recordings);report["longFileQualification"]=observed;report["passed"]=report["passed"] and observed["passed"];report["reasons"].extend(observed["reasons"])
+        if getattr(self,"execution",None):
+            import sys
+            sys.path.insert(0,str(ROOT/"tools/dev"));import local_app
+            ending=local_app.source_signature();report["endingWorkingSourceSignature"]=ending
+            if ending!=self.execution["amaDeployedSourceSignature"]:report["passed"]=False;report["reasons"].append("SOURCE_CHANGED_DURING_QUALIFICATION")
+            state=json.loads((local_app.RUNTIME/"state.json").read_text())
+            for role,key in (("worker","workerPid"),("files","filePid"),("backend","backendPid")):
+                if not local_app.alive(state.get(role)) or not(self.api_fault and role=="backend") and state[role]["pid"]!=self.execution[key]:report["passed"]=False;report["reasons"].append("FROZEN_ROLE_CHANGED_"+role.upper())
         report["execution"]=getattr(self,"execution",None)
         if fatal:report["passed"]=False;report["reasons"].append("LOAD_CONTROLLER_"+fatal)
         report["backgroundTransientErrorCounts"]=sum(b["transientErrors"] for b in background)

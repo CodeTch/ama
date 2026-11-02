@@ -42,3 +42,15 @@ test('application restores the original personal template command and clears its
  const context={tab:'template-application',storage,recovery:'RESUME_NAMESPACE' as const};const first=createApplication('https://ama.test',context);let next:ReturnType<typeof createApplication>|null=null;
  try{await first.session.refresh();await assert.rejects(first.personalTemplateCommands.create('原模板',['决定']));first.dispose();next=createApplication('https://ama.test',context);await next.session.refresh();assert.equal(next.personalTemplateCommands.command.state.value,'UNCERTAIN');retry=true;await next.personalTemplateCommands.retry();assert.equal(next.personalTemplateCommands.pending.value,false);await next.session.logout();assert.equal(rows.size,0);assert.equal(next.personalTemplateCommands.original.value,null);}finally{first.dispose();next?.dispose();globalThis.fetch=old;}
 });
+
+test('recording import original command survives session hydration before the meeting route resolves and logout clears it',async()=>{
+ const {validRecordingImportCommand}=await import('../../src/features/recording/useRecordingTranscription');
+ const rows=new Map<string,string>(),storage={getItem:(k:string)=>rows.get(k)??null,setItem:(k:string,v:string)=>{rows.set(k,v);},removeItem:(k:string)=>{rows.delete(k);}},old=fetch;
+ const context={tab:'recording-import-application',storage,recovery:'RESUME_NAMESPACE' as const};
+ const original={actor:'owner',resource:id,operation:'TRANSCRIPT_IMPORT',path:`/api/v1/meetings/${id}/transcript-imports`,key:id,body:JSON.stringify({expectedRevisionToken:'17',orderedFileIds:[id]})};
+ const journal=()=>createScopedPrivateJournal(context,'recording-transcript-import',validRecordingImportCommand);
+ assert.equal(journal().save('owner',id,original),'SAVED');
+ globalThis.fetch=async url=>String(url).endsWith('/session')?Response.json({actor:{enterpriseId:'owner',status:'ACTIVE',roles:['USER']},csrfToken:'X'.repeat(43),expiresAt:'2030-01-01T00:00:00Z'}):String(url).endsWith('/logout')?new Response(null,{status:204}):Response.json([]);
+ const app=createApplication('https://ama.test',context);
+ try{await app.session.refresh();let result=journal().load('owner',id);assert.equal(result.kind,'RESTORED');app.setMeetingScope(id);result=journal().load('owner',id);assert.equal(result.kind,'RESTORED');if(result.kind==='RESTORED')assert.deepEqual(result.value,original);await app.session.logout();assert.equal(journal().load('owner',id).kind,'EMPTY');}finally{app.dispose();globalThis.fetch=old;}
+});

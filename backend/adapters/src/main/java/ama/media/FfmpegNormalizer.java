@@ -17,8 +17,11 @@ import java.util.function.BooleanSupplier;
 /** Bounded local decoding evidence. A prepared PCM resource conveys no registry or business authority. */
 public final class FfmpegNormalizer {
  @FunctionalInterface public interface SourceReader {InputStream open(String fileId)throws IOException;}
- public record Limits(long maxSourceBytes,long maxSamples,Duration timeout){
-  public Limits{if(maxSourceBytes<1||maxSourceBytes>32L*1024*1024||maxSamples<1||maxSamples>115200000L||timeout==null||timeout.isZero()||timeout.isNegative()||timeout.compareTo(Duration.ofMinutes(10))>0)throw new IllegalArgumentException("Finite media bounds required");}
+ public record Limits(long maxSourceBytes,long maxSamples,Duration timeout,boolean recordingInput){
+  public Limits(long maxSourceBytes,long maxSamples,Duration timeout){this(maxSourceBytes,maxSamples,timeout,false);}
+  /** Capacity selection only; the decoder never grants registry or business authority. */
+  public static Limits recording(long maxSamples,Duration timeout){return new Limits(ama.transcript.RecordingTranscriptProfile.MAX_BYTES,maxSamples,timeout,true);}
+  public Limits{if(maxSourceBytes<1||maxSourceBytes>(recordingInput?ama.transcript.RecordingTranscriptProfile.MAX_BYTES:32L*1024*1024)||maxSamples<1||maxSamples>115200000L||timeout==null||timeout.isZero()||timeout.isNegative()||timeout.compareTo(Duration.ofMinutes(10))>0)throw new IllegalArgumentException("Finite media bounds required");}
  }
  public record SourceProof(String fileId,String sourceSha256,String pcmSha256,long sampleCount){}
  private record Decoded(SourceProof proof,Path pcm){}

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed,onMounted,ref,watch} from 'vue';
 import type {TranscriptReplacementSearch} from '../../shared/api/transcript-operations';
-const props=defineProps<{matches:(Omit<TranscriptReplacementSearch,'occurrences'>&{occurrences:ReadonlyArray<TranscriptReplacementSearch['occurrences'][number]>})|null;segments:ReadonlyArray<{segmentId:string;body:string}>;pending:boolean;busy:boolean;searching:boolean;canMutate:boolean;state:string;original:{find?:string;replacement?:string;occurrenceIds?:ReadonlyArray<string>}|null;error:string|null}>();
+const props=defineProps<{matches:(Omit<TranscriptReplacementSearch,'occurrences'>&{occurrences:ReadonlyArray<TranscriptReplacementSearch['occurrences'][number]>})|null;segments:ReadonlyArray<{segmentId:string;body:string}>;pending:boolean;busy:boolean;searching:boolean;canMutate:boolean;suggestionsAvailable?:boolean;state:string;original:{find?:string;replacement?:string;occurrenceIds?:ReadonlyArray<string>}|null;error:string|null}>();
 const emit=defineEmits<{search:[query:string];replace:[replacement:string,ids:string[]];undo:[];retry:[];discard:[];close:[]}>();
 const dialog=ref<HTMLDialogElement>(),query=ref(''),replacement=ref(''),selected=ref<string[]>([]),page=ref(0),composing=ref(false);
 const locked=computed(()=>props.pending||props.busy),matches=computed(()=>props.matches?.occurrences??[]),pages=computed(()=>Math.max(1,Math.ceil(matches.value.length/50)));
@@ -14,7 +14,7 @@ onMounted(()=>dialog.value?.showModal());
 </script>
 <template><dialog ref="dialog" class="modal lg transcript-operation-dialog" aria-labelledby="manual-tools-title" @cancel="close">
  <header class="modal-h"><h3 id="manual-tools-title" class="m-t">纠错建议与候选</h3><button class="m-x" aria-label="关闭" :disabled="locked" @click="close()">×</button></header>
- <div class="modal-b"><p class="small muted">纠错建议服务尚未接入。可核对已保存工作稿中的具体位置后进行人工修订。</p><h4>按位置替换</h4>
+ <div class="modal-b"><p class="small muted">{{suggestionsAvailable?'语音增强建议请在工作台核对。这里可按具体位置进行人工替换和撤销。':'纠错建议服务尚未接入。可核对已保存工作稿中的具体位置后进行人工修订。'}}</p><h4>按位置替换</h4>
  <p v-if="!canMutate&&!pending" role="status">请先保存或处理当前修改，再修订已保存工作稿。</p>
  <form @submit.prevent="search"><div class="field"><label for="manual-find">查找完整文本</label><input id="manual-find" v-model="query" class="input" aria-label="查找完整文本" maxlength="1024" :readonly="locked" :disabled="!canMutate&&!pending" @compositionstart="composing=true" @compositionend="composing=false"/></div><button class="btn" :disabled="locked||searching||!canMutate||composing||!query">{{searching?'查找中…':'查找全部位置'}}</button></form>
  <div v-if="pending&&original" class="original" role="status"><p v-if="original.find!==undefined">原查找：{{original.find}}</p><p v-if="original.replacement!==undefined">原替换为：{{original.replacement||'（删除匹配文本）'}}</p><p v-if="original.occurrenceIds">选中 {{original.occurrenceIds.length}} 处</p><p v-else>原操作：撤销所选工作版本</p><p>保留原请求，恢复完成后再进行其他修改。</p></div>

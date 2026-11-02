@@ -69,7 +69,7 @@ final class JdbcSpeechExecutionObserver implements HttpSpeechModelPort.Execution
   if(!recoveryLock.tryLock())return 0;
   try{
   if(recoveryUpper==null){var upper=q.jdbc.queryForList("SELECT id FROM speech_execution WHERE service_key=? AND settled_at IS NULL ORDER BY id DESC LIMIT 1",String.class,ControlledSpeechProfile.SERVICE);if(upper.isEmpty())return 0;recoveryUpper=upper.getFirst();recoveryAfter="";}
-  var rows=q.jdbc.queryForList("SELECT id,scope_sha256,path,request_sha256,state,lease_task_id,lease_attempt,lease_owner_sha256 FROM speech_execution WHERE service_key=? AND settled_at IS NULL AND id>? AND id<=? ORDER BY id LIMIT ?",ControlledSpeechProfile.SERVICE,recoveryAfter,recoveryUpper,limit);int recovered=0;
+  var rows=q.jdbc.queryForList("SELECT id,scope_sha256,path,request_sha256,state,lease_task_id,lease_attempt,lease_owner_sha256,lane FROM speech_execution WHERE service_key=? AND settled_at IS NULL AND id>? AND id<=? ORDER BY id LIMIT ?",ControlledSpeechProfile.SERVICE,recoveryAfter,recoveryUpper,limit);int recovered=0;
   for(var row:rows){check();recoveryAfter=text(row,"id");try{
    String id=text(row,"id"),path=text(row,"path"),sha=text(row,"request_sha256");var observed=proofs.lookup(id);
    if(observed.isEmpty()&&("UNKNOWN".equals(row.get("state"))||!ownerCurrent(row)))observed=Optional.of(proofs.fence(id,path,sha));
@@ -81,6 +81,7 @@ final class JdbcSpeechExecutionObserver implements HttpSpeechModelPort.Execution
   }finally{recoveryLock.unlock();}
  }
  private boolean ownerCurrent(Map<String,Object> row){
+  if("REALTIME".equals(row.get("lane"))){var owners=q.jdbc.queryForList("SELECT lease_owner FROM recording_subtitle_job WHERE id=? AND state='LEASED' AND attempt=? AND lease_expires_at>UTC_TIMESTAMP(6)",String.class,row.get("lease_task_id"),row.get("lease_attempt"));return owners.size()==1&&ownerHash(owners.getFirst()).equals(row.get("lease_owner_sha256"));}
   var owners=q.jdbc.queryForList("SELECT lease_owner FROM durable_task WHERE id=? AND state='RUNNING' AND attempt=? AND expires_at>UTC_TIMESTAMP(6)",String.class,row.get("lease_task_id"),row.get("lease_attempt"));
   return owners.size()==1&&ownerHash(owners.getFirst()).equals(row.get("lease_owner_sha256"));
  }

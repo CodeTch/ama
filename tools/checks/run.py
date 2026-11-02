@@ -199,10 +199,10 @@ def main(argv=None):
     if args.group in ("web", "e2e", "visual"):
         return web_tests(args.group, args.selector or "*", output)
     if args.group == "load":
-        if args.selector != "realtime-100":
+        if args.selector not in {"realtime-100","realtime-50","realtime-10-30m"}:
             print(f"FAIL: load scenario {args.selector!r} is not registered", file=sys.stderr)
             return 1
-        result = subprocess.run([sys.executable, "tools/load/recording_load.py", "tools/load/scenarios/realtime-100.json"], cwd=ROOT, check=False)
+        result = subprocess.run([sys.executable, "tools/load/recording_load.py", f"tools/load/scenarios/{args.selector}.json"], cwd=ROOT, check=False)
         return result.returncode if result.returncode > 0 else 0
     if args.group == "contract" and args.selector == "OpenApi":
         return contracts(output)

@@ -36,7 +36,7 @@ public final class JdbcFinalConfirmations {
   var prepared=authority.publicationWriteGuard().prepare(actor,meeting,budget);var publication=authority.publicationWriteGuard().declaration(prepared);
   var captured=authority.transactionRunner().required(()->captureReadiness(actor,meeting,declaration,budget,prepared));
   var snapshot=reader.prepare(captured.graph(),budget);var result=new LinkedHashMap<>(queries.finalReadiness(snapshot,publication));var correction=transcripts.correctionFor(authority);
-  authority.transactionRunner().required(()->{var fresh=captureReadiness(actor,meeting,declaration,budget,prepared);require(fresh.equals(captured),PROVENANCE_UNAVAILABLE);transcripts.requireCorrection(authority,correction,"NOT_APPLICABLE".equals(correction.projection().readiness()));return null;});
+  authority.transactionRunner().required(()->{var fresh=captureReadiness(actor,meeting,declaration,budget,prepared);require(fresh.equals(captured),PROVENANCE_UNAVAILABLE);transcripts.requireCorrection(authority,correction,Set.of("NOT_APPLICABLE","READY").contains(correction.projection().readiness()));return null;});
   if(captured.historyBlocker()!=null){var blockers=new LinkedHashSet<>((List<String>)result.get("blockers"));blockers.add(captured.historyBlocker());result.put("blockers",List.copyOf(blockers));result.put("ready",false);result.put("businessReady",false);}return Collections.unmodifiableMap(result);
  }
  public Map<String,Object> confirm(Actor actor,String meeting,String key,long expected,List<String> optionalReviewIds,String trace){

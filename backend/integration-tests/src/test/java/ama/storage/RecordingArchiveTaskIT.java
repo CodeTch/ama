@@ -126,8 +126,12 @@ class RecordingArchiveTaskIT {
   try(var f=new Fixture()) {
    var s=f.recorded();var first=RecordingArchiveRuntime.accept(f.queue,f.actor,s.sessionId());f.storageUnavailable.set(true);
    for(int attempt=1;attempt<=3;attempt++){
-    if(attempt>1){var time=j.queryForObject("SELECT available_at FROM durable_task WHERE id=?",java.time.LocalDateTime.class,first.taskId());long delay=Math.max(0,java.time.Duration.between(java.time.Instant.now(),time.toInstant(java.time.ZoneOffset.UTC)).toMillis()+30);assertTrue(delay<12000);Thread.sleep(delay);}
-    var lease=f.queue.claim("RECORDING_ARCHIVE","archive-retry").orElseThrow();assertEquals(first.taskId(),lease.taskId());assertTrue(f.queue.completeWithEffects(lease,RecordingArchiveRuntime.prepare(f.queue,lease,LIVE)));
+    if(attempt>1){long micros=j.queryForObject("SELECT GREATEST(0,TIMESTAMPDIFF(MICROSECOND,UTC_TIMESTAMP(6),available_at)) FROM durable_task WHERE id=?",Long.class,first.taskId());assertTrue(micros<12000000);Thread.sleep((micros+999)/1000+30);}
+    // claim is a nonblocking SKIP LOCKED observation, not a promise of one-shot acquisition.
+    // Poll the actual queue without changing available_at, retry counters or any authority.
+    var claim=f.queue.claim("RECORDING_ARCHIVE","archive-retry");long claimDeadline=System.nanoTime()+java.time.Duration.ofSeconds(3).toNanos();
+    while(claim.isEmpty()&&System.nanoTime()<claimDeadline){System.out.println("ARCHIVE_RETRY_CLAIM_DEFERRED "+j.queryForMap("SELECT state,attempt,available_at,UTC_TIMESTAMP(6) database_now,TIMESTAMPDIFF(MICROSECOND,UTC_TIMESTAMP(6),available_at) remaining_micros FROM durable_task WHERE id=?",first.taskId()));Thread.sleep(50);claim=f.queue.claim("RECORDING_ARCHIVE","archive-retry");}
+    var lease=claim.orElseThrow();assertEquals(first.taskId(),lease.taskId());assertTrue(f.queue.completeWithEffects(lease,RecordingArchiveRuntime.prepare(f.queue,lease,LIVE)));
    }
    assertEquals("FAILED",RecordingArchiveRuntime.status(f.queue,f.actor,s.sessionId()).state());assertEquals(1,f.recordings.ack(s.sessionId(),s.partId()).highestContiguousSeq());f.storageUnavailable.set(false);
    var retried=RecordingArchiveRuntime.accept(f.queue,f.actor,s.sessionId());assertNotEquals(first.taskId(),retried.taskId());assertEquals("READY",retried.state());assertEquals(retried.taskId(),RecordingArchiveRuntime.accept(f.queue,f.actor,s.sessionId()).taskId());

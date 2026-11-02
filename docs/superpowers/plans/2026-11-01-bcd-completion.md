@@ -1,3 +1,17 @@
+<!-- BCD_LOCAL_CONTROLLED_COMPLETION_20261102 -->
+# 当前执行结论
+
+本计划适用的本地受控BCD任务已完成；逐任务结果、真实证据、范围与必要视觉差异见[当前完成记录](/home/tanren/ama/docs/acceptance/bcd-completion-2026-11-02.md)。当前仅1440×900、1024×768，手机开发与全部验收完全移除且不归F。C为10/50连续1800秒与30分钟长文件；50/200与两小时仍F。旧未勾选模板/停止点作为历史保留，不要求重做已完成或重复已受理命令。E/F尚未启动。
+
+<details>
+<summary>历史执行记录：原始状态、失败与当时接续条件，均不覆盖上方当前结论</summary>
+
+> 当前范围已按用户最新要求调整：仅桌面端1440×900、1024×768；所有手机端开发与验收项已移出，不属于F待办。历史多视口报告保留原文，不再作为手机端门槛。详见 [桌面端范围裁定](../../development/2026-11-02-desktop-only-scope.md)。
+
+> 2026-11-01 最新长文件验证裁定：当前C阶段仅要求30分钟长录音文件（28800000样本、57600044字节、900分片、15个120秒窗口/75 checkpoint）完整归档→独立受管转写来源→RAW；两小时长文件测试标准后移F。生产既有有界上限和旧失败证据保留，不靠扩大普通32MiB上传绕过来源授权。
+
+> 最新阶段与容量裁定（用户2026-11-01最终更正）：**C阶段**以10场会议并发、50人同时在线、持续不间断录音30分钟（1800秒）验证；10名录音用户计入50人，后台用户40。场景tools/load/scenarios/realtime-10-30m.json，CLI load realtime-10-30m。**50场并发/200人在线验证移到F阶段**（后台150、沿用7200秒场景realtime-50），不阻塞本轮BCD完成。每2秒分片、ACK/原始SHA完整性和字幕temporary p95≤3秒/stable p95≤5秒保持；D沿用其业务/页面验收义务，不另设该容量门槛。下文100/300及旧50/200计划/报告保留历史，不自动折算为C或F已验收。
+
 # B/C/D Completion Implementation Plan
 
 > 执行方式：executing-plans，由当前单agent在项目根目录main执行。用户已明确要求完成BCD全部任务；不创建分支/worktree/子agent，不自动提交，不重置业务数据和失败证据。
@@ -14,7 +28,7 @@
 
 - 所有命令、计划、修改和验证从/home/tanren/ama main执行；保留既有未提交修改。
 - local/MySQL/单机为当前BCD范围；S3、双MySQL、双活和专属恢复依原裁定保留F，不能据此删除BCD共享可靠性要求。
-- 100场录音计入300在线、每2秒分片、持续7200秒；保留每个原始ACK/seq/SHA、失败与延迟，不能放大缓存、放宽fsync或删掉失败样本制造通过。
+- C阶段10场并发录音计入50在线、每2秒分片、持续不间断1800秒；50/200/7200容量验证移F。保留每个原始ACK/seq/SHA、失败与延迟，不能放大缓存、放宽fsync或删掉失败样本制造通过。
 - 临时字p95≤3秒、稳定字p95≤5秒按实际接口观测；用户已明确所有外部联调统一8792兄弟harness，不再等待真实公司端点。模拟器协议/业务结果如实标注，不能据此声称真实模型语义质量。
 - 旧请求结果未知时查原key/body；采用/移除/撤回/删除后的夹具不能重当原状态。原型SHA ab21d0b73f4e48bbf701ee8bca5e958940b61f6e6f680d4ced02de0ce4bab867保持。
 - 实际容量采集期间冻结运行二进制/部署/兄弟配置；构建与部署顺序执行，结束后再做源码和运行签名对齐。
@@ -57,13 +71,13 @@
 **Files:** docs/acceptance/b/b-followup-page-crud-matrix-2026-10-30.md、docs/acceptance/d/page-matrix.md、web/src各可达组件、tools/dev/prototype_*及只读/业务验证脚本。
 
 - [ ] 从main.ts真实路由与条件分支归并464按钮清单，剔除演示/未来/不可达项并说明，补齐App/名单/导入/材料/转写/纪要/来源/候选/确认/发布/回看/模板的证据。
-- [ ] 原型最终渲染对照1440×900、1024×768及D390×844，逐个收口成功/失败/空/加载/禁用/滚动/固定底栏；原图不可改。
+- [ ] 原型最终渲染对照1440×900、1024×768两个桌面视口，逐个收口成功/失败/空/加载/禁用/滚动/固定底栏；原图不可改。
 - [ ] 每个真实写操作使用明确当前版本和原请求恢复；刷新/重登/第二身份/冲突和失败有证据后才关闭对应行。
 
 ## Task 5: 完整容量与最终验收
 
 - [ ] 变化对应生产Java/Web/type/build/OpenAPI/Python及独占MySQL集成全部按适用范围执行、记录所有失败，不用历史隔离夹具结果冒充当前测试。
-- [ ] 通过短/600秒资格后执行冻结部署100录音/300真实CAS用户/7200秒、真实丢ACK和进程退出；全部采集、ACK、100归档和原始SHA回读完成才签收协议容量。
+- [ ] C阶段先通过短预检，再冻结部署执行10录音/50真实CAS用户/连续不间断1800秒；全部采集、ACK、10归档和原始SHA回读完成才签收协议容量。真实丢ACK/进程退出作为独立恢复回归保留，不用中断场景替代本次连续30分钟；50/200/7200验证移F，不阻塞BCD。
 - [ ] 真实模型可用时完成全链字幕p95/质量；没有模型配置时继续其他任务并明确外部依赖，不制造通过。
 - [ ] 单agent集中自查，更新B/C/D摘要、逐行证据、运行签名和机器状态；只有全部本阶段义务达到原验收条件才标完成。
 
@@ -164,3 +178,65 @@ C03后端本批已接线：V057候选/原键批次（仅新测试库已应用）
 运行仍d3cf2d7e8cf07ba1ea9e2a13b69a2ff1cd4f9516da4873d38b8c3f4563f22c4b、主库V056/46431、pool32/file32/standard六角色；当前源码825dc9b3d18781b1935894d1502bb6bb3a3894854088ad0d72140c551fd79037。独占测试库1737f5dfd77a已完整47迁移至V057；057 SHA `01cac8bcebfe72faf9a08b898ac88323bc82fdf8d24c9eb60e3745ca1866ca47`，后续不能改已应用脚本。兄弟master/PID1893722/固定8792与2525，不是企业权威。无测试/浏览器/负载进程，本地常驻服务保留。
 
 下一批先补必要多候选/并发/治理/损坏/预算/原键负例，再C03 HTTP/严格契约/SDK/运行schema/UI journal与正常部署CAS；然后版本化说话人、C06持久字幕、独立两小时归档ASR、B/D页面按钮原型矩阵和冻结容量。100/300/600协议PASS但ACKp95=132.391秒，仍不等于实时或7200。S3/HA等按R2留F。不切分支、不建worktree/子agent、不提交/重置、不清理旧证据。
+
+## 当前恢复执行（用户最新继续指令）
+
+恢复全部BCD，覆盖上一暂停状态。当前main/单agent，无worktree/分支/自动提交。先补C03必要负例，再HTTP/严格契约/SDK/UI、说话人、C06、归档ASR、完整BD页面矩阵和实际容量。沿用已应用V057，不改历史迁移，不重做C02。Ruling: 按用户授权在main执行并自行审查，不派任何子agent；外部接口只经兄弟固定8792/2525。
+
+C03续作：损坏模型原键恢复/拒绝不复活及治理7项MySQL PASS（c03-review-negatives-it1.log）。strict wire先缺proposal方法编译RED→真实CORRECTION未知字段RED→6PASS。HTTP真实404 RED（red2），接线后green1单项PASS；包含proposal/read/path-body mismatch/accept/original proposal replay，接下来新增runtime unavailable原batch/决定恢复。Web500/typecheck PASS；新增correction client3+旧operations4及private journal4通过，面板STALE/UNDONE/无资格撤销RED已修。尚未部署，不将后端或页面测试冒充实际CAS。
+
+C03实际CAS：c03-real-cas-01/report.json 6组全部PASS，会议4a03bd17-3362-4b7b-9f11-71376fa2dcfe，原RAW dfbfedd6-5fb0-4da1-b2da-778396d797b1；UI建议/待处理确认门禁/接受/立即撤销/旧接受原键不回挂/建议原键/刷新/三视口/第二CAS读写403。已部署V057，源码记录来自state的实际签名，不冒充公司模型质量。
+
+### C03说话人设计选择（按用户授权自行推进）
+
+Ruling: 不修改已存在的speaker标签或历史speaker_id，采用不可变speaker snapshot和逐版本segment speaker change证明；新标注、改名和合并都创建新的WORKING。理由是既有confirmation-v1已经将speakerId纳入hash，原始来源时间和RAW保持；改旧标签会改变历史含义。代价是重复标签可能保存多个不可变ID，但所有引用有界且随meeting清理。人工实名是HUMAN显式标注，可选当前ACTIVE企业身份，不因标注添加meeting ACL；合并保留会议全部现有权限。原始自动聚类仅显示模型给出的匿名事实，不能自动产生企业身份。保持旧请求摘要及confirmation-v1字节语义；新增speaker操作独立摘要。所有新读写进入同一SavedScope和S/F源图，Minutes完整图同步加入snapshot/change与内容核验；没有精确证明的speaker变动拒绝，不能简单删除speaker==null/父稿一致保护。先真实契约/业务RED再实现，V058未应用之前才允许修改。
+
+C03说话人：V058仅独占新schema5a8a2ff99e9a已迁移，SHA d062609f8e7c2218b682a01477509cce0a759af29d12d07f86afdb5fe97f52d4，不可改。speaker contract1/coreproof4/wire7/首实际业务1PASS，HTTP+多片段/并发/企业身份/损坏完整14项正在c03-speakers-and-corrections-full-it1.log执行。完整Web新RED为503PASS/1FAIL（批量按钮仍禁用），实现后504全部PASS/typecheck PASS；最早从根目录直接执行旧Vite测试造成路径错误的c03-bulk-controls-red.log仅工具错误，不算产品RED。新speakers严格客户端和private journal测试6PASS。字典/ER已同步docs/database/2026-11-01-speech-increment.md。
+
+C03完整14项实际业务/HTTP集成PASS；加入speaker后的实际meeting删除单项PASS（c03-speaker-actual-deletion-it.log），生产Java873PASS，Web505/type/buildPASS。V058正常部署1a9f018f。首次新实际CAS c03-speakers-real-cas-01在已接受并刻意丢ACK/刷新后FAIL：stopTools误将corrections.pending打开manual dialog，遮住原纠错恢复；根因已由组件真实journal SSR红例c03-lost-ack-dialog-red.log复现。已修两个判定；完整Web正在c03-lost-ack-web-full-green.log验证。原请求和server已提交响应保留，c03-original-ack-recovery-01仅恢复原accepted key，不把旧失败改PASS；随后新case验证完整UI/改名/合并/来源图。C06执行细化见2026-11-01-c06-durable-subtitles.md，尚未实现，不能提前签收。
+
+C03实际续作：02已完成真实丢ACK后刷新journal恢复，但整例FAIL于候选随机ID顺序被脚本误当段序（产品接受的是另一文件的正确segment）。原resume01继续同meeting a9b02092，3组UNDO/原键不回挂/bulk拒绝PASS；首人工标签原key84c47424-36a6-4ba4-90a2-d43dc961311f已服务端200提交，回执漏operationId导致客户端正确拒绝。新增HTTP exact-operation回归真实RED expected revisionId/actual空串（c03-speaker-operation-receipt-red.log），补SPEAKERS receipt分支，green及Java全量进行中。既有sidebar speaker按钮仍指future已改真实工作台focus/labels；Web全量进行中。下一准确恢复脚本c03_resume_label_receipt_cas.mjs使用上述原请求，不能为原标注另发新key。
+
+C03 original-resume-02实际8组全部PASS，同一meeting a9b02092：原标签回执原key恢复、真实sidebar按钮focus、第二标签/merge/rename/旧标签不可变、真实确认后Minutes source graph/current inputs200、三视口/刷新、第二CAS read/write403。之前01/02/resume01失败不覆盖；lostACK真实UI恢复在02的局部原记录已PASS，原accepted key另已恢复。最新Java873/Web507/type/build PASS（c03-speaker-receipt-production-java.log、c03-speaker-focus-web2.log）。现在转入C06：DurableSubtitleIT新四项真实用例已写，先编译RED，未实现/迁移059，主库058与源码签名开始不同，不能把之后源码当已部署。
+
+
+C06 2026-11-01持续执行：详细记录见c06-durable-subtitles.md。V059测试库成功/主库058；生产JdbcLiveSubtitles/API/严格82schema/RecordingPage实际接线未部署。Web512/type/build/API全PASS；真实字幕8项PASS。新增idle无分片不得UPDATE和已ACK等候>3秒delayed两项真实RED后修正：调度候选仅有待处理PCM/封口/换part/finish工作，读取按当前persisted_at判断后端积压，不冒充从采集起的容量时延。联合真实RecordingAppendIT(23PASS已结束)/SpeechReviewIT/ControlledSpeechResourceIT/DurableSubtitleIT进行中。兄弟无效JSON500→400修复65PASS且固定8792/2525已正常重启，真实COMPLETED摘要/FENCED/迟到409全部PASS，PID2265462。原失败和原进程日志保留；继续生产Java/正常部署/真实CAS字幕，然后归档ASR和BD/完整容量，不停。
+
+
+### 用户最终更正：C阶段连续30分钟，50/200后移F
+
+10场并发/50在线/1800秒连续录音归C，不归D；F接收50/200/7200。实时协议新场景realtime-10-30m已注册，负载全部23项PASS（load-c-caption-transport-full2.log），含真实客户端到达时刻与源结束时刻的计算/错源/提前到达拒绝，以及不提前2秒发送完整分片的调度验证。新连续场景禁用计划断ACK，原独立SIGKILL/原字节恢复证据保留；字幕完整覆盖和temporary≤3秒/stable≤5秒不放宽。完整Web520/type/build/OpenAPI83一致PASS；本地工具53项、49PASS/4SKIP（recording-source-dev-tools-full1.log）。录音归档两小时源文件测试it2正在真实运行，尚无最终结论，不是C并发容量。
+
+
+### 2026-11-01 22:55 用户要求当前批次结束后暂停
+
+已执行用户最新暂停指令，停止后续批次。当前精确入口docs/development/2026-11-01-bcd-pause-and-resume.md，机器状态PAUSED_BY_USER_AFTER_CURRENT_BATCH；本指令覆盖旧“D完成前不停”。六角色留运行、main/单agent/无提交、无Maven或负载批次。部署/工作区63f0089a45c840a748c302d33da42196033ed6975553433f31fc755a30580fee/V060已对齐。native-cas-04已结束，11实际检查点通过但总体FAIL：脚本假定RAW-only的CurrentTranscript.saved非null，需改读RAW revision detail.selected.segments；load transcribe_archive有同样假设，暂停前未修改。只读DB确认原归档READY/来源READY/任务SUCCEEDED/RAW持久化，详细IDs与新只读接续顺序见暂停文档。不得覆盖旧失败或重提原intake。C并发预检及1800秒实际验收尚未运行，B/D最终页面/控件/原型仍OPEN；50/200及两小时验证均移F。未来明确继续后从该阻点接续，不重做已通过的878Java/68实际IT/521Web等无变化范围。
+
+
+### 2026-11-01 用户恢复全部BCD（本轮最新状态）
+
+用户明确继续至BCD完成；覆盖上次暂停。根目录main/单agent已确认。上次常驻进程在宿主重启后均退出，Docker Desktop现已启动，按原持久卷及state恢复服务，不重建业务数据。负载RAW-only消费者真实RED AttributeError后改为history.id→revision detail.selected，并新增错来源/缺RAW/时间不足/错SHA拒绝；完整负载26PASS（resume-raw-consumer-full-green.log）。原case04不覆盖，新增只读接续验证，禁止再次intake或创建人工稿绕过。Ruling: 按真实wire history.id而非旧探针fixture的revisionId消费；RAW详情是本阶段独立来源和时间的验收事实。
+
+恢复只读原case04：RAW详情PASS（RAW-only正确），随后原archive实际GET503。开启真实API异常JFR，精确栈StorageContracts.StorageException NOT_FOUND→LocalFileClient.read→JdbcFileRegistry.open→RecordingArchiveRuntime.download。只读SQL确认原文件/副本仍AVAILABLE，文件root的objects/uploads当前为空（目录当前启动时新建），并非API授权故障。未写旧数据/伪造恢复/重提原intake；原只读resume01/02失败报告及JFR保留。Ruling: 原环境二进制对象缺失，必须用新原生录音case05完成当前实际字节闭环，旧case04十一项检查及RAW来源仅保留其真实边界，不升级完整通过。
+
+本轮原生case05完成13真实检查：新的真实CAS/Worklet/SIGKILL/原字节重发/刷新新段/暂停/路由/原intake202重放/独立RAW/18帧1004328字节全SHA。整例随后FAIL在验证器跨导航未收集AudioContext事实的计数，原失败不改；只读resume01/02/03分别保留无本地journal不能在采集页回听、hidden audio错误等探针失败。resume04五项全部PASS：原RAW详情/下载全WAV逐帧SHA/真实转写工作台播放/持久字幕DONE尾部与刷新/三视口无横向溢出/第二CAS对四条私有路由403，无业务写请求，部署与工作签名63f0089a一致。两份报告按链条采纳，不将旧整例FAIL改PASS。
+另以RED→GREEN修复30分钟录音在转写页因32MiB浏览器读取上限无法回听：仅实际recording parser投影标识、精确transcript source路由可选230400044有界预算，完整字节长度/SHA/规范16k单声道16位WAV再校验；默认二进制32MiB和公开上传不变。完整Web523/type/build/API83通过；正常部署中，完成后短预检再冻结1800秒采集。
+
+### D08 控件审查发现：录音材料入口仍指旧占位面板
+
+现状：RecordingPage的“添加背景资料”调用FuturePanels.materials；该分支无真实上传/引用，不能作为完成。方案比较：扩充FuturePanels会继续混合旧演示职责；复用UploadImportPanel会引入多余主文件受理；采用仅在RecordingPage内打开现有MaterialImportSection的原生dialog。用户已授权疑问自行选择，按此最小接线推进。
+设计：当前真实meetingId绑定材料组件，资料主文件独立；关闭/Escape/路由离开在材料busy或结果未知blocked时拒绝，原组件继续使用private journals及8792材料接口；没有新上传/权限/事务旁路。只读已结束录音仍由服务器EDIT权限决定是否可改材料。代价：材料面板保留组件真实状态和错误文案，与旧空占位面板的视觉差异需要纳入D08对照。
+实施顺序：真实CAS入口断言RED；复用组件接线与离开保护；同脚本验证真实上传/关闭/刷新持久回读；完整Web/type/build/API；正常部署后再容量短预检。
+
+2026-11-02 新部署d9afb285/V060/六角色，完整Web523/type/build/API83通过；录音材料入口真实RED→HMR完整上传/刷新3PASS→部署真实2PASS（包含持有真实GET时关闭/Escape不得离开），证据recording-material-entry-*。
+C首30秒预检resume01正式FAIL：150分片完整ACK/10归档/独立RAW成功，temporary p95=3671.14ms>3000，stable3161.65ms；首批seq1实际3566—4708ms，后续明显下降，全部冷启动样本保留。冻结工具先启动Worker随即重启文件服务，Worker启动probe遇存储窗口实际退出（worker.log精确栈），会后由原配置start-worker恢复并排空全部归档。该预检不具备六角色连续存活资格，不升级通过。修复工具：真实自有进程+实际listener等待，才继续冻结下一角色；采样识别Z/X状态，资源任务异常纳入负载主控；末尾实际PID与冻结角色需一致。实际listener/timeout/自有进程死亡测试RED→GREEN，负载全27PASS，未更改任何产品阈值或成功样本。新预检resume02已启动，产品代码冻结，尚无结论。
+
+C短预检resume02实际PASS：10录音/50真实CAS/30秒，150完整分片与10归档逐片校验，temp p95=1918.04ms/stable2868.56ms，1份完整录音独立RAW成功，0错误/0瞬态，source d9afb285与部署一致。原冷启动FAIL保留，新预检不排除任何初始事件。正式c-10-50-1800s-qualification-01已按realtime-10-30m场景启动，冻结运行角色、产品/driver源码和兄弟代码/配置；直到采集和会后完整处理排空都不执行构建、浏览器验证或产品/harness修改。此期间只读静态控件/原型/证据审查与文档整理，未有容量最终结论。
+
+### 2026-11-02 00:48 正式C10/50/1800资格批次PASS
+
+`recording-load/c-10-50-1800s-qualification-01/report.json`正式passed=true、reasons=[]；自有runner退出0、兄弟代码/配置摘要前后2e444177一致，产品/部署/结束签名d9afb285一致。10录音计入50真实CAS，连续最短1800.004685531秒，9000 sent/verified、10完整归档、missing/errors/transient均0。ACK p95=529.81ms；temporary6000事件p95=2012.78ms，stable3000事件p95=2405.82ms，完整逐路覆盖/DONE；1份完整30分钟57600044字节归档→独立来源→真实受理/生产worker→RAW成功。排空后结束约34分46秒，采集与会后处理分列。资源峰值owned AMA+client RSS1975537664字节/CPU296.87%，不含MySQL容器和内核cache。realModelQualified=false，受控兄弟接口吞吐/正确性不证明真实模型语义。原preflight01失败保留。
+
+解除冻结继续三个前端缺口及最终BD矩阵。672交互/489button静态审计与405生产button/545生产交互的证据映射已完成但不计操作成功；每项handler/实际API源码/相关正负例报告均有链接，仍待最终浏览器和像素汇合。
+
+</details>

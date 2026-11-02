@@ -1,3 +1,33 @@
+<!-- BCD_FINAL_HANDOFF_20261102 -->
+# 当前开发接续：BCD已完成
+
+本地受控桌面B/C/D开发与验证已完成，正常部署和工作源`86a1c312d1b11c24b590c2aa8f6eef764b8c636ca82a0767142a29cd5a3f2ebd`。当前没有活动验收批次或未决测试命令；这不是暂停请求。精确夹具状态、已完成操作、防重复提交规则和E/F边界见[当前接续](docs/development/2026-11-02-bcd-active-continuation.md)，逐任务与最终证据见[完成记录](docs/acceptance/bcd-completion-2026-11-02.md)。
+
+后续“继续任务”先读取上述两份文档及`.tools/local-app/task-current-status.json`，从E阶段边界接续。F保留50场/200在线、两小时长文件与长时/真实平台/部署资格；手机端开发计划和所有验收指标已完全移除，不安排到任何阶段。当前C标准10/50连续30分钟与30分钟长文件已正式通过。
+
+根目录/home/tanren/ama/main，单agent；外部统一兄弟/home/tanren/ama-integration-harness固定8792/2525，非公司权威。工作区改动保留。严格像素不是全部0：规范最终24图0，必要真实文案/审阅/恢复入口差异已明确裁定，原始FAIL保留。下方旧暂停/运行中/未接线/PENDING状态均为历史，不覆盖当前完成事实。
+
+<details>
+<summary>历史执行记录：旧运行/待办/暂停/候选状态均不覆盖上方最新检查点</summary>
+
+> **用户最新范围（2026-11-02）：仅桌面端1440×900、1024×768；全部手机端开发计划和验收指标移除，后续阶段也不安排。** 旧手机截图/报告仅保留历史，不新增适配或测试、不作为门槛，也不转入F。详[范围裁定](docs/development/2026-11-02-desktop-only-scope.md)。
+
+> **2026-11-02 最新状态：ACTIVE，用户已恢复至BCD完成。** 当前正在冻结执行C10/50连续1800秒及会后归档/RAW排空，未暂停。接续先读[当前活动任务](docs/development/2026-11-02-bcd-active-continuation.md)与[静态审查待修项](docs/development/2026-11-02-bcd-static-review.md)，机器状态 `.tools/local-app/task-current-status.json`。以下所有旧PAUSED/ACTIVE、旧容量和旧签名段落只保留历史，不覆盖此入口。
+
+> **2026-11-01 22:55 用户要求本批结束后暂停：PAUSED_BY_USER_AFTER_CURRENT_BATCH。** 当前已停开发验证，无Maven/负载/浏览器批次继续运行，应用六角色保持运行。精准接续见[本次暂停与接续](docs/development/2026-11-01-bcd-pause-and-resume.md)，机器状态`.tools/local-app/task-current-status.json`。实际部署/工作区一致63f0089a45c840a748c302d33da42196033ed6975553433f31fc755a30580fee，主V060/DB46431，web5174/API8182/管理8183。Java878、实际IT68PASS/1F-SKIP、Web521/type/build/API83、本地工具49PASS/4SKIP、负载工具26PASS。本批native-cas-04总体FAIL，11个实际检查点通过（含SIGKILL原PCM恢复和刷新同键202回执）；最终脚本错误读取nullable saved.segments，实际任务e519a93d-1d12-46cb-91ce-5392656a8222已SUCCEEDED、RAW3586e924-c532-4a43-8039-7a9ddc501215已落库。下一步修复private native脚本和load transcribe_archive相同RAW-only假设，并只读接续原04，不重提intake/不改旧失败。C10/50连续1800秒与长文件30分钟为当前标准；50/200及两小时验证归F。实际并发预检/长测尚未启动，B/D矩阵仍NOT_ACCEPTED。仅在用户“继续任务”后恢复；本条覆盖下方历史ACTIVE/禁止停描述。
+
+> **2026-11-01 22:16 活动接续（继续至D完成，不是结束）：** 最新验收以docs/development/2026-11-01-current-phase-acceptance.md为准。main/单agent/无分支worktree/无提交。主运行仍V059/99a84776696d0ffa044ccfd9df3e2a95daf5eceffcaa03c66d341c15de14b2ff，新V060来源/页面/专用期限尚未部署。30分钟源文件900片/57600044字节/15窗/75checkpoint→完整RAW在it1实际断言通过（elapsed317s/renewals123）；组合前台命令随后SIGTERM143，不能称全批通过。原Archive重试单次Optional夹具失败保留；有界真实poll已在it2归档7项PASS。当前唯一Maven为自有detached PID2533841，recording-thirty-minute-source-current-it2，覆盖source+Archive+DurableSubtitle+SpeechReview+Resource+Append，等待exit.json；勿并行Maven。录音专用期限普通60秒/recording600秒，Settings6参+旧构造兼容2测试RED→GREEN；LocalSpeechSetup待正常部署。Web520/type/build/API83及load26项通过。下一步：确认当前完整IT→生产Java→正常部署V060→新native归档转写丢ACK/刷新同键恢复CAS→10/50短预检→C连续1800秒和至少一份完整录音HTTP转写→BCD剩余页面/控件/原型闭环。两小时/50场200人均归F，不阻塞BCD。外部兄弟固定8792/2525，master不改端口；所有旧报告原样保留。
+
+> 2026-11-01 最新长文件验证裁定：当前C阶段仅要求30分钟长录音文件（28800000样本、57600044字节、900分片、15个120秒窗口/75 checkpoint）完整归档→独立受管转写来源→RAW；两小时长文件测试标准后移F。生产既有有界上限和旧失败证据保留，不靠扩大普通32MiB上传绕过来源授权。
+
+> 最新阶段与容量裁定（用户2026-11-01最终更正）：**C阶段**以10场会议并发、50人同时在线、持续不间断录音30分钟（1800秒）验证；10名录音用户计入50人，后台用户40。场景tools/load/scenarios/realtime-10-30m.json，CLI load realtime-10-30m。**50场并发/200人在线验证移到F阶段**（后台150、沿用7200秒场景realtime-50），不阻塞本轮BCD完成。每2秒分片、ACK/原始SHA完整性和字幕temporary p95≤3秒/stable p95≤5秒保持；D沿用其业务/页面验收义务，不另设该容量门槛。下文100/300及旧50/200计划/报告保留历史，不自动折算为C或F已验收。
+
+> 当前继续执行（覆盖下方历史暂停段）：用户要求所有BCD/D完成前不停，main/单agent/不建worktree、不自动提交。C03纠错/人工说话人已实际CAS通过；C06生产持久字幕/API/RecordingPage已接线尚未正常部署，V059仅测试库bf39889988a8已应用不可改。49项相关真实IT、Web512/type/build/OpenAPI82全部PASS；生产Java正在执行c06-production-java1.log。下一正常部署V059→c06_native_subtitles_cas.mjs真实原生/CAS/WS/归档/字幕/刷新/三视口/第二身份→独立两小时归档ASR（计划2026-11-01-recording-archive-transcription.md）→BD逐控件原型与100/300/7200/时延；未验完不得结束。harness master固定8792/2525/PID2265462，无效JSON400修复65测试及真实五400/资源证据PASS，非公司权威。所有失败原报告/请求保留。
+
+> **持续执行最新检查点：用户要求全部BCD/D完成前不停，单agent/main，外部固定兄弟8792/2525。** 当前C03纠错/版本化人工说话人核心已落地V058；14项MySQL+mTLS+固定harness集成、实际删除1项、Java873、Web506曾通过。正常部署V058后实际CAS first6PASS；新的两文件lostACK UI刷新恢复已通过，但整例02因脚本假定候选ID序=段序而FAIL，保留；原fixture a9b02092-401e-4eea-92af-3d75707936dd继续，不重提旧接受。原resume01已UNDO/原键不回挂/bulk拒绝通过，人工王工标注服务端200已提交，但回执漏operationId客户端正确保留原请求。真实HTTP已RED并已补SPEAKERS回执条件；验证正在c03-speaker-operation-receipt-green + c03-speaker-receipt-production-java.log；Web侧原speaker按钮改真实focus/summary，完整验证c03-speaker-focus-web.log。随后正常部署→c03_resume_label_receipt_cas.mjs 新目录，恢复原标注key再完成第二标注/merge/rename/确认后的Minutes完整源图/三视口/外人。C06细化在docs/superpowers/plans/2026-11-01-c06-durable-subtitles.md，尚未实现；两小时独立归档ASR/完整BD页面矩阵/最终容量仍OPEN。**继续，不在C03局部通过后结束。**
+
+> **当前用户已恢复全部BCD，D全部完成前继续，不询问、不停在局部批次。** main/单agent/无worktree/分支/提交。外部接口固定兄弟8792/2525，允许同步修复，不能当企业权威。当前C03 HTTP/OpenAPI/SDK/私有journal/面板已实现；wire6PASS、后端+实际MVC8PASS（含runtime unavailable原键恢复）、生产Java867PASS、Web500/type/build/契约一致PASS。已正常部署V057/六角色，c03-real-cas-01浏览器执行中。进一步工作：完成实际CAS纠错→版本化说话人→C06持久字幕/独立长录音ASR→全BD页面原型按钮矩阵→实际冻结容量。当前机器状态ACTIVE_BCD_COMPLETION；旧暂停是历史，不是本轮停止许可。统一台账 docs/superpowers/plans/2026-11-01-bcd-completion.md。
+
 <!-- AUTHORITATIVE_USER_PAUSE_C03_20261101 -->
 > **2026-11-01 当前权威状态：本批收尾后按用户要求暂停。** 用户最新指令是“完成当前批次调度之后，就停下，记录当前任务状态信息以及接续文档”。本批C03后端已完成验证，没有下一批正在执行；下方历史“D完成前不停”“尚未接线”“测试运行中”等记录均不能覆盖本段。仅收到“继续任务”等恢复指令后再推进。
 >
@@ -632,3 +662,5 @@ W=`.superpowers/sdd/2026-10-23-ama-phase-b-remaining`。已封存13份可变前�
 最新证据：固定 CAS/材料导入浏览器流程 10/10、harness 全量 31 passed、Web E2E 28/28、Web 单元 337/337、C focused Java/load/build/OpenAPI checks 全通过。最新 B report 在 [`docs/acceptance/b/b-followup-final-2026-10-30.md`](docs/acceptance/b/b-followup-final-2026-10-30.md)，C 记录在 [`docs/acceptance/c/summary.md`](docs/acceptance/c/summary.md)。
 
 阶段结论仍为 `NOT ACCEPTED`：主页全页差异含真实数据数量/空态差异，名单第二身份与完整撤权、Office/转写/纪要/审阅/最终冻结/发布/专题/反馈逐页 CRUD 证据尚未全部闭环；语音业务继续 `DEFERRED_VOICE`。全量 Maven 还保留既有 `StoredSourceGraphTest` 的 `PROFILE_UNAVAILABLE` 夹具失败（2 failures + 3 errors）。不要用历史报告或静态 demo 把这些行升级为 PASS。
+
+</details>

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 @Configuration(proxyBeanMethods=false) class TranscriptConfiguration {
  private static final Logger LOG=LoggerFactory.getLogger(TranscriptConfiguration.class);
  record Runtime(JdbcSavedTranscripts service,CorrectionInstallation correction,Map<String,Object> qualification) {}
+ @Bean SpeechReviewReceipts speechReviewReceipts(DataSource source,TransactionRunner tx,MeetingAccess access){return new SpeechReviewReceipts(source,tx,access);}
  @Bean JdbcSavedTranscriptReceipts savedTranscriptReceipts(DataSource source,TransactionRunner tx,MeetingAccess access){return new JdbcSavedTranscriptReceipts(source,tx,access);}
  @Bean Runtime transcriptRuntime(ProcessingConfiguration.Runtime processing,DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,Environment env,ApplicationContext context){
   if(!env.getProperty("transcript.enabled",Boolean.class,false))return new Runtime(null,null,Map.of());
@@ -32,7 +33,7 @@ import org.slf4j.LoggerFactory;
   var providers=context.getBeansOfType(CorrectionInstallation.Provider.class).entrySet().stream().map(e->e.getKey()+":"+e.getValue().getClass().getName()).sorted().toList();
   String selected=env.getProperty("transcript.correction.mode"),declared=env.getProperty("transcript.correction.installation"),version=env.getProperty("transcript.correction.installation-version");
   String boot=UUID.randomUUID().toString();String qualification="saved-correction-v1-"+boot;
-  var declaration=Objects.equals(selected,declared)&&"DISABLED_NOT_INSTALLED".equals(declared)?new CorrectionInstallation.Declaration(selected,version,qualification):null;
+  var declaration=Objects.equals(selected,declared)&&Set.of("DISABLED_NOT_INSTALLED","CONTROLLED_SPEECH").contains(declared==null?"":declared)?new CorrectionInstallation.Declaration(selected,version,qualification):null;
   var correction=CorrectionInstallation.compose(declaration,providers);
   var candidateProviders=context.getBeansOfType(SavedTranscriptTransitions.CandidateProvider.class).entrySet().stream().map(e->e.getKey()+":"+e.getValue().getClass().getName()).sorted().toList();var publicationProviders=context.getBeansOfType(SavedTranscriptTransitions.PublicationProvider.class).entrySet().stream().map(e->e.getKey()+":"+e.getValue().getClass().getName()).sorted().toList();
   var transitions=new SavedTranscriptTransitions(env.getProperty("transcript.candidates.installation"),env.getProperty("transcript.publication.installation"),env.getProperty("transcript.transitions.installation-version"),candidateProviders,publicationProviders);

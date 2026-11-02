@@ -31,7 +31,7 @@ final class StoredFactsIndex {
    }
   }
   for(var anchor:facts.evidenceAnchors()){check(cancelled);require(anchors.putIfAbsent(anchor.evidenceId(),anchor.anchor())==null,SOURCE_MEMBERSHIP_MISMATCH);}
-  validateMembershipRows();check(cancelled);
+  ama.transcript.TranscriptSpeakerProof.validate(facts.rows());validateMembershipRows();check(cancelled);
  }
  List<FullRow> rows(Table table){check(cancelled);return tables.getOrDefault(table,List.of());}
  List<FullRow> matching(Table table,String column,String value){

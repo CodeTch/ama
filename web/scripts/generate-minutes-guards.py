@@ -2,7 +2,8 @@
 import json, pathlib, sys
 root=pathlib.Path(__file__).resolve().parents[2]
 selected={'minutes.yaml':['MinutesCandidates','MinutesCandidate','SavedHistory','SavedBodyDetail','SavedSetDetail','SavedSettings','SavedReviewHistory','SavedReviewDetail','SavedSource','SavedReadiness'], 'publications.yaml':['FinalReadiness','FinalDetail','FinalHistory','FinalAcknowledgment','PublicationCurrent','PublicationAcknowledgment','SubmissionPage','AttemptPage','DestinationLibraryPage','DestinationFolderPage']}
-selected['transcripts.yaml']=['TranscriptReplacementSearch','TranscriptOperationReceipt']
+selected['transcripts.yaml']=['TranscriptReplacementSearch','TranscriptOperationReceipt','SpeechCorrections','CorrectionProposalReceipt','SpeechSpeakers']
+selected['recording.yaml']=['RecordingSubtitles', 'RecordingTranscriptSource']
 annotations={'description','title','example','examples','deprecated','readOnly','writeOnly','default'}
 keywords={'$ref','type','const','enum','oneOf','anyOf','allOf','required','properties','additionalProperties','items','maxItems','minItems','uniqueItems','pattern','maxLength','minLength','format','minimum','maximum','exclusiveMinimum','exclusiveMaximum'}
 result={}

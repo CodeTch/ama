@@ -14,7 +14,7 @@ public record ConfiguredProcessing(ArchiveReadBudget read,CanonicalBudget canoni
   var c=new CanonicalBudget(n(env,"canonical-bytes"),i(env,"canonical-depth"),n(env,"canonical-nodes"),n(env,"canonical-string-utf8"),n(env,"canonical-scalars"));
   var ix=new ConfigArchiveIndex.IndexBudget(n(env,"index-bytes"),i(env,"index-entries"),n(env,"release-bytes"),i(env,"index-generations"));
   var aggregate=new TranscriptDocumentParser.ParseBudget(n(env,"total-source-bytes"),n(env,"total-utf16"),i(env,"total-segments"));
-  var settings=new TranscriptImportRuntime.Settings(()->new ControlledConfigArchiveSource().open(Path.of(env.getRequiredProperty("processing.archive-root")),env.getRequiredProperty("processing.index-sha"),ix,b,()->false),b,aggregate,Duration.ofMillis(n(env,"batch-deadline-ms")));
+  var settings=new TranscriptImportRuntime.Settings(()->new ControlledConfigArchiveSource().open(Path.of(env.getRequiredProperty("processing.archive-root")),env.getRequiredProperty("processing.index-sha"),ix,b,()->false),b,aggregate,Duration.ofMillis(n(env,"batch-deadline-ms")),env.getProperty("processing.bounds.recording-source-bytes",Long.class,0L),Duration.ofMillis(env.getProperty("processing.bounds.recording-batch-deadline-ms",Long.class,n(env,"batch-deadline-ms"))));
   for(String key:new String[]{"lease-seconds","heartbeat-seconds","poll-seconds"})if(env.getRequiredProperty("worker."+key,Integer.class)!=(key.equals("lease-seconds")?20:5))throw new IllegalArgumentException("Unsupported worker timing profile");
   return new ConfiguredProcessing(b,c,ix,settings);
  }

@@ -1,3 +1,5 @@
+> 当前范围已按用户最新要求调整：仅桌面端1440×900、1024×768；所有手机端开发与验收项已移出，不属于F待办。历史多视口报告保留原文，不再作为手机端门槛。详见 [桌面端范围裁定](../../development/2026-11-02-desktop-only-scope.md)。
+
 # 新鲜发布会议与个人专题验收（2026-11-01）
 
 `/home/tanren/ama` main，单agent，standard、固定harness HTTP8792 / SMTP2525，无分支/worktree/提交/重置。源码及部署 `c7d15b5ba2cdd328b6995f78f1683e2f83405686668c72aed6a0ef35bffa8857` 一致。

@@ -71,7 +71,7 @@ public final class JdbcSavedTranscripts {
   try{requireTransitions();writable(snapshot,command);write=plan(actor,prepare(snapshot,budget),command,budget);pending=authority.prepareMinutesTransition(actor,meeting,selection.discovered().ancestry().values().stream().map(row->row.get(4)).filter(Objects::nonNull).toList(),budget);}catch(RuntimeException failure){cancellation(failure);error=failure;}
   final var expected=write;final var failed=error;final var contribution=pending;
   return authority.transactionRunner().required(()->{
-   var stored=receipts.claim(actor,meeting,identity);var gate=authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);JdbcSavedTranscriptReceipts.match(stored);
+   var stored=receipts.claim(actor,meeting,identity);var gate=mutationGate(actor,meeting,command);JdbcSavedTranscriptReceipts.match(stored);
    if(failed!=null&&!ordinaryPreparationFailure(failed))throw failed;
    if(stored.result()!=null)return receipts.restore(meeting,stored,command,true);
    if(failed!=null)throw failed;
@@ -87,11 +87,15 @@ public final class JdbcSavedTranscripts {
    var subject=fences.lock(new SubjectRef("MEETING",meeting),false).orElseThrow(()->fail(PROVENANCE_UNAVAILABLE));
    require(!subject.deleted()&&subject.businessVersion()==revision&&subject.cancelEpoch()==SavedTranscriptGraph.num(fresh.root(),"cancel_epoch"),PROVENANCE_UNAVAILABLE);
    if(!confirming)require(fresh.maximumHistory()<=revision&&j.queryForObject("SELECT COUNT(*) FROM transcript_revision WHERE meeting_id=? AND revision=?",Long.class,meeting,revision+1)==0,PROVENANCE_UNAVAILABLE);
+   for(var row:expected.created())if(row.table()==Table.TRANSCRIPT_SPEAKER_SNAPSHOT){
+    authority.requireSavedHeld(held,gate,actor,meeting);require(j.update("INSERT INTO speaker(id,meeting_id,display_name,enterprise_id,identity_source,merged_into_id,revision) VALUES (?,?,?,?,'HUMAN',NULL,1)",row.string("id"),meeting,row.string("label"),row.nullableString("enterprise_id"))==1,PROVENANCE_UNAVAILABLE);
+   }
    for(var row:expected.created())insert(row);
    var read=new SavedTranscriptRows(j,budget,authority.readBudget().maxManifestBytes());var actual=new ArrayList<FullRow>();
    if(!expected.created().isEmpty()){
     if(confirming)actual.addAll(read.rows(Table.TRANSCRIPT_CONFIRMATION,"id=?","id",1,true,expected.resultId()));
     else {actual.addAll(read.rows(Table.TRANSCRIPT_REVISION,"id=?","id",1,true,expected.resultId()));var segments=read.deferRows(Table.TRANSCRIPT_SEGMENT,"revision_id=?","segment_id",(int)Math.min(Integer.MAX_VALUE-2L,authority.readBudget().maxFactRows()),true,expected.resultId());var marks=read.deferRows(Table.TRANSCRIPT_SEGMENT_MARK,"revision_id=?","segment_id,mark",(int)Math.min(Integer.MAX_VALUE-2L,authority.readBudget().maxFactRows()),true,expected.resultId());actual.addAll(segments.get());actual.addAll(marks.get());}
+    if(!confirming){actual.addAll(read.rows(Table.TRANSCRIPT_SPEAKER_CHANGE,"revision_id=?","segment_id",4096,true,expected.resultId()));for(var row:expected.created())if(row.table()==Table.TRANSCRIPT_SPEAKER_SNAPSHOT)actual.addAll(read.rows(Table.TRANSCRIPT_SPEAKER_SNAPSHOT,"id=?","id",1,true,row.string("id")));}
     require(actual.size()==expected.created().size()&&new HashSet<>(actual).equals(new HashSet<>(expected.created())),PROVENANCE_UNAVAILABLE);
    }
    if(!confirming&&speechReviewInstalled())speechReviews.afterRevision(held,gate,actor,fresh,command,expected.resultId(),actual);
@@ -106,6 +110,10 @@ public final class JdbcSavedTranscripts {
    outbox.flush();return response;
   });
  }
+ private FileRegistry.LockedMeeting mutationGate(Actor actor,String meeting,ama.contract.TranscriptContracts.Command command){
+  var speakers=command.speakers();if(speakers==null||speakers.enterpriseId()==null)return authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);
+  var affected=List.of(speakers.enterpriseId());var access=authority.savedAccess();var identities=access.tryLockIdentities(actor,affected,false).orElseThrow(MeetingAccess.AccessDeniedException::new);var held=access.lockPrepared(identities,meeting,false).orElseThrow(MeetingAccess.AccessDeniedException::new);access.requirePrepared(held,actor,meeting,affected,MeetingAccess.Action.EDIT);return authority.fileRegistry().adopt(actor,meeting,held,MeetingAccess.Action.EDIT);
+ }
  private static boolean ordinaryPreparationFailure(RuntimeException error){
   if(error instanceof Failure f)return Set.of(ARCHIVE_IO_UNAVAILABLE,CAPABILITY_UNAVAILABLE,BUDGET_EXCEEDED,READ_FAILED).contains(f.code());
   if(error instanceof ama.contract.FileContracts.Unavailable||error instanceof ama.contract.FileContracts.Conflict||error instanceof ama.contract.FileContracts.NotFound)return true;
@@ -116,7 +124,7 @@ public final class JdbcSavedTranscripts {
   if(SavedTranscriptGraph.num(root,"ever_published")!=0||!"ACTIVE".equals(root.get("lifecycle"))||!"ACTIVE".equals(root.get("governance_state"))||"PUBLISHED".equals(root.get("stage")))throw new ama.contract.TranscriptContracts.Failure(409,"MEETING_NOT_WRITABLE");
   boolean working=graph.selectedRow().string("kind").equals("WORKING");var op=command.operation();
   if(op==ama.contract.TranscriptContracts.Operation.CORRECTION&&!speechReviewInstalled())throw new ama.contract.TranscriptContracts.Failure(503,"CORRECTION_UNAVAILABLE");
-  if((op==ama.contract.TranscriptContracts.Operation.CONFIRM||op==ama.contract.TranscriptContracts.Operation.MARKS||op==ama.contract.TranscriptContracts.Operation.REPLACE||op==ama.contract.TranscriptContracts.Operation.UNDO||op==ama.contract.TranscriptContracts.Operation.CORRECTION)&&!working)throw new ama.contract.TranscriptContracts.Failure(422,"WORKING_REQUIRED");
+  if((op==ama.contract.TranscriptContracts.Operation.CONFIRM||op==ama.contract.TranscriptContracts.Operation.MARKS||op==ama.contract.TranscriptContracts.Operation.REPLACE||op==ama.contract.TranscriptContracts.Operation.UNDO||op==ama.contract.TranscriptContracts.Operation.CORRECTION||op==ama.contract.TranscriptContracts.Operation.SPEAKERS)&&!working)throw new ama.contract.TranscriptContracts.Failure(422,"WORKING_REQUIRED");
   if(op!=ama.contract.TranscriptContracts.Operation.RESTORE&&working&&!graph.selected().equals(root.get("transcript_revision_id")))throw new ama.contract.TranscriptContracts.Failure(409,"CURRENT_REVISION_REQUIRED");
   if(op==ama.contract.TranscriptContracts.Operation.CONFIRM){correction.requireReady();if(speechReviewInstalled()&&speechReviews.pending(graph)!=0)throw new ama.contract.TranscriptContracts.Failure(422,"CORRECTIONS_PENDING");}
   else require(canAppend(graph),BUDGET_EXCEEDED);
@@ -132,6 +140,8 @@ public final class JdbcSavedTranscripts {
    if(existing.isEmpty())created.add(planned(budget,Table.TRANSCRIPT_CONFIRMATION,id,graph.meeting(),graph.selected(),prepared.hash(),actor.enterpriseId(),time));else id=existing.getFirst().string("id");
    if(graph.root().get("transcript_confirmation_id")!=null)require(id.equals(graph.root().get("transcript_confirmation_id")),PROVENANCE_UNAVAILABLE);
   }else{
+   String newSpeaker=null;var speakerEdit=command.speakers();
+   if(speakerEdit!=null){var known=graph.segments(graph.selected()).stream().map(row->row.string("segment_id")).collect(java.util.stream.Collectors.toSet());if(!known.containsAll(speakerEdit.segmentIds()))throw new ama.contract.TranscriptContracts.Failure(422,"SEGMENT_IDENTITY_CHANGED");newSpeaker=UUID.randomUUID().toString();created.add(planned(budget,Table.TRANSCRIPT_SPEAKER_SNAPSHOT,newSpeaker,graph.meeting(),speakerEdit.label(),speakerEdit.enterpriseId(),"HUMAN",TranscriptSpeakerProof.digest(newSpeaker,graph.meeting(),speakerEdit.label(),speakerEdit.enterpriseId())));}
    var parent=graph.selectedRow();created.add(planned(budget,Table.TRANSCRIPT_REVISION,id,graph.meeting(),command.expectedRevision()+1,"WORKING",parent.string("batch_id"),graph.selected(),parent.string("input_fingerprint"),actor.enterpriseId(),time,parent.string("processing_input_id"),null));
    var segments=graph.segments(graph.selected());var operation=command.operation();boolean edits=operation==ama.contract.TranscriptContracts.Operation.SAVE||operation==ama.contract.TranscriptContracts.Operation.MARKS;
    boolean undo=operation==ama.contract.TranscriptContracts.Operation.UNDO;
@@ -147,7 +157,9 @@ public final class JdbcSavedTranscripts {
     require(original.get(i).string("segment_id").equals(segment.string("segment_id")),PROVENANCE_UNAVAILABLE);
     String body=operation==ama.contract.TranscriptContracts.Operation.SAVE?edit.body():replaced!=null?replaced.get(i).body():original.get(i).string("body");content|=!body.isBlank();
     if(correctionDecision!=null&&command.correction().decision()==ama.contract.TranscriptContracts.CorrectionDecision.ACCEPT&&segment.string("segment_id").equals(correctionDecision.get("segment_id")))body=(String)correctionDecision.get("after_text");
-    created.add(planned(budget,Table.TRANSCRIPT_SEGMENT,id,segment.string("segment_id"),segment.number("ordinal"),body,segment.string("source_file_id"),segment.nullableNumber("source_paragraph"),segment.nullableNumber("start_ms"),segment.nullableNumber("end_ms"),segment.nullableString("speaker_id")));
+    String speaker=speakerEdit!=null&&speakerEdit.segmentIds().contains(segment.string("segment_id"))?newSpeaker:original.get(i).nullableString("speaker_id");
+    created.add(planned(budget,Table.TRANSCRIPT_SEGMENT,id,segment.string("segment_id"),segment.number("ordinal"),body,segment.string("source_file_id"),segment.nullableNumber("source_paragraph"),segment.nullableNumber("start_ms"),segment.nullableNumber("end_ms"),speaker));
+    if(!Objects.equals(segment.nullableString("speaker_id"),speaker))created.add(planned(budget,Table.TRANSCRIPT_SPEAKER_CHANGE,id,segment.string("segment_id"),segment.nullableString("speaker_id"),speaker));
     List<Mark> marks=edits?edit.marks():preservedMarks.getOrDefault(segment.string("segment_id"),List.of());
     for(var mark:marks)created.add(planned(budget,Table.TRANSCRIPT_SEGMENT_MARK,id,segment.string("segment_id"),mark.name()));
    }
@@ -241,7 +253,15 @@ public final class JdbcSavedTranscripts {
   var full=revision==null?readCurrent(actor,meeting):readOwner(actor,meeting,revision);var selected=(Map<?,?>)full.get("selected");var result=new LinkedHashMap<String,Object>();result.put("revisionId",selected==null?null:selected.get("id"));result.put("complete",true);result.put("observation",full.get("observation"));result.put("sourceBytes",full.get("sourceBytes"));result.put("storedInspection",full.get("storedInspection"));
   var marks=new ArrayList<Map<String,Object>>();if(selected!=null)for(var value:(List<?>)selected.get("segments")){var segment=(Map<?,?>)value;marks.add(Map.of("segmentId",segment.get("segmentId"),"marks",segment.get("marks")));}result.put("segments",List.copyOf(marks));return Collections.unmodifiableMap(result);
  }
- private Map<String,Object> read(Actor actor,String meeting,String revision,JdbcTranscriptAuthority.SavedPurpose purpose){
+ public Map<String,Object> readSpeakers(Actor actor,String meeting,String revision){
+  uuid(meeting);uuid(revision);boolean current=j.queryForList("SELECT transcript_revision_id FROM meeting WHERE id=?",String.class,meeting).equals(List.of(revision));return read(actor,meeting,revision,current?JdbcTranscriptAuthority.SavedPurpose.CURRENT:JdbcTranscriptAuthority.SavedPurpose.OWNER_INSPECTION,true);
+ }
+ private Map<String,Object> speakerProjection(SavedTranscriptGraph graph){
+  var items=new ArrayList<Map<String,Object>>();for(var snapshot:graph.rows())if(snapshot.table()==Table.TRANSCRIPT_SPEAKER_SNAPSHOT){var segments=graph.segments(graph.selected()).stream().filter(r->snapshot.string("id").equals(r.nullableString("speaker_id"))).map(r->r.string("segment_id")).toList();if(segments.isEmpty())continue;var item=new LinkedHashMap<String,Object>();item.put("id",snapshot.string("id"));item.put("label",snapshot.string("label"));item.put("enterpriseId",snapshot.nullableString("enterprise_id"));item.put("source","HUMAN");item.put("segmentIds",segments);items.add(Collections.unmodifiableMap(item));}
+  items.sort(Comparator.comparing(v->(String)v.get("id")));return Map.of("meetingId",graph.meeting(),"sourceRevisionId",graph.selected(),"observation",observation(graph.root()),"items",List.copyOf(items));
+ }
+ private Map<String,Object> read(Actor actor,String meeting,String revision,JdbcTranscriptAuthority.SavedPurpose purpose){return read(actor,meeting,revision,purpose,false);}
+ private Map<String,Object> read(Actor actor,String meeting,String revision,JdbcTranscriptAuthority.SavedPurpose purpose,boolean speakersOnly){
   independent();uuid(meeting);var budget=limits.ledger(authority.readBudget(),admission.canonical(),()->false);var selection=discover(meeting,revision,budget);
   var snapshot=acquire(actor,meeting,selection,purpose,budget);Prepared prepared=null;RuntimeException error=null;
   try{prepared=prepare(snapshot,budget);}catch(RuntimeException failure){cancellation(failure);error=failure;}
@@ -254,7 +274,7 @@ public final class JdbcSavedTranscripts {
    boolean owner=actor.enterpriseId().equals(fresh.root().get("owner_id"));
    if(!owner&&fresh.selected()!=null)require(fresh.root().get("transcript_confirmation_id")!=null&&fresh.rows().stream().anyMatch(r->r.table()==Table.TRANSCRIPT_CONFIRMATION&&r.string("id").equals(fresh.root().get("transcript_confirmation_id"))),CAPABILITY_UNAVAILABLE);
    if(purpose==JdbcTranscriptAuthority.SavedPurpose.CURRENT&&fresh.selected()!=null)require(fresh.selectedRow().string("kind").equals("WORKING"),PROVENANCE_UNAVAILABLE);
-   return projection(expected,owner);
+   return speakersOnly?speakerProjection(fresh):projection(expected,owner);
   });
  }
  private Prepared prepare(SavedTranscriptGraph graph,TranscriptAcquisitionBudget.Ledger budget){
@@ -272,18 +292,19 @@ public final class JdbcSavedTranscripts {
   var fingerprintMembers=new ArrayList<BatchFingerprint.Member>();long order=1;for(var m:members){require(m.number("ordinal")==order++,PROVENANCE_UNAVAILABLE);var f=byFile.get(m.string("file_id"));require(f!=null&&f.sha256().equals(m.string("sha256")),PROVENANCE_UNAVAILABLE);fingerprintMembers.add(new BatchFingerprint.Member(m.number("ordinal"),f.id(),f.sha256(),f.sizeBytes()));}
   var batch=graph.rows().stream().filter(r->r.table()==Table.INPUT_BATCH).findFirst().orElseThrow(()->fail(PROVENANCE_UNAVAILABLE));
   require(new BatchFingerprint().compute(graph.meeting(),batch.string("id"),"TRANSCRIPT",batch.number("base_revision"),fingerprintMembers,authority.canonicalBudget(),()->false).equals(batch.string("input_fingerprint")),FINGERPRINT_MISMATCH);
+  TranscriptSpeakerProof.validate(graph.rows());
   var revisions=graph.rows().stream().filter(r->r.table()==Table.TRANSCRIPT_REVISION).toList();
   for(var r:revisions){
    require(r.string("batch_id").equals(input.string("batch_id"))&&r.string("processing_input_id").equals(input.string("id"))&&r.string("input_fingerprint").equals(verified.fingerprint()),PROVENANCE_UNAVAILABLE);
    var segments=graph.segments(r.string("id"));require(!segments.isEmpty()&&segments.size()<=verified.parseBudget().maxSegments(),BUDGET_EXCEEDED);long ordinal=1;boolean content=false;
-   for(var segment:segments){require(segment.number("ordinal")==ordinal++&&TranscriptSegmentProvenance.timing(input.string("parser_version"),segment.nullableNumber("start_ms"),segment.nullableNumber("end_ms"),segment.nullableString("speaker_id"))&&segment.nullableNumber("source_paragraph")!=null&&segment.number("source_paragraph")>0&&byFile.containsKey(segment.string("source_file_id")),PROVENANCE_UNAVAILABLE);content|=!segment.string("body").isBlank();}
+   for(var segment:segments){require(segment.number("ordinal")==ordinal++&&TranscriptSegmentProvenance.timing(input.string("parser_version"),segment.nullableNumber("start_ms"),segment.nullableNumber("end_ms"),null)&&segment.nullableNumber("source_paragraph")!=null&&segment.number("source_paragraph")>0&&byFile.containsKey(segment.string("source_file_id")),PROVENANCE_UNAVAILABLE);content|=!segment.string("body").isBlank();}
    require(content,INPUT_INVALID);
    var segmentIds=segments.stream().map(s->s.string("segment_id")).collect(java.util.stream.Collectors.toSet());
    for(var mark:graph.rows())if(mark.table()==Table.TRANSCRIPT_SEGMENT_MARK&&mark.string("revision_id").equals(r.string("id")))require(segmentIds.contains(mark.string("segment_id")),PROVENANCE_UNAVAILABLE);
    if(r.string("kind").equals("RAW"))require(r.number("revision")==expected.businessVersion()&&r.nullableString("parent_id")==null&&r.string("producer_task_id").equals(graph.task().get("id")),PROVENANCE_UNAVAILABLE);
    else {
     require(r.string("kind").equals("WORKING")&&r.nullableString("producer_task_id")==null&&r.nullableString("parent_id")!=null,PROVENANCE_UNAVAILABLE);var parentRow=revisions.stream().filter(candidate->candidate.string("id").equals(r.string("parent_id"))).findFirst().orElseThrow(()->fail(PROVENANCE_UNAVAILABLE));require(parentRow.number("revision")<r.number("revision"),PROVENANCE_UNAVAILABLE);var parent=graph.segments(r.string("parent_id"));require(parent.size()==segments.size(),PROVENANCE_UNAVAILABLE);
-    for(int i=0;i<segments.size();i++)for(String field:List.of("segment_id","ordinal","source_file_id","source_paragraph","start_ms","end_ms","speaker_id"))require(segments.get(i).value(field).equals(parent.get(i).value(field)),PROVENANCE_UNAVAILABLE);
+    for(int i=0;i<segments.size();i++)for(String field:List.of("segment_id","ordinal","source_file_id","source_paragraph","start_ms","end_ms"))require(segments.get(i).value(field).equals(parent.get(i).value(field)),PROVENANCE_UNAVAILABLE);
    }
   }
   var context=binding.begin(facts,raw,authority.readBudget(),()->false);var profile=context.confirmation(input);context.finish();String hash=null;

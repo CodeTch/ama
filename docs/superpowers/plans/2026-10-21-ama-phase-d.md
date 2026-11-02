@@ -1,3 +1,15 @@
+<!-- BCD_LOCAL_CONTROLLED_COMPLETION_20261102 -->
+# 当前执行结论
+
+本计划适用的本地受控BCD任务已完成；逐任务结果、真实证据、范围与必要视觉差异见[当前完成记录](/home/tanren/ama/docs/acceptance/bcd-completion-2026-11-02.md)。当前仅1440×900、1024×768，手机开发与全部验收完全移除且不归F。C为10/50连续1800秒与30分钟长文件；50/200与两小时仍F。旧未勾选模板/停止点作为历史保留，不要求重做已完成或重复已受理命令。E/F尚未启动。
+
+<details>
+<summary>历史执行记录：原始状态、失败与当时接续条件，均不覆盖上方当前结论</summary>
+
+> 当前范围已按用户最新要求调整：仅桌面端1440×900、1024×768；所有手机端开发与验收项已移出，不属于F待办。历史多视口报告保留原文，不再作为手机端门槛。详见 [桌面端范围裁定](../../development/2026-11-02-desktop-only-scope.md)。
+
+> 2026-11-01 用户最终更正：10场并发/50人在线/连续30分钟录音是C阶段验收标准，50/200验证移F；D保留原业务与页面验收任务，不另设该容量门槛。
+
 > **2026-10-28 当前范围（AMA-DEMO-FIRST-20261028 R2）**：按[Demo 优先调整计划](2026-10-28-ama-demo-first-adjustment.md)执行；前期本地 MySQL＋本地文件＋单机，优先原型页面与核心业务联调。已完成/已采纳能力保留，不重做；S3、双 MySQL、双活全部尚未完成的专用实现、配置、测试和依赖归最后 F，前期不新增相关抽象或架构改造。本轮仅调整文档。 D-08 中 Demo 页面的复刻与对照验收拆入 B；D 的其余页面/业务仍按依赖交付，S3 读取/删除/恢复专属部分归 DEP-S3/DEP-MIGRATE。
 
 ---
@@ -115,7 +127,7 @@
 
 ## Task D-08：个人专题与全页面视觉/交互收口
 
-**拆分顺序（R2）：** 当前 Demo 页面按[逐页矩阵](2026-10-28-ama-demo-first-adjustment.md)分入 DEMO-01～04，随对应功能一起复刻和联调，05 汇合：1440×900 原型对照、1024×768 关键布局可用；已有 shell 零像素断言保留。原型尚未索引的纪要/审阅/发布状态须先从原件实际补录参考；信息抽屉等关键形态不能以“功能可点”代替。复用已采纳页面及协议，允许必要的模板/CSS/交互呈现调整。个人专题、非关键差异及全产品三视口/像素收口仍在 D-08，前置部分不重新开发。
+**拆分顺序（R2）：** 当前 Demo 页面按[逐页矩阵](2026-10-28-ama-demo-first-adjustment.md)分入 DEMO-01～04，随对应功能一起复刻和联调，05 汇合：1440×900 原型对照、1024×768 关键布局可用；已有 shell 零像素断言保留。原型尚未索引的纪要/审阅/发布状态须先从原件实际补录参考；信息抽屉等关键形态不能以“功能可点”代替。复用已采纳页面及协议，允许必要的模板/CSS/交互呈现调整。个人专题、非关键差异及全产品两个桌面视口/像素收口仍在 D-08，前置部分不重新开发。
 
 **Files:** Create `backend/core/src/main/java/ama/topic/TopicService.java`、`backend/adapters/src/main/resources/db/migration/V015__topics.sql`、`backend/integration-tests/src/test/java/ama/topic/TopicAccessIT.java`、`web/src/features/topic/TopicPanel.vue`、`web/tests/e2e/topics.spec.ts`、`web/tests/visual/business-pages.spec.ts`、`docs/acceptance/d/page-matrix.md`。
 
@@ -123,7 +135,7 @@
 
 - [ ] 写别人专题直接访问403、未发布会议归集422、非空专题删除409；`assertEquals(403, outsider.status());`；视觉覆盖导入/录音/转写/纪要/确认/发布/回看/专题及各弹窗。
 - [ ] 运行 `python3 tools/checks/run.py it TopicAccessIT`、`python3 tools/checks/run.py e2e topics.spec.ts`、`python3 tools/checks/run.py visual business-pages.spec.ts`，确认行为/布局失败。
-- [ ] 实现专题与名称去重；按原型补齐空态、加载、错误、权限失效、长名称、窄屏和焦点保持；专题不改变正文版本或授权。
+- [ ] 实现专题与名称去重；按原型补齐空态、加载、错误、权限失效、长名称、1024px桌面布局和焦点保持；专题不改变正文版本或授权。
 - [ ] 重跑测试；审阅原型对比而非直接更新截图掩盖差异；页面矩阵每个按钮均关联真实接口及成功/失败路径，E 阶段治理页面单列后续验收。
 - [ ] 提交 `feat: complete personal topics and business page fidelity`。
 
@@ -132,3 +144,5 @@
 - [ ] 一期已定义主业务所有页面和规则已覆盖，D-01…D-18 中尚缺规则明确落实到决定台账或 E 阶段任务。
 - [ ] local 的上传、回听、来源、导出、删除全链路通过；无隐藏 S3/双 MySQL/双活必需依赖。S3 适配与全链路差异验证归最后 F，原始义务保留。
 - [ ] `docs/acceptance/d/summary.md` 包含交互/视觉/权限/异常证据；不能只因截图一致就宣布功能完成。
+
+</details>

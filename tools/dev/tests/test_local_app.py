@@ -69,12 +69,18 @@ class ConfigurationIsolationTests(unittest.TestCase):
 
     def test_harness_origins_are_explicit_bounded_and_preserved_separately(self):
         with patch.dict(os.environ, {}, clear=True):
-            self.assertEqual({'knowledge':None,'model':None,'cas':'http://127.0.0.1:8792'},app.integration_origins())
+            self.assertEqual({'knowledge':None,'model':None,'cas':'http://127.0.0.1:8792','directory':'http://127.0.0.1:8792'},app.integration_origins())
         with patch.dict(os.environ, {'AMA_INTEGRATION_KNOWLEDGE_ORIGIN':'http://127.0.0.1:8792','AMA_INTEGRATION_MODEL_ORIGIN':'http://127.0.0.1:8792'},clear=True):
-            self.assertEqual({'knowledge':'http://127.0.0.1:8792','model':'http://127.0.0.1:8792','cas':'http://127.0.0.1:8792'},app.integration_origins())
+            self.assertEqual({'knowledge':'http://127.0.0.1:8792','model':'http://127.0.0.1:8792','cas':'http://127.0.0.1:8792','directory':'http://127.0.0.1:8792'},app.integration_origins())
         for value in ['http://127.0.0.1:65536','http://remote:8792','http://127.0.0.1:8792/path','https://127.0.0.1:8792']:
             with self.subTest(value=value),patch.dict(os.environ,{'AMA_INTEGRATION_MODEL_ORIGIN':value},clear=True):
                 with self.assertRaises(ValueError):app.integration_origins()
+
+    def test_directory_provider_is_the_fixed_sibling_and_cannot_silently_change_ports(self):
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertEqual('http://127.0.0.1:8792', app.integration_origins()['directory'])
+        with patch.dict(os.environ, {'AMA_INTEGRATION_DIRECTORY_ORIGIN':'http://127.0.0.1:8793'}, clear=True):
+            with self.assertRaises(ValueError):app.integration_origins()
 
     def test_changing_only_the_model_harness_origin_requires_a_real_restart(self):
         ports={'web':5174,'api':8182,'management':8183}

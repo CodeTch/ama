@@ -18,7 +18,7 @@ final class MinutesGraphDiscovery {
  record Selector(String table,String column,Object value,String qualifier) {}
  private record Definition(String name,List<String> keys,List<String> columns) {}
  private record Query(String table,String column,Object value,int depth,boolean required,String qualifier) {Query(String table,String column,Object value,int depth,boolean required){this(table,column,value,depth,required,"");}}
- private static final Set<String> CONTENT=Set.of("body","title","name","themes","reason","target_anchor","section_path","owner_display","owner_mention","config_manifest","external_version","instructions");
+ private static final Set<String> CONTENT=Set.of("body","title","name","themes","reason","target_anchor","section_path","owner_display","owner_mention","config_manifest","external_version","instructions","label");
  private static final Map<String,Definition> DEFINITIONS=definitions();
  private final JdbcTemplate j;private final String meeting,kind,selected;private final int maximum;private int taskMaximum=256,fileMaximum=64,revisionMaximum=256,depthMaximum=128;private long byteMaximum=16777216;
  private final ArrayDeque<Query> pending=new ArrayDeque<>();
@@ -93,7 +93,7 @@ final class MinutesGraphDiscovery {
    case "transcript_revision"->{
     require(Set.of("RAW","WORKING").contains(r.get("kind")),CAPABILITY_UNAVAILABLE);
     parent("durable_task",r.get("producer_task_id"),depth);parent("transcript_revision",r.get("parent_id"),depth);parent("transcription_input",r.get("processing_input_id"),depth);parent("input_batch",r.get("batch_id"),depth);
-    children("transcript_segment","revision_id",id,depth);children("transcript_segment_mark","revision_id",id,depth);children("transcript_confirmation","revision_id",id,depth);identity(r,"created_by");
+    children("transcript_segment","revision_id",id,depth);children("transcript_segment_mark","revision_id",id,depth);children("transcript_speaker_change","revision_id",id,depth);children("transcript_confirmation","revision_id",id,depth);identity(r,"created_by");
    }
    case "transcription_input"->{inputTasks("TRANSCRIPTION_INPUT",id,depth);require("IMPORT".equals(r.get("kind"))&&"EMPTY".equals(r.get("material_mode")),CAPABILITY_UNAVAILABLE);unsupported(r,"material_snapshot_id");unsupported(r,"source_revision_id");parent("input_batch",r.get("batch_id"),depth);}
    case "input_batch"->{pending.addLast(new Query("file_reference","owner_id",id,depth,false," AND owner_kind='INPUT_BATCH_FILE'"));children("input_batch_file","batch_id",id,depth);children("input_batch_fingerprint_profile","batch_id",id,depth);}
@@ -140,7 +140,10 @@ final class MinutesGraphDiscovery {
    case "external_execution"->{parent("external_operation",r.get("operation_id"),depth);parent("durable_task",r.get("task_id"),depth);}
    case "external_operation"->{require("MEETING".equals(r.get("subject_kind"))&&meeting.equals(r.get("subject_id")),PROVENANCE_UNAVAILABLE);children("external_execution","operation_id",id,depth);}
    case "file_object"->pending.addLast(new Query("upload_session","completed_file_id",id,depth,false," AND state='COMPLETED'"));
-   case "upload_session","file_reference","task_attempt","transcript_segment","transcript_segment_mark","input_batch_fingerprint_profile"->{}
+   case "transcript_segment"->parent("transcript_speaker_snapshot",r.get("speaker_id"),depth);
+   case "transcript_speaker_change"->{parent("transcript_speaker_snapshot",r.get("before_speaker_id"),depth);parent("transcript_speaker_snapshot",r.get("after_speaker_id"),depth);}
+   case "transcript_speaker_snapshot"->identity(r,"enterprise_id");
+   case "upload_session","file_reference","task_attempt","transcript_segment_mark","input_batch_fingerprint_profile"->{}
    default->throw fail(CAPABILITY_UNAVAILABLE);
   }
  }

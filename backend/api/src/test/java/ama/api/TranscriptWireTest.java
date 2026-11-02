@@ -16,4 +16,20 @@ class TranscriptWireTest {
   var body=Map.of("body","\u0000".repeat(10));int exact=("{\"body\":\""+"\\u0000".repeat(10)+"\"}").getBytes(StandardCharsets.UTF_8).length;
   assertEquals(exact,TranscriptWire.response(body,exact).length);assertEquals(503,assertThrows(Failure.class,()->TranscriptWire.response(body,exact-1)).status());
  }
+ @Test void correctionDecisionBindsOnlyTheServerCandidateAndRejectsArbitraryText()throws Exception {
+  String body="{\"expectedRevisionToken\":\"7\",\"sourceRevisionId\":\""+R+"\",\"candidateId\":\""+S+"\",\"decision\":\"ACCEPT\"}";
+  var command=TranscriptWire.parse(new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8)),-1,Operation.CORRECTION);
+  assertEquals(S,command.correction().candidateId());assertEquals(CorrectionDecision.ACCEPT,command.correction().decision());
+  for(String invalid:List.of(body.replace("ACCEPT","accept"),body.replace("\"decision\"","\"replacement\""),body.replace("}",",\"body\":\"untrusted model text\"}"),body.replace("}",",\"candidateId\":\""+R+"\"}"),body.replace(",\"candidateId\":\""+S+"\"","")))assertThrows(RuntimeException.class,()->TranscriptWire.parse(new ByteArrayInputStream(invalid.getBytes(StandardCharsets.UTF_8)),-1,Operation.CORRECTION));
+ }
+ @Test void proposalUsesTheSameBoundedStrictRevisionEnvelope()throws Exception {
+  String body="{\"expectedRevisionToken\":\"9007199254740993\",\"sourceRevisionId\":\""+R+"\"}";
+  var request=TranscriptWire.proposal(new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8)),-1);assertEquals(9007199254740993L,request.expectedRevision());assertEquals(R,request.sourceRevisionId());
+  assertThrows(RuntimeException.class,()->TranscriptWire.proposal(new ByteArrayInputStream(body.replace("}",",\"text\":\"forged\"}").getBytes(StandardCharsets.UTF_8)),-1));
+ }
+ @Test void humanSpeakersAreStrictExplicitSegmentLabelsRatherThanClientSpeakerIds()throws Exception {
+  String body="{\"expectedRevisionToken\":\"7\",\"sourceRevisionId\":\""+R+"\",\"segmentIds\":[\""+S+"\"],\"label\":\"人工王工\",\"enterpriseId\":null}";
+  var command=TranscriptWire.parse(new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8)),-1,Operation.SPEAKERS);assertEquals(List.of(S),command.speakers().segmentIds());assertEquals("人工王工",command.speakers().label());
+  assertThrows(RuntimeException.class,()->TranscriptWire.parse(new ByteArrayInputStream(body.replace("}",",\"speakerId\":\""+R+"\"}").getBytes(StandardCharsets.UTF_8)),-1,Operation.SPEAKERS));
+ }
 }

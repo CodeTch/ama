@@ -74,3 +74,10 @@ test('a transcript conflict code does not alter unscoped or unrelated HTTP error
 });
 
 test('published-only topic admission has a precise private-safe rejection message',async()=>{await assert.rejects(request(origin+'/topic-not-published'),(e:unknown)=>e instanceof ApiError&&e.kind==='http'&&e.status===422&&e.code==='TOPIC_NOT_PUBLISHED'&&e.message==='仅本人负责的已发布会议可归入专题。');});
+
+test('a body completion already queued by transport cannot acknowledge a caller-aborted request',async()=>{
+ const old=fetch,caller=new AbortController();let writer!:ReadableStreamDefaultController<Uint8Array>,readStarted!:()=>void;
+ const started=new Promise<void>(r=>readStarted=r),body=new ReadableStream<Uint8Array>({start(c){writer=c;},pull(){if(body.locked)readStarted();}});
+ globalThis.fetch=async()=>new Response(body,{headers:{'Content-Type':'application/json'}});
+ try{const pending=request('https://ama.test/api/v1/session',{signal:caller.signal});await started;caller.abort();writer.enqueue(new TextEncoder().encode('{"value":42}'));writer.close();await assert.rejects(pending,{name:'AbortError'});}finally{globalThis.fetch=old;}
+});

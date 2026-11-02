@@ -20,8 +20,8 @@ public final class MediaTranscriptParser implements MeasuredTranscriptDocumentPa
  public static final String PROFILE_VERSION="ama.media-documents.v2";
  public static final List<String> LEGACY_FORMATS=List.of("TXT","DOC","DOCX","PDF","PPTX","MP3","WAV","M4A","MP4","MOV","MKV","WEBM");
  public static final List<String> FORMATS=List.of("TXT","DOC","DOCX","PDF","PPTX","MP3","WAV","M4A","MP4","MOV","MKV","WEBM","AAC","FLAC","OGG","M4V","AVI","SRT","VTT");
- public static boolean supportsProfile(String version){return PROFILE_VERSION.equals(version)||LEGACY_PROFILE_VERSION.equals(version)||"ama.media-documents.v3".equals(version);}
- public static List<String> formats(String version){if(!supportsProfile(version))throw new IllegalArgumentException("Unsupported media profile");return LEGACY_PROFILE_VERSION.equals(version)?LEGACY_FORMATS:FORMATS;}
+ public static boolean supportsProfile(String version){return PROFILE_VERSION.equals(version)||LEGACY_PROFILE_VERSION.equals(version)||"ama.media-documents.v3".equals(version)||RecordingTranscriptProfile.PARSER.equals(version);}
+ public static List<String> formats(String version){if(!supportsProfile(version))throw new IllegalArgumentException("Unsupported media profile");return RecordingTranscriptProfile.PARSER.equals(version)?List.of("WAV"):LEGACY_PROFILE_VERSION.equals(version)?LEGACY_FORMATS:FORMATS;}
  private static final long SOURCE_LIMIT=32L*1024*1024;
  public record Config(Path python,Path runner,Path model,Path manifest,String manifestSha256,long timeoutMillis){
   public Config {if(python==null||runner==null||model==null||manifest==null||manifestSha256==null||!manifestSha256.matches("[0-9a-f]{64}")||timeoutMillis<1||timeoutMillis>3600000)throw new IllegalArgumentException("Explicit bounded media engine required");}

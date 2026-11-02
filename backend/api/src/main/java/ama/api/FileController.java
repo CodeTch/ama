@@ -49,6 +49,7 @@ class FileController {
     ResponseEntity<Accepted> begin(@PathVariable String id, HttpServletRequest request)
             throws IOException {
         var body = parse(request, Set.of("purpose", "name", "size", "sha256"));
+        if("TRANSCRIPT_INPUT".equals(text(body,"purpose",true))&&number(body,"size")>32L*1024*1024)throw new RequestTooLarge();
         return ResponseEntity.status(201)
                 .body(
                         uploads.begin(

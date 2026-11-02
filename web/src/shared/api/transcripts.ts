@@ -9,7 +9,7 @@ export type TranscriptDetail=components['schemas']['OwnerDetail'];
 export type TranscriptReceipt=components['schemas']['Receipt'];
 export type TranscriptSegment=components['schemas']['Segment'];
 export type TranscriptHistory=components['schemas']['History'];
-export type TranscriptSource={fileId:string;sha256:string;sizeBytes:number;revisionId:string|null};
+export type TranscriptSource={fileId:string;sha256:string;sizeBytes:number;revisionId:string|null;recordingWav?:boolean};
 const object=(v:unknown):v is Record<string,unknown>=>typeof v==='object'&&v!==null&&!Array.isArray(v);
 const exact=(v:Record<string,unknown>,keys:string)=>Object.keys(v).sort().join(',')===keys;
 const shape=(v:unknown,keys:string):v is Record<string,unknown>=>object(v)&&exact(v,keys);
@@ -28,7 +28,7 @@ function saved(v:unknown,owner=false):v is components['schemas']['OwnerSaved']|c
 }
 function common(v:Record<string,unknown>,meeting:string){
  return v.meetingId===meeting&&observation(v.observation)&&v.storedInspection==='AVAILABLE'&&typeof v.needsGeneration==='boolean'
- &&shape(v.correction,'mode,qualificationId,readiness')&&['DISABLED_NOT_INSTALLED','UNAVAILABLE'].includes(String(v.correction.mode))&&['NOT_APPLICABLE','UNAVAILABLE'].includes(String(v.correction.readiness))&&nullableText(v.correction.qualificationId)
+ &&shape(v.correction,'mode,qualificationId,readiness')&&['DISABLED_NOT_INSTALLED','UNAVAILABLE','CONTROLLED_SPEECH'].includes(String(v.correction.mode))&&['NOT_APPLICABLE','UNAVAILABLE','READY'].includes(String(v.correction.readiness))&&nullableText(v.correction.qualificationId)
  &&shape(v.capabilities,'canConfirm,canReadHistory,canReadSources,canRestore,canSave')&&Object.values(v.capabilities).every(x=>typeof x==='boolean')
  &&(v.confirmation===null||confirmation(v.confirmation))&&Array.isArray(v.sources)&&v.sources.length<=4096&&v.sources.every(s=>shape(s,'fileId,ordinal,sha256,sizeBytes,sizeBytesToken')&&uuid(s.fileId)&&number(s.ordinal)&&hash(s.sha256)&&number(s.sizeBytes)&&revisionToken(s.sizeBytesToken))&&new Set(v.sources.map(s=>s.fileId)).size===v.sources.length
  &&Array.isArray(v.sourceBytes)&&v.sourceBytes.length===v.sources.length&&v.sourceBytes.every(s=>shape(s,'eligibility,fileId,reason')&&uuid(s.fileId)&&['ELIGIBLE','INELIGIBLE','UNAVAILABLE'].includes(String(s.eligibility))&&['AVAILABLE','SOURCE_EPOCH_CHANGED','FILE_UNAVAILABLE','ROUTE_UNAVAILABLE'].includes(String(s.reason)))&&new Set(v.sourceBytes.map(s=>s.fileId)).size===v.sourceBytes.length;
@@ -50,10 +50,11 @@ function freeze<T>(v:T):T{if(v!==null&&typeof v==='object'){Object.values(v).for
 function invalid():never{throw new ApiError('response',200,'转写响应暂无法确认，请保留草稿并重新读取。');}
 export function createTranscriptsApi(client:ReturnType<typeof createBusinessClient>,actor:()=>string|null){return {
  async source(meeting:string,source:TranscriptSource,signal:AbortSignal):Promise<{blob:Blob;name:string|null}>{
-  if(!uuid(meeting)||!uuid(source.fileId)||source.revisionId!==null&&!uuid(source.revisionId)||!hash(source.sha256)||!Number.isSafeInteger(source.sizeBytes)||source.sizeBytes<0||source.sizeBytes>32*1024*1024)throw new TypeError('Exact original source required');
+  if(!uuid(meeting)||!uuid(source.fileId)||source.revisionId!==null&&!uuid(source.revisionId)||!hash(source.sha256)||!Number.isSafeInteger(source.sizeBytes)||source.sizeBytes<0||source.sizeBytes>(source.recordingWav===true?230400044:32*1024*1024))throw new TypeError('Exact original source required');
   const who=actor();if(!who)throw new DOMException('Source actor unavailable','AbortError');const path=`/api/v1/meetings/${meeting}/transcript${source.revisionId===null?'':`/revisions/${source.revisionId}`}/sources/${source.fileId}`;
-  const value=await client.bytes(path,{signal,size:source.sizeBytes});const actual=[...new Uint8Array(await crypto.subtle.digest('SHA-256',value.bytes))].map(x=>x.toString(16).padStart(2,'0')).join('');if(signal.aborted||actor()!==who)throw new DOMException('Source actor changed','AbortError');if(actual!==source.sha256)throw new ApiError('response',200,'原文件校验失败，请重新读取会议。');
+  const value=await client.bytes(path,{signal,size:source.sizeBytes,recordingWav:source.recordingWav===true});const actual=[...new Uint8Array(await crypto.subtle.digest('SHA-256',value.bytes))].map(x=>x.toString(16).padStart(2,'0')).join('');if(signal.aborted||actor()!==who)throw new DOMException('Source actor changed','AbortError');if(actual!==source.sha256)throw new ApiError('response',200,'原文件校验失败，请重新读取会议。');
   const p=new Uint8Array(value.bytes),name=value.name?.toLowerCase()??'';let type='application/octet-stream';
+  if(source.recordingWav===true){const v=new DataView(value.bytes);if(p.length<44||String.fromCharCode(...p.subarray(0,4))!=='RIFF'||String.fromCharCode(...p.subarray(8,16))!=='WAVEfmt '||String.fromCharCode(...p.subarray(36,40))!=='data'||v.getUint32(4,true)!==p.length-8||v.getUint32(16,true)!==16||v.getUint16(20,true)!==1||v.getUint16(22,true)!==1||v.getUint32(24,true)!==16000||v.getUint32(28,true)!==32000||v.getUint16(32,true)!==2||v.getUint16(34,true)!==16||v.getUint32(40,true)!==p.length-44||(p.length-44)%2!==0)throw new ApiError('response',200,'录音来源格式校验失败，请重新读取会议。');}
   if(p.length>=12&&String.fromCharCode(...p.subarray(0,4))==='RIFF'&&String.fromCharCode(...p.subarray(8,12))==='WAVE')type='audio/wav';else if(p.length>=3&&String.fromCharCode(...p.subarray(0,3))==='ID3'||p.length>=2&&p[0]===255&&((p[1]??0)&224)===224)type='audio/mpeg';else if(p.length>=8&&String.fromCharCode(...p.subarray(4,8))==='ftyp')type=name.endsWith('.m4a')?'audio/mp4':name.endsWith('.mov')?'video/quicktime':'video/mp4';else if(p.length>=4&&p[0]===26&&p[1]===69&&p[2]===223&&p[3]===163)type=name.endsWith('.mkv')?'video/x-matroska':'audio/webm';
   return{blob:new Blob([value.bytes],{type}),name:value.name};
  },

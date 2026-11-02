@@ -30,10 +30,13 @@ public final class TranscriptImportRuntime {
   return new SpeechExecutionMaintenance(queue,policy.components.authority(),java.nio.file.Path.of(runtime));
  }
  public record Settings(Supplier<ConfigArchiveSource.Snapshot> archives,ArchiveReadBudget archiveBudget,
-                        TranscriptDocumentParser.ParseBudget aggregate,Duration batchDeadline) {
+                        TranscriptDocumentParser.ParseBudget aggregate,Duration batchDeadline,long recordingSourceBytes,Duration recordingBatchDeadline) {
+  public Settings(Supplier<ConfigArchiveSource.Snapshot> archives,ArchiveReadBudget archiveBudget,TranscriptDocumentParser.ParseBudget aggregate,Duration batchDeadline){this(archives,archiveBudget,aggregate,batchDeadline,0,batchDeadline);}
+  public Settings(Supplier<ConfigArchiveSource.Snapshot> archives,ArchiveReadBudget archiveBudget,TranscriptDocumentParser.ParseBudget aggregate,Duration batchDeadline,long recordingSourceBytes){this(archives,archiveBudget,aggregate,batchDeadline,recordingSourceBytes,batchDeadline);}
+  public Duration deadlineFor(String parser){return recordingSourceBytes==RecordingTranscriptProfile.MAX_BYTES&&RecordingTranscriptProfile.PARSER.equals(parser)?recordingBatchDeadline:batchDeadline;}
   public Settings {
-   Objects.requireNonNull(archives);Objects.requireNonNull(archiveBudget);Objects.requireNonNull(aggregate);Objects.requireNonNull(batchDeadline);
-   if(aggregate.maxSourceBytes()<=0||aggregate.maxUtf16CodeUnits()<=0||aggregate.maxSegments()<=0||batchDeadline.isZero()||batchDeadline.isNegative()||batchDeadline.compareTo(Duration.ofHours(1))>0)throw new IllegalArgumentException("Finite import bounds required");
+   Objects.requireNonNull(archives);Objects.requireNonNull(archiveBudget);Objects.requireNonNull(aggregate);Objects.requireNonNull(batchDeadline);Objects.requireNonNull(recordingBatchDeadline);
+   if(recordingBatchDeadline.isZero()||recordingBatchDeadline.isNegative()||recordingBatchDeadline.compareTo(Duration.ofHours(1))>0||recordingSourceBytes<0||recordingSourceBytes>RecordingTranscriptProfile.MAX_BYTES||aggregate.maxSourceBytes()<=0||aggregate.maxUtf16CodeUnits()<=0||aggregate.maxSegments()<=0||batchDeadline.isZero()||batchDeadline.isNegative()||batchDeadline.compareTo(Duration.ofHours(1))>0)throw new IllegalArgumentException("Finite import bounds required");
   }
  }
  public static JdbcTaskQueue install(DataSource source,JdbcSubjectFences fences,JdbcOutbox outbox,JdbcTranscriptAuthority.Components components) {
@@ -83,13 +86,17 @@ public final class TranscriptImportRuntime {
    public TaskResult get(){throw new IllegalStateException("QUEUE_PATH_REQUIRED");}
   }
   Supplier<TaskResult> prepareRaw(TaskLease lease,Settings settings,PreparationCancellation cancellation) throws Exception {
-   long deadline=System.nanoTime()+settings.batchDeadline().toNanos();
-   BooleanSupplier cancelled=()->cancellation.cancelled()||System.nanoTime()-deadline>=0;
+   long started=System.nanoTime();var deadline=new java.util.concurrent.atomic.AtomicLong(started+settings.batchDeadline().toNanos());
+   BooleanSupplier cancelled=()->cancellation.cancelled()||System.nanoTime()-deadline.get()>=0;
    String failurePrefix="TXT_";
-   try(var sourceLifetime=new ama.storage.SourceReadLifetime(cancellation,deadline)) {
+   try {
     check(cancelled);
     var facts=components.authority().readWorkerFacts(lease,cancelled);
     var input=facts.rows().stream().filter(row->row.table()==Table.TRANSCRIPTION_INPUT&&row.string("id").equals(lease.spec().input().id())).findFirst().orElseThrow();
+    // Only the actual retained task facts choose a separate deny-only lifetime.
+    // Manifest/profile/origin verification and all S/F authorization still follow below.
+    deadline.set(started+settings.deadlineFor(input.string("parser_version")).toNanos());
+    try(var sourceLifetime=new ama.storage.SourceReadLifetime(cancellation,deadline.get())) {
     byte[] original=input.string("config_manifest").getBytes(StandardCharsets.UTF_8);
     var state=new ArchiveReadState(settings.archiveBudget(),cancelled);
     var manifest=new StrictProcessingManifestReader().read(state.capture(original,true),state);
@@ -101,13 +108,16 @@ public final class TranscriptImportRuntime {
     var members=facts.rows().stream().filter(row->row.table()==Table.INPUT_BATCH_FILE).sorted(Comparator.comparingLong(row->row.number("ordinal"))).toList();
     require(!members.isEmpty()&&members.size()<=settings.archiveBudget().maxBatchFiles(),BUDGET_EXCEEDED);
     var files=new HashMap<String,ContentFile>();for(var file:facts.files())require(files.put(file.id(),file)==null,PROVENANCE_UNAVAILABLE);
-    long declared=0;for(var member:members){var file=files.get(member.string("file_id"));require(file!=null&&file.sizeBytes()<=settings.aggregate().maxSourceBytes()-declared,BUDGET_EXCEEDED);declared+=file.sizeBytes();}
-    boolean speechProfile=binding.parser().version().equals(ControlledSpeechProfile.PARSER);MeasuredTranscriptDocumentParser parser=speechProfile?null:media?mediaParser(binding.engineManifestSha256(),binding.parser().version()):documents?new OfficeTranscriptParser():new TextTranscriptParser();var segments=new ArrayList<TranscriptDocumentParser.Segment>();long bytes=0,units=0,samples=0;
-    try(var speech=speechProfile?new SpeechMediaPipeline(queue,components,lease,binding.engineManifestSha256(),cancelled):null){
+    boolean recordingProfile=RecordingTranscriptProfile.PARSER.equals(binding.parser().version());
+    if(recordingProfile)require(settings.recordingSourceBytes()==RecordingTranscriptProfile.MAX_BYTES&&members.size()==1,PROFILE_UNAVAILABLE);
+    var aggregate=recordingProfile?new TranscriptDocumentParser.ParseBudget(settings.recordingSourceBytes(),settings.aggregate().maxUtf16CodeUnits(),settings.aggregate().maxSegments()):settings.aggregate();
+    long declared=0;for(var member:members){var file=files.get(member.string("file_id"));require(file!=null&&file.sizeBytes()<=aggregate.maxSourceBytes()-declared,BUDGET_EXCEEDED);declared+=file.sizeBytes();}
+    boolean speechProfile=recordingProfile||binding.parser().version().equals(ControlledSpeechProfile.PARSER);MeasuredTranscriptDocumentParser parser=speechProfile?null:media?mediaParser(binding.engineManifestSha256(),binding.parser().version()):documents?new OfficeTranscriptParser():new TextTranscriptParser();var segments=new ArrayList<TranscriptDocumentParser.Segment>();long bytes=0,units=0,samples=0;
+    try(var speech=speechProfile?new SpeechMediaPipeline(queue,components,lease,binding.engineManifestSha256(),binding.parser().version(),cancelled):null){
     for(var member:members){
      check(cancelled);var file=files.get(member.string("file_id"));
-     long remainingBytes=settings.aggregate().maxSourceBytes()-bytes,remainingUnits=settings.aggregate().maxUtf16CodeUnits()-units;
-     int remainingSegments=settings.aggregate().maxSegments()-segments.size();
+     long remainingBytes=aggregate.maxSourceBytes()-bytes,remainingUnits=aggregate.maxUtf16CodeUnits()-units;
+     int remainingSegments=aggregate.maxSegments()-segments.size();
      require(remainingBytes>0&&remainingUnits>0&&remainingSegments>0&&file.sizeBytes()<=remainingBytes,BUDGET_EXCEEDED);
      var budget=new TranscriptDocumentParser.ParseBudget(Math.min(binding.parseBudget().maxSourceBytes(),remainingBytes),Math.min(binding.parseBudget().maxUtf16CodeUnits(),remainingUnits),Math.min(binding.parseBudget().maxSegments(),remainingSegments));
      MeasuredTranscriptDocumentParser.MeasuredResult measured;
@@ -121,6 +131,7 @@ public final class TranscriptImportRuntime {
     }
     check(cancelled);String owner=queue.jdbc.queryForObject("SELECT owner_id FROM meeting WHERE id=?",String.class,lease.spec().subject().id());
     return new Carrier(new Raw(lease,UUID.randomUUID().toString(),owner,input.string("batch_id"),Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS),segments,null),cancelled);
+    }
    } catch(TranscriptDocumentParser.ParseException failure){
     check(cancelled);return failed(lease,failurePrefix+failure.code().name(),cancelled);
    } catch(ama.contract.MinutesContracts.Failure|ama.contract.FileContracts.Unavailable|ama.contract.FileContracts.NotFound|java.io.IOException failure){

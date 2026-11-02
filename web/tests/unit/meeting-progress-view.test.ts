@@ -8,6 +8,8 @@ test('meeting progress reflects saved facts and never treats hidden member detai
   const base={stage:'ENTRY',relation:'MEMBER',saved:{transcriptRevisionId:'saved',transcriptConfirmationId:null,minutesRevisionId:null,elementSetId:null},privateSections:null};
   const working=await render(base);assert.match(working,/aria-label="会议处理环节"/);assert.match(working,/<button[^>]*data-step="2"[^>]*aria-current="step"/);assert.doesNotMatch(working,/已发布/);
   const minutes=await render({...base,saved:{...base.saved,transcriptConfirmationId:'confirmed',minutesRevisionId:'minutes',elementSetId:'elements'}});assert.match(minutes,/<button[^>]*data-step="4"[^>]*aria-current="step"/);assert.match(minutes,/data-step="4"[^>]*data-complete="false"/);
+  assert.doesNotMatch(minutes,/<button[^>]*data-step="4"[^>]*disabled/);
+  const pending=await render({...base,saved:{...base.saved,transcriptConfirmationId:'confirmed',minutesRevisionId:'minutes',elementSetId:'elements'},privateSections:{candidates:{items:[{id:'actual-pending'}],hasMore:false}}});assert.match(pending,/<button[^>]*data-step="4"[^>]*disabled/);
   const published=await render({...base,stage:'PUBLISHED'});assert.match(published,/data-step="5"[^>]*aria-current="step"/);assert.equal((published.match(/data-complete="true"/g)??[]).length,5);
  }finally{await server.close();}
 });

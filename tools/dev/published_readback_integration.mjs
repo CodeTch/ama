@@ -38,7 +38,7 @@ try{
  const before=await current();assert.equal(before.observation.readOnlyReason,'PUBLISHED');assert(before.body&&before.setId);
  await page.goto(base+`/meeting/${meetingId}/published`);
  await expect(page.locator('.minutes .core-content')).toBeVisible();
- for(const [width,height] of [[1440,900],[1024,768],[390,844]]){
+ for(const [width,height] of [[1440,900],[1024,768]]){
   await page.setViewportSize({width,height});
   const tabs=page.getByRole('navigation',{name:'纪要内容',exact:true});await expect(tabs).toBeVisible();
   await tabs.getByRole('button',{name:'核心要素',exact:true}).click();await expect(page.locator('.minutes .core-content')).toBeVisible();

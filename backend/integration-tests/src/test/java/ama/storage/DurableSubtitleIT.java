@@ -1,0 +1,92 @@
+package ama.storage;
+import ama.contract.IdentityContracts.*;import ama.contract.RecordingContracts;import ama.db.TransactionRunner;import ama.meeting.*;import ama.recording.*;import ama.task.*;import java.io.*;import java.nio.*;import java.nio.file.Path;import java.util.*;import org.junit.jupiter.api.*;import org.junit.jupiter.api.io.TempDir;import static org.junit.jupiter.api.Assertions.*;import static ama.storage.ControlledSpeechImportIT.*;
+/** Actual committed mTLS PCM -> fixed harness ASR -> durable revisioned captions. */
+class DurableSubtitleIT {
+ @TempDir Path root;
+ @BeforeAll static void schema(){ControlledSpeechImportIT.schema();assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=1 AND version='059'",Integer.class));}
+ final class Fixture implements AutoCloseable {
+  final ManagedLocalFixture nativeFiles;final FileStoragePort storage;final FileBackendCatalog catalog;final TransactionRunner tx;final JdbcMeetingAccess access;final MeetingService meetings;final Actor actor;final String meeting;final JdbcRecordingPersistence persistence;final RecordingService recordings;final RecordingContracts.Session session;final JdbcLiveSubtitles live;final byte[] pcm=new byte[64000];
+  Fixture()throws Exception {this(true);}
+  Fixture(boolean install)throws Exception {
+   nativeFiles=new ManagedLocalFixture(root.resolve(id()));storage=nativeFiles.startServer();catalog=new FileBackendCatalog(source,List.of(new FileBackendCatalog.Backend(nativeFiles.binding.id(),"local",1,"WRITABLE",storage,nativeFiles.binding)),nativeFiles.binding.id());catalog.configure();tx=new TransactionRunner(source);var fences=new JdbcSubjectFences(source,Set.of("MEETING"));access=new JdbcMeetingAccess(source,tx,fences);var outbox=new JdbcOutbox(source,new MeetingEventReferences(source).validators());String owner="live-subtitle-"+id();j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",owner,owner);actor=new Actor(owner,Status.ACTIVE,Set.of(Role.USER));meetings=new MeetingService(new JdbcMeetingRepository(source,tx,access,fences,outbox,new ama.audit.JdbcAuditAdapter(source),m->{}));meeting=meetings.create(actor,id(),"durable-live-subtitles").id();persistence=new JdbcRecordingPersistence(source,catalog);recordings=new RecordingService(persistence);session=tx.required(()->{access.require(access.lock(actor,meeting),ama.access.MeetingAccess.Action.EDIT);return recordings.open(meeting,nativeFiles.binding.id());});new java.security.SecureRandom().nextBytes(pcm);live=new JdbcLiveSubtitles(source,access,persistence,ControlledSpeechProfile.fromRuntime(Path.of(System.getenv("AMA_LOCAL_SPEECH_RUNTIME"))));if(install)live.start(actor,session.sessionId());
+  }
+  RecordingContracts.Ack accept(long seq)throws Exception {return tx.required(()->{access.require(access.lock(actor,meeting),ama.access.MeetingAccess.Action.EDIT);return recordings.accept(session.sessionId(),session.writerEpoch(),new RecordingContracts.Chunk(session.partId(),session.writerEpoch(),seq,(seq-1)*32000,32000,pcm));});}
+  byte[] window(int chunks){byte[] bytes=new byte[chunks*pcm.length];for(int n=0;n<chunks;n++)System.arraycopy(pcm,0,bytes,n*pcm.length,pcm.length);return wavBytes(bytes);}
+  void scenario(int chunks,String text,int delay)throws Exception {
+   var probe=new SpeechReviewIT();probe.scenario("asr","/inference/asr-nano/modelserving/asr",Map.of("binary_sha256",sha(window(chunks))),Map.of("text",text));
+   if(delay>0){var json=new com.fasterxml.jackson.databind.ObjectMapper();try(var client=java.net.http.HttpClient.newBuilder().version(java.net.http.HttpClient.Version.HTTP_1_1).build()){
+    var value=Map.ofEntries(Map.entry("module","asr"),Map.entry("name","ama-live-delay-"+id()),Map.entry("enabled",true),Map.entry("priority",2000),Map.entry("method","POST"),Map.entry("path","/inference/asr-nano/modelserving/asr"),Map.entry("match",Map.of("binary_sha256",sha(window(chunks)))),Map.entry("status_code",200),Map.entry("delay_ms",delay),Map.entry("response_type","json"),Map.entry("response_body",Map.of("text",text)),Map.entry("response_headers",Map.of()));var r=client.send(java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://127.0.0.1:8792/admin/api/scenarios")).header("Content-Type","application/json").POST(java.net.http.HttpRequest.BodyPublishers.ofByteArray(json.writeValueAsBytes(value))).build(),java.net.http.HttpResponse.BodyHandlers.discarding());assertEquals(201,r.statusCode());
+   }}
+  }
+  @SuppressWarnings("unchecked") List<Map<String,Object>> events(){return (List<Map<String,Object>>)live.read(actor,session.sessionId(),"0",64).get("events");}
+  @Override public void close()throws Exception{live.close();nativeFiles.close();}
+ }
+ static byte[] wavBytes(byte[] pcm){var b=ByteBuffer.allocate(44+pcm.length).order(ByteOrder.LITTLE_ENDIAN);b.put("RIFF".getBytes(java.nio.charset.StandardCharsets.US_ASCII)).putInt(36+pcm.length).put("WAVEfmt ".getBytes(java.nio.charset.StandardCharsets.US_ASCII)).putInt(16).putShort((short)1).putShort((short)1).putInt(16000).putInt(32000).putShort((short)2).putShort((short)16).put("data".getBytes(java.nio.charset.StandardCharsets.US_ASCII)).putInt(pcm.length).put(pcm);return b.array();}
+ @Test void actualThreeCommittedChunksReplaceOneSegmentWithoutRemovingRepeatedWordsAndSurviveRestart()throws Exception {
+  try(var f=new Fixture()){
+   for(int n=1;n<=3;n++){f.scenario(n,n==3?"非常非常重要12345":"临时"+n,0);assertEquals(n,f.accept(n).highestContiguousSeq());assertTrue(f.live.runOnce(f.session.sessionId()));}
+   var events=f.events();assertEquals(3,events.size());assertEquals(List.of("temporary","temporary","stable"),events.stream().map(e->e.get("status")).toList());assertEquals(1,events.stream().map(e->e.get("segmentId")).distinct().count());assertEquals("非常非常重要12345",events.getLast().get("text"));assertEquals(6000,((Number)events.getLast().get("endMs")).longValue());assertEquals(3,((Number)events.getLast().get("sourceFinalSeq")).longValue());assertFalse(f.live.runOnce(f.session.sessionId()));
+   try(var next=new JdbcLiveSubtitles(source,f.access,new JdbcRecordingPersistence(source,f.catalog),ControlledSpeechProfile.fromRuntime(Path.of(System.getenv("AMA_LOCAL_SPEECH_RUNTIME"))))){var replay=(List<?>)next.read(f.actor,f.session.sessionId(),(String)events.getFirst().get("eventId"),64).get("events");assertEquals(2,replay.size());assertThrows(IllegalArgumentException.class,()->next.read(f.actor,f.session.sessionId(),"999",64));}
+  }
+ }
+ @Test void aGapCannotBecomeCaptionInputAndPartialPauseClosesTheWindowBeforeResume()throws Exception {
+  try(var f=new Fixture()){
+   f.scenario(1,"第一段",0);f.scenario(2,"第二段第二段99",0);assertEquals(0,f.accept(2).highestContiguousSeq());assertFalse(f.live.runOnce(f.session.sessionId()));assertTrue(f.events().isEmpty());assertEquals(2,f.accept(1).highestContiguousSeq());assertTrue(f.live.runOnce(f.session.sessionId()));assertTrue(f.live.runOnce(f.session.sessionId()));
+   f.recordings.pause(f.session.sessionId(),1);assertTrue(f.live.runOnce(f.session.sessionId()));var before=f.events();assertEquals("stable",before.getLast().get("status"));assertEquals("第二段第二段99",before.getLast().get("text"));String old=(String)before.getLast().get("segmentId");f.recordings.resume(f.session.sessionId(),1);f.accept(3);assertTrue(f.live.runOnce(f.session.sessionId()));var after=f.events();assertNotEquals(old,after.getLast().get("segmentId"));assertEquals(4000,((Number)after.getLast().get("startMs")).longValue());assertEquals(6000,((Number)after.getLast().get("endMs")).longValue());
+  }
+ }
+ @Test void modelTimeoutKeepsCommittedAudioAndUnknownGlobalExecutionDebt()throws Exception {
+  try(var f=new Fixture()){
+   f.scenario(1,"迟到内容",5000);f.accept(1);assertFalse(f.live.runOnce(f.session.sessionId()));assertTrue(f.events().isEmpty());assertEquals(1,f.recordings.ack(f.session.sessionId(),f.session.partId()).highestContiguousSeq());assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM speech_execution e JOIN recording_subtitle_job q ON q.id=e.lease_task_id WHERE q.session_id=? AND e.lane='REALTIME' AND e.state='UNKNOWN' AND e.settled_at IS NULL",Integer.class,f.session.sessionId()));
+  }
+ }
+ @Test void lateModelResultCannotReviveDeletedMeetingAndDeletionPurgesAllSubtitleContent()throws Exception {
+  try(var f=new Fixture();var pool=java.util.concurrent.Executors.newSingleThreadExecutor()){
+   f.scenario(1,"不应复活的迟到内容",1000);f.accept(1);java.util.concurrent.Future<Boolean> running=pool.submit(()->f.live.runOnce(f.session.sessionId()));long deadline=System.nanoTime()+java.time.Duration.ofSeconds(10).toNanos();while(j.queryForObject("SELECT COUNT(*) FROM speech_execution e JOIN recording_subtitle_job q ON q.id=e.lease_task_id WHERE q.session_id=?",Integer.class,f.session.sessionId())==0){assertTrue(System.nanoTime()<deadline);Thread.sleep(10);}
+   String liveId=j.queryForObject("SELECT id FROM recording_subtitle_job WHERE session_id=?",String.class,f.session.sessionId());f.recordings.finish(f.session.sessionId(),1,Map.of(f.session.partId(),1L));long revision=j.queryForObject("SELECT revision FROM meeting WHERE id=?",Long.class,f.meeting);f.meetings.delete(f.actor,f.meeting,id(),new ama.contract.MeetingContracts.DeleteMeeting(revision),"SUBTITLE_DELETE");assertFalse(running.get(10,java.util.concurrent.TimeUnit.SECONDS));assertThrows(ama.access.MeetingAccess.AccessDeniedException.class,()->f.live.read(f.actor,f.session.sessionId(),"0",64));assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM recording_subtitle_event WHERE meeting_id=?",Integer.class,f.meeting));
+   try(var deletion=new JdbcMeetingDeletion(source,f.tx,f.access,f.catalog)){String job=deletion.forMeeting(f.actor,f.meeting).deletionTaskId();for(int n=0;n<180&&!deletion.status(f.actor,job).state().equals("COMPLETE");n++)assertTrue(deletion.runOnce(job));assertEquals("COMPLETE",deletion.status(f.actor,job).state());}
+   assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM recording_subtitle_job WHERE meeting_id=?",Integer.class,f.meeting));assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM speech_execution WHERE lane='REALTIME' AND lease_task_id=?",Integer.class,liveId));
+  }
+ }
+ @Test void actualHttpReplayIsAuthorizedReadOnlyAndNeverCreatesAHiddenCaptionJob()throws Exception {
+  try(var f=new Fixture(false)){
+   var mvc=ama.api.RecordingSubtitleHttpProbe.create(f.live,f.recordings,f.tx,f.access);String path="/api/v1/recordings/"+f.session.sessionId()+"/subtitles",attribute=ama.api.RecordingSubtitleHttpProbe.sessionAttribute();var session=new ResolvedSession(f.actor,"T".repeat(43),java.time.Instant.now().plusSeconds(60));var json=new com.fasterxml.jackson.databind.ObjectMapper();
+   var empty=mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(path).requestAttr(attribute,session)).andReturn().getResponse();assertEquals(200,empty.getStatus(),empty.getContentAsString());assertEquals("NOT_STARTED",json.readTree(empty.getContentAsByteArray()).path("state").asText());assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM recording_subtitle_job WHERE session_id=?",Integer.class,f.session.sessionId()));
+   f.live.start(f.actor,f.session.sessionId());f.scenario(1,"HTTP非常非常重要12345",0);f.accept(1);assertTrue(f.live.runOnce(f.session.sessionId()));var result=mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(path).param("afterEventId","0").requestAttr(attribute,session)).andReturn().getResponse();assertEquals(200,result.getStatus(),result.getContentAsString());assertEquals("private, no-store",result.getHeader("Cache-Control"));assertEquals("HTTP非常非常重要12345",json.readTree(result.getContentAsByteArray()).path("events").get(0).path("text").asText());
+   var invalid=mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(path).param("afterEventId","01").requestAttr(attribute,session)).andReturn().getResponse();assertEquals(400,invalid.getStatus());String outsider="caption-outsider-"+id();j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",outsider,outsider);var foreign=new ResolvedSession(new Actor(outsider,Status.ACTIVE,Set.of(Role.USER)),"T".repeat(43),java.time.Instant.now().plusSeconds(60));var denied=mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(path).requestAttr(attribute,foreign)).andReturn().getResponse();assertEquals(403,denied.getStatus());assertFalse(denied.getContentAsString().contains("HTTP非常"));
+  }
+ }
+ @Test void nextPartKeepsAbsoluteTimeAndFinishSealsItsPartialTail()throws Exception {
+  try(var f=new Fixture()){
+   f.scenario(1,"同一句同一句11",0);f.accept(1);assertTrue(f.live.runOnce(f.session.sessionId()));f.recordings.pause(f.session.sessionId(),1);var next=f.recordings.nextPart(f.session.sessionId(),1);assertTrue(f.live.runOnce(f.session.sessionId()));assertTrue(f.live.runOnce(f.session.sessionId()));
+   f.tx.required(()->{f.access.require(f.access.lock(f.actor,f.meeting),ama.access.MeetingAccess.Action.EDIT);return f.recordings.accept(f.session.sessionId(),next.writerEpoch(),new RecordingContracts.Chunk(next.partId(),next.writerEpoch(),1,0,32000,f.pcm));});assertTrue(f.live.runOnce(f.session.sessionId()));f.recordings.finish(f.session.sessionId(),next.writerEpoch(),Map.of(f.session.partId(),1L,next.partId(),1L));assertTrue(f.live.runOnce(f.session.sessionId()));assertFalse(f.live.runOnce(f.session.sessionId()));var events=f.events();assertEquals(4,events.size());assertEquals("stable",events.getLast().get("status"));assertEquals(2000,((Number)events.getLast().get("startMs")).longValue());assertEquals(4000,((Number)events.getLast().get("endMs")).longValue());assertNotEquals(events.getFirst().get("segmentId"),events.getLast().get("segmentId"));assertEquals("DONE",f.live.read(f.actor,f.session.sessionId(),"4",64).get("state"));
+  }
+ }
+ @Test void disabledCurrentIdentityCannotCommitLateResultOrReadPreviouslyPrivateCaptions()throws Exception {
+  try(var f=new Fixture();var pool=java.util.concurrent.Executors.newSingleThreadExecutor()){
+   f.scenario(1,"私密晚到",1000);f.accept(1);java.util.concurrent.Future<Boolean> running=pool.submit(()->f.live.runOnce(f.session.sessionId()));long deadline=System.nanoTime()+java.time.Duration.ofSeconds(10).toNanos();while(j.queryForObject("SELECT COUNT(*) FROM speech_execution e JOIN recording_subtitle_job q ON q.id=e.lease_task_id WHERE q.session_id=?",Integer.class,f.session.sessionId())==0){assertTrue(System.nanoTime()<deadline);Thread.sleep(10);}
+   j.update("UPDATE enterprise_identity SET status='DISABLED' WHERE enterprise_id=?",f.actor.enterpriseId());assertFalse(running.get(10,java.util.concurrent.TimeUnit.SECONDS));assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM recording_subtitle_event WHERE session_id=?",Integer.class,f.session.sessionId()));assertThrows(ama.access.MeetingAccess.AccessDeniedException.class,()->f.live.read(f.actor,f.session.sessionId(),"0",64));assertEquals(1,f.recordings.ack(f.session.sessionId(),f.session.partId()).highestContiguousSeq());
+  }
+ }
+ @Test void stableTailCannotReuseTextAfterItsCommittedSourceProofWasChanged()throws Exception {
+  try(var f=new Fixture()){
+   f.scenario(1,"原片段",0);f.accept(1);assertTrue(f.live.runOnce(f.session.sessionId()));j.update("UPDATE recording_chunk SET sha256=? WHERE session_id=? AND part_id=? AND seq=1","0".repeat(64),f.session.sessionId(),f.session.partId());f.recordings.pause(f.session.sessionId(),1);assertFalse(f.live.runOnce(f.session.sessionId()));assertEquals(1,f.events().size());assertEquals("temporary",f.events().getFirst().get("status"));
+  }
+ }
+ @Test void idleSchedulerDoesNotRewriteEmptyJobsButPicksUpNewCommittedAudio()throws Exception {
+  try(var f=new Fixture()){
+   Object before=j.queryForObject("SELECT updated_at FROM recording_subtitle_job WHERE session_id=?",Object.class,f.session.sessionId());f.live.startScheduler();Thread.sleep(650);assertEquals(before,j.queryForObject("SELECT updated_at FROM recording_subtitle_job WHERE session_id=?",Object.class,f.session.sessionId()));f.scenario(1,"调度读取真实音频",0);f.accept(1);long deadline=System.nanoTime()+java.time.Duration.ofSeconds(8).toNanos();while(f.events().isEmpty()){assertTrue(System.nanoTime()<deadline);Thread.sleep(30);}assertEquals("调度读取真实音频",f.events().getFirst().get("text"));
+  }
+ }
+ @Test void committedAudioWaitingMoreThanThreeSecondsReportsDelayedWithoutChangingItsCursor()throws Exception {
+  try(var f=new Fixture()){
+   f.accept(1);j.update("UPDATE recording_chunk SET persisted_at=UTC_TIMESTAMP(6)-INTERVAL 4 SECOND WHERE session_id=?",f.session.sessionId());var read=f.live.read(f.actor,f.session.sessionId(),"0",64);assertEquals(true,read.get("delayed"));assertEquals("0",read.get("nextCursor"));assertEquals(0,((List<?>)read.get("events")).size());assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM speech_execution e JOIN recording_subtitle_job q ON q.id=e.lease_task_id WHERE q.session_id=?",Integer.class,f.session.sessionId()));
+  }
+ }
+ @Test void expiredLeaseDiscardsLateTextWithoutPermanentlyCancellingAnAuthorizedRecording()throws Exception {
+  try(var f=new Fixture();var pool=java.util.concurrent.Executors.newSingleThreadExecutor()){
+   f.scenario(1,"过期租约不应永久取消",1000);f.accept(1);java.util.concurrent.Future<Boolean> running=pool.submit(()->f.live.runOnce(f.session.sessionId()));long deadline=System.nanoTime()+java.time.Duration.ofSeconds(10).toNanos();while(j.queryForObject("SELECT COUNT(*) FROM speech_execution e JOIN recording_subtitle_job q ON q.id=e.lease_task_id WHERE q.session_id=?",Integer.class,f.session.sessionId())==0){assertTrue(System.nanoTime()<deadline);Thread.sleep(10);}
+   j.update("UPDATE recording_subtitle_job SET lease_expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE session_id=?",f.session.sessionId());assertFalse(running.get(10,java.util.concurrent.TimeUnit.SECONDS));assertTrue(f.events().isEmpty());assertEquals("DELAYED",f.live.read(f.actor,f.session.sessionId(),"0",64).get("state"));assertTrue(f.live.runOnce(f.session.sessionId()));assertEquals("过期租约不应永久取消",f.events().getFirst().get("text"));assertEquals(1,f.recordings.ack(f.session.sessionId(),f.session.partId()).highestContiguousSeq());
+  }
+ }
+}

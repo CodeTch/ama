@@ -14,7 +14,7 @@ import static ama.transcript.SavedTranscriptRows.*;
  * Captured graph is detached data; only the private authority scope records successful acquisition. */
 final class MinutesGraphCapture {
  record Graph(MinutesGraphDiscovery.Discovery discovery,List<FullRow> rows,Map<String,List<Map<String,Object>>> auxiliary) {}
- static final List<String> DOMAIN_RANK=List.of("transcript_revision","transcript_segment","transcript_segment_mark","transcript_confirmation","transcription_input","input_batch","input_batch_fingerprint_profile","input_batch_file","minutes_template","personal_template_state","template_revision","exclusion_revision","sensitive_exclusion","generation_input","generation_region_request","source_context","source_context_material","material_snapshot","material_snapshot_item","material_reference","material_revision","parsed_document","parsed_document_profile","parsed_unit","minutes_revision","element_set","minutes_element","action_item","action_suggestion","sensitive_detection","background_note","source_locator","sensitive_detection_source","background_note_source","evidence_link","evidence_source_context","element_source_context","result_review","result_review_evidence","final_result_review","generation_candidate");
+ static final List<String> DOMAIN_RANK=List.of("transcript_revision","transcript_segment","transcript_segment_mark","transcript_speaker_change","transcript_speaker_snapshot","transcript_confirmation","transcription_input","input_batch","input_batch_fingerprint_profile","input_batch_file","minutes_template","personal_template_state","template_revision","exclusion_revision","sensitive_exclusion","generation_input","generation_region_request","source_context","source_context_material","material_snapshot","material_snapshot_item","material_reference","material_revision","parsed_document","parsed_document_profile","parsed_unit","minutes_revision","element_set","minutes_element","action_item","action_suggestion","sensitive_detection","background_note","source_locator","sensitive_detection_source","background_note_source","evidence_link","evidence_source_context","element_source_context","result_review","result_review_evidence","final_result_review","generation_candidate");
  static final Shape TEMPLATE=new Shape("minutes_template",List.of("id"),List.of("id","owner_id","name","name_normalized","name_hash","current_revision_id","revision","created_at"),Set.of("revision"),Set.of("created_at"));
  static final Shape PERSONAL_TEMPLATE_STATE=new Shape("personal_template_state",List.of("template_id"),List.of("template_id","owner_id","command_revision","deleted_at"),Set.of("command_revision"),Set.of("deleted_at"));
  static final Shape CANDIDATE=new Shape("generation_candidate",List.of("id"),List.of("id","meeting_id","input_id","task_id","minutes_revision_id","element_set_id","base_revision","input_fingerprint","state","created_at","decided_at"),Set.of("base_revision"),Set.of("created_at","decided_at"));
@@ -92,6 +92,9 @@ final class MinutesGraphCapture {
     else auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(read.deferRead(shape,where,order,1,false,keys));
    }
   }
+  // Readiness and publication submission capture actual pending decisions under the same gate/budget.
+  // Both S and F retain this set in Graph equality; missing capture is never proof of zero.
+  if(expected.kind().equals("READINESS")||currentSources&&expected.kind().equals("FINAL"))auxiliary.put("speech_review_pending",read.read(metadata("speech_review_candidate","id","id meeting_id raw_revision_id state"),"meeting_id=? AND state='PENDING'","id",120,false,expected.meeting()));
   if(exportFiles!=null){
    require(exportFiles.extra.size()==1,PROVENANCE_UNAVAILABLE);
    var union=new TreeSet<String>(exportFiles.extra);for(String id:union)uuid(id);
@@ -121,6 +124,7 @@ final class MinutesGraphCapture {
   // No existing-row lock is discovered by a deferred content SELECT; exact protected PKs only.
   for(var transfer:transfers){var found=transfer.get();require(found.size()==1,PROVENANCE_UNAVAILABLE);rows.addAll(found);}
   for(var group:auxiliaryTransfers.entrySet()){var found=new ArrayList<Map<String,Object>>();for(var transfer:group.getValue()){var one=transfer.get();require(one.size()==1,PROVENANCE_UNAVAILABLE);found.addAll(one);}auxiliary.put(group.getKey(),List.copyOf(found));}
+  TranscriptSpeakerRows.mirrors(j,rows);
   var graph=new Graph(expected,List.copyOf(rows),Collections.unmodifiableMap(auxiliary));authority.sealMinutesCapture(scope,gate,actor,graph,ordinaryPublication);if(ordinaryPublication!=null&&!taskCapture)authority.publicationWriteGuard().requirePermitted(ordinaryPublication,authority.fileRegistry().access(gate));return graph;
  }
 }

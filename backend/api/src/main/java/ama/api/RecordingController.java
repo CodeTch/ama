@@ -28,19 +28,21 @@ class RecordingController {
     private final ama.recording.JdbcRecordingWriterLeases leases;
     private final ama.recording.RecordingMutationGuard mutations;
     private final RecordingIngressBudget ingress;
-    RecordingController(RecordingService service,Environment environment,TransactionRunner transactions,MeetingAccess access,ama.recording.RecordingArchiveAdmission archives,ama.recording.JdbcRecordingWriterLeases leases,ama.recording.RecordingMutationGuard mutations,RecordingIngressBudget ingress) {
+    private final RecordingSubtitleRuntime subtitles;
+    RecordingController(RecordingService service,Environment environment,TransactionRunner transactions,MeetingAccess access,ama.recording.RecordingArchiveAdmission archives,ama.recording.JdbcRecordingWriterLeases leases,ama.recording.RecordingMutationGuard mutations,RecordingIngressBudget ingress,RecordingSubtitleRuntime subtitles) {
         this.service=Objects.requireNonNull(service);this.backendId=environment.getProperty("recording.backend-id","backend-local");
         this.transactions=Objects.requireNonNull(transactions);this.access=Objects.requireNonNull(access);
         this.archives=Objects.requireNonNull(archives);
         this.leases=Objects.requireNonNull(leases);
         this.mutations=Objects.requireNonNull(mutations);
-        this.ingress=Objects.requireNonNull(ingress);
+        this.ingress=Objects.requireNonNull(ingress);this.subtitles=Objects.requireNonNull(subtitles);
     }
     @PostMapping("/api/v1/meetings/{meetingId}/recordings")
     ResponseEntity<SessionResponse> create(@PathVariable String meetingId,HttpServletRequest request) {
         return meeting(request,meetingId,gate -> {
             mutations.require(actor(request),meetingId,gate);
             var s=service.open(meetingId,backendId);
+            if(subtitles.service()!=null)subtitles.service().attach(actor(request),meetingId,gate,s.sessionId());
             return ResponseEntity.status(201).body(new SessionResponse(s.sessionId(),s.partId(),s.writerEpoch(),s.backendId()));
         });
     }
@@ -77,7 +79,9 @@ class RecordingController {
     }
     @PostMapping("/api/v1/recordings/{sessionId}/resume")
     ResponseEntity<Void> resume(@PathVariable String sessionId,@RequestHeader(name="X-Expected-Epoch") long epoch,HttpServletRequest request,@RequestHeader(name="X-Collector-Id",required=false) String collector) {
-        return writer(request,sessionId,epoch,collector,() -> {service.resume(sessionId,epoch);return ResponseEntity.noContent().build();});
+        ResponseEntity<Void> result=writer(request,sessionId,epoch,collector,() -> {service.resume(sessionId,epoch);return ResponseEntity.noContent().build();});
+        if(subtitles.service()!=null)try{subtitles.service().start(actor(request),sessionId);}catch(RuntimeException unavailable){org.slf4j.LoggerFactory.getLogger(RecordingController.class).warn("Recording resumed; subtitle installation deferred: type={}",unavailable.getClass().getSimpleName());}
+        return result;
     }
     @PostMapping("/api/v1/recordings/{sessionId}/finish")
     FinishResponse finishHttp(@PathVariable String sessionId,@RequestHeader(name="X-Expected-Epoch") long epoch,HttpServletRequest request,@RequestHeader(name="X-Collector-Id",required=false) String collector)throws IOException {

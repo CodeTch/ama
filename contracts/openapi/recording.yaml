@@ -1509,5 +1509,565 @@
         }
       }
     }
+  },
+  "RecordingSubtitleEvent": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "eventId",
+      "sessionId",
+      "partId",
+      "segmentId",
+      "revision",
+      "status",
+      "text",
+      "startMs",
+      "endMs",
+      "sourceFinalSeq",
+      "createdAt"
+    ],
+    "properties": {
+      "eventId": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "sessionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "partId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "segmentId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "revision": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 3
+      },
+      "status": {
+        "enum": [
+          "temporary",
+          "stable"
+        ]
+      },
+      "text": {
+        "type": "string",
+        "maxLength": 8192
+      },
+      "startMs": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 7200000
+      },
+      "endMs": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 7200000
+      },
+      "sourceFinalSeq": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 4608
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "RecordingSubtitles": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "meetingId",
+      "sessionId",
+      "events",
+      "nextCursor",
+      "hasMore",
+      "delayed",
+      "state"
+    ],
+    "properties": {
+      "meetingId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "sessionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "events": {
+        "type": "array",
+        "maxItems": 64,
+        "items": {
+          "$ref": "#/RecordingSubtitleEvent"
+        }
+      },
+      "nextCursor": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "hasMore": {
+        "type": "boolean"
+      },
+      "delayed": {
+        "type": "boolean"
+      },
+      "state": {
+        "enum": [
+          "NOT_STARTED",
+          "IDLE",
+          "LEASED",
+          "DELAYED",
+          "DEFERRED",
+          "DONE",
+          "CANCELLED"
+        ]
+      }
+    }
+  },
+  "subtitles": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "readRecordingSubtitles",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "afterEventId",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$"
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 64,
+            "default": 64
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingSubtitles"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      },
+      "description": "Current meeting READ authorization and exact session scope. Read-only persisted event replay; does not create a job or call a model. Text replaces the same segment only at a higher revision. Stable denotes a locally closed bounded window, not company model quality. Audio ACK and archive are independent."
+    }
+  },
+  "RecordingTranscriptSource": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "meetingId",
+      "state",
+      "archiveAvailable"
+    ],
+    "properties": {
+      "meetingId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "sessionId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "sourceId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "NOT_RECORDED",
+          "NOT_REQUESTED",
+          "PENDING",
+          "LEASED",
+          "DELAYED",
+          "READY",
+          "CANCELLED"
+        ]
+      },
+      "archiveAvailable": {
+        "type": "boolean"
+      },
+      "fileId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "sourceSha256": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "sourceBytes": {
+        "type": "integer",
+        "minimum": 46,
+        "maximum": 230400044
+      },
+      "sourceSamples": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 115200000
+      },
+      "transcriptionTaskId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "transcriptionState": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "RUNNING",
+          "RECONCILING",
+          "SUCCEEDED",
+          "FAILED",
+          "CANCELLED",
+          "STALE"
+        ]
+      }
+    }
+  },
+  "transcriptionSource": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "readTranscriptionSource",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingTranscriptSource"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      },
+      "description": "Current meeting READ and exact recording scope. Read-only source preparation status; no copy or model call."
+    },
+    "post": {
+      "operationId": "prepareTranscriptionSource",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        },
+        "202": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingTranscriptSource"
+              }
+            }
+          }
+        }
+      },
+      "description": "Explicit owner command. Copies only the actual current READY archive through real upload receipts, under current epoch. A prepared copy does not imply accepted import or RAW.",
+      "parameters": [
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "maxProperties": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "currentTranscriptionSource": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "meetingId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "readCurrentTranscriptionSource",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingTranscriptSource"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        }
+      },
+      "description": "Current meeting READ and exact recording scope. Read-only source preparation status; no copy or model call."
+    },
+    "post": {
+      "operationId": "prepareCurrentTranscriptionSource",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "400": {
+          "$ref": "#/Error"
+        },
+        "401": {
+          "$ref": "#/Error"
+        },
+        "403": {
+          "$ref": "#/Error"
+        },
+        "404": {
+          "$ref": "#/Error"
+        },
+        "409": {
+          "$ref": "#/Error"
+        },
+        "413": {
+          "$ref": "#/Error"
+        },
+        "429": {
+          "$ref": "#/Error"
+        },
+        "503": {
+          "$ref": "#/Error"
+        },
+        "202": {
+          "description": "Committed current-session result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/RecordingTranscriptSource"
+              }
+            }
+          }
+        }
+      },
+      "description": "Explicit owner command. Copies only the actual current READY archive through real upload receipts, under current epoch. A prepared copy does not imply accepted import or RAW.",
+      "parameters": [
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "maxProperties": 0
+            }
+          }
+        }
+      }
+    }
   }
 }

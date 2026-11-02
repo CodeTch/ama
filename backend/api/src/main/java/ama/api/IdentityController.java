@@ -14,10 +14,13 @@ class IdentityController {
     IdentityController(SessionPort sessions, DirectoryPort directory) { this.sessions = sessions; this.directory = directory; }
     @GetMapping("/api/v1/session") ResolvedSession session(HttpServletRequest request) { return resolved(request); }
     @GetMapping("/api/v1/directory/people") PeoplePage people(@RequestParam(defaultValue="") String query,
-            @RequestParam(required=false) String cursor, @RequestParam(defaultValue="20") int limit) {
+            @RequestParam(required=false) String cursor, @RequestParam(defaultValue="20") int limit,
+            @RequestParam(required=false) String departmentId) {
         if (limit < 1 || limit > 100) throw new IllegalArgumentException("Invalid page size");
-        return directory.search(query, cursor, limit);
+        if (departmentId != null) { ama.contract.IdentityContracts.stableId(departmentId); }
+        return directory.search(query, cursor, limit, departmentId);
     }
+    @GetMapping("/api/v1/directory/departments") Departments departments() { return directory.departments(); }
     @PostMapping("/api/v1/session/logout") ResponseEntity<Void> logout(HttpServletRequest request) {
         sessions.revoke((String) request.getAttribute(SessionSecurityFilter.TOKEN), UUID.randomUUID().toString());
         return cleared();

@@ -40,6 +40,14 @@ class FfmpegNormalizerTest {
         assertThrows(IllegalArgumentException.class, () -> oversized.normalize(List.of(new OrderedSource("big", 0))));
     }
 
+    @Test void longRecordingCapacityIsExplicitAndOrdinaryInputKeepsItsOriginalCeiling()throws Exception {
+        assertThrows(IllegalArgumentException.class,()->new FfmpegNormalizer.Limits(33554433,115200000,java.time.Duration.ofMinutes(2)));
+        byte[] input=wav(16000,1,16,32000);
+        try(var prepared=new FfmpegNormalizer(id->new ByteArrayInputStream(input),FfmpegNormalizer.Limits.recording(115200000,java.time.Duration.ofMinutes(2))).prepare(List.of(new OrderedSource("recording",0)),()->false)) {
+            assertEquals(32000,prepared.sources().getFirst().sampleCount());
+        }
+    }
+
     private static byte[] wav(int rate, int channels, int bits, int frames) {
         int dataSize = frames * channels * bits / 8;
         var b = ByteBuffer.allocate(44 + dataSize).order(ByteOrder.LITTLE_ENDIAN);

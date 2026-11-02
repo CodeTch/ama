@@ -33,6 +33,6 @@ defineExpose({show:()=>{if(dialog.value&&!dialog.value.open)dialog.value.showMod
  </dialog>
 </template>
 <style scoped>
-.template-dialog-root{inset:0;border:0;padding:24px;margin:0;width:100vw;height:100dvh;max-width:none;max-height:none;color:var(--text)}
+.template-dialog-root{inset:0;border:0;padding:0;margin:0;width:100vw;height:100dvh;max-width:none;max-height:none;color:var(--text)}
 .template-dialog-root:not([open]){display:none}.template-dialog-root::backdrop{background:transparent}.m-t{margin:0}.input{width:100%}
 </style>

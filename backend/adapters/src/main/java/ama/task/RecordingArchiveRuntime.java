@@ -65,6 +65,7 @@ public final class RecordingArchiveRuntime {
  /** Registration additionally requires the actual queue-owned WRITING invocation, never a caller flag. */
  public static void requireReferenceCompletion(FileRegistry.ReferenceContext context,DataSource source,String meeting,String archive,String file){
   requireReferenceDeclaration(context,source,meeting,archive,file);var domain=(Domain)context;
+  if(domain.purpose!=TaskDomainPolicy.Acquisition.TASK_MUTATION)throw new IllegalArgumentException("Archive mutation completion required");
   if(domain.scope==null||domain.invocation==null||domain.carrier==null)throw new IllegalArgumentException("Recording queue completion required");
   domain.scope.requireInvocation(domain.owner.queue,domain.owner,domain.invocation,domain.carrier,domain.carrier.lease,CompletionPhase.WRITING);
  }
@@ -72,11 +73,11 @@ public final class RecordingArchiveRuntime {
  private static void check(PreparationCancellation c){if(Thread.currentThread().isInterrupted()||c.cancelled())throw new CancellationException("Archive cancelled");}
  private static final class Domain implements FileRegistry.ReferenceContext {
   final Policy owner;final Object holder;final TaskSpec spec;
-  final Actor actor;final JdbcMeetingAccess.FactIdentities identities;final PublicationWriteGuard.Prepared plan;
+  final Actor actor;final JdbcMeetingAccess.FactIdentities identities;final PublicationWriteGuard.Prepared plan;final TaskDomainPolicy.Acquisition purpose;
   MeetingAccess.Locked access;FileRegistry.LockedMeeting gate;PublicationWriteGuard.Held publication;
   FileRegistry.LockedReference reference;FileRegistry.LockedSources sources;FileRegistry.CompletedSource file;
   String archive,fileId;JdbcTaskQueue.AfterTask scope;CompletionInvocation invocation;Policy.Carrier carrier;
-  Domain(Policy owner,TaskSpec spec,Actor actor,JdbcMeetingAccess.FactIdentities identities,PublicationWriteGuard.Prepared plan){this.owner=owner;this.spec=spec;holder=TransactionSynchronizationManager.getResource(owner.queue.source);this.actor=actor;this.identities=identities;this.plan=plan;}
+  Domain(Policy owner,TaskSpec spec,Actor actor,JdbcMeetingAccess.FactIdentities identities,PublicationWriteGuard.Prepared plan,TaskDomainPolicy.Acquisition purpose){this.owner=owner;this.spec=spec;holder=TransactionSynchronizationManager.getResource(owner.queue.source);this.actor=actor;this.identities=identities;this.plan=plan;this.purpose=purpose;}
  }
  private static final class Policy implements ConfinedTaskCompletionPolicy {
   final JdbcTaskQueue queue;final Dependencies d;final JdbcTaskPreparations issuer;final RecordingArchivePreparation archives;
@@ -117,22 +118,25 @@ public final class RecordingArchiveRuntime {
      queue.jdbc.update("INSERT INTO recording_archive_input(id,session_id,meeting_id,requested_by,base_revision,cancel_epoch,input_fingerprint,producer_key,generation) VALUES (?,?,?,?,?,?,?,?,?)",id,session,meeting,actor.enterpriseId(),revision,epoch,fingerprint,producer,generation);
      queue.jdbc.update("INSERT INTO recording_archive_current(session_id,input_id) VALUES (?,?) ON DUPLICATE KEY UPDATE input_id=VALUES(input_id)",session,id);
      queue.jdbc.update("INSERT INTO recording_archive(id,input_id,session_id,meeting_id,state,backend_id) VALUES (?,?,?,?,'PENDING',?)",UUID.randomUUID().toString(),id,session,meeting,detached.session().backendId());
-     var domain=new Domain(this,in.spec(),actor,null,plan);domain.access=gate;domain.gate=registry;domain.publication=held;
+     var domain=new Domain(this,in.spec(),actor,null,plan,Acquisition.TASK_MUTATION);domain.access=gate;domain.gate=registry;domain.publication=held;
      queue.enqueue(in.spec(),issuer.issue(List.of(in.spec()),Acquisition.TASK_MUTATION,domain,true));
      var result=projection(session);queue.outbox.flush();return result;
     });
    });
   }
   public Optional<PreparedDomain> prepare(List<TaskSpec> specs,Acquisition purpose,boolean skip){
-   if(specs.size()!=1||purpose!=Acquisition.TASK_MUTATION)throw new DomainPreparationUnavailableException();var spec=specs.getFirst();shape(spec);var in=input(spec.input().id(),false);if(!in.spec().equals(spec))throw new IllegalArgumentException("Recording input mismatch");
-   var actor=in.actor();var plan=d.publication().prepare(actor,in.meeting());var identities=d.access().tryLockFactIdentities(actor,List.of(actor.enterpriseId()),skip);
-   return identities.map(ids->issuer.issue(specs,purpose,new Domain(this,spec,actor,ids,plan),true));
+   if(specs.size()!=1||!Set.of(Acquisition.TASK_MUTATION,Acquisition.TASK_PREPARATION).contains(purpose))throw new DomainPreparationUnavailableException();var spec=specs.getFirst();shape(spec);var in=input(spec.input().id(),false);if(!in.spec().equals(spec))throw new IllegalArgumentException("Recording input mismatch");
+   var actor=in.actor();var plan=purpose==Acquisition.TASK_PREPARATION?d.publication().prepareStorage(actor,in.meeting()):d.publication().prepare(actor,in.meeting());var identities=d.access().tryLockFactIdentities(actor,List.of(actor.enterpriseId()),skip);
+   return identities.map(ids->issuer.issue(specs,purpose,new Domain(this,spec,actor,ids,plan,purpose),true));
   }
   public void requirePrepared(List<TaskSpec> specs,Acquisition purpose,PreparedDomain held){issuer.require(specs,purpose,held);}
   public boolean permitsDomainEffects(PreparedDomain held){return issuer.permitsEffects(held);}
   public boolean lockRoot(TaskSpec spec,boolean skip){throw new DomainPreparationUnavailableException();}
   public boolean lockRoots(List<TaskSpec> specs,boolean skip,PreparedDomain held){
-   issuer.require(specs,Acquisition.TASK_MUTATION,held);var domain=(Domain)issuer.value(held);var spec=specs.getFirst();var in=input(spec.input().id(),false);
+   try{return lockArchiveRoots(specs,skip,held);}catch(NotFound|Unavailable missing){if(skip)return false;throw missing;}
+  }
+  private boolean lockArchiveRoots(List<TaskSpec> specs,boolean skip,PreparedDomain held){
+   var domain=(Domain)issuer.value(held);issuer.require(specs,domain.purpose,held);var spec=specs.getFirst();var in=input(spec.input().id(),false);
    if(domain.access==null){
     var facts=d.access().lockFactRoot(domain.identities,in.meeting(),skip);if(facts.isEmpty())return false;
     if(d.access().factAllowsBusiness(facts.orElseThrow(),in.epoch(),in.revision())){
@@ -140,6 +144,7 @@ public final class RecordingArchiveRuntime {
     }
    }
    var sessions=queue.jdbc.queryForList("SELECT session_id FROM recording_session WHERE session_id=? AND meeting_id=? AND state='FINISHED' FOR UPDATE"+(skip?" SKIP LOCKED":""),String.class,in.session(),in.meeting());if(sessions.isEmpty())return false;
+   if(domain.gate!=null){String backend=queue.jdbc.queryForObject("SELECT backend_id FROM recording_session WHERE session_id=? AND meeting_id=? FOR SHARE",String.class,in.session(),in.meeting());d.backends().require(backend,false);}
    if(!input(in.id(),true).equals(in))throw new IllegalArgumentException("Recording input changed");
    var current=queue.jdbc.queryForList("SELECT input_id FROM recording_archive_current WHERE session_id=? FOR UPDATE",String.class,in.session());if(!current.equals(List.of(in.id())))throw new Conflict();
    var candidates=queue.jdbc.queryForList("SELECT id,file_id,state FROM recording_archive WHERE input_id=? FOR UPDATE",in.id());if(candidates.size()!=1)throw new IllegalArgumentException("Recording archive missing");var row=candidates.getFirst();
@@ -163,7 +168,7 @@ public final class RecordingArchiveRuntime {
   Supplier<TaskResult> prepare(TaskLease lease,PreparationCancellation c){
    check(c);shape(lease.spec());String stage="LEASE_FACTS";
    try(var lifetime=new SourceReadLifetime(c,System.nanoTime()+java.time.Duration.ofMinutes(10).toNanos())){
-    var in=queue.work(()->{var valid=queue.validatedLease(lease);if(valid.isEmpty())throw new CancellationException("Archive lease expired");var domain=(Domain)issuer.value(valid.orElseThrow().domain().prepared());if(domain.gate==null)throw new MeetingAccess.AccessDeniedException();return input(lease.spec().input().id(),false);});
+    var in=queue.preparation(()->{var valid=queue.validatedPreparationLease(lease);if(valid.isEmpty())throw new CancellationException("Archive lease expired");var domain=(Domain)issuer.value(valid.orElseThrow().domain().prepared());if(domain.gate==null)throw new MeetingAccess.AccessDeniedException();return input(lease.spec().input().id(),false);});
     stage="PREPARE_AUDIO";var artifact=archives.prepare(in.session(),c::cancelled);check(c);if(!artifact.inputFingerprint().equals(in.fingerprint()))throw new IllegalStateException("Frozen recording changed");
     stage="UPLOAD_BEGIN";var accepted=d.uploads().beginPinned(in.actor(),in.meeting(),in.id(),new Begin("RECORDING_ARCHIVE","录音.wav",artifact.blob().size(),artifact.blob().sha256()),"recording-archive",artifact.blob().key().backendId());
     long partSize=Math.min(accepted.partSize(),8L*1024*1024);if(partSize<1)throw new IllegalStateException("Upload bounds unavailable");var parts=new ArrayList<ClientPart>();
@@ -173,8 +178,8 @@ public final class RecordingArchiveRuntime {
      if(stream.read()!=-1)throw new IOException("Archive oversized");
     }
     check(c);stage="UPLOAD_COMPLETE";var completed=d.uploads().complete(in.actor(),accepted.uploadId(),new Completion(parts,artifact.blob().sha256()),"recording-archive");check(c);
-    stage="PREPARED_FACTS";return queue.work(()->{
-     if(queue.validatedLease(lease).isEmpty())throw new CancellationException("Archive lease changed");
+    stage="PREPARED_FACTS";return queue.preparation(()->{
+     if(queue.validatedPreparationLease(lease).isEmpty())throw new CancellationException("Archive lease changed");
      var row=queue.jdbc.queryForMap("SELECT id,state,file_id,upload_id,sha256,size_bytes,sample_count FROM recording_archive WHERE input_id=? FOR UPDATE",in.id());String id=(String)row.get("id");
      if(row.get("file_id")!=null&&(!completed.fileId().equals(row.get("file_id"))||!accepted.uploadId().equals(row.get("upload_id"))||!artifact.blob().sha256().equals(row.get("sha256"))))throw new Conflict();
      queue.jdbc.update("UPDATE recording_archive SET state='PREPARED',file_id=?,upload_id=?,sha256=?,size_bytes=?,sample_count=? WHERE id=? AND state IN ('PENDING','PREPARED')",completed.fileId(),accepted.uploadId(),artifact.blob().sha256(),artifact.blob().size(),artifact.sampleCount(),id);

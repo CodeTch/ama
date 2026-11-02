@@ -386,6 +386,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/directory/departments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read the current bounded directory department catalogue
+         * @description Read-only provider metadata. No account or meeting authorization is created. An unconfigured or malformed provider returns 503 rather than an empty success.
+         */
+        get: operations["listDirectoryDepartments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/directory/people": {
         parameters: {
             query?: never;
@@ -1159,6 +1179,82 @@ export interface paths {
         /** @description Fresh owner EDIT and mandatory accepted-result lookup before current CAS/exhaustion/source/archive/readiness. Semantic replay returns only the original committed result with fresh observation; it never reattaches historical pointers. Each new save creates a full immutable WORKING and clears confirmation/final pointers, advances meeting/subject once and records generation debt. */
         put: operations["saveTranscript"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/transcript/speakers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        get: operations["readTranscriptSpeakers"];
+        put?: never;
+        /** @description An explicit human attribution creates a new WORKING and immutable speaker snapshot. Existing labels, RAW, source coordinates and meeting permissions remain intact. Selecting both source and target segments merges their display label without changing access. Optional enterprise identity is freshly checked; no automatic real-name claim. */
+        post: operations["labelTranscriptSpeakers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/transcript/corrections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        get: operations["readSpeechCorrections"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/transcript/correction-proposals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Explicit owner correction operation using verified durable speech checkpoints. Original receipts replay before current model availability; no client model text accepted. Decisions create a new immutable WORKING, preserving RAW, source coordinates and marks. */
+        post: operations["proposeSpeechCorrections"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/transcript/corrections/{candidateId}/decisions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Explicit owner correction operation using verified durable speech checkpoints. Original receipts replay before current model availability; no client model text accepted. Decisions create a new immutable WORKING, preserving RAW, source coordinates and marks. */
+        post: operations["decideSpeechCorrection"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2744,6 +2840,25 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/recordings/{sessionId}/subtitles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Current meeting READ authorization and exact session scope. Read-only persisted event replay; does not create a job or call a model. Text replaces the same segment only at a higher revision. Stable denotes a locally closed bounded window, not company model quality. Audio ACK and archive are independent. */
+        get: operations["readRecordingSubtitles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/recordings/{sessionId}/manifest": {
         parameters: {
             query?: never;
@@ -2756,6 +2871,46 @@ export interface paths {
         get: operations["getRecordingManifest"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/transcription-source": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Current meeting READ and exact recording scope. Read-only source preparation status; no copy or model call. */
+        get: operations["readTranscriptionSource"];
+        put?: never;
+        /** @description Explicit owner command. Copies only the actual current READY archive through real upload receipts, under current epoch. A prepared copy does not imply accepted import or RAW. */
+        post: operations["prepareTranscriptionSource"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/recording-transcription-source": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Current meeting READ and exact recording scope. Read-only source preparation status; no copy or model call. */
+        get: operations["readCurrentTranscriptionSource"];
+        put?: never;
+        /** @description Explicit owner command. Copies only the actual current READY archive through real upload receipts, under current epoch. A prepared copy does not imply accepted import or RAW. */
+        post: operations["prepareCurrentTranscriptionSource"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2918,6 +3073,15 @@ export interface components {
             csrfToken: string;
             /** Format: date-time */
             expiresAt: string;
+        };
+        Department: {
+            id: string;
+            name: string;
+            parentId: string | null;
+            active: boolean;
+        };
+        Departments: {
+            items: components["schemas"]["Department"][];
         };
         Person: {
             stableId: string;
@@ -3314,7 +3478,10 @@ export interface components {
             purpose: string;
             /** @description Exact stored/display value; never an object key or path. No product character quota. The HTTP download filename has a separate bounded transport representation. */
             name: string;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description TRANSCRIPT_INPUT requests to this public upload endpoint are limited to 33554432 bytes. Recording archives use the separate source preparation command.
+             */
             size: number;
             sha256?: components["schemas"]["Hash"] | null;
         };
@@ -3590,9 +3757,9 @@ export interface components {
         /** @description Actual boot installation declaration and provider inventory. No pendingCount; NOT_APPLICABLE does not mean an installed reader counted zero. */
         Correction: {
             /** @enum {string} */
-            mode: "DISABLED_NOT_INSTALLED" | "UNAVAILABLE";
+            mode: "DISABLED_NOT_INSTALLED" | "UNAVAILABLE" | "CONTROLLED_SPEECH";
             /** @enum {string} */
-            readiness: "NOT_APPLICABLE" | "UNAVAILABLE";
+            readiness: "NOT_APPLICABLE" | "UNAVAILABLE" | "READY";
             qualificationId: string | null;
         };
         /** @description Fresh observations only, never transferable mutation or source grants. Later installed candidate/publication policies may further deny writes. */
@@ -3747,11 +3914,109 @@ export interface components {
         TranscriptCommandRejection: {
             error: {
                 /** @enum {string} */
-                code: "TRANSCRIPT_NOT_FOUND" | "REVISION_CONFLICT" | "CURRENT_REVISION_REQUIRED" | "MEETING_NOT_WRITABLE" | "REVISION_EXHAUSTED" | "IDEMPOTENCY_CONFLICT" | "TRANSCRIPT_CONFLICT" | "REQUEST_TOO_LARGE" | "WORKING_REQUIRED" | "COMPLETE_SEGMENTS_REQUIRED" | "SEGMENT_IDENTITY_CHANGED" | "EMPTY_TRANSCRIPT";
+                code: "TRANSCRIPT_NOT_FOUND" | "REVISION_CONFLICT" | "CURRENT_REVISION_REQUIRED" | "MEETING_NOT_WRITABLE" | "REVISION_EXHAUSTED" | "IDEMPOTENCY_CONFLICT" | "TRANSCRIPT_CONFLICT" | "REQUEST_TOO_LARGE" | "WORKING_REQUIRED" | "COMPLETE_SEGMENTS_REQUIRED" | "SEGMENT_IDENTITY_CHANGED" | "EMPTY_TRANSCRIPT" | "CORRECTION_NOT_FOUND" | "CORRECTION_ALREADY_HANDLED" | "CORRECTION_STALE" | "TRANSCRIPT_ALREADY_CONFIRMED" | "CORRECTIONS_PENDING" | "CORRECTION_NOT_AVAILABLE";
                 message: string;
                 /** Format: uuid */
                 traceId: string;
             };
+        };
+        SpeechSpeakerSnapshot: {
+            /** Format: uuid */
+            id: string;
+            label: string;
+            enterpriseId: string | null;
+            /** @constant */
+            source: "HUMAN";
+            segmentIds: string[];
+        };
+        SpeechSpeakers: {
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            observation: components["schemas"]["Observation"];
+            items: components["schemas"]["SpeechSpeakerSnapshot"][];
+        };
+        SpeakerEditRequest: {
+            expectedRevisionToken: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            segmentIds: string[];
+            label: string;
+            enterpriseId: string | null;
+        };
+        /** @description The immutable created WORKING revision is the operation ID; operationId equals revisionId. */
+        TranscriptOperationResult: {
+            /** @constant */
+            kind: "SAVED_REVISION";
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            revisionId: string;
+            /** Format: int64 */
+            historyRevision: number;
+            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
+            historyRevisionToken: string;
+            /** Format: uuid */
+            operationId: string;
+        };
+        /** @description Immutable actual result identity plus fresh current observation, never an invented historical accepted meeting revision. Exact replay returns the old result without attaching pointers. Repeated unchanged attached confirmation returns the same ID with no version increment; cleared pointer explicit new confirmation may reattach the same immutable ID with one increment. */
+        TranscriptOperationReceipt: {
+            result: components["schemas"]["TranscriptOperationResult"];
+            replayed: boolean;
+            resultIsCurrent: boolean;
+            observation: components["schemas"]["Observation"];
+        };
+        SpeechCorrectionItem: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            segmentId: string;
+            source: string;
+            replacement: string;
+            /** @enum {unknown} */
+            status: "PENDING" | "ACCEPTED" | "REJECTED" | "UNDONE" | "STALE";
+            operationId: string | null;
+            canAccept: boolean;
+            canReject: boolean;
+            canUndo: boolean;
+        };
+        SpeechCorrections: {
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            observation: components["schemas"]["Observation"];
+            items: components["schemas"]["SpeechCorrectionItem"][];
+            pendingCount: number;
+            canPropose: boolean;
+        };
+        CorrectionProposalRequest: {
+            expectedRevisionToken: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+        };
+        CorrectionProposalReceipt: {
+            result: {
+                /** Format: uuid */
+                reviewBatchId: string;
+                /** Format: uuid */
+                sourceRevisionId: string;
+                candidateIds: string[];
+                createdCount: number;
+            };
+            replayed: boolean;
+            resultIsCurrent: boolean;
+            observation: components["schemas"]["Observation"];
+        };
+        CorrectionDecisionRequest: {
+            expectedRevisionToken: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            /** Format: uuid */
+            candidateId: string;
+            /** @enum {unknown} */
+            decision: "ACCEPT" | "REJECT";
         };
         TranscriptOccurrence: {
             occurrenceId: string;
@@ -3789,28 +4054,6 @@ export interface components {
             /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
             expectedRevisionToken: string;
         });
-        /** @description The immutable created WORKING revision is the operation ID; operationId equals revisionId. */
-        TranscriptOperationResult: {
-            /** @constant */
-            kind: "SAVED_REVISION";
-            /** Format: uuid */
-            meetingId: string;
-            /** Format: uuid */
-            revisionId: string;
-            /** Format: int64 */
-            historyRevision: number;
-            /** @description Opaque decimal token. Preserve every digit; supported business revisions are 0..9223372036854775806. */
-            historyRevisionToken: string;
-            /** Format: uuid */
-            operationId: string;
-        };
-        /** @description Immutable actual result identity plus fresh current observation, never an invented historical accepted meeting revision. Exact replay returns the old result without attaching pointers. Repeated unchanged attached confirmation returns the same ID with no version increment; cleared pointer explicit new confirmation may reattach the same immutable ID with one increment. */
-        TranscriptOperationReceipt: {
-            result: components["schemas"]["TranscriptOperationResult"];
-            replayed: boolean;
-            resultIsCurrent: boolean;
-            observation: components["schemas"]["Observation"];
-        };
         /** @description sourceRevisionId must equal the path operationId and still be the current WORKING revision. Undo creates a new child copying its verified parent text/marks; a later edit conflicts. No historical row is overwritten. */
         TranscriptUndoRequest: {
             expectedRevision?: components["schemas"]["ExpectedRevision"];
@@ -4576,9 +4819,9 @@ export interface components {
         };
         SavedCorrectionQualification: {
             /** @enum {unknown} */
-            mode: "DISABLED_NOT_INSTALLED" | "UNAVAILABLE";
+            mode: "DISABLED_NOT_INSTALLED" | "UNAVAILABLE" | "CONTROLLED_SPEECH";
             /** @enum {unknown} */
-            readiness: "NOT_APPLICABLE" | "UNAVAILABLE";
+            readiness: "NOT_APPLICABLE" | "UNAVAILABLE" | "READY";
             qualificationId: string | null;
         };
         /** @description Current business assessment is separate from formal activation. ready remains false while Task11 is absent. Required scopes are exact latest WHOLE support and accepted nullable ACTION_FIELDS; SPANs never combine. Historical reviews do not imply current credit. Correction qualification is consumed from the exact actual saved-transcript component and same private boot identity rechecked in F; these projection strings confer no authority. */
@@ -5064,6 +5307,23 @@ export interface components {
                 CHUNK_PLAN: components["schemas"]["OriginalArtifactIdentity"];
             };
         };
+        FrozenRosterMember: {
+            memberId: components["schemas"]["Uuid"];
+            enterpriseId: string | null;
+            displayName: string;
+            /** @enum {unknown} */
+            memberKind: "ENTERPRISE" | "EXTERNAL";
+        };
+        /** @description Exact saved information and confirmed roster selected by the immutable final IDs; protected and budgeted graph capture, never current-root substitution. */
+        FrozenInformation: {
+            infoRevisionId: components["schemas"]["Uuid"];
+            rosterRevisionId: components["schemas"]["Uuid"];
+            name: string | null;
+            category: string | null;
+            summary: string | null;
+            occurredOn: string | null;
+            roster: components["schemas"]["FrozenRosterMember"][];
+        };
         /** @description Exact verified frozen body/set/elements/accepted action tuple and original review/profile identities. Member detail requires the current effective final at both protected captures; owner may read frozen history. No current/default substitution or raw manifests. */
         FinalDetail: {
             confirmation: components["schemas"]["FrozenFinal"] | null;
@@ -5076,6 +5336,7 @@ export interface components {
             elements?: components["schemas"]["FrozenElements"];
             reviews?: components["schemas"]["FrozenReview"][];
             profiles?: components["schemas"]["OriginalProfiles"][];
+            information?: components["schemas"]["FrozenInformation"];
         };
         /** @description Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header. */
         SubmitCommand: {
@@ -5390,6 +5651,36 @@ export interface components {
             available: boolean;
             sampleCount: number;
         };
+        RecordingSubtitleEvent: {
+            eventId: string;
+            /** Format: uuid */
+            sessionId: string;
+            /** Format: uuid */
+            partId: string;
+            /** Format: uuid */
+            segmentId: string;
+            revision: number;
+            /** @enum {unknown} */
+            status: "temporary" | "stable";
+            text: string;
+            startMs: number;
+            endMs: number;
+            sourceFinalSeq: number;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        RecordingSubtitles: {
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            sessionId: string;
+            events: components["schemas"]["RecordingSubtitleEvent"][];
+            nextCursor: string;
+            hasMore: boolean;
+            delayed: boolean;
+            /** @enum {unknown} */
+            state: "NOT_STARTED" | "IDLE" | "LEASED" | "DELAYED" | "DEFERRED" | "DONE" | "CANCELLED";
+        };
         RecordingManifest: {
             /** Format: uuid */
             sessionId: string;
@@ -5402,6 +5693,26 @@ export interface components {
                 highestReceivedSeq: number;
                 sampleCount: number;
             }[];
+        };
+        RecordingTranscriptSource: {
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            sessionId?: string;
+            /** Format: uuid */
+            sourceId?: string;
+            /** @enum {string} */
+            state: "NOT_RECORDED" | "NOT_REQUESTED" | "PENDING" | "LEASED" | "DELAYED" | "READY" | "CANCELLED";
+            archiveAvailable: boolean;
+            /** Format: uuid */
+            fileId?: string;
+            sourceSha256?: string;
+            sourceBytes?: number;
+            sourceSamples?: number;
+            /** Format: uuid */
+            transcriptionTaskId?: string;
+            /** @enum {string} */
+            transcriptionState?: "READY" | "RUNNING" | "RECONCILING" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "STALE";
         };
     };
     responses: {
@@ -6303,10 +6614,35 @@ export interface operations {
             503: components["responses"]["Unavailable"];
         };
     };
+    listDirectoryDepartments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description At most 1000 current departments, including explicit inactive status */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Departments"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["BusinessForbidden"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
     searchDirectoryPeople: {
         parameters: {
             query?: {
                 query?: string;
+                /** @description Exact stable department identity from the current catalogue; changing it resets paging. */
+                departmentId?: string;
                 /** @description Opaque next-page cursor from the prior response */
                 cursor?: string;
                 limit?: number;
@@ -8722,6 +9058,604 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Receipt"];
+                };
+            };
+            /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
+            400: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or revoked session. */
+            401: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh meeting permission denied. Admin role grants no implicit content access. */
+            403: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Exact same-meeting selected entity missing after authorization. */
+            404: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
+            409: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Stable request transport envelope exceeded. */
+            413: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unsupported, blank or incomplete segment/mark input. */
+            422: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
+            503: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    readTranscriptSpeakers: {
+        parameters: {
+            query: {
+                sourceRevisionId: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized complete result. */
+            200: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpeechSpeakers"];
+                };
+            };
+            /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
+            400: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or revoked session. */
+            401: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh meeting permission denied. Admin role grants no implicit content access. */
+            403: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Exact same-meeting selected entity missing after authorization. */
+            404: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
+            409: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Stable request transport envelope exceeded. */
+            413: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unsupported, blank or incomplete segment/mark input. */
+            422: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
+            503: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    labelTranscriptSpeakers: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SpeakerEditRequest"];
+            };
+        };
+        responses: {
+            /** @description Fresh authorized complete result. */
+            200: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptOperationReceipt"];
+                };
+            };
+            /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
+            400: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or revoked session. */
+            401: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh meeting permission denied. Admin role grants no implicit content access. */
+            403: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Exact same-meeting selected entity missing after authorization. */
+            404: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
+            409: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Stable request transport envelope exceeded. */
+            413: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unsupported, blank or incomplete segment/mark input. */
+            422: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
+            503: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    readSpeechCorrections: {
+        parameters: {
+            query: {
+                sourceRevisionId: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fresh authorized complete result. */
+            200: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpeechCorrections"];
+                };
+            };
+            /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
+            400: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or revoked session. */
+            401: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh meeting permission denied. Admin role grants no implicit content access. */
+            403: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Exact same-meeting selected entity missing after authorization. */
+            404: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
+            409: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Stable request transport envelope exceeded. */
+            413: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unsupported, blank or incomplete segment/mark input. */
+            422: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
+            503: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    proposeSpeechCorrections: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CorrectionProposalRequest"];
+            };
+        };
+        responses: {
+            /** @description Fresh authorized complete result. */
+            200: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CorrectionProposalReceipt"];
+                };
+            };
+            /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
+            400: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or revoked session. */
+            401: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh meeting permission denied. Admin role grants no implicit content access. */
+            403: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Exact same-meeting selected entity missing after authorization. */
+            404: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
+            409: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Stable request transport envelope exceeded. */
+            413: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unsupported, blank or incomplete segment/mark input. */
+            422: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptCommandRejection"];
+                };
+            };
+            /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
+            503: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    decideSpeechCorrection: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CorrectionDecisionRequest"];
+            };
+        };
+        responses: {
+            /** @description Fresh authorized complete result. */
+            200: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptOperationReceipt"];
                 };
             };
             /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
@@ -16764,6 +17698,39 @@ export interface operations {
             503: components["responses"]["recording_Error"];
         };
     };
+    readRecordingSubtitles: {
+        parameters: {
+            query?: {
+                afterEventId?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingSubtitles"];
+                };
+            };
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
+        };
+    };
     getRecordingManifest: {
         parameters: {
             query?: never;
@@ -16782,6 +17749,140 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RecordingManifest"];
+                };
+            };
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
+        };
+    };
+    readTranscriptionSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingTranscriptSource"];
+                };
+            };
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
+        };
+    };
+    prepareTranscriptionSource: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": Record<string, never>;
+            };
+        };
+        responses: {
+            /** @description Committed current-session result */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingTranscriptSource"];
+                };
+            };
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
+        };
+    };
+    readCurrentTranscriptionSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingTranscriptSource"];
+                };
+            };
+            400: components["responses"]["recording_Error"];
+            401: components["responses"]["recording_Error"];
+            403: components["responses"]["recording_Error"];
+            404: components["responses"]["recording_Error"];
+            409: components["responses"]["recording_Error"];
+            413: components["responses"]["recording_Error"];
+            429: components["responses"]["recording_Error"];
+            503: components["responses"]["recording_Error"];
+        };
+    };
+    prepareCurrentTranscriptionSource: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": Record<string, never>;
+            };
+        };
+        responses: {
+            /** @description Committed current-session result */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingTranscriptSource"];
                 };
             };
             400: components["responses"]["recording_Error"];

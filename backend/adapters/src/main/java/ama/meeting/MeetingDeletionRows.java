@@ -48,6 +48,7 @@ final class MeetingDeletionRows {
   new Owned("parsed_unit","document_id IN (SELECT id FROM parsed_document WHERE material_revision_id IN (SELECT id FROM material_revision WHERE reference_id IN (SELECT id FROM material_reference WHERE meeting_id=?)))"),
   new Owned("publication_attempt","publication_id IN (SELECT id FROM publication WHERE meeting_id=?)"),
   new Owned("publication_submission","publication_id IN (SELECT id FROM publication WHERE meeting_id=?)"),
+  new Owned("recording_transcript_source","meeting_id=?"),
   new Owned("recording_archive","meeting_id=?"),
   new Owned("recording_archive_current","input_id IN (SELECT id FROM recording_archive_input WHERE meeting_id=?)"),
   new Owned("recording_chunk","session_id IN (SELECT session_id FROM recording_session WHERE meeting_id=?)"),
@@ -57,6 +58,8 @@ final class MeetingDeletionRows {
   new Owned("sensitive_detection_source","detection_id IN (SELECT id FROM sensitive_detection WHERE set_id IN (SELECT id FROM element_set WHERE meeting_id=?))"),
   new Owned("sensitive_exclusion","revision_id IN (SELECT id FROM exclusion_revision WHERE meeting_id=?)"),
   new Owned("source_context_material","context_id IN (SELECT id FROM source_context WHERE meeting_id=?)"),
+  new Owned("recording_subtitle_event","meeting_id=?"),
+  new Owned("recording_subtitle_job","meeting_id=?"),
   new Owned("speech_review_candidate","meeting_id=?"),
   new Owned("speech_review_batch","meeting_id=?"),
   new Owned("speech_checkpoint","input_id IN (SELECT id FROM transcription_input WHERE meeting_id=?)"),
@@ -64,6 +67,8 @@ final class MeetingDeletionRows {
   new Owned("task_attempt","task_id IN (SELECT id FROM durable_task WHERE subject_kind='MEETING' AND subject_id=?)"),
   new Owned("task_outbox","subject_kind='MEETING' AND subject_id=?"),
   new Owned("transcript_correction_operation","meeting_id=?"),
+  new Owned("transcript_speaker_change","revision_id IN (SELECT id FROM transcript_revision WHERE meeting_id=?)"),
+  new Owned("transcript_speaker_snapshot","meeting_id=?"),
   new Owned("transcript_segment_mark","revision_id IN (SELECT id FROM transcript_revision WHERE meeting_id=?)"),
   new Owned("transcript_speaker_access","meeting_id=?"),
   new Owned("upload_part","upload_id IN (SELECT id FROM upload_session WHERE meeting_id=?)"),
@@ -120,7 +125,16 @@ final class MeetingDeletionRows {
  static int purgePage(JdbcTemplate j,String meeting,int cursor){
   while(cursor<ORDER.size()){
    var p=ORDER.get(cursor);
-   if(j.update("DELETE FROM "+p.table+" WHERE "+p.where+" LIMIT 500",meeting)>0)return cursor;
+   if(p.table.equals("recording_chunk")) {
+    // Its generation trigger updates recording_session. A DELETE whose subquery
+    // also reads that parent is rejected by MySQL 1442. Capture the owned session
+    // under the deleted-root transaction, then delete by the bound session ID.
+    var sessions=j.queryForList("SELECT s.session_id FROM recording_session s WHERE s.meeting_id=? AND EXISTS(SELECT 1 FROM recording_chunk c WHERE c.session_id=s.session_id) ORDER BY s.session_id LIMIT 1 FOR UPDATE",String.class,meeting);
+    if(!sessions.isEmpty()) {
+     if(j.update("DELETE FROM recording_chunk WHERE session_id=? LIMIT 500",sessions.getFirst())>0)return cursor;
+     throw new IllegalStateException("Recording cleanup source changed");
+    }
+   } else if(j.update("DELETE FROM "+p.table+" WHERE "+p.where+" LIMIT 500",meeting)>0)return cursor;
    cursor++;
   }return cursor;
  }

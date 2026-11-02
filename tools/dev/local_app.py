@@ -38,7 +38,7 @@ def load_local_settings(path=None):
         return
     if path.is_symlink() or not path.is_file() or path.stat().st_size > 4096 or path.stat().st_mode & 0o777 != 0o600:
         raise ValueError('Restricted local settings required')
-    allowed = {'AMA_CAS_ORIGIN', 'AMA_INTEGRATION_KNOWLEDGE_ORIGIN', 'AMA_INTEGRATION_MODEL_ORIGIN',
+    allowed = {'AMA_CAS_ORIGIN', 'AMA_INTEGRATION_KNOWLEDGE_ORIGIN', 'AMA_INTEGRATION_MODEL_ORIGIN', 'AMA_INTEGRATION_DIRECTORY_ORIGIN',
                'AMA_LOCAL_DB_POOL_MAXIMUM', 'AMA_LOCAL_FILE_WORKERS', 'AMA_LOCAL_MINUTES_SCENARIO'}
     values = json.loads(path.read_text())
     if not isinstance(values, dict) or not set(values) <= allowed or any(not isinstance(v, str) for v in values.values()):
@@ -268,6 +268,9 @@ def integration_origins():
     values = {'knowledge': os.environ.get('AMA_INTEGRATION_KNOWLEDGE_ORIGIN') or None,
               'model': os.environ.get('AMA_INTEGRATION_MODEL_ORIGIN') or None}
     values['cas'] = os.environ.get('AMA_CAS_ORIGIN', values['knowledge'] or 'http://127.0.0.1:8792')
+    values['directory'] = os.environ.get('AMA_INTEGRATION_DIRECTORY_ORIGIN', 'http://127.0.0.1:8792')
+    if values['directory'] != 'http://127.0.0.1:8792':
+        raise ValueError('The sibling directory uses its fixed loopback port 8792')
     for name, value in values.items():
         if value is not None:
             match = re.fullmatch(r'http://127\.0\.0\.1:([1-9][0-9]{2,4})', value)
@@ -321,7 +324,7 @@ def start(state):
             snapshot += struct.pack('>I', len(value)) + value
     category_file = RUNTIME / 'categories.bin'
     category_file.write_bytes(snapshot)
-    options = [f'--local-dev.categories={category_file}',
+    options = ['--local-dev.directory-origin=' + origins['directory'], f'--local-dev.categories={category_file}',
                '--local-dev.categories-sha=' + hashlib.sha256(snapshot).hexdigest(),
                '--local-dev.seed-marker=' + str(RUNTIME / 'seeded'), '--local-dev.seed-date=' + state['seedDate']]
     # Reuse the production processing budgets for local TXT intake and authority.

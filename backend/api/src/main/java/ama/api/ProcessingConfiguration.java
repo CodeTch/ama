@@ -52,9 +52,11 @@ import static ama.contract.ProcessingContracts.*;
             if(request.orderedFileIds().size()>budget.maxBatchFiles())throw new Failure(413,"REQUEST_TOO_LARGE");
             var draft=components.intake().readDraft(actor,meeting,request.orderedFileIds(),()->false);
             if(draft.revision()!=request.expectedRevision())throw conflict();
+            boolean recording=env.containsProperty("processing.recording-config-version")&&components.authority().recordingSource(draft);
+            long sourceBound=recording?ama.transcript.RecordingTranscriptProfile.MAX_BYTES:aggregate;
             long size=0;
             for(var file:draft.orderedSources()) {
-                if(file.file().size()>aggregate-size)throw new Failure(413,"REQUEST_TOO_LARGE");
+                if(file.file().size()>sourceBound-size)throw new Failure(413,"REQUEST_TOO_LARGE");
                 size+=file.file().size();
             }
             Path root;
@@ -62,8 +64,8 @@ import static ama.contract.ProcessingContracts.*;
             try {
                 root=Path.of(env.getRequiredProperty("processing.archive-root"));
                 pin=env.getRequiredProperty("processing.index-sha");
-                version=env.getRequiredProperty("processing.config-version");
-                sha=env.getRequiredProperty("processing.config-sha");
+                version=env.getRequiredProperty(recording?"processing.recording-config-version":"processing.config-version");
+                sha=env.getRequiredProperty(recording?"processing.recording-config-sha":"processing.config-sha");
             }
             catch(IllegalStateException failure) {
                 throw unavailable();

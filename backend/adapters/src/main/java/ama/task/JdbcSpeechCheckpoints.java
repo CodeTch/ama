@@ -22,7 +22,7 @@ final class JdbcSpeechCheckpoints implements SpeechPipeline.Store {
  void current(){
   if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new CancellationException("Speech checkpoint cancelled");
   var valid=q.validatedPreparationLease(lease).orElseThrow(()->new CancellationException("Speech lease changed"));authority.requireImportPreparation(List.of(lease.spec()),valid.domain().prepared());
-  Long member=q.jdbc.queryForObject("SELECT COUNT(*) FROM transcription_input i JOIN input_batch_file f ON f.batch_id=i.batch_id WHERE i.id=? AND i.meeting_id=? AND i.input_fingerprint=? AND i.parser_version=? AND f.file_id=? AND f.sha256=?",Long.class,lease.spec().input().id(),lease.spec().subject().id(),lease.spec().inputFingerprint(),ControlledSpeechProfile.PARSER,source.fileId(),source.sourceSha256());
+  Long member=q.jdbc.queryForObject("SELECT COUNT(*) FROM transcription_input i JOIN input_batch_file f ON f.batch_id=i.batch_id WHERE i.id=? AND i.meeting_id=? AND i.input_fingerprint=? AND i.parser_version IN (?,?) AND f.file_id=? AND f.sha256=?",Long.class,lease.spec().input().id(),lease.spec().subject().id(),lease.spec().inputFingerprint(),ControlledSpeechProfile.PARSER,ama.transcript.RecordingTranscriptProfile.PARSER,source.fileId(),source.sourceSha256());
   if(member==null||member!=1)throw unavailable();
  }
  @Override public Optional<SpeechPipeline.Snapshot> load(SpeechPipeline.Stage stage){Objects.requireNonNull(stage);return q.preparation(()->{current();var row=read(stage);return row==null?Optional.empty():Optional.of(SpeechCheckpointCodec.decode(stage,payload(row)));});}

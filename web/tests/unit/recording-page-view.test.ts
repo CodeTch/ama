@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createServer} from 'vite';
-import {createSSRApp,h,ref,shallowReadonly} from 'vue';
+import {createSSRApp,h,ref,shallowReadonly,nextTick} from 'vue';
 import {createMemoryHistory,createRouter} from 'vue-router';
 import {renderToString} from 'vue/server-renderer';
 import type {RecordingPart,RecordingSession,PartState} from '../../src/features/recording/recording-types';
@@ -12,7 +12,7 @@ const meetingId='00000000-0000-4000-8000-000000000001';
 const emptyRecord=():RecordingSession=>({schema:1,actor:'actor-1',meeting:meetingId,finished:false,parts:[]});
 const part=(state:PartState):RecordingPart=>({id:'part-1',index:1,name:'录音片段 01.webm',mime:'audio/webm',state,elapsedMs:9000,savedElapsedMs:9000,bytes:1024,chunks:['chunk-1'],incomplete:false});
 
-async function renderPage(component:unknown,applicationKey:unknown,phase:Phase='IDLE',record=emptyRecord()){
+async function renderPage(component:unknown,applicationKey:unknown,phase:Phase='IDLE',record=emptyRecord(),capture?:(state:any,scope:any)=>void){
  const router=createRouter({history:createMemoryHistory(),routes:[{path:'/meetings',component:{render:()=>null}},{path:'/recording/:id?',component:{render:()=>null}}]});
  await router.push('/recording/'+meetingId);await router.isReady();
  const current=ref({actor:{enterpriseId:'actor-1',status:'ACTIVE',roles:['USER'] as const},csrfToken:'csrf',expiresAt:'2099-01-01T00:00:00.000Z'});
@@ -20,8 +20,8 @@ async function renderPage(component:unknown,applicationKey:unknown,phase:Phase='
  const command={state:shallowReadonly(ref('EMPTY')),snapshot:shallowReadonly(ref(null)),ack:shallowReadonly(ref(null))};
  const pcmRecord=record.parts.length?{schema:1,actor:record.actor,meetingId:record.meeting,session:{sessionId:meetingId,partId:record.parts.at(-1)!.id,writerEpoch:2,backendId:'a'.repeat(64)},parts:record.parts.map(p=>({partId:p.id,finalSequence:p.chunks.length,sampleCount:p.elapsedMs*16})),finished:record.finished}:null;
  const pcmRecorder={...recorder,record:shallowReadonly(ref(pcmRecord)),meetingId:ref(meetingId),pendingCount:ref(!record.finished&&record.parts.length?1:0),pendingBytes:ref(!record.finished&&record.parts.length?1024:0),connected:ref(true),reconnect:async()=>{},restore:async()=>null};
- const app={pcmRecorder,recordingApi:{archive:async()=>({taskId:meetingId,state:'SUCCEEDED',available:true,sampleCount:144000}),audioUrl:()=>'/api/v1/recordings/'+meetingId+'/audio'},session:{current:shallowReadonly(current),status:shallowReadonly(ref('ACTIVE')),refresh:async()=>{},invalidate:()=>{},logout:async()=>{},onLogout:()=>()=>{}},recorder,recordingStore:{latest:async()=>null,load:async()=>null,save:async()=>{},append:async()=>{},file:async()=>new File([], 'empty.webm'),clear:async()=>{}},create:{command,submit:async()=>({id:meetingId})},uploadQueue:{ready:shallowReadonly(ref(false)),blocked:shallowReadonly(ref(false)),items:shallowReadonly(ref([])),importCommand:command,open:async()=>{},add:async()=>{},retry:async()=>{},submitImport:async()=>{}},setMeetingScope:()=>{},meetingScope:shallowReadonly(ref(meetingId)),infoScopeReady:shallowReadonly(ref(true)),info:{},journals:{},options:{},dispose:()=>{}};
- const html=await renderToString(createSSRApp({render:()=>h(component as any)}).provide(applicationKey as any,app).use(router));
+ const app={pcmRecorder,subtitleApi:{read:async()=>({meetingId,sessionId:meetingId,events:[],nextCursor:'0',hasMore:false,delayed:false,state:'IDLE'})},recordingApi:{archive:async()=>({taskId:meetingId,state:'SUCCEEDED',available:true,sampleCount:144000}),audioUrl:()=>'/api/v1/recordings/'+meetingId+'/audio'},session:{current:shallowReadonly(current),status:shallowReadonly(ref('ACTIVE')),refresh:async()=>{},invalidate:()=>{},logout:async()=>{},onLogout:()=>()=>{}},recorder,recordingStore:{latest:async()=>null,load:async()=>null,save:async()=>{},append:async()=>{},file:async()=>new File([], 'empty.webm'),clear:async()=>{}},create:{command,submit:async()=>({id:meetingId})},uploadQueue:{ready:shallowReadonly(ref(false)),blocked:shallowReadonly(ref(false)),items:shallowReadonly(ref([])),importCommand:command,open:async()=>{},add:async()=>{},retry:async()=>{},submitImport:async()=>{}},setMeetingScope:()=>{},meetingScope:shallowReadonly(ref(meetingId)),infoScopeReady:shallowReadonly(ref(true)),info:{},journals:{},options:{},dispose:()=>{}};
+ const view=capture?{...(component as any),setup(props:any,context:any){const state=(component as any).setup(props,context);capture(state,{pcmRecorder,current,router});return state;}}:component;const html=await renderToString(createSSRApp({render:()=>h(view as any)}).provide(applicationKey as any,app).use(router));
  return html;
 }
 
@@ -40,6 +40,8 @@ test('online recording view matches prototype structure and state copy',async()=
   assert.match(empty,/M12 4v14m-5-5 5 5 5-5M5 21h14/);
   const active=await renderPage(component,applicationKey,'RECORDING',{...emptyRecord(),parts:[part('RECORDING')]});
   assert.match(active,/暂停录音/);
+  assert.match(active,/class="recording-live"/);
+  assert.doesNotMatch(active,/实时识别尚未安装/);
   assert.match(active,/待服务端确认/);
   const interrupted=await renderPage(component,applicationKey,'INTERRUPTED',{...emptyRecord(),parts:[part('INTERRUPTED')]});
   assert.match(interrupted,/内容保留/);
@@ -53,4 +55,9 @@ test('production recording page has no fixed demo or interface bypass',()=>{
  const source=readFileSync(new URL('../../src/features/meetings/RecordingPage.vue',import.meta.url),'utf8');
  assert.doesNotMatch(source,/MTG-|mock|demoSeed|VITE_USE_RECORDING_FIXTURE/i);
  assert.match(source,/useRecorder|useApplication/);
+});
+
+test('recording scope-loss cleanup closes private decisions and late finish cannot navigate the next actor',async()=>{
+ const server=await createServer({server:{middlewareMode:true,hmr:false},appType:'custom'});let state:any,scope:any,release:(()=>void)|undefined,pending:Promise<void>|undefined;try{const component=(await server.ssrLoadModule('/src/features/meetings/RecordingPage.vue')).default,{applicationKey}=await server.ssrLoadModule('/src/application');await renderPage(component,applicationKey,'PAUSED',{...emptyRecord(),parts:[part('PAUSED')]},(s,c)=>{state=s;scope=c;});const end={open:true,close(){this.open=false;}},interrupt={open:true,close(){this.open=false;}};state.endDialog.value=end;state.interruptDialog.value=interrupt;scope.pcmRecorder.finish=()=>new Promise<void>(r=>release=r);pending=state.finish('save');assert.equal(state.busy.value,true);assert.equal(state.closeDecision(end),false);assert.equal(end.open,true);scope.current.value=null;state.resetPrivateDialogs();await nextTick();assert.equal(end.open,false);assert.equal(interrupt.open,false);release!();await pending;assert.equal(scope.router.currentRoute.value.path,'/recording/'+meetingId);assert.equal(state.endError.value,null);
+ }finally{release?.();await pending;state?.subtitles.dispose();state?.flow.dispose();await server.close();}
 });

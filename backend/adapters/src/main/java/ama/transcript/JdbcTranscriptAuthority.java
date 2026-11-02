@@ -114,6 +114,13 @@ public final class JdbcTranscriptAuthority {
    return new ProcessingIntakeFacts.Draft(actor,meeting,number(root,"revision"),number(root,"cancel_epoch"),ordered);
   });check(cancelled);return draft;
  }
+ /** Selection observation only; reserveIntake repeats the proof under its authentic owner gate. */
+ public boolean recordingSource(ProcessingIntakeFacts.Draft draft){
+  independent();return tx.required(()->{var gate=registry.lock(draft.actor(),draft.meetingId(),MeetingAccess.Action.EDIT);var current=root(draft.meetingId());writable(current);require(number(current,"revision")==draft.revision()&&number(current,"cancel_epoch")==draft.cancelEpoch(),FINGERPRINT_MISMATCH);return recordingDraft(draft);});
+ }
+ private boolean recordingDraft(ProcessingIntakeFacts.Draft draft){
+  if(draft.orderedSources().size()!=1)return false;var file=draft.orderedSources().getFirst().file();return ama.recording.JdbcRecordingTranscriptSources.readyCopy(j,draft.meetingId(),draft.actor().enterpriseId(),draft.cancelEpoch(),file.fileId(),file.sha256());
+ }
  public PreparedIntake prepare(ProcessingIntakeFacts.Draft draft,String batch,String input,ConfigArchiveSource.Snapshot archives,Ref processing,BooleanSupplier cancelled){
   independent();Objects.requireNonNull(draft);Objects.requireNonNull(archives);check(cancelled);uuid(batch);uuid(input);uuid(draft.meetingId());
   require(!draft.orderedSources().isEmpty()&&draft.orderedSources().size()<=budget.maxBatchFiles(),BUDGET_EXCEEDED);
@@ -132,6 +139,7 @@ public final class JdbcTranscriptAuthority {
   for(var a:raw){check(cancelled);String hash=ArchiveBytes.capture(a.bytes(),budget.maxArtifactBytes(),budget.maxTotalBytes(),cancelled).sha256(cancelled);require(refs.put(a.claimedArtifactType(),new Ref(a.claimedArtifactType(),a.claimedVersion(),hash))==null,PROFILE_UNAVAILABLE);}
   require(processing.equals(refs.get(ArtifactType.PROCESSING_CONFIG)),PROFILE_UNAVAILABLE);
   Ref parser=Objects.requireNonNull(refs.get(ArtifactType.PARSER_CONFIG));
+  if(RecordingTranscriptProfile.PARSER.equals(parser.version()))require(recordingSource(draft),INPUT_INVALID);
   var ordered=new ArrayList<CanonicalValue>();for(var m:members)ordered.add(obj("ordinal",m.ordinal(),"fileId",m.fileId(),"sha256",m.sha256(),"sizeBytes",m.sizeBytes()));
   var manifestValue=obj("schemaVersion",1,"profile","ama.transcription-input.v1","meetingId",draft.meetingId(),"inputId",input,"kind","IMPORT",
    "batch",obj("id",batch,"kind","TRANSCRIPT","files",new Sequence(ordered)),"sourceRevisionId",null,"materials",obj("mode","EMPTY","items",list()),
@@ -161,6 +169,7 @@ public final class JdbcTranscriptAuthority {
   transaction();if(prepared==null||prepared.issuer!=this)throw new IllegalArgumentException("Foreign prepared intake");
   var d=prepared.draft;access.requirePrepared(registry.access(gate),d.actor(),d.meetingId(),List.of(d.actor().enterpriseId()),MeetingAccess.Action.EDIT);
   var root=root(d.meetingId());writable(root);require(d.actor().enterpriseId().equals(root.get("owner_id"))&&number(root,"revision")==d.revision()&&number(root,"cancel_epoch")==d.cancelEpoch(),FINGERPRINT_MISMATCH);
+  if(RecordingTranscriptProfile.PARSER.equals(prepared.parserVersion))require(recordingDraft(d),INPUT_INVALID);
   // Fresh IDs may not adopt existing input/producer/output rows. No old domain is acquired after sources.
   for(String table:List.of("input_batch","transcription_input")){
    String id=table.equals("input_batch")?prepared.batch:prepared.input;

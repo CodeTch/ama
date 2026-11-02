@@ -1,3 +1,17 @@
+<!-- BCD_LOCAL_CONTROLLED_COMPLETION_20261102 -->
+# B阶段当前完成摘要
+
+**本地受控范围完成。** 当前正常部署/工作源 `86a1c312d1b11c24b590c2aa8f6eef764b8c636ca82a0767142a29cd5a3f2ebd`。仅1440×900、1024×768，全部手机开发与验收移除且不归F；外部固定兄弟8792/2525、非公司权威。
+
+B00—B09及本次后续页面/CRUD/CAS矩阵已完成，与C/D实际能力汇合。原B正式本地事务、预算、权限、恢复与设计评审证据按原限定范围保留；当前50条SQL迁移成功至V060，新增语音字典和真实字段核验已登记。真实平台/模型、S3/HA/双MySQL等既有独立生产资格仍归F，不冒称已完成。
+
+当前完整Web591、type/API85/build/launcher20/deploy通过；兄弟69通过；规范桌面24图严格0，必要真值/恢复/审阅扩展的原始非零已明确裁定，**没有全部原型像素全零结论**。详[BCD最终记录](../bcd-completion-2026-11-02.md)、[当前页面矩阵](b-followup-page-crud-matrix-2026-10-30.md)、[差异裁定](../d/desktop-visual-rulings-2026-11-02.md)。下方旧OPEN/INCOMPLETE与DEFERRED_VOICE是历史，语音现已由C的真实协议/浏览器/30分钟验证关闭。
+
+<details>
+<summary>历史执行记录：原始状态、失败与当时接续条件，均不覆盖上方当前结论</summary>
+
+> **用户最新范围（2026-11-02）：仅桌面端1440×900、1024×768；全部手机端开发计划和验收指标移除，后续阶段也不安排。** 旧手机截图/报告仅保留历史，不新增适配或测试、不作为门槛，也不转入F。详[范围裁定](../../development/2026-11-02-desktop-only-scope.md)。
+
 # Phase B acceptance evidence
 
 > **2026-10-30 当前裁定：** B 阶段后续按 [逐页像素、非语音 CRUD 与 CAS 联调计划](../../superpowers/plans/2026-10-30-ama-b-followup-pixel-crud-cas.md) 执行；当前总状态为 `NOT ACCEPTED`。原 M1-B 受控后端证据只保留在其限定范围内。
@@ -116,3 +130,5 @@ The one-time batch was settled at approximately 01:10 CST, before the original 0
 The current batch is closed and must not be restarted using its consumed approval. The continuation entry is handoff-bl5-settled-20261028.md. Final independent review adjudicates the qualified results and remaining gaps; Phase B remains incomplete.
 
 Final independent review completed: no new Critical/Important source defects, inherited SOURCE QUALITY PASS retained, actual API evidence adopted only within the report scope. Review SHA256: 10c1d9208b5aee4aa634a7d32d27a53357e8f9602db22648c63d2b77fbf84366. Controller adoption: bl5-final-limited-adoption-20261028.json. Phase B remains INCOMPLETE.
+
+</details>

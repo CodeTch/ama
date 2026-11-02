@@ -1,3 +1,5 @@
+> 2026-11-01 语音/人工核对新增迁移、逐字段语义、ER和验证边界见[增量数据字典](2026-11-01-speech-increment.md)。既有基线和已应用脚本保留。
+
 # AMA 数据字典 — B00-1.7-publication-submission
 
 生成源：`tools/checks/database_design.py`。与审阅 DDL 同步，实际 MySQL 元数据另行比对；生成本身不构成验证。

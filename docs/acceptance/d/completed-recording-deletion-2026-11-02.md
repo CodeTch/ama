@@ -1,0 +1,11 @@
+# 完整原生录音→独立转写来源完成后的删除验证
+
+实际CAS整例四组通过，报告`.tools/local-app/deletions/completed-recording-source-01/report.json`。当前部署/工作签名68fa2515565f6ede144e6c95e629ded3220b86fc59cf7874e7c48dad6f357a58，兄弟固定HTTP8792/SMTP2525，受控模拟器不作为公司权威。验证直接使用先前完整native06已通过的自有会议4d6d0e9f-1324-41f4-9748-c40177f7b226，session7fa75a8b-a083-414c-8900-b398359c1eef；**该会议现已真实删除，后续不得再把它当仍可回听的ACTIVE夹具**。正式30分钟容量夹具未删除。
+
+删除前，从真实RAW恢复人工WORKING，再通过真实speakers接口创建人工标签并按原key/body重放，核对RAW逐段保持不可变；通过真实correction-proposals创建纠错批次（本次增强与RAW一致，候选数实际0，不虚称非零候选）。此前SpeechReviewIT已另覆盖非零候选清理。本例重点为完整录音归档、独立受管副本、RAW和字幕已经完成后的新表与物理字节清理。
+
+独立只读SQL和实际文件系统验证：2个file_object（归档与独立TRANSCRIPT_INPUT）、16个真实PCM分片、1个speech_pcm_artifact，共19个对象在删除前实际完整SHA/字节匹配。SQL另证20条字幕事件、1条字幕job、1条recording_transcript_source、1条纠错batch、1条人工speaker_snapshot、5个checkpoint、3个转写revision和对应实际会话/输入/上传等。
+
+真实DELETE返回202，立即读取会议、转写、源字节、字幕和来源准备均403；相同原key/body返回同一deletionTaskId，变更正文409。真实worker完成至COMPLETE后，独立SQL确认18个所属表/路径计数全0，19个对象data均消失且discarded永久退役标记均存在。foreign真实CAS读取删除metadata403。没有直接SQL写业务结果或手工删除文件；SQL与文件系统只用于独立观测。
+
+原始证据为目录中的private-originals、original-deletion、cleanup、sql-physical-before/after及报告；不覆盖原native06历史通过报告，其后状态变化由本记录说明。此项覆盖本地在线受管副本，其他旧D07边界仍按原报告：已发布/发布中/未知发布拒删、外部知识库原件不被删除、迟到任务不能复活；备份/S3/双后端专属验证仍归F。

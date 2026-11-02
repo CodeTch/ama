@@ -70,14 +70,16 @@
         "type": "string",
         "enum": [
           "DISABLED_NOT_INSTALLED",
-          "UNAVAILABLE"
+          "UNAVAILABLE",
+          "CONTROLLED_SPEECH"
         ]
       },
       "readiness": {
         "type": "string",
         "enum": [
           "NOT_APPLICABLE",
-          "UNAVAILABLE"
+          "UNAVAILABLE",
+          "READY"
         ]
       },
       "qualificationId": {
@@ -4141,7 +4143,13 @@
               "WORKING_REQUIRED",
               "COMPLETE_SEGMENTS_REQUIRED",
               "SEGMENT_IDENTITY_CHANGED",
-              "EMPTY_TRANSCRIPT"
+              "EMPTY_TRANSCRIPT",
+              "CORRECTION_NOT_FOUND",
+              "CORRECTION_ALREADY_HANDLED",
+              "CORRECTION_STALE",
+              "TRANSCRIPT_ALREADY_CONFIRMED",
+              "CORRECTIONS_PENDING",
+              "CORRECTION_NOT_AVAILABLE"
             ]
           },
           "message": {
@@ -5073,6 +5081,1397 @@
               "schema": {
                 "$ref": "#/TranscriptReplacementSearch"
               }
+            }
+          }
+        }
+      }
+    }
+  },
+  "CorrectionProposalRequest": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "expectedRevisionToken",
+      "sourceRevisionId"
+    ],
+    "properties": {
+      "expectedRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "sourceRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      }
+    }
+  },
+  "CorrectionDecisionRequest": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "expectedRevisionToken",
+      "sourceRevisionId",
+      "candidateId",
+      "decision"
+    ],
+    "properties": {
+      "expectedRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "sourceRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "candidateId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "decision": {
+        "enum": [
+          "ACCEPT",
+          "REJECT"
+        ]
+      }
+    }
+  },
+  "SpeechCorrectionItem": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "segmentId",
+      "source",
+      "replacement",
+      "status",
+      "operationId",
+      "canAccept",
+      "canReject",
+      "canUndo"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "segmentId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "source": {
+        "type": "string",
+        "maxLength": 65536
+      },
+      "replacement": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 65536
+      },
+      "status": {
+        "enum": [
+          "PENDING",
+          "ACCEPTED",
+          "REJECTED",
+          "UNDONE",
+          "STALE"
+        ]
+      },
+      "operationId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "canAccept": {
+        "type": "boolean"
+      },
+      "canReject": {
+        "type": "boolean"
+      },
+      "canUndo": {
+        "type": "boolean"
+      }
+    }
+  },
+  "SpeechCorrections": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "meetingId",
+      "sourceRevisionId",
+      "observation",
+      "items",
+      "pendingCount",
+      "canPropose"
+    ],
+    "properties": {
+      "meetingId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "sourceRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "observation": {
+        "$ref": "#/Observation"
+      },
+      "items": {
+        "type": "array",
+        "maxItems": 60,
+        "items": {
+          "$ref": "#/SpeechCorrectionItem"
+        }
+      },
+      "pendingCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 60
+      },
+      "canPropose": {
+        "type": "boolean"
+      }
+    }
+  },
+  "CorrectionProposalReceipt": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "result",
+      "replayed",
+      "resultIsCurrent",
+      "observation"
+    ],
+    "properties": {
+      "result": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reviewBatchId",
+          "sourceRevisionId",
+          "candidateIds",
+          "createdCount"
+        ],
+        "properties": {
+          "reviewBatchId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "sourceRevisionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "candidateIds": {
+            "type": "array",
+            "maxItems": 60,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            }
+          },
+          "createdCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 60
+          }
+        }
+      },
+      "replayed": {
+        "type": "boolean"
+      },
+      "resultIsCurrent": {
+        "type": "boolean"
+      },
+      "observation": {
+        "$ref": "#/Observation"
+      }
+    }
+  },
+  "corrections": {
+    "parameters": [
+      {
+        "$ref": "#/meetingId"
+      }
+    ],
+    "get": {
+      "operationId": "readSpeechCorrections",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "sourceRevisionId",
+          "in": "query",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Malformed request, UUID, revision token, unequal dual representation or query.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or revoked session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh meeting permission denied. Admin role grants no implicit content access.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Exact same-meeting selected entity missing after authorization.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/current-source or idempotency digest conflict; preserve key and original body.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Stable request transport envelope exceeded.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Unsupported, blank or incomplete segment/mark input.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized complete result.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/SpeechCorrections"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "correctionProposals": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/meetingId"
+      }
+    ],
+    "post": {
+      "operationId": "proposeSpeechCorrections",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Explicit owner correction operation using verified durable speech checkpoints. Original receipts replay before current model availability; no client model text accepted. Decisions create a new immutable WORKING, preserving RAW, source coordinates and marks.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, UUID, revision token, unequal dual representation or query.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or revoked session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh meeting permission denied. Admin role grants no implicit content access.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Exact same-meeting selected entity missing after authorization.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/current-source or idempotency digest conflict; preserve key and original body.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Stable request transport envelope exceeded.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Unsupported, blank or incomplete segment/mark input.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized complete result.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/CorrectionProposalReceipt"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        },
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/CorrectionProposalRequest"
+            }
+          }
+        }
+      }
+    }
+  },
+  "correctionDecision": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/meetingId"
+      },
+      {
+        "name": "candidateId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "decideSpeechCorrection",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Explicit owner correction operation using verified durable speech checkpoints. Original receipts replay before current model availability; no client model text accepted. Decisions create a new immutable WORKING, preserving RAW, source coordinates and marks.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, UUID, revision token, unequal dual representation or query.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or revoked session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh meeting permission denied. Admin role grants no implicit content access.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Exact same-meeting selected entity missing after authorization.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/current-source or idempotency digest conflict; preserve key and original body.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Stable request transport envelope exceeded.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Unsupported, blank or incomplete segment/mark input.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized complete result.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptOperationReceipt"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        },
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/CorrectionDecisionRequest"
+            }
+          }
+        }
+      }
+    }
+  },
+  "SpeakerEditRequest": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "expectedRevisionToken",
+      "sourceRevisionId",
+      "segmentIds",
+      "label",
+      "enterpriseId"
+    ],
+    "properties": {
+      "expectedRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "sourceRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "segmentIds": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 4096,
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        }
+      },
+      "label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      },
+      "enterpriseId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "SpeechSpeakerSnapshot": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "label",
+      "enterpriseId",
+      "source",
+      "segmentIds"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      },
+      "enterpriseId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "source": {
+        "const": "HUMAN"
+      },
+      "segmentIds": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 4096,
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        }
+      }
+    }
+  },
+  "SpeechSpeakers": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "meetingId",
+      "sourceRevisionId",
+      "observation",
+      "items"
+    ],
+    "properties": {
+      "meetingId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "sourceRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "observation": {
+        "$ref": "#/Observation"
+      },
+      "items": {
+        "type": "array",
+        "maxItems": 4096,
+        "items": {
+          "$ref": "#/SpeechSpeakerSnapshot"
+        }
+      }
+    }
+  },
+  "speakers": {
+    "parameters": [
+      {
+        "$ref": "#/meetingId"
+      }
+    ],
+    "get": {
+      "operationId": "readTranscriptSpeakers",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "sourceRevisionId",
+          "in": "query",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Malformed request, UUID, revision token, unequal dual representation or query.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or revoked session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh meeting permission denied. Admin role grants no implicit content access.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Exact same-meeting selected entity missing after authorization.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/current-source or idempotency digest conflict; preserve key and original body.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Stable request transport envelope exceeded.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Unsupported, blank or incomplete segment/mark input.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized complete result.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/SpeechSpeakers"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "operationId": "labelTranscriptSpeakers",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "An explicit human attribution creates a new WORKING and immutable speaker snapshot. Existing labels, RAW, source coordinates and meeting permissions remain intact. Selecting both source and target segments merges their display label without changing access. Optional enterprise identity is freshly checked; no automatic real-name claim.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, UUID, revision token, unequal dual representation or query.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or revoked session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh meeting permission denied. Admin role grants no implicit content access.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Exact same-meeting selected entity missing after authorization.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "CAS/current-source or idempotency digest conflict; preserve key and original body.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Stable request transport envelope exceeded.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Unsupported, blank or incomplete segment/mark input.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptCommandRejection"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Fresh authorized complete result.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/TranscriptOperationReceipt"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        },
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/SpeakerEditRequest"
             }
           }
         }

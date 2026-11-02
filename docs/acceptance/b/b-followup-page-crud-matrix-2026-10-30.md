@@ -1,3 +1,38 @@
+<!-- BCD_LOCAL_CONTROLLED_COMPLETION_20261102 -->
+# B后续页面与真实接口矩阵：当前完成
+
+当前正常部署/工作源 `86a1c312d1b11c24b590c2aa8f6eef764b8c636ca82a0767142a29cd5a3f2ebd`。仅1440×900、1024×768，全部手机开发与验收移除且不归F；外部固定兄弟8792/2525、非公司权威。 当前20行均完成其本地功能/状态/权限义务；VOICE由C的实际录音/语音/播放验证关闭，未继续延期为占位。真实模型/平台生产资格另归F。视觉按真实状态和必要功能扩展逐项裁定，不把严格非零写成零。
+
+| ID | 当前范围结论 | 实际证据领域 |
+| --- | --- | --- |
+| AUTH-01 | COMPLETE_LOCAL_CONTROLLED | AUTH |
+| MEET-01 | COMPLETE_LOCAL_CONTROLLED | MEET |
+| MEET-02 | COMPLETE_LOCAL_CONTROLLED | MEET |
+| MEET-03 | COMPLETE_LOCAL_CONTROLLED | MEET |
+| INFO-01 | COMPLETE_LOCAL_CONTROLLED | INFO |
+| ROST-01 | COMPLETE_LOCAL_CONTROLLED | INFO |
+| IMPORT-01 | COMPLETE_LOCAL_CONTROLLED | IMPORT |
+| MATERIAL-01 | COMPLETE_LOCAL_CONTROLLED | MATERIAL |
+| TRANS-01 | COMPLETE_LOCAL_CONTROLLED | TRANSCRIPT |
+| MIN-01 | COMPLETE_LOCAL_CONTROLLED | MINUTES/TEMPLATE |
+| REVIEW-01 | COMPLETE_LOCAL_CONTROLLED | MINUTES/INFO |
+| FINAL-01 | COMPLETE_LOCAL_CONTROLLED | PUBLICATION |
+| PUB-01 | COMPLETE_LOCAL_CONTROLLED | PUBLICATION |
+| TOPIC-01 | COMPLETE_LOCAL_CONTROLLED | TOPIC |
+| LIB-01 | COMPLETE_LOCAL_CONTROLLED | LIBRARY |
+| FEEDBACK-01 | COMPLETE_LOCAL_CONTROLLED | FEEDBACK |
+| VOICE-01 | COMPLETE_LOCAL_CONTROLLED | RECORDING/TRANSCRIPT |
+| VOICE-02 | COMPLETE_LOCAL_CONTROLLED | RECORDING/TRANSCRIPT |
+| CROSS-01 | COMPLETE_LOCAL_CONTROLLED | AUTH/IMPORT/RECORDING |
+| CROSS-02 | COMPLETE_LOCAL_CONTROLLED | AUTH/IMPORT/RECORDING |
+
+每个领域的精确报告路径、SHA及适用范围见`.tools/local-app/d08-page-matrix/controls-audit-11/evidence-domains.json`；每个生产控件的条件/禁用/handler/父form和对应证据见`bound-reviewed-controls.json`。这些是状态/源码与实际业务证据的汇合，不是20行或596节点均独立点击的计数。详[完整逐任务结果](../bcd-completion-2026-11-02.md)与[差异裁定](../d/desktop-visual-rulings-2026-11-02.md)。
+
+<details>
+<summary>历史执行记录：原始状态、失败与当时接续条件，均不覆盖上方当前结论</summary>
+
+> 当前范围已按用户最新要求调整：仅桌面端1440×900、1024×768；所有手机端开发与验收项已移出，不属于F待办。历史多视口报告保留原文，不再作为手机端门槛。详见 [桌面端范围裁定](../../development/2026-11-02-desktop-only-scope.md)。
+
 # B 阶段后续页面、CRUD 与联调矩阵（2026-10-30）
 
 > 本表是 [B 阶段后续设计](../../superpowers/specs/2026-10-30-ama-b-followup-pixel-crud-cas-design.md) 的执行台账。它只记录 2026-10-30 之后的新范围；此前报告中的通过、失败和限定证据仍按原文保留。
@@ -105,3 +140,5 @@ TOPIC-01：当前冻结源码的真实CAS10项和三视口72项精确零像素�
 LIB-01：`b-followup/resume-library-final-20261031-01/report.json`真实6项+三视口12项零像素，部署/工作区签名一致。所有产品外部请求经8792，报告含harness当前源码SHA；管理日志确认location 200/403实际穿过harness。当前成员READ、非成员拒绝、提供方撤READ后刷新隐藏、恢复新grant版本、真实分页/刷新/按会议ID导航均通过。并发provider回包乱序已确定性RED→GREEN，Web全433/type/build/APIbytes通过。原型`PAGES['/meeting-library']`为只读浏览，没有删除已发布成果按钮；Ruling：本行的“移除”明确归原有D-05治理/失效传播，不能新增旁路删除已发布快照或将治理任务标完成。原型只读路径验收通过，D-05仍未完成。旧失败/局部验证不被重标。
 
 新TXT会议db0dbb33-962f-469a-bb86-074f9f28bd35的实际纪要执行与结果读取已经8792；提供方模型/知识库仍是可重复受控模拟器，不是企业权威。生成/发布脚本最后因同名会议定位歧义失败的报告保留，新的库脚本用真实meetingId定位并对全部真实已发布条目投影对比。新原生SIGKILL恢复10项PASS，11.8秒恢复、17原帧957416字节WAV逐帧SHA；报告`recording-native-cas/resume-harness-probe-hard-crash-20261031-01/report.json`。100路60秒短测当前运行，尚不证明两小时或字幕性能。
+
+</details>

@@ -23,7 +23,7 @@ final class JdbcSpeechAudio {
  private void current(String file,String sha){
   if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new CancellationException("Speech audio cancelled");
   var valid=q.validatedPreparationLease(lease).orElseThrow(()->new CancellationException("Speech lease changed"));authority.requireImportPreparation(List.of(lease.spec()),valid.domain().prepared());
-  Long n=q.jdbc.queryForObject("SELECT COUNT(*) FROM transcription_input i JOIN input_batch_file f ON f.batch_id=i.batch_id WHERE i.id=? AND i.meeting_id=? AND i.input_fingerprint=? AND i.parser_version=? AND f.file_id=? AND f.sha256=?",Long.class,lease.spec().input().id(),lease.spec().subject().id(),lease.spec().inputFingerprint(),ControlledSpeechProfile.PARSER,file,sha);
+  Long n=q.jdbc.queryForObject("SELECT COUNT(*) FROM transcription_input i JOIN input_batch_file f ON f.batch_id=i.batch_id WHERE i.id=? AND i.meeting_id=? AND i.input_fingerprint=? AND i.parser_version IN (?,?) AND f.file_id=? AND f.sha256=?",Long.class,lease.spec().input().id(),lease.spec().subject().id(),lease.spec().inputFingerprint(),ControlledSpeechProfile.PARSER,ama.transcript.RecordingTranscriptProfile.PARSER,file,sha);
   if(n==null||n!=1)throw unavailable();
  }
  Optional<Source> retained(String file,String sha){return q.preparation(()->{

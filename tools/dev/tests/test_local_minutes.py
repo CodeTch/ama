@@ -104,7 +104,8 @@ class PersonalTemplatePreparationTests(unittest.TestCase):
             self.assertEqual(calls[-2][-2:],[phases['ama.localdev.LocalMaterialSetup'],state['minutesTemplateRevisionId']])
             self.assertEqual(values['minutes.index-sha'],'e'*64)
             self.assertEqual(values['processing.index-sha'],'e'*64)
-            self.assertEqual(values['processing.bounds.dependencies'],256)
+            self.assertEqual(values['processing.bounds.dependencies'],384)
+            self.assertEqual(values['processing.bounds.artifacts'],64)
 
 
 class SensitiveScenarioPreparationTests(unittest.TestCase):

@@ -65,3 +65,35 @@ def build_report(samples, *, expected_recorders: int, expected_users: int):
     return {"passed": passed, "recorders": recorders, "totalUsers": len(observed_users), "expectedUsers": expected_users, "missingAckedChunks": missing,
             "duplicateChunks": duplicate, "latencyP95Ms": p95, "queueAgeP95Ms": max(queue_ages, default=0),
             "errorCounts": errors, "resourcePeaks": {"cpuPercent": max(cpu_peaks, default=0), "memoryBytes": max(memory_peaks, default=0)}, "samples": len(samples)}
+
+def qualify_subtitles(scenario, recordings):
+    """Every actual source chunk needs an ordered replay event and client arrival time."""
+    from math import ceil
+    rows=list(recordings);count=ceil(scenario['durationSeconds']*1000/scenario['chunkMs']);reasons=[];temporary=[];stable=[]
+    if len(rows)!=scenario['recorders']:reasons.append('SUBTITLE_RECORDER_COUNT')
+    for index,row in enumerate(rows):
+        events=row.get('subtitleEvents');seen=set();parts=set();valid=row.get('subtitleState')=='DONE' and row.get('subtitleErrors')==0 and isinstance(events,list)
+        if isinstance(events,list):
+            for position,event in enumerate(events,1):
+                seq=event.get('sourceFinalSeq');latency=event.get('latencyMs');status=event.get('status')
+                timing=type(seq) is int and 1<=seq<=count and event.get('endMs')==min(seq*scenario['chunkMs'],scenario['durationSeconds']*1000)
+                expected='stable' if type(seq) is int and seq%3==0 else 'temporary'
+                tail=position==count+1 and seq==count and count%3!=0 and status=='stable'
+                if not(timing and event.get('eventId')==str(position) and event.get('sessionId')==row.get('sessionId') and isinstance(event.get('partId'),str) and event['partId'] and (position==seq and status==expected or tail) and type(latency) in (int,float) and isfinite(latency) and latency>=0):valid=False;continue
+                parts.add(event['partId']);seen.add(seq)
+                (stable if status=='stable' else temporary).append(latency)
+            if seen!=set(range(1,count+1)) or len(parts)!=1 or len(events)!=count+(count%3!=0):valid=False
+        if not valid:reasons.append('INCOMPLETE_SUBTITLES_'+str(index))
+    p95=lambda values:quantiles(values,n=20,method='inclusive')[18] if len(values)>1 else values[0] if values else None
+    temp=p95(temporary);final=p95(stable)
+    if temp is None or temp>3000:reasons.append('TEMPORARY_SUBTITLE_LATENCY')
+    if final is None or final>5000:reasons.append('STABLE_SUBTITLE_LATENCY')
+    return dict(passed=not reasons,reasons=reasons,scope='ACTUAL_CLIENT_ARRIVAL_FROM_SOURCE_END_CONTROLLED_HARNESS',temporarySubtitleP95Ms=temp,stableSubtitleP95Ms=final,temporaryEvents=len(temporary),stableEvents=len(stable),realModelQualified=False)
+
+def qualify_long_file(scenario,recordings):
+    required=scenario.get('longFileRecorderCount',0);selected=[r for r in recordings if r.get('longFileSelected') is True];reasons=[]
+    if len(selected)!=required:reasons.append('LONG_FILE_RECORDER_COUNT')
+    for index,r in enumerate(selected):
+        value=r.get('longFileTranscription',{});valid=(value.get('passed') is True and value.get('state')=='SUCCEEDED' and value.get('sourceSha256')==r.get('wavSha256') and isinstance(value.get('sourceSha256'),str) and len(value['sourceSha256'])==64 and value.get('sourceBytes')==r.get('wavBytes')==44+2*r.get('sampleCount',0) and value.get('sourceSamples')==r.get('sampleCount') and value.get('lastEndMs')==scenario['durationSeconds']*1000 and type(value.get('segments')) is int and value['segments']>0 and all(isinstance(value.get(k),str) and value[k] for k in ('taskId','inputId','sourceFileId','rawRevisionId')))
+        if not valid:reasons.append('INCOMPLETE_LONG_FILE_'+str(index))
+    return dict(passed=not reasons,reasons=reasons,scope='POST_CAPTURE_COMPLETE_ARCHIVE_COPY_TO_INDEPENDENT_RAW',requiredRecorders=required,observedRecorders=len(selected),durationSeconds=scenario['durationSeconds'])

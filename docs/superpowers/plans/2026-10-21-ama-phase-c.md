@@ -1,3 +1,15 @@
+<!-- BCD_LOCAL_CONTROLLED_COMPLETION_20261102 -->
+# 当前执行结论
+
+本计划适用的本地受控BCD任务已完成；逐任务结果、真实证据、范围与必要视觉差异见[当前完成记录](/home/tanren/ama/docs/acceptance/bcd-completion-2026-11-02.md)。当前仅1440×900、1024×768，手机开发与全部验收完全移除且不归F。C为10/50连续1800秒与30分钟长文件；50/200与两小时仍F。旧未勾选模板/停止点作为历史保留，不要求重做已完成或重复已受理命令。E/F尚未启动。
+
+<details>
+<summary>历史执行记录：原始状态、失败与当时接续条件，均不覆盖上方当前结论</summary>
+
+> 2026-11-01 最新长文件验证裁定：当前C阶段仅要求30分钟长录音文件（28800000样本、57600044字节、900分片、15个120秒窗口/75 checkpoint）完整归档→独立受管转写来源→RAW；两小时长文件测试标准后移F。生产既有有界上限和旧失败证据保留，不靠扩大普通32MiB上传绕过来源授权。
+
+> 最新阶段与容量裁定（用户2026-11-01最终更正）：**C阶段**以10场会议并发、50人同时在线、持续不间断录音30分钟（1800秒）验证；10名录音用户计入50人，后台用户40。场景tools/load/scenarios/realtime-10-30m.json，CLI load realtime-10-30m。**50场并发/200人在线验证移到F阶段**（后台150、沿用7200秒场景realtime-50），不阻塞本轮BCD完成。每2秒分片、ACK/原始SHA完整性和字幕temporary p95≤3秒/stable p95≤5秒保持；D沿用其业务/页面验收义务，不另设该容量门槛。下文100/300及旧50/200计划/报告保留历史，不自动折算为C或F已验收。
+
 > **2026-10-28 当前范围（AMA-DEMO-FIRST-20261028 R2）**：按[Demo 优先调整计划](2026-10-28-ama-demo-first-adjustment.md)执行；前期本地 MySQL＋本地文件＋单机，优先原型页面与核心业务联调。已完成/已采纳能力保留，不重做；S3、双 MySQL、双活全部尚未完成的专用实现、配置、测试和依赖归最后 F，前期不新增相关抽象或架构改造。本轮仅调整文档。 C-04/C-07 的 S3 适配与专属验证归 DEP-S3；本地音频/录音业务、进程恢复与协议资格保留。
 
 ---
@@ -16,7 +28,7 @@
 
 ## Global Constraints
 
-- 继承总计划；每场一个采集端，100 场录音用户计入总计 300 在线。
+- 按用户最终更正：每场一个采集端，C验收10场录音用户计入总计50在线，连续不间断1800秒；50/200容量验证归F。
 - 输入转换到 16kHz/单声道/16bit PCM，不能假定浏览器实际输入已是 16kHz。
 - 每 2 秒分片；浏览器未 ACK 缓存建议 10 分钟约 19.2MB；达到限额明确阻断/提示，不能无限缓存。
 - 临时字 p95≤3 秒、稳定字 p95≤5 秒均从语音片段结束计；没有 tokens 时只提供可靠片段定位。
@@ -101,17 +113,17 @@
 - [ ] 重跑 IT 和真实模型测试；计算语音片段结束到显示的全链路 p95，分别报告 temporary/stable；断线后按事件游标恢复不重复显示。
 - [ ] 提交 `feat: stream revisioned live subtitles with recovery`。
 
-## Task C-07：100 路协议负载与阶段报告
+## Task C-07：10路并发、50人在线、连续30分钟录音与阶段报告
 
-**Files:** Create `tools/load/recording_load.py`、`tools/load/report.py`、`tools/load/requirements.txt`、`tools/load/tests/test_recording_load.py`、`tools/load/scenarios/realtime-100.json`、`docs/acceptance/c/summary.md`。Modify `tools/checks/run.py` 注册 load selector；负载客户端的异步 WebSocket 依赖仅用于测试并锁定版本，不加入生产镜像。
+**Files:** tools/load/recording_load.py、transport.py、report.py、tests/test_recording_load.py、scenarios/realtime-10-30m.json、docs/acceptance/c/summary.md；tools/checks/run.py 注册 load realtime-10-30m。原 realtime-100 场景/报告保留历史；realtime-50 归 F。
 
-**Interfaces:** CLI `python3 tools/checks/run.py load realtime-100`；场景含 recorders=100/totalUsers=300/chunkMs=2000/durationSeconds=7200/backend/modelMode，报告提供 missingAckedChunks/duplicateChunks/queueAge/latency/errorCounts/resourcePeaks；模型模拟与真实分开归档。
+**Interfaces:** CLI `python3 tools/checks/run.py load realtime-10-30m`；recorders=10/totalUsers=50/backgroundUsers=40/chunkMs=2000/durationSeconds=1800/acceptancePhase=C。实际采集、真实CAS、WS持久ACK、逐帧SHA归档回读；临时/稳定字幕按客户端收到事件减对应音频结束时刻计算，不用数据库提交时刻或无字幕协议报告替代。模拟器结果单列，不声称公司模型质量。
 
-- [ ] 写报告聚合测试，丢一个已 ACK 分片或少创建一路时不得 PASS；`assert report['passed'] is False`，不能丢弃失败样本计算分位数。
-- [ ] 运行 `python3 -m unittest discover -s tools/load/tests`，确认违规负载不能被识别时失败。
-- [ ] 实现可校验 hash/seq 的模拟采集端、200其他用户场景和端到端打点；不把100个空闲连接当100场实时录音。
-- [ ] C-07 在 local 进行2小时协议负载（不作为首个 M1-Demo 前置）；S3 参数组及适配/负载后移 DEP-S3/F-04；加入断连/单进程退出；真实模型可用时追加真实链路，未达标记录瓶颈并回到责任任务修复。8小时及主机故障满载资格在 F。
-- [ ] 提交 `test: verify concurrent recording durability and live latency`；报告各验收项通过/失败/待环境，不把全部统称通过。
+- [ ] 报告聚合反例：缺一路、缺一个已ACK分片、时长不足、后台不活跃、字幕缺事件/错误会话/负延迟/超标均不得通过，保留所有错误和瞬态。
+- [ ] 执行 tools/load/tests 完整验证，再运行短预检。
+- [ ] 冻结部署、兄弟固定接口配置和负载源码；10路持续不间断录音1800秒、40名其他用户全程活跃，全部9000分片ACK和10归档原始SHA回读完成。
+- [ ] 字幕temporary p95≤3秒/stable p95≤5秒实际观测，逐路覆盖完整源分片及尾部稳定事件；真实丢ACK/单进程退出另列恢复回归，不以故障中断场景替代连续30分钟。
+- [ ] 更新阶段报告和机器状态。50录音/200在线/7200秒及8小时、主机故障、S3专属验证归F，不作为BCD收口阻塞；该后移不放宽权限、删除、字节完整性与恢复要求。
 
 ## 阶段验收与移交
 
@@ -126,3 +138,5 @@
 C-04 后续按既定 local 存储契约推进：以现有 `FileBackendCatalog/FileStoragePort` 保存不可变分片，保持 session 固定 backend，文件持久化成功后才提交清单并 ACK；数据库提交失败留下可幂等恢复的同键孤儿，不主动清除仍可能需要的字节。为现有有效数据库 PCM 保留显式历史读路径，新文件分片读取失败不得切换后端。接着补归档流式校验/任务/正式文件注册与回听，再连接浏览器 PCM、租约/重连及字幕。该顺序由 C-05/06/07 对已 ACK 字节的依赖决定；不新增 S3/HA 工作。
 
 新增验证使用本轮新建 `ama_c_recording_<nonce>` schema 与新临时目录/mTLS 文件服务，不恢复任何旧受限证据窗口，不删除已有业务或证据。真实公司模型质量与 p95 仍按依赖边界单列；harness 模拟协议通过不能替代这些资格。
+
+</details>

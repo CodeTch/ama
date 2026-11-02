@@ -1,6 +1,8 @@
+> 当前范围已按用户最新要求调整：仅桌面端1440×900、1024×768；所有手机端开发与验收项已移出，不属于F待办。历史多视口报告保留原文，不再作为手机端门槛。详见 [桌面端范围裁定](../../development/2026-11-02-desktop-only-scope.md)。
+
 > **2026-10-28 当前执行覆盖（AMA-DEMO-FIRST-20261028 R2）**：按[调整计划](../plans/2026-10-28-ama-demo-first-adjustment.md)和[简化流程](../plans/2026-10-27-ama-development-workflow.md)执行。前期本地 MySQL/local/单机，按 DEMO-01～05 逐段装配、复刻原型和联调，先交 M1-Demo；深度预算/锁序/精确并发/关键 crash 等仍由 B-QUAL 在 M1-B 前关闭，实际重要缺陷必须提前处理。未完 S3/双 MySQL/双活及专属依赖全部最后 F，不再要求两后端浏览器都通过才交付 B。
 
-> Demo 页面按 R2 逐页矩阵验收，原型关键结构和动作不可缺；已有 shell 零像素基准不放宽，全产品三视口收口留 D-08。浏览器可使用已验证 loopback 开发入口，不取消 Cookie/Origin/CSRF 或内部 mTLS；受控合成纪要明确标识，真实 AI/企业平台另验。当前缺口/最晚关卡见 [B 摘要](../../acceptance/b/summary.md#current-open-obligations-r2)。主 Agent 内联、完整功能批次和增量证据延续 10-27 流程。
+> Demo 页面按 R2 逐页矩阵验收，原型关键结构和动作不可缺；已有 shell 零像素基准不放宽，全产品两桌面视口收口留 D-08。浏览器可使用已验证 loopback 开发入口，不取消 Cookie/Origin/CSRF 或内部 mTLS；受控合成纪要明确标识，真实 AI/企业平台另验。当前缺口/最晚关卡见 [B 摘要](../../acceptance/b/summary.md#current-open-obligations-r2)。主 Agent 内联、完整功能批次和增量证据延续 10-27 流程。
 
 > 下文是 **2026-10-23 的历史设计采纳与原始义务**，其 local/S3 双链路、全套证明同批和视口/HTTPS 时点由上述当前调度拆分覆盖；源码事实、技术保护、原始封存件和未通过结论不改，不按旧“待开发”措辞重做已采纳 B-L1～4。
 

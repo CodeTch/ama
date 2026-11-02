@@ -161,7 +161,7 @@ def prepare(runtime,state,java,env,classpath):
     values.update(prepare_knowledge(runtime,state))
     values.update({'transcript.candidates.installation':'AUTHORITY_CONTROLLED',
         'transcript.publication.installation':'AUTHORITY_CONTROLLED','transcript.transitions.installation-version':'2',
-        'processing.bounds.artifacts':64,'processing.bounds.dependencies':256,'processing.bounds.graph-depth':16})
+        'processing.bounds.artifacts':64,'processing.bounds.dependencies':384,'processing.bounds.graph-depth':16})
     # Retain the admin's immutable installation files; each process gets its own readiness receipt.
     ready=root/('ready-'+secrets.token_hex(8))
     write(root/'runtime.properties','\n'.join(['mode=CONTROLLED_INSTALLATION','bind=127.0.0.1',

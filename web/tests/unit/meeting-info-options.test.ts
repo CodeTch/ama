@@ -10,3 +10,12 @@ test('real directory and category endpoints preserve stable identities and opaqu
  globalThis.fetch=async()=>Response.json({items:[],nextCursor:null},{status:503});await assert.rejects(api.people('',null,new AbortController().signal));
  }finally{globalThis.fetch=old;}
 });
+
+test('directory department catalogue and exact department filter retain provider identity',async()=>{
+ const old=fetch,seen:string[]=[],api=createMeetingOptionsApi(createBusinessClient('https://ama.test',()=>session,()=>{}));try{
+ globalThis.fetch=async url=>{seen.push(String(url));return Response.json({items:[{id:'dep+%_甲',name:'完整目录部门',parentId:null,active:true},{id:'off',name:'停用部门',parentId:'dep+%_甲',active:false}]});};const catalogue=await api.departments(new AbortController().signal);assert.equal(catalogue.items[0]!.id,'dep+%_甲');assert.equal(catalogue.items[1]!.active,false);assert.match(seen[0]!,/\/api\/v1\/directory\/departments$/);assert(Object.isFrozen(catalogue.items));
+ globalThis.fetch=async url=>{seen.push(String(url));return Response.json({items:[],nextCursor:null});};await api.people('同名','opaque',new AbortController().signal,'dep+%_甲');const url=new URL(seen[1]!);assert.equal(url.searchParams.get('departmentId'),'dep+%_甲');assert.equal(url.searchParams.get('cursor'),'opaque');
+ globalThis.fetch=async()=>Response.json({items:[{id:'one',name:'部门',parentId:null,active:1}]});await assert.rejects(api.departments(new AbortController().signal));
+ globalThis.fetch=async()=>Response.json({items:[{id:'one',name:'部门',parentId:null,active:true},{id:'one',name:'部门2',parentId:null,active:true}]});await assert.rejects(api.departments(new AbortController().signal));
+ }finally{globalThis.fetch=old;}
+});

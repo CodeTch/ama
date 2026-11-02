@@ -1,3 +1,5 @@
+> 2026-11-01 语音/人工核对新增迁移、逐字段语义、ER和验证边界见[增量数据字典](2026-11-01-speech-increment.md)。既有基线和已应用脚本保留。
+
 # AMA 统一 migration-register
 
 版本 B00-1.3-review（纪要目录及复核增量已独立评审；原1.2上传补充保留），2026-10-22；已采用 B00-1.1-review 的 R1—R6 独立关闭结论不变。这是迁移所有权/顺序登记，不是执行记录。实现仍须按统一新版本修正差异、回归并独立评审后验收。Flyway执行器单实例运行；已应用/已共享/已冻结脚本不可改字节或重编号。DDL多语句不是可整体ROLLBACK的事务，MySQL atomic DDL只保证单条语句原子；中途失败检查实际schema并前滚修复。[MySQL atomic DDL](https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html)
@@ -273,3 +275,15 @@ root 独立以原生MySQL文本/UTC和epoch读取实际history：installed_rank1
 ## 2026-10-29 导入批次本地执行观察（V017/V028）
 
 在当前工作树拥有的 `ama-local-dev-5c92c4c3a416` 数据库上，串行启动器实际读取 Flyway history 确认：V017 `materials` 与 V028 `import draft` 均按顺序成功安装，前置历史至 V013.4 保留，未使用 repair、outOfOrder、reset 或清空库。首次观察的 Flyway checksum 分别为 V017 `-583668077`、V028 `-15868374`；当前候选源码 SHA 分别为 `f649eab312e6b673baa9893b067cb5df2c453fc2cb6a63e92d0af5772f1fdd16` 与 `0e351a3483accda7f22631db2ffcbc9b26a55eeb6a4fd0e3b7789fb1c539fc8e`。该记录只证明本地受控库的首次成功观察，不代表 D01/V017 的整体业务验收或生产采用。
+
+
+2026-11-01 V059 durable_recording_subtitles：job/event字典及ER见[语音增量字典](2026-11-01-speech-increment.md)。SHA `8afe136f26fa896f358bb3703cde543983c25a865c4d57a859b0a9649759760e`，新独占库bf39889988a8迁移成功；主库部署记录待正常发布后追加。首次失败2d23fd307995和原SQL副本保留，不修旧失败库。
+
+V059 主库正常部署：`c06-normal-deploy1.log` 六角色健康，源码签名 `99a84776696d0ffa044ccfd9df3e2a95daf5eceffcaa03c66d341c15de14b2ff`；实际只读查询flyway058/059 success均1。生产Java873、相关实际IT49、Web512/type/build/API82全部PASS。未变更已有057/058/059脚本。
+
+V060 recording_transcript_sources：独占`ama_c_recording_3b64241f569b`已成功50迁移；SHA `54fd3408912dbe5bd3c9d73fce68277696be4e0d58ace17ce09ae652cb9743cf`不可改，主库尚未应用。字典/ER见[语音增量](2026-11-01-speech-increment.md)。实际server copy/重启/越权/删除/真实丢part回复恢复/普通同字节文件拒绝四项PASS。完整归档ASR接线及长流/API/UI继续验证，不能按技术副本READY签收RAW。
+
+
+## 2026-11-02当前正常主库V060核验（覆盖上方待应用状态）
+
+`.tools/local-app/bcd-completion/bcd-final-database-readonly/report.json` PASS：50条SQL迁移全部success=1、最高V060，源码SHA仍为54fd3408912dbe5bd3c9d73fce68277696be4e0d58ace17ce09ae652cb9743cf；实际recording_transcript_source、recording_subtitle_job、recording_subtitle_event三表共59列。只SELECT，没有schema或业务写入，没有repair或重编号。正常源86a1c312d1b11c24b590c2aa8f6eef764b8c636ca82a0767142a29cd5a3f2ebd。上方主库尚未应用/完整RAW接线待验证为早期历史。正式C10/50/1800、完整30分钟独立RAW、native08归档/恢复和D07物理删除分别已有实际证据，元数据查询不替代业务验收。

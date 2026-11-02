@@ -424,7 +424,8 @@
       "size": {
         "type": "integer",
         "format": "int64",
-        "minimum": 0
+        "minimum": 0,
+        "description": "TRANSCRIPT_INPUT requests to this public upload endpoint are limited to 33554432 bytes. Recording archives use the separate source preparation command."
       },
       "sha256": {
         "oneOf": [

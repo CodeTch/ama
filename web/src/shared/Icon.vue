@@ -1,8 +1,17 @@
 <script setup lang="ts">
-defineProps<{name:'download'|'kb'|'list'|'mic'|'plus'|'layers'|'play'|'pause'|'file'|'refresh'|'edit'|'search'|'x'|'copy'|'calendar'|'message'|'guide'|'reset'|'arrowL'|'arrowR'|'alert';size?:number}>();
+defineProps<{name:'folder'|'eye'|'lock'|'user'|'merge'|'split'|'undo'|'check'|'sparkle'|'download'|'kb'|'list'|'mic'|'plus'|'layers'|'play'|'pause'|'file'|'refresh'|'edit'|'search'|'x'|'copy'|'calendar'|'message'|'guide'|'reset'|'arrowL'|'arrowR'|'alert';size?:number}>();
 </script>
 <template><svg :width="size||16" :height="size||16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px" aria-hidden="true">
- <template v-if="name==='download'"><path d="M12 4v11"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></template>
+ <template v-if="name==='folder'"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></template>
+ <template v-else-if="name==='eye'"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></template>
+ <template v-else-if="name==='lock'"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></template>
+ <template v-else-if="name==='user'"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></template>
+ <template v-else-if="name==='merge'"><path d="M7 4v6a4 4 0 0 0 4 4h6"/><path d="m14 11 3 3-3 3"/><path d="M7 20v-4"/></template>
+ <template v-else-if="name==='split'"><path d="M12 4v6"/><path d="M12 10 6 16v4"/><path d="m12 10 6 6v4"/></template>
+ <template v-else-if="name==='undo'"><path d="M8 5 4 9l4 4"/><path d="M4 9h9a6 6 0 0 1 0 12h-3"/></template>
+ <path v-else-if="name==='check'" d="m4.5 12.5 5 5 10-11"/>
+ <template v-else-if="name==='sparkle'"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/><path d="M19 15l.9 2.6L22.5 18.5l-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9L19 15Z"/></template>
+ <template v-else-if="name==='download'"><path d="M12 4v11"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></template>
  <template v-else-if="name==='kb'"><path d="M4 19V6a2 2 0 0 1 2-2h5v15H6a2 2 0 0 0-2 2v-2Z"/><path d="M11 4h5a2 2 0 0 1 2 2v13"/></template>
  <template v-else-if="name==='list'"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1.4"/><circle cx="4" cy="12" r="1.4"/><circle cx="4" cy="18" r="1.4"/></template>
  <template v-else-if="name==='mic'"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></template>

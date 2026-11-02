@@ -33,3 +33,15 @@ test('published untimed text uses an unavailable clock instead of inventing an a
  const server=await createServer({server:{middlewareMode:true,hmr:false},appType:'custom'});
  try{const component=(await server.ssrLoadModule('/src/features/transcript/TranscriptForm.vue')).default;const html=await renderToString(createSSRApp({render:()=>h(component,{published:true,value:[{segmentId:'text',body:'Untimed original text',marks:[]}],editable:false,busy:false,dirty:false,conflict:null,conflictToken:null,state:'EMPTY',blocked:false,storageStatus:'SAVED',error:null,confirmed:true,canConfirm:false})}));assert.match(html,/此片段无对应原录音/);assert.match(html,/>--:--<\/button>/);assert.doesNotMatch(html,/00:00/);}finally{await server.close();}
 });
+
+test('bulk correction controls are enabled only for qualified saved pending candidates',async()=>{
+ const server=await createServer({root:new URL('../../',import.meta.url).pathname,server:{middlewareMode:true},appType:'custom'});try{const component=(await server.ssrLoadModule('/src/features/transcript/TranscriptForm.vue')).default,props={value:[{segmentId:'seg',body:'待校正',marks:[]}],editable:true,busy:false,dirty:false,conflict:null,conflictToken:null,state:'EMPTY',blocked:false,storageStatus:'SAVED',error:null,confirmed:false,canConfirm:false,correctionsReady:true,correctionCount:1};
+ const html=await renderToString(createSSRApp({render:()=>h(component,props)}));assert.doesNotMatch(html,/class="btn sm aci-inline-accept" disabled/);assert.doesNotMatch(html,/纠错建议服务尚未接入/);const dirty=await renderToString(createSSRApp({render:()=>h(component,{...props,dirty:true})}));assert.match(dirty,/aci-inline-accept" disabled/);
+ }finally{await server.close();}
+});
+
+test('versioned human speaker labels are used in both workbench and published readback',async()=>{
+ const server=await createServer({root:new URL('../../',import.meta.url).pathname,server:{middlewareMode:true,hmr:false},appType:'custom'});try{const component=(await server.ssrLoadModule('/src/features/transcript/TranscriptForm.vue')).default,props={value:[{segmentId:'seg',body:'语音内容',marks:[]}],editable:false,busy:false,dirty:false,conflict:null,conflictToken:null,state:'EMPTY',blocked:false,storageStatus:'SAVED',error:null,confirmed:true,canConfirm:false,provenance:[{segmentId:'seg',sourceFileId:'file',startMs:1000,endMs:8000,speakerId:'speaker'}],speakerLabels:{speaker:'人工核对王工'}};
+ for(const published of [false,true]){const html=await renderToString(createSSRApp({render:()=>h(component,{...props,published})}));assert.match(html,/人工核对王工/);assert.doesNotMatch(html,/文本段落|匿名说话人/);}
+ }finally{await server.close();}
+});

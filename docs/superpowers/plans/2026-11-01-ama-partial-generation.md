@@ -18,4 +18,4 @@
 
 实际执行补记（2026-11-01）：V054已迁移。首次新增release累计依赖预算128不足，独立归档保留回归先RED后通过，本地Admin READ及运行预算改为256，旧归档内容未改。CAS02原区域请求在任务域/事件SQL的FULL-only处503回滚；JFR定位后补入REGION及自身region row/基集同会议约束。原键恢复得到成功task a1d7740a-7602-4bc3-b524-ef4eb24e8ca9、candidate d49dc78a-3b9d-40c4-a550-e539d04309c8。resume-cas02-02真实UI明确采用成功，正文人工标题/文本/id、六类非目标文字与行动负责人/空日期逐项相同，needs_generation=true，最终阻断。
 
-该例整体仍失败：新region字段未生成runtime guards导致比较拒绝，RED→重新生成后修复；后续材料证据编辑在旧TranscriptVersion-only限制503。现新增当前材料快照/解析版本门禁及版本来源读取，生产Java833PASS，实际重新部署验证待进行。390候选比较footer横向裁切已实际截图确认，CSS改为换行，待新鲜截图复核。完整新case须覆盖真正已受理丢ACK刷新恢复、当前草稿复制及无日期显示。
+该例整体仍失败：新region字段未生成runtime guards导致比较拒绝，RED→重新生成后修复；后续材料证据编辑在旧TranscriptVersion-only限制503。现新增当前材料快照/解析版本门禁及版本来源读取，生产Java833PASS，实际重新部署验证待进行。历史390候选比较footer横向裁切及换行修改保留记录；用户现已移除全部手机开发与验收，本项不再安排截图复核或作为任何阶段指标。完整新case须覆盖真正已受理丢ACK刷新恢复、当前草稿复制及无日期显示。

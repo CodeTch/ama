@@ -10,10 +10,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import static ama.contract.MinutesContracts.*;
 
 /** Accepted proposal batches use the existing no-FK idempotency rank before the owner root. */
-final class SpeechReviewReceipts {
+public final class SpeechReviewReceipts {
  private final JdbcTemplate j;private final TransactionRunner tx;private final MeetingAccess access;private final JdbcSavedTranscriptReceipts stable;
  private static final ObjectMapper JSON=new ObjectMapper(JsonFactory.builder().enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION).build()).enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
- SpeechReviewReceipts(JdbcTranscriptAuthority authority){j=new JdbcTemplate(authority.dataSource());j.setQueryTimeout(5);tx=authority.transactionRunner();access=authority.savedAccess();stable=new JdbcSavedTranscriptReceipts(authority.dataSource(),tx,access);}
+ SpeechReviewReceipts(JdbcTranscriptAuthority authority){this(authority.dataSource(),authority.transactionRunner(),authority.savedAccess());}
+ public SpeechReviewReceipts(javax.sql.DataSource source,TransactionRunner tx,MeetingAccess access){j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=tx;this.access=access;stable=new JdbcSavedTranscriptReceipts(source,tx,access);}
+ public Optional<Map<String,Object>> lookup(Actor actor,String meeting,String key,long expected,String source){return lookup(actor,meeting,identity(actor,meeting,key,expected,source),expected,source);}
  static JdbcSavedTranscriptReceipts.Identity identity(Actor actor,String meeting,String key,long expected,String source){
   JdbcProcessingIntake.key(key);uuid(meeting);uuid(source);if(expected<0||expected>=Long.MAX_VALUE)throw new IllegalArgumentException("Valid proposal revision required");String operation="TRANSCRIPT_SPEECH_REVIEW_PROPOSE";
   return new JdbcSavedTranscriptReceipts.Identity(JdbcProcessingIntake.digest(actor.enterpriseId(),meeting,operation,key),JdbcProcessingIntake.digest(key),JdbcProcessingIntake.digest("speech-review-proposal-v1",Long.toString(expected),source),operation);

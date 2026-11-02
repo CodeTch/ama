@@ -109,6 +109,7 @@ record SavedTranscriptGraph(String meeting,String selected,Map<String,Object> ro
   require(maximum.getFirst()<=num(root,"revision"),PROVENANCE_UNAVAILABLE);
   // Every content-bearing set is now measured, reserved and retained under its actual parent/row locks.
   var inputRows=inputTransfer.get();require(inputRows.size()==1,PROVENANCE_UNAVAILABLE);rows.addAll(inputRows);for(var transfer:transfers)rows.addAll(transfer.get());
+  TranscriptSpeakerRows.capture(read,rows,revisions.keySet(),maxRows);TranscriptSpeakerRows.mirrors(j,rows);
   return new SavedTranscriptGraph(meeting,discovered.selected,root,List.copyOf(rows),List.copyOf(sessions),List.copyOf(files),task,(String)profileRows.getFirst().get("profile"),List.copyOf(byteStatus),maximum.getFirst());
  }
  StoredProvenanceFacts facts(long maximum){return new StoredProvenanceFacts(rows,files.stream().map(f->new ContentFile((String)f.get("id"),(String)f.get("sha256"),num(f,"size_bytes"),meeting)).toList(),List.of(),List.of(),List.of(),List.of(),task.isEmpty()?List.of():List.of(new StoredTask((String)task.get("id"),TranscriptReadGraph.spec(task))),maximum);}

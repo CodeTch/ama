@@ -30,6 +30,23 @@ class RecordingConfiguration {
     @Bean JdbcRecordingPersistence recordingPersistence(DataSource source,ama.storage.FileBackendCatalog backends) {
         return new JdbcRecordingPersistence(source,backends);
     }
+    @Bean(destroyMethod="close") RecordingSubtitleRuntime recordingSubtitleRuntime(DataSource source,ama.access.MeetingAccess access,JdbcRecordingPersistence persistence) {
+        String installation=System.getenv("AMA_LOCAL_SPEECH_RUNTIME");
+        if(installation==null||installation.isBlank())return new RecordingSubtitleRuntime(null);
+        try {
+            var profile=ama.task.ControlledSpeechProfile.fromRuntime(java.nio.file.Path.of(installation));
+            var subtitles=new ama.recording.JdbcLiveSubtitles(source,access,persistence,profile);
+            subtitles.startScheduler();return new RecordingSubtitleRuntime(subtitles);
+        } catch(Exception unavailable) {
+            org.slf4j.LoggerFactory.getLogger(RecordingConfiguration.class).warn("Live subtitles unavailable: type={}",unavailable.getClass().getSimpleName());
+            return new RecordingSubtitleRuntime(null);
+        }
+    }
+    @Bean(destroyMethod="close") RecordingTranscriptRuntime recordingTranscriptRuntime(DataSource source,ama.meeting.JdbcMeetingAccess access,JdbcRecordingPersistence persistence,ama.task.JdbcTaskQueue queue,ama.storage.FileUploads uploads,org.springframework.core.env.Environment env) {
+        if(!ama.transcript.RecordingTranscriptProfile.PROCESSING.equals(env.getProperty("processing.recording-config-version")))return new RecordingTranscriptRuntime(null);
+        try {var copies=new ama.recording.JdbcRecordingTranscriptSources(source,access,persistence,queue,uploads);copies.startScheduler();return new RecordingTranscriptRuntime(copies);}
+        catch(Exception unavailable){org.slf4j.LoggerFactory.getLogger(RecordingConfiguration.class).warn("Recording transcription unavailable: type={}",unavailable.getClass().getSimpleName());return new RecordingTranscriptRuntime(null);}
+    }
     @Bean RecordingService recordingService(JdbcRecordingPersistence persistence) {
         return new RecordingService(persistence);
     }

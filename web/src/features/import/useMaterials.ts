@@ -8,7 +8,7 @@ import {prepareUpload,UPLOAD_FILE_BYTES,UPLOAD_PART_COUNT} from './upload-bytes'
 import {knowledgeKey,materialFormat,materialUuid,validKnowledgeDocument,validMaterialBegin,validMaterialCommand,type createMaterialsApi,type KnowledgeDocument,type MaterialItem,type MaterialLibrary,type MaterialListing} from '../../shared/api/materials';
 
 type Api=ReturnType<typeof createMaterialsApi>;
-export type MaterialState=Readonly<{busy:boolean;blocked:boolean;failed:boolean;hasFiles:boolean}>;
+export type MaterialState=Readonly<{busy:boolean;blocked:boolean;failed:boolean;hasFiles:boolean;closeBlocked:boolean}>;
 type JobKind='LOCAL'|'KNOWLEDGE'|'BATCH'|'RETRY'|'REMOVE';
 type StoredJob=Readonly<{id:string;kind:JobKind;name:string;begin:CommandSnapshot|null;completion:CommandSnapshot|null;command:CommandSnapshot|null;uploadId:string|null;selection:KnowledgeDocument|null}>;
 export type MaterialJob=StoredJob&Readonly<{status:string;error:string|null;needsFile:boolean;canRemove:boolean}>;
@@ -41,7 +41,7 @@ export function useMaterials(api:Api,actor:()=>string|null,meeting:()=>string,co
  const items=shallowRef<readonly MaterialItem[]>([]),jobs=shallowRef<readonly MaterialJob[]>([]),ready=shallowRef(false),busy=shallowRef(false),loading=shallowRef(false),error=shallowRef<string|null>(null),storageBlocked=shallowRef(false),listing=shallowRef<MaterialListing|null>(null);
  const journal=createScopedPrivateJournal(context,'import-materials',validJobs),files=new Map<string,File>();
  let epoch=0,disposed=false,controller=new AbortController(),restored=false,reloadFlight:Promise<void>|null=null,readSequence=0;
- const state=computed<MaterialState>(()=>({busy:busy.value||loading.value,blocked:!ready.value||storageBlocked.value||busy.value||loading.value||jobs.value.length>0||!!listing.value?.materialsPending,failed:!!error.value||jobs.value.some(j=>!!j.error)||items.value.some(i=>i.state==='FAILED'),hasFiles:items.value.length>0||jobs.value.length>0}));
+ const state=computed<MaterialState>(()=>({busy:busy.value||loading.value,closeBlocked:busy.value||loading.value||storageBlocked.value||jobs.value.some(job=>!job.canRemove),blocked:!ready.value||storageBlocked.value||busy.value||loading.value||jobs.value.length>0||!!listing.value?.materialsPending,failed:!!error.value||jobs.value.some(j=>!!j.error)||items.value.some(i=>i.state==='FAILED'),hasFiles:items.value.length>0||jobs.value.length>0}));
  const stored=(values:readonly MaterialJob[])=>values.map(({id,kind,name,begin,completion,command,uploadId,selection})=>({id,kind,name,begin,completion,command,uploadId,selection}));
  function active(turn:number){if(disposed||turn!==epoch||!actor()||!materialUuid(meeting())||!eligible())throw aborted();}
  function persist(values=jobs.value){if(!actor()||!materialUuid(meeting()))throw aborted();if(journal.save(actor()!,meeting(),stored(values))!=='SAVED'){storageBlocked.value=true;throw new Error('无法保存材料原请求，请保持页面打开并恢复存储后重试。');}storageBlocked.value=false;}

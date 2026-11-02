@@ -18,6 +18,10 @@ public final class IdentityContracts {
     }
     public record Person(String stableId, String displayName, String department, boolean active) {}
     public record PeoplePage(List<Person> items, String nextCursor) {}
+    public record Department(String id, String name, String parentId, boolean active) {}
+    public record Departments(List<Department> items) {
+        public Departments { items = List.copyOf(items); }
+    }
     public record ResolvedSession(Actor actor, String csrfToken, Instant expiresAt) {
         public ResolvedSession { expiresAt = expiresAt.truncatedTo(ChronoUnit.MICROS); }
         @Override public String toString() { return "ResolvedSession[actor=" + actor + ", csrfToken=REDACTED, expiresAt=" + expiresAt + "]"; }

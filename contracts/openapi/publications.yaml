@@ -260,6 +260,9 @@
           "$ref": "#/OriginalProfiles"
         },
         "maxItems": 256
+      },
+      "information": {
+        "$ref": "#/FrozenInformation"
       }
     },
     "required": [
@@ -5984,5 +5987,108 @@
         }
       }
     }
+  },
+  "FrozenInformation": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "infoRevisionId": {
+        "$ref": "#/Uuid"
+      },
+      "rosterRevisionId": {
+        "$ref": "#/Uuid"
+      },
+      "name": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "category": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "summary": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "occurredOn": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "roster": {
+        "type": "array",
+        "maxItems": 128,
+        "items": {
+          "$ref": "#/FrozenRosterMember"
+        }
+      }
+    },
+    "required": [
+      "infoRevisionId",
+      "rosterRevisionId",
+      "name",
+      "category",
+      "summary",
+      "occurredOn",
+      "roster"
+    ],
+    "description": "Exact saved information and confirmed roster selected by the immutable final IDs; protected and budgeted graph capture, never current-root substitution."
+  },
+  "FrozenRosterMember": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "memberId": {
+        "$ref": "#/Uuid"
+      },
+      "enterpriseId": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "displayName": {
+        "type": "string"
+      },
+      "memberKind": {
+        "enum": [
+          "ENTERPRISE",
+          "EXTERNAL"
+        ]
+      }
+    },
+    "required": [
+      "memberId",
+      "enterpriseId",
+      "displayName",
+      "memberKind"
+    ]
   }
 }

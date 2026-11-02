@@ -18,28 +18,29 @@ import ama.transcript.MeasuredTranscriptDocumentParser.*;
 /** Only ImportPolicy constructs this collaborator; no public model-result writer is installed. */
 final class SpeechMediaPipeline implements AutoCloseable {
  private final JdbcTaskQueue q;private final JdbcTranscriptAuthority.Components components;private final TaskLease lease;
- private final ControlledSpeechProfile profile;private final BooleanSupplier cancelled;
+ private final String parserVersion;private final boolean recording;private final ControlledSpeechProfile profile;private final BooleanSupplier cancelled;
  private final JdbcSpeechAudio audio;private final ControlledSpeechProofClient proofs;private final JdbcSpeechExecutionObserver observer;
- SpeechMediaPipeline(JdbcTaskQueue q,JdbcTranscriptAuthority.Components components,TaskLease lease,String engine,BooleanSupplier cancelled){
-  TranscriptImportRuntime.requireCombined(q,components.authority());profile=ControlledSpeechProfile.configured(engine);
+ SpeechMediaPipeline(JdbcTaskQueue q,JdbcTranscriptAuthority.Components components,TaskLease lease,String engine,String parserVersion,BooleanSupplier cancelled){
+  TranscriptImportRuntime.requireCombined(q,components.authority());profile=ControlledSpeechProfile.configured(engine);this.parserVersion=parserVersion;recording=ama.transcript.RecordingTranscriptProfile.PARSER.equals(parserVersion);if(!recording&&!ControlledSpeechProfile.PARSER.equals(parserVersion))throw new IllegalArgumentException("Unsupported speech parser");
   this.q=q;this.components=components;this.lease=lease;this.cancelled=cancelled;audio=new JdbcSpeechAudio(q,components,lease,engine,cancelled);proofs=new ControlledSpeechProofClient(profile);
   observer=new JdbcSpeechExecutionObserver(q,components.authority(),lease,ControlledSpeechProfile.key("ama.speech-scope.v1",lease.spec().input().id(),lease.spec().inputFingerprint(),engine),profile,proofs,cancelled);
   try{observer.configure();observer.recover(16);}catch(RuntimeException|Error failure){proofs.close();throw failure;}
  }
  MeasuredResult parse(InputStream source,UUID file,String hash,ParseBudget budget,BooleanSupplier cancelled,String name,long remainingSamples)throws ParseException,IOException {
   if(name==null||name.length()>1048576||budget.maxSourceBytes()<1||budget.maxUtf16CodeUnits()<1||budget.maxSegments()<1)throw new ParseException(INVALID_ARGUMENT);
-  String format=name.substring(name.lastIndexOf('.')+1).toUpperCase(Locale.ROOT);if(!MediaTranscriptParser.FORMATS.contains(format))throw new ParseException(INVALID_ARGUMENT);
+  String format=name.substring(name.lastIndexOf('.')+1).toUpperCase(Locale.ROOT);if(!MediaTranscriptParser.FORMATS.contains(format)||recording&&!format.equals("WAV"))throw new ParseException(INVALID_ARGUMENT);
   if(Set.of("TXT","DOC","DOCX","PDF","PPTX","SRT","VTT").contains(format)){
    var parser=new MediaTranscriptParser(MediaTranscriptParser.configured(profile.documentSha256()));var value=parser.parseMeasured(source,file,hash,budget,cancelled,name);
    var segments=value.result().segments().stream().map(s->new Segment(stable(file,hash,s.paragraphNo()),file,s.paragraphNo(),s.text(),null,s.startMs(),s.endMs())).toList();
-   return new MeasuredResult(new Result(segments,hash,ControlledSpeechProfile.PARSER),value.usage());
+   return new MeasuredResult(new Result(segments,hash,parserVersion),value.usage());
   }
   if(remainingSamples<1||remainingSamples>115200000)throw new ParseException(AUDIO_DURATION_EXCEEDED);
+  if(recording){if(!format.equals("WAV"))throw new ParseException(INVALID_ARGUMENT);q.preparation(()->{var valid=q.validatedPreparationLease(lease).orElseThrow(()->new java.util.concurrent.CancellationException("Recording input lease changed"));components.authority().requireImportPreparation(List.of(lease.spec()),valid.domain().prepared());return null;});}
   var counted=new Counted(source,budget.maxSourceBytes(),cancelled);var retained=audio.retained(file.toString(),hash);JdbcSpeechAudio.Source material;
   if(retained.isPresent()){
    verify(counted,hash);material=retained.get();if(material.proof().sampleCount()>remainingSamples)throw new ParseException(AUDIO_DURATION_EXCEEDED);
   }else{
-   try(var prepared=new FfmpegNormalizer(id->{if(!id.equals(file.toString()))throw new IOException("Unissued source");return counted;},new FfmpegNormalizer.Limits(Math.min(33554432,budget.maxSourceBytes()),remainingSamples,Duration.ofMinutes(2))).prepare(List.of(new OrderedSource(file.toString(),0)),cancelled)){
+   try(var prepared=new FfmpegNormalizer(id->{if(!id.equals(file.toString()))throw new IOException("Unissued source");return counted;},recording?FfmpegNormalizer.Limits.recording(remainingSamples,Duration.ofMinutes(2)):new FfmpegNormalizer.Limits(Math.min(33554432,budget.maxSourceBytes()),remainingSamples,Duration.ofMinutes(2))).prepare(List.of(new OrderedSource(file.toString(),0)),cancelled)){
     var proof=prepared.sources().getFirst();if(!proof.sourceSha256().equals(hash))throw new ParseException(SOURCE_HASH_MISMATCH);
     var clips=new ArrayList<WavClip>();for(long start=0;start<proof.sampleCount();start+=profile.windowSamples()){
      var clip=new WavClip(file.toString(),start,Math.min(profile.windowSamples(),proof.sampleCount()-start));try(var wav=prepared.openClip(clip.fileId(),clip.startSample(),clip.sampleCount())){audio.retain(proof,clip,wav);}clips.add(clip);
@@ -58,13 +59,13 @@ final class SpeechMediaPipeline implements AutoCloseable {
    }
   }
   observer.recover(4);
-  check();return new MeasuredResult(new Result(segments,hash,ControlledSpeechProfile.PARSER),new Usage(counted.count,units,segments.size(),material.proof().sampleCount()));
+  check();return new MeasuredResult(new Result(segments,hash,parserVersion),new Usage(counted.count,units,segments.size(),material.proof().sampleCount()));
  }
  private long add(List<Segment> segments,UUID file,String hash,long ordinal,String text,long start,long end,long units,ParseBudget budget)throws ParseException {
   if(segments.size()>=budget.maxSegments())throw new ParseException(SEGMENTS_EXCEEDED);if(text.length()+1L>budget.maxUtf16CodeUnits()-units)throw new ParseException(UTF16_CODE_UNITS_EXCEEDED);
   segments.add(new Segment(stable(file,hash,ordinal),file,ordinal,text,null,start/16,(end+15)/16));return units+text.length()+1L;
  }
- private UUID stable(UUID file,String sha,long ordinal){byte[] bytes=HexFormat.of().parseHex(ControlledSpeechProfile.key(ControlledSpeechProfile.PARSER,file.toString(),sha,Long.toString(ordinal)));bytes[6]=(byte)((bytes[6]&15)|0x80);bytes[8]=(byte)((bytes[8]&63)|0x80);var b=ByteBuffer.wrap(bytes);return new UUID(b.getLong(),b.getLong());}
+ private UUID stable(UUID file,String sha,long ordinal){byte[] bytes=HexFormat.of().parseHex(ControlledSpeechProfile.key(parserVersion,file.toString(),sha,Long.toString(ordinal)));bytes[6]=(byte)((bytes[6]&15)|0x80);bytes[8]=(byte)((bytes[8]&63)|0x80);var b=ByteBuffer.wrap(bytes);return new UUID(b.getLong(),b.getLong());}
  private void check(){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new java.util.concurrent.CancellationException("Speech preparation cancelled");}
  private static void verify(InputStream input,String expected)throws IOException,ParseException {
   java.security.MessageDigest digest;try{digest=java.security.MessageDigest.getInstance("SHA-256");}catch(java.security.NoSuchAlgorithmException impossible){throw new IllegalStateException(impossible);}byte[] bytes=new byte[8192];for(int n;(n=input.read(bytes))!=-1;)digest.update(bytes,0,n);
