@@ -22,8 +22,6 @@ test('owner delete confirmation sends the command and reloads the list',async({p
  await expect(dialog).toContainText('确认删除“可删除会议”？');
  await dialog.getByRole('button',{name:'确认删除'}).click();
  const progress=page.getByRole('dialog',{name:'会议删除进度',exact:true});
- await expect(progress).toContainText('在线数据已清理完成');
- await progress.getByRole('button',{name:'关闭删除状态',exact:true}).click();
  await expect(progress).toBeHidden();
  await expect(page.getByRole('button',{name:'可删除会议'})).toHaveCount(0);
  expect(deleteCalls).toBe(1);

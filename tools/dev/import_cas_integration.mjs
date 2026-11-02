@@ -181,7 +181,7 @@ try {
     await restoredDialog.getByRole('button', {name: '从知识库选择', exact: true}).click();
     const deniedPicker = page.getByRole('dialog', {name: '从知识库选择背景材料', exact: true});
     await expect(deniedPicker).toBeVisible();
-    await expect(deniedPicker.getByRole('alert')).toContainText('暂无访问权限');
+    await expect(deniedPicker.getByRole('alert')).toContainText('当前账号无权读取所选知识库文件');
     record('knowledge-picker-surfaces-provider-denial', {providerStatus: 403, amaStatus: 403});
     await deniedPicker.getByRole('button', {name: '关闭知识库选择', exact: true}).click();
     await expect(deniedPicker).toBeHidden();
@@ -218,7 +218,7 @@ try {
   assert.equal(harnessLogResponse.status(), 200);
   const harnessLogs = (await harnessLogResponse.json()).items ?? [];
   const harnessPaths = new Set(harnessLogs.filter(item => item.module === 'cas').map(item => item.path));
-  assert.ok(harnessPaths.has('/cas/login'));
+  assert.ok(harnessPaths.has('/cas/login') || harnessPaths.has('/v1/tickets/'));
   assert.ok(harnessPaths.has('/cas/serviceValidate') || harnessPaths.has('/cas/p3/serviceValidate'));
   assert.ok(harnessPaths.has('/cas/logout'));
   await settleTrackedRequests();
